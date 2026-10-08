@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07131d" />
+    <meta
+      name="description"
+      content="幻想数据库 GM 工作台：筛选物品、查阅 NPC、任务与技能，一键复制游戏指令。"
+    />
+    <title>幻想数据库 · GM 工作台</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script defer src="assets/gm-tools.js"></script>
+    <script defer src="assets/app.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./"><strong>幻想数据库</strong></a>
+    </header>
+    <main>
+      <section class="database-summary" aria-label="资料统计">
+        <div id="stats" class="stats" aria-live="polite">加载中…</div>
+      </section>
+      <nav id="sections" class="section-nav" aria-label="资料类型">
+        <button data-section="items" class="active" aria-current="page">
+          物品与装备
+        </button>
+        <button data-section="npc">NPC</button
+        ><button data-section="task">任务</button
+        ><button data-section="skill">技能</button>
+        <button data-section="gm">GM 手册</button>
+      </nav>
+      <section class="command-context" aria-label="快捷指令设置">
+        <label
+          >发放数量
+          <input
+            id="quantity"
+            type="number"
+            value="1"
+            min="1"
+            max="10000"
+            step="1"
+        /></label>
+        <label
+          >目标角色
+          <input
+            id="target"
+            maxlength="40"
+            placeholder="自己"
+            title="留空发给自己；指定角色需要 WIZARD 权限"
+        /></label>
+        <button id="show-history" class="subtle">
+          最近复制 <span id="history-count">0</span>
+        </button>
+      </section>
+      <section id="catalog" class="catalog-shell">
+        <div class="catalog-toolbar">
+          <label class="search-box"
+            ><span aria-hidden="true">⌕</span
+            ><input
+              id="search"
+              type="search"
+              maxlength="80"
+              aria-label="搜索资料"
+              placeholder="搜索名称、描述或 ID…"
+            /><kbd>⌘ K</kbd></label
+          >
+          <div class="toolbar-actions">
+            <button id="save-search" class="subtle">收藏筛选</button
+            ><button id="saved-searches" class="subtle">已收藏</button
+            ><button id="view-toggle" class="subtle" aria-pressed="false">
+              切换卡片
+            </button>
+          </div>
+        </div>
+        <div class="catalog-body">
+          <aside class="filters">
+            <div class="filter-heading">
+              <h2>筛选条件</h2>
+              <button
+                id="toggle-filters"
+                class="subtle"
+                aria-expanded="false"
+                aria-controls="filter-form"
+              >
+                展开筛选
+              </button>
+              <button id="clear-filters">重置</button>
+            </div>
+            <form id="filter-form">
+              <div id="filter-fields"></div>
+              <button class="apply-button" type="submit">应用筛选</button>
+            </form>
+          </aside>
+          <div class="results-pane">
+            <div class="results-topline">
+              <p>
+                <strong id="result-count">—</strong>
+                <span id="result-unit">条结果</span>
+              </p>
+              <div class="sort-control">
+                <select id="page-size" aria-label="每页条数">
+                  <option value="24">24 条 / 页</option>
+                  <option value="48">48 条 / 页</option>
+                  <option value="60">60 条 / 页</option></select
+                ><select id="sort" aria-label="排序"></select>
+              </div>
+            </div>
+            <div id="active-filters" class="active-filters"></div>
+            <div id="error-state" class="message-state" hidden>
+              <h2>无法读取资料</h2>
+              <p></p>
+              <button id="retry">重新加载</button>
+            </div>
+            <div id="empty-state" class="message-state" hidden>
+              <h2>没有匹配的资料</h2>
+              <button id="empty-reset">清空筛选</button>
+            </div>
+            <div
+              id="item-grid"
+              class="item-grid list-view"
+              aria-live="polite"
+            ></div>
+            <nav id="pagination" class="pagination" aria-label="结果分页"></nav>
+          </div>
+        </div>
+      </section>
+      <section id="gm-tools" hidden>
+        <div class="gm-workspace">
+          <section class="tool-panel command-book" aria-label="GM 指令手册">
+            <div class="book-header">
+              <h2>指令手册 <small id="command-count"></small></h2>
+              <button id="book-history" class="subtle">最近复制</button>
+            </div>
+            <input
+              id="command-search"
+              type="search"
+              maxlength="80"
+              aria-label="搜索 GM 指令"
+              placeholder="搜索指令、用途或别名"
+            />
+            <div class="book-body">
+              <nav id="command-categories" aria-label="指令分类"></nav>
+              <div id="command-entries" aria-live="polite"></div>
+            </div>
+          </section>
+          <section
+            id="command-editor"
+            class="tool-panel command-editor"
+            aria-labelledby="command-editor-title"
+          >
+            <h2 id="command-editor-title">填写参数</h2>
+            <form id="command-form">
+              <label class="field"
+                >操作<select id="command-action"></select
+              ></label>
+              <div id="command-fields"></div>
+              <output id="command-preview" class="command-preview"></output>
+              <p id="command-permission" class="muted"></p>
+              <button type="submit" class="apply-button">复制指令</button>
+            </form>
+          </section>
+        </div>
+        <details id="account-panel" class="account-panel">
+          <summary>账号权限</summary>
+          <section class="tool-panel" aria-label="账号权限">
+            <p class="muted">保存后需退出账号重新登录。</p>
+            <form id="account-search-form" class="account-search">
+              <input
+                id="account-search"
+                type="search"
+                maxlength="80"
+                aria-label="账号搜索"
+                placeholder="账号名、角色名或账号 ID"
+              /><button type="submit" class="subtle">查找</button>
+            </form>
+            <p id="account-message" role="status"></p>
+            <div id="accounts"></div>
+          </section>
+        </details>
+      </section>
+    </main>
+    <div
+      id="catalog-tooltip"
+      class="floating-tooltip"
+      role="tooltip"
+      hidden
+    ></div>
+    <dialog id="detail-dialog" aria-labelledby="detail-title">
+      <div class="dialog-top">
+        <span id="detail-title">资料详情</span
+        ><button class="subtle" data-close aria-label="关闭详情">关闭</button>
+      </div>
+      <div id="detail-content"></div>
+    </dialog>
+    <dialog id="utility-dialog" aria-labelledby="utility-title">
+      <div class="dialog-top">
+        <span id="utility-title"></span
+        ><button class="subtle" data-close aria-label="关闭面板">关闭</button>
+      </div>
+      <div id="utility-content"></div>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+  </body>
+</html>

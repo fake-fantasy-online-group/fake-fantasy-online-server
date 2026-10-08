@@ -1,0 +1,23 @@
+name: fake-fantasy-server
+
+services:
+  postgres:
+    container_name: fantasy-postgres
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-fantasy}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fantasy_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-fantasy}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - fantasy-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  fantasy-postgres-data:
+    name: fantasy-postgres-data

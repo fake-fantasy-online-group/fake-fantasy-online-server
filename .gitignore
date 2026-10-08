@@ -1,0 +1,30 @@
+# Secrets and local configuration
+*.pem
+*.key
+*.p12
+*.pfx
+*.dump
+server/internal/crypto/keys/
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Build outputs
+/bin/
+/*.app/
+/服务端控制器
+/服务端控制器.exe
+/服务端控制器.desktop
+/fantasy-controller
+/controller/服务端控制器.app/
+/controller/服务端控制器
+/controller/服务端控制器.exe
+/controller/服务端控制器.desktop
+/controller/controller_icon_windows_*.syso
+
+# Local state and editor files
+.DS_Store
+*.log

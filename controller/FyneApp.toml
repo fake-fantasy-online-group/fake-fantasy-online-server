@@ -1,0 +1,6 @@
+[Details]
+Icon = "assets/controller.png"
+Name = "Fantasy服务端控制器"
+ID = "org.fakefantasy.server-controller"
+Version = "1.0.0"
+Build = 1
