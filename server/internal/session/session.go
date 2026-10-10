@@ -176,7 +176,7 @@ func (s *Session) OnHandshake(hs []byte) (wire.Keys, error) {
 		return wire.Keys{}, err
 	}
 	s.mu.Lock()
-	s.clientAuthTag = wire.ClientAuthTag(k, "1.5.8")
+	s.clientAuthTag = wire.ClientAuthTag(k, "1.6.0")
 	s.mu.Unlock()
 	return k, nil
 }

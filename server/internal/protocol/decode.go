@@ -101,7 +101,7 @@ type Request struct {
 	S1, S2        string
 	S3, S4        string
 	DeviceID      string  // Login 的客户端设备标识；认证暂不使用，但协议层不得丢字段
-	ClientVersion string  // Login 固定版本字段；当前只接受 1.5.8
+	ClientVersion string  // Login 固定版本字段；当前只接受 1.6.0
 	ClientVM      uint8   // 1.5.8 VmDetect 结果，只接受 0/1
 	ClientDebug   uint8   // 1.5.8 DebugDetect 结果，只接受 0/1
 	ClientAuthTag []byte  // 1.5.8 HMAC-SHA256 tag，会话层使用本连接握手密钥校验
@@ -859,14 +859,14 @@ func decPing(payload []byte) (Request, bool) {
 	return Request{Kind: ReqPing, TickMS: v}, true
 }
 
-// decLogin 只接受 1.5.8：Str acc/pwd/device/version + U8 vm/debug + 32B authTag。
+// decLogin 只接受 1.6.0：Str acc/pwd/device/version + U8 vm/debug + 32B authTag。
 // authTag 是客户端 HMAC-SHA256 的原始 32 字节，没有长度前缀；会话层依据
 // 已恢复的 NetCrypto 算法与本连接握手密钥验证，协议层只负责完整读取。
 func decLogin(payload []byte) (Request, bool) {
 	r := newReader(payload)
 	acc, pwd, deviceID := r.str(), r.str(), r.str()
 	clientVersion, vm, debug := r.str(), r.u8(), r.u8()
-	if !r.ok() || acc == "" || clientVersion != "1.5.8" || vm > 1 || debug > 1 || r.remaining() != 32 {
+	if !r.ok() || acc == "" || clientVersion != "1.6.0" || vm > 1 || debug > 1 || r.remaining() != 32 {
 		return Request{}, false
 	}
 	tag := r.raw(32)
