@@ -20,4 +20,5 @@ services:
 
 volumes:
   fantasy-postgres-data:
-    name: fantasy-postgres-data
+    name: ${POSTGRES_VOLUME_NAME:-fantasy-postgres-data}
+    external: ${POSTGRES_VOLUME_EXTERNAL:-false}
