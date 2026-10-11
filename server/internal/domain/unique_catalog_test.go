@@ -38,6 +38,8 @@ func TestUniqueCatalogCompleteDistinctAndValid(t *testing.T) {
 			traits[tr.Kind] = true
 		}
 		defs[d.BaseID] = uniqueFixture(d)
+		// This structural fixture needs nonzero white bases for explicit local rows.
+		defs[d.BaseID].Equip.Bonus = Stats{MinAtk: 100, MaxAtk: 200, MAtk: 100, Def: 100, MDef: 100}
 	}
 	if native != 885 || ready != 298 {
 		t.Fatalf("native=%d ready=%d traits=%d", native, ready, len(traits))

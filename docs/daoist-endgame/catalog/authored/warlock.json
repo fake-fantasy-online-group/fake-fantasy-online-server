@@ -1,7 +1,7 @@
 [
   {
     "BaseID": 2006,
-    "Name": "白羽误书",
+    "Name": "错羽",
     "Lore": "两根羽毛原是书吏的废笔，写过的错字会在帽沿显出。新术者靠它查出一道倒画的符，随后一周只敢用铅笔。",
     "LoreRoot": "原型·白羽帽的两片羽饰",
     "Identity": "让初学咒术更稳定的羽帽",
@@ -36,11 +36,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 7,
+        "Max": 8
+      }
+    ]
   },
   {
     "BaseID": 2012,
-    "Name": "夜檐借光",
+    "Name": "夜檐",
     "Lore": "帽檐裁自一面遮日的黑帘，里衬却永远微亮。夜学者靠那点光抄完一本没有日字的历书。",
     "LoreRoot": "原型·黑夜帽的遮光意象",
     "Identity": "法力偏科初学帽",
@@ -75,7 +82,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 78,
+        "Max": 85
+      }
+    ]
   },
   {
     "BaseID": 2018,
@@ -125,7 +139,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 13,
+        "Max": 14
+      }
+    ]
   },
   {
     "BaseID": 2033,
@@ -164,11 +185,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 2034,
-    "Name": "钱眼观天",
+    "Name": "方孔里的圆天",
     "Lore": "冠额铜钱的孔方得端正，从孔里望天却只见一片圆。铸钱人说铜尚有余，天却未必。",
     "LoreRoot": "原创·钱眼天圆",
     "Identity": "法术暴击冠",
@@ -203,11 +231,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 350,
+        "Max": 385
+      }
+    ]
   },
   {
     "BaseID": 2057,
-    "Name": "月影借宿",
+    "Name": "月宿",
     "Lore": "月亮借宿星冠，第二天留下一枚皱巴巴的月影。冠主把它展开，从此每晚都少睡一个时辰。",
     "LoreRoot": "原型·星月冠",
     "Identity": "高法力熬夜冠",
@@ -242,16 +277,23 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 135,
+        "Max": 148
+      }
+    ]
   },
   {
     "BaseID": 2058,
-    "Name": "符头漏雨",
+    "Name": "漏符",
     "Lore": "古符写成帽形，符头有一个针眼。所有雨都从那里漏下，修符人只得在屋里撑一把极小的伞。",
     "LoreRoot": "原型·古仙符冠",
     "Identity": "法术固定减伤冠",
-    "Benefit": "以法术承伤为主，保留法术固定减伤冠的用途；法术平减、魔防、生命、精神、异常抵抗形成完整底盘",
-    "Tradeoff": "投入集中在法术承伤；不提供法攻、法术会心专精",
+    "Benefit": "以法术承伤为主，保留法术固定减伤冠的用途；法术平减、魔防、生命、精神、异常抵抗形成完整底盘；另有本件白字魔防强化30–45%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在法术承伤；不提供法攻、法术会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -281,11 +323,26 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 16,
+        "Max": 17
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 37,
+        "MinPercent": 30,
+        "MaxPercent": 45
+      }
+    ]
   },
   {
     "BaseID": 2059,
-    "Name": "无人领封",
+    "Name": "无主诰",
     "Lore": "封神告书最后一页被叠成冠，受封者一栏空着。借冠的人纷纷填名，翌日名字又全部变白。",
     "LoreRoot": "原创·未领封神告书",
     "Identity": "魔攻集中的虚名冠",
@@ -320,11 +377,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 52,
+        "Max": 57
+      }
+    ]
   },
   {
     "BaseID": 2815,
-    "Name": "墨袖还字",
+    "Name": "还砚",
     "Lore": "练咒时滴在袖上的墨，晾干后会爬回砚台。教习怀疑有人偷抄，查到最后只剩一屋干净的衣服。",
     "LoreRoot": "原创·回砚墨袖",
     "Identity": "练习用智慧衣",
@@ -359,11 +423,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 7,
+        "Max": 8
+      }
+    ]
   },
   {
     "BaseID": 2816,
-    "Name": "纸甲会软",
+    "Name": "读经衣渐软",
     "Lore": "纸衣刚裁出时硬如甲片，读过一篇经便软一点。学徒读到最后一页，终于能把袖子挽起来。",
     "LoreRoot": "原创·读经软纸衣",
     "Identity": "初学回避衣",
@@ -398,16 +469,23 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 7,
+        "Max": 8
+      }
+    ]
   },
   {
     "BaseID": 2817,
-    "Name": "窗外旧影",
+    "Name": "影未迁",
     "Lore": "袍上的人影每天朝窗外走一步，走到衣角又折回。术者搬了家，它却一直朝原来的方向。",
     "LoreRoot": "原创·衣中走失人影",
     "Identity": "魔防偏科袍",
-    "Benefit": "以法术承伤为主，保留魔防偏科袍的用途；魔防、生命、法术平减、精神、异常抵抗形成完整底盘",
-    "Tradeoff": "投入集中在法术承伤；不提供法攻、法术会心专精",
+    "Benefit": "以法术承伤为主，保留魔防偏科袍的用途；魔防、生命、法术平减、精神、异常抵抗形成完整底盘；另有本件白字魔防强化20–30%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在法术承伤；不提供法攻、法术会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -437,7 +515,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 227,
+        "Max": 249
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 25,
+        "MinPercent": 20,
+        "MaxPercent": 30
+      }
+    ]
   },
   {
     "BaseID": 2818,
@@ -476,7 +569,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 150,
+        "Max": 165
+      }
+    ]
   },
   {
     "BaseID": 2829,
@@ -515,11 +615,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 15,
+        "Max": 16
+      }
+    ]
   },
   {
     "BaseID": 2830,
-    "Name": "假鬼朝服",
+    "Name": "祠堂里的下半场",
     "Lore": "戏班朝服被误供进祠堂，绣鬼从此学会端坐。它至今还在等那个从没排过的下半场。",
     "LoreRoot": "原创·错供戏衣",
     "Identity": "高魔攻薄袍",
@@ -554,7 +661,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 42,
+        "Max": 46
+      }
+    ]
   },
   {
     "BaseID": 2889,
@@ -593,11 +707,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 12,
+        "Max": 13
+      }
+    ]
   },
   {
     "BaseID": 2890,
-    "Name": "雨字长衫",
+    "Name": "补雨",
     "Lore": "长衫只绣一个雨字，穿进屋就会少一滴。补字的女工每夜回来，数完总比昨夜多一针。",
     "LoreRoot": "原创·变化雨字",
     "Identity": "生命过渡袍",
@@ -632,11 +753,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 68,
+        "Max": 74
+      }
+    ]
   },
   {
     "BaseID": 2897,
-    "Name": "先生余座",
+    "Name": "虚座",
     "Lore": "衣背画着讲堂里一张没人坐的椅子，学生遇到难题便朝它行礼。先生后来也开始向自己的背后请教。",
     "LoreRoot": "原创·背后空椅",
     "Identity": "法力储备讲师衣",
@@ -671,7 +799,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 128,
+        "Max": 140
+      }
+    ]
   },
   {
     "BaseID": 2898,
@@ -679,8 +814,8 @@
     "Lore": "课程表上被删掉的一课缝进衣领，贴着脖子发凉。毕业后只有戴过它的人还记得课名，却谁也说不出口。",
     "LoreRoot": "原创·删课衣领",
     "Identity": "抗术法衣",
-    "Benefit": "以法术承伤为主，保留抗术法衣的用途；魔防、法术平减、生命、精神、异常抵抗形成完整底盘",
-    "Tradeoff": "投入集中在法术承伤；不提供法攻、法术会心专精",
+    "Benefit": "以法术承伤为主，保留抗术法衣的用途；魔防、法术平减、生命、精神、异常抵抗形成完整底盘；另有本件白字魔防强化20–30%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在法术承伤；不提供法攻、法术会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -710,11 +845,26 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 10,
+        "Max": 11
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 25,
+        "MinPercent": 20,
+        "MaxPercent": 30
+      }
+    ]
   },
   {
     "BaseID": 9601,
-    "Name": "炭灰署名",
+    "Name": "灰名",
     "Lore": "袍内的署名用炭灰写成，洗净一次便换一种笔迹。裁袍的店里只一位师傅，他承认自己也认不全。",
     "LoreRoot": "原创·炭灰换名",
     "Identity": "输出过渡袍",
@@ -749,7 +899,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 55,
+        "Max": 60
+      }
+    ]
   },
   {
     "BaseID": 9602,
@@ -757,8 +914,8 @@
     "Lore": "袍料由六扇窗的旧纸拼成，穿上时总像站在窗边。有人敲窗，声响却从袖里传来。",
     "LoreRoot": "原创·六窗纸袍",
     "Identity": "状态抵抗纸衣",
-    "Benefit": "以法术承伤为主，保留状态抵抗纸衣的用途；异常抵抗、精神、生命、魔防、法术平减形成完整底盘",
-    "Tradeoff": "投入集中在法术承伤；不提供法攻、法术会心专精",
+    "Benefit": "以法术承伤为主，保留状态抵抗纸衣的用途；异常抵抗、精神、生命、魔防、法术平减形成完整底盘；另有本件白字魔防强化20–30%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在法术承伤；不提供法攻、法术会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -788,11 +945,26 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 25,
+        "MinPercent": 20,
+        "MaxPercent": 30
+      }
+    ]
   },
   {
     "BaseID": 9603,
-    "Name": "天罡漏昼",
+    "Name": "白昼值星官",
     "Lore": "袍上星宿少了一位，守夜弟子相互指认，最后一致认定那位负责白天。",
     "LoreRoot": "原创·缺宿天罡袍",
     "Identity": "法力偏科星袍",
@@ -827,16 +999,23 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 490,
+        "Max": 539
+      }
+    ]
   },
   {
     "BaseID": 9604,
-    "Name": "尾火归仓",
+    "Name": "灰穗",
     "Lore": "衣摆的火尾会吞吃炉灰，吃饱后变成黑色谷穗。粮仓拒收，丹房也不肯要回。",
     "LoreRoot": "原创·火尾灰穗",
     "Identity": "火球术专用法衣",
-    "Benefit": "以法术输出为主，保留火球术专用法衣的用途；法攻、智慧、法力、法术会心、精神、生命、魔防形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以法术输出为主，保留火球术专用法衣的用途；法攻、智慧、法力、法术会心、精神、生命、魔防形成完整底盘；另有本件白字法攻强化50–70%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "builddefining",
     "Affixes": [
       {
@@ -884,7 +1063,22 @@
         "SkillName": "火球术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 23,
+        "Max": 25
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 60,
+        "MinPercent": 50,
+        "MaxPercent": 70
+      }
+    ]
   },
   {
     "BaseID": 9605,
@@ -923,11 +1117,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 39,
+        "Max": 42
+      }
+    ]
   },
   {
     "BaseID": 9606,
-    "Name": "梦中缴税",
+    "Name": "惊梦税",
     "Lore": "袖中忽然多出一张梦税完纳单，金额是三次惊醒。主人只睡过两次好觉，不知第三次将如何结清。",
     "LoreRoot": "原创·梦税凭单",
     "Identity": "冰系伤害法衣",
@@ -973,11 +1174,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 15086,
-    "Name": "音后余音",
+    "Name": "余息",
     "Lore": "仙音杖的清音结束后，总还有极短的一声。新飞升的术者靠它定神，后来发现那是自己还没吐出的气。",
     "LoreRoot": "原型·仙音杖安定心神",
     "Identity": "平静续航法杖",
@@ -1023,7 +1231,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 380,
+        "Max": 418
+      }
+    ]
   },
   {
     "BaseID": 15087,
@@ -1062,16 +1277,23 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 27,
+        "Max": 29
+      }
+    ]
   },
   {
     "BaseID": 15088,
-    "Name": "石魄相看",
+    "Name": "未成魄",
     "Lore": "玄石化魄的记载只说成功，从没记失败者。杖首两块未成的石魄彼此望着，谁也不肯先开口。",
     "LoreRoot": "原型·两仪玄石化魄",
     "Identity": "单体法术专精杖",
-    "Benefit": "以法术输出为主，保留单体法术专精杖的用途；法攻、智慧、法力、法术会心、精神、生命形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以法术输出为主，保留单体法术专精杖的用途；法攻、智慧、法力、法术会心、精神、生命形成完整底盘；另有本件白字法攻强化100–130%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1112,7 +1334,22 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 20,
+        "Max": 22
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 115,
+        "MinPercent": 100,
+        "MaxPercent": 130
+      }
+    ]
   },
   {
     "BaseID": 15089,
@@ -1120,8 +1357,8 @@
     "Lore": "穷桑冰玉的旧说被抄在匣底，匣中却结出一截木枝。持杖者把木枝移走，整根杖才开始真正变冷。",
     "LoreRoot": "原型·穷桑寒冰魄玉；木枝异象原创",
     "Identity": "冰伤优先专精杖",
-    "Benefit": "以法术输出为主，保留冰伤优先专精杖的用途；法攻、智慧、法力、法术会心、精神、生命形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以法术输出为主，保留冰伤优先专精杖的用途；法攻、智慧、法力、法术会心、精神、生命形成完整底盘；另有本件白字法攻强化100–130%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1162,16 +1399,31 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 20,
+        "Max": 22
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 115,
+        "MinPercent": 100,
+        "MaxPercent": 130
+      }
+    ]
   },
   {
     "BaseID": 15090,
-    "Name": "炉里来客",
+    "Name": "炉客",
     "Lore": "炉火中有人轻敲三下，铸杖师便按约开了气孔。此后杖心一直空着，凡施火术，孔内便传来宾客落座的声音。",
     "LoreRoot": "原型·赤炎妖杖的火妖意象",
     "Identity": "牺牲生命的火系专精杖",
-    "Benefit": "以法术输出为主，保留牺牲生命的火系专精杖的用途；法攻、法术会心、智慧、法力、精神、魔防形成完整底盘",
-    "Tradeoff": "仍降低生命；特性须满足原有技能或战况条件",
+    "Benefit": "以法术输出为主，保留牺牲生命的火系专精杖的用途；法攻、法术会心、智慧、法力、精神、魔防形成完整底盘；另有本件白字法攻强化100–130%，只按该底材未加工固有值结算",
+    "Tradeoff": "仍降低生命；特性须满足原有技能或战况条件；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1217,7 +1469,22 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 464,
+        "Max": 510
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 115,
+        "MinPercent": 100,
+        "MaxPercent": 130
+      }
+    ]
   },
   {
     "BaseID": 15091,
@@ -1225,8 +1492,8 @@
     "Lore": "梵龙改梵天的旧名被磨去，雨后却从木纹里浮出。执杖者把显字的一面朝内，从不当众解释。",
     "LoreRoot": "原型·梵龙因禁忌改名梵天",
     "Identity": "针对强敌的禁名法杖",
-    "Benefit": "以法术输出为主，保留针对强敌的禁名法杖的用途；法攻、法术会心、智慧、法力、精神、生命形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以法术输出为主，保留针对强敌的禁名法杖的用途；法攻、法术会心、智慧、法力、精神、生命形成完整底盘；另有本件白字法攻强化100–130%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1267,7 +1534,22 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 464,
+        "Max": 510
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 115,
+        "MinPercent": 100,
+        "MaxPercent": 130
+      }
+    ]
   },
   {
     "BaseID": 15092,
@@ -1275,8 +1557,8 @@
     "Lore": "妖王赌输宝杖的故事人尽皆知，夹在杖芯的字据却只写着借用。鉴物人因此不敢在归属栏落笔。",
     "LoreRoot": "原型·冥契转手记载；字据为原创疑案",
     "Identity": "极高魔攻的契杖",
-    "Benefit": "以法术输出为主，保留极高魔攻的契杖的用途；法攻、法术会心、智慧、法力、精神、生命形成完整底盘",
-    "Tradeoff": "投入集中在法术输出；不提供物攻、命中专精",
+    "Benefit": "以法术输出为主，保留极高魔攻的契杖的用途；法攻、法术会心、智慧、法力、精神、生命形成完整底盘；另有本件白字法攻强化100–130%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在法术输出；不提供物攻、命中专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1311,16 +1593,31 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 464,
+        "Max": 510
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 115,
+        "MinPercent": 100,
+        "MaxPercent": 130
+      }
+    ]
   },
   {
     "BaseID": 15093,
-    "Name": "灰角有座",
+    "Name": "灰席",
     "Lore": "苍月炼杖的旧录称它洗练百年，玉角仍有一块洗不净的灰。后来的匠人给那块灰单独留了座位。",
     "LoreRoot": "原型·苍月炼杖及瑶池洗练",
     "Identity": "广范围火球法杖",
-    "Benefit": "以法术输出为主，保留广范围火球法杖的用途；法攻、智慧、法力、法术会心、精神、生命、魔防形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以法术输出为主，保留广范围火球法杖的用途；法攻、智慧、法力、法术会心、精神、生命、魔防形成完整底盘；另有本件白字法攻强化140–180%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "builddefining",
     "Affixes": [
       {
@@ -1375,7 +1672,22 @@
         "SkillName": "火球术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 23,
+        "Max": 25
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 160,
+        "MinPercent": 140,
+        "MaxPercent": 180
+      }
+    ]
   },
   {
     "BaseID": 15094,
@@ -1383,8 +1695,8 @@
     "Lore": "紫玉将持有者渐化紫晶的警告刻在握柄。最后一行字异常整齐，像是用一根已经变硬的手指写下。",
     "LoreRoot": "原型·紫玉洗髓晶化风险",
     "Identity": "高伤害的晶化法杖",
-    "Benefit": "以法术输出为主，保留高伤害的晶化法杖的用途；法攻、法术会心、智慧、法力、精神、魔防、法术平减、异常抵抗形成完整底盘",
-    "Tradeoff": "仍降低生命；特性须满足原有技能或战况条件",
+    "Benefit": "以法术输出为主，保留高伤害的晶化法杖的用途；法攻、法术会心、智慧、法力、精神、魔防、法术平减、异常抵抗形成完整底盘；另有本件白字法攻强化180–220%，只按该底材未加工固有值结算",
+    "Tradeoff": "仍降低生命；特性须满足原有技能或战况条件；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "godlike",
     "Affixes": [
       {
@@ -1440,11 +1752,26 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 646,
+        "Max": 710
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 200,
+        "MinPercent": 180,
+        "MaxPercent": 220
+      }
+    ]
   },
   {
     "BaseID": 20103,
-    "Name": "火后黑雪",
+    "Name": "黑雪",
     "Lore": "黑炎熄灭后落下一层黑雪，缝衣匠赶在融化前把它压入衬里。袍子至今没有湿过。",
     "LoreRoot": "原型·黑炎法袍",
     "Identity": "固定物理减伤袍",
@@ -1479,11 +1806,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20104,
-    "Name": "蜡泪错位",
+    "Name": "离烛泪",
     "Lore": "祭袍上每道蜡泪都比蜡烛偏左三寸，摆满整座坛也一样。主祭因此学会只点一支灯。",
     "LoreRoot": "原创·偏落蜡泪",
     "Identity": "低耗火弹法衣",
@@ -1536,11 +1870,18 @@
         "SkillName": "火弹术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 487,
+        "Max": 535
+      }
+    ]
   },
   {
     "BaseID": 20105,
-    "Name": "寒月布样",
+    "Name": "寒月布",
     "Lore": "布样上画了一轮冻住的月亮，裁成袍后仍未解冻。裁缝开价时连那一夜的寒气也算了进去。",
     "LoreRoot": "原型·冷月袍",
     "Identity": "冰箭伤害法衣",
@@ -1593,11 +1934,18 @@
         "SkillName": "冰箭术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 48,
+        "Max": 52
+      }
+    ]
   },
   {
     "BaseID": 20106,
-    "Name": "水银折页",
+    "Name": "折天纸",
     "Lore": "衣领里压着一折水银色的纸，展开后是昨夜天空。天亮后纸上没有字，唯独折痕始终留在东方。",
     "LoreRoot": "原创·银纸藏夜",
     "Identity": "魔法回护袍",
@@ -1632,11 +1980,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 20107,
-    "Name": "心室无人",
+    "Name": "空心宅",
     "Lore": "袍胸的内景图只画房间，不画脏腑。练功者每次默数，都会少一间已经住过人的屋。",
     "LoreRoot": "原创·内景心室图",
     "Identity": "法力专精衣",
@@ -1676,11 +2031,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 20,
+        "Max": 22
+      }
+    ]
   },
   {
     "BaseID": 20108,
-    "Name": "玉衣短梦",
+    "Name": "梦从剪上生",
     "Lore": "穿衣打盹的人只做半个梦，醒来时另一半挂在衣角。把衣角剪去，梦就从剪刀上继续。",
     "LoreRoot": "原创·半梦玉衣",
     "Identity": "状态抗性法衣",
@@ -1715,7 +2077,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20109,
@@ -1754,7 +2123,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 22,
+        "Max": 24
+      }
+    ]
   },
   {
     "BaseID": 20110,
@@ -1809,11 +2185,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 20111,
-    "Name": "仙绣空章",
+    "Name": "准字在掌中",
     "Lore": "衣上留下完整的印章边框，中间一个字也无。验衣官给它盖了准字，次日字仍留在验衣官掌中。",
     "LoreRoot": "原创·空印仙绣",
     "Identity": "智慧集中衣",
@@ -1848,11 +2231,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 25,
+        "Max": 27
+      }
+    ]
   },
   {
     "BaseID": 20112,
-    "Name": "欠色账缝",
+    "Name": "欠色",
     "Lore": "九色线缝的是购线账目，算到最后还欠第十种颜色。染坊改了几任掌柜，都不肯销掉这笔欠款。",
     "LoreRoot": "原创·九色欠账袍",
     "Identity": "储气兼明悟的法衣",
@@ -1887,7 +2277,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20113,
@@ -1926,11 +2323,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20114,
-    "Name": "月蚀内衬",
+    "Name": "月蚀宜出游",
     "Lore": "内衬记录了九次月蚀，第十次的位置留着线轴。天官拆开线轴，里面是一张晴天出游单。",
     "LoreRoot": "原创·月蚀线轴",
     "Identity": "魔法承伤专精袍",
@@ -1976,7 +2380,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 58,
+        "Max": 63
+      }
+    ]
   },
   {
     "BaseID": 20115,
@@ -1984,8 +2395,8 @@
     "Lore": "华裳的羽毛都朝着同一个方向，衣主搬到哪里也不改。织羽人查了图，那方向并没有一棵树。",
     "LoreRoot": "原型·凤羽华裳",
     "Identity": "高生命法袍",
-    "Benefit": "以血线容错为主，保留高生命法袍的用途；生命、体质、物理平减、法术平减、魔防、防御形成完整底盘",
-    "Tradeoff": "投入集中在血线容错；不提供法攻、法术会心专精",
+    "Benefit": "以血线容错为主，保留高生命法袍的用途；生命、体质、物理平减、法术平减、魔防、防御形成完整底盘；另有本件白字防御强化70–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在血线容错；不提供法攻、法术会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -2020,7 +2431,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 489,
+        "Max": 537
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 85,
+        "MinPercent": 70,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 20116,
@@ -2070,7 +2496,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 20257,
@@ -2127,7 +2560,14 @@
         "SkillName": "火球术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 68,
+        "Max": 74
+      }
+    ]
   },
   {
     "BaseID": 20258,
@@ -2166,11 +2606,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 28,
+        "Max": 30
+      }
+    ]
   },
   {
     "BaseID": 20409,
-    "Name": "金冠借秤",
+    "Name": "听金冠",
     "Lore": "铸冠时欠一架秤，匠人凭声音分金。冠顶最薄的一块敲起来却最沉，他始终不肯补厚。",
     "LoreRoot": "原型·金神仿冠；听金原创",
     "Identity": "固定物理减伤冠",
@@ -2205,7 +2652,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20419,
@@ -2255,11 +2709,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 374,
+        "Max": 411
+      }
+    ]
   },
   {
     "BaseID": 20423,
-    "Name": "沉金出汗",
+    "Name": "金汗",
     "Lore": "金冠每到寒天便渗汗，擦下的盐会在铜镜里倒着结晶。炼师至今没有选好应记金部还是水部。",
     "LoreRoot": "原创·寒金汗晶",
     "Identity": "魔防和状态冠",
@@ -2294,11 +2755,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 20428,
-    "Name": "祝火旁听",
+    "Name": "门外听祝火",
     "Lore": "祭火时不许术者入席，他只好把冠放在门外。第二天，冠内的灰竟完整排出主祭讲过的话。",
     "LoreRoot": "原创·门外火灰记录",
     "Identity": "火弹强专精冠",
@@ -2351,7 +2819,14 @@
         "SkillName": "火弹术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 46,
+        "Max": 50
+      }
+    ]
   },
   {
     "BaseID": 20435,
@@ -2390,11 +2865,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 390,
+        "Max": 429
+      }
+    ]
   },
   {
     "BaseID": 20445,
-    "Name": "潮汐抄本",
+    "Name": "内陆潮汐录",
     "Lore": "冠衬抄的是潮汐表，往年每次满潮都在此刻。船家查了全本，发现写表的人从没离开过内陆。",
     "LoreRoot": "原创·内陆潮表",
     "Identity": "暴雪术范围冠",
@@ -2447,7 +2929,14 @@
         "SkillName": "暴雪术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 658,
+        "Max": 723
+      }
+    ]
   },
   {
     "BaseID": 20500,
@@ -2486,7 +2975,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20507,
@@ -2536,11 +3032,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 330,
+        "Max": 363
+      }
+    ]
   },
   {
     "BaseID": 20511,
-    "Name": "黄铜龟腹",
+    "Name": "归途龟",
     "Lore": "匣扣铸成龟腹，裂纹却像一张地图。占卜者焚香七次，终于承认那是铸匠回家的路线。",
     "LoreRoot": "原创·龟腹家路",
     "Identity": "物理固定减伤匣",
@@ -2575,11 +3078,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20516,
-    "Name": "炉山搬家",
+    "Name": "饭点的火山",
     "Lore": "火山模型装进背匣，七名术者轮流看守。最后发现山口并不喷火，只在饭点冒炊烟。",
     "LoreRoot": "原创·炉山模型",
     "Identity": "抗术法的炉山匣",
@@ -2614,11 +3124,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 48,
+        "Max": 52
+      }
+    ]
   },
   {
     "BaseID": 20523,
-    "Name": "河蚌藏钟",
+    "Name": "蚌钟",
     "Lore": "水匣内有半只蚌壳，合匣便敲一次钟。渡口废弃后，钟声仍准确报出空船靠岸的时刻。",
     "LoreRoot": "原创·蚌壳渡钟",
     "Identity": "法力储存背匣",
@@ -2653,11 +3170,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 450,
+        "Max": 495
+      }
+    ]
   },
   {
     "BaseID": 20535,
-    "Name": "无岸水牍",
+    "Name": "岸另计",
     "Lore": "牍文：取水三斗，还水四斗，岸另计。背匣的主人至今没有弄明白该向谁归还一条岸。",
     "LoreRoot": "原创·借水契牍",
     "Identity": "暴雪节省背匣",
@@ -2710,7 +3234,14 @@
         "SkillName": "暴雪术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 612,
+        "Max": 673
+      }
+    ]
   },
   {
     "BaseID": 20662,
@@ -2749,7 +3280,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 20667,
@@ -2788,11 +3326,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 18,
+        "Max": 19
+      }
+    ]
   },
   {
     "BaseID": 20671,
-    "Name": "目中余金",
+    "Name": "闭目金",
     "Lore": "两个眼孔里各挂一丝金屑，闭眼才看得见它们。术者靠那两点光读完了地底的经卷。",
     "LoreRoot": "原创·闭目金屑",
     "Identity": "精神专精面具",
@@ -2827,11 +3372,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20676,
-    "Name": "烈字漏口",
+    "Name": "列火",
     "Lore": "烈字刻到一半缺了下方四点，火工拿它当成列字。面具出炉后，所有火苗都排得极整齐。",
     "LoreRoot": "原创·错字火面",
     "Identity": "火球范围面具",
@@ -2884,11 +3436,18 @@
         "SkillName": "火球术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 44,
+        "Max": 48
+      }
+    ]
   },
   {
     "BaseID": 20683,
-    "Name": "霜面泪痕",
+    "Name": "霜泪",
     "Lore": "面具泪痕凝成霜，靠火烤化便流向眼角。制面人只留下叮嘱：悲喜都不要往下刻。",
     "LoreRoot": "原创·倒流霜泪",
     "Identity": "冰箭伤害面具",
@@ -2941,7 +3500,14 @@
         "SkillName": "冰箭术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 44,
+        "Max": 48
+      }
+    ]
   },
   {
     "BaseID": 20693,
@@ -2980,7 +3546,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 540,
+        "Max": 594
+      }
+    ]
   },
   {
     "BaseID": 20827,
@@ -3019,11 +3592,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 28,
+        "Max": 30
+      }
+    ]
   },
   {
     "BaseID": 20832,
-    "Name": "山门旧锁",
+    "Name": "归山锁",
     "Lore": "鞋扣是山门拆下的旧锁，离山越远扣得越紧。开锁匠试了三天，最后建议往山里走一步。",
     "LoreRoot": "原创·门锁鞋扣",
     "Identity": "物理减伤重履",
@@ -3058,7 +3638,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 283,
+        "Max": 311
+      }
+    ]
   },
   {
     "BaseID": 20837,
@@ -3102,7 +3689,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 20,
+        "Max": 22
+      }
+    ]
   },
   {
     "BaseID": 20842,
@@ -3141,7 +3735,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20853,
@@ -3180,11 +3781,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20858,
-    "Name": "浪头留宿",
+    "Name": "宿浪",
     "Lore": "鞋跟里困着一朵浪花，夜里用沙粒敲门。主人把鞋放回海边，浪花却选择了更干燥的那一只。",
     "LoreRoot": "原创·浪花鞋跟",
     "Identity": "大法力潮履",
@@ -3219,7 +3827,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 530,
+        "Max": 583
+      }
+    ]
   },
   {
     "BaseID": 20885,
@@ -3276,7 +3891,14 @@
         "SkillName": "火弹术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 44,
+        "Max": 48
+      }
+    ]
   },
   {
     "BaseID": 20890,
@@ -3315,7 +3937,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20895,
@@ -3365,7 +3994,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 20900,
@@ -3404,7 +4040,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20911,
@@ -3454,7 +4097,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 418,
+        "Max": 459
+      }
+    ]
   },
   {
     "BaseID": 20916,
@@ -3504,11 +4154,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 464,
+        "Max": 510
+      }
+    ]
   },
   {
     "BaseID": 20972,
-    "Name": "火目小睡",
+    "Name": "火目眠",
     "Lore": "戒眼困极时会合上半边，术者趁机看清眼后的一张床。床上没有人，枕头却每天换一个方向。",
     "LoreRoot": "原创·戒眼内室",
     "Identity": "法术暴击戒",
@@ -3543,7 +4200,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 480,
+        "Max": 528
+      }
+    ]
   },
   {
     "BaseID": 20977,
@@ -3582,16 +4246,23 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20992,
-    "Name": "瞳中长夜",
+    "Name": "长夜瞳",
     "Lore": "戒石里永远是二更，风雪、花开也都在二更。持戒人开始用它计日，很快忘了哪天才是真正的今天。",
     "LoreRoot": "原创·恒定二更戒",
     "Identity": "火球高爆发戒",
-    "Benefit": "以法术输出为主，保留火球高爆发戒的用途；法术会心、法攻、智慧、法力、精神、生命、魔防形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以法术输出为主，保留火球高爆发戒的用途；法术会心、法攻、智慧、法力、精神、生命、魔防形成完整底盘；另有本件白字法攻强化80–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "builddefining",
     "Affixes": [
       {
@@ -3639,11 +4310,26 @@
         "SkillName": "火球术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 525,
+        "Max": 577
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 90,
+        "MinPercent": 80,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 20997,
-    "Name": "金线缝魂",
+    "Name": "缝魂",
     "Lore": "戒箍的接缝用金线绑着，线头深深没入石中。鉴石者拆出一寸，自己便忘了进门时说的第一句话。",
     "LoreRoot": "原创·石缝金线",
     "Identity": "状态抗性戒",
@@ -3678,7 +4364,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 21008,
@@ -3717,11 +4410,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 470,
+        "Max": 517
+      }
+    ]
   },
   {
     "BaseID": 21013,
-    "Name": "月在蚌背",
+    "Name": "蚌背月",
     "Lore": "海珠的光只照向背面，正面黯淡如石。祭海人把它倒佩，发现影子也开始朝着自己走来。",
     "LoreRoot": "原创·反照海珠",
     "Identity": "低血自保戒",
@@ -3767,7 +4467,14 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 508,
+        "Max": 558
+      }
+    ]
   },
   {
     "BaseID": 21108,
@@ -3806,11 +4513,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 55,
+        "Max": 60
+      }
+    ]
   },
   {
     "BaseID": 21118,
-    "Name": "金牙嚼字",
+    "Name": "嚼字",
     "Lore": "牙雕咬掉书角，书上被咬的字便暂时消失。读完经文后，主人仍得把一个个字吐回纸上。",
     "LoreRoot": "原创·金牙吞字",
     "Identity": "储法坠饰",
@@ -3845,7 +4559,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 290,
+        "Max": 319
+      }
+    ]
   },
   {
     "BaseID": 21128,
@@ -3902,7 +4623,14 @@
         "SkillName": "火弹术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 78,
+        "Max": 85
+      }
+    ]
   },
   {
     "BaseID": 21133,
@@ -3941,7 +4669,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 47,
+        "Max": 51
+      }
+    ]
   },
   {
     "BaseID": 21144,
@@ -3998,7 +4733,14 @@
         "SkillName": "冰箭术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 564,
+        "Max": 620
+      }
+    ]
   },
   {
     "BaseID": 21149,
@@ -4048,11 +4790,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 21785,
-    "Name": "檀中旧牙",
+    "Name": "檀牙",
     "Lore": "紫檀木里包着一颗旧牙，年轮绕牙长了三十二圈。木匠称它是树的牙，牙医拒绝给它估岁数。",
     "LoreRoot": "原型·紫檀盔",
     "Identity": "精神与抗状态盔",
@@ -4087,11 +4836,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 29,
+        "Max": 31
+      }
+    ]
   },
   {
     "BaseID": 21786,
-    "Name": "直钩发簪",
+    "Name": "不钓簪",
     "Lore": "发髻中插一根直钩，钩上写着不钓二字。每到雨夜，簪尖总多出一丝新鲜水草。",
     "LoreRoot": "原型·太公髻意象；无归属断言",
     "Identity": "狩猎强敌法冠",
@@ -4137,7 +4893,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 110,
+        "Max": 121
+      }
+    ]
   },
   {
     "BaseID": 21787,
@@ -4192,7 +4955,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 170,
+        "Max": 187
+      }
+    ]
   },
   {
     "BaseID": 22052,
@@ -4231,11 +5001,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22053,
-    "Name": "灵台欠砖",
+    "Name": "拒念台",
     "Lore": "冠内的灵台小景缺了块砖，制景人说必须留空给念头进出。戴者后来把自己最吵的一念关在了外面。",
     "LoreRoot": "原创·缺砖灵台",
     "Identity": "精神储气冠",
@@ -4270,7 +5047,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22054,
@@ -4320,7 +5104,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22055,
@@ -4359,7 +5150,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22056,
@@ -4398,7 +5196,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 560,
+        "Max": 616
+      }
+    ]
   },
   {
     "BaseID": 22057,
@@ -4437,11 +5242,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 53,
+        "Max": 58
+      }
+    ]
   },
   {
     "BaseID": 22058,
-    "Name": "雷公空位",
+    "Name": "雷公的空盒",
     "Lore": "雷纹中心空了一块，供奉人放什么都被轻轻弹出。最后他摆了一个空盒，盒子却留下了。",
     "LoreRoot": "原创·雷纹空盒",
     "Identity": "范围伤害专精冠",
@@ -4487,7 +5299,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 85,
+        "Max": 93
+      }
+    ]
   },
   {
     "BaseID": 22059,
@@ -4526,7 +5345,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 840,
+        "Max": 924
+      }
+    ]
   },
   {
     "BaseID": 22060,
@@ -4583,7 +5409,14 @@
         "SkillName": "火球术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 95,
+        "Max": 104
+      }
+    ]
   },
   {
     "BaseID": 22317,
@@ -4622,7 +5455,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 200,
+        "Max": 220
+      }
+    ]
   },
   {
     "BaseID": 22318,
@@ -4661,7 +5501,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 17,
+        "Max": 18
+      }
+    ]
   },
   {
     "BaseID": 22319,
@@ -4700,7 +5547,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22320,
@@ -4739,7 +5593,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22321,
@@ -4778,11 +5639,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 610,
+        "Max": 671
+      }
+    ]
   },
   {
     "BaseID": 22322,
-    "Name": "金月落屐",
+    "Name": "月屐",
     "Lore": "月片嵌在木屐下，走一步便亮一瞬。掌灯人曾用它走完整条暗街，鞋底的月却一点没薄。",
     "LoreRoot": "原创·月片木屐",
     "Identity": "法术抵挡履",
@@ -4817,7 +5685,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 48,
+        "Max": 52
+      }
+    ]
   },
   {
     "BaseID": 22323,
@@ -4856,7 +5731,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22324,
@@ -4913,7 +5795,14 @@
         "SkillName": "冰箭术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 15,
+        "Max": 16
+      }
+    ]
   },
   {
     "BaseID": 22325,
@@ -4963,11 +5852,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 63,
+        "Max": 69
+      }
+    ]
   },
   {
     "BaseID": 22334,
-    "Name": "掌中小庙",
+    "Name": "掌中庙",
     "Lore": "护掌内绣一座小庙，庙门朝着腕口。合掌时门关上，门里的钟却会比平时响两声。",
     "LoreRoot": "原创·掌绣小庙",
     "Identity": "精神护手",
@@ -5002,7 +5898,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22335,
@@ -5041,7 +5944,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22336,
@@ -5080,7 +5990,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 510,
+        "Max": 561
+      }
+    ]
   },
   {
     "BaseID": 22337,
@@ -5119,7 +6036,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 410,
+        "Max": 451
+      }
+    ]
   },
   {
     "BaseID": 22338,
@@ -5176,7 +6100,14 @@
         "SkillName": "火弹术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 55,
+        "Max": 60
+      }
+    ]
   },
   {
     "BaseID": 22339,
@@ -5215,7 +6146,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 22340,
@@ -5265,11 +6203,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 72,
+        "Max": 79
+      }
+    ]
   },
   {
     "BaseID": 22341,
-    "Name": "空手抄箓",
+    "Name": "空箓",
     "Lore": "书吏空手抄写，桌上没有纸，手套却一天比一天重。秤重簿记到最后，只剩两个字：已满。",
     "LoreRoot": "原创·空抄宝箓",
     "Identity": "高法力抄箓手套",
@@ -5304,7 +6249,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 630,
+        "Max": 693
+      }
+    ]
   },
   {
     "BaseID": 22342,
@@ -5354,11 +6306,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 464,
+        "Max": 510
+      }
+    ]
   },
   {
     "BaseID": 22351,
-    "Name": "金绳捆风",
+    "Name": "风过季",
     "Lore": "袋口捆着一阵已经过季的风，夏天吹来仍有落叶气味。清扫者觉得比金子难收拾。",
     "LoreRoot": "原创·过季之风袋",
     "Identity": "轻身风袋",
@@ -5393,7 +6352,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 14,
+        "Max": 15
+      }
+    ]
   },
   {
     "BaseID": 22352,
@@ -5432,7 +6398,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 460,
+        "Max": 506
+      }
+    ]
   },
   {
     "BaseID": 22353,
@@ -5471,7 +6444,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22354,
@@ -5510,7 +6490,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 27,
+        "Max": 29
+      }
+    ]
   },
   {
     "BaseID": 22355,
@@ -5554,7 +6541,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 20,
+        "Max": 22
+      }
+    ]
   },
   {
     "BaseID": 22356,
@@ -5593,11 +6587,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22357,
-    "Name": "昨日炉火",
+    "Name": "昨日火",
     "Lore": "封炎袋藏着一片昨日的火，今天添柴也烧不进去。火工将它列为废料，史官却出了很高的价。",
     "LoreRoot": "原型·封炎袋；昨日火原创",
     "Identity": "火球续航专精袋",
@@ -5657,7 +6658,14 @@
         "SkillName": "火球术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 743,
+        "Max": 817
+      }
+    ]
   },
   {
     "BaseID": 22358,
@@ -5714,7 +6722,14 @@
         "SkillName": "暴雪术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 85,
+        "Max": 93
+      }
+    ]
   },
   {
     "BaseID": 22359,
@@ -5753,7 +6768,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 61,
+        "Max": 67
+      }
+    ]
   },
   {
     "BaseID": 22362,
@@ -5792,11 +6814,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 31,
+        "Max": 34
+      }
+    ]
   },
   {
     "BaseID": 22363,
-    "Name": "灵童老面",
+    "Name": "老童面",
     "Lore": "童子戏面越放越老，脸上的皱纹却像村后水渠。班主请来渠工，给它改了一张更年轻的水图。",
     "LoreRoot": "原创·戏面渠纹",
     "Identity": "法力偏科面具",
@@ -5831,7 +6860,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 440,
+        "Max": 484
+      }
+    ]
   },
   {
     "BaseID": 22364,
@@ -5870,11 +6906,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22365,
-    "Name": "太阳低头",
+    "Name": "照蚁阳",
     "Lore": "面具上的太阳长了一双朝下的眼睛，照着地上的蚂蚁。观日者指责雕错，雕工说蚂蚁也在天底下。",
     "LoreRoot": "原创·垂目日面",
     "Identity": "生命偏科面具",
@@ -5909,11 +6952,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22366,
-    "Name": "天容退稿",
+    "Name": "太像人",
     "Lore": "神容图被退回六次，每次只批太像人。第七次工匠没有交稿，这张面具因此留着普通的眉眼。",
     "LoreRoot": "原创·退回神容稿",
     "Identity": "稳定魔攻面具",
@@ -5948,7 +6998,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 82,
+        "Max": 90
+      }
+    ]
   },
   {
     "BaseID": 22367,
@@ -5998,7 +7055,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22368,
@@ -6037,7 +7101,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 650,
+        "Max": 715
+      }
+    ]
   },
   {
     "BaseID": 22369,
@@ -6076,11 +7147,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 17,
+        "Max": 18
+      }
+    ]
   },
   {
     "BaseID": 22370,
-    "Name": "星空背面",
+    "Name": "无面的星空",
     "Lore": "苍星面翻过来没有五官，只有一片比夜更黑的底。观星者看久了，开始给那些黑处分别起名字。",
     "LoreRoot": "原创·星空背面",
     "Identity": "高法力与状态面",
@@ -6115,7 +7193,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 780,
+        "Max": 858
+      }
+    ]
   },
   {
     "BaseID": 22373,
@@ -6154,11 +7239,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22374,
-    "Name": "琥珀晚饭",
+    "Name": "琥珀未饱虫",
     "Lore": "琥珀里封着一颗米粒，旁边还有一只吃到一半的小虫。收藏者认为珍贵，孩子认为它还没吃饱。",
     "LoreRoot": "原型·琥珀凝晶",
     "Identity": "生命琥珀坠",
@@ -6193,7 +7285,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 220,
+        "Max": 242
+      }
+    ]
   },
   {
     "BaseID": 22375,
@@ -6232,7 +7331,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 22,
+        "Max": 24
+      }
+    ]
   },
   {
     "BaseID": 22376,
@@ -6271,7 +7377,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 580,
+        "Max": 638
+      }
+    ]
   },
   {
     "BaseID": 22377,
@@ -6321,11 +7434,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 520,
+        "Max": 572
+      }
+    ]
   },
   {
     "BaseID": 22378,
-    "Name": "妖瞳望灶",
+    "Name": "灶眼",
     "Lore": "朱眼石只看灶口，不管主人朝哪里转。妖物鉴定书写了百页，厨师只用一句：它饿了。",
     "LoreRoot": "原型·朱焰妖瞳",
     "Identity": "火系强项坠",
@@ -6371,7 +7491,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 70,
+        "Max": 77
+      }
+    ]
   },
   {
     "BaseID": 22379,
@@ -6410,7 +7537,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22380,
@@ -6449,7 +7583,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 115,
+        "Max": 126
+      }
+    ]
   },
   {
     "BaseID": 22381,
@@ -6499,16 +7640,23 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22384,
-    "Name": "环内冬至",
+    "Name": "冬至环",
     "Lore": "戒内只刻冬至日，戴它写的日期总少一个季节。历官验了七遍，决定春天先不借给他。",
     "LoreRoot": "原创·冬至环",
     "Identity": "冰箭伤害戒",
-    "Benefit": "以法术输出为主，保留冰箭伤害戒的用途；法攻、智慧、法力、法术会心、精神、生命、魔防形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以法术输出为主，保留冰箭伤害戒的用途；法攻、智慧、法力、法术会心、精神、生命、魔防形成完整底盘；另有本件白字法攻强化80–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "builddefining",
     "Affixes": [
       {
@@ -6556,7 +7704,22 @@
         "SkillName": "冰箭术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 23,
+        "Max": 25
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 90,
+        "MinPercent": 80,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 22385,
@@ -6595,7 +7758,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22386,
@@ -6603,8 +7773,8 @@
     "Lore": "六芒星印的第七个角只在拓本上出现，真戒上摸不着。拓印师为它另收一角工钱。",
     "LoreRoot": "原型·六芒星印；多角原创",
     "Identity": "范围伤害戒",
-    "Benefit": "以法术输出为主，保留范围伤害戒的用途；法攻、智慧、法力、法术会心、精神、生命形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以法术输出为主，保留范围伤害戒的用途；法攻、智慧、法力、法术会心、精神、生命形成完整底盘；另有本件白字法攻强化60–80%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -6645,11 +7815,26 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 20,
+        "Max": 22
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 70,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ]
   },
   {
     "BaseID": 22387,
-    "Name": "法眼蒙尘",
+    "Name": "尘眼",
     "Lore": "戒眼擦净后竟看不清字，再蒙灰便好。主人把擦布当成封条，此后每逢大风都将手藏在袖里。",
     "LoreRoot": "原型·法眼戒",
     "Identity": "魔法暴击戒",
@@ -6684,7 +7869,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 590,
+        "Max": 649
+      }
+    ]
   },
   {
     "BaseID": 22388,
@@ -6723,7 +7915,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22389,
@@ -6787,16 +7986,23 @@
         "SkillName": "火球术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 789,
+        "Max": 867
+      }
+    ]
   },
   {
     "BaseID": 22390,
-    "Name": "雷声罚抄",
+    "Name": "雷不认",
     "Lore": "雷纹戒的匣里塞满同一句道歉，只有一张写着不认。术者把那张贴在戒底，声音便忽然轻了。",
     "LoreRoot": "原创·雷声认错纸",
     "Identity": "技能伤害戒",
-    "Benefit": "以法术输出为主，保留技能伤害戒的用途；法攻、智慧、法力、法术会心、精神、生命形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以法术输出为主，保留技能伤害戒的用途；法攻、智慧、法力、法术会心、精神、生命形成完整底盘；另有本件白字法攻强化60–80%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -6837,16 +8043,31 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 20,
+        "Max": 22
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 70,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ]
   },
   {
     "BaseID": 22391,
-    "Name": "凛然空席",
+    "Name": "待客霜",
     "Lore": "玉环下挂着一个细小坐垫，上面永远结霜。主持者并不邀人坐，只用它提醒众人尚有未到的客。",
     "LoreRoot": "原创·霜席玉环",
     "Identity": "暴雪极专精戒",
-    "Benefit": "以法术输出为主，保留暴雪极专精戒的用途；法攻、智慧、法力、法术会心、精神、生命、魔防形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以法术输出为主，保留暴雪极专精戒的用途；法攻、智慧、法力、法术会心、精神、生命、魔防形成完整底盘；另有本件白字法攻强化80–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "builddefining",
     "Affixes": [
       {
@@ -6901,7 +8122,22 @@
         "SkillName": "暴雪术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 23,
+        "Max": 25
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 90,
+        "MinPercent": 80,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 22392,
@@ -6951,7 +8187,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 680,
+        "Max": 748
+      }
+    ]
   },
   {
     "BaseID": 22531,
@@ -7001,7 +8244,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 86,
+        "Max": 94
+      }
+    ]
   },
   {
     "BaseID": 22532,
@@ -7045,7 +8295,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 135,
+        "Max": 148
+      }
+    ]
   },
   {
     "BaseID": 22533,
@@ -7110,7 +8367,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 620,
+        "Max": 682
+      }
+    ]
   },
   {
     "BaseID": 22546,
@@ -7160,7 +8424,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 110,
+        "Max": 121
+      }
+    ]
   },
   {
     "BaseID": 22547,
@@ -7199,7 +8470,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 460,
+        "Max": 506
+      }
+    ]
   },
   {
     "BaseID": 22548,
@@ -7254,11 +8532,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 145,
+        "Max": 159
+      }
+    ]
   },
   {
     "BaseID": 22590,
-    "Name": "冰鞋暖足",
+    "Name": "冰中暖",
     "Lore": "鞋外结冰，鞋内却始终温暖。冰匠说热不曾消失，只是找了一个与世隔绝的地方。",
     "LoreRoot": "原型·冰魂天靴",
     "Identity": "抗法生命靴",
@@ -7293,7 +8578,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 24,
+        "Max": 26
+      }
+    ]
   },
   {
     "BaseID": 22591,
@@ -7332,11 +8624,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 870,
+        "Max": 957
+      }
+    ]
   },
   {
     "BaseID": 22592,
-    "Name": "履底幻城",
+    "Name": "履中城",
     "Lore": "靴底的城图只够一脚，城中的路却要走三日。绘图者拒绝画第二只，怕两城突然打起来。",
     "LoreRoot": "原创·一足幻城",
     "Identity": "灵活冰箭战靴",
@@ -7389,7 +8688,14 @@
         "SkillName": "冰箭术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 22,
+        "Max": 24
+      }
+    ]
   },
   {
     "BaseID": 24680,
@@ -7428,7 +8734,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 24681,
@@ -7485,11 +8798,18 @@
         "SkillName": "火球术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 1022,
+        "Max": 1124
+      }
+    ]
   },
   {
     "BaseID": 24682,
-    "Name": "牙缝火星",
+    "Name": "牙中烬",
     "Lore": "兽牙缝里卡着一颗火星，掏出来便成黑石。插回原处，石头又开始烧。",
     "LoreRoot": "原型·祸斗利牙",
     "Identity": "火伤耳饰",
@@ -7535,7 +8855,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 24683,
@@ -7574,11 +8901,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 75,
+        "Max": 82
+      }
+    ]
   },
   {
     "BaseID": 24684,
-    "Name": "尾环不闭",
+    "Name": "容祸斗",
     "Lore": "环的两端始终隔着半粒米的距离，套在手上却无法取下。铁匠说那缝足够一只祸斗经过。",
     "LoreRoot": "原型·祸斗尾环；不闭之隙原创",
     "Identity": "高法力偏科腕",
@@ -7613,7 +8947,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 980,
+        "Max": 1078
+      }
+    ]
   },
   {
     "BaseID": 24685,
@@ -7652,7 +8993,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 720,
+        "Max": 792
+      }
+    ]
   },
   {
     "BaseID": 24686,
@@ -7702,11 +9050,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 120,
+        "Max": 132
+      }
+    ]
   },
   {
     "BaseID": 24687,
-    "Name": "烟尾归环",
+    "Name": "循烟",
     "Lore": "尾环抛出的烟总会绕一圈回来，闭窗也拦不住。制环师因此把来路两字刻在了内侧。",
     "LoreRoot": "原创·回归烟尾",
     "Identity": "击杀续航腕",
@@ -7752,7 +9107,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 735,
+        "Max": 808
+      }
+    ]
   },
   {
     "BaseID": 24688,
@@ -7796,7 +9158,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 140,
+        "Max": 154
+      }
+    ]
   },
   {
     "BaseID": 40017,
@@ -7835,11 +9204,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 88,
+        "Max": 96
+      }
+    ]
   },
   {
     "BaseID": 40018,
-    "Name": "鸾影借色",
+    "Name": "借青",
     "Lore": "青鸾玉羽的青色每天从别处借来，昨日是山，今日是茶。玉匠希望它别再借自己的脸色。",
     "LoreRoot": "原型·青鸾羽",
     "Identity": "精神和法力玉",
@@ -7874,7 +9250,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 28,
+        "Max": 30
+      }
+    ]
   },
   {
     "BaseID": 40019,
@@ -7913,7 +9296,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 40032,
@@ -7970,11 +9360,18 @@
         "SkillName": "火弹术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 55,
+        "Max": 60
+      }
+    ]
   },
   {
     "BaseID": 40033,
-    "Name": "风神短假",
+    "Name": "无风方归还",
     "Lore": "飞廉玉翼上挂着请假条，日期只写无风之日。借玉者看过天气，仍没找到合适的归还时辰。",
     "LoreRoot": "原型·飞廉风翼",
     "Identity": "移动法力玉",
@@ -8009,7 +9406,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 12,
+        "Max": 13
+      }
+    ]
   },
   {
     "BaseID": 40034,
@@ -8048,11 +9452,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 430,
+        "Max": 473
+      }
+    ]
   },
   {
     "BaseID": 47094,
-    "Name": "泪石不湿",
+    "Name": "泪成河",
     "Lore": "泪石贴着眼角也不湿，贴在地图上却能漫出一条河。制图师标记那河时，先查了自己的旧账。",
     "LoreRoot": "原创·地图泪河",
     "Identity": "暴雪伤害玉",
@@ -8105,7 +9516,14 @@
         "SkillName": "暴雪术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 132,
+        "Max": 145
+      }
+    ]
   },
   {
     "BaseID": 47095,
@@ -8155,11 +9573,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 47096,
-    "Name": "蛟留旧鳞",
+    "Name": "蛟旧名",
     "Lore": "蜕下的鳞上写着原主旧名，新名只留了笔画数。三位术者各猜一个，玉里的影子都不答应。",
     "LoreRoot": "原型·天蛟蜕；换名鳞片原创",
     "Identity": "生命与魔防玉",
@@ -8194,11 +9619,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 470,
+        "Max": 517
+      }
+    ]
   },
   {
     "BaseID": 47109,
-    "Name": "喙中半句",
+    "Name": "喙半言",
     "Lore": "玉喙张到一半，像要纠正什么。祭师把所有赞词改了三遍，喙依旧不肯合上。",
     "LoreRoot": "原型·毕方玉喙",
     "Identity": "精神偏科玉",
@@ -8233,7 +9665,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 47110,
@@ -8272,7 +9711,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 47111,
@@ -8311,7 +9757,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57037,
@@ -8350,7 +9803,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 128,
+        "Max": 140
+      }
+    ]
   },
   {
     "BaseID": 57038,
@@ -8389,7 +9849,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 8,
+        "Max": 9
+      }
+    ]
   },
   {
     "BaseID": 57039,
@@ -8446,11 +9913,18 @@
         "SkillName": "火弹术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 31,
+        "Max": 34
+      }
+    ]
   },
   {
     "BaseID": 57040,
-    "Name": "泥人嫌冷",
+    "Name": "抱寒泥",
     "Lore": "小泥人的双手原本分开，入冬后却抱到胸前。烧窑工没敢送进炉里，只给它补了一件泥衣。",
     "LoreRoot": "原创·怕冷泥人",
     "Identity": "魔法固定减伤徽",
@@ -8485,7 +9959,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 11,
+        "Max": 12
+      }
+    ]
   },
   {
     "BaseID": 57041,
@@ -8524,7 +10005,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 37,
+        "Max": 40
+      }
+    ]
   },
   {
     "BaseID": 57042,
@@ -8574,7 +10062,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 19,
+        "Max": 20
+      }
+    ]
   },
   {
     "BaseID": 57043,
@@ -8613,11 +10108,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57044,
-    "Name": "狸奴占卦",
+    "Name": "卦归猫",
     "Lore": "狸奴走过卦盘，只踩乱最后一爻。术者照那一爻另刻此徽，自称从此每次失算都可追究到猫。",
     "LoreRoot": "原创·猫改卦盘",
     "Identity": "法术暴击徽",
@@ -8657,7 +10159,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 430,
+        "Max": 473
+      }
+    ]
   },
   {
     "BaseID": 57077,
@@ -8696,7 +10205,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 57078,
@@ -8735,7 +10251,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 480,
+        "Max": 528
+      }
+    ]
   },
   {
     "BaseID": 57079,
@@ -8774,7 +10297,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 57080,
@@ -8813,7 +10343,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 520,
+        "Max": 572
+      }
+    ]
   },
   {
     "BaseID": 57081,
@@ -8870,7 +10407,14 @@
         "SkillName": "暴雪术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 158,
+        "Max": 173
+      }
+    ]
   },
   {
     "BaseID": 57082,
@@ -8909,7 +10453,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 24,
+        "Max": 26
+      }
+    ]
   },
   {
     "BaseID": 57083,
@@ -8959,7 +10510,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 148,
+        "Max": 162
+      }
+    ]
   },
   {
     "BaseID": 57084,
@@ -9009,7 +10567,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 418,
+        "Max": 459
+      }
+    ]
   },
   {
     "BaseID": 57125,
@@ -9073,7 +10638,14 @@
         "SkillName": "火球术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 80,
+        "Max": 88
+      }
+    ]
   },
   {
     "BaseID": 57130,
@@ -9112,11 +10684,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57156,
-    "Name": "墨鱼方章",
+    "Name": "墨鱼章",
     "Lore": "方章浸水时会吐出一团墨，提起后又吸回。印师在印谱旁画了条鱼，除此之外什么也不肯解释。",
     "LoreRoot": "原创·吐墨方章",
     "Identity": "法力练习徽",
@@ -9151,7 +10730,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 140,
+        "Max": 154
+      }
+    ]
   },
   {
     "BaseID": 57157,
@@ -9190,7 +10776,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57158,
@@ -9229,7 +10822,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 11,
+        "Max": 12
+      }
+    ]
   },
   {
     "BaseID": 57159,
@@ -9268,11 +10868,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 13,
+        "Max": 14
+      }
+    ]
   },
   {
     "BaseID": 57160,
-    "Name": "桂枝刻漏",
+    "Name": "桂漏",
     "Lore": "小刻漏里装的是桂枝末，漏完后桂香不减。校时人并不称赞，只说这东西无法告诉他过去多久。",
     "LoreRoot": "原创·桂末刻漏",
     "Identity": "火弹吟唱小徽",
@@ -9325,7 +10932,14 @@
         "SkillName": "火弹术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 314,
+        "Max": 345
+      }
+    ]
   },
   {
     "BaseID": 57161,
@@ -9364,11 +10978,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 35,
+        "Max": 38
+      }
+    ]
   },
   {
     "BaseID": 57162,
-    "Name": "无字禁卷",
+    "Name": "无字也禁阅",
     "Lore": "封签写禁阅，卷内无字。保管人多年未敢打开，新的保管人打开以后，多贴了一道封签。",
     "LoreRoot": "原创·无字禁卷徽",
     "Identity": "高精神小徽",
@@ -9403,11 +11024,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57163,
-    "Name": "炉火抄经",
+    "Name": "火抄经",
     "Lore": "经文不是墨写，是炉火隔纸烧出的浅痕。术者换了三次纸，烧痕始终只在第六行停顿。",
     "LoreRoot": "原创·火烧经文",
     "Identity": "火系伤害徽",
@@ -9453,11 +11081,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 40,
+        "Max": 44
+      }
+    ]
   },
   {
     "BaseID": 57196,
-    "Name": "半张天图",
+    "Name": "天图包点心",
     "Lore": "缺失的天图被解释为尚未发现，持图者因此得了奖。获奖后他终于坦白，另一半拿去包了点心。",
     "LoreRoot": "原创·天图奖徽",
     "Identity": "生命与法力徽",
@@ -9492,7 +11127,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 254,
+        "Max": 279
+      }
+    ]
   },
   {
     "BaseID": 57197,
@@ -9531,11 +11173,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 57198,
-    "Name": "卦象可退",
+    "Name": "可退卦",
     "Lore": "卜摊写着不灵可退，退回来的是同一枚铜卦。摊主每次退钱都先看看背面，那里多了一道新划痕。",
     "LoreRoot": "原创·退卦铜片",
     "Identity": "法术暴击徽",
@@ -9570,7 +11219,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 540,
+        "Max": 594
+      }
+    ]
   },
   {
     "BaseID": 57199,
@@ -9627,7 +11283,14 @@
         "SkillName": "暴雪术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 564,
+        "Max": 620
+      }
+    ]
   },
   {
     "BaseID": 57200,
@@ -9666,7 +11329,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 19,
+        "Max": 20
+      }
+    ]
   },
   {
     "BaseID": 57201,
@@ -9705,7 +11375,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 530,
+        "Max": 583
+      }
+    ]
   },
   {
     "BaseID": 57202,
@@ -9755,7 +11432,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 57203,
@@ -9810,7 +11494,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 272,
+        "Max": 299
+      }
+    ]
   },
   {
     "BaseID": 57265,
@@ -9849,7 +11540,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 128,
+        "Max": 140
+      }
+    ]
   },
   {
     "BaseID": 57266,
@@ -9888,7 +11586,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57267,
@@ -9927,7 +11632,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 9,
+        "Max": 10
+      }
+    ]
   },
   {
     "BaseID": 57268,
@@ -9966,7 +11678,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 155,
+        "Max": 170
+      }
+    ]
   },
   {
     "BaseID": 57269,
@@ -10005,11 +11724,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 35,
+        "Max": 38
+      }
+    ]
   },
   {
     "BaseID": 57270,
-    "Name": "还愿过期",
+    "Name": "愿逾期",
     "Lore": "愿条过了约定日期仍不褪色，供品却早已换了三轮。守坛者将纸作徽，写下照常办理。",
     "LoreRoot": "原创·逾期愿条",
     "Identity": "单体法术伤害徽",
@@ -10055,7 +11781,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 28,
+        "Max": 30
+      }
+    ]
   },
   {
     "BaseID": 57271,
@@ -10094,7 +11827,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 13,
+        "Max": 14
+      }
+    ]
   },
   {
     "BaseID": 57272,
@@ -10151,11 +11891,18 @@
         "SkillName": "火球术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 31,
+        "Max": 34
+      }
+    ]
   },
   {
     "BaseID": 57305,
-    "Name": "奉还旧云",
+    "Name": "还云",
     "Lore": "文书只列一片旧云，状态写着完好。收云人看了半天，最后在清单上补了仍有雨。",
     "LoreRoot": "原创·归还云文书",
     "Identity": "生命精神徽",
@@ -10190,7 +11937,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 254,
+        "Max": 279
+      }
+    ]
   },
   {
     "BaseID": 57306,
@@ -10229,7 +11983,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57307,
@@ -10268,7 +12029,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 560,
+        "Max": 616
+      }
+    ]
   },
   {
     "BaseID": 57308,
@@ -10307,11 +12075,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 57309,
-    "Name": "禁火之外",
+    "Name": "炉内不禁火",
     "Lore": "墙上写着禁火，落款后另加了一小句炉内不算。此徽正是那一小句，炉工认为它最有用。",
     "LoreRoot": "原创·禁火例外牌",
     "Identity": "火系魔攻徽",
@@ -10357,7 +12132,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 56,
+        "Max": 61
+      }
+    ]
   },
   {
     "BaseID": 57310,
@@ -10396,7 +12178,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57311,
@@ -10446,11 +12235,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 420,
+        "Max": 462
+      }
+    ]
   },
   {
     "BaseID": 57312,
-    "Name": "守约的空雷",
+    "Name": "雷独至",
     "Lore": "雷声按约抵达，闪电却没有来。接引的术者把听到的一切封成此徽，在收条上写足数。",
     "LoreRoot": "原创·空雷收讫徽",
     "Identity": "持续火球施法徽",
@@ -10510,6 +12306,13 @@
         "SkillName": "火球术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 48,
+        "Max": 52
+      }
+    ]
   }
 ]

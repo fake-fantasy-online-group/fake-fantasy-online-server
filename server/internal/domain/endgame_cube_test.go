@@ -282,7 +282,7 @@ func TestCubeReforgeCannotReturnCurrentPotency(t *testing.T) {
 			st := ctx.Bag.At(200)
 			st.Endgame.UniqueRollBP = old
 			ctx.Bag.Set(200, st)
-			ctx.Intn = func(int) int { return roll }
+			ctx.Intn = func(n int) int { return roll % n }
 			p, err := PlanCube(ctx, req, true)
 			if err != nil || p.Target.Endgame.UniqueRollBP == old || p.Target.Endgame.UniqueRollBP < 8000 || p.Target.Endgame.UniqueRollBP > 12000 {
 				t.Fatalf("bad reforge old%d roll%d: %+v %v", old, roll, p.Target.Endgame, err)

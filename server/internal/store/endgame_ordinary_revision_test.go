@@ -133,7 +133,7 @@ func TestSaveEndgameOrdinaryRevision(t *testing.T) {
 	if err := saveEndgameItem(context.Background(), q, st); err != nil {
 		t.Fatal(err)
 	}
-	if !strings.HasPrefix(q.statement, "INSERT INTO equipment_endgame_state") || len(q.args) != 4 || q.args[1] != int64(2) || q.args[2] != int32(0) || q.args[3] != int32(0) {
+	if !strings.HasPrefix(q.statement, "INSERT INTO equipment_endgame_state") || len(q.args) != 5 || q.args[1] != int64(2) || q.args[2] != int32(0) || q.args[3] != int32(0) || q.args[4] != int32(0) {
 		t.Fatalf("revision was not saved: %s %v", q.statement, q.args)
 	}
 	st.Endgame = domain.EndgameItemState{}
@@ -142,5 +142,24 @@ func TestSaveEndgameOrdinaryRevision(t *testing.T) {
 	}
 	if !strings.HasPrefix(q.statement, "DELETE") {
 		t.Fatal("legacy zero metadata should need no overlay")
+	}
+}
+
+func TestFormationRollStorageValidationAndExactSave(t *testing.T) {
+	for _, roll := range []int32{0, 8000, 10417, 12000} {
+		st := domain.Stack{UID: 42, Item: 1001, Count: 1, InstanceKind: domain.ItemInstanceEquipment, Endgame: domain.EndgameItemState{FormationRollBP: roll}}
+		q := &revisionRecordingQuerier{}
+		if err := saveEndgameItem(context.Background(), q, st); err != nil {
+			t.Fatal(err)
+		}
+		if roll != 0 && (len(q.args) != 5 || q.args[4] != roll) {
+			t.Fatal("stored roll changed", q.args)
+		}
+	}
+	for _, roll := range []int32{-1, 1, 7999, 12001} {
+		st := domain.Stack{UID: 42, Item: 1001, Count: 1, InstanceKind: domain.ItemInstanceEquipment, Endgame: domain.EndgameItemState{FormationRollBP: roll}}
+		if validateEndgameItem(st) == nil {
+			t.Fatal("invalid formation roll accepted", roll)
+		}
 	}
 }

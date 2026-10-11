@@ -155,7 +155,7 @@ func TestEndgameUniqueCatalogEveryPageBoundedAndComplete(t *testing.T) {
 				x.Profession != int32(u.Professions) || x.UniqueRollBP != 10000 {
 				t.Fatalf("catalog identity/requirement/reference mapping differs for %d: %+v", x.ItemID, x)
 			}
-			if !reflect.DeepEqual(x.Stats, endgameStats(u.Affixes)) || x.Trait != uniqueTraitDescription(u.Traits) {
+			if !reflect.DeepEqual(x.Stats, endgameStats(domain.ResolveVariableAffixes(u.Affixes, u.VariableAffixes, 10000))) || x.Trait != uniqueTraitDescription(u.Traits) {
 				t.Fatalf("catalog values do not match the 100%% reference for %d", x.ItemID)
 			}
 		}

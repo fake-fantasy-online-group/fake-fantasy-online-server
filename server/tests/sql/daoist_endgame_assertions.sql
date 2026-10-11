@@ -27,19 +27,25 @@ SELECT pg_temp.expect_error('UPDATE characters SET trial_key_reward=-1 WHERE id=
 SELECT pg_temp.expect_error('UPDATE characters SET trial_completion_id=repeat(''x'',65) WHERE id=920000001', '23514');
 INSERT INTO item_instances(uid,item_id,instance_kind) VALUES(920000001,32001,1);
 INSERT INTO equipment_instances(uid,refine_level,socket_count,socket_item_ids) VALUES(920000001,3,2,ARRAY[101,102,0,0,0]);
-INSERT INTO equipment_endgame_state VALUES(920000001,0,32001,8000);
+INSERT INTO equipment_endgame_state(uid,revision,unique_id,unique_roll_bp) VALUES(920000001,0,32001,8000);
 UPDATE equipment_endgame_state SET revision=1,unique_roll_bp=12000 WHERE uid=920000001;
 SELECT pg_temp.assert_true((SELECT i.item_id=32001 AND e.refine_level=3 AND e.socket_item_ids=ARRAY[101,102,0,0,0] AND x.unique_roll_bp=12000 FROM item_instances i JOIN equipment_instances e USING(uid) JOIN equipment_endgame_state x USING(uid) WHERE uid=920000001), 'overlay shares UID without replacing native equipment');
-SELECT pg_temp.expect_error('INSERT INTO equipment_endgame_state VALUES(920000002,0,32001,10000)', '23503');
-SELECT pg_temp.expect_error('INSERT INTO equipment_endgame_state VALUES(920000001,0,32001,10000)', '23505');
+SELECT pg_temp.expect_error('INSERT INTO equipment_endgame_state(uid,revision,unique_id,unique_roll_bp) VALUES(920000002,0,32001,10000)', '23503');
+SELECT pg_temp.expect_error('INSERT INTO equipment_endgame_state(uid,revision,unique_id,unique_roll_bp) VALUES(920000001,0,32001,10000)', '23505');
 SELECT pg_temp.expect_error('UPDATE equipment_endgame_state SET revision=-1 WHERE uid=920000001', '23514');
 SELECT pg_temp.expect_error('UPDATE equipment_endgame_state SET unique_id=0 WHERE uid=920000001', '23514');
 SELECT pg_temp.expect_error('UPDATE equipment_endgame_state SET unique_roll_bp=7999 WHERE uid=920000001', '23514');
 SELECT pg_temp.expect_error('UPDATE equipment_endgame_state SET unique_roll_bp=12001 WHERE uid=920000001', '23514');
+SELECT pg_temp.assert_true((SELECT formation_roll_bp=0 FROM equipment_endgame_state WHERE uid=920000001), 'legacy formation roll remains zero');
+UPDATE equipment_endgame_state SET formation_roll_bp=10417 WHERE uid=920000001;
+SELECT pg_temp.expect_error('UPDATE equipment_endgame_state SET formation_roll_bp=7999 WHERE uid=920000001', '23514');
+SELECT pg_temp.expect_error('UPDATE equipment_endgame_state SET formation_roll_bp=12001 WHERE uid=920000001', '23514');
+SELECT pg_temp.assert_true((SELECT formation_roll_bp=10417 FROM equipment_endgame_state WHERE uid=920000001), 'formation roll persisted exactly');
+
 -- Ordinary equipment carries the same durable mutation revision, with no unique roll.
 INSERT INTO item_instances(uid,item_id,instance_kind) VALUES(920000003,1001,1);
 INSERT INTO equipment_instances(uid,socket_count) VALUES(920000003,1);
-INSERT INTO equipment_endgame_state VALUES(920000003,1,0,0);
+INSERT INTO equipment_endgame_state(uid,revision,unique_id,unique_roll_bp) VALUES(920000003,1,0,0);
 UPDATE equipment_endgame_state SET revision=2 WHERE uid=920000003;
 SELECT pg_temp.assert_true((SELECT revision=2 AND unique_id=0 AND unique_roll_bp=0 FROM equipment_endgame_state WHERE uid=920000003), 'ordinary revision retained');
 SELECT pg_temp.expect_error('UPDATE equipment_endgame_state SET revision=-1 WHERE uid=920000003', '23514');

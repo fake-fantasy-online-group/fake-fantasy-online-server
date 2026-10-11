@@ -1,0 +1,2771 @@
+{
+  "schema_version": 2,
+  "review_date": "2026-10-11",
+  "method": "Prefer rune animal → named native monster → actual collectible drop → ov_desc.small_map. Where no suitable direct chain is established, use an explicitly labelled related native non-usable collectible under the updated 2026-10-11 selection policy. Direct chains and related substitutions are distinct evidence statuses. All rune icons must have different decoded visible pixels.",
+  "source_counts": {
+    "game_monsters": 2262,
+    "ov_desc": 21630,
+    "ov_item": 12541,
+    "game_monster_drops": 16887
+  },
+  "verified_count": 14,
+  "pending_count": 0,
+  "runes": [
+    {
+      "rune_id": 1900028001,
+      "rune_name": "星篆·角木蛟",
+      "animal": "蛟",
+      "previous_sprite": 26279,
+      "sprite": 26018,
+      "name_match_count": 2,
+      "status": "related_collectible_substitute",
+      "candidates": [
+        {
+          "id": 10216,
+          "name": "蛟龙神(BOSS)",
+          "sprite": 4891,
+          "_source": "server/migrations/000000_init-2.sql:1844"
+        },
+        {
+          "id": 10234,
+          "name": "双头恶蛟(BOSS)",
+          "sprite": 4892,
+          "_source": "server/migrations/000000_init-2.sql:1846"
+        }
+      ],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "蛟龙神、双头恶蛟有掉落，但太极碎片是共用奖励，魔龙之眼不是已证实的蛟类专属收集品。"
+      },
+      "reason": "蛟与龙同属龙形意象，采用原生龙鳞收集品；不声称蛟龙神掉落它。",
+      "collectible": {
+        "index": 26108,
+        "name": "龙鳞",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-30.sql:6842"
+      },
+      "description": {
+        "index": 26108,
+        "name_2": "龙鳞",
+        "small_map": 26018,
+        "big_map": 26018,
+        "desc_": "名器之魂",
+        "_source": "server/migrations/000000_init-27.sql:14898"
+      }
+    },
+    {
+      "rune_id": 1900028002,
+      "rune_name": "星篆·亢金龙",
+      "animal": "龙",
+      "previous_sprite": 26280,
+      "sprite": 4332,
+      "name_match_count": 80,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1119,
+        "name": "三头龙",
+        "sprite": 319,
+        "_source": "server/migrations/000000_init-2.sql:2011"
+      },
+      "drop": {
+        "monster_id": 1119,
+        "seq": 0,
+        "rate": "34.653853",
+        "item_id": 4332,
+        "item_name": "龙牙",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:15308"
+      },
+      "collectible": {
+        "index": 4332,
+        "name": "龙牙",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:15119"
+      },
+      "description": {
+        "index": 4332,
+        "name_2": "龙牙",
+        "small_map": 4332,
+        "big_map": 4332,
+        "desc_": "珍贵的龙的牙齿。",
+        "_source": "server/migrations/000000_init-28.sql:6054"
+      }
+    },
+    {
+      "rune_id": 1900028003,
+      "rune_name": "星篆·氐土貉",
+      "animal": "貉",
+      "previous_sprite": 4312,
+      "sprite": 4134,
+      "name_match_count": 0,
+      "status": "related_collectible_substitute",
+      "candidates": [],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "原始怪物表未找到名称含“貉”的怪物。"
+      },
+      "reason": "貉以皮毛意象关联温暖的皮毛；不声称该物品来自貉。",
+      "collectible": {
+        "index": 4134,
+        "name": "温暖的皮毛",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13625"
+      },
+      "description": {
+        "index": 4134,
+        "name_2": "温暖的皮毛",
+        "small_map": 4134,
+        "big_map": 4134,
+        "desc_": "浓密的毛发，做成衣服穿上一定很暖和。",
+        "_source": "server/migrations/000000_init-28.sql:5905"
+      }
+    },
+    {
+      "rune_id": 1900028004,
+      "rune_name": "星篆·房日兔",
+      "animal": "兔",
+      "previous_sprite": 4233,
+      "sprite": 4141,
+      "name_match_count": 38,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1060,
+        "name": "兔王",
+        "sprite": 260,
+        "_source": "server/migrations/000000_init-2.sql:1890"
+      },
+      "drop": {
+        "monster_id": 1060,
+        "seq": 0,
+        "rate": "100.0",
+        "item_id": 4141,
+        "item_name": "兔尾巴",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:14499"
+      },
+      "collectible": {
+        "index": 4141,
+        "name": "兔尾巴",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13704"
+      },
+      "description": {
+        "index": 4141,
+        "name_2": "兔尾巴",
+        "small_map": 4141,
+        "big_map": 4141,
+        "desc_": "毛茸茸的兔尾巴。",
+        "_source": "server/migrations/000000_init-28.sql:5913"
+      },
+      "note": "绒绒兔也掉落兔毛4101，但其真实小图4136与猴皮相同。本项采用另一条已核实链：兔王→兔尾巴4141，保留辨识度。"
+    },
+    {
+      "rune_id": 1900028005,
+      "rune_name": "星篆·心月狐",
+      "animal": "狐",
+      "previous_sprite": 39032,
+      "sprite": 4121,
+      "name_match_count": 22,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1020,
+        "name": "狐妖",
+        "sprite": 220,
+        "_source": "server/migrations/000000_init-2.sql:1836"
+      },
+      "drop": {
+        "monster_id": 1020,
+        "seq": 0,
+        "rate": "34.201963",
+        "item_id": 4121,
+        "item_name": "火灵珠",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:14246"
+      },
+      "collectible": {
+        "index": 4121,
+        "name": "火灵珠",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13475"
+      },
+      "description": {
+        "index": 4121,
+        "name_2": "火灵珠",
+        "small_map": 4121,
+        "big_map": 4121,
+        "desc_": "一颗闪动着火光的宝珠，里面可是凝结了狐妖多年修行的精华。",
+        "_source": "server/migrations/000000_init-28.sql:5891"
+      },
+      "note": "原始描述明确火灵珠凝结狐妖修行精华；九尾火狐另有火狐的日记4433→sprite4812，未替代本链。"
+    },
+    {
+      "rune_id": 1900028006,
+      "rune_name": "星篆·尾火虎",
+      "animal": "虎",
+      "previous_sprite": 26282,
+      "sprite": 4102,
+      "name_match_count": 33,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1042,
+        "name": "小虎怪",
+        "sprite": 242,
+        "_source": "server/migrations/000000_init-2.sql:1868"
+      },
+      "drop": {
+        "monster_id": 1042,
+        "seq": 0,
+        "rate": "36.43767",
+        "item_id": 4102,
+        "item_name": "老虎皮",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:14441"
+      },
+      "collectible": {
+        "index": 4102,
+        "name": "老虎皮",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13260"
+      },
+      "description": {
+        "index": 4102,
+        "name_2": "老虎皮",
+        "small_map": 4102,
+        "big_map": 4102,
+        "desc_": "老虎的皮，尊贵的象征，很难得。",
+        "_source": "server/migrations/000000_init-28.sql:5870"
+      }
+    },
+    {
+      "rune_id": 1900028007,
+      "rune_name": "星篆·箕水豹",
+      "animal": "豹",
+      "previous_sprite": 26281,
+      "sprite": 4122,
+      "name_match_count": 5,
+      "status": "related_collectible_substitute",
+      "candidates": [
+        {
+          "id": 10520,
+          "name": "闪电豹",
+          "sprite": 5114,
+          "_source": "server/migrations/000000_init-2.sql:1885"
+        },
+        {
+          "id": 10521,
+          "name": "闪电豹*物",
+          "sprite": 5114,
+          "_source": "server/migrations/000000_init-2.sql:1886"
+        },
+        {
+          "id": 10522,
+          "name": "闪电豹*法",
+          "sprite": 5114,
+          "_source": "server/migrations/000000_init-2.sql:1887"
+        },
+        {
+          "id": 10598,
+          "name": "霹雳火豹物",
+          "sprite": 5116,
+          "_source": "server/migrations/000000_init-2.sql:1888"
+        },
+        {
+          "id": 10599,
+          "name": "霹雳火豹法",
+          "sprite": 5116,
+          "_source": "server/migrations/000000_init-2.sql:1889"
+        }
+      ],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "找到闪电豹、霹雳火豹，但这些怪物没有可核实的普通掉落记录。"
+      },
+      "reason": "豹与虎同为猫科兽，借用白虎皮表达兽皮；不声称其为豹皮。",
+      "collectible": {
+        "index": 4122,
+        "name": "白虎皮",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13486"
+      },
+      "description": {
+        "index": 4122,
+        "name_2": "白虎皮",
+        "small_map": 4122,
+        "big_map": 4122,
+        "desc_": "华贵美丽的白色虎皮，非常难得的珍品。",
+        "_source": "server/migrations/000000_init-28.sql:5892"
+      }
+    },
+    {
+      "rune_id": 1900028008,
+      "rune_name": "星篆·斗木獬",
+      "animal": "獬",
+      "previous_sprite": 26522,
+      "sprite": 4118,
+      "name_match_count": 0,
+      "status": "related_collectible_substitute",
+      "candidates": [],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "原始怪物表未找到名称含“獬”的怪物。"
+      },
+      "reason": "獬豸的独角意象关联灵兽角；原描述为独角兽的角，不声称来自獬豸。",
+      "collectible": {
+        "index": 4118,
+        "name": "灵兽角",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13442"
+      },
+      "description": {
+        "index": 4118,
+        "name_2": "灵兽角",
+        "small_map": 4118,
+        "big_map": 4118,
+        "desc_": "传说中独角兽的角，有辟邪的灵气",
+        "_source": "server/migrations/000000_init-28.sql:5888"
+      }
+    },
+    {
+      "rune_id": 1900028009,
+      "rune_name": "星篆·牛金牛",
+      "animal": "牛",
+      "previous_sprite": 26520,
+      "sprite": 4313,
+      "name_match_count": 35,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1090,
+        "name": "牛头",
+        "sprite": 290,
+        "_source": "server/migrations/000000_init-2.sql:1944"
+      },
+      "drop": {
+        "monster_id": 1090,
+        "seq": 0,
+        "rate": "26.467697",
+        "item_id": 4313,
+        "item_name": "牛角",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:14882"
+      },
+      "collectible": {
+        "index": 4313,
+        "name": "牛角",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:14904"
+      },
+      "description": {
+        "index": 4313,
+        "name_2": "牛角",
+        "small_map": 4313,
+        "big_map": 4313,
+        "desc_": "牛的角。",
+        "_source": "server/migrations/000000_init-28.sql:6033"
+      }
+    },
+    {
+      "rune_id": 1900028010,
+      "rune_name": "星篆·女土蝠",
+      "animal": "蝠",
+      "previous_sprite": 26521,
+      "sprite": 4158,
+      "name_match_count": 13,
+      "status": "related_collectible_substitute",
+      "candidates": [
+        {
+          "id": 6015,
+          "name": "灰翼鬼蝠（敏）",
+          "sprite": 433,
+          "_source": "server/migrations/000000_init-2.sql:3865"
+        },
+        {
+          "id": 6031,
+          "name": "黑翼鬼蝠（灵）",
+          "sprite": 433,
+          "_source": "server/migrations/000000_init-2.sql:3881"
+        },
+        {
+          "id": 6047,
+          "name": "冥蝠（灵）",
+          "sprite": 433,
+          "_source": "server/migrations/000000_init-2.sql:3897"
+        },
+        {
+          "id": 6065,
+          "name": "幻陇灵蝠（灵）",
+          "sprite": 433,
+          "_source": "server/migrations/000000_init-2.sql:3915"
+        },
+        {
+          "id": 6077,
+          "name": "魔蝠",
+          "sprite": 433,
+          "_source": "server/migrations/000000_init-2.sql:3929"
+        },
+        {
+          "id": 6113,
+          "name": "灰翼鬼蝠王",
+          "sprite": 433,
+          "_source": "server/migrations/000000_init-2.sql:3947"
+        },
+        {
+          "id": 6127,
+          "name": "金边黑翼鬼蝠",
+          "sprite": 433,
+          "_source": "server/migrations/000000_init-2.sql:3961"
+        },
+        {
+          "id": 6142,
+          "name": "九幽冥蝠",
+          "sprite": 433,
+          "_source": "server/migrations/000000_init-2.sql:3976"
+        },
+        {
+          "id": 6158,
+          "name": "九音幻胧灵蝠",
+          "sprite": 433,
+          "_source": "server/migrations/000000_init-2.sql:3992"
+        },
+        {
+          "id": 6213,
+          "name": "灰翼鬼蝠(精英)",
+          "sprite": 433,
+          "_source": "server/migrations/000000_init-2.sql:4008"
+        },
+        {
+          "id": 6227,
+          "name": "黑翼鬼蝠(精英)",
+          "sprite": 433,
+          "_source": "server/migrations/000000_init-2.sql:4022"
+        },
+        {
+          "id": 6242,
+          "name": "冥蝠(精英)",
+          "sprite": 433,
+          "_source": "server/migrations/000000_init-2.sql:4039"
+        },
+        {
+          "id": 6258,
+          "name": "幻陇灵蝠(精英)",
+          "sprite": 433,
+          "_source": "server/migrations/000000_init-2.sql:4055"
+        }
+      ],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "找到鬼蝠、冥蝠等怪物；只有通用奖励、装备和材料，未证实蝠类专属收集品。"
+      },
+      "reason": "蝠的翼膜意象关联原生飞天猪翅膀；保留物品真实名称，不声称其为蝙蝠翅膀。",
+      "collectible": {
+        "index": 4158,
+        "name": "飞天猪翅膀",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13895"
+      },
+      "description": {
+        "index": 4158,
+        "name_2": "飞天猪翅膀",
+        "small_map": 4158,
+        "big_map": 4158,
+        "desc_": "珍贵的飞天猪的翅膀。",
+        "_source": "server/migrations/000000_init-28.sql:5932"
+      }
+    },
+    {
+      "rune_id": 1900028011,
+      "rune_name": "星篆·虚日鼠",
+      "animal": "鼠",
+      "previous_sprite": 41117,
+      "sprite": 4304,
+      "name_match_count": 19,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1080,
+        "name": "山鼠",
+        "sprite": 280,
+        "_source": "server/migrations/000000_init-2.sql:1929"
+      },
+      "drop": {
+        "monster_id": 1080,
+        "seq": 0,
+        "rate": "33.040796",
+        "item_id": 4304,
+        "item_name": "山鼠尾巴",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:14680"
+      },
+      "collectible": {
+        "index": 4304,
+        "name": "山鼠尾巴",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:14802"
+      },
+      "description": {
+        "index": 4304,
+        "name_2": "山鼠尾巴",
+        "small_map": 4304,
+        "big_map": 4304,
+        "desc_": "山鼠的尾巴。",
+        "_source": "server/migrations/000000_init-28.sql:6023"
+      }
+    },
+    {
+      "rune_id": 1900028012,
+      "rune_name": "星篆·危月燕",
+      "animal": "燕",
+      "previous_sprite": 39033,
+      "sprite": 4117,
+      "name_match_count": 1,
+      "status": "related_collectible_substitute",
+      "candidates": [
+        {
+          "id": 6000,
+          "name": "燕子风筝",
+          "sprite": 599,
+          "_source": "server/migrations/000000_init-2.sql:3850"
+        }
+      ],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "仅找到燕子风筝，没有可核实的掉落收集品。"
+      },
+      "reason": "燕的飞鸟意象关联原生羽毛。",
+      "collectible": {
+        "index": 4117,
+        "name": "羽毛",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13431"
+      },
+      "description": {
+        "index": 4117,
+        "name_2": "羽毛",
+        "small_map": 4117,
+        "big_map": 4117,
+        "desc_": "大而漂亮的羽毛。",
+        "_source": "server/migrations/000000_init-28.sql:5887"
+      }
+    },
+    {
+      "rune_id": 1900028013,
+      "rune_name": "星篆·室火猪",
+      "animal": "猪",
+      "previous_sprite": 26514,
+      "sprite": 4132,
+      "name_match_count": 40,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1032,
+        "name": "小野猪",
+        "sprite": 232,
+        "_source": "server/migrations/000000_init-2.sql:1862"
+      },
+      "drop": {
+        "monster_id": 1032,
+        "seq": 0,
+        "rate": "80.0",
+        "item_id": 4132,
+        "item_name": "野猪牙",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:14375"
+      },
+      "collectible": {
+        "index": 4132,
+        "name": "野猪牙",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13601"
+      },
+      "description": {
+        "index": 4132,
+        "name_2": "野猪牙",
+        "small_map": 4132,
+        "big_map": 4132,
+        "desc_": "野猪牙虽然比不上象牙，但也是雕刻的好材料。",
+        "_source": "server/migrations/000000_init-28.sql:5903"
+      }
+    },
+    {
+      "rune_id": 1900028014,
+      "rune_name": "星篆·壁水貐",
+      "animal": "貐",
+      "previous_sprite": 26517,
+      "sprite": 4112,
+      "name_match_count": 0,
+      "status": "related_collectible_substitute",
+      "candidates": [],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "原始怪物表未找到名称含“貐”的怪物。"
+      },
+      "reason": "貐的兽牙意象关联血牙；原描述属于修罗，不声称来自貐。",
+      "collectible": {
+        "index": 4112,
+        "name": "血牙",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13373"
+      },
+      "description": {
+        "index": 4112,
+        "name_2": "血牙",
+        "small_map": 4112,
+        "big_map": 4112,
+        "desc_": "嗜杀的修罗，染血的利牙，不要被咬到啊！",
+        "_source": "server/migrations/000000_init-28.sql:5881"
+      }
+    },
+    {
+      "rune_id": 1900028015,
+      "rune_name": "星篆·奎木狼",
+      "animal": "狼",
+      "previous_sprite": 26301,
+      "sprite": 4115,
+      "name_match_count": 18,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1014,
+        "name": "山狼",
+        "sprite": 214,
+        "_source": "server/migrations/000000_init-2.sql:1831"
+      },
+      "drop": {
+        "monster_id": 1014,
+        "seq": 0,
+        "rate": "37.539195",
+        "item_id": 4115,
+        "item_name": "狼皮",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:14157"
+      },
+      "collectible": {
+        "index": 4115,
+        "name": "狼皮",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13409"
+      },
+      "description": {
+        "index": 4115,
+        "name_2": "狼皮",
+        "small_map": 4115,
+        "big_map": 4115,
+        "desc_": "狼的皮毛，拿到市场上应该可以卖个好价钱。",
+        "_source": "server/migrations/000000_init-28.sql:5885"
+      }
+    },
+    {
+      "rune_id": 1900028016,
+      "rune_name": "星篆·娄金狗",
+      "animal": "狗",
+      "previous_sprite": 26298,
+      "sprite": 4131,
+      "name_match_count": 10,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1031,
+        "name": "小黑狗",
+        "sprite": 231,
+        "_source": "server/migrations/000000_init-2.sql:1861"
+      },
+      "drop": {
+        "monster_id": 1031,
+        "seq": 0,
+        "rate": "80.0",
+        "item_id": 4131,
+        "item_name": "小狗牙",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:14359"
+      },
+      "collectible": {
+        "index": 4131,
+        "name": "小狗牙",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13588"
+      },
+      "description": {
+        "index": 4131,
+        "name_2": "小狗牙",
+        "small_map": 4131,
+        "big_map": 4131,
+        "desc_": "小狗的牙齿，你确定要拿？",
+        "_source": "server/migrations/000000_init-28.sql:5902"
+      }
+    },
+    {
+      "rune_id": 1900028017,
+      "rune_name": "星篆·胃土雉",
+      "animal": "雉",
+      "previous_sprite": 26302,
+      "sprite": 4345,
+      "name_match_count": 0,
+      "status": "related_collectible_substitute",
+      "candidates": [],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "原始怪物表未找到名称含“雉”的怪物。"
+      },
+      "reason": "雉的禽鸟意象关联鹅翅面具；原始收集品是不可使用的面具，不声称其为雉羽。",
+      "collectible": {
+        "index": 4345,
+        "name": "鹅翅面具",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:15245"
+      },
+      "description": {
+        "index": 4345,
+        "name_2": "鹅翅面具",
+        "small_map": 4345,
+        "big_map": 4345,
+        "desc_": "看起来像鹅翅的面具，不过好像不能使用。",
+        "_source": "server/migrations/000000_init-28.sql:6069"
+      }
+    },
+    {
+      "rune_id": 1900028018,
+      "rune_name": "星篆·昴日鸡",
+      "animal": "鸡",
+      "previous_sprite": 39194,
+      "sprite": 4142,
+      "name_match_count": 1,
+      "status": "related_collectible_substitute",
+      "candidates": [
+        {
+          "id": 12256,
+          "name": "鸡年QQ",
+          "sprite": 5585,
+          "_source": "server/migrations/000000_init-2.sql:2351"
+        }
+      ],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "仅找到鸡年QQ，没有可核实的掉落收集品。"
+      },
+      "reason": "鸡的喙部意象关联步行鸟嘴。",
+      "collectible": {
+        "index": 4142,
+        "name": "步行鸟嘴",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13715"
+      },
+      "description": {
+        "index": 4142,
+        "name_2": "步行鸟嘴",
+        "small_map": 4142,
+        "big_map": 4142,
+        "desc_": "坚硬的鸟嘴，连石头都可以啄破。",
+        "_source": "server/migrations/000000_init-28.sql:5914"
+      }
+    },
+    {
+      "rune_id": 1900028019,
+      "rune_name": "星篆·毕月乌",
+      "animal": "乌",
+      "previous_sprite": 27731,
+      "sprite": 39439,
+      "name_match_count": 12,
+      "status": "related_collectible_substitute",
+      "candidates": [
+        {
+          "id": 10917,
+          "name": "狂躁的乌龟",
+          "sprite": 206,
+          "_source": "server/migrations/000000_init-2.sql:1946"
+        },
+        {
+          "id": 11979,
+          "name": "极速乌龟",
+          "sprite": 5468,
+          "_source": "server/migrations/000000_init-2.sql:2210"
+        },
+        {
+          "id": 11980,
+          "name": "极速乌龟*物",
+          "sprite": 5466,
+          "_source": "server/migrations/000000_init-2.sql:2211"
+        },
+        {
+          "id": 11981,
+          "name": "极速乌龟*法",
+          "sprite": 5466,
+          "_source": "server/migrations/000000_init-2.sql:2212"
+        },
+        {
+          "id": 12119,
+          "name": "首领·鸦片大王",
+          "sprite": 3765,
+          "_source": "server/migrations/000000_init-2.sql:2273"
+        },
+        {
+          "id": 12188,
+          "name": "狂躁的乌龟",
+          "sprite": 206,
+          "_source": "server/migrations/000000_init-2.sql:2325"
+        },
+        {
+          "id": 2062,
+          "name": "乌木",
+          "sprite": 510,
+          "_source": "server/migrations/000000_init-2.sql:2589"
+        },
+        {
+          "id": 31487,
+          "name": "扁嘴鸦",
+          "sprite": 3414,
+          "_source": "server/migrations/000000_init-2.sql:3146"
+        },
+        {
+          "id": 31724,
+          "name": "欠扁的扁嘴鸦",
+          "sprite": 3414,
+          "_source": "server/migrations/000000_init-2.sql:3221"
+        },
+        {
+          "id": 31784,
+          "name": "鸦片大王",
+          "sprite": 3765,
+          "_source": "server/migrations/000000_init-2.sql:3286"
+        },
+        {
+          "id": 32520,
+          "name": "扁嘴鸦",
+          "sprite": 3414,
+          "_source": "server/migrations/000000_init-2.sql:3432"
+        },
+        {
+          "id": 32869,
+          "name": "扁嘴鸦",
+          "sprite": 3414,
+          "_source": "server/migrations/000000_init-2.sql:3491"
+        }
+      ],
+      "name_search_terms": [
+        "乌",
+        "鸦"
+      ],
+      "candidate_drop_evidence": [
+        {
+          "monster_id": 12119,
+          "decision": "通用掉落，不能作为乌鸦类专属收集品链。",
+          "drops": [
+            {
+              "monster_id": 12119,
+              "seq": 0,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27082"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 1,
+              "rate": "100.0",
+              "item_id": 42565,
+              "item_name": "虎啸极光礼包",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27083"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 2,
+              "rate": "100.0",
+              "item_id": 42565,
+              "item_name": "虎啸极光礼包",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27084"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 3,
+              "rate": "100.0",
+              "item_id": 42565,
+              "item_name": "虎啸极光礼包",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27085"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 4,
+              "rate": "100.0",
+              "item_id": 42565,
+              "item_name": "虎啸极光礼包",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27086"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 5,
+              "rate": "100.0",
+              "item_id": 42565,
+              "item_name": "虎啸极光礼包",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27087"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 6,
+              "rate": "100.0",
+              "item_id": 42565,
+              "item_name": "虎啸极光礼包",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27088"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 7,
+              "rate": "100.0",
+              "item_id": 42565,
+              "item_name": "虎啸极光礼包",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27089"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 8,
+              "rate": "100.0",
+              "item_id": 42565,
+              "item_name": "虎啸极光礼包",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27090"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 9,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27091"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 10,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27092"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 11,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27093"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 12,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27094"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 13,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27095"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 14,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27096"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 15,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27097"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 16,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27098"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 17,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27099"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 18,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27100"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 19,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27101"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 20,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27102"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 21,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27103"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 22,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27104"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 23,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27105"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 24,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27106"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 25,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27107"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 26,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27108"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 27,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27109"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 28,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27110"
+            },
+            {
+              "monster_id": 12119,
+              "seq": 29,
+              "rate": "100.0",
+              "item_id": 13540,
+              "item_name": "逆袭首领的宝藏",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:27111"
+            }
+          ]
+        },
+        {
+          "monster_id": 31487,
+          "decision": "通用掉落，不能作为乌鸦类专属收集品链。",
+          "drops": [
+            {
+              "monster_id": 31487,
+              "seq": 0,
+              "rate": "0.051348",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "长剑",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28584"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 1,
+              "rate": "0.051348",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "双手剑",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28585"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 2,
+              "rate": "0.102696",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "长枪",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28586"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 3,
+              "rate": "0.051348",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "双刃",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28587"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 4,
+              "rate": "0.051348",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "暗器",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28588"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 5,
+              "rate": "0.205392",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "法杖",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28589"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 6,
+              "rate": "0.051348",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "盾牌",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28590"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 7,
+              "rate": "0.513479",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "服装",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28591"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 8,
+              "rate": "0.308087",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "背包",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28592"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 9,
+              "rate": "0.308087",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "头盔",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28593"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 10,
+              "rate": "0.308087",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "鞋子",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28594"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 11,
+              "rate": "0.154044",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "戒指",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28595"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 12,
+              "rate": "0.154044",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "项链",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28596"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 13,
+              "rate": "0.308087",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "手套",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28597"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 14,
+              "rate": "0.308087",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "面具",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:28598"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 15,
+              "rate": "0.00045",
+              "item_id": 25107,
+              "item_name": "《念力造物Ⅲ》",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:28599"
+            },
+            {
+              "monster_id": 31487,
+              "seq": 16,
+              "rate": "3.625",
+              "item_id": 3128,
+              "item_name": "愿望果实",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:28600"
+            }
+          ]
+        },
+        {
+          "monster_id": 31724,
+          "decision": "通用掉落，不能作为乌鸦类专属收集品链。",
+          "drops": [
+            {
+              "monster_id": 31724,
+              "seq": 0,
+              "rate": "50.0",
+              "item_id": 4126,
+              "item_name": "花岗石",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:29432"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 1,
+              "rate": "50.0",
+              "item_id": 4126,
+              "item_name": "花岗石",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:29433"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 2,
+              "rate": "50.0",
+              "item_id": 14492,
+              "item_name": "五色土",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:29434"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 3,
+              "rate": "50.0",
+              "item_id": 14492,
+              "item_name": "五色土",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:29435"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 4,
+              "rate": "70.0",
+              "item_id": 14506,
+              "item_name": "七星石-摇光石",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:29436"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 5,
+              "rate": "30.0",
+              "item_id": 14505,
+              "item_name": "七星石-开阳石",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:29437"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 6,
+              "rate": "10.0",
+              "item_id": 14504,
+              "item_name": "七星石-玉衡石",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:29438"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 7,
+              "rate": "0.045",
+              "item_id": 25107,
+              "item_name": "《念力造物Ⅲ》",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:29439"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 8,
+              "rate": "1.0",
+              "item_id": 12479,
+              "item_name": "宝石锦盒",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:29440"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 9,
+              "rate": "5.32978",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "长剑",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29441"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 10,
+              "rate": "5.32978",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "双手剑",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29442"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 11,
+              "rate": "10.65956",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "长枪",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29443"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 12,
+              "rate": "5.32978",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "双刃",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29444"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 13,
+              "rate": "5.32978",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "暗器",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29445"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 14,
+              "rate": "21.319121",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "法杖",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29446"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 15,
+              "rate": "5.32978",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "盾牌",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29447"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 16,
+              "rate": "53.297801",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "服装",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29448"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 17,
+              "rate": "31.978681",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "背包",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29449"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 18,
+              "rate": "31.978681",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "头盔",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29450"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 19,
+              "rate": "31.978681",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "鞋子",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29451"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 20,
+              "rate": "15.98934",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "戒指",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29452"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 21,
+              "rate": "15.98934",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "项链",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29453"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 22,
+              "rate": "31.978681",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "手套",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29454"
+            },
+            {
+              "monster_id": 31724,
+              "seq": 23,
+              "rate": "31.978681",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "面具",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29455"
+            }
+          ]
+        },
+        {
+          "monster_id": 31784,
+          "decision": "通用掉落，不能作为乌鸦类专属收集品链。",
+          "drops": [
+            {
+              "monster_id": 31784,
+              "seq": 0,
+              "rate": "100.0",
+              "item_id": 4126,
+              "item_name": "花岗石",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:29988"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 1,
+              "rate": "80.0",
+              "item_id": 14492,
+              "item_name": "五色土",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:29989"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 2,
+              "rate": "6.527948",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "长剑",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29990"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 3,
+              "rate": "6.527948",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "双手剑",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29991"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 4,
+              "rate": "13.055896",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "长枪",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29992"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 5,
+              "rate": "6.527948",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "双刃",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29993"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 6,
+              "rate": "6.527948",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "暗器",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29994"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 7,
+              "rate": "26.111791",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "法杖",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29995"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 8,
+              "rate": "6.527948",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "盾牌",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29996"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 9,
+              "rate": "65.279478",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "服装",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29997"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 10,
+              "rate": "39.167687",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "背包",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29998"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 11,
+              "rate": "39.167687",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "头盔",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:29999"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 12,
+              "rate": "39.167687",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "鞋子",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:30000"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 13,
+              "rate": "19.583843",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "戒指",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:30001"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 14,
+              "rate": "19.583843",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "项链",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:30002"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 15,
+              "rate": "39.167687",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "手套",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:30003"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 16,
+              "rate": "39.167687",
+              "item_id": 0,
+              "item_name": "",
+              "item_src": "",
+              "kind_name": "面具",
+              "lv_min": 21,
+              "lv_max": 23,
+              "_source": "server/migrations/000000_init-32.sql:30004"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 17,
+              "rate": "100.0",
+              "item_id": 12481,
+              "item_name": "高级宝石锦盒",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30005"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 18,
+              "rate": "40.0",
+              "item_id": 14502,
+              "item_name": "七星石-天玑石",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30006"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 19,
+              "rate": "35.0",
+              "item_id": 14501,
+              "item_name": "七星石-天璇石",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30007"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 20,
+              "rate": "15.0",
+              "item_id": 14500,
+              "item_name": "七星石-天枢石",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30008"
+            },
+            {
+              "monster_id": 31784,
+              "seq": 21,
+              "rate": "10.0",
+              "item_id": 3128,
+              "item_name": "愿望果实",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30009"
+            }
+          ]
+        },
+        {
+          "monster_id": 32520,
+          "decision": "通用掉落，不能作为乌鸦类专属收集品链。",
+          "drops": [
+            {
+              "monster_id": 32520,
+              "seq": 0,
+              "rate": "30.0",
+              "item_id": 26551,
+              "item_name": "护卫召唤令",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30351"
+            },
+            {
+              "monster_id": 32520,
+              "seq": 1,
+              "rate": "1.0",
+              "item_id": 10473,
+              "item_name": "大地女神的祝福",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30352"
+            },
+            {
+              "monster_id": 32520,
+              "seq": 2,
+              "rate": "0.5",
+              "item_id": 10470,
+              "item_name": "齐天大圣的祝福",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30353"
+            },
+            {
+              "monster_id": 32520,
+              "seq": 3,
+              "rate": "0.5",
+              "item_id": 10471,
+              "item_name": "金刚罗汉的祝福",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30354"
+            },
+            {
+              "monster_id": 32520,
+              "seq": 4,
+              "rate": "0.5",
+              "item_id": 10472,
+              "item_name": "胜利女神的祝福",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30355"
+            }
+          ]
+        },
+        {
+          "monster_id": 32869,
+          "decision": "通用掉落，不能作为乌鸦类专属收集品链。",
+          "drops": [
+            {
+              "monster_id": 32869,
+              "seq": 0,
+              "rate": "30.0",
+              "item_id": 26551,
+              "item_name": "护卫召唤令",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30682"
+            },
+            {
+              "monster_id": 32869,
+              "seq": 1,
+              "rate": "1.0",
+              "item_id": 10473,
+              "item_name": "大地女神的祝福",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30683"
+            },
+            {
+              "monster_id": 32869,
+              "seq": 2,
+              "rate": "0.5",
+              "item_id": 10470,
+              "item_name": "齐天大圣的祝福",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30684"
+            },
+            {
+              "monster_id": 32869,
+              "seq": 3,
+              "rate": "0.5",
+              "item_id": 10471,
+              "item_name": "金刚罗汉的祝福",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30685"
+            },
+            {
+              "monster_id": 32869,
+              "seq": 4,
+              "rate": "0.5",
+              "item_id": 10472,
+              "item_name": "胜利女神的祝福",
+              "item_src": "item",
+              "kind_name": "",
+              "lv_min": 0,
+              "lv_max": 0,
+              "_source": "server/migrations/000000_init-32.sql:30686"
+            }
+          ]
+        }
+      ],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "同时按“乌”“鸦”检索，找到6条鸦类候选，包括欠扁的扁嘴鸦31724、鸦片大王31784及其其他变体。现有普通掉落只有花岗石、五色土、七星石、锦盒、书籍、愿望果实、宝藏/礼包、召唤令/祝福及通用装备，未证实乌鸦类专属收集品。名字含“乌”的其他结果为乌龟或乌木，不能认作乌鸦。"
+      },
+      "reason": "乌的飞鸟意象关联神奇的羽毛，采用与普通羽毛不同的原生小图；不声称来自鸦类怪物。",
+      "collectible": {
+        "index": 25029,
+        "name": "神奇的羽毛",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 37,
+        "_source": "server/migrations/000000_init-30.sql:6067"
+      },
+      "description": {
+        "index": 25029,
+        "name_2": "神奇的羽毛",
+        "small_map": 39439,
+        "big_map": 39439,
+        "desc_": "用来换取新翅膀",
+        "_source": "server/migrations/000000_init-27.sql:14122"
+      }
+    },
+    {
+      "rune_id": 1900028020,
+      "rune_name": "星篆·觜火猴",
+      "animal": "猴",
+      "previous_sprite": 26303,
+      "sprite": 4136,
+      "name_match_count": 10,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1043,
+        "name": "小猴子",
+        "sprite": 243,
+        "_source": "server/migrations/000000_init-2.sql:1869"
+      },
+      "drop": {
+        "monster_id": 1043,
+        "seq": 0,
+        "rate": "80.0",
+        "item_id": 4136,
+        "item_name": "猴皮",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:14463"
+      },
+      "collectible": {
+        "index": 4136,
+        "name": "猴皮",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13647"
+      },
+      "description": {
+        "index": 4136,
+        "name_2": "猴皮",
+        "small_map": 4136,
+        "big_map": 4136,
+        "desc_": "灵长类是国家保护动物，私剥皮毛是~违~法~的~！",
+        "_source": "server/migrations/000000_init-28.sql:5908"
+      }
+    },
+    {
+      "rune_id": 1900028021,
+      "rune_name": "星篆·参水猿",
+      "animal": "猿",
+      "previous_sprite": 26297,
+      "sprite": 4350,
+      "name_match_count": 2,
+      "status": "related_collectible_substitute",
+      "candidates": [
+        {
+          "id": 11950,
+          "name": "红毛剑齿猿",
+          "sprite": 5168,
+          "_source": "server/migrations/000000_init-2.sql:2185"
+        },
+        {
+          "id": 12176,
+          "name": "红毛剑齿猿",
+          "sprite": 5168,
+          "_source": "server/migrations/000000_init-2.sql:2313"
+        }
+      ],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "找到红毛剑齿猿，但没有可核实的普通掉落记录；不把猴皮冒称猿的掉落。"
+      },
+      "reason": "猿与猴的灵长类意象关联猴爪；不声称其为猿的实际掉落。",
+      "collectible": {
+        "index": 4350,
+        "name": "猴爪",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:15300"
+      },
+      "description": {
+        "index": 4350,
+        "name_2": "猴爪",
+        "small_map": 4350,
+        "big_map": 4350,
+        "desc_": "小猴的爪子，有什么用呢？",
+        "_source": "server/migrations/000000_init-28.sql:6074"
+      }
+    },
+    {
+      "rune_id": 1900028022,
+      "rune_name": "星篆·井木犴",
+      "animal": "犴",
+      "previous_sprite": 39636,
+      "sprite": 4137,
+      "name_match_count": 24,
+      "status": "related_collectible_substitute",
+      "candidates": [
+        {
+          "id": 30057,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2711"
+        },
+        {
+          "id": 30089,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2746"
+        },
+        {
+          "id": 30103,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2762"
+        },
+        {
+          "id": 30131,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2793"
+        },
+        {
+          "id": 30132,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2794"
+        },
+        {
+          "id": 30133,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2795"
+        },
+        {
+          "id": 30134,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2796"
+        },
+        {
+          "id": 30135,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2797"
+        },
+        {
+          "id": 30136,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2798"
+        },
+        {
+          "id": 30137,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2801"
+        },
+        {
+          "id": 30138,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2802"
+        },
+        {
+          "id": 30139,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2803"
+        },
+        {
+          "id": 30140,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2805"
+        },
+        {
+          "id": 30141,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2806"
+        },
+        {
+          "id": 30142,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2807"
+        },
+        {
+          "id": 30147,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:2812"
+        },
+        {
+          "id": 31745,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:3244"
+        },
+        {
+          "id": 31746,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:3245"
+        },
+        {
+          "id": 31747,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:3246"
+        },
+        {
+          "id": 31748,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:3247"
+        },
+        {
+          "id": 31763,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:3264"
+        },
+        {
+          "id": 31764,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:3265"
+        },
+        {
+          "id": 31765,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:3266"
+        },
+        {
+          "id": 31766,
+          "name": "狴犴",
+          "sprite": 3050,
+          "_source": "server/migrations/000000_init-2.sql:3267"
+        }
+      ],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "找到狴犴，但没有可核实的普通掉落记录。"
+      },
+      "reason": "犴的兽爪意象关联猫爪；只作兽爪主题的替代，不声称犴属于猫或实际掉落猫爪。",
+      "collectible": {
+        "index": 4137,
+        "name": "猫爪",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13658"
+      },
+      "description": {
+        "index": 4137,
+        "name_2": "猫爪",
+        "small_map": 4137,
+        "big_map": 4137,
+        "desc_": "可爱小猫的指甲。",
+        "_source": "server/migrations/000000_init-28.sql:5909"
+      }
+    },
+    {
+      "rune_id": 1900028023,
+      "rune_name": "星篆·鬼金羊",
+      "animal": "羊",
+      "previous_sprite": 39634,
+      "sprite": 27653,
+      "name_match_count": 14,
+      "status": "related_collectible_substitute",
+      "candidates": [
+        {
+          "id": 11032,
+          "name": "小神羊（物）",
+          "sprite": 5226,
+          "_source": "server/migrations/000000_init-2.sql:1973"
+        },
+        {
+          "id": 11038,
+          "name": "小神羊（法）",
+          "sprite": 5226,
+          "_source": "server/migrations/000000_init-2.sql:1974"
+        },
+        {
+          "id": 11039,
+          "name": "屌丝羊（物）",
+          "sprite": 5227,
+          "_source": "server/migrations/000000_init-2.sql:1975"
+        },
+        {
+          "id": 11040,
+          "name": "屌丝羊（法）",
+          "sprite": 5227,
+          "_source": "server/migrations/000000_init-2.sql:1976"
+        },
+        {
+          "id": 11154,
+          "name": "小神羊",
+          "sprite": 5268,
+          "_source": "server/migrations/000000_init-2.sql:2007"
+        },
+        {
+          "id": 11904,
+          "name": "羊坨坨",
+          "sprite": 5228,
+          "_source": "server/migrations/000000_init-2.sql:2141"
+        },
+        {
+          "id": 12011,
+          "name": "黄金羊（物）",
+          "sprite": 5268,
+          "_source": "server/migrations/000000_init-2.sql:2226"
+        },
+        {
+          "id": 12012,
+          "name": "黄金羊（法）",
+          "sprite": 5268,
+          "_source": "server/migrations/000000_init-2.sql:2227"
+        },
+        {
+          "id": 12013,
+          "name": "神兽羊（物）",
+          "sprite": 5269,
+          "_source": "server/migrations/000000_init-2.sql:2228"
+        },
+        {
+          "id": 12014,
+          "name": "神兽羊（法）",
+          "sprite": 5269,
+          "_source": "server/migrations/000000_init-2.sql:2229"
+        },
+        {
+          "id": 12024,
+          "name": "白羊之护",
+          "sprite": 5485,
+          "_source": "server/migrations/000000_init-2.sql:2237"
+        },
+        {
+          "id": 12026,
+          "name": "黄金神羊",
+          "sprite": 5487,
+          "_source": "server/migrations/000000_init-2.sql:2239"
+        },
+        {
+          "id": 12035,
+          "name": "绝版羊年QQ",
+          "sprite": 5496,
+          "_source": "server/migrations/000000_init-2.sql:2249"
+        },
+        {
+          "id": 12049,
+          "name": "挟持了暖羊羊的神兽",
+          "sprite": 5342,
+          "_source": "server/migrations/000000_init-2.sql:2252"
+        }
+      ],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "找到神羊等怪物；可见掉落是蟠桃、礼包、回魂娃娃等，未证实羊类专属收集品。"
+      },
+      "reason": "羊毛意象关联幸运金羊毛；它是原生不可使用的活动兑换收集品，不声称神羊怪物掉落它。",
+      "collectible": {
+        "index": 36204,
+        "name": "幸运金羊毛",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:12642"
+      },
+      "description": {
+        "index": 36204,
+        "name_2": "幸运金羊毛",
+        "small_map": 27653,
+        "big_map": 27653,
+        "desc_": "在美羊羊中获得。可以兑换各种性价比高的道具哦！兑换截至2015年12月31日。6月1日起也可以回兑成5金币。",
+        "_source": "server/migrations/000000_init-28.sql:1234"
+      }
+    },
+    {
+      "rune_id": 1900028024,
+      "rune_name": "星篆·柳土獐",
+      "animal": "獐",
+      "previous_sprite": 39635,
+      "sprite": 3583,
+      "name_match_count": 0,
+      "status": "related_collectible_substitute",
+      "candidates": [],
+      "direct_drop_audit": {
+        "status": "not_established",
+        "reason": "原始怪物表未找到名称含“獐”的怪物；不把鹿角面具冒称獐的掉落。"
+      },
+      "reason": "獐的鹿科意象关联洁净的鹿角之心；原生物品以鹿命名，不声称獐有鹿角或实际掉落该物品。",
+      "collectible": {
+        "index": 3583,
+        "name": "洁净的鹿角之心",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 0,
+        "_source": "server/migrations/000000_init-30.sql:4237"
+      },
+      "description": {
+        "index": 3583,
+        "name_2": "洁净的鹿角之心",
+        "small_map": 3583,
+        "big_map": 3583,
+        "desc_": "没有被魔气污染的鹿角之心。",
+        "_source": "server/migrations/000000_init-28.sql:2011"
+      }
+    },
+    {
+      "rune_id": 1900028025,
+      "rune_name": "星篆·星日马",
+      "animal": "马",
+      "previous_sprite": 4094,
+      "sprite": 4314,
+      "name_match_count": 16,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1091,
+        "name": "马面",
+        "sprite": 291,
+        "_source": "server/migrations/000000_init-2.sql:1945"
+      },
+      "drop": {
+        "monster_id": 1091,
+        "seq": 0,
+        "rate": "27.085183",
+        "item_id": 4314,
+        "item_name": "马面具",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:14904"
+      },
+      "collectible": {
+        "index": 4314,
+        "name": "马面具",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:14915"
+      },
+      "description": {
+        "index": 4314,
+        "name_2": "马面具",
+        "small_map": 4314,
+        "big_map": 4314,
+        "desc_": "看来来象马的面具的东西，怪怪的感觉。",
+        "_source": "server/migrations/000000_init-28.sql:6034"
+      }
+    },
+    {
+      "rune_id": 1900028026,
+      "rune_name": "星篆·张月鹿",
+      "animal": "鹿",
+      "previous_sprite": 4024,
+      "sprite": 4344,
+      "name_match_count": 9,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1134,
+        "name": "鹿角面具",
+        "sprite": 334,
+        "_source": "server/migrations/000000_init-2.sql:2031"
+      },
+      "drop": {
+        "monster_id": 1134,
+        "seq": 0,
+        "rate": "26.186896",
+        "item_id": 4344,
+        "item_name": "鹿角面具",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:15530"
+      },
+      "collectible": {
+        "index": 4344,
+        "name": "鹿角面具",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:15234"
+      },
+      "description": {
+        "index": 4344,
+        "name_2": "鹿角面具",
+        "small_map": 4344,
+        "big_map": 4344,
+        "desc_": "看起来像鹿角的面具，不过好像不能使用。",
+        "_source": "server/migrations/000000_init-28.sql:6068"
+      }
+    },
+    {
+      "rune_id": 1900028027,
+      "rune_name": "星篆·翼火蛇",
+      "animal": "蛇",
+      "previous_sprite": 39633,
+      "sprite": 4116,
+      "name_match_count": 33,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1015,
+        "name": "碧蛇",
+        "sprite": 215,
+        "_source": "server/migrations/000000_init-2.sql:1832"
+      },
+      "drop": {
+        "monster_id": 1015,
+        "seq": 0,
+        "rate": "27.218726",
+        "item_id": 4116,
+        "item_name": "蛇胆",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:14179"
+      },
+      "collectible": {
+        "index": 4116,
+        "name": "蛇胆",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:13420"
+      },
+      "description": {
+        "index": 4116,
+        "name_2": "蛇胆",
+        "small_map": 4116,
+        "big_map": 4116,
+        "desc_": "蛇的胆，也许可以拿来做药？？",
+        "_source": "server/migrations/000000_init-28.sql:5886"
+      }
+    },
+    {
+      "rune_id": 1900028028,
+      "rune_name": "星篆·轸水蚓",
+      "animal": "蚓",
+      "previous_sprite": 39637,
+      "sprite": 4338,
+      "name_match_count": 2,
+      "status": "verified_monster_collectible",
+      "monster": {
+        "id": 1127,
+        "name": "蚯蚓",
+        "sprite": 327,
+        "_source": "server/migrations/000000_init-2.sql:2016"
+      },
+      "drop": {
+        "monster_id": 1127,
+        "seq": 0,
+        "rate": "80.0",
+        "item_id": 4338,
+        "item_name": "泥块",
+        "item_src": "item",
+        "_source": "server/migrations/000000_init-32.sql:15400"
+      },
+      "collectible": {
+        "index": 4338,
+        "name": "泥块",
+        "category": 0,
+        "self_use": 0,
+        "other_use": 0,
+        "query_type": 27,
+        "_source": "server/migrations/000000_init-29.sql:15165"
+      },
+      "description": {
+        "index": 4338,
+        "name_2": "泥块",
+        "small_map": 4338,
+        "big_map": 4338,
+        "desc_": "这是蚯蚓挖洞时翻出的泥块吗？",
+        "_source": "server/migrations/000000_init-28.sql:6058"
+      }
+    }
+  ],
+  "related_substitute_count": 14
+}

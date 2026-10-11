@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"reflect"
 	"sort"
 	"testing"
 )
@@ -297,8 +298,7 @@ func TestUniqueAllSourceBudgetLanesThroughWornRuntime(t *testing.T) {
 			for _, class := range target.IntendedClasses {
 				base := cardBudgetCharacter(t, r, class)
 				usefulLines := 0
-				for _, a := range d.Affixes {
-					a.Value = scaleUniqueAffix(a, 8000)
+				for _, a := range ResolveVariableAffixes(d.Affixes, d.VariableAffixes, 8000) {
 					if cardBudgetUsefulLine(a, class, target.Lane) {
 						usefulLines++
 					}
@@ -417,11 +417,11 @@ func TestFormationAllSourceBudgetLanesThroughActivation(t *testing.T) {
 			seen[recipe.ID] = true
 			for _, comparison := range target.Comparisons {
 				r, ok := bases[comparison.BaseID]
-				if !ok || !r.Native || comparison.Reference != "native_plain_pool_at_or_below_recipe_level" {
+				if !ok || !r.Native || comparison.Reference != "native_plain_pool_at_effective_item_level" {
 					t.Fatal("formation reference is not an actual plain-native pool")
 				}
-				if r.Level > recipe.MinLevel {
-					t.Fatal("reference exceeds the promised recipe wearer-level boundary")
+				if r.Level > comparison.FixtureLevel {
+					t.Fatal("reference exceeds the actual finished-equipment wearer-level boundary")
 				}
 				def := cardBudgetDefinition(r)
 				st := Stack{UID: int64(r.BaseID), Item: r.BaseID, Count: 1, InstanceKind: ItemInstanceEquipment, Durability: 100, MaxDurability: 100, SocketCount: uint8(len(recipe.Runes))}
@@ -436,6 +436,9 @@ func TestFormationAllSourceBudgetLanesThroughActivation(t *testing.T) {
 					}
 					level = max(level, rune.MinLevel)
 					st.Sockets[i], st.SocketUIDs[i], st.SocketCards[i] = id, int64(900000+i), runeDefs[id].CardDefaults
+				}
+				if got := EquipmentRequiredLevel(def, st); got != level {
+					t.Fatalf("formation/base requirement=%d want %d", got, level)
 				}
 				if comparison.FixtureLevel != level {
 					t.Fatalf("fixture level=%d want actual runtime requirement=%d", comparison.FixtureLevel, level)
@@ -465,11 +468,12 @@ func TestFormationAllSourceBudgetLanesThroughActivation(t *testing.T) {
 					t.Fatalf("formation did not actually activate on base %d class %d at level %d", r.BaseID, comparison.Class, level)
 				}
 				bonuses := AstralBonuses(worn, lookup, ch)
-				if len(bonuses) != len(recipe.Affixes) {
+				if !reflect.DeepEqual(bonuses, AstralItemBonuses(def, st, recipe)) {
 					t.Fatal("actual activation does not expose all authored extras")
 				}
 				useful := 0
-				for _, a := range bonuses {
+				// The five-line minimum cannot be padded with resolved local deltas.
+				for _, a := range ResolveVariableAffixes(recipe.Affixes, recipe.VariableAffixes, st.Endgame.FormationRollBP) {
 					if cardBudgetUsefulLine(a, comparison.Class, comparison.Lane) {
 						useful++
 					}
@@ -484,6 +488,22 @@ func TestFormationAllSourceBudgetLanesThroughActivation(t *testing.T) {
 				formedScore := cardBudgetMetric(t, formed, comparison.Lane, level)
 				ingredientScore := cardBudgetMetric(t, ingredientsOnly, comparison.Lane, level)
 				ratio := formedScore / yellowScore
+				// Exercise the actual winner at both persisted roll boundaries,
+				// preserving the same ingredient snapshots and native base.
+				for _, roll := range []int32{UniqueRollMinBP, UniqueRollMaxBP} {
+					rolled := st
+					rolled.Endgame.FormationRollBP = roll
+					worn.Set(EquipSlot(r.Slot), rolled)
+					_, rolledStats := Compute(StatSource{Base: base, Level: level, Innate: Stats{MoveSpeed: 100}, Worn: worn, Defs: lookup, Passive: AstralBonuses(worn, lookup, ch)})
+					score := cardBudgetMetric(t, rolledStats, comparison.Lane, level)
+					if score/yellowScore+1e-9 < comparison.RequiredRatio {
+						t.Errorf("formation %d roll%d falls below unchanged yellow margin: %g", recipe.ID, roll, score/yellowScore)
+					}
+					if roll == UniqueRollMinBP && score > formedScore+1e-9 || roll == UniqueRollMaxBP && score+1e-9 < formedScore {
+						t.Error("formation quality is not monotonic")
+					}
+				}
+				worn.Set(EquipSlot(r.Slot), st)
 				minRatio := map[string]float64{"transition": 1.12, "highvalue": 1.20, "builddefining": 1.30, "godlike": 1.38}[recipe.PowerTier]
 				if minRatio <= 1 || comparison.RequiredRatio+1e-9 < minRatio {
 					t.Fatal("formation target weakens independently specified tier floor")

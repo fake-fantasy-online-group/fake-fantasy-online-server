@@ -489,6 +489,11 @@ func (s *Scene) itemTooltip(def domain.ItemDef, st domain.Stack) string {
 // ownedItemTooltip 的人物上下文仅用于需求颜色和套装激活判定。
 // 不在服务端描述中添加“已装备/未装备”标签。
 func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *entity.Entity) string {
+	return s.itemTooltipForViewer(def, st, owner, owner)
+}
+
+// Viewer controls renderer negotiation; owner controls requirements/activation.
+func (s *Scene) itemTooltipForViewer(def domain.ItemDef, st domain.Stack, owner, viewer *entity.Entity) string {
 	var ch *domain.Character
 	if owner != nil && owner.Player != nil {
 		ch = owner.Player.Char
@@ -524,17 +529,24 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 	quality := equipmentQuality(def, st)
 	textQuality := quality
 	_, unique := domain.UniqueOf(st)
+	_, formed := domain.MatchAstralRecipe(def, st)
+	nativeStats := s.nativeEndgameStats(viewer) && (unique || formed)
 	if !unique && domain.EquipmentAttributeCount(def, st) == 2 {
 		textQuality = tooltipLightBlue
 	}
 	lines := []string{"\x07(" + equipmentKindName(e) + ")", ""}
 	if d, ok := domain.UniqueOf(st); ok {
 		lines = append(lines, qualityColoredLine(4, "仙遗·"+d.Name), "基底："+def.Name)
-		for _, a := range domain.UniqueAffixes(st) {
-			lines = append(lines, qualityColoredLine(4, affixText(a)))
+		if !nativeStats {
+			for _, a := range domain.UniqueAffixes(st) {
+				lines = append(lines, qualityColoredLine(4, affixText(a)))
+			}
+			for _, line := range localEnhancementLines(def, d.LocalEnhancements, st.Endgame.UniqueRollBP) {
+				lines = append(lines, qualityColoredLine(4, line))
+			}
 		}
 		for _, tr := range d.Traits {
-			lines = append(lines, qualityColoredLine(4, tr.Describe(st.Endgame.UniqueRollBP)))
+			lines = append(lines, qualityColoredLine(4, tr.Describe(10000)))
 		}
 		lines = append(lines, "同名仙遗特性取最高值；不同特性按通道上限叠加。", d.Description(), "")
 	}
@@ -580,8 +592,26 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 	requirements.Need.Level = domain.EquipmentRequiredLevel(def, st)
 	appendEquipmentRequirements(&lines, &requirements, ch, actual)
 	lines = append(lines, "")
-	equipBase, equipStats := e.RefinedIntrinsic(st.RefineLevel)
-	appendIntrinsicEquipmentStats(&lines, equipStats, equipBase)
+	var local []domain.ItemLocalEnhancement
+	roll := st.Endgame.UniqueRollBP
+	if d, ok := domain.UniqueOf(st); ok {
+		local = d.LocalEnhancements
+	}
+	formation, includeFormation := s.tooltipFormation(def, st, owner)
+	if nativeStats && includeFormation {
+		local = append(local, formation.LocalEnhancements...)
+		roll = st.Endgame.FormationRollBP
+	}
+	equipBase, equipStats := domain.EnhancedIntrinsic(e, st.RefineLevel, local, roll)
+	if nativeStats {
+		var white []string
+		appendIntrinsicEquipmentStats(&white, equipStats, equipBase)
+		for _, line := range white {
+			lines = append(lines, "\x030"+line)
+		}
+	} else {
+		appendIntrinsicEquipmentStats(&lines, equipStats, equipBase)
+	}
 	if def.Weight != 0 {
 		lines = append(lines, fmt.Sprintf("重量 %d", def.Weight))
 	}
@@ -603,20 +633,47 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 	for i := 0; i < int(st.WashCount) && i < len(st.WashAffixes); i++ {
 		appendEquipmentAffixes(&lines, []domain.Affix{st.WashAffixes[i]}, textQuality)
 	}
-	// 镶嵌显示与 Compute 读取相同的卡实例属性快照。
+	// The native-stat renderer owns one authoritative extra-attribute block.
+	// Rune snapshots and active formation extras merge only on identical scope.
 	usedSockets := domain.UsedEquipmentSockets(st)
-	for i := 0; i < int(st.SocketCount) && i < len(st.Sockets); i++ {
-		if st.Sockets[i] == 0 {
-			continue
+	if nativeStats {
+		var socketAffixes []domain.Affix
+		for i := 0; i < int(st.SocketCount) && i < len(st.Sockets); i++ {
+			if st.Sockets[i] != 0 {
+				socketAffixes = append(socketAffixes, st.SocketCards[i].StaticAffixes()...)
+			}
 		}
-		for _, affix := range st.SocketCards[i].StaticAffixes() {
-			lines = append(lines, qualityColoredLine(textQuality, astralRuneAffixText(st.Sockets[i], affix)))
+		var formationAffixes []domain.Affix
+		if includeFormation {
+			formationAffixes = domain.ResolveVariableAffixes(formation.Affixes, formation.VariableAffixes, st.Endgame.FormationRollBP)
+		}
+		for _, a := range mergedEndgameAffixes(domain.UniqueAffixes(st), socketAffixes, formationAffixes) {
+			text := affixText(a)
+			if a.Attr == domain.AttrHPRegen {
+				text = astralRuneAffixText(domain.LastAstralRune, a)
+			}
+			lines = append(lines, qualityColoredLine(4, text))
+		}
+		for _, line := range localEnhancementLines(def, local, roll) {
+			lines = append(lines, qualityColoredLine(4, line))
+		}
+	} else {
+		for i := 0; i < int(st.SocketCount) && i < len(st.Sockets); i++ {
+			if st.Sockets[i] != 0 {
+				for _, a := range st.SocketCards[i].StaticAffixes() {
+					lines = append(lines, qualityColoredLine(textQuality, astralRuneAffixText(st.Sockets[i], a)))
+				}
+			}
 		}
 	}
 	// 分母是这件装备实际已打出的孔，不是模板可打孔上限。
 	// 无孔装备不显示；空孔计入分母，只有已镶嵌的孔计入分子。
 	if st.SocketCount > 0 {
-		lines = append(lines, qualityColoredLine(textQuality, fmt.Sprintf("孔数 %d/%d", usedSockets, st.SocketCount)))
+		socketQuality := textQuality
+		if nativeStats {
+			socketQuality = 4
+		}
+		lines = append(lines, qualityColoredLine(socketQuality, fmt.Sprintf("孔数 %d/%d", usedSockets, st.SocketCount)))
 	}
 	s.appendSuitTooltip(&lines, e.Suit, owner)
 	if e.Skill != nil {

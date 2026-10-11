@@ -43,9 +43,9 @@ func TestAstralEveryRuneRequiredLevelAndAtomicInsert(t *testing.T) {
 	}
 }
 
-func TestAstralFormationTierInsertGateAndExtractionRecovery(t *testing.T) {
+func TestAstralFormationMaxRuneInsertGateAndExtractionRecovery(t *testing.T) {
 	defs, lookup := astralFixture()
-	recipe, _ := AstralRecipeByID(6) // Ingredient levels 12/14, authored formation tier 20.
+	recipe, _ := AstralRecipeByID(6) // Ingredient levels 12/14; there is no independent formation tier.
 	target := NewStack(defs[999001], 1)
 	target.SocketCount = 2
 	bag := NewBag(4)
@@ -58,7 +58,7 @@ func TestAstralFormationTierInsertGateAndExtractionRecovery(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, level := range []int32{14, 19, 20, 60} {
+	for _, level := range []int32{12, 13, 14, 19, 20, 60} {
 		plan, err := PlanAstralInsert(p.Bag, p.Worn, lookup, target.UID, b.UID, 1, &Character{Level: level})
 		if (err == nil) != (level >= recipe.MinLevel) {
 			t.Fatalf("formation level %d: %v", level, err)
@@ -115,7 +115,7 @@ func TestAstralEveryFormationIngredientAndLevelBoundaries(t *testing.T) {
 				maxRune = rune.MinLevel
 			}
 		}
-		if r.MinLevel < maxRune || r.MinLevel < 12 || r.MinLevel > 60 {
+		if r.MinLevel != maxRune || r.MinLevel < 12 || r.MinLevel > 60 {
 			t.Fatal("invalid formation level", r.ID)
 		}
 		st := astralStack(t, r, def, lookup)

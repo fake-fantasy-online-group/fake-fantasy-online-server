@@ -154,7 +154,6 @@ func ActiveUniqueTraits(worn *EquipSet, defs func(ItemID) (ItemDef, bool), ch *C
 			return
 		}
 		for _, tr := range d.Traits {
-			tr.PowerBP = scaledUniquePower(tr.PowerBP, st.Endgame.UniqueRollBP)
 			out = append(out, tr)
 		}
 	})

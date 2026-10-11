@@ -469,7 +469,7 @@ func Compute(in StatSource) (Base, Stats) {
 		for _, a := range def.Equip.Affixes {
 			applyAffix(a, &base, &basePct, &flat, &pct)
 		}
-		for _, a := range UniqueAffixes(st) {
+		for _, a := range UniqueItemBonuses(def, st) {
 			applyAffix(a, &base, &basePct, &flat, &pct)
 		}
 		for i := 0; i < int(st.RolledAffixCount) && i < len(st.RolledAffixes); i++ {

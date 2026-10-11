@@ -7,7 +7,7 @@ import (
 	"sort"
 )
 
-const UniqueCatalogVersion = "endgame-v3-authored"
+const UniqueCatalogVersion = "endgame-v4-local-fixed"
 const UniqueCatalogCount = 1619
 const UniqueRollMinBP int32 = 8000
 const UniqueRollMaxBP int32 = 12000
@@ -32,6 +32,8 @@ type UniqueDefinition struct {
 	Slot, LevelRequirement, ResourceLevel    int32
 	NativeDropEligible, LegacyAffixPoolReady bool
 	Affixes                                  []Affix
+	VariableAffixes                          []VariableAffix
+	LocalEnhancements                        []ItemLocalEnhancement
 	Traits                                   []UniqueTrait
 	SourceArm, SourceDesc                    string
 }
@@ -86,6 +88,9 @@ func validateUniqueDefinition(d UniqueDefinition) error {
 	if err := validateEndgameExtraAffixes(d.Affixes, true); err != nil {
 		return fmt.Errorf("unique %d: %w", d.BaseID, err)
 	}
+	if err := validateEndgameRollModel(d.Affixes, d.VariableAffixes, d.LocalEnhancements); err != nil {
+		return fmt.Errorf("unique %d: %w", d.BaseID, err)
+	}
 	for _, b := range d.ReservedSkills {
 		if !b.Valid() {
 			return fmt.Errorf("invalid reserved skill attribute %d", d.BaseID)
@@ -101,6 +106,8 @@ func validateUniqueDefinition(d UniqueDefinition) error {
 
 func cloneUnique(d UniqueDefinition) UniqueDefinition {
 	d.Affixes = append([]Affix(nil), d.Affixes...)
+	d.VariableAffixes = append([]VariableAffix(nil), d.VariableAffixes...)
+	d.LocalEnhancements = append([]ItemLocalEnhancement(nil), d.LocalEnhancements...)
 	d.Traits = append([]UniqueTrait(nil), d.Traits...)
 	d.ReservedSkills = append([]ReservedSkillAttribute(nil), d.ReservedSkills...)
 	return d
@@ -157,10 +164,7 @@ func UniqueAffixes(st Stack) []Affix {
 	if !ok {
 		return nil
 	}
-	for i := range d.Affixes {
-		d.Affixes[i].Value = scaleUniqueAffix(d.Affixes[i], st.Endgame.UniqueRollBP)
-	}
-	return d.Affixes
+	return ResolveVariableAffixes(d.Affixes, d.VariableAffixes, st.Endgame.UniqueRollBP)
 }
 func ValidateUniqueCatalog(defs map[ItemID]ItemDef) error {
 	count := 0
@@ -177,6 +181,11 @@ func ValidateUniqueCatalog(defs map[ItemID]ItemDef) error {
 			return err
 		}
 		e := def.Equip
+		for _, local := range d.LocalEnhancements {
+			if len(ResolveItemLocalEnhancements(e, []ItemLocalEnhancement{local}, UniqueRollMinBP)) == 0 {
+				return fmt.Errorf("unique %d local enhancement has no intrinsic base", id)
+			}
+		}
 		if d.Slot != e.Slot || d.Professions != e.Need.Professions || d.BeginnerAllowed != e.Need.BeginnerAllowed || d.Sex != e.Need.Sex || d.LevelRequirement != e.LevelReq {
 			return fmt.Errorf("unique %d requirement metadata differs from loaded equipment", id)
 		}

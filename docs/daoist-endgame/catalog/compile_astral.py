@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Compile explicitly authored rune/formation JSON; never create item prose or stats."""
 import argparse,json,pathlib
-from generate import TRAITS, TRAIT_CLASSES, POWER_TIERS, supported_endgame_affix, validate_extra_affixes
+from generate import TRAITS, TRAIT_CLASSES, POWER_TIERS, supported_endgame_affix, validate_extra_affixes, validate_roll_model
 ROOT=pathlib.Path(__file__).resolve().parents[3]
 SOURCE=ROOT/'server/docs/endgame/astral_runes.json'
 TARGET=ROOT/'server/internal/domain/endgame_runes_catalog.go'
@@ -9,6 +9,8 @@ def q(s):return json.dumps(s,ensure_ascii=False)
 def affixes(rows):return '[]Affix{'+','.join('{Attr:%d,Value:%d,Mode:%d}'%(r['attr'],r['value'],r['mode']) for r in rows)+'}'
 def traits(rows):return '[]UniqueTrait{'+','.join('{Kind:%s,PowerBP:%d,ThresholdPct:%d,SkillID:%d,SkillName:%s}'%(q(r['kind']),r['powerBP'],r['thresholdPct'],r.get('skillID',0),q(r.get('skillName',''))) for r in rows)+'}'
 def reserved(rows):return '[]ReservedSkillAttribute{'+','.join('{Scope:%s,Target:%s,Levels:%d}'%(q(r['scope']),q(r['target']),r['levels']) for r in rows)+'}'
+def variables(rows):return '[]VariableAffix{'+','.join('{Attr:%d,Min:%d,Max:%d}'%(r['attr'],r['min'],r['max']) for r in rows)+'}'
+def local(rows):return '[]ItemLocalEnhancement{'+','.join('{Attr:%d,Percent:%d,MinPercent:%d,MaxPercent:%d}'%(r['attr'],r['percent'],r.get('minPercent',0),r.get('maxPercent',0)) for r in rows)+'}'
 def supported_affix(a):
     return (isinstance(a,dict) and set(a) == {'attr','value','mode'}
             and supported_endgame_affix(a['attr'],a['value'],a['mode']))
@@ -26,13 +28,17 @@ def compile_catalog(doc):
     lines+=['}','','var astralRecipeCatalog = []AstralRecipe{']
     channels={'战阵':1,'守阵':2,'辅阵':3}
     names=set(); lores=set()
+    rune_levels={r['id']:r['minLevel'] for r in doc['runes']}
     scopes={r['SkillID']:r for r in json.loads((ROOT/'docs/daoist-endgame/catalog/skill_scopes.json').read_text())}
     for r in doc['formations']:
+        assert 2 <= len(r['runes']) <= 5 and all(id in rune_levels for id in r['runes']), ('invalid formation runes',r['id'])
+        assert type(r['minLevel']) is int and r['minLevel'] == max(rune_levels[id] for id in r['runes']), ('formation level must equal highest rune level',r['id'])
         assert r['name'] not in names and r['lore'] not in lores
         names.add(r['name']);lores.add(r['lore'])
         assert all(r.get(k) for k in ['identity','benefit','tradeoff','powerTier']) and r['powerTier'] in POWER_TIERS
         assert len(r.get('traits',[])) <= 3
         validate_extra_affixes(r['affixes'],r['id'],keys=('attr','value','mode'))
+        validate_roll_model(r['affixes'],r.get('variableAffixes',[]),r.get('localEnhancements',[]),r['id'],lower=True)
         for t in r.get('traits',[]):
             assert t['kind'] in TRAITS and 0 < t['powerBP'] <= 10000 and 0 <= t['thresholdPct'] <= 100
             assert not r['professions'] or r['professions'] & TRAIT_CLASSES.get(t['kind'],31), ('class has no executable trait path',r['id'],t)
@@ -44,7 +50,7 @@ def compile_catalog(doc):
         for b in r.get('reservedSkills',[]):
             assert b['scope'] in ('all','class','tree','skill') and 1 <= b['levels'] <= 3
             assert (b['scope']=='all' and b['target']=='') or (b['scope']!='all' and b['target'])
-        lines.append('{ID:%d,Name:%s,Channel:%d,MinLevel:%d,Professions:%d,Runes:[]ItemID{%s},Slots:[]EquipSlot{%s},Affixes:%s,Lore:%s,Identity:%s,Benefit:%s,Tradeoff:%s,PowerTier:%s,Traits:%s,ReservedSkills:%s},'%(r['id'],q(r['name']),channels[r['channel']],r['minLevel'],r['professions'],','.join(map(str,r['runes'])),','.join(map(str,r['slots'])),affixes(r['affixes']),q(r['lore']),q(r['identity']),q(r['benefit']),q(r['tradeoff']),q(r['powerTier']),traits(r.get('traits',[])),reserved(r.get('reservedSkills',[]))))
+        lines.append('{ID:%d,Name:%s,Channel:%d,MinLevel:%d,Professions:%d,Runes:[]ItemID{%s},Slots:[]EquipSlot{%s},Affixes:%s,Lore:%s,Identity:%s,Benefit:%s,Tradeoff:%s,PowerTier:%s,Traits:%s,ReservedSkills:%s,VariableAffixes:%s,LocalEnhancements:%s},'%(r['id'],q(r['name']),channels[r['channel']],r['minLevel'],r['professions'],','.join(map(str,r['runes'])),','.join(map(str,r['slots'])),affixes(r['affixes']),q(r['lore']),q(r['identity']),q(r['benefit']),q(r['tradeoff']),q(r['powerTier']),traits(r.get('traits',[])),reserved(r.get('reservedSkills',[])),variables(r.get('variableAffixes',[])),local(r.get('localEnhancements',[]))))
     return '\n'.join(lines+['}',''])
 def main():
     import subprocess,os

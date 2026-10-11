@@ -42,6 +42,8 @@ type AstralRecipe struct {
 	Runes                                  []ItemID
 	Slots                                  []EquipSlot
 	Affixes                                []Affix
+	VariableAffixes                        []VariableAffix
+	LocalEnhancements                      []ItemLocalEnhancement
 	Lore                                   string
 	Identity, Benefit, Tradeoff, PowerTier string
 	Traits                                 []UniqueTrait
@@ -59,6 +61,8 @@ func cloneAstralRune(r AstralRuneDef) AstralRuneDef {
 	return r
 }
 func cloneAstralRecipe(r AstralRecipe) AstralRecipe {
+	r.VariableAffixes = append([]VariableAffix(nil), r.VariableAffixes...)
+	r.LocalEnhancements = append([]ItemLocalEnhancement(nil), r.LocalEnhancements...)
 	r.Runes = append([]ItemID(nil), r.Runes...)
 	r.Slots = append([]EquipSlot(nil), r.Slots...)
 	r.Affixes = append([]Affix(nil), r.Affixes...)
@@ -221,7 +225,11 @@ func ActiveAstralRecipes(worn *EquipSet, defs func(ItemID) (ItemDef, bool), ch *
 func AstralBonuses(worn *EquipSet, defs func(ItemID) (ItemDef, bool), ch *Character) []Affix {
 	var out []Affix
 	for _, a := range ActiveAstralRecipes(worn, defs, ch) {
-		out = append(out, a.Recipe.Affixes...)
+		def, ok := defs(a.Item)
+		if !ok {
+			continue
+		}
+		out = append(out, AstralItemBonuses(def, worn.At(a.Slot), a.Recipe)...)
 	}
 	return out
 }
@@ -248,6 +256,9 @@ func ValidateAstralCatalog() error {
 		if err := validateEndgameExtraAffixes(r.Affixes, false); err != nil {
 			return fmt.Errorf("formation %d: %w", r.ID, err)
 		}
+		if err := validateEndgameRollModel(r.Affixes, r.VariableAffixes, r.LocalEnhancements); err != nil {
+			return fmt.Errorf("formation %d: %w", r.ID, err)
+		}
 		for _, t := range r.Traits {
 			if !ValidUniqueTrait(t) || !TraitMatchesProfessions(t, r.Professions) {
 				return fmt.Errorf("invalid formation trait %d", r.ID)
@@ -263,13 +274,17 @@ func ValidateAstralCatalog() error {
 			return fmt.Errorf("duplicate formation %d", r.ID)
 		}
 		seen[key] = true
+		maxRuneLevel := int32(0)
 		for _, id := range r.Runes {
 			if rune, ok := AstralRune(id); !ok {
 				return fmt.Errorf("unknown rune %d", id)
-			} else if r.MinLevel < rune.MinLevel {
-				return fmt.Errorf("formation %d undercuts rune %d requirement", r.ID, id)
+			} else if rune.MinLevel > maxRuneLevel {
+				maxRuneLevel = rune.MinLevel
 			}
 			used[id] = true
+		}
+		if r.MinLevel != maxRuneLevel {
+			return fmt.Errorf("formation %d requirement must equal highest rune level %d", r.ID, maxRuneLevel)
 		}
 	}
 	if len(used) != 28 {
@@ -281,6 +296,8 @@ func ValidateAstralCatalog() error {
 // EquipmentRequiredLevel is derived from current authoritative catalogs, never
 // saved on an instance. Existing cards and saved equipment therefore inherit new
 // requirements without rewriting their identities or snapshotted effects.
+// A formation adds no independent level tier: keep the higher of the base
+// equipment requirement and every installed rune requirement.
 func EquipmentRequiredLevel(def ItemDef, st Stack) int32 {
 	level := int32(0)
 	if def.Equip != nil {
@@ -290,9 +307,6 @@ func EquipmentRequiredLevel(def ItemDef, st Stack) int32 {
 		if rune, ok := AstralRune(st.Sockets[i]); ok && rune.MinLevel > level {
 			level = rune.MinLevel
 		}
-	}
-	if recipe, ok := MatchAstralRecipe(def, st); ok && recipe.MinLevel > level {
-		level = recipe.MinLevel
 	}
 	return level
 }

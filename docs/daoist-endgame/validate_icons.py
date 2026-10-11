@@ -26,6 +26,7 @@ assert len(set(manifest['fallbacks'])) == 11, 'fallback semantic groups collapse
 assets = {row['sprite']: row for row in manifest['assets']}
 assert set(primary + manifest['fallbacks']) == set(assets), 'review coverage mismatch'
 assert len({assets[id]['variants'][args.mode]['pixel_sha256'] for id in primary}) == 32, 'duplicate primary artwork'
+assert len({assets[id]['variants'][args.mode]['visible_pixel_sha256'] for id in primary}) == 32, 'duplicate visible primary artwork after cropping transparent borders'
 errors = []
 for sprite, row in assets.items():
     path = args.resource_root / row['path']
@@ -38,4 +39,4 @@ for sprite, row in assets.items():
         errors.append(str(path) + ': differs from reviewed ' + reviewed['package'])
 if errors:
     parser.exit(1, '\n'.join(errors) + '\nFAIL: resource availability/identity was not established.\n')
-print(f"PASS: {len(assets)} actual {args.mode} sprites; 32 distinct primary icons and 11 semantic fallback groups; source map matches review.")
+print(f"PASS: {len(assets)} actual {args.mode} sprites; 32 distinct primary icons including normalized visible pixels and 11 semantic fallback groups; source map matches review.")

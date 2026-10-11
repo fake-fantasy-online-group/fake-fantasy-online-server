@@ -29,7 +29,7 @@ FIELDS = 'base_id,base_name,resource_level,level_requirement,drop_kind,professio
 AUTHORED = HERE / 'authored'
 TRAITS = set("healthy_assault desperate_assault execution ambush elite_hunter critical_focus physical_guard magic_guard desperate_guard healthy_guard healing_grace rescue_heal selfless_heal healing_cost skill_economy spell_economy swift_cast area_expansion trap_expansion fire_mastery ice_mastery holy_mastery single_focus area_focus invisible_focus kill_mend kill_mana basic_focus skill_focus".split())
 AUTHOR_REQUIRED = {'BaseID','Name','Lore','LoreRoot','Identity','Benefit','Tradeoff','PowerTier','Affixes','Traits'}
-AUTHOR_OPTIONAL = {'ReservedSkills'}
+AUTHOR_OPTIONAL = {'ReservedSkills','VariableAffixes','LocalEnhancements'}
 POWER_TIERS = {'transition','highvalue','builddefining','godlike'}
 MIN_BENEFICIAL_EXTRA_AFFIXES = 5
 TRAIT_CLASSES = {**dict.fromkeys(('healing_grace','rescue_heal','selfless_heal','healing_cost','holy_mastery'),8),**dict.fromkeys(('fire_mastery','ice_mastery'),16),**dict.fromkeys(('swift_cast','spell_economy'),24),**dict.fromkeys(('trap_expansion','invisible_focus'),4)}
@@ -71,6 +71,33 @@ def validate_extra_affixes(rows, label, *, unique=False, keys=('Attr','Value','M
         if (value < 0 if attr == 25 else value > 0):
             beneficial += 1
     assert beneficial >= MIN_BENEFICIAL_EXTRA_AFFIXES, (label,'at least five beneficial distinct extra attributes required',beneficial)
+
+
+def validate_roll_model(affixes, variables, local, label, *, lower=False, intrinsic=None):
+    def key(k): return k[0].lower()+k[1:] if lower else k
+    akey,vkey,mkey=map(key,('Attr','Value','Mode'))
+    rows={a[akey]:a for a in affixes}; seen=set(); count=len(variables)
+    assert isinstance(variables,list) and isinstance(local,list) and len(local)<=2, (label,'invalid roll metadata')
+    for v in variables:
+        assert isinstance(v,dict) and set(v)==set(map(key,('Attr','Min','Max'))), (label,'invalid variable shape')
+        attr,lo,hi=(v[key(k)] for k in ('Attr','Min','Max'))
+        assert all(type(x) is int for x in (attr,lo,hi)) and attr in rows and attr not in seen and lo<hi, (label,'invalid variable affix')
+        seen.add(attr); a=rows[attr]
+        assert lo<=a[vkey]<=hi, (label,'variable reference outside range')
+        assert all(supported_endgame_affix(attr,x,a[mkey]) and (x<0 if attr==25 else x>0) for x in (lo,hi)), (label,'invalid variable endpoints')
+    seen=set()
+    for v in local:
+        assert isinstance(v,dict) and set(map(key,('Attr','Percent')))<=set(v)<=set(map(key,('Attr','Percent','MinPercent','MaxPercent'))), (label,'invalid local shape')
+        attr,pct=(v[key(k)] for k in ('Attr','Percent')); lo=v.get(key('MinPercent'),0); hi=v.get(key('MaxPercent'),0)
+        assert all(type(x) is int for x in (attr,pct,lo,hi)) and attr in (47,15,13,17) and attr not in seen and 0<pct<=1000, (label,'invalid local enhancement')
+        seen.add(attr)
+        if lo or hi:
+            count+=1
+            assert 0<lo<=pct<=hi<=1000 and lo<hi, (label,'invalid local range')
+        if intrinsic is not None:
+            names={47:('min_atk','max_atk'),15:('matk',),13:('def',),17:('mdef',)}[attr]
+            assert any(intrinsic.get(n,0)>0 for n in names), (label,'local enhancement has no intrinsic base',attr)
+    assert count<=2, (label,'at most two variable lines')
 
 
 def split_sql(text):
@@ -171,6 +198,7 @@ def read_authored(sources):
             assert row['PowerTier'] in POWER_TIERS, (iid,'PowerTier')
             assert 0 <= len(row['Traits']) <= 3, (iid,'trait count')
             validate_extra_affixes(row['Affixes'],iid,unique=True)
+            validate_roll_model(row['Affixes'],row.get('VariableAffixes',[]),row.get('LocalEnhancements',[]),iid,intrinsic=sources[iid][0])
             kinds=set()
             for t in row['Traits']:
                 assert {'Kind','PowerBP','ThresholdPct'} <= t.keys() <= {'Kind','PowerBP','ThresholdPct','SkillID','SkillName'}, (iid,t)

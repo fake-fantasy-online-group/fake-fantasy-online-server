@@ -105,7 +105,30 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 	}
 	switch {
 	case r.Op == "hello":
-		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: []string{domain.EndgameV1}, CatalogVersion: "daoist-v1"})
+		caps := []string{domain.EndgameV1}
+		priorNativeStats := p.Player.EndgameNativeStats
+		p.Player.EndgameNativeStats = false
+		for _, cap := range r.Capabilities {
+			if cap == domain.EndgameNativeStatsV1 {
+				p.Player.EndgameNativeStats = true
+				break
+			}
+		}
+		if p.Player.EndgameNativeStats {
+			caps = append(caps, domain.EndgameNativeStatsV1)
+		}
+		// Native descriptions must arrive before capability echo makes the
+		// new client stop reconstructing them from catalog rows.
+		if p.Player.EndgameNativeStats || priorNativeStats {
+			nativeSnapshot, err := s.inventorySnapshot(p)
+			if err != nil {
+				p.Player.EndgameNativeStats = priorNativeStats
+				s.endgameError(p, r, "busy", "物品信息暂时无法刷新，请重试")
+				return
+			}
+			s.emitTo(p.ID, nativeSnapshot)
+		}
+		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: caps, CatalogVersion: domain.UniqueCatalogVersion})
 		s.sendEndgameSnapshot(p)
 	case r.Op == "snapshot":
 		s.sendEndgameSnapshot(p)

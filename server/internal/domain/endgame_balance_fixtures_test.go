@@ -149,19 +149,13 @@ func TestAuthoredOffensiveSpecialistsEarnFreshDropPurpose(t *testing.T) {
 			base, innate := fixtureBuild(t, tc.race, fixtureInt(a, "level_need"), a)
 			yellow := fixtureYellow(t, tc.race, a, p90)
 			y := fixtureOutput(base, innate, yellow, nil, tc.ctx, tc.race >= Healer)
-			fresh := fixtureOutput(base, innate, d.Affixes, d.Traits, tc.ctx, tc.race >= Healer)
-			converted := fixtureOutput(base, innate, append(append([]Affix{}, yellow...), d.Affixes...), d.Traits, tc.ctx, tc.race >= Healer)
+			reference := append(ResolveVariableAffixes(d.Affixes, d.VariableAffixes, 10000), ResolveItemLocalEnhancements(&EquipDef{Bonus: innate}, d.LocalEnhancements, 10000)...)
+			fresh := fixtureOutput(base, innate, reference, d.Traits, tc.ctx, tc.race >= Healer)
+			converted := fixtureOutput(base, innate, append(append([]Affix{}, yellow...), reference...), d.Traits, tc.ctx, tc.race >= Healer)
 			t.Logf("%s fresh=%.2f strong-yellow=%.2f converted=%.2f", d.Name, fresh, y, converted)
 			for _, roll := range []int32{8000, 10000, 12000} {
-				var scaled []Affix
-				for _, a := range d.Affixes {
-					a.Value = scaleUniqueAffix(a, roll)
-					scaled = append(scaled, a)
-				}
+				scaled := append(ResolveVariableAffixes(d.Affixes, d.VariableAffixes, roll), ResolveItemLocalEnhancements(&EquipDef{Bonus: innate}, d.LocalEnhancements, roll)...)
 				traits := append([]UniqueTrait{}, d.Traits...)
-				for i := range traits {
-					traits[i].PowerBP = scaledUniquePower(traits[i].PowerBP, roll)
-				}
 				off := tc.ctx
 				off.HPPercent = 100
 				off.TargetHPPercent = 50

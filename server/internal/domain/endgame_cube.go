@@ -96,14 +96,14 @@ func cubeRecipe(id int32, target Stack, items map[ItemID]ItemDef) (EndgameRecipe
 	case CubeAwakenUnique:
 		r.Name = "淬器成真"
 		r.Operation = "unique.awaken"
-		r.Description = "唤醒此基底唯一对应的仙遗；灵性80%至120%，原有加工、孔内卡与换形保留。"
+		r.Description = "唤醒此基底唯一对应的仙遗；主体属性固定，少数词条浮动；原有加工、孔内卡与换形保留。"
 		add(CubeStarMarrow, 120)
 		add(CubePurifiedDust, 30)
 		fee(100000)
 	case CubeReforgeUnique:
 		r.Name = "返本重铸"
 		r.Operation = "unique.reforge"
-		r.Description = "仅重铸仙遗灵性为80%至120%的另一档，可能降低；原有养成与仙遗身份保留。"
+		r.Description = "仅重铸明确浮动的词条，保证与当前可见数值不同，可能降低；固定属性、原有养成与仙遗身份保留。"
 		add(CubeStarMarrow, 40)
 		add(CubePurifiedDust, 25)
 		add(CubeImmortalEcho, 4)
@@ -111,7 +111,7 @@ func cubeRecipe(id int32, target Stack, items map[ItemID]ItemDef) (EndgameRecipe
 	case CubeTemperUnique:
 		r.Name = "炼真守一"
 		r.Operation = "unique.temper"
-		r.Description = "确定提高仙遗灵性5个百分点，上限120%；原有养成不变。"
+		r.Description = "提高少数浮动词条的共享品质，确保可见数值提升；已满值不可使用，固定属性与原有养成不变。"
 		add(CubeStarMarrow, 60)
 		add(CubePurifiedDust, 40)
 		add(CubeImmortalEcho, 6)

@@ -99,7 +99,7 @@ func TestAstralEveryRecipeAndInvalidOrders(t *testing.T) {
 					break
 				}
 			}
-			if a := ActiveAstralRecipes(worn, lookup, ch); len(a) != 1 || a[0].Recipe.ID != r.ID || !reflect.DeepEqual(AstralBonuses(worn, lookup, ch), r.Affixes) {
+			if a := ActiveAstralRecipes(worn, lookup, ch); len(a) != 1 || a[0].Recipe.ID != r.ID || !reflect.DeepEqual(AstralBonuses(worn, lookup, ch), AstralItemBonuses(def, st, r)) {
 				t.Fatal("no executable bonuses")
 			}
 			originalRace := ch.Race

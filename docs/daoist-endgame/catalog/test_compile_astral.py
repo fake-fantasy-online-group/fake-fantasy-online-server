@@ -9,9 +9,14 @@ class AstralCompilerTest(unittest.TestCase):
         # unrelated source row cannot make their negative assertions pass.
         for r in self.doc['formations']:
             r['powerTier']='transition'
+            r['variableAffixes']=[];r['localEnhancements']=[]
             r['affixes']=[{'attr':a,'value':20,'mode':0} for a in (1,5,19,34,47)]
     def test_current_source(self):
         self.assertIn('astralRuneCatalog',compiler.compile_catalog(json.loads(compiler.SOURCE.read_text())))
+    def test_formation_level_is_exactly_highest_rune(self):
+        for offset in (-1,1):
+            doc=copy.deepcopy(self.doc);doc['formations'][0]['minLevel']+=offset
+            with self.subTest(offset=offset),self.assertRaisesRegex(AssertionError,'formation level must equal highest rune level'):compiler.compile_catalog(doc)
     def test_five_or_more_extra_attributes(self):
         for tier in sorted(compiler.POWER_TIERS):
             doc=copy.deepcopy(self.doc);r=doc['formations'][0];r['powerTier']=tier

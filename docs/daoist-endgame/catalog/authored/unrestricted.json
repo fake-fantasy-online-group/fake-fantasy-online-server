@@ -36,11 +36,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 114,
+        "Max": 125
+      }
+    ]
   },
   {
     "BaseID": 2874,
-    "Name": "反穿春衫",
+    "Name": "袖里桃核生",
     "Lore": "裁衣时里外用反，绣在内侧的桃枝只给穿衣人看。有一天袖中结出一枚桃核，裁缝却记得自己根本没绣果子。",
     "LoreRoot": "原创·内藏桃枝的薄衫",
     "Identity": "轻巧的入门法力衣",
@@ -75,6 +82,13 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 95,
+        "Max": 104
+      }
+    ]
   }
 ]

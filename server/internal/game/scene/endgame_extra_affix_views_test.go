@@ -82,7 +82,7 @@ func TestEndgameFormationCatalogEveryPagePreservesAllExtras(t *testing.T) {
 		for _, item := range r.Formations {
 			definition, ok := domain.AstralRecipeByID(item.ID)
 			if !ok || seen[item.ID] || len(item.Stats) < domain.MinBeneficialEndgameExtraAffixes ||
-				!reflect.DeepEqual(item.Stats, endgameStats(definition.Affixes)) {
+				!reflect.DeepEqual(item.Stats, endgameStats(domain.ResolveVariableAffixes(definition.Affixes, definition.VariableAffixes, 10000))) {
 				t.Fatal("formation extras missing or truncated", item.ID)
 			}
 			seen[item.ID] = true

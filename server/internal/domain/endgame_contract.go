@@ -2,6 +2,7 @@ package domain
 
 // EndgameV1 is explicitly negotiated; native positional packets remain unchanged.
 const EndgameV1 = "endgame.v1"
+const EndgameNativeStatsV1 = "endgame.native-stats.v1"
 const EndgameSchema = 1
 const EndgameMaxJSONBytes = 60 * 1024
 
@@ -11,6 +12,8 @@ type EndgameItemState struct {
 	Revision     int64
 	UniqueID     int32
 	UniqueRollBP int32
+	// FormationRollBP is generated once for new equipment. Legacy zero stays midpoint.
+	FormationRollBP int32
 }
 
 type EndgameRequest struct {

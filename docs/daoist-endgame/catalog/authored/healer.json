@@ -1,7 +1,7 @@
 [
   {
     "BaseID": 2005,
-    "Name": "茴香小盏",
+    "Name": "藏焦香",
     "Lore": "小药童把煎焦的茴香藏在帽顶，满院找锅的师父循香而来。他没有挨罚，只学会了第一味药也有过火的时候。",
     "LoreRoot": "原型·药童小冠；煎药故事为原创",
     "Identity": "容错型药童冠",
@@ -36,11 +36,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 65,
+        "Max": 71
+      }
+    ]
   },
   {
     "BaseID": 2011,
-    "Name": "月下空额",
+    "Name": "月白",
     "Lore": "冠额本要绣药师名号，绣娘却睡着了。空处积下一层月色，洗也洗不去。",
     "LoreRoot": "原创·未完冠绣",
     "Identity": "储气的学徒帽",
@@ -75,11 +82,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 59,
+        "Max": 64
+      }
+    ]
   },
   {
     "BaseID": 2017,
-    "Name": "量额秘方",
+    "Name": "量额方",
     "Lore": "药铺只凭三指量冠，掌柜说额头宽窄与医术无关。冠内另缝了一张谁也读不懂的方子。",
     "LoreRoot": "原创·药铺旧规",
     "Identity": "稳健的精神冠",
@@ -114,11 +128,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 12,
+        "Max": 13
+      }
+    ]
   },
   {
     "BaseID": 2031,
-    "Name": "兰根倒生",
+    "Name": "倒根兰",
     "Lore": "帽缝中的兰草向天空扎根，花开在贴额的一侧。养兰人至今以为它早已枯死。",
     "LoreRoot": "原创·倒生兰草",
     "Identity": "护身草冠",
@@ -153,11 +174,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 100,
+        "Max": 110
+      }
+    ]
   },
   {
     "BaseID": 2032,
-    "Name": "葫里午睡",
+    "Name": "哈欠葫",
     "Lore": "葫芦帽中装着一声长长的哈欠，晃动时会滚向左耳。午后的病历因此总写得格外整齐。",
     "LoreRoot": "原创·午睡葫芦",
     "Identity": "省力的治疗头饰",
@@ -203,11 +231,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 21,
+        "Max": 23
+      }
+    ]
   },
   {
     "BaseID": 2054,
-    "Name": "隔帘问脉",
+    "Name": "帘外谁牵线",
     "Lore": "冠边垂下七条细线，原用来隔帘搭脉。最长的一条每夜绷紧，另一端不知系在何处。",
     "LoreRoot": "原创·悬丝诊脉",
     "Identity": "警觉的避击冠",
@@ -242,7 +277,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 24,
+        "Max": 26
+      }
+    ]
   },
   {
     "BaseID": 2055,
@@ -281,7 +323,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 2056,
@@ -331,11 +380,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 349,
+        "Max": 383
+      }
+    ]
   },
   {
     "BaseID": 2811,
-    "Name": "药灰长襟",
+    "Name": "药灰襟",
     "Lore": "炼药失败后的灰落满长襟，拍打便浮出半张符。制衣人反复试过，另外半张不在袖上。",
     "LoreRoot": "原创·药灰残符",
     "Identity": "耐法的旧袍",
@@ -370,11 +426,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 22,
+        "Max": 24
+      }
+    ]
   },
   {
     "BaseID": 2812,
-    "Name": "打结方笺",
+    "Name": "错方结",
     "Lore": "衣带系着写错剂量的方笺，每结一处便遮去一笔。展开以后，药名仍旧一个也没改对。",
     "LoreRoot": "原创·错方衣带",
     "Identity": "养神的练习袍",
@@ -409,7 +472,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 50,
+        "Max": 55
+      }
+    ]
   },
   {
     "BaseID": 2813,
@@ -448,16 +518,23 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 12,
+        "Max": 13
+      }
+    ]
   },
   {
     "BaseID": 2814,
-    "Name": "错季桑衣",
+    "Name": "冬蚕衣",
     "Lore": "蚕在冬天吐丝，春天结冰。裁出的薄衣穿着微凉，药师专用它提醒自己别把节气写错。",
     "LoreRoot": "原创·异季蚕丝",
     "Identity": "抗术法的凉衣",
-    "Benefit": "以法术承伤为主，保留抗术法的凉衣的用途；法术平减、生命、魔防、精神、异常抵抗形成完整底盘",
-    "Tradeoff": "投入集中在法术承伤；不提供法攻、法术会心专精",
+    "Benefit": "以法术承伤为主，保留抗术法的凉衣的用途；法术平减、生命、魔防、精神、异常抵抗形成完整底盘；另有本件白字魔防强化20–30%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在法术承伤；不提供法攻、法术会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -487,7 +564,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 9,
+        "Max": 10
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 25,
+        "MinPercent": 20,
+        "MaxPercent": 30
+      }
+    ]
   },
   {
     "BaseID": 2827,
@@ -526,7 +618,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 9,
+        "Max": 10
+      }
+    ]
   },
   {
     "BaseID": 2828,
@@ -534,8 +633,8 @@
     "Lore": "白鹤每见这件衣服便拔腿走开，道观却拿它当迎鹤礼服。衣摆里藏着一张画得很像鹤的鸡。",
     "LoreRoot": "原创·迎鹤乌龙",
     "Identity": "灵巧躲避的礼衣",
-    "Benefit": "以物理承伤为主，保留灵巧躲避的礼衣的用途；敏捷、防御、生命、物理平减、体质形成完整底盘",
-    "Tradeoff": "投入集中在物理承伤；不提供法攻、法术会心专精",
+    "Benefit": "以物理承伤为主，保留灵巧躲避的礼衣的用途；敏捷、防御、生命、物理平减、体质形成完整底盘；另有本件白字防御强化50–70%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在物理承伤；不提供法攻、法术会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -565,11 +664,26 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 14,
+        "Max": 15
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 60,
+        "MinPercent": 50,
+        "MaxPercent": 70
+      }
+    ]
   },
   {
     "BaseID": 2887,
-    "Name": "半盏泼茶",
+    "Name": "茶脉",
     "Lore": "茶渍恰好洇成胸中经脉的样子，医者照着改了一处注解。翌日再看，茶渍已经换了走向。",
     "LoreRoot": "原创·会变的茶渍",
     "Identity": "集中生命的诊衣",
@@ -604,7 +718,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 95,
+        "Max": 104
+      }
+    ]
   },
   {
     "BaseID": 2888,
@@ -643,7 +764,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 18,
+        "Max": 19
+      }
+    ]
   },
   {
     "BaseID": 2899,
@@ -693,11 +821,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 205,
+        "Max": 225
+      }
+    ]
   },
   {
     "BaseID": 2900,
-    "Name": "折山遮月",
+    "Name": "侧身月入山",
     "Lore": "旧屏风的绢被裁成衣，折痕始终展不平。药师侧身时，屏上的山便挡住画里的月亮。",
     "LoreRoot": "原创·屏绢成衣",
     "Identity": "偏物理避击的厚衣",
@@ -732,7 +867,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 104,
+        "Max": 114
+      }
+    ]
   },
   {
     "BaseID": 9801,
@@ -771,16 +913,23 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 9802,
-    "Name": "垂星围裙",
+    "Name": "垂星",
     "Lore": "围裙上的五颗星是被锅底烫出的洞，夜里却正对天上五处暗点。掌厨从不准人补好。",
     "LoreRoot": "原创·星洞围裙",
     "Identity": "法术固定减伤衣",
-    "Benefit": "以法术承伤为主，保留法术固定减伤衣的用途；法术平减、魔防、生命、精神、异常抵抗形成完整底盘",
-    "Tradeoff": "投入集中在法术承伤；不提供法攻、法术会心专精",
+    "Benefit": "以法术承伤为主，保留法术固定减伤衣的用途；法术平减、魔防、生命、精神、异常抵抗形成完整底盘；另有本件白字魔防强化20–30%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在法术承伤；不提供法攻、法术会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -810,7 +959,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 16,
+        "Max": 17
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 25,
+        "MinPercent": 20,
+        "MaxPercent": 30
+      }
+    ]
   },
   {
     "BaseID": 9803,
@@ -849,11 +1013,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 9804,
-    "Name": "紫河旧图",
+    "Name": "腕上河",
     "Lore": "袖内绘着一条没有入口的河，水色每日改变。临摹者画到第九日才发现河流正沿着自己的腕骨走。",
     "LoreRoot": "原创·袖中内景河",
     "Identity": "法力池专精衣",
@@ -893,11 +1064,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 9805,
-    "Name": "丹扣不化",
+    "Name": "不化扣",
     "Lore": "丹衣的扣子原是一枚失败的药丸，泡了百年也不化。只有说出它的配方时，衣服才忽然变重。",
     "LoreRoot": "原创·不化丹扣",
     "Identity": "定神丹扣衣",
@@ -932,11 +1110,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 9806,
-    "Name": "露台散发",
+    "Name": "发上花",
     "Lore": "袍上曾晒满刚剪下的长发，发丝吸露后自织成花。主人不认那些花，说自己从没梦见这样的颜色。",
     "LoreRoot": "原创·发丝露花",
     "Identity": "灵活的施法衣",
@@ -971,11 +1156,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 11,
+        "Max": 12
+      }
+    ]
   },
   {
     "BaseID": 15120,
-    "Name": "息壤止寸",
+    "Name": "息壤不肯长",
     "Lore": "杖尾息壤长过刻线便被刮去，用来补丹房漏墙。墙越补越薄，杖却再也不肯长高。",
     "LoreRoot": "原型·息壤杖尾的灵性",
     "Identity": "小幅普疗主杖",
@@ -1021,7 +1213,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 15121,
@@ -1060,11 +1259,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 48,
+        "Max": 52
+      }
+    ]
   },
   {
     "BaseID": 15122,
-    "Name": "紫云迟到",
+    "Name": "迟云",
     "Lore": "每当求晴的科仪结束，杖旁才慢慢聚起紫云。主持认为这算祥瑞，晒药人坚持另记一笔。",
     "LoreRoot": "原型·杖上紫云祥瑞",
     "Identity": "兼顾输出的药师杖",
@@ -1099,16 +1305,23 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 239,
+        "Max": 262
+      }
+    ]
   },
   {
     "BaseID": 15123,
-    "Name": "炉壁玉髓",
+    "Name": "炉壁藏书声",
     "Lore": "玉髓杖在丹炉受火的旧说流传很广，杖上一块炉壁却从未见火。药师刮下薄屑，听见里面有人翻书。",
     "LoreRoot": "原型·古玉浴老君丹炉；炉壁异象原创",
     "Identity": "进攻与救护折中的古玉杖",
-    "Benefit": "以治疗续航为主，保留进攻与救护折中的古玉杖的用途；法攻、精神、法力、生命、魔防、异常抵抗形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以治疗续航为主，保留进攻与救护折中的古玉杖的用途；法攻、精神、法力、生命、魔防、异常抵抗形成完整底盘；另有本件白字法攻强化60–80%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1149,7 +1362,22 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 70,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ]
   },
   {
     "BaseID": 15124,
@@ -1199,11 +1427,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 191,
+        "Max": 210
+      }
+    ]
   },
   {
     "BaseID": 15125,
-    "Name": "苦签无字",
+    "Name": "苦签",
     "Lore": "玄木杖上钉着一百片空白药签，尝遍草木的人没有写下最后一味。持杖者每救回一人，签上的苦气便淡一点。",
     "LoreRoot": "原型·神农玄杖的尝草意象；非神农遗物断言",
     "Identity": "舍弃自身伤害的急救主杖",
@@ -1254,7 +1489,14 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 362,
+        "Max": 398
+      }
+    ]
   },
   {
     "BaseID": 15126,
@@ -1304,7 +1546,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 15127,
@@ -1359,7 +1608,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 237,
+        "Max": 260
+      }
+    ]
   },
   {
     "BaseID": 15128,
@@ -1424,7 +1680,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 36,
+        "Max": 39
+      }
+    ]
   },
   {
     "BaseID": 20137,
@@ -1463,11 +1726,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 17,
+        "Max": 18
+      }
+    ]
   },
   {
     "BaseID": 20138,
-    "Name": "坐忘凹痕",
+    "Name": "坐痕",
     "Lore": "蒲团的凹痕被师父缝进了衣背，穿上便像靠着无人之墙。新弟子问修了几年，师父指着线头。",
     "LoreRoot": "原创·蒲团痕入衣",
     "Identity": "偏重定神防护",
@@ -1502,11 +1772,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20139,
-    "Name": "金乌打盹",
+    "Name": "眠乌",
     "Lore": "衣上的乌鸦总在正午合眼，天黑才伸懒腰。观日者按它值守，一个月误了十九次日出。",
     "LoreRoot": "原型·金乌袍纹",
     "Identity": "抗法薄袍",
@@ -1541,11 +1818,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 20140,
-    "Name": "日轮反面",
+    "Name": "日背井",
     "Lore": "绣娘在日轮背后添了一口井，井水每晚浸湿衣里。她说这是给太阳洗脸用的，没人敢去试。",
     "LoreRoot": "原创·日轮后井",
     "Identity": "法力恢复节约衣",
@@ -1591,11 +1875,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 255,
+        "Max": 280
+      }
+    ]
   },
   {
     "BaseID": 20141,
-    "Name": "扶风针脚",
+    "Name": "逆风针",
     "Lore": "针脚全朝上风处倾斜，穿衣人转身也不会改变。裁缝因此测出了山中一年不动的那一阵风。",
     "LoreRoot": "原型·舞风衣的风向",
     "Identity": "轻盈走位衣",
@@ -1630,7 +1921,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 12,
+        "Max": 13
+      }
+    ]
   },
   {
     "BaseID": 20142,
@@ -1669,11 +1967,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 32,
+        "Max": 35
+      }
+    ]
   },
   {
     "BaseID": 20143,
-    "Name": "池边禁洗",
+    "Name": "池后晒衣影",
     "Lore": "池边木牌写着不可浣衣，捞出的衣服却件件雪白。看守只收漂到岸上的影子，整齐挂在后院。",
     "LoreRoot": "原创·禁洗池的影衣",
     "Identity": "抵御物理命中的礼袍",
@@ -1708,7 +2013,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20144,
@@ -1716,8 +2028,8 @@
     "Lore": "裙裾绣鱼每夜挪近衣领一寸，绣者只好天天拆线。她说鱼想升天，买衣人觉得它只是怕水。",
     "LoreRoot": "原创·离水绣鱼",
     "Identity": "生命储备衣",
-    "Benefit": "以血线容错为主，保留生命储备衣的用途；生命、体质、物理平减、法术平减、魔防、防御形成完整底盘",
-    "Tradeoff": "投入集中在血线容错；不提供法攻、法术会心专精",
+    "Benefit": "以血线容错为主，保留生命储备衣的用途；生命、体质、物理平减、法术平减、魔防、防御形成完整底盘；另有本件白字防御强化70–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在血线容错；不提供法攻、法术会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1752,11 +2064,26 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 85,
+        "MinPercent": 70,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 20145,
-    "Name": "雾中量体",
+    "Name": "雾裁",
     "Lore": "裁缝在浓雾中量体，做成一件大了三寸的袍。天晴穿着松垮，起雾时却正好合身。",
     "LoreRoot": "原型·幻雾云袍",
     "Identity": "宽松的储气雾衣",
@@ -1791,7 +2118,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 300,
+        "Max": 330
+      }
+    ]
   },
   {
     "BaseID": 20146,
@@ -1830,11 +2164,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 62,
+        "Max": 68
+      }
+    ]
   },
   {
     "BaseID": 20147,
-    "Name": "值宿空班",
+    "Name": "阙宿",
     "Lore": "紫微值宿表缝在衣胸，轮到最末一栏时总没人来。守门人把空栏剪下，夜空便少了一个位置。",
     "LoreRoot": "原型·紫微星官意象",
     "Identity": "单点治疗储备衣",
@@ -1880,7 +2221,14 @@
         "ThresholdPct": 35
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 20148,
@@ -1919,11 +2267,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20149,
-    "Name": "针走无布",
+    "Name": "裁空",
     "Lore": "云纱师从空气中剪下三尺空处，包在衣内。人们只见针在走，始终没见那块布长什么样。",
     "LoreRoot": "原创·裁空云纱",
     "Identity": "状态防护的轻衣",
@@ -1958,7 +2313,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20150,
@@ -1997,11 +2359,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 40,
+        "Max": 44
+      }
+    ]
   },
   {
     "BaseID": 20255,
-    "Name": "魂针落地",
+    "Name": "针有声",
     "Lore": "针落地时发出人声，拾起来又恢复安静。缝衣人铺满软毡，宁可漏针也不想再听第二次。",
     "LoreRoot": "原型·魂能宝衣",
     "Identity": "危险的快速救治衣",
@@ -2052,11 +2421,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 20256,
-    "Name": "脱壳未遂",
+    "Name": "蜕衣不同息",
     "Lore": "蜕下的衣服还会自己吐纳，穿回去却怎么也对不上呼吸。内丹师只在最漫长的闭关时使用它。",
     "LoreRoot": "原创·未成的形蜕",
     "Identity": "法力极集中的重修衣",
@@ -2101,7 +2477,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 20,
+        "Max": 22
+      }
+    ]
   },
   {
     "BaseID": 20410,
@@ -2140,11 +2523,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20420,
-    "Name": "炉灰冠花",
+    "Name": "灰冠花",
     "Lore": "祝融仿冠的最后一炉火没点燃，灰里却开出花。工匠将花压成冠饰，拒绝补烧。",
     "LoreRoot": "原型·祝融仿器；炉灰花原创",
     "Identity": "抗法的未烧冠",
@@ -2179,11 +2569,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 20424,
-    "Name": "无声金磬",
+    "Name": "迟眨的倒影",
     "Lore": "铸冠人把敲哑的磬熔进金冠，成品入水仍会震动。每震一次，水面的倒影就晚眨一次眼。",
     "LoreRoot": "原创·哑磬入冠",
     "Identity": "抗状态的金冠",
@@ -2218,11 +2615,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20429,
-    "Name": "火字缺点",
+    "Name": "补不上的火",
     "Lore": "冠上火字漏了右下那一点，补金三次都融化。炼师把缺处对准眉心，称这是最难守住的火候。",
     "LoreRoot": "原创·缺笔火冠",
     "Identity": "高风险治疗增幅冠",
@@ -2273,7 +2677,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 20434,
@@ -2312,7 +2723,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20444,
@@ -2362,11 +2780,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 52,
+        "Max": 57
+      }
+    ]
   },
   {
     "BaseID": 20502,
-    "Name": "秤砣空腹",
+    "Name": "空砣",
     "Lore": "金匠劈开最重的秤砣，里面一粒金砂也没有。他将空壳做成药匣，称出的药总比昨日轻一点。",
     "LoreRoot": "原创·空心金秤",
     "Identity": "抗术法的空心背匣",
@@ -2401,7 +2826,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 20508,
@@ -2440,7 +2872,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 177,
+        "Max": 194
+      }
+    ]
   },
   {
     "BaseID": 20512,
@@ -2479,7 +2918,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20517,
@@ -2529,11 +2975,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 480,
+        "Max": 528
+      }
+    ]
   },
   {
     "BaseID": 20522,
-    "Name": "杯外支流",
+    "Name": "杯外河",
     "Lore": "水箱只有一杯容量，倒出来却总分成两股。河工查遍渠图，找不到多出的那条支流。",
     "LoreRoot": "原型·百川归途意象",
     "Identity": "小体积深法力匣",
@@ -2568,11 +3021,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 360,
+        "Max": 396
+      }
+    ]
   },
   {
     "BaseID": 20534,
-    "Name": "河口封泥",
+    "Name": "河泥锁",
     "Lore": "匣锁不用金属，只贴一道河泥。揭开便听见潮声，合上时耳边却剩山中落石的响动。",
     "LoreRoot": "原创·封泥藏潮",
     "Identity": "抗法药箱",
@@ -2607,7 +3067,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 48,
+        "Max": 52
+      }
+    ]
   },
   {
     "BaseID": 20663,
@@ -2646,7 +3113,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20668,
@@ -2685,11 +3159,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20672,
-    "Name": "未铸之耳",
+    "Name": "未铸耳",
     "Lore": "铸模少了一只耳朵，成品却能听见炉内的小声争吵。戴者学了多年，才辨出那是在争下一味矿料。",
     "LoreRoot": "原创·缺耳听炉",
     "Identity": "高精神的静听面",
@@ -2724,7 +3205,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20677,
@@ -2781,7 +3269,14 @@
         "SkillName": "光弹术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 20682,
@@ -2820,7 +3315,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 52,
+        "Max": 57
+      }
+    ]
   },
   {
     "BaseID": 20692,
@@ -2870,7 +3372,14 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 363,
+        "Max": 399
+      }
+    ]
   },
   {
     "BaseID": 20828,
@@ -2909,7 +3418,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 35,
+        "Max": 38
+      }
+    ]
   },
   {
     "BaseID": 20833,
@@ -2948,11 +3464,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 34,
+        "Max": 37
+      }
+    ]
   },
   {
     "BaseID": 20838,
-    "Name": "煨火长路",
+    "Name": "火线无尽头",
     "Lore": "鞋底藏的火种来自一条烧不完的引线，线头却在鞋外。制鞋人走了三年，也没找到另一头。",
     "LoreRoot": "原创·无尽引线",
     "Identity": "快速支援鞋",
@@ -2992,7 +3515,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 17,
+        "Max": 18
+      }
+    ]
   },
   {
     "BaseID": 20843,
@@ -3031,7 +3561,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20852,
@@ -3070,11 +3607,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 310,
+        "Max": 341
+      }
+    ]
   },
   {
     "BaseID": 20857,
-    "Name": "逆流草绳",
+    "Name": "草绳向山行",
     "Lore": "草绳在静水里也会逆流而上，编鞋后却不再动。只有剪开的那一头，始终朝着山顶。",
     "LoreRoot": "原创·逆流草鞋",
     "Identity": "法术防护步履",
@@ -3109,11 +3653,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 20886,
-    "Name": "烫手空碗",
+    "Name": "碗温",
     "Lore": "护手沾过一只没有盛药的碗，此后掌心常有余温。药师查遍药柜，只有碗底的字被烫掉了。",
     "LoreRoot": "原创·空碗余温",
     "Identity": "专注单次治愈",
@@ -3166,11 +3717,18 @@
         "SkillName": "治愈术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 30,
+        "Max": 33
+      }
+    ]
   },
   {
     "BaseID": 20891,
-    "Name": "金蚕护指",
+    "Name": "待指蚕",
     "Lore": "五只金蚕各吐一寸丝，恰够缠住五个指节。第六只一直守在腕上，等着一根不存在的手指。",
     "LoreRoot": "原创·六蚕五指",
     "Identity": "物理减伤护手",
@@ -3205,7 +3763,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20896,
@@ -3244,11 +3809,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 18,
+        "Max": 19
+      }
+    ]
   },
   {
     "BaseID": 20901,
-    "Name": "金指认赃",
+    "Name": "赃金指",
     "Lore": "食指缠着炼金未成的薄片，点到木头只会留下金色指纹。器匠靠这些指纹认回了偷走的工作台。",
     "LoreRoot": "原创·失败点金指",
     "Identity": "药师进攻护手",
@@ -3283,11 +3855,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 52,
+        "Max": 57
+      }
+    ]
   },
   {
     "BaseID": 20910,
-    "Name": "水磨脉枕",
+    "Name": "谁的脉",
     "Lore": "护腕内的小玉片曾作脉枕，磨得比水还滑。按住它的人经常忘记，刚才究竟数的是谁的脉。",
     "LoreRoot": "原创·水磨脉玉",
     "Identity": "养神护腕",
@@ -3322,11 +3901,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20915,
-    "Name": "掌心退潮",
+    "Name": "掌潮",
     "Lore": "五根手指分别记录五次潮汐，握拳时会听见退潮。抄潮书的人坚持说，那是同一天的五片海。",
     "LoreRoot": "原创·五潮指谱",
     "Identity": "群疗施法范围专精",
@@ -3379,7 +3965,14 @@
         "SkillName": "群疗术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 492,
+        "Max": 541
+      }
+    ]
   },
   {
     "BaseID": 20973,
@@ -3418,11 +4011,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 56,
+        "Max": 61
+      }
+    ]
   },
   {
     "BaseID": 20978,
-    "Name": "金针余圈",
+    "Name": "针欲归",
     "Lore": "一根金针弯成戒后仍想扎回针囊，每到月末便收紧一分。戴者靠这个提醒自己结清药账。",
     "LoreRoot": "原创·弯针成戒",
     "Identity": "法力池小戒",
@@ -3457,7 +4057,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 17,
+        "Max": 18
+      }
+    ]
   },
   {
     "BaseID": 20993,
@@ -3465,8 +4072,8 @@
     "Lore": "戒上的红石能照透丹丸，偏照不见自己。炼师将它送给眼力最好的徒弟，附了一个空盒子。",
     "LoreRoot": "原创·照丹自盲",
     "Identity": "光弹暴击戒",
-    "Benefit": "以法术输出为主，保留光弹暴击戒的用途；法术会心、法攻、智慧、法力、精神、生命、魔防形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以法术输出为主，保留光弹暴击戒的用途；法术会心、法攻、智慧、法力、精神、生命、魔防形成完整底盘；另有本件白字法攻强化80–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "builddefining",
     "Affixes": [
       {
@@ -3514,11 +4121,26 @@
         "SkillName": "光弹术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 525,
+        "Max": 577
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 90,
+        "MinPercent": 80,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 20998,
-    "Name": "削金成环",
+    "Name": "削金又成环",
     "Lore": "戒指每天少一丝金，内径却始终不变。七日后的金屑拼成另一枚完整戒，第二枚也开始变薄。",
     "LoreRoot": "原创·自行削金戒",
     "Identity": "重视抗术法的戒指",
@@ -3553,11 +4175,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 21007,
-    "Name": "蚌中药名",
+    "Name": "方外药",
     "Lore": "明珠上现出的药名总比处方多一味，谁也没见过那味药。老药工将其登记在空白抽屉上。",
     "LoreRoot": "原型·东海明珠；陌生药名原创",
     "Identity": "大法力明珠",
@@ -3592,7 +4221,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 390,
+        "Max": 429
+      }
+    ]
   },
   {
     "BaseID": 21012,
@@ -3649,7 +4285,14 @@
         "SkillName": "群疗术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 30,
+        "Max": 33
+      }
+    ]
   },
   {
     "BaseID": 21024,
@@ -3709,7 +4352,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 642,
+        "Max": 706
+      }
+    ]
   },
   {
     "BaseID": 21109,
@@ -3748,7 +4398,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 202,
+        "Max": 222
+      }
+    ]
   },
   {
     "BaseID": 21119,
@@ -3787,11 +4444,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 21129,
-    "Name": "火里空心",
+    "Name": "火中水",
     "Lore": "坠子入火后中心变空，外壳却没有裂痕。摇晃时听见清水声，炼师说那是火还没冷透。",
     "LoreRoot": "原创·空心火坠",
     "Identity": "高法力储器",
@@ -3826,11 +4490,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 540,
+        "Max": 594
+      }
+    ]
   },
   {
     "BaseID": 21134,
-    "Name": "牙下寒字",
+    "Name": "寒牙",
     "Lore": "金牙底下刻了一个寒字，每刮一遍字便深一分。主人终于停手时，牙尖也不再反光。",
     "LoreRoot": "原创·金牙寒铭",
     "Identity": "承受法术的坠饰",
@@ -3865,7 +4536,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 21143,
@@ -3904,7 +4582,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 21148,
@@ -3954,11 +4639,18 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 21788,
-    "Name": "颈玉倒悬",
+    "Name": "倒山门",
     "Lore": "冠上的玉原是挂在颈间的，倒悬后映出一座朝下的山。冠师照着筑院，山门便开在屋顶。",
     "LoreRoot": "原型·玉颈法冠",
     "Identity": "高魔防奇冠",
@@ -3993,7 +4685,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 82,
+        "Max": 90
+      }
+    ]
   },
   {
     "BaseID": 21789,
@@ -4057,7 +4756,14 @@
         "SkillName": "治愈术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 30,
+        "Max": 33
+      }
+    ]
   },
   {
     "BaseID": 21790,
@@ -4127,7 +4833,14 @@
         "ThresholdPct": 25
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 373,
+        "Max": 410
+      }
+    ]
   },
   {
     "BaseID": 22069,
@@ -4166,7 +4879,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 230,
+        "Max": 253
+      }
+    ]
   },
   {
     "BaseID": 22070,
@@ -4205,7 +4925,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22071,
@@ -4255,11 +4982,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 298,
+        "Max": 327
+      }
+    ]
   },
   {
     "BaseID": 22072,
-    "Name": "斗柄偏北",
+    "Name": "北斗随冠偏",
     "Lore": "冠星排列偏了一格，观星台要求重做。老匠将旧冠挂到门前，夜里北斗反而向它偏了一分。",
     "LoreRoot": "原创·错格星冠",
     "Identity": "攻法辅助冠",
@@ -4294,11 +5028,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 22073,
-    "Name": "莲心空座",
+    "Name": "容露",
     "Lore": "莲瓣围着一个空座，没人愿意将名字刻上去。卖冠人说位置太小，只能坐下一滴露水。",
     "LoreRoot": "原创·空座莲冠",
     "Identity": "储法莲冠",
@@ -4333,11 +5074,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 560,
+        "Max": 616
+      }
+    ]
   },
   {
     "BaseID": 22074,
-    "Name": "收露得影",
+    "Name": "晾露影",
     "Lore": "收露人迟到一刻，玉盘里只剩露水的影子。影子蒸不干，只能镶在冠额慢慢晾着。",
     "LoreRoot": "原创·露影凝冠",
     "Identity": "魔防生命折中",
@@ -4372,11 +5120,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 22075,
-    "Name": "仙字磨平",
+    "Name": "仙字在背后",
     "Lore": "冠上的仙字被前主人反复磨平，背面却越刻越深。继承人只好把冠倒着戴，假装没有读到。",
     "LoreRoot": "原创·双面仙铭",
     "Identity": "抗状态修行冠",
@@ -4411,7 +5166,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22076,
@@ -4461,7 +5223,14 @@
         "ThresholdPct": 25
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 595,
+        "Max": 654
+      }
+    ]
   },
   {
     "BaseID": 22077,
@@ -4500,7 +5269,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 70,
+        "Max": 77
+      }
+    ]
   },
   {
     "BaseID": 22395,
@@ -4539,7 +5315,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22396,
@@ -4578,7 +5361,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22397,
@@ -4617,7 +5407,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 460,
+        "Max": 506
+      }
+    ]
   },
   {
     "BaseID": 22398,
@@ -4656,11 +5453,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22399,
-    "Name": "水莲倒影",
+    "Name": "倒影莲",
     "Lore": "鞋面莲花从未开过，水中倒影却年年结子。摘莲人蹲在池边一夜，只捞到两只干鞋。",
     "LoreRoot": "原创·倒影结莲",
     "Identity": "抗术法莲履",
@@ -4695,7 +5499,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 22400,
@@ -4734,7 +5545,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 13,
+        "Max": 14
+      }
+    ]
   },
   {
     "BaseID": 22401,
@@ -4773,11 +5591,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 36,
+        "Max": 39
+      }
+    ]
   },
   {
     "BaseID": 22402,
-    "Name": "旧门认步",
+    "Name": "门去步犹停",
     "Lore": "鞋尖磨损处恰好能敲出三种声音，守门人各认一种。后来门拆了，脚步声仍会自行停下。",
     "LoreRoot": "原创·三步门暗号",
     "Identity": "危急施救履",
@@ -4823,11 +5648,18 @@
         "ThresholdPct": 25
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 237,
+        "Max": 260
+      }
+    ]
   },
   {
     "BaseID": 22403,
-    "Name": "敌影迟到",
+    "Name": "迟影",
     "Lore": "鞋底踏着的影子总落后一小步，受惊时才赶上。主人拿它试过无数法阵，唯独不敢试正午。",
     "LoreRoot": "原创·迟影鞋",
     "Identity": "术法承伤专精履",
@@ -4873,7 +5705,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 55,
+        "Max": 60
+      }
+    ]
   },
   {
     "BaseID": 22412,
@@ -4930,7 +5769,14 @@
         "SkillName": "治愈术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 30,
+        "Max": 33
+      }
+    ]
   },
   {
     "BaseID": 22413,
@@ -4969,7 +5815,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22414,
@@ -5008,7 +5861,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 440,
+        "Max": 484
+      }
+    ]
   },
   {
     "BaseID": 22415,
@@ -5065,7 +5925,14 @@
         "SkillName": "光弹术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 48,
+        "Max": 52
+      }
+    ]
   },
   {
     "BaseID": 22416,
@@ -5104,11 +5971,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 264,
+        "Max": 290
+      }
+    ]
   },
   {
     "BaseID": 22417,
-    "Name": "露书水字",
+    "Name": "露书",
     "Lore": "掌心的露只够写一个字，写错便须等一夜。药师试写了十年，留下的全是不同的水字。",
     "LoreRoot": "原创·晨露掌书",
     "Identity": "节省群疗的护手",
@@ -5161,11 +6035,18 @@
         "SkillName": "群疗术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 548,
+        "Max": 602
+      }
+    ]
   },
   {
     "BaseID": 22418,
-    "Name": "握住空香",
+    "Name": "拈尽香",
     "Lore": "香烧完后，护手仍保持拈香的形状。展开五指时，掌中会散出一缕没有点燃的白烟。",
     "LoreRoot": "原创·空香手印",
     "Identity": "状态抵抗护手",
@@ -5200,7 +6081,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22419,
@@ -5257,7 +6145,14 @@
         "SkillName": "治愈术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 30,
+        "Max": 33
+      }
+    ]
   },
   {
     "BaseID": 22420,
@@ -5296,7 +6191,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 57,
+        "Max": 62
+      }
+    ]
   },
   {
     "BaseID": 22429,
@@ -5335,11 +6237,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 420,
+        "Max": 462
+      }
+    ]
   },
   {
     "BaseID": 22430,
-    "Name": "紫纱筛月",
+    "Name": "月筛",
     "Lore": "袋底密密缝了筛孔，只漏月光不漏药粉。筛出的光装在碗里，天亮就成了普通的水。",
     "LoreRoot": "原创·筛月药袋",
     "Identity": "法力储存袋",
@@ -5374,11 +6283,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 430,
+        "Max": 473
+      }
+    ]
   },
   {
     "BaseID": 22431,
-    "Name": "玉屑发芽",
+    "Name": "玉芽",
     "Lore": "碎玉在药袋里结成嫩芽，离袋便变回石头。药师给每粒玉屑编号，数目却一直比昨天多。",
     "LoreRoot": "原创·药袋玉芽",
     "Identity": "高体质储药袋",
@@ -5413,11 +6329,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22432,
-    "Name": "空枢虫鸣",
+    "Name": "虫声历",
     "Lore": "空袋里每隔十二日响一次虫声，缝口以后仍响。修士拿它校历，终于过了一个没有闰月的冬天。",
     "LoreRoot": "原型·空枢袋；虫历原创",
     "Identity": "沉静养神袋",
@@ -5452,11 +6375,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22433,
-    "Name": "乾坤分账",
+    "Name": "天租",
     "Lore": "袋里两本账分别记收入和支出，合账时却多出一笔天空的租金。掌柜决定以后露天摆摊。",
     "LoreRoot": "原型·乾坤袋；租天账原创",
     "Identity": "丰厚法力背袋",
@@ -5496,7 +6426,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 20,
+        "Max": 22
+      }
+    ]
   },
   {
     "BaseID": 22434,
@@ -5535,11 +6472,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 28,
+        "Max": 30
+      }
+    ]
   },
   {
     "BaseID": 22435,
-    "Name": "收尽余火",
+    "Name": "尽火袋",
     "Lore": "熄炉后的火星都滚进此袋，却烧不破内衬。积得最多的一夜，袋里传出了柴刀劈木的声音。",
     "LoreRoot": "原型·封炎袋",
     "Identity": "对抗术法的封火袋",
@@ -5574,7 +6518,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22436,
@@ -5624,7 +6575,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 363,
+        "Max": 399
+      }
+    ]
   },
   {
     "BaseID": 22437,
@@ -5663,7 +6621,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 50,
+        "Max": 55
+      }
+    ]
   },
   {
     "BaseID": 22440,
@@ -5702,7 +6667,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 85,
+        "Max": 93
+      }
+    ]
   },
   {
     "BaseID": 22441,
@@ -5741,7 +6713,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22442,
@@ -5780,7 +6759,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 280,
+        "Max": 308
+      }
+    ]
   },
   {
     "BaseID": 22443,
@@ -5819,11 +6805,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22444,
-    "Name": "荷塘旧戏",
+    "Name": "荷塘散场后",
     "Lore": "戏班散了以后，荷花脸谱自己走完了最后一折。听戏人只听到鼓点，没有谁记得唱了什么。",
     "LoreRoot": "原创·荷面残戏",
     "Identity": "稳定的魔法防护",
@@ -5858,7 +6851,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 22445,
@@ -5897,7 +6897,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 620,
+        "Max": 682
+      }
+    ]
   },
   {
     "BaseID": 22446,
@@ -5936,11 +6943,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22447,
-    "Name": "阎王未醒",
+    "Name": "阎王梦木虱",
     "Lore": "面具雕成沉睡的模样，卖家说梦里判案更准。医者掀开面具，只看见一只蜷着的木虱。",
     "LoreRoot": "原创·梦判木面",
     "Identity": "自保急救面具",
@@ -5986,7 +7000,14 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22448,
@@ -6036,7 +7057,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 72,
+        "Max": 79
+      }
+    ]
   },
   {
     "BaseID": 22451,
@@ -6075,7 +7103,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22452,
@@ -6114,11 +7149,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 450,
+        "Max": 495
+      }
+    ]
   },
   {
     "BaseID": 22453,
-    "Name": "砂行瓶外",
+    "Name": "瓶外砂",
     "Lore": "碧砂在瓶里只走七圈，第八圈总从瓶外开始。炼丹师为此添了七层瓶，药师只添了一层布。",
     "LoreRoot": "原型·翡青碧砂",
     "Identity": "魔法固定减伤坠",
@@ -6153,11 +7195,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 19,
+        "Max": 20
+      }
+    ]
   },
   {
     "BaseID": 22454,
-    "Name": "星盘蚁路",
+    "Name": "蚁星图",
     "Lore": "星盘上的蚂蚁绕开了最亮的玉点，留下另一套星图。司天者抄完才发现，图上没有自己的观星台。",
     "LoreRoot": "原创·蚁路星盘",
     "Identity": "光弹术伤害专精坠",
@@ -6210,7 +7259,14 @@
         "SkillName": "光弹术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 65,
+        "Max": 71
+      }
+    ]
   },
   {
     "BaseID": 22455,
@@ -6249,7 +7305,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22456,
@@ -6288,11 +7351,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 58,
+        "Max": 63
+      }
+    ]
   },
   {
     "BaseID": 22457,
-    "Name": "月夜咳声",
+    "Name": "月满咳",
     "Lore": "天珠在月圆时咳一声，声小得只有贴近胸口才听见。做珠的人说只是裂隙，裂隙却从未扩大。",
     "LoreRoot": "原创·咳月珠",
     "Identity": "深法力与节省",
@@ -6338,11 +7408,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 760,
+        "Max": 836
+      }
+    ]
   },
   {
     "BaseID": 22458,
-    "Name": "未尽药帖",
+    "Name": "方尽是家书",
     "Lore": "药帖到最后一行改成了家书，署名处又回到药名。收藏者只装裱中间那一段，挂在脉枕旁。",
     "LoreRoot": "原创·方书混写药帖",
     "Identity": "他疗型项坠",
@@ -6388,11 +7465,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22459,
-    "Name": "通神口令",
+    "Name": "通神嚏",
     "Lore": "吊坠上的口令读起来像打喷嚏，抄写者不敢省略一字。祭司试了七年，唯一的结果是戒掉了香灰。",
     "LoreRoot": "原创·口令吊坠",
     "Identity": "抗状态高精神坠",
@@ -6427,11 +7511,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 24,
+        "Max": 26
+      }
+    ]
   },
   {
     "BaseID": 22462,
-    "Name": "游光走马",
+    "Name": "转马",
     "Lore": "戒面里画着一匹跑不出边框的马，转戒才能让它继续走。戴者常在闲谈中把整个月转过去。",
     "LoreRoot": "原创·戒内走马灯",
     "Identity": "走位小戒",
@@ -6466,7 +7557,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 11,
+        "Max": 12
+      }
+    ]
   },
   {
     "BaseID": 22463,
@@ -6474,8 +7572,8 @@
     "Lore": "晨曦从戒里升起时总先照手背，掌心仍是黑的。药师翻手看了多年，也没看出戒内那座山在哪里。",
     "LoreRoot": "原创·戒内晨光",
     "Identity": "光系伤害戒",
-    "Benefit": "以法术输出为主，保留光系伤害戒的用途；智慧、法攻、法力、法术会心、精神、生命形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以法术输出为主，保留光系伤害戒的用途；智慧、法攻、法力、法术会心、精神、生命形成完整底盘；另有本件白字法攻强化60–80%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -6516,7 +7614,22 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 70,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ]
   },
   {
     "BaseID": 22464,
@@ -6555,11 +7668,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22465,
-    "Name": "鬼不留名",
+    "Name": "客鬼",
     "Lore": "晶中借宿的影子每夜变换身形，只不肯改掉蹲坐的姿势。问它是谁，它在晶壁写下了一个问号。",
     "LoreRoot": "原型·鬼魄碧晶",
     "Identity": "高法力偏科晶戒",
@@ -6594,11 +7714,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 570,
+        "Max": 627
+      }
+    ]
   },
   {
     "BaseID": 22466,
-    "Name": "针孔里春",
+    "Name": "针孔春",
     "Lore": "戒指上的针孔漏进一缕春风，寒冬也不止息。园丁借它催花，花开后却只结了一个铁锈色的果。",
     "LoreRoot": "原创·针孔春风",
     "Identity": "稳定普疗戒",
@@ -6644,7 +7771,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22467,
@@ -6708,11 +7842,18 @@
         "SkillName": "治愈术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 548,
+        "Max": 602
+      }
+    ]
   },
   {
     "BaseID": 22468,
-    "Name": "仙舟票根",
+    "Name": "云海旧船票",
     "Lore": "戒箍是仙舟船票折成，座位号在每次雨后改变。船早已沉入云海，票根仍印着准时开航。",
     "LoreRoot": "原创·云海船票戒",
     "Identity": "抗术法续航戒",
@@ -6747,11 +7888,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 54,
+        "Max": 59
+      }
+    ]
   },
   {
     "BaseID": 22469,
-    "Name": "空玺无主",
+    "Name": "未刻玺",
     "Lore": "戒面适合刻一方小玺，前后七位主人却都没有动刀。如今留白处满是划痕，像一张极细的疆图。",
     "LoreRoot": "原创·未刻仙玺",
     "Identity": "物理防护戒",
@@ -6786,7 +7934,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 369,
+        "Max": 405
+      }
+    ]
   },
   {
     "BaseID": 22534,
@@ -6825,11 +7980,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 1100,
+        "Max": 1210
+      }
+    ]
   },
   {
     "BaseID": 22535,
-    "Name": "碎魂有声",
+    "Name": "裂魂声",
     "Lore": "玉坠摔裂后每片声音不同，拼好反而寂静。修补匠留了一条缝，好听清哪片在夜里说话。",
     "LoreRoot": "原型·破魂坠",
     "Identity": "高魔防碎玉",
@@ -6864,7 +8026,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 90,
+        "Max": 99
+      }
+    ]
   },
   {
     "BaseID": 22536,
@@ -6919,7 +8088,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 833,
+        "Max": 916
+      }
+    ]
   },
   {
     "BaseID": 22549,
@@ -6958,7 +8134,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 30,
+        "Max": 33
+      }
+    ]
   },
   {
     "BaseID": 22550,
@@ -7002,7 +8185,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 712,
+        "Max": 783
+      }
+    ]
   },
   {
     "BaseID": 22551,
@@ -7066,11 +8256,18 @@
         "SkillName": "群疗术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 797,
+        "Max": 876
+      }
+    ]
   },
   {
     "BaseID": 22593,
-    "Name": "阶前落籽",
+    "Name": "种阶",
     "Lore": "鞋底带回一粒陌生种子，埋下后只长出一级石阶。来年又一级，药师已经给它留了整座山的位置。",
     "LoreRoot": "原创·石阶种子",
     "Identity": "耐久行医鞋",
@@ -7105,11 +8302,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 392,
+        "Max": 431
+      }
+    ]
   },
   {
     "BaseID": 22594,
-    "Name": "云上木鱼",
+    "Name": "云木鱼",
     "Lore": "鞋头里封了半只木鱼，走在云上也会响。另一半留在庙里，和尚敲下去总慢一拍。",
     "LoreRoot": "原创·两地木鱼",
     "Identity": "灵活高精神履",
@@ -7149,7 +8353,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 18,
+        "Max": 19
+      }
+    ]
   },
   {
     "BaseID": 22595,
@@ -7204,7 +8415,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 21,
+        "Max": 23
+      }
+    ]
   },
   {
     "BaseID": 24689,
@@ -7243,11 +8461,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 24690,
-    "Name": "潮痕旧镯",
+    "Name": "梦潮",
     "Lore": "镯上刻度记的是潮痕，最深一线在内侧。海边老人说那一年，海水涨进了所有人的梦。",
     "LoreRoot": "原创·内侧潮痕",
     "Identity": "法术固定减伤镯",
@@ -7282,7 +8507,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 25,
+        "Max": 27
+      }
+    ]
   },
   {
     "BaseID": 24691,
@@ -7321,11 +8553,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 24692,
-    "Name": "海比带窄",
+    "Name": "未织岸",
     "Lore": "羽带展开时像一条很窄的海，系紧后只剩盐味。织者特意留下毛边，说岸还没有织好。",
     "LoreRoot": "原创·羽带织海",
     "Identity": "生命偏科羽带",
@@ -7360,7 +8599,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 417,
+        "Max": 458
+      }
+    ]
   },
   {
     "BaseID": 24693,
@@ -7399,11 +8645,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 34,
+        "Max": 37
+      }
+    ]
   },
   {
     "BaseID": 24694,
-    "Name": "耳边小岸",
+    "Name": "珰中岸",
     "Lore": "羽珰碰在一起便有沙滩声，分开只剩海风。听潮者借它回家，却再也没认出故乡那片岸。",
     "LoreRoot": "原创·羽珰藏岸",
     "Identity": "治疗耗蓝耳饰",
@@ -7449,7 +8702,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 514,
+        "Max": 565
+      }
+    ]
   },
   {
     "BaseID": 24695,
@@ -7493,7 +8753,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 20,
+        "Max": 22
+      }
+    ]
   },
   {
     "BaseID": 24696,
@@ -7543,7 +8810,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 735,
+        "Max": 808
+      }
+    ]
   },
   {
     "BaseID": 24697,
@@ -7593,11 +8867,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 27,
+        "Max": 29
+      }
+    ]
   },
   {
     "BaseID": 40020,
-    "Name": "雨前留声",
+    "Name": "晴雨声",
     "Lore": "润玉里封着一声雨前的鸟叫，逢晴便响。农人拿它问天，药师拿它提醒自己晾药。",
     "LoreRoot": "原创·玉内雨鸟",
     "Identity": "法力与抗状态玉",
@@ -7632,7 +8913,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 720,
+        "Max": 792
+      }
+    ]
   },
   {
     "BaseID": 40021,
@@ -7671,7 +8959,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 100,
+        "Max": 110
+      }
+    ]
   },
   {
     "BaseID": 40022,
@@ -7728,7 +9023,14 @@
         "SkillName": "群疗术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 704,
+        "Max": 774
+      }
+    ]
   },
   {
     "BaseID": 40035,
@@ -7767,7 +9069,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 199,
+        "Max": 218
+      }
+    ]
   },
   {
     "BaseID": 40036,
@@ -7806,7 +9115,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 27,
+        "Min": 11,
+        "Max": 12
+      }
+    ]
   },
   {
     "BaseID": 40037,
@@ -7863,11 +9179,18 @@
         "SkillName": "治愈术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 30,
+        "Max": 33
+      }
+    ]
   },
   {
     "BaseID": 47097,
-    "Name": "候风竹片",
+    "Name": "候春",
     "Lore": "玉里夹着细竹片，每年换一次方向。刻历的人照着改了三次，才发现方向从来都是朝着春天。",
     "LoreRoot": "原创·候风历片",
     "Identity": "精神与法力玉",
@@ -7902,7 +9225,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 24,
+        "Max": 26
+      }
+    ]
   },
   {
     "BaseID": 47098,
@@ -7952,7 +9282,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 64,
+        "Max": 70
+      }
+    ]
   },
   {
     "BaseID": 47099,
@@ -8009,7 +9346,14 @@
         "SkillName": "光弹术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 525,
+        "Max": 577
+      }
+    ]
   },
   {
     "BaseID": 47112,
@@ -8048,7 +9392,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 47113,
@@ -8087,11 +9438,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 25,
+        "Max": 27
+      }
+    ]
   },
   {
     "BaseID": 47114,
-    "Name": "针孔小巢",
+    "Name": "针孔里灯明",
     "Lore": "刺尖只有一个针孔，夜里却传出整巢蜂鸣。持玉者把孔对准灯，发现里面亮着另一盏更小的灯。",
     "LoreRoot": "原创·玉刺蜂巢",
     "Identity": "深法力入门玉",
@@ -8126,7 +9484,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 340,
+        "Max": 374
+      }
+    ]
   },
   {
     "BaseID": 57045,
@@ -8165,11 +9530,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 132,
+        "Max": 145
+      }
+    ]
   },
   {
     "BaseID": 57046,
-    "Name": "柴门缺钉",
+    "Name": "余钉",
     "Lore": "一场大风后，门还在，门上的钉却全不见了；仅存的一枚被装进小木匣，作了药堂徽记。",
     "LoreRoot": "原创·风后门钉",
     "Identity": "固定物理减伤徽",
@@ -8204,7 +9576,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 11,
+        "Max": 12
+      }
+    ]
   },
   {
     "BaseID": 57047,
@@ -8243,11 +9622,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 13,
+        "Max": 14
+      }
+    ]
   },
   {
     "BaseID": 57048,
-    "Name": "空秤常沉",
+    "Name": "空秤沉",
     "Lore": "秤盘上永久压着一钱半的重量。空秤也一样。卖药人只得另备一架秤给凡药使用。",
     "LoreRoot": "原创·自重秤盘",
     "Identity": "养气称量徽",
@@ -8282,7 +9668,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57049,
@@ -8321,11 +9714,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 32,
+        "Max": 35
+      }
+    ]
   },
   {
     "BaseID": 57050,
-    "Name": "药铺鸡鸣",
+    "Name": "失晨",
     "Lore": "药铺失物录：一只铜鸡，半斤松香，昨日清晨。铜鸡在三日后自行回来，另两样杳无音讯。",
     "LoreRoot": "原创·失物铜鸡",
     "Identity": "精神专精小徽",
@@ -8360,7 +9760,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57051,
@@ -8417,11 +9824,18 @@
         "SkillName": "治愈术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 215,
+        "Max": 236
+      }
+    ]
   },
   {
     "BaseID": 57052,
-    "Name": "留环封炉",
+    "Name": "封炉环",
     "Lore": "炉门关上，第六声之后便不再开。药师留下这枚门环，把丹药与配方一并留在门内。",
     "LoreRoot": "原创·封炉门环",
     "Identity": "长战节省徽",
@@ -8467,11 +9881,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 157,
+        "Max": 172
+      }
+    ]
   },
   {
     "BaseID": 57085,
-    "Name": "入山骨哨",
+    "Name": "山外有人应",
     "Lore": "骨哨只有一孔，吹声听来像人在山外答应。进山册上没有归期，只有历任持哨者反复画出的同一道岭。",
     "LoreRoot": "原创·采药骨哨",
     "Identity": "偏生命野行徽",
@@ -8506,7 +9927,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 202,
+        "Max": 222
+      }
+    ]
   },
   {
     "BaseID": 57086,
@@ -8545,7 +9973,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 420,
+        "Max": 462
+      }
+    ]
   },
   {
     "BaseID": 57087,
@@ -8584,7 +10019,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 57088,
@@ -8623,7 +10065,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57089,
@@ -8662,11 +10111,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 57090,
-    "Name": "匣外虫声",
+    "Name": "匣外鸣",
     "Lore": "匣里一百格，每格一只虫，皆无声。第百零一声却从匣外传来。",
     "LoreRoot": "原创·百虫静匣",
     "Identity": "防止法术压力的徽",
@@ -8701,7 +10157,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 57091,
@@ -8763,7 +10226,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 175,
+        "Max": 192
+      }
+    ]
   },
   {
     "BaseID": 57092,
@@ -8813,7 +10283,14 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 57126,
@@ -8868,7 +10345,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 290,
+        "Max": 319
+      }
+    ]
   },
   {
     "BaseID": 57131,
@@ -8907,11 +10391,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 18,
+        "Max": 19
+      }
+    ]
   },
   {
     "BaseID": 57164,
-    "Name": "干姜木字",
+    "Name": "辛字",
     "Lore": "标牌上的姜字用干姜拼成，药童拆开尝过一角。补回去以后，每个字都带一点辛辣。",
     "LoreRoot": "原创·姜拼药牌",
     "Identity": "小法力药徽",
@@ -8946,7 +10437,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 110,
+        "Max": 121
+      }
+    ]
   },
   {
     "BaseID": 57165,
@@ -8985,11 +10483,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 132,
+        "Max": 145
+      }
+    ]
   },
   {
     "BaseID": 57166,
-    "Name": "错药准脉",
+    "Name": "药误脉不误",
     "Lore": "残页只剩三行，药名全错，脉象却写得极准。先生将它钉在墙上，供后来的学生分别批注。",
     "LoreRoot": "原创·错方残页",
     "Identity": "精神练习徽",
@@ -9024,7 +10529,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57167,
@@ -9063,7 +10575,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 11,
+        "Max": 12
+      }
+    ]
   },
   {
     "BaseID": 57168,
@@ -9102,7 +10621,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57169,
@@ -9159,7 +10685,14 @@
         "SkillName": "群疗术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 215,
+        "Max": 236
+      }
+    ]
   },
   {
     "BaseID": 57170,
@@ -9198,11 +10731,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57171,
-    "Name": "铜鹤吃墨",
+    "Name": "墨鹤",
     "Lore": "铜鹤含走墨团后，翅膀上出现完整的药方。后来它只肯吞错字，肚里也渐渐安静下来。",
     "LoreRoot": "原创·食墨铜鹤",
     "Identity": "单体治疗经济徽",
@@ -9262,11 +10802,18 @@
         "SkillName": "治愈术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 21,
+        "Max": 23
+      }
+    ]
   },
   {
     "BaseID": 57204,
-    "Name": "未开药会",
+    "Name": "何处赴药会",
     "Lore": "药会邀请写好了日期，却没写地点。各地来客纷纷带回此徽，声称自己确曾赴约。",
     "LoreRoot": "原创·无址药会徽",
     "Identity": "法术耐久的药会徽",
@@ -9301,7 +10848,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 57205,
@@ -9340,11 +10894,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 410,
+        "Max": 451
+      }
+    ]
   },
   {
     "BaseID": 57206,
-    "Name": "白纸脾气",
+    "Name": "拒墨",
     "Lore": "这张白纸拒绝墨，拒绝血，也拒绝药汤。只有夹在经书里时，它才肯显出一个很淡的页码。",
     "LoreRoot": "原创·拒墨白纸",
     "Identity": "不良状态抵抗徽",
@@ -9379,11 +10940,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57207,
-    "Name": "小灶欠风",
+    "Name": "欠风灶",
     "Lore": "灶模型的烟囱总朝下，供在屋里却不熏梁。炉簿写着：欠东风一缕，来年偿。",
     "LoreRoot": "原创·倒烟小灶",
     "Identity": "大法力徽",
@@ -9418,11 +10986,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 480,
+        "Max": 528
+      }
+    ]
   },
   {
     "BaseID": 57208,
-    "Name": "银箔试苦",
+    "Name": "苦银鹤",
     "Lore": "试药用过的银箔被折成鹤，一只比一只苦。最后那只放进糖水，糖水也学会了展翅。",
     "LoreRoot": "原创·苦箔折鹤",
     "Identity": "抗术法小徽",
@@ -9457,7 +11032,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 57209,
@@ -9507,7 +11089,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 57210,
@@ -9551,11 +11140,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 154,
+        "Max": 169
+      }
+    ]
   },
   {
     "BaseID": 57211,
-    "Name": "序前脉枕",
+    "Name": "序前枕",
     "Lore": "第零页只有一张空白脉枕图，翻过去才是序。藏书人说页码并非错刻，是后来的人不愿从那里开始。",
     "LoreRoot": "原创·医经零页",
     "Identity": "群疗高专精徽",
@@ -9615,7 +11211,14 @@
         "SkillName": "群疗术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 398,
+        "Max": 437
+      }
+    ]
   },
   {
     "BaseID": 57273,
@@ -9654,7 +11257,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 132,
+        "Max": 145
+      }
+    ]
   },
   {
     "BaseID": 57274,
@@ -9693,7 +11303,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57275,
@@ -9732,11 +11349,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 145,
+        "Max": 159
+      }
+    ]
   },
   {
     "BaseID": 57276,
-    "Name": "药柜守则",
+    "Name": "不该有的药屉",
     "Lore": "柜门上写着：头层放根，二层放花，第三层不要开。柜子一共只有两层。",
     "LoreRoot": "原创·两层药柜铭",
     "Identity": "抗状态徽",
@@ -9771,7 +11395,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 13,
+        "Max": 14
+      }
+    ]
   },
   {
     "BaseID": 57277,
@@ -9810,7 +11441,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57278,
@@ -9860,7 +11498,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 157,
+        "Max": 172
+      }
+    ]
   },
   {
     "BaseID": 57279,
@@ -9899,7 +11544,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 35,
+        "Max": 38
+      }
+    ]
   },
   {
     "BaseID": 57280,
@@ -9949,11 +11601,18 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 19,
+        "Max": 20
+      }
+    ]
   },
   {
     "BaseID": 57313,
-    "Name": "来客无名",
+    "Name": "未问名",
     "Lore": "药账：一人，衣湿，取药三包，不肯署名。隔页补记：名字忘问了，非不肯。",
     "LoreRoot": "原创·更正药账徽",
     "Identity": "偏生命的日常徽",
@@ -9988,7 +11647,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 202,
+        "Max": 222
+      }
+    ]
   },
   {
     "BaseID": 57314,
@@ -10027,7 +11693,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 57315,
@@ -10066,11 +11739,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 530,
+        "Max": 583
+      }
+    ]
   },
   {
     "BaseID": 57316,
-    "Name": "替身药偶",
+    "Name": "纸腹偶",
     "Lore": "药偶替人躺过三百回诊台，腹中塞满不同病案。最后一回，药师只查出一肚子纸。",
     "LoreRoot": "原创·装案药偶",
     "Identity": "固定减伤徽",
@@ -10105,7 +11785,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57317,
@@ -10144,11 +11831,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57318,
-    "Name": "借脉不还",
+    "Name": "借脉",
     "Lore": "铜片刻着借脉二字，下面密密划了归还日期。最晚的一次在明年，最早的一次还没开始。",
     "LoreRoot": "原创·借脉铜契",
     "Identity": "危急他疗徽",
@@ -10194,7 +11888,14 @@
         "ThresholdPct": 25
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 57319,
@@ -10233,7 +11934,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57320,
@@ -10290,6 +11998,13 @@
         "SkillName": "群疗术"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 30,
+        "Max": 33
+      }
+    ]
   }
 ]

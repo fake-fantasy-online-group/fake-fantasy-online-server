@@ -196,7 +196,8 @@ func TestAstralFormationChangesRealCombatStats(t *testing.T) {
 	source := domain.StatSource{Base: p.Player.Char.EffectiveBase(), Level: p.Player.Char.Level,
 		Innate: characterInnateStats(p.Player.Char), Passive: runeBonuses}
 	_, wantReversed := domain.Compute(source)
-	source.Passive = append(append([]domain.Affix{}, runeBonuses...), recipe.Affixes...)
+	source.Passive = append(append([]domain.Affix{}, runeBonuses...), domain.ResolveVariableAffixes(recipe.Affixes, recipe.VariableAffixes, plan.Target.Endgame.FormationRollBP)...)
+	source.Passive = append(source.Passive, domain.ResolveItemLocalEnhancements(s.items[plan.Target.Item].Equip, recipe.LocalEnhancements, plan.Target.Endgame.FormationRollBP)...)
 	_, wantComplete := domain.Compute(source)
 	s.refreshStats(p)
 	complete := p.Stats

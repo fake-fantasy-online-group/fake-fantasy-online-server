@@ -36,7 +36,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 5,
+        "Max": 6
+      }
+    ]
   },
   {
     "BaseID": 1601,
@@ -75,7 +82,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 41,
+        "Max": 45
+      }
+    ]
   },
   {
     "BaseID": 1602,
@@ -114,7 +128,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 28,
+        "Max": 30
+      }
+    ]
   },
   {
     "BaseID": 1603,
@@ -153,16 +174,23 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 7,
+        "Max": 8
+      }
+    ]
   },
   {
     "BaseID": 1604,
-    "Name": "潮沟藏螺",
+    "Name": "栖螺",
     "Lore": "退潮后，三枚枪齿间卡着一只小螺。修闸人曾用它撬开堵死的水门，此后再不肯把中齿磨尖。",
     "LoreRoot": "原创·三尖枪与水门",
     "Identity": "群击范围枪",
-    "Benefit": "以物理输出为主，保留群击范围枪的用途；物攻、命中、力量、物理会心、生命、灵巧形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以物理输出为主，保留群击范围枪的用途；物攻、命中、力量、物理会心、生命、灵巧形成完整底盘；另有本件白字物攻强化120–150%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -203,7 +231,22 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 11,
+        "Max": 12
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 135,
+        "MinPercent": 120,
+        "MaxPercent": 150
+      }
+    ]
   },
   {
     "BaseID": 1605,
@@ -211,8 +254,8 @@
     "Lore": "戟侧月刃是从旧船锚上锻出的，沾了水便发出铁链拖行声。船家说它还想回江底去。",
     "LoreRoot": "原创·月刃血戟",
     "Identity": "钩斩型长兵",
-    "Benefit": "以物理输出为主，保留钩斩型长兵的用途；物攻、力量、命中、物理会心、生命形成完整底盘",
-    "Tradeoff": "投入集中在物理输出；不提供法攻、法术会心专精",
+    "Benefit": "以物理输出为主，保留钩斩型长兵的用途；物攻、力量、命中、物理会心、生命形成完整底盘；另有本件白字物攻强化60–80%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在物理输出；不提供法攻、法术会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -242,7 +285,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 12,
+        "Max": 13
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 70,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ]
   },
   {
     "BaseID": 1606,
@@ -281,7 +339,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 14,
+        "Max": 15
+      }
+    ]
   },
   {
     "BaseID": 1607,
@@ -289,8 +354,8 @@
     "Lore": "庙祝将仿神棒截短，挂在义仓秤尾。乱军来时，伙夫卸下秤砣守门；至今棒上的刻度仍只称粮，不记人命。",
     "LoreRoot": "原创·仿神棒与义仓",
     "Identity": "重击力量棒",
-    "Benefit": "以物理输出为主，保留重击力量棒的用途；力量、物攻、命中、物理会心、生命形成完整底盘",
-    "Tradeoff": "投入集中在物理输出；不提供法攻、法术会心专精",
+    "Benefit": "以物理输出为主，保留重击力量棒的用途；力量、物攻、命中、物理会心、生命形成完整底盘；另有本件白字物攻强化80–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在物理输出；不提供法攻、法术会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -320,7 +385,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 16,
+        "Max": 17
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 90,
+        "MinPercent": 80,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 1608,
@@ -328,8 +408,8 @@
     "Lore": "海龙纹只在枪杆停住时可见，挥动便成一条银线。它的前主人练了四十年，仍嫌这一线太粗。",
     "LoreRoot": "原创·龙纹疾枪",
     "Identity": "连环枪法专门长枪",
-    "Benefit": "以物理输出为主，保留连环枪法专门长枪的用途；物攻、命中、力量、物理会心、生命、灵巧形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以物理输出为主，保留连环枪法专门长枪的用途；物攻、命中、力量、物理会心、生命、灵巧形成完整底盘；另有本件白字物攻强化120–150%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -372,7 +452,22 @@
         "SkillName": "连环枪法"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 21,
+        "Max": 23
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 135,
+        "MinPercent": 120,
+        "MaxPercent": 150
+      }
+    ]
   },
   {
     "BaseID": 1609,
@@ -411,7 +506,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 21,
+        "Max": 23
+      }
+    ]
   },
   {
     "BaseID": 1610,
@@ -419,8 +521,8 @@
     "Lore": "炼枪人把欠徒弟的工钱刻进戟脊，淬入幽泉。徒弟后来取走枪，却没有抹去数字：死人欠的账，也得有人认。",
     "LoreRoot": "原创·阴火幽泉",
     "Identity": "低血决战戟",
-    "Benefit": "以物理输出为主，保留低血决战戟的用途；物攻、命中、力量、物理会心、生命、灵巧形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以物理输出为主，保留低血决战戟的用途；物攻、命中、力量、物理会心、生命、灵巧形成完整底盘；另有本件白字物攻强化120–150%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -461,7 +563,22 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 135,
+        "MinPercent": 120,
+        "MaxPercent": 150
+      }
+    ]
   },
   {
     "BaseID": 2003,
@@ -500,11 +617,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 7,
+        "Max": 8
+      }
+    ]
   },
   {
     "BaseID": 2009,
-    "Name": "银山压顶",
+    "Name": "银山未掏空",
     "Lore": "做头盔的银子本要铸一座微型仙山。匠人偷懒没掏干净山腹，戴上后连打喷嚏都得先扶住桌角。",
     "LoreRoot": "原创·沉重白银护头",
     "Identity": "笨重抗打盔",
@@ -544,7 +668,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 7,
+        "Max": 8
+      }
+    ]
   },
   {
     "BaseID": 2015,
@@ -583,7 +714,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 8,
+        "Max": 9
+      }
+    ]
   },
   {
     "BaseID": 2025,
@@ -622,7 +760,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 323,
+        "Max": 355
+      }
+    ]
   },
   {
     "BaseID": 2026,
@@ -661,7 +806,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 18,
+        "Max": 19
+      }
+    ]
   },
   {
     "BaseID": 2045,
@@ -711,16 +863,23 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 24,
+        "Max": 26
+      }
+    ]
   },
   {
     "BaseID": 2046,
-    "Name": "炉内家字",
+    "Name": "家字盔",
     "Lore": "铜匠一家在炉沿刻了九十九道线。最后一次开炉时，最小的孩子没有刻线，只在盔内留下一个认不全的家字。",
     "LoreRoot": "原创·百炼火铜",
     "Identity": "老炉承伤盔",
-    "Benefit": "以物理承伤为主，保留老炉承伤盔的用途；物理平减、生命、防御、体质、魔防形成完整底盘",
-    "Tradeoff": "投入集中在物理承伤；不提供物攻、物理会心专精",
+    "Benefit": "以物理承伤为主，保留老炉承伤盔的用途；物理平减、生命、防御、体质、魔防形成完整底盘；另有本件白字防御强化60–80%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在物理承伤；不提供物攻、物理会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -750,7 +909,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 70,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ]
   },
   {
     "BaseID": 2047,
@@ -789,7 +963,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 2819,
@@ -828,7 +1009,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 73,
+        "Max": 80
+      }
+    ]
   },
   {
     "BaseID": 2820,
@@ -867,7 +1055,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 7,
+        "Max": 8
+      }
+    ]
   },
   {
     "BaseID": 2821,
@@ -875,8 +1070,8 @@
     "Lore": "鳞片合拢时像一只漆黑的书匣。甲内抄了半卷兵书，剩下半卷据说在敌人的甲里。",
     "LoreRoot": "原创·男式墨鳞甲",
     "Identity": "偏物抗轻甲",
-    "Benefit": "以物理承伤为主，保留偏物抗轻甲的用途；物理平减、体质、生命、防御、魔防形成完整底盘",
-    "Tradeoff": "投入集中在物理承伤；不提供物攻、物理会心专精",
+    "Benefit": "以物理承伤为主，保留偏物抗轻甲的用途；物理平减、体质、生命、防御、魔防形成完整底盘；另有本件白字防御强化50–70%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在物理承伤；不提供物攻、物理会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -906,7 +1101,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 8,
+        "Max": 9
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 60,
+        "MinPercent": 50,
+        "MaxPercent": 70
+      }
+    ]
   },
   {
     "BaseID": 2822,
@@ -945,7 +1155,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 68,
+        "Max": 74
+      }
+    ]
   },
   {
     "BaseID": 2831,
@@ -984,7 +1201,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 14,
+        "Max": 15
+      }
+    ]
   },
   {
     "BaseID": 2832,
@@ -1023,7 +1247,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 14,
+        "Max": 15
+      }
+    ]
   },
   {
     "BaseID": 2891,
@@ -1031,8 +1262,8 @@
     "Lore": "铠胸有一道像爪又像掌的凹痕，匠人拒绝补平。他说那东西只是拍了拍肩，已经够客气了。",
     "LoreRoot": "原创·男式黑麒铠",
     "Identity": "物抗前排铠",
-    "Benefit": "以物理承伤为主，保留物抗前排铠的用途；物理平减、体质、生命、防御、魔防形成完整底盘",
-    "Tradeoff": "投入集中在物理承伤；不提供物攻、物理会心专精",
+    "Benefit": "以物理承伤为主，保留物抗前排铠的用途；物理平减、体质、生命、防御、魔防形成完整底盘；另有本件白字防御强化50–70%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在物理承伤；不提供物攻、物理会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -1062,7 +1293,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 13,
+        "Max": 14
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 60,
+        "MinPercent": 50,
+        "MaxPercent": 70
+      }
+    ]
   },
   {
     "BaseID": 2892,
@@ -1070,8 +1316,8 @@
     "Lore": "黑鳞缝隙里常夹着不认识的头发。守夜人发现，穿它睡过的屋子，谁也记不住当晚的梦。",
     "LoreRoot": "原创·女式黑麒铠",
     "Identity": "魔防偏科铠",
-    "Benefit": "以法术承伤为主，保留魔防偏科铠的用途；魔防、精神、生命、法术平减、异常抵抗形成完整底盘",
-    "Tradeoff": "投入集中在法术承伤；不提供物攻、物理会心专精",
+    "Benefit": "以法术承伤为主，保留魔防偏科铠的用途；魔防、精神、生命、法术平减、异常抵抗形成完整底盘；另有本件白字魔防强化20–30%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在法术承伤；不提供物攻、物理会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -1101,7 +1347,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 18,
+        "Max": 19
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 25,
+        "MinPercent": 20,
+        "MaxPercent": 30
+      }
+    ]
   },
   {
     "BaseID": 2901,
@@ -1109,8 +1370,8 @@
     "Lore": "红铠出炉时，匠人从炉灰中捡到一根白翎。翎毛逢雨便烧，烧完仍是原来那一根。",
     "LoreRoot": "原创·男式朱雀铠",
     "Identity": "高血稳攻铠",
-    "Benefit": "以血线容错为主，保留高血稳攻铠的用途；生命、物攻、体质、物理平减、法术平减、魔防形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以血线容错为主，保留高血稳攻铠的用途；生命、物攻、体质、物理平减、法术平减、魔防形成完整底盘；另有本件白字防御强化70–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1151,7 +1412,22 @@
         "ThresholdPct": 80
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 537,
+        "Max": 590
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 85,
+        "MinPercent": 70,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 2902,
@@ -1159,8 +1435,8 @@
     "Lore": "这件赤甲不怕火，偏偏内衬怕烫。女匠为它换过七层布，最后留下一层无法点燃的灰。",
     "LoreRoot": "原创·女式朱雀铠",
     "Identity": "术伤缓冲铠",
-    "Benefit": "以法术承伤为主，保留术伤缓冲铠的用途；法术平减、生命、魔防、精神、异常抵抗形成完整底盘",
-    "Tradeoff": "投入集中在法术承伤；不提供物攻、物理会心专精",
+    "Benefit": "以法术承伤为主，保留术伤缓冲铠的用途；法术平减、生命、魔防、精神、异常抵抗形成完整底盘；另有本件白字魔防强化20–30%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在法术承伤；不提供物攻、物理会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -1190,7 +1466,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 15,
+        "Max": 16
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 25,
+        "MinPercent": 20,
+        "MaxPercent": 30
+      }
+    ]
   },
   {
     "BaseID": 8003,
@@ -1229,7 +1520,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 41,
+        "Max": 45
+      }
+    ]
   },
   {
     "BaseID": 9901,
@@ -1268,7 +1566,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 298,
+        "Max": 327
+      }
+    ]
   },
   {
     "BaseID": 9902,
@@ -1276,8 +1581,8 @@
     "Lore": "铠片来自枯盐井，缝中凝着蓝色盐花。采盐人把它浸过三十桶水，盐花仍在第二天长出来。",
     "LoreRoot": "原创·空白原述的女铠新故事",
     "Identity": "抗法甲衣",
-    "Benefit": "以法术承伤为主，保留抗法甲衣的用途；魔防、精神、生命、法术平减、异常抵抗形成完整底盘",
-    "Tradeoff": "投入集中在法术承伤；不提供物攻、物理会心专精",
+    "Benefit": "以法术承伤为主，保留抗法甲衣的用途；魔防、精神、生命、法术平减、异常抵抗形成完整底盘；另有本件白字魔防强化20–30%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在法术承伤；不提供物攻、物理会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "transition",
     "Affixes": [
       {
@@ -1307,7 +1612,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 25,
+        "MinPercent": 20,
+        "MaxPercent": 30
+      }
+    ]
   },
   {
     "BaseID": 9903,
@@ -1346,7 +1666,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 9904,
@@ -1385,7 +1712,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 135,
+        "Max": 148
+      }
+    ]
   },
   {
     "BaseID": 9905,
@@ -1424,7 +1758,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 9906,
@@ -1432,8 +1773,8 @@
     "Lore": "胸甲只有一枚钉，月圆时却投下十三枚钉的影子。制甲人临终只肯数到十二。",
     "LoreRoot": "原创·空白原述的高阶女铠",
     "Identity": "濒危保命铠",
-    "Benefit": "以血线容错为主，保留濒危保命铠的用途；生命、体质、物理平减、法术平减、魔防、防御形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以血线容错为主，保留濒危保命铠的用途；生命、体质、物理平减、法术平减、魔防、防御形成完整底盘；另有本件白字防御强化70–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1474,7 +1815,22 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 880,
+        "Max": 968
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 85,
+        "MinPercent": 70,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 15035,
@@ -1482,8 +1838,8 @@
     "Lore": "画师从说书人的方天戟图上裁去人物，把剩下的戟形交给铸师。铸师照画打成，偏偏在刃下留了一角未画完的白门。",
     "LoreRoot": "原创·温侯兵器传说的民间仿作",
     "Identity": "单点破阵画戟",
-    "Benefit": "以物理输出为主，保留单点破阵画戟的用途；物攻、命中、力量、物理会心、生命、灵巧形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以物理输出为主，保留单点破阵画戟的用途；物攻、命中、力量、物理会心、生命、灵巧形成完整底盘；另有本件白字物攻强化120–150%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1524,7 +1880,22 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 135,
+        "MinPercent": 120,
+        "MaxPercent": 150
+      }
+    ]
   },
   {
     "BaseID": 15036,
@@ -1563,7 +1934,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 418,
+        "Max": 459
+      }
+    ]
   },
   {
     "BaseID": 15037,
@@ -1571,8 +1949,8 @@
     "Lore": "枪尾封着拇指大的陶瓮，雨前会传来擂鼓声。拆过瓮的匠人说，里面只有一只被电白的蟋蟀。",
     "LoreRoot": "原创·九天雷枪的原创仿器",
     "Identity": "暴击爆发枪",
-    "Benefit": "以物理输出为主，保留暴击爆发枪的用途；物理会心、攻击上限、物攻、力量、命中、生命形成完整底盘",
-    "Tradeoff": "仍降低攻击下限；优先本件的专长，不承担所有输出与防护需求",
+    "Benefit": "以物理输出为主，保留暴击爆发枪的用途；物理会心、攻击上限、物攻、力量、命中、生命形成完整底盘；另有本件白字物攻强化100–130%，只按该底材未加工固有值结算",
+    "Tradeoff": "仍降低攻击下限；优先本件的专长，不承担所有输出与防护需求；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1612,7 +1990,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 464,
+        "Max": 510
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 115,
+        "MinPercent": 100,
+        "MaxPercent": 130
+      }
+    ]
   },
   {
     "BaseID": 15038,
@@ -1651,7 +2044,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 15039,
@@ -1690,7 +2090,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 15040,
@@ -1745,16 +2152,23 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 764,
+        "Max": 840
+      }
+    ]
   },
   {
     "BaseID": 15041,
-    "Name": "战后星图",
+    "Name": "留星待归人",
     "Lore": "仿沉星戟的刃面刻着撤军路线，经过的村落一个也没少。最后那颗星没有连线，据说是留给尚未归队的人。",
     "LoreRoot": "原创·沉星改名破军的原述",
     "Identity": "精英攻坚戟",
-    "Benefit": "以物理输出为主，保留精英攻坚戟的用途；物攻、命中、力量、物理会心、生命、灵巧形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以物理输出为主，保留精英攻坚戟的用途；物攻、命中、力量、物理会心、生命、灵巧形成完整底盘；另有本件白字物攻强化100–130%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1795,7 +2209,22 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 115,
+        "MinPercent": 100,
+        "MaxPercent": 130
+      }
+    ]
   },
   {
     "BaseID": 15042,
@@ -1803,8 +2232,8 @@
     "Lore": "枯木内部盘着一道没有出口的蛇纹。匠人每刨下一片，第二天便在枕下找到一片新蛇蜕。",
     "LoreRoot": "原创·腾蛇与方寸枯木传说",
     "Identity": "流虹之枪范围长兵",
-    "Benefit": "以物理输出为主，保留流虹之枪范围长兵的用途；物攻、命中、力量、物理会心、生命、灵巧形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以物理输出为主，保留流虹之枪范围长兵的用途；物攻、命中、力量、物理会心、生命、灵巧形成完整底盘；另有本件白字物攻强化100–130%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1854,7 +2283,22 @@
         "SkillName": "流虹之枪"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 115,
+        "MinPercent": 100,
+        "MaxPercent": 130
+      }
+    ]
   },
   {
     "BaseID": 15043,
@@ -1862,8 +2306,8 @@
     "Lore": "引雷台只剩一道紫色铁脊，雨落上去便向天空飞回。后来人给它安了戟杆，却没能让雨水学会下落。",
     "LoreRoot": "原创·紫色地心火与天雷铸胚",
     "Identity": "高攻重戟",
-    "Benefit": "以物理输出为主，保留高攻重戟的用途；物攻、力量、物理会心、命中、生命、灵巧、攻击速度、物理平减形成完整底盘",
-    "Tradeoff": "仍降低魔防；优先本件的专长，不承担所有输出与防护需求",
+    "Benefit": "以物理输出为主，保留高攻重戟的用途；物攻、力量、物理会心、命中、生命、灵巧、攻击速度、物理平减形成完整底盘；另有本件白字物攻强化200–240%，只按该底材未加工固有值结算",
+    "Tradeoff": "仍降低魔防；优先本件的专长，不承担所有输出与防护需求；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "godlike",
     "Affixes": [
       {
@@ -1913,7 +2357,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 36,
+        "Max": 39
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 220,
+        "MinPercent": 200,
+        "MaxPercent": 240
+      }
+    ]
   },
   {
     "BaseID": 20027,
@@ -1921,8 +2380,8 @@
     "Lore": "甲胸空着一块方印，谁也没敢补上。穿它的人走入废殿时，殿中所有椅子都朝向了他。",
     "LoreRoot": "原创·慑魔天铠威压的仿造物",
     "Identity": "满血承伤铠",
-    "Benefit": "以血线容错为主，保留满血承伤铠的用途；体质、物理平减、生命、法术平减、魔防、防御形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以血线容错为主，保留满血承伤铠的用途；体质、物理平减、生命、法术平减、魔防、防御形成完整底盘；另有本件白字防御强化70–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -1963,7 +2422,22 @@
         "ThresholdPct": 80
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 85,
+        "MinPercent": 70,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 20028,
@@ -2002,7 +2476,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20035,
@@ -2041,7 +2522,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20036,
@@ -2080,7 +2568,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20037,
@@ -2119,7 +2614,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 20038,
@@ -2158,7 +2660,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20039,
@@ -2197,7 +2706,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20040,
@@ -2236,7 +2752,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 305,
+        "Max": 335
+      }
+    ]
   },
   {
     "BaseID": 20041,
@@ -2285,7 +2808,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 19,
+        "Max": 20
+      }
+    ]
   },
   {
     "BaseID": 20042,
@@ -2324,7 +2854,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20043,
@@ -2363,7 +2900,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20044,
@@ -2402,7 +2946,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 20045,
@@ -2410,8 +2961,8 @@
     "Lore": "行者坐化时身上没有铠，弟子却抬不起那件薄衣。衣中一口气始终未散，霜天里能看清肩甲轮廓。",
     "LoreRoot": "原创·武道灵仙以气成铠",
     "Identity": "生命与物抗兼修甲",
-    "Benefit": "以血线容错为主，保留生命与物抗兼修甲的用途；体质、物理平减、生命、法术平减、魔防、防御形成完整底盘",
-    "Tradeoff": "投入集中在血线容错；不提供物攻、物理会心专精",
+    "Benefit": "以血线容错为主，保留生命与物抗兼修甲的用途；体质、物理平减、生命、法术平减、魔防、防御形成完整底盘；另有本件白字防御强化70–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在血线容错；不提供物攻、物理会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -2446,7 +2997,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 85,
+        "MinPercent": 70,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 20046,
@@ -2454,8 +3020,8 @@
     "Lore": "甲师整日对着空炉捶打，邻人当他疯了。百日后炉中仍无铁，门前却多了一件只有影子能穿上的甲。",
     "LoreRoot": "原创·灵神天铠非实物设定",
     "Identity": "回避之气甲",
-    "Benefit": "以物理承伤为主，保留回避之气甲的用途；敏捷、防御、生命、物理平减、体质、魔防形成完整底盘",
-    "Tradeoff": "投入集中在物理承伤；不提供物攻、物理会心专精",
+    "Benefit": "以物理承伤为主，保留回避之气甲的用途；敏捷、防御、生命、物理平减、体质、魔防形成完整底盘；另有本件白字防御强化70–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在物理承伤；不提供物攻、物理会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -2490,7 +3056,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 85,
+        "MinPercent": 70,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 20249,
@@ -2498,8 +3079,8 @@
     "Lore": "仿古治水甲的夹层填着黑土，铲去一勺便长回一勺。女匠种了一粒稻子，秋天只收获一粒铁。",
     "LoreRoot": "原创·荡妖宝铠与鲧的原述",
     "Identity": "物理守关甲",
-    "Benefit": "以物理承伤为主，保留物理守关甲的用途；物理平减、生命、防御、体质、敏捷、法术平减形成完整底盘",
-    "Tradeoff": "仍降低魔防；优先本件的专长，不承担所有输出与防护需求",
+    "Benefit": "以物理承伤为主，保留物理守关甲的用途；物理平减、生命、防御、体质、敏捷、法术平减形成完整底盘；另有本件白字防御强化70–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "仍降低魔防；优先本件的专长，不承担所有输出与防护需求；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -2539,7 +3120,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 19,
+        "Max": 20
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 85,
+        "MinPercent": 70,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 20250,
@@ -2547,8 +3143,8 @@
     "Lore": "甲里装的沙来自一条无人见过的河，贴近耳边能听见逆流声。水师以它试阵，沙先在图上淹没了自己的营地。",
     "LoreRoot": "原创·荡妖甲吸纳魔力背景",
     "Identity": "代价明确的攻守甲",
-    "Benefit": "以物理输出为主，保留代价明确的攻守甲的用途；力量、生命、物攻、物理会心、灵巧、攻击速度形成完整底盘",
-    "Tradeoff": "仍降低命中；特性须满足原有技能或战况条件",
+    "Benefit": "以物理输出为主，保留代价明确的攻守甲的用途；力量、生命、物攻、物理会心、灵巧、攻击速度形成完整底盘；另有本件白字防御强化70–100%，只按该底材未加工固有值结算",
+    "Tradeoff": "仍降低命中；特性须满足原有技能或战况条件；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -2594,7 +3190,22 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 85,
+        "MinPercent": 70,
+        "MaxPercent": 100
+      }
+    ]
   },
   {
     "BaseID": 20406,
@@ -2633,7 +3244,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20416,
@@ -2672,7 +3290,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 277,
+        "Max": 304
+      }
+    ]
   },
   {
     "BaseID": 20425,
@@ -2721,7 +3346,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 20430,
@@ -2760,7 +3392,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 155,
+        "Max": 170
+      }
+    ]
   },
   {
     "BaseID": 20431,
@@ -2799,7 +3438,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 20441,
@@ -2848,7 +3494,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 19,
+        "Max": 20
+      }
+    ]
   },
   {
     "BaseID": 20494,
@@ -2887,7 +3540,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 292,
+        "Max": 321
+      }
+    ]
   },
   {
     "BaseID": 20504,
@@ -2926,7 +3586,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20513,
@@ -2970,7 +3637,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 723,
+        "Max": 795
+      }
+    ]
   },
   {
     "BaseID": 20518,
@@ -3020,7 +3694,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 723,
+        "Max": 795
+      }
+    ]
   },
   {
     "BaseID": 20519,
@@ -3059,7 +3740,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20531,
@@ -3109,7 +3797,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 178,
+        "Max": 195
+      }
+    ]
   },
   {
     "BaseID": 20659,
@@ -3148,7 +3843,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20664,
@@ -3187,7 +3889,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20673,
@@ -3231,7 +3940,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 20678,
@@ -3281,7 +3997,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 178,
+        "Max": 195
+      }
+    ]
   },
   {
     "BaseID": 20679,
@@ -3320,7 +4043,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 20689,
@@ -3370,7 +4100,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 52,
+        "Max": 57
+      }
+    ]
   },
   {
     "BaseID": 20824,
@@ -3409,7 +4146,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20829,
@@ -3448,7 +4192,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 20834,
@@ -3487,7 +4238,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20839,
@@ -3526,7 +4284,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20849,
@@ -3565,7 +4330,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 353,
+        "Max": 388
+      }
+    ]
   },
   {
     "BaseID": 20854,
@@ -3609,7 +4381,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 19,
+        "Max": 20
+      }
+    ]
   },
   {
     "BaseID": 20882,
@@ -3648,7 +4427,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20887,
@@ -3687,11 +4473,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20892,
-    "Name": "丹炉把手",
+    "Name": "提耳",
     "Lore": "护腕本是丹炉的提耳，炼丹失败后仍能握住滚烫铁块。炉主最遗憾的，是成功的只剩这对把手。",
     "LoreRoot": "原创·真式火神之手",
     "Identity": "野战八荒增伤护腕",
@@ -3739,7 +4532,14 @@
         "SkillName": "野战八荒"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 30,
+        "Max": 33
+      }
+    ]
   },
   {
     "BaseID": 20897,
@@ -3783,7 +4583,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 30,
+        "Max": 33
+      }
+    ]
   },
   {
     "BaseID": 20907,
@@ -3822,7 +4629,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 139,
+        "Max": 152
+      }
+    ]
   },
   {
     "BaseID": 20912,
@@ -3861,7 +4675,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 20969,
@@ -3900,7 +4721,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 404,
+        "Max": 444
+      }
+    ]
   },
   {
     "BaseID": 20974,
@@ -3939,7 +4767,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 20989,
@@ -3947,8 +4782,8 @@
     "Lore": "燧石戒常年冰冷，只有两指搓动时蹦出一点火。那火点燃不了草，偏能烧穿写错的符。",
     "LoreRoot": "原创·真式火神眼戒",
     "Identity": "单点施技戒",
-    "Benefit": "以物理输出为主，保留单点施技戒的用途；命中、物攻、力量、物理会心、生命、灵巧形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以物理输出为主，保留单点施技戒的用途；命中、物攻、力量、物理会心、生命、灵巧形成完整底盘；另有本件白字物攻强化60–80%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -3989,7 +4824,22 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 70,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ]
   },
   {
     "BaseID": 20994,
@@ -3997,8 +4847,8 @@
     "Lore": "戒面是一粒咬不断的金子，齿痕却年年增多。主人声称它专门勾引世上最有耐心的贪财鬼。",
     "LoreRoot": "原创·真式金神魂戒",
     "Identity": "暴击专门戒",
-    "Benefit": "以物理输出为主，保留暴击专门戒的用途；物理会心、攻击上限、物攻、力量、命中、生命形成完整底盘",
-    "Tradeoff": "投入集中在物理输出；不提供法攻、法术会心专精",
+    "Benefit": "以物理输出为主，保留暴击专门戒的用途；物理会心、攻击上限、物攻、力量、命中、生命形成完整底盘；另有本件白字物攻强化60–80%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在物理输出；不提供法攻、法术会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -4033,7 +4883,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 464,
+        "Max": 510
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 70,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ]
   },
   {
     "BaseID": 21004,
@@ -4072,7 +4937,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 21009,
@@ -4111,7 +4983,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 454,
+        "Max": 499
+      }
+    ]
   },
   {
     "BaseID": 21105,
@@ -4150,7 +5029,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 317,
+        "Max": 348
+      }
+    ]
   },
   {
     "BaseID": 21115,
@@ -4189,7 +5075,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 21125,
@@ -4239,7 +5132,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 464,
+        "Max": 510
+      }
+    ]
   },
   {
     "BaseID": 21130,
@@ -4283,7 +5183,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 21140,
@@ -4322,11 +5229,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 21145,
-    "Name": "河图空白",
+    "Name": "河图待雨来",
     "Lore": "坠内的河图缺了一条河，补画的墨总会流出来。老道人不让再补，说那是尚未下过的一场雨。",
     "LoreRoot": "原创·真式水神决心",
     "Identity": "低血保命坠",
@@ -4372,7 +5286,14 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 810,
+        "Max": 891
+      }
+    ]
   },
   {
     "BaseID": 21776,
@@ -4411,7 +5332,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 21777,
@@ -4450,7 +5378,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 25,
+        "Max": 27
+      }
+    ]
   },
   {
     "BaseID": 21778,
@@ -4500,7 +5435,14 @@
         "ThresholdPct": 35
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 1253,
+        "Max": 1378
+      }
+    ]
   },
   {
     "BaseID": 22018,
@@ -4539,7 +5481,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 22019,
@@ -4578,7 +5527,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22020,
@@ -4617,7 +5573,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22021,
@@ -4656,7 +5619,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22022,
@@ -4706,7 +5676,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 812,
+        "Max": 893
+      }
+    ]
   },
   {
     "BaseID": 22023,
@@ -4750,7 +5727,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22024,
@@ -4789,7 +5773,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 490,
+        "Max": 539
+      }
+    ]
   },
   {
     "BaseID": 22025,
@@ -4828,7 +5819,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22026,
@@ -4877,7 +5875,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 38,
+        "Max": 41
+      }
+    ]
   },
   {
     "BaseID": 22086,
@@ -4916,7 +5921,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22087,
@@ -4955,7 +5967,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22088,
@@ -4994,7 +6013,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22089,
@@ -5033,7 +6059,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 153,
+        "Max": 168
+      }
+    ]
   },
   {
     "BaseID": 22090,
@@ -5083,7 +6116,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22091,
@@ -5122,7 +6162,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 427,
+        "Max": 469
+      }
+    ]
   },
   {
     "BaseID": 22092,
@@ -5172,7 +6219,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 33,
+        "Max": 36
+      }
+    ]
   },
   {
     "BaseID": 22093,
@@ -5180,8 +6234,8 @@
     "Lore": "玉靴内有十个凹槽，数目一直正确，位置却每月换一次。穿它的人终于学会不用脚趾抓地。",
     "LoreRoot": "原创·方寸玄玉足具",
     "Identity": "闪避专用靴",
-    "Benefit": "以物理承伤为主，保留闪避专用靴的用途；敏捷、防御、生命、物理平减、体质、魔防形成完整底盘",
-    "Tradeoff": "投入集中在物理承伤；不提供物攻、物理会心专精",
+    "Benefit": "以物理承伤为主，保留闪避专用靴的用途；敏捷、防御、生命、物理平减、体质、魔防形成完整底盘；另有本件白字防御强化60–90%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在物理承伤；不提供物攻、物理会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -5216,7 +6270,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 75,
+        "MinPercent": 60,
+        "MaxPercent": 90
+      }
+    ]
   },
   {
     "BaseID": 22094,
@@ -5260,7 +6329,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 404,
+        "Max": 444
+      }
+    ]
   },
   {
     "BaseID": 22103,
@@ -5299,7 +6375,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22104,
@@ -5338,7 +6421,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22105,
@@ -5377,7 +6467,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 404,
+        "Max": 444
+      }
+    ]
   },
   {
     "BaseID": 22106,
@@ -5416,7 +6513,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22107,
@@ -5455,7 +6559,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 22108,
@@ -5504,7 +6615,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22109,
@@ -5548,7 +6666,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 38,
+        "Max": 41
+      }
+    ]
   },
   {
     "BaseID": 22110,
@@ -5592,7 +6717,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22111,
@@ -5641,7 +6773,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 42,
+        "Max": 46
+      }
+    ]
   },
   {
     "BaseID": 22120,
@@ -5680,7 +6819,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 113,
+        "Max": 124
+      }
+    ]
   },
   {
     "BaseID": 22121,
@@ -5719,7 +6865,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22122,
@@ -5758,7 +6911,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 342,
+        "Max": 376
+      }
+    ]
   },
   {
     "BaseID": 22123,
@@ -5802,7 +6962,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 176,
+        "Max": 193
+      }
+    ]
   },
   {
     "BaseID": 22124,
@@ -5841,7 +7008,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22125,
@@ -5880,7 +7054,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 180,
+        "Max": 198
+      }
+    ]
   },
   {
     "BaseID": 22126,
@@ -5930,7 +7111,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 875,
+        "Max": 962
+      }
+    ]
   },
   {
     "BaseID": 22127,
@@ -5969,7 +7157,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22128,
@@ -6008,7 +7203,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22130,
@@ -6047,7 +7249,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22131,
@@ -6086,7 +7295,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22132,
@@ -6125,7 +7341,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22133,
@@ -6164,11 +7387,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22134,
-    "Name": "神像背面",
+    "Name": "替神打个盹",
     "Lore": "面上刻满神像，内侧却只刻一张打哈欠的脸。刻匠说，神也得有人替班。",
     "LoreRoot": "原创·三清四御面甲",
     "Identity": "魔法防线面甲",
@@ -6203,7 +7433,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 22135,
@@ -6247,7 +7484,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 712,
+        "Max": 783
+      }
+    ]
   },
   {
     "BaseID": 22136,
@@ -6297,7 +7541,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 32,
+        "Max": 35
+      }
+    ]
   },
   {
     "BaseID": 22137,
@@ -6341,7 +7592,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 52,
+        "Max": 57
+      }
+    ]
   },
   {
     "BaseID": 22138,
@@ -6390,7 +7648,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22140,
@@ -6429,7 +7694,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22141,
@@ -6468,7 +7740,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 339,
+        "Max": 372
+      }
+    ]
   },
   {
     "BaseID": 22142,
@@ -6507,7 +7786,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22143,
@@ -6546,7 +7832,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 404,
+        "Max": 444
+      }
+    ]
   },
   {
     "BaseID": 22144,
@@ -6596,7 +7889,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22145,
@@ -6646,7 +7946,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 864,
+        "Max": 950
+      }
+    ]
   },
   {
     "BaseID": 22146,
@@ -6685,7 +7992,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 22147,
@@ -6735,7 +8049,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 19,
+        "Max": 20
+      }
+    ]
   },
   {
     "BaseID": 22148,
@@ -6784,7 +8105,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22150,
@@ -6823,7 +8151,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22151,
@@ -6862,7 +8197,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 22152,
@@ -6901,7 +8243,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 367,
+        "Max": 403
+      }
+    ]
   },
   {
     "BaseID": 22153,
@@ -6909,8 +8258,8 @@
     "Lore": "戒面的狼眼只在佩戴者睡着时睁开。看守营帐的人发现，那些夜里没有一只狗敢吠。",
     "LoreRoot": "原创·贪狼星与魔狼眼",
     "Identity": "低血强攻戒",
-    "Benefit": "以物理输出为主，保留低血强攻戒的用途；物攻、物理会心、力量、命中、生命、灵巧形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以物理输出为主，保留低血强攻戒的用途；物攻、物理会心、力量、命中、生命、灵巧形成完整底盘；另有本件白字物攻强化60–80%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -6951,16 +8300,31 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 464,
+        "Max": 510
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 70,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ]
   },
   {
     "BaseID": 22154,
-    "Name": "失译军令",
+    "Name": "归家令",
     "Lore": "戒上的异界圣语无人能读，兵卒拿它压地图却屡屡猜中退路。翻译官最后给出四字：尽快回家。",
     "LoreRoot": "原创·伽蓝军神刻符的临摹物",
     "Identity": "命中指挥戒",
-    "Benefit": "以物理输出为主，保留命中指挥戒的用途；命中、力量、物攻、物理会心、生命、灵巧形成完整底盘",
-    "Tradeoff": "投入集中在物理输出；不提供法攻、法术会心专精",
+    "Benefit": "以物理输出为主，保留命中指挥戒的用途；命中、力量、物攻、物理会心、生命、灵巧形成完整底盘；另有本件白字物攻强化60–80%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在物理输出；不提供法攻、法术会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -6995,7 +8359,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 70,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ]
   },
   {
     "BaseID": 22155,
@@ -7045,7 +8424,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 19,
+        "Max": 20
+      }
+    ]
   },
   {
     "BaseID": 22156,
@@ -7053,8 +8439,8 @@
     "Lore": "戒盒里是一卷删得只剩标点的龙名册。做仿戒的学徒觉得名字不能当战功，师父却只夸他刻得清楚。",
     "LoreRoot": "原创·封龙王戒战功叙事的仿件",
     "Identity": "首领爆发戒",
-    "Benefit": "以物理输出为主，保留首领爆发戒的用途；物理会心、物攻、力量、命中、生命、灵巧形成完整底盘",
-    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "Benefit": "以物理输出为主，保留首领爆发戒的用途；物理会心、物攻、力量、命中、生命、灵巧形成完整底盘；另有本件白字物攻强化60–80%，只按该底材未加工固有值结算",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -7095,7 +8481,22 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 464,
+        "Max": 510
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 70,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ]
   },
   {
     "BaseID": 22157,
@@ -7145,7 +8546,14 @@
         "ThresholdPct": 80
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 22158,
@@ -7153,8 +8561,8 @@
     "Lore": "仿神武戒的匠人向百位武夫各讨一滴血，收到九十九份和一根木刺。他把木刺也熔了进去，戒面从此有了年轮。",
     "LoreRoot": "原创·李玉通神武徽记的仿铸传说",
     "Identity": "高代价近战核心戒",
-    "Benefit": "以物理输出为主，保留高代价近战核心戒的用途；力量、物攻、物理会心、命中、生命、灵巧形成完整底盘",
-    "Tradeoff": "仍降低法术平减；优先本件的专长，不承担所有输出与防护需求",
+    "Benefit": "以物理输出为主，保留高代价近战核心戒的用途；力量、物攻、物理会心、命中、生命、灵巧形成完整底盘；另有本件白字物攻强化60–80%，只按该底材未加工固有值结算",
+    "Tradeoff": "仍降低法术平减；优先本件的专长，不承担所有输出与防护需求；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -7194,7 +8602,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 70,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ]
   },
   {
     "BaseID": 22522,
@@ -7233,7 +8656,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 404,
+        "Max": 444
+      }
+    ]
   },
   {
     "BaseID": 22523,
@@ -7272,7 +8702,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22524,
@@ -7316,7 +8753,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 113,
+        "Max": 124
+      }
+    ]
   },
   {
     "BaseID": 22537,
@@ -7355,7 +8799,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 22538,
@@ -7394,7 +8845,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 265,
+        "Max": 291
+      }
+    ]
   },
   {
     "BaseID": 22539,
@@ -7443,11 +8901,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 54,
+        "Max": 59
+      }
+    ]
   },
   {
     "BaseID": 22581,
-    "Name": "空营靴声",
+    "Name": "靴声停岔路",
     "Lore": "营里只剩这双靴子，每夜仍沿帐篷巡一圈。新来的守兵改变了营道，它停在岔路口等了整晚。",
     "LoreRoot": "原创·空白原述战魂靴的新故事",
     "Identity": "生命巡防靴",
@@ -7482,7 +8947,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 609,
+        "Max": 669
+      }
+    ]
   },
   {
     "BaseID": 22582,
@@ -7532,7 +9004,14 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 49,
+        "Max": 53
+      }
+    ]
   },
   {
     "BaseID": 22583,
@@ -7540,8 +9019,8 @@
     "Lore": "靴边缝着登天的路线，偏把第一阶写成了第九阶。前主人始终没登上天，却把双腿练得异乎寻常。",
     "LoreRoot": "原创·空白原述战神足具",
     "Identity": "体质专门靴",
-    "Benefit": "以血线容错为主，保留体质专门靴的用途；体质、生命、移动速度、物理平减、法术平减、防御形成完整底盘",
-    "Tradeoff": "投入集中在血线容错；不提供物攻、物理会心专精",
+    "Benefit": "以血线容错为主，保留体质专门靴的用途；体质、生命、移动速度、物理平减、法术平减、防御形成完整底盘；另有本件白字防御强化60–90%，只按该底材未加工固有值结算",
+    "Tradeoff": "投入集中在血线容错；不提供物攻、物理会心专精；本件强化不放大其它装备、人物六维派生、卡片、加工或其余附加属性",
     "PowerTier": "highvalue",
     "Affixes": [
       {
@@ -7576,7 +9055,22 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 26,
+        "Max": 28
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 75,
+        "MinPercent": 60,
+        "MaxPercent": 90
+      }
+    ]
   },
   {
     "BaseID": 24653,
@@ -7615,7 +9109,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 24654,
@@ -7654,7 +9155,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 24655,
@@ -7693,7 +9201,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 24656,
@@ -7732,7 +9247,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 583,
+        "Max": 641
+      }
+    ]
   },
   {
     "BaseID": 24657,
@@ -7771,7 +9293,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 24658,
@@ -7810,7 +9339,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 404,
+        "Max": 444
+      }
+    ]
   },
   {
     "BaseID": 24659,
@@ -7859,11 +9395,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 24660,
-    "Name": "噬甲戒律",
+    "Name": "噬影戒",
     "Lore": "甲环的利齿被铸师逐个封住，最后一颗却怎么也合不上。封条写着：每日只许咬自己的影子。",
     "LoreRoot": "原创·精良穷奇兽甲",
     "Identity": "物理防线甲环",
@@ -7914,7 +9457,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 19,
+        "Max": 20
+      }
+    ]
   },
   {
     "BaseID": 24661,
@@ -7958,7 +9508,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 40008,
@@ -7997,7 +9554,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 404,
+        "Max": 444
+      }
+    ]
   },
   {
     "BaseID": 40009,
@@ -8036,7 +9600,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 40010,
@@ -8075,7 +9646,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 40023,
@@ -8114,7 +9692,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 40024,
@@ -8153,7 +9738,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 40025,
@@ -8192,7 +9784,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 47085,
@@ -8242,7 +9841,14 @@
         "ThresholdPct": 80
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 83,
+        "Max": 91
+      }
+    ]
   },
   {
     "BaseID": 47086,
@@ -8292,7 +9898,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 47087,
@@ -8336,7 +9949,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 19,
+        "Max": 20
+      }
+    ]
   },
   {
     "BaseID": 47100,
@@ -8386,11 +10006,18 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 47101,
-    "Name": "翼下急信",
+    "Name": "风催客",
     "Lore": "飞廉护符曾夹着一封没封口的急信，拆看只有一阵风。收信人听完便出门，鞋都没换。",
     "LoreRoot": "原创·飞廉高阶太极护符",
     "Identity": "攻速风符",
@@ -8430,7 +10057,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 47102,
@@ -8480,7 +10114,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 464,
+        "Max": 510
+      }
+    ]
   },
   {
     "BaseID": 57013,
@@ -8519,7 +10160,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57014,
@@ -8558,7 +10206,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 167,
+        "Max": 183
+      }
+    ]
   },
   {
     "BaseID": 57015,
@@ -8597,7 +10252,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57016,
@@ -8636,7 +10298,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57017,
@@ -8675,7 +10344,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57018,
@@ -8714,7 +10390,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57019,
@@ -8753,7 +10436,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 86,
+        "Max": 94
+      }
+    ]
   },
   {
     "BaseID": 57020,
@@ -8803,7 +10493,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 19,
+        "Max": 20
+      }
+    ]
   },
   {
     "BaseID": 57053,
@@ -8842,7 +10539,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 373,
+        "Max": 410
+      }
+    ]
   },
   {
     "BaseID": 57054,
@@ -8881,7 +10585,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 57055,
@@ -8920,7 +10631,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 57056,
@@ -8959,7 +10677,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57057,
@@ -8998,7 +10723,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 57058,
@@ -9037,7 +10769,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 404,
+        "Max": 444
+      }
+    ]
   },
   {
     "BaseID": 57059,
@@ -9076,7 +10815,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 57060,
@@ -9126,7 +10872,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 163,
+        "Max": 179
+      }
+    ]
   },
   {
     "BaseID": 57122,
@@ -9170,7 +10923,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 19,
+        "Max": 20
+      }
+    ]
   },
   {
     "BaseID": 57127,
@@ -9220,7 +10980,14 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 317,
+        "Max": 348
+      }
+    ]
   },
   {
     "BaseID": 57132,
@@ -9259,7 +11026,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57133,
@@ -9298,7 +11072,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 86,
+        "Max": 94
+      }
+    ]
   },
   {
     "BaseID": 57134,
@@ -9337,7 +11118,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57135,
@@ -9376,7 +11164,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57136,
@@ -9415,7 +11210,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57137,
@@ -9454,7 +11256,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 17,
+        "Max": 18
+      }
+    ]
   },
   {
     "BaseID": 57138,
@@ -9493,7 +11302,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57139,
@@ -9550,7 +11366,14 @@
         "SkillName": "连环枪法"
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 21,
+        "Max": 23
+      }
+    ]
   },
   {
     "BaseID": 57172,
@@ -9589,7 +11412,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 57173,
@@ -9628,7 +11458,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 57174,
@@ -9667,11 +11504,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 57175,
-    "Name": "天阶磨痕",
+    "Name": "莫磨登天路",
     "Lore": "这枚章最先是补鞋的铁片，磨出一层云色后才被取下。主人拒绝抛光，怕把登天的路一起磨掉。",
     "LoreRoot": "原创·普通飞升卓越徽章",
     "Identity": "物抗行功章",
@@ -9706,7 +11550,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57176,
@@ -9745,7 +11596,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 91,
+        "Max": 100
+      }
+    ]
   },
   {
     "BaseID": 57177,
@@ -9784,7 +11642,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 139,
+        "Max": 152
+      }
+    ]
   },
   {
     "BaseID": 57178,
@@ -9823,7 +11688,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 404,
+        "Max": 444
+      }
+    ]
   },
   {
     "BaseID": 57179,
@@ -9873,7 +11745,14 @@
         "ThresholdPct": 0
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 26,
+        "Max": 28
+      }
+    ]
   },
   {
     "BaseID": 57241,
@@ -9912,7 +11791,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 167,
+        "Max": 183
+      }
+    ]
   },
   {
     "BaseID": 57242,
@@ -9951,7 +11837,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57243,
@@ -9990,7 +11883,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57244,
@@ -10029,7 +11929,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 11,
+        "Max": 12
+      }
+    ]
   },
   {
     "BaseID": 57245,
@@ -10068,7 +11975,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57246,
@@ -10107,7 +12021,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 35,
+        "Max": 38
+      }
+    ]
   },
   {
     "BaseID": 57247,
@@ -10146,7 +12067,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 200,
+        "Max": 220
+      }
+    ]
   },
   {
     "BaseID": 57248,
@@ -10196,7 +12124,14 @@
         "ThresholdPct": 80
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 317,
+        "Max": 348
+      }
+    ]
   },
   {
     "BaseID": 57281,
@@ -10235,7 +12170,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57282,
@@ -10274,7 +12216,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 45,
+        "Max": 49
+      }
+    ]
   },
   {
     "BaseID": 57283,
@@ -10313,7 +12262,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 57284,
@@ -10352,7 +12308,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 317,
+        "Max": 348
+      }
+    ]
   },
   {
     "BaseID": 57285,
@@ -10391,7 +12354,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 23,
+        "Max": 25
+      }
+    ]
   },
   {
     "BaseID": 57286,
@@ -10430,11 +12400,18 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 373,
+        "Max": 410
+      }
+    ]
   },
   {
     "BaseID": 57287,
-    "Name": "无期值守",
+    "Name": "任期长过仙宫",
     "Lore": "值守名册写到此人时墨用尽，只留了开始日期。守门人把那一角铸成章，自称任期比仙宫还长。",
     "LoreRoot": "原创·精良飞升忠诚徽章",
     "Identity": "术法守备章",
@@ -10469,7 +12446,14 @@
       }
     ],
     "Traits": [],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 16,
+        "Max": 17
+      }
+    ]
   },
   {
     "BaseID": 57288,
@@ -10519,6 +12503,13 @@
         "ThresholdPct": 30
       }
     ],
-    "ReservedSkills": []
+    "ReservedSkills": [],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 648,
+        "Max": 712
+      }
+    ]
   }
 ]

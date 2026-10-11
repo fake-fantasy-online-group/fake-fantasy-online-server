@@ -397,7 +397,7 @@
   "formations": [
     {
       "id": 1,
-      "name": "宿阵·引火入锋",
+      "name": "引火入锋",
       "runes": [
         1900028001,
         1900028006
@@ -452,11 +452,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 47,
+          "min": 50,
+          "max": 55
+        }
+      ]
     },
     {
       "id": 2,
-      "name": "宿阵·井星入瞳",
+      "name": "井星入瞳",
       "runes": [
         1900028008,
         1900028022
@@ -511,11 +518,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 36,
+          "min": 160,
+          "max": 176
+        }
+      ]
     },
     {
       "id": 3,
-      "name": "宿阵·覆土埋名",
+      "name": "覆土埋名",
       "runes": [
         1900028009,
         1900028014
@@ -565,11 +579,18 @@
       "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
       "powerTier": "transition",
       "traits": [],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 34,
+          "min": 240,
+          "max": 264
+        }
+      ]
     },
     {
       "id": 4,
-      "name": "宿阵·分月仍圆",
+      "name": "分月仍圆",
       "runes": [
         1900028010,
         1900028011
@@ -627,11 +648,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 61,
+          "min": 16,
+          "max": 17
+        }
+      ]
     },
     {
       "id": 5,
-      "name": "宿阵·灯灭客未行",
+      "name": "灯灭客未行",
       "runes": [
         1900028016,
         1900028020
@@ -686,11 +714,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 47,
+          "min": 100,
+          "max": 110
+        }
+      ]
     },
     {
       "id": 6,
-      "name": "宿阵·担山不语",
+      "name": "担山不语",
       "runes": [
         1900028001,
         1900028002
@@ -700,7 +735,7 @@
         "亢"
       ],
       "channel": "战阵",
-      "minLevel": 20,
+      "minLevel": 14,
       "professions": 1,
       "slots": [
         4,
@@ -745,11 +780,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 1,
+          "min": 14,
+          "max": 15
+        }
+      ]
     },
     {
       "id": 7,
-      "name": "宿阵·空庭留步",
+      "name": "空庭留步",
       "runes": [
         1900028015,
         1900028017
@@ -805,11 +847,18 @@
           "thresholdPct": 80
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 19,
+          "min": 24,
+          "max": 26
+        }
+      ]
     },
     {
       "id": 8,
-      "name": "宿阵·灰中见鹤",
+      "name": "灰中见鹤",
       "runes": [
         1900028022,
         1900028023
@@ -864,11 +913,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 66,
+          "min": 700,
+          "max": 770
+        }
+      ]
     },
     {
       "id": 9,
-      "name": "宿阵·不收诊金",
+      "name": "不收诊金",
       "runes": [
         1900028004,
         1900028028
@@ -926,11 +982,18 @@
           "thresholdPct": 30
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 17,
+          "min": 48,
+          "max": 52
+        }
+      ]
     },
     {
       "id": 10,
-      "name": "宿阵·履上驿尘",
+      "name": "履上驿尘",
       "runes": [
         1900028007,
         1900028027
@@ -987,11 +1050,18 @@
       "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
       "powerTier": "transition",
       "traits": [],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 9,
+          "min": 20,
+          "max": 22
+        }
+      ]
     },
     {
       "id": 11,
-      "name": "宿阵·铁扇不迎客",
+      "name": "铁扇不迎客",
       "runes": [
         1900028001,
         1900028002,
@@ -1003,7 +1073,7 @@
         "尾"
       ],
       "channel": "战阵",
-      "minLevel": 30,
+      "minLevel": 21,
       "professions": 1,
       "slots": [
         4,
@@ -1043,8 +1113,8 @@
       ],
       "lore": "钟离的扇影落入演阵，门人却把它画成一堵窄门：只容一个敌人挤入，也只需一个人守住。",
       "identity": "守窄口的连环枪技战阵",
-      "benefit": "物理输出为主；物攻、攻击上限、力量、命中、生命、物理会心提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "benefit": "物理输出为主；物攻、攻击上限、力量、命中、生命、物理会心提供独立于星篆的完整词条；另有本件白字物攻强化90–110%，收益随所选武器固有白字而变",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
       "powerTier": "transition",
       "traits": [
         {
@@ -1055,11 +1125,26 @@
           "skillName": "连环枪法"
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 31,
+          "min": 40,
+          "max": 44
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 100,
+          "minPercent": 90,
+          "maxPercent": 110
+        }
+      ]
     },
     {
       "id": 12,
-      "name": "宿阵·醉后问剑",
+      "name": "醉后问剑",
       "runes": [
         1900028015,
         1900028016,
@@ -1111,8 +1196,8 @@
       ],
       "lore": "酒醒时，石上只剩一道浅痕。剑客反复看了三天，才明白那不是吕仙留下的答案，而是自己没敢问完的半句。",
       "identity": "专注单敌的问剑阵",
-      "benefit": "物理输出为主；物攻、命中、防御、力量、生命、灵巧提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "benefit": "物理输出为主；物攻、命中、防御、力量、生命、灵巧提供独立于星篆的完整词条；另有本件白字物攻强化80–100%，收益随所选武器固有白字而变",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
       "powerTier": "transition",
       "traits": [
         {
@@ -1123,11 +1208,26 @@
           "skillName": "罡气剑"
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 1,
+          "min": 18,
+          "max": 19
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 90,
+          "minPercent": 80,
+          "maxPercent": 100
+        }
+      ]
     },
     {
       "id": 13,
-      "name": "宿阵·荷心藏针",
+      "name": "荷心藏针",
       "runes": [
         1900028018,
         1900028020,
@@ -1191,11 +1291,18 @@
           "skillName": "背刺"
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 23,
+          "min": 800,
+          "max": 880
+        }
+      ]
     },
     {
       "id": 14,
-      "name": "宿阵·倒骑观火",
+      "name": "倒骑观火",
       "runes": [
         1900028008,
         1900028022,
@@ -1247,8 +1354,8 @@
       ],
       "lore": "纸驴逆着火光走，背上的术者也倒坐着。他只看身后哪一盏灯熄了，便知道下一张符该落在何处。",
       "identity": "火法输出的逆行星图",
-      "benefit": "法术输出为主；法攻、智慧、法术会心、法力、精神、魔防提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "benefit": "法术输出为主；法攻、智慧、法术会心、法力、精神、魔防提供独立于星篆的完整词条；另有本件白字法攻强化100–120%，收益随所选武器固有白字而变",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
       "powerTier": "transition",
       "traits": [
         {
@@ -1257,11 +1364,26 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 3,
+          "min": 24,
+          "max": 26
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 15,
+          "percent": 110,
+          "minPercent": 100,
+          "maxPercent": 120
+        }
+      ]
     },
     {
       "id": 15,
-      "name": "宿阵·拐下生根",
+      "name": "拐下生根",
       "runes": [
         1900028010,
         1900028013,
@@ -1326,11 +1448,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 61,
+          "min": 26,
+          "max": 28
+        }
+      ]
     },
     {
       "id": 16,
-      "name": "宿阵·城砖无字",
+      "name": "城砖无字",
       "runes": [
         1900028003,
         1900028009,
@@ -1387,11 +1516,18 @@
       "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
       "powerTier": "transition",
       "traits": [],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 69,
+          "min": 24,
+          "max": 26
+        }
+      ]
     },
     {
       "id": 17,
-      "name": "宿阵·龟背驮碑",
+      "name": "龟背驮碑",
       "runes": [
         1900028017,
         1900028002,
@@ -1448,11 +1584,18 @@
       "tradeoff": "仍降低移动速度；占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
       "powerTier": "transition",
       "traits": [],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 5,
+          "min": 20,
+          "max": 22
+        }
+      ]
     },
     {
       "id": 18,
-      "name": "宿阵·雨洗空符",
+      "name": "雨洗空符",
       "runes": [
         1900028012,
         1900028011,
@@ -1509,11 +1652,18 @@
       "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
       "powerTier": "transition",
       "traits": [],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 17,
+          "min": 48,
+          "max": 52
+        }
+      ]
     },
     {
       "id": 19,
-      "name": "宿阵·步斗困煞",
+      "name": "步斗困煞",
       "runes": [
         1900028007,
         1900028026,
@@ -1572,11 +1722,18 @@
       "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
       "powerTier": "transition",
       "traits": [],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 36,
+          "min": 250,
+          "max": 275
+        }
+      ]
     },
     {
       "id": 20,
-      "name": "宿阵·甘露不留瓶",
+      "name": "甘露不留瓶",
       "runes": [
         1900028014,
         1900028010,
@@ -1641,11 +1798,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 61,
+          "min": 18,
+          "max": 19
+        }
+      ]
     },
     {
       "id": 21,
-      "name": "宿阵·破阵先折旗",
+      "name": "破阵先折旗",
       "runes": [
         1900028001,
         1900028005,
@@ -1659,7 +1823,7 @@
         "箕"
       ],
       "channel": "战阵",
-      "minLevel": 40,
+      "minLevel": 23,
       "professions": 1,
       "slots": [
         4,
@@ -1704,8 +1868,8 @@
       ],
       "lore": "祖师留下的战旗从不沾血，旗手却一日比一日苍白。第四夜，他割开旗脚，看见历任旗手的影子正在里面相争。",
       "identity": "以受伤风险换精英输出",
-      "benefit": "物理输出为主；物攻、力量、命中、物理会心、生命、法力提供独立于星篆的完整词条",
-      "tradeoff": "仍降低魔防；占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "benefit": "物理输出为主；物攻、力量、命中、物理会心、生命、法力提供独立于星篆的完整词条；另有本件白字物攻强化140–170%，收益随所选武器固有白字而变",
+      "tradeoff": "仍降低魔防；占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
       "powerTier": "highvalue",
       "traits": [
         {
@@ -1721,11 +1885,26 @@
           "skillName": "流虹之枪"
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 1,
+          "min": 24,
+          "max": 26
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 155,
+          "minPercent": 140,
+          "maxPercent": 170
+        }
+      ]
     },
     {
       "id": 22,
-      "name": "宿阵·剑不入壁",
+      "name": "剑不入壁",
       "runes": [
         1900028015,
         1900028016,
@@ -1790,11 +1969,18 @@
           "thresholdPct": 35
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 7,
+          "min": 24,
+          "max": 26
+        }
+      ]
     },
     {
       "id": 23,
-      "name": "宿阵·缺痕断忆",
+      "name": "缺痕断忆",
       "runes": [
         1900028018,
         1900028019,
@@ -1848,8 +2034,8 @@
       ],
       "lore": "刺客清点刀口，发现月下少了一个缺痕。月落后，那个缺痕出现在他的记忆里，恰好切断了雇主的面容。",
       "identity": "追击残血的高速刃阵",
-      "benefit": "物理输出为主；物理会心、攻击速度、物攻、命中、力量、灵巧提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "benefit": "物理输出为主；物理会心、攻击速度、物攻、命中、力量、灵巧提供独立于星篆的完整词条；另有本件白字物攻强化100–130%，收益随所选武器固有白字而变",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
       "powerTier": "highvalue",
       "traits": [
         {
@@ -1858,11 +2044,26 @@
           "thresholdPct": 30
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 23,
+          "min": 1000,
+          "max": 1100
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 115,
+          "minPercent": 100,
+          "maxPercent": 130
+        }
+      ]
     },
     {
       "id": 24,
-      "name": "宿阵·朱鸟衔余烬",
+      "name": "朱鸟衔余烬",
       "runes": [
         1900028022,
         1900028023,
@@ -1916,8 +2117,8 @@
       ],
       "lore": "火烧过的阵图缺了一角，术者便让纸鸟叼着余烬悬在那里。风越急，它越不肯合拢那半边翅膀。",
       "identity": "火系范围清怪的偏门阵",
-      "benefit": "法术输出为主；法攻、法术会心、法力、智慧、精神、生命提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "benefit": "法术输出为主；法攻、法术会心、法力、智慧、精神、生命提供独立于星篆的完整词条；另有本件白字法攻强化140–170%，收益随所选武器固有白字而变",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
       "powerTier": "highvalue",
       "traits": [
         {
@@ -1933,11 +2134,26 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 66,
+          "min": 850,
+          "max": 935
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 15,
+          "percent": 155,
+          "minPercent": 140,
+          "maxPercent": 170
+        }
+      ]
     },
     {
       "id": 25,
-      "name": "宿阵·先问归处",
+      "name": "先问归处",
       "runes": [
         1900028008,
         1900028010,
@@ -2011,11 +2227,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 61,
+          "min": 30,
+          "max": 33
+        }
+      ]
     },
     {
       "id": 26,
-      "name": "宿阵·龙眠桥下",
+      "name": "龙眠桥下",
       "runes": [
         1900028001,
         1900028003,
@@ -2029,7 +2252,7 @@
         "心"
       ],
       "channel": "守阵",
-      "minLevel": 40,
+      "minLevel": 19,
       "professions": 0,
       "slots": [
         2,
@@ -2080,11 +2303,18 @@
           "thresholdPct": 75
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 69,
+          "min": 26,
+          "max": 28
+        }
+      ]
     },
     {
       "id": 27,
-      "name": "宿阵·玄武不出门",
+      "name": "玄武不出门",
       "runes": [
         1900028008,
         1900028009,
@@ -2098,7 +2328,7 @@
         "壁"
       ],
       "channel": "守阵",
-      "minLevel": 40,
+      "minLevel": 35,
       "professions": 0,
       "slots": [
         2,
@@ -2149,11 +2379,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 70,
+          "min": 28,
+          "max": 30
+        }
+      ]
     },
     {
       "id": 28,
-      "name": "宿阵·鞋底藏北斗",
+      "name": "鞋底藏北斗",
       "runes": [
         1900028016,
         1900028017,
@@ -2220,11 +2457,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 36,
+          "min": 280,
+          "max": 308
+        }
+      ]
     },
     {
       "id": 29,
-      "name": "宿阵·心灯照旧债",
+      "name": "心灯照旧债",
       "runes": [
         1900028015,
         1900028010,
@@ -2238,7 +2482,7 @@
         "危"
       ],
       "channel": "辅阵",
-      "minLevel": 40,
+      "minLevel": 37,
       "professions": 0,
       "slots": [
         1,
@@ -2293,11 +2537,18 @@
           "skillName": "群疗术"
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 118,
+          "min": 35,
+          "max": 38
+        }
+      ]
     },
     {
       "id": 30,
-      "name": "宿阵·日月各半",
+      "name": "日月各半",
       "runes": [
         1900028005,
         1900028018,
@@ -2365,11 +2616,18 @@
       "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
       "powerTier": "highvalue",
       "traits": [],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 47,
+          "min": 219,
+          "max": 240
+        }
+      ]
     },
     {
       "id": 31,
-      "name": "宿阵·卸镜平秤",
+      "name": "卸镜平秤",
       "runes": [
         1900028001,
         1900028002,
@@ -2385,7 +2643,7 @@
         "箕"
       ],
       "channel": "战阵",
-      "minLevel": 50,
+      "minLevel": 23,
       "professions": 1,
       "slots": [
         4,
@@ -2435,8 +2693,8 @@
       ],
       "lore": "演阵把五座山压成五枚砝码，最后一枚始终放不上秤。持枪者摘下自己的护心镜，才让两端终于相平。",
       "identity": "舍防换取持续物理输出",
-      "benefit": "物理输出为主；物攻、攻击上限、力量、命中、物理会心、生命、灵巧提供独立于星篆的完整词条",
-      "tradeoff": "仍降低魔防；占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "benefit": "物理输出为主；物攻、攻击上限、力量、命中、物理会心、生命、灵巧提供独立于星篆的完整词条；另有本件白字物攻强化180–220%，收益随所选武器固有白字而变",
+      "tradeoff": "仍降低魔防；占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
       "powerTier": "builddefining",
       "traits": [
         {
@@ -2445,11 +2703,26 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 31,
+          "min": 52,
+          "max": 57
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 200,
+          "minPercent": 180,
+          "maxPercent": 220
+        }
+      ]
     },
     {
       "id": 32,
-      "name": "宿阵·问劫无回声",
+      "name": "问劫无回声",
       "runes": [
         1900028015,
         1900028016,
@@ -2465,7 +2738,7 @@
         "参"
       ],
       "channel": "战阵",
-      "minLevel": 50,
+      "minLevel": 48,
       "professions": 2,
       "slots": [
         4,
@@ -2510,8 +2783,8 @@
       ],
       "lore": "剑落入演算之阵的最深处，没有回声。行者收剑时，刃上多出一道尚未发生的伤痕，正与他梦中断开的山脊相合。",
       "identity": "单体精英的稳剑阵",
-      "benefit": "物理输出为主；物攻、命中、防御、灵巧、力量、生命、物理平减提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "benefit": "物理输出为主；物攻、命中、防御、灵巧、力量、生命、物理平减提供独立于星篆的完整词条；另有本件白字物攻强化160–200%，收益随所选武器固有白字而变",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
       "powerTier": "builddefining",
       "traits": [
         {
@@ -2527,11 +2800,26 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 9,
+          "min": 28,
+          "max": 30
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 180,
+          "minPercent": 160,
+          "maxPercent": 200
+        }
+      ]
     },
     {
       "id": 33,
-      "name": "宿阵·莲子夜游",
+      "name": "莲子夜游",
       "runes": [
         1900028018,
         1900028005,
@@ -2547,7 +2835,7 @@
         "参"
       ],
       "channel": "战阵",
-      "minLevel": 50,
+      "minLevel": 48,
       "professions": 4,
       "slots": [
         4,
@@ -2597,8 +2885,8 @@
       ],
       "lore": "莲房里的第八颗种子每夜都会少一次，天明又重新长出。刺客不再数它，只等哪一天它带回不属于此世的花粉。",
       "identity": "先手暴击的极端短战阵",
-      "benefit": "物理输出为主；物理会心、攻击速度、物攻、命中、力量、灵巧、法力提供独立于星篆的完整词条",
-      "tradeoff": "仍降低生命；占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "benefit": "物理输出为主；物理会心、攻击速度、物攻、命中、力量、灵巧、法力提供独立于星篆的完整词条；另有本件白字物攻强化140–180%，收益随所选武器固有白字而变",
+      "tradeoff": "仍降低生命；占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
       "powerTier": "builddefining",
       "traits": [
         {
@@ -2607,11 +2895,26 @@
           "thresholdPct": 85
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 23,
+          "min": 1400,
+          "max": 1540
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 160,
+          "minPercent": 140,
+          "maxPercent": 180
+        }
+      ]
     },
     {
       "id": 34,
-      "name": "宿阵·纸驴驮残夜",
+      "name": "纸驴驮残夜",
       "runes": [
         1900028008,
         1900028022,
@@ -2677,8 +2980,8 @@
       ],
       "lore": "纸驴驮着五盏熄灯走过五更，经过的村镇便各少一刻。术者追到阵眼，才发现自己已比昨夜苍老五年。",
       "identity": "高消耗大范围施法阵",
-      "benefit": "法术输出为主；法攻、智慧、法术会心、法力、精神、魔防、异常抵抗提供独立于星篆的完整词条",
-      "tradeoff": "仍降低生命；占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "benefit": "法术输出为主；法攻、智慧、法术会心、法力、精神、魔防、异常抵抗提供独立于星篆的完整词条；另有本件白字法攻强化180–220%，收益随所选武器固有白字而变",
+      "tradeoff": "仍降低生命；占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
       "powerTier": "builddefining",
       "traits": [
         {
@@ -2694,11 +2997,26 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 3,
+          "min": 32,
+          "max": 35
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 15,
+          "percent": 200,
+          "minPercent": 180,
+          "maxPercent": 220
+        }
+      ]
     },
     {
       "id": 35,
-      "name": "宿阵·空瓢济厄",
+      "name": "空瓢济厄",
       "runes": [
         1900028010,
         1900028011,
@@ -2779,11 +3097,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 17,
+          "min": 50,
+          "max": 55
+        }
+      ]
     },
     {
       "id": 36,
-      "name": "宿阵·门闩抵天倾",
+      "name": "门闩抵天倾",
       "runes": [
         1900028001,
         1900028004,
@@ -2799,7 +3124,7 @@
         "壁"
       ],
       "channel": "守阵",
-      "minLevel": 50,
+      "minLevel": 35,
       "professions": 0,
       "slots": [
         2,
@@ -2860,11 +3185,18 @@
           "thresholdPct": 35
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 69,
+          "min": 34,
+          "max": 37
+        }
+      ]
     },
     {
       "id": 37,
-      "name": "宿阵·寒潭照无影",
+      "name": "寒潭照无影",
       "runes": [
         1900028008,
         1900028012,
@@ -2931,11 +3263,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 70,
+          "min": 36,
+          "max": 39
+        }
+      ]
     },
     {
       "id": 38,
-      "name": "宿阵·行囊漏晨光",
+      "name": "行囊漏晨光",
       "runes": [
         1900028007,
         1900028015,
@@ -3004,11 +3343,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 34,
+          "min": 280,
+          "max": 308
+        }
+      ]
     },
     {
       "id": 39,
-      "name": "宿阵·五炁不争先",
+      "name": "五炁不争先",
       "runes": [
         1900028004,
         1900028005,
@@ -3082,11 +3428,18 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 61,
+          "min": 24,
+          "max": 26
+        }
+      ]
     },
     {
       "id": 40,
-      "name": "宿阵·四象让中宫",
+      "name": "四象让中宫",
       "runes": [
         1900028001,
         1900028008,
@@ -3162,7 +3515,14 @@
           "thresholdPct": 0
         }
       ],
-      "reservedSkills": []
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 47,
+          "min": 218,
+          "max": 239
+        }
+      ]
     }
   ]
 }

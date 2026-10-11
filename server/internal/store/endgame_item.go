@@ -16,6 +16,9 @@ func validateEndgameItem(st domain.Stack) error {
 	if st.UID <= 0 || st.Count != 1 || (st.InstanceKind != domain.ItemInstanceNone && st.InstanceKind != domain.ItemInstanceEquipment) || v.Revision < 0 {
 		return fmt.Errorf("endgame: invalid equipment metadata uid=%d", st.UID)
 	}
+	if v.FormationRollBP != 0 && (v.FormationRollBP < domain.UniqueRollMinBP || v.FormationRollBP > domain.UniqueRollMaxBP) {
+		return fmt.Errorf("endgame: invalid formation roll uid=%d", st.UID)
+	}
 	if v.UniqueID == 0 {
 		if v.UniqueRollBP != 0 {
 			return fmt.Errorf("endgame: invalid ordinary metadata")
@@ -54,7 +57,7 @@ func saveEndgameItem(ctx context.Context, q querier, st domain.Stack) error {
 		_, err := q.Exec(ctx, `DELETE FROM equipment_endgame_state WHERE uid=$1`, st.UID)
 		return err
 	}
-	_, err := q.Exec(ctx, `INSERT INTO equipment_endgame_state(uid,revision,unique_id,unique_roll_bp) VALUES($1,$2,$3,$4) ON CONFLICT(uid) DO UPDATE SET revision=EXCLUDED.revision,unique_id=EXCLUDED.unique_id,unique_roll_bp=EXCLUDED.unique_roll_bp`, st.UID, st.Endgame.Revision, st.Endgame.UniqueID, st.Endgame.UniqueRollBP)
+	_, err := q.Exec(ctx, `INSERT INTO equipment_endgame_state(uid,revision,unique_id,unique_roll_bp,formation_roll_bp) VALUES($1,$2,$3,$4,$5) ON CONFLICT(uid) DO UPDATE SET revision=EXCLUDED.revision,unique_id=EXCLUDED.unique_id,unique_roll_bp=EXCLUDED.unique_roll_bp,formation_roll_bp=EXCLUDED.formation_roll_bp`, st.UID, st.Endgame.Revision, st.Endgame.UniqueID, st.Endgame.UniqueRollBP, st.Endgame.FormationRollBP)
 	return err
 }
 func loadEndgameItems(ctx context.Context, q querier, items map[int64]domain.Stack) error {
@@ -65,7 +68,7 @@ func loadEndgameItems(ctx context.Context, q querier, items map[int64]domain.Sta
 	if len(ids) == 0 {
 		return nil
 	}
-	rows, err := q.Query(ctx, `SELECT uid,revision,unique_id,unique_roll_bp FROM equipment_endgame_state WHERE uid=ANY($1)`, ids)
+	rows, err := q.Query(ctx, `SELECT uid,revision,unique_id,unique_roll_bp,formation_roll_bp FROM equipment_endgame_state WHERE uid=ANY($1)`, ids)
 	if err != nil {
 		return err
 	}
@@ -73,7 +76,7 @@ func loadEndgameItems(ctx context.Context, q querier, items map[int64]domain.Sta
 	for rows.Next() {
 		var id int64
 		var v domain.EndgameItemState
-		if err := rows.Scan(&id, &v.Revision, &v.UniqueID, &v.UniqueRollBP); err != nil {
+		if err := rows.Scan(&id, &v.Revision, &v.UniqueID, &v.UniqueRollBP, &v.FormationRollBP); err != nil {
 			return err
 		}
 		st := items[id]

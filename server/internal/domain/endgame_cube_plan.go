@@ -364,28 +364,40 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 			}
 		}
 	case CubeReforgeUnique:
-		if !hasUnique {
-			return p, cubeError("requirements", "只有仙遗可以返本重铸")
+		d, ok := UniqueOf(target)
+		if !ok || !UniqueHasVariableStats(d) {
+			return p, cubeError("requirements", "这件仙遗没有可重铸的浮动属性")
 		}
 		if execute {
 			if ctx.Intn == nil {
 				return p, cubeError("requirements", "随机源不可用")
 			}
-			n := ctx.Intn(int(UniqueRollMaxBP - UniqueRollMinBP))
-			if n < 0 || n >= int(UniqueRollMaxBP-UniqueRollMinBP) {
+			candidates := make([]int32, 0, 4001)
+			for roll := UniqueRollMinBP; roll <= UniqueRollMaxBP; roll++ {
+				if !sameUniqueVariableValues(d, target.Endgame.UniqueRollBP, roll) {
+					candidates = append(candidates, roll)
+				}
+			}
+			if len(candidates) == 0 {
+				return p, cubeError("requirements", "浮动属性没有其他数值")
+			}
+			n := ctx.Intn(len(candidates))
+			if n < 0 || n >= len(candidates) {
 				return p, cubeError("requirements", "随机源无效")
 			}
-			next := UniqueRollMinBP + int32(n)
-			if next >= target.Endgame.UniqueRollBP {
-				next++
-			}
-			target.Endgame.UniqueRollBP = next
+			target.Endgame.UniqueRollBP = candidates[n]
 		}
 	case CubeTemperUnique:
-		if !hasUnique || target.Endgame.UniqueRollBP >= UniqueRollMaxBP {
-			return p, cubeError("requirements", "须选择灵性未满的仙遗")
+		d, ok := UniqueOf(target)
+		if !ok || !UniqueHasVariableStats(d) || sameUniqueVariableValues(d, target.Endgame.UniqueRollBP, UniqueRollMaxBP) {
+			return p, cubeError("requirements", "须选择浮动属性尚未满值的仙遗")
 		}
-		target.Endgame.UniqueRollBP = min(UniqueRollMaxBP, target.Endgame.UniqueRollBP+500)
+		next := min(UniqueRollMaxBP, target.Endgame.UniqueRollBP+500)
+		for next < UniqueRollMaxBP && sameUniqueVariableValues(d, target.Endgame.UniqueRollBP, next) {
+			next++
+		}
+		target.Endgame.UniqueRollBP = next
+
 	default:
 		if inscribe {
 			p.Description += " 产物：" + ctx.Items[outputRune].Name + "×1。"

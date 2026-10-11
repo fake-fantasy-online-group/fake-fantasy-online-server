@@ -71,7 +71,7 @@ func TestAstralBaseEligibilityUsesInnateProperties(t *testing.T) {
 				t.Fatalf("active=%v want %v", got, tc.want)
 			}
 			bonuses := AstralBonuses(worn, lookup, ch)
-			if tc.want && !reflect.DeepEqual(bonuses, recipe.Affixes) || !tc.want && len(bonuses) != 0 {
+			if tc.want && !reflect.DeepEqual(bonuses, AstralItemBonuses(def, st, recipe)) || !tc.want && len(bonuses) != 0 {
 				t.Fatalf("unexpected formation bonuses: %+v", bonuses)
 			}
 			if st != original || worn.At(SlotWeapon) != original {
@@ -107,7 +107,7 @@ func TestAstralAffixedGearKeepsStandaloneRunesAndExtraction(t *testing.T) {
 	def := defs[999001]
 	def.Equip.Affixes = []Affix{{Attr: AttrSTR, Value: 5}}
 	defs[def.ID] = def
-	recipe, _ := AstralRecipeByID(6) // Rune levels 12/14; only the formation requires level 20.
+	recipe, _ := AstralRecipeByID(6) // Rune levels 12/14; formation and standalone sockets share this gate.
 	st := astralStack(t, recipe, def, lookup)
 	st.InstanceKind = ItemInstanceNone // Persisted legacy equipment is not rewritten.
 	st.RefineLevel, st.WashCount, st.WashQuality = 3, 1, 2
@@ -149,8 +149,8 @@ func TestAstralAffixedGearKeepsStandaloneRunesAndExtraction(t *testing.T) {
 	if plan.Target != expected || worn.At(SlotWeapon) != original || !bag.At(0).Empty() {
 		t.Fatal("extraction changed unrelated gear state or input inventories")
 	}
-	// Reinsert at the rune level: this is a standalone rune, so no formation-tier
-	// gate applies to an ineligible base and no formation bonuses are created.
+	// Reinsert at the rune level: an ineligible base keeps standalone effects
+	// without gaining formation bonuses.
 	insert, err := PlanAstralInsert(plan.Bag, plan.Worn, lookup, st.UID, plan.Rune.UID, 0, ch)
 	if err != nil {
 		t.Fatal("standalone insertion was blocked by the formation-only rule", err)

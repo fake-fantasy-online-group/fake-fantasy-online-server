@@ -28,6 +28,8 @@ func TestAstralJSONMatchesExecutableCatalog(t *testing.T) {
 			Professions                            uint8
 			Slots                                  []EquipSlot
 			Affixes                                []Affix
+			VariableAffixes                        []VariableAffix
+			LocalEnhancements                      []ItemLocalEnhancement
 		}
 	}
 	raw, err := os.ReadFile("../../docs/endgame/astral_runes.json")
@@ -50,6 +52,9 @@ func TestAstralJSONMatchesExecutableCatalog(t *testing.T) {
 		d := doc.Formations[i]
 		if !reflect.DeepEqual(d.ReservedSkills, r.ReservedSkills) && !(len(d.ReservedSkills) == 0 && len(r.ReservedSkills) == 0) {
 			t.Fatalf("reserved skill definition drift %d", i)
+		}
+		if !reflect.DeepEqual(d.VariableAffixes, r.VariableAffixes) || !reflect.DeepEqual(d.LocalEnhancements, r.LocalEnhancements) && !(len(d.LocalEnhancements) == 0 && len(r.LocalEnhancements) == 0) {
+			t.Fatalf("roll/local model drift %d", i)
 		}
 		if d.ID != r.ID || d.Name != r.Name || d.Channel != r.Channel.String() || d.MinLevel != r.MinLevel || d.Professions != r.Professions || d.Lore != r.Lore || d.Identity != r.Identity || d.Benefit != r.Benefit || d.Tradeoff != r.Tradeoff || d.PowerTier != r.PowerTier || !reflect.DeepEqual(d.Traits, r.Traits) && !(len(d.Traits) == 0 && len(r.Traits) == 0) || !reflect.DeepEqual(d.Runes, r.Runes) || !reflect.DeepEqual(d.Slots, r.Slots) || !reflect.DeepEqual(d.Affixes, r.Affixes) {
 			t.Fatalf("formation row %d drift", i)

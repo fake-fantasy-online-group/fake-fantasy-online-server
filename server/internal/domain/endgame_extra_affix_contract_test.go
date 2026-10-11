@@ -129,6 +129,8 @@ func TestExtendedExtraAffixSlicesDoNotTruncateOrRewriteInstances(t *testing.T) {
 	d := UniqueCatalog()[0]
 	original := uniqueByBase[d.BaseID]
 	t.Cleanup(func() { uniqueByBase[d.BaseID] = original })
+	d.VariableAffixes = nil
+	d.LocalEnhancements = nil
 	d.Affixes = append(validFiveExtraAffixes(), Affix{Attr: AttrAGI, Value: 10},
 		Affix{Attr: AttrDEX, Value: 12}, Affix{Attr: AttrAtk, Value: 30, Mode: ModePercent},
 		Affix{Attr: AttrMDef, Value: -8}, Affix{Attr: AttrMaxMP, Value: -10})
@@ -145,9 +147,7 @@ func TestExtendedExtraAffixSlicesDoNotTruncateOrRewriteInstances(t *testing.T) {
 	before := st
 	got := UniqueAffixes(st)
 	want := append([]Affix{}, d.Affixes...)
-	for i := range want {
-		want[i].Value = scaleUniqueAffix(want[i], st.Endgame.UniqueRollBP)
-	}
+	want = ResolveVariableAffixes(want, d.VariableAffixes, st.Endgame.UniqueRollBP)
 	if len(got) != 10 || !reflect.DeepEqual(got, want) || st != before {
 		t.Fatal("extended definition was truncated or persisted instance changed")
 	}

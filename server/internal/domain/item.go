@@ -582,6 +582,9 @@ func NewStack(def ItemDef, count int32) Stack {
 	if def.InstanceKind != ItemInstanceNone {
 		st.UID = NewItemInstanceID()
 	}
+	if def.InstanceKind == ItemInstanceEquipment && def.Equip != nil {
+		st.Endgame.FormationRollBP = newFormationRollBP()
+	}
 	if def.InstanceKind == ItemInstanceSocketCard {
 		st.Card = def.CardDefaults
 	}
