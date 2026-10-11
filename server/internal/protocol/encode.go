@@ -186,6 +186,8 @@ const (
 // 与聊天提示；调用方必须按返回顺序逐包发送，不能只取第一包。
 func Encode(observer domain.EntityID, ev event.Event) [][]byte {
 	switch e := ev.(type) {
+	case event.EndgameMessage:
+		if e.Who != observer { return nil }; return packets(EncodeEndgame(e.Message))
 	case event.MonsterSpoke:
 		return packets(EntityBubble(int32(e.Who), e.Text))
 	case event.EntityOwnerChanged:

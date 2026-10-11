@@ -4,6 +4,8 @@ package domain
 type TrialProgress struct {
 	Day, DailyCompleted, Cycle int32
 	MonsterLevel               int32
+ KeyReward int32
+ CompletionID string
 }
 
 type TrialSpawn struct {

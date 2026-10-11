@@ -119,6 +119,7 @@ type Session struct {
 
 	mu            sync.Mutex
 	stage         Stage
+	endgameV1     bool
 	account       *store.Account
 	clientAuthTag []byte
 	char          *domain.Character
@@ -199,6 +200,7 @@ func (s *Session) OnPacket(op uint16, payload []byte) {
 			return
 		}
 	}
+	if op == protocol.OpEndgame { s.onEndgame(payload); return }
 	if protocol.Op(op) == protocol.OpRideTogether || protocol.Op(op) == protocol.OpRideInvite {
 		target, ok := protocol.DecodeRideTarget(payload)
 		if ok {
@@ -975,6 +977,7 @@ func (s *Session) leaveWorld(reason string, target Stage) bool {
 		return false
 	}
 	s.stage = target
+	s.endgameV1 = false
 	s.awaitMapAck = false
 	s.mapEpoch++
 	s.entity = 0
@@ -1524,7 +1527,8 @@ func (s *Session) onEnter(req protocol.Request) {
 		ok = s.deps.Router.Post(sc, enter)
 	} else {
 		def := s.deps.Dungeons[sc.MapID]
-		ok = s.deps.Router.PostExistingForOwner(sc, def.Owner(domain.CharID(char.ID), partyID), enter)
+		ok = s.deps.Router.PostExistingRift(sc, domain.CharID(char.ID), enter)
+ if !ok { ok = s.deps.Router.PostExistingForOwner(sc, def.Owner(domain.CharID(char.ID), partyID), enter) }
 	}
 	if !ok {
 		s.stage = StageAuthed
@@ -1555,7 +1559,7 @@ func (s *Session) resolveLoginScene(ctx context.Context, char *domain.Character,
 		return domain.SceneID{MapID: char.Pos.MapID}, nil
 	}
 	saved := domain.SceneID{MapID: char.Pos.MapID, Instance: char.SceneInstance}
-	if dungeon && s.deps.Router.ActiveForOwner(saved, def.Owner(domain.CharID(char.ID), partyID)) {
+	if dungeon && (s.deps.Router.ActiveRiftForCharacter(saved, domain.CharID(char.ID)) || s.deps.Router.ActiveForOwner(saved, def.Owner(domain.CharID(char.ID), partyID))) {
 		return saved, nil
 	}
 	if !dungeon {
