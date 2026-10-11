@@ -108,6 +108,8 @@ type endgameFaultStore struct {
 	stage   string
 	fired   atomic.Bool
 	lostAck bool
+	outage  bool
+	offline atomic.Bool
 }
 type endgameFaultTx struct {
 	Store
@@ -116,8 +118,14 @@ type endgameFaultTx struct {
 }
 
 func (f *endgameFaultStore) WithTx(ctx context.Context, fn func(Store) error) error {
+	if f.offline.Load() {
+		return errors.New("database temporarily unavailable")
+	}
 	err := f.Memory.WithTx(ctx, func(tx Store) error { return fn(&endgameFaultTx{Store: tx, EndgameStore: tx.(EndgameStore), owner: f}) })
 	if err == nil && f.lostAck && f.fired.CompareAndSwap(false, true) {
+		if f.outage {
+			f.offline.Store(true)
+		}
 		return errors.New("lost COMMIT ack")
 	}
 	return err
@@ -259,5 +267,56 @@ func TestEndgameWriteBackOrderingAndClone(t *testing.T) {
 	after := durableSnapshot(t, m, s)
 	if after.Char.Caiyu != 490 || after.Bag.At(0).Empty() {
 		t.Fatal("candidate was not cloned synchronously")
+	}
+}
+
+func TestEndgameWriteBackFailurePreservesBaselineAck(t *testing.T) {
+	m, s := endgameFixture(t)
+	f := &endgameFaultStore{Memory: m, stage: "receipt"}
+	wb := NewWriteBack(f, time.Millisecond, nil)
+	ack := wb.SaveAck(s)
+	p := endgamePlan(s)
+	result := NewEndgameBackend(f, wb).Commit(p)
+	waitFor(t, "queued mutation", func() bool {
+		wb.mu.Lock()
+		defer wb.mu.Unlock()
+		v := wb.pending[s.Char.ID]
+		return v != nil && v.mutation != nil
+	})
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go wb.Run(ctx)
+	got := awaitEndgame(t, result)
+	if got.Err == nil {
+		t.Fatal("expected injected error")
+	}
+	select {
+	case <-ack:
+	case <-time.After(time.Second):
+		t.Fatal("baseline SaveAck lost")
+	}
+	if durableSnapshot(t, m, s).Char.Caiyu != 500 {
+		t.Fatal("baseline not durable")
+	}
+}
+
+func TestEndgameAmbiguousOutageRemainsPendingUntilReceiptProven(t *testing.T) {
+	m, s := endgameFixture(t)
+	f := &endgameFaultStore{Memory: m, lostAck: true, outage: true}
+	defer f.offline.Store(false)
+	ch := NewEndgameBackend(f, nil).Commit(endgamePlan(s))
+	waitFor(t, "ambiguous outage", f.offline.Load)
+	select {
+	case r := <-ch:
+		t.Fatalf("reported unknown outcome/refund: %+v", r)
+	case <-time.After(80 * time.Millisecond):
+	}
+	if durableSnapshot(t, m, s).Char.Caiyu != 490 {
+		t.Fatal("lost ACK did not actually commit")
+	}
+	f.offline.Store(false)
+	r := awaitEndgame(t, ch)
+	if r.Err != nil || !r.Replayed || r.Authoritative == nil || r.Authoritative.Char.Caiyu != 490 {
+		t.Fatalf("reconnect did not reconcile: %+v", r)
 	}
 }

@@ -8,7 +8,11 @@ import (
 
 // Blow 描述一次出手是怎么打的。零值 = 普通物理平砍。
 type Blow struct {
-	SkillID int32 // 0 = 普通攻击
+	// Cast-local context survives stealth consumption and trap delays.
+	StartedInvisible bool
+	Area             bool
+	HurtType         int32
+	SkillID          int32 // 0 = 普通攻击
 	// Magic 表示这是法系技能。**法系技能 100% 命中**（法杖平砍算物理, 照样 miss）。
 	Magic bool
 	// SkillPct 技能倍率, 百分比。0 视为 100。来自 ov_skilldesc 的「130%伤害」。
@@ -67,7 +71,7 @@ func Strike(a, d *entity.Entity, tr *HitTracker, b Blow, rng Rand) event.DamageD
 	}
 
 	if crit {
-		dmg *= CritMultiplier
+		dmg = boundedDamage(int64(dmg) * CritMultiplier)
 	}
 
 	// 扣血。伤害可以大于剩余血(溢出斩杀), 抓包实测最后一击伤害 7 > 剩余 4。

@@ -8,13 +8,19 @@ import (
 
 func validateEndgameItem(st domain.Stack) error {
 	v := st.Endgame
-	if v.UniqueID == 0 {
-		if v.Revision != 0 || v.UniqueRollBP != 0 {
-			return fmt.Errorf("endgame: invalid ordinary metadata")
-		}
+	// A revision belongs to every mutated equipment instance, not only uniques.
+	// Legacy ordinary items without metadata need no overlay row.
+	if v == (domain.EndgameItemState{}) {
 		return nil
 	}
-	if st.UID <= 0 || st.Count != 1 || (st.InstanceKind != domain.ItemInstanceNone && st.InstanceKind != domain.ItemInstanceEquipment) || v.UniqueID != int32(st.Item) || v.Revision < 0 || v.UniqueRollBP < 8000 || v.UniqueRollBP > 12000 {
+	if st.UID <= 0 || st.Count != 1 || (st.InstanceKind != domain.ItemInstanceNone && st.InstanceKind != domain.ItemInstanceEquipment) || v.Revision < 0 {
+		return fmt.Errorf("endgame: invalid equipment metadata uid=%d", st.UID)
+	}
+	if v.UniqueID == 0 {
+		if v.UniqueRollBP != 0 {
+			return fmt.Errorf("endgame: invalid ordinary metadata")
+		}
+	} else if v.UniqueID != int32(st.Item) || v.UniqueID < 0 || v.UniqueRollBP < 8000 || v.UniqueRollBP > 12000 {
 		return fmt.Errorf("endgame: invalid unique metadata uid=%d", st.UID)
 	}
 	return nil
@@ -44,7 +50,7 @@ func saveEndgameItem(ctx context.Context, q querier, st domain.Stack) error {
 	if err := validateEndgameItem(st); err != nil {
 		return err
 	}
-	if st.Endgame.UniqueID == 0 {
+	if st.Endgame == (domain.EndgameItemState{}) {
 		_, err := q.Exec(ctx, `DELETE FROM equipment_endgame_state WHERE uid=$1`, st.UID)
 		return err
 	}

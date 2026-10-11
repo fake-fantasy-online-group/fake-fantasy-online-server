@@ -1,0 +1,2032 @@
+{
+  "generatorVersion": 1,
+  "auditKind": "static SQL fixtures and native collision masks",
+  "runtimeCaveat": "The live loader separately verifies its loaded monster definitions, sprites, attack eligibility and non-city map catalog. This audit does not establish live PostgreSQL or client runtime behavior.",
+  "criteria": [
+    "Non-city native map; island aliases excluded",
+    "Existing hostile positive-HP positive-sprite attack-capable definitions",
+    "At least 18 unique walkable anchors in one native 4-neighbor component",
+    "At least 1024 pixels anchor diameter",
+    "Entry and exit separated by at least 512 pixels; at least 8 safe population anchors"
+  ],
+  "sourceMaps": 371,
+  "sourceMasks": 377,
+  "eligibleMaps": 189,
+  "sourceSHA256": {
+    "000000_init-0.sql": "24d38353ca0e690ef5842d3bcbf61ab2e18c92b9e120c3b957d4f3d92dc01cc7",
+    "000000_init-2.sql": "3e01c8656d9b136715bf0da88b17bbcd072c9b619c25b3acf836fae2e5514679",
+    "000000_init-32.sql": "510fa55863b28bb32b93745bf92e5d1877b223ca8cf18dc600a6457ee7f9c6bb",
+    "000000_init-46.sql": "8e91a1c84848d196f84f3e13bd60eff12586805f72d5e2f52b87d1a890540457",
+    "000000_init-47.sql": "1e5c31c6b4866d5c1fe73d9e0f0e4a2477482332d93158980a36c1b13d0998dc",
+    "000000_init-48.sql": "9aa17495c154da5417495ae46ceeef5b28561133778db06b5cb3ba6977581467",
+    "000000_init-49.sql": "5af4c37482e6d1e8212c87e34be6308b11a12131e5d56f3f7efa166f8f1e001e"
+  },
+  "maps": [
+    {
+      "mapId": 2,
+      "mapName": "桃源",
+      "connectedAnchors": 168,
+      "monsterIds": [
+        1043,
+        3007,
+        3041
+      ]
+    },
+    {
+      "mapId": 3,
+      "mapName": "龙城北郊",
+      "connectedAnchors": 107,
+      "monsterIds": [
+        1064,
+        1149
+      ]
+    },
+    {
+      "mapId": 4,
+      "mapName": "华山脚",
+      "connectedAnchors": 90,
+      "monsterIds": [
+        1014,
+        1015,
+        1137
+      ]
+    },
+    {
+      "mapId": 6,
+      "mapName": "龙城西郊",
+      "connectedAnchors": 127,
+      "monsterIds": [
+        1006,
+        1062,
+        1074
+      ]
+    },
+    {
+      "mapId": 8,
+      "mapName": "龙城东郊",
+      "connectedAnchors": 152,
+      "monsterIds": [
+        1020,
+        1129,
+        1132
+      ]
+    },
+    {
+      "mapId": 9,
+      "mapName": "青牛山",
+      "connectedAnchors": 81,
+      "monsterIds": [
+        1027,
+        1073,
+        1143
+      ]
+    },
+    {
+      "mapId": 10,
+      "mapName": "出云山道",
+      "connectedAnchors": 99,
+      "monsterIds": [
+        1007,
+        1131,
+        1144
+      ]
+    },
+    {
+      "mapId": 11,
+      "mapName": "出云北郊",
+      "connectedAnchors": 111,
+      "monsterIds": [
+        1005,
+        1069,
+        1131
+      ]
+    },
+    {
+      "mapId": 12,
+      "mapName": "飞仙台",
+      "connectedAnchors": 117,
+      "monsterIds": [
+        1089,
+        1145,
+        3023
+      ]
+    },
+    {
+      "mapId": 13,
+      "mapName": "上古岳平原",
+      "connectedAnchors": 129,
+      "monsterIds": [
+        1041,
+        1062,
+        1140
+      ]
+    },
+    {
+      "mapId": 14,
+      "mapName": "龙城南郊",
+      "connectedAnchors": 158,
+      "monsterIds": [
+        1001,
+        1149
+      ]
+    },
+    {
+      "mapId": 15,
+      "mapName": "青牛山脚",
+      "connectedAnchors": 87,
+      "monsterIds": [
+        1027,
+        1133,
+        1143
+      ]
+    },
+    {
+      "mapId": 16,
+      "mapName": "大秦山原西",
+      "connectedAnchors": 105,
+      "monsterIds": [
+        1018,
+        1139,
+        3020
+      ]
+    },
+    {
+      "mapId": 17,
+      "mapName": "大秦山原",
+      "connectedAnchors": 118,
+      "monsterIds": [
+        1139,
+        1144,
+        1153
+      ]
+    },
+    {
+      "mapId": 18,
+      "mapName": "大秦山原东",
+      "connectedAnchors": 104,
+      "monsterIds": [
+        1007,
+        1144,
+        1153
+      ]
+    },
+    {
+      "mapId": 20,
+      "mapName": "飞鹤台",
+      "connectedAnchors": 87,
+      "monsterIds": [
+        1020,
+        1065,
+        1137
+      ]
+    },
+    {
+      "mapId": 21,
+      "mapName": "下古岳平原",
+      "connectedAnchors": 97,
+      "monsterIds": [
+        1020,
+        1041,
+        1065
+      ]
+    },
+    {
+      "mapId": 22,
+      "mapName": "阳泉平原左",
+      "connectedAnchors": 114,
+      "monsterIds": [
+        1002,
+        1127,
+        1152
+      ]
+    },
+    {
+      "mapId": 23,
+      "mapName": "落霞坡",
+      "connectedAnchors": 107,
+      "monsterIds": [
+        1123,
+        1139,
+        3020
+      ]
+    },
+    {
+      "mapId": 24,
+      "mapName": "大秦山原南",
+      "connectedAnchors": 96,
+      "monsterIds": [
+        1018,
+        1139,
+        1153
+      ]
+    },
+    {
+      "mapId": 27,
+      "mapName": "阳泉平原上",
+      "connectedAnchors": 150,
+      "monsterIds": [
+        1002,
+        1127,
+        1152
+      ]
+    },
+    {
+      "mapId": 28,
+      "mapName": "华山北麓",
+      "connectedAnchors": 116,
+      "monsterIds": [
+        1014,
+        1015,
+        1042
+      ]
+    },
+    {
+      "mapId": 29,
+      "mapName": "华山南麓",
+      "connectedAnchors": 94,
+      "monsterIds": [
+        1014,
+        1015,
+        1042
+      ]
+    },
+    {
+      "mapId": 30,
+      "mapName": "阳泉平原右",
+      "connectedAnchors": 123,
+      "monsterIds": [
+        1013,
+        1032,
+        1043
+      ]
+    },
+    {
+      "mapId": 31,
+      "mapName": "阳泉平原中",
+      "connectedAnchors": 169,
+      "monsterIds": [
+        1013,
+        1032,
+        1043
+      ]
+    },
+    {
+      "mapId": 33,
+      "mapName": "上天郊",
+      "connectedAnchors": 107,
+      "monsterIds": [
+        1141,
+        1146,
+        1147
+      ]
+    },
+    {
+      "mapId": 34,
+      "mapName": "前天郊",
+      "connectedAnchors": 113,
+      "monsterIds": [
+        1088,
+        1128
+      ]
+    },
+    {
+      "mapId": 35,
+      "mapName": "后天郊",
+      "connectedAnchors": 98,
+      "monsterIds": [
+        1088,
+        1141,
+        1147
+      ]
+    },
+    {
+      "mapId": 36,
+      "mapName": "瑶池台",
+      "connectedAnchors": 106,
+      "monsterIds": [
+        3022,
+        3024,
+        3026
+      ]
+    },
+    {
+      "mapId": 40,
+      "mapName": "小桃源",
+      "connectedAnchors": 148,
+      "monsterIds": [
+        1043,
+        3007,
+        3041
+      ]
+    },
+    {
+      "mapId": 41,
+      "mapName": "缘溪走廊",
+      "connectedAnchors": 319,
+      "monsterIds": [
+        1002,
+        1127,
+        1152
+      ]
+    },
+    {
+      "mapId": 42,
+      "mapName": "听溪走廊",
+      "connectedAnchors": 191,
+      "monsterIds": [
+        1002,
+        1127,
+        1152
+      ]
+    },
+    {
+      "mapId": 43,
+      "mapName": "寻仙道",
+      "connectedAnchors": 123,
+      "monsterIds": [
+        1020,
+        1065,
+        1137
+      ]
+    },
+    {
+      "mapId": 44,
+      "mapName": "碧野岭",
+      "connectedAnchors": 149,
+      "monsterIds": [
+        1074,
+        1120,
+        1140
+      ]
+    },
+    {
+      "mapId": 45,
+      "mapName": "一叶岭",
+      "connectedAnchors": 175,
+      "monsterIds": [
+        1065,
+        1132,
+        1137
+      ]
+    },
+    {
+      "mapId": 46,
+      "mapName": "仙踪森林",
+      "connectedAnchors": 158,
+      "monsterIds": [
+        1015,
+        1137,
+        3014,
+        3015
+      ]
+    },
+    {
+      "mapId": 47,
+      "mapName": "千叶森林",
+      "connectedAnchors": 153,
+      "monsterIds": [
+        1014,
+        1131,
+        3017,
+        3018
+      ]
+    },
+    {
+      "mapId": 48,
+      "mapName": "芳草林西",
+      "connectedAnchors": 202,
+      "monsterIds": [
+        1031,
+        1033,
+        1049
+      ]
+    },
+    {
+      "mapId": 49,
+      "mapName": "芳草林",
+      "connectedAnchors": 286,
+      "monsterIds": [
+        1148,
+        1150
+      ]
+    },
+    {
+      "mapId": 50,
+      "mapName": "沙角",
+      "connectedAnchors": 125,
+      "monsterIds": [
+        1164,
+        1167,
+        1169
+      ]
+    },
+    {
+      "mapId": 51,
+      "mapName": "楼兰城郊",
+      "connectedAnchors": 119,
+      "monsterIds": [
+        1161,
+        1165,
+        1166
+      ]
+    },
+    {
+      "mapId": 52,
+      "mapName": "蚂蚁沙地北",
+      "connectedAnchors": 61,
+      "monsterIds": [
+        1165,
+        1166,
+        1170
+      ]
+    },
+    {
+      "mapId": 53,
+      "mapName": "沙台",
+      "connectedAnchors": 122,
+      "monsterIds": [
+        1167,
+        1168,
+        1169
+      ]
+    },
+    {
+      "mapId": 54,
+      "mapName": "蚂蚁沙地西",
+      "connectedAnchors": 159,
+      "monsterIds": [
+        1171,
+        1172,
+        1173
+      ]
+    },
+    {
+      "mapId": 55,
+      "mapName": "蚂蚁沙地",
+      "connectedAnchors": 183,
+      "monsterIds": [
+        1170,
+        1171,
+        1172
+      ]
+    },
+    {
+      "mapId": 56,
+      "mapName": "蚂蚁沙地东",
+      "connectedAnchors": 139,
+      "monsterIds": [
+        1172,
+        1173,
+        1174
+      ]
+    },
+    {
+      "mapId": 57,
+      "mapName": "蚂蚁沙地南",
+      "connectedAnchors": 124,
+      "monsterIds": [
+        1173,
+        1174,
+        1175
+      ]
+    },
+    {
+      "mapId": 63,
+      "mapName": "芳草林东",
+      "connectedAnchors": 257,
+      "monsterIds": [
+        1031,
+        1033,
+        1049
+      ]
+    },
+    {
+      "mapId": 64,
+      "mapName": "吟松谷西",
+      "connectedAnchors": 144,
+      "monsterIds": [
+        1031,
+        1049,
+        1126
+      ]
+    },
+    {
+      "mapId": 65,
+      "mapName": "吟松谷",
+      "connectedAnchors": 279,
+      "monsterIds": [
+        1138,
+        1148
+      ]
+    },
+    {
+      "mapId": 66,
+      "mapName": "吟松谷东",
+      "connectedAnchors": 160,
+      "monsterIds": [
+        1031,
+        1049,
+        1126
+      ]
+    },
+    {
+      "mapId": 67,
+      "mapName": "出云之角",
+      "connectedAnchors": 159,
+      "monsterIds": [
+        1007,
+        1060,
+        1131
+      ]
+    },
+    {
+      "mapId": 68,
+      "mapName": "大秦山原北",
+      "connectedAnchors": 150,
+      "monsterIds": [
+        1018,
+        1139,
+        1153
+      ]
+    },
+    {
+      "mapId": 69,
+      "mapName": "青牛山西",
+      "connectedAnchors": 198,
+      "monsterIds": [
+        1133,
+        1134,
+        1135
+      ]
+    },
+    {
+      "mapId": 70,
+      "mapName": "青牛山南",
+      "connectedAnchors": 209,
+      "monsterIds": [
+        1133,
+        1134,
+        1135
+      ]
+    },
+    {
+      "mapId": 71,
+      "mapName": "幻萤谷",
+      "connectedAnchors": 221,
+      "monsterIds": [
+        1070,
+        1123,
+        3020,
+        3021
+      ]
+    },
+    {
+      "mapId": 72,
+      "mapName": "函谷岭",
+      "connectedAnchors": 273,
+      "monsterIds": [
+        1134,
+        1135,
+        1136
+      ]
+    },
+    {
+      "mapId": 73,
+      "mapName": "仙台东",
+      "connectedAnchors": 177,
+      "monsterIds": [
+        1089,
+        3023,
+        3025
+      ]
+    },
+    {
+      "mapId": 74,
+      "mapName": "仙台北",
+      "connectedAnchors": 176,
+      "monsterIds": [
+        1089,
+        1128,
+        1145,
+        3025
+      ]
+    },
+    {
+      "mapId": 75,
+      "mapName": "仙台南",
+      "connectedAnchors": 176,
+      "monsterIds": [
+        1145,
+        3023,
+        3025
+      ]
+    },
+    {
+      "mapId": 76,
+      "mapName": "下天郊",
+      "connectedAnchors": 167,
+      "monsterIds": [
+        1141,
+        1145,
+        1146
+      ]
+    },
+    {
+      "mapId": 77,
+      "mapName": "瑶台西",
+      "connectedAnchors": 102,
+      "monsterIds": [
+        3028,
+        3029,
+        3030
+      ]
+    },
+    {
+      "mapId": 78,
+      "mapName": "瑶台东",
+      "connectedAnchors": 128,
+      "monsterIds": [
+        3024,
+        3026,
+        3028
+      ]
+    },
+    {
+      "mapId": 79,
+      "mapName": "落日沙丘",
+      "connectedAnchors": 142,
+      "monsterIds": [
+        3033,
+        3034
+      ]
+    },
+    {
+      "mapId": 80,
+      "mapName": "落日沙丘北",
+      "connectedAnchors": 148,
+      "monsterIds": [
+        1201,
+        3033,
+        3034
+      ]
+    },
+    {
+      "mapId": 81,
+      "mapName": "落日沙丘西",
+      "connectedAnchors": 149,
+      "monsterIds": [
+        1201,
+        3033,
+        3034
+      ]
+    },
+    {
+      "mapId": 82,
+      "mapName": "遗忘之角",
+      "connectedAnchors": 170,
+      "monsterIds": [
+        1145,
+        1146,
+        3027
+      ]
+    },
+    {
+      "mapId": 83,
+      "mapName": "千年之镜",
+      "connectedAnchors": 202,
+      "monsterIds": [
+        1111,
+        1112,
+        3031,
+        3032
+      ]
+    },
+    {
+      "mapId": 84,
+      "mapName": "虚空之境",
+      "connectedAnchors": 137,
+      "monsterIds": [
+        1162,
+        1163,
+        3038
+      ]
+    },
+    {
+      "mapId": 85,
+      "mapName": "流沙盆地",
+      "connectedAnchors": 126,
+      "monsterIds": [
+        1164,
+        1167,
+        3035
+      ]
+    },
+    {
+      "mapId": 87,
+      "mapName": "无泪南郊",
+      "connectedAnchors": 120,
+      "monsterIds": [
+        6001,
+        6002,
+        6005,
+        6007,
+        6008
+      ]
+    },
+    {
+      "mapId": 88,
+      "mapName": "无泪东郊",
+      "connectedAnchors": 83,
+      "monsterIds": [
+        6003,
+        6004,
+        6006,
+        6009
+      ]
+    },
+    {
+      "mapId": 89,
+      "mapName": "无泪盆地",
+      "connectedAnchors": 132,
+      "monsterIds": [
+        6010,
+        6012,
+        6014,
+        6017
+      ]
+    },
+    {
+      "mapId": 90,
+      "mapName": "空灵平原四",
+      "connectedAnchors": 147,
+      "monsterIds": [
+        6050,
+        6051,
+        6052,
+        6053
+      ]
+    },
+    {
+      "mapId": 91,
+      "mapName": "幻幽平原四",
+      "connectedAnchors": 165,
+      "monsterIds": [
+        6026,
+        6027,
+        6028,
+        6029
+      ]
+    },
+    {
+      "mapId": 92,
+      "mapName": "镜湖北岸",
+      "connectedAnchors": 143,
+      "monsterIds": [
+        6024,
+        6025,
+        6030,
+        6031
+      ]
+    },
+    {
+      "mapId": 93,
+      "mapName": "镜湖",
+      "connectedAnchors": 112,
+      "monsterIds": [
+        6032,
+        6033,
+        6034
+      ]
+    },
+    {
+      "mapId": 94,
+      "mapName": "心岛",
+      "connectedAnchors": 118,
+      "monsterIds": [
+        6035,
+        6036,
+        6037,
+        6038
+      ]
+    },
+    {
+      "mapId": 95,
+      "mapName": "落英谷一苑",
+      "connectedAnchors": 49,
+      "monsterIds": [
+        5124,
+        5125,
+        5126
+      ]
+    },
+    {
+      "mapId": 96,
+      "mapName": "落英谷二苑",
+      "connectedAnchors": 49,
+      "monsterIds": [
+        5124,
+        5125,
+        5126
+      ]
+    },
+    {
+      "mapId": 97,
+      "mapName": "嫣然谷二苑",
+      "connectedAnchors": 49,
+      "monsterIds": [
+        5124,
+        5125,
+        5126
+      ]
+    },
+    {
+      "mapId": 98,
+      "mapName": "嫣然谷一苑",
+      "connectedAnchors": 49,
+      "monsterIds": [
+        5124,
+        5125,
+        5126
+      ]
+    },
+    {
+      "mapId": 99,
+      "mapName": "芳菲谷一苑",
+      "connectedAnchors": 35,
+      "monsterIds": [
+        5127,
+        5128,
+        5129
+      ]
+    },
+    {
+      "mapId": 100,
+      "mapName": "芳菲谷二苑",
+      "connectedAnchors": 35,
+      "monsterIds": [
+        5127,
+        5128,
+        5129
+      ]
+    },
+    {
+      "mapId": 101,
+      "mapName": "芳菲谷三苑",
+      "connectedAnchors": 35,
+      "monsterIds": [
+        5127,
+        5128,
+        5129
+      ]
+    },
+    {
+      "mapId": 102,
+      "mapName": "芳菲谷四苑",
+      "connectedAnchors": 35,
+      "monsterIds": [
+        5127,
+        5128,
+        5129
+      ]
+    },
+    {
+      "mapId": 103,
+      "mapName": "芳菲谷五苑",
+      "connectedAnchors": 35,
+      "monsterIds": [
+        5127,
+        5128,
+        5129
+      ]
+    },
+    {
+      "mapId": 104,
+      "mapName": "芳菲谷六苑",
+      "connectedAnchors": 35,
+      "monsterIds": [
+        5127,
+        5128,
+        5129
+      ]
+    },
+    {
+      "mapId": 105,
+      "mapName": "芳菲谷七苑",
+      "connectedAnchors": 35,
+      "monsterIds": [
+        5127,
+        5128,
+        5129
+      ]
+    },
+    {
+      "mapId": 106,
+      "mapName": "芳菲谷八苑",
+      "connectedAnchors": 35,
+      "monsterIds": [
+        5127,
+        5128,
+        5129
+      ]
+    },
+    {
+      "mapId": 107,
+      "mapName": "空灵平原一",
+      "connectedAnchors": 202,
+      "monsterIds": [
+        6039,
+        6040,
+        6041,
+        6042
+      ]
+    },
+    {
+      "mapId": 108,
+      "mapName": "空灵平原二",
+      "connectedAnchors": 210,
+      "monsterIds": [
+        6043,
+        6044,
+        6045
+      ]
+    },
+    {
+      "mapId": 109,
+      "mapName": "空灵平原三",
+      "connectedAnchors": 238,
+      "monsterIds": [
+        6046,
+        6047,
+        6048,
+        6049
+      ]
+    },
+    {
+      "mapId": 110,
+      "mapName": "幻幽平原一",
+      "connectedAnchors": 153,
+      "monsterIds": [
+        6011,
+        6013,
+        6015,
+        6016
+      ]
+    },
+    {
+      "mapId": 111,
+      "mapName": "幻幽平原二",
+      "connectedAnchors": 155,
+      "monsterIds": [
+        6019,
+        6020,
+        6021,
+        6023
+      ]
+    },
+    {
+      "mapId": 112,
+      "mapName": "幻幽平原三",
+      "connectedAnchors": 130,
+      "monsterIds": [
+        6018,
+        6022,
+        6024,
+        6025,
+        6026
+      ]
+    },
+    {
+      "mapId": 135,
+      "mapName": "云墟森林",
+      "connectedAnchors": 80,
+      "monsterIds": [
+        11978,
+        31195,
+        31196,
+        31197,
+        31213
+      ]
+    },
+    {
+      "mapId": 155,
+      "mapName": "秋风原",
+      "connectedAnchors": 101,
+      "monsterIds": [
+        31473,
+        31485,
+        31493
+      ]
+    },
+    {
+      "mapId": 156,
+      "mapName": "落叶坡",
+      "connectedAnchors": 100,
+      "monsterIds": [
+        31477,
+        31480
+      ]
+    },
+    {
+      "mapId": 157,
+      "mapName": "积石圃",
+      "connectedAnchors": 109,
+      "monsterIds": [
+        31477,
+        31495
+      ]
+    },
+    {
+      "mapId": 158,
+      "mapName": "流花径",
+      "connectedAnchors": 159,
+      "monsterIds": [
+        31495,
+        31496
+      ]
+    },
+    {
+      "mapId": 159,
+      "mapName": "幻翎谷",
+      "connectedAnchors": 169,
+      "monsterIds": [
+        31492,
+        31690
+      ]
+    },
+    {
+      "mapId": 160,
+      "mapName": "星星泉",
+      "connectedAnchors": 140,
+      "monsterIds": [
+        31499,
+        31683
+      ]
+    },
+    {
+      "mapId": 161,
+      "mapName": "银月湖",
+      "connectedAnchors": 86,
+      "monsterIds": [
+        31498
+      ]
+    },
+    {
+      "mapId": 162,
+      "mapName": "银月湖畔",
+      "connectedAnchors": 121,
+      "monsterIds": [
+        31481,
+        31498
+      ]
+    },
+    {
+      "mapId": 163,
+      "mapName": "迷荒道",
+      "connectedAnchors": 119,
+      "monsterIds": [
+        31481,
+        31487
+      ]
+    },
+    {
+      "mapId": 164,
+      "mapName": "遗忘沼泽",
+      "connectedAnchors": 96,
+      "monsterIds": [
+        31482,
+        31487
+      ]
+    },
+    {
+      "mapId": 165,
+      "mapName": "比翼城南",
+      "connectedAnchors": 136,
+      "monsterIds": [
+        31474,
+        31475,
+        31494
+      ]
+    },
+    {
+      "mapId": 166,
+      "mapName": "比翼城北",
+      "connectedAnchors": 146,
+      "monsterIds": [
+        31474,
+        31476,
+        31494
+      ]
+    },
+    {
+      "mapId": 167,
+      "mapName": "悲羽山",
+      "connectedAnchors": 116,
+      "monsterIds": [
+        31484,
+        31688
+      ]
+    },
+    {
+      "mapId": 168,
+      "mapName": "永恒之地",
+      "connectedAnchors": 121,
+      "monsterIds": [
+        31689,
+        31694
+      ]
+    },
+    {
+      "mapId": 169,
+      "mapName": "步霞途",
+      "connectedAnchors": 82,
+      "monsterIds": [
+        31472,
+        31476,
+        31479
+      ]
+    },
+    {
+      "mapId": 170,
+      "mapName": "缥缈林",
+      "connectedAnchors": 92,
+      "monsterIds": [
+        31473,
+        31479,
+        31483
+      ]
+    },
+    {
+      "mapId": 171,
+      "mapName": "忘天峰",
+      "connectedAnchors": 74,
+      "monsterIds": [
+        31685,
+        31687
+      ]
+    },
+    {
+      "mapId": 172,
+      "mapName": "羽战台",
+      "connectedAnchors": 91,
+      "monsterIds": [
+        31478,
+        31687
+      ]
+    },
+    {
+      "mapId": 901,
+      "mapName": "华山地宫1层",
+      "connectedAnchors": 183,
+      "monsterIds": [
+        1080,
+        1081,
+        1083
+      ]
+    },
+    {
+      "mapId": 902,
+      "mapName": "华山地宫2层",
+      "connectedAnchors": 92,
+      "monsterIds": [
+        1022,
+        1083,
+        1084
+      ]
+    },
+    {
+      "mapId": 903,
+      "mapName": "华山地宫3层",
+      "connectedAnchors": 86,
+      "monsterIds": [
+        1017,
+        1022,
+        3019
+      ]
+    },
+    {
+      "mapId": 904,
+      "mapName": "华山地宫4层",
+      "connectedAnchors": 129,
+      "monsterIds": [
+        1017,
+        1082,
+        3019
+      ]
+    },
+    {
+      "mapId": 905,
+      "mapName": "华山地宫5层",
+      "connectedAnchors": 98,
+      "monsterIds": [
+        1010,
+        1082,
+        1085
+      ]
+    },
+    {
+      "mapId": 906,
+      "mapName": "修罗殿1层",
+      "connectedAnchors": 83,
+      "monsterIds": [
+        1025,
+        1035,
+        1087
+      ]
+    },
+    {
+      "mapId": 907,
+      "mapName": "修罗殿2层",
+      "connectedAnchors": 76,
+      "monsterIds": [
+        1025,
+        1087,
+        1090
+      ]
+    },
+    {
+      "mapId": 908,
+      "mapName": "修罗殿3层",
+      "connectedAnchors": 101,
+      "monsterIds": [
+        1025,
+        1090,
+        1091
+      ]
+    },
+    {
+      "mapId": 909,
+      "mapName": "修罗殿4层",
+      "connectedAnchors": 49,
+      "monsterIds": [
+        1091,
+        1092,
+        1093
+      ]
+    },
+    {
+      "mapId": 910,
+      "mapName": "黄鹤遗址1层",
+      "connectedAnchors": 88,
+      "monsterIds": [
+        1094,
+        1095,
+        3016
+      ]
+    },
+    {
+      "mapId": 911,
+      "mapName": "黄鹤遗址2层",
+      "connectedAnchors": 46,
+      "monsterIds": [
+        1095,
+        1098,
+        3016
+      ]
+    },
+    {
+      "mapId": 912,
+      "mapName": "黄鹤遗址3层",
+      "connectedAnchors": 44,
+      "monsterIds": [
+        1096,
+        1097,
+        1098
+      ]
+    },
+    {
+      "mapId": 913,
+      "mapName": "黄鹤遗址4层",
+      "connectedAnchors": 31,
+      "monsterIds": [
+        1003,
+        1096,
+        1097
+      ]
+    },
+    {
+      "mapId": 914,
+      "mapName": "黄鹤遗址5层",
+      "connectedAnchors": 26,
+      "monsterIds": [
+        1003,
+        1011,
+        1028
+      ]
+    },
+    {
+      "mapId": 915,
+      "mapName": "东海1层",
+      "connectedAnchors": 24,
+      "monsterIds": [
+        1113,
+        1115,
+        1117
+      ]
+    },
+    {
+      "mapId": 916,
+      "mapName": "东海2层",
+      "connectedAnchors": 41,
+      "monsterIds": [
+        1114,
+        1115,
+        1117
+      ]
+    },
+    {
+      "mapId": 917,
+      "mapName": "东海3层",
+      "connectedAnchors": 33,
+      "monsterIds": [
+        1114,
+        1116,
+        1117
+      ]
+    },
+    {
+      "mapId": 918,
+      "mapName": "东海4层",
+      "connectedAnchors": 48,
+      "monsterIds": [
+        1116,
+        1118,
+        1119
+      ]
+    },
+    {
+      "mapId": 919,
+      "mapName": "地下王宫1层",
+      "connectedAnchors": 95,
+      "monsterIds": [
+        1202,
+        1203
+      ]
+    },
+    {
+      "mapId": 920,
+      "mapName": "地下王宫2层",
+      "connectedAnchors": 94,
+      "monsterIds": [
+        1203,
+        1204,
+        1205
+      ]
+    },
+    {
+      "mapId": 921,
+      "mapName": "地下王宫3层",
+      "connectedAnchors": 76,
+      "monsterIds": [
+        1204,
+        1205,
+        1206
+      ]
+    },
+    {
+      "mapId": 922,
+      "mapName": "地下王宫4层",
+      "connectedAnchors": 92,
+      "monsterIds": [
+        1206,
+        1207
+      ]
+    },
+    {
+      "mapId": 923,
+      "mapName": "地下王宫5层",
+      "connectedAnchors": 118,
+      "monsterIds": [
+        1208,
+        1209,
+        3040
+      ]
+    },
+    {
+      "mapId": 924,
+      "mapName": "源源洞",
+      "connectedAnchors": 222,
+      "monsterIds": [
+        3008,
+        3011,
+        3013
+      ]
+    },
+    {
+      "mapId": 925,
+      "mapName": "陶陶洞",
+      "connectedAnchors": 153,
+      "monsterIds": [
+        3009,
+        3010,
+        3012
+      ]
+    },
+    {
+      "mapId": 926,
+      "mapName": "幻萤洞",
+      "connectedAnchors": 188,
+      "monsterIds": [
+        1008,
+        1070,
+        1123,
+        3021
+      ]
+    },
+    {
+      "mapId": 927,
+      "mapName": "流沙洞",
+      "connectedAnchors": 189,
+      "monsterIds": [
+        3035,
+        3036,
+        3037,
+        3039
+      ]
+    },
+    {
+      "mapId": 928,
+      "mapName": "影子迷泽",
+      "connectedAnchors": 181,
+      "monsterIds": [
+        6026,
+        6027,
+        6030,
+        6031
+      ]
+    },
+    {
+      "mapId": 929,
+      "mapName": "镜穴第一层",
+      "connectedAnchors": 95,
+      "monsterIds": [
+        6054,
+        6055,
+        6057,
+        6058
+      ]
+    },
+    {
+      "mapId": 930,
+      "mapName": "镜穴第二层",
+      "connectedAnchors": 132,
+      "monsterIds": [
+        6056,
+        6059,
+        6060,
+        6061
+      ]
+    },
+    {
+      "mapId": 931,
+      "mapName": "镜穴第三层",
+      "connectedAnchors": 74,
+      "monsterIds": [
+        6062,
+        6063,
+        6065
+      ]
+    },
+    {
+      "mapId": 932,
+      "mapName": "镜穴第四层",
+      "connectedAnchors": 127,
+      "monsterIds": [
+        6064,
+        6066,
+        6067,
+        6068
+      ]
+    },
+    {
+      "mapId": 933,
+      "mapName": "家族采石场1",
+      "connectedAnchors": 53,
+      "monsterIds": [
+        30069,
+        30117,
+        30120
+      ]
+    },
+    {
+      "mapId": 934,
+      "mapName": "家族采石场2",
+      "connectedAnchors": 55,
+      "monsterIds": [
+        30069,
+        30117,
+        30120
+      ]
+    },
+    {
+      "mapId": 935,
+      "mapName": "家族采石场3",
+      "connectedAnchors": 56,
+      "monsterIds": [
+        30069,
+        30119,
+        30120
+      ]
+    },
+    {
+      "mapId": 936,
+      "mapName": "家族采石场4",
+      "connectedAnchors": 57,
+      "monsterIds": [
+        30069,
+        30117,
+        30119,
+        30120
+      ]
+    },
+    {
+      "mapId": 937,
+      "mapName": "家族采石场5",
+      "connectedAnchors": 52,
+      "monsterIds": [
+        30069,
+        30117,
+        30119,
+        30120
+      ]
+    },
+    {
+      "mapId": 942,
+      "mapName": "奴奴火山一层",
+      "connectedAnchors": 50,
+      "monsterIds": [
+        31491,
+        31497
+      ]
+    },
+    {
+      "mapId": 943,
+      "mapName": "奴奴火山二层",
+      "connectedAnchors": 42,
+      "monsterIds": [
+        31490,
+        31491
+      ]
+    },
+    {
+      "mapId": 944,
+      "mapName": "奴奴火山三层",
+      "connectedAnchors": 43,
+      "monsterIds": [
+        31490
+      ]
+    },
+    {
+      "mapId": 945,
+      "mapName": "巨木树窟一层",
+      "connectedAnchors": 59,
+      "monsterIds": [
+        31488,
+        31489
+      ]
+    },
+    {
+      "mapId": 946,
+      "mapName": "巨木树窟二层",
+      "connectedAnchors": 77,
+      "monsterIds": [
+        31686,
+        31691
+      ]
+    },
+    {
+      "mapId": 947,
+      "mapName": "折翼墓地一层",
+      "connectedAnchors": 58,
+      "monsterIds": [
+        31486,
+        31500
+      ]
+    },
+    {
+      "mapId": 948,
+      "mapName": "折翼墓地二层",
+      "connectedAnchors": 55,
+      "monsterIds": [
+        31486,
+        31684
+      ]
+    },
+    {
+      "mapId": 20100,
+      "mapName": "赤枭出没地",
+      "connectedAnchors": 123,
+      "monsterIds": [
+        3045,
+        3046
+      ]
+    },
+    {
+      "mapId": 20300,
+      "mapName": "赤枭巢穴",
+      "connectedAnchors": 192,
+      "monsterIds": [
+        3044,
+        3047,
+        3048
+      ]
+    },
+    {
+      "mapId": 20502,
+      "mapName": "塔狱",
+      "connectedAnchors": 156,
+      "monsterIds": [
+        3000,
+        3001,
+        3005,
+        3006
+      ]
+    },
+    {
+      "mapId": 20600,
+      "mapName": "纯阳宝塔",
+      "connectedAnchors": 370,
+      "monsterIds": [
+        3054,
+        3055,
+        3056,
+        3057,
+        3058,
+        3059,
+        3060,
+        3061,
+        3062,
+        3063
+      ]
+    },
+    {
+      "mapId": 20701,
+      "mapName": "八仙的结界",
+      "connectedAnchors": 139,
+      "monsterIds": [
+        3049,
+        3050,
+        3051,
+        3080,
+        3081,
+        3082
+      ]
+    },
+    {
+      "mapId": 20801,
+      "mapName": "天空之泉一层",
+      "connectedAnchors": 106,
+      "monsterIds": [
+        3064,
+        3065,
+        3066,
+        3067
+      ]
+    },
+    {
+      "mapId": 20802,
+      "mapName": "天空之泉二层",
+      "connectedAnchors": 214,
+      "monsterIds": [
+        3068,
+        3069,
+        3070,
+        3071
+      ]
+    },
+    {
+      "mapId": 20803,
+      "mapName": "天空之泉三层",
+      "connectedAnchors": 103,
+      "monsterIds": [
+        3072,
+        3073,
+        3074,
+        3075
+      ]
+    },
+    {
+      "mapId": 20901,
+      "mapName": "失落神殿一层",
+      "connectedAnchors": 239,
+      "monsterIds": [
+        3111,
+        3112,
+        3113,
+        3114,
+        3115,
+        3116,
+        3117,
+        3141
+      ]
+    },
+    {
+      "mapId": 20902,
+      "mapName": "失落神殿二层",
+      "connectedAnchors": 126,
+      "monsterIds": [
+        3111,
+        3112,
+        3113,
+        3118,
+        3119,
+        3177,
+        3178,
+        3180
+      ]
+    },
+    {
+      "mapId": 23601,
+      "mapName": "百里杜鹃",
+      "connectedAnchors": 98,
+      "monsterIds": [
+        6272,
+        6273,
+        6274,
+        6275
+      ]
+    },
+    {
+      "mapId": 23602,
+      "mapName": "消失的土地庙",
+      "connectedAnchors": 110,
+      "monsterIds": [
+        6276,
+        6277
+      ]
+    },
+    {
+      "mapId": 23800,
+      "mapName": "荒雷岛",
+      "connectedAnchors": 358,
+      "monsterIds": [
+        5206,
+        5207,
+        5208,
+        5209,
+        5210,
+        5211,
+        5212,
+        6073,
+        6074,
+        6075,
+        6076,
+        6077,
+        6078,
+        6079
+      ]
+    },
+    {
+      "mapId": 23900,
+      "mapName": "荒雷岛",
+      "connectedAnchors": 358,
+      "monsterIds": [
+        5206,
+        5207,
+        5208,
+        5209,
+        5210,
+        5211,
+        5212,
+        6073,
+        6074,
+        6075,
+        6076,
+        6077,
+        6078,
+        6079
+      ]
+    },
+    {
+      "mapId": 24000,
+      "mapName": "荒雷岛",
+      "connectedAnchors": 358,
+      "monsterIds": [
+        5206,
+        5207,
+        5208,
+        5209,
+        5210,
+        5211,
+        5212,
+        6073,
+        6074,
+        6075,
+        6076,
+        6077,
+        6078,
+        6079
+      ]
+    },
+    {
+      "mapId": 24100,
+      "mapName": "荒雷岛",
+      "connectedAnchors": 358,
+      "monsterIds": [
+        5206,
+        5207,
+        5208,
+        5209,
+        5210,
+        5211,
+        5212,
+        6073,
+        6074,
+        6075,
+        6076,
+        6077,
+        6078,
+        6079
+      ]
+    },
+    {
+      "mapId": 24200,
+      "mapName": "荒雷岛",
+      "connectedAnchors": 358,
+      "monsterIds": [
+        5206,
+        5207,
+        5208,
+        5209,
+        5210,
+        5211,
+        5212,
+        6073,
+        6074,
+        6075,
+        6076,
+        6077,
+        6078,
+        6079
+      ]
+    },
+    {
+      "mapId": 24300,
+      "mapName": "荒雷岛",
+      "connectedAnchors": 358,
+      "monsterIds": [
+        5206,
+        5207,
+        5208,
+        5209,
+        5210,
+        5211,
+        5212,
+        6073,
+        6074,
+        6075,
+        6076,
+        6077,
+        6078,
+        6079
+      ]
+    },
+    {
+      "mapId": 24600,
+      "mapName": "飓风战场",
+      "connectedAnchors": 35,
+      "monsterIds": [
+        30103,
+        30112,
+        30113,
+        30114,
+        30115,
+        30116,
+        30126
+      ]
+    },
+    {
+      "mapId": 24700,
+      "mapName": "飓风战场",
+      "connectedAnchors": 35,
+      "monsterIds": [
+        30089,
+        30098,
+        30099,
+        30100,
+        30101,
+        30102,
+        30125
+      ]
+    },
+    {
+      "mapId": 24800,
+      "mapName": "飓风战场",
+      "connectedAnchors": 35,
+      "monsterIds": [
+        30084,
+        30085,
+        30086,
+        30087,
+        30088,
+        30124,
+        30147
+      ]
+    },
+    {
+      "mapId": 28402,
+      "mapName": "凝香冢",
+      "connectedAnchors": 20,
+      "monsterIds": [
+        6273,
+        6288,
+        6289
+      ]
+    },
+    {
+      "mapId": 28502,
+      "mapName": "仙境二层",
+      "connectedAnchors": 29,
+      "monsterIds": [
+        31058,
+        31059,
+        31060,
+        31064
+      ]
+    },
+    {
+      "mapId": 28503,
+      "mapName": "仙境三层",
+      "connectedAnchors": 54,
+      "monsterIds": [
+        31059,
+        31060,
+        31061,
+        31065,
+        31080
+      ]
+    },
+    {
+      "mapId": 28504,
+      "mapName": "仙境四层",
+      "connectedAnchors": 65,
+      "monsterIds": [
+        31060,
+        31061,
+        31062,
+        31066,
+        31081
+      ]
+    },
+    {
+      "mapId": 28505,
+      "mapName": "仙境五层",
+      "connectedAnchors": 46,
+      "monsterIds": [
+        31060,
+        31061,
+        31062,
+        31067,
+        31082
+      ]
+    },
+    {
+      "mapId": 28602,
+      "mapName": "遗迹二层",
+      "connectedAnchors": 73,
+      "monsterIds": [
+        31037,
+        31038,
+        31039,
+        31042,
+        31084
+      ]
+    },
+    {
+      "mapId": 28603,
+      "mapName": "遗迹三层",
+      "connectedAnchors": 61,
+      "monsterIds": [
+        31038,
+        31039,
+        31040,
+        31044,
+        31085
+      ]
+    },
+    {
+      "mapId": 30600,
+      "mapName": "桃花岛",
+      "connectedAnchors": 22,
+      "monsterIds": [
+        31466,
+        31467
+      ]
+    },
+    {
+      "mapId": 36700,
+      "mapName": "灵泽殿",
+      "connectedAnchors": 44,
+      "monsterIds": [
+        10113,
+        10210,
+        10211,
+        10212,
+        10216,
+        10237,
+        10238,
+        10239,
+        10240
+      ]
+    }
+  ]
+}

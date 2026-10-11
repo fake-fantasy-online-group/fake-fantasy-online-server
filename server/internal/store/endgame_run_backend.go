@@ -16,7 +16,7 @@ func (b *endgameBackend) SaveRun(v domain.EndgameRunRecord, expected int64) <-ch
 			ch <- domain.EndgameRunSaveResult{Err: err}
 			return
 		}
-		if expected < 0 || v.Revision != expected+1 || !json.Valid([]byte(v.Payload)) {
+		if expected < 0 || v.Revision <= 0 || v.Revision != expected+1 || !json.Valid([]byte(v.Payload)) {
 			ch <- domain.EndgameRunSaveResult{Err: ErrEndgameRevision}
 			return
 		}

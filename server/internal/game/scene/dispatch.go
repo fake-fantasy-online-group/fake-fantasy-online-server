@@ -19,6 +19,8 @@ func (s *Scene) exec(c Command) {
 		return
 	}
 	switch cmd := c.(type) {
+	case EndgameRequest:
+		s.onEndgame(cmd)
 	case SharedRide:
 		s.onSharedRide(cmd)
 	case LeaveSharedRide:
@@ -402,6 +404,15 @@ func (s *Scene) onQueryTargetStatus(cmd QueryTargetStatus) {
 // 摆到自己周围, 反过来发会让先到的实体没有参照系。
 func (s *Scene) onEnter(cmd Enter) {
 	ch := cmd.Char
+	if !s.prepareEndgameRift(cmd) {
+		if cmd.Sink != nil {
+			cmd.Sink.Close()
+		}
+		if cmd.FinalSaver != nil {
+			cmd.FinalSaver.Save(domain.Snapshot{Char: cmd.Char, Bag: cmd.Bag, Worn: cmd.Worn, ChangeSet: cmd.ChangeSet, Warehouse: cmd.Warehouse, Wardrobe: cmd.Wardrobe, Stall: cmd.Stall}.Clone())
+		}
+		return
+	}
 	s.prepareTrial(cmd)
 	if s.dungeon != nil && cmd.DungeonElapsed > s.dungeonElapsed() {
 		s.dungeonElapsedBase += cmd.DungeonElapsed - s.dungeonElapsed()
@@ -692,6 +703,8 @@ func (s *Scene) onLeave(cmd Leave) {
 		}
 		return
 	}
+	s.disconnectEndgameRift(e)
+	s.stepEndgameTrial()
 	s.clearCastWindup(e.ID)
 	s.endSharedRide(e)
 	// 宠物实体先摘 —— **必须在摘除主人之前**，否则当前血量无法抄回实例。
@@ -875,6 +888,9 @@ func (s *Scene) move(cmd MoveTo, checkPortal, force bool) {
 // 真正的命中与伤害在 stepCombat 里结算 —— 攻击必须落在固定的帧序里,
 // 不能谁的包先到谁先打, 那样帧率高、网络好的客户端就白占便宜了。
 func (s *Scene) onAttack(cmd Attack) {
+	if s.rift != nil && !s.riftCombatReady() {
+		return
+	}
 	e, ok := s.entities[cmd.ID]
 	if !ok || s.entityMapLoading(e) {
 		return

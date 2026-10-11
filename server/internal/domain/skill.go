@@ -301,9 +301,11 @@ type PassiveCounterAttack struct {
 
 // SkillDef 是一个技能在某一级上的定义。
 type SkillDef struct {
-	ID    SkillID
-	Level int32 // 1~5
-	Name  string
+	// UniqueInvisibleStart is a cast-local snapshot, never a static table rule.
+	UniqueInvisibleStart bool
+	ID                   SkillID
+	Level                int32 // 1~5
+	Name                 string
 	// Description 是 PostgreSQL ov_skilldesc.desc_ 的原始技能说明。
 	Description string
 	// Icon 来自 ov_skilldesc.small_map；该列与客户端 skills.json.icon 逐行闭合。
@@ -543,7 +545,7 @@ func (e SkillEffect) HealAmount(targetMaxHP int32) int32 {
 	if e.Kind != EffectHeal {
 		return 0
 	}
-	n := targetMaxHP*e.HealPctOfMax/100 + e.HealFlat
+	n := SaturateInt32(int64(targetMaxHP)*int64(e.HealPctOfMax)/100 + int64(e.HealFlat))
 	if n < 1 {
 		return 1
 	}

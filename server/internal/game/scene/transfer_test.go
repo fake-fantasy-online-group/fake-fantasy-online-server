@@ -79,7 +79,9 @@ func inspect(t *testing.T, s *Scene, rig *sceneRig, fn func(*Scene)) {
 		t.Fatalf("图 %d 没有节拍通道", s.ID().MapID)
 	}
 	inspectPump(t, s, frames, fn)
-	inspectPump(t, s, frames, func(*Scene) {}) // 栅栏: 确认上一帧已经冲刷完
+	// drain can consume a newly queued second Inspect in the same frame. An
+	// explicit actor-owned flush makes this a real event barrier under -race.
+	inspectPump(t, s, frames, func(scene *Scene) { scene.flush() })
 }
 
 func inspectPump(t *testing.T, s *Scene, frames chan time.Time, fn func(*Scene)) {

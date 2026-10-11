@@ -89,6 +89,7 @@ func run() int {
 	// 全服只建一个角色 gate：租约从 Enter 前持续到离场最终快照成功提交。
 	// 若每连接各建一份，新 TCP 秒连仍会绕过旧连接的写回屏障。
 	charGate := store.NewCharacterGate(wb)
+	endgameBackend := store.NewEndgameBackend(st, wb)
 	// 写回循环不能共用网关的 signal context。收到停服信号后，场景会在
 	// Router.Drain 中才交出最后一批在线存档；若 wb 也同时因 ctx.Done 退出，
 	// 这批迟到快照就只会留在 pending，服务端重启后丢档。wb 的生命周期只由
@@ -99,6 +100,10 @@ func run() int {
 	parties := party.NewRegistry()
 	onlineIdx := online.NewRegistry()
 	world := loadWorldData(ctx, st, log)
+	if err := registerEndgameItems(&world); err != nil {
+		log.Error("演劫规则校验失败", "err", err)
+		return 1
+	}
 	var staticQ data.Querier
 	var mapCatalog *data.MapCatalog
 	if pg, ok := st.(*store.Postgres); ok {
@@ -166,6 +171,19 @@ func run() int {
 	}
 	// Router 在写锁内串行调用 Builder，因此这份按静态地图号共享的懒加载缓存
 	// 不需要额外锁；副本实例也不会重复吃一份 1~2MB 的碰撞网格。
+	// Validate rift topology before starting actors. A failed catalog disables new
+	// seeded runs rather than spending a key on an unverified destination.
+	var riftLayouts []domain.RiftFloorTemplate
+	if mapCatalog != nil && staticQ != nil {
+		var err error
+		riftLayouts, err = data.LoadRiftFloorTemplates(ctx, staticQ, mapCatalog, world.spawns, world.monsters)
+		if err != nil {
+			log.Error("洞天地形目录加载失败，新洞天暂不可用", "err", err)
+			riftLayouts = nil
+		} else {
+			log.Info("洞天地形目录就绪", "可达地图", len(riftLayouts))
+		}
+	}
 	maskCache := make(map[int32]*data.CollisionMask)
 	maskTried := make(map[int32]bool)
 	// ── 场景路由: 按需建场景。371 张图不会全部常驻, 有人进才起 ──
@@ -210,7 +228,7 @@ func run() int {
 		if mask != nil {
 			walkable = mask.Walkable
 		}
-		cfg := scene.Config{Trial: world.trial,
+		cfg := scene.Config{Trial: world.trial, EndgameBackend: endgameBackend, RiftLayouts: riftLayouts,
 			DungeonParty: func(char domain.CharID) domain.DungeonParty {
 				p, ok := parties.Get(parties.PartyOf(char))
 				if !ok {

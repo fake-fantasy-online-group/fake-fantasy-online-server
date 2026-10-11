@@ -1817,7 +1817,15 @@ func (s *Scene) petTake(e *entity.Entity, owner *entity.Entity, drop *entity.Ent
 		s.removeLoot(drop.ID, event.DespawnPickedUp) // 配置没了, 别让它永远躺着
 		return
 	}
-	left := owner.Player.Bag.Add(def, drop.Drop.Count)
+	itemName := def.Name
+	left := drop.Drop.Count
+	if drop.Drop.Stack.Empty() {
+		left = owner.Player.Bag.Add(def, drop.Drop.Count)
+	} else {
+		// Transfer the owned instance, never recreate its UID or rolled metadata.
+		itemName = itemDisplayName(def, drop.Drop.Stack)
+		left = owner.Player.Bag.AddStack(def, drop.Drop.Stack)
+	}
 	if left == drop.Drop.Count {
 		// 一件都装不下: 说一次就别再刷屏了, 让它回去跟着主人
 		if !e.Pet.BagWarned {
@@ -1833,10 +1841,13 @@ func (s *Scene) petTake(e *entity.Entity, owner *entity.Entity, drop *entity.Ent
 
 	if left > 0 {
 		drop.Drop.Count = left // 只装下一部分, 剩下的留在地上
+		if !drop.Drop.Stack.Empty() {
+			drop.Drop.Stack.Count = left
+		}
 		return
 	}
 	s.removeLoot(drop.ID, event.DespawnPickedUp)
 	s.emitTo(owner.ID, event.PetPickedUp{Who: owner.ID, Pet: e.ID,
-		Item: int32(def.ID), Name: def.Name})
-	s.log.Debug("宠物拾取", "char", owner.Name, "宠", e.Name, "物品", def.Name)
+		Item: int32(def.ID), Name: itemName})
+	s.log.Debug("宠物拾取", "char", owner.Name, "宠", e.Name, "物品", itemName)
 }

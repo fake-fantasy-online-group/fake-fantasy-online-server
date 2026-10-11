@@ -102,6 +102,15 @@ func TestAstralEveryRecipeAndInvalidOrders(t *testing.T) {
 			if a := ActiveAstralRecipes(worn, lookup, ch); len(a) != 1 || a[0].Recipe.ID != r.ID || !reflect.DeepEqual(AstralBonuses(worn, lookup, ch), r.Affixes) {
 				t.Fatal("no executable bonuses")
 			}
+			originalRace := ch.Race
+			for race := Warrior; race <= Warlock; race++ {
+				ch.Race = race
+				allowed := r.Professions == 0 || r.Professions&(1<<uint8(race)) != 0
+				if got := len(ActiveAstralRecipes(worn, lookup, ch)) > 0; got != allowed {
+					t.Fatalf("profession %d got active=%v want %v", race, got, allowed)
+				}
+			}
+			ch.Race = originalRace
 			ch.Level = r.MinLevel - 1
 			if len(ActiveAstralRecipes(worn, lookup, ch)) != 0 {
 				t.Fatal("low level active")

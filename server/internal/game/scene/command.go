@@ -819,6 +819,7 @@ func (ChooseTransport) CmdName() string { return "ChooseTransport" }
 // 由场景自己在踩到传送门时投, 也可以由复活流程/GM 直接投。
 // 目标场景不存在会被懒加载建出来。
 type Teleport struct {
+	RiftRunID      string // internal ownership guard; never supplied by a client packet
 	ID             domain.EntityID
 	To             domain.SceneID
 	At             domain.Pos

@@ -191,7 +191,7 @@ func AstralBonuses(worn *EquipSet, defs func(ItemID) (ItemDef, bool), ch *Charac
 }
 func ValidateAstralCatalog() error {
 	if len(astralRuneCatalog) != 28 || len(astralRecipeCatalog) != 40 {
-		return fmt.Errorf("astral catalog requires28 runes and40 formations")
+		return fmt.Errorf("astral catalog requires 28 runes and 40 formations")
 	}
 	used := map[ItemID]bool{}
 	seen := map[string]bool{}

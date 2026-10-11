@@ -34,7 +34,9 @@ type eventSink struct {
 }
 
 func (s *eventSink) Emit(ev event.Event) {
-	if _,ok := ev.(event.EndgameMessage); ok && (s.sess == nil || !s.sess.endgameEnabled()) { return }
+	if _, ok := ev.(event.EndgameMessage); ok && (s.sess == nil || !s.sess.endgameEnabled()) {
+		return
+	}
 	var pkts [][]byte
 	var refreshParty bool
 	var entered bool

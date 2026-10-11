@@ -36,9 +36,12 @@ type Saver interface {
 
 // Config 建场景所需的一切。
 type Config struct {
-	Trial         *domain.TrialRules
-	DungeonParty  func(domain.CharID) domain.DungeonParty
-	DungeonNotify func(string, string)
+	// RiftLayouts is the immutable, collision-validated startup map catalog.
+	RiftLayouts    []domain.RiftFloorTemplate
+	EndgameBackend domain.EndgameBackend
+	Trial          *domain.TrialRules
+	DungeonParty   func(domain.CharID) domain.DungeonParty
+	DungeonNotify  func(string, string)
 
 	PickupRange int32
 	ID          domain.SceneID
@@ -189,11 +192,17 @@ func (r ReviveAt) Enabled() bool { return r.Scene.MapID != 0 }
 //
 // 除 mailbox / quit / log 外的所有字段, **只有场景 goroutine 能碰**。
 type Scene struct {
-	trial         *domain.TrialRules
-	trialLevel    int32
-	trialCleared  bool
-	dungeonParty  func(domain.CharID) domain.DungeonParty
-	dungeonNotify func(string, string)
+	riftLayouts    []domain.RiftFloorTemplate
+	endgameBackend domain.EndgameBackend
+	endgamePlayers map[domain.EntityID]*endgamePlayerState
+	rift           *endgameRiftState
+	riftRequests   map[domain.EntityID]*endgameRiftRequestState
+	trialRun       *endgameTrialState
+	trial          *domain.TrialRules
+	trialLevel     int32
+	trialCleared   bool
+	dungeonParty   func(domain.CharID) domain.DungeonParty
+	dungeonNotify  func(string, string)
 
 	pickupRange int32
 	id          domain.SceneID
@@ -364,6 +373,8 @@ func New(cfg Config) *Scene {
 			(int64(cfg.ID.MapID) << 32) ^ int64(cfg.ID.Instance)
 	}
 	s := &Scene{
+		riftLayouts:          cfg.RiftLayouts,
+		endgameBackend:       cfg.EndgameBackend,
 		id:                   cfg.ID,
 		mailbox:              make(chan Command, cfg.Mailbox),
 		quit:                 make(chan struct{}),
@@ -883,13 +894,17 @@ func (s *Scene) finalizeUnentered(cmd Enter) {
 
 // step 推进一帧的游戏逻辑。**顺序是固定的, 不能随便调。**
 func (s *Scene) step() {
+	s.finishEndgame(false)
+	s.stepEndgameRift()
 	s.finishReadyTrades(false)
 	s.tick++
 	if s.dungeon == nil && s.spawner != nil && s.tick%spawn.EliteChanceInterval == 0 {
 		s.spawner.RecordMinute()
 	}
-	s.timer.advance(s.tick)     // 1. 冷却/刷怪/重生/尸体移除
-	s.stepStatus()              // 2. 状态: 周期触发与到期。**必须在任何人行动之前**
+	s.timer.advance(s.tick) // 1. 冷却/刷怪/重生/尸体移除
+	if s.rift == nil || s.riftCombatReady() {
+		s.stepStatus()
+	} // 2. 状态: 周期触发与到期。**必须在任何人行动之前**
 	s.stepRest()                // 3. 坐下休息: 周期恢复生命
 	s.stepWork()                // 4. 打工: 结算与扣耐力
 	s.stepNianli()              // 5. 念力: 只累计在线时间
@@ -918,6 +933,9 @@ func (s *Scene) stepCombat() {
 // stepCombatAt 在主帧或精确命中相位结算攻击。timedOnly=true 时保留怪物/宠物
 // 的主帧攻击，避免 50ms 表现定时器改变它们原有的攻速节奏。
 func (s *Scene) stepCombatAt(now time.Time, timedOnly bool) {
+	if s.rift != nil && !s.riftCombatReady() {
+		return
+	}
 	if len(s.attacks) == 0 {
 		return
 	}
@@ -1023,6 +1041,9 @@ func (s *Scene) passiveCounterPending(defender, attacker *entity.Entity) (pendin
 // 死亡与「从视野里消失」是两件事: 死亡是**战斗结果**(要结算经验/掉落/仇恨),
 // 消失是**视野事件**(只影响渲染)。所以先发 EntityDied, 尸体停留若干帧后才移除。
 func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
+	if dead.Monster != nil && s.rift == nil {
+		s.beginEndgameTrial()
+	}
 	if dead.Monster != nil {
 		s.monsterSpeak(dead, domain.MonsterSceneDie)
 	} else if dead.Kind == domain.KindPlayer {
@@ -1032,7 +1053,7 @@ func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
 	}
 	s.endSharedRide(dead)
 	s.clearCastWindup(dead.ID)
-	if dead.Kind == domain.KindPlayer {
+	if dead.Kind == domain.KindPlayer && s.rift == nil {
 		s.consumeDeathDurability(dead)
 	}
 	// 死亡会终止本次战斗产生的状态，只保留跨死亡继续计时的经验增益。
@@ -1049,7 +1070,9 @@ func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
 		AllowSkillRevive: dead.Kind == domain.KindPlayer,
 	})
 	if dead.Kind == domain.KindPlayer {
-		s.recordPlayerDeathLoss(dead)
+		if !s.onEndgameRiftPlayerDeath(dead) {
+			s.recordPlayerDeathLoss(dead)
+		}
 	}
 
 	// 打它的那些怪要脱战, 否则会一直对着尸体挥空
@@ -1076,7 +1099,7 @@ func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
 	}
 
 	// 临时召唤物不代表刷怪点产出，不提供经验、任务进度或掉落。
-	if dead.Monster == nil || dead.Monster.Summoner == 0 {
+	if !s.onEndgameRiftMonsterDeath(dead, s.entities[killer]) && (dead.Monster == nil || dead.Monster.Summoner == 0) {
 		// 结算击杀回报：任务专属收集品直入背包；普通掉落仍生成地面实体。
 		s.recordQuestKill(dead, killer)
 		s.grantQuestDrops(dead, killer)
@@ -1447,6 +1470,8 @@ func (s *Scene) snapshotOf(e *entity.Entity) domain.Snapshot {
 func (s *Scene) shutdown(reason string) {
 	// WriteBack stays alive until all scenes have drained. Resolve each accepted
 	// pair before saving final snapshots, even after normal Post has been closed.
+	s.finishEndgame(true)
+	s.finishEndgameRunWrites()
 	s.finishReadyTrades(true)
 	s.log.Info("场景停止", "reason", reason, "tick", s.tick, "在线", len(s.players))
 	for _, e := range s.players {

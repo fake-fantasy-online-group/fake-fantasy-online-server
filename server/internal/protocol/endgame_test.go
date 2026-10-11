@@ -14,7 +14,7 @@ func TestEndgameClosedSchema(t *testing.T) {
 	if !ok || v.TargetUID != "9007199254740993" || v.RuneUID != "9223372036854775807" {
 		t.Fatalf("lossless decode: %+v %v", v, ok)
 	}
-	cases := []string{`null`, `[]`, `{"op":"hello","x":1}`, `{"op":"hello","op":"snapshot"}`, `{"op":"snapshot","targetUid":123}`, `{"op":"snapshot","targetUid":"01"}`, `{"op":"snapshot","targetUid":"-1"}`, `{"op":"snapshot","expectedRevision":"+0"}`, `{"op":"socket.insert","requestId":"short","expectedRevision":"0"}`, `{"op":"snapshot","socket":5}`, `{"op":"snapshot","itemUids":["0"]}`, `{"op":"hello"} {}`, `{"op":"unknown"}`, `{"op":"hello","capabilities":["` + strings.Repeat("x", 61440) + `"]}`}
+	cases := []string{`null`, `[]`, `{"op":"hello","x":1}`, `{"op":"hello","Op":"snapshot"}`, `{"op":"hello","op":"snapshot"}`, `{"op":"snapshot","targetUid":123}`, `{"op":"snapshot","targetUid":"01"}`, `{"op":"snapshot","targetUid":"-1"}`, `{"op":"snapshot","expectedRevision":"+0"}`, `{"op":"socket.insert","requestId":"short","expectedRevision":"0"}`, `{"op":"snapshot","socket":5}`, `{"op":"snapshot","itemUids":["0"]}`, `{"op":"hello"} {}`, `{"op":"unknown"}`, `{"op":"hello","capabilities":["` + strings.Repeat("x", 61440) + `"]}`}
 	for _, s := range cases {
 		if _, ok := DecodeEndgame(endgamePayload(s)); ok {
 			t.Errorf("accepted %s", s[:min(len(s), 100)])

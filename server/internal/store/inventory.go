@@ -641,6 +641,9 @@ func loadWarehouse(ctx context.Context, q querier, charID int64, rule domain.War
 // 增量更新要跟踪每一格的变化, 那套簿记出一次错就是刷物品漏洞;
 // 一个角色最多几十格, 整包重写的代价完全可以接受。
 func (p *Postgres) SaveSnapshot(ctx context.Context, snap domain.Snapshot) error {
+	if err := validateEndgameSnapshot(snap); err != nil {
+		return err
+	}
 	if err := validatePetItems(snap); err != nil {
 		return err
 	}
@@ -835,6 +838,9 @@ func saveTitles(ctx context.Context, tx pgx.Tx, charID int64, titles []string) e
 }
 
 func (t *pgTx) SaveSnapshot(ctx context.Context, snap domain.Snapshot) error {
+	if err := validateEndgameSnapshot(snap); err != nil {
+		return err
+	}
 	if err := validatePetItems(snap); err != nil {
 		return err
 	}

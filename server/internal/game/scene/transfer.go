@@ -36,6 +36,13 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	if !ok {
 		return false
 	}
+	if s.rift != nil && cmd.To != s.id && !s.rift.data.Run.Terminal() && s.rift.data.Run.Admitted(domain.CharID(e.Player.Char.ID)) && !(s.rift.retired && s.rift.transition != nil && cmd.To == s.rift.transition.target) {
+		s.trialNotice(e, "请通过演劫洞天面板离开；离开会放弃本次奖励资格。")
+		if cmd.ClientMapReady {
+			return s.onTeleport(Teleport{ID: e.ID, To: s.id, At: e.Pos})
+		}
+		return false
+	}
 	if loading := s.mapLoads[cmd.ID]; loading != nil {
 		queued := cmd
 		loading.next = &queued
@@ -132,6 +139,8 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	// Character.Pos 在线期间不随每次移动更新，源场景的权威位置是实体位置。
 	// 交接失败时玩家只能断线重登，届时必须从这个源坐标恢复，不能把尚未成功
 	// 到达的目标落点写进存档。
+	s.disconnectEndgameRift(e)
+	s.stepEndgameTrial()
 	sourcePos := e.Pos
 	s.endSharedRide(e)
 
@@ -188,7 +197,7 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	id := e.ID // 实体 id 跟着人走 —— 是同一个实体换了地方, 不是新生成一个
 
 	handoff := func() bool {
-		return s.router.PostHandoff(cmd.To, Enter{
+		enter := Enter{
 			ID: id, Char: char, Runtime: &runtime, Bag: bag, Worn: worn, Warehouse: warehouse,
 			ChangeSet: changeSet,
 			Wardrobe:  wardrobe,
@@ -196,7 +205,11 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 			Party:     partyID, DungeonElapsed: s.transferDungeonElapsed(cmd.To),
 			Sink: sink, ClientMapReady: cmd.ClientMapReady,
 			FinalSaver: finalSaver,
-		})
+		}
+		if cmd.RiftRunID != "" {
+			return s.router.postExistingRiftHandoff(cmd.To, cmd.RiftRunID, enter)
+		}
+		return s.router.PostHandoff(cmd.To, enter)
 	}
 	handedOff := false
 	if owner, ok := sink.(transferSink); ok {
@@ -210,7 +223,10 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 		s.log.Error("传送失败, 目标场景不可用", "char", name, "to", cmd.To)
 		char.Pos = sourcePos
 		char.SceneInstance = s.id.Instance
-		if s.dungeon != nil {
+		if s.rift != nil && s.rift.retired && s.rift.transition != nil {
+			char.Pos = s.rift.data.Floor.Entry
+			char.SceneInstance = s.rift.transition.target.Instance
+		} else if s.dungeon != nil {
 			char.Pos = s.dungeon.Exit
 			char.SceneInstance = 0
 		}

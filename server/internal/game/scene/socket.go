@@ -164,6 +164,10 @@ func (s *Scene) onInlayItem(cmd InlayItem) {
 		return
 	}
 	rune := p.Player.Bag.At(int(cmd.RuneBagSlot))
+	if _, astral := domain.AstralRune(rune.Item); astral {
+		s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: "星篆请在周天鼎的星篆界面镶嵌，确保孔序与安全结算。"})
+		return
+	}
 	runeDef, ok := s.itemDef(rune.Item)
 	if !ok || rune.Empty() || rune.Locked || !rune.Card.Initialized || rune.Count != 1 || rune.UID <= 0 ||
 		rune.InstanceKind != domain.ItemInstanceSocketCard ||

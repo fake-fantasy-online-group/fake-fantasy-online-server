@@ -22,6 +22,9 @@ import (
 
 // onUseSkill 处理释放技能。
 func (s *Scene) onUseSkill(cmd UseSkill) {
+	if s.rift != nil && !s.riftCombatReady() {
+		return
+	}
 	caster, ok := s.players[cmd.ID]
 	if !ok || !caster.Alive() || s.entityMapLoading(caster) {
 		return
@@ -70,6 +73,8 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		return
 	}
 	s.applyPassiveSkillModifiers(caster, &def)
+	def.UniqueInvisibleStart = entityInvisible(caster)
+	s.applyUniqueSkillModifiers(caster, &def)
 	if def.RequiresInvisible && !entityInvisible(caster) {
 		reject(event.RejectRequiresInvisible)
 		return
@@ -843,6 +848,9 @@ func (s *Scene) stepCasts() {
 // stepCastsAt 同时服务 100ms 主帧与主帧之间的精确吟唱结束/命中相位。
 // timedOnly=true 时只处理到期的壁钟时刻，不能顺手提前执行普通瞬发技能。
 func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
+	if s.rift != nil && !s.riftCombatReady() {
+		return
+	}
 	if len(s.casts) == 0 {
 		return
 	}
@@ -1024,14 +1032,15 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		switch effect.Kind {
 		case domain.EffectHeal:
 			amount := effect.HealAmount(effectTarget.MaxHP)
+			amount = s.uniqueHealing(src, effectTarget, amount, def)
 			ev := combat.Restore(src, effectTarget, amount, int32(def.ID))
 			s.emit(ev)
 			s.emitAttributesIfPlayer(effectTarget)
 			effectLanded = true
 
 		case domain.EffectRestoreMP:
-			amount := effect.RestoreMPFlat + src.Stats.MaxAtk*effect.SourceAttackPct/100
-			effectTarget.MP += amount
+			amount := clampI32(int64(effect.RestoreMPFlat) + int64(src.Stats.MaxAtk)*int64(effect.SourceAttackPct)/100)
+			effectTarget.MP = clampI32(int64(effectTarget.MP) + int64(amount))
 			if effectTarget.MP > effectTarget.MaxMP {
 				effectTarget.MP = effectTarget.MaxMP
 			}
@@ -1039,14 +1048,15 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			effectLanded = true
 
 		case domain.EffectRestoreHP:
-			amount := src.Stats.MaxAtk * effect.SourceAttackPct / 100
+			amount := clampI32(int64(src.Stats.MaxAtk) * int64(effect.SourceAttackPct) / 100)
+			amount = s.uniqueHealing(src, effectTarget, amount, def)
 			ev := combat.Restore(src, effectTarget, amount, int32(def.ID))
 			s.emit(ev)
 			s.emitAttributesIfPlayer(effectTarget)
 			effectLanded = true
 
 		case domain.EffectDamageMP:
-			amount := src.Stats.MaxAtk * effect.SourceAttackPct / 100
+			amount := clampI32(int64(src.Stats.MaxAtk) * int64(effect.SourceAttackPct) / 100)
 			effectTarget.MP -= amount
 			if effectTarget.MP < 0 {
 				effectTarget.MP = 0
@@ -1055,7 +1065,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			effectLanded = true
 
 		case domain.EffectDamageMPMax:
-			amount := effectTarget.MaxMP * effect.MaxResourcePct / 100
+			amount := clampI32(int64(effectTarget.MaxMP) * int64(effect.MaxResourcePct) / 100)
 			effectTarget.MP -= amount
 			if effectTarget.MP < 0 {
 				effectTarget.MP = 0
@@ -1103,11 +1113,14 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 				s.hits[src.ID] = tr
 			}
 			blow := combat.Blow{
-				SkillID:       int32(def.ID),
-				SkillPct:      effect.DamagePct,
-				FlatDamage:    effect.DamageFlat,
-				Trap:          triggeredByTrap,
-				GuaranteedHit: effect.GuaranteedHit,
+				StartedInvisible: def.UniqueInvisibleStart,
+				Area:             def.Area.Valid() || def.Radius > 0,
+				HurtType:         def.HurtType,
+				SkillID:          int32(def.ID),
+				SkillPct:         effect.DamagePct,
+				FlatDamage:       effect.DamageFlat,
+				Trap:             triggeredByTrap,
+				GuaranteedHit:    effect.GuaranteedHit,
 				// 法系技能 100% 命中(docs/战斗公式.md 第一节)。
 				// 物理系技能照常判命中 —— 「法杖平砍算物理, 照样 miss」。
 				Magic: def.HurtType != domain.HurtPhysical && def.HurtType != domain.HurtNone,

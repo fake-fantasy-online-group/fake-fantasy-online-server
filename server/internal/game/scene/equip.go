@@ -307,6 +307,7 @@ func (s *Scene) passiveStatAffixes(p *entity.Entity) []domain.Affix {
 	}
 	ch := p.Player.Char
 	out := s.petStatAffixes(p)
+	out = append(out, domain.AstralBonuses(p.Player.Worn, s.itemDef, ch)...)
 	for skill, level := range ch.Skills {
 		def, ok := s.skills.Get(skill, level)
 		if !ok || def.Kind != domain.SkillPassive || !ch.AllowsSkill(def.ID, def.Prof) {

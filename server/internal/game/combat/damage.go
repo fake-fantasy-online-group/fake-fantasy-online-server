@@ -1,5 +1,11 @@
 package combat
 
+import (
+	"math"
+
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+)
+
 // 伤害计算。三条铁律，都来自 docs/战斗公式.md 第一节第 2 步：
 //
 //	① 均匀分布      基础伤害 = uniform(攻击下限, 攻击上限)
@@ -31,11 +37,11 @@ func RollPhysicalSkill(minAtk, maxAtk, resist, skillPct int32, rng Rand) int32 {
 	if skillPct <= 0 {
 		skillPct = 100
 	}
-	base := minAtk
-	if span := maxAtk - minAtk; span > 0 && rng != nil {
-		base += int32(rng.Intn(int(span) + 1)) // +1: 上限要能取到
+	base := int64(minAtk)
+	if span := int64(maxAtk) - int64(minAtk); span > 0 && rng != nil {
+		base += int64(rng.Intn(int(span) + 1)) // +1: 上限要能取到
 	}
-	return floor(int32(int64(base)*int64(skillPct)/100) - resist)
+	return boundedDamage(base*int64(skillPct)/100 - int64(resist))
 }
 
 // MagicMitigation 返回旧比例模型的减伤率，仅保留给历史数值诊断调用。
@@ -80,7 +86,14 @@ func RollMagic(matk, skillPct, atkLevel, mdef, mresist int32) int32 {
 	}
 	base := float64(matk) * float64(skillPct) / 100
 	after := base * (1 - MagicMitigation(atkLevel, mdef))
-	return floor(int32(after) - mresist)
+	damage := math.Trunc(after) - float64(mresist)
+	if damage >= math.MaxInt32 {
+		return math.MaxInt32
+	}
+	if damage <= MinDamage {
+		return MinDamage
+	}
+	return int32(damage)
 }
 
 // RollMagicFixedDefense 按当前规则计算魔法伤害。
@@ -95,7 +108,7 @@ func RollMagicFixedDefense(matk, skillPct, mdef, mresist int32) int32 {
 	damageHundredths := int64(matk)*int64(skillPct) -
 		int64(mdef)*MagicDefenseReductionNumerator
 	damage := damageHundredths / MagicDefenseReductionDenominator
-	return floor(int32(damage) - mresist)
+	return boundedDamage(damage - int64(mresist))
 }
 
 // Crit 掷暴击。rate 是**万分比**（attr23 的口径，10000 = 100%）。
@@ -115,4 +128,10 @@ func floor(d int32) int32 {
 		return MinDamage
 	}
 	return d
+}
+
+// boundedDamage retains wide skill, resistance and critical intermediates until
+// the final event amount is narrowed; high-tier hits must never wrap or heal.
+func boundedDamage(damage int64) int32 {
+	return max(int32(MinDamage), domain.SaturateInt32(damage))
 }

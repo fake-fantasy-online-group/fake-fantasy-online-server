@@ -125,6 +125,7 @@ func (s *Scene) onMapReady(cmd MapReady) {
 }
 
 func (s *Scene) syncWorldAfterLoad(e *entity.Entity) {
+	s.syncEndgameRift(e)
 	if s.trial.IsMap(s.id.MapID) {
 		s.emitTo(e.ID, event.NewbieTextNotice{Who: e.ID, Text: "进入妖魔结界！"})
 	}

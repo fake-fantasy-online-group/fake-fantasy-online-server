@@ -135,6 +135,7 @@ func (s *Scene) prepareBasicAttackStatuses(e *entity.Entity, blow *combat.Blow) 
 		return
 	}
 	bonus := e.Status.StealthDamageBonus()
+	blow.StartedInvisible = entityInvisible(e)
 	oneShotBonus, _, _, removed := e.Status.ConsumeAttackModifiers(false, true, false, false)
 	bonus += oneShotBonus
 	if bonus > 0 {
@@ -198,7 +199,7 @@ func boostedDamagePct(base, bonus int32) int32 {
 	if base == 0 {
 		base = 100
 	}
-	return base * (100 + bonus) / 100
+	return clampI32(int64(base) * (100 + int64(bonus)) / 100)
 }
 
 // resolveStrikeStatuses 把普通战斗公式的结果再经过状态减伤/护盾。
@@ -210,7 +211,7 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		return ev, rawDamage, 0
 	}
 	if blow.FlatDamage > 0 {
-		rawDamage += blow.FlatDamage
+		rawDamage = clampI32(int64(rawDamage) + int64(blow.FlatDamage))
 	}
 	if gmGodEnabled(dst) {
 		dst.HP = beforeHP
@@ -224,14 +225,15 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		if magic {
 			kind = "magic_extra"
 		}
-		rawDamage += s.petProcAmount(src, kind)
+		rawDamage = clampI32(int64(rawDamage) + int64(s.petProcAmount(src, kind)))
 	}
 	if src.Status != nil {
-		rawDamage += src.Status.OutgoingDamageFlat(magic)
+		rawDamage = clampI32(int64(rawDamage) + int64(src.Status.OutgoingDamageFlat(magic)))
 		if rawDamage < 1 {
 			rawDamage = 1
 		}
 	}
+	rawDamage = s.uniqueOutgoingDamage(src, dst, blow, ev, rawDamage, beforeHP)
 	finalDamage, fullMagicReflect := rawDamage, int32(0)
 	removed := []domain.StatusID(nil)
 	reflectChance := int32(0)
@@ -243,25 +245,24 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 	} else if magic && reflectChance > 0 && int32(s.rng.Intn(100)) < reflectChance {
 		finalDamage, fullMagicReflect = 0, rawDamage
 	} else {
-		incoming := rawDamage
+		incoming := s.uniqueIncomingDamage(dst, magic, rawDamage, beforeHP)
 		if dst.Kind == domain.KindPlayer {
 			kind := "physical_reduction"
 			if magic {
 				kind = "magic_reduction"
 			}
-			incoming -= s.petProcAmount(dst, kind)
-			incoming -= s.petFlatReduction(dst, magic)
+			incoming = clampI32(int64(incoming) - int64(s.petProcAmount(dst, kind)) - int64(s.petFlatReduction(dst, magic)))
 			if incoming < 1 {
 				incoming = 1
 			}
 		}
 		if chance := s.trapHalfDamageChance(dst); blow.Trap && chance > 0 &&
 			int32(s.rng.Intn(10000)) < chance {
-			incoming = (incoming + 1) / 2
+			incoming = incoming/2 + incoming%2
 		}
 		if chance := s.incomingMagicHalfChance(dst); magic && chance > 0 &&
 			int32(s.rng.Intn(10000)) < chance {
-			incoming = (incoming + 1) / 2
+			incoming = incoming/2 + incoming%2
 		}
 		if dst.Status != nil {
 			finalDamage, removed = dst.Status.MitigateDamage(magic, incoming)
@@ -283,7 +284,13 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		ev.Flag &^= event.DamageFatal
 	}
 	ev.Amount, ev.DstHP = finalDamage, dst.HP
+	if finalDamage > 0 {
+		s.beginEndgameTrial()
+	}
 	s.statusesRemoved(dst, removed)
+	if beforeHP > 0 {
+		s.afterUniqueStrike(src, dst, ev)
+	}
 	return ev, rawDamage, fullMagicReflect
 }
 
@@ -354,13 +361,13 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 	if src.Status != nil && src.Alive() && ev.Amount > 0 {
 		_, _, _, lifePct, lifeChance, manaPct, manaChance := src.Status.CombatTriggers()
 		if lifePct > 0 && int32(s.rng.Intn(100)) < lifeChance {
-			amount := ev.Amount * lifePct / 100
+			amount := clampI32(int64(ev.Amount) * int64(lifePct) / 100)
 			if amount > 0 {
 				s.emit(combat.Restore(src, src, amount, ev.SkillID))
 			}
 		}
 		if manaPct > 0 && int32(s.rng.Intn(100)) < manaChance {
-			src.MP += ev.Amount * manaPct / 100
+			src.MP = clampI32(int64(src.MP) + int64(ev.Amount)*int64(manaPct)/100)
 			if src.MP > src.MaxMP {
 				src.MP = src.MaxMP
 			}
@@ -373,7 +380,7 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 	}
 	reflectPct := dst.Status.ReflectPct(magic)
 	reflectFlat, reflectFlatAsMagic := dst.Status.ReflectFlat(magic)
-	reflected := ev.Amount*reflectPct/100 + reflectFlat
+	reflected := clampI32(int64(ev.Amount)*int64(reflectPct)/100 + int64(reflectFlat))
 	s.emitReflectedDamage(dst, src, reflected, magic || reflectFlatAsMagic)
 }
 
@@ -693,21 +700,21 @@ func (s *Scene) statusDefByID(id domain.StatusID) (domain.StatusDef, bool) {
 // attr38 与 attr446 修改当前生命，attr447 修改当前法力。Mode=1 按对应
 // 上限取百分比；此前把“每两秒减少生命上限6%”错算成固定 6 点。
 func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
-	var hpDelta, mpDelta int32
+	var hpDelta, mpDelta int64
 	for _, af := range a.Def.Affixes {
 		if af.Attr == domain.AttrHPRegen {
-			hpDelta += resourceDelta(af.Value, af.Mode, e.MaxHP)
+			hpDelta += int64(resourceDelta(af.Value, af.Mode, e.MaxHP))
 		}
 	}
 	for _, change := range a.Def.HPChanges {
-		hpDelta += resourceDelta(change.Value, change.Mode, e.MaxHP)
+		hpDelta += int64(resourceDelta(change.Value, change.Mode, e.MaxHP))
 	}
 	for _, change := range a.Def.MPChanges {
-		mpDelta += resourceDelta(change.Value, change.Mode, e.MaxMP)
+		mpDelta += int64(resourceDelta(change.Value, change.Mode, e.MaxMP))
 	}
-	if a.Def.ManaToHealthRate > 0 && e.MP+mpDelta > 0 && e.HP+hpDelta < e.MaxHP {
+	if a.Def.ManaToHealthRate > 0 && int64(e.MP)+mpDelta > 0 && int64(e.HP)+hpDelta < int64(e.MaxHP) {
 		mpDelta--
-		hpDelta += a.Def.ManaToHealthRate
+		hpDelta += int64(a.Def.ManaToHealthRate)
 	}
 	if (hpDelta == 0 && mpDelta == 0) || !e.Alive() {
 		return
@@ -717,14 +724,14 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 		src = o
 	}
 	if hpDelta > 0 {
-		s.emit(combat.Restore(src, e, hpDelta, int32(a.Def.ID)))
+		s.emit(combat.Restore(src, e, clampI32(hpDelta), int32(a.Def.ID)))
 	} else if hpDelta < 0 {
 		// 掉血。走一条独立的路径而不是 combat.Strike ——
 		// 周期伤害不判命中、不吃暴击、不触发“挨打还手”。
 		if gmGodEnabled(e) {
 			hpDelta = 0
 		} else {
-			dmg := -hpDelta
+			dmg := clampI32(-hpDelta)
 			e.HP -= dmg
 			ev := event.DamageDealt{Src: a.Source, Dst: e.ID, Amount: dmg, DstHP: e.HP}
 			if e.HP <= 0 {
@@ -734,6 +741,9 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 			}
 			s.emit(ev)
 			s.afterCastDamage(ev, false)
+			if ev.Amount > 0 {
+				s.beginEndgameTrial()
+			}
 			if ev.Amount > 0 && e.Status != nil {
 				s.statusesRemoved(e, e.Status.RemoveWhere(func(d domain.StatusDef) bool {
 					return d.BreakOnDamage
@@ -747,7 +757,7 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 		}
 	}
 	if mpDelta != 0 {
-		e.MP += mpDelta
+		e.MP = clampI32(int64(e.MP) + mpDelta)
 		if e.MP < 0 {
 			e.MP = 0
 		}
@@ -768,7 +778,7 @@ func gmOneShotEnabled(e *entity.Entity) bool {
 
 func resourceDelta(value, mode, max int32) int32 {
 	if mode == domain.ModePercent {
-		return max * value / 100
+		return domain.SaturateInt32(int64(max) * int64(value) / 100)
 	}
 	return value
 }
@@ -790,7 +800,13 @@ func (s *Scene) refreshEntityStats(e *entity.Entity) {
 		return
 	}
 	// 从模板重新起算；固定 buff 与百分比 buff 分桶后一次性相加，禁止复利。
-	e.Stats = domain.ApplyStatusStats(def.Stats, e.Status.Affixes())
+	base := def.Stats
+	if s.rift != nil {
+		if scaled, exists := s.rift.baseStats[e.ID]; exists {
+			base = scaled
+		}
+	}
+	e.Stats = domain.ApplyStatusStats(base, e.Status.Affixes())
 	applyStatusAttackCap(e)
 }
 

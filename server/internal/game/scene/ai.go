@@ -88,10 +88,16 @@ func (q *monsterPathQueue) Pop() any {
 
 // stepAI 推进本图所有怪的行为。
 func (s *Scene) stepAI() {
+	if s.rift != nil && !s.riftCombatReady() {
+		return
+	}
 	if len(s.monsters) == 0 {
 		return
 	}
 	for _, m := range s.monsters {
+		if s.riftMonsterAbilityBusy(m.ID) {
+			continue
+		}
 		if !m.Alive() || m.Monster == nil {
 			continue
 		}
@@ -376,7 +382,7 @@ func monsterHPPct(m *entity.Entity) int32 {
 	if m == nil || m.MaxHP <= 0 {
 		return 0
 	}
-	return m.HP * 100 / m.MaxHP
+	return int32(max(int64(0), min(int64(100), int64(m.HP)*100/int64(m.MaxHP))))
 }
 
 func monsterRuleInHPRange(rule domain.MonsterSkillRule, hpPct int32) bool {

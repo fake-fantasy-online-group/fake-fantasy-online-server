@@ -55,6 +55,7 @@ func (s *Scene) rollLoot(dead *entity.Entity, killer domain.EntityID) {
 	entries := s.lootTable[dead.Monster.TypeID]
 	fixed := s.rollBossFixedEquipment(dead)
 	if len(entries) == 0 && len(fixed) == 0 {
+		s.rollAstralRuneLoot(dead, killer, 0)
 		return
 	}
 	// 跨级惩罚的掉率倍率按击杀者等级对怪模板等级算；宠物补刀归主人。
@@ -74,11 +75,13 @@ func (s *Scene) rollLoot(dead *entity.Entity, killer domain.EntityID) {
 			continue
 		}
 		stack := domain.NewStack(def, 1)
+		stack.SocketCount = domain.RollDroppedSocketCount(def, domain.AstralDropBoss, s.rng.Int63n)
 		if choice.RollAffixes {
-			rolled := s.equipmentRoll.Roll(def, profile, s.rng.Int63n)
+			rolled := s.equipmentRoll.RollWithReservedSockets(def, profile, stack.SocketCount, s.rng.Int63n)
 			stack.RolledAffixCount = uint8(len(rolled))
 			copy(stack.RolledAffixes[:], rolled)
 		}
+		domain.RollUniqueDrop(&stack, def, s.rng.Intn)
 		s.spawnGeneratedLoot(def, stack,
 			s.monsterLootPosition(dead.Pos, startSlot+n), killer)
 		n++
@@ -105,15 +108,18 @@ func (s *Scene) rollLoot(dead *entity.Entity, killer domain.EntityID) {
 			continue
 		}
 		stack := domain.NewStack(def, 1)
+		stack.SocketCount = domain.RollDroppedSocketCount(def, s.astralDropGrade(dead), s.rng.Int63n)
 		if e.RollAffixes && def.Equip != nil {
-			rolled := s.equipmentRoll.Roll(def, profile, s.rng.Int63n)
+			rolled := s.equipmentRoll.RollWithReservedSockets(def, profile, stack.SocketCount, s.rng.Int63n)
 			stack.RolledAffixCount = uint8(len(rolled))
 			copy(stack.RolledAffixes[:], rolled)
 		}
+		domain.RollUniqueDrop(&stack, def, s.rng.Intn)
 		s.spawnGeneratedLoot(def, stack, s.monsterLootPosition(dead.Pos, startSlot+n), killer)
 		n++
 		originalDrops++
 	}
+	s.rollAstralRuneLoot(dead, killer, startSlot+n)
 }
 
 func (s *Scene) fixedEquipmentManaged(monster domain.MonsterID, item domain.ItemID) bool {
@@ -344,7 +350,7 @@ func (s *Scene) spawnGeneratedLoot(def domain.ItemDef, stack domain.Stack, at do
 	e := &entity.Entity{
 		ID:   id,
 		Kind: domain.KindDrop,
-		Name: def.Name,
+		Name: itemDisplayName(def, stack),
 		Pos:  at,
 		Drop: &entity.Drop{
 			Item:       stack.Item,
@@ -373,7 +379,7 @@ func (s *Scene) spawnGeneratedLoot(def domain.ItemDef, stack domain.Stack, at do
 func (s *Scene) spawnPlayerDrop(def domain.ItemDef, st domain.Stack, at domain.Pos, owner domain.EntityID) {
 	id := s.alloc.Drop()
 	e := &entity.Entity{
-		ID: id, Kind: domain.KindDrop, Name: def.Name, Pos: at,
+		ID: id, Kind: domain.KindDrop, Name: itemDisplayName(def, st), Pos: at,
 		Drop: &entity.Drop{
 			Item: st.Item, Count: st.Count, Stack: st,
 			Owner: owner, OwnerUntil: s.tick + lootOwnerTicks,
@@ -443,6 +449,10 @@ func (s *Scene) onPickUp(cmd PickUp) {
 		s.removeLoot(e.ID, event.DespawnPickedUp) // 配置没了, 别让它永远躺着
 		return
 	}
+	itemName := def.Name
+	if !e.Drop.Stack.Empty() {
+		itemName = itemDisplayName(def, e.Drop.Stack)
+	}
 	bag := p.Player.Bag
 	originalCount := e.Drop.Count
 	left := originalCount
@@ -464,16 +474,16 @@ func (s *Scene) onPickUp(cmd PickUp) {
 		}
 		s.pushInventory(p)
 		p.Player.MarkDirty()
-		s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: fmt.Sprintf("获得了 %s ×%d", def.Name, originalCount-left)})
+		s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: fmt.Sprintf("获得了 %s ×%d", itemName, originalCount-left)})
 		s.requestNewbieTip(p.ID, 2)
 		return
 	}
 	s.removeLoot(e.ID, event.DespawnPickedUp)
-	s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: fmt.Sprintf("获得了 %s ×%d", def.Name, originalCount)})
+	s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: fmt.Sprintf("获得了 %s ×%d", itemName, originalCount)})
 	s.pushInventory(p)
 	p.Player.MarkDirty()
 	s.requestNewbieTip(p.ID, 2)
-	s.log.Debug("拾取", "char", p.Name, "物品", def.Name, "数量", e.Drop.Count)
+	s.log.Debug("拾取", "char", p.Name, "物品", itemName, "数量", e.Drop.Count)
 }
 
 // pickUpRange 拾取距离。取近战攻击距离的量级 —— 够得着打就够得着捡。

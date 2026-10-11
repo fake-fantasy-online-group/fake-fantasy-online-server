@@ -1,0 +1,342 @@
+package scene
+
+import (
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
+	"sort"
+)
+
+func (s *Scene) onEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
+	if s.endgameBackend == nil {
+		s.endgameError(p, req, "unavailable", "洞天暂不可用")
+		return
+	}
+	if s.rift != nil {
+		if req.RunID != "" && req.RunID != s.rift.data.Run.RunID {
+			s.endgameError(p, req, "busy", "请先离开当前洞天")
+			return
+		}
+		switch req.Op {
+		case "rift.advance":
+			s.advanceEndgameRift(p, req)
+		case "rift.state":
+			s.replyLiveRift(p, req)
+		case "rift.leave":
+			s.leaveEndgameRift(p, req)
+		case "rift.claim":
+			s.claimEndgameRift(p, req, s.rift.data, s.rift.revision, true)
+		case "rift.start":
+			s.replyLiveRift(p, req)
+		}
+		return
+	}
+	profile := riftProfile(s.endgamePlayer(p).state.Payload)
+	if (req.Op == "rift.start") && profile.RunID != "" && profile.RunID != req.RunID {
+		s.loadEndgameRift(p, req, profile.RunID, true)
+		return
+	}
+	id := req.RunID
+	if id == "" {
+		id = profile.RunID
+	}
+	if req.Op == "rift.start" && req.RunID == "" {
+		s.startEndgameRift(p, req)
+		return
+	}
+	if id == "" {
+		s.endgameReply(p, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Rift: &domain.EndgameRiftView{Phase: "idle", MaxTier: domain.RiftMaxTier, UnlockedTier: profile.UnlockedTier, Name: "演劫洞天", KeyCount: p.Player.Bag.CountOf(domain.RiftKeyItemID), KeyItemID: int32(domain.RiftKeyItemID)}})
+		return
+	}
+	s.loadEndgameRift(p, req, id, false)
+}
+func (s *Scene) loadEndgameRift(p *entity.Entity, req domain.EndgameRequest, id string, prior bool) {
+	if s.riftRequests == nil {
+		s.riftRequests = map[domain.EntityID]*endgameRiftRequestState{}
+	}
+	if s.riftRequests[p.ID] != nil {
+		return
+	}
+	s.riftRequests[p.ID] = &endgameRiftRequestState{req: req, load: s.endgameBackend.LoadRun(id), prior: prior}
+}
+func (s *Scene) stepEndgameRiftRequests() {
+	for id, x := range s.riftRequests {
+		select {
+		case result := <-x.load:
+			delete(s.riftRequests, id)
+			p := s.players[id]
+			if p == nil {
+				continue
+			}
+			if result.Err != nil {
+				s.endgameError(p, x.req, "storage", "读取洞天失败，请重试")
+				continue
+			}
+			d, ok := decodeEndgameRift(result.Run)
+			if !ok {
+				if x.prior {
+					s.continueEndgameRiftStart(p, x.req)
+				} else {
+					s.endgameError(p, x.req, "not_found", "洞天已不存在")
+				}
+				continue
+			}
+			char := domain.CharID(p.Player.Char.ID)
+			m := d.Run.Members[char]
+			if m == nil {
+				s.endgameError(p, x.req, "not_owner", "不在本次洞天名册")
+				continue
+			}
+			_, live := s.router.riftScene(d.Run.RunID)
+			if x.prior {
+				owed := (m.Eligible && !m.Claimed && (d.Run.Phase == domain.RiftCompleted || d.Run.Phase == domain.RiftClosed)) || riftNeedsCompensation(d.Run, live, char)
+				if owed {
+					s.endgameError(p, x.req, "pending_reward", "请先领取上次洞天奖励或中断补偿")
+					s.endgameReply(p, domain.EndgameResponse{Kind: "rift.state", OK: true, Rift: s.riftView(p, d, true, live)})
+					continue
+				}
+				if live && !d.Run.Terminal() {
+					s.endgameError(p, x.req, "active_run", "上次洞天仍在进行")
+					continue
+				}
+				s.continueEndgameRiftStart(p, x.req)
+				continue
+			}
+			switch x.req.Op {
+			case "rift.state":
+				s.endgameReply(p, domain.EndgameResponse{Kind: x.req.Op, RequestID: x.req.RequestID, OK: true, Rift: s.riftView(p, d, true, live)})
+			case "rift.start":
+				s.joinEndgameRift(p, x.req, d)
+			case "rift.claim":
+				if live {
+					s.endgameError(p, x.req, "reenter", "请先重返洞天领取奖励")
+					continue
+				}
+				s.claimEndgameRift(p, x.req, d, result.Run.Revision, false)
+			case "rift.leave":
+				s.endgameError(p, x.req, "not_inside", "当前不在洞天内")
+			}
+		default:
+		}
+	}
+}
+func (s *Scene) continueEndgameRiftStart(p *entity.Entity, req domain.EndgameRequest) {
+	if req.RunID == "" {
+		s.startEndgameRift(p, req)
+	} else {
+		s.loadEndgameRift(p, req, req.RunID, false)
+	}
+}
+func (s *Scene) startEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
+	if s.router == nil || s.trial == nil || !p.Alive() || !s.trialEntryNPC(p) {
+		s.endgameError(p, req, "entrance", "请与妖魔结界守卫交谈后开启洞天")
+		return
+	}
+	profile := riftProfile(s.endgamePlayer(p).state.Payload)
+	if req.Tier < 1 || req.Tier > profile.UnlockedTier || req.Tier > domain.RiftMaxTier {
+		s.endgameError(p, req, "tier", "尚未解锁此层")
+		return
+	}
+	if p.Player.Party != 0 && (s.dungeonParty == nil || s.dungeonParty(domain.CharID(p.Player.Char.ID)).Leader != domain.CharID(p.Player.Char.ID)) {
+		s.endgameError(p, req, "leader", "请由队长开启洞天")
+		return
+	}
+	var roster []domain.TrialKeyMember
+	names := map[domain.CharID]string{}
+	profiles := map[domain.CharID]endgameRiftIdentity{}
+	var peers []domain.EntityID
+	for _, peer := range s.players {
+		if peer.ID != p.ID && (p.Player.Party == 0 || peer.Player.Party != p.Player.Party) {
+			continue
+		}
+		if !peer.Alive() || riftDistance2(peer.Pos, p.Pos) > 500*500 {
+			continue
+		}
+		ch := peer.Player.Char
+		if ch.Level < s.trial.MinLevel || ch.Level > s.trial.MaxLevel {
+			continue
+		}
+		char := domain.CharID(ch.ID)
+		roster = append(roster, domain.TrialKeyMember{CharID: char, Level: ch.Level, Cycle: ch.Trial.Cycle})
+		names[char] = ch.Name
+		profiles[char] = endgameRiftIdentity{Race: ch.Race, Gender: ch.Appear.Gender, Employed: ch.HasProfession()}
+		peers = append(peers, peer.ID)
+	}
+	sort.Slice(roster, func(i, j int) bool { return roster[i].CharID < roster[j].CharID })
+	run, err := domain.NewRiftRun(riftNonce(), req.Tier, domain.CharID(p.Player.Char.ID), roster, s.riftMS())
+	if err != nil {
+		s.endgameError(p, req, "roster", "洞天限1至5名合适等级队员")
+		return
+	}
+	plan, layoutErr := s.planEndgameRiftFloor(run.RunID, 1, 0)
+	if layoutErr != nil {
+		s.endgameError(p, req, "layout", "洞天地形暂不可用，请稍后重试")
+		return
+	}
+	mapID := plan.MapID
+	floor := &plan
+	d := endgameRiftPersisted{Version: 1, Floor: floor, Run: run, MapID: mapID, Return: p.Pos, Names: names, Profiles: profiles, Grants: map[domain.CharID]endgameRiftGrant{}}
+	candidate := s.snapshotOf(p).Clone()
+	if !candidate.Bag.Remove(domain.RiftKeyItemID, 1) {
+		s.endgameError(p, req, "key", "需要一枚洞天符钥")
+		return
+	}
+	inst, err := s.router.reserveEndgameRift(mapID, d)
+	if err != nil {
+		s.endgameError(p, req, "instance", err.Error())
+		return
+	}
+	record := d.record(1)
+	profile.RunID = run.RunID
+	ok := s.endgameCommitPayload(p, req, candidate, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Rift: s.riftView(p, d, true, true)}, &record, 0, func() {
+		s.router.payEndgameRift(inst)
+		for _, id := range peers {
+			if peer := s.players[id]; peer != nil {
+				s.endgameReply(peer, domain.EndgameResponse{Kind: "rift.state", OK: true, Rift: s.riftView(peer, d, true, true)})
+			}
+		}
+		id := p.ID
+		s.timer.after(s.tick, 1, func() {
+			if s.players[id] != nil {
+				s.onTeleport(Teleport{RiftRunID: run.RunID, ID: id, To: inst, At: s.router.riftEntry(inst, s.dungeons[mapID].Enter)})
+			}
+		})
+	}, withRiftProfile(s.endgamePlayer(p).state.Payload, profile))
+	if ok {
+		s.endgamePlayer(p).onFailure = func() { s.router.discardEndgameRift(inst) }
+	} else {
+		s.router.discardEndgameRift(inst)
+	}
+}
+func (s *Scene) joinEndgameRift(p *entity.Entity, req domain.EndgameRequest, d endgameRiftPersisted) {
+	if !p.Alive() {
+		s.endgameError(p, req, "dead", "请复活后进入洞天")
+		return
+	}
+	id, ok := s.router.riftScene(d.Run.RunID)
+	char := domain.CharID(p.Player.Char.ID)
+	if !ok || !s.router.ActiveRiftForCharacter(id, char) {
+		s.endgameError(p, req, "not_owner", "洞天已结束或没有本次入场资格")
+		return
+	}
+	profile := riftProfile(s.endgamePlayer(p).state.Payload)
+	profile.RunID = d.Run.RunID
+	s.endgameCommitPayload(p, req, s.snapshotOf(p).Clone(), domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Rift: s.riftView(p, d, true, true)}, nil, 0, func() {
+		entityID := p.ID
+		s.timer.after(s.tick, 1, func() {
+			if s.players[entityID] != nil {
+				s.onTeleport(Teleport{RiftRunID: d.Run.RunID, ID: entityID, To: id, At: s.router.riftEntry(id, s.dungeons[id.MapID].Enter)})
+			}
+		})
+	}, withRiftProfile(s.endgamePlayer(p).state.Payload, profile))
+}
+func (s *Scene) replyLiveRift(p *entity.Entity, req domain.EndgameRequest) {
+	s.endgameReply(p, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Rift: s.riftView(p, s.rift.data, s.rift.savedRevision >= s.rift.data.Run.Revision, true)})
+}
+func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d endgameRiftPersisted, revision int64, live bool) {
+	if live && (s.rift.saving != nil || s.rift.economicPending || s.rift.savedRevision < d.Run.Revision) {
+		s.endgameError(p, req, "pending", "结算正在保存，请稍候")
+		return
+	}
+	next := d.clone()
+	char := domain.CharID(p.Player.Char.ID)
+	candidate := s.snapshotOf(p).Clone()
+	profile := riftProfile(s.endgamePlayer(p).state.Payload)
+	previousLevel := candidate.Char.Level
+	var gainedExp int64
+	if riftNeedsCompensation(next.Run, live, char) {
+		def, ok := s.itemDef(domain.RiftKeyItemID)
+		if !ok || candidate.Bag.AddStack(def, domain.Stack{Item: def.ID, Count: 1, Bound: true}) != 0 {
+			s.endgameError(p, req, "bag_full", "请腾出背包空间")
+			return
+		}
+		next.Run.Phase = domain.RiftFailed
+		next.Run.Reason = "compensated"
+		next.Run.Revision++
+	} else {
+		if !next.GrantsReady || !next.Run.MarkClaimed(char) {
+			s.endgameError(p, req, "not_claimable", "没有可领取的奖励")
+			return
+		}
+		grant := next.Grants[char]
+		gainedExp = grant.Exp
+		for _, stack := range grant.Items {
+			def, ok := s.itemDef(stack.Item)
+			if !ok || candidate.Bag.AddStack(def, stack) != 0 {
+				s.endgameError(p, req, "bag_full", "背包空间不足，奖励将保留")
+				return
+			}
+		}
+		gain := candidate.Char.AddExp(s.levels, grant.Exp, domain.LevelCap)
+		candidate.Char.ApplyLevelUps(gain.FromLevel, gain.ToLevel)
+		plan := domain.PlanRiftRewards(next.Run.Tier, next.Run.Timely)
+		if profile.UnlockedTier < plan.UnlockTier {
+			profile.UnlockedTier = plan.UnlockTier
+		}
+	}
+	profile.RunID = next.Run.RunID
+	all := true
+	for _, m := range next.Run.Members {
+		if m.Eligible && !m.Claimed {
+			all = false
+		}
+	}
+	if all && (next.Run.Phase == domain.RiftCompleted) {
+		next.Run.Phase = domain.RiftClosed
+	}
+	record := next.record(revision + 1)
+	if live {
+		s.rift.economicPending = true
+	}
+	ok := s.endgameCommitPayload(p, req, candidate, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Message: "洞天奖励已领取", Rift: s.riftView(p, next, true, live)}, &record, revision, func() {
+		s.publishEndgameRewardExperience(p, previousLevel, gainedExp)
+		if live {
+			s.rift.data = next
+			s.rift.revision = record.Revision
+			s.rift.savedRevision = next.Run.Revision
+			s.rift.economicPending = false
+			if next.Run.Phase == domain.RiftClosed {
+				s.rift.terminalUntil = s.riftMS() + 1000
+			}
+		}
+	}, withRiftProfile(s.endgamePlayer(p).state.Payload, profile))
+	if live {
+		if ok {
+			s.endgamePlayer(p).onFailure = func() { s.reloadEndgameRift() }
+		} else {
+			s.rift.economicPending = false
+		}
+	}
+}
+func (s *Scene) leaveEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
+	x := s.rift
+	if x.saving != nil || x.economicPending || x.transition != nil || x.retired {
+		s.endgameError(p, req, "pending", "存档中，请稍候")
+		return
+	}
+	next := x.data.clone()
+	char := domain.CharID(p.Player.Char.ID)
+	next.Run.Leave(char)
+	record := next.record(x.revision + 1)
+	x.economicPending = true
+	ok := s.endgameCommit(p, req, s.snapshotOf(p).Clone(), domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Message: "已离开洞天"}, &record, x.revision, func() {
+		x.data = next
+		x.revision = record.Revision
+		x.savedRevision = next.Run.Revision
+		x.economicPending = false
+		if !next.Run.Admitted(char) {
+			s.router.withdrawRift(s.id, char)
+		}
+		id := p.ID
+		s.timer.after(s.tick, 1, func() {
+			if s.players[id] != nil {
+				s.onTeleport(Teleport{ID: id, To: domain.SceneID{MapID: next.Return.MapID}, At: next.Return})
+			}
+		})
+	})
+	if ok {
+		s.endgamePlayer(p).onFailure = func() { s.reloadEndgameRift() }
+	} else {
+		x.economicPending = false
+	}
+}
+func riftDistance2(a, b domain.Pos) float64 { x, y := a.X-b.X, a.Y-b.Y; return x*x + y*y }

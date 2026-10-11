@@ -2,8 +2,16 @@
 CREATE TABLE IF NOT EXISTS equipment_endgame_state (
  uid BIGINT PRIMARY KEY REFERENCES item_instances(uid) ON DELETE CASCADE,
  revision BIGINT NOT NULL CHECK(revision >= 0),
- unique_id INTEGER NOT NULL CHECK(unique_id > 0),
- unique_roll_bp INTEGER NOT NULL CHECK(unique_roll_bp BETWEEN 8000 AND 12000)
+ unique_id INTEGER NOT NULL,
+ unique_roll_bp INTEGER NOT NULL
+);
+-- Upgrade previously initialized unique-only overlays without losing revisions.
+ALTER TABLE equipment_endgame_state DROP CONSTRAINT IF EXISTS equipment_endgame_state_unique_id_check;
+ALTER TABLE equipment_endgame_state DROP CONSTRAINT IF EXISTS equipment_endgame_state_unique_roll_bp_check;
+ALTER TABLE equipment_endgame_state DROP CONSTRAINT IF EXISTS equipment_endgame_state_metadata_check;
+ALTER TABLE equipment_endgame_state ADD CONSTRAINT equipment_endgame_state_metadata_check CHECK (
+ (unique_id = 0 AND unique_roll_bp = 0) OR
+ (unique_id > 0 AND unique_roll_bp BETWEEN 8000 AND 12000)
 );
 CREATE TABLE IF NOT EXISTS character_endgame_state (
  char_id BIGINT PRIMARY KEY REFERENCES characters(id) ON DELETE CASCADE,

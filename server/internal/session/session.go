@@ -200,7 +200,10 @@ func (s *Session) OnPacket(op uint16, payload []byte) {
 			return
 		}
 	}
-	if op == protocol.OpEndgame { s.onEndgame(payload); return }
+	if op == protocol.OpEndgame {
+		s.onEndgame(payload)
+		return
+	}
 	if protocol.Op(op) == protocol.OpRideTogether || protocol.Op(op) == protocol.OpRideInvite {
 		target, ok := protocol.DecodeRideTarget(payload)
 		if ok {
@@ -1528,7 +1531,9 @@ func (s *Session) onEnter(req protocol.Request) {
 	} else {
 		def := s.deps.Dungeons[sc.MapID]
 		ok = s.deps.Router.PostExistingRift(sc, domain.CharID(char.ID), enter)
- if !ok { ok = s.deps.Router.PostExistingForOwner(sc, def.Owner(domain.CharID(char.ID), partyID), enter) }
+		if !ok {
+			ok = s.deps.Router.PostExistingForOwner(sc, def.Owner(domain.CharID(char.ID), partyID), enter)
+		}
 	}
 	if !ok {
 		s.stage = StageAuthed
@@ -1554,6 +1559,13 @@ func (s *Session) resolveLoginScene(ctx context.Context, char *domain.Character,
 	if char == nil {
 		return domain.SceneID{}, fmt.Errorf("角色为空")
 	}
+	if id, entry, ok := s.deps.Router.ActiveRiftDestination(domain.CharID(char.ID)); ok {
+		if entry.MapID != 0 {
+			char.Pos = entry
+		}
+		char.SceneInstance = id.Instance
+		return id, nil
+	}
 	def, dungeon := s.deps.Dungeons[char.Pos.MapID]
 	if char.SceneInstance == 0 && !dungeon {
 		return domain.SceneID{MapID: char.Pos.MapID}, nil
@@ -1563,7 +1575,13 @@ func (s *Session) resolveLoginScene(ctx context.Context, char *domain.Character,
 		return saved, nil
 	}
 	if !dungeon {
-		return domain.SceneID{}, fmt.Errorf("副本地图 %d 缺少出口配置", char.Pos.MapID)
+		// A lost rift on an ordinary map can safely return to the public
+		// counterpart at the last collision-valid position; no instance recreation.
+		char.SceneInstance = 0
+		if err := s.deps.Store.SaveChar(ctx, char); err != nil {
+			return domain.SceneID{}, err
+		}
+		return domain.SceneID{MapID: char.Pos.MapID}, nil
 	}
 	char.Pos = def.Exit
 	char.SceneInstance = 0

@@ -30,6 +30,9 @@ func (s *Scene) onRevive(cmd Revive) {
 		return
 	}
 
+	if s.reviveEndgameRift(p) {
+		return
+	}
 	switch cmd.ReviveType {
 	case ReviveTypeRespawn:
 		// 回魂娃娃不是普通双击物品。玩家在死亡面板选择回城时，若背包有

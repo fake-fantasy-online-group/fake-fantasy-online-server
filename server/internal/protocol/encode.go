@@ -187,7 +187,10 @@ const (
 func Encode(observer domain.EntityID, ev event.Event) [][]byte {
 	switch e := ev.(type) {
 	case event.EndgameMessage:
-		if e.Who != observer { return nil }; return packets(EncodeEndgame(e.Message))
+		if e.Who != observer {
+			return nil
+		}
+		return packets(EncodeEndgame(e.Message))
 	case event.MonsterSpoke:
 		return packets(EntityBubble(int32(e.Who), e.Text))
 	case event.EntityOwnerChanged:

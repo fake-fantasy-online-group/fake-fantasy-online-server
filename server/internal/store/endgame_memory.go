@@ -31,7 +31,7 @@ func (t *txView) SaveEndgameState(_ context.Context, id int64, v domain.EndgameS
 	if t.m.chars[id] == nil {
 		return domain.ErrCharNotFound
 	}
-	if expected < 0 || v.Revision != expected+1 || t.m.endgameStates[id].Revision != expected {
+	if expected < 0 || v.Revision <= 0 || v.Revision != expected+1 || t.m.endgameStates[id].Revision != expected {
 		return ErrEndgameRevision
 	}
 	if !json.Valid([]byte(v.Payload)) {
@@ -66,7 +66,7 @@ func (t *txView) LoadEndgameRun(_ context.Context, id string) (*domain.EndgameRu
 	return &v, nil
 }
 func (t *txView) SaveEndgameRun(_ context.Context, v domain.EndgameRunRecord, expected int64) error {
-	if expected < 0 || v.Revision != expected+1 || t.m.endgameRuns[v.RunID].Revision != expected {
+	if expected < 0 || v.Revision <= 0 || v.Revision != expected+1 || t.m.endgameRuns[v.RunID].Revision != expected {
 		return ErrEndgameRevision
 	}
 	if len(v.RunID) < 1 || len(v.RunID) > 64 || !json.Valid([]byte(v.Payload)) {

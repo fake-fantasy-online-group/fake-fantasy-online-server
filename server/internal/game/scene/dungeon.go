@@ -72,6 +72,9 @@ func (s *Scene) onEnterDungeon(cmd EnterDungeon) bool {
 // canStayInDungeon 统一判定停留资格：单人副本按角色持有，其余要求组队。
 // 退队、断线、重登都只复用这一个事实，不各自发明一套分支。
 func (s *Scene) canStayInDungeon(p *entity.Entity) bool {
+	if s.rift != nil {
+		return p != nil && p.Player != nil && s.rift.data.Run.Admitted(domain.CharID(p.Player.Char.ID))
+	}
 	return p != nil && p.Player != nil &&
 		((s.dungeon != nil && s.dungeon.Solo) || p.Player.Party != 0)
 }
@@ -121,6 +124,9 @@ func (s *Scene) persistedPosition(p *entity.Entity) (domain.Pos, uint32) {
 
 // closeDungeonIfEmpty 是副本销毁的唯一规则：曾经进过人，现在实际人数为零。
 func (s *Scene) closeDungeonIfEmpty() bool {
+	if s.rift != nil || (s.trialRun != nil && s.trialRun.Completed && !s.trialRun.Saved) {
+		return false
+	}
 	if s.dungeon == nil || s.id.Persistent() || !s.everOccupied || len(s.players) != 0 {
 		return false
 	}
@@ -144,6 +150,9 @@ func (s *Scene) closeDungeonIfEmpty() bool {
 // 只对副本实例生效 —— 常驻大陆图永远不会因为没人就关掉，
 // 它们要一直在那儿等人来。
 func (s *Scene) checkInstanceLife() {
+	if s.rift != nil || (s.router != nil && s.router.isRiftScene(s.id)) || (s.trialRun != nil && s.trialRun.Completed && !s.trialRun.Saved) {
+		return
+	}
 	if s.dungeon == nil || s.id.Persistent() {
 		return
 	}
@@ -311,6 +320,18 @@ func (s *Scene) openPlayerDungeon(p *entity.Entity, def domain.DungeonDef) (doma
 		q, ok := ch.Quests[s.trial.Quest]
 		if !ok || q.State != domain.QuestActive {
 			return domain.SceneID{}, fmt.Errorf("请先领取尚未完成的试炼任务")
+		}
+		// A previously frozen trial may have completed while this player was
+		// offline. Do not let a new opening replace its nonce before the async
+		// entitlement lookup has resolved. A definite missing record permits
+		// retry; a completed record restores QuestDeliver instead.
+		if s.endgameBackend != nil && ch.Trial.CompletionID != "" {
+			recovery := s.trialState()
+			_, pending := recovery.Recoveries[p.ID]
+			if pending || recovery.RecoveryChecked[p.ID] != ch.Trial.CompletionID {
+				s.recoverEndgameTrial(p)
+				return domain.SceneID{}, fmt.Errorf("正在核对上次试炼完成记录，请稍后重试")
+			}
 		}
 		level = roster.MaxLevel
 		if level < ch.Level {

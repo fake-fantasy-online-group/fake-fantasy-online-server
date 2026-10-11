@@ -446,6 +446,9 @@ func equipmentQuality(def domain.ItemDef, stacks ...domain.Stack) uint8 {
 	if len(stacks) != 0 {
 		st = stacks[0]
 	}
+	if _, ok := domain.UniqueOf(st); ok {
+		return 4
+	}
 	n := domain.EquipmentAttributeCount(def, st)
 	if n > 5 {
 		n = 5
@@ -513,10 +516,21 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 	e := def.Equip
 	quality := equipmentQuality(def, st)
 	textQuality := quality
-	if domain.EquipmentAttributeCount(def, st) == 2 {
+	_, unique := domain.UniqueOf(st)
+	if !unique && domain.EquipmentAttributeCount(def, st) == 2 {
 		textQuality = tooltipLightBlue
 	}
 	lines := []string{"\x07(" + equipmentKindName(e) + ")", ""}
+	if d, ok := domain.UniqueOf(st); ok {
+		lines = append(lines, qualityColoredLine(4, "仙遗·"+d.Name), "基底："+def.Name)
+		for _, a := range domain.UniqueAffixes(st) {
+			lines = append(lines, qualityColoredLine(4, affixText(a)))
+		}
+		for _, tr := range d.Traits {
+			lines = append(lines, qualityColoredLine(4, tr.Describe(st.Endgame.UniqueRollBP)))
+		}
+		lines = append(lines, "同名仙遗特性取最高值；不同特性按通道上限叠加。", d.Lore, "")
+	}
 	if st.Bound {
 		lines = append(lines, "（绑定）（可用天工剪解除绑定）")
 	}
@@ -666,10 +680,14 @@ func equipmentKindName(e *domain.EquipDef) string {
 
 func itemDisplayName(def domain.ItemDef, st domain.Stack) string {
 	name := def.Name
+	uniqueName, unique := domain.UniqueName(st)
+	if unique {
+		name = uniqueName
+	}
 	if def.Equip != nil && st.RefineLevel > 0 {
 		name = fmt.Sprintf("%s+%d", name, st.RefineLevel)
 	}
-	if domain.EquipmentAttributeCount(def, st) == 2 {
+	if !unique && domain.EquipmentAttributeCount(def, st) == 2 {
 		name = "\x05" + name
 	}
 	return name
@@ -814,6 +832,7 @@ func (s *Scene) pushInventory(p *entity.Entity) error {
 	if s.skills != nil {
 		s.emitTo(p.ID, s.lifeSkillSnapshot(p))
 	}
+	s.sendEndgameSnapshot(p)
 	return nil
 }
 

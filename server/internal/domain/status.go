@@ -539,19 +539,19 @@ func (s *StatusSet) MitigateDamage(magic bool, damage int32) (int32, []StatusID)
 			reduction += a.Def.PhysicalDamageReductionPct
 		}
 	})
+	// Keep percentage intermediates wide until mitigation is complete. Rift
+	// attacks and HP can reach int32's ceiling without changing these formulas.
+	wideDamage := int64(damage)
 	if increase > 0 {
-		damage += damage * increase / 100
+		wideDamage += wideDamage * int64(increase) / 100
 	}
 	if reduction > 100 {
 		reduction = 100
 	}
 	if reduction > 0 {
-		damage -= damage * reduction / 100
+		wideDamage -= wideDamage * int64(reduction) / 100
 	}
-	damage -= flatReduction
-	if damage < 0 {
-		damage = 0
-	}
+	damage = max(int32(0), SaturateInt32(wideDamage-int64(flatReduction)))
 
 	var removed []StatusID
 	for _, id := range s.sortedIDs() {

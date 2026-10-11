@@ -2,6 +2,8 @@ package store
 
 import (
 	"context"
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"time"
@@ -135,30 +137,48 @@ func (b *endgameBackend) Commit(p domain.EndgameCommitPlan) <-chan domain.Endgam
 				return nil
 			})
 		}
-		var err error
+		// Reconcile before releasing WriteBack's ordered slot. Returning nil means
+		// either candidate or proven baseline is durable; business failure is in
+		// result.Err. This also safely completes coalesced SaveAck waiters.
+		settle := func(ctx context.Context, st Store, snap domain.Snapshot) error {
+			if err := mutation(ctx, st, snap); err != nil {
+				result = b.reconcile(p, err)
+			}
+			return nil
+		}
 		if b.writer != nil {
-			err = <-b.writer.CommitMutation(p.Snapshot, mutation)
+			if err := <-b.writer.CommitMutation(p.Snapshot, settle); err != nil {
+				// Rejected before execution (another mutation already owns the slot).
+				// Do not write a stale baseline over that operation.
+				result = domain.EndgameCommitResult{Err: err}
+			}
 		} else {
 			ctx, cancel := endgameContext()
-			err = mutation(ctx, b.raw, p.Snapshot)
+			_ = settle(ctx, b.raw, p.Snapshot)
 			cancel()
-		}
-		if err != nil {
-			result = b.reconcile(p, err)
 		}
 		ch <- result
 	}()
 	return ch
 }
 func validateEndgamePlan(p domain.EndgameCommitPlan) error {
-	if p.Before.Char == nil || p.Snapshot.Char == nil || p.Before.Char.ID != p.Snapshot.Char.ID || p.Before.Char.AccountID != p.Snapshot.Char.AccountID || p.Receipt.CharID != p.Snapshot.Char.ID {
+	if p.Before.Char == nil || p.Snapshot.Char == nil || p.Snapshot.Char.ID <= 0 || p.Snapshot.Char.AccountID <= 0 || p.Before.Char.ID != p.Snapshot.Char.ID || p.Before.Char.AccountID != p.Snapshot.Char.AccountID || p.Receipt.CharID != p.Snapshot.Char.ID {
 		return fmt.Errorf("endgame: invalid snapshot ownership")
 	}
-	if p.ExpectedRevision < 0 || p.State.Revision != p.ExpectedRevision+1 || p.Receipt.Revision != p.State.Revision {
+	if p.ExpectedRevision < 0 || p.State.Revision <= 0 || p.State.Revision != p.ExpectedRevision+1 || p.Receipt.Revision != p.State.Revision {
 		return ErrEndgameRevision
+	}
+	if p.Before.Char.Caiyu < 0 || p.Snapshot.Char.Caiyu < 0 {
+		return fmt.Errorf("endgame: invalid account wallet")
 	}
 	if len(p.Receipt.RequestID) < 16 || len(p.Receipt.RequestID) > 64 || len(p.Receipt.Digest) != 64 {
 		return fmt.Errorf("endgame: invalid receipt")
+	}
+	if _, err := hex.DecodeString(p.Receipt.Digest); err != nil || p.Receipt.Operation == "" || len(p.Receipt.Operation) > 64 || !json.Valid([]byte(p.Receipt.Response)) || !json.Valid([]byte(p.State.Payload)) {
+		return fmt.Errorf("endgame: invalid receipt/state")
+	}
+	if p.Run != nil && (p.ExpectedRunRevision < 0 || p.Run.Revision <= 0 || p.Run.Revision != p.ExpectedRunRevision+1 || len(p.Run.RunID) < 1 || len(p.Run.RunID) > 64 || !json.Valid([]byte(p.Run.Payload))) {
+		return fmt.Errorf("endgame: invalid run plan")
 	}
 	if err := validateEndgameSnapshot(p.Before); err != nil {
 		return err
