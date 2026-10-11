@@ -42,7 +42,7 @@ func (s *Scene) onOpenShop(cmd OpenShop) {
 		}
 		views = append(views, event.ShopItemView{
 			Item: id, Price: def.Price, Name: def.Name, Desc: s.itemTooltip(def, st),
-			Blocked: s.equipmentBlockedFor(p, def),
+			Blocked: s.equipmentBlockedFor(p, def, st),
 		})
 	}
 	p.Player.ShopID = cmd.Shop

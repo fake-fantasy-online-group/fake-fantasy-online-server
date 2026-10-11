@@ -74,6 +74,7 @@ type EndgameItemView struct {
 	Locked         bool                `json:"locked"`
 }
 type EndgameRuneView struct {
+	MinLevel    int32             `json:"minLevel"`
 	Mansion     string            `json:"mansion,omitempty"`
 	ItemID      int32             `json:"itemId"`
 	Name        string            `json:"name"`

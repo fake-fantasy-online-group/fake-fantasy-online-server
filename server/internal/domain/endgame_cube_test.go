@@ -20,7 +20,7 @@ func cubeFixture() CubeContext {
 		b.Set(100+i, Stack{Item: id, Count: 800, Bound: true})
 	}
 	b.Set(200, Stack{UID: 42, Item: 1001, Count: 1, InstanceKind: ItemInstanceEquipment, Durability: 77, MaxDurability: 95, DurabilityWearRaw: 12, RefineLevel: 3, FusedAppearance: 999, FusedSoul: 111, FusedDragon: 222})
-	return CubeContext{Bag: b, Money: 10000000, Items: items, Intn: func(n int) int { return n / 2 }, NewUID: func() int64 { return 999999 }}
+	return CubeContext{Level: 60, Bag: b, Money: 10000000, Items: items, Intn: func(n int) int { return n / 2 }, NewUID: func() int64 { return 999999 }}
 }
 func cubeRune(ctx CubeContext, id ItemID, uid int64) Stack {
 	return Stack{UID: uid, Item: id, Count: 1, InstanceKind: ItemInstanceSocketCard, Card: ctx.Items[id].CardDefaults}

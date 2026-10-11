@@ -1,0 +1,935 @@
+{
+  "review_date": "2026-10-11",
+  "note": "Existing package pixels inspected; no artwork included. q21 is base; classic resolves res_05diff before base. Optional patch packages were not audited.",
+  "runes": [
+    26279,
+    26280,
+    4312,
+    4233,
+    39032,
+    26282,
+    26281,
+    26522,
+    26520,
+    26521,
+    41117,
+    39033,
+    26514,
+    26517,
+    26301,
+    26298,
+    26302,
+    39194,
+    27731,
+    26303,
+    26297,
+    39636,
+    39634,
+    39635,
+    4094,
+    4024,
+    39633,
+    39637
+  ],
+  "key": 3387,
+  "materials": [
+    26017,
+    26214,
+    26804
+  ],
+  "fallbacks": [
+    3608,
+    3573,
+    4312,
+    4094,
+    4024,
+    3607,
+    3606,
+    3303,
+    3559,
+    4019,
+    3619
+  ],
+  "assets": [
+    {
+      "sprite": 3303,
+      "path": "item/item/item3303.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1864,
+          "sha256": "931b48e0cc8f91c7d2fe470d1f001b0908d74a7c7d66a063c74a6c69d52504de",
+          "width": 29,
+          "height": 30,
+          "pixel_sha256": "400697e86ce846156d556a73a0a76ae827aed3f02d9ff2410bcfd27160d8595f"
+        },
+        "classic": {
+          "package": "res_05diff.pkg",
+          "bytes": 1860,
+          "sha256": "29866e3bd637b4bbe5f00041eca84c8b3c7a09d3436b562091426a763016980d",
+          "width": 29,
+          "height": 30,
+          "pixel_sha256": "400697e86ce846156d556a73a0a76ae827aed3f02d9ff2410bcfd27160d8595f"
+        }
+      }
+    },
+    {
+      "sprite": 3387,
+      "path": "item/item/item3387.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1924,
+          "sha256": "b969d189c057277404f82ef154b150a945647a8b0341e26e8ab2a9282483d9a3",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "810459db8a7cb0b83affcee5880d5fb77976c913a4f9b34997fbf6872b4c6f38"
+        },
+        "classic": {
+          "package": "res_05diff.pkg",
+          "bytes": 1920,
+          "sha256": "0f995d08a8a1c5fbadd7a3005b88cb5720ba707f942225732dd3431e6efb6ec0",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "810459db8a7cb0b83affcee5880d5fb77976c913a4f9b34997fbf6872b4c6f38"
+        }
+      }
+    },
+    {
+      "sprite": 3559,
+      "path": "item/item/item3559.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1864,
+          "sha256": "c093d96f28ae85de970fe79561933142aaa3544693b14a7680f465d8aafa242d",
+          "width": 29,
+          "height": 30,
+          "pixel_sha256": "07d10598c743db6a99b28d0f95cbe6664d17c04f26d74c2808a0638873abadba"
+        },
+        "classic": {
+          "package": "res_05diff.pkg",
+          "bytes": 1860,
+          "sha256": "e2b28eff403d6f7d986af7988c239fb24895029be3be2c105727f9712eacba3f",
+          "width": 29,
+          "height": 30,
+          "pixel_sha256": "07d10598c743db6a99b28d0f95cbe6664d17c04f26d74c2808a0638873abadba"
+        }
+      }
+    },
+    {
+      "sprite": 3573,
+      "path": "item/item/item3573.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1804,
+          "sha256": "a58ebf385c936352220becce78cd4dfa10b8b6f34b1f277d78d5d7d818a90eee",
+          "width": 30,
+          "height": 28,
+          "pixel_sha256": "88ee46b104fc26f87fa1db70f419033027c79ed45e76f1920463d80ea8ede9c9"
+        },
+        "classic": {
+          "package": "res_05diff.pkg",
+          "bytes": 1800,
+          "sha256": "8878f944d4bcaffa786f59093e3ea7e1678cc1651940004c901f8342300420b8",
+          "width": 30,
+          "height": 28,
+          "pixel_sha256": "88ee46b104fc26f87fa1db70f419033027c79ed45e76f1920463d80ea8ede9c9"
+        }
+      }
+    },
+    {
+      "sprite": 3606,
+      "path": "item/item/item3606.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1924,
+          "sha256": "3bb5d7a8d4da86caa4614269d323782756918151b16128dd700c1ae044bb0f7c",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "566abbb5b63a7f5f71e0c1126db162b9d093133a943a533a329d61ba30ea864c"
+        },
+        "classic": {
+          "package": "res_05diff.pkg",
+          "bytes": 1920,
+          "sha256": "7a60026f85d187bdcc233bc9b4760b7431b83a4caea083d5be1a798141d34378",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "566abbb5b63a7f5f71e0c1126db162b9d093133a943a533a329d61ba30ea864c"
+        }
+      }
+    },
+    {
+      "sprite": 3607,
+      "path": "item/item/item3607.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1924,
+          "sha256": "4ec659d3c69633aee2005834f58ec54b59d72a84525d0ad43ad2e3e6faaf04d3",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "8af5806b5296494db4967ef55dc5c3b10931289816eb456554cc8a93fb6281f4"
+        },
+        "classic": {
+          "package": "res_05diff.pkg",
+          "bytes": 1920,
+          "sha256": "62ab3f28a22a6dae0a8898ae5059db507a0283129b91bd32b48d01cf2fe72228",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "8af5806b5296494db4967ef55dc5c3b10931289816eb456554cc8a93fb6281f4"
+        }
+      }
+    },
+    {
+      "sprite": 3608,
+      "path": "item/item/item3608.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1924,
+          "sha256": "c0623d8bd94ac847f870c94f8e471c49d512ac3d3c5ce367db26d851913d78c4",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "6088519eb8f4d455746e585a578669e6846d874716a37fae8adfe84c48aae133"
+        },
+        "classic": {
+          "package": "res_05diff.pkg",
+          "bytes": 1920,
+          "sha256": "16b1674e83b0a6514cb22e5a6d27e48ced3796c06a93e27efad51107f5131961",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "6088519eb8f4d455746e585a578669e6846d874716a37fae8adfe84c48aae133"
+        }
+      }
+    },
+    {
+      "sprite": 3619,
+      "path": "item/item/item3619.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1924,
+          "sha256": "db81ec818d3c2b59120464442f9a74bdd5354242ea256eb33ee0a634cc39d484",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "a1adb56944c6294f187cba8c8535be51d2e9f6d1c910775834e85e6b15f07730"
+        },
+        "classic": {
+          "package": "res_05diff.pkg",
+          "bytes": 1920,
+          "sha256": "03f10a06006a9d98a5bc8eefaba9b03b6b4b6f5573c674d12bb0ea98cce332fe",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "a1adb56944c6294f187cba8c8535be51d2e9f6d1c910775834e85e6b15f07730"
+        }
+      }
+    },
+    {
+      "sprite": 4019,
+      "path": "item/item/item4019.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1864,
+          "sha256": "cfb55ef93bb4359f9c7ea8763782abf44697f71c7b5c7a1cdd111eccf57bd2bc",
+          "width": 30,
+          "height": 29,
+          "pixel_sha256": "ee8e2835f2a1e32e7a88951ca80f438990437ea2b58223a42f751393bcb7e7ab"
+        },
+        "classic": {
+          "package": "res_05diff.pkg",
+          "bytes": 1860,
+          "sha256": "1bc44eb609116026cd6ffe73cee085a2f169e625e4eb63b02a250ea97c0cfe2c",
+          "width": 30,
+          "height": 29,
+          "pixel_sha256": "ee8e2835f2a1e32e7a88951ca80f438990437ea2b58223a42f751393bcb7e7ab"
+        }
+      }
+    },
+    {
+      "sprite": 4024,
+      "path": "item/item/item4024.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1924,
+          "sha256": "bd6e6a9cf7aae352f303e5ff227722f3aad5492ad4889157bc64c9bdc373d996",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "c5c81c4860a6b9f6255fec5b5b56fe039c11a07a5c080736993edc94806d1e54"
+        },
+        "classic": {
+          "package": "res_05diff.pkg",
+          "bytes": 1920,
+          "sha256": "1a0a68c47153ae08295d915586ddd1dbf2d906c8c4a6d343a4d71f20b4a364ee",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "c5c81c4860a6b9f6255fec5b5b56fe039c11a07a5c080736993edc94806d1e54"
+        }
+      }
+    },
+    {
+      "sprite": 4094,
+      "path": "item/item/item4094.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1984,
+          "sha256": "de10f7344fdf7ba1376377df7928ce6c3315d9fe99805aa1bfe67801d74397fa",
+          "width": 30,
+          "height": 31,
+          "pixel_sha256": "58aea188509eb3c208286bcc0aeeb132f7e468029b50382d8ccc552815b7f68d"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1984,
+          "sha256": "de10f7344fdf7ba1376377df7928ce6c3315d9fe99805aa1bfe67801d74397fa",
+          "width": 30,
+          "height": 31,
+          "pixel_sha256": "58aea188509eb3c208286bcc0aeeb132f7e468029b50382d8ccc552815b7f68d"
+        }
+      }
+    },
+    {
+      "sprite": 4233,
+      "path": "item/item/item4233.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1736,
+          "sha256": "e4e1d40cfe294f4b4333cb7cf9c6695a6d85e0e4e294fe7804aa8b1cd7f52422",
+          "width": 26,
+          "height": 31,
+          "pixel_sha256": "9b07e006f431e8c4972953c28b2cc77128a3fe59f86fdceca638b0e6caae2b09"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1736,
+          "sha256": "e4e1d40cfe294f4b4333cb7cf9c6695a6d85e0e4e294fe7804aa8b1cd7f52422",
+          "width": 26,
+          "height": 31,
+          "pixel_sha256": "9b07e006f431e8c4972953c28b2cc77128a3fe59f86fdceca638b0e6caae2b09"
+        }
+      }
+    },
+    {
+      "sprite": 4312,
+      "path": "item/item/item4312.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1924,
+          "sha256": "3acb0a4b089a93761d7110315be02e167690b3e1f3b82574705d99d234aa2f99",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "8743cc38bf00a33f28ef76b2803d9459f52583feba793a7fd788830291173d88"
+        },
+        "classic": {
+          "package": "res_05diff.pkg",
+          "bytes": 1920,
+          "sha256": "d4ca9842e6a046fa423a567d5e400ec0b1b2c0083708c3037ce4d03ec011f48b",
+          "width": 30,
+          "height": 30,
+          "pixel_sha256": "8743cc38bf00a33f28ef76b2803d9459f52583feba793a7fd788830291173d88"
+        }
+      }
+    },
+    {
+      "sprite": 26017,
+      "path": "item/item/item26017.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1692,
+          "sha256": "4e3dd0cc0a35746be2564a47db09c40a7b77071cf9e68dd264aa008c5b643d3c",
+          "width": 28,
+          "height": 28,
+          "pixel_sha256": "be752d46f8a9bd30f8b218f8765f35b5e658b4d3264b79d60fade5038bc7ff65"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1692,
+          "sha256": "4e3dd0cc0a35746be2564a47db09c40a7b77071cf9e68dd264aa008c5b643d3c",
+          "width": 28,
+          "height": 28,
+          "pixel_sha256": "be752d46f8a9bd30f8b218f8765f35b5e658b4d3264b79d60fade5038bc7ff65"
+        }
+      }
+    },
+    {
+      "sprite": 26214,
+      "path": "item/item/item26214.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1864,
+          "sha256": "3b0f3c27206faecfcbc9ce77259b00219a55d5d085ab4ac27256e2d5e60418cc",
+          "width": 30,
+          "height": 29,
+          "pixel_sha256": "37de96fed9035101b7e3a34766efb1d4dc43f274546f3808c41faa90a9039a58"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1864,
+          "sha256": "3b0f3c27206faecfcbc9ce77259b00219a55d5d085ab4ac27256e2d5e60418cc",
+          "width": 30,
+          "height": 29,
+          "pixel_sha256": "37de96fed9035101b7e3a34766efb1d4dc43f274546f3808c41faa90a9039a58"
+        }
+      }
+    },
+    {
+      "sprite": 26279,
+      "path": "item/item/item26279.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1312,
+          "sha256": "f427d61f824d2a1cfa764e6725c4a990ebcebe9020e18ac1ef82af5cbf033d3a",
+          "width": 22,
+          "height": 27,
+          "pixel_sha256": "bd4ab96db9438d31d4bdc914573b1c87429c199642d1aec14fb07c5960d325f1"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1312,
+          "sha256": "f427d61f824d2a1cfa764e6725c4a990ebcebe9020e18ac1ef82af5cbf033d3a",
+          "width": 22,
+          "height": 27,
+          "pixel_sha256": "bd4ab96db9438d31d4bdc914573b1c87429c199642d1aec14fb07c5960d325f1"
+        }
+      }
+    },
+    {
+      "sprite": 26280,
+      "path": "item/item/item26280.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1412,
+          "sha256": "b0e72f758d9e5b431308cfe727cd75aabeaa023516b6407e5e16455abcfe3090",
+          "width": 23,
+          "height": 28,
+          "pixel_sha256": "7eec32d1222fdf9ed72e999c11272923b446f2a97b9b15298a8569d3a9f56879"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1412,
+          "sha256": "b0e72f758d9e5b431308cfe727cd75aabeaa023516b6407e5e16455abcfe3090",
+          "width": 23,
+          "height": 28,
+          "pixel_sha256": "7eec32d1222fdf9ed72e999c11272923b446f2a97b9b15298a8569d3a9f56879"
+        }
+      }
+    },
+    {
+      "sprite": 26281,
+      "path": "item/item/item26281.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1458,
+          "sha256": "b39d69931cd410c73edb2e082cd6909838908a5546a5d5bf6941e0b409073efd",
+          "width": 23,
+          "height": 29,
+          "pixel_sha256": "56345fa7a93064d110e11f61c8c37d3eabdc424f41b221f0019377ab192505b4"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1458,
+          "sha256": "b39d69931cd410c73edb2e082cd6909838908a5546a5d5bf6941e0b409073efd",
+          "width": 23,
+          "height": 29,
+          "pixel_sha256": "56345fa7a93064d110e11f61c8c37d3eabdc424f41b221f0019377ab192505b4"
+        }
+      }
+    },
+    {
+      "sprite": 26282,
+      "path": "item/item/item26282.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1412,
+          "sha256": "c262f0177a94b9a252547fe17d5384a744a3c64e8e944ab8224c2b2862a5896c",
+          "width": 23,
+          "height": 28,
+          "pixel_sha256": "b4665877e0f40c2583361bef13bb9b30635e17b88edc28e6fe7f9d4b2fe9d4bb"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1412,
+          "sha256": "c262f0177a94b9a252547fe17d5384a744a3c64e8e944ab8224c2b2862a5896c",
+          "width": 23,
+          "height": 28,
+          "pixel_sha256": "b4665877e0f40c2583361bef13bb9b30635e17b88edc28e6fe7f9d4b2fe9d4bb"
+        }
+      }
+    },
+    {
+      "sprite": 26297,
+      "path": "item/item/item26297.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1258,
+          "sha256": "f373f5cd4f2672f9d61331c9a070c7934e1d391e95af9bda8daacde04715d1e1",
+          "width": 21,
+          "height": 27,
+          "pixel_sha256": "e3f5f8178706920bf29c75a507b3a22a93ff4888594146fde7f8538e205f896d"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1258,
+          "sha256": "f373f5cd4f2672f9d61331c9a070c7934e1d391e95af9bda8daacde04715d1e1",
+          "width": 21,
+          "height": 27,
+          "pixel_sha256": "e3f5f8178706920bf29c75a507b3a22a93ff4888594146fde7f8538e205f896d"
+        }
+      }
+    },
+    {
+      "sprite": 26298,
+      "path": "item/item/item26298.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1300,
+          "sha256": "6c788a91b1a9ab8724b7ae81a6360d2d8e967c2aa9fd783f26b17e90697b7eff",
+          "width": 21,
+          "height": 28,
+          "pixel_sha256": "fd3d4431eec407a512bc6f6cb21bfcd873fb9558c4978b425eecaf53fbf895a8"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1300,
+          "sha256": "6c788a91b1a9ab8724b7ae81a6360d2d8e967c2aa9fd783f26b17e90697b7eff",
+          "width": 21,
+          "height": 28,
+          "pixel_sha256": "fd3d4431eec407a512bc6f6cb21bfcd873fb9558c4978b425eecaf53fbf895a8"
+        }
+      }
+    },
+    {
+      "sprite": 26301,
+      "path": "item/item/item26301.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1258,
+          "sha256": "2681e4728d9ab7322914a6b82b7065ad7b36d5d1afe3e70503e0a6b324a37704",
+          "width": 21,
+          "height": 27,
+          "pixel_sha256": "4317f3f882a0fd349c5cc978c3b738bec39762f5deca0c784d662c2d34440e34"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1258,
+          "sha256": "2681e4728d9ab7322914a6b82b7065ad7b36d5d1afe3e70503e0a6b324a37704",
+          "width": 21,
+          "height": 27,
+          "pixel_sha256": "4317f3f882a0fd349c5cc978c3b738bec39762f5deca0c784d662c2d34440e34"
+        }
+      }
+    },
+    {
+      "sprite": 26302,
+      "path": "item/item/item26302.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1258,
+          "sha256": "9fdb9780001b7718956ca230c1744915d88781c079c51f86f995195ac0f9a2b5",
+          "width": 21,
+          "height": 27,
+          "pixel_sha256": "6a0054aa15ebbe6eb56608c89630701a637bf5d66df38dae369b168b572a110b"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1258,
+          "sha256": "9fdb9780001b7718956ca230c1744915d88781c079c51f86f995195ac0f9a2b5",
+          "width": 21,
+          "height": 27,
+          "pixel_sha256": "6a0054aa15ebbe6eb56608c89630701a637bf5d66df38dae369b168b572a110b"
+        }
+      }
+    },
+    {
+      "sprite": 26303,
+      "path": "item/item/item26303.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1258,
+          "sha256": "cfde0f1ec386c0af03b8a72798117fc43c4baf0a1717234100719fc8103b9492",
+          "width": 21,
+          "height": 27,
+          "pixel_sha256": "075d78731a5f893327d0fdc8340d486c76e81f70c9a51d0843efbc0555348d73"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1258,
+          "sha256": "cfde0f1ec386c0af03b8a72798117fc43c4baf0a1717234100719fc8103b9492",
+          "width": 21,
+          "height": 27,
+          "pixel_sha256": "075d78731a5f893327d0fdc8340d486c76e81f70c9a51d0843efbc0555348d73"
+        }
+      }
+    },
+    {
+      "sprite": 26514,
+      "path": "item/item/item26514.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1916,
+          "sha256": "f73c2a43f049e20cb7acffa8ca4413fab5eb82a9364ed966cc2a162b0d2b8d33",
+          "width": 28,
+          "height": 32,
+          "pixel_sha256": "b4948157088ebf9730c363c6e5a7b427a397e6c3bab9780c8fb8059a6e8c92cb"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1916,
+          "sha256": "f73c2a43f049e20cb7acffa8ca4413fab5eb82a9364ed966cc2a162b0d2b8d33",
+          "width": 28,
+          "height": 32,
+          "pixel_sha256": "b4948157088ebf9730c363c6e5a7b427a397e6c3bab9780c8fb8059a6e8c92cb"
+        }
+      }
+    },
+    {
+      "sprite": 26517,
+      "path": "item/item/item26517.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1916,
+          "sha256": "d60ec4b5bdd429e14476bb1b09dab0c171a16c8febe85994cb1a777dd95566c3",
+          "width": 28,
+          "height": 32,
+          "pixel_sha256": "aa5008aea54b5ef3c414b0e1b217bc465044413052084218ffff3130979a590f"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1916,
+          "sha256": "d60ec4b5bdd429e14476bb1b09dab0c171a16c8febe85994cb1a777dd95566c3",
+          "width": 28,
+          "height": 32,
+          "pixel_sha256": "aa5008aea54b5ef3c414b0e1b217bc465044413052084218ffff3130979a590f"
+        }
+      }
+    },
+    {
+      "sprite": 26520,
+      "path": "item/item/item26520.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1804,
+          "sha256": "ae4087fc209faefc370df35a3752f51d5915ad8dd8224f6daad0544372f9ffe8",
+          "width": 28,
+          "height": 30,
+          "pixel_sha256": "39afe06ac2828d6a073708d7a4bb679b1273248217f8e9a3a30591670c2efdfd"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1804,
+          "sha256": "ae4087fc209faefc370df35a3752f51d5915ad8dd8224f6daad0544372f9ffe8",
+          "width": 28,
+          "height": 30,
+          "pixel_sha256": "39afe06ac2828d6a073708d7a4bb679b1273248217f8e9a3a30591670c2efdfd"
+        }
+      }
+    },
+    {
+      "sprite": 26521,
+      "path": "item/item/item26521.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1804,
+          "sha256": "5182768789f36687ecfae4c101745543afe90177300142e2785713035710f3a4",
+          "width": 28,
+          "height": 30,
+          "pixel_sha256": "f3f59dad419561234b389091b8637dc7de004d009b98ed35f8477db901e773b8"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1804,
+          "sha256": "5182768789f36687ecfae4c101745543afe90177300142e2785713035710f3a4",
+          "width": 28,
+          "height": 30,
+          "pixel_sha256": "f3f59dad419561234b389091b8637dc7de004d009b98ed35f8477db901e773b8"
+        }
+      }
+    },
+    {
+      "sprite": 26522,
+      "path": "item/item/item26522.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1804,
+          "sha256": "c0ac02519c07b17d0422b0ed3994ca2e833eb37507c4df62ab6ff115ef8c74bf",
+          "width": 28,
+          "height": 30,
+          "pixel_sha256": "6767fc10c83fc4615c4af0048d389c6b2f5ac59f4182623f3f9825363bac5c3f"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1804,
+          "sha256": "c0ac02519c07b17d0422b0ed3994ca2e833eb37507c4df62ab6ff115ef8c74bf",
+          "width": 28,
+          "height": 30,
+          "pixel_sha256": "6767fc10c83fc4615c4af0048d389c6b2f5ac59f4182623f3f9825363bac5c3f"
+        }
+      }
+    },
+    {
+      "sprite": 26804,
+      "path": "item/item/item26804.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 2172,
+          "sha256": "4a82eee803e36a3e571e79b13204c104389347e2f8c32281959227ed20b0b966",
+          "width": 32,
+          "height": 32,
+          "pixel_sha256": "56951d1ad2d5304b99c79d444bda09c6aeec1c6fb260a6da4871ea7f8666d68c"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 2172,
+          "sha256": "4a82eee803e36a3e571e79b13204c104389347e2f8c32281959227ed20b0b966",
+          "width": 32,
+          "height": 32,
+          "pixel_sha256": "56951d1ad2d5304b99c79d444bda09c6aeec1c6fb260a6da4871ea7f8666d68c"
+        }
+      }
+    },
+    {
+      "sprite": 27731,
+      "path": "item/item/item27731.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 2302,
+          "sha256": "eb1dbd83d2337bb2bd8606738df34a1a94e001be3ce495cfd154c99b2cb6ce46",
+          "width": 33,
+          "height": 33,
+          "pixel_sha256": "5efdfd39ee68d41cc1e80b6822046cef8cc8e6eb9f30fb02fb2fb4c8703e478a"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 2302,
+          "sha256": "eb1dbd83d2337bb2bd8606738df34a1a94e001be3ce495cfd154c99b2cb6ce46",
+          "width": 33,
+          "height": 33,
+          "pixel_sha256": "5efdfd39ee68d41cc1e80b6822046cef8cc8e6eb9f30fb02fb2fb4c8703e478a"
+        }
+      }
+    },
+    {
+      "sprite": 39032,
+      "path": "item/item/item39032.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1636,
+          "sha256": "aeaf88e249af85bb3fd7c6ca7a6dfbe80decd2315d73670ee4c5567e169ef8e4",
+          "width": 28,
+          "height": 27,
+          "pixel_sha256": "a9912e7dfd6ed53f42b7960bbe8773a480a249a1e0f6db25e7cad811d047a521"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1636,
+          "sha256": "aeaf88e249af85bb3fd7c6ca7a6dfbe80decd2315d73670ee4c5567e169ef8e4",
+          "width": 28,
+          "height": 27,
+          "pixel_sha256": "a9912e7dfd6ed53f42b7960bbe8773a480a249a1e0f6db25e7cad811d047a521"
+        }
+      }
+    },
+    {
+      "sprite": 39033,
+      "path": "item/item/item39033.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1276,
+          "sha256": "eefad4212a074d602ec56eae8d68d7b26b280ae79b91c89ee0d9df29801fdb29",
+          "width": 24,
+          "height": 24,
+          "pixel_sha256": "73e0e06038124ed39ac0c9ff933934e64e5e00fdafda5709161d5dc0393b69db"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1276,
+          "sha256": "eefad4212a074d602ec56eae8d68d7b26b280ae79b91c89ee0d9df29801fdb29",
+          "width": 24,
+          "height": 24,
+          "pixel_sha256": "73e0e06038124ed39ac0c9ff933934e64e5e00fdafda5709161d5dc0393b69db"
+        }
+      }
+    },
+    {
+      "sprite": 39194,
+      "path": "item/item/item39194.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 2172,
+          "sha256": "9ab8e232492eb9155ee380dfd2891a58255bad9a72e1422cd297467577c9ec08",
+          "width": 32,
+          "height": 32,
+          "pixel_sha256": "b2d7ec82096a39a76a1c365398e16832a220d8d77a2f3b6ea59bfbde3e9ecf7b"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 2172,
+          "sha256": "9ab8e232492eb9155ee380dfd2891a58255bad9a72e1422cd297467577c9ec08",
+          "width": 32,
+          "height": 32,
+          "pixel_sha256": "b2d7ec82096a39a76a1c365398e16832a220d8d77a2f3b6ea59bfbde3e9ecf7b"
+        }
+      }
+    },
+    {
+      "sprite": 39633,
+      "path": "item/item/item39633.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1724,
+          "sha256": "68b063c445e6bcd4608d8bec38617df633c0da8e00407cddc76677b0452d4877",
+          "width": 25,
+          "height": 32,
+          "pixel_sha256": "d9b76c67171f003f9e641ad58a20062a1e23e7adc9d3d7b6fbec1264dfac1007"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1724,
+          "sha256": "68b063c445e6bcd4608d8bec38617df633c0da8e00407cddc76677b0452d4877",
+          "width": 25,
+          "height": 32,
+          "pixel_sha256": "d9b76c67171f003f9e641ad58a20062a1e23e7adc9d3d7b6fbec1264dfac1007"
+        }
+      }
+    },
+    {
+      "sprite": 39634,
+      "path": "item/item/item39634.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1724,
+          "sha256": "6078347f66f5f512c003c87b7b87d67da6b1dfa6fb59d7b03743ba59ee54bdfb",
+          "width": 25,
+          "height": 32,
+          "pixel_sha256": "5b73301a45108ed130f90ba312d76d6b66f83227761df4d65fae70b70c6e114f"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1724,
+          "sha256": "6078347f66f5f512c003c87b7b87d67da6b1dfa6fb59d7b03743ba59ee54bdfb",
+          "width": 25,
+          "height": 32,
+          "pixel_sha256": "5b73301a45108ed130f90ba312d76d6b66f83227761df4d65fae70b70c6e114f"
+        }
+      }
+    },
+    {
+      "sprite": 39635,
+      "path": "item/item/item39635.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1724,
+          "sha256": "4f6af0e11b115ad0ed45f17553bd30d7eb0347eb754a2a5eb067daf097942d01",
+          "width": 25,
+          "height": 32,
+          "pixel_sha256": "d079858a026e1cddb60e5cdf562286375f8e27576a62f296566070493a1d0c33"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1724,
+          "sha256": "4f6af0e11b115ad0ed45f17553bd30d7eb0347eb754a2a5eb067daf097942d01",
+          "width": 25,
+          "height": 32,
+          "pixel_sha256": "d079858a026e1cddb60e5cdf562286375f8e27576a62f296566070493a1d0c33"
+        }
+      }
+    },
+    {
+      "sprite": 39636,
+      "path": "item/item/item39636.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1724,
+          "sha256": "91c910c7689df13786602daaaeada28c969433f988115dbe397083e600ddf42c",
+          "width": 25,
+          "height": 32,
+          "pixel_sha256": "a046aae1b433d07f2615828e1ccfbcf460b1c3f98066cba8a56775ed6282982c"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1724,
+          "sha256": "91c910c7689df13786602daaaeada28c969433f988115dbe397083e600ddf42c",
+          "width": 25,
+          "height": 32,
+          "pixel_sha256": "a046aae1b433d07f2615828e1ccfbcf460b1c3f98066cba8a56775ed6282982c"
+        }
+      }
+    },
+    {
+      "sprite": 39637,
+      "path": "item/item/item39637.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1724,
+          "sha256": "4334e59f2431c53ab5f798701742743c51f9abff5401f561973351d4f5e0ca75",
+          "width": 25,
+          "height": 32,
+          "pixel_sha256": "e55872040d65f48b3391db8920ff19e5a16167d51976aaf0d59fbfaaa6adc11a"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 1724,
+          "sha256": "4334e59f2431c53ab5f798701742743c51f9abff5401f561973351d4f5e0ca75",
+          "width": 25,
+          "height": 32,
+          "pixel_sha256": "e55872040d65f48b3391db8920ff19e5a16167d51976aaf0d59fbfaaa6adc11a"
+        }
+      }
+    },
+    {
+      "sprite": 41117,
+      "path": "item/item/item41117.gso",
+      "variants": {
+        "q21": {
+          "package": "res_q21_001.pkg",
+          "bytes": 2172,
+          "sha256": "a49c6114289847a6acc9bc64714e55f54fae002ba92e41638a348327e72cddb9",
+          "width": 32,
+          "height": 32,
+          "pixel_sha256": "08c3d57f78a2471c8f490f331db2b037bbaec7398e44cac4fac6533b38810ac1"
+        },
+        "classic": {
+          "package": "res_q21_001.pkg",
+          "bytes": 2172,
+          "sha256": "a49c6114289847a6acc9bc64714e55f54fae002ba92e41638a348327e72cddb9",
+          "width": 32,
+          "height": 32,
+          "pixel_sha256": "08c3d57f78a2471c8f490f331db2b037bbaec7398e44cac4fac6533b38810ac1"
+        }
+      }
+    }
+  ]
+}

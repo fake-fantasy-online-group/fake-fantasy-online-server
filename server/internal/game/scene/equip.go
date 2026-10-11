@@ -47,6 +47,10 @@ func (s *Scene) onEquip(cmd Equip) {
 		return
 	}
 	ch := p.Player.Char
+	if ch.Level < domain.EquipmentRequiredLevel(def, st) {
+		reject(event.RejectLevelTooLow)
+		return
+	}
 	slot := domain.EquipSlot(def.Equip.Slot)
 
 	// 门槛按当前有效六维判定，但先移除目标槽位和冲突槽位的旧装备。
@@ -148,7 +152,7 @@ func (s *Scene) functionalWorn(p *entity.Entity) *domain.EquipSet {
 				return
 			}
 			ch := p.Player.Char
-			if def.Equip.Need.Meet(ch.Level, s.equipmentRequirementBaseFromWorn(p, active, slot), ch.Appear.Gender) != domain.RejectNone ||
+			if ch.Level < domain.EquipmentRequiredLevel(def, st) || def.Equip.Need.Meet(ch.Level, s.equipmentRequirementBaseFromWorn(p, active, slot), ch.Appear.Gender) != domain.RejectNone ||
 				!def.Equip.Need.AllowsCharacter(ch) {
 				return
 			}
@@ -336,7 +340,7 @@ func (s *Scene) hasFunctionalEquipType(p *entity.Entity, equipType int32) bool {
 		}
 		def, ok := s.itemDef(stack.Item)
 		found = ok && def.Equip != nil && def.Equip.Type == equipType &&
-			domain.EquipmentFunctional(stack, def)
+			domain.EquipmentFunctional(stack, def) && p.Player.Char != nil && p.Player.Char.Level >= domain.EquipmentRequiredLevel(def, stack)
 	})
 	return found
 }

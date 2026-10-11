@@ -24,11 +24,14 @@ func (s *Scene) endgameItem(st domain.Stack, loc string, slot int32) domain.Endg
 	v := domain.EndgameItemView{UID: strconv.FormatInt(st.UID, 10), ItemID: int32(st.Item), Location: loc, Slot: slot, Revision: strconv.FormatInt(st.Endgame.Revision, 10), UniqueID: st.Endgame.UniqueID, UniqueRollBP: st.Endgame.UniqueRollBP, Name: d.Name, Tab: int32(d.InventoryTab), SocketCount: int32(st.SocketCount), Bound: st.Bound, Locked: st.Locked}
 	if d.Equip != nil {
 		// Use the actual onEquip character-level gate, not the resource tier.
-		v.Level = d.Equip.Need.Level
+		v.Level = domain.EquipmentRequiredLevel(d, st)
 		// Bit (1 << Character.Race): warrior/swordsman/assassin/healer/warlock.
 		// This is not an ordinal or a complete requirement: beginner and sex
 		// restrictions remain in the native equipment requirements/tooltip.
 		v.Profession = int32(d.Equip.Need.Professions)
+	}
+	if rune, ok := domain.AstralRune(st.Item); ok {
+		v.Level = rune.MinLevel
 	}
 	for i := 0; i < int(st.SocketCount) && i < len(st.Sockets); i++ {
 		v.Sockets = append(v.Sockets, domain.EndgameSocketView{Index: int32(i), ItemID: int32(st.Sockets[i]), UID: strconv.FormatInt(st.SocketUIDs[i], 10)})
@@ -58,7 +61,8 @@ func (s *Scene) sendEndgameSnapshot(p *entity.Entity) {
 	}
 	items := []domain.EndgameItemView{}
 	active := map[int64]bool{}
-	for _, a := range domain.ActiveAstralRecipes(p.Player.Worn, s.itemDef, p.Player.Char) {
+	functional := s.functionalWorn(p)
+	for _, a := range domain.ActiveAstralRecipes(functional, s.itemDef, p.Player.Char) {
 		active[a.UID] = true
 	}
 	p.Player.Bag.Each(func(slot int, st domain.Stack) {
@@ -74,7 +78,7 @@ func (s *Scene) sendEndgameSnapshot(p *entity.Entity) {
 		v := s.endgameItem(st, "equipped", int32(slot))
 		v.Active = active[st.UID]
 		if v.FormationID != 0 && !v.Active {
-			v.InactiveReason = "职业、等级、耐久或同类宿阵优先级未满足"
+			v.InactiveReason = s.astralInactiveReason(p, slot, st, functional)
 		}
 		items = append(items, v)
 	})
@@ -85,9 +89,12 @@ func (s *Scene) sendEndgameSnapshot(p *entity.Entity) {
 		}
 	}
 	formations := []domain.EndgameFormationView{}
-	for _, a := range domain.ActiveAstralRecipes(p.Player.Worn, s.itemDef, p.Player.Char) {
+	for _, a := range domain.ActiveAstralRecipes(functional, s.itemDef, p.Player.Char) {
 		f := a.Recipe
-		v := domain.EndgameFormationView{ID: f.ID, Name: f.Name, Channel: f.Channel.String(), Active: true, Description: f.Lore, Stats: endgameStats(f.Affixes)}
+		v := domain.EndgameFormationView{ID: f.ID, Name: f.Name, Channel: f.Channel.String(), MinLevel: f.MinLevel, Professions: int32(f.Professions), Active: true, Description: f.Lore, Stats: endgameStats(f.Affixes)}
+		for _, slot := range f.Slots {
+			v.Slots = append(v.Slots, int32(slot))
+		}
 		for _, r := range f.Runes {
 			v.Runes = append(v.Runes, int32(r))
 		}
@@ -141,7 +148,7 @@ func (s *Scene) sendEndgameCatalog(p *entity.Entity, req domain.EndgameRequest) 
 		total = len(all)
 		for i := start; i < len(all) && i < start+page; i++ {
 			u := all[i]
-			r.Runes = append(r.Runes, domain.EndgameRuneView{ItemID: int32(u.Item), Name: u.Name, Description: u.Mansion, Quadrant: u.Quadrant, Stats: endgameStats(u.Affixes)})
+			r.Runes = append(r.Runes, domain.EndgameRuneView{MinLevel: u.MinLevel, ItemID: int32(u.Item), Name: u.Name, Description: u.Mansion, Quadrant: u.Quadrant, Stats: endgameStats(u.Affixes)})
 		}
 	case "formations":
 		all := domain.AstralRecipes()
@@ -191,4 +198,30 @@ func astralItemIDs() []domain.ItemID {
 		ids = append(ids, r.Item)
 	}
 	return ids
+}
+
+// Only label channel suppression after all independent eligibility checks pass.
+func (s *Scene) astralInactiveReason(p *entity.Entity, slot domain.EquipSlot, st domain.Stack, functional *domain.EquipSet) string {
+	def, ok := s.itemDef(st.Item)
+	if !ok || def.Equip == nil || int32(slot) != def.Equip.Slot {
+		return "装备状态不符合要求"
+	}
+	ch := p.Player.Char
+	if ch == nil || ch.Level < domain.EquipmentRequiredLevel(def, st) {
+		return fmt.Sprintf("需要等级: %d", domain.EquipmentRequiredLevel(def, st))
+	}
+	if !domain.EquipmentFunctional(st, def) {
+		return "装备耐久不足"
+	}
+	recipe, matched := domain.MatchAstralRecipe(def, st)
+	if !matched {
+		return "孔数、宿序或部位未匹配"
+	}
+	if !def.Equip.Need.AllowsCharacter(ch) || recipe.Professions != 0 && (!ch.HasProfession() || !ch.Race.Valid() || recipe.Professions&(1<<uint8(ch.Race)) == 0) {
+		return "职业要求未满足"
+	}
+	if functional.At(slot).UID != st.UID {
+		return "装备属性或性别要求未满足"
+	}
+	return "同类宿阵优先级未满足"
 }

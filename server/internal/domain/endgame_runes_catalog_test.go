@@ -13,6 +13,7 @@ func TestAstralJSONMatchesExecutableCatalog(t *testing.T) {
 		SchemaVersion int
 		Runes         []struct {
 			ID                      ItemID
+			MinLevel                int32
 			Name, Mansion, Quadrant string
 			Affixes                 []Affix
 		}
@@ -38,7 +39,7 @@ func TestAstralJSONMatchesExecutableCatalog(t *testing.T) {
 	}
 	for i, r := range AstralRunes() {
 		d := doc.Runes[i]
-		if d.ID != r.Item || d.Name != r.Name || d.Mansion != r.Mansion || d.Quadrant != r.Quadrant || !reflect.DeepEqual(d.Affixes, r.Affixes) {
+		if d.ID != r.Item || d.MinLevel != r.MinLevel || d.Name != r.Name || d.Mansion != r.Mansion || d.Quadrant != r.Quadrant || !reflect.DeepEqual(d.Affixes, r.Affixes) {
 			t.Fatalf("rune row %d drift", i)
 		}
 	}

@@ -448,7 +448,7 @@ func Compute(in StatSource) (Base, Stats) {
 
 	src.Worn.Each(func(slot EquipSlot, st Stack) {
 		def, ok := src.Defs(st.Item)
-		if !ok || def.Equip == nil || !EquipmentFunctional(st, def) {
+		if !ok || def.Equip == nil || !EquipmentFunctional(st, def) || src.Level < EquipmentRequiredLevel(def, st) {
 			return
 		}
 		if suit := def.Equip.Suit; suit != nil && !seenSuits[suit.ID] {

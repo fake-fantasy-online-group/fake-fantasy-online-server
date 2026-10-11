@@ -63,7 +63,7 @@ func (s *Scene) inventorySnapshot(p *entity.Entity) (event.InventorySnapshot, er
 		view := event.InventoryItemView{
 			BagIndex: int32(clientSlot), Item: st.Item, Count: st.Count,
 			Tab: def.InventoryTab, Name: itemDisplayName(def, st), Desc: s.ownedItemTooltip(def, st, p),
-			Sell: def.SellPrice, Slot: -1, Bound: st.Bound, Blocked: s.equipmentBlockedFor(p, def),
+			Sell: def.SellPrice, Slot: -1, Bound: st.Bound, Blocked: s.equipmentBlockedFor(p, def, st),
 			Locked: st.Locked, Quality: equipmentQuality(def, st), Cosmetic: def.AvatarFusion != nil,
 			FusedDesc: s.fusedDescription(st),
 		}
@@ -466,12 +466,12 @@ func equipmentQuality(def domain.ItemDef, stacks ...domain.Stack) uint8 {
 // equipmentBlockedFor 为 0x8006 item.blocked 提供角色当下的可穿戴状态。
 // 这与 locked（玩家手动锁定实例）、bound（永久绑定）不是同一件事。
 // 真正穿戴时 onEquip 会使用同一组规则再做一次权威校验，不信任客户端。
-func (s *Scene) equipmentBlockedFor(p *entity.Entity, def domain.ItemDef) bool {
+func (s *Scene) equipmentBlockedFor(p *entity.Entity, def domain.ItemDef, st domain.Stack) bool {
 	if def.Equip == nil || p == nil || p.Player == nil || p.Player.Char == nil {
 		return false
 	}
 	ch := p.Player.Char
-	if def.Equip.Need.Meet(ch.Level, s.equipmentRequirementBaseFromWorn(p, s.functionalWorn(p), domain.EquipSlot(def.Equip.Slot)), ch.Appear.Gender) != domain.RejectNone {
+	if ch.Level < domain.EquipmentRequiredLevel(def, st) || def.Equip.Need.Meet(ch.Level, s.equipmentRequirementBaseFromWorn(p, s.functionalWorn(p), domain.EquipSlot(def.Equip.Slot)), ch.Appear.Gender) != domain.RejectNone {
 		return true
 	}
 	return !def.Equip.Need.AllowsCharacter(ch)
@@ -495,6 +495,13 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 	}
 	if def.Equip == nil {
 		lines := make([]string, 0, 2)
+		if rune, ok := domain.AstralRune(st.Item); ok {
+			level := fmt.Sprintf("需要等级: %d", rune.MinLevel)
+			if ch != nil && ch.Level < rune.MinLevel {
+				level = "\x02" + level
+			}
+			lines = append(lines, level)
+		}
 		if def.Weight != 0 {
 			lines = append(lines, fmt.Sprintf("重量 %d", def.Weight))
 		}
@@ -569,7 +576,9 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 			actual = s.equipmentRequirementBaseFromWorn(owner, s.functionalWorn(owner), domain.EquipSlot(e.Slot))
 		}
 	}
-	appendEquipmentRequirements(&lines, e, ch, actual)
+	requirements := *e
+	requirements.Need.Level = domain.EquipmentRequiredLevel(def, st)
+	appendEquipmentRequirements(&lines, &requirements, ch, actual)
 	lines = append(lines, "")
 	equipBase, equipStats := e.RefinedIntrinsic(st.RefineLevel)
 	appendIntrinsicEquipmentStats(&lines, equipStats, equipBase)

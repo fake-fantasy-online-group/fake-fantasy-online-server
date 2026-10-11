@@ -29,6 +29,7 @@ func (c AstralChannel) String() string {
 
 type AstralRuneDef struct {
 	Item                    ItemID
+	MinLevel                int32
 	Mansion, Name, Quadrant string
 	Affixes                 []Affix
 }
@@ -96,7 +97,7 @@ func AstralRuneItems(icon int32) []ItemDef {
 		for i, a := range r.Affixes {
 			card.Effects[i] = CardEffect{Op: 1, Attr: a.Attr, Value: a.Value, Mode: a.Mode, Probability: 100}
 		}
-		out = append(out, ItemDef{ID: r.Item, Name: r.Name, Description: "按孔位顺序镶入星篆，可结成宿阵。", Level: 10, UseLevel: 10, Weight: 1, Icon: icon, InventoryTab: 1, InventoryTabKnown: true, InstanceKind: ItemInstanceSocketCard, CanMail: true, CanTrade: true, CardDefaults: card, SocketAffixes: append([]Affix(nil), r.Affixes...)})
+		out = append(out, ItemDef{ID: r.Item, Name: r.Name, Description: "按孔位顺序镶入星篆，可结成宿阵。", Level: r.MinLevel, UseLevel: r.MinLevel, Weight: 1, Icon: icon, InventoryTab: 1, InventoryTabKnown: true, InstanceKind: ItemInstanceSocketCard, CanMail: true, CanTrade: true, CardDefaults: card, SocketAffixes: append([]Affix(nil), r.Affixes...)})
 	}
 	return out
 }
@@ -158,7 +159,7 @@ func ActiveAstralRecipes(worn *EquipSet, defs func(ItemID) (ItemDef, bool), ch *
 	var chosen [4]AstralActivation
 	worn.Each(func(slot EquipSlot, st Stack) {
 		def, ok := defs(st.Item)
-		if !ok || def.Equip == nil || int32(slot) != def.Equip.Slot || !def.Equip.Need.AllowsCharacter(ch) || !EquipmentFunctional(st, def) {
+		if !ok || def.Equip == nil || int32(slot) != def.Equip.Slot || !def.Equip.Need.AllowsCharacter(ch) || ch.Level < EquipmentRequiredLevel(def, st) || !EquipmentFunctional(st, def) {
 			return
 		}
 		r, ok := MatchAstralRecipe(def, st)
@@ -196,12 +197,12 @@ func ValidateAstralCatalog() error {
 	used := map[ItemID]bool{}
 	seen := map[string]bool{}
 	for i, r := range astralRuneCatalog {
-		if r.Item != FirstAstralRune+ItemID(i) || r.Name == "" || len(r.Affixes) == 0 {
+		if r.Item != FirstAstralRune+ItemID(i) || r.Name == "" || r.MinLevel < 12 || r.MinLevel > 60 || (i > 0 && r.MinLevel <= astralRuneCatalog[i-1].MinLevel) || len(r.Affixes) == 0 {
 			return fmt.Errorf("invalid rune row %d", i)
 		}
 	}
 	for i, r := range astralRecipeCatalog {
-		if r.ID != int32(i+1) || r.Name == "" || r.Channel < AstralBattle || r.Channel > AstralSupport || len(r.Runes) < 2 || len(r.Runes) > 5 || len(r.Slots) == 0 || len(r.Affixes) == 0 || r.Professions&^uint8(31) != 0 {
+		if r.ID != int32(i+1) || r.Name == "" || r.Channel < AstralBattle || r.Channel > AstralSupport || len(r.Runes) < 2 || len(r.Runes) > 5 || len(r.Slots) == 0 || len(r.Affixes) == 0 || r.Professions&^uint8(31) != 0 || r.MinLevel < 12 || r.MinLevel > 60 {
 			return fmt.Errorf("invalid formation %d", r.ID)
 		}
 		key := fmt.Sprint(r.Runes)
@@ -210,8 +211,10 @@ func ValidateAstralCatalog() error {
 		}
 		seen[key] = true
 		for _, id := range r.Runes {
-			if _, ok := AstralRune(id); !ok {
+			if rune, ok := AstralRune(id); !ok {
 				return fmt.Errorf("unknown rune %d", id)
+			} else if r.MinLevel < rune.MinLevel {
+				return fmt.Errorf("formation %d undercuts rune %d requirement", r.ID, id)
 			}
 			used[id] = true
 		}
@@ -220,4 +223,23 @@ func ValidateAstralCatalog() error {
 		return fmt.Errorf("not all mansions used")
 	}
 	return nil
+}
+
+// EquipmentRequiredLevel is derived from current authoritative catalogs, never
+// saved on an instance. Existing cards and saved equipment therefore inherit new
+// requirements without rewriting their identities or snapshotted effects.
+func EquipmentRequiredLevel(def ItemDef, st Stack) int32 {
+	level := int32(0)
+	if def.Equip != nil {
+		level = def.Equip.Need.Level
+	}
+	for i := 0; i < int(st.SocketCount) && i < len(st.Sockets); i++ {
+		if rune, ok := AstralRune(st.Sockets[i]); ok && rune.MinLevel > level {
+			level = rune.MinLevel
+		}
+	}
+	if recipe, ok := MatchAstralRecipe(def, st); ok && recipe.MinLevel > level {
+		level = recipe.MinLevel
+	}
+	return level
 }

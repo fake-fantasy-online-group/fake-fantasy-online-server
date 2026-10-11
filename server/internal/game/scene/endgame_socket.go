@@ -22,16 +22,12 @@ func (s *Scene) onEndgameSocket(p *entity.Entity, req domain.EndgameRequest) {
 	var removalMoney int64
 	switch req.Op {
 	case "socket.insert":
-		if p.Player.Char.Level < 10 {
-			s.endgameError(p, req, "requirements", "10级后可以镶嵌星篆")
-			return
-		}
 		runeUID, e := strconv.ParseInt(req.RuneUID, 10, 64)
 		if e != nil || runeUID <= 0 {
 			s.endgameError(p, req, "invalid_rune", "请选择背包中的星篆")
 			return
 		}
-		plan, err = domain.PlanAstralInsert(p.Player.Bag, p.Player.Worn, s.itemDef, target, runeUID, uint8(req.Socket))
+		plan, err = domain.PlanAstralInsert(p.Player.Bag, p.Player.Worn, s.itemDef, target, runeUID, uint8(req.Socket), p.Player.Char)
 	case "socket.remove":
 		money, e := inventoryMoney(p.Player.Char.Money)
 		if e != nil || money < 2500 {
@@ -67,6 +63,10 @@ func (s *Scene) onEndgameSocket(p *entity.Entity, req domain.EndgameRequest) {
 }
 func astralErrorText(code string) string {
 	switch code {
+	case "rune_level":
+		return "角色等级未达到该星篆的使用要求"
+	case "formation_level":
+		return "角色等级未达到该宿阵的使用要求"
 	case "not_owner", "not_found":
 		return "物品已移动，请刷新后重试"
 	case "locked":

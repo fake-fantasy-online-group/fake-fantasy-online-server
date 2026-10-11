@@ -118,7 +118,7 @@ func TestAstralSocketCommitReplayAndStorageFailure(t *testing.T) {
 func TestAstralRemoveUsesFreedMaterialSlot(t *testing.T) {
 	s, _, b := astralSceneFixture(t)
 	p := s.players[1]
-	plan, err := domain.PlanAstralInsert(p.Player.Bag, p.Player.Worn, s.itemDef, 42, 51, 0)
+	plan, err := domain.PlanAstralInsert(p.Player.Bag, p.Player.Worn, s.itemDef, 42, 51, 0, p.Player.Char)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -165,14 +165,14 @@ func TestAstralFormationChangesRealCombatStats(t *testing.T) {
 	s, _, _ := astralSceneFixture(t)
 	p := s.players[1]
 	p.Player.Char.Base = domain.Base{STR: 200, VIT: 100, INT: 100, SPI: 100, AGI: 100, DEX: 100}
-	plan, err := domain.PlanAstralInsert(p.Player.Bag, p.Player.Worn, s.itemDef, 42, 51, 0)
+	plan, err := domain.PlanAstralInsert(p.Player.Bag, p.Player.Worn, s.itemDef, 42, 51, 0, p.Player.Char)
 	if err != nil {
 		t.Fatal(err)
 	}
 	tail := domain.NewStack(s.items[domain.FirstAstralRune+5], 1)
 	tail.UID = 52
 	plan.Bag.Set(101, tail)
-	plan, err = domain.PlanAstralInsert(plan.Bag, plan.Worn, s.itemDef, 42, 52, 1)
+	plan, err = domain.PlanAstralInsert(plan.Bag, plan.Worn, s.itemDef, 42, 52, 1, p.Player.Char)
 	if err != nil {
 		t.Fatal(err)
 	}

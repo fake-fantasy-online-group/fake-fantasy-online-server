@@ -105,7 +105,7 @@ func setAstralTarget(p *AstralSocketPlan, t astralTarget) {
 		p.Bag.Set(t.bagSlot, p.Target)
 	}
 }
-func PlanAstralInsert(bag *Bag, worn *EquipSet, defs func(ItemID) (ItemDef, bool), targetUID, runeUID int64, hole uint8) (AstralSocketPlan, error) {
+func PlanAstralInsert(bag *Bag, worn *EquipSet, defs func(ItemID) (ItemDef, bool), targetUID, runeUID int64, hole uint8, ch *Character) (AstralSocketPlan, error) {
 	t, err := findAstralTarget(bag, worn, defs, targetUID)
 	if err != nil {
 		return AstralSocketPlan{}, err
@@ -133,6 +133,10 @@ func PlanAstralInsert(bag *Bag, worn *EquipSet, defs func(ItemID) (ItemDef, bool
 	if _, astral := AstralRune(rune.Item); !ok || !astral || rd.InstanceKind != ItemInstanceSocketCard || rune.InstanceKind != ItemInstanceSocketCard || rune.Count != 1 || !rune.Card.Initialized {
 		return AstralSocketPlan{}, AstralSocketError("invalid_rune")
 	}
+	runeDef, _ := AstralRune(rune.Item)
+	if ch == nil || ch.Level < runeDef.MinLevel {
+		return AstralSocketPlan{}, AstralSocketError("rune_level")
+	}
 	if rune.Locked || rune.Card.Locked {
 		return AstralSocketPlan{}, AstralSocketError("locked")
 	}
@@ -147,6 +151,14 @@ func PlanAstralInsert(bag *Bag, worn *EquipSet, defs func(ItemID) (ItemDef, bool
 	p.Target.Sockets[hole] = rune.Item
 	p.Target.SocketUIDs[hole] = rune.UID
 	p.Target.SocketCards[hole] = card
+	// Completing a formation must also meet its tier requirement. Bag gear can
+	// be prepared before its base-equipment level, but worn gear cannot be made unusable.
+	if recipe, matched := MatchAstralRecipe(t.def, p.Target); matched && ch.Level < recipe.MinLevel {
+		return AstralSocketPlan{}, AstralSocketError("formation_level")
+	}
+	if t.worn && ch.Level < EquipmentRequiredLevel(t.def, p.Target) {
+		return AstralSocketPlan{}, AstralSocketError("rune_level")
+	}
 	p.Rune.Bound = card.Bound
 	p.Rune.Card = card
 	setAstralTarget(&p, t)

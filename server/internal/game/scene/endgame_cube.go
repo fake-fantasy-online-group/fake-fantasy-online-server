@@ -29,7 +29,7 @@ func (s *Scene) planEndgameCube(p *entity.Entity, req domain.EndgameRequest, exe
 	if err != nil {
 		return domain.CubePlan{}, &domain.CubeError{Code: "requirements", Message: "铜币状态无效"}
 	}
-	return domain.PlanCube(domain.CubeContext{Bag: p.Player.Bag, Money: money, Items: s.items, Intn: s.rng.Intn, NewUID: domain.NewItemInstanceID}, req, execute)
+	return domain.PlanCube(domain.CubeContext{Level: p.Player.Char.Level, Bag: p.Player.Bag, Money: money, Items: s.items, Intn: s.rng.Intn, NewUID: domain.NewItemInstanceID}, req, execute)
 }
 func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil {

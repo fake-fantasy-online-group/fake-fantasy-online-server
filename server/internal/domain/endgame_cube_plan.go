@@ -9,6 +9,7 @@ import (
 )
 
 type CubeContext struct {
+	Level        int32
 	Bag          *Bag
 	Money        int64
 	Items        map[ItemID]ItemDef
@@ -301,6 +302,9 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 			target.SocketUIDs[i] = uid
 			target.SocketCards[i] = original.SocketCards[found]
 		}
+		if ctx.Level < EquipmentRequiredLevel(def, target) {
+			return p, cubeError("requirements", "角色等级未达到星篆或宿阵要求")
+		}
 		if target.SocketUIDs == original.SocketUIDs {
 			return p, cubeError("requirements", "孔位顺序没有变化")
 		}
@@ -323,6 +327,9 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 			target.Sockets[i] = st.Item
 			target.SocketUIDs[i] = st.UID
 			target.SocketCards[i] = card
+		}
+		if ctx.Level < EquipmentRequiredLevel(def, target) {
+			return p, cubeError("requirements", "角色等级未达到星篆或宿阵要求")
 		}
 		if _, ok := MatchAstralRecipe(def, target); !ok {
 			return p, cubeError("requirements", "孔数、顺序与部位未匹配任何宿阵")

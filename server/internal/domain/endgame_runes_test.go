@@ -187,7 +187,7 @@ func TestAstralInsertRemoveIdentityIsolationAndLegacy(t *testing.T) {
 	bag := NewBag(4)
 	bag.Set(0, target)
 	bag.Set(1, rune)
-	p, err := PlanAstralInsert(bag, NewEquipSet(), lookup, target.UID, rune.UID, 0)
+	p, err := PlanAstralInsert(bag, NewEquipSet(), lookup, target.UID, rune.UID, 0, &Character{Level: 60})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -221,19 +221,19 @@ func TestAstralRejectWithoutLoss(t *testing.T) {
 			t.Fatalf("got %v want %s", err, want)
 		}
 	}
-	_, err := PlanAstralInsert(bag, worn, lookup, st.UID, r.UID, 2)
+	_, err := PlanAstralInsert(bag, worn, lookup, st.UID, r.UID, 2, &Character{Level: 60})
 	assert(err, "invalid_socket")
 	locked := r
 	locked.Locked = true
 	bag.Set(1, locked)
-	_, err = PlanAstralInsert(bag, worn, lookup, st.UID, r.UID, 0)
+	_, err = PlanAstralInsert(bag, worn, lookup, st.UID, r.UID, 0, &Character{Level: 60})
 	assert(err, "locked")
 	bag.Set(1, r)
 	bag.Set(2, r)
-	_, err = PlanAstralInsert(bag, worn, lookup, st.UID, r.UID, 0)
+	_, err = PlanAstralInsert(bag, worn, lookup, st.UID, r.UID, 0, &Character{Level: 60})
 	assert(err, "invalid_rune")
 	bag.Set(2, Stack{})
-	p, err := PlanAstralInsert(bag, worn, lookup, st.UID, r.UID, 0)
+	p, err := PlanAstralInsert(bag, worn, lookup, st.UID, r.UID, 0, &Character{Level: 60})
 	if err != nil {
 		t.Fatal(err)
 	}

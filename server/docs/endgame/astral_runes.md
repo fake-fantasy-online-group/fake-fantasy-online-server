@@ -27,7 +27,7 @@ Existing `Stack.SocketCount`, `Sockets[5]`, `SocketUIDs[5]`, `SocketCards[5]` re
 
 - Required socket count equals recipe length; an extra empty hole prevents a shorter prefix from activating.
 - Read hole0 through hole4. Empty holes, wrong order, old non-astral cards, duplicate card UIDs and missing snapshots do not form an array.
-- Recipe requirements are character level20/30/40/50 for2/3/4/5 holes, plus profession masks and item slot list. Restricted arrays require an employed profession.
+- Each rune has an explicit level requirement from 12 to 60, progressing in the existing mansion order. Recipe requirements are the maximum of their authored level20/30/40/50 floor for2/3/4/5 holes and every ingredient rune requirement, plus the existing profession masks and item slot list. Restricted arrays require an employed profession.
 - 战阵 uses weapons4/13; 守阵 uses head2/shield5/body8; 辅阵 uses face1/neck3/gloves6/ring7/shoes9.
 - Only functional currently worn equipment grants formation bonuses. Broken gear does not. A complete formation may still be described while in the bag.
 - At most one formation per channel contributes: more holes wins, then lower recipeID, then lower worn slot. Other complete formations keep their single-rune effects but not their formation bonus.
@@ -54,7 +54,7 @@ A level20+ combat kill rolls at most one supplemental rune: ordinary0.6%, elite8
 
 `PlanAstralInsert` and `PlanAstralRemove` return cloned candidates without changing live inventory. The scene calls the shared durable revision/receipt transaction gate and only publishes after committed success.
 
-- Insertion:100% success, no currency cost or random destruction. Requires character level10+.
+- Insertion:100% success, no currency cost or random destruction. Requires the character to meet the selected rune requirement and, when completed, the formation requirement. Cube inscription and reordering enforce the same current requirements during preview and commit.
 - Single extraction:1星髓 +1净煞尘 +2500铜. Materials are removed from the candidate first, so a freed material slot can hold the returned card. Invalid/locked target, insufficient materials/money or capacity failure discards the whole candidate.
 - Bound rune binds its equipment; inserting into bound equipment binds the inserted rune. Saved binding remains with the card on extraction. Locked cards/equipment cannot be operated on.
 - Duplicate/cross-owner UID, occupied/nonexistent hole and invalid card snapshots are rejected. Unrelated refine/wash/fusion/unique state is preserved.
@@ -68,3 +68,14 @@ Domain exports: `AstralRuneItems(icon)`, `AstralRunes`, `AstralRecipes`, `Astral
 Scene owns `onEndgameSocket`, `astralDropGrade`, `rollAstralRuneLoot`; root startup registers actual rune definitions with an existing icon, validates the catalogue, dispatches extension operations and projects catalogues/sidecar views. Unique combat lane adds `AstralBonuses` once in `passiveStatAffixes`.
 
 Tests cover all40 recipes, order/gap/extra-hole/duplicate UID failures, profession/level/broken equipment, deterministic channel selection, legacy hydration, clone isolation, bindings, five-property limits, durable commit/replay/failure, real combat-stat changes, native-path denial, and complete-Stack pet pickup/full-bag/partial retry. Test pass claims belong in verified logs, not implied by this list. No live database migration, deployment or Unity run is part of this reconstruction.
+
+
+## Level requirements and compatibility
+
+The 28 rune levels, in item-ID order, are: 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 30, 32, 33, 35, 37, 39, 40, 42, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60. They are evenly rounded across the authored 28-mansion order. Rune effects, crafting costs, drop rates, slot lists and profession masks are unchanged. Universal formations remain universal.
+
+`EquipmentRequiredLevel` derives the maximum of base-equipment level, installed rune levels, and any exactly matched formation. Equip, alternate-set switching, native blocked flags and tooltip descriptions, sidecar item levels, functional equipment selection, combat stats and granted equipment skills use this current requirement. The rune catalog wire DTO adds `minLevel`; ship the paired client update with the server because its JSON schema is strict.
+
+No database migration or instance rewrite is required. Existing rune UIDs, saved card effect rolls, socket order and equipment identities remain intact. Previously worn gear that no longer meets the level requirement remains worn but grants no functional bonuses until eligible; it is not deleted or silently moved. Unequip and extraction remain available, including below the new requirement, under their existing inventory/cost rules. Level-up refresh and relog reevaluate eligibility. New drops and crafted runes may still be owned or traded before their use level; possession is not restricted.
+
+The snapshot uses the same functional-equipment selection as combat. `同类宿阵优先级未满足` is returned only for an independently eligible formation that lost canonical channel selection; level, durability, profession and other equipment requirements are reported separately.

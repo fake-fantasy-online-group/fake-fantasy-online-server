@@ -562,7 +562,7 @@ func (s *Scene) weaponDurabilityCost(p *entity.Entity, def domain.SkillDef) (ski
 			(def.RequiredWeaponType > 0 && item.Equip.Type != def.RequiredWeaponType) {
 			return skillWeaponDurabilityCost{}, event.RejectNotEquippable
 		}
-		if item.Equip.Durable <= 0 || !domain.EquipmentFunctional(st, item) {
+		if item.Equip.Durable <= 0 || !domain.EquipmentFunctional(st, item) || p.Player.Char == nil || p.Player.Char.Level < domain.EquipmentRequiredLevel(item, st) {
 			return skillWeaponDurabilityCost{}, event.RejectNotEnough
 		}
 		reduction := def.WeaponDurabilityReductionPct
@@ -592,7 +592,7 @@ func (s *Scene) equippedTreasureSkill(p *entity.Entity) *domain.EquipmentSkill {
 		return nil
 	}
 	def, ok := s.itemDef(st.Item)
-	if !ok || def.Equip == nil || def.Equip.Skill == nil || !domain.EquipmentFunctional(st, def) {
+	if !ok || def.Equip == nil || def.Equip.Skill == nil || !domain.EquipmentFunctional(st, def) || p.Player.Char == nil || p.Player.Char.Level < domain.EquipmentRequiredLevel(def, st) {
 		return nil
 	}
 	return def.Equip.Skill
