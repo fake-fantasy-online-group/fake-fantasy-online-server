@@ -24,7 +24,11 @@ func TestEndgameNegotiationRequiresWorld(t *testing.T) {
 	}
 	s.OnPacket(protocol.OpEndgame, endgameHello())
 	if !s.endgameEnabled() || len(out.pkts) != 1 {
-		t.Fatal("hello not negotiated")
+		t.Fatal("hello transport not enabled")
+	}
+	responses := nativeStatsResponses(t, out.pkts)
+	if len(responses) != 1 || responses[0].OK || responses[0].Error != "busy" || len(responses[0].Capabilities) != 0 {
+		t.Fatal("missing scene router must not fabricate a successful hello", responses)
 	}
 	s.leaveWorld("test", StageAuthed)
 	if s.endgameEnabled() || s.endgameV1 {

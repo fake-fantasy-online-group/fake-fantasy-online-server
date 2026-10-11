@@ -22,20 +22,24 @@ func (s *Session) onEndgame(payload []byte) {
 		return
 	}
 	if req.Op == "hello" {
+		// This is only the transport opt-in. The scene owns the capability
+		// response and must refresh native descriptions before confirming it.
+		enabled := false
 		for _, v := range req.Capabilities {
 			if v == domain.EndgameV1 {
+				enabled = true
 				s.endgameV1 = true
 			}
 		}
-		enabled := s.endgameV1
+		id, sc := s.entity, s.scene
 		s.mu.Unlock()
-		reply := domain.EndgameResponse{Kind: "hello", RequestID: req.RequestID, OK: enabled}
-		if enabled {
-			reply.Capabilities = []string{domain.EndgameV1}
-		} else {
-			reply.Error = "unsupported_capability"
+		if !enabled {
+			s.sink.Send(protocol.EncodeEndgame(domain.EndgameResponse{Kind: "hello", RequestID: req.RequestID, Error: "unsupported_capability"}))
+			return
 		}
-		s.sink.Send(protocol.EncodeEndgame(reply))
+		if s.deps.Router == nil || !s.deps.Router.Post(sc, scene.EndgameRequest{ID: id, Request: req}) {
+			s.sink.Send(protocol.EncodeEndgame(domain.EndgameResponse{Kind: "hello", RequestID: req.RequestID, Error: "busy", Message: "演劫系统暂时无法响应，请重试"}))
+		}
 		return
 	}
 	enabled, id := s.endgameV1, s.entity
