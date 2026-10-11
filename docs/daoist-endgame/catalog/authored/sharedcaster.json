@@ -5,13 +5,33 @@
     "Lore": "木杆只刻一道横线，既不量人也不量天。验杖的学徒留下批语：能盛一缕气，暂不必为它取神名。",
     "LoreRoot": "原创·测试木杖的验收木规",
     "Identity": "无特性的入门法力储器",
-    "Benefit": "增加入门施法的法力余量",
-    "Tradeoff": "没有伤害、治疗或防御加成",
-    "PowerTier": "niche",
+    "Benefit": "以法术输出为主，保留无特性的入门法力储器的用途；法力、法攻、智慧、法术会心、精神形成完整底盘",
+    "Tradeoff": "投入集中在法术输出；不提供物攻、命中专精",
+    "PowerTier": "transition",
     "Affixes": [
       {
         "Attr": 36,
-        "Value": 24,
+        "Value": 41,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
         "Mode": 0
       }
     ],
@@ -20,22 +40,37 @@
   },
   {
     "BaseID": 1301,
-    "Name": "桥下第三根",
+    "Name": "桥下余木",
     "Lore": "洪水退后，桥匠把剩下的第三根支木削成手杖。握柄那一面没沾过河水，干燥得像还等着一只求援的手。",
     "LoreRoot": "原创·救桥余木",
     "Identity": "偏生存的学徒木杖",
-    "Benefit": "增加生命与物防，给初学者更多容错",
-    "Tradeoff": "不增魔攻，清怪较慢",
-    "PowerTier": "niche",
+    "Benefit": "以法术输出为主，保留偏生存的学徒木杖的用途；生命、防御、法攻、智慧、法力形成完整底盘",
+    "Tradeoff": "投入集中在法术输出；不提供物攻、命中专精",
+    "PowerTier": "transition",
     "Affixes": [
       {
         "Attr": 34,
-        "Value": 32,
+        "Value": 41,
         "Mode": 0
       },
       {
         "Attr": 13,
-        "Value": 2,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 31,
         "Mode": 0
       }
     ],
@@ -48,23 +83,38 @@
     "Lore": "檀芯烧过半寸便熄，余香却在每次吐纳后重现。制香人要它安神，最后只制成了一个让人不愿离席的好借口。",
     "LoreRoot": "原型·檀木材质的持续余香",
     "Identity": "精心养气的静修杖",
-    "Benefit": "精神与法力双补，适合连续施法",
-    "Tradeoff": "损失少量体质，没有直接增伤",
-    "PowerTier": "niche",
+    "Benefit": "以法术输出为主，保留精心养气的静修杖的用途；精神、法力、法攻、智慧、法术会心形成完整底盘",
+    "Tradeoff": "仍降低体质；优先本件的专长，不承担所有输出与防护需求",
+    "PowerTier": "transition",
     "Affixes": [
       {
         "Attr": 61,
-        "Value": 2,
+        "Value": 5,
         "Mode": 0
       },
       {
         "Attr": 36,
-        "Value": 12,
+        "Value": 41,
         "Mode": 0
       },
       {
         "Attr": 5,
-        "Value": -1,
+        "Value": -2,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 24,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 143,
         "Mode": 0
       }
     ],
@@ -77,23 +127,38 @@
     "Lore": "术院的点名长签多出一个从未入学的姓名。每逢讲到结印，那个名字便滴下一点朱砂，恰好落在正确的位置。",
     "LoreRoot": "原型·术士认证法杖",
     "Identity": "以练习精度换防护的施法凭据",
-    "Benefit": "提高智慧与魔攻，强化基础施法",
-    "Tradeoff": "物防下降，需要保持距离",
-    "PowerTier": "niche",
+    "Benefit": "以法术输出为主，保留以练习精度换防护的施法凭据的用途；智慧、法攻、法力、法术会心、精神形成完整底盘",
+    "Tradeoff": "仍降低防御；优先本件的专长，不承担所有输出与防护需求",
+    "PowerTier": "transition",
     "Affixes": [
       {
         "Attr": 3,
-        "Value": 3,
+        "Value": 7,
         "Mode": 0
       },
       {
         "Attr": 15,
-        "Value": 12,
+        "Value": 29,
         "Mode": 0
       },
       {
         "Attr": 13,
         "Value": -5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 38,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 164,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 6,
         "Mode": 0
       }
     ],
@@ -106,9 +171,9 @@
     "Lore": "剖石师没有找到玉，只听见石心每夜涨潮。他把裂缝包成杖头，让潮声留在掌中，自己迁去了没有海的地方。",
     "LoreRoot": "原型·灵石中蕴藏的力量",
     "Identity": "靠深厚法力支撑的灵石杖",
-    "Benefit": "较大的单一法力储量，支持较长施法序列",
-    "Tradeoff": "魔防下降，且不改善输出和治疗",
-    "PowerTier": "niche",
+    "Benefit": "以法术输出为主，保留靠深厚法力支撑的灵石杖的用途；法力、法攻、智慧、法术会心、精神形成完整底盘",
+    "Tradeoff": "仍降低魔防；优先本件的专长，不承担所有输出与防护需求",
+    "PowerTier": "transition",
     "Affixes": [
       {
         "Attr": 36,
@@ -118,6 +183,26 @@
       {
         "Attr": 17,
         "Value": -4,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 35,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 184,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 7,
         "Mode": 0
       }
     ],
@@ -130,18 +215,43 @@
     "Lore": "金蛇的封印绕到杖尾便接不上，封师用一枚俗钱补齐。蛇每日问铜钱的来历，听到第三种说法才肯闭口。",
     "LoreRoot": "原型·蛇魔法杖的金蛇封印",
     "Identity": "克制强敌的危险封印",
-    "Benefit": "提高对精英与首领的伤害并补魔攻",
-    "Tradeoff": "最大生命降低，对普通敌人的专长无效",
-    "PowerTier": "specialist",
+    "Benefit": "以法术输出为主，保留克制强敌的危险封印的用途；法攻、智慧、法力、法术会心、精神、魔防形成完整底盘",
+    "Tradeoff": "仍降低生命；特性须满足原有技能或战况条件",
+    "PowerTier": "highvalue",
     "Affixes": [
       {
         "Attr": 15,
-        "Value": 18,
+        "Value": 50,
         "Mode": 0
       },
       {
         "Attr": 34,
         "Value": -40,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 59,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 235,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 25,
         "Mode": 0
       }
     ],
@@ -160,18 +270,43 @@
     "Lore": "山下孩子把辉石碎屑装进坏拨浪鼓，摇一下便落一片微霞。术者换来鼓柄，直到上阵仍不敢摇得太响。",
     "LoreRoot": "原型·辉石杖的霞光",
     "Identity": "放弃正面防护的范围施法器",
-    "Benefit": "范围技能尺寸扩大，法力稍增",
-    "Tradeoff": "物防下降，单体技能不受范围增益",
-    "PowerTier": "specialist",
+    "Benefit": "以法术输出为主，保留放弃正面防护的范围施法器的用途；法力、法攻、智慧、法术会心、精神、生命形成完整底盘",
+    "Tradeoff": "仍降低防御；特性须满足原有技能或战况条件",
+    "PowerTier": "highvalue",
     "Affixes": [
       {
         "Attr": 36,
-        "Value": 45,
+        "Value": 88,
         "Mode": 0
       },
       {
         "Attr": 13,
         "Value": -8,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 62,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 259,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 67,
         "Mode": 0
       }
     ],
@@ -190,13 +325,33 @@
     "Lore": "三尊小像背对持杖者，面朝路上众人。刻工说神像该看见来者，至于执杖的人，先学着自己站稳。",
     "LoreRoot": "原型·三清金身雕像的朝向",
     "Identity": "保命优先的守正杖",
-    "Benefit": "受到法术攻击时减伤，并增加生命",
-    "Tradeoff": "不增魔攻，舍弃武器位的进攻预算",
-    "PowerTier": "niche",
+    "Benefit": "以法术输出为主，保留保命优先的守正杖的用途；生命、法攻、智慧、法力、法术会心形成完整底盘",
+    "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+    "PowerTier": "transition",
     "Affixes": [
       {
         "Attr": 34,
-        "Value": 45,
+        "Value": 86,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 60,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 65,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 245,
         "Mode": 0
       }
     ],
@@ -211,22 +366,47 @@
   },
   {
     "BaseID": 1308,
-    "Name": "翼骨缺一",
+    "Name": "偏翼画圆",
     "Lore": "杖首两翼一轻一重，轻的那边少了根骨。飞禽匠试了多年，终于让它在地面上画出了极圆的圈。",
     "LoreRoot": "原型·双翼杖首的残缺结构",
     "Identity": "容易展开法阵的偏科长杖",
-    "Benefit": "范围技能伤害提高，附带魔攻",
-    "Tradeoff": "魔法暴击率下降，单体施法不获专长",
-    "PowerTier": "specialist",
+    "Benefit": "以法术输出为主，保留容易展开法阵的偏科长杖的用途；法攻、智慧、法力、精神、生命、魔防形成完整底盘",
+    "Tradeoff": "仍降低法术会心；特性须满足原有技能或战况条件",
+    "PowerTier": "highvalue",
     "Affixes": [
       {
         "Attr": 15,
-        "Value": 32,
+        "Value": 95,
         "Mode": 0
       },
       {
         "Attr": 66,
         "Value": -180,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 83,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 83,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 34,
         "Mode": 0
       }
     ],
@@ -241,13 +421,13 @@
   },
   {
     "BaseID": 1309,
-    "Name": "天上第九滴",
+    "Name": "旱夜露声",
     "Lore": "采露匣的九格只有八格盛着液体，最后一格装着一声回响。后来的执杖者不敢说它来自果老，只在旱夜听见雨。",
     "LoreRoot": "原型·九天采灵液传说；新匣为原创",
     "Identity": "把法力与吟唱效率推高的采露遗物",
-    "Benefit": "高法力与吟唱缩短，适合密集施法",
-    "Tradeoff": "生命上限下降，施法失误代价更高",
-    "PowerTier": "specialist",
+    "Benefit": "以法术输出为主，保留把法力与吟唱效率推高的采露遗物的用途；法力、法攻、智慧、法术会心、精神、魔防形成完整底盘",
+    "Tradeoff": "仍降低生命；特性须满足原有技能或战况条件",
+    "PowerTier": "highvalue",
     "Affixes": [
       {
         "Attr": 36,
@@ -257,6 +437,31 @@
       {
         "Attr": 34,
         "Value": -60,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 112,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 329,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 37,
         "Mode": 0
       }
     ],
@@ -274,19 +479,19 @@
     "Name": "无名神席",
     "Lore": "杖上九个座位都没有刻像，第十个影子却总坐在持杖者脚边。九仪旧说解释不了它，只有一行小字：席满，莫请。",
     "LoreRoot": "原型·九仪来历不明的传说",
-    "Identity": "高魔攻但拒绝防护的稀有主杖",
-    "Benefit": "显著魔攻、魔法暴击与技能伤害增幅",
-    "Tradeoff": "生命与物防同时下降，治疗未获特性增强",
-    "PowerTier": "chase",
+    "Identity": "削弱血线与回避的高魔攻主杖",
+    "Benefit": "以法术输出为主，保留削弱血线与回避的高魔攻主杖的用途；法攻、法术会心、智慧、法力、精神、魔防、法术平减、异常抵抗形成完整底盘",
+    "Tradeoff": "仍降低生命、防御；特性须满足原有技能或战况条件",
+    "PowerTier": "godlike",
     "Affixes": [
       {
         "Attr": 15,
-        "Value": 65,
+        "Value": 200,
         "Mode": 0
       },
       {
         "Attr": 66,
-        "Value": 320,
+        "Value": 646,
         "Mode": 0
       },
       {
@@ -297,6 +502,36 @@
       {
         "Attr": 13,
         "Value": -20,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 136,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 55,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 20,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 20,
         "Mode": 0
       }
     ],
@@ -315,18 +550,38 @@
     "Lore": "画符人用旧木枝抄自己的梦，醒来只剩一笔横画。次夜梦里的门却矮了半寸，他从此不敢再削杖尖。",
     "LoreRoot": "原创·梦境记号木枝",
     "Identity": "便宜而挑剔的单体法术杖",
-    "Benefit": "单体技能伤害提高，略增法力",
-    "Tradeoff": "物防降低，范围伤害不获增幅",
-    "PowerTier": "niche",
+    "Benefit": "以法术输出为主，保留便宜而挑剔的单体法术杖的用途；法力、法攻、智慧、法术会心、精神形成完整底盘",
+    "Tradeoff": "仍降低防御；特性须满足原有技能或战况条件",
+    "PowerTier": "transition",
     "Affixes": [
       {
         "Attr": 36,
-        "Value": 34,
+        "Value": 41,
         "Mode": 0
       },
       {
         "Attr": 13,
         "Value": -3,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 24,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
         "Mode": 0
       }
     ],

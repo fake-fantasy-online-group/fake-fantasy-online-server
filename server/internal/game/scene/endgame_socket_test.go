@@ -179,17 +179,43 @@ func TestAstralFormationChangesRealCombatStats(t *testing.T) {
 	p.Player.Bag = plan.Bag
 	p.Player.Bag.Set(200, domain.Stack{})
 	p.Player.Worn.Set(domain.SlotWeapon, plan.Target)
+	recipe, ok := domain.AstralRecipeByID(1)
+	if !ok || len(recipe.Runes) != int(plan.Target.SocketCount) {
+		t.Fatal("formation fixture missing")
+	}
+	var runeBonuses []domain.Affix
+	for i, runeID := range recipe.Runes {
+		if plan.Target.Sockets[i] != runeID {
+			t.Fatal("formation fixture no longer matches authored ingredient order")
+		}
+		runeBonuses = append(runeBonuses, plan.Target.SocketCards[i].StaticAffixes()...)
+	}
+	// Independently assemble the expected sources, without MatchAstralRecipe,
+	// AstralBonuses, functionalWorn or the scene's passive-affix selection. This
+	// verifies every new recipe line and leaves rune snapshots separate.
+	source := domain.StatSource{Base: p.Player.Char.EffectiveBase(), Level: p.Player.Char.Level,
+		Innate: characterInnateStats(p.Player.Char), Passive: runeBonuses}
+	_, wantReversed := domain.Compute(source)
+	source.Passive = append(append([]domain.Affix{}, runeBonuses...), recipe.Affixes...)
+	_, wantComplete := domain.Compute(source)
 	s.refreshStats(p)
-	complete := p.Stats.MinAtk
+	complete := p.Stats
+	if complete != wantComplete || p.Player.Worn.At(domain.SlotWeapon) != plan.Target {
+		t.Fatalf("active recipe lost extras or changed rune snapshots: got %+v want %+v", complete, wantComplete)
+	}
 	st := plan.Target
 	st.Sockets[0], st.Sockets[1] = st.Sockets[1], st.Sockets[0]
 	st.SocketUIDs[0], st.SocketUIDs[1] = st.SocketUIDs[1], st.SocketUIDs[0]
 	st.SocketCards[0], st.SocketCards[1] = st.SocketCards[1], st.SocketCards[0]
 	p.Player.Worn.Set(domain.SlotWeapon, st)
 	s.refreshStats(p)
-	// v2 引火入锋 adds STR4 then attack18%; reverse order retains only the two rune snapshots.
-	if complete != 125 || p.Stats.MinAtk != 104 {
-		t.Fatalf("wrong active/reversed damage stats %d/%d", complete, p.Stats.MinAtk)
+	if p.Stats != wantReversed || complete.MinAtk <= p.Stats.MinAtk || p.Player.Worn.At(domain.SlotWeapon) != st {
+		t.Fatalf("reversed recipe must retain only rune effects: active %+v; reversed %+v; want %+v", complete, p.Stats, wantReversed)
+	}
+	p.Player.Worn.Set(domain.SlotWeapon, plan.Target)
+	s.refreshStats(p)
+	if p.Stats != wantComplete || p.Player.Worn.At(domain.SlotWeapon) != plan.Target {
+		t.Fatal("restoring order failed to reactivate all formation extras without rerolling")
 	}
 }
 func TestAstralDroppedHolesReserveAttributeBudget(t *testing.T) {

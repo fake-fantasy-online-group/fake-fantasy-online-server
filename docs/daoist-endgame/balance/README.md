@@ -1,4 +1,6 @@
-# Itemization balance research, 2026-10-11
+# Historical v2 itemization balance research, 2026-10-11
+
+> Superseded design policy: the user’s subsequent v3 direction requires every unique and formation to have at least five useful extra affixes, and every unique to clear a strict intended-use yellow-upgrade floor. Earlier recommendations below permitting weak/niche items or 1–6 lines are retained only as the historical diagnosis. The current contract and verification are in [V3_POWER_BUDGETS.md](V3_POWER_BUDGETS.md), [CARD_BUDGET_RESEARCH.md](CARD_BUDGET_RESEARCH.md), and the catalog README. Frozen baseline fixtures remain historical inputs, never new shipping targets.
 
 The research phase was read-only. A separately authorized narrow rune28 regeneration repair follows below; no database, published repository, or desktop was changed. Reference checkout HEAD: `3b3999de226a033906e4f1062e164689ba76b70d`. Concurrent authored changes were underway, so baseline unique data are frozen in the research snapshot below.
 

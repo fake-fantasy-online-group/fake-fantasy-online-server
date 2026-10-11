@@ -20,23 +20,24 @@
     "2": 99
   },
   "catalog_sha256": {
-    "unique_catalog_allclasses.json": "c280d2da37ef14e89086ea7cabf0f72689da5d592a3ebbc8024c4ee80f948ff5",
-    "unique_catalog_assassin.json": "aeef59bd1b7fb1546291891d5e16127fbca9d7dd15724a045f32072ce5f756ce",
-    "unique_catalog_healer.json": "853780f0cc3935cc75d1e983d68e2c1d08f64bf23be3125de08a13171ed6d6c5",
-    "unique_catalog_sharedcaster.json": "71d6e800af695e46f19a1fa9dd6cb7194e28f3b55764f60067f37bed5a4f049d",
-    "unique_catalog_swordsman.json": "4e603a62524328ea0b61cea4dfa9925ead3df433c033da3f4aa0c8606969ea0d",
-    "unique_catalog_unrestricted.json": "c50277d97fe0c0cebf4aa4939604fb05ca7ce7adaa07620b14840399e53b51bd",
-    "unique_catalog_warlock.json": "b6149672d0902edcdbbec1c48dd3f7771d743ccd54fe59137475c1a22d044c39",
-    "unique_catalog_warrior.json": "a570de0bb513865d5f570ab41df1b5d56ff08567f59739a1efd196af1b267d39"
+    "unique_catalog_allclasses.json": "36751f43375108de68fb9c7da013444c7215b57569ee444336ce1aa3e7e8304f",
+    "unique_catalog_assassin.json": "962114dc3feb5ad19db899e034c78df6689bb5a4497bcd2f74be861dd59007d9",
+    "unique_catalog_healer.json": "26a69cf770a62e931f5143321df62462c284a242bd209721ba33de4216a02490",
+    "unique_catalog_sharedcaster.json": "5171070eba8bae10507a8cc7220abf9c9abc709f2fe4e37ac2e7efd47e5b68e6",
+    "unique_catalog_swordsman.json": "30968c7847b195a5956f2d4cd87d7d5857fb9a302c09c360cdf05c4a5761b126",
+    "unique_catalog_unrestricted.json": "62e4340023fb05b182c9939912d2a614199beb3f3f17265f87b47569d4999b00",
+    "unique_catalog_warlock.json": "63d7c414752675e0b5b2d8dec4f9f556f7976ac10e554b241361681cccb603e6",
+    "unique_catalog_warrior.json": "57b931b75045c0b48e31c8bcc7ef8e6da76864c9858778b87fcfa7abc044a157"
   },
   "source_csv_sha256": "44a64a6e266b7e02809bdc1abb658d7df25b3ce1715d568a094e726da7756006",
-  "max_catalog_bytes": 271041,
+  "max_catalog_bytes": 359280,
   "authored_entry_count": 1619,
   "legacy_template_count": 0,
   "power_tier_counts": {
-    "niche": 1082,
-    "specialist": 486,
-    "chase": 51
+    "transition": 1080,
+    "highvalue": 449,
+    "builddefining": 84,
+    "godlike": 6
   },
   "trait_count_distribution": {
     "0": 1195,

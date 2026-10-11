@@ -28,7 +28,7 @@ func TestUniqueCatalogCompleteDistinctAndValid(t *testing.T) {
 		if d.LegacyAffixPoolReady {
 			ready++
 		}
-		if d.Slot < 1 || d.Slot > 25 || len(d.Affixes) < 1 || len(d.Affixes) > 6 || len(d.Traits) > 3 {
+		if d.Slot < 1 || d.Slot > 25 || validateUniqueDefinition(d) != nil {
 			t.Fatal(d.ID)
 		}
 		for _, tr := range d.Traits {

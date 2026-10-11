@@ -625,8 +625,14 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 			lines = append(lines, "技能效果: "+text)
 		}
 	}
-	if text := strings.TrimSpace(def.Description); text != "" {
-		lines = append(lines, text)
+	// Unique and formed astral equipment use their authored lore. Omit only
+	// the base template prose here, before it becomes an unstructured tooltip;
+	// requirements, set/skill effects and binding notices remain untouched.
+	// Recipe identity, not current activation, also covers bag and broken gear.
+	if _, formed := domain.MatchAstralRecipe(def, st); !unique && !formed {
+		if text := strings.TrimSpace(def.Description); text != "" {
+			lines = append(lines, text)
+		}
 	}
 	if st.Bound {
 		lines = append(lines, "（绑定物品不可交易/摆摊/邮寄, 可卖NPC）")

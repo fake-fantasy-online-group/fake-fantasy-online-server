@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Compile explicitly authored rune/formation JSON; never create item prose or stats."""
 import argparse,json,pathlib
-from generate import TRAITS, TRAIT_CLASSES, POWER_TIERS
+from generate import TRAITS, TRAIT_CLASSES, POWER_TIERS, supported_endgame_affix, validate_extra_affixes
 ROOT=pathlib.Path(__file__).resolve().parents[3]
 SOURCE=ROOT/'server/docs/endgame/astral_runes.json'
 TARGET=ROOT/'server/internal/domain/endgame_runes_catalog.go'
@@ -10,9 +10,8 @@ def affixes(rows):return '[]Affix{'+','.join('{Attr:%d,Value:%d,Mode:%d}'%(r['at
 def traits(rows):return '[]UniqueTrait{'+','.join('{Kind:%s,PowerBP:%d,ThresholdPct:%d,SkillID:%d,SkillName:%s}'%(q(r['kind']),r['powerBP'],r['thresholdPct'],r.get('skillID',0),q(r.get('skillName',''))) for r in rows)+'}'
 def reserved(rows):return '[]ReservedSkillAttribute{'+','.join('{Scope:%s,Target:%s,Levels:%d}'%(q(r['scope']),q(r['target']),r['levels']) for r in rows)+'}'
 def supported_affix(a):
-    return (set(a) == {'attr','value','mode'} and a['attr'] in {1,3,5,7,9,61,13,15,17,19,23,25,27,29,31,34,36,47,66,69,70,118}
-            and type(a['value']) is int and -2147483648 <= a['value'] <= 2147483647 and a['value'] != 0 and a['mode'] in (0,1)
-            and not (a['attr'] in (23,66) and a['mode']==1) and not (a['attr']==25 and a['mode']==0))
+    return (isinstance(a,dict) and set(a) == {'attr','value','mode'}
+            and supported_endgame_affix(a['attr'],a['value'],a['mode']))
 def supported_rune_affix(rune_id,a):
     return supported_affix(a) or (rune_id == 1900028028 and set(a) == {'attr','value','mode'}
         and a['attr'] == 38 and a['mode'] == 0 and type(a['value']) is int and 0 < a['value'] <= 2147483647)
@@ -32,9 +31,8 @@ def compile_catalog(doc):
         assert r['name'] not in names and r['lore'] not in lores
         names.add(r['name']);lores.add(r['lore'])
         assert all(r.get(k) for k in ['identity','benefit','tradeoff','powerTier']) and r['powerTier'] in POWER_TIERS
-        assert 1 <= len(r['affixes']) <= 6 and len(r.get('traits',[])) <= 3
-        for a in r['affixes']:
-            assert supported_affix(a), ('unsupported formation affix',r['id'],a)
+        assert len(r.get('traits',[])) <= 3
+        validate_extra_affixes(r['affixes'],r['id'],keys=('attr','value','mode'))
         for t in r.get('traits',[]):
             assert t['kind'] in TRAITS and 0 < t['powerBP'] <= 10000 and 0 <= t['thresholdPct'] <= 100
             assert not r['professions'] or r['professions'] & TRAIT_CLASSES.get(t['kind'],31), ('class has no executable trait path',r['id'],t)

@@ -7,7 +7,7 @@ import (
 	"sort"
 )
 
-const UniqueCatalogVersion = "endgame-v2-authored"
+const UniqueCatalogVersion = "endgame-v3-authored"
 const UniqueCatalogCount = 1619
 const UniqueRollMinBP int32 = 8000
 const UniqueRollMaxBP int32 = 12000
@@ -61,23 +61,11 @@ func loadUniqueCatalog() ([]UniqueDefinition, map[ItemID]UniqueDefinition) {
 			panic(err)
 		}
 		for _, d := range rows {
-			if d.BaseID <= 0 || d.ID != int32(d.BaseID) || d.Name == "" || names[d.Name] || byBase[d.BaseID].ID != 0 || len(d.Affixes) < 1 || len(d.Affixes) > 6 || len(d.Traits) > 3 {
+			if names[d.Name] || byBase[d.BaseID].ID != 0 {
 				panic(fmt.Sprintf("invalid unique catalogue row %d", d.BaseID))
 			}
-			for _, a := range d.Affixes {
-				if !SupportedEndgameAffix(a) {
-					panic(fmt.Sprintf("unsupported unique affix %d/%+v", d.BaseID, a))
-				}
-			}
-			for _, b := range d.ReservedSkills {
-				if !b.Valid() {
-					panic(fmt.Sprintf("invalid reserved skill attribute %d", d.BaseID))
-				}
-			}
-			for _, tr := range d.Traits {
-				if !ValidUniqueTrait(tr) || !TraitMatchesProfessions(tr, d.Professions) {
-					panic(fmt.Sprintf("invalid unique trait %d/%s", d.BaseID, tr.Kind))
-				}
+			if err := validateUniqueDefinition(d); err != nil {
+				panic(err)
 			}
 			names[d.Name] = true
 			byBase[d.BaseID] = d
@@ -89,6 +77,26 @@ func loadUniqueCatalog() ([]UniqueDefinition, map[ItemID]UniqueDefinition) {
 	}
 	sort.Slice(all, func(i, j int) bool { return all[i].BaseID < all[j].BaseID })
 	return all, byBase
+}
+
+func validateUniqueDefinition(d UniqueDefinition) error {
+	if d.BaseID <= 0 || d.ID != int32(d.BaseID) || d.Name == "" || len(d.Traits) > 3 || !validEndgamePowerTier(d.PowerTier) {
+		return fmt.Errorf("invalid unique catalogue row %d", d.BaseID)
+	}
+	if err := validateEndgameExtraAffixes(d.Affixes, true); err != nil {
+		return fmt.Errorf("unique %d: %w", d.BaseID, err)
+	}
+	for _, b := range d.ReservedSkills {
+		if !b.Valid() {
+			return fmt.Errorf("invalid reserved skill attribute %d", d.BaseID)
+		}
+	}
+	for _, tr := range d.Traits {
+		if !ValidUniqueTrait(tr) || !TraitMatchesProfessions(tr, d.Professions) {
+			return fmt.Errorf("invalid unique trait %d/%s", d.BaseID, tr.Kind)
+		}
+	}
+	return nil
 }
 
 func cloneUnique(d UniqueDefinition) UniqueDefinition {
@@ -164,6 +172,9 @@ func ValidateUniqueCatalog(defs map[ItemID]ItemDef) error {
 		d, ok := uniqueByBase[id]
 		if !ok {
 			return fmt.Errorf("eligible equipment %d lacks unique", id)
+		}
+		if err := validateUniqueDefinition(d); err != nil {
+			return err
 		}
 		e := def.Equip
 		if d.Slot != e.Slot || d.Professions != e.Need.Professions || d.BeginnerAllowed != e.Need.BeginnerAllowed || d.Sex != e.Need.Sex || d.LevelRequirement != e.LevelReq {

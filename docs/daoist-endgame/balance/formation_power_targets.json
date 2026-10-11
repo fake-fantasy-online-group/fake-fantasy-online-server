@@ -1,0 +1,1727 @@
+[
+  {
+    "RecipeID": 1,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 1604,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 21,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 1,
+        "BaseID": 1004,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 21,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 2,
+        "BaseID": 1804,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 21,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 47,
+        "value": 18,
+        "mode": 1
+      },
+      {
+        "attr": 19,
+        "value": 8,
+        "mode": 0
+      },
+      {
+        "attr": 1,
+        "value": 4,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 2,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 3,
+        "BaseID": 1309,
+        "Lane": "magic",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 49,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 4,
+        "BaseID": 1309,
+        "Lane": "magic",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 49,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 15,
+        "value": 24,
+        "mode": 1
+      },
+      {
+        "attr": 36,
+        "value": 60,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 3,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 2007,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 35,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 1,
+        "BaseID": 2007,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 35,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 2,
+        "BaseID": 2007,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 35,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 3,
+        "BaseID": 2007,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 35,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 4,
+        "BaseID": 2007,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 35,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 34,
+        "value": 150,
+        "mode": 0
+      },
+      {
+        "attr": 17,
+        "value": 25,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 4,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 3,
+        "BaseID": 2405,
+        "Lane": "healing_sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 30,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 61,
+        "value": 8,
+        "mode": 0
+      },
+      {
+        "attr": 36,
+        "value": 15,
+        "mode": 1
+      }
+    ]
+  },
+  {
+    "RecipeID": 5,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 2,
+        "BaseID": 1808,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 46,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 25,
+        "value": -9,
+        "mode": 1
+      },
+      {
+        "attr": 19,
+        "value": 25,
+        "mode": 1
+      },
+      {
+        "attr": 47,
+        "value": 12,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 6,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 1604,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 20,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 1,
+        "value": 6,
+        "mode": 0
+      },
+      {
+        "attr": 47,
+        "value": 15,
+        "mode": 1
+      }
+    ]
+  },
+  {
+    "RecipeID": 7,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 1,
+        "BaseID": 2885,
+        "Lane": "physical_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 13,
+        "value": 35,
+        "mode": 1
+      },
+      {
+        "attr": 19,
+        "value": 15,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 8,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 4,
+        "BaseID": 1309,
+        "Lane": "magic",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 51,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 66,
+        "value": 700,
+        "mode": 0
+      },
+      {
+        "attr": 15,
+        "value": 18,
+        "mode": 1
+      }
+    ]
+  },
+  {
+    "RecipeID": 9,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 3,
+        "BaseID": 2410,
+        "Lane": "healing_sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 17,
+        "value": 35,
+        "mode": 0
+      },
+      {
+        "attr": 34,
+        "value": 120,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 10,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 2108,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 58,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 1,
+        "BaseID": 2108,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 58,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 2,
+        "BaseID": 2108,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 58,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 3,
+        "BaseID": 2108,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 58,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 4,
+        "BaseID": 2108,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 58,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 27,
+        "value": 8,
+        "mode": 1
+      },
+      {
+        "attr": 9,
+        "value": 12,
+        "mode": 0
+      },
+      {
+        "attr": 36,
+        "value": 120,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 11,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 1606,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 30,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 47,
+        "value": 24,
+        "mode": 1
+      },
+      {
+        "attr": 31,
+        "value": 18,
+        "mode": 0
+      },
+      {
+        "attr": 1,
+        "value": 8,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 12,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 1,
+        "BaseID": 1008,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 44,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 47,
+        "value": 25,
+        "mode": 1
+      },
+      {
+        "attr": 19,
+        "value": 30,
+        "mode": 1
+      },
+      {
+        "attr": 13,
+        "value": 20,
+        "mode": 1
+      }
+    ]
+  },
+  {
+    "RecipeID": 13,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 2,
+        "BaseID": 1809,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 48,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 23,
+        "value": 800,
+        "mode": 0
+      },
+      {
+        "attr": 25,
+        "value": -12,
+        "mode": 1
+      },
+      {
+        "attr": 31,
+        "value": 28,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 14,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 4,
+        "BaseID": 1310,
+        "Lane": "magic",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 55,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 15,
+        "value": 32,
+        "mode": 1
+      },
+      {
+        "attr": 3,
+        "value": 15,
+        "mode": 0
+      },
+      {
+        "attr": 66,
+        "value": 400,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 15,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 3,
+        "BaseID": 2410,
+        "Lane": "healing_sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 61,
+        "value": 22,
+        "mode": 0
+      },
+      {
+        "attr": 36,
+        "value": 18,
+        "mode": 1
+      },
+      {
+        "attr": 17,
+        "value": 25,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 16,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 2007,
+        "Lane": "physical_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 35,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 1,
+        "BaseID": 2007,
+        "Lane": "physical_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 35,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 2,
+        "BaseID": 2007,
+        "Lane": "physical_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 35,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 3,
+        "BaseID": 2007,
+        "Lane": "physical_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 35,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 4,
+        "BaseID": 2007,
+        "Lane": "physical_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 35,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 69,
+        "value": 20,
+        "mode": 0
+      },
+      {
+        "attr": 70,
+        "value": 14,
+        "mode": 0
+      },
+      {
+        "attr": 34,
+        "value": 90,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 17,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 2891,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 1,
+        "BaseID": 2885,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 2,
+        "BaseID": 2883,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 3,
+        "BaseID": 2887,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 4,
+        "BaseID": 2817,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 34,
+        "value": 26,
+        "mode": 1
+      },
+      {
+        "attr": 13,
+        "value": 35,
+        "mode": 1
+      },
+      {
+        "attr": 27,
+        "value": -3,
+        "mode": 1
+      }
+    ]
+  },
+  {
+    "RecipeID": 18,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 2007,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 33,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 1,
+        "BaseID": 2007,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 33,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 2,
+        "BaseID": 2007,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 33,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 3,
+        "BaseID": 2007,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 33,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 4,
+        "BaseID": 2007,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 33,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 17,
+        "value": 35,
+        "mode": 0
+      },
+      {
+        "attr": 118,
+        "value": 25,
+        "mode": 0
+      },
+      {
+        "attr": 70,
+        "value": 12,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 19,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 2108,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 58,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 1,
+        "BaseID": 2108,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 58,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 2,
+        "BaseID": 2108,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 58,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 27,
+        "value": 10,
+        "mode": 1
+      },
+      {
+        "attr": 36,
+        "value": 120,
+        "mode": 0
+      },
+      {
+        "attr": 25,
+        "value": -6,
+        "mode": 1
+      }
+    ]
+  },
+  {
+    "RecipeID": 20,
+    "PowerTier": "transition",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 2410,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 1,
+        "BaseID": 2410,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 2,
+        "BaseID": 2410,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 3,
+        "BaseID": 2410,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.12
+      },
+      {
+        "Class": 4,
+        "BaseID": 2410,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.12
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 34,
+        "value": 18,
+        "mode": 1
+      },
+      {
+        "attr": 61,
+        "value": 10,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 21,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 1607,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 47,
+        "value": 38,
+        "mode": 1
+      },
+      {
+        "attr": 1,
+        "value": 18,
+        "mode": 0
+      },
+      {
+        "attr": 17,
+        "value": -12,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 22,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 1,
+        "BaseID": 2893,
+        "Lane": "physical_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 48,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 13,
+        "value": 50,
+        "mode": 1
+      },
+      {
+        "attr": 19,
+        "value": 28,
+        "mode": 1
+      },
+      {
+        "attr": 34,
+        "value": 14,
+        "mode": 1
+      }
+    ]
+  },
+  {
+    "RecipeID": 23,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 2,
+        "BaseID": 1809,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 48,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 23,
+        "value": 1000,
+        "mode": 0
+      },
+      {
+        "attr": 25,
+        "value": -14,
+        "mode": 1
+      },
+      {
+        "attr": 47,
+        "value": 24,
+        "mode": 1
+      }
+    ]
+  },
+  {
+    "RecipeID": 24,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 4,
+        "BaseID": 1310,
+        "Lane": "magic",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 55,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 15,
+        "value": 38,
+        "mode": 1
+      },
+      {
+        "attr": 66,
+        "value": 700,
+        "mode": 0
+      },
+      {
+        "attr": 36,
+        "value": 70,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 25,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 3,
+        "BaseID": 2410,
+        "Lane": "healing_sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 61,
+        "value": 25,
+        "mode": 0
+      },
+      {
+        "attr": 36,
+        "value": 24,
+        "mode": 1
+      },
+      {
+        "attr": 17,
+        "value": 20,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 26,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 2891,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 1,
+        "BaseID": 2885,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 2,
+        "BaseID": 2883,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 3,
+        "BaseID": 2887,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 4,
+        "BaseID": 2817,
+        "Lane": "vitality",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 34,
+        "value": 32,
+        "mode": 1
+      },
+      {
+        "attr": 69,
+        "value": 20,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 27,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 2891,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 1,
+        "BaseID": 2885,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 2,
+        "BaseID": 2883,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 3,
+        "BaseID": 2887,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 4,
+        "BaseID": 2817,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 17,
+        "value": 40,
+        "mode": 1
+      },
+      {
+        "attr": 70,
+        "value": 22,
+        "mode": 0
+      },
+      {
+        "attr": 118,
+        "value": 18,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 28,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 3,
+        "BaseID": 2108,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 58,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 4,
+        "BaseID": 2108,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 58,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 27,
+        "value": 12,
+        "mode": 1
+      },
+      {
+        "attr": 36,
+        "value": 150,
+        "mode": 0
+      },
+      {
+        "attr": 9,
+        "value": 12,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 29,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 3,
+        "BaseID": 2506,
+        "Lane": "healing_sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 40,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 118,
+        "value": 35,
+        "mode": 0
+      },
+      {
+        "attr": 36,
+        "value": 25,
+        "mode": 1
+      },
+      {
+        "attr": 17,
+        "value": 28,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 30,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 1610,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 1,
+        "BaseID": 1010,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 2,
+        "BaseID": 1810,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 3,
+        "BaseID": 1310,
+        "Lane": "magic",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 4,
+        "BaseID": 1310,
+        "Lane": "magic",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 47,
+        "value": 25,
+        "mode": 1
+      },
+      {
+        "attr": 15,
+        "value": 25,
+        "mode": 1
+      },
+      {
+        "attr": 23,
+        "value": 650,
+        "mode": 0
+      },
+      {
+        "attr": 66,
+        "value": 650,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 31,
+    "PowerTier": "builddefining",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 1609,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 50,
+        "RequiredRatio": 1.3
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 47,
+        "value": 44,
+        "mode": 1
+      },
+      {
+        "attr": 31,
+        "value": 35,
+        "mode": 0
+      },
+      {
+        "attr": 1,
+        "value": 18,
+        "mode": 0
+      },
+      {
+        "attr": 19,
+        "value": 24,
+        "mode": 1
+      },
+      {
+        "attr": 17,
+        "value": -18,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 32,
+    "PowerTier": "builddefining",
+    "Comparisons": [
+      {
+        "Class": 1,
+        "BaseID": 1009,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 50,
+        "RequiredRatio": 1.3
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 47,
+        "value": 40,
+        "mode": 1
+      },
+      {
+        "attr": 19,
+        "value": 35,
+        "mode": 1
+      },
+      {
+        "attr": 13,
+        "value": 28,
+        "mode": 1
+      },
+      {
+        "attr": 9,
+        "value": 16,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 33,
+    "PowerTier": "builddefining",
+    "Comparisons": [
+      {
+        "Class": 2,
+        "BaseID": 1809,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 50,
+        "RequiredRatio": 1.3
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 23,
+        "value": 1400,
+        "mode": 0
+      },
+      {
+        "attr": 25,
+        "value": -18,
+        "mode": 1
+      },
+      {
+        "attr": 47,
+        "value": 35,
+        "mode": 1
+      },
+      {
+        "attr": 34,
+        "value": -12,
+        "mode": 1
+      }
+    ]
+  },
+  {
+    "RecipeID": 34,
+    "PowerTier": "builddefining",
+    "Comparisons": [
+      {
+        "Class": 4,
+        "BaseID": 1310,
+        "Lane": "magic",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 56,
+        "RequiredRatio": 1.3
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 15,
+        "value": 45,
+        "mode": 1
+      },
+      {
+        "attr": 3,
+        "value": 22,
+        "mode": 0
+      },
+      {
+        "attr": 66,
+        "value": 1100,
+        "mode": 0
+      },
+      {
+        "attr": 34,
+        "value": -10,
+        "mode": 1
+      }
+    ]
+  },
+  {
+    "RecipeID": 35,
+    "PowerTier": "builddefining",
+    "Comparisons": [
+      {
+        "Class": 3,
+        "BaseID": 2410,
+        "Lane": "healing_sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.3
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 61,
+        "value": 22,
+        "mode": 1
+      },
+      {
+        "attr": 36,
+        "value": 30,
+        "mode": 1
+      },
+      {
+        "attr": 17,
+        "value": 35,
+        "mode": 0
+      },
+      {
+        "attr": 70,
+        "value": 14,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 36,
+    "PowerTier": "builddefining",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 2901,
+        "Lane": "physical_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 50,
+        "RequiredRatio": 1.3
+      },
+      {
+        "Class": 1,
+        "BaseID": 2893,
+        "Lane": "physical_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 50,
+        "RequiredRatio": 1.3
+      },
+      {
+        "Class": 2,
+        "BaseID": 2895,
+        "Lane": "physical_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 50,
+        "RequiredRatio": 1.3
+      },
+      {
+        "Class": 3,
+        "BaseID": 2899,
+        "Lane": "physical_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 50,
+        "RequiredRatio": 1.3
+      },
+      {
+        "Class": 4,
+        "BaseID": 2829,
+        "Lane": "physical_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 50,
+        "RequiredRatio": 1.3
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 34,
+        "value": 38,
+        "mode": 1
+      },
+      {
+        "attr": 69,
+        "value": 28,
+        "mode": 0
+      },
+      {
+        "attr": 5,
+        "value": 22,
+        "mode": 0
+      },
+      {
+        "attr": 27,
+        "value": -5,
+        "mode": 1
+      }
+    ]
+  },
+  {
+    "RecipeID": 37,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 2046,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 53,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 1,
+        "BaseID": 2052,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 53,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 2,
+        "BaseID": 2049,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 53,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 3,
+        "BaseID": 2055,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 53,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 4,
+        "BaseID": 2058,
+        "Lane": "magic_guard",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 53,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 17,
+        "value": 55,
+        "mode": 1
+      },
+      {
+        "attr": 70,
+        "value": 30,
+        "mode": 0
+      },
+      {
+        "attr": 118,
+        "value": 40,
+        "mode": 0
+      },
+      {
+        "attr": 34,
+        "value": 90,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 38,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 2410,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 1,
+        "BaseID": 2410,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 2,
+        "BaseID": 2410,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 27,
+        "value": 15,
+        "mode": 1
+      },
+      {
+        "attr": 19,
+        "value": 35,
+        "mode": 1
+      },
+      {
+        "attr": 34,
+        "value": 180,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 39,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 2410,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 1,
+        "BaseID": 2410,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 2,
+        "BaseID": 2410,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 3,
+        "BaseID": 2410,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 4,
+        "BaseID": 2410,
+        "Lane": "sustain",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 34,
+        "value": 26,
+        "mode": 1
+      },
+      {
+        "attr": 36,
+        "value": 32,
+        "mode": 1
+      },
+      {
+        "attr": 61,
+        "value": 14,
+        "mode": 0
+      }
+    ]
+  },
+  {
+    "RecipeID": 40,
+    "PowerTier": "highvalue",
+    "Comparisons": [
+      {
+        "Class": 0,
+        "BaseID": 1610,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 1,
+        "BaseID": 1010,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 2,
+        "BaseID": 1810,
+        "Lane": "physical",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 3,
+        "BaseID": 1310,
+        "Lane": "magic",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      },
+      {
+        "Class": 4,
+        "BaseID": 1310,
+        "Lane": "magic",
+        "Reference": "native_plain_pool_at_or_below_recipe_level",
+        "FixtureLevel": 60,
+        "RequiredRatio": 1.2
+      }
+    ],
+    "OriginalAffixes": [
+      {
+        "attr": 47,
+        "value": 32,
+        "mode": 1
+      },
+      {
+        "attr": 15,
+        "value": 32,
+        "mode": 1
+      },
+      {
+        "attr": 23,
+        "value": 800,
+        "mode": 0
+      },
+      {
+        "attr": 66,
+        "value": 800,
+        "mode": 0
+      }
+    ]
+  }
+]

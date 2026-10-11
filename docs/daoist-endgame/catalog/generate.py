@@ -30,8 +30,47 @@ AUTHORED = HERE / 'authored'
 TRAITS = set("healthy_assault desperate_assault execution ambush elite_hunter critical_focus physical_guard magic_guard desperate_guard healthy_guard healing_grace rescue_heal selfless_heal healing_cost skill_economy spell_economy swift_cast area_expansion trap_expansion fire_mastery ice_mastery holy_mastery single_focus area_focus invisible_focus kill_mend kill_mana basic_focus skill_focus".split())
 AUTHOR_REQUIRED = {'BaseID','Name','Lore','LoreRoot','Identity','Benefit','Tradeoff','PowerTier','Affixes','Traits'}
 AUTHOR_OPTIONAL = {'ReservedSkills'}
-POWER_TIERS = {'niche','specialist','chase'}
+POWER_TIERS = {'transition','highvalue','builddefining','godlike'}
+MIN_BENEFICIAL_EXTRA_AFFIXES = 5
 TRAIT_CLASSES = {**dict.fromkeys(('healing_grace','rescue_heal','selfless_heal','healing_cost','holy_mastery'),8),**dict.fromkeys(('fire_mastery','ice_mastery'),16),**dict.fromkeys(('swift_cast','spell_economy'),24),**dict.fromkeys(('trap_expansion','invisible_focus'),4)}
+
+
+def supported_endgame_affix(attr, value, mode):
+    """Match SupportedEndgameAffix; bools/floats are not integer stat data."""
+    return (all(type(v) is int for v in (attr,value,mode))
+            and attr in ATTRS - {38,40} and mode in (0,1)
+            and -2147483648 <= value <= 2147483647 and value != 0
+            and not (attr in (23,66,69,70,118) and mode == 1)
+            and not (attr == 25 and mode == 0))
+
+
+def validate_extra_affixes(rows, label, *, unique=False, keys=('Attr','Value','Mode')):
+    """Count only distinct, executable, beneficial extras, never other sources.
+
+    Native base stats, saved yellow rolls, socket runes, conditional traits and
+    unimplemented skill-level definitions cannot satisfy this contract. Curses
+    remain explicit additional lines. There is no legacy six-line ceiling.
+    """
+    assert isinstance(rows,list), (label,'extra affixes must be an array')
+    seen=set(); percent_attack=False; beneficial=0
+    for a in rows:
+        assert isinstance(a,dict) and set(a)==set(keys), (label,'invalid affix shape',a)
+        attr,value,mode=(a[k] for k in keys)
+        assert supported_endgame_affix(attr,value,mode), (label,'unsupported extra affix',a)
+        assert attr not in seen, (label,'duplicate extra Attr',attr)
+        seen.add(attr)
+        # These three percentage forms all enter the same pct.atk bucket.
+        if mode == 1 and attr in (29,31,47):
+            assert not percent_attack, (label,'duplicate percentage attack effect')
+            percent_attack=True
+        if unique:
+            # Keep every line nonzero and int32-safe at all stored 80–120%
+            # potency values, including inverse-scaled curses. Do not reroll.
+            assert abs(value)*8000//10000 > 0, (label,'extra affix vanishes at minimum potency',a)
+            assert abs(value)*12000//10000 <= 2147483647, (label,'extra affix overflows at maximum potency',a)
+        if (value < 0 if attr == 25 else value > 0):
+            beneficial += 1
+    assert beneficial >= MIN_BENEFICIAL_EXTRA_AFFIXES, (label,'at least five beneficial distinct extra attributes required',beneficial)
 
 
 def split_sql(text):
@@ -130,12 +169,8 @@ def read_authored(sources):
                 assert isinstance(row[key],str) and row[key].strip(), (iid,key)
             assert '演劫残忆中，行者以' not in row['Lore'] and '承载那一刻的心愿' not in row['Lore'], f'legacy template in {iid}'
             assert row['PowerTier'] in POWER_TIERS, (iid,'PowerTier')
-            assert 1 <= len(row['Affixes']) <= 6 and 0 <= len(row['Traits']) <= 3, (iid,'effect counts')
-            affixes=set()
-            for a in row['Affixes']:
-                assert set(a)=={'Attr','Value','Mode'} and a['Attr'] in ATTRS - {38,40} and a['Mode'] in (0,1) and not (a['Attr'] in (23,66) and a['Mode']==1) and not (a['Attr']==25 and a['Mode']==0) and isinstance(a['Value'],int) and a['Value'] != 0, (iid,a)
-                assert (a['Attr'],a['Mode']) not in affixes, (iid,'duplicate affix')
-                affixes.add((a['Attr'],a['Mode']))
+            assert 0 <= len(row['Traits']) <= 3, (iid,'trait count')
+            validate_extra_affixes(row['Affixes'],iid,unique=True)
             kinds=set()
             for t in row['Traits']:
                 assert {'Kind','PowerBP','ThresholdPct'} <= t.keys() <= {'Kind','PowerBP','ThresholdPct','SkillID','SkillName'}, (iid,t)

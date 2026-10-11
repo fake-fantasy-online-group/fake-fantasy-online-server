@@ -232,7 +232,7 @@ func ValidateAstralCatalog() error {
 	used := map[ItemID]bool{}
 	seen := map[string]bool{}
 	for i, r := range astralRuneCatalog {
-		if r.Item != FirstAstralRune+ItemID(i) || r.Name == "" || r.MinLevel < 12 || r.MinLevel > 60 || (i > 0 && r.MinLevel <= astralRuneCatalog[i-1].MinLevel) || len(r.Affixes) == 0 {
+		if r.Item != FirstAstralRune+ItemID(i) || r.Name == "" || r.MinLevel < 12 || r.MinLevel > 60 || (i > 0 && r.MinLevel <= astralRuneCatalog[i-1].MinLevel) || len(r.Affixes) == 0 || len(r.Affixes) > len((CardInstanceState{}).Effects) {
 			return fmt.Errorf("invalid rune row %d", i)
 		}
 		for _, a := range r.Affixes {
@@ -242,13 +242,11 @@ func ValidateAstralCatalog() error {
 		}
 	}
 	for i, r := range astralRecipeCatalog {
-		if r.ID != int32(i+1) || r.Name == "" || r.Channel < AstralBattle || r.Channel > AstralSupport || len(r.Runes) < 2 || len(r.Runes) > 5 || len(r.Slots) == 0 || len(r.Affixes) == 0 || r.Professions&^uint8(31) != 0 || r.MinLevel < 12 || r.MinLevel > 60 {
+		if r.ID != int32(i+1) || r.Name == "" || r.Channel < AstralBattle || r.Channel > AstralSupport || len(r.Runes) < 2 || len(r.Runes) > 5 || len(r.Slots) == 0 || len(r.Traits) > 3 || !validEndgamePowerTier(r.PowerTier) || r.Professions&^uint8(31) != 0 || r.MinLevel < 12 || r.MinLevel > 60 {
 			return fmt.Errorf("invalid formation %d", r.ID)
 		}
-		for _, a := range r.Affixes {
-			if !SupportedEndgameAffix(a) {
-				return fmt.Errorf("unsupported formation affix %d/%+v", r.ID, a)
-			}
+		if err := validateEndgameExtraAffixes(r.Affixes, false); err != nil {
+			return fmt.Errorf("formation %d: %w", r.ID, err)
 		}
 		for _, t := range r.Traits {
 			if !ValidUniqueTrait(t) || !TraitMatchesProfessions(t, r.Professions) {

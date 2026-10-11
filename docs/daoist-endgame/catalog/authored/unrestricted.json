@@ -5,13 +5,33 @@
     "Lore": "针脚里夹着一粒没熟的稻米，晒过三次仍会发热。远行的人把它穿在甲下，只当有人替自己留着灶火。",
     "LoreRoot": "原创·夹米的贴身旧衣",
     "Identity": "低门槛的温养内衫",
-    "Benefit": "增加少量生命，方便新角色起步",
-    "Tradeoff": "没有防御和攻击，后期占用衣服位置",
-    "PowerTier": "niche",
+    "Benefit": "以血线容错为主，保留低门槛的温养内衫的用途；生命、体质、物理平减、法术平减、魔防形成完整底盘",
+    "Tradeoff": "投入集中在血线容错；不提供物攻、物理会心专精",
+    "PowerTier": "transition",
     "Affixes": [
       {
         "Attr": 34,
-        "Value": 30,
+        "Value": 114,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 14,
         "Mode": 0
       }
     ],
@@ -24,18 +44,33 @@
     "Lore": "裁衣时里外用反，绣在内侧的桃枝只给穿衣人看。有一天袖中结出一枚桃核，裁缝却记得自己根本没绣果子。",
     "LoreRoot": "原创·内藏桃枝的薄衫",
     "Identity": "轻巧的入门法力衣",
-    "Benefit": "提供少量法力并增加精神",
-    "Tradeoff": "不补生命、物防或魔攻",
-    "PowerTier": "niche",
+    "Benefit": "以技能续航为主，保留轻巧的入门法力衣的用途；法力、精神、生命、物理平减、防御形成完整底盘",
+    "Tradeoff": "投入集中在技能续航；不提供物攻、物理会心专精",
+    "PowerTier": "transition",
     "Affixes": [
       {
         "Attr": 36,
-        "Value": 26,
+        "Value": 95,
         "Mode": 0
       },
       {
         "Attr": 61,
-        "Value": 2,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
         "Mode": 0
       }
     ],

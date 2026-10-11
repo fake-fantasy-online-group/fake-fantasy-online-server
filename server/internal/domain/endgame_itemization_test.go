@@ -16,7 +16,7 @@ func TestAuthoredAffixModesActuallyChangeStats(t *testing.T) {
 		for _, mode := range []int32{0, 1} {
 			a := Affix{Attr: attr, Mode: mode, Value: 20}
 			if !SupportedEndgameAffix(a) {
-				if !((mode == 1 && (attr == 23 || attr == 66)) || (mode == 0 && attr == 25)) {
+				if !((mode == 1 && (attr == 23 || attr == 66 || attr == 69 || attr == 70 || attr == 118)) || (mode == 0 && attr == 25)) {
 					t.Fatal("unexpected unsupported", a)
 				}
 				continue
