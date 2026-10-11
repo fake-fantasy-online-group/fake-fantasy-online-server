@@ -468,6 +468,8 @@ func (d ItemDef) IsEquip() bool { return d.Equip != nil }
 
 // Stack 是背包里的一格。Item == 0 表示空格。
 type Stack struct {
+	Endgame EndgameItemState // durable per-instance extension; omitted from native packets
+
 	// UID 是**这一件东西**的唯一标识, 与 ItemID(哪一种)不是一回事。
 	//
 	// 现在只有装备用得上(每件的耐久不同), 但交易、仓库、摆摊都要靠它来说
