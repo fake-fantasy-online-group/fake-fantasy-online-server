@@ -33,6 +33,9 @@ func saveItemInstances(ctx context.Context, q querier, source string, stacks ...
 		if st.Empty() {
 			continue
 		}
+		if err := validateEndgameItem(st); err != nil {
+			return err
+		}
 		kind := st.InstanceKind
 		if kind == domain.ItemInstanceNone && st.UID > 0 {
 			// 兼容旧测试夹具和迁移前内存快照；历史 UID 只曾用于装备。
@@ -68,6 +71,9 @@ func saveItemInstances(ctx context.Context, q querier, source string, stacks ...
 		}
 		if kind != domain.ItemInstanceEquipment {
 			continue
+		}
+		if err := saveEndgameItem(ctx, q, st); err != nil {
+			return err
 		}
 		// 新获得的卡可能在第一次周期存档前就被镶入。此时它已不在背包位置
 		// 中，必须从装备的孔关系补写卡实例根，否则重登后只剩模板号。
@@ -197,6 +203,9 @@ func loadItemInstances(ctx context.Context, q querier, uids []int64) (map[int64]
 		return nil, fmt.Errorf("store: 遍历物品实例: %w", err)
 	}
 	rows.Close()
+	if err := loadEndgameItems(ctx, q, out); err != nil {
+		return nil, err
+	}
 	if err := loadCardInstances(ctx, q, out); err != nil {
 		return nil, err
 	}

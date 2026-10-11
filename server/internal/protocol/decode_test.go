@@ -14,7 +14,7 @@ import (
 
 func TestDecodeLogin(t *testing.T) {
 	payload := NewW(0).
-		Str("123").Str("321").Str("device-test").Str("1.5.8").
+		Str("123").Str("321").Str("device-test").Str("1.6.0").
 		U8(0).U8(0).Raw(make([]byte, 32)).Bytes()[2:]
 
 	req, ok := Decode(0x1002, payload)
@@ -27,7 +27,7 @@ func TestDecodeLogin(t *testing.T) {
 	if req.S1 != "123" || req.S2 != "321" {
 		t.Fatalf("账号/密码 = %q / %q", req.S1, req.S2)
 	}
-	if req.ClientVersion != "1.5.8" || len(req.ClientAuthTag) != 32 {
+	if req.ClientVersion != "1.6.0" || len(req.ClientAuthTag) != 32 {
 		t.Fatalf("版本/auth tag = %q / %d", req.ClientVersion, len(req.ClientAuthTag))
 	}
 }

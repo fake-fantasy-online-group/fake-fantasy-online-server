@@ -14,45 +14,51 @@ import (
 // 生产用 PostgreSQL 实现(接同一接口)。这里刻意做成线程安全, 语义与真实存储对齐,
 // 以便上层逻辑在两种实现下行为一致。
 type Memory struct {
-	mu         sync.RWMutex
-	accounts   map[string]*Account            // username -> account
-	accByID    map[int64]*Account             //
-	chars      map[int64]*domain.Character    // id -> char
-	charName   map[string]int64               // name -> id
-	bags       map[int64]*domain.Bag          // charID -> 背包
-	warehouses map[int64]*domain.Warehouse    // charID -> 角色独立仓库
-	wardrobes  map[int64]*domain.Wardrobe     // charID -> 永久外观收藏
-	stalls     map[int64]*domain.Stall        // charID -> 摆摊托管物权
-	worn       map[int64]*domain.EquipSet     // charID -> 身上穿的
-	changeSets map[int64]*domain.ChangeSet    // charID -> 快速换装备用装备
-	skills     map[int64]domain.Learned       // charID -> 学会的技能
-	quests     map[int64]domain.QuestLog      // charID -> 任务本
-	pets       map[int64][]domain.PetInstance // charID -> 养的宠物
-	friends    map[int64]map[int64]string     // charID -> 好友 id -> 备注
-	blocks     map[int64]map[int64]uint8      // charID -> 被屏蔽角色 id -> 客户端 scope
-	seenTips   map[int64]map[int32]struct{}   // charID -> 已展示的 NewbieTipBox tipId
-	nextAcc    int64
-	nextChar   int64
+	endgameStates   map[int64]domain.EndgameState
+	endgameReceipts map[endgameReceiptKey]domain.EndgameReceipt
+	endgameRuns     map[string]domain.EndgameRunRecord
+	mu              sync.RWMutex
+	accounts        map[string]*Account            // username -> account
+	accByID         map[int64]*Account             //
+	chars           map[int64]*domain.Character    // id -> char
+	charName        map[string]int64               // name -> id
+	bags            map[int64]*domain.Bag          // charID -> 背包
+	warehouses      map[int64]*domain.Warehouse    // charID -> 角色独立仓库
+	wardrobes       map[int64]*domain.Wardrobe     // charID -> 永久外观收藏
+	stalls          map[int64]*domain.Stall        // charID -> 摆摊托管物权
+	worn            map[int64]*domain.EquipSet     // charID -> 身上穿的
+	changeSets      map[int64]*domain.ChangeSet    // charID -> 快速换装备用装备
+	skills          map[int64]domain.Learned       // charID -> 学会的技能
+	quests          map[int64]domain.QuestLog      // charID -> 任务本
+	pets            map[int64][]domain.PetInstance // charID -> 养的宠物
+	friends         map[int64]map[int64]string     // charID -> 好友 id -> 备注
+	blocks          map[int64]map[int64]uint8      // charID -> 被屏蔽角色 id -> 客户端 scope
+	seenTips        map[int64]map[int32]struct{}   // charID -> 已展示的 NewbieTipBox tipId
+	nextAcc         int64
+	nextChar        int64
 }
 
 func NewMemory() *Memory {
 	return &Memory{
-		accounts:   map[string]*Account{},
-		accByID:    map[int64]*Account{},
-		chars:      map[int64]*domain.Character{},
-		charName:   map[string]int64{},
-		bags:       map[int64]*domain.Bag{},
-		warehouses: map[int64]*domain.Warehouse{},
-		wardrobes:  map[int64]*domain.Wardrobe{},
-		stalls:     map[int64]*domain.Stall{},
-		worn:       map[int64]*domain.EquipSet{},
-		changeSets: map[int64]*domain.ChangeSet{},
-		skills:     map[int64]domain.Learned{},
-		quests:     map[int64]domain.QuestLog{},
-		pets:       map[int64][]domain.PetInstance{},
-		friends:    map[int64]map[int64]string{},
-		blocks:     map[int64]map[int64]uint8{},
-		seenTips:   map[int64]map[int32]struct{}{},
+		endgameStates:   map[int64]domain.EndgameState{},
+		endgameReceipts: map[endgameReceiptKey]domain.EndgameReceipt{},
+		endgameRuns:     map[string]domain.EndgameRunRecord{},
+		accounts:        map[string]*Account{},
+		accByID:         map[int64]*Account{},
+		chars:           map[int64]*domain.Character{},
+		charName:        map[string]int64{},
+		bags:            map[int64]*domain.Bag{},
+		warehouses:      map[int64]*domain.Warehouse{},
+		wardrobes:       map[int64]*domain.Wardrobe{},
+		stalls:          map[int64]*domain.Stall{},
+		worn:            map[int64]*domain.EquipSet{},
+		changeSets:      map[int64]*domain.ChangeSet{},
+		skills:          map[int64]domain.Learned{},
+		quests:          map[int64]domain.QuestLog{},
+		pets:            map[int64][]domain.PetInstance{},
+		friends:         map[int64]map[int64]string{},
+		blocks:          map[int64]map[int64]uint8{},
+		seenTips:        map[int64]map[int32]struct{}{},
 	}
 }
 
@@ -457,6 +463,9 @@ func (m *Memory) saveSnapshotLocked(snap domain.Snapshot) error {
 	if snap.Char.Caiyu < 0 {
 		return fmt.Errorf("store: 彩玉余额不能为负")
 	}
+	if err := validateEndgameSnapshot(snap); err != nil {
+		return err
+	}
 	cloned := snap.Clone()
 	if a := m.accByID[snap.Char.AccountID]; a != nil {
 		a.Caiyu = snap.Char.Caiyu
@@ -595,10 +604,19 @@ func (m *Memory) DeleteChar(_ context.Context, id int64) error {
 }
 
 // WithTx: 内存实现没有真事务, 用大锁近似"原子块"。真实实现走 DB 事务。
-func (m *Memory) WithTx(ctx context.Context, fn func(Store) error) error {
+func (m *Memory) WithTx(ctx context.Context, fn func(Store) error) (err error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	return fn(&txView{m})
+	backup := m.transactionCopy()
+	committed := false
+	defer func() {
+		if !committed {
+			m.restoreTransaction(backup)
+		}
+	}()
+	err = fn(&txView{m})
+	committed = err == nil
+	return err
 }
 
 func (m *Memory) Close() error { return nil }

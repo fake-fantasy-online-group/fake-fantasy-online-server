@@ -50,7 +50,10 @@ func loadWashArrays(st *domain.Stack, quality, count int16, attrs, values, modes
 
 // LoadSkills 读一个角色学会的技能。没有时返回空表, 不是 nil。
 func (p *Postgres) LoadSkills(ctx context.Context, charID int64) (domain.Learned, error) {
-	rows, err := p.pool.Query(ctx,
+	return loadSkills(ctx, p.pool, charID)
+}
+func loadSkills(ctx context.Context, q querier, charID int64) (domain.Learned, error) {
+	rows, err := q.Query(ctx,
 		`SELECT skill_id, level FROM character_skills WHERE char_id = $1`, charID)
 	if err != nil {
 		return nil, fmt.Errorf("store: 查技能: %w", err)
@@ -72,7 +75,7 @@ func (p *Postgres) LoadSkills(ctx context.Context, charID int64) (domain.Learned
 }
 
 func (t *pgTx) LoadSkills(ctx context.Context, charID int64) (domain.Learned, error) {
-	return nil, fmt.Errorf("store: 事务内不支持读技能")
+	return loadSkills(ctx, t.tx, charID)
 }
 
 func saveSkills(ctx context.Context, tx pgx.Tx, charID int64, l domain.Learned) error {
@@ -100,7 +103,10 @@ func saveSkills(ctx context.Context, tx pgx.Tx, charID int64, l domain.Learned) 
 
 // LoadQuests 读一个角色的任务本。没有时返回空表, 不是 nil。
 func (p *Postgres) LoadQuests(ctx context.Context, charID int64) (domain.QuestLog, error) {
-	rows, err := p.pool.Query(ctx,
+	return loadQuests(ctx, p.pool, charID)
+}
+func loadQuests(ctx context.Context, q querier, charID int64) (domain.QuestLog, error) {
+	rows, err := q.Query(ctx,
 		`SELECT task_id, state, progress FROM character_quests WHERE char_id = $1`, charID)
 	if err != nil {
 		return nil, fmt.Errorf("store: 查任务本: %w", err)
@@ -121,7 +127,7 @@ func (p *Postgres) LoadQuests(ctx context.Context, charID int64) (domain.QuestLo
 	}
 	rows.Close()
 
-	kills, err := p.pool.Query(ctx, `
+	kills, err := q.Query(ctx, `
 		SELECT task_id, monster_id, progress
 		  FROM character_quest_kills
 		 WHERE char_id = $1`, charID)
@@ -151,7 +157,7 @@ func (p *Postgres) LoadQuests(ctx context.Context, charID int64) (domain.QuestLo
 }
 
 func (t *pgTx) LoadQuests(ctx context.Context, charID int64) (domain.QuestLog, error) {
-	return nil, fmt.Errorf("store: 事务内不支持读任务本")
+	return loadQuests(ctx, t.tx, charID)
 }
 
 func saveQuests(ctx context.Context, tx pgx.Tx, charID int64, l domain.QuestLog) error {
@@ -202,7 +208,10 @@ func saveQuests(ctx context.Context, tx pgx.Tx, charID int64, l domain.QuestLog)
 
 // LoadEquips 读一个角色身上穿的。没有任何行时返回空的一套, 不是 nil。
 func (p *Postgres) LoadEquips(ctx context.Context, charID int64) (*domain.EquipSet, error) {
-	rows, err := p.pool.Query(ctx,
+	return loadEquips(ctx, p.pool, charID)
+}
+func loadEquips(ctx context.Context, q querier, charID int64) (*domain.EquipSet, error) {
+	rows, err := q.Query(ctx,
 		`SELECT slot, uid, item_id, durability, max_durability, durability_wear_raw, bound, locked, refine_level, socket_count, sockets,
 		        wash_quality, wash_count, wash_attrs, wash_values, wash_modes, fused_appearance_item_id
 		   FROM character_equips WHERE char_id = $1`, charID)
@@ -242,7 +251,7 @@ func (p *Postgres) LoadEquips(ctx context.Context, charID int64) (*domain.EquipS
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("store: 遍历装备: %w", err)
 	}
-	facts, err := loadItemInstances(ctx, p.pool, instanceUIDs)
+	facts, err := loadItemInstances(ctx, q, instanceUIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -264,13 +273,16 @@ func (p *Postgres) LoadEquips(ctx context.Context, charID int64) (*domain.EquipS
 }
 
 func (t *pgTx) LoadEquips(ctx context.Context, charID int64) (*domain.EquipSet, error) {
-	return nil, fmt.Errorf("store: 事务内不支持读装备")
+	return loadEquips(ctx, t.tx, charID)
 }
 
 // LoadChangeSet 读取快速换装面板托管的备用装备。表内 cell 是客户端部位号，
 // 物品真实穿戴槽仍在 game_equipment 中，切换时由场景重新复核。
 func (p *Postgres) LoadChangeSet(ctx context.Context, charID int64) (*domain.ChangeSet, error) {
-	rows, err := p.pool.Query(ctx,
+	return loadChangeSet(ctx, p.pool, charID)
+}
+func loadChangeSet(ctx context.Context, q querier, charID int64) (*domain.ChangeSet, error) {
+	rows, err := q.Query(ctx,
 		`SELECT cell, uid, item_id, durability, max_durability, durability_wear_raw,
 		        bound, locked, refine_level, socket_count, sockets,
 		        wash_quality, wash_count, wash_attrs, wash_values, wash_modes,
@@ -311,7 +323,7 @@ func (p *Postgres) LoadChangeSet(ctx context.Context, charID int64) (*domain.Cha
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("store: 遍历快速换装套装: %w", err)
 	}
-	facts, err := loadItemInstances(ctx, p.pool, instanceUIDs)
+	facts, err := loadItemInstances(ctx, q, instanceUIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -333,7 +345,7 @@ func (p *Postgres) LoadChangeSet(ctx context.Context, charID int64) (*domain.Cha
 }
 
 func (t *pgTx) LoadChangeSet(ctx context.Context, charID int64) (*domain.ChangeSet, error) {
-	return nil, fmt.Errorf("store: 事务内不支持读快速换装套装")
+	return loadChangeSet(ctx, t.tx, charID)
 }
 
 func saveEquips(ctx context.Context, tx pgx.Tx, charID int64, worn *domain.EquipSet) error {
@@ -398,7 +410,10 @@ func saveChangeSet(ctx context.Context, tx pgx.Tx, charID int64, set *domain.Cha
 
 // LoadBag 读一个角色的背包。没有任何物品行时返回空背包, 不是 nil。
 func (p *Postgres) LoadBag(ctx context.Context, charID int64, slots int) (*domain.Bag, error) {
-	rows, err := p.pool.Query(ctx,
+	return loadBag(ctx, p.pool, charID, slots)
+}
+func loadBag(ctx context.Context, q querier, charID int64, slots int) (*domain.Bag, error) {
+	rows, err := q.Query(ctx,
 		`SELECT slot, uid, item_id, count, durability, max_durability, durability_wear_raw, bound, locked, refine_level, socket_count, sockets,
 		        wash_quality, wash_count, wash_attrs, wash_values, wash_modes, fused_appearance_item_id
 		   FROM character_items WHERE char_id = $1`, charID)
@@ -442,7 +457,7 @@ func (p *Postgres) LoadBag(ctx context.Context, charID int64, slots int) (*domai
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("store: 遍历背包: %w", err)
 	}
-	facts, err := loadItemInstances(ctx, p.pool, instanceUIDs)
+	facts, err := loadItemInstances(ctx, q, instanceUIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -466,7 +481,7 @@ func (p *Postgres) LoadBag(ctx context.Context, charID int64, slots int) (*domai
 // LoadBag 在事务内暂不支持 —— 现在没有"事务里读背包"的用例,
 // 真需要时(交易)会走一条显式加锁的路径, 不是这个。
 func (t *pgTx) LoadBag(ctx context.Context, charID int64, slots int) (*domain.Bag, error) {
-	return nil, fmt.Errorf("store: 事务内不支持读背包")
+	return loadBag(ctx, t.tx, charID, slots)
 }
 
 func (p *Postgres) LoadWarehouse(ctx context.Context, charID int64, rule domain.WarehouseRule) (*domain.Warehouse, error) {
@@ -489,6 +504,9 @@ func loadWardrobe(ctx context.Context, q querier, charID int64, rule domain.Ward
 	if !rule.Valid() {
 		return nil, fmt.Errorf("store: 非法衣柜规则")
 	}
+	return loadWardrobeState(ctx, q, charID, rule.OpenCapacity, rule.MaxCapacity)
+}
+func loadWardrobeState(ctx context.Context, q querier, charID int64, openCapacity, maxCapacity int32) (*domain.Wardrobe, error) {
 	capacity := int32(0)
 	err := q.QueryRow(ctx, `SELECT capacity FROM character_wardrobes WHERE char_id=$1`, charID).Scan(&capacity)
 	if errors.Is(err, pgx.ErrNoRows) {
@@ -497,7 +515,7 @@ func loadWardrobe(ctx context.Context, q querier, charID int64, rule domain.Ward
 	if err != nil {
 		return nil, fmt.Errorf("store: 查角色衣柜状态: %w", err)
 	}
-	if capacity < 0 || capacity > rule.MaxCapacity || capacity > 0 && capacity < rule.OpenCapacity {
+	if capacity < 0 || capacity > maxCapacity || capacity > 0 && capacity < openCapacity {
 		return nil, fmt.Errorf("store: 角色 %d 衣柜容量非法 %d", charID, capacity)
 	}
 	w := domain.NewWardrobe(capacity)
