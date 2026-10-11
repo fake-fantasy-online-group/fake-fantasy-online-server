@@ -19,14 +19,17 @@ func TestRegisterEndgameItemsCompleteNoAssetInvention(t *testing.T) {
 	if err := registerEndgameItems(&w); err != nil {
 		t.Fatal(err)
 	}
-	if len(w.items) != base+32 || len(w.itemIcons) != 32 || !w.itemIconsKnown {
+	if len(w.items) != base+32 || len(w.itemIcons) != base+32 || !w.itemIconsKnown {
 		t.Fatal("missing runtime definitions")
 	}
 	seen := map[domain.ItemID]bool{}
 	for _, m := range w.itemIcons {
 		d := w.items[m.Item]
-		if seen[m.Item] || m.Icon != endgameItemIcon(m.Item) || d.Icon != m.Icon || !d.InventoryTabKnown {
+		if seen[m.Item] || d.Icon != m.Icon || !d.InventoryTabKnown {
 			t.Fatal("bad existing-art mapping", m, d)
+		}
+		if d.Equip == nil && m.Icon != endgameItemIcon(m.Item) {
+			t.Fatal("bad added item mapping", m)
 		}
 		seen[m.Item] = true
 	}

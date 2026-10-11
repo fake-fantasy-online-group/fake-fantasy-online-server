@@ -2276,7 +2276,8 @@ func countUnnamedAffixes(ctx context.Context, q Querier) (int, error) {
 // **Stats 里的暴击率与各种抗性只从这里来** —— 没有词条那些字段永远是零,
 // 整套战斗公式就有一半参数拿不到值。
 //
-// 跳掉两类行, 都有明确依据:
+// 下列两类行不载入可结算 Affixes，但标记 UnknownInnateProperties，
+// 保留“尚不能确认白板底材”的不确定性，不宣称实例实际获得了此属性:
 //
 //	prob < 100    "有几率触发"的词条(全表只有 2 条, 30% 的爆击率)。
 //	              当成固定加成算等于白送 —— 宁可不给, 也别给错。
@@ -2286,25 +2287,27 @@ func countUnnamedAffixes(ctx context.Context, q Querier) (int, error) {
 //	              所以"有没有名字"就是这份数据自带的质量信号, 比我们另立一套白名单可靠。
 func loadAffixes(ctx context.Context, q Querier, items ItemDefs) (skipped int, err error) {
 	rows, err := q.Query(ctx, `
-		SELECT arm_id, attr_id, value, mode, attr_name <> '' AS named
-		  FROM game_equip_extra WHERE prob >= 100 ORDER BY arm_id, seq`)
+		SELECT arm_id, attr_id, value, mode, prob, attr_name <> '' AS named
+		  FROM game_equip_extra ORDER BY arm_id, seq`)
 	if err != nil {
 		return 0, fmt.Errorf("data: 查 game_equip_extra: %w", err)
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var armID, attr, value, mode int32
+		var armID, attr, value, mode, probability int32
 		var named bool
-		if err := rows.Scan(&armID, &attr, &value, &mode, &named); err != nil {
+		if err := rows.Scan(&armID, &attr, &value, &mode, &probability, &named); err != nil {
 			return skipped, fmt.Errorf("data: 读词条行: %w", err)
-		}
-		if !named {
-			skipped++
-			continue
 		}
 		d, ok := items[domain.ItemID(armID)]
 		if !ok || d.Equip == nil {
 			skipped++ // 词条挂在一件不存在的装备上
+			continue
+		}
+		if probability < 100 || !named {
+			d.Equip.UnknownInnateProperties = true
+			items[domain.ItemID(armID)] = d
+			skipped++
 			continue
 		}
 		d.Equip.Affixes = append(d.Equip.Affixes,

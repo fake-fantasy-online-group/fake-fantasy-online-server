@@ -43,3 +43,32 @@ python docs/daoist-endgame/validate_icons.py --mode classic --resource-root /pat
 客户端在 Unity 外执行实际 fallback 源码：`python Tests/Endgame/run-icon-contract.py --mono ... --csc ... [--framework-dir ...]`，覆盖缺图、未知物品、有限查找和重复诊断。
 
 未验证：完整 Unity 实机渲染、可选补丁包对相同路径的进一步覆盖。尝试读取另一个资源清单中的 `item_icons.json` 时返回 HTTP 403，未绕过访问限制；这里的存在性与图案审阅来自已成功取得的包内真实图像，不依赖该表。
+
+## 仙遗装备的底材图标
+
+仙遗保留原装备的 `BaseID`，更名、品质和 UID 不产生新的图标编号。2026-10-11 排查“鞋显示小剑”时确认了一处映射覆盖缺口：`LoadItemsVerbose` 已读取原 `ov_desc.small_map`，但此前只向客户端下发特殊图标、宠物和 32 个新增星篆/材料/钥匙的映射；1,619 件仙遗底材仍依赖安装目录中的 `item_icons.json` / `item_icon_fix.json`。现在注册时按稳定的底材 ID 顺序补发这些装备的真实 sprite 编号，保留原 87 项特殊覆盖的优先级。共新增 1,532 条映射；完整原始数据加宠物、材料后为 2,154 条，原生包约 17.3 KB，无协议变更。
+
+跨部位审计涵盖 23 个装备槽位。1,619 件中有 914 件的原物品 ID 与 sprite ID 不同；101 件鞋中有 46 件需要这种别名映射。示例：
+
+- `2101` 长筒鞋 → `item/item/item2101.gso`
+- `20824–20843` 神器鞋底材 → `item/item/item22090.gso`
+- `22581` 战魂宝靴 → `item/item/item30041.gso`
+- `22593` 祈祷圣靴 → `item/item/item40330.gso`
+- `57093` 的显式特殊小图仍为 `8231`；`8230` 是其特殊大图字段，不能当作小图号下发。
+
+上述鞋小图和每个装备槽位的代表图案已经从实际外置包解码后目视检查。完整映射、原 SQL 行位置与哈希保存在仅含元数据的 `catalog/equipment_icon_manifest.json`，可复验：
+
+```
+python3 docs/daoist-endgame/catalog/audit_icons.py --check
+python3 docs/daoist-endgame/catalog/audit_icons.py --check --resource-root /path/to/icon-review --resource-report /tmp/equipment-icons.json
+```
+
+可选资源检查会实际解码 PNG 并验证非透明像素，不把编号或文件名存在当作像素检查。当前外置 q21/05diff 解码集合覆盖 884 个有效 sprite 中的 874 个；另外 10 个仅确认未出现在这份提取集合里，不推断完整安装缺图，也不随意替换原有图标。
+
+客户端沿用原 `NetClient.LoadItemIcon`。其顺序仍为单物品 PNG、映射后小图、映射后大图、坐骑和已界定的星篆/材料备用路径。当前源码没有“装备一律用小剑”的通用 fallback。服务端 `0x804d` 映射在登录背包快照前送达；接收适配器更新字典并清除地面图标缓存。已有客户端无需新增资源或另一套装备图标渲染器。
+
+`EquipmentIconContract` 执行真实加载器、原生 `0x804d` 解析、UI 适配器和地面缓存：以模拟的旧表 `22581→1001` 复现小剑，再验证服务端 `22581→30041` 恢复靴子路径；同时检查重复接收、sprite 不被二次当作物品 ID、跨部位别名、真实武器保留、缺图有界且不套小剑、大图备用和缓存失效。Unity 纹理与外置表 IO 使用确定性替身，不能替代实机截图验收。
+
+本次未取得用户所指鞋的精确 ID，也未读取其安装表的实际内容，因此“旧客户端映射指向小剑”是已验证可修复的故障模式，并非对用户当前安装根因的确认。需更新服务端后重新登录，再以原问题鞋验收；未运行 Unity 或 Player 构建，未改动属性、掉落或外观模型。
+
+映射修复保留原资源优先级：若存在该物品专用 `itemicon/item<ID>.png`，它仍先于表映射；熔合外观的原生 `Avatar` 查找规则也未改变。错误专用 PNG 或外观替换属于另外的诊断路径，不包含在本次旧表映射复现中。1,619 项原描述表的大小图编号逐项相同，补发小图编号不会抹掉其不同的大图别名。

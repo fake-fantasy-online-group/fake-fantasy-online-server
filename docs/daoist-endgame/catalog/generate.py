@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Re-enumerate original SQL equipment; generate deterministic frozen unique catalog.
+"""Re-enumerate original SQL equipment; compile individually authored unique catalog.
 No database, network, dependencies, migration execution, or original drop edits.
 Run from any directory; --check performs byte-exact output verification.
 """
@@ -24,65 +24,15 @@ CLASSES = [('warrior','战士'),('swordman','剑客'),('stabber','刺客'),('dru
 SEGMENTS = {1:'warrior',2:'swordsman',4:'assassin',8:'healer',16:'warlock',24:'sharedcaster',31:'allclasses',0:'unrestricted'}
 EXPECTED = {'warrior':249,'swordsman':290,'assassin':269,'healer':237,'warlock':237,'sharedcaster':12,'allclasses':323,'unrestricted':2}
 FIELDS = 'base_id,base_name,resource_level,level_requirement,drop_kind,professions,beginner_allowed,sex,base_affix_count,roll_pool_options,can_roll_affix,source_arm,source_desc'.split(',')
-ROOTS = {
-'warrior':'还丹 青藜 宝扇 石晶 战将 东海 守土 八荒'.split(),
-'swordsman':'飞鹤 山石 花簪 妙音 画轴 白牡丹 铜壶 心镜 渡海'.split(),
-'assassin':'莲舟 荷影 仙桃 天花 云母 萼绿 花雨 无痕 月隐'.split(),
-'healer':'悬壶 通玄 七孔 茱萸 回春 济世 清身 解咒 光盾 护生'.split(),
-'warlock':'纸驴 果老 寒山 红莲 寒冰 太极 八相 照劫 星轨'.split(),
-'sharedcaster':'丹符 云箓 灵台 星灯'.split(),
-'allclasses':'太清 玄津 归墟 望舒 长庚 云岫 松风 玉衡 沧浪 紫微 天门 流霞'.split(),
-'unrestricted':'无涯 归一'.split(),
-}
-# Original memory echoes; none claim to be an original NPC's canonical property.
-ACTIONS = [
-('守夜','在漫长守夜里护住最后一线灯火'),('渡潮','涉过寒潮后仍记得彼岸的约定'),
-('听雨','从檐下雨声中辨出将至的险途'),('照雪','借雪地微光辨清迷失者的归路'),
-('问心','在幻境深处留住未改的本心'),('破雾','于迷雾尽头为同行者辟出道路'),
-('回澜','在逆卷的浪头前重新站定'),('引星','以一缕星光标记夜行的方向'),
-('鸣泉','听山泉复鸣而知生机尚在'),('镇岚','迎着山岚守住残破的关隘'),
-('寻火','从冷灰中寻回不肯熄灭的火种'),('洗尘','洗去旅尘后重新踏上远行之路'),
-('留霞','将将暮的霞光留给迟归之人'),('叩月','向月下空山问得静守的答案'),
-('开云','拨开云幕时看见未曾坍塌的天门'),('赴约','跨过乱石赴一场无人催促的旧约'),
-('惜春','把将尽的春意分给受伤的行客'),('踏霜','踏碎薄霜仍不惊醒山间的梦'),
-('抱朴','在纷乱人声里收拢朴素的愿望'),('续灯','把将灭的灯焰递向下一位守望者'),
-('折浪','从浪间折返带回失落的信物'),('望岳','越过群峰仍向故土回望'),
-('沉璧','藏起一枚旧璧以换同行者平安'),('听松','凭松涛辨明山道上无人言说的警讯'),
-('定风','在骤起风声中稳住摇晃的渡口'),('迎晓','把伤痕留在夜里而迎向天明'),
-('藏锋','把锋芒收进一场不必发生的争斗'),('执炬','举起火炬领众人走过漫长暗巷'),
-('解围','从重围缝隙中护送同伴离去'),('访泉','循着荒山泉脉寻找重生的契机'),
-('磨镜','磨去心镜浮尘而见自身旧愿'),('叠影','借层叠树影掩护归途的脚步'),
-('扶舟','在急流将倾时伸手扶正孤舟'),('缚雷','收束惊雷而不使余波伤及村落'),
-('重誓','在断碑前重拾久远的誓言'),('守隙','守住黎明之前最脆弱的片刻'),
-('寄远','把未尽的心愿寄给远行之人'),('归岚','带着故山的岚气回到旧日渡口'),
-('拾翠','从荒芜庭院拾起一片新生的翠叶'),('停戈','在争斗将起时记得护生的本意'),
-('探幽','循微光探入无人记载的幽径'),('越关','在暮色封关前带回同伴的讯息'),
-('藏露','将清晨露意藏进干涸的行囊'),('醒梦','从层层旧梦中唤回同行者的名字'),
-('听潮','听潮声起落而学会进退之度'),('澄江','让浑浊江水映出重返的星空'),
-('寻鹤','循远鹤清音找到山外的去路'),('归鞘','在尘埃落定后把争胜之意收回'),
-]
-NOUNS = {1:'面',2:'冠',3:'坠',4:'刃',5:'盾',6:'护手',7:'戒',8:'衣',9:'履',10:'囊',11:'宝印',12:'灵饰',13:'长刃',14:'珰',15:'镯',16:'带',17:'兽饰',18:'兽饰',19:'兽饰',20:'徽章',21:'徽章',22:'徽章',23:'徽章',24:'徽章',25:'徽章'}
-WEAPON_NOUNS = {1:'枪',2:'剑',4:'巨剑',8:'双刃',16:'杖',32:'飞针'}
-PROFILES = {
-'warrior': [('healthy_assault','physical_guard'),('desperate_assault','desperate_guard'),('elite_hunter','healthy_guard'),('execution','kill_mend'),('basic_focus','critical_focus'),('skill_focus','magic_guard')],
-'swordsman': [('single_focus','critical_focus'),('execution','healthy_guard'),('area_focus','kill_mana'),('skill_focus','magic_guard'),('healthy_assault','basic_focus'),('elite_hunter','physical_guard')],
-'assassin': [('ambush','invisible_focus'),('trap_expansion','skill_focus'),('execution','critical_focus'),('single_focus','kill_mana'),('basic_focus','healthy_assault'),('elite_hunter','desperate_guard')],
-'healer': [('healing_grace','spell_economy'),('rescue_heal','healthy_guard'),('selfless_heal','magic_guard'),('healing_cost','swift_cast'),('holy_mastery','area_expansion'),('healing_grace','kill_mana')],
-'warlock': [('fire_mastery','area_focus'),('ice_mastery','spell_economy'),('area_expansion','swift_cast'),('single_focus','skill_focus'),('critical_focus','kill_mana'),('desperate_assault','magic_guard')],
-'sharedcaster': [('spell_economy','swift_cast'),('area_expansion','magic_guard'),('skill_focus','kill_mana')],
-'allclasses': [('healthy_guard','physical_guard'),('desperate_guard','magic_guard'),('healthy_assault','kill_mend'),('elite_hunter','kill_mana')],
-'unrestricted': [('healthy_guard','physical_guard'),('desperate_guard','magic_guard')],
-}
-STAT_PROFILES = {
-'warrior':[(1,5,47),(1,34,13),(5,47,69),(1,19,34),(47,23,5),(1,17,34)],
-'swordsman':[(1,9,23),(47,7,19),(1,36,34),(9,17,47),(1,23,34),(47,5,13)],
-'assassin':[(7,9,23),(7,36,47),(47,23,34),(9,36,19),(7,47,34),(9,23,13)],
-'healer':[(3,61,36),(3,34,17),(61,15,34),(3,36,61),(15,61,17),(3,61,34)],
-'warlock':[(3,15,66),(3,61,36),(15,36,34),(3,15,19),(15,66,36),(3,17,34)],
-'sharedcaster':[(3,61,36),(15,34,17),(3,15,36)],
-'allclasses':[(5,34,13),(61,34,17),(5,34,19),(5,36,17)],
-'unrestricted':[(5,34,13),(61,34,17)],
-}
+# Authored content is data, never a root/action/slot product. Source metadata is
+# still derived from the original SQL so writers cannot change item identities.
+AUTHORED = HERE / 'authored'
+TRAITS = set("healthy_assault desperate_assault execution ambush elite_hunter critical_focus physical_guard magic_guard desperate_guard healthy_guard healing_grace rescue_heal selfless_heal healing_cost skill_economy spell_economy swift_cast area_expansion trap_expansion fire_mastery ice_mastery holy_mastery single_focus area_focus invisible_focus kill_mend kill_mana basic_focus skill_focus".split())
+AUTHOR_REQUIRED = {'BaseID','Name','Lore','LoreRoot','Identity','Benefit','Tradeoff','PowerTier','Affixes','Traits'}
+AUTHOR_OPTIONAL = {'ReservedSkills'}
+POWER_TIERS = {'niche','specialist','chase'}
+TRAIT_CLASSES = {**dict.fromkeys(('healing_grace','rescue_heal','selfless_heal','healing_cost','holy_mastery'),8),**dict.fromkeys(('fire_mastery','ice_mastery'),16),**dict.fromkeys(('swift_cast','spell_economy'),24),**dict.fromkeys(('trap_expansion','invisible_focus'),4)}
+
 
 def split_sql(text):
     """Split only top-level commas; preserve PostgreSQL escaped quotes/decode()."""
@@ -164,46 +114,58 @@ def enumerate_eligible(tables):
     return rows,sources
 
 
-def trait(kind, seed):
-    power = 400+(seed%9)*100
-    if kind in {'spell_economy','swift_cast','area_expansion','trap_expansion','healing_cost'}: power = 500+(seed%11)*100
-    if kind in {'kill_mend','kill_mana'}: power = 100+(seed%4)*100
-    threshold = 0
-    if kind.startswith('healthy_'): threshold = 70
-    if kind.startswith('desperate_'): threshold = 35
-    if kind in {'execution','rescue_heal'}: threshold = 30
-    if kind == 'ambush': threshold = 80
-    return dict(Kind=kind,PowerBP=power,ThresholdPct=threshold)
+def read_authored(sources):
+    authored = {}
+    skills={r['SkillID']:r for r in json.loads((HERE/'skill_scopes.json').read_text())}
+    for path in sorted(AUTHORED.glob('*.json')):
+        assert path.stem in EXPECTED, f'unknown authored shard {path.name}'
+        rows = json.loads(path.read_text())
+        assert isinstance(rows,list), f'{path.name} must be an explicit item array'
+        for row in rows:
+            iid = row.get('BaseID')
+            assert iid in sources and iid not in authored, f'invalid/duplicate authored BaseID {iid}'
+            assert SEGMENTS[sources[iid][3]] == path.stem, f'wrong authored shard for {iid}'
+            assert AUTHOR_REQUIRED <= row.keys() <= AUTHOR_REQUIRED | AUTHOR_OPTIONAL, (iid, row.keys())
+            for key in ('Name','Lore','LoreRoot','Identity','Benefit','Tradeoff'):
+                assert isinstance(row[key],str) and row[key].strip(), (iid,key)
+            assert '演劫残忆中，行者以' not in row['Lore'] and '承载那一刻的心愿' not in row['Lore'], f'legacy template in {iid}'
+            assert row['PowerTier'] in POWER_TIERS, (iid,'PowerTier')
+            assert 1 <= len(row['Affixes']) <= 6 and 0 <= len(row['Traits']) <= 3, (iid,'effect counts')
+            affixes=set()
+            for a in row['Affixes']:
+                assert set(a)=={'Attr','Value','Mode'} and a['Attr'] in ATTRS - {38,40} and a['Mode'] in (0,1) and not (a['Attr'] in (23,66) and a['Mode']==1) and not (a['Attr']==25 and a['Mode']==0) and isinstance(a['Value'],int) and a['Value'] != 0, (iid,a)
+                assert (a['Attr'],a['Mode']) not in affixes, (iid,'duplicate affix')
+                affixes.add((a['Attr'],a['Mode']))
+            kinds=set()
+            for t in row['Traits']:
+                assert {'Kind','PowerBP','ThresholdPct'} <= t.keys() <= {'Kind','PowerBP','ThresholdPct','SkillID','SkillName'}, (iid,t)
+                assert not sources[iid][3] or sources[iid][3] & TRAIT_CLASSES.get(t['Kind'],31), (iid,'class has no executable trait path',t)
+                assert t['Kind'] in TRAITS and (t['Kind'],t.get('SkillID',0)) not in kinds and 0 < t['PowerBP'] <= 10000 and 0 <= t['ThresholdPct'] <= 100, (iid,t)
+                if t.get('SkillID',0):
+                    scope=skills.get(t['SkillID']); assert scope and t.get('SkillName',scope['Name'])==scope['Name'], (iid,'unverified skill')
+                    assert t['Kind'] in scope['AllowedTraits'], (iid,'inert skill-specific effect',t)
+                    assert sources[iid][3]==0 or sources[iid][3] & (1<<(scope['Profession']-1)), (iid,'skill class')
+                    assert t['Kind'] not in {'basic_focus','kill_mend','kill_mana','physical_guard','magic_guard','healthy_guard','desperate_guard'}, (iid,'skill unavailable at hook')
+                else: assert not t.get('SkillName'), (iid,'name without scope')
+                kinds.add((t['Kind'],t.get('SkillID',0)))
+            for b in row.get('ReservedSkills',[]):
+                assert set(b)=={'Scope','Target','Levels'} and b['Scope'] in ('all','class','tree','skill') and 1 <= b['Levels'] <= 3, (iid,b)
+                assert (b['Scope']=='all' and b['Target']=='') or (b['Scope']!='all' and b['Target']), (iid,b)
+            authored[iid]=row
+    names=[r['Name'] for r in authored.values()]; lores=[r['Lore'] for r in authored.values()]
+    assert len(names)==len(set(names)), 'duplicate authored name'
+    assert len(lores)==len(set(lores)), 'reused authored lore'
+    return authored
 
 
-def generate(rows,sources):
-    groups = collections.defaultdict(list); ordinals = collections.Counter(); names = set(); packages = set()
+def generate(rows,sources,authored):
+    missing=sorted(set(sources)-set(authored))
+    assert not missing, f'{len(missing)} items still need individual authoring; first missing IDs: {missing[:20]}'
+    groups=collections.defaultdict(list)
     for row in rows:
-        iid = row['base_id']; a,d,e,mask = sources[iid]; segment = SEGMENTS[mask]
-        slot = e['slot']; noun = WEAPON_NOUNS.get(d['type'],NOUNS.get(slot,'灵器'))
-        # Stable source ID order, distinct original root/action/slot combinations.
-        order = ordinals[segment,noun]; ordinals[segment,noun] += 1
-        roots = ROOTS[segment]; root = roots[order%len(roots)]
-        action,story = ACTIONS[order//len(roots)]
-        name = root+action+noun
-        assert name not in names, name
-        names.add(name)
-        seed = int(hashlib.sha256(str(iid).encode()).hexdigest()[:8],16)
-        p = seed%len(PROFILES[segment]); kinds = PROFILES[segment][p]
-        stat_ids = STAT_PROFILES[segment][p]
-        rank = min(80,max(1,row['level_requirement']))
-        stats = []
-        for j,attr in enumerate(stat_ids):
-            value = 3+rank//5+(seed>>(j*5))%7
-            if attr in (34,36): value = 20+rank*3+(seed>>(j*4))%31
-            elif attr in (23,66): value = 100+((seed>>(j*4))%7)*25
-            elif attr in (47,15): value = 5+rank//3+(seed>>(j*4))%9
-            stats.append(dict(Attr=attr,Value=value,Mode=0))
-        lore = f'演劫残忆中，行者以{root}为记，{story}。这件{noun}承载那一刻的心愿。'
-        item = dict(ID=iid,BaseID=iid,BaseName=row['base_name'],Name=name,Lore=lore,LoreRoot=root,Role=segment,Professions=mask,BeginnerAllowed=row['beginner_allowed'],Unrestricted=not mask and not row['beginner_allowed'],Sex=row['sex'],Slot=slot,LevelRequirement=row['level_requirement'],ResourceLevel=row['resource_level'],NativeDropEligible=bool(row['drop_kind']),LegacyAffixPoolReady=row['can_roll_affix'],Affixes=stats,Traits=[trait(kinds[0],seed),trait(kinds[1],seed>>8)],SourceArm=row['source_arm'],SourceDesc=row['source_desc'])
-        signature = lambda: json.dumps([item['Affixes'],item['Traits']],sort_keys=True)
-        while signature() in packages: item['Affixes'][-1]['Value'] += 1
-        packages.add(signature())
+        iid=row['base_id']; a,d,e,mask=sources[iid]; segment=SEGMENTS[mask]
+        item=dict(ID=iid,BaseID=iid,BaseName=row['base_name'],Role=segment,Professions=mask,BeginnerAllowed=row['beginner_allowed'],Unrestricted=not mask and not row['beginner_allowed'],Sex=row['sex'],Slot=e['slot'],LevelRequirement=row['level_requirement'],ResourceLevel=row['resource_level'],NativeDropEligible=bool(row['drop_kind']),LegacyAffixPoolReady=row['can_roll_affix'],SourceArm=row['source_arm'],SourceDesc=row['source_desc'])
+        item.update(authored[iid])
         groups[segment].append(item)
     return groups
 
@@ -219,28 +181,26 @@ def validate(groups,rows):
     assert {k:len(v) for k,v in groups.items()} == EXPECTED
     assert sum(i['NativeDropEligible'] for i in items)==885
     assert sum(i['LegacyAffixPoolReady'] for i in items)==298
-    assert all(len(i['Affixes'])==3 and len(i['Traits'])==2 for i in items)
-    assert all(len({a['Attr'] for a in i['Affixes']})==3 and all(a['Attr'] in ATTRS and a['Mode']==0 and a['Value']>0 for a in i['Affixes']) for i in items)
-    traits={t['Kind'] for i in items for t in i['Traits']}
-    assert len(traits)==28, (len(traits),traits)
-    assert all(i['Name']!=i['BaseName'] and len(i['Name'])<=12 for i in items)
-    assert len({i['Lore'] for i in items})==1619
-    assert len({json.dumps([i['Affixes'],i['Traits']],sort_keys=True) for i in items})==1619
     assert all(i['ID']==i['BaseID'] for i in items)
+    # Distinct strings/packages cannot prove good writing or balance. Editorial
+    # review uses each row's concrete identity, benefit and tradeoff instead.
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__); parser.add_argument('--check',action='store_true'); args=parser.parse_args()
+    parser=argparse.ArgumentParser(description=__doc__); mode=parser.add_mutually_exclusive_group(); mode.add_argument('--check',action='store_true'); mode.add_argument('--validate-authored',action='store_true'); args=parser.parse_args()
     rows,sources=enumerate_eligible(read_tables())
     # This independently reconstructed list must match the recovered source audit.
     with (HERE/'eligible.csv').open(encoding='utf-8',newline='') as f: recovered=list(csv.DictReader(f))
     assert len(rows)==len(recovered), (len(rows),len(recovered))
     for actual,old in zip(rows,recovered):
         assert {k:str(v) for k,v in actual.items()}==old, (actual,old)
-    groups=generate(rows,sources); validate(groups,rows)
+    authored=read_authored(sources)
+    if args.validate_authored:
+        print(json.dumps(dict(authored=len(authored),remaining=len(rows)-len(authored),total=len(rows)),ensure_ascii=False)); return
+    groups=generate(rows,sources,authored); validate(groups,rows)
     outputs={TARGET/f'unique_catalog_{key}.json':(json.dumps(group,ensure_ascii=False,separators=(',',':'))+'\n').encode() for key,group in sorted(groups.items())}
     assert all(len(data)<500000 for data in outputs.values())
-    summary=dict(schema=1,total=len(rows),native_drop_kind=885,conversion_only=734,legacy_affix_pool_ready=298,class_counts=EXPECTED,sex_counts=dict(collections.Counter(str(r['sex']) for r in rows)),catalog_sha256={p.name:hashlib.sha256(data).hexdigest() for p,data in outputs.items()},source_csv_sha256=hashlib.sha256(encode_csv(rows)).hexdigest(),max_catalog_bytes=max(map(len,outputs.values())),unique_name_count=1619,unique_lore_count=1619,unique_effect_package_count=1619,executable_trait_kind_count=28)
+    summary=dict(schema=2,total=len(rows),native_drop_kind=885,conversion_only=734,legacy_affix_pool_ready=298,class_counts=EXPECTED,sex_counts=dict(collections.Counter(str(r['sex']) for r in rows)),catalog_sha256={p.name:hashlib.sha256(data).hexdigest() for p,data in outputs.items()},source_csv_sha256=hashlib.sha256(encode_csv(rows)).hexdigest(),max_catalog_bytes=max(map(len,outputs.values())),authored_entry_count=len(authored),legacy_template_count=0,power_tier_counts=dict(collections.Counter(i['PowerTier'] for i in authored.values())),trait_count_distribution=dict(collections.Counter(str(len(i['Traits'])) for i in authored.values())),executable_trait_kind_count=len({t['Kind'] for i in authored.values() for t in i['Traits']}),editorial_note='Completeness and structural checks do not certify literary quality or gameplay balance.')
     outputs[HERE/'coverage.json']=(json.dumps(summary,ensure_ascii=False,indent=2)+'\n').encode()
     for path,data in outputs.items():
         if args.check:

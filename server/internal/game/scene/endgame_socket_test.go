@@ -187,7 +187,8 @@ func TestAstralFormationChangesRealCombatStats(t *testing.T) {
 	st.SocketCards[0], st.SocketCards[1] = st.SocketCards[1], st.SocketCards[0]
 	p.Player.Worn.Set(domain.SlotWeapon, st)
 	s.refreshStats(p)
-	if complete <= p.Stats.MinAtk || complete != p.Stats.MinAtk*104/100 {
+	// v2 引火入锋 adds STR4 then attack18%; reverse order retains only the two rune snapshots.
+	if complete != 125 || p.Stats.MinAtk != 104 {
 		t.Fatalf("wrong active/reversed damage stats %d/%d", complete, p.Stats.MinAtk)
 	}
 }

@@ -3,7 +3,7 @@ package domain
 import "testing"
 
 func TestEveryUniqueTraitHasExecutableResult(t *testing.T) {
-	if len(uniqueTraitNames) != 28 {
+	if len(uniqueTraitNames) != 29 {
 		t.Fatal(len(uniqueTraitNames))
 	}
 	for kind := range uniqueTraitNames {
@@ -45,6 +45,12 @@ func TestUniqueBoundariesCapsAndFunctionalClassRules(t *testing.T) {
 		t.Fatal("unsafe scaling")
 	}
 	d := UniqueCatalog()[0]
+	for _, candidate := range UniqueCatalog() {
+		if len(candidate.Traits) > 0 {
+			d = candidate
+			break
+		}
+	}
 	def := uniqueFixture(d)
 	def.Equip.Need = Requirement{Professions: 1, ProfessionRestricted: true}
 	w := NewEquipSet()
@@ -53,7 +59,7 @@ func TestUniqueBoundariesCapsAndFunctionalClassRules(t *testing.T) {
 	w.Set(EquipSlot(def.Equip.Slot), st)
 	ch := &Character{Race: Race(0), Level: 100}
 	defs := func(ItemID) (ItemDef, bool) { return def, true }
-	if len(ActiveUniqueTraits(w, defs, ch)) != 2 {
+	if len(ActiveUniqueTraits(w, defs, ch)) != len(d.Traits) {
 		t.Fatal("eligible traits absent")
 	}
 	ch.Race = Race(1)

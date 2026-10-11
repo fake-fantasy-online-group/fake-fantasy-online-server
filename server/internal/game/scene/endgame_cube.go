@@ -16,6 +16,9 @@ type endgameCubeState struct {
 	revision    int64
 	fingerprint string
 	expires     time.Time
+	// Never expose a random candidate until its atomic commit succeeds. Retain it
+	// across definite storage failures so retrying this quote cannot reroll.
+	candidate *domain.CubePlan
 }
 
 func (s *Scene) catalogCubeRecipeViews() []domain.EndgameRecipeView {
@@ -87,19 +90,35 @@ func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 			s.endgameError(p, req, "stale_revision", "装备、材料或铜币已变化，请重新问鼎")
 			return
 		}
-		plan, err := s.planEndgameCube(p, q.request, true)
-		if err != nil {
+		// A cached candidate does not waive live character/recipe preconditions.
+		if _, err := s.planEndgameCube(p, q.request, false); err != nil {
 			s.endgameError(p, req, domain.CubeErrorCode(err), err.Error())
 			return
 		}
+		if q.candidate == nil {
+			plan, err := s.planEndgameCube(p, q.request, true)
+			if err != nil {
+				s.endgameError(p, req, domain.CubeErrorCode(err), err.Error())
+				return
+			}
+			q.candidate = &plan
+		}
+		plan := *q.candidate
 		candidate := s.snapshotOf(p).Clone()
 		candidate.Bag = plan.Bag
 		candidate.Char.Money = moneyFromInventory(plan.Money)
 		result := map[string]string{"recipeId": strconv.FormatInt(int64(plan.Recipe.ID), 10)}
 		if !plan.Target.Empty() {
 			result["itemUid"] = strconv.FormatInt(plan.Target.UID, 10)
+			if plan.Recipe.ID == domain.CubeOpenSocket {
+				result["socketCount"] = strconv.Itoa(int(plan.Target.SocketCount))
+			}
 		}
-		s.endgameCommit(p, req, candidate, domain.EndgameResponse{Kind: "cube.result", Message: plan.Recipe.Name + "完成。", Result: result}, nil, 0, func() { state.cube = nil })
+		message := plan.Recipe.Name + "完成。"
+		if plan.Recipe.ID == domain.CubeOpenSocket {
+			message = plan.Recipe.Name + "完成：开出" + strconv.Itoa(int(plan.Target.SocketCount)) + "孔。"
+		}
+		s.endgameCommit(p, req, candidate, domain.EndgameResponse{Kind: "cube.result", Message: message, Result: result}, nil, 0, func() { state.cube = nil })
 	default:
 		s.endgameError(p, req, "unsupported_operation", "不支持的周天鼎操作")
 	}

@@ -1,0 +1,394 @@
+[
+  {
+    "id": 1900028001,
+    "mansion": "角",
+    "name": "星篆·角木蛟",
+    "quadrant": "青龙",
+    "affixes": [
+      {
+        "attr": 1,
+        "value": 3,
+        "mode": 0
+      }
+    ],
+    "minLevel": 12
+  },
+  {
+    "id": 1900028002,
+    "mansion": "亢",
+    "name": "星篆·亢金龙",
+    "quadrant": "青龙",
+    "affixes": [
+      {
+        "attr": 5,
+        "value": 3,
+        "mode": 0
+      }
+    ],
+    "minLevel": 14
+  },
+  {
+    "id": 1900028003,
+    "mansion": "氐",
+    "name": "星篆·氐土貉",
+    "quadrant": "青龙",
+    "affixes": [
+      {
+        "attr": 69,
+        "value": 2,
+        "mode": 0
+      }
+    ],
+    "minLevel": 16
+  },
+  {
+    "id": 1900028004,
+    "mansion": "房",
+    "name": "星篆·房日兔",
+    "quadrant": "青龙",
+    "affixes": [
+      {
+        "attr": 34,
+        "value": 3,
+        "mode": 1
+      }
+    ],
+    "minLevel": 17
+  },
+  {
+    "id": 1900028005,
+    "mansion": "心",
+    "name": "星篆·心月狐",
+    "quadrant": "青龙",
+    "affixes": [
+      {
+        "attr": 23,
+        "value": 100,
+        "mode": 0
+      }
+    ],
+    "minLevel": 19
+  },
+  {
+    "id": 1900028006,
+    "mansion": "尾",
+    "name": "星篆·尾火虎",
+    "quadrant": "青龙",
+    "affixes": [
+      {
+        "attr": 47,
+        "value": 3,
+        "mode": 0
+      }
+    ],
+    "minLevel": 21
+  },
+  {
+    "id": 1900028007,
+    "mansion": "箕",
+    "name": "星篆·箕水豹",
+    "quadrant": "青龙",
+    "affixes": [
+      {
+        "attr": 19,
+        "value": 4,
+        "mode": 0
+      }
+    ],
+    "minLevel": 23
+  },
+  {
+    "id": 1900028008,
+    "mansion": "斗",
+    "name": "星篆·斗木獬",
+    "quadrant": "玄武",
+    "affixes": [
+      {
+        "attr": 15,
+        "value": 3,
+        "mode": 0
+      }
+    ],
+    "minLevel": 24
+  },
+  {
+    "id": 1900028009,
+    "mansion": "牛",
+    "name": "星篆·牛金牛",
+    "quadrant": "玄武",
+    "affixes": [
+      {
+        "attr": 17,
+        "value": 4,
+        "mode": 0
+      }
+    ],
+    "minLevel": 26
+  },
+  {
+    "id": 1900028010,
+    "mansion": "女",
+    "name": "星篆·女土蝠",
+    "quadrant": "玄武",
+    "affixes": [
+      {
+        "attr": 61,
+        "value": 3,
+        "mode": 0
+      }
+    ],
+    "minLevel": 28
+  },
+  {
+    "id": 1900028011,
+    "mansion": "虚",
+    "name": "星篆·虚日鼠",
+    "quadrant": "玄武",
+    "affixes": [
+      {
+        "attr": 36,
+        "value": 3,
+        "mode": 1
+      }
+    ],
+    "minLevel": 30
+  },
+  {
+    "id": 1900028012,
+    "mansion": "危",
+    "name": "星篆·危月燕",
+    "quadrant": "玄武",
+    "affixes": [
+      {
+        "attr": 118,
+        "value": 3,
+        "mode": 0
+      }
+    ],
+    "minLevel": 32
+  },
+  {
+    "id": 1900028013,
+    "mansion": "室",
+    "name": "星篆·室火猪",
+    "quadrant": "玄武",
+    "affixes": [
+      {
+        "attr": 70,
+        "value": 2,
+        "mode": 0
+      }
+    ],
+    "minLevel": 33
+  },
+  {
+    "id": 1900028014,
+    "mansion": "壁",
+    "name": "星篆·壁水貐",
+    "quadrant": "玄武",
+    "affixes": [
+      {
+        "attr": 34,
+        "value": 24,
+        "mode": 0
+      }
+    ],
+    "minLevel": 35
+  },
+  {
+    "id": 1900028015,
+    "mansion": "奎",
+    "name": "星篆·奎木狼",
+    "quadrant": "白虎",
+    "affixes": [
+      {
+        "attr": 9,
+        "value": 3,
+        "mode": 0
+      }
+    ],
+    "minLevel": 37
+  },
+  {
+    "id": 1900028016,
+    "mansion": "娄",
+    "name": "星篆·娄金狗",
+    "quadrant": "白虎",
+    "affixes": [
+      {
+        "attr": 7,
+        "value": 3,
+        "mode": 0
+      }
+    ],
+    "minLevel": 39
+  },
+  {
+    "id": 1900028017,
+    "mansion": "胃",
+    "name": "星篆·胃土雉",
+    "quadrant": "白虎",
+    "affixes": [
+      {
+        "attr": 13,
+        "value": 4,
+        "mode": 0
+      }
+    ],
+    "minLevel": 40
+  },
+  {
+    "id": 1900028018,
+    "mansion": "昴",
+    "name": "星篆·昴日鸡",
+    "quadrant": "白虎",
+    "affixes": [
+      {
+        "attr": 23,
+        "value": 100,
+        "mode": 0
+      }
+    ],
+    "minLevel": 42
+  },
+  {
+    "id": 1900028019,
+    "mansion": "毕",
+    "name": "星篆·毕月乌",
+    "quadrant": "白虎",
+    "affixes": [
+      {
+        "attr": 47,
+        "value": 3,
+        "mode": 1
+      }
+    ],
+    "minLevel": 44
+  },
+  {
+    "id": 1900028020,
+    "mansion": "觜",
+    "name": "星篆·觜火猴",
+    "quadrant": "白虎",
+    "affixes": [
+      {
+        "attr": 25,
+        "value": -2,
+        "mode": 1
+      }
+    ],
+    "minLevel": 46
+  },
+  {
+    "id": 1900028021,
+    "mansion": "参",
+    "name": "星篆·参水猿",
+    "quadrant": "白虎",
+    "affixes": [
+      {
+        "attr": 19,
+        "value": 3,
+        "mode": 1
+      }
+    ],
+    "minLevel": 48
+  },
+  {
+    "id": 1900028022,
+    "mansion": "井",
+    "name": "星篆·井木犴",
+    "quadrant": "朱雀",
+    "affixes": [
+      {
+        "attr": 3,
+        "value": 3,
+        "mode": 0
+      }
+    ],
+    "minLevel": 49
+  },
+  {
+    "id": 1900028023,
+    "mansion": "鬼",
+    "name": "星篆·鬼金羊",
+    "quadrant": "朱雀",
+    "affixes": [
+      {
+        "attr": 66,
+        "value": 100,
+        "mode": 0
+      }
+    ],
+    "minLevel": 51
+  },
+  {
+    "id": 1900028024,
+    "mansion": "柳",
+    "name": "星篆·柳土獐",
+    "quadrant": "朱雀",
+    "affixes": [
+      {
+        "attr": 17,
+        "value": 3,
+        "mode": 1
+      }
+    ],
+    "minLevel": 53
+  },
+  {
+    "id": 1900028025,
+    "mansion": "星",
+    "name": "星篆·星日马",
+    "quadrant": "朱雀",
+    "affixes": [
+      {
+        "attr": 15,
+        "value": 3,
+        "mode": 1
+      }
+    ],
+    "minLevel": 55
+  },
+  {
+    "id": 1900028026,
+    "mansion": "张",
+    "name": "星篆·张月鹿",
+    "quadrant": "朱雀",
+    "affixes": [
+      {
+        "attr": 36,
+        "value": 24,
+        "mode": 0
+      }
+    ],
+    "minLevel": 56
+  },
+  {
+    "id": 1900028027,
+    "mansion": "翼",
+    "name": "星篆·翼火蛇",
+    "quadrant": "朱雀",
+    "affixes": [
+      {
+        "attr": 27,
+        "value": 2,
+        "mode": 1
+      }
+    ],
+    "minLevel": 58
+  },
+  {
+    "id": 1900028028,
+    "mansion": "轸",
+    "name": "星篆·轸水蚓",
+    "quadrant": "朱雀",
+    "affixes": [
+      {
+        "attr": 38,
+        "value": 1,
+        "mode": 0
+      }
+    ],
+    "minLevel": 60
+  }
+]

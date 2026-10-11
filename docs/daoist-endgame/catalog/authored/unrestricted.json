@@ -1,0 +1,45 @@
+[
+  {
+    "BaseID": 2873,
+    "Name": "炕头旧单衣",
+    "Lore": "针脚里夹着一粒没熟的稻米，晒过三次仍会发热。远行的人把它穿在甲下，只当有人替自己留着灶火。",
+    "LoreRoot": "原创·夹米的贴身旧衣",
+    "Identity": "低门槛的温养内衫",
+    "Benefit": "增加少量生命，方便新角色起步",
+    "Tradeoff": "没有防御和攻击，后期占用衣服位置",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 30,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2874,
+    "Name": "反穿春衫",
+    "Lore": "裁衣时里外用反，绣在内侧的桃枝只给穿衣人看。有一天袖中结出一枚桃核，裁缝却记得自己根本没绣果子。",
+    "LoreRoot": "原创·内藏桃枝的薄衫",
+    "Identity": "轻巧的入门法力衣",
+    "Benefit": "提供少量法力并增加精神",
+    "Tradeoff": "不补生命、物防或魔攻",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 26,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  }
+]

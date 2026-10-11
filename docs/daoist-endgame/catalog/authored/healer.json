@@ -1,0 +1,5680 @@
+[
+  {
+    "BaseID": 2005,
+    "Name": "茴香小盏",
+    "Lore": "小药童把煎焦的茴香藏在帽顶，满院找锅的师父循香而来。他没有挨罚，只学会了第一味药也有过火的时候。",
+    "LoreRoot": "原型·药童小冠；煎药故事为原创",
+    "Identity": "容错型药童冠",
+    "Benefit": "增加生命与物防，适合近身救急前的过渡",
+    "Tradeoff": "没有治疗特性和法力增益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 65,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2011,
+    "Name": "月下空额",
+    "Lore": "冠额本要绣药师名号，绣娘却睡着了。空处积下一层月色，洗也洗不去。",
+    "LoreRoot": "原创·未完冠绣",
+    "Identity": "储气的学徒帽",
+    "Benefit": "补充法力与精神",
+    "Tradeoff": "缺少生命和治疗专长",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2017,
+    "Name": "三指宽",
+    "Lore": "药铺只凭三指量冠，掌柜说额头宽窄与医术无关。冠内另缝了一张谁也读不懂的方子。",
+    "LoreRoot": "原创·药铺旧规",
+    "Identity": "稳健的精神冠",
+    "Benefit": "精神集中提高法力和魔防",
+    "Tradeoff": "不增加伤害或治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2031,
+    "Name": "兰根倒生",
+    "Lore": "帽缝中的兰草向天空扎根，花开在贴额的一侧。养兰人至今以为它早已枯死。",
+    "LoreRoot": "原创·倒生兰草",
+    "Identity": "护身草冠",
+    "Benefit": "增加生命并少量减免法术伤害",
+    "Tradeoff": "没有进攻属性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 70,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2032,
+    "Name": "葫里午睡",
+    "Lore": "葫芦帽中装着一声长长的哈欠，晃动时会滚向左耳。午后的病历因此总写得格外整齐。",
+    "LoreRoot": "原创·午睡葫芦",
+    "Identity": "省力的治疗头饰",
+    "Benefit": "治疗技能法力消耗减少",
+    "Tradeoff": "不增强治疗量、生命或物理承伤",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 2000,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2054,
+    "Name": "隔帘问脉",
+    "Lore": "冠边垂下七条细线，原用来隔帘搭脉。最长的一条每夜绷紧，另一端不知系在何处。",
+    "LoreRoot": "原创·悬丝诊脉",
+    "Identity": "警觉的避击冠",
+    "Benefit": "集中物防以减少物理命中",
+    "Tradeoff": "不能减轻已经命中的伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 24,
+        "Mode": 0
+      },
+      {
+        "Attr": 7,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2055,
+    "Name": "多出来的叶",
+    "Lore": "园丁数了四十年三叶草，退休那天才数到第四片。他把它夹进旧帽，留给不肯退休的徒弟。",
+    "LoreRoot": "原型·四叶草冠",
+    "Identity": "单纯坚韧的绿冠",
+    "Benefit": "提高体质与生命",
+    "Tradeoff": "法力和治疗效率均不提升",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 35,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2056,
+    "Name": "闭目神像",
+    "Lore": "冠上神像闭着眼，信众争论它是否垂怜。擦像的药师却发现，眼缝里沾着整夜未干的药汁。",
+    "LoreRoot": "原创·闭眼冠像",
+    "Identity": "偏重施救的祭冠",
+    "Benefit": "治疗他人时获得明显加成",
+    "Tradeoff": "自疗无特性收益，缺乏魔攻",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 85,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "selfless_heal",
+        "PowerBP": 2300,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2811,
+    "Name": "药灰长襟",
+    "Lore": "炼药失败后的灰落满长襟，拍打便浮出半张符。制衣人反复试过，另外半张不在袖上。",
+    "LoreRoot": "原创·药灰残符",
+    "Identity": "耐法的旧袍",
+    "Benefit": "魔防与精神提高法术承受能力",
+    "Tradeoff": "物理防护薄弱",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2812,
+    "Name": "打结方笺",
+    "Lore": "衣带系着写错剂量的方笺，每结一处便遮去一笔。展开以后，药名仍旧一个也没改对。",
+    "LoreRoot": "原创·错方衣带",
+    "Identity": "养神的练习袍",
+    "Benefit": "增加法力并略补精神",
+    "Tradeoff": "没有魔攻、生命和物理防护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 1,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2813,
+    "Name": "竹院回声",
+    "Lore": "空竹院只剩一件晾着的衣服，风过便有人背诵经络。记载此事的药师后来画了张完全不同的人体图。",
+    "LoreRoot": "原创·竹院异声",
+    "Identity": "养神的宽袍",
+    "Benefit": "较高精神带来法力和魔防",
+    "Tradeoff": "未补物防与治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2814,
+    "Name": "错季桑衣",
+    "Lore": "蚕在冬天吐丝，春天结冰。裁出的薄衣穿着微凉，药师专用它提醒自己别把节气写错。",
+    "LoreRoot": "原创·异季蚕丝",
+    "Identity": "抗术法的凉衣",
+    "Benefit": "魔法抗性提供固定减伤",
+    "Tradeoff": "面对高伤害和物理敌人收益有限",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 24,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2827,
+    "Name": "跟风小褂",
+    "Lore": "衣后拖着一条总被风掀起的布，剪下便立刻长回。缝衣人索性在上面写满要晾晒的药名。",
+    "LoreRoot": "原创·长回的衣尾",
+    "Identity": "轻便赶路衣",
+    "Benefit": "移动速度提高，方便走位",
+    "Tradeoff": "不补生命和减伤",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 27,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 7,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2828,
+    "Name": "鹤嫌衣",
+    "Lore": "白鹤每见这件衣服便拔腿走开，道观却拿它当迎鹤礼服。衣摆里藏着一张画得很像鹤的鸡。",
+    "LoreRoot": "原创·迎鹤乌龙",
+    "Identity": "灵巧躲避的礼衣",
+    "Benefit": "敏捷与物防帮助避开近袭",
+    "Tradeoff": "没有法术输出或治疗增益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2887,
+    "Name": "半盏泼茶",
+    "Lore": "茶渍恰好洇成胸中经脉的样子，医者照着改了一处注解。翌日再看，茶渍已经换了走向。",
+    "LoreRoot": "原创·会变的茶渍",
+    "Identity": "集中生命的诊衣",
+    "Benefit": "增加生命与体质",
+    "Tradeoff": "舍弃衣服位法力和攻击预算",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 65,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2888,
+    "Name": "狐裁袖",
+    "Lore": "裁缝留下两只过长的袖子便不见了，桌下有一撮狐毛。袖里藏物不难，难在每月清点总多一件。",
+    "LoreRoot": "原创·狐裁异袖",
+    "Identity": "轻巧避击的宽袖衣",
+    "Benefit": "敏捷与法力兼顾",
+    "Tradeoff": "没有生命及治疗专长",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 82,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2899,
+    "Name": "未讲经",
+    "Lore": "胸前绣着一页还未开讲的医经，听众每坐满一次便少一行。如今只剩页码，讲堂倒越修越大。",
+    "LoreRoot": "原创·消字讲经袍",
+    "Identity": "专用于持久治疗",
+    "Benefit": "提高法力并降低治疗耗蓝",
+    "Tradeoff": "缺少伤害、生命及物理防护",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 110,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 1400,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2900,
+    "Name": "九折屏风",
+    "Lore": "旧屏风的绢被裁成衣，折痕始终展不平。药师侧身时，屏上的山便挡住画里的月亮。",
+    "LoreRoot": "原创·屏绢成衣",
+    "Identity": "偏物理避击的厚衣",
+    "Benefit": "物防百分比强化既有躲避构筑",
+    "Tradeoff": "对低物防角色和必中法术无优势",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 24,
+        "Mode": 1
+      },
+      {
+        "Attr": 36,
+        "Value": 24,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 9801,
+    "Name": "无炉丹衣",
+    "Lore": "内衬画了一座空丹炉，药材沾到便结成细霜。丹师说火候已足，来访者却连炉子也没见过。",
+    "LoreRoot": "原创·内景空炉",
+    "Identity": "精神集中的飞升衣",
+    "Benefit": "高精神改善法力储备与魔防",
+    "Tradeoff": "不提高治疗倍率与生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 13,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 9802,
+    "Name": "垂星围裙",
+    "Lore": "围裙上的五颗星是被锅底烫出的洞，夜里却正对天上五处暗点。掌厨从不准人补好。",
+    "LoreRoot": "原创·星洞围裙",
+    "Identity": "法术固定减伤衣",
+    "Benefit": "魔法抗性与少量魔防",
+    "Tradeoff": "没有物理防护和输出",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 9803,
+    "Name": "药圃守岁",
+    "Lore": "整件衣服只用了药圃边一年的蛛丝，穿着时常闻到刚翻土的气味。衣角那枚虫卵始终不孵。",
+    "LoreRoot": "原创·药圃蛛丝",
+    "Identity": "生命偏科的园衣",
+    "Benefit": "集中体质，适合补生命缺口",
+    "Tradeoff": "其他战斗维度无加成",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 18,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 9804,
+    "Name": "紫河旧图",
+    "Lore": "袖内绘着一条没有入口的河，水色每日改变。临摹者画到第九日才发现河流正沿着自己的腕骨走。",
+    "LoreRoot": "原创·袖中内景河",
+    "Identity": "法力池专精衣",
+    "Benefit": "显著提高法力上限",
+    "Tradeoff": "没有治疗或防护特性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 22,
+        "Mode": 1
+      },
+      {
+        "Attr": 61,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 9805,
+    "Name": "一粒不化",
+    "Lore": "丹衣的扣子原是一枚失败的药丸，泡了百年也不化。只有说出它的配方时，衣服才忽然变重。",
+    "LoreRoot": "原创·不化丹扣",
+    "Identity": "定神丹扣衣",
+    "Benefit": "不良状态抗性与魔防",
+    "Tradeoff": "不加生命、治疗或物理减伤",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 18,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 9806,
+    "Name": "露台散发",
+    "Lore": "袍上曾晒满刚剪下的长发，发丝吸露后自织成花。主人不认那些花，说自己从没梦见这样的颜色。",
+    "LoreRoot": "原创·发丝露花",
+    "Identity": "灵活的施法衣",
+    "Benefit": "移动与魔防兼顾",
+    "Tradeoff": "不提高魔攻和治疗量",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 27,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 28,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15120,
+    "Name": "息壤止寸",
+    "Lore": "杖尾息壤长过刻线便被刮去，用来补丹房漏墙。墙越补越薄，杖却再也不肯长高。",
+    "LoreRoot": "原型·息壤杖尾的灵性",
+    "Identity": "小幅普疗主杖",
+    "Benefit": "直接治疗提高并增加精神",
+    "Tradeoff": "攻击法术没有特性收益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 65,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 1800,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15121,
+    "Name": "烟不留",
+    "Lore": "此杖放在灶边三年，表面仍无烟色。看炉人用它拨过一次炭，此后只敢把它供在窗外。",
+    "LoreRoot": "原型·净灵杖不染烟火",
+    "Identity": "纯防护的清气杖",
+    "Benefit": "魔防与法术减伤，适合承担术法压力",
+    "Tradeoff": "武器词条完全不增加输出治疗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 48,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15122,
+    "Name": "紫云迟到",
+    "Lore": "每当求晴的科仪结束，杖旁才慢慢聚起紫云。主持认为这算祥瑞，晒药人坚持另记一笔。",
+    "LoreRoot": "原型·杖上紫云祥瑞",
+    "Identity": "兼顾输出的药师杖",
+    "Benefit": "魔攻集中提升进攻法术",
+    "Tradeoff": "没有治疗、减耗或防护特性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 75,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15123,
+    "Name": "炉壁玉髓",
+    "Lore": "玉髓杖在丹炉受火的旧说流传很广，杖上一块炉壁却从未见火。药师刮下薄屑，听见里面有人翻书。",
+    "LoreRoot": "原型·古玉浴老君丹炉；炉壁异象原创",
+    "Identity": "进攻与救护折中的古玉杖",
+    "Benefit": "魔攻与治疗倍率同时提高",
+    "Tradeoff": "两个方向均不及专精主杖",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 75,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 1200,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15124,
+    "Name": "千缕不伤",
+    "Lore": "旧录说华莹曾护乾庸穿行战阵。这一支仿杖只留下千条擦痕，刻工把最深的一条刻成了门。",
+    "LoreRoot": "原型·乾庸护身记载；新作明确为仿杖",
+    "Identity": "承受压力的护卫杖",
+    "Benefit": "生命与物理伤害减免",
+    "Tradeoff": "没有直接治疗增强，进攻预算缺失",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 180,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "physical_guard",
+        "PowerBP": 800,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15125,
+    "Name": "百草不答",
+    "Lore": "玄木杖上钉着一百片空白药签，尝遍草木的人没有写下最后一味。持杖者每救回一人，签上的苦气便淡一点。",
+    "LoreRoot": "原型·神农玄杖的尝草意象；非神农遗物断言",
+    "Identity": "舍弃自身伤害的急救主杖",
+    "Benefit": "显著强化濒危目标治疗并扩充法力",
+    "Tradeoff": "魔攻降低，进攻与常规满血治疗不获急救专长",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 240,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 20,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": -65,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "rescue_heal",
+        "PowerBP": 3000,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15126,
+    "Name": "金仙验牒",
+    "Lore": "宝杖的身份文牒盖了七次印，第八方印留着空。新任医仙走遍诸殿，也没找到该收这笔印税的人。",
+    "LoreRoot": "原型·大罗天杖金仙资格",
+    "Identity": "支持频繁急救的认证杖",
+    "Benefit": "治疗耗蓝降低且精神集中",
+    "Tradeoff": "缺少伤害加成与快速吟唱",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 25,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 120,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 1800,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15127,
+    "Name": "后土小指",
+    "Lore": "后土宫炼杖的旧说里没有提到这一枚指印。复刻杖身的工匠总在最后一刻，把自己的小指缩回来。",
+    "LoreRoot": "原型·天瑞经后土宫炼化；复刻故事原创",
+    "Identity": "他疗专精的祭土杖",
+    "Benefit": "强化对他人治疗并增加自身生命",
+    "Tradeoff": "自疗不受专长影响，魔攻略减",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 210,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": -55,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "selfless_heal",
+        "PowerBP": 2800,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15128,
+    "Name": "星轨错一",
+    "Lore": "天仪星轨的摹本在杖腰断了一寸，刻匠没有补。每逢月缺，断处反而比完整的星路更亮。",
+    "LoreRoot": "原型·天仪杖星轨与火纹净玉",
+    "Identity": "强力治疗与续航兼顾",
+    "Benefit": "治疗量、治疗节省及精神都出色",
+    "Tradeoff": "没有伤害特性，低耗技能较难用满节省收益",
+    "PowerTier": "chase",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 190,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 2200,
+        "ThresholdPct": 0
+      },
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 1800,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20137,
+    "Name": "小周天旧账",
+    "Lore": "衣内用朱笔算了一圈周天，结尾欠着三息。账房坚持先还清，修士于是每天少说一句话。",
+    "LoreRoot": "原创·吐纳欠账",
+    "Identity": "储气循行衣",
+    "Benefit": "最大法力提升",
+    "Tradeoff": "没有生命、防护和治疗特性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 16,
+        "Mode": 1
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20138,
+    "Name": "坐忘凹痕",
+    "Lore": "蒲团的凹痕被师父缝进了衣背，穿上便像靠着无人之墙。新弟子问修了几年，师父指着线头。",
+    "LoreRoot": "原创·蒲团痕入衣",
+    "Identity": "偏重定神防护",
+    "Benefit": "精神与不良状态抗性",
+    "Tradeoff": "不提高行动速度与输出",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20139,
+    "Name": "金乌打盹",
+    "Lore": "衣上的乌鸦总在正午合眼，天黑才伸懒腰。观日者按它值守，一个月误了十九次日出。",
+    "LoreRoot": "原型·金乌袍纹",
+    "Identity": "抗法薄袍",
+    "Benefit": "魔防与魔法抗性",
+    "Tradeoff": "物理威胁面前没有额外保护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 35,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20140,
+    "Name": "日轮反面",
+    "Lore": "绣娘在日轮背后添了一口井，井水每晚浸湿衣里。她说这是给太阳洗脸用的，没人敢去试。",
+    "LoreRoot": "原创·日轮后井",
+    "Identity": "法力恢复节约衣",
+    "Benefit": "法力充足且技能法力消耗下降",
+    "Tradeoff": "不增强治疗量和吟唱速度",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 95,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "skill_economy",
+        "PowerBP": 1600,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20141,
+    "Name": "扶风针脚",
+    "Lore": "针脚全朝上风处倾斜，穿衣人转身也不会改变。裁缝因此测出了山中一年不动的那一阵风。",
+    "LoreRoot": "原型·舞风衣的风向",
+    "Identity": "轻盈走位衣",
+    "Benefit": "提高移动速度和敏捷",
+    "Tradeoff": "生命与法力无加成",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 27,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 7,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20142,
+    "Name": "袖底雀粮",
+    "Lore": "袖口绣了半把谷子，麻雀落下总啄不中。过了冬，衣服却自行添了半圈细羽。",
+    "LoreRoot": "原创·绣谷生羽",
+    "Identity": "回避型轻衣",
+    "Benefit": "物防与体质兼顾",
+    "Tradeoff": "缺少法术防护和治疗提升",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 32,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20143,
+    "Name": "池边禁洗",
+    "Lore": "池边木牌写着不可浣衣，捞出的衣服却件件雪白。看守只收漂到岸上的影子，整齐挂在后院。",
+    "LoreRoot": "原创·禁洗池的影衣",
+    "Identity": "抵御物理命中的礼袍",
+    "Benefit": "物防百分比强化回避",
+    "Tradeoff": "无法减少必中攻击伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 28,
+        "Mode": 1
+      },
+      {
+        "Attr": 7,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20144,
+    "Name": "鱼先登岸",
+    "Lore": "裙裾绣鱼每夜挪近衣领一寸，绣者只好天天拆线。她说鱼想升天，买衣人觉得它只是怕水。",
+    "LoreRoot": "原创·离水绣鱼",
+    "Identity": "生命储备衣",
+    "Benefit": "生命百分比提升并补体质",
+    "Tradeoff": "治疗、法力和输出预算空缺",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 13,
+        "Mode": 1
+      },
+      {
+        "Attr": 5,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20145,
+    "Name": "雾中量体",
+    "Lore": "裁缝在浓雾中量体，做成一件大了三寸的袍。天晴穿着松垮，起雾时却正好合身。",
+    "LoreRoot": "原型·幻雾云袍",
+    "Identity": "宽松的储气雾衣",
+    "Benefit": "法力储量和移动速度",
+    "Tradeoff": "没有生命和治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 300,
+        "Mode": 0
+      },
+      {
+        "Attr": 27,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20146,
+    "Name": "云缝漏青",
+    "Lore": "云衣有道补不住的口子，里面露出从未见过的青天。补衣人索性把所有针线染成那个颜色。",
+    "LoreRoot": "原创·云衣内天",
+    "Identity": "偏魔防的破衣",
+    "Benefit": "魔防集中提高",
+    "Tradeoff": "缺少物防与生命，近战承压弱",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 62,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20147,
+    "Name": "值宿空班",
+    "Lore": "紫微值宿表缝在衣胸，轮到最末一栏时总没人来。守门人把空栏剪下，夜空便少了一个位置。",
+    "LoreRoot": "原型·紫微星官意象",
+    "Identity": "单点治疗储备衣",
+    "Benefit": "精神及濒危目标治疗增强",
+    "Tradeoff": "目标不濒危时没有治疗倍率收益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "rescue_heal",
+        "PowerBP": 2300,
+        "ThresholdPct": 35
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20148,
+    "Name": "星官借衣",
+    "Lore": "星官借袍参加人间的婚宴，归还时多了一枚枣核。后来整颗星都移到这枚枣核后面。",
+    "LoreRoot": "原创·星官婚宴逸事",
+    "Identity": "温养生命的星袍",
+    "Benefit": "体质与魔法固定减伤",
+    "Tradeoff": "没有施法效率加成",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20149,
+    "Name": "裁空三尺",
+    "Lore": "云纱师从空气中剪下三尺空处，包在衣内。人们只见针在走，始终没见那块布长什么样。",
+    "LoreRoot": "原创·裁空云纱",
+    "Identity": "状态防护的轻衣",
+    "Benefit": "不良状态抗性与魔防",
+    "Tradeoff": "不提高生命或直接减伤倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 24,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20150,
+    "Name": "一衣两影",
+    "Lore": "穿衣者在灯下有两道影子，其中一道偶尔先坐下。脱衣后只剩一影，另一影须等到鸡鸣才肯走。",
+    "LoreRoot": "原创·双影衣",
+    "Identity": "物理与法术兼顾防护",
+    "Benefit": "物防、魔防双补",
+    "Tradeoff": "没有魔攻、治疗或法力专长",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 40,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 40,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20255,
+    "Name": "魂针落地",
+    "Lore": "针落地时发出人声，拾起来又恢复安静。缝衣人铺满软毡，宁可漏针也不想再听第二次。",
+    "LoreRoot": "原型·魂能宝衣",
+    "Identity": "危险的快速救治衣",
+    "Benefit": "缩短技能吟唱并增加精神",
+    "Tradeoff": "最大生命下降，不能缩短技能冷却",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 20,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": -130,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "swift_cast",
+        "PowerBP": 2100,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20256,
+    "Name": "脱壳未遂",
+    "Lore": "蜕下的衣服还会自己吐纳，穿回去却怎么也对不上呼吸。内丹师只在最漫长的闭关时使用它。",
+    "LoreRoot": "原创·未成的形蜕",
+    "Identity": "法力极集中的重修衣",
+    "Benefit": "大量法力上限与储量",
+    "Tradeoff": "移动速度下降，缺少治疗增强",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 25,
+        "Mode": 1
+      },
+      {
+        "Attr": 36,
+        "Value": 90,
+        "Mode": 0
+      },
+      {
+        "Attr": 27,
+        "Value": -6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20410,
+    "Name": "铸额冷金",
+    "Lore": "仿金神的冠模没有眼，铸匠用指甲划开两道。金液凝固后，划痕里长出了淡绿色铜锈。",
+    "LoreRoot": "原型·蓐收仿器；铸造轶事原创",
+    "Identity": "金属护额",
+    "Benefit": "物理固定减伤与体质",
+    "Tradeoff": "不防法术，也不提高治疗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20420,
+    "Name": "炉灰冠花",
+    "Lore": "祝融仿冠的最后一炉火没点燃，灰里却开出花。工匠将花压成冠饰，拒绝补烧。",
+    "LoreRoot": "原型·祝融仿器；炉灰花原创",
+    "Identity": "抗法的未烧冠",
+    "Benefit": "魔防与法术固定减伤",
+    "Tradeoff": "不补生命和法力",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20424,
+    "Name": "无声金磬",
+    "Lore": "铸冠人把敲哑的磬熔进金冠，成品入水仍会震动。每震一次，水面的倒影就晚眨一次眼。",
+    "LoreRoot": "原创·哑磬入冠",
+    "Identity": "抗状态的金冠",
+    "Benefit": "不良状态抗性较高",
+    "Tradeoff": "没有攻击和治疗特性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 20,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20429,
+    "Name": "火字缺点",
+    "Lore": "冠上火字漏了右下那一点，补金三次都融化。炼师把缺处对准眉心，称这是最难守住的火候。",
+    "LoreRoot": "原创·缺笔火冠",
+    "Identity": "高风险治疗增幅冠",
+    "Benefit": "直接治疗得到集中增幅",
+    "Tradeoff": "魔攻下降，无法兼顾进攻",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": -45,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 2400,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20434,
+    "Name": "河图倒看",
+    "Lore": "仿冠内的河图只有倒过来才像水。有人照它挖井，挖出一块干燥得发烫的石头。",
+    "LoreRoot": "原型·河洛水神仿器",
+    "Identity": "冷静的精神冠",
+    "Benefit": "精神与法力小幅兼顾",
+    "Tradeoff": "无生命和治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 45,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20444,
+    "Name": "深水发髻",
+    "Lore": "冠底缠着一束始终湿润的头发，水滴落地就向井边滚。道童把井盖封住，雨却连下了九天。",
+    "LoreRoot": "原创·回井湿发",
+    "Identity": "法术承伤专精",
+    "Benefit": "魔防与法术减伤适合术法战",
+    "Tradeoff": "没有物理保护或施法强化",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 45,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "magic_guard",
+        "PowerBP": 600,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20502,
+    "Name": "秤砣空腹",
+    "Lore": "金匠劈开最重的秤砣，里面一粒金砂也没有。他将空壳做成药匣，称出的药总比昨日轻一点。",
+    "LoreRoot": "原创·空心金秤",
+    "Identity": "抗术法的空心背匣",
+    "Benefit": "魔防较高并补法力",
+    "Tradeoff": "没有治疗倍率和物理保护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 42,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 65,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20508,
+    "Name": "取火钱",
+    "Lore": "药箱中只装一枚烧黑的铜钱，借火时须抛三次。三次都是字，火便等到下个月才来。",
+    "LoreRoot": "原创·火钱药箱",
+    "Identity": "温养生命的小箱",
+    "Benefit": "提高生命与物理固定减伤",
+    "Tradeoff": "不补法力和治疗效率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 170,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20512,
+    "Name": "金屑寄生",
+    "Lore": "匣底的金屑会爬上药根，结出坚硬的花蕾。收药人一直等它开花，换了七任都没等到。",
+    "LoreRoot": "原创·金屑之花",
+    "Identity": "抗状态的金芽药匣",
+    "Benefit": "不良状态抗性并略补生命",
+    "Tradeoff": "没有治疗和法力续航",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 70,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20517,
+    "Name": "换炉契",
+    "Lore": "匣内夹着一张约定换炉的契纸，落款处是烫焦的掌印。新炉早已冷了，契纸却一年比一年热。",
+    "LoreRoot": "原创·换炉旧契",
+    "Identity": "长战治疗补给匣",
+    "Benefit": "大量法力并降低治疗耗蓝",
+    "Tradeoff": "没有伤害或防护词条",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 480,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 1400,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20522,
+    "Name": "百川余杯",
+    "Lore": "水箱只有一杯容量，倒出来却总分成两股。河工查遍渠图，找不到多出的那条支流。",
+    "LoreRoot": "原型·百川归途意象",
+    "Identity": "小体积深法力匣",
+    "Benefit": "法力储量集中提高",
+    "Tradeoff": "占用背包位而不增强战斗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 360,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20534,
+    "Name": "河口封泥",
+    "Lore": "匣锁不用金属，只贴一道河泥。揭开便听见潮声，合上时耳边却剩山中落石的响动。",
+    "LoreRoot": "原创·封泥藏潮",
+    "Identity": "抗法药箱",
+    "Benefit": "较高魔防与生命",
+    "Tradeoff": "不改善耗蓝和吟唱",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 48,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 105,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20663,
+    "Name": "焦眉画",
+    "Lore": "面具眉毛烧掉以后，画工用冷灰重描。戴它的人看不见自己的眉，却总能闻到有人刚吹灭灯。",
+    "LoreRoot": "原创·冷灰眉妆",
+    "Identity": "法术减伤面具",
+    "Benefit": "魔法抗性与精神",
+    "Tradeoff": "不减少物理命中或强化治疗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20668,
+    "Name": "药金笑",
+    "Lore": "面具用试药剩下的金箔贴成，嘴角一边上扬一边下垂。药金的账本说，这两边不能称在一起。",
+    "LoreRoot": "原创·药金箔面",
+    "Identity": "少量物理减伤脸饰",
+    "Benefit": "固定物理减伤并补生命",
+    "Tradeoff": "高伤法术前缺乏优势",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 60,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20672,
+    "Name": "未铸之耳",
+    "Lore": "铸模少了一只耳朵，成品却能听见炉内的小声争吵。戴者学了多年，才辨出那是在争下一味矿料。",
+    "LoreRoot": "原创·缺耳听炉",
+    "Identity": "高精神的静听面",
+    "Benefit": "精神显著提高法力与魔防",
+    "Tradeoff": "没有治疗倍率、生命或输出",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 21,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20677,
+    "Name": "朱砂熄火",
+    "Lore": "朱砂面谱最后一笔总会冒烟，画师改用清水收尾。如今遇到热风，那笔清水反比朱砂更红。",
+    "LoreRoot": "原创·水笔朱砂面",
+    "Identity": "光弹术专用攻击面",
+    "Benefit": "显著增强光弹术伤害并补魔攻",
+    "Tradeoff": "其他技能与治疗不获专长",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 45,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "holy_mastery",
+        "PowerBP": 3000,
+        "ThresholdPct": 0,
+        "SkillID": 10319,
+        "SkillName": "光弹术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20682,
+    "Name": "无波眉",
+    "Lore": "镜中的眉毛先动，面具上的眉毛才慢慢跟上。塑面师留下一句嘱咐：不要在水边练笑。",
+    "LoreRoot": "原型·水神冷漠面具",
+    "Identity": "偏魔防的冷面",
+    "Benefit": "魔防集中提高",
+    "Tradeoff": "没有生命和物理防护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 52,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20692,
+    "Name": "井底换脸",
+    "Lore": "井底捞出面具时朝向天空，水里的倒影却一直朝下。旧主人来认领，只认出了背面那道刀痕。",
+    "LoreRoot": "原创·反向井面",
+    "Identity": "危险的自我保全",
+    "Benefit": "低生命时减伤并增加生命",
+    "Tradeoff": "平时减伤不生效，治疗专长缺失",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 210,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "desperate_guard",
+        "PowerBP": 1800,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20828,
+    "Name": "铁屐小响",
+    "Lore": "鞋底嵌着三片薄铁，落在药房地板上却只有两声。守夜人听惯了，反而怕第三声突然响起。",
+    "LoreRoot": "原创·缺一声铁屐",
+    "Identity": "物理防护的铁屐",
+    "Benefit": "物防与固定物理减伤",
+    "Tradeoff": "没有移速和法术防护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 35,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20833,
+    "Name": "金汞足印",
+    "Lore": "金鞋踩过处会留下一点银亮，日出前自行收回。炼师循着足印，总走回还没开工的丹房。",
+    "LoreRoot": "原创·回返金汞迹",
+    "Identity": "物理回避鞋",
+    "Benefit": "提高物防和敏捷",
+    "Tradeoff": "不能防必中法术",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 34,
+        "Mode": 0
+      },
+      {
+        "Attr": 7,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20838,
+    "Name": "煨火长路",
+    "Lore": "鞋底藏的火种来自一条烧不完的引线，线头却在鞋外。制鞋人走了三年，也没找到另一头。",
+    "LoreRoot": "原创·无尽引线",
+    "Identity": "快速支援鞋",
+    "Benefit": "明显移速与生命提升",
+    "Tradeoff": "没有治疗倍率和法力",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 27,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 125,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20843,
+    "Name": "灶猫让路",
+    "Lore": "灶边的猫只肯让穿此鞋的人添柴。鞋头绣的两只老鼠被它舔掉了眼睛，仍每夜偷看火色。",
+    "LoreRoot": "原创·灶猫绣鼠",
+    "Identity": "温厚护命鞋",
+    "Benefit": "体质与生命兼顾",
+    "Tradeoff": "不增加移动和法术能力",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 55,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20852,
+    "Name": "浅滩留白",
+    "Lore": "鞋面绣满水纹，浅滩处留着一块白。涉水的药师发现，真河流也开始绕开那一块形状。",
+    "LoreRoot": "原创·水纹空滩",
+    "Identity": "法力支援鞋",
+    "Benefit": "法力集中提高",
+    "Tradeoff": "鞋位不提供移速或防护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 310,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20857,
+    "Name": "逆流草绳",
+    "Lore": "草绳在静水里也会逆流而上，编鞋后却不再动。只有剪开的那一头，始终朝着山顶。",
+    "LoreRoot": "原创·逆流草鞋",
+    "Identity": "法术防护步履",
+    "Benefit": "魔防与魔法抗性",
+    "Tradeoff": "缺少生命、物防和治疗特性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 36,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20886,
+    "Name": "烫手空碗",
+    "Lore": "护手沾过一只没有盛药的碗，此后掌心常有余温。药师查遍药柜，只有碗底的字被烫掉了。",
+    "LoreRoot": "原创·空碗余温",
+    "Identity": "专注单次治愈",
+    "Benefit": "治愈术治疗量提高",
+    "Tradeoff": "群疗和攻击技能无专长收益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 2600,
+        "ThresholdPct": 0,
+        "SkillID": 10301,
+        "SkillName": "治愈术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20891,
+    "Name": "金蚕护指",
+    "Lore": "五只金蚕各吐一寸丝，恰够缠住五个指节。第六只一直守在腕上，等着一根不存在的手指。",
+    "LoreRoot": "原创·六蚕五指",
+    "Identity": "物理减伤护手",
+    "Benefit": "固定物理减伤和体质",
+    "Tradeoff": "没有施法增益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20896,
+    "Name": "丹炉冷柄",
+    "Lore": "炉柄被拆下来套在手上，任凭加火也不再发烫。师父认定炼成了，徒弟只觉得整座炉都坏了。",
+    "LoreRoot": "原创·冷炉柄",
+    "Identity": "法术抵挡护腕",
+    "Benefit": "魔法抗性较高",
+    "Tradeoff": "不补生命、法力或治疗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 18,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20901,
+    "Name": "一指点金",
+    "Lore": "食指缠着炼金未成的薄片，点到木头只会留下金色指纹。器匠靠这些指纹认回了偷走的工作台。",
+    "LoreRoot": "原创·失败点金指",
+    "Identity": "药师进攻护手",
+    "Benefit": "魔攻与智慧提升光系输出",
+    "Tradeoff": "没有治疗或生存专长",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 52,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20910,
+    "Name": "水磨脉枕",
+    "Lore": "护腕内的小玉片曾作脉枕，磨得比水还滑。按住它的人经常忘记，刚才究竟数的是谁的脉。",
+    "LoreRoot": "原创·水磨脉玉",
+    "Identity": "养神护腕",
+    "Benefit": "精神集中补法力和魔防",
+    "Tradeoff": "不能提升治疗倍率与生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 17,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20915,
+    "Name": "诊浪五指",
+    "Lore": "五根手指分别记录五次潮汐，握拳时会听见退潮。抄潮书的人坚持说，那是同一天的五片海。",
+    "LoreRoot": "原创·五潮指谱",
+    "Identity": "群疗施法范围专精",
+    "Benefit": "扩大群疗术范围并增加法力",
+    "Tradeoff": "单体治疗和群疗量不获加成",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 170,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "area_expansion",
+        "PowerBP": 3500,
+        "ThresholdPct": 0,
+        "SkillID": 10304,
+        "SkillName": "群疗术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20973,
+    "Name": "火眼眨一次",
+    "Lore": "戒眼从未合过，戒师封炉那夜却眨了一次。炉里失踪的丹药后来出现在一只空药瓶的画上。",
+    "LoreRoot": "原创·丹炉火眼",
+    "Identity": "魔攻偏科戒",
+    "Benefit": "明显提高魔攻",
+    "Tradeoff": "无治疗、续航及防御增益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 56,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20978,
+    "Name": "金针余圈",
+    "Lore": "一根金针弯成戒后仍想扎回针囊，每到月末便收紧一分。戴者靠这个提醒自己结清药账。",
+    "LoreRoot": "原创·弯针成戒",
+    "Identity": "法力池小戒",
+    "Benefit": "法力百分比提升",
+    "Tradeoff": "没有直接治疗和生存",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 15,
+        "Mode": 1
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20993,
+    "Name": "照丹盲点",
+    "Lore": "戒上的红石能照透丹丸，偏照不见自己。炼师将它送给眼力最好的徒弟，附了一个空盒子。",
+    "LoreRoot": "原创·照丹自盲",
+    "Identity": "光弹暴击戒",
+    "Benefit": "魔法暴击与光弹伤害提升",
+    "Tradeoff": "治疗不暴击增伤，其他攻击少一项收益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 66,
+        "Value": 450,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 28,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "skill_focus",
+        "PowerBP": 1800,
+        "ThresholdPct": 0,
+        "SkillID": 10319,
+        "SkillName": "光弹术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20998,
+    "Name": "削金七日",
+    "Lore": "戒指每天少一丝金，内径却始终不变。七日后的金屑拼成另一枚完整戒，第二枚也开始变薄。",
+    "LoreRoot": "原创·自行削金戒",
+    "Identity": "重视抗术法的戒指",
+    "Benefit": "魔防与精神",
+    "Tradeoff": "没有输出或治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 32,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21007,
+    "Name": "蚌中药名",
+    "Lore": "明珠上现出的药名总比处方多一味，谁也没见过那味药。老药工将其登记在空白抽屉上。",
+    "LoreRoot": "原型·东海明珠；陌生药名原创",
+    "Identity": "大法力明珠",
+    "Benefit": "法力储量大幅提高",
+    "Tradeoff": "没有生命与专属治疗特性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 390,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21012,
+    "Name": "海底开方",
+    "Lore": "海珠里藏一张纸方，字迹朝着珠心。抄方者把自己的字倒着写，终于抄出一味最普通的盐。",
+    "LoreRoot": "原创·反字珠方",
+    "Identity": "廉耗群疗戒",
+    "Benefit": "群疗术耗蓝显著下降",
+    "Tradeoff": "其他治疗与攻击没有特性收益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 15,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 3200,
+        "ThresholdPct": 0,
+        "SkillID": 10304,
+        "SkillName": "群疗术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21024,
+    "Name": "不归魂印",
+    "Lore": "徽记本来盖在还魂册上，刻师却把归字刻反了。新掌册者没有重刻，另写了整本不用姓名的册子。",
+    "LoreRoot": "原型·复魂徽记；反印故事原创",
+    "Identity": "长线他疗续航戒",
+    "Benefit": "治疗他人和治疗耗蓝均改善",
+    "Tradeoff": "没有复活功能、伤害或物理防护",
+    "PowerTier": "chase",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 520,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 44,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "selfless_heal",
+        "PowerBP": 2000,
+        "ThresholdPct": 0
+      },
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 1800,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21109,
+    "Name": "灯花结绳",
+    "Lore": "项绳结上长了一朵灯花，吹熄屋里的灯便开得更大。卖绳人只在天亮后才敢交货。",
+    "LoreRoot": "原创·灯花项绳",
+    "Identity": "照护生命的绳坠",
+    "Benefit": "生命与体质",
+    "Tradeoff": "没有法力及治疗增益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 140,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21119,
+    "Name": "金牙药签",
+    "Lore": "小牙雕侧面刻着药重，咬痕恰好遮住了单位。药师因此废掉整张方，却舍不得扔掉这枚精细的牙。",
+    "LoreRoot": "原型·金神牙雕",
+    "Identity": "载方定神坠",
+    "Benefit": "抵抗不良状态并略补精神",
+    "Tradeoff": "没有生命、输出或治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21129,
+    "Name": "火里空心",
+    "Lore": "坠子入火后中心变空，外壳却没有裂痕。摇晃时听见清水声，炼师说那是火还没冷透。",
+    "LoreRoot": "原创·空心火坠",
+    "Identity": "高法力储器",
+    "Benefit": "大量法力支持长时间治疗",
+    "Tradeoff": "没有治疗倍率和减耗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 540,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21134,
+    "Name": "牙下寒字",
+    "Lore": "金牙底下刻了一个寒字，每刮一遍字便深一分。主人终于停手时，牙尖也不再反光。",
+    "LoreRoot": "原创·金牙寒铭",
+    "Identity": "承受法术的坠饰",
+    "Benefit": "魔防与固定法术减伤",
+    "Tradeoff": "没有生命、输出和治疗提升",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 42,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21143,
+    "Name": "分水结",
+    "Lore": "项链的三个结打在同一处，却从不碰在一起。解绳匠说解开不难，只是不知道会放出哪条河。",
+    "LoreRoot": "原创·三结分水",
+    "Identity": "轻巧避击项绳",
+    "Benefit": "敏捷与物防",
+    "Tradeoff": "不防必中伤害，无法增强治疗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21148,
+    "Name": "沉舟药匣钥",
+    "Lore": "钥匙挂在颈上三十年，沉舟中的药匣却已被鱼撞开。钥齿里仍留着一粒未曾泡湿的朱砂。",
+    "LoreRoot": "原创·沉舟匣钥",
+    "Identity": "濒危治疗项链",
+    "Benefit": "增强对低血量目标的治疗",
+    "Tradeoff": "常规治疗与伤害缺少专长",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 100,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "rescue_heal",
+        "PowerBP": 2400,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21788,
+    "Name": "颈玉倒悬",
+    "Lore": "冠上的玉原是挂在颈间的，倒悬后映出一座朝下的山。冠师照着筑院，山门便开在屋顶。",
+    "LoreRoot": "原型·玉颈法冠",
+    "Identity": "高魔防奇冠",
+    "Benefit": "集中魔防及魔法抗性",
+    "Tradeoff": "不增加生命或治疗量",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 82,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 15,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21789,
+    "Name": "扁鹊未署",
+    "Lore": "医书抄完只缺署名，书吏把空白页叠成帽衬。多年后显出两个字，却不是众人期待的姓名。",
+    "LoreRoot": "原型·扁鹊冠医书意象；未断言归属",
+    "Identity": "治愈术持续救护专精",
+    "Benefit": "治愈术治疗量提高且法力消耗降低",
+    "Tradeoff": "群疗及进攻法术不获技能专长",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 26,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 3500,
+        "ThresholdPct": 0,
+        "SkillID": 10301,
+        "SkillName": "治愈术"
+      },
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 2000,
+        "ThresholdPct": 0,
+        "SkillID": 10301,
+        "SkillName": "治愈术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21790,
+    "Name": "鸡鸣以前",
+    "Lore": "翎中夹着一枚迟迟不落的晨星，戴冠者醒来时总比鸡鸣早一息。那一息救不了所有人，却够他把手按在还热的脉上。",
+    "LoreRoot": "原型·光芒翎的晨光；原创医者故事",
+    "Identity": "提前出手的高阶急救冠",
+    "Benefit": "缩短吟唱并增强濒危治疗，附带生命储备",
+    "Tradeoff": "魔攻与物防减少，输出和正面承伤较弱",
+    "PowerTier": "chase",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 280,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 210,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": -90,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": -35,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "swift_cast",
+        "PowerBP": 1800,
+        "ThresholdPct": 0
+      },
+      {
+        "Kind": "rescue_heal",
+        "PowerBP": 2500,
+        "ThresholdPct": 25
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22069,
+    "Name": "月饼模",
+    "Lore": "冠饰是旧月饼模刻成，边沿还留着一撮糖粉。每逢新月，模中总会多出一个浅浅的齿印。",
+    "LoreRoot": "原创·月饼模冠",
+    "Identity": "生命过渡冠",
+    "Benefit": "生命集中提高",
+    "Tradeoff": "其他战斗方向无增益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 230,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22070,
+    "Name": "不低头",
+    "Lore": "冠内垫了一片折不断的竹，戴者无法低头看药柜。药铺便将最常用的药全搬到了高架。",
+    "LoreRoot": "原创·直竹冠垫",
+    "Identity": "精神专一冠",
+    "Benefit": "精神提升法力与魔防",
+    "Tradeoff": "缺少生命、攻击与快速吟唱",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 17,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22071,
+    "Name": "心字两瓣",
+    "Lore": "冠上的心字裂成两瓣，镶匠用一滴蜡粘合。蜡融尽那日，两瓣各自长成了完整的字。",
+    "LoreRoot": "原创·裂字增生",
+    "Identity": "他人治疗增幅冠",
+    "Benefit": "对他人治疗获得加成",
+    "Tradeoff": "自疗和伤害无专长",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 190,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "selfless_heal",
+        "PowerBP": 2100,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22072,
+    "Name": "斗柄偏北",
+    "Lore": "冠星排列偏了一格，观星台要求重做。老匠将旧冠挂到门前，夜里北斗反而向它偏了一分。",
+    "LoreRoot": "原创·错格星冠",
+    "Identity": "攻法辅助冠",
+    "Benefit": "魔攻与魔法暴击",
+    "Tradeoff": "治疗效果没有直接提升",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 45,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 220,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22073,
+    "Name": "莲心空座",
+    "Lore": "莲瓣围着一个空座，没人愿意将名字刻上去。卖冠人说位置太小，只能坐下一滴露水。",
+    "LoreRoot": "原创·空座莲冠",
+    "Identity": "储法莲冠",
+    "Benefit": "大量法力上限",
+    "Tradeoff": "没有防护和治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 560,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22074,
+    "Name": "收露迟一刻",
+    "Lore": "收露人迟到一刻，玉盘里只剩露水的影子。影子蒸不干，只能镶在冠额慢慢晾着。",
+    "LoreRoot": "原创·露影凝冠",
+    "Identity": "魔防生命折中",
+    "Benefit": "魔防与生命相互补足",
+    "Tradeoff": "无进攻与施法效率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 45,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 160,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22075,
+    "Name": "仙字磨平",
+    "Lore": "冠上的仙字被前主人反复磨平，背面却越刻越深。继承人只好把冠倒着戴，假装没有读到。",
+    "LoreRoot": "原创·双面仙铭",
+    "Identity": "抗状态修行冠",
+    "Benefit": "状态抗性与精神",
+    "Tradeoff": "不提高治疗量和生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 15,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22076,
+    "Name": "阎门缺瓦",
+    "Lore": "金冠嵌着一块黑瓦，据说取自想象中的阎门。捏瓦的匠人每年都画一张更详细的门图。",
+    "LoreRoot": "原创·杜撰阎门的黑瓦",
+    "Identity": "低血承伤冠",
+    "Benefit": "低生命时减伤，兼具生命",
+    "Tradeoff": "安全血线不享受减伤，缺施法特性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 340,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "desperate_guard",
+        "PowerBP": 2100,
+        "ThresholdPct": 25
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22077,
+    "Name": "魔不识医",
+    "Lore": "面朝外的字写着辟魔，内侧却是一张退热方。新来的道童以为两者相同，抄经时抄了整夜。",
+    "LoreRoot": "原创·辟魔退热双文",
+    "Identity": "纯魔防医冠",
+    "Benefit": "很高魔防与固定法术减伤",
+    "Tradeoff": "不能抵御物理伤害或增强治疗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 70,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 15,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22395,
+    "Name": "药杵声",
+    "Lore": "鞋底两块木片来自一根药杵，落地总一高一低。研药人听这声音，能猜出当天舂的是哪味根。",
+    "LoreRoot": "原创·药杵旧木鞋",
+    "Identity": "稳健护命履",
+    "Benefit": "体质与物理固定减伤",
+    "Tradeoff": "不加移速或法力",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22396,
+    "Name": "坡上不歇",
+    "Lore": "鞋后跟钉着上山时折断的拐杖头，走平路反而咯脚。登山药师说鞋子已经忘了平地。",
+    "LoreRoot": "原创·拐头鞋跟",
+    "Identity": "快速移位鞋",
+    "Benefit": "集中提高移动速度",
+    "Tradeoff": "没有直接生存和治疗加成",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 27,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22397,
+    "Name": "留客草",
+    "Lore": "草鞋上的草根认床，换一间客栈便卷紧。主人走遍州县，最后学会在地上铺同一块旧席。",
+    "LoreRoot": "原创·认床草根",
+    "Identity": "大法力草鞋",
+    "Benefit": "显著提高法力储备",
+    "Tradeoff": "缺少鞋位速度与回避",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 460,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22398,
+    "Name": "星沙不落",
+    "Lore": "鞋缝中的细砂从不倒出，却总让鞋子显得很轻。扫星台的道士摸了摸，说少的并不是砂子。",
+    "LoreRoot": "原创·星台细砂",
+    "Identity": "敏捷回避履",
+    "Benefit": "敏捷与物防",
+    "Tradeoff": "没有生命或直接伤害减免",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 20,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22399,
+    "Name": "水莲倒影",
+    "Lore": "鞋面莲花从未开过，水中倒影却年年结子。摘莲人蹲在池边一夜，只捞到两只干鞋。",
+    "LoreRoot": "原创·倒影结莲",
+    "Identity": "抗术法莲履",
+    "Benefit": "魔防及魔法固定减伤",
+    "Tradeoff": "没有速度或治疗强化",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 40,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22400,
+    "Name": "露脚过桥",
+    "Lore": "脚边总围着一圈不湿地的露水，过木桥时会排成一线。桥下鱼群追着露水的影子走。",
+    "LoreRoot": "原创·脚边露环",
+    "Identity": "支援走位履",
+    "Benefit": "移速与精神兼顾",
+    "Tradeoff": "不增加治疗倍率和生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 27,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22401,
+    "Name": "凝步不凝心",
+    "Lore": "鞋内冻着一个未踏出的脚印，穿上后每步都像第二步。修行人始终说不清第一步在哪里。",
+    "LoreRoot": "原创·冻结未行步",
+    "Identity": "少量全面防护履",
+    "Benefit": "物防和魔防均提高",
+    "Tradeoff": "不强化走位、法力或治疗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 36,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 44,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22402,
+    "Name": "敲门三步",
+    "Lore": "鞋尖磨损处恰好能敲出三种声音，守门人各认一种。后来门拆了，脚步声仍会自行停下。",
+    "LoreRoot": "原创·三步门暗号",
+    "Identity": "危急施救履",
+    "Benefit": "对濒危目标治疗增强并补生命",
+    "Tradeoff": "平常治疗和攻击不获加成",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 230,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "rescue_heal",
+        "PowerBP": 2200,
+        "ThresholdPct": 25
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22403,
+    "Name": "敌影迟到",
+    "Lore": "鞋底踏着的影子总落后一小步，受惊时才赶上。主人拿它试过无数法阵，唯独不敢试正午。",
+    "LoreRoot": "原创·迟影鞋",
+    "Identity": "术法承伤专精履",
+    "Benefit": "法术减伤与魔防",
+    "Tradeoff": "物理与施法效率缺位",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 55,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "magic_guard",
+        "PowerBP": 1200,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22412,
+    "Name": "半月指甲",
+    "Lore": "护指套用半月形玉片磨成，月圆后仍少一角。药师试着补齐，指尖反而认不准脉搏。",
+    "LoreRoot": "原创·缺角护指",
+    "Identity": "治愈术练习护手",
+    "Benefit": "治愈术耗蓝降低，补精神",
+    "Tradeoff": "其他技能不享受节省",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 1800,
+        "ThresholdPct": 0,
+        "SkillID": 10301,
+        "SkillName": "治愈术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22413,
+    "Name": "悬线五色",
+    "Lore": "五根诊线分别染色，浸水后却都变白。染坊拒绝退钱，说这本就是同一条线。",
+    "LoreRoot": "原创·五色诊线",
+    "Identity": "抗术法手套",
+    "Benefit": "精神与魔防集中",
+    "Tradeoff": "不增加生命或治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22414,
+    "Name": "纸掌印",
+    "Lore": "护手夹层里是一只纸掌，五指都比真人短。握紧时纸上会出现新字，张开后只剩掌纹。",
+    "LoreRoot": "原创·纸掌成文",
+    "Identity": "储法护手",
+    "Benefit": "法力储量提高",
+    "Tradeoff": "其他战斗能力不增加",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 440,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22415,
+    "Name": "指间北斗",
+    "Lore": "七粒星砂在指缝间自行排阵，少一粒就全部暗下。主人宁肯不戴首饰，也不愿再点一次数。",
+    "LoreRoot": "原创·七砂指阵",
+    "Identity": "光弹术偏科护手",
+    "Benefit": "光弹术法力消耗降低并补魔攻",
+    "Tradeoff": "其他技能不享受法力节省",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 48,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "skill_economy",
+        "PowerBP": 3000,
+        "ThresholdPct": 0,
+        "SkillID": 10319,
+        "SkillName": "光弹术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22416,
+    "Name": "莲藕关节",
+    "Lore": "腕扣取自一节干藕，断丝缠住玉环多年。药师说藕孔只是孔，炼师偏要逐个命名洞天。",
+    "LoreRoot": "原创·藕节玉扣",
+    "Identity": "实用生命护手",
+    "Benefit": "生命与体质",
+    "Tradeoff": "缺少输出及施法效率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 180,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22417,
+    "Name": "一掌晨露",
+    "Lore": "掌心的露只够写一个字，写错便须等一夜。药师试写了十年，留下的全是不同的水字。",
+    "LoreRoot": "原创·晨露掌书",
+    "Identity": "节省群疗的护手",
+    "Benefit": "群疗术法力消耗降低",
+    "Tradeoff": "其他治疗和伤害无特性收益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 210,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 2800,
+        "ThresholdPct": 0,
+        "SkillID": 10304,
+        "SkillName": "群疗术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22418,
+    "Name": "握住空香",
+    "Lore": "香烧完后，护手仍保持拈香的形状。展开五指时，掌中会散出一缕没有点燃的白烟。",
+    "LoreRoot": "原创·空香手印",
+    "Identity": "状态抵抗护手",
+    "Benefit": "不良状态抗性与精神",
+    "Tradeoff": "不防直接伤害，也不增治疗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22419,
+    "Name": "判笔错锋",
+    "Lore": "腕上缝着一截折断的判笔，笔锋向内。抄录生死簿的传闻只是买家所编，制笔人仍在街口磨墨。",
+    "LoreRoot": "原创·被误传的判笔",
+    "Identity": "精准急救护腕",
+    "Benefit": "濒危时治愈术显著增强",
+    "Tradeoff": "仅单技能且目标需低生命",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 20,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "rescue_heal",
+        "PowerBP": 3800,
+        "ThresholdPct": 25,
+        "SkillID": 10301,
+        "SkillName": "治愈术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22420,
+    "Name": "空手降魔",
+    "Lore": "手套不绣符，指腹却全是拆符留下的针眼。主人每次胜过对手，便再拆下一道旧符。",
+    "LoreRoot": "原创·拆符护手",
+    "Identity": "法术承伤护手",
+    "Benefit": "魔防和魔法固定减伤",
+    "Tradeoff": "没有进攻或治疗特性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 57,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22429,
+    "Name": "金绳绕舌",
+    "Lore": "袋口绳结像一个结巴的字，念对才松一寸。药师后来索性将最常用的药装在袖子里。",
+    "LoreRoot": "原创·念字袋结",
+    "Identity": "紧口藏气袋",
+    "Benefit": "较大的法力储量",
+    "Tradeoff": "不提高伤害、生命或治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 420,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22430,
+    "Name": "紫纱筛月",
+    "Lore": "袋底密密缝了筛孔，只漏月光不漏药粉。筛出的光装在碗里，天亮就成了普通的水。",
+    "LoreRoot": "原创·筛月药袋",
+    "Identity": "法力储存袋",
+    "Benefit": "大法力提升长战余量",
+    "Tradeoff": "无伤害、减耗和防御",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 430,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22431,
+    "Name": "玉屑发芽",
+    "Lore": "碎玉在药袋里结成嫩芽，离袋便变回石头。药师给每粒玉屑编号，数目却一直比昨天多。",
+    "LoreRoot": "原创·药袋玉芽",
+    "Identity": "高体质储药袋",
+    "Benefit": "体质集中增加生命",
+    "Tradeoff": "不增加法力与治疗量",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 23,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22432,
+    "Name": "空枢虫鸣",
+    "Lore": "空袋里每隔十二日响一次虫声，缝口以后仍响。修士拿它校历，终于过了一个没有闰月的冬天。",
+    "LoreRoot": "原型·空枢袋；虫历原创",
+    "Identity": "沉静养神袋",
+    "Benefit": "精神与不良状态抗性",
+    "Tradeoff": "缺少生命与治疗特性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22433,
+    "Name": "乾坤分账",
+    "Lore": "袋里两本账分别记收入和支出，合账时却多出一笔天空的租金。掌柜决定以后露天摆摊。",
+    "LoreRoot": "原型·乾坤袋；租天账原创",
+    "Identity": "丰厚法力背袋",
+    "Benefit": "法力上限百分比提高",
+    "Tradeoff": "没有施法效率和防护",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 28,
+        "Mode": 1
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22434,
+    "Name": "须弥饭团",
+    "Lore": "袋内最重的东西是一粒隔夜饭，拿掉它整袋便轻得飘起。老药师总留半口，专等它隔夜。",
+    "LoreRoot": "原型·须弥容物意象",
+    "Identity": "护身的饭粒药袋",
+    "Benefit": "生命与物防",
+    "Tradeoff": "没有输出、治疗或法力",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 190,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22435,
+    "Name": "收尽余火",
+    "Lore": "熄炉后的火星都滚进此袋，却烧不破内衬。积得最多的一夜，袋里传出了柴刀劈木的声音。",
+    "LoreRoot": "原型·封炎袋",
+    "Identity": "对抗术法的封火袋",
+    "Benefit": "魔法固定减伤较高",
+    "Tradeoff": "不提供元素抗性百分比或物理保护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 23,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22436,
+    "Name": "一袋药债",
+    "Lore": "玉袋只装已经还清的药账，未还的纸放入就被弹出。袋主因此一年到头都在重新核算。",
+    "LoreRoot": "原型·华天玉袋；药账故事原创",
+    "Identity": "纯治疗效率袋",
+    "Benefit": "治疗量集中提高并补法力",
+    "Tradeoff": "无进攻和生存词条",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 290,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 2100,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22437,
+    "Name": "洗不净的白",
+    "Lore": "净玉内壁留着一块更白的印，什么药汁都染不上。鉴玉师怀疑那里根本没有玉，只是不见底的亮。",
+    "LoreRoot": "原创·净玉白印",
+    "Identity": "宽容的法术防护袋",
+    "Benefit": "魔防及精神较高",
+    "Tradeoff": "不改善物理承伤和治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 50,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 17,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22440,
+    "Name": "月窄脸",
+    "Lore": "面具瘦得只能遮住半边脸，圆月下却严丝合缝。制面人留下十二种尺寸，缺的恰好是日常那一种。",
+    "LoreRoot": "原创·随月变宽面",
+    "Identity": "物理回避面具",
+    "Benefit": "物防百分比提升",
+    "Tradeoff": "必中法术不受影响，缺施法加成",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 25,
+        "Mode": 1
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22441,
+    "Name": "闻药鼻",
+    "Lore": "面具的鼻孔塞着旧药棉，只有撒谎时才闻见药香。药铺掌柜戴了三天，承认他根本分不清当归。",
+    "LoreRoot": "原创·闻谎药棉",
+    "Identity": "养神面具",
+    "Benefit": "精神与法力小补",
+    "Tradeoff": "不增加治疗倍率或生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 75,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22442,
+    "Name": "半笑泥",
+    "Lore": "烧窑时泥面笑了一半，另一半被窑门卡住。陶师再没修整，说这样的表情才像认真听诊。",
+    "LoreRoot": "原创·窑门半笑",
+    "Identity": "生命面饰",
+    "Benefit": "生命储备较高",
+    "Tradeoff": "无法增强法力、治疗及伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 280,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22443,
+    "Name": "星瞳不对称",
+    "Lore": "左眼镶的是星石，右眼只是磨亮的瓦。买家坚持留下右眼，说夜里只有它肯看地上的路。",
+    "LoreRoot": "原创·石瓦双眼",
+    "Identity": "魔攻偏科面饰",
+    "Benefit": "智慧与魔攻",
+    "Tradeoff": "不提高治疗和防御倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 3,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 42,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22444,
+    "Name": "荷塘旧戏",
+    "Lore": "戏班散了以后，荷花脸谱自己走完了最后一折。听戏人只听到鼓点，没有谁记得唱了什么。",
+    "LoreRoot": "原创·荷面残戏",
+    "Identity": "稳定的魔法防护",
+    "Benefit": "魔防与魔法抗性",
+    "Tradeoff": "缺少物理保护及输出",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 35,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22445,
+    "Name": "露遮眉",
+    "Lore": "晨露把面具的眉毛泡成两条细河，日出便恢复原样。描眉人顺河画桥，画了七座都太小。",
+    "LoreRoot": "原创·露眉成河",
+    "Identity": "大法力脸饰",
+    "Benefit": "法力集中提高",
+    "Tradeoff": "没有防护和治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 620,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22446,
+    "Name": "仙容底稿",
+    "Lore": "面具内藏着三十张仙人画像，脸孔各异，额头的疤却相同。画师否认画过任何一张。",
+    "LoreRoot": "原创·同疤仙容",
+    "Identity": "抵抗控制的面具",
+    "Benefit": "不良状态抗性较高",
+    "Tradeoff": "直接伤害和施法效率不改善",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22447,
+    "Name": "阎王未醒",
+    "Lore": "面具雕成沉睡的模样，卖家说梦里判案更准。医者掀开面具，只看见一只蜷着的木虱。",
+    "LoreRoot": "原创·梦判木面",
+    "Identity": "自保急救面具",
+    "Benefit": "低生命时减伤并补精神",
+    "Tradeoff": "通常血线没有比例减伤，也不强化治疗",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "desperate_guard",
+        "PowerBP": 2000,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22448,
+    "Name": "退魔告示",
+    "Lore": "薄面背后贴着一张辟魔告示，日期写在百年以后。旧城早拆了，告示上的墨却还没干。",
+    "LoreRoot": "原创·未来辟魔告示",
+    "Identity": "法术防护专精面",
+    "Benefit": "魔防高并附法术减伤",
+    "Tradeoff": "不防物理，也不提升治疗量",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 72,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "magic_guard",
+        "PowerBP": 900,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22451,
+    "Name": "鼠牙门牌",
+    "Lore": "祛妖牌原是药柜的门牌，鼠牙把妖字啃成了女。主人怕惹笑话，改用背面朝外佩着。",
+    "LoreRoot": "原创·药柜门牌",
+    "Identity": "简朴生命项坠",
+    "Benefit": "体质增加生命",
+    "Tradeoff": "无攻击和施法效率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 20,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22452,
+    "Name": "不如意珠",
+    "Lore": "每次许愿珠子都滚向相反方向，珠商却说从未失灵。第一位买家因此终于找回了丢失的钱袋。",
+    "LoreRoot": "原型·如意珠的反愿故事",
+    "Identity": "随身法力储珠",
+    "Benefit": "法力充裕，适合久战",
+    "Tradeoff": "不提供治疗倍率或防护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 450,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22453,
+    "Name": "青砂七转",
+    "Lore": "碧砂在瓶里只走七圈，第八圈总从瓶外开始。炼丹师为此添了七层瓶，药师只添了一层布。",
+    "LoreRoot": "原型·翡青碧砂",
+    "Identity": "魔法固定减伤坠",
+    "Benefit": "魔法抗性集中提高",
+    "Tradeoff": "对物理和治疗无增益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 19,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22454,
+    "Name": "星盘蚁路",
+    "Lore": "星盘上的蚂蚁绕开了最亮的玉点，留下另一套星图。司天者抄完才发现，图上没有自己的观星台。",
+    "LoreRoot": "原创·蚁路星盘",
+    "Identity": "光弹术伤害专精坠",
+    "Benefit": "光弹伤害显著提升并补魔攻",
+    "Tradeoff": "治疗和其他伤害技能无专长",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 65,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "skill_focus",
+        "PowerBP": 2800,
+        "ThresholdPct": 0,
+        "SkillID": 10319,
+        "SkillName": "光弹术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22455,
+    "Name": "乌啄药籽",
+    "Lore": "乌形坠口含一粒药籽，晒七日便缩小一点。取出的那天，坠子终于第一次发出清脆的响声。",
+    "LoreRoot": "原创·乌坠含籽",
+    "Identity": "状态防护坠",
+    "Benefit": "状态抗性与生命",
+    "Tradeoff": "缺乏法力及治疗效率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 200,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22456,
+    "Name": "镜中先谢",
+    "Lore": "镜玉照见的花总先谢一天，花农借它避过几场雨。药师照自己时，只看见镜背的绳结。",
+    "LoreRoot": "原型·流光镜玉",
+    "Identity": "偏法防镜坠",
+    "Benefit": "高魔防和少量精神",
+    "Tradeoff": "物理承伤与治疗不增强",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 58,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22457,
+    "Name": "月夜咳声",
+    "Lore": "天珠在月圆时咳一声，声小得只有贴近胸口才听见。做珠的人说只是裂隙，裂隙却从未扩大。",
+    "LoreRoot": "原创·咳月珠",
+    "Identity": "深法力与节省",
+    "Benefit": "大法力且治疗耗蓝降低",
+    "Tradeoff": "没有治疗倍率和生命词条",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 760,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 1400,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22458,
+    "Name": "未尽药帖",
+    "Lore": "药帖到最后一行改成了家书，署名处又回到药名。收藏者只装裱中间那一段，挂在脉枕旁。",
+    "LoreRoot": "原创·方书混写药帖",
+    "Identity": "他疗型项坠",
+    "Benefit": "治疗他人时加成",
+    "Tradeoff": "自疗和输出缺少专长",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 21,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "selfless_heal",
+        "PowerBP": 2600,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22459,
+    "Name": "通神口令",
+    "Lore": "吊坠上的口令读起来像打喷嚏，抄写者不敢省略一字。祭司试了七年，唯一的结果是戒掉了香灰。",
+    "LoreRoot": "原创·口令吊坠",
+    "Identity": "抗状态高精神坠",
+    "Benefit": "精神与状态抗性",
+    "Tradeoff": "不直接增加治疗或生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 24,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22462,
+    "Name": "游光走马",
+    "Lore": "戒面里画着一匹跑不出边框的马，转戒才能让它继续走。戴者常在闲谈中把整个月转过去。",
+    "LoreRoot": "原创·戒内走马灯",
+    "Identity": "走位小戒",
+    "Benefit": "移速与法力",
+    "Tradeoff": "没有治疗倍率和生存",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 27,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 125,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22463,
+    "Name": "先照手背",
+    "Lore": "晨曦从戒里升起时总先照手背，掌心仍是黑的。药师翻手看了多年，也没看出戒内那座山在哪里。",
+    "LoreRoot": "原创·戒内晨光",
+    "Identity": "光系伤害戒",
+    "Benefit": "光系伤害增强且智慧提高",
+    "Tradeoff": "治疗不获光系伤害特性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 3,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "holy_mastery",
+        "PowerBP": 2200,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22464,
+    "Name": "化邪墨迹",
+    "Lore": "戒侧的符咒擦一次便少一画，最后只剩一个墨点。道士仍说足够，反倒不肯给它补一笔。",
+    "LoreRoot": "原创·化邪残墨",
+    "Identity": "物法固定减伤戒",
+    "Benefit": "物理与法术固定减伤兼顾",
+    "Tradeoff": "缺少生命、治疗和进攻",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22465,
+    "Name": "鬼不留名",
+    "Lore": "晶中借宿的影子每夜变换身形，只不肯改掉蹲坐的姿势。问它是谁，它在晶壁写下了一个问号。",
+    "LoreRoot": "原型·鬼魄碧晶",
+    "Identity": "高法力偏科晶戒",
+    "Benefit": "大量法力",
+    "Tradeoff": "没有生命与任何治疗特性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 570,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22466,
+    "Name": "针孔里春",
+    "Lore": "戒指上的针孔漏进一缕春风，寒冬也不止息。园丁借它催花，花开后却只结了一个铁锈色的果。",
+    "LoreRoot": "原创·针孔春风",
+    "Identity": "稳定普疗戒",
+    "Benefit": "直接治疗提高并加精神",
+    "Tradeoff": "没有伤害、生命和物理防护词条",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 18,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 1900,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22467,
+    "Name": "逆写天字",
+    "Lore": "戒内的天字倒写，印到纸上却仍是正的。制印师只承认那是自己睡迷糊时刻的，并没打算争天命。",
+    "LoreRoot": "原型·逆天圣戒；倒字故事原创",
+    "Identity": "治愈术持续救护专精",
+    "Benefit": "治愈术治疗量提高且法力消耗降低",
+    "Tradeoff": "只服务治愈术，其他技能无专长",
+    "PowerTier": "chase",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 420,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 3000,
+        "ThresholdPct": 0,
+        "SkillID": 10301,
+        "SkillName": "治愈术"
+      },
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 3000,
+        "ThresholdPct": 0,
+        "SkillID": 10301,
+        "SkillName": "治愈术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22468,
+    "Name": "仙舟票根",
+    "Lore": "戒箍是仙舟船票折成，座位号在每次雨后改变。船早已沉入云海，票根仍印着准时开航。",
+    "LoreRoot": "原创·云海船票戒",
+    "Identity": "抗术法续航戒",
+    "Benefit": "魔防与法力",
+    "Tradeoff": "不提高治疗量和移速",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 54,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 280,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22469,
+    "Name": "空玺无主",
+    "Lore": "戒面适合刻一方小玺，前后七位主人却都没有动刀。如今留白处满是划痕，像一张极细的疆图。",
+    "LoreRoot": "原创·未刻仙玺",
+    "Identity": "物理防护戒",
+    "Benefit": "生命和物理固定减伤",
+    "Tradeoff": "无法提升治疗及法术抵挡",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 270,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22534,
+    "Name": "撑天牙签",
+    "Lore": "坠物像一根用旧的牙签，商人却称能撑天。药师买下后只用来拨灯，倒从没让灯花落在药里。",
+    "LoreRoot": "原型·擎天名称；市井缩小故事原创",
+    "Identity": "朴素法力巨量坠",
+    "Benefit": "极大法力储量",
+    "Tradeoff": "没有输出、防护或治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 1100,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22535,
+    "Name": "碎魂有声",
+    "Lore": "玉坠摔裂后每片声音不同，拼好反而寂静。修补匠留了一条缝，好听清哪片在夜里说话。",
+    "LoreRoot": "原型·破魂坠",
+    "Identity": "高魔防碎玉",
+    "Benefit": "魔防集中并抗不良状态",
+    "Tradeoff": "缺少生命和治疗效率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 90,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22536,
+    "Name": "三次离席",
+    "Lore": "同一串链被三位客人先后遗在桌上，次日都称从未到访。客栈将链挂起，空桌便再没人坐。",
+    "LoreRoot": "原创·忘却席间之链",
+    "Identity": "安全施救的遁灵坠",
+    "Benefit": "物理与法术减伤配合生命",
+    "Tradeoff": "治疗效率与输出无加成",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 330,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "physical_guard",
+        "PowerBP": 700,
+        "ThresholdPct": 0
+      },
+      {
+        "Kind": "magic_guard",
+        "PowerBP": 700,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22549,
+    "Name": "玉肉边界",
+    "Lore": "护手内侧生出像掌纹的石纹，触摸时却冰凉。玉匠每年磨去一层，纹路年年更接近自己的手。",
+    "LoreRoot": "原型·灵玉手套",
+    "Identity": "高精神玉手",
+    "Benefit": "精神与魔防",
+    "Tradeoff": "不补生命或治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 35,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22550,
+    "Name": "百岁松脂",
+    "Lore": "护腕封着百年前割下的松脂，松树如今长在城墙外。每到雨夜，树与腕都会透出同样的湿香。",
+    "LoreRoot": "原创·百年松脂腕",
+    "Identity": "稀有纯生命护腕",
+    "Benefit": "生命与体质集中",
+    "Tradeoff": "没有法力和治疗特性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 450,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 28,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22551,
+    "Name": "众水分杯",
+    "Lore": "护掌上刻着一只分成许多小格的杯，哪格都盛不满。倒向别人时，杯里反而总会剩下一点。",
+    "LoreRoot": "原创·分杯护掌",
+    "Identity": "强力群疗护手",
+    "Benefit": "群疗术范围和治疗量同时提高",
+    "Tradeoff": "单体治疗与进攻不获专长",
+    "PowerTier": "chase",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 450,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "area_expansion",
+        "PowerBP": 3500,
+        "ThresholdPct": 0,
+        "SkillID": 10304,
+        "SkillName": "群疗术"
+      },
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 2800,
+        "ThresholdPct": 0,
+        "SkillID": 10304,
+        "SkillName": "群疗术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22593,
+    "Name": "阶前落籽",
+    "Lore": "鞋底带回一粒陌生种子，埋下后只长出一级石阶。来年又一级，药师已经给它留了整座山的位置。",
+    "LoreRoot": "原创·石阶种子",
+    "Identity": "耐久行医鞋",
+    "Benefit": "生命与法术固定减伤",
+    "Tradeoff": "没有移动与治疗增幅",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 360,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 18,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22594,
+    "Name": "云上木鱼",
+    "Lore": "鞋头里封了半只木鱼，走在云上也会响。另一半留在庙里，和尚敲下去总慢一拍。",
+    "LoreRoot": "原创·两地木鱼",
+    "Identity": "灵活高精神履",
+    "Benefit": "移速与精神",
+    "Tradeoff": "没有比例减伤和治疗倍率",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 27,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 23,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22595,
+    "Name": "末拍停舞",
+    "Lore": "舞谱最后一拍画着一只空鞋，谁跳到那里都会忘记下一步。制鞋人于是把最后一页缝在鞋底。",
+    "LoreRoot": "原创·缺步舞谱",
+    "Identity": "极速但脆弱的施救靴",
+    "Benefit": "高移速并缩短技能吟唱",
+    "Tradeoff": "生命下降，不能降低技能冷却",
+    "PowerTier": "chase",
+    "Affixes": [
+      {
+        "Attr": 27,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": -180,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "swift_cast",
+        "PowerBP": 1700,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24689,
+    "Name": "小石羽结",
+    "Lore": "羽带打结处夹着一颗细石，轻得称不出。解开结后，整条带子却重得必须两人抬。",
+    "LoreRoot": "原型·精卫羽材；石结原创",
+    "Identity": "沉稳的护身羽带",
+    "Benefit": "较高固定物理减伤",
+    "Tradeoff": "没有魔防、法力或治疗增幅",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 26,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24690,
+    "Name": "潮痕旧镯",
+    "Lore": "镯上刻度记的是潮痕，最深一线在内侧。海边老人说那一年，海水涨进了所有人的梦。",
+    "LoreRoot": "原创·内侧潮痕",
+    "Identity": "法术固定减伤镯",
+    "Benefit": "较高魔法抗性",
+    "Tradeoff": "没有生命、法力及治疗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 25,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24691,
+    "Name": "填海一响",
+    "Lore": "翎珰落地的声音极沉，捡起来却没有重量。佩戴者用它计步，每一步都像把石头投进了很远的水。",
+    "LoreRoot": "原型·精卫填海意象",
+    "Identity": "抗状态翎珰",
+    "Benefit": "不良状态抗性集中",
+    "Tradeoff": "直接伤害和施法均不强化",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24692,
+    "Name": "海比带窄",
+    "Lore": "羽带展开时像一条很窄的海，系紧后只剩盐味。织者特意留下毛边，说岸还没有织好。",
+    "LoreRoot": "原创·羽带织海",
+    "Identity": "生命偏科羽带",
+    "Benefit": "较多生命与物理固定减伤",
+    "Tradeoff": "无法提升治疗及法力",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 350,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24693,
+    "Name": "衔石腕",
+    "Lore": "镯扣刻了一张鸟喙，衔石处磨得最亮。新主人嵌入宝石，第二天宝石变回普通小石。",
+    "LoreRoot": "原型·精卫衔石；腕扣原创",
+    "Identity": "高精神羽镯",
+    "Benefit": "大量精神",
+    "Tradeoff": "没有生命和治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 34,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24694,
+    "Name": "耳边小岸",
+    "Lore": "羽珰碰在一起便有沙滩声，分开只剩海风。听潮者借它回家，却再也没认出故乡那片岸。",
+    "LoreRoot": "原创·羽珰藏岸",
+    "Identity": "治疗耗蓝耳饰",
+    "Benefit": "治疗耗蓝明显降低",
+    "Tradeoff": "不提高治疗量与防护",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 310,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 2500,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24695,
+    "Name": "终年未满",
+    "Lore": "羽带的最后一孔始终系不上，哪怕截短也会多出一孔。主人说填海之事，也是这样的数法。",
+    "LoreRoot": "原型·精卫不尽之志",
+    "Identity": "极大法力羽带",
+    "Benefit": "高法力上限与储量",
+    "Tradeoff": "没有治疗特性或生命加成",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 22,
+        "Mode": 1
+      },
+      {
+        "Attr": 36,
+        "Value": 500,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24696,
+    "Name": "鸟爪折痕",
+    "Lore": "镯上爪痕来自一只没有落地的鸟，只有太阳照到时才出现。匠人照痕重刻，刻刀每次都在半途停下。",
+    "LoreRoot": "原创·未落鸟爪痕",
+    "Identity": "承伤偏科腕镯",
+    "Benefit": "物理减伤与生命",
+    "Tradeoff": "没有法术保护、治疗和输出",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 420,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "physical_guard",
+        "PowerBP": 1100,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24697,
+    "Name": "一海之重",
+    "Lore": "羽珰的两片羽毛一片向上，一片向下。称重师压尽所有砝码，也没让那片向上的羽毛低头。",
+    "LoreRoot": "原创·反重羽珰",
+    "Identity": "他疗与精神耳饰",
+    "Benefit": "他疗加成较高并增加精神",
+    "Tradeoff": "自疗和进攻缺少专长",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 27,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "selfless_heal",
+        "PowerBP": 2800,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 40020,
+    "Name": "雨前留声",
+    "Lore": "润玉里封着一声雨前的鸟叫，逢晴便响。农人拿它问天，药师拿它提醒自己晾药。",
+    "LoreRoot": "原创·玉内雨鸟",
+    "Identity": "法力与抗状态玉",
+    "Benefit": "法力及状态抗性",
+    "Tradeoff": "没有生命和治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 720,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 40021,
+    "Name": "靛蓝余眼",
+    "Lore": "染玉师盯着天色太久，玉面留下一个蓝色眼影。谁再盯它，都会先看见自己的眼白。",
+    "LoreRoot": "原创·染玉留眼",
+    "Identity": "魔防专精玉",
+    "Benefit": "集中魔防",
+    "Tradeoff": "不增加治疗或物理承伤能力",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 100,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 40022,
+    "Name": "火入水纹",
+    "Lore": "湿玉上的水纹被火烧成浅槽，槽中总比四周凉。药师用手指循纹走完一周，才开始煎下一锅。",
+    "LoreRoot": "原创·火烧水纹",
+    "Identity": "群疗应急玉",
+    "Benefit": "濒危目标的群疗更强",
+    "Tradeoff": "仅群疗且需目标处于低生命",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 360,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "rescue_heal",
+        "PowerBP": 3800,
+        "ThresholdPct": 35,
+        "SkillID": 10304,
+        "SkillName": "群疗术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 40035,
+    "Name": "毕方留足",
+    "Lore": "玉上雕了两只脚，雕师坚持说那是同一只脚走了两步。道童因此把它放进学步的木盒里。",
+    "LoreRoot": "原型·毕方单足意象",
+    "Identity": "生命辅助玉",
+    "Benefit": "生命与体质",
+    "Tradeoff": "缺少法力和治疗专长",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 190,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 40036,
+    "Name": "翼下风箱",
+    "Lore": "小玉翼的风声来自一只坏风箱，箱子早已烧尽。按住翼尖，仍能听见当年拉箱人的喘气。",
+    "LoreRoot": "原型·飞廉风翼",
+    "Identity": "移动辅助玉",
+    "Benefit": "移速与少量魔防",
+    "Tradeoff": "无生命及治疗量加成",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 27,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 20,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 40037,
+    "Name": "蜂医针",
+    "Lore": "玉刺被药蜂当作回巢路标，移到屋内也有蜂影来访。药师从不赶它们，只把糖罐盖紧。",
+    "LoreRoot": "原型·钦原针刺；药蜂原创",
+    "Identity": "治愈术节省玉",
+    "Benefit": "治愈术耗蓝减少",
+    "Tradeoff": "只对单一治疗技能有效",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 3000,
+        "ThresholdPct": 0,
+        "SkillID": 10301,
+        "SkillName": "治愈术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 47097,
+    "Name": "候风竹片",
+    "Lore": "玉里夹着细竹片，每年换一次方向。刻历的人照着改了三次，才发现方向从来都是朝着春天。",
+    "LoreRoot": "原创·候风历片",
+    "Identity": "精神与法力玉",
+    "Benefit": "精神和法力储量",
+    "Tradeoff": "没有直接治疗或生命增强",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 24,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 320,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 47098,
+    "Name": "天色最后一针",
+    "Lore": "刺绣用完最后一缕蓝线，天边便留下一点白。绣娘不肯接线，怕把那点白也缝进人间。",
+    "LoreRoot": "原创·补天绣线",
+    "Identity": "法术承压玉",
+    "Benefit": "魔法减伤与魔防",
+    "Tradeoff": "物理及治疗能力不强化",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 64,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "magic_guard",
+        "PowerBP": 1000,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 47099,
+    "Name": "饮火凉矢",
+    "Lore": "玉矢曾被投入热泉，泉水冷了三日。出水后矢尖多出一滴热泪，凝固时像一片透明的叶。",
+    "LoreRoot": "原创·热泉玉矢",
+    "Identity": "光弹进攻专精玉",
+    "Benefit": "光弹伤害和魔法暴击率较高",
+    "Tradeoff": "治疗与其他技能缺少专长",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 66,
+        "Value": 480,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 68,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "skill_focus",
+        "PowerBP": 2400,
+        "ThresholdPct": 0,
+        "SkillID": 10319,
+        "SkillName": "光弹术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 47112,
+    "Name": "单足不立",
+    "Lore": "毕方小像只雕了一足，却无论如何也站不稳。供桌主人把它平放，第二天桌面多了一片火烧云。",
+    "LoreRoot": "原型·毕方小像",
+    "Identity": "小幅魔法防护玉",
+    "Benefit": "魔防与固定法术减伤",
+    "Tradeoff": "不提供生命与治疗特性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 47113,
+    "Name": "吹不动的翼",
+    "Lore": "飞廉玉翼悬在风口纹丝不动，墙上的影子却日夜拍打。修窗的人最后把影子也钉进窗框。",
+    "LoreRoot": "原型·飞廉玉翼；不动影原创",
+    "Identity": "回避辅助玉",
+    "Benefit": "物防和敏捷",
+    "Tradeoff": "必中攻击前无额外保护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 25,
+        "Mode": 0
+      },
+      {
+        "Attr": 7,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 47114,
+    "Name": "针孔小巢",
+    "Lore": "刺尖只有一个针孔，夜里却传出整巢蜂鸣。持玉者把孔对准灯，发现里面亮着另一盏更小的灯。",
+    "LoreRoot": "原创·玉刺蜂巢",
+    "Identity": "深法力入门玉",
+    "Benefit": "法力储量集中",
+    "Tradeoff": "无攻击、防御及治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 340,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57045,
+    "Name": "药渣压胜钱",
+    "Lore": "钱文：煎三遍，服二遍。边缘还有半句，被药渣牢牢封在铜里。",
+    "LoreRoot": "原创·药渣铜钱",
+    "Identity": "微薄生命徽物",
+    "Benefit": "增加生命",
+    "Tradeoff": "无其他战斗加成",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 80,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57046,
+    "Name": "柴门缺钉",
+    "Lore": "一场大风后，门还在，门上的钉却全不见了；仅存的一枚被装进小木匣，作了药堂徽记。",
+    "LoreRoot": "原创·风后门钉",
+    "Identity": "固定物理减伤徽",
+    "Benefit": "对物理伤害提供固定减免",
+    "Tradeoff": "对法术无效且不补生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57047,
+    "Name": "苦参虫蜕",
+    "Lore": "标本匣记载这只虫蜕了七次皮，吃完三株苦参，最后长成了一粒无翅的石子。",
+    "LoreRoot": "原创·苦参虫蜕",
+    "Identity": "抗状态小徽",
+    "Benefit": "不良状态抗性",
+    "Tradeoff": "不抵挡直接伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57048,
+    "Name": "一钱半",
+    "Lore": "秤盘上永久压着一钱半的重量。空秤也一样。卖药人只得另备一架秤给凡药使用。",
+    "LoreRoot": "原创·自重秤盘",
+    "Identity": "养气称量徽",
+    "Benefit": "精神提高法力与魔防",
+    "Tradeoff": "没有生命和治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57049,
+    "Name": "火候签",
+    "Lore": "竹签刻着九成火候，背面却画十团火。灶下学徒决定相信画，从此成了全院最好的煮粥人。",
+    "LoreRoot": "原创·火候竹签",
+    "Identity": "进攻药师徽",
+    "Benefit": "魔攻提高",
+    "Tradeoff": "治疗和防护不增强",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 32,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57050,
+    "Name": "药铺鸡鸣",
+    "Lore": "药铺失物录：一只铜鸡，半斤松香，昨日清晨。铜鸡在三日后自行回来，另两样杳无音讯。",
+    "LoreRoot": "原创·失物铜鸡",
+    "Identity": "精神专精小徽",
+    "Benefit": "精神补充法力和魔防",
+    "Tradeoff": "没有生命及治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57051,
+    "Name": "打翻的字",
+    "Lore": "小匾原题宁心，泼上一碗药后变成心宁。先生承认意思相近，字却谁也改不回去了。",
+    "LoreRoot": "原创·药汁改字匾",
+    "Identity": "治愈术强化徽",
+    "Benefit": "治愈术治疗量提高",
+    "Tradeoff": "只强化这一项治疗",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 80,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 2500,
+        "ThresholdPct": 0,
+        "SkillID": 10301,
+        "SkillName": "治愈术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57052,
+    "Name": "炉门最后一响",
+    "Lore": "炉门关上，第六声之后便不再开。药师留下这枚门环，把丹药与配方一并留在门内。",
+    "LoreRoot": "原创·封炉门环",
+    "Identity": "长战节省徽",
+    "Benefit": "治疗耗蓝减少并补法力",
+    "Tradeoff": "不提高治疗量及生存",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 120,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 2300,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57085,
+    "Name": "入山骨哨",
+    "Lore": "骨哨只有一孔，吹声听来像人在山外答应。进山册上没有归期，只有历任持哨者反复画出的同一道岭。",
+    "LoreRoot": "原创·采药骨哨",
+    "Identity": "偏生命野行徽",
+    "Benefit": "生命与体质",
+    "Tradeoff": "缺少法力、攻击和治疗专长",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 190,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57086,
+    "Name": "羊胃星图",
+    "Lore": "星图画在羊胃上，水一泡就蜷成球。观星师坚持球内才是真天，厨师坚持先刮干净。",
+    "LoreRoot": "原创·羊胃星图",
+    "Identity": "大法力偏科徽",
+    "Benefit": "法力储量集中",
+    "Tradeoff": "无任何治疗或防护倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 420,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57087,
+    "Name": "山菌耳",
+    "Lore": "夹在木片中的菌盖长得像耳朵，晾干后仍会随着雷声微微收拢。标本旁注着：不入汤。",
+    "LoreRoot": "原创·听雷山菌",
+    "Identity": "抗术法杂物徽",
+    "Benefit": "魔防与魔法抗性",
+    "Tradeoff": "物理承伤及治疗不改善",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 26,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57088,
+    "Name": "四时药印",
+    "Lore": "春印在夏方上，夏印在秋方上，唯独冬印盖满整本账。刻印的学徒至今不知秋印去了哪里。",
+    "LoreRoot": "原创·错季药印",
+    "Identity": "状态抵抗徽",
+    "Benefit": "状态抗性与精神",
+    "Tradeoff": "无生命和治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57089,
+    "Name": "石肠丹",
+    "Lore": "开石得肠，剖肠得丹。验药册最后只写：不可试食，留作戒物。",
+    "LoreRoot": "原创·石腹怪丹",
+    "Identity": "单纯体质徽",
+    "Benefit": "体质集中增加生命",
+    "Tradeoff": "无续航和施法效率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57090,
+    "Name": "百虫静匣",
+    "Lore": "匣里一百格，每格一只虫，皆无声。第百零一声却从匣外传来。",
+    "LoreRoot": "原创·百虫静匣",
+    "Identity": "防止法术压力的徽",
+    "Benefit": "魔防与魔法固定减伤",
+    "Tradeoff": "无物理防护及治疗特性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 34,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57091,
+    "Name": "山中借目",
+    "Lore": "采药人用自己的旧镜片换来一颗兽眼。眼睛从不合拢，他只在寻找杀得过的妖物时才戴上。",
+    "LoreRoot": "原创·换目采药符",
+    "Identity": "单刷光弹徽",
+    "Benefit": "光弹术伤害提升，击杀怪物返还法力",
+    "Tradeoff": "治疗无加成且回蓝依赖击杀",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 40,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "skill_focus",
+        "PowerBP": 2200,
+        "ThresholdPct": 0,
+        "SkillID": 10319,
+        "SkillName": "光弹术"
+      },
+      {
+        "Kind": "kill_mana",
+        "PowerBP": 200,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57092,
+    "Name": "血芝不服",
+    "Lore": "药匾背面刻着一味拒不入方的血芝。每抄其名，字就爬出行格；药师只好为它留一整页。",
+    "LoreRoot": "原创·血芝逸字",
+    "Identity": "濒危治疗专精徽",
+    "Benefit": "低血目标治疗显著提高",
+    "Tradeoff": "目标血量高时无倍率收益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 20,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "rescue_heal",
+        "PowerBP": 3000,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57126,
+    "Name": "拔毒者手札",
+    "Lore": "手札无姓名，只画了三百只肿胀的手。末页留白，压着一枚完好的银针。",
+    "LoreRoot": "原创·拔毒医者手札",
+    "Identity": "治疗与承伤兼顾徽",
+    "Benefit": "治疗量与生命储备都高",
+    "Tradeoff": "缺少输出和施法减耗",
+    "PowerTier": "chase",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 290,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 18,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 2300,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57131,
+    "Name": "行医短棍",
+    "Lore": "短棍折为两截后，一截撑药箱，一截作药徽。箱底的记录承认：它打过狗，也赶错过人。",
+    "LoreRoot": "原创·折棍药徽",
+    "Identity": "药师近战偏门徽",
+    "Benefit": "物攻与命中支持普通近战",
+    "Tradeoff": "施法、治疗和生存不提升",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57164,
+    "Name": "干姜木字",
+    "Lore": "标牌上的姜字用干姜拼成，药童拆开尝过一角。补回去以后，每个字都带一点辛辣。",
+    "LoreRoot": "原创·姜拼药牌",
+    "Identity": "小法力药徽",
+    "Benefit": "提高法力储量",
+    "Tradeoff": "没有防护和治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 110,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57165,
+    "Name": "断秤绳",
+    "Lore": "失准的秤不再称药，秤绳盘成一枚胸结。每到月底，结心会吐出一小撮已经称过的药末。",
+    "LoreRoot": "原创·秤绳胸结",
+    "Identity": "温养秤绳结",
+    "Benefit": "生命与少量精神",
+    "Tradeoff": "没有直接治疗倍率和物理保护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 55,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57166,
+    "Name": "抄错三行",
+    "Lore": "残页只剩三行，药名全错，脉象却写得极准。先生将它钉在墙上，供后来的学生分别批注。",
+    "LoreRoot": "原创·错方残页",
+    "Identity": "精神练习徽",
+    "Benefit": "精神与魔防",
+    "Tradeoff": "缺少治疗量和生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57167,
+    "Name": "葱白玉牌",
+    "Lore": "玉牌绿得发青，偏有一块像葱白。厨子认得它：去年扔进井里的那根葱就是这个形状。",
+    "LoreRoot": "原创·井中葱玉",
+    "Identity": "法术固定减伤牌",
+    "Benefit": "固定减免法术伤害",
+    "Tradeoff": "不防物理和状态控制",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57168,
+    "Name": "迟到的脉",
+    "Lore": "脉图上的线比真人慢一拍，录完后仍跳了整夜。纸角注着：明早再核。",
+    "LoreRoot": "原创·滞后脉图",
+    "Identity": "生命小徽",
+    "Benefit": "体质与生命",
+    "Tradeoff": "不补法力及施法效率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 45,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57169,
+    "Name": "指月药尺",
+    "Lore": "尺子最短一格标着月亮，最长一格只写一寸。药工按它裁纱，每次都能多裁出一条极细的路。",
+    "LoreRoot": "原创·药尺错度",
+    "Identity": "群疗范围徽",
+    "Benefit": "群疗术范围扩大",
+    "Tradeoff": "不增强治疗量或单体治疗",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 70,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "area_expansion",
+        "PowerBP": 3000,
+        "ThresholdPct": 0,
+        "SkillID": 10304,
+        "SkillName": "群疗术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57170,
+    "Name": "山药字帖",
+    "Lore": "先写字，再种药，收成时根根都照字形生长；只有那个寿字，每年都烂在地里。",
+    "LoreRoot": "原创·字形山药帖",
+    "Identity": "进攻辅助徽",
+    "Benefit": "智慧与魔攻",
+    "Tradeoff": "治疗与生命无专长",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 3,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 20,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57171,
+    "Name": "铜鹤吃墨",
+    "Lore": "铜鹤含走墨团后，翅膀上出现完整的药方。后来它只肯吞错字，肚里也渐渐安静下来。",
+    "LoreRoot": "原创·食墨铜鹤",
+    "Identity": "单体治疗经济徽",
+    "Benefit": "治愈术耗蓝降低且治疗增强",
+    "Tradeoff": "其他技能没有特性收益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 1800,
+        "ThresholdPct": 0,
+        "SkillID": 10301,
+        "SkillName": "治愈术"
+      },
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 1800,
+        "ThresholdPct": 0,
+        "SkillID": 10301,
+        "SkillName": "治愈术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57204,
+    "Name": "未开药会",
+    "Lore": "药会邀请写好了日期，却没写地点。各地来客纷纷带回此徽，声称自己确曾赴约。",
+    "LoreRoot": "原创·无址药会徽",
+    "Identity": "法术耐久的药会徽",
+    "Benefit": "魔防与法力",
+    "Tradeoff": "没有治疗倍率和物理保护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 190,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57205,
+    "Name": "诊台缺角",
+    "Lore": "诊台缺的角被磨成小牌，台上留下的空处却仍能放稳药瓶。匠人对此收了两次修理钱。",
+    "LoreRoot": "原创·诊台残角",
+    "Identity": "物理回避牌",
+    "Benefit": "物防百分比提高",
+    "Tradeoff": "不减免已命中伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 22,
+        "Mode": 1
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57206,
+    "Name": "白纸脾气",
+    "Lore": "这张白纸拒绝墨，拒绝血，也拒绝药汤。只有夹在经书里时，它才肯显出一个很淡的页码。",
+    "LoreRoot": "原创·拒墨白纸",
+    "Identity": "不良状态抵抗徽",
+    "Benefit": "状态抗性集中",
+    "Tradeoff": "无直接攻防加成",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57207,
+    "Name": "小灶欠风",
+    "Lore": "灶模型的烟囱总朝下，供在屋里却不熏梁。炉簿写着：欠东风一缕，来年偿。",
+    "LoreRoot": "原创·倒烟小灶",
+    "Identity": "大法力徽",
+    "Benefit": "法力储量集中",
+    "Tradeoff": "不增加生命和治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 480,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57208,
+    "Name": "银箔试苦",
+    "Lore": "试药用过的银箔被折成鹤，一只比一只苦。最后那只放进糖水，糖水也学会了展翅。",
+    "LoreRoot": "原创·苦箔折鹤",
+    "Identity": "抗术法小徽",
+    "Benefit": "魔防与精神",
+    "Tradeoff": "物理承伤和治疗不改善",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 33,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57209,
+    "Name": "十三味缺席",
+    "Lore": "十二味药围坐图中，第十三味只留一张空凳。作者在凳下写道：实在请不来，照此煎也成。",
+    "LoreRoot": "原创·药味席图",
+    "Identity": "稳定治疗徽",
+    "Benefit": "治疗量提高",
+    "Tradeoff": "没有伤害、生命与减耗",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 2200,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57210,
+    "Name": "夜半校方",
+    "Lore": "灯油耗尽后的三处改字，是谁的手迹？药师问了所有学徒，最后把自己的旧字帖烧了。",
+    "LoreRoot": "原创·夜校药方",
+    "Identity": "光弹输出徽",
+    "Benefit": "高魔攻与魔法暴击",
+    "Tradeoff": "治疗和防御专长空缺",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 70,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 350,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57211,
+    "Name": "医经第零页",
+    "Lore": "第零页只有一张空白脉枕图，翻过去才是序。藏书人说页码并非错刻，是后来的人不愿从那里开始。",
+    "LoreRoot": "原创·医经零页",
+    "Identity": "群疗高专精徽",
+    "Benefit": "群疗术治疗量与耗蓝改善",
+    "Tradeoff": "其他技能缺少专长",
+    "PowerTier": "chase",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 330,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healing_grace",
+        "PowerBP": 2800,
+        "ThresholdPct": 0,
+        "SkillID": 10304,
+        "SkillName": "群疗术"
+      },
+      {
+        "Kind": "healing_cost",
+        "PowerBP": 2300,
+        "ThresholdPct": 0,
+        "SkillID": 10304,
+        "SkillName": "群疗术"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57273,
+    "Name": "煎过的诺言",
+    "Lore": "两张借据一同煎成纸饼，只剩一句明日来取。债主把纸饼压成徽，等得比药还凉。",
+    "LoreRoot": "原创·借据纸饼",
+    "Identity": "小生命徽",
+    "Benefit": "增加生命",
+    "Tradeoff": "没有施法与防护倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 95,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57274,
+    "Name": "鸦替签",
+    "Lore": "账页上的押记是一只乌鸦踩的，它从此每天来巡视药铺，尤其留意账房窗边的花生。",
+    "LoreRoot": "原创·乌鸦签押",
+    "Identity": "敏捷定神徽",
+    "Benefit": "敏捷与精神",
+    "Tradeoff": "没有生命和直接治疗增幅",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57275,
+    "Name": "枯井水牌",
+    "Lore": "水牌记着枯井每日的水位，笔迹从不间断。挖井工在井底找到一张同样认真记录旱情的表。",
+    "LoreRoot": "原创·枯井双表",
+    "Identity": "法力徽牌",
+    "Benefit": "法力储量提升",
+    "Tradeoff": "不增加生命和治疗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 145,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57276,
+    "Name": "药柜守则",
+    "Lore": "柜门上写着：头层放根，二层放花，第三层不要开。柜子一共只有两层。",
+    "LoreRoot": "原创·两层药柜铭",
+    "Identity": "抗状态徽",
+    "Benefit": "状态抗性与魔防",
+    "Tradeoff": "不增生命及治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57277,
+    "Name": "铜人肚兜",
+    "Lore": "针灸铜人的旧肚兜洗后缩成掌大，所有穴位却都在。药师把它缝作徽，却总按不到自己身上的同一个点。",
+    "LoreRoot": "原创·铜人缩衣",
+    "Identity": "生命与物理减伤徽",
+    "Benefit": "体质与固定物理减伤",
+    "Tradeoff": "没有法力及治疗效果",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57278,
+    "Name": "一直开门",
+    "Lore": "药铺打烊牌被磨掉了半边，余下两个字是开门。主人将牌收进衣里，学会从侧门下班。",
+    "LoreRoot": "原创·残缺打烊牌",
+    "Identity": "治疗他人的徽记",
+    "Benefit": "他疗获得加成",
+    "Tradeoff": "自疗和攻击无专长",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 90,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "selfless_heal",
+        "PowerBP": 2400,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57279,
+    "Name": "两味同名",
+    "Lore": "同名药草一凉一热，药师不肯改名，另刻两枚不同的标记。这枚既不是凉字，也不是热字。",
+    "LoreRoot": "原创·同名药识",
+    "Identity": "法术防护小牌",
+    "Benefit": "魔防集中提高",
+    "Tradeoff": "不增强治疗和生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57280,
+    "Name": "烧完的药山",
+    "Lore": "山图烧掉以后，灰里剩一条未烧的路。那条路折来折去，正好折成胸前这块徽记。",
+    "LoreRoot": "原创·灰中山路",
+    "Identity": "紧急治疗徽",
+    "Benefit": "低血目标治疗增强",
+    "Tradeoff": "正常治疗与攻击无倍率",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "rescue_heal",
+        "PowerBP": 2900,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57313,
+    "Name": "来客无名",
+    "Lore": "药账：一人，衣湿，取药三包，不肯署名。隔页补记：名字忘问了，非不肯。",
+    "LoreRoot": "原创·更正药账徽",
+    "Identity": "偏生命的日常徽",
+    "Benefit": "生命与体质",
+    "Tradeoff": "其他战斗维度不提升",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 180,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57314,
+    "Name": "半根人参须",
+    "Lore": "人参须夹在两片铜中，活了比整株更久。铜面上记录的不是年数，是历任保管人的年龄。",
+    "LoreRoot": "原创·参须夹铜",
+    "Identity": "高精神药徽",
+    "Benefit": "精神集中补法力与魔防",
+    "Tradeoff": "没有生命与治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 23,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57315,
+    "Name": "门后排队签",
+    "Lore": "无人药铺的门后挂满号码签。每天清晨总有一枚少了，再过一天，便多出另一种笔迹写的新签。",
+    "LoreRoot": "原创·空店排队签",
+    "Identity": "大法力小徽",
+    "Benefit": "显著提高法力储备",
+    "Tradeoff": "无防护和治疗特性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 530,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57316,
+    "Name": "替身药偶",
+    "Lore": "药偶替人躺过三百回诊台，腹中塞满不同病案。最后一回，药师只查出一肚子纸。",
+    "LoreRoot": "原创·装案药偶",
+    "Identity": "固定减伤徽",
+    "Benefit": "物理法术固定减伤兼顾",
+    "Tradeoff": "高额伤害前有限且缺生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57317,
+    "Name": "七封回信",
+    "Lore": "师徒通信七封，纸上却有八种笔迹。最陌生的一种只添了一个标点，双方都因此改了方。",
+    "LoreRoot": "原创·多笔迹师徒信",
+    "Identity": "抗状态与法力徽",
+    "Benefit": "状态抗性及法力",
+    "Tradeoff": "没有治疗倍率和生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 210,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57318,
+    "Name": "借脉不还",
+    "Lore": "铜片刻着借脉二字，下面密密划了归还日期。最晚的一次在明年，最早的一次还没开始。",
+    "LoreRoot": "原创·借脉铜契",
+    "Identity": "危急他疗徽",
+    "Benefit": "低血目标治疗加成较高",
+    "Tradeoff": "安全血线没有倍率，输出无专长",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 18,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "rescue_heal",
+        "PowerBP": 2900,
+        "ThresholdPct": 25
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57319,
+    "Name": "最后一个药屉",
+    "Lore": "药柜拆空后仍剩一只抽屉，木匠无法解释它原来装在哪里。如今屉面是徽，屉中空间留在药铺。",
+    "LoreRoot": "原创·多出药屉",
+    "Identity": "深藏法力的药屉徽",
+    "Benefit": "法力与不良状态抗性",
+    "Tradeoff": "没有伤害、生命或治疗倍率",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 320,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57320,
+    "Name": "旧方不署名",
+    "Lore": "药方最后不是名号，只写了可再斟酌四字。百年校注覆满整页，仍没人划掉那句提醒。",
+    "LoreRoot": "原创·百年校方残纸",
+    "Identity": "稳定群疗施法徽",
+    "Benefit": "群疗术吟唱缩短与精神补给",
+    "Tradeoff": "其他技能不加速，冷却不变",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "swift_cast",
+        "PowerBP": 2800,
+        "ThresholdPct": 0,
+        "SkillID": 10304,
+        "SkillName": "群疗术"
+      }
+    ],
+    "ReservedSkills": []
+  }
+]

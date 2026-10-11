@@ -3,6 +3,7 @@ package domain
 import "fmt"
 
 type UniqueContext struct {
+	SkillID                                                                   SkillID
 	HPPercent, MPPercent, TargetHPPercent                                     int32
 	Magic, Critical, TargetElite, Invisible, Trap, Area, Skill, Healing, Ally bool
 	HurtType                                                                  int32
@@ -17,13 +18,32 @@ var uniqueTraitNames = map[string]string{
 	"healthy_assault": "盈生破阵", "desperate_assault": "绝境回锋", "execution": "断劫", "ambush": "初锋", "elite_hunter": "诛邪", "critical_focus": "会心问道",
 	"physical_guard": "金身", "magic_guard": "清心", "desperate_guard": "危身护命", "healthy_guard": "圆满护体",
 	"healing_grace": "济世", "rescue_heal": "救急", "selfless_heal": "渡人", "healing_cost": "悬壶归元",
-	"spell_economy": "节炁", "swift_cast": "瞬念", "area_expansion": "广法", "trap_expansion": "罗网",
+	"skill_economy": "行炁", "spell_economy": "节炁", "swift_cast": "瞬念", "area_expansion": "广法", "trap_expansion": "罗网",
 	"fire_mastery": "红莲", "ice_mastery": "寒山", "holy_mastery": "净光", "single_focus": "一心", "area_focus": "八相", "invisible_focus": "无痕",
 	"kill_mend": "还丹", "kill_mana": "纳炁", "basic_focus": "砺锋", "skill_focus": "通玄",
 }
 
-func UniqueTraitName(kind string) string        { return uniqueTraitNames[kind] }
-func SupportedUniqueTrait(kind string) bool     { return uniqueTraitNames[kind] != "" }
+func UniqueTraitName(kind string) string    { return uniqueTraitNames[kind] }
+func SupportedUniqueTrait(kind string) bool { return uniqueTraitNames[kind] != "" }
+func ValidUniqueTrait(t UniqueTrait) bool {
+	if !SupportedUniqueTrait(t.Kind) || t.PowerBP <= 0 || t.PowerBP > 10000 || t.ThresholdPct < 0 || t.ThresholdPct > 100 {
+		return false
+	}
+	if t.SkillID == 0 {
+		return t.SkillName == ""
+	}
+	scope, ok := EndgameSkillTarget(t.SkillID)
+	if !ok || !scope.Supports(t.Kind) || (t.SkillName != "" && t.SkillName != scope.Name) {
+		return false
+	}
+	// These channels have no skill identity at their settlement boundary.
+	switch t.Kind {
+	case "basic_focus", "kill_mend", "kill_mana", "physical_guard", "magic_guard", "healthy_guard", "desperate_guard":
+		return false
+	}
+	return true
+}
+
 func scaledUniquePower(value, roll int32) int32 { return int32(int64(value) * int64(roll) / 10000) }
 
 // Only the strongest active instance of a named power counts. Different powers
@@ -31,6 +51,9 @@ func scaledUniquePower(value, roll int32) int32 { return int32(int64(value) * in
 func EvaluateUniqueTraits(traits []UniqueTrait, c UniqueContext) UniqueEffects {
 	active := make(map[string]int32)
 	for _, t := range traits {
+		if t.SkillID != 0 && t.SkillID != c.SkillID {
+			continue
+		}
 		ok := false
 		switch t.Kind {
 		case "healthy_assault", "healthy_guard":
@@ -57,7 +80,7 @@ func EvaluateUniqueTraits(traits []UniqueTrait, c UniqueContext) UniqueEffects {
 			ok = c.Healing && c.Ally
 		case "spell_economy":
 			ok = c.Skill && c.Magic
-		case "swift_cast", "skill_focus":
+		case "swift_cast", "skill_focus", "skill_economy":
 			ok = c.Skill
 		case "area_expansion", "area_focus":
 			ok = c.Skill && c.Area
@@ -89,7 +112,7 @@ func EvaluateUniqueTraits(traits []UniqueTrait, c UniqueContext) UniqueEffects {
 			out.MitigationBP += power
 		case "healing_grace", "rescue_heal", "selfless_heal":
 			out.HealingBP += power
-		case "healing_cost", "spell_economy":
+		case "healing_cost", "spell_economy", "skill_economy":
 			out.ManaCostReductionBP += power
 		case "swift_cast":
 			out.CastReductionBP += power
@@ -123,7 +146,7 @@ func ActiveUniqueTraits(worn *EquipSet, defs func(ItemID) (ItemDef, bool), ch *C
 	var out []UniqueTrait
 	worn.Each(func(slot EquipSlot, st Stack) {
 		def, ok := defs(st.Item)
-		if !ok || def.Equip == nil || int32(slot) != def.Equip.Slot || !EquipmentFunctional(st, def) || !def.Equip.Need.AllowsCharacter(ch) {
+		if !ok || def.Equip == nil || int32(slot) != def.Equip.Slot || !EquipmentFunctional(st, def) || !def.Equip.Need.AllowsCharacter(ch) || ch.Level < EquipmentRequiredLevel(def, st) {
 			return
 		}
 		d, ok := UniqueOf(st)
@@ -173,15 +196,17 @@ func (t UniqueTrait) Describe(rollBP int32) string {
 	case "magic_guard":
 		condition = "受到法术攻击时，"
 	case "healing_grace":
-		effect = "治疗提高"
+		effect = "直接治疗提高"
 	case "rescue_heal":
 		condition = fmt.Sprintf("目标生命不高于%d%%时，", t.ThresholdPct)
-		effect = "治疗提高"
+		effect = "直接治疗提高"
 	case "selfless_heal":
-		condition = "治疗他人时，"
-		effect = "治疗提高"
+		condition = "直接治疗他人时，"
+		effect = "直接治疗提高"
 	case "healing_cost":
-		effect = "治疗技能法力消耗降低"
+		effect = "直接治疗技能法力消耗降低"
+	case "skill_economy":
+		effect = "技能法力消耗降低"
 	case "spell_economy":
 		effect = "法术技能法力消耗降低"
 	case "swift_cast":
@@ -214,6 +239,13 @@ func (t UniqueTrait) Describe(rollBP int32) string {
 	switch t.Kind {
 	case "physical_guard", "magic_guard", "healthy_guard", "desperate_guard":
 		effect = "受到伤害降低"
+	}
+	if t.SkillID != 0 {
+		scope, ok := EndgameSkillTarget(t.SkillID)
+		if !ok {
+			return ""
+		}
+		condition = "仅“" + scope.Name + "”，" + condition
 	}
 	return fmt.Sprintf("%s：%s%s%.2f%%", UniqueTraitName(t.Kind), condition, effect, p)
 }

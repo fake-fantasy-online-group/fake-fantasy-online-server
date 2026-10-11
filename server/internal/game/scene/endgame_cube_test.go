@@ -1,8 +1,11 @@
 package scene
 
 import (
+	"encoding/json"
 	"errors"
+	"math/rand"
 	"reflect"
+	"strconv"
 	"testing"
 	"time"
 
@@ -166,5 +169,72 @@ func TestEndgameCubeRejectsTamperedAndSupersededQuotes(t *testing.T) {
 	ev, _ = firstOf[event.EndgameMessage](cubeTake(s, sink))
 	if ev.Message.Error != "quote_expired" || b.commits != 0 {
 		t.Fatal("superseded quote executed")
+	}
+}
+
+func TestEndgameRandomSocketRetryReceiptAndExpiry(t *testing.T) {
+	s, sink, b := cubeSceneFixture(t)
+	p := s.players[1]
+	now := time.Unix(100000, 0)
+	s.now = func() time.Time { return now }
+	s.rng = rand.New(rand.NewSource(456))
+	expected := rand.New(rand.NewSource(456))
+	want := expected.Intn(5) + 1
+	requestQuote := func() domain.EndgameQuoteView {
+		s.onEndgameCube(p, domain.EndgameRequest{Op: "cube.quote", RequestID: "random-preview", RecipeID: domain.CubeOpenSocket, TargetUID: "42", ExpectedRevision: "0"})
+		ev, _ := firstOf[event.EndgameMessage](cubeTake(s, sink))
+		if !ev.Message.OK || ev.Message.Quote == nil {
+			t.Fatalf("no quote: %+v", ev.Message)
+		}
+		return *ev.Message.Quote
+	}
+	requestQuote()
+	q := requestQuote()
+	before := p.Player.Bag.Clone()
+	money := p.Player.Char.Money
+	req := cubeExecute(q)
+	s.onEndgameCube(p, req)
+	if got := int(b.plan.Snapshot.Bag.At(200).SocketCount); got != want {
+		t.Fatalf("outcome=%d want%d", got, want)
+	}
+	candidate := s.endgamePlayer(p).cube.candidate
+	b.result <- domain.EndgameCommitResult{Err: errors.New("transaction rollback")}
+	s.finishEndgame(false)
+	if !reflect.DeepEqual(before, p.Player.Bag) || p.Player.Char.Money != money {
+		t.Fatal("failed transaction exposed result or costs")
+	}
+	events := cubeTake(s, sink)
+	for _, ev := range events {
+		if msg, ok := ev.(event.EndgameMessage); ok && msg.Message.Kind == "cube.result" {
+			t.Fatal("failed transaction exposed random result")
+		}
+	}
+	s.onEndgameCube(p, req)
+	if s.endgamePlayer(p).cube.candidate != candidate || int(b.plan.Snapshot.Bag.At(200).SocketCount) != want {
+		t.Fatal("retry rerolled candidate")
+	}
+	if s.rng.Intn(100000) != expected.Intn(100000) {
+		t.Fatal("preview or retry consumed extra RNG")
+	}
+	b.receipt = &b.plan.Receipt
+	b.result <- domain.EndgameCommitResult{State: b.plan.State, Receipt: b.plan.Receipt}
+	s.finishEndgame(false)
+	cubeTake(s, sink)
+	after := p.Player.Bag.Clone()
+	if int(after.At(200).SocketCount) != want || after.CountOf(domain.CubeStarMarrow) != 496 || p.Player.Char.Money != moneyFromInventory(495000) {
+		t.Fatal("wrong socket result/cost")
+	}
+	var receipt domain.EndgameResponse
+	if err := json.Unmarshal([]byte(b.plan.Receipt.Response), &receipt); err != nil {
+		t.Fatal(err)
+	}
+	if receipt.Result["socketCount"] != strconv.Itoa(want) {
+		t.Fatal("receipt missing committed socket outcome")
+	}
+	now = now.Add(time.Hour)
+	s.onEndgame(EndgameRequest{ID: p.ID, Request: req})
+	s.finishEndgame(false)
+	if b.commits != 2 || !reflect.DeepEqual(after, p.Player.Bag) {
+		t.Fatal("expired-quote receipt replay charged or rerolled")
 	}
 }

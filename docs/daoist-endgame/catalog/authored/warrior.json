@@ -1,0 +1,6379 @@
+[
+  {
+    "BaseID": 1016,
+    "Name": "校场最后一杆",
+    "Lore": "库吏本想折掉这杆试枪，却发现木杆上每一道裂口旁都刻着新兵的名字。枪头不曾开刃，握处已磨得像玉。",
+    "LoreRoot": "原创·试兵器",
+    "Identity": "无锋练力枪",
+    "Benefit": "少量力量与生命补足入门近战",
+    "Tradeoff": "不提供命中或暴击，不能替代精制杀伤武器",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 1,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 1601,
+    "Name": "桥桩铁",
+    "Lore": "洪水将渡桥冲走，铁匠把剩下的桥钉熔成枪尖。第一位买主付了三文钱，又把枪留给了背不动粮袋的守桥老人。",
+    "LoreRoot": "原创·铁枪与乡渡",
+    "Identity": "耐耗守桥枪",
+    "Benefit": "生命与固定物理减伤支持低级承伤",
+    "Tradeoff": "杀伤词条很少，清怪速度让位于站稳",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 1,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 1602,
+    "Name": "错星",
+    "Lore": "铸师醉后将七枚铆钉钉成了八卦。来取钢枪的人看了半晌，反倒多付一坛酒。",
+    "LoreRoot": "原创·精钢枪的错铆",
+    "Identity": "便宜的重手枪",
+    "Benefit": "少量物攻兼顾命中",
+    "Tradeoff": "不附体质，换血不能靠它",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 1,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 1603,
+    "Name": "半尺嫁衣",
+    "Lore": "出征那日，裁缝剪下未缝好的嫁衣，替枪扎了一束挡血的红缨。十年后枪送回铺中，缨上还留着没拆的疏针。",
+    "LoreRoot": "原创·红缨挡血",
+    "Identity": "近身缠斗枪",
+    "Benefit": "命中与小额物攻适合普通攻击",
+    "Tradeoff": "没有续航或法防，遇到术法仍需换装",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 1604,
+    "Name": "潮沟三齿",
+    "Lore": "退潮后，三枚枪齿间卡着一只小螺。修闸人曾用它撬开堵死的水门，此后再不肯把中齿磨尖。",
+    "LoreRoot": "原创·三尖枪与水门",
+    "Identity": "群击范围枪",
+    "Benefit": "范围伤害特性服务聚怪打法",
+    "Tradeoff": "单体物攻预算偏低，首领战不占优",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "area_focus",
+        "PowerBP": 650,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 1605,
+    "Name": "截江钩",
+    "Lore": "戟侧月刃是从旧船锚上锻出的，沾了水便发出铁链拖行声。船家说它还想回江底去。",
+    "LoreRoot": "原创·月刃血戟",
+    "Identity": "钩斩型长兵",
+    "Benefit": "物攻与力量提高近战伤害",
+    "Tradeoff": "没有命中补偿，先解决挥空",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 1606,
+    "Name": "枕中缺",
+    "Lore": "道人将梦里的城门画给铸师，只说要一件能出去的兵器。枪成之后，道人从此不再午睡。",
+    "LoreRoot": "原创·破梦玄戟的穿透意象",
+    "Identity": "精准突刺长戟",
+    "Benefit": "命中集中，适合高闪避目标",
+    "Tradeoff": "平面攻击增幅较少",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 1607,
+    "Name": "定秤砣",
+    "Lore": "庙祝将仿神棒截短，挂在义仓秤尾。乱军来时，伙夫卸下秤砣守门；至今棒上的刻度仍只称粮，不记人命。",
+    "LoreRoot": "原创·仿神棒与义仓",
+    "Identity": "重击力量棒",
+    "Benefit": "集中力量与物攻支撑平砍",
+    "Tradeoff": "命中不足时收益落空，不补法力",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 1608,
+    "Name": "伏波线",
+    "Lore": "海龙纹只在枪杆停住时可见，挥动便成一条银线。它的前主人练了四十年，仍嫌这一线太粗。",
+    "LoreRoot": "原创·龙纹疾枪",
+    "Identity": "连环枪法专门长枪",
+    "Benefit": "集中物攻与连环枪法专属增伤服务连续突刺",
+    "Tradeoff": "其他技能和平砍不享专属增伤，无生存词条",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 95,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "single_focus",
+        "PowerBP": 650,
+        "ThresholdPct": 0,
+        "SkillID": 10002,
+        "SkillName": "连环枪法"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 1609,
+    "Name": "解麟锁",
+    "Lore": "麒麟的传说使铸师不敢封死枪尾，特地留了一把小铜锁。锁孔朝内，像是给枪里的人开的。",
+    "LoreRoot": "原创·麒麟寄枪传说的仿作",
+    "Identity": "体质承伤枪",
+    "Benefit": "体质和物理抗性支撑近战",
+    "Tradeoff": "物攻与暴击均需别处补足",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 1610,
+    "Name": "泉下欠条",
+    "Lore": "炼枪人把欠徒弟的工钱刻进戟脊，淬入幽泉。徒弟后来取走枪，却没有抹去数字：死人欠的账，也得有人认。",
+    "LoreRoot": "原创·阴火幽泉",
+    "Identity": "低血决战戟",
+    "Benefit": "濒危增伤适合受控压血",
+    "Tradeoff": "额外增伤特性仅在低血线出现，不补生命与抗性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 125,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "desperate_assault",
+        "PowerBP": 800,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2003,
+    "Name": "值更牌",
+    "Lore": "盔额镶的不是宝石，而是一枚刻错时辰的宫门牌。戴它的亲兵总比别人早半个时辰交班。",
+    "LoreRoot": "原创·王族亲兵护头",
+    "Identity": "命中守卫头具",
+    "Benefit": "命中配生命，适合稳健开荒",
+    "Tradeoff": "不加物攻，输出上限普通",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2009,
+    "Name": "银山压顶",
+    "Lore": "做头盔的银子本要铸一座微型仙山。匠人偷懒没掏干净山腹，戴上后连打喷嚏都得先扶住桌角。",
+    "LoreRoot": "原创·沉重白银护头",
+    "Identity": "笨重抗打盔",
+    "Benefit": "物理抗性与生命",
+    "Tradeoff": "攻击速度属性降低，配装需关注出手档位",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 25,
+        "Value": 2,
+        "Mode": 1
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2015,
+    "Name": "卖傩人的角",
+    "Lore": "傩班散伙后，扮恶鬼的老人把两只牛角嵌进战盔。盔里留着一撮白粉，是每年开戏前画笑脸用的。",
+    "LoreRoot": "原创·牛角与傩戏",
+    "Identity": "吓人却耐打的头具",
+    "Benefit": "固定物理减伤与体质偏向前排",
+    "Tradeoff": "不增强攻击，术法防护薄弱",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2025,
+    "Name": "倒写必胜",
+    "Lore": "头巾上的字是对着镜子写的。主人每战之后都端详镜中的自己，看谁先忍不住笑出来。",
+    "LoreRoot": "原创·必胜头巾",
+    "Identity": "赌暴击的轻头巾",
+    "Benefit": "小额暴击配命中",
+    "Tradeoff": "没有抗性，持续挨打不合适",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 100,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2026,
+    "Name": "三更啼",
+    "Lore": "冠上羽毛来自一只总在三更报晓的鸟。道人追了它七座山，只为问明天究竟从哪里开始。",
+    "LoreRoot": "原创·灵鸟羽冠",
+    "Identity": "轻捷闪避冠",
+    "Benefit": "敏捷与闪避偏向回避",
+    "Tradeoff": "无法减轻已经命中的伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2045,
+    "Name": "颅中客",
+    "Lore": "龙颅盔里有一片磨光的齿根，敲起来像有人答门。主人睡觉也不脱，怕那位客人终于出来时无人招呼。",
+    "LoreRoot": "原创·龙骨头盔",
+    "Identity": "近身猎首盔",
+    "Benefit": "精英增伤配体质",
+    "Tradeoff": "普通敌人不触发特性，命中另配",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "elite_hunter",
+        "PowerBP": 400,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2046,
+    "Name": "第百次开炉",
+    "Lore": "铜匠一家在炉沿刻了九十九道线。最后一次开炉时，最小的孩子没有刻线，只在盔内留下一个认不全的家字。",
+    "LoreRoot": "原创·百炼火铜",
+    "Identity": "老炉承伤盔",
+    "Benefit": "固定物理减伤集中且附少量生命",
+    "Tradeoff": "不提供暴击与命中，输出需要其他部位",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 25,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2047,
+    "Name": "第十日",
+    "Lore": "一片黑羽在冠中朝东，一片朝西。制冠者不肯说哪片来自神鸟，只嘱咐别在正午替它梳羽。",
+    "LoreRoot": "原创·扶桑三足乌羽传说",
+    "Identity": "抗法羽冠",
+    "Benefit": "魔防与生命缓冲术伤",
+    "Tradeoff": "缺物抗，面对兵刃须换配装",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 24,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2819,
+    "Name": "饭痂衣",
+    "Lore": "操练场上没人抢这件衣服，胸口那块硬痂总有饭香。老伙夫说，真饿急了，至少还能闻一闻。",
+    "LoreRoot": "原创·男式武士服",
+    "Identity": "入门耐打衣",
+    "Benefit": "生命与体质补足容错",
+    "Tradeoff": "不提供输出属性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 1,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2820,
+    "Name": "百结练服",
+    "Lore": "腰间的绳结由前主人每次摔倒后亲手添上。穿衣的人没有数过，解结的人先累得坐下了。",
+    "LoreRoot": "原创·女式武士服",
+    "Identity": "跌打练功服",
+    "Benefit": "闪避与生命帮助入门近战",
+    "Tradeoff": "没有抗法词条",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2821,
+    "Name": "墨匣",
+    "Lore": "鳞片合拢时像一只漆黑的书匣。甲内抄了半卷兵书，剩下半卷据说在敌人的甲里。",
+    "LoreRoot": "原创·男式墨鳞甲",
+    "Identity": "偏物抗轻甲",
+    "Benefit": "固定物理减伤适合密集小击",
+    "Tradeoff": "法术与高单次伤害仍危险",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 1,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2822,
+    "Name": "潜鳞",
+    "Lore": "黑鳞上附着极细的水草，晒多少日也不干。卸甲时若忘了铺盆，第二天脚下必有一滩水。",
+    "LoreRoot": "原创·女式墨鳞甲",
+    "Identity": "法力储备鳞衣",
+    "Benefit": "法力与精神支持频繁用技",
+    "Tradeoff": "不强化物理抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 20,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2831,
+    "Name": "孤擂",
+    "Lore": "擂台木板被拆来衬甲，板上两双足印只剩一双。街坊问谁胜了，制甲人说，不知，台先塌了。",
+    "LoreRoot": "原创·男式无双铠",
+    "Identity": "单挑进攻铠",
+    "Benefit": "命中与力量偏单点战斗",
+    "Tradeoff": "没有生命抗性，依赖走位",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2832,
+    "Name": "不倒翁",
+    "Lore": "腹甲里藏了一枚偏心铁珠，行走时笃笃轻响。习武的孩子把它当不倒翁推，十个孩子也没推倒。",
+    "LoreRoot": "原创·女式无双铠",
+    "Identity": "体质站桩铠",
+    "Benefit": "体质和生命用于硬撑",
+    "Tradeoff": "不提高技能输出",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 18,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2891,
+    "Name": "麒爪痕",
+    "Lore": "铠胸有一道像爪又像掌的凹痕，匠人拒绝补平。他说那东西只是拍了拍肩，已经够客气了。",
+    "LoreRoot": "原创·男式黑麒铠",
+    "Identity": "物抗前排铠",
+    "Benefit": "物抗与体质对付连续近战",
+    "Tradeoff": "术法抗性未补齐",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2892,
+    "Name": "夜巡食梦",
+    "Lore": "黑鳞缝隙里常夹着不认识的头发。守夜人发现，穿它睡过的屋子，谁也记不住当晚的梦。",
+    "LoreRoot": "原创·女式黑麒铠",
+    "Identity": "魔防偏科铠",
+    "Benefit": "魔防与精神缓冲法术压力",
+    "Tradeoff": "物理减伤不突出",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2901,
+    "Name": "灰翎",
+    "Lore": "红铠出炉时，匠人从炉灰中捡到一根白翎。翎毛逢雨便烧，烧完仍是原来那一根。",
+    "LoreRoot": "原创·男式朱雀铠",
+    "Identity": "高血稳攻铠",
+    "Benefit": "高血线增伤配生命",
+    "Tradeoff": "掉到阈值以下失去增伤",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 38,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healthy_assault",
+        "PowerBP": 350,
+        "ThresholdPct": 80
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 2902,
+    "Name": "火浣衬",
+    "Lore": "这件赤甲不怕火，偏偏内衬怕烫。女匠为它换过七层布，最后留下一层无法点燃的灰。",
+    "LoreRoot": "原创·女式朱雀铠",
+    "Identity": "术伤缓冲铠",
+    "Benefit": "魔抗与生命抵御法术",
+    "Tradeoff": "无命中和暴击，不适合竞速",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 28,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 8003,
+    "Name": "纸上长枪",
+    "Lore": "孩童在窗纸上画的枪，雷雨后多了一道影子。铁匠照影打了一杆，窗上的原画便少了枪尖。",
+    "LoreRoot": "原创·空白原述的原创幻枪",
+    "Identity": "低级技能储备枪",
+    "Benefit": "法力与命中辅助技能练级",
+    "Tradeoff": "直接攻击增益不足",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 1,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 9901,
+    "Name": "铁壳蜕",
+    "Lore": "废弃铠壳中有完整的人形，却找不到一处可供脱身的接缝。新主人凿开领口，听见里面呼出一口长气。",
+    "LoreRoot": "原创·空白原述的男铠新故事",
+    "Identity": "生命偏科铠",
+    "Benefit": "生命集中并补少量体质",
+    "Tradeoff": "没有减伤，对重击防护有限",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 48,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 9902,
+    "Name": "盐井衣",
+    "Lore": "铠片来自枯盐井，缝中凝着蓝色盐花。采盐人把它浸过三十桶水，盐花仍在第二天长出来。",
+    "LoreRoot": "原创·空白原述的女铠新故事",
+    "Identity": "抗法甲衣",
+    "Benefit": "魔防与精神增强法术容错",
+    "Tradeoff": "近战输出词条空缺",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 9903,
+    "Name": "无声铁",
+    "Lore": "铠片相撞从不响，摘下来却会在箱底自行叮当。夜行队把这箱子留在营地，假装仍有人守着。",
+    "LoreRoot": "原创·空白原述的男甲新故事",
+    "Identity": "闪避偏科铠",
+    "Benefit": "敏捷与闪避提高回避",
+    "Tradeoff": "不提供命中后减伤",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 9904,
+    "Name": "雷茧",
+    "Lore": "女匠把引雷丝缝入甲衬，想听天雷织布。成品拆不出一根线，布面却留着一枚枚未孵的银卵。",
+    "LoreRoot": "原创·空白原述的女甲新故事",
+    "Identity": "技能储备铠",
+    "Benefit": "法力与命中支持连续施技",
+    "Tradeoff": "生命与物抗都需其他部位",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 42,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 9905,
+    "Name": "负碑",
+    "Lore": "背甲刻了半篇碑文，倒着读才是一张菜谱。没人知道立碑的人供的是哪位神，胃口倒真不小。",
+    "LoreRoot": "原创·空白原述的高阶男铠",
+    "Identity": "重型扛击铠",
+    "Benefit": "物抗与生命缓冲小额连击",
+    "Tradeoff": "不增加攻速，速杀能力一般",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 35,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 9906,
+    "Name": "月中钉",
+    "Lore": "胸甲只有一枚钉，月圆时却投下十三枚钉的影子。制甲人临终只肯数到十二。",
+    "LoreRoot": "原创·空白原述的高阶女铠",
+    "Identity": "濒危保命铠",
+    "Benefit": "低血减伤与生命救急",
+    "Tradeoff": "健康血线只剩普通属性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 48,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "desperate_guard",
+        "PowerBP": 350,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15035,
+    "Name": "白门旧画",
+    "Lore": "画师从说书人的方天戟图上裁去人物，把剩下的戟形交给铸师。铸师照画打成，偏偏在刃下留了一角未画完的白门。",
+    "LoreRoot": "原创·温侯兵器传说的民间仿作",
+    "Identity": "单点破阵画戟",
+    "Benefit": "精英伤害与命中支持长线首领战",
+    "Tradeoff": "普通群怪吃不到精英收益，生命无补强",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 70,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "elite_hunter",
+        "PowerBP": 650,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15036,
+    "Name": "铸潮熄",
+    "Lore": "仿火纹戟的工坊接到一纸退单：海边的战争已经结束。匠人把最后一炉火留在戟内，等一个不必开炉的冬天。",
+    "LoreRoot": "原创·火纹金戟战争背景的支线",
+    "Identity": "持续近战长戟",
+    "Benefit": "物攻与命中适合长线打击",
+    "Tradeoff": "不带范围与收尾特性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15037,
+    "Name": "雷瓮",
+    "Lore": "枪尾封着拇指大的陶瓮，雨前会传来擂鼓声。拆过瓮的匠人说，里面只有一只被电白的蟋蟀。",
+    "LoreRoot": "原创·九天雷枪的原创仿器",
+    "Identity": "暴击爆发枪",
+    "Benefit": "暴击配攻击上限偏高峰值",
+    "Tradeoff": "攻击下限不补，伤害波动大",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 220,
+        "Mode": 0
+      },
+      {
+        "Attr": 31,
+        "Value": 20,
+        "Mode": 0
+      },
+      {
+        "Attr": 29,
+        "Value": -3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15038,
+    "Name": "乳齿关",
+    "Lore": "武罗乳齿的螺纹被刻成微型山道，尽头坐着一个看不清脸的小人。每日转枪一周，小人便换一条道。",
+    "LoreRoot": "原创·武罗乳牙材质",
+    "Identity": "命中与轻快长枪",
+    "Benefit": "命中配少量灵巧",
+    "Tradeoff": "无直接物攻，不擅硬甲消耗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15039,
+    "Name": "沉璞",
+    "Lore": "黑玉戈沉在清水中会把水面映成星夜。有人依照星点算出自己的寿数，第二天便砸了算筹。",
+    "LoreRoot": "原创·瑶池黑玉",
+    "Identity": "法术压力下的长兵",
+    "Benefit": "魔抗与物攻兼顾近战",
+    "Tradeoff": "不加命中，高闪避目标难处理",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15040,
+    "Name": "不赴和宴",
+    "Lore": "兵器册中关于龙骨的那一页被撕去了。新铸的戟柄只绑着两副未用的筷子，提醒执戟者：有的仇，正是别人想让你报的。",
+    "LoreRoot": "原创·龙王戟争端的演劫旁证",
+    "Identity": "克制杀意的护身长兵",
+    "Benefit": "物理防护与稳定物攻兼顾近战存活",
+    "Tradeoff": "扣减魔防，术法爆发需要额外防护",
+    "PowerTier": "chase",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 80,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": -8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "physical_guard",
+        "PowerBP": 350,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15041,
+    "Name": "战后星图",
+    "Lore": "仿沉星戟的刃面刻着撤军路线，经过的村落一个也没少。最后那颗星没有连线，据说是留给尚未归队的人。",
+    "LoreRoot": "原创·沉星改名破军的原述",
+    "Identity": "精英攻坚戟",
+    "Benefit": "精英伤害配物攻用于攻坚",
+    "Tradeoff": "群怪阶段效益减弱，法防不补",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "elite_hunter",
+        "PowerBP": 500,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15042,
+    "Name": "蛇梦木",
+    "Lore": "枯木内部盘着一道没有出口的蛇纹。匠人每刨下一片，第二天便在枕下找到一片新蛇蜕。",
+    "LoreRoot": "原创·腾蛇与方寸枯木传说",
+    "Identity": "流虹之枪范围长兵",
+    "Benefit": "流虹之枪伤害与作用范围提高，配集中物攻清群",
+    "Tradeoff": "单体及其他招式不享专属特性，生命抗性未补",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 200,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 15,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "area_focus",
+        "PowerBP": 700,
+        "ThresholdPct": 0,
+        "SkillID": 10021,
+        "SkillName": "流虹之枪"
+      },
+      {
+        "Kind": "area_expansion",
+        "PowerBP": 1000,
+        "ThresholdPct": 0,
+        "SkillID": 10021,
+        "SkillName": "流虹之枪"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 15043,
+    "Name": "紫霆脊",
+    "Lore": "引雷台只剩一道紫色铁脊，雨落上去便向天空飞回。后来人给它安了戟杆，却没能让雨水学会下落。",
+    "LoreRoot": "原创·紫色地心火与天雷铸胚",
+    "Identity": "高攻重戟",
+    "Benefit": "物攻、力量与暴击形成进攻核心",
+    "Tradeoff": "扣减魔防，法术敌人尤其危险",
+    "PowerTier": "chase",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 220,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 20,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 300,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": -15,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20027,
+    "Name": "空王座",
+    "Lore": "甲胸空着一块方印，谁也没敢补上。穿它的人走入废殿时，殿中所有椅子都朝向了他。",
+    "LoreRoot": "原创·慑魔天铠威压的仿造物",
+    "Identity": "满血承伤铠",
+    "Benefit": "高血线减伤配体质",
+    "Tradeoff": "跌破阈值后只靠普通防护",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healthy_guard",
+        "PowerBP": 300,
+        "ThresholdPct": 80
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20028,
+    "Name": "不拜甲",
+    "Lore": "拜神用的蒲团烧成了胸前的一层黑漆。甲主人问遍寺观，始终没人敢说那一拜究竟受给了谁。",
+    "LoreRoot": "原创·慑魔天铠威压的演劫旁支",
+    "Identity": "抗法重铠",
+    "Benefit": "魔抗与精神偏向法术防线",
+    "Tradeoff": "无额外物抗与攻击",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20035,
+    "Name": "海底量衣",
+    "Lore": "甲师请渔人量一量海底的尺寸。渔人带回绳上七个结，甲师照着做了七处空腔，竟比原铠轻了半数。",
+    "LoreRoot": "原创·深海玄铁轻重反差",
+    "Identity": "物抗机动甲",
+    "Benefit": "物抗配敏捷支持近战回避",
+    "Tradeoff": "不含生命，重击容错依赖体质",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 7,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20036,
+    "Name": "沉船衣柜",
+    "Lore": "百年沉船里，一柜玄铁甲没有沾上半粒泥。开柜时却游出一尾眼睛像铆钉的鱼。",
+    "LoreRoot": "原创·深海玄铁",
+    "Identity": "体质储备重甲",
+    "Benefit": "体质与生命适合站场",
+    "Tradeoff": "魔法防护没有补强",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 30,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20037,
+    "Name": "织铁经",
+    "Lore": "经书上的字一夜化成铁丝，织娘只好将整卷经织进甲里。她说经还是那部经，只是不能再折角。",
+    "LoreRoot": "原创·神锦编缀玄铁",
+    "Identity": "抗法锦甲",
+    "Benefit": "魔防与少量生命增加容错",
+    "Tradeoff": "没有输出词条",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 25,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20038,
+    "Name": "锦里藏针",
+    "Lore": "每片甲上都绣着一根针，拆线后针仍在。偷甲贼穿它过河，翌日河面漂来一床缝好的被子。",
+    "LoreRoot": "原创·神锦铁铠",
+    "Identity": "灵巧回避甲",
+    "Benefit": "灵巧与闪避兼顾命中回避",
+    "Tradeoff": "无固定减伤，不适合硬吃重击",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20039,
+    "Name": "败鳞",
+    "Lore": "龙鳞上有一道浅浅的齿痕，比龙齿小得多。卖甲人声称是自己咬的，偏偏满嘴只剩一颗牙。",
+    "LoreRoot": "原创·大战后龙鳞装甲",
+    "Identity": "近战反压铠",
+    "Benefit": "物抗与物攻适合近身换血",
+    "Tradeoff": "法术减伤词条缺席",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20040,
+    "Name": "换鳞匣衣",
+    "Lore": "甲匣每逢初一便落下一枚旧鳞，空位次日自行长好。第一任主人留下的规矩是，旧鳞绝不许数。",
+    "LoreRoot": "原创·龙鳞稀少的原述",
+    "Identity": "生命偏科龙铠",
+    "Benefit": "生命与体质提高血池",
+    "Tradeoff": "不增加命中，回避敌人仍难缠",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 42,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20041,
+    "Name": "建木断年",
+    "Lore": "树皮甲内有一圈断开的年轮。工匠试图补圆时，工具全长出了细叶，只好带着斧头去浇水。",
+    "LoreRoot": "原创·建木之皮",
+    "Identity": "法术防护树甲",
+    "Benefit": "魔抗配魔防强化抗法",
+    "Tradeoff": "缺少物理承伤能力",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": -2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20042,
+    "Name": "树皮问天",
+    "Lore": "甲内夹着一页求雨疏文，雨神的落款是虫蛀出来的。每次晒甲，附近花盆都会多长一节。",
+    "LoreRoot": "原创·建木圣皮与紫微加持",
+    "Identity": "精神储备树甲",
+    "Benefit": "精神与法力支持技能消耗",
+    "Tradeoff": "输出与物抗均不补足",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 32,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20043,
+    "Name": "瑶池秤金",
+    "Lore": "紫金甲的铆钉轻重不一，秤上却永远平衡。受奖的人每天调换一颗，想知道是哪一桩功劳最重。",
+    "LoreRoot": "原创·瑶池紫神金赏功背景",
+    "Identity": "命中偏科金铠",
+    "Benefit": "命中与灵巧确保出手",
+    "Tradeoff": "没有生命词条，不能当血装",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20044,
+    "Name": "紫井",
+    "Lore": "甲胸中央嵌了一圈紫金，深得像口井。入夜望进去能看见陌生的天，井底从来没有月亮。",
+    "LoreRoot": "原创·西昆仑紫神金",
+    "Identity": "抗法观井铠",
+    "Benefit": "魔防与生命对抗术伤",
+    "Tradeoff": "无增伤与物抗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 34,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20045,
+    "Name": "息为甲",
+    "Lore": "行者坐化时身上没有铠，弟子却抬不起那件薄衣。衣中一口气始终未散，霜天里能看清肩甲轮廓。",
+    "LoreRoot": "原创·武道灵仙以气成铠",
+    "Identity": "生命与物抗兼修甲",
+    "Benefit": "体质与物抗支持近战核心",
+    "Tradeoff": "没有爆发增伤，速刷逊色",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20046,
+    "Name": "无铸炉",
+    "Lore": "甲师整日对着空炉捶打，邻人当他疯了。百日后炉中仍无铁，门前却多了一件只有影子能穿上的甲。",
+    "LoreRoot": "原创·灵神天铠非实物设定",
+    "Identity": "回避之气甲",
+    "Benefit": "敏捷与闪避形成专门回避路线",
+    "Tradeoff": "被命中时没有固定减伤",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 15,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20249,
+    "Name": "鲧土衣",
+    "Lore": "仿古治水甲的夹层填着黑土，铲去一勺便长回一勺。女匠种了一粒稻子，秋天只收获一粒铁。",
+    "LoreRoot": "原创·荡妖宝铠与鲧的原述",
+    "Identity": "物理守关甲",
+    "Benefit": "高物抗加生命缓冲近战",
+    "Tradeoff": "魔防略降，术法敌人需要换装",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 50,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": -5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20250,
+    "Name": "魔河沙",
+    "Lore": "甲里装的沙来自一条无人见过的河，贴近耳边能听见逆流声。水师以它试阵，沙先在图上淹没了自己的营地。",
+    "LoreRoot": "原创·荡妖甲吸纳魔力背景",
+    "Identity": "代价明确的攻守甲",
+    "Benefit": "力量、生命与低血减伤",
+    "Tradeoff": "牺牲命中，需要其他部位补足",
+    "PowerTier": "chase",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 80,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": -5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "desperate_guard",
+        "PowerBP": 400,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20406,
+    "Name": "秋锉",
+    "Lore": "锉屑被收在冠顶，每到霜降便排成一枚枚小刀。扫落它们的匠人，来年再也找不到自己的锉。",
+    "LoreRoot": "原创·仿蓐收神器·金精冠",
+    "Identity": "进攻型金冠",
+    "Benefit": "力量与命中提高近战可靠性",
+    "Tradeoff": "没有生命与抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20416,
+    "Name": "灶君不语",
+    "Lore": "冠上小像没有嘴，炉工只好把祭辞念给火听。有一次火里答了半句，整座窑便被封了。",
+    "LoreRoot": "原创·仿祝融神器·火精冠",
+    "Identity": "生命火冠",
+    "Benefit": "生命与体质提供耐打血池",
+    "Tradeoff": "无命中和物攻",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 34,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20425,
+    "Name": "刈星",
+    "Lore": "冠沿铸成秋镰，夜里会割下细碎星光。藏星光的瓷瓶越轻，冠便越沉。",
+    "LoreRoot": "原创·真式金精顶戴",
+    "Identity": "力量特化冠",
+    "Benefit": "集中力量兼物攻，支撑近战面板",
+    "Tradeoff": "扣减法力，技能续航下降",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": -20,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20430,
+    "Name": "倒炉",
+    "Lore": "这顶冠的火舌朝内，香灰却向外落。戴冠者试了七年，才学会让一支香烧够一个时辰。",
+    "LoreRoot": "原创·真式火精冠",
+    "Identity": "技能储备火冠",
+    "Benefit": "法力与精神辅助耗蓝打法",
+    "Tradeoff": "直接攻击与生命无补益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 40,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20431,
+    "Name": "水下策",
+    "Lore": "水冠缝里塞着一卷湿透的兵策，墨迹永远不散。摊开读，只有水底的倒影能看到字。",
+    "LoreRoot": "原创·仿河洛神器·水精冠",
+    "Identity": "魔防水冠",
+    "Benefit": "魔防与灵巧兼顾抗法命中",
+    "Tradeoff": "物理减伤欠缺",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20441,
+    "Name": "未融雪",
+    "Lore": "冠额那片雪来自六月的旧梦，呼出的热气绕着它走。主人已记不得梦中人，却记得对方怕冷。",
+    "LoreRoot": "原创·真式水精顶戴",
+    "Identity": "抗法专用冠",
+    "Benefit": "魔抗、魔防集中抵御术法",
+    "Tradeoff": "力量略减，平砍输出有损失",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": -3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20494,
+    "Name": "铁算盘匣",
+    "Lore": "算珠都是小铁锤，算到亏欠便齐齐敲响。匠人曾把空匣交给讨债人，响声追了他三条街。",
+    "LoreRoot": "原创·金精宝箱",
+    "Identity": "近战补给匣",
+    "Benefit": "生命与力量支撑近战消耗",
+    "Tradeoff": "不补法力与抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 32,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20504,
+    "Name": "焰中盏",
+    "Lore": "箱里永远有一盏没喝完的热茶，倾倒也不见底。开箱人最怕的是，某日发现杯沿多了别人的唇印。",
+    "LoreRoot": "原创·火神烈焰箱",
+    "Identity": "法力补充箱",
+    "Benefit": "精神与法力支持长时间用技",
+    "Tradeoff": "不补生命与物攻",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 28,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20513,
+    "Name": "缺斤秤",
+    "Lore": "箱底的金秤只能称出缺少的重量。仙商用它称自己的心，秤杆断了。",
+    "LoreRoot": "原创·真式金精宝箱",
+    "Identity": "双池资源匣",
+    "Benefit": "生命与法力储备支持持久施技",
+    "Tradeoff": "不提供攻击、命中或减伤",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 100,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 80,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20518,
+    "Name": "煨日罐",
+    "Lore": "小罐装在箱中央，罐底有一圈逐年缩小的日轮。道童每天添一根柴，已经添了三个甲子。",
+    "LoreRoot": "原创·真式烈焰箱",
+    "Identity": "清怪恢复箱",
+    "Benefit": "击杀回血与生命法力储备支持清杂",
+    "Tradeoff": "没有击杀时不触发恢复，抗性不足",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 40,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 35,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "kill_mend",
+        "PowerBP": 100,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20519,
+    "Name": "九曲漏斗",
+    "Lore": "河图被折成漏斗，注入的水总从画中的山顶流出。兵家拿它推演渡河，十次有九次先淹了地图。",
+    "LoreRoot": "原创·百川归途的水精容器",
+    "Identity": "灵巧水囊",
+    "Benefit": "灵巧与法力用于技能命中配装",
+    "Tradeoff": "没有生命抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 26,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20531,
+    "Name": "不归泉",
+    "Lore": "箱中有一孔泉眼，掬出的水总能回到箱里。唯独某年盛夏失去的那一滴，再也没有回来。",
+    "LoreRoot": "原创·真式百川归途",
+    "Identity": "续法容器",
+    "Benefit": "击杀怪物回蓝服务连续清怪",
+    "Tradeoff": "首领无小怪时缺乏回蓝收益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 44,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "kill_mana",
+        "PowerBP": 125,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20659,
+    "Name": "煤公脸",
+    "Lore": "煤窑工给面甲画了两道白眉，贴在墙上吓跑偷炭的猴子。三天后猴子送来一张更丑的面甲。",
+    "LoreRoot": "原创·火种面甲",
+    "Identity": "抗法煤面",
+    "Benefit": "魔抗与生命防护术伤",
+    "Tradeoff": "不提供命中与攻击",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 27,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20664,
+    "Name": "钱孔目",
+    "Lore": "金面双眼像两枚钱孔，透过去看人，衣冠都成了铁屑。故主人从不戴它赴宴。",
+    "LoreRoot": "原创·金神之颜",
+    "Identity": "命中型面具",
+    "Benefit": "命中与暴击辅助精准出手",
+    "Tradeoff": "生命和减伤仍需别处解决",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 100,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20673,
+    "Name": "冶金笑",
+    "Lore": "面具微笑时露出一排金牙，原本一颗也没有。铸师说牙是夜里偷吃炉料长出来的。",
+    "LoreRoot": "原创·真式金颜",
+    "Identity": "物攻偏科面甲",
+    "Benefit": "物攻与力量提高普通攻击",
+    "Tradeoff": "无任何防护词条",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20678,
+    "Name": "焚书眉",
+    "Lore": "火面额上有一道书页烧成的眉，拓下来竟是失传的菜谱。道人试着煮了一次，锅先飞升了。",
+    "LoreRoot": "原创·真式九天火种",
+    "Identity": "技能面具",
+    "Benefit": "技能伤害配法力服务频繁出手",
+    "Tradeoff": "普通攻击不吃技能特性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 45,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "skill_focus",
+        "PowerBP": 350,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20679,
+    "Name": "冰墨脸",
+    "Lore": "画脸用的墨是冻住的江水，融化就会流到别人的面孔上。画师因此只在隆冬接活。",
+    "LoreRoot": "原创·水神冷漠面具",
+    "Identity": "抗法灵巧面",
+    "Benefit": "魔防与灵巧偏向术战",
+    "Tradeoff": "不增加物理抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20689,
+    "Name": "潮后空颜",
+    "Lore": "海潮替面具磨去了五官，只留下一只额眼。将它埋进沙里，第二日沙滩便出现一张巨脸。",
+    "LoreRoot": "原创·真式水神面具",
+    "Identity": "魔法减伤面具",
+    "Benefit": "魔法减伤特性配魔防",
+    "Tradeoff": "面对纯物理敌人收益偏低",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 36,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "magic_guard",
+        "PowerBP": 300,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20824,
+    "Name": "金屐牙",
+    "Lore": "鞋底的齿能啃断石阶，却咬不穿薄纸。道士铺了一路黄纸上山，省下了修门槛的钱。",
+    "LoreRoot": "原创·金精足具",
+    "Identity": "力量金屐",
+    "Benefit": "力量与命中补近战出手",
+    "Tradeoff": "没有生命与固定抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20829,
+    "Name": "敲骨钉",
+    "Lore": "靴钉来自铸坏的铜人，踩在山石上像叩骨问卜。主人问过婚期，此后只敢问天气。",
+    "LoreRoot": "原创·真式金神足具",
+    "Identity": "物抗铁靴",
+    "Benefit": "固定物抗与体质偏前排",
+    "Tradeoff": "不增加命中和技能输出",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20834,
+    "Name": "履中丹",
+    "Lore": "炼废的丹砂被缝进鞋底，走一里路便少一粒。道人走遍九州，最后一粒始终在左鞋里。",
+    "LoreRoot": "原创·真式火履",
+    "Identity": "法力行功靴",
+    "Benefit": "精神与法力支持技能行路",
+    "Tradeoff": "不补物理减伤",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 36,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20839,
+    "Name": "灶沿印",
+    "Lore": "鞋底留下半圈灶沿，每走一步便印出一个缺口。厨子认得那缺口，是他童年磕掉的。",
+    "LoreRoot": "原创·真火足具",
+    "Identity": "轻捷火靴",
+    "Benefit": "敏捷与闪避偏回避",
+    "Tradeoff": "被命中后没有减伤加成",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20849,
+    "Name": "潮线",
+    "Lore": "靴筒每天高出一道水渍，清洗后反而更深。穿靴人从不下海，却总梦见自己站在海底。",
+    "LoreRoot": "原创·千浪之履",
+    "Identity": "生命水靴",
+    "Benefit": "生命与魔防适合术伤环境",
+    "Tradeoff": "不补命中，攻击需要配套",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 29,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20854,
+    "Name": "回水弯",
+    "Lore": "一双靴子总向不同方向歪着，唯有逆流而走才合脚。河岸上的脚印因此像两个人互相追逐。",
+    "LoreRoot": "原创·真式千浪足具",
+    "Identity": "抗法偏科靴",
+    "Benefit": "魔抗与精神强化术法防线",
+    "Tradeoff": "物抗不足，物理群怪有压力",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20882,
+    "Name": "烧指套",
+    "Lore": "炉工的十个指套只找回九个，后来那一个从铸好的护腕里敲门。没人敢替它开门。",
+    "LoreRoot": "原创·火神手套",
+    "Identity": "物攻火护手",
+    "Benefit": "物攻与命中偏近战出手",
+    "Tradeoff": "无生命与抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20887,
+    "Name": "铸纹掌",
+    "Lore": "掌纹被翻铸在护手外面，掌相先生看完断言此人一生捡钱。主人气得摘了护手，果然掉出两枚铜钱。",
+    "LoreRoot": "原创·金神之握",
+    "Identity": "力量金护手",
+    "Benefit": "力量与少量暴击支持平砍",
+    "Tradeoff": "不补生存和法力",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 100,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20892,
+    "Name": "丹炉把手",
+    "Lore": "护腕本是丹炉的提耳，炼丹失败后仍能握住滚烫铁块。炉主最遗憾的，是成功的只剩这对把手。",
+    "LoreRoot": "原创·真式火神之手",
+    "Identity": "野战八荒增伤护腕",
+    "Benefit": "野战八荒专属伤害提高，配少量物攻命中",
+    "Tradeoff": "其他招式与普通攻击不获专属增伤",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "skill_focus",
+        "PowerBP": 1200,
+        "ThresholdPct": 0,
+        "SkillID": 10022,
+        "SkillName": "野战八荒"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20897,
+    "Name": "铁雨十指",
+    "Lore": "护手在暴雨里张开，会接住细小的铁砂。铸师用这些砂打造了第二只手，却再没等来那场雨。",
+    "LoreRoot": "原创·真式金神之握",
+    "Identity": "平砍攻速护手",
+    "Benefit": "提高攻击速度属性并补物攻",
+    "Tradeoff": "不含命中，挥空会浪费攻速",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 25,
+        "Value": -6,
+        "Mode": 1
+      },
+      {
+        "Attr": 47,
+        "Value": 15,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20907,
+    "Name": "掌上河",
+    "Lore": "水纹从护掌中央分成五股，终日在指尖汇流。握拳时能听见水闸合拢，却从没有一滴水落下。",
+    "LoreRoot": "原创·水神之手",
+    "Identity": "法力水手套",
+    "Benefit": "法力与灵巧改善技能配装",
+    "Tradeoff": "无直接物攻",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20912,
+    "Name": "捞月盂",
+    "Lore": "铁匠照着猴子捞月的手势铸了护手，发现月影真能盛住一会儿。天亮前必须倒回水中。",
+    "LoreRoot": "原创·真式水神手具",
+    "Identity": "抗法续技护手",
+    "Benefit": "魔防与精神支撑法术压力",
+    "Tradeoff": "缺少暴击与物攻",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20969,
+    "Name": "炭瞳",
+    "Lore": "戒面的红点像一只缩小的火眼，盯久了会打哈欠。火匠说它已经替主人看了太多炉。",
+    "LoreRoot": "原创·火神之眼",
+    "Identity": "暴击火戒",
+    "Benefit": "小额暴击和物攻补伤害",
+    "Tradeoff": "没有命中，低命中配装不合适",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 120,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20974,
+    "Name": "铜舌",
+    "Lore": "戒中藏着小铜铃，却只能在人撒谎后响。主人最后把铃舌拆了，留着戒指防止自己忘记。",
+    "LoreRoot": "原创·金神之魂",
+    "Identity": "命中金戒",
+    "Benefit": "命中与灵巧减少落空",
+    "Tradeoff": "缺少平面攻击增幅",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20989,
+    "Name": "燧人剩石",
+    "Lore": "燧石戒常年冰冷，只有两指搓动时蹦出一点火。那火点燃不了草，偏能烧穿写错的符。",
+    "LoreRoot": "原创·真式火神眼戒",
+    "Identity": "单点施技戒",
+    "Benefit": "单体技能增伤配命中",
+    "Tradeoff": "群攻与普通攻击不吃特性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "single_focus",
+        "PowerBP": 450,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 20994,
+    "Name": "无价齿金",
+    "Lore": "戒面是一粒咬不断的金子，齿痕却年年增多。主人声称它专门勾引世上最有耐心的贪财鬼。",
+    "LoreRoot": "原创·真式金神魂戒",
+    "Identity": "暴击专门戒",
+    "Benefit": "暴击与攻击上限增强峰值",
+    "Tradeoff": "不补攻击下限，波动显著",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 300,
+        "Mode": 0
+      },
+      {
+        "Attr": 31,
+        "Value": 24,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21004,
+    "Name": "潮贩",
+    "Lore": "珠子里装着一场退潮，海水已退了三百年。卖珠人按露出的礁石收钱，至今只收到第一块的。",
+    "LoreRoot": "原创·东海明珠",
+    "Identity": "精神珠戒",
+    "Benefit": "精神与魔防面向术战",
+    "Tradeoff": "没有物攻或物抗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21009,
+    "Name": "蚌国门",
+    "Lore": "戒上的珠子裂开一道细缝，缝里有十万盏灯。有人对着喊价，里面回说城门已关，明早再来。",
+    "LoreRoot": "原创·真式东海明珠",
+    "Identity": "生命法力双池戒",
+    "Benefit": "生命与法力改善长线消耗",
+    "Tradeoff": "不补伤害及抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 36,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 36,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21105,
+    "Name": "焰结",
+    "Lore": "项绳打成了一个火结，拆开时会烧掉解结者刚想说的话。哑道士戴了半生，绳结从未松过。",
+    "LoreRoot": "原创·火神灵光坠",
+    "Identity": "生命火坠",
+    "Benefit": "生命与体质补前排血量",
+    "Tradeoff": "缺少命中和伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 32,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21115,
+    "Name": "秋牙",
+    "Lore": "牙雕上刻了一张收租簿，欠的是四时雨露。乡人每年把第一粒新谷塞进牙缝，账仍没还清。",
+    "LoreRoot": "原创·金神牙雕",
+    "Identity": "力量牙坠",
+    "Benefit": "力量与物攻帮助普通攻击",
+    "Tradeoff": "术法防护为零增益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21125,
+    "Name": "一线炉心",
+    "Lore": "吊坠的细孔直通炉膛般的红光，匠人用头发试深浅，头发回来时已变成白色。",
+    "LoreRoot": "原创·真式火神灵光",
+    "Identity": "暴击进攻坠",
+    "Benefit": "暴击时增伤配暴击率",
+    "Tradeoff": "未暴击时只剩普通属性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 220,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "critical_focus",
+        "PowerBP": 500,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21130,
+    "Name": "庚辛契",
+    "Lore": "金片两面分别刻着庚与辛，翻面时掌心会多一道细纹。占者说是两位不肯相见的金神在借路。",
+    "LoreRoot": "原创·真式金神牙雕",
+    "Identity": "力量命中特化坠",
+    "Benefit": "力量与命中建立稳定近战面板",
+    "Tradeoff": "不补生命，防护需要另配",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21140,
+    "Name": "井誓",
+    "Lore": "坠子是从古井绞盘上拆下的铁环。喝过那口井的人都说水甜，只有铸匠说里面有兵刃的味道。",
+    "LoreRoot": "原创·水神决心坠",
+    "Identity": "魔防水坠",
+    "Benefit": "魔防配生命应对术伤",
+    "Tradeoff": "没有进攻属性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 25,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21145,
+    "Name": "河图空白",
+    "Lore": "坠内的河图缺了一条河，补画的墨总会流出来。老道人不让再补，说那是尚未下过的一场雨。",
+    "LoreRoot": "原创·真式水神决心",
+    "Identity": "低血保命坠",
+    "Benefit": "低血减伤与生命作为险境缓冲",
+    "Tradeoff": "未进入低血线时增益普通",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 54,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "desperate_guard",
+        "PowerBP": 350,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21776,
+    "Name": "风腹",
+    "Lore": "盔里装着一团旋风，转了多年仍找不到出口。主人往里塞过一片叶子，叶子比他先学会了识字。",
+    "LoreRoot": "原创·空白原述的暴风头盔",
+    "Identity": "回避风盔",
+    "Benefit": "敏捷与闪避支持回避路线",
+    "Tradeoff": "不减轻已命中伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21777,
+    "Name": "紧箍客",
+    "Lore": "头箍越生气越松，越平静越紧。武夫只好天天听笑话，以免练到一半箍子落地。",
+    "LoreRoot": "原创·空白原述的狂战头箍",
+    "Identity": "普通攻击头箍",
+    "Benefit": "物攻与暴击支持平砍",
+    "Tradeoff": "没有生命或法防",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 130,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 21778,
+    "Name": "幻兽空角",
+    "Lore": "盔顶两角摸起来有形，看过去却一片空白。猎人沿着角尖望了十年，还没找到那头兽的尾巴。",
+    "LoreRoot": "原创·空白原述的幻麟圣盔",
+    "Identity": "低血抗压盔",
+    "Benefit": "低血减伤、生命与体质",
+    "Tradeoff": "不加命中和输出，爆发流不适合",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 72,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "desperate_guard",
+        "PowerBP": 350,
+        "ThresholdPct": 35
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22018,
+    "Name": "露重",
+    "Lore": "冠上每滴露都有小小的影子，正午也不蒸发。摘一滴放在舌尖，只尝得到昨夜的凉。",
+    "LoreRoot": "原创·金风玉露制盔",
+    "Identity": "魔防露冠",
+    "Benefit": "魔防与法力适合消耗战",
+    "Tradeoff": "无直接物攻",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 28,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22019,
+    "Name": "补天碗",
+    "Lore": "头盔原是一只盛玄钢碎屑的碗，碗底的漏孔补了七次。最后一块补丁，来自匠人自己的锤。",
+    "LoreRoot": "原创·稀少玄钢制盔",
+    "Identity": "物抗铁盔",
+    "Benefit": "物抗与生命提高挨打容错",
+    "Tradeoff": "不增强施技",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 28,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22020,
+    "Name": "喷海",
+    "Lore": "乌晶盔里封着一次海底喷发的火光。敲击左右两侧，听见的浪声总隔着一个时辰。",
+    "LoreRoot": "原创·东海火山乌晶",
+    "Identity": "命中矿盔",
+    "Benefit": "命中与灵巧用于稳定打击",
+    "Tradeoff": "生存词条偏少",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22021,
+    "Name": "睡玉人",
+    "Lore": "冠中玉花倒映着一个熟睡的人，没人认识他的脸。戴冠者一旦打盹，那人便会醒来坐着。",
+    "LoreRoot": "原创·天魄凝魂副产物",
+    "Identity": "精神魂盔",
+    "Benefit": "精神与魔防应对法术",
+    "Tradeoff": "缺少物理承伤",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22022,
+    "Name": "缺一御",
+    "Lore": "盔上三清四御的画像少了一位，空处被磨得发亮。刻匠并非不会画，只说那位不愿入画。",
+    "LoreRoot": "原创·三清四御宝相",
+    "Identity": "抗法仪式盔",
+    "Benefit": "魔法减伤配生命缓冲术击",
+    "Tradeoff": "物理攻击不受特性减伤",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 45,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 17,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "magic_guard",
+        "PowerBP": 300,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22023,
+    "Name": "天重三两",
+    "Lore": "称盔时总是三两，戴上却像顶着整片阴天。金仙的学徒为此练了百年颈功，终于学会先低头。",
+    "LoreRoot": "原创·浩天神盔的资格门槛",
+    "Identity": "体质专门盔",
+    "Benefit": "体质与生命集中提高血池",
+    "Tradeoff": "无抗性，百分比高伤仍难承受",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 65,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22024,
+    "Name": "火鸦巢",
+    "Lore": "火盔中编了一个小巢，里面并无鸟卵。匠人每年换一次巢草，说空巢也总得有点像样的准备。",
+    "LoreRoot": "原创·南明离火盔的仿器",
+    "Identity": "生命火盔",
+    "Benefit": "生命与魔抗侧重术伤容错",
+    "Tradeoff": "不提高物攻命中",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 43,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22025,
+    "Name": "千年磕",
+    "Lore": "玄玉上有个磕口，照出的一切都比实物慢一息。匠人按着它磨刀，刀刃总比手先破。",
+    "LoreRoot": "原创·方寸玄玉",
+    "Identity": "近战回避重盔",
+    "Benefit": "闪避与命中辅助近身缠斗",
+    "Tradeoff": "没有固定减伤",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22026,
+    "Name": "蚀盘",
+    "Lore": "魔盔内侧刻着日晷，晷针的影子每夜缩短。守观人守到影子全无时，发现自己已不在观内。",
+    "LoreRoot": "原创·逆日魔厉",
+    "Identity": "重攻魔盔",
+    "Benefit": "物攻与力量形成强攻取向",
+    "Tradeoff": "减少生命，抗压能力下降",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 27,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": -35,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22086,
+    "Name": "曙袜",
+    "Lore": "靴内藏着一双薄袜，露水总在袜外结霜。道童舍不得换袜，只好每日倒着走过结霜的桥。",
+    "LoreRoot": "原创·金风玉露制靴",
+    "Identity": "体质行路靴",
+    "Benefit": "体质与魔防支持远行消耗",
+    "Tradeoff": "不增输出和命中",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22087,
+    "Name": "铁蒺底",
+    "Lore": "鞋底的玄钢蒺藜会避开草根，却从不避开石头。穿靴的校尉怀疑它比自己更懂庄稼。",
+    "LoreRoot": "原创·玄钢小件足具",
+    "Identity": "物抗耐耗靴",
+    "Benefit": "物抗与生命抵御近战连击",
+    "Tradeoff": "无魔法防护和攻击增幅",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 32,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22088,
+    "Name": "乌晶足迹",
+    "Lore": "脚印里会留下细碎黑晶，拾起即化成盐。采矿人跟着这些脚印走，最后到了自己床前。",
+    "LoreRoot": "原创·喷海乌晶足具",
+    "Identity": "灵巧乌晶靴",
+    "Benefit": "命中与敏捷兼顾出手回避",
+    "Tradeoff": "不提供生命储备",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 7,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22089,
+    "Name": "离魂跫音",
+    "Lore": "靴子空着时仍能走两步，穿上反而安静。看守仓库的人一直没查明第三步是谁走的。",
+    "LoreRoot": "原创·天魄凝魂足具",
+    "Identity": "法力魂靴",
+    "Benefit": "法力与精神支撑技能消耗",
+    "Tradeoff": "物防和输出缺席",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 36,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22090,
+    "Name": "踏罡缺笔",
+    "Lore": "靴底的罡步图少最后一笔，补上就会自行脱落。老道说阵势若真走完，未必还能留在人间。",
+    "LoreRoot": "原创·三清四御足具",
+    "Identity": "技能命中靴",
+    "Benefit": "技能增伤与命中",
+    "Tradeoff": "普通攻击收益低，无抗性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 40,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "skill_focus",
+        "PowerBP": 350,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22091,
+    "Name": "云阶债",
+    "Lore": "一双靴子走过的云阶会变硬，掌管云路的吏员屡次来收石税。主人只肯付雨钱。",
+    "LoreRoot": "原创·浩天足具",
+    "Identity": "高生命云靴",
+    "Benefit": "生命与体质用于承伤",
+    "Tradeoff": "不补闪避和伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 45,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22092,
+    "Name": "红炭屐",
+    "Lore": "履齿是一排永不熄灭的红炭，踏雪却无融痕。樵夫拿它烘过一夜湿柴，柴上长出满树火花。",
+    "LoreRoot": "原创·离火足具",
+    "Identity": "普通攻击火靴",
+    "Benefit": "平砍增伤与物攻",
+    "Tradeoff": "技能不受平砍特性帮助",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "basic_focus",
+        "PowerBP": 350,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22093,
+    "Name": "石中趾",
+    "Lore": "玉靴内有十个凹槽，数目一直正确，位置却每月换一次。穿它的人终于学会不用脚趾抓地。",
+    "LoreRoot": "原创·方寸玄玉足具",
+    "Identity": "闪避专用靴",
+    "Benefit": "敏捷与闪避强化回避路线",
+    "Tradeoff": "无法缓冲必中或已命中的攻击",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 18,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22094,
+    "Name": "倒影先行",
+    "Lore": "靴在灯下投出的影子总先迈步。主人先跟它走，后来改由自己带路，双方时常在门槛上争执。",
+    "LoreRoot": "原创·逆日魔足具",
+    "Identity": "暴击进攻靴",
+    "Benefit": "暴击与命中偏高峰值",
+    "Tradeoff": "生命略降，不适合低容错配装",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 180,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": -18,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22103,
+    "Name": "捻露指",
+    "Lore": "指尖镶着能夹起露珠的金片。修士用它把一场雨分装入七百个瓶子，卖给沙漠来的客人。",
+    "LoreRoot": "原创·金风玉露护手",
+    "Identity": "灵巧细工手",
+    "Benefit": "灵巧与命中保障出手",
+    "Tradeoff": "没有暴击及生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22104,
+    "Name": "旧锤掌",
+    "Lore": "护掌取自一柄锤的断面，每条裂纹都曾打成一把兵器。铸匠退休后，反倒最喜欢空手敲东西。",
+    "LoreRoot": "原创·玄钢护手",
+    "Identity": "力量铁护手",
+    "Benefit": "力量与物攻偏平砍",
+    "Tradeoff": "法力与防护不补",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22105,
+    "Name": "捉烬",
+    "Lore": "乌晶指甲里夹着无法吹散的火山灰。戴上它抓过的鱼会在盆底排列成群星，却仍然是鱼。",
+    "LoreRoot": "原创·海底乌晶护手",
+    "Identity": "暴击矿护腕",
+    "Benefit": "暴击与攻击上限支持爆发",
+    "Tradeoff": "不抬攻击下限，伤害不稳定",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 140,
+        "Mode": 0
+      },
+      {
+        "Attr": 31,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22106,
+    "Name": "玉胎手",
+    "Lore": "护手掌心有一道胎记，握拳时便像婴孩蜷起。试图替它起名的人，每次都会忘掉自己的小名。",
+    "LoreRoot": "原创·天魄凝魂护手",
+    "Identity": "体质魂手套",
+    "Benefit": "体质与生命增加存活",
+    "Tradeoff": "不增强命中输出",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 30,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22107,
+    "Name": "拈香铁",
+    "Lore": "指套常年沾着香灰，擦去后浮出微小宝相。寺中住持嫌它太沉，武夫却嫌它握刀太轻。",
+    "LoreRoot": "原创·三清四御护手",
+    "Identity": "抗法护掌",
+    "Benefit": "魔防与魔抗抵御术法",
+    "Tradeoff": "物理攻击没有额外防护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22108,
+    "Name": "举天痕",
+    "Lore": "掌心一道横纹把天光切成两半，握紧才会合拢。观星人借去一夜，第二天送回半张星图。",
+    "LoreRoot": "原创·浩天神手",
+    "Identity": "专门力量护手",
+    "Benefit": "力量与物攻集中服务近战",
+    "Tradeoff": "扣减灵巧，需额外补命中",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": -4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22109,
+    "Name": "炉雀停",
+    "Lore": "护腕上有三枚焦黑爪印，戴上时像有鸟停在手边。主人撒过小米，回来发现铁钉被啄走了。",
+    "LoreRoot": "原创·南明离火护手",
+    "Identity": "平砍节奏手",
+    "Benefit": "提高攻击速度属性并给物攻",
+    "Tradeoff": "不补生命与法防",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 25,
+        "Value": -7,
+        "Mode": 1
+      },
+      {
+        "Attr": 47,
+        "Value": 18,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22110,
+    "Name": "摩崖指",
+    "Lore": "玄玉掌背被刻成一面小山崖，上有蚂蚁般的字。放大了看，竟是更小的山崖。",
+    "LoreRoot": "原创·方寸玄玉护手",
+    "Identity": "命中偏科手",
+    "Benefit": "高命中配灵巧适合高回避目标",
+    "Tradeoff": "平面伤害不及攻击型手套",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22111,
+    "Name": "偷日拳",
+    "Lore": "魔掌握紧时，附近灯芯会短一截。酒馆为它另列灯油钱，主人已经欠了三百碗面的价。",
+    "LoreRoot": "原创·逆日魔护手",
+    "Identity": "代价进攻手",
+    "Benefit": "物攻与暴击提供爆发",
+    "Tradeoff": "魔抗下降，术伤风险上升",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 260,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": -5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22120,
+    "Name": "三文结",
+    "Lore": "仙袋的金索只能打三个结，第四个会自动变成铜钱。掌柜研究了一年，发现先前的三文押金总在减少。",
+    "LoreRoot": "原创·金索银丝容器",
+    "Identity": "体质储技袋",
+    "Benefit": "体质与法力支持长期用技",
+    "Tradeoff": "无命中和直接物攻",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 35,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22121,
+    "Name": "紫气剩头",
+    "Lore": "织娘把剪下的紫气线头装进袋中。袋口一开，清晨便总比天边早到一会儿。",
+    "LoreRoot": "原创·东来紫气纺丝",
+    "Identity": "精神轻囊",
+    "Benefit": "精神与法力辅助持续施技",
+    "Tradeoff": "战斗承伤缺少补强",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 30,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22122,
+    "Name": "响玉粮",
+    "Lore": "玉片袋每装一粒米便响一声，满袋时反而寂静。行脚人据此分辨饥荒的年份，记录从没错过。",
+    "LoreRoot": "原创·仙玉薄片容器",
+    "Identity": "术伤缓冲袋",
+    "Benefit": "生命与魔防提高术伤容错",
+    "Tradeoff": "不增加输出和物抗",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 34,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22123,
+    "Name": "门后门",
+    "Lore": "箱中放着一扇小门，打开后仍是一扇门。探路人系绳进去，回来时绳头比他年长三岁。",
+    "LoreRoot": "原创·空枢自成空间",
+    "Identity": "战技储备匣",
+    "Benefit": "大量法力与力量支持反复施技",
+    "Tradeoff": "不提供生命和减伤",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 100,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22124,
+    "Name": "装山半袋",
+    "Lore": "道人夸口一袋能装山，回来时袋里只有半座。另一半山至今仍在原处，切面平得可以晒谷。",
+    "LoreRoot": "原创·乾坤纳物传说",
+    "Identity": "近战命中囊",
+    "Benefit": "力量与命中减少近战落空",
+    "Tradeoff": "无抗性和血量词条",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22125,
+    "Name": "芥子账",
+    "Lore": "袋内贴着一张小得看不见的账单。每逢主人买大件，账单就长大一分，袋子倒从未胀过。",
+    "LoreRoot": "原创·须弥纳物",
+    "Identity": "气血储备袋",
+    "Benefit": "体质与法力兼顾血量和用技储备",
+    "Tradeoff": "无直接伤害或抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 40,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22126,
+    "Name": "豕腹暖",
+    "Lore": "袋皮一到饭点便哼哼作声，只喂烧焦的谷糠才肯安静。刀兵放进去不响，锅铲进去却很高兴。",
+    "LoreRoot": "原创·封豨之皮容器",
+    "Identity": "清杂续命袋",
+    "Benefit": "击杀回血、生命与物抗适合连续清杂",
+    "Tradeoff": "无击杀时不产生恢复，对术伤补防有限",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 52,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "kill_mend",
+        "PowerBP": 125,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22127,
+    "Name": "洗不净",
+    "Lore": "袋上妖血洗过九九次，只剩米粒大的印。道人打算再洗一次，盆里却倒映出整片血海。",
+    "LoreRoot": "原创·降妖袋染血失效的原述",
+    "Identity": "抗法续技袋",
+    "Benefit": "魔抗与法力服务术伤环境下的施技",
+    "Tradeoff": "不含收妖能力与直接伤害特性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 40,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22128,
+    "Name": "失灵玉筛",
+    "Lore": "筛孔中卡着最后一粒未能净化的仙玉。鉴玉师天天用它校色，宁可相信这粒顽石，也不信灯光。",
+    "LoreRoot": "原创·失去净玉功效的容器",
+    "Identity": "精准爆发袋",
+    "Benefit": "命中与暴击偏向准确出手",
+    "Tradeoff": "无净玉能力，生命抗性不补",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 160,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22130,
+    "Name": "露幕",
+    "Lore": "面甲薄得能透出嘴角，露凝之后却只映出陌生人的笑。制甲人建议，晨起别先照镜。",
+    "LoreRoot": "原创·金风玉露面甲",
+    "Identity": "灵巧清露面",
+    "Benefit": "灵巧与魔防适合术战命中",
+    "Tradeoff": "物抗与生命不足",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22131,
+    "Name": "半张铁脸",
+    "Lore": "锻打到鼻梁时玄钢用尽，另一半用薄铜补成。主人偏偏只让人从铜的一侧画画像。",
+    "LoreRoot": "原创·稀少玄钢面甲",
+    "Identity": "物抗半面",
+    "Benefit": "物抗与少量命中帮助贴身战",
+    "Tradeoff": "不加强法防",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22132,
+    "Name": "黑潮眶",
+    "Lore": "黑晶镜片映不出海水，只映出海床。老渔师看了一眼便摘下，说下面的船比记得的多。",
+    "LoreRoot": "原创·东海乌晶面甲",
+    "Identity": "命中乌晶面",
+    "Benefit": "命中与暴击偏精准爆发",
+    "Tradeoff": "没有生存词条",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 120,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22133,
+    "Name": "另一口气",
+    "Lore": "面具摘下后仍会呼吸，戴着却感觉不到。道士数过它的气息，每天总比自己多一口。",
+    "LoreRoot": "原创·天魄凝魂面甲",
+    "Identity": "法力魂面",
+    "Benefit": "精神与法力支持技能预算",
+    "Tradeoff": "普通攻击和抗性不补",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 35,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22134,
+    "Name": "神像背面",
+    "Lore": "面上刻满神像，内侧却只刻一张打哈欠的脸。刻匠说，神也得有人替班。",
+    "LoreRoot": "原创·三清四御面甲",
+    "Identity": "魔法防线面甲",
+    "Benefit": "魔防与生命抵御术伤",
+    "Tradeoff": "没有伤害词条",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 30,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22135,
+    "Name": "云牙",
+    "Lore": "面甲的牙齿是凝云所成，开口便飘下一小片雨。主人学会闭嘴打仗后，牙齿一颗也没少过。",
+    "LoreRoot": "原创·浩天面甲",
+    "Identity": "生命专门面甲",
+    "Benefit": "生命与体质补站场血量",
+    "Tradeoff": "不提供闪避和减伤",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 75,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22136,
+    "Name": "火面无鼻",
+    "Lore": "面甲没有鼻孔，火匠用它寻找炉中异味。每次摘下面甲，眉毛就会比昨日更红一些。",
+    "LoreRoot": "原创·离火面甲",
+    "Identity": "技能爆发火面",
+    "Benefit": "技能增伤与物攻",
+    "Tradeoff": "平砍不受特性加成",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 19,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "skill_focus",
+        "PowerBP": 400,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22137,
+    "Name": "玉口缄",
+    "Lore": "面甲嘴部天然闭合，工匠钻了三天也未钻开。换一个角度看，嘴里似乎正含着一枚小小的月亮。",
+    "LoreRoot": "原创·方寸玄玉面甲",
+    "Identity": "魔防玄玉面",
+    "Benefit": "魔防与魔抗集中抗法",
+    "Tradeoff": "物理输出无补益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22138,
+    "Name": "日蚀眉骨",
+    "Lore": "这张脸只有在日食时像人，其余时候像一块熄灭的炭。主人画眉画了半辈子，炭面始终不肯留墨。",
+    "LoreRoot": "原创·逆日魔面甲",
+    "Identity": "高攻魔面",
+    "Benefit": "力量与物攻强化近战",
+    "Tradeoff": "牺牲生命，需专门防护配套",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 23,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": -32,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22140,
+    "Name": "北极缺星",
+    "Lore": "坠内星图的北极处空着，拨动坠子时众星便缓缓绕空处转。观星人认为，空处才是最亮的那颗。",
+    "LoreRoot": "原创·北极星力坠饰",
+    "Identity": "精神星坠",
+    "Benefit": "精神与魔防适应术伤",
+    "Tradeoff": "物攻与暴击未增加",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22141,
+    "Name": "一寸灯心",
+    "Lore": "金灯芯截作吊坠后仍每百年长一寸。后人算好它长到脚边的日期，早早预备了一把长梯。",
+    "LoreRoot": "原创·神炎金灯芯材质",
+    "Identity": "生命灯坠",
+    "Benefit": "生命与体质补充血池",
+    "Tradeoff": "没有命中和减伤",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 36,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22142,
+    "Name": "七孔不吹",
+    "Lore": "魂玉七孔恰好能作笛，试吹的人却听见自己的心跳。音乐家嫌节奏太差，把它还给了武夫。",
+    "LoreRoot": "原创·七棱七窍魂玉",
+    "Identity": "精准魂玉坠",
+    "Benefit": "命中与灵巧适合回避敌人",
+    "Tradeoff": "平面伤害低于攻击坠",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22143,
+    "Name": "眨金",
+    "Lore": "妖眼仿品只会在没人看时眨一下，照镜子也算有人。收藏家养了一只盲猫，才终于确信它不是石头。",
+    "LoreRoot": "原创·妖王金眼的仿制物",
+    "Identity": "暴击眼坠",
+    "Benefit": "暴击与攻击上限增强峰值",
+    "Tradeoff": "伤害下限不补，波动较高",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 170,
+        "Mode": 0
+      },
+      {
+        "Attr": 31,
+        "Value": 15,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22144,
+    "Name": "角上盟辞",
+    "Lore": "断角缀成项链后被刻上一纸互不侵犯的盟辞。第一场雨洗掉了字，留下的刀痕却清晰如初。",
+    "LoreRoot": "原创·大战断龙角赏功背景",
+    "Identity": "精英攻坚坠",
+    "Benefit": "精英增伤与命中支持首领",
+    "Tradeoff": "普通敌群不触发增伤",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 18,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "elite_hunter",
+        "PowerBP": 450,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22145,
+    "Name": "不饱牙",
+    "Lore": "牙坠吞掉的第一件东西是一张菜单。此后无论放在什么旁边，都只留下整整齐齐的菜名。",
+    "LoreRoot": "原创·饕餮牙材质",
+    "Identity": "击杀补给牙坠",
+    "Benefit": "击杀回血与生命利于刷怪",
+    "Tradeoff": "没有击杀的战斗无法回血",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 58,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "kill_mend",
+        "PowerBP": 125,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22146,
+    "Name": "众星签",
+    "Lore": "项链的每一颗星珠里都夹着一张署名签。仿制信物的道人不敢写神名，便把二十八位邻居填了进去。",
+    "LoreRoot": "原创·勾陈信物的民间仿作",
+    "Identity": "稳定物抗坠",
+    "Benefit": "物抗与魔防提供双路防护",
+    "Tradeoff": "两面都非极值，输出无增益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22147,
+    "Name": "檐下天",
+    "Lore": "宫檐仿件被磨成吊坠后，雨水会在它下面分作两边。街头艺人靠它表演了多年，终于攒够一把伞。",
+    "LoreRoot": "原创·御神宫飞檐传说的仿物",
+    "Identity": "抗法专门坠",
+    "Benefit": "魔法减伤配魔抗",
+    "Tradeoff": "物理战斗只剩少量生命补益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 46,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "magic_guard",
+        "PowerBP": 350,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22148,
+    "Name": "囚神空座",
+    "Lore": "魂晶中摆着一把空椅子，四角链条却全绷得笔直。武夫不信里面坐着谁，但每次擦拭都先问一声。",
+    "LoreRoot": "原创·勇士蓟魂晶传说的演劫映像",
+    "Identity": "危险强攻魂坠",
+    "Benefit": "力量与物攻支持高伤近战",
+    "Tradeoff": "魔防削弱，术伤容错下降",
+    "PowerTier": "chase",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 38,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 180,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": -12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22150,
+    "Name": "青金屑",
+    "Lore": "指环不是整金铸成，而是无数青金屑挤在一起。匠人放大细看时，每粒金屑都映着不同的天色。",
+    "LoreRoot": "原创·青金提纯仙力",
+    "Identity": "灵巧青金戒",
+    "Benefit": "灵巧与小额物攻",
+    "Tradeoff": "没有生命与抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22151,
+    "Name": "门神指",
+    "Lore": "戒上两尊门神背对背站着，始终不肯相见。捏住指环转动时，屋里的门便全都吱呀作响。",
+    "LoreRoot": "原创·辟邪青金戒",
+    "Identity": "抗法金戒",
+    "Benefit": "魔防与精神补术伤防线",
+    "Tradeoff": "物抗与物攻缺席",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22152,
+    "Name": "墨髓井",
+    "Lore": "墨玉髓在戒面流成一口井，投一粒灰便能听到回声。主人投过一枚小钱，响声至今没停。",
+    "LoreRoot": "原创·青金与墨玉髓",
+    "Identity": "血量偏科戒",
+    "Benefit": "生命和体质提高容错",
+    "Tradeoff": "不含暴击，进攻收益小",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 37,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22153,
+    "Name": "狼梦",
+    "Lore": "戒面的狼眼只在佩戴者睡着时睁开。看守营帐的人发现，那些夜里没有一只狗敢吠。",
+    "LoreRoot": "原创·贪狼星与魔狼眼",
+    "Identity": "低血强攻戒",
+    "Benefit": "濒危增伤配物攻",
+    "Tradeoff": "满血阶段没有特性收益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 19,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 180,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "desperate_assault",
+        "PowerBP": 600,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22154,
+    "Name": "失译军令",
+    "Lore": "戒上的异界圣语无人能读，兵卒拿它压地图却屡屡猜中退路。翻译官最后给出四字：尽快回家。",
+    "LoreRoot": "原创·伽蓝军神刻符的临摹物",
+    "Identity": "命中指挥戒",
+    "Benefit": "命中与力量支撑稳定输出",
+    "Tradeoff": "不补法力和血量",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22155,
+    "Name": "二十八缺一",
+    "Lore": "战符上的二十八宿少了一宿，缺处嵌着普通铁屑。铁匠说那夜云太厚，实在没看见最后一颗。",
+    "LoreRoot": "原创·贪狼洗练与天罡星宿",
+    "Identity": "物抗星符戒",
+    "Benefit": "物理减伤配物抗适合近战",
+    "Tradeoff": "对术法防护薄弱",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 42,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "physical_guard",
+        "PowerBP": 300,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22156,
+    "Name": "龙名删本",
+    "Lore": "戒盒里是一卷删得只剩标点的龙名册。做仿戒的学徒觉得名字不能当战功，师父却只夸他刻得清楚。",
+    "LoreRoot": "原创·封龙王戒战功叙事的仿件",
+    "Identity": "首领爆发戒",
+    "Benefit": "精英增伤与暴击用于攻坚",
+    "Tradeoff": "普通怪不触发精英增伤，生命与抗性需另配",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 280,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "elite_hunter",
+        "PowerBP": 500,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22157,
+    "Name": "五衰未答",
+    "Lore": "戒面刻着五个问号般的孔，没有一个打穿。闭关客戴着它出门，只说终于知道该问什么了。",
+    "LoreRoot": "原创·天人五衰参悟的仿作",
+    "Identity": "高血维持戒",
+    "Benefit": "高血减伤与体质支持健康血线",
+    "Tradeoff": "受伤跌破阈值便失去特性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 65,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healthy_guard",
+        "PowerBP": 350,
+        "ThresholdPct": 80
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22158,
+    "Name": "百血同环",
+    "Lore": "仿神武戒的匠人向百位武夫各讨一滴血，收到九十九份和一根木刺。他把木刺也熔了进去，戒面从此有了年轮。",
+    "LoreRoot": "原创·李玉通神武徽记的仿铸传说",
+    "Identity": "高代价近战核心戒",
+    "Benefit": "力量、物攻与暴击全面服务强攻",
+    "Tradeoff": "降低魔抗，术法环境须专门补防",
+    "PowerTier": "chase",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 40,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 320,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": -10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22522,
+    "Name": "睁闭之间",
+    "Lore": "眼坠的瞳仁是空洞，闭上自己的眼睛反而能看到一点金光。卖坠者嘱咐不要同时闭两只，理由始终不肯说。",
+    "LoreRoot": "原创·空白原述邪眼的新故事",
+    "Identity": "暴击偏科眼坠",
+    "Benefit": "暴击与命中支持精准爆发",
+    "Tradeoff": "无生存增益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 180,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22523,
+    "Name": "风没来",
+    "Lore": "项链上系着一面纹丝不动的小旗，周围大风越猛，旗子越平静。主人靠它找到过一处暴风中心。",
+    "LoreRoot": "原创·空白原述风魄的新故事",
+    "Identity": "回避风坠",
+    "Benefit": "敏捷与闪避降低被命中机会",
+    "Tradeoff": "不减轻命中后的伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22524,
+    "Name": "最后的军灶",
+    "Lore": "战场火种被盛在铜链坠中，烧到如今只剩蓝色一点。军厨认定还能煮一锅粥，拒绝把它当圣物供起来。",
+    "LoreRoot": "原创·空白原述战火链的新故事",
+    "Identity": "强攻与生命坠",
+    "Benefit": "物攻与生命兼顾换血",
+    "Tradeoff": "缺命中和法防",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 85,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22537,
+    "Name": "紫指蛾",
+    "Lore": "护手内衬爬满紫色蛾纹，合掌后会少一只。松手时，少掉的那只总停在另一只手背上。",
+    "LoreRoot": "原创·空白原述紫灵手的新故事",
+    "Identity": "灵巧护掌",
+    "Benefit": "灵巧与命中偏稳定打击",
+    "Tradeoff": "输出上限无补强",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22538,
+    "Name": "天边袖扣",
+    "Lore": "护腕的扣子扣住过一片云，解开后云仍绕在腕边。雨日穿它的人，袖口总比别人先湿。",
+    "LoreRoot": "原创·空白原述凌云护腕的新故事",
+    "Identity": "法力护腕",
+    "Benefit": "法力与精神强化施技储备",
+    "Tradeoff": "缺乏物抗和物攻",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 55,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22539,
+    "Name": "掌中擂",
+    "Lore": "每次合掌，护手内便响起极远的喝彩。主人苦练一年后终于听清，众人其实在叫下一位。",
+    "LoreRoot": "原创·空白原述武圣手的新故事",
+    "Identity": "平砍专门护手",
+    "Benefit": "攻速与物攻支持连续普通攻击",
+    "Tradeoff": "命中下降，需灵巧配套",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 25,
+        "Value": -10,
+        "Mode": 1
+      },
+      {
+        "Attr": 47,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": -4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22581,
+    "Name": "空营靴声",
+    "Lore": "营里只剩这双靴子，每夜仍沿帐篷巡一圈。新来的守兵改变了营道，它停在岔路口等了整晚。",
+    "LoreRoot": "原创·空白原述战魂靴的新故事",
+    "Identity": "生命巡防靴",
+    "Benefit": "生命与物抗适合持久近战",
+    "Tradeoff": "不加伤害和命中",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 52,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22582,
+    "Name": "醉山",
+    "Lore": "靴底有一块斜切的山石，步子越乱越合脚。酒仙借去三日，回来时说山也喝醉了。",
+    "LoreRoot": "原创·空白原述狂战靴的新故事",
+    "Identity": "低血爆发靴",
+    "Benefit": "濒危增伤配物攻",
+    "Tradeoff": "高血阶段特性不生效",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 25,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 240,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "desperate_assault",
+        "PowerBP": 550,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 22583,
+    "Name": "登天误步",
+    "Lore": "靴边缝着登天的路线，偏把第一阶写成了第九阶。前主人始终没登上天，却把双腿练得异乎寻常。",
+    "LoreRoot": "原创·空白原述战神足具",
+    "Identity": "体质专门靴",
+    "Benefit": "体质与生命形成高血池",
+    "Tradeoff": "没有抗性与命中",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 85,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24653,
+    "Name": "鬼结",
+    "Lore": "穷奇筋绳打的结，会把绳影一并勒紧。解结师试了一日，发现自己的影子已少一截腰。",
+    "LoreRoot": "原创·穷奇兽筋",
+    "Identity": "力体兽筋带",
+    "Benefit": "力量与体质兼顾近战血量和攻击",
+    "Tradeoff": "无命中与法防",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24654,
+    "Name": "骨夜环",
+    "Lore": "兽甲磨成手环，内壁却长出一排细齿。匠人每月磨一次，磨下来的粉末从不肯落地。",
+    "LoreRoot": "原创·穷奇兽甲",
+    "Identity": "物抗兽甲环",
+    "Benefit": "物抗与体质补近战防线",
+    "Tradeoff": "魔抗和输出不补",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24655,
+    "Name": "食鬼余音",
+    "Lore": "角坠中有几声极细的争吵，一到太阳底下就安静。赶路人拿它报时，比带漏壶轻便得多。",
+    "LoreRoot": "原创·穷奇兽角",
+    "Identity": "精神角珰",
+    "Benefit": "精神与魔防抗术消耗",
+    "Tradeoff": "不增加物攻和命中",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24656,
+    "Name": "百匝腹",
+    "Lore": "筋带原本能绕树百圈，裁短后仍留着百圈树纹。樵夫扣错一格，腰间竟闻到了去年秋天的树汁味。",
+    "LoreRoot": "原创·精选穷奇兽筋",
+    "Identity": "生命兽筋带",
+    "Benefit": "生命与体质用于承伤",
+    "Tradeoff": "没有技能输出词条",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 50,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24657,
+    "Name": "咬镯",
+    "Lore": "甲环上两枚兽齿咬得死紧，夹住的却是一片普通桑叶。传说撬开过一次的人，第二天满院长桑。",
+    "LoreRoot": "原创·精选穷奇甲片",
+    "Identity": "命中甲环",
+    "Benefit": "命中与灵巧应对高回避",
+    "Tradeoff": "血量和抗性不足",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24658,
+    "Name": "饥星",
+    "Lore": "耳坠的兽角总朝着最暗的一颗星。天文学徒跟了整冬，终于明白它指的不是星，而是星间的空处。",
+    "LoreRoot": "原创·精选穷奇角",
+    "Identity": "暴击角珰",
+    "Benefit": "暴击与攻击上限偏爆发",
+    "Tradeoff": "无命中，必须其他部位补足",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 190,
+        "Mode": 0
+      },
+      {
+        "Attr": 31,
+        "Value": 18,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24659,
+    "Name": "断宴",
+    "Lore": "兽筋带勒着一枚石碗，碗里只有啃到一半的月影。放在满月下晒，碗中的缺口反而越来越大。",
+    "LoreRoot": "原创·精良穷奇兽筋",
+    "Identity": "进攻兽筋核心",
+    "Benefit": "力量与物攻强化近战",
+    "Tradeoff": "减法力，技能续航下降",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": -40,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24660,
+    "Name": "噬甲戒律",
+    "Lore": "甲环的利齿被铸师逐个封住，最后一颗却怎么也合不上。封条写着：每日只许咬自己的影子。",
+    "LoreRoot": "原创·精良穷奇兽甲",
+    "Identity": "物理防线甲环",
+    "Benefit": "物抗与物理减伤特性",
+    "Tradeoff": "魔防下降，需要抗法配套",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 55,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": -6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "physical_guard",
+        "PowerBP": 350,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 24661,
+    "Name": "鬼听不见",
+    "Lore": "角珰碰在一起完全无声，反而令屋内的铃铛齐鸣。老道将它分给两人，一东一西，铃声仍照旧。",
+    "LoreRoot": "原创·精良穷奇角",
+    "Identity": "技能储备角珰",
+    "Benefit": "精神与法力供连续施技",
+    "Tradeoff": "输出及减伤均依赖其他装备",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 90,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 40008,
+    "Name": "朱眼初醒",
+    "Lore": "鸟眼玉佩的眼睑只睁开一线，里面映的始终是破晓。守夜人用它照桌，不必再向邻居借火。",
+    "LoreRoot": "原创·赤鸟睛太极玉佩",
+    "Identity": "暴击玉佩",
+    "Benefit": "暴击与物攻补近战伤害",
+    "Tradeoff": "无防护与命中",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 150,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 40009,
+    "Name": "蛇尾数",
+    "Lore": "符环每响一声就添一片鳞，声音却隔年才来一次。主人已把它留给了孙子，另附一张未填完的数表。",
+    "LoreRoot": "原创·响蛇太极护符",
+    "Identity": "命中蛇符",
+    "Benefit": "命中与灵巧稳定出手",
+    "Tradeoff": "不提高血量和抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 40010,
+    "Name": "覆翼图",
+    "Lore": "胸针上两片翼羽盖着一张地图，怎么掀都只露出自己站的地方。迷路的人因此最恨这件宝物。",
+    "LoreRoot": "原创·龙雀太极胸针",
+    "Identity": "物抗胸饰",
+    "Benefit": "物抗与生命提高近战容错",
+    "Tradeoff": "不补输出属性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 46,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 40023,
+    "Name": "一足啄",
+    "Lore": "鸟喙玉佩旁只刻了一只足。孩子问另一只在哪里，雕工指着窗外说它还在赶路。",
+    "LoreRoot": "原创·毕方太极玉佩",
+    "Identity": "力量禽纹佩",
+    "Benefit": "力量配小额物攻",
+    "Tradeoff": "无命中与生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 40024,
+    "Name": "风驿签",
+    "Lore": "风翼护符背面是一个无人认得的驿站名。送信人把信绑上去，第二天收到一封更旧的回信。",
+    "LoreRoot": "原创·飞廉太极护符",
+    "Identity": "法力风符",
+    "Benefit": "精神与法力减轻耗蓝压力",
+    "Tradeoff": "不增加物理伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 29,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 40025,
+    "Name": "小毒针",
+    "Lore": "针形胸饰的尖端从不沾血，只吸墨。书生别着它赶考，回来时衣襟上爬满了错字。",
+    "LoreRoot": "原创·钦原太极胸针",
+    "Identity": "灵巧针饰",
+    "Benefit": "命中与暴击辅助近战",
+    "Tradeoff": "无毒伤效果，防护须另配",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 100,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 47085,
+    "Name": "朱眼长明",
+    "Lore": "玉眼完全张开后，主人忘了怎样闭目。制佩师给它另做一块小眼罩，梦才重新回到床边。",
+    "LoreRoot": "原创·赤鸟睛高阶太极玉佩",
+    "Identity": "高血进攻玉佩",
+    "Benefit": "高血增伤与物攻强化健康血线",
+    "Tradeoff": "受伤后特性关闭，缺防护",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 240,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healthy_assault",
+        "PowerBP": 500,
+        "ThresholdPct": 80
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 47086,
+    "Name": "响骨轮",
+    "Lore": "蛇环的骨节轮流响，记下顺序正好是一套古老步罡。道士按步走完，环里多了一枚人骨似的白节。",
+    "LoreRoot": "原创·响蛇高阶护符",
+    "Identity": "技能特化蛇符",
+    "Benefit": "技能增伤与命中",
+    "Tradeoff": "普通攻击无特性增益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 75,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "skill_focus",
+        "PowerBP": 500,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 47087,
+    "Name": "双禽争枝",
+    "Lore": "龙雀胸针的两只鸟共衔一枝，夜里会为枝头的位置争吵。匠人把枝锯短后，它们终于开始合唱。",
+    "LoreRoot": "原创·龙雀高阶胸针",
+    "Identity": "物理专防胸饰",
+    "Benefit": "物抗与体质集中抗近战",
+    "Tradeoff": "魔法压力需要别的部位承担",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 47100,
+    "Name": "余喙",
+    "Lore": "毕方像刻坏后只剩一截喙，仍会啄破包裹它的布。雕工专制一个石匣，匣底的洞次日便出现了。",
+    "LoreRoot": "原创·毕方高阶太极玉佩",
+    "Identity": "普通攻击禽佩",
+    "Benefit": "平砍增伤配力量",
+    "Tradeoff": "技能流不享受平砍特性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 15,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "basic_focus",
+        "PowerBP": 400,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 47101,
+    "Name": "翼下急信",
+    "Lore": "飞廉护符曾夹着一封没封口的急信，拆看只有一阵风。收信人听完便出门，鞋都没换。",
+    "LoreRoot": "原创·飞廉高阶太极护符",
+    "Identity": "攻速风符",
+    "Benefit": "提高攻击速度属性配命中",
+    "Tradeoff": "不补生命和抗性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 25,
+        "Value": -6,
+        "Mode": 1
+      },
+      {
+        "Attr": 19,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 47102,
+    "Name": "钦原留刺",
+    "Lore": "制胸针时折断的刺被留在铸模内，每次开模都少一分。最后一枚成品里多了一阵极细的嗡鸣。",
+    "LoreRoot": "原创·钦原高阶太极胸针",
+    "Identity": "暴击针饰",
+    "Benefit": "暴击与暴击增伤形成专向收益",
+    "Tradeoff": "非暴击出手没有特性加成",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 260,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "critical_focus",
+        "PowerBP": 450,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57013,
+    "Name": "泥校尉",
+    "Lore": "泥做的小军官烘干后缩了一圈，正好成了徽章。新兵因此管它叫最先学会后退的校尉。",
+    "LoreRoot": "原创·劣质狂野徽章",
+    "Identity": "便宜力量章",
+    "Benefit": "少量力量与命中",
+    "Tradeoff": "没有抗性或特殊能力",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57014,
+    "Name": "半鼓",
+    "Lore": "铜章缺口像一面破鼓，敲起来却比整鼓更响。营中鼓手拿它垫鼓脚，从此再没睡过懒觉。",
+    "LoreRoot": "原创·残缺狂野徽章",
+    "Identity": "生命鼓章",
+    "Benefit": "生命与体质服务站场",
+    "Tradeoff": "不补输出和魔防",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57015,
+    "Name": "斜刀纹",
+    "Lore": "雕错的刀纹歪向左边，右撇子佩戴总觉得碍眼。左撇子买下后，反而练会了右手使枪。",
+    "LoreRoot": "原创·瑕疵狂野徽章",
+    "Identity": "灵巧习武章",
+    "Benefit": "灵巧与少量暴击",
+    "Tradeoff": "没有平面攻击增幅",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 70,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57016,
+    "Name": "斗鸡令",
+    "Lore": "徽章来自一次盛大的斗鸡赛，败鸡的主人偷偷把鸡刻成了鹰。拿去换酒，掌柜仍只认一只鸡的价。",
+    "LoreRoot": "原创·普通狂野徽章",
+    "Identity": "平砍小章",
+    "Benefit": "物攻和力量补普通攻击",
+    "Tradeoff": "缺命中与法力",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57017,
+    "Name": "醉虎纽",
+    "Lore": "章纽是一只倒挂的虎，原主人坚持说虎在练功。每次喝醉，他便把徽章倒过来给人证明。",
+    "LoreRoot": "原创·别致狂野徽章",
+    "Identity": "回避趣章",
+    "Benefit": "敏捷与闪避适合灵活近战",
+    "Tradeoff": "不提供固定减伤",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57018,
+    "Name": "拍桌功",
+    "Lore": "铜章上的掌印来自酒馆一次争论，掌印清晰，桌子却毫无损伤。老板坚持收了修桌钱。",
+    "LoreRoot": "原创·上乘狂野徽章",
+    "Identity": "体质掌章",
+    "Benefit": "体质和物抗减少近战压力",
+    "Tradeoff": "魔防与输出未增强",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57019,
+    "Name": "野火谱",
+    "Lore": "章面刻着二十种野火的颜色，最后一种没有填色。铸工留下话，见过那种火的人不会再来填。",
+    "LoreRoot": "原创·精良狂野徽章",
+    "Identity": "法力火谱章",
+    "Benefit": "法力与命中辅助技能",
+    "Tradeoff": "平砍和生命无提升",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 27,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57020,
+    "Name": "山王空位",
+    "Lore": "一群猎人推举山王，谁都不肯戴章。徽章于是钉在最大的树上，树冠一年长过了猎棚。",
+    "LoreRoot": "原创·完美狂野徽章",
+    "Identity": "精英狩猎章",
+    "Benefit": "精英增伤与命中用于小首领",
+    "Tradeoff": "普通怪不触发，抗性无补强",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "elite_hunter",
+        "PowerBP": 400,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57053,
+    "Name": "云泥脚印",
+    "Lore": "初到仙界的武夫踩了一脚云泥，把脚印带回铸成小章。仙友见了大笑，只有守门人要他先擦鞋。",
+    "LoreRoot": "原创·劣质飞升狂野徽章",
+    "Identity": "生命登云章",
+    "Benefit": "生命与魔防提供基础容错",
+    "Tradeoff": "不提高物攻",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57054,
+    "Name": "裂天小缝",
+    "Lore": "徽章从中裂开，主人宣称那是自己劈天留下的。匠人没有反驳，只把修补费加了一倍。",
+    "LoreRoot": "原创·残缺飞升狂野徽章",
+    "Identity": "力量裂纹章",
+    "Benefit": "力量与物攻",
+    "Tradeoff": "无命中与防护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57055,
+    "Name": "雷写错字",
+    "Lore": "章上的雷纹像一个倒写的武字，雷工说天书本来就该倒看。私下里他换了副老花镜。",
+    "LoreRoot": "原创·瑕疵飞升狂野徽章",
+    "Identity": "命中雷纹章",
+    "Benefit": "命中与灵巧保证出手",
+    "Tradeoff": "不补攻击峰值",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57056,
+    "Name": "云市角力",
+    "Lore": "云市角力赛的奖章是一片薄铁，获胜者吹口气就能弯。裁判说真正的胜者应该学会轻拿轻放。",
+    "LoreRoot": "原创·普通飞升狂野徽章",
+    "Identity": "物抗角力章",
+    "Benefit": "物抗与体质用于贴身搏斗",
+    "Tradeoff": "术法防线仍弱",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57057,
+    "Name": "仙酒开封",
+    "Lore": "章面铸着酒坛封泥的裂纹，闻起来仍有酒香。酒虫钻进过一次，竟在里面结了个金色的蛹。",
+    "LoreRoot": "原创·别致飞升狂野徽章",
+    "Identity": "精神酒章",
+    "Benefit": "精神与法力支持用技",
+    "Tradeoff": "直接伤害不增加",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 26,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57058,
+    "Name": "龙虎押注",
+    "Lore": "两位散仙下注龙虎谁先醒，赌资化成了这枚章。龙虎睡到今日，下注的人先成了对方的邻居。",
+    "LoreRoot": "原创·上乘飞升狂野徽章",
+    "Identity": "暴击赌斗章",
+    "Benefit": "暴击与攻击上限偏爆发",
+    "Tradeoff": "不补命中与下限",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 130,
+        "Mode": 0
+      },
+      {
+        "Attr": 31,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57059,
+    "Name": "擒风票",
+    "Lore": "武夫参加擒风比赛，把空袋递给裁判。裁判刚要判负，胡须全被吹进了袋口。",
+    "LoreRoot": "原创·精良飞升狂野徽章",
+    "Identity": "攻速试艺章",
+    "Benefit": "小幅提高攻击速度属性配命中",
+    "Tradeoff": "缺生命与减伤",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 25,
+        "Value": -3,
+        "Mode": 1
+      },
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57060,
+    "Name": "天外擂签",
+    "Lore": "签上只写一字擂，背面却始终有掌声。报名的人等了十年，连擂台在哪一重天都没打听清。",
+    "LoreRoot": "原创·完美飞升狂野徽章",
+    "Identity": "单挑技击章",
+    "Benefit": "单体技能增伤配物攻",
+    "Tradeoff": "群攻与平砍不获特性收益",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "single_focus",
+        "PowerBP": 450,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57122,
+    "Name": "一夫关印",
+    "Lore": "关门落下时压扁了一枚私印，印文再也读不清。守关人干脆以指印代签，把旧印佩在胸口。",
+    "LoreRoot": "原创·飞升英勇徽章",
+    "Identity": "物理守关章",
+    "Benefit": "物抗与生命适合站桩承伤",
+    "Tradeoff": "不提高魔防和输出",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 60,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57127,
+    "Name": "没过河的令",
+    "Lore": "渡河令已发，河却在一夜间改道。领章的兵站在干河床上，生平第一次不知该往哪边冲。",
+    "LoreRoot": "原创·英勇徽章",
+    "Identity": "低血应急章",
+    "Benefit": "低血减伤配生命",
+    "Tradeoff": "高血阶段只靠普通属性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 37,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "desperate_guard",
+        "PowerBP": 300,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57132,
+    "Name": "歪准星",
+    "Lore": "刻匠把靶心雕偏半寸，学徒照着练，竟每发必中旁边的木结。后来索性在木结上画了靶。",
+    "LoreRoot": "原创·劣质卓越徽章",
+    "Identity": "低价命中章",
+    "Benefit": "命中与灵巧补稳定性",
+    "Tradeoff": "缺少伤害增幅",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57133,
+    "Name": "缺筹",
+    "Lore": "兵棋奖章少了一角，棋手把缺角当作阵眼。对手研究了一夜，才发现他只是找不到补铜的钱。",
+    "LoreRoot": "原创·残缺卓越徽章",
+    "Identity": "技能储备章",
+    "Benefit": "法力与精神",
+    "Tradeoff": "无直接攻击及抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 20,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57134,
+    "Name": "细针枪",
+    "Lore": "徽章里的长枪细如绣针，织娘认定是自己的失物。武夫只好拿出真枪让她比量，仍然没有说服她。",
+    "LoreRoot": "原创·瑕疵卓越徽章",
+    "Identity": "灵巧针枪章",
+    "Benefit": "命中与暴击用于精准出手",
+    "Tradeoff": "不增加生命",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 75,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57135,
+    "Name": "三百步",
+    "Lore": "射艺场的距离被缩刻在铜章边缘，每一步都有名字。最后那步没有名字，只有一枚鞋底纹。",
+    "LoreRoot": "原创·普通卓越徽章",
+    "Identity": "力量练武章",
+    "Benefit": "力量与攻击上限支持近战",
+    "Tradeoff": "攻击下限和法防不补",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 31,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57136,
+    "Name": "错阵图",
+    "Lore": "军师送来的阵图左右颠倒，校尉照练竟赢了一次。如今章上仍刻错图，怕改对了反而不会打仗。",
+    "LoreRoot": "原创·别致卓越徽章",
+    "Identity": "闪避阵图章",
+    "Benefit": "敏捷与闪避适合回避",
+    "Tradeoff": "无固定减伤",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57137,
+    "Name": "铜笔锋",
+    "Lore": "记功的铜笔写钝后被卷成徽章，笔锋仍露在背后。佩戴者每次忘记垫布，都像被催着交战报。",
+    "LoreRoot": "原创·上乘卓越徽章",
+    "Identity": "物攻书功章",
+    "Benefit": "物攻与命中支撑稳定近战",
+    "Tradeoff": "没有生命和抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57138,
+    "Name": "百投不中",
+    "Lore": "百投不中的投壶客获赠此章，店主感谢他养活全家。第二天他改用长枪，壶底便没了。",
+    "LoreRoot": "原创·精良卓越徽章",
+    "Identity": "命中练技章",
+    "Benefit": "较多命中与少量力量",
+    "Tradeoff": "没有暴击或攻速",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57139,
+    "Name": "枪影抄本",
+    "Lore": "弟子把师父枪影描在铜上，只有一笔怎么也追不上。师父看后指着空处说，就是这一笔。",
+    "LoreRoot": "原创·完美卓越徽章",
+    "Identity": "连环枪法节用章",
+    "Benefit": "连环枪法法力消耗降低，兼补命中与物攻",
+    "Tradeoff": "其他招式不享减耗，没有生命抗性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "skill_economy",
+        "PowerBP": 2000,
+        "ThresholdPct": 0,
+        "SkillID": 10002,
+        "SkillName": "连环枪法"
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57172,
+    "Name": "飞升补考",
+    "Lore": "仙门给补考者的章刻得格外粗糙，背面却认真写着下次再来。有人戴着它过了三次天劫，仍没交卷。",
+    "LoreRoot": "原创·劣质飞升卓越徽章",
+    "Identity": "魔防入门仙章",
+    "Benefit": "魔防与精神加强术伤容错",
+    "Tradeoff": "无物理进攻收益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57173,
+    "Name": "断尺量云",
+    "Lore": "仙匠断尺量出的云高，永远少一寸。补发的奖章因此也缺一角，主人说尺寸终于对上了。",
+    "LoreRoot": "原创·残缺飞升卓越徽章",
+    "Identity": "体质量云章",
+    "Benefit": "体质与生命增强血池",
+    "Tradeoff": "不增闪避和抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 30,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57174,
+    "Name": "第九格",
+    "Lore": "九宫章只刻了八格，第九格在匠人手掌上。徒弟学会拓印之后，师父突然不愿与人击掌。",
+    "LoreRoot": "原创·瑕疵飞升卓越徽章",
+    "Identity": "灵巧九宫章",
+    "Benefit": "灵巧和命中偏准确攻击",
+    "Tradeoff": "缺少平面物攻",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57175,
+    "Name": "天阶磨痕",
+    "Lore": "这枚章最先是补鞋的铁片，磨出一层云色后才被取下。主人拒绝抛光，怕把登天的路一起磨掉。",
+    "LoreRoot": "原创·普通飞升卓越徽章",
+    "Identity": "物抗行功章",
+    "Benefit": "物抗与敏捷帮助近战存活",
+    "Tradeoff": "魔法防护不补",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 7,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57176,
+    "Name": "无字战书",
+    "Lore": "对手送来一封空白战书，拆封人用封泥铸了章。多年后墨字才慢慢显现：昨日午时。",
+    "LoreRoot": "原创·别致飞升卓越徽章",
+    "Identity": "攻速竞艺章",
+    "Benefit": "攻击速度属性提高配物攻",
+    "Tradeoff": "不补命中和防护",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 25,
+        "Value": -3,
+        "Mode": 1
+      },
+      {
+        "Attr": 47,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57177,
+    "Name": "云雷间隙",
+    "Lore": "章面记录雷声到闪电之间的距离，算式显然倒了。道人照算推演，却听见了一声还没响起的雷。",
+    "LoreRoot": "原创·上乘飞升卓越徽章",
+    "Identity": "法力推演章",
+    "Benefit": "法力与命中支持施技",
+    "Tradeoff": "物理抗性无补益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 35,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57178,
+    "Name": "北斗误签",
+    "Lore": "求签者抽到一支没有字的北斗签，摇了三遍仍是它。签筒碎后，他把签头嵌进了徽章。",
+    "LoreRoot": "原创·精良飞升卓越徽章",
+    "Identity": "暴击星签章",
+    "Benefit": "暴击与力量补强普攻",
+    "Tradeoff": "不加生命与魔防",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 140,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57179,
+    "Name": "折枪问道",
+    "Lore": "长枪折断，主人便用短的一截继续练。有人问他何时换兵器，他指着旧枪做的徽章说，已经换过。",
+    "LoreRoot": "原创·完美飞升卓越徽章",
+    "Identity": "单项技法章",
+    "Benefit": "单体技能增伤和命中",
+    "Tradeoff": "群体技能收益有限",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "single_focus",
+        "PowerBP": 450,
+        "ThresholdPct": 0
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57241,
+    "Name": "守饭牌",
+    "Lore": "伙房的铜牌被划进守备名册，厨子每次点名都带着锅铲。牌上最后添了一字：饱。",
+    "LoreRoot": "原创·劣质忠诚徽章",
+    "Identity": "入门血量章",
+    "Benefit": "少量生命与体质",
+    "Tradeoff": "无进攻收益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 2,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57242,
+    "Name": "半面营旗",
+    "Lore": "旗被风撕掉一半，留下的图案恰似一只笑脸。营中因此禁止给此章配流苏，免得笑脸长胡子。",
+    "LoreRoot": "原创·残缺忠诚徽章",
+    "Identity": "回避旗章",
+    "Benefit": "敏捷与生命提升入门容错",
+    "Tradeoff": "没有固定减伤",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 19,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57243,
+    "Name": "错名木",
+    "Lore": "奖章把守卫的姓刻错了，他不肯退，说这正好能躲开催租。房东第二天便把错姓加进账册。",
+    "LoreRoot": "原创·瑕疵忠诚徽章",
+    "Identity": "法力勤务章",
+    "Benefit": "精神与法力辅助施技",
+    "Tradeoff": "不增强生命和物攻",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57244,
+    "Name": "门轴骨",
+    "Lore": "旧门轴在守卫死后被拆成徽章，转动时仍像开门。新兵最初害怕，后来用它提醒自己别打瞌睡。",
+    "LoreRoot": "原创·普通忠诚徽章",
+    "Identity": "物抗守门章",
+    "Benefit": "物抗与生命偏近战防护",
+    "Tradeoff": "术法防线无提升",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57245,
+    "Name": "纸阵亡",
+    "Lore": "一张写错的阵亡簿被压入铜章，活着的主人每年去给自己上香。祭品总是被他带回家。",
+    "LoreRoot": "原创·别致忠诚徽章",
+    "Identity": "生命玩笑章",
+    "Benefit": "体质与魔防适合混合环境",
+    "Tradeoff": "防护强度有限，输出无补益",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57246,
+    "Name": "借班印",
+    "Lore": "守卒替同伴值夜留下的印记叠满章面，最后盖成一片黑。接班人辨不清名字，只好把所有人都记作已到。",
+    "LoreRoot": "原创·上乘忠诚徽章",
+    "Identity": "精神守夜章",
+    "Benefit": "魔防与法力缓冲术战",
+    "Tradeoff": "物抗和进攻不补",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57247,
+    "Name": "风雪一炭",
+    "Lore": "奖章铸着一粒炭，是雪夜分火时最后留下的。真正的炭早已烧完，铜炭却总带一点炉灰味。",
+    "LoreRoot": "原创·精良忠诚徽章",
+    "Identity": "稳健承伤章",
+    "Benefit": "生命配物抗适合近战消耗",
+    "Tradeoff": "无命中及暴击",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57248,
+    "Name": "替身草结",
+    "Lore": "草人替守卒站了一夜岗，天亮时胸前多了这枚章。守卒不敢私领，连草绳也一同佩着。",
+    "LoreRoot": "原创·完美忠诚徽章",
+    "Identity": "高血防护章",
+    "Benefit": "高血减伤与生命",
+    "Tradeoff": "跌破血线便失去特性",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 40,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "healthy_guard",
+        "PowerBP": 300,
+        "ThresholdPct": 80
+      }
+    ],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57281,
+    "Name": "仙门门闩",
+    "Lore": "上天后第一份差事竟是看门，武夫拆旧门闩作章以作纪念。后来门飞走了，他仍握着门闩。",
+    "LoreRoot": "原创·劣质飞升忠诚徽章",
+    "Identity": "物抗仙门章",
+    "Benefit": "物抗与生命补近战容错",
+    "Tradeoff": "无进攻与法力",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 27,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57282,
+    "Name": "残云帐",
+    "Lore": "营帐被天风吹去一半，剩下的一半压成章。夜里盖在眼上，仍能看见从前帐内挂着的灯。",
+    "LoreRoot": "原创·残缺飞升忠诚徽章",
+    "Identity": "魔防云帐章",
+    "Benefit": "魔防与精神抵御术法",
+    "Tradeoff": "不补物理伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57283,
+    "Name": "错刻仙籍",
+    "Lore": "仙籍上的名字少一笔，发章的仙吏表示可以补。主人问要等多久，仙吏翻到三百年后的那页。",
+    "LoreRoot": "原创·瑕疵飞升忠诚徽章",
+    "Identity": "灵巧仙籍章",
+    "Benefit": "灵巧与法力支持技能练级",
+    "Tradeoff": "缺血量和抗性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 30,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57284,
+    "Name": "云上家书",
+    "Lore": "家书烧成灰后凝在铜章里，字迹只在下雨时出现。收信人不再问故乡天气，而问哪日这里有雨。",
+    "LoreRoot": "原创·普通飞升忠诚徽章",
+    "Identity": "生命家书章",
+    "Benefit": "生命与体质适合站场",
+    "Tradeoff": "不补命中及伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 33,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 3,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57285,
+    "Name": "鹤不归",
+    "Lore": "传令鹤啄下了徽章的一粒铜星，飞出去便没回来。每到发饷日，窗外却总落下一根新羽。",
+    "LoreRoot": "原创·别致飞升忠诚徽章",
+    "Identity": "闪避传令章",
+    "Benefit": "敏捷与闪避用于回避路线",
+    "Tradeoff": "无法降低命中后的伤害",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57286,
+    "Name": "封箱军饷",
+    "Lore": "军饷箱空了，押运者仍把箱锁带回。锁被铸成章后，有时能从里面倒出一枚从未见过的钱。",
+    "LoreRoot": "原创·上乘飞升忠诚徽章",
+    "Identity": "物理守运章",
+    "Benefit": "生命与物抗支持近战消耗",
+    "Tradeoff": "没有输出或法术防护属性",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 35,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57287,
+    "Name": "无期值守",
+    "Lore": "值守名册写到此人时墨用尽，只留了开始日期。守门人把那一角铸成章，自称任期比仙宫还长。",
+    "LoreRoot": "原创·精良飞升忠诚徽章",
+    "Identity": "术法守备章",
+    "Benefit": "魔抗与生命支持术伤消耗",
+    "Tradeoff": "不增强物理进攻",
+    "PowerTier": "niche",
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 35,
+        "Mode": 0
+      }
+    ],
+    "Traits": [],
+    "ReservedSkills": []
+  },
+  {
+    "BaseID": 57288,
+    "Name": "一盏归营",
+    "Lore": "铜灯章的火孔朝向佩戴者，外人看不见亮光。夜行队按次序把它传到队尾，从没有少过一次。",
+    "LoreRoot": "原创·完美飞升忠诚徽章",
+    "Identity": "前排救急章",
+    "Benefit": "低血减伤与生命救急",
+    "Tradeoff": "高血线没有特性减伤",
+    "PowerTier": "specialist",
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 60,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "Traits": [
+      {
+        "Kind": "desperate_guard",
+        "PowerBP": 350,
+        "ThresholdPct": 30
+      }
+    ],
+    "ReservedSkills": []
+  }
+]

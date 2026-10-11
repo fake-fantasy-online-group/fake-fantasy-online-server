@@ -17,13 +17,14 @@ func (s *Scene) uniqueTraits(p *entity.Entity) []domain.UniqueTrait {
 	if p == nil || p.Player == nil || p.Player.Char == nil {
 		return nil
 	}
-	return domain.ActiveUniqueTraits(s.functionalWorn(p), s.itemDef, p.Player.Char)
+	worn := s.functionalWorn(p)
+	return append(domain.ActiveUniqueTraits(worn, s.itemDef, p.Player.Char), domain.AstralTraits(worn, s.itemDef, p.Player.Char)...)
 }
 func uniqueMonsterElite(p *entity.Entity) bool {
 	return p != nil && p.Monster != nil && (p.Monster.Kind == domain.MonsterElite || p.Monster.Kind == domain.MonsterBoss)
 }
 func uniqueStrikeContext(src, dst *entity.Entity, blow combat.Blow, ev event.DamageDealt, beforeHP int32) domain.UniqueContext {
-	return domain.UniqueContext{HPPercent: uniquePercent(src.HP, src.MaxHP), MPPercent: uniquePercent(src.MP, src.MaxMP),
+	return domain.UniqueContext{SkillID: domain.SkillID(blow.SkillID), HPPercent: uniquePercent(src.HP, src.MaxHP), MPPercent: uniquePercent(src.MP, src.MaxMP),
 		TargetHPPercent: uniquePercent(beforeHP, dst.MaxHP), Magic: ev.Flag.Has(event.DamageMagic), Critical: ev.Flag.Has(event.DamageCrit),
 		TargetElite: uniqueMonsterElite(dst), Invisible: blow.StartedInvisible || entityInvisible(src), Trap: blow.Trap,
 		Area: blow.Area || blow.Trap, Skill: blow.SkillID != 0, HurtType: blow.HurtType}
@@ -37,7 +38,7 @@ func (s *Scene) uniqueIncomingDamage(dst *entity.Entity, magic bool, amount, bef
 	return max(int32(1), domain.ApplyUniqueBP(amount, -x.MitigationBP))
 }
 func (s *Scene) uniqueHealing(src, dst *entity.Entity, amount int32, def domain.SkillDef) int32 {
-	x := domain.EvaluateUniqueTraits(s.uniqueTraits(src), domain.UniqueContext{HPPercent: uniquePercent(src.HP, src.MaxHP),
+	x := domain.EvaluateUniqueTraits(s.uniqueTraits(src), domain.UniqueContext{SkillID: def.ID, HPPercent: uniquePercent(src.HP, src.MaxHP),
 		TargetHPPercent: uniquePercent(dst.HP, dst.MaxHP), Healing: true, Ally: src.ID != dst.ID, Skill: true})
 	return domain.ApplyUniqueBP(amount, x.HealingBP)
 }
@@ -45,7 +46,7 @@ func (s *Scene) applyUniqueSkillModifiers(p *entity.Entity, def *domain.SkillDef
 	if p == nil || def == nil {
 		return
 	}
-	c := domain.UniqueContext{HPPercent: uniquePercent(p.HP, p.MaxHP), MPPercent: uniquePercent(p.MP, p.MaxMP), Skill: true,
+	c := domain.UniqueContext{SkillID: def.ID, HPPercent: uniquePercent(p.HP, p.MaxHP), MPPercent: uniquePercent(p.MP, p.MaxMP), Skill: true,
 		Magic: def.HurtType != domain.HurtNone && def.HurtType != domain.HurtPhysical, Area: def.Area.Valid() || def.Radius > 0}
 	for _, e := range def.DirectEffects() {
 		c.Healing = c.Healing || e.Kind == domain.EffectHeal || e.Kind == domain.EffectRestoreHP

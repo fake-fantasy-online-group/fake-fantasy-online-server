@@ -80,6 +80,9 @@ func TestEveryUniquePowerAtExecutedBoundary(t *testing.T) {
 					t.Fatal("lost stealth start context")
 				}
 			}
+			if tr.SkillID != 0 {
+				blow.SkillID = int32(tr.SkillID)
+			}
 			p.Stats.MinAtk, p.Stats.MaxAtk, p.Stats.MAtk = 100, 100, 100
 			beforeHP := m.HP
 			plainSrc, plainDst := *p, *m

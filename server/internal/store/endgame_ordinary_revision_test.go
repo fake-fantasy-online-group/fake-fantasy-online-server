@@ -24,6 +24,12 @@ func TestOrdinaryCubeSocketRevisionDurableReplayAndCAS(t *testing.T) {
 	s.Bag.Set(200, target)
 	s.Bag.Set(100, domain.Stack{Item: domain.CubeStarMarrow, Count: 100})
 	s.Bag.Set(101, domain.Stack{Item: domain.CubePurifiedDust, Count: 100})
+	runes := domain.AstralRuneItems(7)
+	for i, index := range []int{0, 5} {
+		rune := domain.NewStack(runes[index], 1)
+		rune.UID = int64(501 + i)
+		s.Bag.Set(110+i, rune)
+	}
 	if err := m.SaveSnapshot(context.Background(), s); err != nil {
 		t.Fatal(err)
 	}
@@ -33,8 +39,16 @@ func TestOrdinaryCubeSocketRevisionDurableReplayAndCAS(t *testing.T) {
 	for _, d := range domain.CubeMaterialDefinitions() {
 		items[d.ID] = d
 	}
+	for _, d := range runes {
+		items[d.ID] = d
+	}
 	for revision := int64(1); revision <= 2; revision++ {
-		cube, err := domain.PlanCube(domain.CubeContext{Bag: s.Bag, Money: money, Items: items}, domain.EndgameRequest{RecipeID: domain.CubeOpenSocket, TargetUID: "42"}, true)
+		req := domain.EndgameRequest{RecipeID: domain.CubeOpenSocket, TargetUID: "42"}
+		if revision == 2 {
+			req.RecipeID = domain.CubeInscribeArray
+			req.ItemUIDs = []string{"501", "502"}
+		}
+		cube, err := domain.PlanCube(domain.CubeContext{Level: 60, Bag: s.Bag, Money: money, Items: items, Intn: func(int) int { return 1 }}, req, true)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -49,11 +63,11 @@ func TestOrdinaryCubeSocketRevisionDurableReplayAndCAS(t *testing.T) {
 		p.Receipt.RequestID = fmt.Sprintf("ordinary-socket-%02d", revision)
 		got := awaitEndgame(t, backend.Commit(p))
 		if got.Err != nil {
-			t.Fatalf("ordinary opening revision %d: %v", revision, got.Err)
+			t.Fatalf("ordinary cube mutation revision %d: %v", revision, got.Err)
 		}
 		loaded := durableSnapshot(t, m, s)
 		st := loaded.Bag.At(200)
-		if st.SocketCount != uint8(revision) || st.Endgame.Revision != revision || st.Endgame.UniqueID != 0 {
+		if st.SocketCount != 2 || st.Endgame.Revision != revision || st.Endgame.UniqueID != 0 {
 			t.Fatalf("lost socket/revision: %+v", st)
 		}
 		if !reflect.DeepEqual(loaded.Bag, cube.Bag) || loaded.Char.Money != p.Snapshot.Char.Money {

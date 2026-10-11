@@ -300,6 +300,7 @@ func (s *Scene) refreshStats(p *entity.Entity) {
 	if p.MP < 0 {
 		p.MP = 0
 	}
+	s.invalidateAstralRuneRegen(p, worn)
 	s.emitTo(p.ID, s.attributeSnapshot(p))
 	s.refreshWarehouseBlocked(p)
 }

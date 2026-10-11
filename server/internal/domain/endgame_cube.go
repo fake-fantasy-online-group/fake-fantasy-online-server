@@ -67,13 +67,11 @@ func cubeRecipe(id int32, target Stack, items map[ItemID]ItemDef) (EndgameRecipe
 		r.TargetRequired = false
 		r.Description = "消耗所选一枚背包星篆，获得4星髓。"
 	case CubeOpenSocket:
-		n := int32(target.SocketCount) + 1
 		r.Name = "开窍引星"
 		r.Operation = "socket.open"
-		r.Description = "安全增加一空孔，不超过真实属性容量；孔数变化可能使原宿阵失效。"
-		add(CubeStarMarrow, 12*n)
-		add(CubePurifiedDust, 4*n)
-		fee(20000 * int64(n))
+		r.Description = "仅限无孔装备，随机开出1至真实容量的孔数，各孔数等概率；已有孔不可重开。"
+		add(CubeStarMarrow, 4)
+		fee(5000)
 	case CubeExtractRunes:
 		r.Name = "归星还篆"
 		r.Operation = "socket.extract"

@@ -101,6 +101,10 @@ type EquipDef struct {
 	// Affixes 是词条(game_equip_extra, 17717 行)。**Stats 里的暴击率与各种抗性
 	// 只从这里来** —— 没有词条的话那些字段永远是零。
 	Affixes []Affix
+	// UnknownInnateProperties 标记 game_equip_extra 中尚未解析/实现、没有
+	// 载入 Affixes 的源行。这不证明实例实际获得了该属性；仅表示不能确认
+	// 是白板底材。它不读取随机属性池，也不改变属性计算和孔位预算。
+	UnknownInnateProperties bool
 	// Need 是穿戴门槛(等级 + 六维 + 性别 + 职业)。
 	Need Requirement
 	// ProfessionNames 是 ov_arm 的初行者/五职业/五飞升职业开关

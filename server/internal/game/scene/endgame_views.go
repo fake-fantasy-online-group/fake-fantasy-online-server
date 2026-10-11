@@ -38,7 +38,7 @@ func (s *Scene) endgameItem(st domain.Stack, loc string, slot int32) domain.Endg
 	}
 	if u, ok := domain.UniqueOf(st); ok {
 		v.Name = u.Name
-		v.Description = u.Lore
+		v.Description = u.Description()
 		v.Stats = endgameStats(domain.UniqueAffixes(st))
 		ts := []string{}
 		for _, t := range u.Traits {
@@ -48,6 +48,15 @@ func (s *Scene) endgameItem(st domain.Stack, loc string, slot int32) domain.Endg
 	}
 	if f, ok := domain.MatchAstralRecipe(d, st); ok {
 		v.FormationID = f.ID
+		// Reuse the existing owned-item effect field; older closed-schema clients
+		// cannot accept a new formation field. This describes potential effects,
+		// while Active/InactiveReason remains the authoritative activation state.
+		if text := uniqueTraitDescription(f.Traits); text != "" {
+			if v.Trait != "" {
+				v.Trait += "；"
+			}
+			v.Trait += text
+		}
 	}
 	return v
 }
@@ -91,7 +100,7 @@ func (s *Scene) sendEndgameSnapshot(p *entity.Entity) {
 	formations := []domain.EndgameFormationView{}
 	for _, a := range domain.ActiveAstralRecipes(functional, s.itemDef, p.Player.Char) {
 		f := a.Recipe
-		v := domain.EndgameFormationView{ID: f.ID, Name: f.Name, Channel: f.Channel.String(), MinLevel: f.MinLevel, Professions: int32(f.Professions), Active: true, Description: f.Lore, Stats: endgameStats(f.Affixes)}
+		v := domain.EndgameFormationView{ID: f.ID, Name: f.Name, Channel: f.Channel.String(), MinLevel: f.MinLevel, Professions: int32(f.Professions), Active: true, Description: f.Description(), Stats: endgameStats(f.Affixes)}
 		for _, slot := range f.Slots {
 			v.Slots = append(v.Slots, int32(slot))
 		}
@@ -139,7 +148,7 @@ func (s *Scene) sendEndgameCatalog(p *entity.Entity, req domain.EndgameRequest) 
 		total = len(all)
 		for i := start; i < len(all) && i < start+page; i++ {
 			u := all[i]
-			r.Items = append(r.Items, domain.EndgameItemView{ItemID: int32(u.BaseID), UniqueID: u.ID, Name: u.Name, Description: u.Lore,
+			r.Items = append(r.Items, domain.EndgameItemView{ItemID: int32(u.BaseID), UniqueID: u.ID, Name: u.Name, Description: u.Description(),
 				Level: u.LevelRequirement, Profession: int32(u.Professions), UniqueRollBP: uniqueCatalogDisplayRollBP,
 				Stats: endgameStats(u.Affixes), Trait: uniqueTraitDescription(u.Traits)})
 		}
@@ -148,14 +157,14 @@ func (s *Scene) sendEndgameCatalog(p *entity.Entity, req domain.EndgameRequest) 
 		total = len(all)
 		for i := start; i < len(all) && i < start+page; i++ {
 			u := all[i]
-			r.Runes = append(r.Runes, domain.EndgameRuneView{MinLevel: u.MinLevel, ItemID: int32(u.Item), Name: u.Name, Description: u.Mansion, Quadrant: u.Quadrant, Stats: endgameStats(u.Affixes)})
+			r.Runes = append(r.Runes, domain.EndgameRuneView{MinLevel: u.MinLevel, ItemID: int32(u.Item), Name: u.Name, Mansion: u.Mansion, Description: u.Description(), Quadrant: u.Quadrant, Stats: endgameStats(u.Affixes)})
 		}
 	case "formations":
 		all := domain.AstralRecipes()
 		total = len(all)
 		for i := start; i < len(all) && i < start+page; i++ {
 			u := all[i]
-			v := domain.EndgameFormationView{ID: u.ID, Name: u.Name, Description: u.Lore, Channel: u.Channel.String(), MinLevel: u.MinLevel, Professions: int32(u.Professions), Stats: endgameStats(u.Affixes)}
+			v := domain.EndgameFormationView{ID: u.ID, Name: u.Name, Description: u.Description(), Channel: u.Channel.String(), MinLevel: u.MinLevel, Professions: int32(u.Professions), Stats: endgameStats(u.Affixes)}
 			for _, a := range u.Runes {
 				v.Runes = append(v.Runes, int32(a))
 			}

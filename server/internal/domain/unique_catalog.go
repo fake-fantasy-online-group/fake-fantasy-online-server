@@ -7,7 +7,7 @@ import (
 	"sort"
 )
 
-const UniqueCatalogVersion = "xianyi-v1-1619"
+const UniqueCatalogVersion = "endgame-v2-authored"
 const UniqueCatalogCount = 1619
 const UniqueRollMinBP int32 = 8000
 const UniqueRollMaxBP int32 = 12000
@@ -16,12 +16,16 @@ type UniqueTrait struct {
 	Kind         string
 	PowerBP      int32
 	ThresholdPct int32
+	SkillID      SkillID // optional filter on an existing skill, not a granted skill
+	SkillName    string
 }
 
 type UniqueDefinition struct {
 	ID                                       int32
 	BaseID                                   ItemID
 	BaseName, Name, Lore, LoreRoot, Role     string
+	Identity, Benefit, Tradeoff, PowerTier   string
+	ReservedSkills                           []ReservedSkillAttribute
 	Professions                              uint8
 	BeginnerAllowed, Unrestricted            bool
 	Sex                                      uint8
@@ -57,11 +61,21 @@ func loadUniqueCatalog() ([]UniqueDefinition, map[ItemID]UniqueDefinition) {
 			panic(err)
 		}
 		for _, d := range rows {
-			if d.BaseID <= 0 || d.ID != int32(d.BaseID) || d.Name == "" || names[d.Name] || byBase[d.BaseID].ID != 0 || len(d.Affixes) != 3 || len(d.Traits) != 2 {
+			if d.BaseID <= 0 || d.ID != int32(d.BaseID) || d.Name == "" || names[d.Name] || byBase[d.BaseID].ID != 0 || len(d.Affixes) < 1 || len(d.Affixes) > 6 || len(d.Traits) > 3 {
 				panic(fmt.Sprintf("invalid unique catalogue row %d", d.BaseID))
 			}
+			for _, a := range d.Affixes {
+				if !SupportedEndgameAffix(a) {
+					panic(fmt.Sprintf("unsupported unique affix %d/%+v", d.BaseID, a))
+				}
+			}
+			for _, b := range d.ReservedSkills {
+				if !b.Valid() {
+					panic(fmt.Sprintf("invalid reserved skill attribute %d", d.BaseID))
+				}
+			}
 			for _, tr := range d.Traits {
-				if !SupportedUniqueTrait(tr.Kind) || tr.PowerBP <= 0 {
+				if !ValidUniqueTrait(tr) || !TraitMatchesProfessions(tr, d.Professions) {
 					panic(fmt.Sprintf("invalid unique trait %d/%s", d.BaseID, tr.Kind))
 				}
 			}
@@ -80,6 +94,7 @@ func loadUniqueCatalog() ([]UniqueDefinition, map[ItemID]UniqueDefinition) {
 func cloneUnique(d UniqueDefinition) UniqueDefinition {
 	d.Affixes = append([]Affix(nil), d.Affixes...)
 	d.Traits = append([]UniqueTrait(nil), d.Traits...)
+	d.ReservedSkills = append([]ReservedSkillAttribute(nil), d.ReservedSkills...)
 	return d
 }
 func UniqueCatalog() []UniqueDefinition {
@@ -135,7 +150,7 @@ func UniqueAffixes(st Stack) []Affix {
 		return nil
 	}
 	for i := range d.Affixes {
-		d.Affixes[i].Value = scaledUniquePower(d.Affixes[i].Value, st.Endgame.UniqueRollBP)
+		d.Affixes[i].Value = scaleUniqueAffix(d.Affixes[i], st.Endgame.UniqueRollBP)
 	}
 	return d.Affixes
 }
@@ -159,4 +174,19 @@ func ValidateUniqueCatalog(defs map[ItemID]ItemDef) error {
 		return fmt.Errorf("eligible equipment count %d differs from catalogue %d", count, UniqueCatalogCount)
 	}
 	return nil
+}
+
+func (d UniqueDefinition) Description() string { return d.Lore }
+
+// Higher potency must improve both positive and explicitly cursed packages.
+// Attack interval is inverted: negative numbers make attacks faster.
+func scaleUniqueAffix(a Affix, roll int32) int32 {
+	drawback := a.Value < 0
+	if a.Attr == AttrAtkSpeed {
+		drawback = a.Value > 0
+	}
+	if drawback {
+		roll = 20000 - roll
+	}
+	return scaledUniquePower(a.Value, roll)
 }

@@ -509,7 +509,7 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 		if st.InstanceKind == domain.ItemInstanceSocketCard && len(st.Card.StaticAffixes()) > 0 {
 			// 数值只取实例；原始描述仅保留部位限制，避免模板旧数值与实例并列。
 			for _, affix := range st.Card.StaticAffixes() {
-				lines = append(lines, affixText(affix))
+				lines = append(lines, astralRuneAffixText(st.Item, affix))
 			}
 			if at := strings.Index(text, "只可"); at >= 0 {
 				lines = append(lines, text[at:])
@@ -536,7 +536,7 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 		for _, tr := range d.Traits {
 			lines = append(lines, qualityColoredLine(4, tr.Describe(st.Endgame.UniqueRollBP)))
 		}
-		lines = append(lines, "同名仙遗特性取最高值；不同特性按通道上限叠加。", d.Lore, "")
+		lines = append(lines, "同名仙遗特性取最高值；不同特性按通道上限叠加。", d.Description(), "")
 	}
 	if st.Bound {
 		lines = append(lines, "（绑定）（可用天工剪解除绑定）")
@@ -609,7 +609,9 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 		if st.Sockets[i] == 0 {
 			continue
 		}
-		appendEquipmentAffixes(&lines, st.SocketCards[i].StaticAffixes(), textQuality)
+		for _, affix := range st.SocketCards[i].StaticAffixes() {
+			lines = append(lines, qualityColoredLine(textQuality, astralRuneAffixText(st.Sockets[i], affix)))
+		}
 	}
 	// 分母是这件装备实际已打出的孔，不是模板可打孔上限。
 	// 无孔装备不显示；空孔计入分母，只有已镶嵌的孔计入分子。
@@ -810,7 +812,17 @@ func equipmentAffixLine(a domain.Affix) (string, bool) {
 	if a.Mode == domain.ModePercent {
 		suffix = "%"
 	}
-	return fmt.Sprintf("%s %s%d%s", name, signedPrefix(a.Value), a.Value, suffix), true
+	value := int64(a.Value)
+	if a.Attr == domain.AttrAtkSpeed && a.Mode == domain.ModePercent {
+		// Stored negative interval-percent entries feed positive AtkSpeedPct.
+		// Player cadence uses base / speed, not a linear interval subtraction.
+		value = -value
+	}
+	prefix := ""
+	if value >= 0 {
+		prefix = "+"
+	}
+	return fmt.Sprintf("%s %s%d%s", name, prefix, value, suffix), true
 }
 
 func signedPrefix(v int32) string {

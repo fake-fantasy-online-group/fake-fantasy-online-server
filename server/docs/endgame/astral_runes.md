@@ -1,6 +1,6 @@
-# 星篆 / 宿阵 v1
+# 星篆 / 宿阵 v2
 
-This source catalogue is complete: 28 independent rune templates, 40 executable ordered formations, ten each of lengths 2/3/4/5. Machine-readable rows are in `astral_runes.json`; runtime rows are `internal/domain/endgame_runes_catalog.go`. The same catalogue drives validation, bonuses and discovery. No formation advertises an unimplemented proc.
+This source catalogue contains 28 stable rune identities and 40 individually authored ordered formations, ten each of lengths 2/3/4/5. Each formation records its identity, intended benefit, opportunity cost, explicit stats, and optional executable traits. Machine-readable rows are in `astral_runes.json`; runtime rows are `internal/domain/endgame_runes_catalog.go`. The same catalogue drives validation, bonuses and discovery. No formation advertises an unimplemented proc.
 
 ## Setting and naming
 
@@ -72,10 +72,22 @@ Tests cover all40 recipes, order/gap/extra-hole/duplicate UID failures, professi
 
 ## Level requirements and compatibility
 
-The 28 rune levels, in item-ID order, are: 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 30, 32, 33, 35, 37, 39, 40, 42, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60. They are evenly rounded across the authored 28-mansion order. Rune effects, crafting costs, drop rates, slot lists and profession masks are unchanged. Universal formations remain universal.
+The 28 rune levels, in item-ID order, are: 12, 14, 16, 17, 19, 21, 23, 24, 26, 28, 30, 32, 33, 35, 37, 39, 40, 42, 44, 46, 48, 49, 51, 53, 55, 56, 58, 60. They are evenly rounded across the authored 28-mansion order. Rune snapshot fields, crafting costs, drop rates, slot lists and profession masks remain unchanged. The v2 formation names, lore, derived affixes and conditional traits are intentionally redesigned. Universal formations remain universal.
 
 `EquipmentRequiredLevel` derives the maximum of base-equipment level, installed rune levels, and any exactly matched formation. Equip, alternate-set switching, native blocked flags and tooltip descriptions, sidecar item levels, functional equipment selection, combat stats and granted equipment skills use this current requirement. The rune catalog wire DTO adds `minLevel`; ship the paired client update with the server because its JSON schema is strict.
 
 No database migration or instance rewrite is required. Existing rune UIDs, saved card effect rolls, socket order and equipment identities remain intact. Previously worn gear that no longer meets the level requirement remains worn but grants no functional bonuses until eligible; it is not deleted or silently moved. Unequip and extraction remain available, including below the new requirement, under their existing inventory/cost rules. Level-up refresh and relog reevaluate eligibility. New drops and crafted runes may still be owned or traded before their use level; possession is not restricted.
 
 The snapshot uses the same functional-equipment selection as combat. `同类宿阵优先级未满足` is returned only for an independently eligible formation that lost canonical channel selection; level, durability, profession and other equipment requirements are reported separately.
+
+## Version 2 authored formation and skill effects
+
+Compile with `python3 docs/daoist-endgame/catalog/compile_astral.py`; `--check` verifies exact generated Go. The compiler formats explicit rows only, never manufactures prose or stats. All40 names/lore are individually written and each recipe includes a distinct use/cost; statistical string uniqueness is not an editorial quality claim.
+
+Formation strength is evaluated as base + ingredient snapshots + selected formation, compared with the same base's coherent five-line yellow opportunity. Strong physical five-rune specialists use roughly40–44% global attack with additional focused lines; they do not borrow D2's on-weapon enhanced-damage scale. Off-build and utility arrays can remain substantially weaker for pure panel damage. No formula implies every five-rune array is best for every build.
+
+Skill scope is an optional `SkillID` filter on an existing trait. Canonical skill names and class provenance are frozen in `catalog/skill_scopes.json`. The actual strike/cast/heal passes the current ID, filters before strongest-kind selection, and applies existing caps. Examples: 连环枪法 damage, 流虹之枪 mana economy, 群疗术 ally healing, 暴雪术 cast time or area. This grants no skill and modifies no global SkillTable. Future+skill levels remain reserved inactive data, separately from these working per-skill effects.
+
+The server projects executed formation traits and intended use/cost in the existing description field, so no invisible wire-only field is required. At most one formation per channel still wins. All saved rune/equipment UIDs, card snapshots, ingredient ordering and potency are preserved. Existing arrays receive the new derived formation definition; there is no inventory rewrite or silent reroll.
+
+轸星篆's saved flat recovery amount now has a narrow rune-only two-second pulse, using the actual stored card effect. Ordinary equipment regeneration fields are not globally activated. It requires living, eligible, valid worn equipment and unique card identity; unequip/death/relogin cannot yield offline catch-up or resurrection.

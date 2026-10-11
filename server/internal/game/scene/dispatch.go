@@ -636,6 +636,9 @@ func (s *Scene) onEnter(cmd Enter) {
 			s.syncWorldAfterLoad(e)
 		} else {
 			// Initial 8003 builds the client world synchronously before later packets.
+			// Reconnecting into a live rift takes this fresh-login path too;
+			// restore its presence without waiting for a transfer-only map ACK.
+			s.syncEndgameRift(e)
 			s.pushNpcChatter(e.ID)
 			s.sendAllEntities(e.ID)
 			s.sendStallSigns(e.ID)

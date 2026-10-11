@@ -30,3 +30,22 @@ func endgameItemIcon(id domain.ItemID) int32 {
 	}
 	return 0
 }
+
+// Unique rolls keep their original equipment ItemID. Publish those base sprites
+// too: relying only on a client's installed item_icons table leaves renamed
+// equipment vulnerable to stale/missing aliases (for example boots 22581 use
+// sprite 30041, not sprite 22581). Explicit ov_item_icon_special mappings remain
+// authoritative, including the unique-eligible extended equipment slots.
+func registerEndgameEquipmentIcons(w *worldData) {
+	mapped := make(map[domain.ItemID]bool, len(w.itemIcons))
+	for _, pair := range w.itemIcons {
+		mapped[pair.Item] = true
+	}
+	for _, unique := range domain.UniqueCatalog() { // stable BaseID order
+		def := w.items[unique.BaseID]
+		if mapped[unique.BaseID] || def.Equip == nil || def.Icon <= 0 {
+			continue // Do not guess a generic weapon sprite for unknown artwork.
+		}
+		w.itemIcons = append(w.itemIcons, domain.ItemIconMapping{Item: unique.BaseID, Icon: def.Icon})
+	}
+}

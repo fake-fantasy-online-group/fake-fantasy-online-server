@@ -18,13 +18,16 @@ func TestAstralJSONMatchesExecutableCatalog(t *testing.T) {
 			Affixes                 []Affix
 		}
 		Formations []struct {
-			ID                  int32
-			Name, Channel, Lore string
-			Runes               []ItemID
-			MinLevel            int32
-			Professions         uint8
-			Slots               []EquipSlot
-			Affixes             []Affix
+			ID                                     int32
+			Name, Channel, Lore                    string
+			Identity, Benefit, Tradeoff, PowerTier string
+			Traits                                 []UniqueTrait
+			ReservedSkills                         []ReservedSkillAttribute
+			Runes                                  []ItemID
+			MinLevel                               int32
+			Professions                            uint8
+			Slots                                  []EquipSlot
+			Affixes                                []Affix
 		}
 	}
 	raw, err := os.ReadFile("../../docs/endgame/astral_runes.json")
@@ -34,7 +37,7 @@ func TestAstralJSONMatchesExecutableCatalog(t *testing.T) {
 	if err = json.Unmarshal(raw, &doc); err != nil {
 		t.Fatal(err)
 	}
-	if doc.SchemaVersion != 1 || len(doc.Runes) != 28 || len(doc.Formations) != 40 {
+	if doc.SchemaVersion != 2 || len(doc.Runes) != 28 || len(doc.Formations) != 40 {
 		t.Fatal("incomplete external catalog")
 	}
 	for i, r := range AstralRunes() {
@@ -45,7 +48,10 @@ func TestAstralJSONMatchesExecutableCatalog(t *testing.T) {
 	}
 	for i, r := range AstralRecipes() {
 		d := doc.Formations[i]
-		if d.ID != r.ID || d.Name != r.Name || d.Channel != r.Channel.String() || d.MinLevel != r.MinLevel || d.Professions != r.Professions || d.Lore != r.Lore || !reflect.DeepEqual(d.Runes, r.Runes) || !reflect.DeepEqual(d.Slots, r.Slots) || !reflect.DeepEqual(d.Affixes, r.Affixes) {
+		if !reflect.DeepEqual(d.ReservedSkills, r.ReservedSkills) && !(len(d.ReservedSkills) == 0 && len(r.ReservedSkills) == 0) {
+			t.Fatalf("reserved skill definition drift %d", i)
+		}
+		if d.ID != r.ID || d.Name != r.Name || d.Channel != r.Channel.String() || d.MinLevel != r.MinLevel || d.Professions != r.Professions || d.Lore != r.Lore || d.Identity != r.Identity || d.Benefit != r.Benefit || d.Tradeoff != r.Tradeoff || d.PowerTier != r.PowerTier || !reflect.DeepEqual(d.Traits, r.Traits) && !(len(d.Traits) == 0 && len(r.Traits) == 0) || !reflect.DeepEqual(d.Runes, r.Runes) || !reflect.DeepEqual(d.Slots, r.Slots) || !reflect.DeepEqual(d.Affixes, r.Affixes) {
 			t.Fatalf("formation row %d drift", i)
 		}
 	}

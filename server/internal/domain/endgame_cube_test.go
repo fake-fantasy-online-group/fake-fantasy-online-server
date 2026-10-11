@@ -127,7 +127,7 @@ func TestCubeEveryRecipePreviewAndExecution(t *testing.T) {
 				}
 			}
 			wantRNG := 0
-			if recipe.ID == CubeAwakenUnique || recipe.ID == CubeReforgeUnique {
+			if recipe.ID == CubeAwakenUnique || recipe.ID == CubeReforgeUnique || recipe.ID == CubeOpenSocket {
 				wantRNG = 1
 			}
 			if rng != wantRNG {

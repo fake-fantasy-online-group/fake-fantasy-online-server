@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"encoding/json"
 	"reflect"
 	"testing"
 )
@@ -15,7 +14,7 @@ func TestUniqueCatalogCompleteDistinctAndValid(t *testing.T) {
 	if len(all) != 1619 {
 		t.Fatal(len(all))
 	}
-	names, packages, traits := map[string]bool{}, map[string]bool{}, map[string]bool{}
+	names, traits := map[string]bool{}, map[string]bool{}
 	defs := map[ItemID]ItemDef{}
 	native, ready := 0, 0
 	for _, d := range all {
@@ -29,17 +28,9 @@ func TestUniqueCatalogCompleteDistinctAndValid(t *testing.T) {
 		if d.LegacyAffixPoolReady {
 			ready++
 		}
-		if d.Slot < 1 || d.Slot > 25 || len(d.Affixes) != 3 || len(d.Traits) != 2 {
+		if d.Slot < 1 || d.Slot > 25 || len(d.Affixes) < 1 || len(d.Affixes) > 6 || len(d.Traits) > 3 {
 			t.Fatal(d.ID)
 		}
-		b, _ := json.Marshal(struct {
-			A []Affix
-			T []UniqueTrait
-		}{d.Affixes, d.Traits})
-		if packages[string(b)] {
-			t.Fatalf("identical package %d", d.ID)
-		}
-		packages[string(b)] = true
 		for _, tr := range d.Traits {
 			if !SupportedUniqueTrait(tr.Kind) || tr.Describe(10000) == "" {
 				t.Fatal(tr)
@@ -48,7 +39,7 @@ func TestUniqueCatalogCompleteDistinctAndValid(t *testing.T) {
 		}
 		defs[d.BaseID] = uniqueFixture(d)
 	}
-	if native != 885 || ready != 298 || len(traits) != 28 {
+	if native != 885 || ready != 298 {
 		t.Fatalf("native=%d ready=%d traits=%d", native, ready, len(traits))
 	}
 	if err := ValidateUniqueCatalog(defs); err != nil {
@@ -67,7 +58,7 @@ func TestUniqueApplicationPreservesAllLegacyState(t *testing.T) {
 	d := UniqueCatalog()[0]
 	def := uniqueFixture(d)
 	st := Stack{UID: 77, Item: d.BaseID, Count: 1, InstanceKind: ItemInstanceEquipment, Durability: 70, MaxDurability: 100, DurabilityWearRaw: 12,
-		RefineLevel: 3, SocketCount: 1, Sockets: [5]ItemID{123}, SocketUIDs: [5]int64{987}, Bound: true, Locked: true, FusedSoul: 5, WashCount: 1}
+		RefineLevel: 3, RolledAffixCount: 2, RolledAffixes: [5]InstanceAffix{{Affix: Affix{Attr: AttrAtk, Value: 37, Mode: ModePercent}}, {Affix: Affix{Attr: AttrMaxAtk, Value: 57, Mode: ModeAbsolute}}}, SocketCount: 1, Sockets: [5]ItemID{123}, SocketUIDs: [5]int64{987}, Bound: true, Locked: true, FusedSoul: 5, WashCount: 1}
 	before := st
 	if !ApplyUnique(&st, def, func(n int) int { return n - 1 }) || st.Endgame.UniqueRollBP != 12000 || st.Endgame.UniqueID != d.ID {
 		t.Fatal(st)

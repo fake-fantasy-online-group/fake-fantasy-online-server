@@ -261,10 +261,21 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 			return p, err
 		}
 	case CubeOpenSocket:
-		if int(target.SocketCount) >= EquipmentSocketCapacity(def, target) || target.SocketCount >= 5 {
-			return p, cubeError("requirements", "装备已达到真实孔位容量")
+		capacity := min(5, EquipmentSocketCapacity(def, target))
+		if target.SocketCount != 0 || capacity < 1 {
+			return p, cubeError("requirements", "随机开窍仅限有剩余属性容量的无孔装备；已有孔不可重开")
 		}
-		target.SocketCount++
+		p.Description += fmt.Sprintf(" 本次随机1至%d孔，每种孔数概率1/%d；不损毁装备。", capacity, capacity)
+		if execute {
+			if ctx.Intn == nil {
+				return p, cubeError("requirements", "随机源不可用")
+			}
+			n := ctx.Intn(capacity)
+			if n < 0 || n >= capacity {
+				return p, cubeError("requirements", "随机源无效")
+			}
+			target.SocketCount = uint8(n + 1)
+		}
 	case CubeExtractRunes:
 		p.Description += fmt.Sprintf(" 本次原样取回%d枚孔内卡。", UsedEquipmentSockets(target))
 		if UsedEquipmentSockets(target) == 0 {
@@ -274,6 +285,9 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 			return p, err
 		}
 	case CubeReorderRunes:
+		if reason := AstralBaseIneligibility(def, target); reason != "" {
+			return p, cubeError("requirements", reason)
+		}
 		if target.SocketCount < 2 || len(req.ItemUIDs) != int(target.SocketCount) || UsedEquipmentSockets(target) != int(target.SocketCount) {
 			return p, cubeError("requirements", "须按新顺序选择所有已镶满的星篆")
 		}
@@ -309,6 +323,9 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 			return p, cubeError("requirements", "孔位顺序没有变化")
 		}
 	case CubeInscribeArray:
+		if reason := AstralBaseIneligibility(def, target); reason != "" {
+			return p, cubeError("requirements", reason)
+		}
 		if target.SocketCount < 2 || UsedEquipmentSockets(target) != 0 || len(req.ItemUIDs) != int(target.SocketCount) {
 			return p, cubeError("requirements", "须选择与全部空孔数量相同的有序星篆")
 		}

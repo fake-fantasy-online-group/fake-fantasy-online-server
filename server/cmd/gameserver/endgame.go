@@ -29,6 +29,7 @@ func registerEndgameItems(w *worldData) error {
 		w.items[d.ID] = d
 		w.itemIcons = append(w.itemIcons, domain.ItemIconMapping{Item: d.ID, Icon: d.Icon})
 	}
+	registerEndgameEquipmentIcons(w)
 	w.itemIconsKnown = true
 	return nil
 }

@@ -1,0 +1,529 @@
+{
+  "baseline_commit": "3b3999de226a033906e4f1062e164689ba76b70d",
+  "arm": [
+    {
+      "index": 1006,
+      "name": "妖泣",
+      "level": 6,
+      "level_need": 30,
+      "min_atk": 6,
+      "max_atk": 81,
+      "def": 0,
+      "matk": 0,
+      "mdef": 0,
+      "hit_rate": 40,
+      "str": 0,
+      "vit": 0,
+      "int_": 0,
+      "spi": 0,
+      "agi": 0,
+      "dex": 0,
+      "str_need": 62,
+      "vit_need": 0,
+      "int_need": 0,
+      "spi_need": 0,
+      "agi_need": 62,
+      "dex_need": 0,
+      "_source": "server/migrations/000000_init-25.sql:2683"
+    },
+    {
+      "index": 1010,
+      "name": "凶剑·诛魔",
+      "level": 10,
+      "level_need": 54,
+      "min_atk": 10,
+      "max_atk": 140,
+      "def": 0,
+      "matk": 0,
+      "mdef": 0,
+      "hit_rate": 65,
+      "str": 0,
+      "vit": 0,
+      "int_": 0,
+      "spi": 0,
+      "agi": 0,
+      "dex": 0,
+      "str_need": 110,
+      "vit_need": 0,
+      "int_need": 0,
+      "spi_need": 0,
+      "agi_need": 110,
+      "dex_need": 0,
+      "_source": "server/migrations/000000_init-26.sql:690"
+    },
+    {
+      "index": 1306,
+      "name": "辉石杖",
+      "level": 6,
+      "level_need": 30,
+      "min_atk": 6,
+      "max_atk": 68,
+      "def": 0,
+      "matk": 37,
+      "mdef": 0,
+      "hit_rate": 33,
+      "str": 0,
+      "vit": 0,
+      "int_": 0,
+      "spi": 0,
+      "agi": 0,
+      "dex": 0,
+      "str_need": 0,
+      "vit_need": 0,
+      "int_need": 45,
+      "spi_need": 0,
+      "agi_need": 0,
+      "dex_need": 0,
+      "_source": "server/migrations/000000_init-24.sql:10615"
+    },
+    {
+      "index": 1310,
+      "name": "神杖·九仪",
+      "level": 10,
+      "level_need": 54,
+      "min_atk": 10,
+      "max_atk": 118,
+      "def": 0,
+      "matk": 64,
+      "mdef": 0,
+      "hit_rate": 57,
+      "str": 0,
+      "vit": 0,
+      "int_": 0,
+      "spi": 0,
+      "agi": 0,
+      "dex": 0,
+      "str_need": 0,
+      "vit_need": 0,
+      "int_need": 81,
+      "spi_need": 0,
+      "agi_need": 0,
+      "dex_need": 0,
+      "_source": "server/migrations/000000_init-24.sql:10661"
+    },
+    {
+      "index": 1606,
+      "name": "破梦玄戟",
+      "level": 6,
+      "level_need": 30,
+      "min_atk": 6,
+      "max_atk": 100,
+      "def": 0,
+      "matk": 0,
+      "mdef": 0,
+      "hit_rate": 33,
+      "str": 0,
+      "vit": 0,
+      "int_": 0,
+      "spi": 0,
+      "agi": 0,
+      "dex": 0,
+      "str_need": 95,
+      "vit_need": 0,
+      "int_need": 0,
+      "spi_need": 0,
+      "agi_need": 0,
+      "dex_need": 0,
+      "_source": "server/migrations/000000_init-24.sql:11070"
+    },
+    {
+      "index": 1610,
+      "name": "怒戟·通天",
+      "level": 10,
+      "level_need": 54,
+      "min_atk": 10,
+      "max_atk": 174,
+      "def": 0,
+      "matk": 0,
+      "mdef": 0,
+      "hit_rate": 57,
+      "str": 0,
+      "vit": 0,
+      "int_": 0,
+      "spi": 0,
+      "agi": 0,
+      "dex": 0,
+      "str_need": 167,
+      "vit_need": 0,
+      "int_need": 0,
+      "spi_need": 0,
+      "agi_need": 0,
+      "dex_need": 0,
+      "_source": "server/migrations/000000_init-24.sql:11114"
+    },
+    {
+      "index": 1806,
+      "name": "鬼饮血刺",
+      "level": 6,
+      "level_need": 30,
+      "min_atk": 12,
+      "max_atk": 38,
+      "def": 0,
+      "matk": 0,
+      "mdef": 0,
+      "hit_rate": 62,
+      "str": 0,
+      "vit": 0,
+      "int_": 0,
+      "spi": 0,
+      "agi": 0,
+      "dex": 0,
+      "str_need": 29,
+      "vit_need": 0,
+      "int_need": 0,
+      "spi_need": 0,
+      "agi_need": 0,
+      "dex_need": 95,
+      "_source": "server/migrations/000000_init-24.sql:11296"
+    },
+    {
+      "index": 1810,
+      "name": "煞刺·伏龙",
+      "level": 10,
+      "level_need": 54,
+      "min_atk": 20,
+      "max_atk": 66,
+      "def": 0,
+      "matk": 0,
+      "mdef": 0,
+      "hit_rate": 107,
+      "str": 0,
+      "vit": 0,
+      "int_": 0,
+      "spi": 0,
+      "agi": 0,
+      "dex": 0,
+      "str_need": 53,
+      "vit_need": 0,
+      "int_need": 0,
+      "spi_need": 0,
+      "agi_need": 0,
+      "dex_need": 167,
+      "_source": "server/migrations/000000_init-24.sql:11340"
+    }
+  ],
+  "desc": [
+    {
+      "index": 1006,
+      "type": 2,
+      "_source": "server/migrations/000000_init-28.sql:8896"
+    },
+    {
+      "index": 1010,
+      "type": 2,
+      "_source": "server/migrations/000000_init-29.sql:2764"
+    },
+    {
+      "index": 1306,
+      "type": 16,
+      "_source": "server/migrations/000000_init-27.sql:18521"
+    },
+    {
+      "index": 1310,
+      "type": 16,
+      "_source": "server/migrations/000000_init-27.sql:18975"
+    },
+    {
+      "index": 1606,
+      "type": 1,
+      "_source": "server/migrations/000000_init-28.sql:3950"
+    },
+    {
+      "index": 1610,
+      "type": 1,
+      "_source": "server/migrations/000000_init-28.sql:4402"
+    },
+    {
+      "index": 1806,
+      "type": 8,
+      "_source": "server/migrations/000000_init-28.sql:5736"
+    },
+    {
+      "index": 1810,
+      "type": 8,
+      "_source": "server/migrations/000000_init-28.sql:5782"
+    }
+  ],
+  "unique": [
+    {
+      "BaseID": 1006,
+      "Name": "白牡丹守夜剑",
+      "Affixes": [
+        {
+          "Attr": 47,
+          "Value": 22,
+          "Mode": 0
+        },
+        {
+          "Attr": 7,
+          "Value": 13,
+          "Mode": 0
+        },
+        {
+          "Attr": 19,
+          "Value": 11,
+          "Mode": 0
+        }
+      ],
+      "Traits": [
+        {
+          "Kind": "execution",
+          "PowerBP": 1100,
+          "ThresholdPct": 30
+        },
+        {
+          "Kind": "healthy_guard",
+          "PowerBP": 600,
+          "ThresholdPct": 70
+        }
+      ],
+      "SourceArm": "server/migrations/000000_init-25.sql:2683",
+      "SourceDesc": "server/migrations/000000_init-28.sql:8896"
+    },
+    {
+      "BaseID": 1010,
+      "Name": "飞鹤渡潮剑",
+      "Affixes": [
+        {
+          "Attr": 47,
+          "Value": 24,
+          "Mode": 0
+        },
+        {
+          "Attr": 7,
+          "Value": 13,
+          "Mode": 0
+        },
+        {
+          "Attr": 19,
+          "Value": 18,
+          "Mode": 0
+        }
+      ],
+      "Traits": [
+        {
+          "Kind": "execution",
+          "PowerBP": 500,
+          "ThresholdPct": 30
+        },
+        {
+          "Kind": "healthy_guard",
+          "PowerBP": 800,
+          "ThresholdPct": 70
+        }
+      ],
+      "SourceArm": "server/migrations/000000_init-26.sql:690",
+      "SourceDesc": "server/migrations/000000_init-29.sql:2764"
+    },
+    {
+      "BaseID": 1306,
+      "Name": "灵台渡潮杖",
+      "Affixes": [
+        {
+          "Attr": 15,
+          "Value": 16,
+          "Mode": 0
+        },
+        {
+          "Attr": 34,
+          "Value": 119,
+          "Mode": 0
+        },
+        {
+          "Attr": 17,
+          "Value": 13,
+          "Mode": 0
+        }
+      ],
+      "Traits": [
+        {
+          "Kind": "area_expansion",
+          "PowerBP": 1400,
+          "ThresholdPct": 0
+        },
+        {
+          "Kind": "magic_guard",
+          "PowerBP": 600,
+          "ThresholdPct": 0
+        }
+      ],
+      "SourceArm": "server/migrations/000000_init-24.sql:10615",
+      "SourceDesc": "server/migrations/000000_init-27.sql:18521"
+    },
+    {
+      "BaseID": 1310,
+      "Name": "灵台听雨杖",
+      "Affixes": [
+        {
+          "Attr": 3,
+          "Value": 14,
+          "Mode": 0
+        },
+        {
+          "Attr": 61,
+          "Value": 19,
+          "Mode": 0
+        },
+        {
+          "Attr": 36,
+          "Value": 212,
+          "Mode": 0
+        }
+      ],
+      "Traits": [
+        {
+          "Kind": "spell_economy",
+          "PowerBP": 1500,
+          "ThresholdPct": 0
+        },
+        {
+          "Kind": "swift_cast",
+          "PowerBP": 1200,
+          "ThresholdPct": 0
+        }
+      ],
+      "SourceArm": "server/migrations/000000_init-24.sql:10661",
+      "SourceDesc": "server/migrations/000000_init-27.sql:18975"
+    },
+    {
+      "BaseID": 1606,
+      "Name": "守土守夜枪",
+      "Affixes": [
+        {
+          "Attr": 47,
+          "Value": 16,
+          "Mode": 0
+        },
+        {
+          "Attr": 23,
+          "Value": 200,
+          "Mode": 0
+        },
+        {
+          "Attr": 5,
+          "Value": 14,
+          "Mode": 0
+        }
+      ],
+      "Traits": [
+        {
+          "Kind": "basic_focus",
+          "PowerBP": 500,
+          "ThresholdPct": 0
+        },
+        {
+          "Kind": "critical_focus",
+          "PowerBP": 1200,
+          "ThresholdPct": 0
+        }
+      ],
+      "SourceArm": "server/migrations/000000_init-24.sql:11070",
+      "SourceDesc": "server/migrations/000000_init-28.sql:3950"
+    },
+    {
+      "BaseID": 1610,
+      "Name": "宝扇渡潮枪",
+      "Affixes": [
+        {
+          "Attr": 1,
+          "Value": 17,
+          "Mode": 0
+        },
+        {
+          "Attr": 19,
+          "Value": 13,
+          "Mode": 0
+        },
+        {
+          "Attr": 34,
+          "Value": 199,
+          "Mode": 0
+        }
+      ],
+      "Traits": [
+        {
+          "Kind": "execution",
+          "PowerBP": 700,
+          "ThresholdPct": 30
+        },
+        {
+          "Kind": "kill_mend",
+          "PowerBP": 200,
+          "ThresholdPct": 0
+        }
+      ],
+      "SourceArm": "server/migrations/000000_init-24.sql:11114",
+      "SourceDesc": "server/migrations/000000_init-28.sql:4402"
+    },
+    {
+      "BaseID": 1806,
+      "Name": "花雨守夜双刃",
+      "Affixes": [
+        {
+          "Attr": 7,
+          "Value": 9,
+          "Mode": 0
+        },
+        {
+          "Attr": 36,
+          "Value": 117,
+          "Mode": 0
+        },
+        {
+          "Attr": 47,
+          "Value": 22,
+          "Mode": 0
+        }
+      ],
+      "Traits": [
+        {
+          "Kind": "trap_expansion",
+          "PowerBP": 1200,
+          "ThresholdPct": 0
+        },
+        {
+          "Kind": "skill_focus",
+          "PowerBP": 1100,
+          "ThresholdPct": 0
+        }
+      ],
+      "SourceArm": "server/migrations/000000_init-24.sql:11296",
+      "SourceDesc": "server/migrations/000000_init-28.sql:5736"
+    },
+    {
+      "BaseID": 1810,
+      "Name": "荷影渡潮双刃",
+      "Affixes": [
+        {
+          "Attr": 7,
+          "Value": 19,
+          "Mode": 0
+        },
+        {
+          "Attr": 9,
+          "Value": 15,
+          "Mode": 0
+        },
+        {
+          "Attr": 23,
+          "Value": 250,
+          "Mode": 0
+        }
+      ],
+      "Traits": [
+        {
+          "Kind": "ambush",
+          "PowerBP": 700,
+          "ThresholdPct": 80
+        },
+        {
+          "Kind": "invisible_focus",
+          "PowerBP": 800,
+          "ThresholdPct": 0
+        }
+      ],
+      "SourceArm": "server/migrations/000000_init-24.sql:11340",
+      "SourceDesc": "server/migrations/000000_init-28.sql:5782"
+    }
+  ]
+}

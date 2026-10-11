@@ -192,17 +192,18 @@ func (r ReviveAt) Enabled() bool { return r.Scene.MapID != 0 }
 //
 // 除 mailbox / quit / log 外的所有字段, **只有场景 goroutine 能碰**。
 type Scene struct {
-	riftLayouts    []domain.RiftFloorTemplate
-	endgameBackend domain.EndgameBackend
-	endgamePlayers map[domain.EntityID]*endgamePlayerState
-	rift           *endgameRiftState
-	riftRequests   map[domain.EntityID]*endgameRiftRequestState
-	trialRun       *endgameTrialState
-	trial          *domain.TrialRules
-	trialLevel     int32
-	trialCleared   bool
-	dungeonParty   func(domain.CharID) domain.DungeonParty
-	dungeonNotify  func(string, string)
+	riftLayouts     []domain.RiftFloorTemplate
+	endgameBackend  domain.EndgameBackend
+	endgamePlayers  map[domain.EntityID]*endgamePlayerState
+	astralRuneRegen map[domain.EntityID]astralRuneRegenClock
+	rift            *endgameRiftState
+	riftRequests    map[domain.EntityID]*endgameRiftRequestState
+	trialRun        *endgameTrialState
+	trial           *domain.TrialRules
+	trialLevel      int32
+	trialCleared    bool
+	dungeonParty    func(domain.CharID) domain.DungeonParty
+	dungeonNotify   func(string, string)
 
 	pickupRange int32
 	id          domain.SceneID
@@ -905,17 +906,18 @@ func (s *Scene) step() {
 	if s.rift == nil || s.riftCombatReady() {
 		s.stepStatus()
 	} // 2. 状态: 周期触发与到期。**必须在任何人行动之前**
-	s.stepRest()                // 3. 坐下休息: 周期恢复生命
-	s.stepWork()                // 4. 打工: 结算与扣耐力
-	s.stepNianli()              // 5. 念力: 只累计在线时间
-	s.stepPets()                // 6. 宠物: 跟随主人、推进出战期饥饿与信赖
-	s.stepAI()                  // 7. 怪物寻敌、移动、决定出手
-	s.stepTraps()               // 8. 怪物踏入后触发上一帧已经落地的陷阱
-	s.stepCasts()               // 9. 结算本帧全部技能
-	s.stepCombat()              // 10. 结算本帧全部普通攻击
-	s.checkDungeonEligibility() // 11. 副本退队宽限到期时只清退本人
-	s.flush()                   // 12. 按 AOI 把本帧事件广播出去
-	s.checkInstanceLife()       // 13. 副本实例: 限时到 / 空了就收摊
+	s.stepRest()                   // 3. 坐下休息: 周期恢复生命
+	s.stepAstralRuneRegeneration() // Standalone 轸 rune: flat, online-only recovery.
+	s.stepWork()                   // 4. 打工: 结算与扣耐力
+	s.stepNianli()                 // 5. 念力: 只累计在线时间
+	s.stepPets()                   // 6. 宠物: 跟随主人、推进出战期饥饿与信赖
+	s.stepAI()                     // 7. 怪物寻敌、移动、决定出手
+	s.stepTraps()                  // 8. 怪物踏入后触发上一帧已经落地的陷阱
+	s.stepCasts()                  // 9. 结算本帧全部技能
+	s.stepCombat()                 // 10. 结算本帧全部普通攻击
+	s.checkDungeonEligibility()    // 11. 副本退队宽限到期时只清退本人
+	s.flush()                      // 12. 按 AOI 把本帧事件广播出去
+	s.checkInstanceLife()          // 13. 副本实例: 限时到 / 空了就收摊
 
 	if s.tick%s.saveEvery == 0 {
 		s.saveDirty()
@@ -1041,6 +1043,7 @@ func (s *Scene) passiveCounterPending(defender, attacker *entity.Entity) (pendin
 // 死亡与「从视野里消失」是两件事: 死亡是**战斗结果**(要结算经验/掉落/仇恨),
 // 消失是**视野事件**(只影响渲染)。所以先发 EntityDied, 尸体停留若干帧后才移除。
 func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
+	delete(s.astralRuneRegen, dead.ID)
 	if dead.Monster != nil && s.rift == nil {
 		s.beginEndgameTrial()
 	}
