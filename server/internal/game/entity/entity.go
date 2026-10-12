@@ -191,6 +191,7 @@ type SnapshotSaver interface {
 type PlayerRuntime struct {
 	V5StatusOwner           domain.EntityID
 	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
+	EndgameRiftPortals      bool // negotiated server-owned rift gate context
 	EndgameSkillVariants    bool // negotiated equipment skill variants
 	EndgameSkillBehavior    bool // negotiated typed skill behavior; connection-scoped
 	EndgameGrowthV5         bool // negotiated V5 growth rules; connection-scoped
@@ -264,6 +265,7 @@ func (e *Entity) CapturePlayerRuntime(now domain.Tick) PlayerRuntime {
 		r.EndgameNativeStats = e.Player.EndgameNativeStats
 		r.EndgameGrowthV5 = e.Player.EndgameGrowthV5
 		r.EndgameSkillVariants = e.Player.EndgameSkillVariants
+		r.EndgameRiftPortals = e.Player.EndgameRiftPortals
 		r.EndgameSkillBehavior = e.Player.EndgameSkillBehavior
 		r.EquipmentAbsorbRestores = append([]domain.EquipmentAbsorbRestore(nil), e.Player.EquipmentAbsorbRestores...)
 		r.GMGod = e.Player.GMGod
@@ -306,6 +308,7 @@ func (e *Entity) RestorePlayerRuntime(r PlayerRuntime, now domain.Tick) {
 		e.Player.EndgameNativeStats = r.EndgameNativeStats
 		e.Player.EndgameGrowthV5 = r.EndgameGrowthV5
 		e.Player.EndgameSkillVariants = r.EndgameSkillVariants
+		e.Player.EndgameRiftPortals = r.EndgameRiftPortals
 		e.Player.EndgameSkillBehavior = r.EndgameSkillBehavior
 		e.Player.EquipmentAbsorbRestores = append([]domain.EquipmentAbsorbRestore(nil), r.EquipmentAbsorbRestores...)
 		e.Player.GMGod = r.GMGod
@@ -458,6 +461,7 @@ type Player struct {
 	// Removing them from max-resource deltas prevents soft-rank toggles from healing.
 	SkillGrowthMaxHP, SkillGrowthMaxMP int32
 	EquipmentAbsorbRestores            []domain.EquipmentAbsorbRestore
+	EndgameRiftPortals                 bool // negotiated server-owned rift gate context
 	EndgameSkillVariants               bool // negotiated equipment skill variants
 	EndgameSkillBehavior               bool // negotiated typed skill behavior; connection-scoped
 	EndgameGrowthV5                    bool // negotiated V5 growth rules; connection-scoped

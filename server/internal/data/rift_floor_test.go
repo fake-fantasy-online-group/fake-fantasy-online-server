@@ -2,6 +2,7 @@ package data
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+	"reflect"
 	"testing"
 )
 
@@ -33,9 +34,27 @@ func TestRiftFloorTemplateConnectedNativeAnchors(t *testing.T) {
 	if !ok || len(layout.Anchors) != 51 || len(layout.Monsters) != 1 || len(layout.Guardians) != 1 || layout.Guardians[0] != 2 {
 		t.Fatalf("bad validated component: %+v", layout)
 	}
+	if layout.WalkableArea != 65*100*16*16 || len(layout.Population) <= len(layout.Anchors)*3 {
+		t.Fatalf("missing verified area/dense candidate positions: area=%v population=%d", layout.WalkableArea, len(layout.Population))
+	}
 	for _, p := range layout.Anchors {
 		if p.Pos.X >= 1040 || !mask.Walkable(p.Pos) {
 			t.Fatal("unreachable or blocked anchor")
+		}
+	}
+	seen := map[domain.Pos]bool{}
+	for _, p := range layout.Population {
+		if p.Pos.X >= 1040 || !mask.Walkable(p.Pos) || seen[p.Pos] {
+			t.Fatal("unreachable, blocked or overlapping population point")
+		}
+		seen[p.Pos] = true
+		nearNative := false
+		for _, native := range layout.Anchors {
+			dx, dy := p.Pos.X-native.Pos.X, p.Pos.Y-native.Pos.Y
+			nearNative = nearNative || dx*dx+dy*dy <= domain.RiftFloorPopulationRadius*domain.RiftFloorPopulationRadius
+		}
+		if !nearNative {
+			t.Fatal("population escaped verified native encounter regions")
 		}
 	}
 	for floor := int32(1); floor <= 30; floor++ {
@@ -43,6 +62,29 @@ func TestRiftFloorTemplateConnectedNativeAnchors(t *testing.T) {
 		if err != nil || !p.Valid() {
 			t.Fatal("validated map failed generation", err)
 		}
+		if len(p.Spawns) < domain.RiftFloorMinPopulation {
+			t.Fatalf("small map stayed sparse despite safe positions: %d", len(p.Spawns))
+		}
+		for _, monster := range p.Spawns {
+			if !seen[monster.Point.Pos] {
+				t.Fatal("spawn did not use a verified population position")
+			}
+		}
+	}
+}
+
+func TestRiftFloorDenseCandidatesKeepNativeInputOrderIndependent(t *testing.T) {
+	mask, defs, points := riftGeometryFixture()
+	a, ok := BuildRiftFloorTemplate(7, "森林", points, defs, mask)
+	if !ok {
+		t.Fatal("fixture rejected")
+	}
+	for i, j := 0, len(points)-1; i < j; i, j = i+1, j-1 {
+		points[i], points[j] = points[j], points[i]
+	}
+	b, ok := BuildRiftFloorTemplate(7, "森林", points, defs, mask)
+	if !ok || !reflect.DeepEqual(a, b) {
+		t.Fatal("native input order changed collision-verified population")
 	}
 }
 func TestRiftFloorTemplateFollowsWindingCorridor(t *testing.T) {

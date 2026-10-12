@@ -138,9 +138,11 @@ func BuildRiftFloorTemplate(mapID int32, name string, spawns []domain.SpawnPoint
 		groups[labels[cell]] = append(groups[labels[cell]], p)
 	}
 	// Component labels follow sorted native anchor IDs, making ties stable.
+	var selectedLabel int32
 	for i := int32(1); i <= label; i++ {
 		if len(groups[i]) > len(out.Anchors) {
 			out.Anchors = groups[i]
+			selectedLabel = i
 		}
 	}
 	if len(out.Anchors) < domain.RiftFloorMinAnchors {
@@ -158,6 +160,48 @@ func BuildRiftFloorTemplate(mapID int32, name string, spawns []domain.SpawnPoint
 	}
 	if diameter < 1024*1024 {
 		return out, false
+	}
+	for _, component := range labels {
+		if component == selectedLabel {
+			out.WalkableArea += float64(mask.cellWidth) * float64(mask.cellHeight)
+		}
+	}
+	// A globally aligned lattice gives distinct, spaced positions around native
+	// hostile regions. Every point must be in this exact flood-filled component;
+	// no unchecked jitter, blocked cell or disconnected island is eligible.
+	spacing, radius := domain.RiftFloorPopulationSpacing, domain.RiftFloorPopulationRadius
+	seenCells := map[[2]int]bool{}
+	for _, anchor := range out.Anchors {
+		for y := (int(anchor.Pos.Y) - radius) / spacing; y <= (int(anchor.Pos.Y)+radius)/spacing; y++ {
+			for x := (int(anchor.Pos.X) - radius) / spacing; x <= (int(anchor.Pos.X)+radius)/spacing; x++ {
+				key := [2]int{x, y}
+				if seenCells[key] {
+					continue
+				}
+				pos := domain.Pos{MapID: mapID, X: float64(x*spacing + spacing/2), Y: float64(y*spacing + spacing/2)}
+				dx, dy := pos.X-anchor.Pos.X, pos.Y-anchor.Pos.Y
+				if dx*dx+dy*dy > float64(radius*radius) || !mask.Walkable(pos) {
+					continue
+				}
+				cell := int(uint32(pos.Y)/mask.cellHeight)*width + int(uint32(pos.X)/mask.cellWidth)
+				if labels[cell] != selectedLabel {
+					continue
+				}
+				seenCells[key] = true
+				out.Population = append(out.Population, domain.SpawnPoint{Pos: pos, Dir: anchor.Dir})
+			}
+		}
+	}
+	sort.Slice(out.Population, func(i, j int) bool {
+		if out.Population[i].Pos.Y != out.Population[j].Pos.Y {
+			return out.Population[i].Pos.Y < out.Population[j].Pos.Y
+		}
+		return out.Population[i].Pos.X < out.Population[j].Pos.X
+	})
+	for i := range out.Population {
+		// Negative IDs distinguish catalog-only positions from native spawns.
+		// Encounter entity IDs are allocated independently by the scene.
+		out.Population[i].ID = -int32(i + 1)
 	}
 	monsters, bosses := map[domain.MonsterID]bool{}, map[domain.MonsterID]bool{}
 	for _, p := range out.Anchors {

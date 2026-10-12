@@ -601,6 +601,12 @@ func (s *Scene) onEnter(cmd Enter) {
 		return
 	}
 
+	// Private ownership must precede the map edge; releasing ordinary gates
+	// waits until its authoritative teleport has started on the client.
+	if s.rift != nil {
+		s.sendRiftSceneContext(e)
+	}
+
 	// 1. 先告诉客户端本人生命周期。初次登录走 8033+8003；服务端发起的跨场景
 	// 走专用 803a。客户端已经自行加载目标图时不能再发 803a，否则异步重复清图会
 	// 把紧随其后的 NPC/怪物删掉；会话路由已在所有权交接时同步改绑。
@@ -614,6 +620,9 @@ func (s *Scene) onEnter(cmd Enter) {
 		// SeedServer 依赖当前角色身份，所以要紧跟 0x8003；同时又必须赶在
 		// 0x8015/0x800b 之前，否则登录快照会先把旧提示弹出来。
 		s.emitTo(e.ID, event.NewbieTipSeed{Who: e.ID, TipIDs: cmd.SeenTips})
+	}
+	if s.rift == nil {
+		s.sendRiftSceneContext(e)
 	}
 	// 1.5 初次登录才下发完整角色 bootstrap；跨图保留客户端已有的本人状态。
 	if cmd.Runtime == nil {

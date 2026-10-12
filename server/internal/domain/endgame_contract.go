@@ -4,6 +4,7 @@ package domain
 const EndgameV1 = "endgame.v1"
 const EndgameNativeStatsV1 = "endgame.native-stats.v1"
 const EndgameGrowthV5 = "endgame.growth.v5"
+const EndgameRiftPortalsV1 = "endgame.rift-portals.v1"
 const EndgameSchema = 1
 const EndgameMaxJSONBytes = 60 * 1024
 

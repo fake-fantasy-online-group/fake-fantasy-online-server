@@ -109,3 +109,41 @@ func TestSeededRiftInvalidPopulationFailsAtomically(t *testing.T) {
 		})
 	}
 }
+
+func TestSeededRiftDensePopulationUsesFullPlanAtLowAndMaxTier(t *testing.T) {
+	for _, tier := range []int32{1, domain.RiftMaxTier} {
+		s, _ := seededRiftLayoutFixture(t, 1)
+		layout := &s.riftLayouts[0]
+		layout.WalkableArea = 1000 * domain.RiftFloorAreaPerMonster
+		for i := 0; i < 400; i++ {
+			layout.Population = append(layout.Population, domain.SpawnPoint{ID: -int32(i + 1), Pos: domain.Pos{MapID: 7, X: float64(i%20)*80 + 32, Y: float64(i/20)*80 + 32}, Dir: 67})
+		}
+		plan, err := s.planEndgameRiftFloor("dense-scene", 1, 0)
+		if err != nil {
+			t.Fatal(err)
+		}
+		s.rift.data.Floor, s.rift.data.Run.Tier = &plan, tier
+		s.populateEndgameRift(false)
+		if len(s.monsters) != len(plan.Spawns) || len(s.monsters) < 144 || s.rift.data.Run.Phase != domain.RiftActive {
+			t.Fatalf("dense plan not fully spawned at tier %d: %d", tier, len(s.monsters))
+		}
+		seen := map[domain.Pos]bool{}
+		for id, m := range s.monsters {
+			class := s.rift.data.Run.Monsters[id].Class
+			if seen[m.Pos] || !s.walkable(m.Pos) || m.MaxHP != domain.RiftScaledStat(100, tier, 1, class, true) {
+				t.Fatal("density changed geometry or difficulty stats")
+			}
+			seen[m.Pos] = true
+		}
+	}
+}
+
+func TestSeededRiftSavedVersionOnePopulationNotExpanded(t *testing.T) {
+	s, plan := seededRiftLayoutFixture(t, 1)
+	plan.GeneratorVersion, plan.Seed, plan.Spawns = 1, 123456, plan.Spawns[:48]
+	s.rift.data.Floor = &plan
+	s.populateEndgameRift(false)
+	if len(s.monsters) != 48 || s.rift.data.Run.Phase != domain.RiftActive || s.rift.data.Floor.Seed != 123456 {
+		t.Fatal("saved version one plan was rejected or regenerated")
+	}
+}

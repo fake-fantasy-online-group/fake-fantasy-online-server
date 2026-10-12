@@ -30,6 +30,10 @@ func (s *Scene) onEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
 		}
 		return
 	}
+	if req.Op == "rift.advance" {
+		s.endgameError(p, req, "not_inside", "当前不在洞天内")
+		return
+	}
 	profile := riftProfile(s.endgamePlayer(p).state.Payload)
 	if (req.Op == "rift.start") && profile.RunID != "" && profile.RunID != req.RunID {
 		s.loadEndgameRift(p, req, profile.RunID, true)

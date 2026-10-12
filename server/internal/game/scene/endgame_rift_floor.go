@@ -28,8 +28,50 @@ func (s *Scene) canAdvanceEndgameRift(p *entity.Entity) bool {
 		return false
 	}
 	char := domain.CharID(p.Player.Char.ID)
-	return char == x.data.Run.Payer && x.ready[char] && x.data.Run.Admitted(char) && riftDistance2(p.Pos, x.data.Floor.Exit) <= 160*160
+	return char == x.data.Run.Payer && x.ready[char] && x.data.Run.Admitted(char) && s.atEndgameRiftExit(p.Pos)
 }
+
+// Both the seeded exit marker and every usable native map gate lead forward.
+// Use the actor's position, never client-supplied coordinates or destinations.
+// The same 160px tolerance as the seeded exit covers the movement report cadence.
+func (s *Scene) atEndgameRiftExit(pos domain.Pos) bool {
+	x := s.rift
+	if x == nil || x.data.Floor == nil || pos.MapID != s.id.MapID {
+		return false
+	}
+	if riftDistance2(pos, x.data.Floor.Exit) <= 160*160 {
+		return true
+	}
+	for _, portal := range x.portals {
+		area := portal.Area
+		if len(area) < 3 {
+			continue
+		}
+		if area.Contains(pos) {
+			return true
+		}
+		for i, a := range area {
+			b := area[(i+1)%len(area)]
+			dx, dy := b.X-a.X, b.Y-a.Y
+			length := dx*dx + dy*dy
+			u := 0.0
+			if length > 0 {
+				u = ((pos.X-a.X)*dx + (pos.Y-a.Y)*dy) / length
+			}
+			if u < 0 {
+				u = 0
+			} else if u > 1 {
+				u = 1
+			}
+			near := domain.Pos{X: a.X + u*dx, Y: a.Y + u*dy}
+			if riftDistance2(pos, near) <= 160*160 {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func (s *Scene) advanceEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
 	x := s.rift
 	if x == nil || x.data.Floor == nil {
@@ -42,7 +84,7 @@ func (s *Scene) advanceEndgameRift(p *entity.Entity, req domain.EndgameRequest) 
 		return
 	}
 	if !s.canAdvanceEndgameRift(p) {
-		s.endgameError(p, req, "exit", "请由开启者抵达本层出口；首领战中不能换层")
+		s.endgameError(p, req, "exit", "请由开启者抵达本层出口或传送门；首领战中不能换层")
 		return
 	}
 	if x.saving != nil || x.economicPending {

@@ -46,7 +46,14 @@ func (s *Scene) prepareEndgameRift(cmd Enter) bool {
 	return true
 }
 func (s *Scene) initEndgameRift(d endgameRiftPersisted) {
+	// Keep only the native gate geometry for authoritative floor admission. Its
+	// original destination and script must never execute in this private run.
+	portals := s.portals
+	if s.rift != nil {
+		portals = s.rift.portals
+	}
 	s.rift = &endgameRiftState{baseStats: map[domain.EntityID]domain.Stats{}, data: d, revision: 1, savedRevision: d.Run.Revision, ready: map[domain.CharID]bool{}, deathAt: map[domain.CharID]int64{}, loadUntil: s.riftMS() + 60000}
+	s.rift.portals = portals
 	for char, at := range d.DeathTimes {
 		s.rift.deathAt[char] = at
 	}

@@ -10,9 +10,15 @@ import (
 
 const (
 	// Changes to the PRNG, ordering or population rules require a new version.
-	RiftFloorGeneratorVersion int32 = 1
-	RiftFloorMinAnchors             = 18
-	RiftFloorSafeRadius             = 160
+	RiftFloorGeneratorVersion  int32 = 2
+	RiftFloorMinAnchors              = 18
+	RiftFloorSafeRadius              = 160
+	RiftFloorMinPopulation           = 96
+	RiftFloorMaxPopulation           = 160
+	RiftFloorPopulationSpacing       = 64
+	RiftFloorPopulationRadius        = 160
+	RiftFloorPackRadius              = 192
+	RiftFloorAreaPerMonster          = 448 * 448
 )
 
 // RiftFloorTemplate contains only anchors on the same verified walkable map
@@ -24,6 +30,10 @@ type RiftFloorTemplate struct {
 	Anchors   []SpawnPoint
 	Monsters  []MonsterID
 	Guardians []MonsterID
+	// Population is a collision-verified lattice near native hostile anchors.
+	// Entry/exit still use Anchors. Empty Population supports anchor-only catalogs.
+	Population   []SpawnPoint
+	WalkableArea float64
 }
 
 type RiftFloorSpawn struct {
@@ -57,7 +67,7 @@ func RiftFloorSeed(runID string, floor int32) uint64 {
 	return binary.LittleEndian.Uint64(h.Sum(nil)[:8])
 }
 
-// riftFloorRandom is SplitMix64, frozen as part of generator version 1.
+// riftFloorRandom is SplitMix64, unchanged since generator version 1.
 type riftFloorRandom uint64
 
 func (r *riftFloorRandom) next() uint64 {
@@ -78,10 +88,15 @@ func (t RiftFloorTemplate) Valid() bool {
 	if t.MapID <= 0 || len(t.Anchors) < RiftFloorMinAnchors || len(t.Monsters) == 0 || len(t.Guardians) == 0 {
 		return false
 	}
-	for _, p := range t.Anchors {
-		if !riftFloorPointValid(p.Pos, t.MapID) {
-			return false
+	for _, points := range [][]SpawnPoint{t.Anchors, t.Population} {
+		for _, p := range points {
+			if !riftFloorPointValid(p.Pos, t.MapID) {
+				return false
+			}
 		}
+	}
+	if t.WalkableArea < 0 || math.IsNaN(t.WalkableArea) || math.IsInf(t.WalkableArea, 0) {
+		return false
 	}
 	for _, pool := range [][]MonsterID{t.Monsters, t.Guardians} {
 		for _, id := range pool {
@@ -127,20 +142,10 @@ func PlanRiftFloor(runID string, floor int32, templates []RiftFloorTemplate, pre
 	seed := RiftFloorSeed(runID, floor)
 	rng := riftFloorRandom(seed)
 	t := pool[rng.index(len(pool))]
-	anchors := append([]SpawnPoint(nil), t.Anchors...)
-	sort.Slice(anchors, func(i, j int) bool {
-		a, b := anchors[i], anchors[j]
-		if a.ID != b.ID {
-			return a.ID < b.ID
-		}
-		if a.Pos.X != b.Pos.X {
-			return a.Pos.X < b.Pos.X
-		}
-		return a.Pos.Y < b.Pos.Y
-	})
-	for i := len(anchors) - 1; i > 0; i-- {
-		j := rng.index(i + 1)
-		anchors[i], anchors[j] = anchors[j], anchors[i]
+	anchors := shuffledRiftFloorPoints(t.Anchors, &rng)
+	population := anchors
+	if len(t.Population) > 0 {
+		population = shuffledRiftFloorPoints(t.Population, &rng)
 	}
 	var entry, exit SpawnPoint
 	var points []SpawnPoint
@@ -158,7 +163,7 @@ func PlanRiftFloor(runID string, floor int32, templates []RiftFloorTemplate, pre
 			continue
 		}
 		points = points[:0]
-		for _, p := range anchors {
+		for _, p := range population {
 			if riftFloorDistance(entry.Pos, p.Pos) >= RiftFloorSafeRadius*RiftFloorSafeRadius && riftFloorDistance(exit.Pos, p.Pos) >= 80*80 {
 				points = append(points, p)
 			}
@@ -175,45 +180,128 @@ func PlanRiftFloor(runID string, floor int32, templates []RiftFloorTemplate, pre
 	sort.Slice(monsters, func(i, j int) bool { return monsters[i] < monsters[j] })
 	sort.Slice(guardians, func(i, j int) bool { return guardians[i] < guardians[j] })
 	plan = RiftFloorPlan{GeneratorVersion: RiftFloorGeneratorVersion, Seed: seed, FloorIndex: floor, MapID: t.MapID, MapName: t.MapName, Entry: entry.Pos, Exit: exit.Pos}
-	n := 40 + rng.index(25)
+	// Scale the target with the verified connected walkable area, with seeded
+	// 90–110% variation. Small maps never force overlapping or blocked spawns.
+	target := t.WalkableArea / RiftFloorAreaPerMonster
+	if target < RiftFloorMinPopulation {
+		target = RiftFloorMinPopulation
+	}
+	if target > RiftFloorMaxPopulation {
+		target = RiftFloorMaxPopulation
+	}
+	n := int(target * float64(90+rng.index(21)) / 100)
+	if n < RiftFloorMinPopulation {
+		n = RiftFloorMinPopulation
+	}
+	if n > RiftFloorMaxPopulation {
+		n = RiftFloorMaxPopulation
+	}
 	if n > len(points) {
 		n = len(points)
 	}
+	points = riftFloorPackPoints(points, n, &rng)
 	blue := 6 + 3*rng.index(3)
 	yellow := 2 + rng.index(3)
 	if blue+yellow >= n {
 		blue = n / 3
 		yellow = 2
 	}
+	// Distribute the unchanged elite counts across the chosen packs rather than
+	// concentrating every elite in the first two encounters.
+	classes := make([]int32, n)
+	for i := 0; i < yellow+blue; i++ {
+		classes[i] = 1
+		if i < yellow {
+			classes[i] = 2
+		}
+	}
+	for i := len(classes) - 1; i > 0; i-- {
+		j := rng.index(i + 1)
+		classes[i], classes[j] = classes[j], classes[i]
+	}
 	for i := 0; i < n; i++ {
 		p := points[i]
 		p.Monster = monsters[rng.index(len(monsters))]
-		class := int32(0)
-		if i < yellow {
-			class = 2
-		} else if i < yellow+blue {
-			class = 1
-		}
-		plan.Spawns = append(plan.Spawns, RiftFloorSpawn{Point: p, Class: class})
+		plan.Spawns = append(plan.Spawns, RiftFloorSpawn{Point: p, Class: classes[i]})
 	}
 	exit.Monster = guardians[rng.index(len(guardians))]
 	plan.Guardian = RiftFloorSpawn{Point: exit, Class: 3}
 	return plan, nil
 }
 
+func shuffledRiftFloorPoints(source []SpawnPoint, rng *riftFloorRandom) []SpawnPoint {
+	points := append([]SpawnPoint(nil), source...)
+	sort.Slice(points, func(i, j int) bool {
+		a, b := points[i], points[j]
+		if a.ID != b.ID {
+			return a.ID < b.ID
+		}
+		if a.Pos.X != b.Pos.X {
+			return a.Pos.X < b.Pos.X
+		}
+		return a.Pos.Y < b.Pos.Y
+	})
+	for i := len(points) - 1; i > 0; i-- {
+		j := rng.index(i + 1)
+		points[i], points[j] = points[j], points[i]
+	}
+	return points
+}
+
+// Seeded centers plus four-to-eight nearby positions make encounters visibly
+// denser without multiplying elite rewards or inventing unchecked coordinates.
+func riftFloorPackPoints(points []SpawnPoint, n int, rng *riftFloorRandom) []SpawnPoint {
+	chosen := make([]SpawnPoint, 0, n)
+	used := make([]bool, len(points))
+	for i, center := range points {
+		if len(chosen) == n {
+			break
+		}
+		if used[i] {
+			continue
+		}
+		used[i] = true
+		chosen = append(chosen, center)
+		remaining := 3 + rng.index(5)
+		for j, p := range points {
+			if remaining == 0 || len(chosen) == n {
+				break
+			}
+			if !used[j] && riftFloorDistance(center.Pos, p.Pos) <= RiftFloorPackRadius*RiftFloorPackRadius {
+				used[j] = true
+				chosen = append(chosen, p)
+				remaining--
+			}
+		}
+	}
+	return chosen
+}
+
 // Valid checks persisted plan shape. Runtime separately verifies referenced
 // templates and every coordinate against its own collision mask before spawning.
 func (p RiftFloorPlan) Valid() bool {
-	if p.GeneratorVersion != RiftFloorGeneratorVersion || p.FloorIndex < 1 || p.MapID <= 0 || len(p.Spawns) < 8 || len(p.Spawns) > 64 || !riftFloorPointValid(p.Entry, p.MapID) || !riftFloorPointValid(p.Exit, p.MapID) || riftFloorDistance(p.Entry, p.Exit) < 512*512 {
+	maxPopulation := RiftFloorMaxPopulation
+	if p.GeneratorVersion == 1 {
+		// Already-admitted plans remain authoritative and are never regenerated.
+		maxPopulation = 64
+	} else if p.GeneratorVersion != RiftFloorGeneratorVersion {
+		return false
+	}
+	if p.FloorIndex < 1 || p.MapID <= 0 || len(p.Spawns) < 8 || len(p.Spawns) > maxPopulation || !riftFloorPointValid(p.Entry, p.MapID) || !riftFloorPointValid(p.Exit, p.MapID) || riftFloorDistance(p.Entry, p.Exit) < 512*512 {
 		return false
 	}
 	if p.Guardian.Class != 3 || p.Guardian.Point.Monster <= 0 || !riftFloorPointValid(p.Guardian.Point.Pos, p.MapID) {
 		return false
 	}
+	seen := map[Pos]bool{}
 	for _, s := range p.Spawns {
 		if s.Class < 0 || s.Class > 2 || s.Point.Monster <= 0 || !riftFloorPointValid(s.Point.Pos, p.MapID) {
 			return false
 		}
+		if p.GeneratorVersion >= 2 && (seen[s.Point.Pos] || riftFloorDistance(s.Point.Pos, p.Entry) < RiftFloorSafeRadius*RiftFloorSafeRadius || riftFloorDistance(s.Point.Pos, p.Exit) < 80*80) {
+			return false
+		}
+		seen[s.Point.Pos] = true
 	}
 	return true
 }

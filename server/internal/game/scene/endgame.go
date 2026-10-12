@@ -169,7 +169,18 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 				}
 			}
 		}
+		p.Player.EndgameRiftPortals = false
+		if baseNegotiated {
+			for _, cap := range r.Capabilities {
+				if cap == domain.EndgameRiftPortalsV1 {
+					p.Player.EndgameRiftPortals = true
+					caps = append(caps, cap)
+					break
+				}
+			}
+		}
 		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: caps, CatalogVersion: domain.UniqueCatalogVersion})
+		s.sendRiftSceneContext(p)
 		s.sendEndgameSnapshot(p)
 		if growth {
 			s.sendGrowthV5Skills(p, domain.EndgameRequest{Op: "skill.ranks"})

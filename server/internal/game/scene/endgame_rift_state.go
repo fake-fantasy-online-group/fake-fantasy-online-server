@@ -85,6 +85,7 @@ func withRiftProfile(payload string, p endgameRiftProfile) string {
 }
 
 type endgameRiftState struct {
+	portals                                           []domain.Portal
 	abilities                                         map[domain.EntityID]*endgameRiftAbilityState
 	transition                                        *endgameRiftTransition
 	retired                                           bool
@@ -126,7 +127,7 @@ func (s *Scene) riftView(p *entity.Entity, d endgameRiftPersisted, durable, live
 	}
 	if p != nil {
 		v.UnlockedTier = riftProfile(s.endgamePlayer(p).state.Payload).UnlockedTier
-		if s.rift != nil && live {
+		if s.rift != nil && live && s.rift.data.Run.RunID == r.RunID {
 			v.Transitioning = s.rift.transition != nil || s.rift.floorLoading || s.rift.retired
 			v.CanAdvance = s.canAdvanceEndgameRift(p)
 			v.Telegraphs = s.riftAbilityTelegraphs(s.riftMS())
@@ -179,4 +180,15 @@ func (s *Scene) riftView(p *entity.Entity, d endgameRiftPersisted, durable, live
 		}
 	}
 	return v
+}
+
+// Publish private context before, public context after the map lifecycle edge.
+// The initial login message can be filtered
+// before negotiation, so hello repeats it before the normal sidecar snapshots.
+func (s *Scene) sendRiftSceneContext(p *entity.Entity) {
+	if !p.Player.EndgameRiftPortals {
+		return
+	}
+	inside := s.rift != nil && !s.id.Persistent()
+	s.endgameReply(p, domain.EndgameResponse{Kind: "rift.context", OK: true, Result: map[string]string{"inInstance": strconv.FormatBool(inside)}})
 }
