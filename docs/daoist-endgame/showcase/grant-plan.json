@@ -1,0 +1,1010 @@
+{
+  "schema_version": 1,
+  "account": "test001",
+  "source_baseline_commit": "d9c06ddd53bbb777bc87248b881871ff64d2f947",
+  "source_catalogs": {
+    "unique_catalog_version": "endgame-v5-scope259",
+    "unique_count": 259,
+    "formation_count": 40,
+    "rune_count": 28,
+    "content_version": 5
+  },
+  "status": "deferred_by_user_pending_five_class_original_skill_restoration",
+  "intent": "各新增9件背包装备供看属性，保留旧物品；不自动穿戴，不改角色等级、技能或六维。",
+  "grant_count": 27,
+  "embedded_rune_instance_count": 44,
+  "total_new_item_instances_if_executed": 71,
+  "policy": {
+    "execution_status": "deferred_by_user_pending_five_class_original_skill_restoration",
+    "max_catalog_roll_bp": 12000,
+    "max_roll_scope": "仅显式可变词条与局部强化取合法最高档；固定词条、诅咒、技能、触发和光环原值保留，不能整体乘1.2。",
+    "destination": "backpack_only",
+    "auto_equip": false,
+    "preserve_existing_items": true,
+    "change_character_level_skills_stats_or_free_points": false,
+    "unique_natural_affixes": "新建0普通随机词条的目录展示件，不叠满黄装附加或目录外卡片。",
+    "unique_socket_policy": "0孔；同一唯一装备不能再结宿阵。",
+    "formation_socket_policy": "天生零附加、无套装、属性已确认白底；精确4/5孔及配方顺序，各孔真实新UID星篆和固定Card快照，无多余空孔。",
+    "new_item_upgrades": "加工0、融合0；不触碰旧件加工、融合、孔位、绑定、UID或位置。",
+    "wearability": "职业、等级、性别必须匹配；六维门槛原样展示，可因现有加点未满足，不因此降级替换、不洗点、不强穿。",
+    "power_claim": "按所选玩法的强力目录组合，不宣称全敌人、全加点、黄装词条或加工条件下的数学全局最优。",
+    "inventory": "各9件、共27件；每条衣服仅选实际性别的一件。重新查空格，不能覆盖、删除或换掉旧物品。"
+  },
+  "factory_contract": {
+    "unique": [
+      "加载实际已部署ItemDef，核对职业、等级、性别及目录版本。",
+      "domain.NewStack(def,1)生成新装备UID和满耐久，不复制现有UID。",
+      "domain.ApplyUnique(&stack,def,func(n int) int { return n-1 })，确认成功、UniqueID=BaseID、UniqueContentVersion=5、UniqueRollBP=12000。",
+      "不伪造Affixes；目录属性由实际ItemDef和生产域函数解析。"
+    ],
+    "formation": [
+      "从真实白底ItemDef调用domain.NewStack(def,1)；确认AstralBaseEligible与EquipmentSocketCapacity。",
+      "新展示件固定FormationContentVersion=5、FormationRollBP=12000，UniqueID=0。",
+      "精确孔数和顺序；每枚星篆用真实Rune ItemDef调用NewStack，保留其Card快照、独立UID及正确槽序。",
+      "MatchAstralRecipe必须匹配指定ID；ActiveAstralRecipes模拟中每频道只有一个所选宿阵。"
+    ],
+    "persistence": "复用本地已存在的隔离展示发放工具及服务端物品持久化路径；不用修改业务代码，不手编SQL绕过实例、归属、插槽不变量。",
+    "preflight": [
+      "本计划暂缓执行；待用户五职业原版技能复原工作允许发放后再继续。",
+      "确认目标仍为test001及角色42/183/206，重读名称、职业、60级、实际性别及装备背包空格。",
+      "正式环境及实际加载目录复核；若不符，停下对应发放，不改其他账号或角色。",
+      "复用已有安全在线同步或离线维护流程及原子保存，避免旧会话覆盖新增库存。",
+      "保存前后快照及此次27装备UID、所有镶嵌星篆UID；完成后重读归属、版本、roll、属性、孔序、唯一性和位置。"
+    ]
+  },
+  "loadouts": [
+    {
+      "character_id": 42,
+      "character_name": "春霞姐姐",
+      "class": "assassin",
+      "race_zero_based": 2,
+      "profession_one_based": 3,
+      "expected_level": 60,
+      "gender": "resolve locally; never infer from name",
+      "build": "先手会心／普攻输出",
+      "count": 9,
+      "items": [
+        {
+          "slot": 1,
+          "slot_name": "面饰",
+          "kind": "formation",
+          "display_name": "行囊漏晨光 · 口罩",
+          "quantity": 1,
+          "required_level": 60,
+          "content_version": 5,
+          "unique_id": 0,
+          "formation_id": 38,
+          "socket_count": 5,
+          "candidates": [
+            {
+              "base_id": 2707,
+              "base_name": "口罩",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "formation_roll_bp": 12000,
+          "channel": "辅阵",
+          "ordered_rune_ids": [
+            1900028007,
+            1900028015,
+            1900028016,
+            1900028027,
+            1900028028
+          ]
+        },
+        {
+          "slot": 2,
+          "slot_name": "头饰",
+          "kind": "unique",
+          "display_name": "夜市收摊人",
+          "quantity": 1,
+          "required_level": 52,
+          "content_version": 5,
+          "unique_id": 2049,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2049,
+              "base_name": "夜魔头巾",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 216,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 3,
+          "slot_name": "项链",
+          "kind": "unique",
+          "display_name": "凝泪未干",
+          "quantity": 1,
+          "required_level": 56,
+          "content_version": 5,
+          "unique_id": 2509,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2509,
+              "base_name": "天使泪项链",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 6,
+          "slot_name": "手套",
+          "kind": "unique",
+          "display_name": "牙根的梦",
+          "quantity": 1,
+          "required_level": 60,
+          "content_version": 5,
+          "unique_id": 2410,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2410,
+              "base_name": "魔牙护腕",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 7,
+          "slot_name": "戒指",
+          "kind": "unique",
+          "display_name": "窄瞳杀机",
+          "quantity": 1,
+          "required_level": 60,
+          "content_version": 5,
+          "unique_id": 2590,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2590,
+              "base_name": "猫眼石武力之戒",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 8,
+          "slot_name": "衣服",
+          "kind": "formation",
+          "display_name": "门闩抵天倾 · 青龙铠",
+          "quantity": 1,
+          "required_level": 48,
+          "content_version": 5,
+          "unique_id": 0,
+          "formation_id": 36,
+          "socket_count": 5,
+          "candidates": [
+            {
+              "base_id": 2895,
+              "base_name": "青龙铠（男）",
+              "equipment_sex_restriction": 1,
+              "character_gender_when_selected": 1,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 196,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            },
+            {
+              "base_id": 2896,
+              "base_name": "青龙铠（女）",
+              "equipment_sex_restriction": 2,
+              "character_gender_when_selected": 0,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 196,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "formation_roll_bp": 12000,
+          "channel": "守阵",
+          "ordered_rune_ids": [
+            1900028001,
+            1900028004,
+            1900028003,
+            1900028009,
+            1900028014
+          ]
+        },
+        {
+          "slot": 9,
+          "slot_name": "鞋",
+          "kind": "unique",
+          "display_name": "漏宿沉履",
+          "quantity": 1,
+          "required_level": 56,
+          "content_version": 5,
+          "unique_id": 2108,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2108,
+              "base_name": "天罡之靴",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 10,
+          "slot_name": "背饰",
+          "kind": "unique",
+          "display_name": "鹰羽量崖",
+          "quantity": 1,
+          "required_level": 24,
+          "content_version": 5,
+          "unique_id": 2604,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2604,
+              "base_name": "雄鹰之翼",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 13,
+          "slot_name": "双手武器",
+          "kind": "formation",
+          "display_name": "莲子夜游 · 煞刺·伏龙",
+          "quantity": 1,
+          "required_level": 54,
+          "content_version": 5,
+          "unique_id": 0,
+          "formation_id": 33,
+          "socket_count": 5,
+          "candidates": [
+            {
+              "base_id": 1810,
+              "base_name": "煞刺·伏龙",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 53,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 167
+              }
+            }
+          ],
+          "formation_roll_bp": 12000,
+          "channel": "战阵",
+          "ordered_rune_ids": [
+            1900028018,
+            1900028005,
+            1900028019,
+            1900028020,
+            1900028021
+          ]
+        }
+      ]
+    },
+    {
+      "character_id": 183,
+      "character_name": "术士姐姐",
+      "class": "warlock",
+      "race_zero_based": 4,
+      "profession_one_based": 5,
+      "expected_level": 60,
+      "gender": "resolve locally; never infer from name",
+      "build": "冰系／暴雪范围施法",
+      "count": 9,
+      "items": [
+        {
+          "slot": 1,
+          "slot_name": "面饰",
+          "kind": "formation",
+          "display_name": "鞋底藏北斗 · 口罩",
+          "quantity": 1,
+          "required_level": 58,
+          "content_version": 5,
+          "unique_id": 0,
+          "formation_id": 28,
+          "socket_count": 4,
+          "candidates": [
+            {
+              "base_id": 2707,
+              "base_name": "口罩",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "formation_roll_bp": 12000,
+          "channel": "辅阵",
+          "ordered_rune_ids": [
+            1900028016,
+            1900028017,
+            1900028026,
+            1900028027
+          ]
+        },
+        {
+          "slot": 2,
+          "slot_name": "头饰",
+          "kind": "unique",
+          "display_name": "无主诰",
+          "quantity": 1,
+          "required_level": 59,
+          "content_version": 5,
+          "unique_id": 2059,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2059,
+              "base_name": "术神冠",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 244,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 3,
+          "slot_name": "项链",
+          "kind": "unique",
+          "display_name": "无人坐的晶椅",
+          "quantity": 1,
+          "required_level": 38,
+          "content_version": 5,
+          "unique_id": 2506,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2506,
+              "base_name": "水晶项链",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 6,
+          "slot_name": "手套",
+          "kind": "unique",
+          "display_name": "翻掌乾坤",
+          "quantity": 1,
+          "required_level": 54,
+          "content_version": 5,
+          "unique_id": 2409,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2409,
+              "base_name": "乾坤手套",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 7,
+          "slot_name": "戒指",
+          "kind": "unique",
+          "display_name": "猫眼认夜",
+          "quantity": 1,
+          "required_level": 60,
+          "content_version": 5,
+          "unique_id": 2560,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2560,
+              "base_name": "猫眼石魔力之戒",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 8,
+          "slot_name": "衣服",
+          "kind": "formation",
+          "display_name": "门闩抵天倾 · 冥法服",
+          "quantity": 1,
+          "required_level": 48,
+          "content_version": 5,
+          "unique_id": 0,
+          "formation_id": 36,
+          "socket_count": 5,
+          "candidates": [
+            {
+              "base_id": 2829,
+              "base_name": "冥法服（男）",
+              "equipment_sex_restriction": 1,
+              "character_gender_when_selected": 1,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 196,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            },
+            {
+              "base_id": 2830,
+              "base_name": "冥法服（女）",
+              "equipment_sex_restriction": 2,
+              "character_gender_when_selected": 0,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 196,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "formation_roll_bp": 12000,
+          "channel": "守阵",
+          "ordered_rune_ids": [
+            1900028001,
+            1900028004,
+            1900028003,
+            1900028009,
+            1900028014
+          ]
+        },
+        {
+          "slot": 9,
+          "slot_name": "鞋",
+          "kind": "unique",
+          "display_name": "漏宿沉履",
+          "quantity": 1,
+          "required_level": 56,
+          "content_version": 5,
+          "unique_id": 2108,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2108,
+              "base_name": "天罡之靴",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 10,
+          "slot_name": "背饰",
+          "kind": "unique",
+          "display_name": "雪轮",
+          "quantity": 1,
+          "required_level": 24,
+          "content_version": 5,
+          "unique_id": 2610,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2610,
+              "base_name": "雪山结晶",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 13,
+          "slot_name": "双手武器",
+          "kind": "formation",
+          "display_name": "纸驴驮残夜 · 神杖·九仪",
+          "quantity": 1,
+          "required_level": 56,
+          "content_version": 5,
+          "unique_id": 0,
+          "formation_id": 34,
+          "socket_count": 5,
+          "candidates": [
+            {
+              "base_id": 1310,
+              "base_name": "神杖·九仪",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 81,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "formation_roll_bp": 12000,
+          "channel": "战阵",
+          "ordered_rune_ids": [
+            1900028008,
+            1900028022,
+            1900028023,
+            1900028025,
+            1900028026
+          ]
+        }
+      ]
+    },
+    {
+      "character_id": 206,
+      "character_name": "骚骚霞",
+      "class": "healer",
+      "race_zero_based": 3,
+      "profession_one_based": 4,
+      "expected_level": 60,
+      "gender": "resolve locally; never infer from name",
+      "build": "救急／长战治疗支援",
+      "count": 9,
+      "items": [
+        {
+          "slot": 1,
+          "slot_name": "面饰",
+          "kind": "unique",
+          "display_name": "泪筹",
+          "quantity": 1,
+          "required_level": 18,
+          "content_version": 5,
+          "unique_id": 2705,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2705,
+              "base_name": "哭丧面具",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 2,
+          "slot_name": "头饰",
+          "kind": "unique",
+          "display_name": "闭目神像",
+          "quantity": 1,
+          "required_level": 59,
+          "content_version": 5,
+          "unique_id": 2056,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2056,
+              "base_name": "神悯冠",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 182,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 3,
+          "slot_name": "项链",
+          "kind": "unique",
+          "display_name": "凝泪未干",
+          "quantity": 1,
+          "required_level": 56,
+          "content_version": 5,
+          "unique_id": 2509,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2509,
+              "base_name": "天使泪项链",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 6,
+          "slot_name": "手套",
+          "kind": "unique",
+          "display_name": "翻掌乾坤",
+          "quantity": 1,
+          "required_level": 54,
+          "content_version": 5,
+          "unique_id": 2409,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2409,
+              "base_name": "乾坤手套",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 7,
+          "slot_name": "戒指",
+          "kind": "unique",
+          "display_name": "结晶的叹息",
+          "quantity": 1,
+          "required_level": 54,
+          "content_version": 5,
+          "unique_id": 2559,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2559,
+              "base_name": "晶钻魔力之戒",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 8,
+          "slot_name": "衣服",
+          "kind": "formation",
+          "display_name": "门闩抵天倾 · 圣贤服",
+          "quantity": 1,
+          "required_level": 48,
+          "content_version": 5,
+          "unique_id": 0,
+          "formation_id": 36,
+          "socket_count": 5,
+          "candidates": [
+            {
+              "base_id": 2899,
+              "base_name": "圣贤服（男）",
+              "equipment_sex_restriction": 1,
+              "character_gender_when_selected": 1,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 145,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            },
+            {
+              "base_id": 2900,
+              "base_name": "圣贤服（女）",
+              "equipment_sex_restriction": 2,
+              "character_gender_when_selected": 0,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 145,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "formation_roll_bp": 12000,
+          "channel": "守阵",
+          "ordered_rune_ids": [
+            1900028001,
+            1900028004,
+            1900028003,
+            1900028009,
+            1900028014
+          ]
+        },
+        {
+          "slot": 9,
+          "slot_name": "鞋",
+          "kind": "formation",
+          "display_name": "空瓢济厄 · 天罡之靴",
+          "quantity": 1,
+          "required_level": 60,
+          "content_version": 5,
+          "unique_id": 0,
+          "formation_id": 35,
+          "socket_count": 5,
+          "candidates": [
+            {
+              "base_id": 2108,
+              "base_name": "天罡之靴",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "formation_roll_bp": 12000,
+          "channel": "辅阵",
+          "ordered_rune_ids": [
+            1900028010,
+            1900028011,
+            1900028013,
+            1900028014,
+            1900028028
+          ]
+        },
+        {
+          "slot": 10,
+          "slot_name": "背饰",
+          "kind": "unique",
+          "display_name": "羽端白尘",
+          "quantity": 1,
+          "required_level": 36,
+          "content_version": 5,
+          "unique_id": 2603,
+          "formation_id": 0,
+          "socket_count": 0,
+          "candidates": [
+            {
+              "base_id": 2603,
+              "base_name": "天使之翼",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
+        },
+        {
+          "slot": 13,
+          "slot_name": "双手武器",
+          "kind": "formation",
+          "display_name": "四象让中宫 · 神杖·九仪",
+          "quantity": 1,
+          "required_level": 60,
+          "content_version": 5,
+          "unique_id": 0,
+          "formation_id": 40,
+          "socket_count": 5,
+          "candidates": [
+            {
+              "base_id": 1310,
+              "base_name": "神杖·九仪",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 81,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              }
+            }
+          ],
+          "formation_roll_bp": 12000,
+          "channel": "战阵",
+          "ordered_rune_ids": [
+            1900028001,
+            1900028008,
+            1900028015,
+            1900028022,
+            1900028028
+          ]
+        }
+      ]
+    }
+  ]
+}
