@@ -1,15 +1,15 @@
 {
   "client_commit": "66c7712170d4a6eb73da828f870026af7089c401",
-  "server_commit": "d9c06ddd53bbb777bc87248b881871ff64d2f947",
+  "server_commit": "db608afea9032e243b3f5d3f60e9c92f1ce1e10f",
   "status": "audit_only_not_original_certification",
   "profession_ids": 150,
   "combat_ids": 149,
   "raw_rows": 750,
   "loaded_combat_rows": 745,
-  "resource_projection_available": false,
-  "resource_rows": 0,
-  "known_issue_groups": 23,
-  "known_issue_skill_ids": 30,
+  "resource_projection_available": true,
+  "resource_rows": 146,
+  "known_issue_groups": 26,
+  "known_issue_skill_ids": 32,
   "per_profession": {
     "战士": {
       "total": 30,
@@ -17,7 +17,7 @@
     },
     "剑客": {
       "total": 30,
-      "with_known_issues": 7
+      "with_known_issues": 8
     },
     "刺客": {
       "total": 30,
@@ -25,7 +25,7 @@
     },
     "药师": {
       "total": 30,
-      "with_known_issues": 8
+      "with_known_issues": 9
     },
     "术士": {
       "total": 30,

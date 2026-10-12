@@ -40,6 +40,45 @@
   },
   {
     "ids": [
+      10109,
+      10124
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Status1019 loses original secondary effects:10109 movement lock10s;10124 attack penalty10/13/16/19/22% for30s.",
+    "evidence": [
+      "skill-status-anchors.json status1019/11..20",
+      "runtime-restoration-gaps.json"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10325
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Status1009/11..15 has no effect fields despite original30s attack-speed reduction30/35/40/45/50%.",
+    "evidence": [
+      "skill-status-anchors.json",
+      "runtime-restoration-gaps.json"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10317
+    ],
+    "field": "target_shape",
+    "category": "confirmed_resource_conversion",
+    "detail": "Historical/current local resource proves original single shape0 converted to circle shape2 radius110; SQL/historical profession page corroborate single.",
+    "evidence": [
+      "verified-asset-differences.json"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
       10102
     ],
     "field": "effect",
@@ -294,11 +333,11 @@
     ],
     "field": "target_shape",
     "category": "historical_single_target_crosscheck",
-    "detail": "Historical character5 page and imported raw rows both describe enemy-single with450px range. Current resource projection must determine whether these were converted to area.",
+    "detail": "Historical character5 page and imported raw rows both describe enemy-single with450px range. Full resource comparison confirms no shape conversion for either skill; current changes are timing only.",
     "evidence": [
       "research worker fo.17173.com/character/character_5.html",
       "init-31.sql"
     ],
-    "confidence": "supported_but_current_resource_pending"
+    "confidence": "supported_current_resource_checked"
   }
 ]

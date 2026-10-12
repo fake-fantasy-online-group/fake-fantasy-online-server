@@ -3,7 +3,8 @@
 All outputs stay in this audit directory. No business source/DB writes.
 """
 from pathlib import Path
-import csv, hashlib, importlib.util, json, re, subprocess
+import csv, hashlib, importlib.util, json, re, subprocess, sys
+sys.dont_write_bytecode = True
 
 OUT = Path(__file__).resolve().parent
 SERVER = Path('/workspace/shared/server-development')
@@ -25,6 +26,9 @@ ISSUES = [
  issue([10102],'target_shape','confirmed_resource_conversion','External tgt1/castkind1 has cone shape3/radius120/rwidth120/dist100; imported five-rank baseline is single shape0/dist75. Stage fix restores entity-single and75px admission.', ['read-only local resource MD5 cbe007d8955b60a992dd4ef3da682c37','client66c7712 NativeSwordSkillTargeting.cs']),
  issue([10122],'target_shape','confirmed_resource_conversion','External tgt1/castkind1 has circle shape2/radius150/dist75; imported baseline is single shape0/dist75. Stage fix restores entity-single.', ['read-only local resource MD5 cbe007d8955b60a992dd4ef3da682c37','client66c7712 NativeSwordSkillTargeting.cs']),
  issue([10009],'effect','missing_native_effect','Description requires15s defense reduction30% at rank1; loaded skill has damage only, no status application.', ['skill-original-ranks.json','gamedb.go skillStatusApplications']),
+ issue([10109,10124],'effect','missing_native_effect','Status1019 loses original secondary effects:10109 movement lock10s;10124 attack penalty10/13/16/19/22% for30s.', ['skill-status-anchors.json status1019/11..20','runtime-restoration-gaps.json']),
+ issue([10325],'effect','missing_native_effect','Status1009/11..15 has no effect fields despite original30s attack-speed reduction30/35/40/45/50%.', ['skill-status-anchors.json','runtime-restoration-gaps.json']),
+ issue([10317],'target_shape','confirmed_resource_conversion','Historical/current local resource proves original single shape0 converted to circle shape2 radius110; SQL/historical profession page corroborate single.', ['verified-asset-differences.json']),
  issue([10102],'effect','missing_native_effect','Description requires knockback; loaded skill contains damage only. Historical knockback distance not established.', ['skill-original-ranks.json','init-31.sql']),
  issue([10103],'effect','missing_native_effect','Description requires15s accuracy reduction30..50%; loaded skill has no status. Status1008 levels6..10 or11..15 match magnitude but require15s duration override.', ['skill-original-ranks.json','skill-status-anchors.json']),
  issue([10111,10221],'effect','missing_native_effect','Descriptions require movement restriction (10111:6..10s;10221:fixed5s at all five ranks). No status is applied; status1034 cannot be copied unchanged because it also stuns and removes defense.', ['skill-original-ranks.json','skill-status-anchors.json status1034']),
@@ -44,7 +48,7 @@ ISSUES = [
  issue([10212],'name_effect','historical_identity_conflict','Imported/current server identity 游龙掌 deals100% damage; historical profession table lists 偷窃 in the corresponding slot. Requires version corroboration before selecting restore baseline.', ['research worker fo.17173.com/character/character_3.html'],'candidate_version_sensitive'),
  issue([10030],'target_shape','historical_target_conflict','Historical static warrior page describes area disarm, while imported table is enemy-single. Version boundary unresolved.', ['research worker fo.17173.com/character/character_2.html','init-31.sql'],'candidate_version_sensitive'),
  issue([10115,10124],'duration','historical_duration_conflict','Historical static sword page reports15s; imported table uses30s. May be a later patch rather than arbitrary mutation.', ['research worker fo.17173.com/character/character_1.html','init-31.sql'],'candidate_version_sensitive'),
- issue([10408,10411],'target_shape','historical_single_target_crosscheck','Historical character5 page and imported raw rows both describe enemy-single with450px range. Current resource projection must determine whether these were converted to area.', ['research worker fo.17173.com/character/character_5.html','init-31.sql'],'supported_but_current_resource_pending'),
+ issue([10408,10411],'target_shape','historical_single_target_crosscheck','Historical character5 page and imported raw rows both describe enemy-single with450px range. Full resource comparison confirms no shape conversion for either skill; current changes are timing only.', ['research worker fo.17173.com/character/character_5.html','init-31.sql'],'supported_current_resource_checked'),
 ]
 
 first={int(r['skill_id']):r for r in RAW if r['skill_level']=='1'}
