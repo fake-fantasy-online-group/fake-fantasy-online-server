@@ -42,8 +42,11 @@ func equipmentElementName(e string) string {
 func equipmentPercent(bp int32) string {
 	return strings.TrimRight(strings.TrimRight(fmt.Sprintf("%.2f", float64(bp)/100), "0"), ".") + "%"
 }
-func (s *Scene) equipmentV5Lines(effects []domain.EquipmentEffect, bonuses []domain.SkillRankBonus) []string {
-	var lines []string
+
+// equipmentV5Lines keeps ordinary bonuses distinct from triggered/special effects.
+// The caller owns their native colors and placement; never infer effect type
+// from a localized display string.
+func (s *Scene) equipmentV5Lines(effects []domain.EquipmentEffect, bonuses []domain.SkillRankBonus) (attributes, specialEffects []string) {
 	for _, b := range bonuses {
 		scope := ""
 		switch b.Scope {
@@ -63,7 +66,7 @@ func (s *Scene) equipmentV5Lines(effects []domain.EquipmentEffect, bonuses []dom
 			}
 		}
 		if scope != "" {
-			lines = append(lines, fmt.Sprintf("%s +%d级", scope, b.Levels))
+			attributes = append(attributes, fmt.Sprintf("%s +%d级", scope, b.Levels))
 		}
 	}
 	for _, e := range effects {
@@ -71,7 +74,7 @@ func (s *Scene) equipmentV5Lines(effects []domain.EquipmentEffect, bonuses []dom
 		el := equipmentElementName(e.Element)
 		switch e.Kind {
 		case "magic_find_pct":
-			text = fmt.Sprintf("染色率 +%d%%", e.Value)
+			text = fmt.Sprintf("魔法装备获取几率提升 +%d%%", e.Value)
 		case "element_damage_bp":
 			text = el + "伤害 +" + equipmentPercent(e.Value)
 		case "enemy_element_pierce_bp":
@@ -128,8 +131,12 @@ func (s *Scene) equipmentV5Lines(effects []domain.EquipmentEffect, bonuses []dom
 			}
 		}
 		if text != "" {
-			lines = append(lines, text)
+			if e.Kind == "proc" || e.Kind == "aura" {
+				specialEffects = append(specialEffects, text)
+			} else {
+				attributes = append(attributes, text)
+			}
 		}
 	}
-	return lines
+	return attributes, specialEffects
 }

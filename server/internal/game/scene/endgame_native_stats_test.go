@@ -88,7 +88,7 @@ func TestNativeSpecialStatsMergeScopesAndPreserveOrdinaryTooltips(t *testing.T) 
 		t.Fatal("same-scope aggregation changed signs/modes", rows)
 	}
 	local := localEnhancementLine(domain.ItemLocalEnhancement{Attr: domain.AttrAtk, Percent: 150}, 10000)
-	if local != "攻击强化 +150%（本件）" {
+	if local != "攻击强化 +150%" {
 		t.Fatal("local scope became global", local)
 	}
 	s, _, _ := astralSceneFixture(t)
@@ -132,7 +132,7 @@ func TestNativeSpecialStatsMergeScopesAndPreserveOrdinaryTooltips(t *testing.T) 
 	legacy = s.itemTooltipForViewer(def, formed, owner, viewer)
 	viewer.Player.EndgameNativeStats = true
 	native := s.itemTooltipForViewer(def, formed, owner, viewer)
-	if native == legacy || !strings.Contains(native, "\x034孔数") {
+	if native == legacy || !strings.Contains(native, "\x035孔数") {
 		t.Fatal("viewer capability not respected", native, legacy)
 	}
 	owner.Player.Worn.Set(domain.EquipSlot(def.Equip.Slot), formed)

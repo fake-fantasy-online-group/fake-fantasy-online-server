@@ -49,18 +49,39 @@ type SkillGrant struct {
 	Origin                 string
 	BenefitsFromSkillRanks bool
 }
+
+// SkillTrainingSynergyView is a planning row even when its source is unlearned.
+// Percentage values use basis points; flat values use whole resource points.
+// These are contribution coefficients, never recursively evaluated skill output.
+type SkillTrainingSynergyView struct {
+	SourceID           SkillID `json:"sourceId"`
+	SourceName         string  `json:"sourceName"`
+	Effect             string  `json:"effect"`
+	EffectLabel        string  `json:"effectLabel"`
+	PerPointValue      int32   `json:"perPointValue"`
+	Unit               string  `json:"unit"`
+	InvestedHardPoints int32   `json:"investedHardPoints"`
+	ContributionValue  int32   `json:"contributionValue"`
+	EquipmentApplies   bool    `json:"equipmentApplies"`
+}
+
 type SkillRankView struct {
-	CurrentEffectLines []string         `json:"currentEffectLines"`
-	NextEffectLines    []string         `json:"nextEffectLines"`
-	CanInvest          bool             `json:"canInvest"`
-	BlockedReasons     []string         `json:"blockedReasons"`
-	ID                 SkillID          `json:"id"`
-	HardRank           int32            `json:"hardRank"`
-	GrantRank          string           `json:"grantRank"`
-	SoftRank           string           `json:"softRank"`
-	EffectiveRank      string           `json:"effectiveRank"`
-	CanCast            bool             `json:"canCast"`
-	Contributions      []SkillRankBonus `json:"contributions,omitempty"`
+	NextChangeLines     []string                   `json:"nextChangeLines,omitempty"`
+	NextRequiredLevel   int32                      `json:"nextRequiredLevel,omitempty"`
+	NextEffectiveRank   string                     `json:"nextEffectiveRank,omitempty"`
+	TrainingSynergies   []SkillTrainingSynergyView `json:"trainingSynergies"`
+	NativeModifierLines []string                   `json:"nativeModifierLines"`
+	CurrentEffectLines  []string                   `json:"currentEffectLines"`
+	NextEffectLines     []string                   `json:"nextEffectLines"`
+	CanInvest           bool                       `json:"canInvest"`
+	BlockedReasons      []string                   `json:"blockedReasons"`
+	ID                  SkillID                    `json:"id"`
+	HardRank            int32                      `json:"hardRank"`
+	GrantRank           string                     `json:"grantRank"`
+	SoftRank            string                     `json:"softRank"`
+	EffectiveRank       string                     `json:"effectiveRank"`
+	CanCast             bool                       `json:"canCast"`
+	Contributions       []SkillRankBonus           `json:"contributions,omitempty"`
 }
 type SkillResolutionSnapshot map[SkillID]SkillRankView
 
@@ -281,6 +302,16 @@ func ValidateSkillSynergies(edges []SkillSynergy) error {
 		}
 		if e.RankMode != "hard" && e.RankMode != "effective_raw" {
 			return fmt.Errorf("invalid synergy rank mode")
+		}
+		if e.RankMode == "hard" {
+			switch e.Effect {
+			case "damage", "elite_damage", "heal_power", "heal_flat", "mana_economy", "radius", "width", "freeze_duration":
+			default:
+				return fmt.Errorf("unsupported training effect %q", e.Effect)
+			}
+			if e.PerPointBP <= 0 || e.PerPointBP > 10000 || (e.Effect == "heal_flat" && e.PerPointBP%100 != 0) {
+				return fmt.Errorf("invalid training coefficient: %+v", e)
+			}
 		}
 		if exact[e] {
 			return fmt.Errorf("duplicate synergy edge")

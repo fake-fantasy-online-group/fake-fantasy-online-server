@@ -60,10 +60,18 @@ func skillTargetName(id domain.SkillID) string {
 	return "技能"
 }
 func (s *Scene) skillStatusName(id domain.StatusID) string {
+	if d, ok := s.statuses.Get(id, 1); ok && d.Name != "" {
+		return d.Name
+	}
+	var name string
+	var level int32
 	for _, d := range s.statuses {
-		if d.ID == id && d.Name != "" {
-			return d.Name
+		if d.ID == id && d.Name != "" && (name == "" || d.Level < level || d.Level == level && d.Name < name) {
+			name, level = d.Name, d.Level
 		}
+	}
+	if name != "" {
+		return name
 	}
 	return "异常状态"
 }
@@ -75,19 +83,37 @@ func (s *Scene) skillStatusNames(ids []domain.StatusID) string {
 	return strings.Join(names, "、")
 }
 func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
-	out := []string{fmt.Sprintf("有效等级%d；法力消耗%d；吟唱%d毫秒；冷却%d毫秒", def.Level, def.MPCost, def.PrepareMS, def.CooldownMS)}
+	out := []string{}
 	for _, e := range def.DirectEffects() {
 		switch e.Kind {
 		case domain.EffectDamage:
-			out = append(out, fmt.Sprintf("伤害倍率%s%%；固定伤害%+d", skillFractionText(e.DamagePct, e.DamagePctNumerator, e.DamagePctDenominator), e.DamageFlat))
+			parts := []string{}
+			if e.DamagePct != 0 || e.DamagePctNumerator != 0 {
+				parts = append(parts, "伤害倍率"+skillFractionText(e.DamagePct, e.DamagePctNumerator, e.DamagePctDenominator)+"%")
+			}
+			if e.DamageFlat != 0 {
+				parts = append(parts, fmt.Sprintf("固定伤害%+d", e.DamageFlat))
+			}
+			if len(parts) > 0 {
+				out = append(out, strings.Join(parts, "，"))
+			}
 		case domain.EffectHeal:
-			out = append(out, fmt.Sprintf("恢复目标最大生命%s%% + %s点生命", skillFractionText(e.HealPctOfMax, e.HealPctNumerator, e.HealPctDenominator), skillFractionText(e.HealFlat, e.HealFlatNumerator, e.HealFlatDenominator)))
+			parts := []string{}
+			if e.HealPctOfMax != 0 || e.HealPctNumerator != 0 {
+				parts = append(parts, "目标最大生命的"+skillFractionText(e.HealPctOfMax, e.HealPctNumerator, e.HealPctDenominator)+"%")
+			}
+			if e.HealFlat != 0 || e.HealFlatNumerator != 0 {
+				parts = append(parts, skillFractionText(e.HealFlat, e.HealFlatNumerator, e.HealFlatDenominator)+"点生命")
+			}
+			if len(parts) > 0 {
+				out = append(out, "恢复"+strings.Join(parts, " + "))
+			}
 		case domain.EffectRestoreMP:
-			out = append(out, fmt.Sprintf("恢复法力%d + 攻击力%d%%", e.RestoreMPFlat, e.SourceAttackPct))
+			out = append(out, skillResourceText("恢复法力", e.RestoreMPFlat, e.SourceAttackPct))
 		case domain.EffectRestoreHP:
-			out = append(out, fmt.Sprintf("恢复生命%d + 攻击力%d%%", e.HealFlat, e.SourceAttackPct))
+			out = append(out, skillResourceText("恢复生命", e.HealFlat, e.SourceAttackPct))
 		case domain.EffectDamageMP:
-			out = append(out, fmt.Sprintf("削减法力%d + 攻击力%d%%", e.DamageFlat, e.SourceAttackPct))
+			out = append(out, skillResourceText("削减法力", e.DamageFlat, e.SourceAttackPct))
 		case domain.EffectDamageMPMax:
 			out = append(out, fmt.Sprintf("削减目标最大法力%d%%", e.MaxResourcePct))
 		case domain.EffectTaunt:
@@ -155,40 +181,7 @@ func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
 		}
 		out = append(out, line)
 	}
-	for _, m := range def.PassiveModifiers {
-		label := "效果增幅"
-		switch m.Kind {
-		case domain.PassiveEffectSourceAttackPct:
-			label = "攻击转化比例%"
-		case domain.PassiveIncomingMagicHalfChance:
-			label = "法术伤害减半概率%"
-		case domain.PassiveStealthDurationSec:
-			label = "隐身时间（秒）"
-		case domain.PassiveStealthMoveSpeedPct:
-			label = "隐身移动速度%"
-		case domain.PassiveStealthDamagePct:
-			label = "隐身伤害加成%"
-		case domain.PassiveTrapHalfDamageChance:
-			label = "陷阱伤害减半概率%"
-		case domain.PassiveStatusPhysicalDamageTakenPct:
-			label = "目标物理易伤%"
-		case domain.PassiveCastInterruptReductionPct:
-			label = "吟唱打断抵抗%"
-		case domain.PassiveSkillDamagePct:
-			label = "伤害加成%"
-		case domain.PassiveSkillDamageFlat:
-			label = "固定伤害"
-		case domain.PassiveEffectRestoreFlat:
-			label = "固定资源量"
-		case domain.PassiveCastTimeReductionPct:
-			label = "吟唱减免%"
-		case domain.PassiveSkillDurabilityReductionPct, domain.PassiveAttackDurabilityReductionPct:
-			label = "耐久消耗减免%"
-		case domain.PassivePreserveInvisibleChance:
-			label = "保留隐身概率%"
-		}
-		out = append(out, fmt.Sprintf("%s：%s %+d", skillTargetName(m.TargetSkill), label, m.Value))
-	}
+	out = append(out, skillPassiveModifierLines(def.PassiveModifiers)...)
 	for _, m := range def.PassiveStatusAffixes {
 		out = append(out, fmt.Sprintf("%s：%s", skillTargetName(m.TargetSkill), skillAffixText(m.Affix)))
 	}
@@ -199,15 +192,55 @@ func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
 		out = append(out, fmt.Sprintf("反击概率%s；伤害倍率%d%%", equipmentPercent(def.PassiveCounter.ChanceBP), def.PassiveCounter.DamagePct))
 	}
 	for _, m := range def.PassiveTriggers {
-		out = append(out, fmt.Sprintf("%s附加%s：概率%s，持续%d秒", skillTargetName(m.TargetSkill), s.skillStatusName(m.Status), equipmentPercent(m.ChanceBP), m.DurationSec))
+		name, duration := s.skillStatusName(m.Status), m.DurationSec
+		if state, ok := s.statuses.Get(m.Status, m.StatusLevel); ok {
+			if state.Name != "" {
+				name = state.Name
+			}
+			if duration <= 0 {
+				duration = state.DurationSec
+			}
+		}
+		line := fmt.Sprintf("%s附加%s：概率%s", skillTargetName(m.TargetSkill), name, equipmentPercent(m.ChanceBP))
+		if duration > 0 {
+			line += fmt.Sprintf("，持续%d秒", duration)
+		}
+		out = append(out, line)
 	}
 	if def.TrainingEliteDamageBP > 0 {
 		out = append(out, fmt.Sprintf("对精英伤害加成%s", equipmentPercent(def.TrainingEliteDamageBP)))
 	}
 	if def.Area.Valid() {
-		out = append(out, fmt.Sprintf("范围：半径%d，长%d，宽%d，角度%d", def.Area.Radius, def.Area.Length, def.Area.Width, def.Area.Angle))
+		parts := []string{}
+		if def.Area.Radius > 0 {
+			parts = append(parts, fmt.Sprintf("半径%d", def.Area.Radius))
+		}
+		if def.Area.Length > 0 {
+			parts = append(parts, fmt.Sprintf("长%d", def.Area.Length))
+		}
+		if def.Area.Width > 0 {
+			parts = append(parts, fmt.Sprintf("宽%d", def.Area.Width))
+		}
+		if def.Area.Angle > 0 {
+			parts = append(parts, fmt.Sprintf("角度%d", def.Area.Angle))
+		}
+		out = append(out, "范围："+strings.Join(parts, "，"))
+	}
+	if def.Kind.Active() {
+		cost, cast := fmt.Sprintf("%d点法力", def.MPCost), skillMillisecondsText(def.PrepareMS)
+		if def.MPCost == 0 {
+			cost = "无"
+		}
+		if def.PrepareMS == 0 {
+			cast = "瞬发"
+		}
+		out = append(out, "消耗："+cost, "技能吟唱："+cast, "技能间隔："+skillMillisecondsText(def.CooldownMS))
 	}
 	return out
+}
+
+func skillMillisecondsText(ms int32) string {
+	return skillFractionText(0, int64(ms), 1000) + "秒"
 }
 
 // skillRanksForDisplay enriches a pure raw snapshot once. It never feeds display
@@ -227,14 +260,21 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 		}
 	}
 	ch := p.Player.Char
+	bonuses := s.skillRankBonuses(p)
 	for id, r := range ranks {
 		r.CurrentEffectLines = []string{}
 		r.NextEffectLines = []string{}
 		r.BlockedReasons = []string{}
+		r.NextEffectiveRank = ""
+		if ident, ok := domain.V5SkillIdentity(id); ok && r.HardRank < domain.SkillHardPointCap {
+			r.NextRequiredLevel = ident.UnlockLevel + r.HardRank
+		}
+		r.TrainingSynergies, r.NativeModifierLines = s.skillSynergyViews(id, ch.Skills, raw)
 		if !s.skills.V5Enabled(id) {
 			ranks[id] = r
 			continue
 		}
+		var currentDef, nextDef domain.SkillDef
 		evaluate := func(n int32) []string {
 			def, ok := s.skills.Get(id, n)
 			if !ok {
@@ -243,6 +283,7 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 			s.applyTrainingSynergiesWithHard(p, &def, ch.Skills)
 			s.applyPassiveSkillModifiersWithLevels(p, &def, raw)
 			s.applyUniqueSkillModifiers(p, &def)
+			nextDef = def
 			return s.skillEffectLines(def)
 		}
 		rank, e := r.EngineRank()
@@ -250,17 +291,33 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 			r.BlockedReasons = append(r.BlockedReasons, "等级超过结算数值表示范围")
 		} else if rank > 0 {
 			r.CurrentEffectLines = evaluate(rank)
+			currentDef = nextDef
 			if rank < 2147483647 {
-				r.NextEffectLines = evaluate(rank + 1)
+				next := big.NewInt(int64(rank) + 1)
+				// A granted but uninvested skill can start accepting equipment ranks
+				// on its first hard point. Read all eligible authored bonuses then.
+				if r.HardRank == 0 && r.GrantRank != "0" {
+					ident, _ := domain.V5SkillIdentity(id)
+					next = firstSkillInvestmentRank(r.GrantRank, ident, bonuses)
+				}
+				if next.IsInt64() && next.Int64() <= 2147483647 {
+					r.NextEffectiveRank = next.String()
+					r.NextEffectLines = evaluate(int32(next.Int64()))
+				}
 			}
 		} else {
 			n, ok := new(big.Int).SetString(r.SoftRank, 10)
 			if ok {
 				n.Add(n, big.NewInt(1))
 				if n.IsInt64() && n.Int64() <= 2147483647 {
+					r.NextEffectiveRank = n.String()
 					r.NextEffectLines = evaluate(int32(n.Int64()))
 				}
 			}
+		}
+
+		if len(r.NextEffectLines) > 0 {
+			r.NextChangeLines = s.skillNextChangeLines(currentDef, nextDef, r.CurrentEffectLines, r.NextEffectLines)
 		}
 
 		if _, _, reason, ok := s.skillUpgradeTarget(p, id); !ok {
@@ -324,4 +381,80 @@ func skillInvestReason(reason event.RejectReason) string {
 		return "请先投入前置技能"
 	}
 	return "当前不能提升该技能"
+}
+
+// firstSkillInvestmentRank follows the resolver's hard+grant+eligible-soft rule.
+func firstSkillInvestmentRank(grant string, ident domain.SkillIdentity, bonuses []domain.SkillRankBonus) *big.Int {
+	n, ok := new(big.Int).SetString(grant, 10)
+	if !ok {
+		n = new(big.Int)
+	}
+	n.Add(n, big.NewInt(1))
+	seen := map[string]bool{}
+	for _, b := range bonuses {
+		if !seen[b.SourceID] && b.Matches(ident, ident.Profession) {
+			seen[b.SourceID] = true
+			n.Add(n, big.NewInt(b.Levels))
+		}
+	}
+	return n
+}
+
+func skillResourceText(label string, flat, attackPct int32) string {
+	parts := []string{}
+	if flat != 0 {
+		parts = append(parts, fmt.Sprintf("%d点", flat))
+	}
+	if attackPct != 0 {
+		parts = append(parts, fmt.Sprintf("攻击力的%d%%", attackPct))
+	}
+	if len(parts) == 0 {
+		return label + "0点"
+	}
+	return label + strings.Join(parts, " + ")
+}
+
+func skillPassiveModifierText(m domain.PassiveModifier) string {
+	label := "效果增幅"
+	switch m.Kind {
+	case domain.PassiveEffectSourceAttackPct:
+		label = "攻击转化比例%"
+	case domain.PassiveIncomingMagicHalfChance:
+		label = "法术伤害减半概率%"
+	case domain.PassiveStealthDurationSec:
+		label = "隐身时间（秒）"
+	case domain.PassiveStealthMoveSpeedPct:
+		label = "隐身移动速度%"
+	case domain.PassiveStealthDamagePct:
+		label = "隐身伤害加成%"
+	case domain.PassiveTrapHalfDamageChance:
+		label = "陷阱伤害减半概率%"
+	case domain.PassiveStatusPhysicalDamageTakenPct:
+		label = "目标物理易伤%"
+	case domain.PassiveCastInterruptReductionPct:
+		label = "吟唱打断抵抗%"
+	case domain.PassiveSkillDamagePct:
+		label = "伤害加成%"
+	case domain.PassiveSkillDamageFlat:
+		label = "固定伤害"
+	case domain.PassiveEffectRestoreFlat:
+		label = "固定资源量"
+	case domain.PassiveCastTimeReductionPct:
+		label = "吟唱减免%"
+	case domain.PassiveSkillDurabilityReductionPct, domain.PassiveAttackDurabilityReductionPct:
+		label = "耐久消耗减免%"
+	case domain.PassivePreserveInvisibleChance:
+		label = "保留隐身概率%"
+	}
+	unit := ""
+	if strings.HasSuffix(label, "%") {
+		label = strings.TrimSuffix(label, "%")
+		unit = "%"
+	}
+	if strings.HasSuffix(label, "（秒）") {
+		label = strings.TrimSuffix(label, "（秒）")
+		unit = "秒"
+	}
+
+	return fmt.Sprintf("%s %+d%s", label, m.Value, unit)
 }

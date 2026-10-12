@@ -21,7 +21,20 @@ Seven one-shot or stealth states (10011, 10130, 10208, 10328, 10329, 10419, 1042
 
 ## Synergy graph differences from the design candidates
 
-The implemented graph has 86 edges: 58 retained native relationships using the raw effective source rank, and 28 training relationships using hard points. Every target has at most three unique sources. Bilateral relationships read one immutable snapshot and do not recurse.
+The implemented graph has 128 edges: 58 retained native relationships using the raw effective source rank, and 70 training relationships using hard points, across 56 training targets. Every target has at most three unique sources. Bilateral relationships read one immutable snapshot and do not recurse.
+
+The October 12 follow-up adds 42 actual attack-to-attack training links to the previous 28 active-to-active links (15 targets), rather than merely relabeling passive bonuses. The explicit catalogue preserves the 149 real identities. New links follow the existing spear/sword attack progressions, assassin thrown/close-range/trap routes, healer holy-attack chain, and warlock fire/ice progressions. Examples are 连环枪法→破防之枪, 罡气剑→金缚剑, 狙击↔连续投掷, 光弹术→圣光术, and 冰箭术↔冰爆术. 暴雪术 retains its three existing native sources; no fourth is hidden elsewhere.
+
+The added attack links retain the approved 100-basis-point coefficient (+1% damage multiplier per invested source point; +20% at 20 hard points). This gives a consistent, bounded investment tradeoff within the 99-point budget, while retaining each target's authored base, native modifiers, control mechanics and separate flat carrier. It is a conservative extension of the existing training budget, not a claim of final competitive balance. No link was added just to fill every target's remaining source slots. Damage training sums in the existing additive multiplier bucket; it does not multiply source skill damage, effective source rank, or recursively enhanced output.
+
+The server now sends typed `trainingSynergies` rows with source ID/name, effect/type/unit, per-point value, invested hard points, current contribution and `equipmentApplies=false`, including zero-invested sources and unlearned targets. Native effective-rank modifiers appear separately as compact actual incoming effects. Current/next effects remain authoritative; `nextEffectiveRank` and `nextRequiredLevel` describe the next investment. `nextChangeLines` provides a compact authoritative changed-effects preview, retaining status/target context and explicitly marking unchanged effects; complete `nextEffectLines` remains available to API consumers. Item skill levels may improve the target's own base curve and existing native modifiers, but cannot add training points. Repeated passive target memberships are losslessly grouped for the original tooltip layout.
+
+Deploy the matching server and client together: the old client's strict V5 DTO rejects the additive view fields. Do not roll out the new server skill-view payload to the old client independently.
+
+Official sources checked for this follow-up:
+- [Arreat Summit skill basics](https://classic.battle.net/diablo2exp/skills/basics.shtml): ordinary synergy uses allocated points, excludes item skill bonuses, and lists the contributing skills in the skill description.
+- [Arreat Summit sorceress fire skills](https://classic.battle.net/diablo2exp/skills/sorceress-fire.shtml): original Diablo II: Lord of Destruction examples explicitly show Fire Bolt receiving Fire Ball/Meteor bonuses and Fire Ball receiving Fire Bolt/Meteor bonuses, with named per-level percentages. This is the model for source/per-invested-point presentation, not a reason to copy D2's damage percentages.
+- [Blizzard D2R 2.4 release notes](https://news.blizzard.com/en-us/article/23788293/diablo-ii-resurrected-patch-2-4-ladder-now-live): adds mutual Multiple Shot/Guided Arrow synergies and revises other relationships/tooltips. These version-specific D2R changes are separate from the historical Arreat Summit tables; neither source is claimed to exhaust every later D2R rule.
 
 Two optional candidate relationships are deliberately omitted instead of advertising a nonexistent effect:
 
@@ -43,8 +56,8 @@ The 10217 → 10216 freeze-duration relationship reads the actual status-table d
 - Read-only loading of actual seeded PostgreSQL skill/status/overlay data in an isolated copied disposable cluster: 750 class rows, 149 battle identities, 1,890 state definitions.
 - Adjacent carrier growth through ranks 1–102 and boundary samples 255/256, 65535/65536 and 1,000,000; original identity and state-level resolution; no source-anchor mutation.
 - Actual scene tests for exact damage and healing, six healing skill-bonus equipment items, native/training modifiers, consumed stealth/one-shot damage, original control hit eligibility, table-backed freeze duration, spent-shield downgrade, trap expansion source loss, transactional allocation commit/replay/failure, and detached-source transfer/logout behavior.
-- All 28 retained training edges alter a consumed payload field with their source invested.
-- 258 legitimate loadout/build and unlearned first-investment preview scenarios across five classes and both sexes verify rank payload encoding. Largest JSON is 25,016 bytes, below the 60,000-byte limit. Healers correctly have 29 battle rows, other classes 30.
+- All 70 training edges alter a consumed payload field with their source invested; all 56 damage/elite-damage edges additionally change actual target HP. Five profession cases execute the accepted `onUseSkill`/timed-cast path. An equipped +狙击 source improves its own rank without changing 连续投掷 training damage; adding a real hard point does change that damage.
+- 258 legitimate loadout/build and unlearned first-investment preview scenarios across five classes and both sexes verify rank payload encoding. Largest JSON is 31,448 bytes, below the 60,000-byte limit. Healers correctly have 29 battle rows, other classes 30.
 - Domain, scene and data package suites plus focused race checks pass. Actual-loader and packet checks have reproducible tests and fixture SHA256 provenance.
 
 This is structural, semantic and numeric regression evidence. It is not production migration approval, gameplay balance certification, live visual acceptance, or a multiplayer tick-latency capacity claim.

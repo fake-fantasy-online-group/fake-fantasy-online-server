@@ -13,7 +13,7 @@ func (s *Scene) nativeEndgameStats(viewer *entity.Entity) bool {
 
 func localEnhancementLine(v domain.ItemLocalEnhancement, roll int32) string {
 	name := map[int32]string{domain.AttrAtk: "攻击", domain.AttrMAtk: "魔法攻击", domain.AttrDef: "防御", domain.AttrMDef: "魔法防御"}[v.Attr]
-	return fmt.Sprintf("%s强化 +%d%%（本件）", name, v.ValueAt(roll))
+	return fmt.Sprintf("%s强化 +%d%%", name, v.ValueAt(roll))
 }
 func localEnhancementLines(def domain.ItemDef, local []domain.ItemLocalEnhancement, roll int32) []string {
 	var out []string

@@ -400,7 +400,7 @@ func TestV5UnlearnedViewHasFirstPointAndSoftPreview(t *testing.T) {
 		t.Fatal(err)
 	}
 	v := view[10301]
-	if v.CanCast || !v.CanInvest || v.SoftRank != "1" || len(v.CurrentEffectLines) != 0 || len(v.NextEffectLines) == 0 || !strings.Contains(v.NextEffectLines[0], "有效等级2") {
+	if v.CanCast || !v.CanInvest || v.SoftRank != "1" || len(v.CurrentEffectLines) != 0 || len(v.NextEffectLines) == 0 || v.NextEffectiveRank != "2" || v.NextRequiredLevel != 10 {
 		t.Fatal(v)
 	}
 	ch.Skills = domain.Learned{10305: 1}

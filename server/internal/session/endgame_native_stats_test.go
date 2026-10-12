@@ -193,7 +193,7 @@ func assertNativeStatsHandshake(t *testing.T, packets [][]byte, native, refresh 
 	packet := packets[inventory]
 	if native {
 		// Same flat/global scope sums 3 + 18 once for each bag/equipped item.
-		for _, line := range []string{"\x034力量 +21\n", "\x034攻击 +3\n", "\x034攻击 +42%\n", "\x034攻击强化 +110%（本件）\n", "\x030攻击 210~420\n"} {
+		for _, line := range []string{"\x035力量 +21\n", "\x035攻击 +3\n", "\x035攻击 +42%\n", "\x035攻击强化 +110%\n", "\x030攻击 210~420\n"} {
 			if bytes.Count(packet, []byte(line)) != 2 {
 				t.Fatalf("bag/equipped merged/local/global line missing or repeated: %q in %q", line, packet)
 			}

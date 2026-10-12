@@ -531,12 +531,15 @@ func (s *Scene) itemTooltipForViewer(def domain.ItemDef, st domain.Stack, owner,
 	_, unique := domain.UniqueOf(st)
 	_, formed := domain.MatchAstralRecipe(def, st)
 	nativeStats := s.nativeEndgameStats(viewer) && (unique || formed)
-	if !unique && domain.EquipmentAttributeCount(def, st) == 2 {
+	if nativeStats {
+		textQuality = tooltipDarkGold
+	} else if !unique && domain.EquipmentAttributeCount(def, st) == 2 {
 		textQuality = tooltipLightBlue
 	}
+	var specialEffects []string
 	lines := []string{"\x07(" + equipmentKindName(e) + ")", ""}
 	if d, ok := domain.UniqueOf(st); ok {
-		lines = append(lines, qualityColoredLine(4, "仙遗·"+d.Name), "基底："+def.Name)
+		lines = append(lines, qualityColoredLine(textQuality, "仙遗·"+d.Name), "基底："+def.Name)
 		if !nativeStats {
 			for _, a := range domain.UniqueAffixes(st) {
 				lines = append(lines, qualityColoredLine(4, affixText(a)))
@@ -546,7 +549,7 @@ func (s *Scene) itemTooltipForViewer(def domain.ItemDef, st domain.Stack, owner,
 			}
 		}
 		for _, tr := range d.Traits {
-			lines = append(lines, qualityColoredLine(4, tr.Describe(10000)))
+			specialEffects = append(specialEffects, tr.Describe(10000))
 		}
 		lines = append(lines, "同名仙遗特性取最高值；不同特性按通道上限叠加。", d.Description(), "")
 	}
@@ -652,16 +655,26 @@ func (s *Scene) itemTooltipForViewer(def domain.ItemDef, st domain.Stack, owner,
 			if a.Attr == domain.AttrHPRegen {
 				text = astralRuneAffixText(domain.LastAstralRune, a)
 			}
-			lines = append(lines, qualityColoredLine(4, text))
+			lines = append(lines, qualityColoredLine(tooltipDarkGold, text))
+		}
+		appendV5 := func(effects []domain.EquipmentEffect, bonuses []domain.SkillRankBonus) {
+			attributes, special := s.equipmentV5Lines(effects, bonuses)
+			for _, text := range attributes {
+				lines = append(lines, qualityColoredLine(tooltipDarkGold, text))
+			}
+			specialEffects = append(specialEffects, special...)
 		}
 		if u, ok := domain.UniqueOf(st); ok {
-			for _, text := range s.equipmentV5Lines(u.TypedEffects,u.SkillBonuses) { lines=append(lines,qualityColoredLine(4,text)) }
+			appendV5(u.TypedEffects, u.SkillBonuses)
 		}
 		if includeFormation {
-			for _, text := range s.equipmentV5Lines(formation.TypedEffects,formation.SkillBonuses) { lines=append(lines,qualityColoredLine(4,text)) }
+			appendV5(formation.TypedEffects, formation.SkillBonuses)
+			for _, tr := range formation.Traits {
+				specialEffects = append(specialEffects, tr.Describe(10000))
+			}
 		}
 		for _, line := range localEnhancementLines(def, local, roll) {
-			lines = append(lines, qualityColoredLine(4, line))
+			lines = append(lines, qualityColoredLine(tooltipDarkGold, line))
 		}
 	} else {
 		for i := 0; i < int(st.SocketCount) && i < len(st.Sockets); i++ {
@@ -677,7 +690,7 @@ func (s *Scene) itemTooltipForViewer(def domain.ItemDef, st domain.Stack, owner,
 	if st.SocketCount > 0 {
 		socketQuality := textQuality
 		if nativeStats {
-			socketQuality = 4
+			socketQuality = tooltipDarkGold
 		}
 		lines = append(lines, qualityColoredLine(socketQuality, fmt.Sprintf("孔数 %d/%d", usedSockets, st.SocketCount)))
 	}
@@ -699,6 +712,11 @@ func (s *Scene) itemTooltipForViewer(def domain.ItemDef, st domain.Stack, owner,
 	}
 	if st.Bound {
 		lines = append(lines, "（绑定物品不可交易/摆摊/邮寄, 可卖NPC）")
+	}
+	// Special effects are the final block, after native metadata and lore.
+	// 0x06 is the existing orange text marker, independent of item quality.
+	for _, text := range specialEffects {
+		lines = append(lines, "\x06"+text)
 	}
 	return strings.Join(lines, "\n")
 }
@@ -844,11 +862,18 @@ func appendEquipmentAffixes(lines *[]string, affixes []domain.Affix, quality uin
 	}
 }
 
-// tooltipLightBlue 仅用于文本，不是协议品质值。
-const tooltipLightBlue uint8 = 5
+// Text-only colors are not equipment-quality protocol values. In particular,
+// retain the existing light-blue value; dark gold emits quality marker 5.
+const (
+	tooltipLightBlue uint8 = 5
+	tooltipDarkGold  uint8 = 6
+)
 
 // qualityColoredLine 使用客户端已有的品质前缀或淡蓝文本前缀。
 func qualityColoredLine(quality uint8, line string) string {
+	if quality == tooltipDarkGold && line != "" {
+		return "\x035" + line
+	}
 	if quality == tooltipLightBlue && line != "" {
 		return "\x05" + line
 	}
