@@ -111,8 +111,14 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 	case r.Op == "hello":
 		caps := []string{domain.EndgameV1}
 		growth := false
-		for _, cap := range r.Capabilities { if cap == domain.EndgameGrowthV5 { growth = true } }
-		if growth { caps = append(caps, domain.EndgameGrowthV5) }
+		for _, cap := range r.Capabilities {
+			if cap == domain.EndgameGrowthV5 {
+				growth = true
+			}
+		}
+		if growth {
+			caps = append(caps, domain.EndgameGrowthV5)
+		}
 		priorNativeStats := p.Player.EndgameNativeStats
 		p.Player.EndgameNativeStats = false
 		for _, cap := range r.Capabilities {
@@ -136,9 +142,28 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 			s.emitTo(p.ID, nativeSnapshot)
 		}
 		p.Player.EndgameGrowthV5 = growth
+		p.Player.EndgameSkillBehavior = false
+		baseNegotiated := false
+		for _, cap := range r.Capabilities {
+			if cap == domain.EndgameV1 {
+				baseNegotiated = true
+				break
+			}
+		}
+		if growth && baseNegotiated {
+			for _, cap := range r.Capabilities {
+				if cap == domain.EndgameSkillBehaviorV1 {
+					p.Player.EndgameSkillBehavior = true
+					caps = append(caps, domain.EndgameSkillBehaviorV1)
+					break
+				}
+			}
+		}
 		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: caps, CatalogVersion: domain.UniqueCatalogVersion})
 		s.sendEndgameSnapshot(p)
-		if growth { s.sendGrowthV5Skills(p, domain.EndgameRequest{Op:"skill.ranks"}) }
+		if growth {
+			s.sendGrowthV5Skills(p, domain.EndgameRequest{Op: "skill.ranks"})
+		}
 	case r.Op == "skill.ranks":
 		s.sendGrowthV5Skills(p, r)
 	case r.Op == "skill.upgrade":

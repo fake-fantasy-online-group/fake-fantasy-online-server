@@ -3432,6 +3432,9 @@ func mpCost(raw int64, control int32) int32 {
 // 缺概率（神威术）、必须覆盖状态时长（燃烧/时之封印）或仅名称相同的技能
 // 不在这里猜，等各自参数闭合后再加入。
 func skillStatusApplications(id domain.SkillID, level int32) []domain.StatusApplication {
+	if restored := restoredNativeSkillApplications(id, level); restored != nil {
+		return restored
+	}
 	status := func(id domain.StatusID, level int32) []domain.StatusApplication {
 		return []domain.StatusApplication{{ID: id, Level: level}}
 	}
@@ -4026,6 +4029,9 @@ func LoadStatuses(ctx context.Context, q Querier) (domain.StatusTable, StatusSta
 	if err := loadCustomStatuses(ctx, q, out); err != nil {
 		return nil, st, err
 	}
+	if err := installRestoredNativeStatuses(out); err != nil {
+		return nil, st, err
+	}
 
 	seen := map[domain.StatusID]bool{}
 	for k := range out {
@@ -4211,7 +4217,9 @@ func completeKnownStatusSemantics(d *domain.StatusDef) {
 	case domain.StatusFreeze:
 		d.BreakOnDamage = true
 	case domain.StatusDampen:
-		mirrorStatusAffix(d, domain.AttrMAtk, domain.AttrMDef)
+		if d.Level >= 1 && d.Level <= 10 {
+			mirrorStatusAffix(d, domain.AttrMAtk, domain.AttrMDef)
+		}
 	case domain.StatusIronSkin:
 		if v, ok := removeStatusAffix(d, domain.AttrPhysRes); ok {
 			d.PhysicalDamageReductionPct = v
@@ -4301,6 +4309,7 @@ func completeKnownStatusSemantics(d *domain.StatusDef) {
 			d.MagicDamageReductionPct = v
 		}
 	}
+	completeRestoredNativeStatus(d)
 }
 
 func mirrorStatusAffix(d *domain.StatusDef, from, to int32) {

@@ -1,6 +1,6 @@
 # 原职业技能客户端最小恢复方案
 
-状态：方案与服务端契约协商中，尚未修改业务源码。目标是在服务端既有技能曲线不变的前提下，让客户端的名称、完整效果、MP、目标/范围、学习资料统一使用已验证的服务端运行结果；保留20硬点、高等级装备成长和训练协同。
+状态：已获批准并实现客户端统一数据入口，正在完成联合验收；未提交/推送。目标是在服务端既有技能曲线不变的前提下，让客户端的名称、完整效果、MP、目标/范围、学习资料统一使用已验证的服务端运行结果；保留20硬点、高等级装备成长和训练协同。
 
 ## 取证确认
 
@@ -41,21 +41,21 @@
 
 ## 2. 服务端契约：最小增量，保持旧协议
 
-拟协商能力`endgame.skill-contract.v1`。现客户端会拒unknown JSON key，因此server必须仅对声明并接受此能力的会话发扩展字段；旧端收到原skill.ranks结构，原0x8015/0x800e布局不变。
+已对齐能力`endgame.skill-behavior.v1`，依赖`endgame.growth.v5`与`endgame.v1`。现客户端会拒unknown JSON key，因此server必须仅对声明并接受此能力的会话发扩展字段；旧端收到原skill.ranks结构，原0x8015/0x800e布局不变。
 
-在现有rank行内增加可选只读view即可，不必重新发送资源表或重建149份客户端公式。准确字段名待服务端工作同伴对齐，但信息必须涵盖：
+在现有rank行内增加可选只读view即可，不必重新发送资源表或重建149份客户端公式。最终字段见同目录上级`skill-behavior-v1.json`；信息涵盖：
 
-- name、iconId、known/active/是否可上快捷栏；ID已有。
+- 身份：name、icon、profession、kind、unlockLevel、prerequisiteSkillIds；ID已有。
 - current实际MP、吟唱/冷却毫秒；未学时预览使用next已存在段，不伪装成当前可施法成本。
-- inputMode：instant/single/ground/direction；targetMask；anchor/center；rangePx；areaShape/radiusPx/lengthPx/widthPx/angleDegrees；isTrap；是否自中心。不能仅传SQL target数字让客户端继续猜。
-- 学习与前置：既有CanInvest、NextRequiredLevel继续用；补typed prerequisites/blocked reason code或明确结构，而非从中文说明猜前置。
-- definitionVersion/sourceProfile与有效状态revision。有效rank仍保留十进制字符串，不能缩到byte或按资源最大lv截断。
+- 行为：usable、inputMode(none/self/entity/point/direction/trapEntity)、pointRequired/selfFallback、targetSelf/targetEnemy/targetTeam、allowsDeadTarget/deadTargetOnly、castDistance、area(shape/center/radius/length/width/angle)、groundEffect、requiresInvisible、requiredWeaponType。
+- 学习与前置：既有CanInvest、NextRequiredLevel继续用；前置ID明确给出，不从中文说明猜前置。
+- 能力版本固定字段含义，复用有效状态generation/revision。有效rank仍保留十进制字符串，不能缩到byte或按资源最大lv截断。
 
 投影源是实际施法的Get(effective rank)并应用training/passive/unique修正后的def。不要从CurrentEffectLines里解析“消耗”和“半径”。原卡片文字仍server生成并保留native布局；typed字段供行为。已经正确的V5 curves、soft/grant/hard分离、incoming协同原封不动。
 
 ## 3. 客户端一次性改动范围
 
-新增一个轻量`ResolvedProfessionSkill`/provider（最终命名可调整），集中选择“已协商且当前server契约”与旧协议路径；不原地改raw SkInfo，避免静态cache跨角色/服务器污染。
+新增轻量`AuthoritativeProfessionSkill`provider，集中选择“已协商且当前server契约”与旧协议路径；不原地改raw SkInfo，避免静态cache跨角色/服务器污染。
 
 | 代码表面 | 最小变更 |
 |---|---|
@@ -63,7 +63,7 @@
 | P/Win05.GrowthSkills.cs | name来自server，保留原current/next完整块、配色、footer、协同位置；active信息来自typed view |
 | P/Win05.SkillDialog.cs、Win05.SkillData.cs | growth入口不先要求raw info；缺3项可取view身份/icon；正常原有节点布局仍用素材 |
 | P/GameHud.HotbarAvailability.cs、HotIcon.cs、HotSlotTip.cs | 同一view判定学会/active，支持缺raw行图标与卡片；不缩有效rank |
-| P/NetClient.SkillCommands.cs | 有当前typed MP时用实际成本；新能力下未知/过期成本不准退旧资源硬拦截，交server最终判断并刷新 |
+| P/NetClient.SkillCommands.cs | 有当前typed MP时用实际成本；未知/过期成本不退旧资源硬拦截；新能力输入等待刷新，旧V5可交server最终判断 |
 | P/SkillTargeting.Classification.cs、Validation.cs、Entry.cs | 新能力从typed模式/权限/几何决定输入，不读中文desc；原协议兼容分支保留 |
 | P/GameHud.HotbarUseAdmission.cs、CombatWorld.SkillRequests.cs、PluginGameApi.Actions.cs | 同一输入语义；友方单体/自身/地面不各自猜targetId和range |
 | P/ReferenceWorldReceiveOwner.SkillCastReceipt.cs、CombatWorld.Cast.cs、CombatWorld.Traps.cs | 朝向、支援特效、范围圈用view；live cooldown/chant继续以server回执为准 |
@@ -81,7 +81,7 @@
 - `SkillTipText:415-417`在raw info为空时直接return，热键tooltip在`HotSlotTip:49`降成“技能 10316”等。
 - 树pickup被info-null和SkillUsableForHotbar挡住。已保存热键若旧技能快照仍有等级，可以继续施法，但Resolve因info-null返回Instant，targetId0；LocalNotEnoughMp缺info直接放行，选队友语义丢失。
 - HotIcon有server给定icon可继续画；无给定icon时SkillIconId=0。修复provider需保证三项的icon ID及资源是否存在，不能用ID猜路径。
-- 当前证据包不含skilldlg_layout，主任务已委托现有本机只读任务核对3项slot/tab/tree/位置；若slot缺失，须通过经过核对的3项最小节点语义补充显示，不复制整张资源表或杜撰坐标。
+- 补充布局证据已确认三项slot/tab/tree/位置均存在且旧/现字节相同。无需补节点或修改美术。
 
 ### 两个可复现的MP错误案例
 
@@ -98,7 +98,7 @@ current在10306的rank1..5都写MP100，10307都写MP120。服务器基础rank1�
 
 ## 5. 71项实现覆盖清单
 
-这是待实现的派生分工表，标记修复应触及的消费者，不宣称全部历史值必须原样回滚。精确字段差异和来源裁决由配套全职业矩阵保存。
+这是覆盖实施消费者的派生分工表，标记修复应触及的消费者，不宣称全部历史值必须原样回滚。精确字段差异和来源裁决由配套全职业矩阵保存。
 
 | ID | 历史技能身份 | 差异 | 必须覆盖的数据/行为 |
 |---|---|---|---|
@@ -174,10 +174,40 @@ current在10306的rank1..5都写MP100，10307都写MP120。服务器基础rank1�
 | 10431 | 寒冰之魂 | 变化 | 学习等级 |
 | 10433 | 秘术：消除 | 变化 | 原完整效果段/语义 |
 
-## 待确认/实施门槛
+## 实施门槛状态
 
-- 服务端同伴锁定capability与typed schema，确保发送给旧端的结构完全不变。
-- 本机确认三个缺失技能的layout/art节点是否仍存在；无需重复下载/提取全部资源。
-- 主任务确认以已验证服务端原技能语义为base、保持V5成长/协同的恢复策略后再修改业务源码。
+- capability与typed schema已经锁定，旧端不发送contract键。
+- 三个缺失技能原layout节点均已确认。
+- 恢复策略已经批准，客户端修改完成；联合验收仍需区分客户端数据源修复与服务端实际原效果完整性。
 
-本方案未把任何资源原件或完整metadata dump写入repo，未对业务源码做修改。
+本方案及实现均未把资源原件或完整metadata dump写入repo；只新增typed语义DTO、统一provider和既有消费者接线。
+
+
+## 2026-10-12 实施结果与剩余边界
+
+### 已落地
+
+- Application 新增只读 contract/behavior/area DTO。只有同时协商 growth.v5 与 skill-behavior.v1 时使用；未知枚举、错误类型、负数和重复前置会拒绝整条非法快照，nullable current/next 和单项 contract:null 不使其他148条失效。
+- `AuthoritativeProfessionSkill` 为本角色职业及实际授权rank行提供身份和当前行为。其他职业观察者特效保留原资源通路，避免把本职业快照当全世界表。行为只在当前revision有效；身份在同一generation内保留。重连/换角清空缓存。
+- `Win05.SkillInfo/SkillIconId`、技能树节点、名称、前置、热键入口共用provider；10316/10318/10321不再因当前资源缺行消失。布局原节点全部保留，无美术改动。
+- MP预检查采用 current.mpCost，且不使用 next.mpCost。growth.v5但未协商新能力、或行为尚未更新时，旧资源MP不再误阻；新能力的目标输入在行为未就绪时不猜目标。原先MP100/120误挡服务端48/35的药师案例可直接验证。
+- 普通/智能施法、目标选择、自动接近、技能请求、直接发送和插件入口接入typed行为；零距离按“服务器不额外限距”处理，不再替换100/400/600。同队、敌怪、死亡目标、点传送、方向与陷阱实体分别走明确字段，不解析说明字符串。
+- 原卡片框、颜色、完整当前/下一等级段、行顺序与协同追加位置保留；前置使用已有“需要技能”行样式。20硬点及装备/软等级语义不变。升级仍使用既有V5操作，旧NPC金币学习入口在V5下指向既有技能面板。
+- 协商新能力后若技能快照落后，会按revision进行有限刷新；不会因10212的单项null无限重试。
+
+### 10212 明确兼容例外
+
+10212 在新cap下 contract:null。按最终产品决定，客户端保留现有资源名称、既有施法和投资状态，不引入“待核/禁用”文案，不擅自禁用。原有V5效果文本与服务端普通伤害占位问题尚未解决；此项不能计入“原偷窃效果已恢复”。它也不影响其余148条typed解析和呈现。
+
+### 证据补充
+
+当前取证包SHA256已经复核为`1671a4bc9fb6eb3080a1fb1ff0185f4054404346f76e96100d453ee6559d3438`。原五份内容不变，新增布局补证：10316 slot7(39,181)、10318 slot8(39,267)、10321 slot10(155,10)，均为maintab/sw4/groupid4；旧/现布局字节相同。原始资源不进仓库。
+
+### 已验证与未验证
+
+- 新DTO/capability/freshness：249检查；现有协议194、成长73检查通过。
+- 真实Go生产器的五份skill.ranks报文经过实际C# parser/state：30+30+30+29+30=149行，148有效identity、10212 null，报文45,095–47,271字节，均低于客户端60KiB限制。
+- 原卡片实际composition/layout/render契约23654条及源隔离45条通过；使用确定性Unity/字体/美术替身，非Unity像素验证。
+- 双加载器/独立效果缓存和剑客旧协议2860条通过。七个engine-free程序集实际源码编译通过。全套12个客户端测试/编译脚本均已执行通过（包含host62、模块152、面板1042、世界入口22、loot27及对应source guards）。
+- 真实Unity Editor/Player启动、网络联机施放、特效尺寸像素与美术检视未执行；引擎外测试不能冒充这些验收。
+- 本次统一数据入口不等于所有原技能效果已经还原。71项字段裁决、服务端已证缺失效果及10212冲突应单列追踪。

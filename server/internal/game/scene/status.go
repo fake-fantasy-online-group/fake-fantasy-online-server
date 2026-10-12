@@ -191,12 +191,7 @@ func (s *Scene) prepareSkillStatuses(e *entity.Entity, def *domain.SkillDef) int
 			def.Effect = def.Effects[0]
 		}
 	}
-	if castReduction > 100 {
-		castReduction = 100
-	}
-	if castReduction > 0 {
-		def.PrepareMS -= def.PrepareMS * castReduction / 100
-	}
+	def.PrepareMS = skillPrepareAfterReduction(def.PrepareMS, castReduction)
 	preserveInvisible := false
 	if def.PreserveInvisibleChanceBP > 0 && e.Status.Invisible() {
 		chance := def.PreserveInvisibleChanceBP
@@ -632,7 +627,7 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 		}
 		beneficial := !isHarmful(a.Def)
 		immobile := a.Def.Immobile
-		if immobile == 0 && a.Def.Control == domain.ControlStun {
+		if immobile == 0 && (a.Def.Control == domain.ControlStun || a.Def.BlockMove) {
 			immobile = 1
 		}
 		icon := event.StatusIconView{
@@ -862,7 +857,7 @@ func (s *Scene) refreshEntityStats(e *entity.Entity) {
 			base = scaled
 		}
 	}
-	e.Stats = domain.ApplyStatusStats(base, e.Status.Affixes())
+	e.Stats = domain.ApplyMonsterStatusStats(base, e.Status)
 	applyStatusAttackCap(e)
 }
 
@@ -899,9 +894,14 @@ func applyStatusAttackCap(e *entity.Entity) {
 	}
 }
 
-// canAct 报告实体现在能不能行动(移动/攻击)。昏迷、冰冻、石化都不能。
+// canAct reports general action admission. Movement-only locks are checked by
+// canMove, leaving attacks and casts available while rooted.
 func canAct(e *entity.Entity) bool {
 	return (e.Player == nil || e.Player.RideAnchor == 0) && e.Status.Controlled() != domain.ControlStun
+}
+
+func canMove(e *entity.Entity) bool {
+	return (e.Player == nil || e.Player.RideAnchor == 0) && !e.Status.BlocksMovement()
 }
 
 func canDealDamage(e *entity.Entity) bool {

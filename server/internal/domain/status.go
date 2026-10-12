@@ -118,6 +118,13 @@ type StatusDef struct {
 	// 破隐后的持续压制；不能借用减速/禁无敌等旧状态来附带实现。
 	PreventInvisible bool
 	Immobile         uint8
+	// BlockMove restricts voluntary movement only. It is independent of stun
+	// and silence, so a rooted entity may still attack and cast in place.
+	BlockMove bool
+	// AttackSpeedIsFrequency identifies source-verified frequency penalties
+	// (枷锁术). Their attack-speed affix is already correct for player speed;
+	// monster intervals require inversion, not the legacy interval multiplier.
+	AttackSpeedIsFrequency bool
 	// Hidden 来自 no_inform_client；这类运行时状态参与数值结算，但不得进入任何
 	// 客户端 Buff、目标栏或实体状态列表。
 	Hidden bool
@@ -267,7 +274,7 @@ func (d StatusDef) Harmful() bool {
 	if d.TypeKnown {
 		return d.Type == StatusBad
 	}
-	if d.Control != ControlNone {
+	if d.Control != ControlNone || d.BlockMove {
 		return true
 	}
 	for _, a := range d.Affixes {
@@ -1039,6 +1046,23 @@ func (s *StatusSet) Controlled() Control {
 		}
 	}
 	return out
+}
+
+// BlocksMovement includes full incapacitation and source-specific movement
+// locks. Reading active states rather than caching a flag makes expiration,
+// dispels and source reconciliation release the restriction immediately.
+func (s *StatusSet) BlocksMovement() bool {
+	if s == nil {
+		return false
+	}
+	for _, list := range s.act {
+		for _, a := range list {
+			if a.Def.BlockMove || a.Def.Control == ControlStun {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // Affixes 把身上所有状态的属性影响摊平，交给属性管线。

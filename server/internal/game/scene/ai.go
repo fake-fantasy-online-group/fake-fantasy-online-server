@@ -673,6 +673,9 @@ func (s *Scene) stepWander(m *entity.Entity, p ai.Params) bool {
 	if d == nil || p.MoveSpeed <= 0 || !d.Kind.Hostile() {
 		return false // 花草、箱子和天生移速为 0 的怪保持静止
 	}
+	if !canMove(m) {
+		return true // Do not send a new client-side roaming path while rooted.
+	}
 
 	if !d.Roaming {
 		if d.NextRoamAt == 0 {
@@ -1046,7 +1049,7 @@ func (s *Scene) dropMonsterAggroForPlayer(player domain.EntityID) {
 //
 // 怪与宠物共用它: 这段代码从头到尾没碰过 m.Monster, 本来就是通用的。
 func (s *Scene) moveEntity(m *entity.Entity, to domain.Pos) {
-	if to == m.Pos {
+	if to == m.Pos || !canMove(m) {
 		return
 	}
 	s.aoi.Move(m, to)

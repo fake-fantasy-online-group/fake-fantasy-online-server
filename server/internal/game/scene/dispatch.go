@@ -851,8 +851,8 @@ func (s *Scene) move(cmd MoveTo, checkPortal, force bool) {
 		s.stallNotice(e, "摆摊中不能攻击，请先结束摊位")
 		return
 	}
-	if !force && e.Kind == domain.KindPlayer && !canAct(e) {
-		return // 昏迷中不能动。移动没有回执 —— 客户端每秒发好几次, 回执只会刷屏
+	if !force && e.Kind == domain.KindPlayer && !canMove(e) {
+		return // 昏迷/移动锁中不能动；强制传送仍沿用服务端的独立放行路径。
 	}
 	positionChanged := e.Pos.X != cmd.To.X || e.Pos.Y != cmd.To.Y || e.Pos.MapID != cmd.To.MapID
 	if !force && positionChanged && e.Player != nil {

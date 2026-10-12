@@ -280,26 +280,44 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 			r.NextRequiredLevel = ident.UnlockLevel + r.HardRank
 		}
 		r.TrainingSynergies, r.NativeModifierLines = s.skillSynergyViews(id, ch.Skills, raw)
+		if p.Player.EndgameSkillBehavior {
+			r.Contract = s.skillBehaviorIdentity(id)
+			r.ContractUnavailable = id == 10212
+		}
+		evaluate := func(n int32) ([]string, *domain.SkillBehaviorPayload) {
+			def, ok := s.skills.Get(id, n)
+			if !ok {
+				return []string{"技能数值配置无法解析"}, nil
+			}
+			s.applyResolvedSkillModifiers(p, &def, ch.Skills, raw)
+			var behavior *domain.SkillBehaviorPayload
+			if p.Player.EndgameSkillBehavior {
+				behavior = s.skillBehaviorPayload(p, def)
+				// Keep the existing tooltip prose/layout, but project the same
+				// non-consuming cast-time preview as the typed behavior.
+				def.PrepareMS = behavior.PrepareMS
+			}
+			return s.skillOriginalEffectLines(def), behavior
+		}
 		if !s.skills.V5Enabled(id) {
+			if r.Contract != nil {
+				if rank, err := r.EngineRank(); err == nil && rank > 0 {
+					_, r.Contract.Current = evaluate(rank)
+				}
+			}
 			ranks[id] = r
 			continue
 		}
 		r.NextChangeLines = nil
-		evaluate := func(n int32) []string {
-			def, ok := s.skills.Get(id, n)
-			if !ok {
-				return []string{"技能数值配置无法解析"}
-			}
-			s.applyTrainingSynergiesWithHard(p, &def, ch.Skills)
-			s.applyPassiveSkillModifiersWithLevels(p, &def, raw)
-			s.applyUniqueSkillModifiers(p, &def)
-			return s.skillOriginalEffectLines(def)
-		}
 		rank, e := r.EngineRank()
 		if e != nil {
 			r.BlockedReasons = append(r.BlockedReasons, "等级超过结算数值表示范围")
 		} else if rank > 0 {
-			r.CurrentEffectLines = evaluate(rank)
+			var behavior *domain.SkillBehaviorPayload
+			r.CurrentEffectLines, behavior = evaluate(rank)
+			if r.Contract != nil {
+				r.Contract.Current = behavior
+			}
 			if rank < 2147483647 {
 				next := big.NewInt(int64(rank) + 1)
 				// A granted but uninvested skill can start accepting equipment ranks
@@ -310,7 +328,11 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 				}
 				if next.IsInt64() && next.Int64() <= 2147483647 {
 					r.NextEffectiveRank = next.String()
-					r.NextEffectLines = evaluate(int32(next.Int64()))
+					var behavior *domain.SkillBehaviorPayload
+					r.NextEffectLines, behavior = evaluate(int32(next.Int64()))
+					if r.Contract != nil {
+						r.Contract.Next = behavior
+					}
 				}
 			}
 		} else {
@@ -319,7 +341,11 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 				n.Add(n, big.NewInt(1))
 				if n.IsInt64() && n.Int64() <= 2147483647 {
 					r.NextEffectiveRank = n.String()
-					r.NextEffectLines = evaluate(int32(n.Int64()))
+					var behavior *domain.SkillBehaviorPayload
+					r.NextEffectLines, behavior = evaluate(int32(n.Int64()))
+					if r.Contract != nil {
+						r.Contract.Next = behavior
+					}
 				}
 			}
 		}
@@ -354,14 +380,20 @@ func (s *Scene) maybeSendSkillRanks(p *entity.Entity) {
 	}
 	var worn []domain.Stack
 	s.functionalWorn(p).Each(func(_ domain.EquipSlot, st domain.Stack) { worn = append(worn, st) })
+	castReduction := int32(0)
+	if p.Player.EndgameSkillBehavior && p.Status != nil {
+		_, _, castReduction, _ = p.Status.Clone().ConsumeAttackModifiers(true, false, false, true)
+	}
 	payload, _ := json.Marshal(struct {
+		TypedBehavior       bool
+		CastReduction       int32
 		Ranks               domain.SkillResolutionSnapshot
 		Hard                domain.Learned
 		Worn                []domain.Stack
 		Level, Points       int32
 		Alive, CanAct, Busy bool
 		Revision            int64
-	}{ranks, p.Player.Char.Skills, worn, p.Player.Char.Level, p.Player.Char.SkillPoints, p.Alive(), canAct(p), endgameEconomicBusy(p), s.endgamePlayer(p).state.Revision})
+	}{p.Player.EndgameSkillBehavior, castReduction, ranks, p.Player.Char.Skills, worn, p.Player.Char.Level, p.Player.Char.SkillPoints, p.Alive(), canAct(p), endgameEconomicBusy(p), s.endgamePlayer(p).state.Revision})
 	digest := sha256.Sum256(payload)
 	if s.skillViewDigests == nil {
 		s.skillViewDigests = map[domain.EntityID][32]byte{}

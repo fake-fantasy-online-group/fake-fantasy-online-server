@@ -174,7 +174,7 @@ func (t StatusTable) SkillApplicationDurationCap(app StatusApplication) int32 {
 func skillStatusDurationCap(d StatusDef, fifth int32) int32 {
 	harmfulControl := d.Harmful() && d.IntervalSec == 0
 	cap := int32(3600)
-	if d.Invulnerable || d.BlockHarmful || (!harmfulControl && d.Control != ControlNone) {
+	if d.Invulnerable || d.BlockHarmful || (!harmfulControl && (d.Control != ControlNone || d.BlockMove)) {
 		cap = fifth
 	} else if d.Harmful() {
 		switch {
@@ -182,7 +182,7 @@ func skillStatusDurationCap(d StatusDef, fifth int32) int32 {
 			cap = 60
 		case d.Control == ControlSilence || d.CannotAttack || d.AttackCapKnown || statusDisarms(d):
 			cap = 20
-		case d.Control == ControlStun || d.Immobile != 0:
+		case d.Control == ControlStun || d.BlockMove || d.Immobile != 0:
 			cap = 15
 		default:
 			cap = 60

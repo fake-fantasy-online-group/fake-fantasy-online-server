@@ -46,3 +46,96 @@ Scope: `endgame.skill-behavior.v1`, gated by growth V5. These are independent ac
 - Existing managed client DTO/state, native tooltip/layout and source integration suites remain required, plus the dedicated behavior-capability suite. Managed tests do not claim Unity/Player or visual acceptance.
 - Final report must distinguish: implementation/runtime parity, historical evidence coverage, and unresolved historical mechanics. Passing a contract test alone does not certify all historical behavior as authentic.
 - No Mac, DB mutation, Unity/Player build, commit, push or deployment is part of this acceptance run.
+
+## Executed acceptance, 2026-10-12
+
+- Evidence/decision matrix: 1,885 checks passed; 149 historical identities,
+  146 current resource identities, 68 changed rows plus three missing healer
+  rows, eight renamed identities, all 71 decision rows and 472 changed fields.
+  Ten identities still carry historical evidence holds. These are dispositions,
+  not a claim that every historical mechanic has been restored.
+- New capability is gated on both `endgame.v1` and `endgame.growth.v5`. Scene and
+  actual session handshake tests cover negotiation, repeated hello, downgrade,
+  ordering, old-key omission, transfer and reconnect reset. Skill 10212 has an
+  explicit null new contract and retains the approved legacy client path,
+  including its native identity and cast request. No new prohibition or hold
+  tooltip is imposed on it; its server damage placeholder remains unresolved.
+- The separate 55-row correction layer is used by the new runtime and behavior
+  tests. All eleven corrected skills at original ranks 1–5 reach actual entity
+  attributes/control through `applySkill`, including attack costs on defense
+  buffs, hit/defense/magic-attack penalties, silence, stun, movement-only roots,
+  and rejected beneficial status applications under chaos.
+- Movement tests run player `MoveTo`, monster locomotion/wandering, real basic
+  attacks and real skill execution. Movement-only roots do not prohibit attacks
+  or spells, roots and silence compose independently, cleanse/removal/expiry
+  release movement, and wandering emits no false movement path. Source rank
+  gains do not strengthen an accepted root; rank loss reduces it and loss of the
+  source skill removes it. High control power does not bypass categorical immunity.
+- Shackle now has independently checked actual attack admission for players and
+  monsters. Original ranks 1–5 yield player speeds 70/65/60/55/50 percent. With a
+  1000ms monster baseline the corresponding intervals are
+  1429/1539/1667/1819/2000ms, rounded upward to 100ms scene ticks. Player admission
+  retains its existing downward tick quantization. Ranks 20 and 100 preserve the
+  existing minimum 50 percent frequency; repeated refresh does not compound the
+  penalty. Unmarked equipment/status interval affixes retain their old semantics.
+- Actual cast MP debit, accepted preparation/cooldown/distance, native passives,
+  training and unique modifiers agree with typed current data. One-shot cast-time
+  preview neither consumes the status nor publishes stale preparation prose;
+  accepted casting consumes once. Real equipped rank bonuses retain hard cap 20,
+  next-effective-rank previews and source-loss recalculation.
+- The standalone managed Presentation acceptance compiles the real authoritative
+  provider, skill resource loader, targeting adapter and NetClient skill-command
+  preflight. It passes 1,361 assertions with production Application DTO/state and
+  BoundedJson. Checks include all 149 identities, the three resource-absent healer
+  skills, MP boundary admission, party/dead-target rules, declared self fallback,
+  current-null/stale data, high equipment ranks, and cross-profession observer
+  metadata fallback. This is not a Unity/Player or visual execution test.
+
+### Complete packet size and parser checks
+
+The production scene obtains grants only from the one `SlotTreasure` item.
+Unique and astral equipment provide profession-scoped rank bonuses, not multiple
+cross-profession grants. The test enumerates all authored legal bonus-equipment
+combinations for five level-100 characters with validated 99-point allocations,
+then grants each of all 149 profession skills (plus no grant) through the real
+single-slot resolver. The latter is a conservative grant-identity superset, not
+an assertion that 149 corresponding treasure items exist in the authored data.
+
+| Profession | Equipment/grant scenarios | Maximum rows | Maximum complete JSON bytes |
+|---|---:|---:|---:|
+| Warrior | 750 | 31 | 55,798 |
+| Swordsman | 900 | 31 | 55,159 |
+| Assassin | 1,200 | 31 | 55,460 |
+| Healer | 2,400 | 30 | 55,899 |
+| Warlock | 1,200 | 31 | 56,902 |
+
+All 6,450 scenarios serialize the complete response, including a 64-character
+request ID and maximum signed revision. Every `protocol.EncodeEndgame` result
+is nonempty and contains the full JSON unchanged. All are below the 61,440-byte
+client limit; the largest leaves 4,538 bytes. Each profession's largest actual
+response also passes production C# BoundedJson, DTO parsing and atomic state
+publication, in addition to the five regular complete profession responses.
+The combined 149-row export is an audit artifact, never a single wire response.
+This scan exhausts the enumerated equipment/grant combinations for its legal
+allocations; it does not enumerate every possible distribution of 99 hard points.
+
+### Reproduction
+
+```sh
+source /workspace/shared/cloud-test-env.sh
+cd server
+SKILL_BEHAVIOR_FIXTURE_PATH=/tmp/skill-behavior-restored149.json \
+  go test ./internal/game/scene -run TestSkillBehaviorAcceptance -count=1 -v
+go test -race ./internal/game/scene ./internal/session \
+  -run 'Test(Verified|NativeMovement|SkillBehaviorAcceptance(MP|High|Hello|Transfer|Unlearned|All149|Session)|SkillBehaviorDragonkill)' \
+  -count=1
+# In the client repository:
+bash Tests/Endgame/run-skill-behavior-presentation-acceptance.sh \
+  /tmp/skill-behavior-restored149.profession-{1,2,3,4,5}.json \
+  /tmp/skill-behavior-restored149.worst-profession-{1,2,3,4,5}.json
+```
+
+The exhaustive grant test takes approximately 2.5 minutes in this cloud setup.
+Targeted final scene/session race tests pass. The integration owner separately
+runs the aggregate Go suite, vet, build and existing client contracts; the
+acceptance results here do not substitute for that final aggregate.

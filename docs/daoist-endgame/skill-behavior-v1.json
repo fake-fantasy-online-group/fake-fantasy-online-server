@@ -1,0 +1,56 @@
+{
+  "capability": "endgame.skill-behavior.v1",
+  "requires": [
+    "endgame.v1",
+    "endgame.growth.v5"
+  ],
+  "wire_location": "skill.ranks.skillRanks[].contract",
+  "compatibility": "Omit the entire contract key unless this connection negotiated the capability. Existing rank fields and legacy packets are unchanged.",
+  "identity": {
+    "name": "nonempty string, authoritative server skill name",
+    "icon": "int32 >= 0, server skill icon ID",
+    "profession": "int32 0..5, 1-based profession identity; 0 for a granted non-profession skill",
+    "kind": "single | area | passive | special",
+    "unlockLevel": "int32 >= 0, original learning identity, not effective rank",
+    "prerequisiteSkillIds": "array of distinct positive int32 IDs; hard learning prerequisites",
+    "current": "payload or null when no effective learned/granted rank is available",
+    "next": "payload or null when no representable next-rank preview exists"
+  },
+  "payload": {
+    "mpCost": "int32 >= 0, actual resolved skill MP cost after training, native passive and equipped modifiers",
+    "prepareMs": "int32 >= 0, resolved preparation including a non-consuming preview of current one-shot cast-reduction status",
+    "cooldownMs": "int32 >= 0, resolved skill cooldown, not remaining cooldown",
+    "castDistance": "int32 >= 0 in world units; 0 means no additional server distance bound, never substitute a default",
+    "usable": "boolean, active skill has a closed server effect; does NOT assert MP, cooldown, riding, silence or target validation",
+    "requiresInvisible": "boolean",
+    "requiredWeaponType": "int32 >= 0; original weapon requirement, 0 means none",
+    "inputMode": "none | self | entity | point | direction | trapEntity",
+    "pointRequired": "boolean, explicit point required by the server (point teleport)",
+    "selfFallback": "boolean, omitted selection may use caster position/entity under the actual server resolver",
+    "targetSelf": "boolean",
+    "targetEnemy": "boolean, hostile monsters; does not authorize player-vs-player damage",
+    "targetTeam": "boolean, SAME PARTY ONLY, never arbitrary friendly players",
+    "allowsDeadTarget": "boolean, server resurrection semantics allow a dead same-party player",
+    "deadTargetOnly": "boolean, pure resurrection rejects living targets",
+    "groundEffect": "boolean, actual server positional effect flag",
+    "area": {
+      "shape": "none | rectangle | circle | cone",
+      "center": "none | caster | target",
+      "radius": "int32 >= 0",
+      "length": "int32 >= 0",
+      "width": "int32 >= 0",
+      "angle": "int32 >= 0, full cone angle in degrees"
+    }
+  },
+  "semantics": [
+    "Identity is supplied for every available profession row, including unlearned skills and skills absent from local resource JSON.",
+    "Existing hardRank/grantRank/effectiveRank/CanCast define learning and grant availability. A current-null row must not borrow next MP cost for real admission.",
+    "The input resolver uses structured effects and area rules, never localized description parsing. Trap/reveal/detect geometry comes from the actual special-effect fields consumed by the server.",
+    "trapEntity is the visible, non-owned trap entity ID sent through the existing UseSkill target ID; the server validates trap visibility/ownership/range.",
+    "A snapshot may become stale. The server remains final authority; missing/stale typed data must not trigger a hard rejection based on stale external-resource MP costs.",
+    "The field set changes no original curves, learned-point cap, equipment rank rules, training synergies, historical effects or tooltip layout."
+  ],
+  "hold": {
+    "10212": "New-capability payload includes contract:null. Its current resource name remains theft; existing server damage-placeholder behavior is unresolved and is not certified as restored."
+  }
+}

@@ -1,0 +1,2398 @@
+{
+  "skills": [
+    {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "造成100%伤害，15秒内降低敌人防御30%。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "FormulaVersion": 5,
+      "HurtType": 1,
+      "ID": 10009,
+      "Icon": 5009,
+      "ImpactDelayMS": 40,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "MPCost": 12,
+      "Name": "破防之枪",
+      "Prerequisites": [
+        10002
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10009,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "造成100%伤害，15秒内降低敌人防御40%。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10009,
+      "Icon": 5009,
+      "ImpactDelayMS": 40,
+      "LearnMoney": 7500,
+      "Level": 2,
+      "LevelNeed": 16,
+      "MPCost": 15,
+      "Name": "破防之枪",
+      "Prerequisites": [
+        10002
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10009,
+          "Level": 2
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "造成100%伤害，15秒内降低敌人防御50%。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10009,
+      "Icon": 5009,
+      "ImpactDelayMS": 40,
+      "LearnMoney": 7500,
+      "Level": 3,
+      "LevelNeed": 17,
+      "MPCost": 18,
+      "Name": "破防之枪",
+      "Prerequisites": [
+        10002
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10009,
+          "Level": 3
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "造成100%伤害，15秒内降低敌人防御60%。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10009,
+      "Icon": 5009,
+      "ImpactDelayMS": 40,
+      "LearnMoney": 7500,
+      "Level": 4,
+      "LevelNeed": 18,
+      "MPCost": 21,
+      "Name": "破防之枪",
+      "Prerequisites": [
+        10002
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10009,
+          "Level": 4
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "造成100%伤害，15秒内降低敌人防御70%。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10009,
+      "Icon": 5009,
+      "ImpactDelayMS": 40,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 19,
+      "MPCost": 24,
+      "Name": "破防之枪",
+      "Prerequisites": [
+        10002
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10009,
+          "Level": 5
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 4000,
+      "Description": "造成145%伤害，15秒内使敌人命中下降30%。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "FormulaVersion": 5,
+      "HurtType": 1,
+      "ID": 10103,
+      "Icon": 5013,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "MPCost": 24,
+      "Name": "幻影剑",
+      "Prerequisites": [
+        10117
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 15,
+          "ID": 1008,
+          "Level": 11
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 4000,
+      "Description": "造成145%伤害，15秒内使敌人命中下降35%。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10103,
+      "Icon": 5013,
+      "LearnMoney": 10000,
+      "Level": 2,
+      "LevelNeed": 21,
+      "MPCost": 29,
+      "Name": "幻影剑",
+      "Prerequisites": [
+        10117
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 15,
+          "ID": 1008,
+          "Level": 12
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 4000,
+      "Description": "造成145%伤害，15秒内使敌人命中下降40%。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10103,
+      "Icon": 5013,
+      "LearnMoney": 10000,
+      "Level": 3,
+      "LevelNeed": 22,
+      "MPCost": 34,
+      "Name": "幻影剑",
+      "Prerequisites": [
+        10117
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 15,
+          "ID": 1008,
+          "Level": 13
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 4000,
+      "Description": "造成145%伤害，15秒内使敌人命中下降45%。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10103,
+      "Icon": 5013,
+      "LearnMoney": 10000,
+      "Level": 4,
+      "LevelNeed": 23,
+      "MPCost": 39,
+      "Name": "幻影剑",
+      "Prerequisites": [
+        10117
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 15,
+          "ID": 1008,
+          "Level": 14
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 4000,
+      "Description": "造成145%伤害，15秒内使敌人命中下降50%。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10103,
+      "Icon": 5013,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 24,
+      "MPCost": 44,
+      "Name": "幻影剑",
+      "Prerequisites": [
+        10117
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 15,
+          "ID": 1008,
+          "Level": 15
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "Book": 3819,
+      "CooldownMS": 300000,
+      "Description": "10秒内无法移动，防御力增加80%。",
+      "Dist": 1,
+      "Effect": {},
+      "FormulaVersion": 5,
+      "ID": 10109,
+      "Icon": 5019,
+      "LearnMoney": 40000,
+      "Level": 1,
+      "LevelNeed": 80,
+      "MPCost": 374,
+      "Name": "仙风云体",
+      "Prerequisites": [
+        10107
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 10,
+          "ID": 1019,
+          "Level": 16
+        }
+      ],
+      "TargetSelf": true
+    },
+    {
+      "Area": {},
+      "Book": 3819,
+      "CooldownMS": 300000,
+      "Description": "10秒内无法移动，防御力增加100%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10109,
+      "Icon": 5019,
+      "LearnMoney": 40000,
+      "Level": 2,
+      "LevelNeed": 82,
+      "MPCost": 419,
+      "Name": "仙风云体",
+      "Prerequisites": [
+        10107
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 10,
+          "ID": 1019,
+          "Level": 17
+        }
+      ],
+      "TargetSelf": true
+    },
+    {
+      "Area": {},
+      "Book": 3819,
+      "CooldownMS": 300000,
+      "Description": "10秒内无法移动，防御力增加120%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10109,
+      "Icon": 5019,
+      "LearnMoney": 40000,
+      "Level": 3,
+      "LevelNeed": 84,
+      "MPCost": 464,
+      "Name": "仙风云体",
+      "Prerequisites": [
+        10107
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 10,
+          "ID": 1019,
+          "Level": 18
+        }
+      ],
+      "TargetSelf": true
+    },
+    {
+      "Area": {},
+      "Book": 3819,
+      "CooldownMS": 300000,
+      "Description": "10秒内无法移动，防御力增加140%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10109,
+      "Icon": 5019,
+      "LearnMoney": 40000,
+      "Level": 4,
+      "LevelNeed": 86,
+      "MPCost": 509,
+      "Name": "仙风云体",
+      "Prerequisites": [
+        10107
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 10,
+          "ID": 1019,
+          "Level": 19
+        }
+      ],
+      "TargetSelf": true
+    },
+    {
+      "Area": {},
+      "Book": 3819,
+      "CooldownMS": 300000,
+      "Description": "10秒内无法移动，防御力增加160%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10109,
+      "Icon": 5019,
+      "LearnMoney": 40000,
+      "Level": 5,
+      "LevelNeed": 88,
+      "MPCost": 554,
+      "Name": "仙风云体",
+      "Prerequisites": [
+        10107
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 10,
+          "ID": 1019,
+          "Level": 20
+        }
+      ],
+      "TargetSelf": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成145%伤害，敌人无法移动6秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "FormulaVersion": 5,
+      "HurtType": 1,
+      "ID": 10111,
+      "Icon": 7029,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "MPCost": 24,
+      "Name": "金缚剑",
+      "Prerequisites": [
+        10102
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10111,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成145%伤害，敌人无法移动7秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10111,
+      "Icon": 7029,
+      "LearnMoney": 10000,
+      "Level": 2,
+      "LevelNeed": 21,
+      "MPCost": 29,
+      "Name": "金缚剑",
+      "Prerequisites": [
+        10102
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10111,
+          "Level": 2
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成145%伤害，敌人无法移动8秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10111,
+      "Icon": 7029,
+      "LearnMoney": 10000,
+      "Level": 3,
+      "LevelNeed": 22,
+      "MPCost": 34,
+      "Name": "金缚剑",
+      "Prerequisites": [
+        10102
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10111,
+          "Level": 3
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成145%伤害，敌人无法移动9秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10111,
+      "Icon": 7029,
+      "LearnMoney": 10000,
+      "Level": 4,
+      "LevelNeed": 23,
+      "MPCost": 39,
+      "Name": "金缚剑",
+      "Prerequisites": [
+        10102
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10111,
+          "Level": 4
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成145%伤害，敌人无法移动10秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10111,
+      "Icon": 7029,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 24,
+      "MPCost": 44,
+      "Name": "金缚剑",
+      "Prerequisites": [
+        10102
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10111,
+          "Level": 5
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成155%伤害，敌人无法使用技能6秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 155,
+        "Kind": 1
+      },
+      "FormulaVersion": 5,
+      "HurtType": 1,
+      "ID": 10113,
+      "Icon": 7031,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 53,
+      "Name": "封法剑",
+      "Prerequisites": [
+        10104
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 6,
+          "ID": 1003,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成155%伤害，敌人无法使用技能7秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 155,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10113,
+      "Icon": 7031,
+      "LearnMoney": 18000,
+      "Level": 2,
+      "LevelNeed": 38,
+      "MPCost": 62,
+      "Name": "封法剑",
+      "Prerequisites": [
+        10104
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 7,
+          "ID": 1003,
+          "Level": 2
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成155%伤害，敌人无法使用技能8秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 155,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10113,
+      "Icon": 7031,
+      "LearnMoney": 18000,
+      "Level": 3,
+      "LevelNeed": 40,
+      "MPCost": 71,
+      "Name": "封法剑",
+      "Prerequisites": [
+        10104
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 8,
+          "ID": 1003,
+          "Level": 3
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成155%伤害，敌人无法使用技能9秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 155,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10113,
+      "Icon": 7031,
+      "LearnMoney": 18000,
+      "Level": 4,
+      "LevelNeed": 42,
+      "MPCost": 80,
+      "Name": "封法剑",
+      "Prerequisites": [
+        10104
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 9,
+          "ID": 1003,
+          "Level": 4
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成155%伤害，敌人无法使用技能10秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 155,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10113,
+      "Icon": 7031,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 89,
+      "Name": "封法剑",
+      "Prerequisites": [
+        10104
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 10,
+          "ID": 1003,
+          "Level": 5
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "对敌人造成160%伤害，10秒内，敌人无法受到任何有益的状态的效果。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 160,
+        "Kind": 1
+      },
+      "FormulaVersion": 5,
+      "HurtType": 1,
+      "ID": 10122,
+      "Icon": 7040,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 69,
+      "Name": "混沌剑",
+      "Prerequisites": [
+        10121
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 10,
+          "ID": 1029,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "对敌人造成160%伤害，11秒内，敌人无法受到任何有益的状态的效果。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 160,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10122,
+      "Icon": 7040,
+      "LearnMoney": 21500,
+      "Level": 2,
+      "LevelNeed": 45,
+      "MPCost": 81,
+      "Name": "混沌剑",
+      "Prerequisites": [
+        10121
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 11,
+          "ID": 1029,
+          "Level": 2
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "对敌人造成160%伤害，12秒内，敌人无法受到任何有益的状态的效果。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 160,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10122,
+      "Icon": 7040,
+      "LearnMoney": 21500,
+      "Level": 3,
+      "LevelNeed": 47,
+      "MPCost": 93,
+      "Name": "混沌剑",
+      "Prerequisites": [
+        10121
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 12,
+          "ID": 1029,
+          "Level": 3
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "对敌人造成160%伤害，13秒内，敌人无法受到任何有益的状态的效果。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 160,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10122,
+      "Icon": 7040,
+      "LearnMoney": 21500,
+      "Level": 4,
+      "LevelNeed": 49,
+      "MPCost": 105,
+      "Name": "混沌剑",
+      "Prerequisites": [
+        10121
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 13,
+          "ID": 1029,
+          "Level": 4
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "对敌人造成160%伤害，14秒内，敌人无法受到任何有益的状态的效果。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 160,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10122,
+      "Icon": 7040,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 117,
+      "Name": "混沌剑",
+      "Prerequisites": [
+        10121
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 14,
+          "ID": 1029,
+          "Level": 5
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "Book": 3915,
+      "Description": "30秒内，攻击力下降10%，防御力上升10%。",
+      "Dist": 100,
+      "Effect": {},
+      "FormulaVersion": 5,
+      "ID": 10124,
+      "Icon": 7042,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "MPCost": 170,
+      "Name": "山字诀",
+      "PrepareMS": 3000,
+      "Prerequisites": [
+        10122
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1019,
+          "Level": 11
+        }
+      ],
+      "TargetSelf": true
+    },
+    {
+      "Area": {},
+      "Book": 3915,
+      "Description": "30秒内，攻击力下降13%，防御力上升13%。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10124,
+      "Icon": 7042,
+      "LearnMoney": 30000,
+      "Level": 2,
+      "LevelNeed": 62,
+      "MPCost": 197,
+      "Name": "山字诀",
+      "PrepareMS": 3000,
+      "Prerequisites": [
+        10122
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1019,
+          "Level": 12
+        }
+      ],
+      "TargetSelf": true
+    },
+    {
+      "Area": {},
+      "Book": 3915,
+      "Description": "30秒内，攻击力下降16%，防御力上升16%。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10124,
+      "Icon": 7042,
+      "LearnMoney": 30000,
+      "Level": 3,
+      "LevelNeed": 64,
+      "MPCost": 224,
+      "Name": "山字诀",
+      "PrepareMS": 3000,
+      "Prerequisites": [
+        10122
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1019,
+          "Level": 13
+        }
+      ],
+      "TargetSelf": true
+    },
+    {
+      "Area": {},
+      "Book": 3915,
+      "Description": "30秒内，攻击力下降19%，防御力上升19%。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10124,
+      "Icon": 7042,
+      "LearnMoney": 30000,
+      "Level": 4,
+      "LevelNeed": 66,
+      "MPCost": 251,
+      "Name": "山字诀",
+      "PrepareMS": 3000,
+      "Prerequisites": [
+        10122
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1019,
+          "Level": 14
+        }
+      ],
+      "TargetSelf": true
+    },
+    {
+      "Area": {},
+      "Book": 3915,
+      "Description": "30秒内，攻击力下降22%，防御力上升22%。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10124,
+      "Icon": 7042,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "MPCost": 278,
+      "Name": "山字诀",
+      "PrepareMS": 3000,
+      "Prerequisites": [
+        10122
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1019,
+          "Level": 15
+        }
+      ],
+      "TargetSelf": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成130%伤害，击晕对手5秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 130,
+        "Kind": 1
+      },
+      "FormulaVersion": 5,
+      "HurtType": 1,
+      "ID": 10219,
+      "Icon": 7055,
+      "LearnMoney": 5000,
+      "Level": 1,
+      "LevelNeed": 10,
+      "MPCost": 8,
+      "Name": "击晕",
+      "Prof": 3,
+      "RequiredWeaponType": 8,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1002,
+          "Level": 16
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成130%伤害，击晕对手6秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 130,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10219,
+      "Icon": 7055,
+      "LearnMoney": 5000,
+      "Level": 2,
+      "LevelNeed": 11,
+      "MPCost": 11,
+      "Name": "击晕",
+      "Prof": 3,
+      "RequiredWeaponType": 8,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1002,
+          "Level": 11
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成130%伤害，击晕对手7秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 130,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10219,
+      "Icon": 7055,
+      "LearnMoney": 5000,
+      "Level": 3,
+      "LevelNeed": 12,
+      "MPCost": 14,
+      "Name": "击晕",
+      "Prof": 3,
+      "RequiredWeaponType": 8,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1002,
+          "Level": 12
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成130%伤害，击晕对手8秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 130,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10219,
+      "Icon": 7055,
+      "LearnMoney": 5000,
+      "Level": 4,
+      "LevelNeed": 13,
+      "MPCost": 17,
+      "Name": "击晕",
+      "Prof": 3,
+      "RequiredWeaponType": 8,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1002,
+          "Level": 13
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成130%伤害，击晕对手9秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 130,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10219,
+      "Icon": 7055,
+      "LearnMoney": 5000,
+      "Level": 5,
+      "LevelNeed": 14,
+      "MPCost": 20,
+      "Name": "击晕",
+      "Prof": 3,
+      "RequiredWeaponType": 8,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1002,
+          "Level": 14
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成135%伤害，使敌人无法移动5秒。",
+      "Dist": 350,
+      "Effect": {
+        "DamagePct": 135,
+        "Kind": 1
+      },
+      "FormulaVersion": 5,
+      "HurtType": 1,
+      "ID": 10221,
+      "Icon": 7057,
+      "LearnMoney": 5000,
+      "Level": 1,
+      "LevelNeed": 10,
+      "MPCost": 8,
+      "Name": "狙击",
+      "Prof": 3,
+      "RequiredWeaponType": 32,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 5,
+          "ID": 10111,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成140%伤害，使敌人无法移动5秒。",
+      "Dist": 350,
+      "Effect": {
+        "DamagePct": 140,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10221,
+      "Icon": 7057,
+      "LearnMoney": 5000,
+      "Level": 2,
+      "LevelNeed": 11,
+      "MPCost": 11,
+      "Name": "狙击",
+      "Prof": 3,
+      "RequiredWeaponType": 32,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 5,
+          "ID": 10111,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成145%伤害，使敌人无法移动5秒。",
+      "Dist": 350,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10221,
+      "Icon": 7057,
+      "LearnMoney": 5000,
+      "Level": 3,
+      "LevelNeed": 12,
+      "MPCost": 14,
+      "Name": "狙击",
+      "Prof": 3,
+      "RequiredWeaponType": 32,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 5,
+          "ID": 10111,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成150%伤害，使敌人无法移动5秒。",
+      "Dist": 350,
+      "Effect": {
+        "DamagePct": 150,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10221,
+      "Icon": 7057,
+      "LearnMoney": 5000,
+      "Level": 4,
+      "LevelNeed": 13,
+      "MPCost": 17,
+      "Name": "狙击",
+      "Prof": 3,
+      "RequiredWeaponType": 32,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 5,
+          "ID": 10111,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成160%伤害，使敌人无法移动5秒。",
+      "Dist": 350,
+      "Effect": {
+        "DamagePct": 160,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10221,
+      "Icon": 7057,
+      "LearnMoney": 5000,
+      "Level": 5,
+      "LevelNeed": 14,
+      "MPCost": 20,
+      "Name": "狙击",
+      "Prof": 3,
+      "RequiredWeaponType": 32,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 5,
+          "ID": 10111,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 10000,
+      "Description": "降低敌人的命中，魔法攻击力30%。",
+      "Dist": 350,
+      "Effect": {},
+      "FormulaVersion": 5,
+      "HurtType": 1,
+      "ID": 10224,
+      "Icon": 7060,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 46,
+      "Name": "烟雾弹",
+      "Prerequisites": [
+        10206
+      ],
+      "Prof": 3,
+      "ProjectileSpeedPXPerSec": 636,
+      "RequiredWeaponType": 32,
+      "Statuses": [
+        {
+          "ID": 1008,
+          "Level": 11
+        },
+        {
+          "ID": 1007,
+          "Level": 11
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 10000,
+      "Description": "降低敌人的命中，魔法攻击力35%。",
+      "Dist": 350,
+      "Effect": {},
+      "HurtType": 1,
+      "ID": 10224,
+      "Icon": 7060,
+      "LearnMoney": 21500,
+      "Level": 2,
+      "LevelNeed": 45,
+      "MPCost": 54,
+      "Name": "烟雾弹",
+      "Prerequisites": [
+        10206
+      ],
+      "Prof": 3,
+      "ProjectileSpeedPXPerSec": 636,
+      "RequiredWeaponType": 32,
+      "Statuses": [
+        {
+          "ID": 1008,
+          "Level": 12
+        },
+        {
+          "ID": 1007,
+          "Level": 12
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 10000,
+      "Description": "降低敌人的命中，魔法攻击力40%。",
+      "Dist": 350,
+      "Effect": {},
+      "HurtType": 1,
+      "ID": 10224,
+      "Icon": 7060,
+      "LearnMoney": 21500,
+      "Level": 3,
+      "LevelNeed": 47,
+      "MPCost": 62,
+      "Name": "烟雾弹",
+      "Prerequisites": [
+        10206
+      ],
+      "Prof": 3,
+      "ProjectileSpeedPXPerSec": 636,
+      "RequiredWeaponType": 32,
+      "Statuses": [
+        {
+          "ID": 1008,
+          "Level": 13
+        },
+        {
+          "ID": 1007,
+          "Level": 13
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 10000,
+      "Description": "降低敌人的命中，魔法攻击力45%。",
+      "Dist": 350,
+      "Effect": {},
+      "HurtType": 1,
+      "ID": 10224,
+      "Icon": 7060,
+      "LearnMoney": 21500,
+      "Level": 4,
+      "LevelNeed": 49,
+      "MPCost": 70,
+      "Name": "烟雾弹",
+      "Prerequisites": [
+        10206
+      ],
+      "Prof": 3,
+      "ProjectileSpeedPXPerSec": 636,
+      "RequiredWeaponType": 32,
+      "Statuses": [
+        {
+          "ID": 1008,
+          "Level": 14
+        },
+        {
+          "ID": 1007,
+          "Level": 14
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "CooldownMS": 10000,
+      "Description": "降低敌人的命中，魔法攻击力50%。",
+      "Dist": 350,
+      "Effect": {},
+      "HurtType": 1,
+      "ID": 10224,
+      "Icon": 7060,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 78,
+      "Name": "烟雾弹",
+      "Prerequisites": [
+        10206
+      ],
+      "Prof": 3,
+      "ProjectileSpeedPXPerSec": 636,
+      "RequiredWeaponType": 32,
+      "Statuses": [
+        {
+          "ID": 1008,
+          "Level": 15
+        },
+        {
+          "ID": 1007,
+          "Level": 15
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "Book": 3943,
+      "CooldownMS": 5000,
+      "Description": "使敌人30秒内攻击速度降低30%。",
+      "Dist": 450,
+      "Effect": {},
+      "FormulaVersion": 5,
+      "ID": 10325,
+      "Icon": 7070,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "MPCost": 340,
+      "Name": "枷锁术",
+      "Prerequisites": [
+        10310
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1009,
+          "Level": 11
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "Book": 3943,
+      "CooldownMS": 5000,
+      "Description": "使敌人30秒内攻击速度降低35%。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10325,
+      "Icon": 7070,
+      "LearnMoney": 30000,
+      "Level": 2,
+      "LevelNeed": 62,
+      "MPCost": 351,
+      "Name": "枷锁术",
+      "Prerequisites": [
+        10310
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1009,
+          "Level": 12
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "Book": 3943,
+      "CooldownMS": 5000,
+      "Description": "使敌人30秒内攻击速度降低40%。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10325,
+      "Icon": 7070,
+      "LearnMoney": 30000,
+      "Level": 3,
+      "LevelNeed": 64,
+      "MPCost": 362,
+      "Name": "枷锁术",
+      "Prerequisites": [
+        10310
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1009,
+          "Level": 13
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "Book": 3943,
+      "CooldownMS": 5000,
+      "Description": "使敌人30秒内攻击速度降低45%。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10325,
+      "Icon": 7070,
+      "LearnMoney": 30000,
+      "Level": 4,
+      "LevelNeed": 66,
+      "MPCost": 373,
+      "Name": "枷锁术",
+      "Prerequisites": [
+        10310
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1009,
+          "Level": 14
+        }
+      ],
+      "TargetEnemy": true
+    },
+    {
+      "Area": {},
+      "Book": 3943,
+      "CooldownMS": 5000,
+      "Description": "使敌人30秒内攻击速度降低50%。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10325,
+      "Icon": 7070,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "MPCost": 384,
+      "Name": "枷锁术",
+      "Prerequisites": [
+        10310
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1009,
+          "Level": 15
+        }
+      ],
+      "TargetEnemy": true
+    }
+  ],
+  "source": "Immutable original LoadSkills/LoadStatuses snapshots plus native_skill_restoration.go; not a new original-source export",
+  "statuses": [
+    {
+      "Control": 1,
+      "Desc": "昏迷中；",
+      "DurationSec": 6,
+      "ID": 1002,
+      "Immobile": 1,
+      "Level": 11,
+      "Name": "昏迷",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Control": 1,
+      "Desc": "昏迷中；",
+      "DurationSec": 7,
+      "ID": 1002,
+      "Immobile": 1,
+      "Level": 12,
+      "Name": "昏迷",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Control": 1,
+      "Desc": "昏迷中；",
+      "DurationSec": 8,
+      "ID": 1002,
+      "Immobile": 1,
+      "Level": 13,
+      "Name": "昏迷",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Control": 1,
+      "Desc": "昏迷中；",
+      "DurationSec": 9,
+      "ID": 1002,
+      "Immobile": 1,
+      "Level": 14,
+      "Name": "昏迷",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Control": 1,
+      "Desc": "昏迷中；",
+      "DurationSec": 5,
+      "ID": 1002,
+      "Immobile": 1,
+      "Level": 16,
+      "Name": "昏迷",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Control": 2,
+      "Desc": "无法使用技能；",
+      "DurationSec": 22,
+      "ID": 1003,
+      "Level": 1,
+      "Name": "封印",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Control": 2,
+      "Desc": "无法使用技能；",
+      "DurationSec": 24,
+      "ID": 1003,
+      "Level": 2,
+      "Name": "封印",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Control": 2,
+      "Desc": "无法使用技能；",
+      "DurationSec": 26,
+      "ID": 1003,
+      "Level": 3,
+      "Name": "封印",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Control": 2,
+      "Desc": "无法使用技能；",
+      "DurationSec": 28,
+      "ID": 1003,
+      "Level": 4,
+      "Name": "封印",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Control": 2,
+      "Desc": "无法使用技能；",
+      "DurationSec": 30,
+      "ID": 1003,
+      "Level": 5,
+      "Name": "封印",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": -30
+        }
+      ],
+      "Desc": "魔法攻击力下降30%；",
+      "DurationSec": 60,
+      "ID": 1007,
+      "Level": 11,
+      "Name": "降幅",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": -35
+        }
+      ],
+      "Desc": "魔法攻击力下降35%；",
+      "DurationSec": 60,
+      "ID": 1007,
+      "Level": 12,
+      "Name": "降幅",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": -40
+        }
+      ],
+      "Desc": "魔法攻击力下降40%；",
+      "DurationSec": 60,
+      "ID": 1007,
+      "Level": 13,
+      "Name": "降幅",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": -45
+        }
+      ],
+      "Desc": "魔法攻击力下降45%；",
+      "DurationSec": 60,
+      "ID": 1007,
+      "Level": 14,
+      "Name": "降幅",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": -50
+        }
+      ],
+      "Desc": "魔法攻击力下降50%；",
+      "DurationSec": 60,
+      "ID": 1007,
+      "Level": 15,
+      "Name": "降幅",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": -30
+        }
+      ],
+      "Desc": "命中下降30%；",
+      "DurationSec": 60,
+      "ID": 1008,
+      "Level": 11,
+      "Name": "致盲",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": -35
+        }
+      ],
+      "Desc": "命中下降35%；",
+      "DurationSec": 60,
+      "ID": 1008,
+      "Level": 12,
+      "Name": "致盲",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": -40
+        }
+      ],
+      "Desc": "命中下降40%；",
+      "DurationSec": 60,
+      "ID": 1008,
+      "Level": 13,
+      "Name": "致盲",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": -45
+        }
+      ],
+      "Desc": "命中下降45%；",
+      "DurationSec": 60,
+      "ID": 1008,
+      "Level": 14,
+      "Name": "致盲",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": -50
+        }
+      ],
+      "Desc": "命中下降50%；",
+      "DurationSec": 60,
+      "ID": 1008,
+      "Level": 15,
+      "Name": "致盲",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 25,
+          "Mode": 1,
+          "Value": 30
+        }
+      ],
+      "AttackSpeedIsFrequency": true,
+      "Desc": "攻击速度降低30%；",
+      "DurationSec": 60,
+      "ID": 1009,
+      "Level": 11,
+      "Name": "减速",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 25,
+          "Mode": 1,
+          "Value": 35
+        }
+      ],
+      "AttackSpeedIsFrequency": true,
+      "Desc": "攻击速度降低35%；",
+      "DurationSec": 60,
+      "ID": 1009,
+      "Level": 12,
+      "Name": "减速",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 25,
+          "Mode": 1,
+          "Value": 40
+        }
+      ],
+      "AttackSpeedIsFrequency": true,
+      "Desc": "攻击速度降低40%；",
+      "DurationSec": 60,
+      "ID": 1009,
+      "Level": 13,
+      "Name": "减速",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 25,
+          "Mode": 1,
+          "Value": 45
+        }
+      ],
+      "AttackSpeedIsFrequency": true,
+      "Desc": "攻击速度降低45%；",
+      "DurationSec": 60,
+      "ID": 1009,
+      "Level": 14,
+      "Name": "减速",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 25,
+          "Mode": 1,
+          "Value": 50
+        }
+      ],
+      "AttackSpeedIsFrequency": true,
+      "Desc": "攻击速度降低50%；",
+      "DurationSec": 60,
+      "ID": 1009,
+      "Level": 15,
+      "Name": "减速",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": 10
+        },
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": -10
+        }
+      ],
+      "Desc": "防御力上升10%，攻击力下降10%；",
+      "DurationSec": 60,
+      "ID": 1019,
+      "Level": 11,
+      "Name": "防御增加",
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": 13
+        },
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": -13
+        }
+      ],
+      "Desc": "防御力上升13%，攻击力下降13%；",
+      "DurationSec": 60,
+      "ID": 1019,
+      "Level": 12,
+      "Name": "防御增加",
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": 16
+        },
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": -16
+        }
+      ],
+      "Desc": "防御力上升16%，攻击力下降16%；",
+      "DurationSec": 60,
+      "ID": 1019,
+      "Level": 13,
+      "Name": "防御增加",
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": 19
+        },
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": -19
+        }
+      ],
+      "Desc": "防御力上升19%，攻击力下降19%；",
+      "DurationSec": 60,
+      "ID": 1019,
+      "Level": 14,
+      "Name": "防御增加",
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": 22
+        },
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": -22
+        }
+      ],
+      "Desc": "防御力上升22%，攻击力下降22%；",
+      "DurationSec": 60,
+      "ID": 1019,
+      "Level": 15,
+      "Name": "防御增加",
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": 80
+        }
+      ],
+      "BlockMove": true,
+      "Desc": "防御力上升80%，移动速度下降100%；",
+      "DurationSec": 60,
+      "ID": 1019,
+      "Immobile": 1,
+      "Level": 16,
+      "Name": "防御增加",
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": 100
+        }
+      ],
+      "BlockMove": true,
+      "Desc": "防御力上升100%，移动速度下降100%；",
+      "DurationSec": 60,
+      "ID": 1019,
+      "Immobile": 1,
+      "Level": 17,
+      "Name": "防御增加",
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": 120
+        }
+      ],
+      "BlockMove": true,
+      "Desc": "防御力上升120%，移动速度下降100%；",
+      "DurationSec": 60,
+      "ID": 1019,
+      "Immobile": 1,
+      "Level": 18,
+      "Name": "防御增加",
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": 140
+        }
+      ],
+      "BlockMove": true,
+      "Desc": "防御力上升140%，移动速度下降100%；",
+      "DurationSec": 60,
+      "ID": 1019,
+      "Immobile": 1,
+      "Level": 19,
+      "Name": "防御增加",
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": 160
+        }
+      ],
+      "BlockMove": true,
+      "Desc": "防御力上升160%，移动速度下降100%；",
+      "DurationSec": 60,
+      "ID": 1019,
+      "Immobile": 1,
+      "Level": 20,
+      "Name": "防御增加",
+      "TypeKnown": true
+    },
+    {
+      "BlockBeneficial": true,
+      "Desc": "增益状态无法作用；",
+      "DurationSec": 10,
+      "ID": 1029,
+      "Level": 1,
+      "Name": "混沌",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "BlockBeneficial": true,
+      "Desc": "增益状态无法作用；",
+      "DurationSec": 10,
+      "ID": 1029,
+      "Level": 2,
+      "Name": "混沌",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "BlockBeneficial": true,
+      "Desc": "增益状态无法作用；",
+      "DurationSec": 10,
+      "ID": 1029,
+      "Level": 3,
+      "Name": "混沌",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "BlockBeneficial": true,
+      "Desc": "增益状态无法作用；",
+      "DurationSec": 10,
+      "ID": 1029,
+      "Level": 4,
+      "Name": "混沌",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "BlockBeneficial": true,
+      "Desc": "增益状态无法作用；",
+      "DurationSec": 10,
+      "ID": 1029,
+      "Level": 5,
+      "Name": "混沌",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": -30
+        }
+      ],
+      "Desc": "防御力下降30%；",
+      "DurationSec": 15,
+      "ID": 10009,
+      "Level": 1,
+      "Name": "破防之枪",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": -40
+        }
+      ],
+      "Desc": "防御力下降40%；",
+      "DurationSec": 15,
+      "ID": 10009,
+      "Level": 2,
+      "Name": "破防之枪",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": -50
+        }
+      ],
+      "Desc": "防御力下降50%；",
+      "DurationSec": 15,
+      "ID": 10009,
+      "Level": 3,
+      "Name": "破防之枪",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": -60
+        }
+      ],
+      "Desc": "防御力下降60%；",
+      "DurationSec": 15,
+      "ID": 10009,
+      "Level": 4,
+      "Name": "破防之枪",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "Affixes": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "Value": -70
+        }
+      ],
+      "Desc": "防御力下降70%；",
+      "DurationSec": 15,
+      "ID": 10009,
+      "Level": 5,
+      "Name": "破防之枪",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "BlockMove": true,
+      "Desc": "无法移动；",
+      "DurationSec": 6,
+      "ID": 10111,
+      "Immobile": 1,
+      "Level": 1,
+      "Name": "移动受限",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "BlockMove": true,
+      "Desc": "无法移动；",
+      "DurationSec": 7,
+      "ID": 10111,
+      "Immobile": 1,
+      "Level": 2,
+      "Name": "移动受限",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "BlockMove": true,
+      "Desc": "无法移动；",
+      "DurationSec": 8,
+      "ID": 10111,
+      "Immobile": 1,
+      "Level": 3,
+      "Name": "移动受限",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "BlockMove": true,
+      "Desc": "无法移动；",
+      "DurationSec": 9,
+      "ID": 10111,
+      "Immobile": 1,
+      "Level": 4,
+      "Name": "移动受限",
+      "Type": 1,
+      "TypeKnown": true
+    },
+    {
+      "BlockMove": true,
+      "Desc": "无法移动；",
+      "DurationSec": 10,
+      "ID": 10111,
+      "Immobile": 1,
+      "Level": 5,
+      "Name": "移动受限",
+      "Type": 1,
+      "TypeKnown": true
+    }
+  ]
+}

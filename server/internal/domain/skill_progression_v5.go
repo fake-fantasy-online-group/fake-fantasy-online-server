@@ -66,6 +66,8 @@ type SkillTrainingSynergyView struct {
 }
 
 type SkillRankView struct {
+	ContractUnavailable bool                       `json:"-"`
+	Contract            *SkillBehaviorContract     `json:"contract,omitempty"`
 	NextChangeLines     []string                   `json:"nextChangeLines,omitempty"`
 	NextRequiredLevel   int32                      `json:"nextRequiredLevel,omitempty"`
 	NextEffectiveRank   string                     `json:"nextEffectiveRank,omitempty"`

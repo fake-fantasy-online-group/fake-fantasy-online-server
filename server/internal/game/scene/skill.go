@@ -76,10 +76,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		reject(event.RejectWrongProf)
 		return
 	}
-	s.applyTrainingSynergies(caster, &def)
-	s.applyPassiveSkillModifiers(caster, &def)
-	def.UniqueInvisibleStart = entityInvisible(caster)
-	s.applyUniqueSkillModifiers(caster, &def)
+	s.applyResolvedSkillModifiers(caster, &def, ch.Skills, s.rawSkillLevels(caster))
 	if def.FormulaVersion == domain.SkillFormulaVersion {
 		def.SnapshotRawRanks = s.rawSkillLevels(caster)
 		def.SnapshotHardRanks = ch.Skills.Clone()
@@ -704,7 +701,9 @@ func (s *Scene) resolveTargets(caster *entity.Entity, def domain.SkillDef, targe
 			return nil // 够不着
 		}
 		center = t.Pos
-		if def.Kind == domain.SkillSingle {
+		// Original type17 (Dragonkill) is active single-target special damage,
+		// not an area skill. It shares the same entity validation as type1.
+		if def.Kind == domain.SkillSingle || def.Kind == domain.SkillSpecial {
 			if !s.validTarget(caster, t, def) {
 				return nil
 			}
