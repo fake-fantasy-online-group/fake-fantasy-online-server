@@ -459,6 +459,20 @@
           "min": 50,
           "max": 55
         }
+      ],
+      "typedEffects": [
+        {
+          "kind": "magic_find_pct",
+          "value": 12
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 70,
+          "minPercent": 70,
+          "maxPercent": 90
+        }
       ]
     },
     {
@@ -524,6 +538,13 @@
           "attr": 36,
           "min": 160,
           "max": 176
+        }
+      ],
+      "typedEffects": [
+        {
+          "kind": "enemy_element_pierce_bp",
+          "value": 1200,
+          "element": "holy"
         }
       ]
     },
@@ -734,6 +755,14 @@
           "min": 100,
           "max": 110
         }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 110,
+          "minPercent": 110,
+          "maxPercent": 140
+        }
       ]
     },
     {
@@ -799,6 +828,14 @@
           "attr": 1,
           "min": 14,
           "max": 15
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 80,
+          "minPercent": 80,
+          "maxPercent": 100
         }
       ]
     },
@@ -933,6 +970,11 @@
           "kind": "element_damage_bp",
           "element": "fire",
           "value": 1200
+        },
+        {
+          "kind": "element_damage_bp",
+          "value": 3000,
+          "element": "fire"
         }
       ],
       "skillBonuses": [],
@@ -1154,9 +1196,9 @@
       "localEnhancements": [
         {
           "attr": 47,
-          "percent": 100,
-          "minPercent": 90,
-          "maxPercent": 110
+          "percent": 130,
+          "minPercent": 130,
+          "maxPercent": 160
         }
       ],
       "typedEffects": [],
@@ -1164,7 +1206,7 @@
         {
           "scope": "single",
           "skillId": 10002,
-          "levels": 1
+          "levels": 2
         }
       ],
       "v5BudgetExchange": {
@@ -1258,9 +1300,16 @@
       "localEnhancements": [
         {
           "attr": 47,
-          "percent": 90,
-          "minPercent": 80,
-          "maxPercent": 100
+          "percent": 110,
+          "minPercent": 110,
+          "maxPercent": 140
+        }
+      ],
+      "skillBonuses": [
+        {
+          "scope": "single",
+          "skillId": 10104,
+          "levels": 2
         }
       ]
     },
@@ -1337,6 +1386,13 @@
           "min": 800,
           "max": 880
         }
+      ],
+      "skillBonuses": [
+        {
+          "scope": "single",
+          "skillId": 10221,
+          "levels": 2
+        }
       ]
     },
     {
@@ -1393,8 +1449,8 @@
       ],
       "lore": "纸驴逆着火光走，背上的术者也倒坐着。他只看身后哪一盏灯熄了，便知道下一张符该落在何处。",
       "identity": "火法输出的逆行星图",
-      "benefit": "法术输出为主；法攻、智慧、法术会心、法力、精神、魔防提供独立于星篆的完整词条；另有本件白字法攻强化100–120%，收益随所选武器固有白字而变",
-      "tradeoff": "火伤10%替换旧火系掌握15%，不双加；占用同类宿阵名额",
+      "benefit": "法术输出为主；法攻、智慧、法术会心、法力、精神、魔防提供独立于星篆的完整词条；另有本件白字法攻强化100–120%，收益随所选武器固有白字而变；组队常驻火伤光环 +10%，与其它同元素增伤同桶，不单独乘算",
+      "tradeoff": "火伤10%替换旧火系掌握15%，不双加；占用同类宿阵名额；同类宿阵只生效一件；组队240像素内生效，同类光环取最高",
       "powerTier": "transition",
       "traits": [],
       "reservedSkills": [],
@@ -1418,6 +1474,29 @@
           "kind": "element_damage_bp",
           "element": "fire",
           "value": 1000
+        },
+        {
+          "kind": "enemy_element_pierce_bp",
+          "value": 1500,
+          "element": "fire"
+        },
+        {
+          "kind": "aura",
+          "aura": {
+            "id": "backward_flame",
+            "fixedRank": 1,
+            "family": "aura_fire_damage",
+            "modifier": "element_damage_bp",
+            "element": "fire",
+            "value": 1000,
+            "radiusPx": 240,
+            "refreshMs": 500,
+            "leaseMs": 1000,
+            "maxPlayers": 6,
+            "includeActivePet": true,
+            "visualKey": "倒骑观火",
+            "pvpScaleBP": 5000
+          }
         }
       ],
       "skillBonuses": [],
@@ -1564,8 +1643,8 @@
       ],
       "lore": "泥匠烧成的砖没有字，垒入城墙后却排出了整部戒律。监造官拆掉其中一条，墙外便空出了一座他从未去过的村庄。",
       "identity": "小额频繁伤害的双抗城墙",
-      "benefit": "物理承伤为主；物理平减、法术平减、生命、体质、防御、魔防提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
+      "benefit": "物理承伤为主；物理平减、法术平减、生命、体质、防御、魔防提供独立于星篆的完整词条；组队常驻物理减伤光环 +10%，240像素，至多六人及出战宠物，同防护类别取最高",
+      "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性；队友须在240像素内，离队、离范围或脱装失去光环",
       "powerTier": "transition",
       "traits": [],
       "reservedSkills": [],
@@ -1574,6 +1653,26 @@
           "attr": 69,
           "min": 24,
           "max": 26
+        }
+      ],
+      "typedEffects": [
+        {
+          "kind": "aura",
+          "aura": {
+            "id": "white_tiger_guard",
+            "fixedRank": 1,
+            "family": "aura_physical_mitigation",
+            "modifier": "physical_mitigation_bp",
+            "element": "",
+            "value": 1000,
+            "radiusPx": 240,
+            "refreshMs": 500,
+            "leaseMs": 1000,
+            "maxPlayers": 6,
+            "includeActivePet": true,
+            "visualKey": "白虎守城",
+            "pvpScaleBP": 5000
+          }
         }
       ]
     },
@@ -1700,8 +1799,8 @@
       ],
       "lore": "写坏的符纸挂在雨中三日，墨迹尽褪，纸里却显出另一个人的掌纹。术者将纸贴在掌心，两只手都同时冷了下去。",
       "identity": "抗咒的无字符阵",
-      "benefit": "法术承伤为主；魔防、异常抵抗、法术平减、生命、精神、法力提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
+      "benefit": "法术承伤为主；魔防、异常抵抗、法术平减、生命、精神、法力提供独立于星篆的完整词条；组队常驻暗抗光环 +14%，240像素，至多六人及出战宠物，同防护类别取最高",
+      "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性；队友须在240像素内，离队、离范围或脱装失去光环",
       "powerTier": "transition",
       "traits": [],
       "reservedSkills": [],
@@ -1710,6 +1809,31 @@
           "attr": 17,
           "min": 48,
           "max": 52
+        }
+      ],
+      "typedEffects": [
+        {
+          "kind": "aura",
+          "aura": {
+            "id": "empty_talisman_ward",
+            "fixedRank": 1,
+            "family": "aura_dark_resist",
+            "modifier": "element_resist_bp",
+            "element": "dark",
+            "value": 1400,
+            "radiusPx": 240,
+            "refreshMs": 500,
+            "leaseMs": 1000,
+            "maxPlayers": 6,
+            "includeActivePet": true,
+            "visualKey": "雨洗空符",
+            "pvpScaleBP": 5000
+          }
+        },
+        {
+          "kind": "element_resist_bp",
+          "value": 2200,
+          "element": "dark"
         }
       ]
     },
@@ -1857,6 +1981,12 @@
           "min": 18,
           "max": 19
         }
+      ],
+      "typedEffects": [
+        {
+          "kind": "magic_find_pct",
+          "value": 28
+        }
       ]
     },
     {
@@ -1926,7 +2056,7 @@
       "traits": [
         {
           "kind": "elite_hunter",
-          "powerBP": 1800,
+          "powerBP": 4500,
           "thresholdPct": 0
         },
         {
@@ -1948,9 +2078,9 @@
       "localEnhancements": [
         {
           "attr": 47,
-          "percent": 155,
-          "minPercent": 140,
-          "maxPercent": 170
+          "percent": 210,
+          "minPercent": 210,
+          "maxPercent": 250
         }
       ]
     },
@@ -2092,7 +2222,7 @@
       "traits": [
         {
           "kind": "execution",
-          "powerBP": 2400,
+          "powerBP": 5000,
           "thresholdPct": 30
         }
       ],
@@ -2107,9 +2237,9 @@
       "localEnhancements": [
         {
           "attr": 47,
-          "percent": 115,
-          "minPercent": 100,
-          "maxPercent": 130
+          "percent": 170,
+          "minPercent": 170,
+          "maxPercent": 200
         }
       ]
     },
@@ -2169,8 +2299,8 @@
       ],
       "lore": "火烧过的阵图缺了一角，术者便让纸鸟叼着余烬悬在那里。风越急，它越不肯合拢那半边翅膀。",
       "identity": "火系范围清怪的偏门阵",
-      "benefit": "法术输出为主；法攻、法术会心、法力、智慧、精神、生命提供独立于星篆的完整词条；另有本件白字法攻强化140–170%，收益随所选武器固有白字而变",
-      "tradeoff": "火伤8%替换旧火系掌握12%，保留火球术范围特性且占同一预算；占用同类宿阵名额",
+      "benefit": "法术输出为主；法攻、法术会心、法力、智慧、精神、生命提供独立于星篆的完整词条；另有本件白字法攻强化140–170%，收益随所选武器固有白字而变；组队常驻火抗光环 +16%，240像素，至多六人及出战宠物，同防护类别取最高",
+      "tradeoff": "火伤8%替换旧火系掌握12%，保留火球术范围特性且占同一预算；占用同类宿阵名额；队友须在240像素内，离队、离范围或脱装失去光环",
       "powerTier": "highvalue",
       "traits": [
         {
@@ -2179,6 +2309,11 @@
           "thresholdPct": 0,
           "skillID": 10402,
           "skillName": "火球术"
+        },
+        {
+          "kind": "fire_mastery",
+          "powerBP": 4000,
+          "thresholdPct": 0
         }
       ],
       "reservedSkills": [],
@@ -2192,9 +2327,9 @@
       "localEnhancements": [
         {
           "attr": 15,
-          "percent": 155,
-          "minPercent": 140,
-          "maxPercent": 170
+          "percent": 190,
+          "minPercent": 190,
+          "maxPercent": 230
         }
       ],
       "typedEffects": [
@@ -2202,6 +2337,29 @@
           "kind": "element_damage_bp",
           "element": "fire",
           "value": 800
+        },
+        {
+          "kind": "aura",
+          "aura": {
+            "id": "ember_shelter",
+            "fixedRank": 1,
+            "family": "aura_fire_resist",
+            "modifier": "element_resist_bp",
+            "element": "fire",
+            "value": 1600,
+            "radiusPx": 240,
+            "refreshMs": 500,
+            "leaseMs": 1000,
+            "maxPlayers": 6,
+            "includeActivePet": true,
+            "visualKey": "朱鸟衔烬",
+            "pvpScaleBP": 5000
+          }
+        },
+        {
+          "kind": "enemy_element_pierce_bp",
+          "value": 2200,
+          "element": "fire"
         }
       ],
       "skillBonuses": [],
@@ -2299,6 +2457,13 @@
           "attr": 61,
           "min": 30,
           "max": 33
+        }
+      ],
+      "skillBonuses": [
+        {
+          "scope": "single",
+          "skillId": 10301,
+          "levels": 2
         }
       ]
     },
@@ -2435,8 +2600,8 @@
       ],
       "lore": "北门外的呼唤一夜没停，声音与守门人的一模一样。他让龟甲向外、蛇纹向内，从此不再回答自己的名字。",
       "identity": "抗法与异常的北门阵",
-      "benefit": "法术承伤为主；魔防、法术平减、异常抵抗、生命、精神、法力提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "benefit": "法术承伤为主；魔防、法术平减、异常抵抗、生命、精神、法力提供独立于星篆的完整词条；组队常驻冰抗光环 +18%，240像素，至多六人及出战宠物，同防护类别取最高",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；队友须在240像素内，离队、离范围或脱装失去光环",
       "powerTier": "highvalue",
       "traits": [
         {
@@ -2451,6 +2616,31 @@
           "attr": 70,
           "min": 28,
           "max": 30
+        }
+      ],
+      "typedEffects": [
+        {
+          "kind": "aura",
+          "aura": {
+            "id": "north_gate_ice",
+            "fixedRank": 1,
+            "family": "aura_ice_resist",
+            "modifier": "element_resist_bp",
+            "element": "ice",
+            "value": 1800,
+            "radiusPx": 240,
+            "refreshMs": 500,
+            "leaseMs": 1000,
+            "maxPlayers": 6,
+            "includeActivePet": true,
+            "visualKey": "玄武镇门",
+            "pvpScaleBP": 5000
+          }
+        },
+        {
+          "kind": "element_absorb_bp",
+          "value": 1000,
+          "element": "ice"
         }
       ]
     },
@@ -2765,7 +2955,7 @@
       "traits": [
         {
           "kind": "basic_focus",
-          "powerBP": 1400,
+          "powerBP": 5000,
           "thresholdPct": 0
         }
       ],
@@ -2780,9 +2970,9 @@
       "localEnhancements": [
         {
           "attr": 47,
-          "percent": 200,
-          "minPercent": 180,
-          "maxPercent": 220
+          "percent": 280,
+          "minPercent": 280,
+          "maxPercent": 330
         }
       ]
     },
@@ -2857,6 +3047,11 @@
           "kind": "elite_hunter",
           "powerBP": 1200,
           "thresholdPct": 0
+        },
+        {
+          "kind": "single_focus",
+          "powerBP": 5500,
+          "thresholdPct": 0
         }
       ],
       "reservedSkills": [],
@@ -2870,17 +3065,17 @@
       "localEnhancements": [
         {
           "attr": 47,
-          "percent": 180,
-          "minPercent": 160,
-          "maxPercent": 200
+          "percent": 220,
+          "minPercent": 220,
+          "maxPercent": 260
         }
       ],
       "typedEffects": [],
       "skillBonuses": [
         {
           "scope": "single",
-          "skillId": 10104,
-          "levels": 2
+          "skillId": 10102,
+          "levels": 3
         }
       ],
       "v5BudgetExchange": {
@@ -2973,6 +3168,11 @@
           "kind": "ambush",
           "powerBP": 2600,
           "thresholdPct": 85
+        },
+        {
+          "kind": "invisible_focus",
+          "powerBP": 6500,
+          "thresholdPct": 0
         }
       ],
       "reservedSkills": [],
@@ -2986,9 +3186,9 @@
       "localEnhancements": [
         {
           "attr": 47,
-          "percent": 160,
-          "minPercent": 140,
-          "maxPercent": 180
+          "percent": 230,
+          "minPercent": 230,
+          "maxPercent": 270
         }
       ]
     },
@@ -3060,8 +3260,8 @@
       ],
       "lore": "纸驴驮着五盏熄灯走过五更，经过的村镇便各少一刻。术者追到阵眼，才发现自己已比昨夜苍老五年。",
       "identity": "高消耗大范围施法阵",
-      "benefit": "法术输出为主；法攻、智慧、法术会心、法力、精神、魔防、异常抵抗提供独立于星篆的完整词条；另有本件白字法攻强化180–220%，收益随所选武器固有白字而变",
-      "tradeoff": "仍降低生命；占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "benefit": "法术输出为主；法攻、智慧、法术会心、法力、精神、魔防、异常抵抗提供独立于星篆的完整词条；另有本件白字法攻强化180–220%，收益随所选武器固有白字而变；组队常驻冰伤光环 +15%，与其它同元素增伤同桶，不单独乘算",
+      "tradeoff": "仍降低生命；占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效；同类宿阵只生效一件；组队240像素内生效，同类光环取最高",
       "powerTier": "builddefining",
       "traits": [
         {
@@ -3073,7 +3273,7 @@
         },
         {
           "kind": "area_focus",
-          "powerBP": 1200,
+          "powerBP": 5000,
           "thresholdPct": 0
         }
       ],
@@ -3088,9 +3288,39 @@
       "localEnhancements": [
         {
           "attr": 15,
-          "percent": 200,
-          "minPercent": 180,
-          "maxPercent": 220
+          "percent": 270,
+          "minPercent": 270,
+          "maxPercent": 320
+        }
+      ],
+      "typedEffects": [
+        {
+          "kind": "element_damage_bp",
+          "value": 4000,
+          "element": "ice"
+        },
+        {
+          "kind": "enemy_element_pierce_bp",
+          "value": 2500,
+          "element": "ice"
+        },
+        {
+          "kind": "aura",
+          "aura": {
+            "id": "paper_donkey_frost",
+            "fixedRank": 1,
+            "family": "aura_ice_damage",
+            "modifier": "element_damage_bp",
+            "element": "ice",
+            "value": 1500,
+            "radiusPx": 240,
+            "refreshMs": 500,
+            "leaseMs": 1000,
+            "maxPlayers": 6,
+            "includeActivePet": true,
+            "visualKey": "纸驴驮霜",
+            "pvpScaleBP": 5000
+          }
         }
       ]
     },
@@ -3160,14 +3390,19 @@
       ],
       "lore": "药瓢已经空了，药师仍背它进入劫阵。同行人伤重时，瓢底忽然响了一声，像有人在很远的地方敲开一扇门。",
       "identity": "危急救援与长战治疗阵",
-      "benefit": "治疗续航为主；精神、法力、魔防、法术平减、生命、异常抵抗、体质提供独立于星篆的完整词条",
-      "tradeoff": "治疗系+1替换旧低血35%救护增幅；保留原治疗节蓝；占用同类宿阵名额",
+      "benefit": "治疗续航为主；精神、法力、魔防、法术平减、生命、异常抵抗、体质提供独立于星篆的完整词条；组队常驻圣抗光环 +20%，240像素，至多六人及出战宠物，同防护类别取最高",
+      "tradeoff": "治疗系+1替换旧低血35%救护增幅；保留原治疗节蓝；占用同类宿阵名额；队友须在240像素内，离队、离范围或脱装失去光环",
       "powerTier": "builddefining",
       "traits": [
         {
           "kind": "healing_cost",
           "powerBP": 2200,
           "thresholdPct": 0
+        },
+        {
+          "kind": "rescue_heal",
+          "powerBP": 6500,
+          "thresholdPct": 30
         }
       ],
       "reservedSkills": [],
@@ -3178,7 +3413,26 @@
           "max": 55
         }
       ],
-      "typedEffects": [],
+      "typedEffects": [
+        {
+          "kind": "aura",
+          "aura": {
+            "id": "holy_feather",
+            "fixedRank": 1,
+            "family": "aura_holy_resist",
+            "modifier": "element_resist_bp",
+            "element": "holy",
+            "value": 2000,
+            "radiusPx": 240,
+            "refreshMs": 500,
+            "leaseMs": 1000,
+            "maxPlayers": 6,
+            "includeActivePet": true,
+            "visualKey": "空瓢济厄",
+            "pvpScaleBP": 5000
+          }
+        }
+      ],
       "skillBonuses": [
         {
           "scope": "school",
@@ -3275,7 +3529,7 @@
       "traits": [
         {
           "kind": "desperate_guard",
-          "powerBP": 2400,
+          "powerBP": 3500,
           "thresholdPct": 35
         }
       ],
@@ -3369,6 +3623,11 @@
           "kind": "element_resist_bp",
           "element": "dark",
           "value": 600
+        },
+        {
+          "kind": "element_mitigation_bp",
+          "value": 1800,
+          "element": "dark"
         }
       ],
       "skillBonuses": [],
@@ -3461,6 +3720,10 @@
         {
           "kind": "magic_find_pct",
           "value": 15
+        },
+        {
+          "kind": "magic_find_pct",
+          "value": 55
         }
       ],
       "skillBonuses": [],
@@ -3641,7 +3904,13 @@
           "max": 239
         }
       ],
-      "typedEffects": [],
+      "typedEffects": [
+        {
+          "kind": "element_damage_bp",
+          "value": 2000,
+          "element": "holy"
+        }
+      ],
       "skillBonuses": [
         {
           "scope": "all",

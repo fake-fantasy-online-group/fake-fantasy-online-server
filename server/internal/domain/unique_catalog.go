@@ -7,8 +7,8 @@ import (
 	"sort"
 )
 
-const UniqueCatalogVersion = "endgame-v5-scope259"
-const UniqueContentVersion int32 = 5
+const UniqueCatalogVersion = "endgame-v6-scope259"
+const UniqueContentVersion int32 = 6
 const UniqueCatalogCount = 259
 const UniqueRollMinBP int32 = 8000
 const UniqueRollMaxBP int32 = 12000
@@ -50,6 +50,11 @@ var uniqueCatalogFiles embed.FS
 //
 //go:embed legacy_unique_v4/*.json
 var legacyUniqueCatalogFiles embed.FS
+
+//go:embed legacy_unique_v5/*.json
+var legacyV5UniqueCatalogFiles embed.FS
+
+var legacyV5UniqueDefinitions, legacyV5UniqueByBase = loadUniqueCatalogFS(legacyV5UniqueCatalogFiles, "legacy_unique_v5", 259, true)
 
 var legacyUniqueDefinitions, legacyUniqueByBase = loadUniqueCatalogFS(legacyUniqueCatalogFiles, "legacy_unique_v4", 1619, false)
 var uniqueDefinitions, uniqueByBase = loadUniqueCatalogFS(uniqueCatalogFiles, ".", UniqueCatalogCount, true)
@@ -165,6 +170,9 @@ func UniqueOf(st Stack) (UniqueDefinition, bool) {
 	case 0:
 		d, ok := legacyUniqueByBase[st.Item]
 		return cloneUnique(d), ok
+	case 5:
+		d, ok := legacyV5UniqueByBase[st.Item]
+		return uniqueV5PersonalDefense(cloneUnique(d)), ok
 	case UniqueContentVersion:
 		return UniqueForBase(st.Item)
 	default:
@@ -246,4 +254,29 @@ func scaleUniqueAffix(a Affix, roll int32) int32 {
 		roll = 20000 - roll
 	}
 	return scaledUniquePower(a.Value, roll)
+}
+
+// V5 retired its three team auras. Preserve every stored instance and all other
+// derived properties, converting only those effects into equal personal defense.
+func uniqueV5PersonalDefense(d UniqueDefinition) UniqueDefinition {
+	out := d.TypedEffects[:0]
+	for _, e := range d.TypedEffects {
+		if e.Kind != "aura" || e.Aura == nil {
+			out = append(out, e)
+			continue
+		}
+		a := e.Aura
+		if a.Modifier == "physical_mitigation_bp" {
+			d.Traits = append(d.Traits, UniqueTrait{Kind: "physical_guard", PowerBP: a.Value})
+		} else {
+			out = append(out, EquipmentEffect{Kind: "element_resist_bp", Element: a.Element, Value: a.Value})
+		}
+	}
+	d.TypedEffects = out
+	if d.BaseID == 1107 || d.BaseID == 1111 || d.BaseID == 2603 {
+		d.Benefit = "旧版团队光环已等值转换为个人防护；其余固定属性与随机值保持原版。"
+		d.Identity = "旧版护持之力内敛于自身，仅为佩戴者提供对应防护。"
+		d.Tradeoff = "不再向队友或宠物提供团队光环；旧版其它属性、代价及本件白字范围保持原样。"
+	}
+	return d
 }

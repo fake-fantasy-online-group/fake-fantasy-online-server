@@ -5,11 +5,12 @@ import "fmt"
 // EquipmentEffect is a versioned, typed channel. Values are basis points except
 // magic_find_pct (percentage points). It never reinterprets legacy numeric attrs.
 type EquipmentEffect struct {
-	Kind    string         `json:"kind"`
-	Element string         `json:"element,omitempty"`
-	Value   int32          `json:"value,omitempty"`
-	Proc    *EquipmentProc `json:"proc,omitempty"`
-	Aura    *EquipmentAura `json:"aura,omitempty"`
+	VariantID string         `json:"variantId,omitempty"`
+	Kind      string         `json:"kind"`
+	Element   string         `json:"element,omitempty"`
+	Value     int32          `json:"value,omitempty"`
+	Proc      *EquipmentProc `json:"proc,omitempty"`
+	Aura      *EquipmentAura `json:"aura,omitempty"`
 }
 type EquipmentProc struct {
 	ID           string  `json:"id"`
@@ -98,7 +99,13 @@ func ValidateEquipmentEffects(effects []EquipmentEffect) error {
 	}
 	for _, e := range effects {
 		valid := false
+		if e.Kind != "skill_variant" && e.VariantID != "" {
+			return fmt.Errorf("variant ID on non-variant effect")
+		}
 		switch e.Kind {
+		case "skill_variant":
+			_, known := EquipmentSkillVariantByID(e.VariantID)
+			valid = known && e.Value == 0 && e.Element == "" && e.Proc == nil && e.Aura == nil
 		case "magic_find_pct":
 			valid = e.Value >= 0 && e.Value <= 1000000 && e.Element == "" && e.Proc == nil && e.Aura == nil
 		case "element_damage_bp", "element_resist_bp", "enemy_element_pierce_bp", "element_mitigation_bp", "element_absorb_bp":
@@ -117,7 +124,7 @@ func ValidateEquipmentEffects(effects []EquipmentEffect) error {
 		case "aura":
 			a := e.Aura
 			if a != nil && e.Proc == nil && e.Value == 0 && e.Element == "" {
-				valid = a.ID != "" && a.Family != "" && a.FixedRank > 0 && a.Value > 0 && a.Value <= 4500 && a.RadiusPX == 240 && a.RefreshMS == 500 && a.LeaseMS == 1000 && a.MaxPlayers >= 1 && a.MaxPlayers <= 6 && a.VisualKey != "" && a.PVPScaleBP == 5000 && ((a.Modifier == "physical_mitigation_bp" && a.Element == "") || (a.Modifier == "element_resist_bp" && ElementIndex(a.Element) >= 0))
+				valid = a.ID != "" && a.Family != "" && a.FixedRank > 0 && a.Value > 0 && a.Value <= 4500 && a.RadiusPX == 240 && a.RefreshMS == 500 && a.LeaseMS == 1000 && a.MaxPlayers >= 1 && a.MaxPlayers <= 6 && a.VisualKey != "" && a.PVPScaleBP == 5000 && ((a.Modifier == "physical_mitigation_bp" && a.Element == "") || ((a.Modifier == "element_resist_bp" || a.Modifier == "element_damage_bp") && ElementIndex(a.Element) >= 0))
 			}
 		}
 		if !valid {
@@ -161,7 +168,38 @@ func ValidateEquipmentRuntimeV5(skills SkillTable) error {
 			return err
 		}
 		procs, auras := 0, 0
+		variantSkills := map[SkillID]bool{}
 		for _, e := range effects {
+			if e.Kind == "skill_variant" {
+				v, _ := EquipmentSkillVariantByID(e.VariantID)
+				def, ok := skills.Get(v.SkillID, 1)
+				if !ok || !def.Usable() || def.Prof != v.Profession || variantSkills[v.SkillID] {
+					return fmt.Errorf("invalid or duplicate skill variant %s", v.ID)
+				}
+				expected := EffectDamage
+				if v.SkillID == 10301 {
+					expected = EffectHeal
+				}
+				executable := false
+				for _, effect := range def.DirectEffects() {
+					executable = executable || effect.Kind == expected
+				}
+				if !executable {
+					return fmt.Errorf("skill variant %s has no required payload", v.ID)
+				}
+				if v.ID == "assassin_bomb_fuse" {
+					trap, exists := skills.Get(10213, 1)
+					placed, damage := false, false
+					for _, effect := range trap.DirectEffects() {
+						placed = placed || effect.Kind == EffectPlaceTrap
+						damage = damage || effect.Kind == EffectDamage
+					}
+					if !exists || trap.Prof != v.Profession || !placed || !damage {
+						return fmt.Errorf("skill variant %s has no executable bomb", v.ID)
+					}
+				}
+				variantSkills[v.SkillID] = true
+			}
 			if e.Aura != nil {
 				auras++
 			}

@@ -11,7 +11,9 @@ func (s *Scene) applyResolvedSkillModifiers(p *entity.Entity, def *domain.SkillD
 	s.applyTrainingSynergiesWithHard(p, def, hard)
 	s.applyPassiveSkillModifiersWithLevels(p, def, raw)
 	def.UniqueInvisibleStart = entityInvisible(p)
+	s.applyEquipmentSkillVariant(p, def, hard)
 	s.applyUniqueSkillModifiers(p, def)
+	finalizeEquipmentSkillVariant(def)
 }
 
 func (s *Scene) skillBehaviorIdentity(id domain.SkillID) *domain.SkillBehaviorContract {
@@ -35,7 +37,7 @@ func (s *Scene) skillBehaviorIdentity(id domain.SkillID) *domain.SkillBehaviorCo
 }
 
 func (s *Scene) skillBehaviorPayload(p *entity.Entity, def domain.SkillDef) *domain.SkillBehaviorPayload {
-	out := &domain.SkillBehaviorPayload{MPCost: def.MPCost, PrepareMS: def.PrepareMS, CooldownMS: def.CooldownMS, CastDistance: def.Dist, Usable: def.Usable(), RequiresInvisible: def.RequiresInvisible, RequiredWeaponType: def.RequiredWeaponType,
+	out := &domain.SkillBehaviorPayload{Variant: def.EquipmentVariant, MPCost: def.MPCost, PrepareMS: def.PrepareMS, CooldownMS: def.CooldownMS, CastDistance: def.Dist, Usable: def.Usable(), RequiresInvisible: def.RequiresInvisible, RequiredWeaponType: def.RequiredWeaponType,
 		InputMode: "none", TargetSelf: def.TargetSelf, TargetEnemy: def.TargetEnemy, TargetTeam: def.TargetTeam && !def.HasDamageEffect(), AllowsDeadTarget: def.HasResurrectEffect(), DeadTargetOnly: def.ResurrectOnly(), GroundEffect: def.GroundEffect,
 		Area: domain.SkillBehaviorArea{Shape: "none", Center: "none"}}
 	// Preview only. Actual acceptance consumes the original status exactly once.

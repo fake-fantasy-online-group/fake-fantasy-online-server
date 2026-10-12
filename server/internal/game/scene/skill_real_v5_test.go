@@ -399,42 +399,68 @@ func TestV5DetachedBuffRevokedAcrossTransferAndLogout(t *testing.T) {
 }
 
 func TestV5StatusRequirementExpiryInvalidatesSkillCache(t *testing.T) {
-	skills, statuses := realV5SkillFixtures(t)
-	s := newTestScene(t, nil)
-	join(t, s, 1, 100, "药师", 100, 100)
-	p := s.players[1]
-	p.Player.Char.Level = 100
-	p.Player.Char.Race = domain.Healer
-	p.Player.Char.Base = domain.Base{STR: 10, VIT: 10, INT: 10, SPI: 10, AGI: 10, DEX: 10}
-	p.Player.Char.Skills = domain.Learned{10301: 20}
-	s.skills = skills
-	s.statuses = statuses
-	item := domain.ItemDef{ID: 2032, Equip: &domain.EquipDef{Slot: 2, Durable: 100, Need: domain.Requirement{Base: domain.Base{STR: 100}}}}
-	s.items = map[domain.ItemID]domain.ItemDef{2032: item}
-	st := domain.NewStack(item, 1)
-	st.UID = 2032001
-	st.MaxDurability = 100
-	st.Durability = 100
-	st.Endgame = domain.EndgameItemState{UniqueID: 2032, UniqueRollBP: 10000, UniqueContentVersion: domain.UniqueContentVersion}
-	p.Player.Worn.Set(domain.SlotHead, st)
-	buff := domain.StatusDef{ID: 95111, Level: 1, DurationSec: 1, Type: domain.StatusGood, TypeKnown: true, Affixes: []domain.Affix{{Attr: domain.AttrSTR, Value: 100, Mode: domain.ModeAbsolute}}}
-	if !s.applyStatusDef(p, buff, p.ID) {
-		t.Fatal("strength buff failed")
-	}
-	if rank, _ := s.skillLevelForUse(p, 10301); rank != 21 {
-		t.Fatal("eligible gear rank", rank)
-	}
-	// Confirm cached raw21 is present before the actual status-removal refresh.
-	if rank, _ := s.skillLevelForUse(p, 10301); rank != 21 {
-		t.Fatal(rank)
-	}
-	removed := p.Status.RemoveWhere(func(d domain.StatusDef) bool { return d.ID == buff.ID })
-	s.statusesRemoved(p, removed)
-	if !s.functionalWorn(p).At(domain.SlotHead).Empty() {
-		t.Fatal("fixture gear still usable")
-	}
-	if rank, _ := s.skillLevelForUse(p, 10301); rank != 20 {
-		t.Fatal("expired strength retained cached soft rank", rank)
+	for _, version := range []int32{5, domain.UniqueContentVersion} {
+		t.Run(fmt.Sprintf("content%d", version), func(t *testing.T) {
+			skills, statuses := realV5SkillFixtures(t)
+			s := newTestScene(t, nil)
+			join(t, s, 1, 100, "药师", 100, 100)
+			p := s.players[1]
+			p.Player.Char.Level = 100
+			p.Player.Char.Race = domain.Healer
+			p.Player.Char.Base = domain.Base{STR: 10, VIT: 10, INT: 10, SPI: 10, AGI: 10, DEX: 10}
+			p.Player.Char.Skills = domain.Learned{10301: 20}
+			s.skills = skills
+			s.statuses = statuses
+			item := domain.ItemDef{ID: 2032, Equip: &domain.EquipDef{Slot: 2, Durable: 100, Need: domain.Requirement{Base: domain.Base{STR: 100}}}}
+			s.items = map[domain.ItemID]domain.ItemDef{2032: item}
+			st := domain.NewStack(item, 1)
+			st.UID = 2032001
+			st.MaxDurability = 100
+			st.Durability = 100
+			st.Endgame = domain.EndgameItemState{UniqueID: 2032, UniqueRollBP: 10000, UniqueContentVersion: version}
+			p.Player.Worn.Set(domain.SlotHead, st)
+			unique, ok := domain.UniqueOf(st)
+			if !ok {
+				t.Fatal("missing versioned unique fixture", version)
+			}
+			bonuses := append([]domain.SkillRankBonus(nil), unique.SkillBonuses...)
+			for i := range bonuses {
+				bonuses[i].SourceID = fmt.Sprintf("fixture:%d", i)
+			}
+			ranks, err := domain.ResolveSkillLoadout(int32(p.Player.Char.Race)+1, p.Player.Char.Skills, bonuses, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			wantRank, err := ranks[10301].EngineRank()
+			if err != nil {
+				t.Fatal(err)
+			}
+			if wantRank <= 20 || version == 5 && wantRank != 21 {
+				t.Fatal("fixture must retain versioned soft bonus", version, wantRank)
+			}
+			buff := domain.StatusDef{ID: 95111, Level: 1, DurationSec: 1, Type: domain.StatusGood, TypeKnown: true, Affixes: []domain.Affix{{Attr: domain.AttrSTR, Value: 100, Mode: domain.ModeAbsolute}}}
+			if !s.applyStatusDef(p, buff, p.ID) {
+				t.Fatal("strength buff failed")
+			}
+			if rank, _ := s.skillLevelForUse(p, 10301); rank != wantRank {
+				t.Fatal("eligible gear rank", rank)
+			}
+			// Confirm the versioned soft rank is cached before real status removal.
+			if rank, _ := s.skillLevelForUse(p, 10301); rank != wantRank {
+				t.Fatal(rank)
+			}
+			removed := p.Status.RemoveWhere(func(d domain.StatusDef) bool { return d.ID == buff.ID })
+			s.statusesRemoved(p, removed)
+			if !s.functionalWorn(p).At(domain.SlotHead).Empty() {
+				t.Fatal("fixture gear still usable")
+			}
+			if rank, _ := s.skillLevelForUse(p, 10301); rank != 20 {
+				t.Fatal("expired strength retained cached soft rank", rank)
+			}
+			if p.Player.Char.Skills[10301] != 20 {
+				t.Fatal("hard rank mutated")
+			}
+		})
 	}
 }
 

@@ -1,0 +1,276 @@
+package showcase
+
+import (
+	"encoding/json"
+	"os"
+	"reflect"
+	"testing"
+
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+)
+
+type cardBudgetSource struct {
+	BaseID       domain.ItemID    `json:"base_id"`
+	Name         string           `json:"base_name"`
+	Level        int32            `json:"wearer_level"`
+	Tier         int32            `json:"resource_tier"`
+	Type         int32            `json:"type"`
+	Slot         int32            `json:"slot"`
+	Professions  []domain.Race    `json:"professions"`
+	Sex          uint8            `json:"sex"`
+	Native       bool             `json:"native_yellow_pool"`
+	Beginner     bool             `json:"beginner_allowed"`
+	Restricted   bool             `json:"profession_restricted"`
+	Unknown      bool             `json:"unknown_innate_properties"`
+	SuitID       int32            `json:"suit_id"`
+	Fixed        []domain.Affix   `json:"fixed_affixes"`
+	MaxRandom    int              `json:"max_random_lines"`
+	Intrinsic    map[string]int32 `json:"intrinsic"`
+	Requirements map[string]int32 `json:"requirements"`
+}
+
+func cardBudgetDefinition(r cardBudgetSource) domain.ItemDef {
+	i, req := r.Intrinsic, r.Requirements
+	var mask uint8
+	for _, class := range r.Professions {
+		mask |= 1 << class
+	}
+	def := domain.ItemDef{ID: r.BaseID, Name: r.Name, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{
+		Slot: r.Slot, LevelReq: r.Level, ResourceLevel: r.Tier, Type: r.Type,
+		Durable: 100, Affixes: append([]domain.Affix(nil), r.Fixed...), UnknownInnateProperties: r.Unknown,
+		Base:  domain.Base{STR: i["str"], VIT: i["vit"], INT: i["int_"], SPI: i["spi"], AGI: i["agi"], DEX: i["dex"]},
+		Bonus: domain.Stats{MinAtk: i["min_atk"], MaxAtk: i["max_atk"], MAtk: i["matk"], Def: i["def"], MDef: i["mdef"], Hit: i["hit_rate"]},
+		Need: domain.Requirement{Level: r.Level, Sex: r.Sex, Professions: mask, BeginnerAllowed: r.Beginner, ProfessionRestricted: r.Restricted,
+			Base: domain.Base{STR: req["str_need"], VIT: req["vit_need"], INT: req["int_need"], SPI: req["spi_need"], AGI: req["agi_need"], DEX: req["dex_need"]}},
+	}}
+	if r.SuitID != 0 {
+		// Membership alone excludes an equipment base from formation recipes.
+		def.Equip.Suit = &domain.EquipmentSuit{ID: r.SuitID}
+	}
+	return def
+}
+
+// fixtureDefs uses the same original-source catalog fixture and conversion as
+// domain/cardBudgetLoad, including actual requirements and innate properties.
+func fixtureDefs(t *testing.T) map[domain.ItemID]domain.ItemDef {
+	t.Helper()
+	raw, err := os.ReadFile("../../../docs/daoist-endgame/balance/native_equipment_budget_references.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var source struct{ Bases []cardBudgetSource }
+	if err := json.Unmarshal(raw, &source); err != nil {
+		t.Fatal(err)
+	}
+	defs := map[domain.ItemID]domain.ItemDef{}
+	for _, row := range source.Bases {
+		defs[row.BaseID] = cardBudgetDefinition(row)
+	}
+	for _, d := range domain.AstralRuneItems(0) {
+		defs[d.ID] = d
+	}
+	return defs
+}
+
+func fixtureCharacter(id int64, gender uint8) *domain.Character {
+	for _, t := range targets {
+		if t.ID == id {
+			return &domain.Character{ID: id, Name: t.Name, Race: t.Race, Level: 60, EmploymentKnown: true, Employed: true, Appear: domain.Appearance{Gender: gender}}
+		}
+	}
+	panic("unknown test target")
+}
+
+func TestBuildRealCatalogBothGenders(t *testing.T) {
+	defs := fixtureDefs(t)
+	seen := map[int64]bool{}
+	for gender := uint8(0); gender < 2; gender++ {
+		count, runeCount := 0, 0
+		for _, target := range targets {
+			ch := fixtureCharacter(target.ID, gender)
+			before, _ := json.Marshal(ch)
+			stacks, err := Build(ch, defs)
+			if err != nil {
+				t.Fatalf("character %d gender %d: %v", ch.ID, gender, err)
+			}
+			after, _ := json.Marshal(ch)
+			if string(before) != string(after) {
+				t.Fatal("factory mutated character")
+			}
+			if len(stacks) != 9 {
+				t.Fatal("expected nine items")
+			}
+			for i, st := range stacks {
+				count++
+				if st.UID <= 0 || seen[st.UID] {
+					t.Fatal("duplicate equipment UID")
+				}
+				seen[st.UID] = true
+				expected := target.Items[i]
+				base := expected.Bases[0]
+				if len(expected.Bases) == 2 && gender == 0 {
+					base = expected.Bases[1]
+				}
+				if st.Item != base || st.Count != 1 || st.InstanceKind != domain.ItemInstanceEquipment || st.RolledAffixCount != 0 || st.Durability != st.MaxDurability {
+					t.Fatalf("bad stack %+v", st)
+				}
+				if expected.Recipe == 0 {
+					if st.Endgame.UniqueID != int32(base) || st.Endgame.UniqueRollBP != 12000 || st.Endgame.UniqueContentVersion != 5 || st.SocketCount != 0 {
+						t.Fatal("bad unique")
+					}
+				} else {
+					if st.Endgame.UniqueID != 0 || st.Endgame.FormationRollBP != 12000 || st.Endgame.FormationContentVersion != 5 || int(st.SocketCount) != len(expected.Runes) {
+						t.Fatal("bad formation")
+					}
+					for j, id := range expected.Runes {
+						runeCount++
+						if st.Sockets[j] != id || st.SocketUIDs[j] <= 0 || seen[st.SocketUIDs[j]] || st.SocketCards[j] != defs[id].CardDefaults {
+							t.Fatal("invalid rune instance")
+						}
+						seen[st.SocketUIDs[j]] = true
+					}
+				}
+			}
+		}
+		if count != 27 || runeCount != 44 {
+			t.Fatalf("counts %d/%d", count, runeCount)
+		}
+	}
+}
+
+func TestFixedSelectionMatchesReviewedPlan(t *testing.T) {
+	raw, err := os.ReadFile("../../../docs/daoist-endgame/showcase/grant-plan.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var plan struct {
+		Loadouts []struct {
+			ID    int64       `json:"character_id"`
+			Name  string      `json:"character_name"`
+			Race  domain.Race `json:"race_zero_based"`
+			Items []struct {
+				Slot       domain.EquipSlot `json:"slot"`
+				Recipe     int32            `json:"formation_id"`
+				Level      int32            `json:"required_level"`
+				Runes      []domain.ItemID  `json:"ordered_rune_ids"`
+				Candidates []struct {
+					ID domain.ItemID `json:"base_id"`
+				} `json:"candidates"`
+			} `json:"items"`
+		} `json:"loadouts"`
+	}
+	if err := json.Unmarshal(raw, &plan); err != nil {
+		t.Fatal(err)
+	}
+	if len(plan.Loadouts) != len(targets) {
+		t.Fatal("target count")
+	}
+	for i, got := range plan.Loadouts {
+		want := targets[i]
+		if got.ID != want.ID || got.Name != want.Name || got.Race != want.Race || len(got.Items) != len(want.Items) {
+			t.Fatal("target identity mismatch")
+		}
+		for j, item := range got.Items {
+			expected := want.Items[j]
+			if item.Slot != expected.Slot || item.Recipe != expected.Recipe || item.Level != expected.Level || !reflect.DeepEqual(item.Runes, expected.Runes) {
+				t.Fatal("selection differs", got.ID, j)
+			}
+			ids := []domain.ItemID{}
+			for _, c := range item.Candidates {
+				ids = append(ids, c.ID)
+			}
+			if !reflect.DeepEqual(ids, expected.Bases) {
+				t.Fatal("base candidates differ")
+			}
+		}
+	}
+}
+
+func TestRejectsChangedCharacter(t *testing.T) {
+	defs := fixtureDefs(t)
+	mutations := map[string]func(*domain.Character){
+		"id": func(c *domain.Character) { c.ID = 1 }, "name": func(c *domain.Character) { c.Name = "other" }, "class": func(c *domain.Character) { c.Race = domain.Warrior },
+		"low level": func(c *domain.Character) { c.Level = 59 }, "high level": func(c *domain.Character) { c.Level = 61 }, "gender": func(c *domain.Character) { c.Appear.Gender = 2 },
+		"employment unknown": func(c *domain.Character) { c.EmploymentKnown = false }, "unemployed": func(c *domain.Character) { c.Employed = false },
+	}
+	for name, change := range mutations {
+		t.Run(name, func(t *testing.T) {
+			c := fixtureCharacter(42, 0)
+			change(c)
+			if out, err := Build(c, defs); err == nil || out != nil {
+				t.Fatal("accepted changed target")
+			}
+		})
+	}
+	if _, err := Build(nil, defs); err == nil {
+		t.Fatal("accepted nil")
+	}
+}
+
+func TestRejectsInvalidDefinitions(t *testing.T) {
+	mutations := map[string]func(map[domain.ItemID]domain.ItemDef){
+		"missing base": func(d map[domain.ItemID]domain.ItemDef) { delete(d, 2707) },
+		"missing rune": func(d map[domain.ItemID]domain.ItemDef) { delete(d, 1900028028) },
+		"wrong ID":     func(d map[domain.ItemID]domain.ItemDef) { v := d[2707]; v.ID = 2708; d[2707] = v },
+		"wrong kind": func(d map[domain.ItemID]domain.ItemDef) {
+			v := d[2707]
+			v.InstanceKind = domain.ItemInstanceNone
+			d[2707] = v
+		},
+		"wrong slot":             func(d map[domain.ItemID]domain.ItemDef) { d[2707].Equip.Slot = 2 },
+		"wrong class":            func(d map[domain.ItemID]domain.ItemDef) { d[2707].Equip.Need.Professions = 1 << domain.Healer },
+		"wrong sex":              func(d map[domain.ItemID]domain.ItemDef) { d[2896].Equip.Need.Sex = 1 },
+		"over level":             func(d map[domain.ItemID]domain.ItemDef) { d[2707].Equip.Need.Level = 61 },
+		"changed required level": func(d map[domain.ItemID]domain.ItemDef) { d[2049].Equip.Need.Level = 51 },
+		"uncertain base":         func(d map[domain.ItemID]domain.ItemDef) { d[2707].Equip.UnknownInnateProperties = true },
+		"innate affix":           func(d map[domain.ItemID]domain.ItemDef) { d[2707].Equip.Affixes = []domain.Affix{{Attr: 1, Value: 1}} },
+		"set base":               func(d map[domain.ItemID]domain.ItemDef) { d[2707].Equip.Suit = &domain.EquipmentSuit{ID: 1} },
+		"corrupt rune snapshot": func(d map[domain.ItemID]domain.ItemDef) {
+			v := d[1900028028]
+			v.CardDefaults.Effects[0].Value++
+			d[v.ID] = v
+		},
+		"no rune snapshot": func(d map[domain.ItemID]domain.ItemDef) {
+			v := d[1900028028]
+			v.CardDefaults.Initialized = false
+			d[v.ID] = v
+		},
+	}
+	for name, change := range mutations {
+		t.Run(name, func(t *testing.T) {
+			defs := fixtureDefs(t)
+			change(defs)
+			if out, err := Build(fixtureCharacter(42, 0), defs); err == nil || out != nil {
+				t.Fatal("accepted invalid definition")
+			}
+		})
+	}
+}
+
+func TestDigestBindsCatalogNotDisplayIcon(t *testing.T) {
+	defs := fixtureDefs(t)
+	a, err := PlanDigest(defs)
+	if err != nil {
+		t.Fatal(err)
+	}
+	b, err := PlanDigest(defs)
+	if err != nil || a != b {
+		t.Fatal("unstable digest")
+	}
+	v := defs[2707]
+	v.Icon++
+	defs[v.ID] = v
+	b, err = PlanDigest(defs)
+	if err != nil || a != b {
+		t.Fatal("icon affected digest")
+	}
+	defs[2707].Equip.Need.Base.STR++
+	b, err = PlanDigest(defs)
+	if err != nil || a == b {
+		t.Fatal("requirement not bound")
+	}
+	delete(defs, 2895)
+	if _, err := PlanDigest(defs); err == nil {
+		t.Fatal("accepted missing male variant")
+	}
+}

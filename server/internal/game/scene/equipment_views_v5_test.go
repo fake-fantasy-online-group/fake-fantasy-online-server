@@ -13,11 +13,11 @@ func TestEquipmentV5StatusRequirementExpiryInvalidatesCache(t *testing.T) {
 	s := newCombatScene(t)
 	join(t, s, 1, 100, "临时门槛", 100, 100)
 	p := s.players[1]
-	st := wearEquipmentV5(t, s, p, 1111, 9001)
+	st := wearFormationAuraTest(t, s, p, 24, 9001)
 	p.Player.Char.Base.STR = 20
-	def := s.items[1111]
+	def := s.items[st.Item]
 	def.Equip.Need.Base.STR = 80
-	s.items[1111] = def
+	s.items[st.Item] = def
 	if len(s.equipmentEffects(p).effects) != 0 {
 		t.Fatal("gear active below requirement")
 	}
@@ -26,7 +26,7 @@ func TestEquipmentV5StatusRequirementExpiryInvalidatesCache(t *testing.T) {
 		t.Fatal("buff did not apply")
 	}
 	s.stepEquipmentAuras()
-	if len(s.equipmentEffects(p).effects) == 0 || s.equipmentDefense(p, false).Elements[0].ResistBP != 800 {
+	if len(s.equipmentEffects(p).effects) == 0 || s.equipmentDefense(p, false).Elements[0].ResistBP != s.equipmentEffects(p).stats.Elements[0].ResistBP+formationAuraTest(t, 24).Value {
 		t.Fatal("buff did not enable item/aura")
 	}
 	s.tick += domain.Ticks(1000)
@@ -35,8 +35,8 @@ func TestEquipmentV5StatusRequirementExpiryInvalidatesCache(t *testing.T) {
 	if len(s.equipmentEffects(p).effects) != 0 || s.equipmentDefense(p, false).Elements[0].ResistBP != 0 {
 		t.Fatal("expired requirement buff left cached aura active")
 	}
-	u, _ := domain.UniqueForBase(1111)
-	if p.Player.Worn.At(domain.EquipSlot(u.Slot)).UID != st.UID {
+	u := s.items[st.Item]
+	if p.Player.Worn.At(domain.EquipSlot(u.Equip.Slot)).UID != st.UID {
 		t.Fatal("test accidentally unequipped gear")
 	}
 }
@@ -45,7 +45,8 @@ func TestEquipmentV5ObservationSnapshotAndChangePush(t *testing.T) {
 	sink := join(t, s, 1, 100, "观察", 100, 100)
 	p := s.players[1]
 	p.Player.EndgameGrowthV5 = true
-	st := wearEquipmentV5(t, s, p, 1111, 9007199254740993)
+	st := wearFormationAuraTest(t, s, p, 24, 9007199254740993)
+	wantResist := s.equipmentEffects(p).stats.Elements[0].ResistBP + formationAuraTest(t, 24).Value
 	s.stepEquipmentAuras()
 	s.flush()
 	sink.take()
@@ -72,7 +73,7 @@ func TestEquipmentV5ObservationSnapshotAndChangePush(t *testing.T) {
 				t.Fatal("combatstats repeated afterchunk0")
 			}
 			v := ev.Message.CombatStats
-			if len(v.Elements) != 4 || v.Elements[0].ResistBP != 800 || len(v.EquipmentAuras) != 1 || v.EquipmentAuras[0].SourceUID != st.UID {
+			if len(v.Elements) != 4 || v.Elements[0].ResistBP != wantResist || len(v.EquipmentAuras) != 1 || v.EquipmentAuras[0].SourceUID != st.UID {
 				t.Fatalf("bad authoritative view %+v", v)
 			}
 			body, _ := json.Marshal(v)
@@ -95,8 +96,8 @@ func TestEquipmentV5ObservationSnapshotAndChangePush(t *testing.T) {
 	if len(sink.take()) != 0 {
 		t.Fatal("unchanged observation republished")
 	}
-	u, _ := domain.UniqueForBase(1111)
-	p.Player.Worn.Set(domain.EquipSlot(u.Slot), domain.Stack{})
+	u := s.items[st.Item]
+	p.Player.Worn.Set(domain.EquipSlot(u.Equip.Slot), domain.Stack{})
 	s.stepEquipmentAuras()
 	s.flush()
 	changed := false

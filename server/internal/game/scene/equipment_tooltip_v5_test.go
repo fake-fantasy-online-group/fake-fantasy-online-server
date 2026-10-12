@@ -15,10 +15,13 @@ func TestV5EquipmentTooltipUsesNativeNamesAndRuntimeConditions(t *testing.T) {
 		{Kind: "aura", Aura: &domain.EquipmentAura{FixedRank: 1, VisualKey: "白虎卫身", Modifier: "physical_mitigation_bp", Value: 400, RadiusPX: 240, MaxPlayers: 6, IncludeActivePet: true}},
 	}, []domain.SkillRankBonus{{Scope: "branch", Profession: 1, Branch: "left", Levels: 2}, {Scope: "school", School: "flame", Levels: 1}})
 	got := strings.Join(append(attributes, special...), "\n")
-	for _, want := range []string{"战士左系主修技能 +2级", "火系技能 +1级", "魔法装备获取几率提升 +35%", "火系伤害吸收 12.5%", "生命不高于30%", "受到伤害时有20%概率对自身释放5级", "冷却15秒", "白虎卫身", "物理伤害减免 4%", "范围240", "最多6人", "出战宠物"} {
+	for _, want := range []string{"战士左系主修技能 +2级", "火系技能 +1级", "魔法装备获取几率提升 +35%", "火系伤害吸收 12.5%", "生命不高于30%", "受到伤害时有20%概率对自身释放5级", "冷却15秒", "白虎卫身"} {
 		if !strings.Contains(got, want) {
 			t.Errorf("missing %q: %s", want, got)
 		}
+	}
+	if special[1] != "赋予1级白虎卫身光环" {
+		t.Fatalf("aura equipment line must stay concise: %q", special[1])
 	}
 	if len(attributes) != 4 || len(special) != 2 {
 		t.Fatalf("skill ranks, MF and absorb must be attributes; only proc/aura are special: %v / %v", attributes, special)

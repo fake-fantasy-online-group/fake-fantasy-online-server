@@ -168,6 +168,8 @@ func MatchAstralRecipe(def ItemDef, st Stack) (AstralRecipe, bool) {
 	catalog := legacyAstralRecipeCatalog
 	if st.Endgame.FormationContentVersion == UniqueContentVersion {
 		catalog = astralRecipeCatalog
+	} else if st.Endgame.FormationContentVersion == 5 {
+		catalog = legacyV5AstralRecipeCatalog
 	} else if st.Endgame.FormationContentVersion != 0 {
 		return AstralRecipe{}, false
 	}

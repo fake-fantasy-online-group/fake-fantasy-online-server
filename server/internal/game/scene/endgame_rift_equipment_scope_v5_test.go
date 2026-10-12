@@ -67,7 +67,7 @@ func TestV5RiftOrdinaryHighLevelPoolIsNotUniqueWhitelist(t *testing.T) {
 					}
 					count++
 					if hasUnique && count == 1 {
-						if item.Item != 1610 || item.Endgame.UniqueID != 1610 || item.Endgame.UniqueContentVersion != 5 {
+						if item.Item != 1610 || item.Endgame.UniqueID != 1610 || item.Endgame.UniqueContentVersion != domain.UniqueContentVersion {
 							t.Fatal("guaranteed slot failed legal259 highest-base selection", item)
 						}
 					} else if item.Item != id || item.Endgame.UniqueID != 0 || item.Endgame.UniqueContentVersion != 0 {

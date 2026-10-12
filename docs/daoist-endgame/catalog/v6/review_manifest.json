@@ -1,0 +1,2905 @@
+{
+  "total": 259,
+  "mechanicallyChanged": 147,
+  "items": [
+    {
+      "baseId": 1001,
+      "name": "借火",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1002,
+      "name": "柄中钱",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 1003,
+      "name": "红月不照井",
+      "tier": "transition",
+      "changedChannels": [
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1004,
+      "name": "银蚊",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1005,
+      "name": "赦锋",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1006,
+      "name": "哭声有姓",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct",
+        "proc"
+      ]
+    },
+    {
+      "baseId": 1007,
+      "name": "莲灰签",
+      "tier": "builddefining",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1008,
+      "name": "逆鳞背面",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "VariableAffixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1009,
+      "name": "撤回的判词",
+      "tier": "builddefining",
+      "changedChannels": [
+        "TypedEffects",
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "skill_variant"
+      ]
+    },
+    {
+      "baseId": 1010,
+      "name": "无口鞘",
+      "tier": "highvalue",
+      "changedChannels": [
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1102,
+      "name": "年轮桌",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1103,
+      "name": "锈龟背",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1104,
+      "name": "炕头红",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 1105,
+      "name": "月钱盾",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1106,
+      "name": "饥狼门",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1107,
+      "name": "伏虎磐",
+      "tier": "builddefining",
+      "changedChannels": [
+        "Traits",
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1108,
+      "name": "残龙眼窝",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp",
+        "element_mitigation_bp"
+      ]
+    },
+    {
+      "baseId": 1109,
+      "name": "西门骨",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1110,
+      "name": "斗柄偏",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "element_absorb_bp"
+      ]
+    },
+    {
+      "baseId": 1111,
+      "name": "炉门客卿",
+      "tier": "builddefining",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "element_resist_bp",
+        "element_absorb_bp"
+      ]
+    },
+    {
+      "baseId": 1301,
+      "name": "待援木",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1302,
+      "name": "不醒香",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1303,
+      "name": "朱签点谁名",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "element_damage_bp"
+      ]
+    },
+    {
+      "baseId": 1304,
+      "name": "石潮",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "VariableAffixes",
+        "Traits",
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 1305,
+      "name": "金蛇闭口",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits",
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": [
+        "element_damage_bp",
+        "enemy_element_pierce_bp"
+      ]
+    },
+    {
+      "baseId": 1306,
+      "name": "摇霞鼓",
+      "tier": "builddefining",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": [
+        "proc",
+        "element_damage_bp",
+        "enemy_element_pierce_bp",
+        "skill_variant"
+      ]
+    },
+    {
+      "baseId": 1307,
+      "name": "不拜三清",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits",
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp",
+        "element_absorb_bp"
+      ]
+    },
+    {
+      "baseId": 1308,
+      "name": "偏翼画圆",
+      "tier": "builddefining",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": [
+        "element_damage_bp",
+        "enemy_element_pierce_bp"
+      ]
+    },
+    {
+      "baseId": 1309,
+      "name": "旱夜露声",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "VariableAffixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1310,
+      "name": "无名神席",
+      "tier": "godlike",
+      "changedChannels": [
+        "Affixes",
+        "LocalEnhancements",
+        "Traits",
+        "TypedEffects",
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 10,
+      "typedEffects": [
+        "element_damage_bp",
+        "enemy_element_pierce_bp"
+      ]
+    },
+    {
+      "baseId": 1501,
+      "name": "门板剑",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1502,
+      "name": "磨盘舌",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 1503,
+      "name": "铁山寸",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1504,
+      "name": "旧阵横",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1505,
+      "name": "血桥",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1506,
+      "name": "鬼不食",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1507,
+      "name": "错领求雨表",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits",
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 1508,
+      "name": "雷公拨浪鼓",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "Traits",
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp",
+        "proc"
+      ]
+    },
+    {
+      "baseId": 1509,
+      "name": "缺阙",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1510,
+      "name": "问渊",
+      "tier": "godlike",
+      "changedChannels": [
+        "Affixes",
+        "LocalEnhancements",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 9,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1601,
+      "name": "桥桩铁",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1602,
+      "name": "错星",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 1603,
+      "name": "半尺嫁衣",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1604,
+      "name": "栖螺",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1605,
+      "name": "截江钩",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1606,
+      "name": "枕中缺",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1607,
+      "name": "定秤砣",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "magic_find_pct",
+        "proc"
+      ]
+    },
+    {
+      "baseId": 1608,
+      "name": "伏波线",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1609,
+      "name": "解麟锁",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1610,
+      "name": "泉下欠条",
+      "tier": "godlike",
+      "changedChannels": [
+        "Affixes",
+        "LocalEnhancements",
+        "Traits",
+        "TypedEffects",
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": [
+        "skill_variant"
+      ]
+    },
+    {
+      "baseId": 1801,
+      "name": "剔灯芯",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1802,
+      "name": "门闩齿",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1803,
+      "name": "余寸",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1804,
+      "name": "缺口朝上",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1805,
+      "name": "空毒牙",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits",
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 1806,
+      "name": "讨血凭",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1807,
+      "name": "空鞘追不回",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1808,
+      "name": "鹤喉哑",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "Traits",
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct",
+        "proc"
+      ]
+    },
+    {
+      "baseId": 1809,
+      "name": "乳牙藏归梦",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "VariableAffixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1810,
+      "name": "鳞下不留名",
+      "tier": "godlike",
+      "changedChannels": [
+        "Affixes",
+        "LocalEnhancements",
+        "Traits",
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1903,
+      "name": "红线刀",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1904,
+      "name": "无风轮",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 1905,
+      "name": "拒马籽",
+      "tier": "highvalue",
+      "changedChannels": [
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1906,
+      "name": "还骨人",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1907,
+      "name": "解不开的渔结",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1908,
+      "name": "灶雷",
+      "tier": "builddefining",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": [
+        "element_damage_bp",
+        "skill_variant"
+      ]
+    },
+    {
+      "baseId": 1909,
+      "name": "簸箕雨",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "VariableAffixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1910,
+      "name": "北斗的反面",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp",
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 1911,
+      "name": "缺半声",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 1912,
+      "name": "红纸天",
+      "tier": "builddefining",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "proc"
+      ]
+    },
+    {
+      "baseId": 2001,
+      "name": "虱王冠",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2002,
+      "name": "炉耳",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2003,
+      "name": "值更牌",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2004,
+      "name": "候风羽",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2005,
+      "name": "藏焦香",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2006,
+      "name": "错羽",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2007,
+      "name": "铸在里面的圣字",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2008,
+      "name": "藤谱",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2009,
+      "name": "银山未掏空",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2010,
+      "name": "半檐晴",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2011,
+      "name": "月白",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2012,
+      "name": "夜檐",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2013,
+      "name": "颁错的荣光",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2014,
+      "name": "风筝盔",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2015,
+      "name": "卖傩人的角",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2016,
+      "name": "低头护额",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2017,
+      "name": "量额方",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2018,
+      "name": "先说错话",
+      "tier": "highvalue",
+      "changedChannels": [
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2019,
+      "name": "药臼边的兔耳",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2020,
+      "name": "熊醒半夜",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2023,
+      "name": "海图外的宝石",
+      "tier": "highvalue",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp",
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2024,
+      "name": "垂旒问价",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2025,
+      "name": "倒写必胜",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2026,
+      "name": "错晓冠",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2027,
+      "name": "不反灯",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2028,
+      "name": "墙内也屏息",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits",
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2029,
+      "name": "缚念",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2030,
+      "name": "过风不留",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2031,
+      "name": "倒根兰",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2032,
+      "name": "哈欠葫",
+      "tier": "builddefining",
+      "changedChannels": [
+        "Traits",
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2033,
+      "name": "没点燃的香",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2034,
+      "name": "方孔里的圆天",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_damage_bp",
+        "enemy_element_pierce_bp"
+      ]
+    },
+    {
+      "baseId": 2035,
+      "name": "结风",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2036,
+      "name": "棉中滚钱",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2037,
+      "name": "帽檐刻星",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2038,
+      "name": "畏井牙",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2039,
+      "name": "误了吉时",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2040,
+      "name": "镜凤",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2041,
+      "name": "未到卯时",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2042,
+      "name": "泥里啄金",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2043,
+      "name": "黑眼圈借宿",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2044,
+      "name": "竹影围头",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2045,
+      "name": "颅中客",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2046,
+      "name": "家字盔",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2047,
+      "name": "日中逆羽",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2048,
+      "name": "认路结",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2049,
+      "name": "夜市收摊人",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2050,
+      "name": "收声布",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp",
+        "element_mitigation_bp"
+      ]
+    },
+    {
+      "baseId": 2051,
+      "name": "软尺冠",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2052,
+      "name": "龙角刻舟",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2053,
+      "name": "仙字未绣",
+      "tier": "builddefining",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2054,
+      "name": "帘外谁牵线",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2055,
+      "name": "多出来的叶",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2056,
+      "name": "闭目神像",
+      "tier": "builddefining",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "skill_variant"
+      ]
+    },
+    {
+      "baseId": 2057,
+      "name": "月宿",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2058,
+      "name": "漏符",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_mitigation_bp",
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2059,
+      "name": "无主诰",
+      "tier": "builddefining",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2060,
+      "name": "木眼",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2061,
+      "name": "咬尾的木兽",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2062,
+      "name": "海风错纽",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2063,
+      "name": "远国梳齿",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2101,
+      "name": "寻泉履",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2102,
+      "name": "门内应铁趾",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2103,
+      "name": "未鸣钢",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2104,
+      "name": "压舱银履",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2105,
+      "name": "台阶上的银花",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2106,
+      "name": "踏碎的胆石",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2107,
+      "name": "空朝靴印",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2108,
+      "name": "漏宿沉履",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2401,
+      "name": "缝籽",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2402,
+      "name": "拳里铜铃",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2403,
+      "name": "拒白指",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2404,
+      "name": "称疑",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2405,
+      "name": "刻名以外",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits",
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2406,
+      "name": "拳中关",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2407,
+      "name": "授节不授声",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2408,
+      "name": "腕内藏星",
+      "tier": "builddefining",
+      "changedChannels": [
+        "Affixes",
+        "VariableAffixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2409,
+      "name": "翻掌乾坤",
+      "tier": "builddefining",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2410,
+      "name": "牙根的梦",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2501,
+      "name": "问雷环",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2502,
+      "name": "银皮旧蜕",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2503,
+      "name": "金环朝北",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2504,
+      "name": "雷松",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2505,
+      "name": "青玉迟青",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2506,
+      "name": "无人坐的晶椅",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects",
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_damage_bp",
+        "proc"
+      ]
+    },
+    {
+      "baseId": 2507,
+      "name": "闭目棱",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp",
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2508,
+      "name": "十字背面的篆",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_absorb_bp"
+      ]
+    },
+    {
+      "baseId": 2509,
+      "name": "凝泪未干",
+      "tier": "builddefining",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "proc"
+      ]
+    },
+    {
+      "baseId": 2551,
+      "name": "铜绿小池",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2552,
+      "name": "旧月",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2553,
+      "name": "赤金空炉",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "element_damage_bp",
+        "enemy_element_pierce_bp",
+        "proc"
+      ]
+    },
+    {
+      "baseId": 2554,
+      "name": "虫翅不动",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2555,
+      "name": "翡色晕墨",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "element_damage_bp",
+        "enemy_element_pierce_bp",
+        "proc"
+      ]
+    },
+    {
+      "baseId": 2556,
+      "name": "翠眠",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp",
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2557,
+      "name": "蓝砂故山",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct",
+        "element_damage_bp"
+      ]
+    },
+    {
+      "baseId": 2558,
+      "name": "红石晚霞",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "element_damage_bp",
+        "enemy_element_pierce_bp"
+      ]
+    },
+    {
+      "baseId": 2559,
+      "name": "结晶的叹息",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2560,
+      "name": "猫眼认夜",
+      "tier": "builddefining",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "enemy_element_pierce_bp",
+        "element_damage_bp"
+      ]
+    },
+    {
+      "baseId": 2581,
+      "name": "铜环量拳",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2582,
+      "name": "银纹错关节",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2583,
+      "name": "金砂压阵",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2584,
+      "name": "封拳琥珀",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2585,
+      "name": "青锋绕指",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2586,
+      "name": "绿火试弦",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2587,
+      "name": "蓝石的重心",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2588,
+      "name": "赤环临敌",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2589,
+      "name": "折光定刃",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits",
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2590,
+      "name": "窄瞳杀机",
+      "tier": "builddefining",
+      "changedChannels": [
+        "Affixes",
+        "VariableAffixes",
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 7,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2601,
+      "name": "瓶里破茧",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2602,
+      "name": "错生的翼骨",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "element_absorb_bp"
+      ]
+    },
+    {
+      "baseId": 2603,
+      "name": "羽端白尘",
+      "tier": "builddefining",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "element_resist_bp",
+        "element_absorb_bp"
+      ]
+    },
+    {
+      "baseId": 2604,
+      "name": "鹰羽量崖",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2605,
+      "name": "囊底暗星",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2606,
+      "name": "龟背旧占",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2607,
+      "name": "结市",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2608,
+      "name": "尾端扣问",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2609,
+      "name": "旧笠藏雷纹",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2610,
+      "name": "雪轮",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects",
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": [
+        "element_damage_bp",
+        "enemy_element_pierce_bp"
+      ]
+    },
+    {
+      "baseId": 2701,
+      "name": "午后黑镜",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2702,
+      "name": "迟到的舞客",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2703,
+      "name": "蒙眼天际",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes",
+        "VariableAffixes"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2704,
+      "name": "笑纹向内",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2705,
+      "name": "泪筹",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2706,
+      "name": "心形余光",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2707,
+      "name": "闻香雾纱",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2803,
+      "name": "赊饭衫",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2804,
+      "name": "竹剑衬",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2805,
+      "name": "针脚藏剑诀",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2806,
+      "name": "剪影袖",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2807,
+      "name": "瓦沟补衣",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2808,
+      "name": "窗月",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2809,
+      "name": "药债",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2810,
+      "name": "裁走的箭孔",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2811,
+      "name": "药灰襟",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2812,
+      "name": "错方结",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2813,
+      "name": "竹院回声",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2814,
+      "name": "冬蚕衣",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2815,
+      "name": "还砚",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2816,
+      "name": "读经衣渐软",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2817,
+      "name": "影未迁",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2818,
+      "name": "赤墨不相容",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_damage_bp"
+      ]
+    },
+    {
+      "baseId": 2819,
+      "name": "饭痂衣",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2820,
+      "name": "跌痕练服",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2821,
+      "name": "墨匣",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2822,
+      "name": "潜鳞",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2823,
+      "name": "旧报捷",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2824,
+      "name": "鱼鳞错甲",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2825,
+      "name": "紫纹账衣",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2826,
+      "name": "云纹藏针",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2827,
+      "name": "跟风小褂",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2828,
+      "name": "鹤嫌衣",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2829,
+      "name": "冥河洗衣票",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_mitigation_bp"
+      ]
+    },
+    {
+      "baseId": 2830,
+      "name": "祠堂里的下半场",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_damage_bp",
+        "enemy_element_pierce_bp"
+      ]
+    },
+    {
+      "baseId": 2831,
+      "name": "孤擂",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2832,
+      "name": "不倒翁",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2867,
+      "name": "红线绕北斗",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2868,
+      "name": "凤尾留空",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2869,
+      "name": "午正异影",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2870,
+      "name": "喙里哨音",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2871,
+      "name": "圆肚无棉",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2872,
+      "name": "黑白之间",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2877,
+      "name": "火药口袋的雪",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2878,
+      "name": "皮扣外的字",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2879,
+      "name": "岛入袖",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2880,
+      "name": "浪花借纽",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "magic_find_pct"
+      ]
+    },
+    {
+      "baseId": 2883,
+      "name": "重鳞不渡",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2884,
+      "name": "鼓鳞",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2885,
+      "name": "挂剑处",
+      "tier": "transition",
+      "changedChannels": [
+        "Affixes"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2886,
+      "name": "鹤唳缝",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2887,
+      "name": "茶脉",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2888,
+      "name": "狐裁袖",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2889,
+      "name": "浮沉袖",
+      "tier": "transition",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2890,
+      "name": "补雨",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2891,
+      "name": "麒爪痕",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2892,
+      "name": "夜巡食梦",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2893,
+      "name": "跑调的龙吟",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2894,
+      "name": "听鳞",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Affixes",
+        "VariableAffixes",
+        "SkillBonuses"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2895,
+      "name": "龙首在眉心",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2896,
+      "name": "鳞中春",
+      "tier": "highvalue",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2897,
+      "name": "虚座",
+      "tier": "transition",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_damage_bp"
+      ]
+    },
+    {
+      "baseId": 2898,
+      "name": "删去的课",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp"
+      ]
+    },
+    {
+      "baseId": 2899,
+      "name": "未讲经",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2900,
+      "name": "侧身月入山",
+      "tier": "highvalue",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2901,
+      "name": "灰翎",
+      "tier": "highvalue",
+      "changedChannels": [
+        "Traits"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 6,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2902,
+      "name": "火浣衬",
+      "tier": "highvalue",
+      "changedChannels": [
+        "TypedEffects"
+      ],
+      "decision": "逐件加强专长通道",
+      "staticAffixCount": 5,
+      "typedEffects": [
+        "element_resist_bp",
+        "element_absorb_bp"
+      ]
+    },
+    {
+      "baseId": 2903,
+      "name": "祭词夹页",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2904,
+      "name": "烛影祭袍",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2905,
+      "name": "旧檐弧",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    },
+    {
+      "baseId": 2906,
+      "name": "裙边纸屏",
+      "tier": "transition",
+      "changedChannels": [],
+      "decision": "保留过渡定位与已验证强黄底线",
+      "staticAffixCount": 5,
+      "typedEffects": []
+    }
+  ]
+}

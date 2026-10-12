@@ -109,12 +109,23 @@ func (s *Scene) equipmentRequirementBase(p *entity.Entity, slot domain.EquipSlot
 }
 
 func (s *Scene) equipmentRequirementBaseFromWorn(p *entity.Entity, worn *domain.EquipSet, slot domain.EquipSlot) domain.Base {
+	return s.equipmentRequirementBaseResolved(p, worn, slot, newEquipmentRequirementResolution())
+}
+
+func (s *Scene) equipmentRequirementBaseResolved(p *entity.Entity, worn *domain.EquipSet, slot domain.EquipSlot, resolution *equipmentRequirementResolution) domain.Base {
 	if p == nil || p.Player == nil || p.Player.Char == nil {
 		return domain.Base{}
 	}
 	worn = worn.Clone()
 	for _, conflict := range append(domain.ConflictSlots(slot), slot) {
 		worn.Set(conflict, domain.Stack{})
+	}
+	key := equipmentRequirementMask(worn)
+	if resolution != nil {
+		if base, ok := resolution.bases[key]; ok {
+			resolution.baseHits++
+			return base
+		}
 	}
 	// 被动技能的装备条件也必须使用试算后的穿戴，不能借用旧武器激活的被动。
 	preview := *p
@@ -124,8 +135,11 @@ func (s *Scene) equipmentRequirementBaseFromWorn(p *entity.Entity, worn *domain.
 	ch := p.Player.Char
 	base, _ := domain.Compute(domain.StatSource{
 		Base: ch.EffectiveBase(), Level: ch.Level, Innate: characterInnateStats(ch),
-		Worn: worn, Defs: s.itemDef, Passive: s.passiveStatAffixes(&preview), Status: p.Status,
+		Worn: worn, Defs: s.itemDef, Passive: s.passiveStatAffixesResolved(&preview, resolution), Status: p.Status,
 	})
+	if resolution != nil {
+		resolution.bases[key] = base
+	}
 	return base
 }
 
@@ -135,8 +149,19 @@ func (s *Scene) equipmentRequirementBaseFromWorn(p *entity.Entity, worn *domain.
 // mutual dependency therefore activates neither item instead of making both appear
 // valid merely because they happen to be persisted in the worn slots.
 func (s *Scene) functionalWorn(p *entity.Entity) *domain.EquipSet {
+	return s.functionalWornResolved(p, newEquipmentRequirementResolution())
+}
+
+func (s *Scene) functionalWornResolved(p *entity.Entity, resolution *equipmentRequirementResolution) *domain.EquipSet {
 	if p == nil || p.Player == nil || p.Player.Worn == nil {
 		return domain.NewEquipSet()
+	}
+	key := equipmentRequirementMask(p.Player.Worn)
+	if resolution != nil {
+		if worn, ok := resolution.worn[key]; ok {
+			resolution.wornHits++
+			return worn.Clone()
+		}
 	}
 	source := p.Player.Worn
 	active := domain.NewEquipSet()
@@ -152,7 +177,7 @@ func (s *Scene) functionalWorn(p *entity.Entity) *domain.EquipSet {
 				return
 			}
 			ch := p.Player.Char
-			if ch.Level < domain.EquipmentRequiredLevel(def, st) || def.Equip.Need.Meet(ch.Level, s.equipmentRequirementBaseFromWorn(p, active, slot), ch.Appear.Gender) != domain.RejectNone ||
+			if ch.Level < domain.EquipmentRequiredLevel(def, st) || def.Equip.Need.Meet(ch.Level, s.equipmentRequirementBaseResolved(p, active, slot, resolution), ch.Appear.Gender) != domain.RejectNone ||
 				!def.Equip.Need.AllowsCharacter(ch) {
 				return
 			}
@@ -166,6 +191,9 @@ func (s *Scene) functionalWorn(p *entity.Entity) *domain.EquipSet {
 		if !changed {
 			break
 		}
+	}
+	if resolution != nil {
+		resolution.worn[key] = active.Clone()
 	}
 	return active
 }
@@ -315,6 +343,10 @@ func (s *Scene) refreshStats(p *entity.Entity) {
 }
 
 func (s *Scene) passiveStatAffixes(p *entity.Entity) []domain.Affix {
+	return s.passiveStatAffixesResolved(p, newEquipmentRequirementResolution())
+}
+
+func (s *Scene) passiveStatAffixesResolved(p *entity.Entity, resolution *equipmentRequirementResolution) []domain.Affix {
 	if s == nil || p == nil || p.Player == nil ||
 		p.Player.Char == nil || p.Player.Worn == nil {
 		return nil
@@ -322,7 +354,7 @@ func (s *Scene) passiveStatAffixes(p *entity.Entity) []domain.Affix {
 	ch := p.Player.Char
 	out := s.petStatAffixes(p)
 	out = append(out, domain.AstralBonuses(p.Player.Worn, s.itemDef, ch)...)
-	for skill, level := range s.rawSkillLevels(p) {
+	for skill, level := range s.rawSkillLevelsResolved(p, resolution) {
 		def, ok := s.skills.Get(skill, level)
 		if !ok || def.Kind != domain.SkillPassive || !ch.AllowsSkill(def.ID, def.Prof) {
 			continue

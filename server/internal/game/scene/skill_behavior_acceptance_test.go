@@ -295,7 +295,7 @@ func TestSkillBehaviorAcceptanceHighEquippedRanksAndRemoval(t *testing.T) {
 	st := domain.NewStack(item, 1)
 	st.UID = 12345
 	st.MaxDurability, st.Durability = 100, 100
-	st.Endgame = domain.EndgameItemState{UniqueID: 2032, UniqueRollBP: 10000, UniqueContentVersion: domain.UniqueContentVersion}
+	st.Endgame = domain.EndgameItemState{UniqueID: 2032, UniqueRollBP: 10000, UniqueContentVersion: 5}
 	p.Player.Worn.Set(domain.EquipSlot(u.Slot), st)
 	views, err := s.skillRanksForDisplay(p)
 	if err != nil {
@@ -317,7 +317,7 @@ func TestSkillBehaviorAcceptanceHighEquippedRanksAndRemoval(t *testing.T) {
 	}
 }
 
-func TestSkillBehaviorAcceptanceWorstCaseLegalPackets(t *testing.T) {
+func TestSkillBehaviorAcceptanceWorstCaseLegalPacketsAndVariantUpperBound(t *testing.T) {
 	skills, statuses := nativeRestoredSceneFixtures(t)
 	for profession := int32(1); profession <= 5; profession++ {
 		s, p := behaviorAcceptancePlayer(t, profession)
@@ -391,6 +391,21 @@ func TestSkillBehaviorAcceptanceWorstCaseLegalPackets(t *testing.T) {
 				} else {
 					p.Player.Worn.Set(domain.SlotTreasure, domain.Stack{})
 				}
+				// Keep all legal numeric loadouts/grants, then conservatively add
+				// this profession's one reviewed variant with longest source IDs.
+				// This is a payload upper bound, not an assertion that a legal
+				// equipped item in each enumerated loadout carries the variant.
+				p.Player.EndgameSkillVariants = true
+				variantID := map[int32]string{1: "warrior_piercing_lance", 2: "sword_gale_fan", 3: "assassin_bomb_fuse", 4: "healer_guarded_mend", 5: "warlock_flash_fire"}[profession]
+				cached := s.equipmentEffects(p)
+				kept := cached.effects[:0]
+				for _, active := range cached.effects {
+					if active.Effect.Kind != "skill_variant" {
+						kept = append(kept, active)
+					}
+				}
+				cached.effects = append(kept, domain.ActiveEquipmentEffect{SourceUID: 9223372036854775807, Item: 2147483647, Effect: domain.EquipmentEffect{Kind: "skill_variant", VariantID: variantID}})
+				s.equipmentState().cache[p.ID] = cached
 				rows := behaviorAcceptanceRows(t, s, p)
 				response := domain.EndgameResponse{Kind: "skill.ranks", OK: true, RequestID: strings.Repeat("r", 64), Revision: "9223372036854775807", SkillRanks: rows, Result: map[string]string{"hardCap": "20", "playerCap": "100", "petCap": "80", "formulaVersion": "5", "unspentPoints": "0"}}
 				b, err := json.Marshal(response)
@@ -412,7 +427,7 @@ func TestSkillBehaviorAcceptanceWorstCaseLegalPackets(t *testing.T) {
 			p.Player.Worn.Set(domain.SlotTreasure, domain.Stack{})
 		}
 		scan(0)
-		t.Logf("profession%d combinations%d maxRows%d maxJSON%d grant%d", profession, combos, maxRows, maxBytes, largestGrant)
+		t.Logf("profession%d combinations%d maxRows%d maxVariantUpperBoundJSON%d grant%d", profession, combos, maxRows, maxBytes, largestGrant)
 		if path := os.Getenv("SKILL_BEHAVIOR_FIXTURE_PATH"); path != "" {
 			if err := os.WriteFile(fmt.Sprintf("%s.worst-profession-%d.json", strings.TrimSuffix(path, ".json"), profession), largest, 0600); err != nil {
 				t.Fatal(err)

@@ -33,6 +33,9 @@ var allow = map[string][]string{
 	"data":  {"domain"}, // 静态配置(将来改名 gamedata)
 	"store": {"domain"},
 
+	// Offline maintenance orchestration; no scene, protocol or network dependency.
+	"showcase": {"domain", "store"},
+
 	// ── 游戏层: 认识模型与资源, **不认识协议和网络** ──
 	"game/event":  {"domain"},
 	"game/entity": {"domain", "game/event"},

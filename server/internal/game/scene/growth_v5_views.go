@@ -117,21 +117,18 @@ func (s *Scene) equipmentV5Lines(effects []domain.EquipmentEffect, bonuses []dom
 					text += "，效力" + equipmentPercent(v.ScaleBP)
 				}
 			}
+		case "skill_variant":
+			if v, ok := domain.EquipmentSkillVariantByID(e.VariantID); ok {
+				text = "已学技能形态·" + v.Name + "：" + v.Description + "（同技能主形态不叠加；需新版客户端）"
+			}
 		case "aura":
 			if e.Aura != nil {
 				a := e.Aura
-				benefit := "物理伤害减免 " + equipmentPercent(a.Value)
-				if a.Modifier == "element_resist_bp" {
-					benefit = equipmentElementName(a.Element) + "抗性 +" + equipmentPercent(a.Value)
-				}
-				text = fmt.Sprintf("赋予%d级%s光环：%s（范围%d，含自身最多%d人）", a.FixedRank, a.VisualKey, benefit, a.RadiusPX, a.MaxPlayers)
-				if a.IncludeActivePet {
-					text += "，惠及出战宠物"
-				}
+				text = fmt.Sprintf("赋予%d级%s光环", a.FixedRank, a.VisualKey)
 			}
 		}
 		if text != "" {
-			if e.Kind == "proc" || e.Kind == "aura" {
+			if e.Kind == "proc" || e.Kind == "aura" || e.Kind == "skill_variant" {
 				specialEffects = append(specialEffects, text)
 			} else {
 				attributes = append(attributes, text)

@@ -1,3 +1,5 @@
+> Historical V5 record. Current generation is V6; see [V6_CATALOG.md](V6_CATALOG.md). The three former unique auras have the documented personal-defense compatibility replacement.
+
 # V5 unique and formation content
 
 Implemented 2026-10-12. This page records code and focused runtime checks, not deployment or full combat balance approval.

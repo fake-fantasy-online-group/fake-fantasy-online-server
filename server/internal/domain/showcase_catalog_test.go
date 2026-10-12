@@ -41,8 +41,8 @@ type showcasePlan struct {
 	} `json:"loadouts"`
 }
 
-func TestShowcaseThreeCatalogLoadouts(t *testing.T) {
-	raw, err := os.ReadFile("../../../docs/daoist-endgame/showcase/manifest.json")
+func TestHistoricalV5ShowcaseThreeCatalogLoadouts(t *testing.T) {
+	raw, err := os.ReadFile("../../../docs/daoist-endgame/showcase/v5/manifest.json")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -100,7 +100,7 @@ func TestShowcaseThreeCatalogLoadouts(t *testing.T) {
 						id = candidate.BaseID
 					}
 				}
-				if id == 0 || item.Version != UniqueContentVersion {
+				if id == 0 || item.Version != 5 {
 					t.Fatal("missing gender candidate or wrong version")
 				}
 				source, ok := bases[id]
@@ -133,9 +133,11 @@ func TestShowcaseThreeCatalogLoadouts(t *testing.T) {
 					if !ApplyUnique(&st, def, func(n int) int { return n - 1 }) {
 						t.Fatal("ApplyUnique failed", id)
 					}
-					if st.Endgame.UniqueRollBP != 12000 || st.Endgame.UniqueContentVersion != 5 {
+					if st.Endgame.UniqueRollBP != 12000 || st.Endgame.UniqueContentVersion != UniqueContentVersion {
 						t.Fatal("unique roll/version")
 					}
+					// This frozen showcase manifest describes V5 only.
+					st.Endgame.UniqueContentVersion = item.Version
 					d, ok := UniqueOf(st)
 					if !ok || d.Name != item.Name {
 						t.Fatal("unique resolution/name mismatch", id)
@@ -146,6 +148,9 @@ func TestShowcaseThreeCatalogLoadouts(t *testing.T) {
 					}
 				case "formation":
 					r, ok := AstralRecipeByID(item.FormationID)
+					if ok {
+						r = cloneAstralRecipe(legacyV5AstralRecipeCatalog[item.FormationID-1])
+					}
 					if !ok || item.UniqueID != 0 || item.FormationRoll != 12000 || item.SocketCount != len(r.Runes) || len(item.SocketRows) != len(r.Runes) {
 						t.Fatal("invalid formation plan metadata", id)
 					}

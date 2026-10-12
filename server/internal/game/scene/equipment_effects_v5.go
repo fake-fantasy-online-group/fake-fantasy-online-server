@@ -37,6 +37,7 @@ type equipmentRoot struct {
 	hits                  []equipmentHit
 }
 type equipmentRuntime struct {
+	variantMends    map[domain.EntityID]variantMend
 	observations    map[domain.EntityID][32]byte
 	cache           map[domain.EntityID]equipmentCached
 	absorption      map[domain.EntityID][]equipmentAbsorbHeal
@@ -114,6 +115,11 @@ func (s *Scene) equipmentDefense(p *entity.Entity, pvp bool) domain.EquipmentCom
 		switch a.Modifier {
 		case "physical_mitigation_bp":
 			out.PhysicalMitigationBP = clampI32(int64(out.PhysicalMitigationBP) + int64(v))
+		case "element_damage_bp":
+			i := domain.ElementIndex(a.Element)
+			if i >= 0 {
+				out.Elements[i].DamageBP = clampI32(int64(out.Elements[i].DamageBP) + int64(v))
+			}
 		case "element_resist_bp":
 			i := domain.ElementIndex(a.Element)
 			if i >= 0 {
@@ -164,6 +170,10 @@ func (s *Scene) equipmentBlow(src *entity.Entity, blow combat.Blow) combat.Blow 
 		blow.EquipmentOffense = s.equipmentOffense(src)
 		blow.EquipmentSnapshot = true
 	}
+	// Source-bound auras are evaluated at settlement, never persisted into an
+	// accepted cast/trap equipment snapshot. The existing elemental bucket handles
+	// its shared cap and PvP half effectiveness exactly once.
+	blow.EquipmentOffense = s.equipmentAuraOffense(src, blow.EquipmentOffense)
 	return blow
 }
 func (s *Scene) collectEquipmentHit(src, dst *entity.Entity, blow combat.Blow, ev event.DamageDealt) {

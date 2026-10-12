@@ -41,7 +41,7 @@ func v5BudgetItems(t *testing.T) []v5BudgetItem {
 // Checks actual Compute with all MF, skills, procs and auras absent from the
 // static score. The yellow is an enumerated compatible same-base max-roll lane
 // reference, never a falsely labelled whole-item P90. All sockets/refines = 0.
-func TestV5UniqueSameBaseStaticBudgetRuntime(t *testing.T) {
+func TestV6UniqueSameBaseStaticBudgetRuntime(t *testing.T) {
 	bases, _, pools := cardBudgetLoad(t)
 	items := v5BudgetItems(t)
 	if len(items) != 259 {
@@ -114,7 +114,7 @@ func TestV5UniqueSameBaseStaticBudgetRuntime(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	t.Logf("V5 actual Compute: %d same-base legal class/roll scenarios, min static ratio %.6f", scenarios, minimum)
+	t.Logf("V6 actual Compute: %d same-base legal class/roll scenarios, min static ratio %.6f", scenarios, minimum)
 }
 
 func TestV5CatalogVersionPreservesAllOldInstances(t *testing.T) {
@@ -148,7 +148,7 @@ func TestV5CatalogVersionPreservesAllOldInstances(t *testing.T) {
 	}
 	for _, d := range UniqueCatalog() {
 		st := Stack{UID: int64(d.BaseID), Item: d.BaseID, Count: 1}
-		if !ApplyUnique(&st, uniqueFixture(d), func(int) int { return 0 }) || st.Endgame.UniqueContentVersion != 5 {
+		if !ApplyUnique(&st, uniqueFixture(d), func(int) int { return 0 }) || st.Endgame.UniqueContentVersion != UniqueContentVersion {
 			t.Fatal(fmt.Sprintf("new V5 instance %d", d.BaseID))
 		}
 	}
@@ -290,13 +290,14 @@ func TestV5AuthorStaticValuesUsingActualCompute(t *testing.T) {
 func TestV5FormationVersionAndAdvancedReplacement(t *testing.T) {
 	defs, lookup := astralFixture()
 	changed := 0
-	for _, r := range AstralRecipes() {
+	for _, r := range legacyV5AstralRecipeCatalog {
 		def := defs[999001]
 		copyEquip := *def.Equip
 		copyEquip.Slot = int32(r.Slots[0])
 		def.Equip = &copyEquip
 		defs[def.ID] = def
 		st := astralStack(t, r, def, lookup)
+		st.Endgame.FormationContentVersion = 5
 		current, ok := MatchAstralRecipe(def, st)
 		if !ok || !reflect.DeepEqual(current, cloneAstralRecipe(r)) {
 			t.Fatalf("new formation %d does not resolve V5", r.ID)
@@ -316,7 +317,7 @@ func TestV5FormationVersionAndAdvancedReplacement(t *testing.T) {
 				t.Fatalf("formation %d altered frozen rune or static identity", r.ID)
 			}
 		}
-		st.Endgame.FormationContentVersion = 6
+		st.Endgame.FormationContentVersion = 7
 		if _, ok := MatchAstralRecipe(def, st); ok {
 			t.Fatal("unknown formation content version accepted")
 		}
@@ -330,7 +331,7 @@ func TestV5AdvancedCatalogExactCountsAndDetachedCopies(t *testing.T) {
 	counts := map[string]int{}
 	skills, locals := 0, 0
 	vars := map[int]int{}
-	for _, d := range UniqueCatalog() {
+	for _, d := range legacyV5UniqueDefinitions {
 		if len(d.SkillBonuses) > 0 {
 			skills++
 		}
@@ -352,21 +353,21 @@ func TestV5AdvancedCatalogExactCountsAndDetachedCopies(t *testing.T) {
 	if !reflect.DeepEqual(counts, expected) || skills != 28 || locals != 51 || !reflect.DeepEqual(vars, map[int]int{0: 124, 1: 120, 2: 15}) {
 		t.Fatal(counts, skills, locals, vars)
 	}
-	d, _ := UniqueForBase(1107)
+	d, _ := frozenV5UniqueForBase(1107)
 	d.TypedEffects[0].Aura.Value = 9999
-	again, _ := UniqueForBase(1107)
+	again, _ := frozenV5UniqueForBase(1107)
 	if again.TypedEffects[0].Aura.Value != 400 {
 		t.Fatal("aura pointer escaped catalog")
 	}
-	d, _ = UniqueForBase(1306)
+	d, _ = frozenV5UniqueForBase(1306)
 	d.TypedEffects[0].Proc.FixedRank = 9999
-	again, _ = UniqueForBase(1306)
+	again, _ = frozenV5UniqueForBase(1306)
 	if again.TypedEffects[0].Proc.FixedRank != 10 {
 		t.Fatal("proc pointer escaped catalog")
 	}
-	d, _ = UniqueForBase(2409)
+	d, _ = frozenV5UniqueForBase(2409)
 	d.SkillBonuses[0].Levels = 9999
-	again, _ = UniqueForBase(2409)
+	again, _ = frozenV5UniqueForBase(2409)
 	if again.SkillBonuses[0].Levels != 1 {
 		t.Fatal("skill slice escaped catalog")
 	}
@@ -442,7 +443,7 @@ func TestV5CompletionUpgradesOldBlankAndPartialWithoutReroll(t *testing.T) {
 				bag, worn, st = plan.Bag, plan.Worn, plan.Target
 				expectedVersion := int32(0)
 				if i == len(r.Runes)-1 {
-					expectedVersion = 5
+					expectedVersion = UniqueContentVersion
 				}
 				if st.Endgame.FormationContentVersion != expectedVersion || st.Endgame.FormationRollBP != roll {
 					t.Fatal("completion version or roll", st.Endgame)
@@ -480,7 +481,7 @@ func TestV5CompletionUpgradesOldBlankAndPartialWithoutReroll(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if inserted.Target.Endgame.FormationContentVersion != 5 || inserted.Target.Endgame.FormationRollBP != 10123 {
+	if inserted.Target.Endgame.FormationContentVersion != UniqueContentVersion || inserted.Target.Endgame.FormationRollBP != 10123 {
 		t.Fatal("explicit reform version/roll")
 	}
 }
@@ -498,7 +499,7 @@ func TestV5CubeCompletionUpgradesOldBlankWithoutReroll(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if ctx.Bag.At(200) != before || preview.Target.Endgame.FormationContentVersion != 5 || executed.Target.Endgame.FormationContentVersion != 5 || executed.Target.Endgame.FormationRollBP != 10123 {
+	if ctx.Bag.At(200) != before || preview.Target.Endgame.FormationContentVersion != UniqueContentVersion || executed.Target.Endgame.FormationContentVersion != UniqueContentVersion || executed.Target.Endgame.FormationRollBP != 10123 {
 		t.Fatal("cube completion changed input or roll", executed.Target.Endgame)
 	}
 }
@@ -522,4 +523,9 @@ func TestV5OrdinaryTypeDropPoolRetainsOriginalScope(t *testing.T) {
 	if outside != 626 {
 		t.Fatal("native bases outside unique scope", outside)
 	}
+}
+
+func frozenV5UniqueForBase(id ItemID) (UniqueDefinition, bool) {
+	d, ok := legacyV5UniqueByBase[id]
+	return cloneUnique(d), ok
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func TestV5CatalogVersionStorageDoesNotRewriteLegacy(t *testing.T) {
-	for _, version := range []int32{0, 5} {
+	for _, version := range []int32{0, 5, domain.UniqueContentVersion} {
 		st := domain.Stack{UID: 42, Item: 1001, Count: 1, InstanceKind: domain.ItemInstanceEquipment, Endgame: domain.EndgameItemState{UniqueID: 1001, UniqueRollBP: 10123, UniqueContentVersion: version, FormationContentVersion: version}}
 		before := st
 		q := &revisionRecordingQuerier{}
@@ -28,7 +28,7 @@ func TestV5CatalogVersionStorageDoesNotRewriteLegacy(t *testing.T) {
 	}
 	legacy.Item = 1001
 	legacy.Endgame.UniqueID = 1001
-	legacy.Endgame.UniqueContentVersion = 6
+	legacy.Endgame.UniqueContentVersion = domain.UniqueContentVersion + 1
 	if validateEndgameItem(legacy) == nil {
 		t.Fatal("unknown future version silently consumed")
 	}

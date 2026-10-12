@@ -138,6 +138,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		}
 	}
 	targets, movementAt := s.resolveSkillTargets(caster, def, cmd.Target, cmd.At)
+	targets = s.limitVariantTargets(caster, def, targets, cmd.Target)
 	if len(targets) == 0 && !(def.Kind == domain.SkillArea && def.Area.Valid()) {
 		reject(event.RejectNoTarget)
 		return
@@ -917,6 +918,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 	if s.rift != nil && !s.riftCombatReady() {
 		return
 	}
+	s.stepVariantMends(now)
 	if len(s.casts) == 0 {
 		return
 	}
@@ -1016,15 +1018,23 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 			offense = s.equipmentOffense(src)
 		}
 		finishEquipment := s.beginEquipmentRoot(src.ID, c.visualTarget, offense)
+		if v := c.def.EquipmentVariant; v != nil {
+			s.log.Debug("equipment skill variant settlement", "skill", c.def.ID, "variant", v.ID, "sourceUID", v.SourceUID, "item", v.Item, "equipmentRevision", v.EquipmentRevision, "root", s.equipment.root.id)
+		}
 		s.equipment.root.source = c.sourceOffense
 		s.equipment.root.attackStats = c.attackStats
 		s.equipment.root.attackSnapshot = c.attackStatsSnapshot
-		for _, tid := range c.targets {
+		for targetIndex, tid := range c.targets {
 			dst, ok := s.entities[tid]
 			if !ok || !dst.Alive() && !c.def.HasResurrectEffect() || dst.Kind == domain.KindPet {
 				continue // 这半帧里已经死了
 			}
-			if s.applySkill(src, dst, c.def, c.statusDurationPct, false) && c.def.HitEffect != "" &&
+			impactPosition := dst.Pos
+			landed := s.applySkill(src, dst, variantTargetDef(c.def, targetIndex), c.statusDurationPct, false)
+			if landed {
+				s.detonateVariantBomb(src, dst, c.def, impactPosition)
+			}
+			if landed && c.def.HitEffect != "" &&
 				dst.ID != releaseTarget {
 				s.emit(event.SkillHitEffect{Target: dst.ID, Effect: c.def.HitEffect})
 			}
@@ -1118,6 +1128,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		case domain.EffectHeal:
 			amount := effect.HealAmount(effectTarget.MaxHP)
 			amount = s.uniqueHealing(src, effectTarget, amount, def)
+			amount = s.startVariantMend(src, effectTarget, def, amount)
 			ev := combat.Restore(src, effectTarget, amount, int32(def.ID))
 			s.emit(ev)
 			s.emitAttributesIfPlayer(effectTarget)
@@ -1135,6 +1146,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		case domain.EffectRestoreHP:
 			amount := clampI32(int64(effect.HealFlat) + int64(s.equipmentAttackStats(src).MaxAtk)*int64(effect.SourceAttackPct)/100)
 			amount = s.uniqueHealing(src, effectTarget, amount, def)
+			amount = s.startVariantMend(src, effectTarget, def, amount)
 			ev := combat.Restore(src, effectTarget, amount, int32(def.ID))
 			s.emit(ev)
 			s.emitAttributesIfPlayer(effectTarget)

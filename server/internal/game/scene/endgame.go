@@ -143,6 +143,7 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 		}
 		p.Player.EndgameGrowthV5 = growth
 		p.Player.EndgameSkillBehavior = false
+		p.Player.EndgameSkillVariants = false
 		baseNegotiated := false
 		for _, cap := range r.Capabilities {
 			if cap == domain.EndgameV1 {
@@ -155,6 +156,15 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 				if cap == domain.EndgameSkillBehaviorV1 {
 					p.Player.EndgameSkillBehavior = true
 					caps = append(caps, domain.EndgameSkillBehaviorV1)
+					break
+				}
+			}
+		}
+		if p.Player.EndgameSkillBehavior {
+			for _, cap := range r.Capabilities {
+				if cap == domain.EquipmentSkillVariantsV1 {
+					p.Player.EndgameSkillVariants = true
+					caps = append(caps, cap)
 					break
 				}
 			}

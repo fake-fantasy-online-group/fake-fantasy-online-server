@@ -92,7 +92,10 @@ func TestEquipmentProcV5ActualRootFixedRankAndCooldown(t *testing.T) {
 	s.now = func() time.Time { return clock }
 	sink := join(t, s, 1, 100, "术士", 100, 100)
 	p := s.players[1]
-	wearEquipmentV5(t, s, p, 1306, 9001)
+	legacy := wearEquipmentV5(t, s, p, 1306, 9001)
+	// This regression asserts the frozen V5 proc payload and its exact damage.
+	legacy.Endgame.UniqueContentVersion = 5
+	p.Player.Worn.Set(domain.SlotTwoHand, legacy)
 	p.Stats = domain.Stats{MAtk: 100}
 	p.HP, p.MaxHP = 1000, 1000
 	proc := domain.SkillDef{ID: 10401, Level: 10, HurtType: domain.HurtFire, Dist: 450, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 200}, Statuses: []domain.StatusApplication{{ID: domain.StatusFreeze, Level: 1}}}
@@ -185,31 +188,32 @@ func TestEquipmentAuraV5PartyRangeFallbackAOIAndTeardown(t *testing.T) {
 	join(t, s, 3, 300, "弱来源", 130, 100)
 	p, q, r := s.players[1], s.players[2], s.players[3]
 	p.Player.Party, q.Player.Party, r.Player.Party = 1, 1, 1
-	wearEquipmentV5(t, s, p, 1107, 9001)
-	wearEquipmentV5(t, s, r, 1107, 9002)
+	wearFormationAuraTest(t, s, p, 16, 9001)
+	wearFormationAuraTest(t, s, r, 16, 9002)
+	aura := formationAuraTest(t, 16)
 	s.stepEquipmentAuras()
 	s.flush()
-	if got := s.equipmentDefense(q, false).PhysicalMitigationBP; got != 400 {
+	if got := s.equipmentDefense(q, false).PhysicalMitigationBP; got != aura.Value {
 		t.Fatal(got)
 	}
-	if got := s.equipmentDefense(q, true).PhysicalMitigationBP; got != 200 {
+	if got := s.equipmentDefense(q, true).PhysicalMitigationBP; got != aura.Value/2 {
 		t.Fatal(got)
 	}
-	if g := s.equipmentState().auras[q.ID]["white_tiger_guard"]; g.owner != p.ID {
+	if g := s.equipmentState().auras[q.ID][aura.Family]; g.owner != p.ID {
 		t.Fatal("unstable tie", g)
 	}
 	foundOwn, foundRemote := false, false
 	for _, e := range ownerSink.take() {
 		if b, ok := e.(event.BuffSnapshot); ok {
 			for _, a := range b.Buffs {
-				if a.Name == "白虎卫身" {
+				if a.Name == aura.VisualKey {
 					foundOwn = true
 				}
 			}
 		}
 	}
 	for _, e := range remoteSink.take() {
-		if b, ok := e.(event.EntityStatusEffect); ok && b.Who == p.ID && b.Effect == "白虎卫身" && b.DurationMS > 0 {
+		if b, ok := e.(event.EntityStatusEffect); ok && b.Who == p.ID && b.Effect == aura.VisualKey && b.DurationMS > 0 {
 			foundRemote = true
 		}
 	}
@@ -223,7 +227,7 @@ func TestEquipmentAuraV5PartyRangeFallbackAOIAndTeardown(t *testing.T) {
 	}
 	p.HP = 0
 	s.stepEquipmentAuras()
-	if s.equipmentState().auras[q.ID]["white_tiger_guard"].owner != r.ID {
+	if s.equipmentState().auras[q.ID][aura.Family].owner != r.ID {
 		t.Fatal("no surviving source fallback")
 	}
 	q.Player.Party = 0
@@ -298,27 +302,28 @@ func TestEquipmentAuraV5PetBrokenReequipAndTransfer(t *testing.T) {
 	join(t, s, 2, 200, "队友", 120, 100)
 	p, q := s.players[1], s.players[2]
 	p.Player.Party, q.Player.Party = 1, 1
-	st := wearEquipmentV5(t, s, p, 1111, 9010)
+	st := wearFormationAuraTest(t, s, p, 24, 9010)
+	aura := formationAuraTest(t, 24)
 	pet := &entity.Entity{ID: 800, Kind: domain.KindPet, HP: 100, MaxHP: 100, Pos: domain.Pos{MapID: 7, X: 125, Y: 100}, Pet: &entity.Pet{Owner: q.ID}}
 	q.Player.Pet = pet.ID
 	s.entities[pet.ID] = pet
 	s.pets[pet.ID] = pet
 	s.aoi.Enter(pet)
 	s.stepEquipmentAuras()
-	if v := s.equipmentDefense(pet, false).Elements[0].ResistBP; v != 800 {
+	if v := s.equipmentDefense(pet, false).Elements[0].ResistBP; v != aura.Value {
 		t.Fatal("activepet did not gain aura", v)
 	}
-	d, _ := domain.UniqueForBase(1111)
+	d := s.items[st.Item]
 	st.Durability = 0
-	p.Player.Worn.Set(domain.EquipSlot(d.Slot), st)
+	p.Player.Worn.Set(domain.EquipSlot(d.Equip.Slot), st)
 	s.stepEquipmentAuras()
 	if len(s.equipmentState().auras) > 0 {
 		t.Fatal("broken source aura")
 	}
 	st.Durability = 100
-	p.Player.Worn.Set(domain.EquipSlot(d.Slot), st)
+	p.Player.Worn.Set(domain.EquipSlot(d.Equip.Slot), st)
 	s.stepEquipmentAuras()
-	if s.equipmentDefense(pet, false).Elements[0].ResistBP != 800 {
+	if s.equipmentDefense(pet, false).Elements[0].ResistBP != aura.Value {
 		t.Fatal("repair missed")
 	}
 	s.aoi.Leave(p)
@@ -495,7 +500,10 @@ func TestEquipmentProcV5FatalPrimaryDoesNotRetarget(t *testing.T) {
 	s := newCombatScene(t)
 	join(t, s, 1, 100, "术士", 100, 100)
 	p := s.players[1]
-	wearEquipmentV5(t, s, p, 1306, 9010)
+	legacy := wearEquipmentV5(t, s, p, 1306, 9010)
+	// This regression asserts the frozen V5 proc payload and its exact damage.
+	legacy.Endgame.UniqueContentVersion = 5
+	p.Player.Worn.Set(domain.SlotTwoHand, legacy)
 	p.Stats = domain.Stats{MAtk: 100}
 	p.HP, p.MaxHP = 1000, 1000
 	s.skills = skillTable(domain.SkillDef{ID: 10401, Level: 10, HurtType: domain.HurtFire, Dist: 450, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 200}})

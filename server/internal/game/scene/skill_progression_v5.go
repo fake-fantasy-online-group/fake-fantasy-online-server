@@ -11,10 +11,14 @@ import (
 // Each authored budget entry has an instance-stable source identity. One item can
 // intentionally carry all+single, while accidental repeated collection is deduped.
 func (s *Scene) skillRankBonuses(p *entity.Entity) []domain.SkillRankBonus {
+	return s.skillRankBonusesResolved(p, newEquipmentRequirementResolution())
+}
+
+func (s *Scene) skillRankBonusesResolved(p *entity.Entity, resolution *equipmentRequirementResolution) []domain.SkillRankBonus {
 	if s == nil || p == nil || p.Player == nil || p.Player.Char == nil {
 		return nil
 	}
-	worn := s.functionalWorn(p)
+	worn := s.functionalWornResolved(p, resolution)
 	if worn == nil {
 		return nil
 	}
@@ -36,6 +40,10 @@ func (s *Scene) skillRankBonuses(p *entity.Entity) []domain.SkillRankBonus {
 	return out
 }
 func (s *Scene) skillRanks(p *entity.Entity) (domain.SkillResolutionSnapshot, error) {
+	return s.skillRanksResolved(p, newEquipmentRequirementResolution())
+}
+
+func (s *Scene) skillRanksResolved(p *entity.Entity, resolution *equipmentRequirementResolution) (domain.SkillResolutionSnapshot, error) {
 	if s == nil || p == nil || p.Player == nil || p.Player.Char == nil {
 		return nil, fmt.Errorf("missing skill actor")
 	}
@@ -44,12 +52,16 @@ func (s *Scene) skillRanks(p *entity.Entity) (domain.SkillResolutionSnapshot, er
 	if treasure := s.equippedTreasureSkill(p); treasure != nil {
 		grants = append(grants, domain.SkillGrant{SourceID: "treasure", SkillID: treasure.ID, Rank: 1, Origin: "treasure_grant"})
 	}
-	return domain.ResolveSkillLoadout(int32(ch.Race)+1, ch.Skills, s.skillRankBonuses(p), grants)
+	return domain.ResolveSkillLoadout(int32(ch.Race)+1, ch.Skills, s.skillRankBonusesResolved(p, resolution), grants)
 }
 
 // rawSkillLevels is the single raw, nonrecursive snapshot used by every passive consumer.
 // Legacy tables keep exact legacy levels; the returned map never aliases permanent hard points.
 func (s *Scene) rawSkillLevels(p *entity.Entity) domain.Learned {
+	return s.rawSkillLevelsResolved(p, newEquipmentRequirementResolution())
+}
+
+func (s *Scene) rawSkillLevelsResolved(p *entity.Entity, resolution *equipmentRequirementResolution) domain.Learned {
 	if p == nil || p.Player == nil || p.Player.Char == nil {
 		return nil
 	}
@@ -68,7 +80,7 @@ func (s *Scene) rawSkillLevels(p *entity.Entity) domain.Learned {
 	if cached, ok := s.skillRawCache[p.ID]; ok && cached.key == key {
 		return cached.levels.Clone()
 	}
-	ranks, err := s.skillRanks(p)
+	ranks, err := s.skillRanksResolved(p, resolution)
 	if err != nil { // Invalid persisted inputs fail closed, rather than granting partial soft ranks.
 		for id := range out {
 			if s.skills.V5Enabled(id) {

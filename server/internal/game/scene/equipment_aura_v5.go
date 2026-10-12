@@ -9,6 +9,9 @@ import (
 	"sort"
 )
 
+// Source-bound buffs have no countdown; the short visual lease is internal only.
+const equipmentAuraSourceBoundSeconds int32 = -2
+
 type equipmentAuraSource struct {
 	owner  domain.EntityID
 	uid    int64
@@ -60,7 +63,7 @@ func (s *Scene) stepEquipmentAuras() {
 		for id, grants := range rt.auras {
 			for _, g := range grants {
 				target, owner := s.entities[id], s.entities[g.owner]
-				if target == nil || !target.Alive() || owner == nil || !owner.Alive() || !s.auraRecipient(owner, target) {
+				if owner == nil || !s.equipmentAuraGrantValid(target, g) {
 					changed = true
 					break
 				}
@@ -89,10 +92,24 @@ func (s *Scene) stepEquipmentAuras() {
 			m = map[string]equipmentAuraGrant{}
 			next[target.ID] = m
 		}
-		old, exists := m[a.Family]
-		if !exists || a.Value > old.effect.Value || a.Value == old.effect.Value && (a.Priority > old.effect.Priority || a.Priority == old.effect.Priority && (source.owner < old.owner || source.owner == old.owner && source.uid < old.uid)) {
-			m[a.Family] = g
+		var replace []string
+		for key, old := range m {
+			// Offensive auras of the same element share one winner even when a
+			// future catalog uses a different family name. Defense is independent.
+			sameElement := a.Modifier == "element_damage_bp" && old.effect.Modifier == a.Modifier && old.effect.Element == a.Element
+			if key != a.Family && !sameElement {
+				continue
+			}
+			stronger := a.Value > old.effect.Value || a.Value == old.effect.Value && (a.Priority > old.effect.Priority || a.Priority == old.effect.Priority && (source.owner < old.owner || source.owner == old.owner && source.uid < old.uid))
+			if !stronger {
+				return
+			}
+			replace = append(replace, key)
 		}
+		for _, key := range replace {
+			delete(m, key)
+		}
+		m[a.Family] = g
 	}
 	for _, source := range sources {
 		owner := s.players[source.owner]
@@ -100,7 +117,7 @@ func (s *Scene) stepEquipmentAuras() {
 		r2 := float64(a.RadiusPX) * float64(a.RadiusPX)
 		candidates := []*entity.Entity{owner}
 		s.aoi.AroundRadius(owner.Pos, float64(a.RadiusPX), func(p *entity.Entity) {
-			if p.ID != owner.ID && p.Player != nil && p.Alive() && !s.entityMapLoading(p) && s.equipmentCombatReady(p) && sameParty(owner, p) && sqDist(owner.Pos, p.Pos) <= r2 {
+			if p.ID != owner.ID && p.Player != nil && p.Pos.MapID == owner.Pos.MapID && p.Alive() && !s.entityMapLoading(p) && s.equipmentCombatReady(p) && sameParty(owner, p) && sqDist(owner.Pos, p.Pos) <= r2 {
 				candidates = append(candidates, p)
 			}
 		})
@@ -119,7 +136,7 @@ func (s *Scene) stepEquipmentAuras() {
 			add(p, source)
 			if a.IncludeActivePet && p.Player.Pet != 0 {
 				pet := s.pets[p.Player.Pet]
-				if pet != nil && pet.Alive() && pet.Pet != nil && pet.Pet.Owner == p.ID && sqDist(owner.Pos, pet.Pos) <= r2 {
+				if pet != nil && pet.Pos.MapID == owner.Pos.MapID && pet.Alive() && pet.Pet != nil && pet.Pet.Owner == p.ID && sqDist(owner.Pos, pet.Pos) <= r2 {
 					add(pet, source)
 				}
 			}
@@ -192,9 +209,26 @@ func (s *Scene) equipmentAuraStatuses(e *entity.Entity) []statusPresentation {
 		if a.Modifier == "element_resist_bp" {
 			label = map[string]string{"fire": "火抗", "ice": "冰抗", "holy": "圣/光抗", "dark": "暗抗"}[a.Element]
 		}
-		desc := fmt.Sprintf("装备光环：%s +%.2f%%；范围%d；同类取最高", label, float64(a.Value)/100, a.RadiusPX)
+		sourceName := "自身"
+		if source := s.players[g.owner]; source != nil && g.owner != e.ID {
+			sourceName = source.Name
+		}
+		pvpCondition := "受到玩家攻击时"
+		if a.Modifier == "element_damage_bp" {
+			label = equipmentElementName(a.Element) + "伤害"
+			pvpCondition = "对玩家造成伤害时"
+		}
+		desc := fmt.Sprintf("%d级光环：%s +%s；%s +%s。\n来源：%s；范围%d，含来源最多%d人；同类光环只取最高，不叠加。", a.FixedRank, label, equipmentPercent(a.Value), pvpCondition, equipmentPercent(int32(int64(a.Value)*int64(a.PVPScaleBP)/10000)), sourceName, a.RadiusPX, a.MaxPlayers)
+		if a.IncludeActivePet {
+			desc += "惠及出战宠物。"
+		}
+		if g.owner == e.ID {
+			desc += "\n自身装备有效时持续生效，脱装、损坏、死亡或离线时移除。"
+		} else {
+			desc += "\n来源装备有效且处于同队范围内时持续生效，来源脱装、损坏、死亡、离线或自身离队、离开范围时移除。"
+		}
 		remaining := nonnegativeI32((g.expires - s.tick).Millis())
-		out = append(out, statusPresentation{name: a.VisualKey, desc: desc, icon: event.StatusIconView{Status: id, Beneficial: true, RemainMS: remaining}, effect: event.EntityStatusEffect{Who: e.ID, Effect: a.VisualKey, PositionMode: position, DurationMS: remaining}, buff: event.BuffView{SkillID: id, Name: a.VisualKey, Desc: desc, Beneficial: true, RemainSec: (remaining + 999) / 1000, PositionMode: position}})
+		out = append(out, statusPresentation{name: a.VisualKey, desc: desc, icon: event.StatusIconView{Status: id, Beneficial: true, RemainMS: -1}, effect: event.EntityStatusEffect{Who: e.ID, Effect: a.VisualKey, PositionMode: position, DurationMS: remaining}, buff: event.BuffView{SkillID: id, Name: a.VisualKey, Desc: desc, Beneficial: true, RemainSec: equipmentAuraSourceBoundSeconds, PositionMode: position}})
 	}
 	return out
 }
@@ -206,6 +240,14 @@ func equipmentAuraStatusID(id string) int32 {
 		return 1901002
 	case "holy_feather":
 		return 1901003
+	case "empty_talisman_ward":
+		return 1901004
+	case "north_gate_ice":
+		return 1901005
+	case "backward_flame":
+		return 1901006
+	case "paper_donkey_frost":
+		return 1901007
 	}
 	h := uint32(2166136261)
 	for _, c := range []byte(id) {
@@ -228,8 +270,14 @@ func (s *Scene) removeEquipmentEntity(id domain.EntityID) {
 // numerical or observed benefit after its source became invalid in this frame.
 func (s *Scene) equipmentAuraGrantValid(target *entity.Entity, g equipmentAuraGrant) bool {
 	source := s.players[g.owner]
-	if source == nil || !source.Alive() || target == nil || !target.Alive() || g.expires <= s.tick || !s.equipmentCombatReady(source) || !s.auraRecipient(source, target) {
+	if source == nil || !source.Alive() || target == nil || !target.Alive() || g.expires <= s.tick || !s.equipmentCombatReady(source) || !s.equipmentCombatReady(target) || s.entityMapLoading(source) || s.entityMapLoading(target) || source.Pos.MapID != target.Pos.MapID || sqDist(source.Pos, target.Pos) > float64(g.effect.RadiusPX)*float64(g.effect.RadiusPX) || !s.auraRecipient(source, target) {
 		return false
+	}
+	if target.Pet != nil {
+		player := s.players[target.Pet.Owner]
+		if player == nil || !player.Alive() || s.entityMapLoading(player) || !s.equipmentCombatReady(player) || player.Pos.MapID != source.Pos.MapID || sqDist(source.Pos, player.Pos) > float64(g.effect.RadiusPX)*float64(g.effect.RadiusPX) {
+			return false
+		}
 	}
 	for _, a := range s.equipmentEffects(source).effects {
 		if a.SourceUID == g.uid && a.Effect.Aura != nil && *a.Effect.Aura == g.effect {
@@ -237,4 +285,22 @@ func (s *Scene) equipmentAuraGrantValid(target *entity.Entity, g equipmentAuraGr
 		}
 	}
 	return false
+}
+
+// Offensive auras join the existing additive elemental damage bucket. Source
+// validity is live, including for a previously accepted cast, pet hit or trap.
+func (s *Scene) equipmentAuraOffense(src *entity.Entity, out domain.EquipmentCombatStats) domain.EquipmentCombatStats {
+	if src == nil {
+		return out
+	}
+	for _, grant := range s.equipmentState().auras[src.ID] {
+		a := grant.effect
+		if a.Modifier != "element_damage_bp" || !s.equipmentAuraGrantValid(src, grant) {
+			continue
+		}
+		if i := domain.ElementIndex(a.Element); i >= 0 {
+			out.Elements[i].DamageBP = clampI32(int64(out.Elements[i].DamageBP) + int64(a.Value))
+		}
+	}
+	return out
 }

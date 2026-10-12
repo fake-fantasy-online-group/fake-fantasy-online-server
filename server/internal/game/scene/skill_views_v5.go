@@ -284,12 +284,17 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 			r.Contract = s.skillBehaviorIdentity(id)
 			r.ContractUnavailable = id == 10212
 		}
-		evaluate := func(n int32) ([]string, *domain.SkillBehaviorPayload) {
+		evaluate := func(n int32, nextInvestment bool) ([]string, *domain.SkillBehaviorPayload) {
 			def, ok := s.skills.Get(id, n)
 			if !ok {
 				return []string{"技能数值配置无法解析"}, nil
 			}
-			s.applyResolvedSkillModifiers(p, &def, ch.Skills, raw)
+			previewHard := ch.Skills
+			if nextInvestment && previewHard[id] == 0 {
+				previewHard = previewHard.Clone()
+				previewHard[id] = 1
+			}
+			s.applyResolvedSkillModifiers(p, &def, previewHard, raw)
 			var behavior *domain.SkillBehaviorPayload
 			if p.Player.EndgameSkillBehavior {
 				behavior = s.skillBehaviorPayload(p, def)
@@ -297,12 +302,12 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 				// non-consuming cast-time preview as the typed behavior.
 				def.PrepareMS = behavior.PrepareMS
 			}
-			return s.skillOriginalEffectLines(def), behavior
+			return variantDisplayLines(def, s.skillOriginalEffectLines(def)), behavior
 		}
 		if !s.skills.V5Enabled(id) {
 			if r.Contract != nil {
 				if rank, err := r.EngineRank(); err == nil && rank > 0 {
-					_, r.Contract.Current = evaluate(rank)
+					_, r.Contract.Current = evaluate(rank, false)
 				}
 			}
 			ranks[id] = r
@@ -314,7 +319,7 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 			r.BlockedReasons = append(r.BlockedReasons, "等级超过结算数值表示范围")
 		} else if rank > 0 {
 			var behavior *domain.SkillBehaviorPayload
-			r.CurrentEffectLines, behavior = evaluate(rank)
+			r.CurrentEffectLines, behavior = evaluate(rank, false)
 			if r.Contract != nil {
 				r.Contract.Current = behavior
 			}
@@ -329,7 +334,7 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 				if next.IsInt64() && next.Int64() <= 2147483647 {
 					r.NextEffectiveRank = next.String()
 					var behavior *domain.SkillBehaviorPayload
-					r.NextEffectLines, behavior = evaluate(int32(next.Int64()))
+					r.NextEffectLines, behavior = evaluate(int32(next.Int64()), true)
 					if r.Contract != nil {
 						r.Contract.Next = behavior
 					}
@@ -342,7 +347,7 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 				if n.IsInt64() && n.Int64() <= 2147483647 {
 					r.NextEffectiveRank = n.String()
 					var behavior *domain.SkillBehaviorPayload
-					r.NextEffectLines, behavior = evaluate(int32(n.Int64()))
+					r.NextEffectLines, behavior = evaluate(int32(n.Int64()), true)
 					if r.Contract != nil {
 						r.Contract.Next = behavior
 					}

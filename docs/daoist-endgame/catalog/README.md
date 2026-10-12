@@ -1,10 +1,14 @@
+# Current catalogue: V6
+
+New generation uses `compile_v6.py` and `v6/authored_catalog.json`; see [V6_CATALOG.md](V6_CATALOG.md) for current effects, compatibility and verification. `compile_v5.py` now verifies frozen V5 only; `generate.py` verifies frozen V4. Neither historical catalogue describes current new-item power.
+
 # 仙遗装备：独立撰写源与冻结编译
 
-## V5 当前规则（2026-10-12）
+## V5 历史规则（2026-10-12，已由V6接替）
 
-新产物目录已收敛为确认的259件，价值档183/54/18/4；完整执行结果和边界见 [V5_CATALOG.md](V5_CATALOG.md)。`v5/assignment.json` 保留逐件设计与来源；`v5/authored_stats.json` 是经过实际 Compute 校准后冻结的明确数值，不会在游戏运行时按ID生成。`generate.py` 同时校验1619条V4冻结来源和259条V5当前产物。
+新产物目录已收敛为确认的259件，价值档183/54/18/4；完整执行结果和边界见 [V5_CATALOG.md](V5_CATALOG.md)。`v5/assignment.json` 保留逐件设计与来源；`v5/authored_stats.json` 是经过实际 Compute 校准后冻结的明确数值，不会在游戏运行时按ID生成。`generate.py` 校验1619条V4冻结来源；`compile_v5.py` 校验259条V5冻结产物。
 
-现有版本0实例从 `legacy_unique_v4` 和冻结宿阵目录读取；新唤醒或新装备实例写版本5。旧目录、旧变量roll、普通装备和历史物权都保留，不把缺少版本字段的旧实例改造成新数值。下文1619范围和 ReservedSkills 仅描述历史V3/V4来源，不能覆盖本节。
+现有版本0实例从 `legacy_unique_v4` 和冻结宿阵目录读取；V5阶段新唤醒或新装备实例曾写版本5（现为版本6）。旧目录、旧变量roll、普通装备和历史物权都保留，不把缺少版本字段的旧实例改造成新数值。下文1619范围和 ReservedSkills 仅描述历史V3/V4来源，不能覆盖本节。
 
 
 ## 边界

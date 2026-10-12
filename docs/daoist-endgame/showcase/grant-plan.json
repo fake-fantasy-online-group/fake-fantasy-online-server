@@ -3,19 +3,19 @@
   "account": "test001",
   "source_baseline_commit": "d9c06ddd53bbb777bc87248b881871ff64d2f947",
   "source_catalogs": {
-    "unique_catalog_version": "endgame-v5-scope259",
+    "unique_catalog_version": "endgame-v6-scope259",
     "unique_count": 259,
     "formation_count": 40,
     "rune_count": 28,
-    "content_version": 5
+    "content_version": 6
   },
-  "status": "deferred_by_user_pending_five_class_original_skill_restoration",
+  "status": "prepared_v6_pending_review_no_grant",
   "intent": "各新增9件背包装备供看属性，保留旧物品；不自动穿戴，不改角色等级、技能或六维。",
   "grant_count": 27,
-  "embedded_rune_instance_count": 44,
-  "total_new_item_instances_if_executed": 71,
+  "embedded_rune_instance_count": 34,
+  "total_new_item_instances_if_executed": 61,
   "policy": {
-    "execution_status": "deferred_by_user_pending_five_class_original_skill_restoration",
+    "execution_status": "prepared_v6_pending_review_no_grant",
     "max_catalog_roll_bp": 12000,
     "max_roll_scope": "仅显式可变词条与局部强化取合法最高档；固定词条、诅咒、技能、触发和光环原值保留，不能整体乘1.2。",
     "destination": "backpack_only",
@@ -34,18 +34,18 @@
     "unique": [
       "加载实际已部署ItemDef，核对职业、等级、性别及目录版本。",
       "domain.NewStack(def,1)生成新装备UID和满耐久，不复制现有UID。",
-      "domain.ApplyUnique(&stack,def,func(n int) int { return n-1 })，确认成功、UniqueID=BaseID、UniqueContentVersion=5、UniqueRollBP=12000。",
+      "domain.ApplyUnique(&stack,def,func(n int) int { return n-1 })，确认成功、UniqueID=BaseID、UniqueContentVersion=6、UniqueRollBP=12000。",
       "不伪造Affixes；目录属性由实际ItemDef和生产域函数解析。"
     ],
     "formation": [
       "从真实白底ItemDef调用domain.NewStack(def,1)；确认AstralBaseEligible与EquipmentSocketCapacity。",
-      "新展示件固定FormationContentVersion=5、FormationRollBP=12000，UniqueID=0。",
+      "新展示件固定FormationContentVersion=6、FormationRollBP=12000，UniqueID=0。",
       "精确孔数和顺序；每枚星篆用真实Rune ItemDef调用NewStack，保留其Card快照、独立UID及正确槽序。",
-      "MatchAstralRecipe必须匹配指定ID；ActiveAstralRecipes模拟中每频道只有一个所选宿阵。"
+      "MatchAstralRecipe必须匹配指定ID；ActiveAstralRecipes模拟中每频道至多一个所选宿阵；神暗金武器路线无战阵。"
     ],
     "persistence": "复用本地已存在的隔离展示发放工具及服务端物品持久化路径；不用修改业务代码，不手编SQL绕过实例、归属、插槽不变量。",
     "preflight": [
-      "本计划暂缓执行；待用户五职业原版技能复原工作允许发放后再继续。",
+      "本计划仅准备；完成V6目录冻结、隔离PG回归及实际环境预检后，由主任务处理后续发放。",
       "确认目标仍为test001及角色42/183/206，重读名称、职业、60级、实际性别及装备背包空格。",
       "正式环境及实际加载目录复核；若不符，停下对应发放，不改其他账号或角色。",
       "复用已有安全在线同步或离线维护流程及原子保存，避免旧会话覆盖新增库存。",
@@ -61,7 +61,7 @@
       "profession_one_based": 3,
       "expected_level": 60,
       "gender": "resolve locally; never infer from name",
-      "build": "先手会心／普攻输出",
+      "build": "精英猎杀／神暗金短刺",
       "count": 9,
       "items": [
         {
@@ -71,7 +71,7 @@
           "display_name": "行囊漏晨光 · 口罩",
           "quantity": 1,
           "required_level": 60,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 0,
           "formation_id": 38,
           "socket_count": 5,
@@ -108,7 +108,7 @@
           "display_name": "夜市收摊人",
           "quantity": 1,
           "required_level": 52,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2049,
           "formation_id": 0,
           "socket_count": 0,
@@ -138,7 +138,7 @@
           "display_name": "凝泪未干",
           "quantity": 1,
           "required_level": 56,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2509,
           "formation_id": 0,
           "socket_count": 0,
@@ -168,7 +168,7 @@
           "display_name": "牙根的梦",
           "quantity": 1,
           "required_level": 60,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2410,
           "formation_id": 0,
           "socket_count": 0,
@@ -198,7 +198,7 @@
           "display_name": "窄瞳杀机",
           "quantity": 1,
           "required_level": 60,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2590,
           "formation_id": 0,
           "socket_count": 0,
@@ -228,7 +228,7 @@
           "display_name": "门闩抵天倾 · 青龙铠",
           "quantity": 1,
           "required_level": 48,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 0,
           "formation_id": 36,
           "socket_count": 5,
@@ -279,7 +279,7 @@
           "display_name": "漏宿沉履",
           "quantity": 1,
           "required_level": 56,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2108,
           "formation_id": 0,
           "socket_count": 0,
@@ -309,7 +309,7 @@
           "display_name": "鹰羽量崖",
           "quantity": 1,
           "required_level": 24,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2604,
           "formation_id": 0,
           "socket_count": 0,
@@ -335,14 +335,14 @@
         {
           "slot": 13,
           "slot_name": "双手武器",
-          "kind": "formation",
-          "display_name": "莲子夜游 · 煞刺·伏龙",
+          "kind": "unique",
+          "display_name": "鳞下不留名",
           "quantity": 1,
           "required_level": 54,
-          "content_version": 5,
-          "unique_id": 0,
-          "formation_id": 33,
-          "socket_count": 5,
+          "content_version": 6,
+          "unique_id": 1810,
+          "formation_id": 0,
+          "socket_count": 0,
           "candidates": [
             {
               "base_id": 1810,
@@ -359,15 +359,8 @@
               }
             }
           ],
-          "formation_roll_bp": 12000,
-          "channel": "战阵",
-          "ordered_rune_ids": [
-            1900028018,
-            1900028005,
-            1900028019,
-            1900028020,
-            1900028021
-          ]
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
         }
       ]
     },
@@ -379,7 +372,7 @@
       "profession_one_based": 5,
       "expected_level": 60,
       "gender": "resolve locally; never infer from name",
-      "build": "冰系／暴雪范围施法",
+      "build": "火弹专精／神暗金法杖",
       "count": 9,
       "items": [
         {
@@ -389,7 +382,7 @@
           "display_name": "鞋底藏北斗 · 口罩",
           "quantity": 1,
           "required_level": 58,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 0,
           "formation_id": 28,
           "socket_count": 4,
@@ -425,7 +418,7 @@
           "display_name": "无主诰",
           "quantity": 1,
           "required_level": 59,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2059,
           "formation_id": 0,
           "socket_count": 0,
@@ -455,7 +448,7 @@
           "display_name": "无人坐的晶椅",
           "quantity": 1,
           "required_level": 38,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2506,
           "formation_id": 0,
           "socket_count": 0,
@@ -485,7 +478,7 @@
           "display_name": "翻掌乾坤",
           "quantity": 1,
           "required_level": 54,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2409,
           "formation_id": 0,
           "socket_count": 0,
@@ -512,17 +505,17 @@
           "slot": 7,
           "slot_name": "戒指",
           "kind": "unique",
-          "display_name": "猫眼认夜",
+          "display_name": "红石晚霞",
           "quantity": 1,
-          "required_level": 60,
-          "content_version": 5,
-          "unique_id": 2560,
+          "required_level": 48,
+          "content_version": 6,
+          "unique_id": 2558,
           "formation_id": 0,
           "socket_count": 0,
           "candidates": [
             {
-              "base_id": 2560,
-              "base_name": "猫眼石魔力之戒",
+              "base_id": 2558,
+              "base_name": "红宝石魔力之戒",
               "equipment_sex_restriction": 0,
               "character_gender_when_selected": null,
               "requirements": {
@@ -545,7 +538,7 @@
           "display_name": "门闩抵天倾 · 冥法服",
           "quantity": 1,
           "required_level": 48,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 0,
           "formation_id": 36,
           "socket_count": 5,
@@ -596,7 +589,7 @@
           "display_name": "漏宿沉履",
           "quantity": 1,
           "required_level": 56,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2108,
           "formation_id": 0,
           "socket_count": 0,
@@ -623,17 +616,17 @@
           "slot": 10,
           "slot_name": "背饰",
           "kind": "unique",
-          "display_name": "雪轮",
+          "display_name": "错生的翼骨",
           "quantity": 1,
-          "required_level": 24,
-          "content_version": 5,
-          "unique_id": 2610,
+          "required_level": 36,
+          "content_version": 6,
+          "unique_id": 2602,
           "formation_id": 0,
           "socket_count": 0,
           "candidates": [
             {
-              "base_id": 2610,
-              "base_name": "雪山结晶",
+              "base_id": 2602,
+              "base_name": "恶魔之翼",
               "equipment_sex_restriction": 0,
               "character_gender_when_selected": null,
               "requirements": {
@@ -652,14 +645,14 @@
         {
           "slot": 13,
           "slot_name": "双手武器",
-          "kind": "formation",
-          "display_name": "纸驴驮残夜 · 神杖·九仪",
+          "kind": "unique",
+          "display_name": "无名神席",
           "quantity": 1,
-          "required_level": 56,
-          "content_version": 5,
-          "unique_id": 0,
-          "formation_id": 34,
-          "socket_count": 5,
+          "required_level": 54,
+          "content_version": 6,
+          "unique_id": 1310,
+          "formation_id": 0,
+          "socket_count": 0,
           "candidates": [
             {
               "base_id": 1310,
@@ -676,15 +669,8 @@
               }
             }
           ],
-          "formation_roll_bp": 12000,
-          "channel": "战阵",
-          "ordered_rune_ids": [
-            1900028008,
-            1900028022,
-            1900028023,
-            1900028025,
-            1900028026
-          ]
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
         }
       ]
     },
@@ -696,24 +682,24 @@
       "profession_one_based": 4,
       "expected_level": 60,
       "gender": "resolve locally; never infer from name",
-      "build": "救急／长战治疗支援",
+      "build": "护持治疗／救急团队支援",
       "count": 9,
       "items": [
         {
           "slot": 1,
           "slot_name": "面饰",
-          "kind": "unique",
-          "display_name": "泪筹",
+          "kind": "formation",
+          "display_name": "空瓢济厄 · 口罩",
           "quantity": 1,
-          "required_level": 18,
-          "content_version": 5,
-          "unique_id": 2705,
-          "formation_id": 0,
-          "socket_count": 0,
+          "required_level": 60,
+          "content_version": 6,
+          "unique_id": 0,
+          "formation_id": 35,
+          "socket_count": 5,
           "candidates": [
             {
-              "base_id": 2705,
-              "base_name": "哭丧面具",
+              "base_id": 2707,
+              "base_name": "口罩",
               "equipment_sex_restriction": 0,
               "character_gender_when_selected": null,
               "requirements": {
@@ -726,8 +712,15 @@
               }
             }
           ],
-          "unique_roll_bp": 12000,
-          "ordered_rune_ids": []
+          "formation_roll_bp": 12000,
+          "channel": "辅阵",
+          "ordered_rune_ids": [
+            1900028010,
+            1900028011,
+            1900028013,
+            1900028014,
+            1900028028
+          ]
         },
         {
           "slot": 2,
@@ -736,7 +729,7 @@
           "display_name": "闭目神像",
           "quantity": 1,
           "required_level": 59,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2056,
           "formation_id": 0,
           "socket_count": 0,
@@ -766,7 +759,7 @@
           "display_name": "凝泪未干",
           "quantity": 1,
           "required_level": 56,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2509,
           "formation_id": 0,
           "socket_count": 0,
@@ -796,7 +789,7 @@
           "display_name": "翻掌乾坤",
           "quantity": 1,
           "required_level": 54,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2409,
           "formation_id": 0,
           "socket_count": 0,
@@ -826,7 +819,7 @@
           "display_name": "结晶的叹息",
           "quantity": 1,
           "required_level": 54,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 2559,
           "formation_id": 0,
           "socket_count": 0,
@@ -856,7 +849,7 @@
           "display_name": "门闩抵天倾 · 圣贤服",
           "quantity": 1,
           "required_level": 48,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 0,
           "formation_id": 36,
           "socket_count": 5,
@@ -903,14 +896,14 @@
         {
           "slot": 9,
           "slot_name": "鞋",
-          "kind": "formation",
-          "display_name": "空瓢济厄 · 天罡之靴",
+          "kind": "unique",
+          "display_name": "漏宿沉履",
           "quantity": 1,
-          "required_level": 60,
-          "content_version": 5,
-          "unique_id": 0,
-          "formation_id": 35,
-          "socket_count": 5,
+          "required_level": 56,
+          "content_version": 6,
+          "unique_id": 2108,
+          "formation_id": 0,
+          "socket_count": 0,
           "candidates": [
             {
               "base_id": 2108,
@@ -927,31 +920,24 @@
               }
             }
           ],
-          "formation_roll_bp": 12000,
-          "channel": "辅阵",
-          "ordered_rune_ids": [
-            1900028010,
-            1900028011,
-            1900028013,
-            1900028014,
-            1900028028
-          ]
+          "unique_roll_bp": 12000,
+          "ordered_rune_ids": []
         },
         {
           "slot": 10,
           "slot_name": "背饰",
           "kind": "unique",
-          "display_name": "羽端白尘",
+          "display_name": "瓶里破茧",
           "quantity": 1,
-          "required_level": 36,
-          "content_version": 5,
-          "unique_id": 2603,
+          "required_level": 30,
+          "content_version": 6,
+          "unique_id": 2601,
           "formation_id": 0,
           "socket_count": 0,
           "candidates": [
             {
-              "base_id": 2603,
-              "base_name": "天使之翼",
+              "base_id": 2601,
+              "base_name": "精灵之翼",
               "equipment_sex_restriction": 0,
               "character_gender_when_selected": null,
               "requirements": {
@@ -974,7 +960,7 @@
           "display_name": "四象让中宫 · 神杖·九仪",
           "quantity": 1,
           "required_level": 60,
-          "content_version": 5,
+          "content_version": 6,
           "unique_id": 0,
           "formation_id": 40,
           "socket_count": 5,

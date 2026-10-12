@@ -16,15 +16,18 @@ func validateEndgameItem(st domain.Stack) error {
 	if st.UID <= 0 || st.Count != 1 || (st.InstanceKind != domain.ItemInstanceNone && st.InstanceKind != domain.ItemInstanceEquipment) || v.Revision < 0 {
 		return fmt.Errorf("endgame: invalid equipment metadata uid=%d", st.UID)
 	}
-	if v.UniqueContentVersion != 0 && v.UniqueContentVersion != domain.UniqueContentVersion || v.FormationContentVersion != 0 && v.FormationContentVersion != domain.UniqueContentVersion {
+	supportedVersion := func(version int32) bool {
+		return version == 0 || version == 5 || version == domain.UniqueContentVersion
+	}
+	if !supportedVersion(v.UniqueContentVersion) || !supportedVersion(v.FormationContentVersion) {
 		return fmt.Errorf("endgame: unsupported content version uid=%d", st.UID)
 	}
 	if v.UniqueContentVersion != 0 && v.UniqueID == 0 {
 		return fmt.Errorf("endgame: ordinary item has unique version uid=%d", st.UID)
 	}
-	if v.UniqueContentVersion == domain.UniqueContentVersion {
-		if _, ok := domain.UniqueForBase(st.Item); !ok {
-			return fmt.Errorf("endgame: V5 unique outside approved scope uid=%d", st.UID)
+	if v.UniqueContentVersion != 0 {
+		if _, ok := domain.UniqueOf(st); !ok {
+			return fmt.Errorf("endgame: versioned unique outside approved scope uid=%d", st.UID)
 		}
 	}
 	if v.FormationRollBP != 0 && (v.FormationRollBP < domain.UniqueRollMinBP || v.FormationRollBP > domain.UniqueRollMaxBP) {

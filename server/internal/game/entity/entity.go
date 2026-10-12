@@ -191,6 +191,7 @@ type SnapshotSaver interface {
 type PlayerRuntime struct {
 	V5StatusOwner           domain.EntityID
 	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
+	EndgameSkillVariants    bool // negotiated equipment skill variants
 	EndgameSkillBehavior    bool // negotiated typed skill behavior; connection-scoped
 	EndgameGrowthV5         bool // negotiated V5 growth rules; connection-scoped
 	EndgameNativeStats      bool // session capability survives map transfer, never persisted
@@ -262,6 +263,7 @@ func (e *Entity) CapturePlayerRuntime(now domain.Tick) PlayerRuntime {
 		r.ProtectedFor = remainingTicks(e.Player.safeUntil, now)
 		r.EndgameNativeStats = e.Player.EndgameNativeStats
 		r.EndgameGrowthV5 = e.Player.EndgameGrowthV5
+		r.EndgameSkillVariants = e.Player.EndgameSkillVariants
 		r.EndgameSkillBehavior = e.Player.EndgameSkillBehavior
 		r.EquipmentAbsorbRestores = append([]domain.EquipmentAbsorbRestore(nil), e.Player.EquipmentAbsorbRestores...)
 		r.GMGod = e.Player.GMGod
@@ -303,6 +305,7 @@ func (e *Entity) RestorePlayerRuntime(r PlayerRuntime, now domain.Tick) {
 		e.Player.safeUntil = now + r.ProtectedFor
 		e.Player.EndgameNativeStats = r.EndgameNativeStats
 		e.Player.EndgameGrowthV5 = r.EndgameGrowthV5
+		e.Player.EndgameSkillVariants = r.EndgameSkillVariants
 		e.Player.EndgameSkillBehavior = r.EndgameSkillBehavior
 		e.Player.EquipmentAbsorbRestores = append([]domain.EquipmentAbsorbRestore(nil), r.EquipmentAbsorbRestores...)
 		e.Player.GMGod = r.GMGod
@@ -452,6 +455,7 @@ func clampCurrent(current, maximum int32) int32 {
 // Player 是玩家实体的专有部分。
 type Player struct {
 	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
+	EndgameSkillVariants    bool // negotiated equipment skill variants
 	EndgameSkillBehavior    bool // negotiated typed skill behavior; connection-scoped
 	EndgameGrowthV5         bool // negotiated V5 growth rules; connection-scoped
 	EndgameNativeStats      bool // negotiated native tooltip renderer; reset on a new login

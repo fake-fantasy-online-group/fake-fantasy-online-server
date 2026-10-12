@@ -81,12 +81,12 @@ def main():
     groups=compile_catalog()
     # Preserve empty shards so embedding never accidentally retains a stale V4 row.
     for role in ('warrior','swordsman','assassin','healer','warlock','sharedcaster','allclasses','unrestricted'):
-        path=DOMAIN/f'unique_catalog_{role}.json';data=encode(groups.get(role,[]))
+        path=DOMAIN/'legacy_unique_v5'/f'unique_catalog_{role}.json';data=encode(groups.get(role,[]))
         if args.check: assert path.read_bytes()==data, f'stale V5 catalog {path}'
         else:path.write_bytes(data)
     items=[r for rows in groups.values() for r in rows]
     summary={'schema':5,'total':259,'legacy_frozen_total':1619,'new_generation_excluded':1360,'native_drop_kind':259,'legacy_affix_pool_ready':259,'class_counts':dict(collections.Counter(r['Role'] for r in items)),'power_tier_counts':dict(collections.Counter(r['PowerTier'] for r in items)),'variable_count_distribution':dict(collections.Counter(str(len(r['VariableAffixes'])+sum(bool(v.get('MinPercent')) for v in r['LocalEnhancements'])) for r in items)),'typed_effect_counts':dict(collections.Counter(e['kind'] for r in items for e in r['TypedEffects'])),'skill_item_count':sum(bool(r['SkillBonuses']) for r in items),'catalog_sha256':{f'unique_catalog_{role}.json':hashlib.sha256(encode(groups.get(role,[]))).hexdigest() for role in ('warrior','swordsman','assassin','healer','warlock','sharedcaster','allclasses','unrestricted')},'validation_boundary':'Structural compilation; runtime static budget and combat/client acceptance are separate tests.'}
-    path=HERE/'coverage.json';data=(json.dumps(summary,ensure_ascii=False,indent=2)+'\n').encode()
+    path=HERE/'v5/coverage.json';data=(json.dumps(summary,ensure_ascii=False,indent=2)+'\n').encode()
     if args.check: assert path.read_bytes()==data,'stale V5 coverage'
     else:path.write_bytes(data)
     print('Verified V5: 259 exact identities; tiers183/54/18/4; same-base yellow evidence; budget ledger; meaningful static fields; at most two rolls.')

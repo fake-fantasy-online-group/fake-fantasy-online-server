@@ -316,6 +316,8 @@ type PassiveCounterAttack struct {
 
 // SkillDef 是一个技能在某一级上的定义。
 type SkillDef struct {
+	EquipmentVariant *EquipmentSkillVariant // immutable accepted cast snapshot
+
 	FormulaVersion         uint32
 	SnapshotRawRanks       Learned
 	SnapshotHardRanks      Learned

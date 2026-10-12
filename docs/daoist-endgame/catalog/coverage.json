@@ -1,10 +1,29 @@
 {
-  "schema": 5,
+  "schema": 6,
   "total": 259,
   "legacy_frozen_total": 1619,
-  "new_generation_excluded": 1360,
+  "legacy_v5_total": 259,
+  "power_tier_counts": {
+    "transition": 183,
+    "highvalue": 54,
+    "builddefining": 18,
+    "godlike": 4
+  },
+  "typed_effect_counts": {
+    "magic_find_pct": 35,
+    "proc": 10,
+    "skill_variant": 5,
+    "element_resist_bp": 30,
+    "element_mitigation_bp": 4,
+    "element_absorb_bp": 7,
+    "element_damage_bp": 17,
+    "enemy_element_pierce_bp": 11
+  },
+  "skill_item_count": 30,
+  "validation_boundary": "Structural checks only; actual combat acceptance is tested separately.",
   "native_drop_kind": 259,
   "legacy_affix_pool_ready": 259,
+  "new_generation_excluded": 1360,
   "class_counts": {
     "swordsman": 48,
     "sharedcaster": 10,
@@ -14,37 +33,21 @@
     "healer": 18,
     "warlock": 18
   },
-  "power_tier_counts": {
-    "transition": 183,
-    "highvalue": 54,
-    "builddefining": 18,
-    "godlike": 4
-  },
   "variable_count_distribution": {
     "1": 120,
     "0": 124,
     "2": 15
   },
-  "typed_effect_counts": {
-    "magic_find_pct": 22,
-    "element_resist_bp": 21,
-    "aura": 3,
-    "element_absorb_bp": 3,
-    "element_damage_bp": 7,
-    "proc": 3,
-    "enemy_element_pierce_bp": 1,
-    "element_mitigation_bp": 1
-  },
-  "skill_item_count": 28,
   "catalog_sha256": {
-    "unique_catalog_warrior.json": "7ec7802e7a8c4d62abd72106e1546f869724a365ad6165549e0ce9af9fb8850d",
-    "unique_catalog_swordsman.json": "92964547b2c8f6e88e550c813c14563eb72d4279c9129009e463284682aeb10d",
-    "unique_catalog_assassin.json": "d31ae697e6ad4a6fb1994da2e89bc44e15f729f30e4828157a8c3af17eea66fe",
-    "unique_catalog_healer.json": "2f08496f309ac30309c9861f4e350077837be4f12d9b70fa7886f87ce7500676",
-    "unique_catalog_warlock.json": "6823f837d15c138ad37186c07e6e28693406c0952ef70933241fd4360fc91bab",
-    "unique_catalog_sharedcaster.json": "53ad75d05ae3254a32c5aba627ecdc45091e7ec583ff8363f9018d5cdb9911f5",
-    "unique_catalog_allclasses.json": "79f91732c8e64aa581f0865ed94dd1231ea0bea0505c37b90615b01acb8acd6c",
+    "unique_catalog_warrior.json": "7ea0207debe4bdee90a412d214f38d3779fc497e0979b0158b62a4ad26f14e05",
+    "unique_catalog_swordsman.json": "416b7c51f7bc05e1ffdb406bec1bec81313f13f1aee7acc1ea787e62069fd283",
+    "unique_catalog_assassin.json": "f6b7b8246c1417e3e516d04be23b6686abd4adffc9cb23d32b2515edaa684324",
+    "unique_catalog_healer.json": "6dd39e20d98ab85a11c9fb670a1add01d27b96818130bb6b524a6760df83df2a",
+    "unique_catalog_warlock.json": "c265f81e3cff66bf570ace6e152cb069ffa6a3df231ed2b3effb433df71377a2",
+    "unique_catalog_sharedcaster.json": "bbc790dcebcb3d62c030fb1a9f13c100acc644fa1c1bb1a52743c2b2af323a48",
+    "unique_catalog_allclasses.json": "c1753cde00ea315798708a94100551efb06679643ac42b0b0c632b0bd9d6abb0",
     "unique_catalog_unrestricted.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
   },
-  "validation_boundary": "Structural compilation; runtime static budget and combat/client acceptance are separate tests."
+  "attack_speed_item_count": 19,
+  "trait_item_count": 80
 }

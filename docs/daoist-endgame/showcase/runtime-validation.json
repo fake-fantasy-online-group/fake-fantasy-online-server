@@ -1,6 +1,7 @@
 {
   "catalog_formation_count": 40,
   "catalog_unique_count": 259,
+  "content_version": 6,
   "database_access": false,
   "item_grant_executed": false,
   "items_validated": 54,
@@ -20,7 +21,6 @@
       "Gender": 0,
       "ItemCount": 9,
       "FormationIDs": [
-        33,
         36,
         38
       ],
@@ -33,36 +33,38 @@
         "DEX": 167
       },
       "FixtureComputedBase": {
-        "STR": 232,
+        "STR": 219,
         "VIT": 246,
         "INT": 6,
         "SPI": 95,
         "AGI": 192,
-        "DEX": 251
+        "DEX": 234
       },
       "FixturePanel": {
-        "MaxHP": 4508,
-        "MaxMP": 1426,
+        "MaxHP": 4992,
+        "MaxMP": 1206,
         "HPRegen": 1,
         "MPRegen": 0,
-        "MinAtk": 726,
-        "MaxAtk": 1007,
+        "MinAtk": 462,
+        "MaxAtk": 682,
         "Def": 258,
-        "Hit": 547,
+        "Hit": 488,
         "MAtk": 3,
         "MDef": 214,
-        "CritRate": 2917,
+        "CritRate": 4128,
         "MCritRate": 0,
-        "AtkSpeedPct": 48,
+        "AtkSpeedPct": 67,
         "AtkSpeedMS": 0,
         "MoveSpeed": 115,
         "PhysResist": 39,
         "MagicResist": 44,
         "StatusResist": 36,
-        "MaxWeight": 2820
+        "MaxWeight": 2690
       },
       "FixtureRemainingAllocatedTo": "STR",
-      "Skills": {},
+      "Skills": {
+        "10219": "5"
+      },
       "Items": [
         {
           "base_id": 2707,
@@ -119,7 +121,7 @@
           "roll_bp": 12000,
           "slot": 1,
           "socket_count": 5,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2049,
@@ -171,12 +173,17 @@
               "Attr": 34,
               "Value": 71,
               "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -22,
+              "Mode": 1
             }
           ],
           "roll_bp": 12000,
           "slot": 2,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2509,
@@ -233,7 +240,7 @@
           "roll_bp": 12000,
           "slot": 3,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2410,
@@ -282,20 +289,20 @@
               "Mode": 0
             },
             {
-              "Attr": 25,
-              "Value": -7,
-              "Mode": 1
-            },
-            {
               "Attr": 34,
               "Value": -120,
               "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -18,
+              "Mode": 1
             }
           ],
           "roll_bp": 12000,
           "slot": 6,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2590,
@@ -324,11 +331,6 @@
               "Mode": 0
             },
             {
-              "Attr": 23,
-              "Value": 429,
-              "Mode": 0
-            },
-            {
               "Attr": 1,
               "Value": 17,
               "Mode": 0
@@ -354,6 +356,11 @@
               "Mode": 1
             },
             {
+              "Attr": 23,
+              "Value": 1980,
+              "Mode": 0
+            },
+            {
               "Attr": 29,
               "Value": 8,
               "Mode": 0
@@ -367,7 +374,7 @@
           "roll_bp": 12000,
           "slot": 7,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2896,
@@ -434,7 +441,7 @@
           "roll_bp": 12000,
           "slot": 8,
           "socket_count": 5,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2108,
@@ -486,7 +493,7 @@
           "roll_bp": 12000,
           "slot": 9,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2604,
@@ -538,12 +545,12 @@
           "roll_bp": 12000,
           "slot": 10,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 1810,
-          "kind": "formation",
-          "name": "莲子夜游 · 煞刺·伏龙",
+          "kind": "unique",
+          "name": "鳞下不留名",
           "required_level": 54,
           "requirements": {
             "Level": 54,
@@ -562,60 +569,55 @@
           },
           "resolved_catalog_affixes_including_item_local": [
             {
-              "Attr": 23,
-              "Value": 1540,
-              "Mode": 0
-            },
-            {
-              "Attr": 25,
-              "Value": -32,
-              "Mode": 1
-            },
-            {
               "Attr": 47,
-              "Value": 117,
-              "Mode": 1
-            },
-            {
-              "Attr": 34,
-              "Value": -12,
-              "Mode": 1
-            },
-            {
-              "Attr": 19,
-              "Value": 40,
+              "Value": 99,
               "Mode": 0
             },
             {
               "Attr": 1,
-              "Value": 28,
+              "Value": 15,
+              "Mode": 0
+            },
+            {
+              "Attr": 19,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 53,
               "Mode": 0
             },
             {
               "Attr": 9,
-              "Value": 28,
+              "Value": 11,
               "Mode": 0
             },
             {
-              "Attr": 36,
-              "Value": 220,
+              "Attr": 23,
+              "Value": 1400,
               "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -20,
+              "Mode": 1
             },
             {
               "Attr": 29,
-              "Value": 36,
+              "Value": 76,
               "Mode": 0
             },
             {
               "Attr": 31,
-              "Value": 118,
+              "Value": 250,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 13,
-          "socket_count": 5,
-          "version": 5
+          "socket_count": 0,
+          "version": 6
         }
       ]
     },
@@ -625,7 +627,6 @@
       "Gender": 1,
       "ItemCount": 9,
       "FormationIDs": [
-        33,
         36,
         38
       ],
@@ -638,36 +639,38 @@
         "DEX": 167
       },
       "FixtureComputedBase": {
-        "STR": 232,
+        "STR": 219,
         "VIT": 246,
         "INT": 6,
         "SPI": 95,
         "AGI": 192,
-        "DEX": 251
+        "DEX": 234
       },
       "FixturePanel": {
-        "MaxHP": 4508,
-        "MaxMP": 1426,
+        "MaxHP": 4992,
+        "MaxMP": 1206,
         "HPRegen": 1,
         "MPRegen": 0,
-        "MinAtk": 726,
-        "MaxAtk": 1007,
+        "MinAtk": 462,
+        "MaxAtk": 682,
         "Def": 258,
-        "Hit": 547,
+        "Hit": 488,
         "MAtk": 3,
         "MDef": 214,
-        "CritRate": 2917,
+        "CritRate": 4128,
         "MCritRate": 0,
-        "AtkSpeedPct": 48,
+        "AtkSpeedPct": 67,
         "AtkSpeedMS": 0,
         "MoveSpeed": 115,
         "PhysResist": 39,
         "MagicResist": 44,
         "StatusResist": 36,
-        "MaxWeight": 2820
+        "MaxWeight": 2690
       },
       "FixtureRemainingAllocatedTo": "STR",
-      "Skills": {},
+      "Skills": {
+        "10219": "5"
+      },
       "Items": [
         {
           "base_id": 2707,
@@ -724,7 +727,7 @@
           "roll_bp": 12000,
           "slot": 1,
           "socket_count": 5,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2049,
@@ -776,12 +779,17 @@
               "Attr": 34,
               "Value": 71,
               "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -22,
+              "Mode": 1
             }
           ],
           "roll_bp": 12000,
           "slot": 2,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2509,
@@ -838,7 +846,7 @@
           "roll_bp": 12000,
           "slot": 3,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2410,
@@ -887,20 +895,20 @@
               "Mode": 0
             },
             {
-              "Attr": 25,
-              "Value": -7,
-              "Mode": 1
-            },
-            {
               "Attr": 34,
               "Value": -120,
               "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -18,
+              "Mode": 1
             }
           ],
           "roll_bp": 12000,
           "slot": 6,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2590,
@@ -929,11 +937,6 @@
               "Mode": 0
             },
             {
-              "Attr": 23,
-              "Value": 429,
-              "Mode": 0
-            },
-            {
               "Attr": 1,
               "Value": 17,
               "Mode": 0
@@ -959,6 +962,11 @@
               "Mode": 1
             },
             {
+              "Attr": 23,
+              "Value": 1980,
+              "Mode": 0
+            },
+            {
               "Attr": 29,
               "Value": 8,
               "Mode": 0
@@ -972,7 +980,7 @@
           "roll_bp": 12000,
           "slot": 7,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2895,
@@ -1039,7 +1047,7 @@
           "roll_bp": 12000,
           "slot": 8,
           "socket_count": 5,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2108,
@@ -1091,7 +1099,7 @@
           "roll_bp": 12000,
           "slot": 9,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2604,
@@ -1143,12 +1151,12 @@
           "roll_bp": 12000,
           "slot": 10,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 1810,
-          "kind": "formation",
-          "name": "莲子夜游 · 煞刺·伏龙",
+          "kind": "unique",
+          "name": "鳞下不留名",
           "required_level": 54,
           "requirements": {
             "Level": 54,
@@ -1167,60 +1175,55 @@
           },
           "resolved_catalog_affixes_including_item_local": [
             {
-              "Attr": 23,
-              "Value": 1540,
-              "Mode": 0
-            },
-            {
-              "Attr": 25,
-              "Value": -32,
-              "Mode": 1
-            },
-            {
               "Attr": 47,
-              "Value": 117,
-              "Mode": 1
-            },
-            {
-              "Attr": 34,
-              "Value": -12,
-              "Mode": 1
-            },
-            {
-              "Attr": 19,
-              "Value": 40,
+              "Value": 99,
               "Mode": 0
             },
             {
               "Attr": 1,
-              "Value": 28,
+              "Value": 15,
+              "Mode": 0
+            },
+            {
+              "Attr": 19,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 53,
               "Mode": 0
             },
             {
               "Attr": 9,
-              "Value": 28,
+              "Value": 11,
               "Mode": 0
             },
             {
-              "Attr": 36,
-              "Value": 220,
+              "Attr": 23,
+              "Value": 1400,
               "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -20,
+              "Mode": 1
             },
             {
               "Attr": 29,
-              "Value": 36,
+              "Value": 76,
               "Mode": 0
             },
             {
               "Attr": 31,
-              "Value": 118,
+              "Value": 250,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 13,
-          "socket_count": 5,
-          "version": 5
+          "socket_count": 0,
+          "version": 6
         }
       ]
     },
@@ -1231,7 +1234,6 @@
       "ItemCount": 9,
       "FormationIDs": [
         28,
-        34,
         36
       ],
       "FixtureNakedBase": {
@@ -1245,42 +1247,42 @@
       "FixtureComputedBase": {
         "STR": 9,
         "VIT": 235,
-        "INT": 284,
-        "SPI": 380,
+        "INT": 266,
+        "SPI": 374,
         "AGI": 66,
         "DEX": 63
       },
       "FixturePanel": {
-        "MaxHP": 3780,
-        "MaxMP": 4484,
+        "MaxHP": 3957,
+        "MaxMP": 4615,
         "HPRegen": 0,
         "MPRegen": 0,
         "MinAtk": 14,
         "MaxAtk": 122,
-        "Def": 123,
+        "Def": 99,
         "Hit": 113,
-        "MAtk": 865,
-        "MDef": 574,
+        "MAtk": 700,
+        "MDef": 558,
         "CritRate": 0,
-        "MCritRate": 2564,
+        "MCritRate": 1746,
         "AtkSpeedPct": 0,
         "AtkSpeedMS": 0,
         "MoveSpeed": 113,
         "PhysResist": 39,
-        "MagicResist": 36,
-        "StatusResist": 57,
+        "MagicResist": 49,
+        "StatusResist": 50,
         "MaxWeight": 590
       },
       "FixtureRemainingAllocatedTo": "INT",
       "Skills": {
-        "10401": "2",
+        "10401": "7",
         "10402": "2",
         "10405": "2",
         "10408": "2",
-        "10409": "3",
-        "10410": "3",
-        "10411": "3",
-        "10412": "3",
+        "10409": "2",
+        "10410": "2",
+        "10411": "2",
+        "10412": "2",
         "10413": "2",
         "10414": "2",
         "10415": "2",
@@ -1295,14 +1297,14 @@
         "10424": "2",
         "10425": "2",
         "10426": "2",
-        "10427": "3",
-        "10428": "3",
-        "10429": "3",
-        "10430": "3",
-        "10431": "3",
+        "10427": "2",
+        "10428": "2",
+        "10429": "2",
+        "10430": "2",
+        "10431": "2",
         "10432": "2",
         "10433": "2",
-        "10435": "3"
+        "10435": "2"
       },
       "Items": [
         {
@@ -1360,7 +1362,7 @@
           "roll_bp": 12000,
           "slot": 1,
           "socket_count": 4,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2059,
@@ -1412,7 +1414,7 @@
           "roll_bp": 12000,
           "slot": 2,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2506,
@@ -1464,7 +1466,7 @@
           "roll_bp": 12000,
           "slot": 3,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2409,
@@ -1521,15 +1523,15 @@
           "roll_bp": 12000,
           "slot": 6,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
-          "base_id": 2560,
+          "base_id": 2558,
           "kind": "unique",
-          "name": "猫眼认夜",
-          "required_level": 60,
+          "name": "红石晚霞",
+          "required_level": 48,
           "requirements": {
-            "Level": 60,
+            "Level": 48,
             "Base": {
               "STR": 0,
               "VIT": 0,
@@ -1545,40 +1547,45 @@
           },
           "resolved_catalog_affixes_including_item_local": [
             {
-              "Attr": 15,
-              "Value": 17,
+              "Attr": 66,
+              "Value": 331,
               "Mode": 0
             },
             {
-              "Attr": 66,
-              "Value": 457,
+              "Attr": 15,
+              "Value": 14,
               "Mode": 0
             },
             {
               "Attr": 3,
-              "Value": 14,
+              "Value": 12,
               "Mode": 0
             },
             {
               "Attr": 36,
-              "Value": 68,
+              "Value": 60,
               "Mode": 0
             },
             {
               "Attr": 61,
-              "Value": 14,
+              "Value": 12,
               "Mode": 0
             },
             {
               "Attr": 34,
-              "Value": 68,
+              "Value": 60,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 7,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 7,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2830,
@@ -1645,7 +1652,7 @@
           "roll_bp": 12000,
           "slot": 8,
           "socket_count": 5,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2108,
@@ -1697,15 +1704,15 @@
           "roll_bp": 12000,
           "slot": 9,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
-          "base_id": 2610,
+          "base_id": 2602,
           "kind": "unique",
-          "name": "雪轮",
-          "required_level": 24,
+          "name": "错生的翼骨",
+          "required_level": 36,
           "requirements": {
-            "Level": 24,
+            "Level": 36,
             "Base": {
               "STR": 0,
               "VIT": 0,
@@ -1722,45 +1729,45 @@
           "resolved_catalog_affixes_including_item_local": [
             {
               "Attr": 15,
-              "Value": 10,
+              "Value": 13,
               "Mode": 0
             },
             {
               "Attr": 3,
-              "Value": 7,
+              "Value": 11,
               "Mode": 0
             },
             {
               "Attr": 36,
-              "Value": 41,
+              "Value": 58,
               "Mode": 0
             },
             {
               "Attr": 66,
-              "Value": 163,
+              "Value": 217,
               "Mode": 0
             },
             {
               "Attr": 61,
-              "Value": 7,
+              "Value": 11,
               "Mode": 0
             },
             {
               "Attr": 34,
-              "Value": 41,
+              "Value": 58,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 10,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 1310,
-          "kind": "formation",
-          "name": "纸驴驮残夜 · 神杖·九仪",
-          "required_level": 56,
+          "kind": "unique",
+          "name": "无名神席",
+          "required_level": 54,
           "requirements": {
             "Level": 54,
             "Base": {
@@ -1779,54 +1786,64 @@
           "resolved_catalog_affixes_including_item_local": [
             {
               "Attr": 15,
-              "Value": 65,
-              "Mode": 1
-            },
-            {
-              "Attr": 3,
-              "Value": 35,
+              "Value": 52,
               "Mode": 0
             },
             {
               "Attr": 66,
-              "Value": 1100,
+              "Value": 454,
               "Mode": 0
             },
             {
-              "Attr": 34,
-              "Value": -10,
-              "Mode": 1
-            },
-            {
-              "Attr": 36,
-              "Value": 260,
+              "Attr": 3,
+              "Value": 18,
               "Mode": 0
             },
             {
               "Attr": 61,
-              "Value": 26,
+              "Value": 18,
               "Mode": 0
             },
             {
               "Attr": 17,
-              "Value": 48,
+              "Value": 35,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 13,
               "Mode": 0
             },
             {
               "Attr": 118,
-              "Value": 20,
+              "Value": 13,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": -80,
+              "Mode": 0
+            },
+            {
+              "Attr": 13,
+              "Value": -20,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 460,
               "Mode": 0
             },
             {
               "Attr": 15,
-              "Value": 140,
+              "Value": 281,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 13,
-          "socket_count": 5,
-          "version": 5
+          "socket_count": 0,
+          "version": 6
         }
       ]
     },
@@ -1837,7 +1854,6 @@
       "ItemCount": 9,
       "FormationIDs": [
         28,
-        34,
         36
       ],
       "FixtureNakedBase": {
@@ -1851,42 +1867,42 @@
       "FixtureComputedBase": {
         "STR": 9,
         "VIT": 235,
-        "INT": 284,
-        "SPI": 380,
+        "INT": 266,
+        "SPI": 374,
         "AGI": 66,
         "DEX": 63
       },
       "FixturePanel": {
-        "MaxHP": 3780,
-        "MaxMP": 4484,
+        "MaxHP": 3957,
+        "MaxMP": 4615,
         "HPRegen": 0,
         "MPRegen": 0,
         "MinAtk": 14,
         "MaxAtk": 122,
-        "Def": 123,
+        "Def": 99,
         "Hit": 113,
-        "MAtk": 865,
-        "MDef": 574,
+        "MAtk": 700,
+        "MDef": 558,
         "CritRate": 0,
-        "MCritRate": 2564,
+        "MCritRate": 1746,
         "AtkSpeedPct": 0,
         "AtkSpeedMS": 0,
         "MoveSpeed": 113,
         "PhysResist": 39,
-        "MagicResist": 36,
-        "StatusResist": 57,
+        "MagicResist": 49,
+        "StatusResist": 50,
         "MaxWeight": 590
       },
       "FixtureRemainingAllocatedTo": "INT",
       "Skills": {
-        "10401": "2",
+        "10401": "7",
         "10402": "2",
         "10405": "2",
         "10408": "2",
-        "10409": "3",
-        "10410": "3",
-        "10411": "3",
-        "10412": "3",
+        "10409": "2",
+        "10410": "2",
+        "10411": "2",
+        "10412": "2",
         "10413": "2",
         "10414": "2",
         "10415": "2",
@@ -1901,14 +1917,14 @@
         "10424": "2",
         "10425": "2",
         "10426": "2",
-        "10427": "3",
-        "10428": "3",
-        "10429": "3",
-        "10430": "3",
-        "10431": "3",
+        "10427": "2",
+        "10428": "2",
+        "10429": "2",
+        "10430": "2",
+        "10431": "2",
         "10432": "2",
         "10433": "2",
-        "10435": "3"
+        "10435": "2"
       },
       "Items": [
         {
@@ -1966,7 +1982,7 @@
           "roll_bp": 12000,
           "slot": 1,
           "socket_count": 4,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2059,
@@ -2018,7 +2034,7 @@
           "roll_bp": 12000,
           "slot": 2,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2506,
@@ -2070,7 +2086,7 @@
           "roll_bp": 12000,
           "slot": 3,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2409,
@@ -2127,15 +2143,15 @@
           "roll_bp": 12000,
           "slot": 6,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
-          "base_id": 2560,
+          "base_id": 2558,
           "kind": "unique",
-          "name": "猫眼认夜",
-          "required_level": 60,
+          "name": "红石晚霞",
+          "required_level": 48,
           "requirements": {
-            "Level": 60,
+            "Level": 48,
             "Base": {
               "STR": 0,
               "VIT": 0,
@@ -2151,40 +2167,45 @@
           },
           "resolved_catalog_affixes_including_item_local": [
             {
-              "Attr": 15,
-              "Value": 17,
+              "Attr": 66,
+              "Value": 331,
               "Mode": 0
             },
             {
-              "Attr": 66,
-              "Value": 457,
+              "Attr": 15,
+              "Value": 14,
               "Mode": 0
             },
             {
               "Attr": 3,
-              "Value": 14,
+              "Value": 12,
               "Mode": 0
             },
             {
               "Attr": 36,
-              "Value": 68,
+              "Value": 60,
               "Mode": 0
             },
             {
               "Attr": 61,
-              "Value": 14,
+              "Value": 12,
               "Mode": 0
             },
             {
               "Attr": 34,
-              "Value": 68,
+              "Value": 60,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 7,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 7,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2829,
@@ -2251,7 +2272,7 @@
           "roll_bp": 12000,
           "slot": 8,
           "socket_count": 5,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2108,
@@ -2303,15 +2324,15 @@
           "roll_bp": 12000,
           "slot": 9,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
-          "base_id": 2610,
+          "base_id": 2602,
           "kind": "unique",
-          "name": "雪轮",
-          "required_level": 24,
+          "name": "错生的翼骨",
+          "required_level": 36,
           "requirements": {
-            "Level": 24,
+            "Level": 36,
             "Base": {
               "STR": 0,
               "VIT": 0,
@@ -2328,45 +2349,45 @@
           "resolved_catalog_affixes_including_item_local": [
             {
               "Attr": 15,
-              "Value": 10,
+              "Value": 13,
               "Mode": 0
             },
             {
               "Attr": 3,
-              "Value": 7,
+              "Value": 11,
               "Mode": 0
             },
             {
               "Attr": 36,
-              "Value": 41,
+              "Value": 58,
               "Mode": 0
             },
             {
               "Attr": 66,
-              "Value": 163,
+              "Value": 217,
               "Mode": 0
             },
             {
               "Attr": 61,
-              "Value": 7,
+              "Value": 11,
               "Mode": 0
             },
             {
               "Attr": 34,
-              "Value": 41,
+              "Value": 58,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 10,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 1310,
-          "kind": "formation",
-          "name": "纸驴驮残夜 · 神杖·九仪",
-          "required_level": 56,
+          "kind": "unique",
+          "name": "无名神席",
+          "required_level": 54,
           "requirements": {
             "Level": 54,
             "Base": {
@@ -2385,54 +2406,64 @@
           "resolved_catalog_affixes_including_item_local": [
             {
               "Attr": 15,
-              "Value": 65,
-              "Mode": 1
-            },
-            {
-              "Attr": 3,
-              "Value": 35,
+              "Value": 52,
               "Mode": 0
             },
             {
               "Attr": 66,
-              "Value": 1100,
+              "Value": 454,
               "Mode": 0
             },
             {
-              "Attr": 34,
-              "Value": -10,
-              "Mode": 1
-            },
-            {
-              "Attr": 36,
-              "Value": 260,
+              "Attr": 3,
+              "Value": 18,
               "Mode": 0
             },
             {
               "Attr": 61,
-              "Value": 26,
+              "Value": 18,
               "Mode": 0
             },
             {
               "Attr": 17,
-              "Value": 48,
+              "Value": 35,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 13,
               "Mode": 0
             },
             {
               "Attr": 118,
-              "Value": 20,
+              "Value": 13,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": -80,
+              "Mode": 0
+            },
+            {
+              "Attr": 13,
+              "Value": -20,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 460,
               "Mode": 0
             },
             {
               "Attr": 15,
-              "Value": 140,
+              "Value": 281,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 13,
-          "socket_count": 5,
-          "version": 5
+          "socket_count": 0,
+          "version": 6
         }
       ]
     },
@@ -2458,29 +2489,29 @@
         "STR": 101,
         "VIT": 263,
         "INT": 98,
-        "SPI": 473,
+        "SPI": 500,
         "AGI": 63,
         "DEX": 66
       },
       "FixturePanel": {
-        "MaxHP": 5655,
-        "MaxMP": 7717,
+        "MaxHP": 5952,
+        "MaxMP": 7689,
         "HPRegen": 2,
         "MPRegen": 0,
         "MinAtk": 299,
         "MaxAtk": 407,
-        "Def": 119,
+        "Def": 118,
         "Hit": 115,
         "MAtk": 274,
-        "MDef": 672,
+        "MDef": 723,
         "CritRate": 900,
         "MCritRate": 900,
         "AtkSpeedPct": 0,
         "AtkSpeedMS": 0,
         "MoveSpeed": 95,
         "PhysResist": 39,
-        "MagicResist": 94,
-        "StatusResist": 96,
+        "MagicResist": 93,
+        "StatusResist": 101,
         "MaxWeight": 1510
       },
       "FixtureRemainingAllocatedTo": "SPI",
@@ -2517,10 +2548,10 @@
       },
       "Items": [
         {
-          "base_id": 2705,
-          "kind": "unique",
-          "name": "泪筹",
-          "required_level": 18,
+          "base_id": 2707,
+          "kind": "formation",
+          "name": "空瓢济厄 · 口罩",
+          "required_level": 60,
           "requirements": {
             "Level": 18,
             "Base": {
@@ -2539,39 +2570,44 @@
           "resolved_catalog_affixes_including_item_local": [
             {
               "Attr": 61,
-              "Value": 10,
-              "Mode": 0
+              "Value": 26,
+              "Mode": 1
             },
             {
               "Attr": 36,
-              "Value": 64,
-              "Mode": 0
-            },
-            {
-              "Attr": 34,
-              "Value": 44,
-              "Mode": 0
+              "Value": 36,
+              "Mode": 1
             },
             {
               "Attr": 17,
-              "Value": 19,
-              "Mode": 0
-            },
-            {
-              "Attr": 118,
-              "Value": 7,
+              "Value": 55,
               "Mode": 0
             },
             {
               "Attr": 70,
-              "Value": 5,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 320,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 25,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 24,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 1,
-          "socket_count": 0,
-          "version": 5
+          "socket_count": 5,
+          "version": 6
         },
         {
           "base_id": 2056,
@@ -2628,7 +2664,7 @@
           "roll_bp": 12000,
           "slot": 2,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2509,
@@ -2685,7 +2721,7 @@
           "roll_bp": 12000,
           "slot": 3,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2409,
@@ -2742,7 +2778,7 @@
           "roll_bp": 12000,
           "slot": 6,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2559,
@@ -2799,7 +2835,7 @@
           "roll_bp": 12000,
           "slot": 7,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2900,
@@ -2866,13 +2902,13 @@
           "roll_bp": 12000,
           "slot": 8,
           "socket_count": 5,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2108,
-          "kind": "formation",
-          "name": "空瓢济厄 · 天罡之靴",
-          "required_level": 60,
+          "kind": "unique",
+          "name": "漏宿沉履",
+          "required_level": 56,
           "requirements": {
             "Level": 56,
             "Base": {
@@ -2890,53 +2926,43 @@
           },
           "resolved_catalog_affixes_including_item_local": [
             {
-              "Attr": 61,
-              "Value": 26,
-              "Mode": 1
-            },
-            {
-              "Attr": 36,
-              "Value": 36,
-              "Mode": 1
-            },
-            {
               "Attr": 17,
-              "Value": 55,
-              "Mode": 0
-            },
-            {
-              "Attr": 70,
-              "Value": 24,
+              "Value": 51,
               "Mode": 0
             },
             {
               "Attr": 34,
-              "Value": 320,
+              "Value": 236,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 15,
               "Mode": 0
             },
             {
               "Attr": 118,
-              "Value": 25,
-              "Mode": 0
-            },
-            {
-              "Attr": 5,
-              "Value": 24,
+              "Value": 10,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 9,
-          "socket_count": 5,
-          "version": 5
+          "socket_count": 0,
+          "version": 6
         },
         {
-          "base_id": 2603,
+          "base_id": 2601,
           "kind": "unique",
-          "name": "羽端白尘",
-          "required_level": 36,
+          "name": "瓶里破茧",
+          "required_level": 30,
           "requirements": {
-            "Level": 36,
+            "Level": 30,
             "Base": {
               "STR": 0,
               "VIT": 0,
@@ -2952,40 +2978,35 @@
           },
           "resolved_catalog_affixes_including_item_local": [
             {
-              "Attr": 36,
-              "Value": 211,
-              "Mode": 0
-            },
-            {
               "Attr": 61,
-              "Value": 8,
+              "Value": 24,
               "Mode": 0
             },
             {
-              "Attr": 34,
-              "Value": 41,
+              "Attr": 36,
+              "Value": 12,
               "Mode": 0
             },
             {
               "Attr": 17,
-              "Value": 17,
+              "Value": 22,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 54,
               "Mode": 0
             },
             {
               "Attr": 118,
-              "Value": 6,
-              "Mode": 0
-            },
-            {
-              "Attr": 70,
-              "Value": 6,
+              "Value": 8,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 10,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 1310,
@@ -3052,7 +3073,7 @@
           "roll_bp": 12000,
           "slot": 13,
           "socket_count": 5,
-          "version": 5
+          "version": 6
         }
       ]
     },
@@ -3078,29 +3099,29 @@
         "STR": 101,
         "VIT": 263,
         "INT": 98,
-        "SPI": 473,
+        "SPI": 500,
         "AGI": 63,
         "DEX": 66
       },
       "FixturePanel": {
-        "MaxHP": 5655,
-        "MaxMP": 7717,
+        "MaxHP": 5952,
+        "MaxMP": 7689,
         "HPRegen": 2,
         "MPRegen": 0,
         "MinAtk": 299,
         "MaxAtk": 407,
-        "Def": 119,
+        "Def": 118,
         "Hit": 115,
         "MAtk": 274,
-        "MDef": 672,
+        "MDef": 723,
         "CritRate": 900,
         "MCritRate": 900,
         "AtkSpeedPct": 0,
         "AtkSpeedMS": 0,
         "MoveSpeed": 95,
         "PhysResist": 39,
-        "MagicResist": 94,
-        "StatusResist": 96,
+        "MagicResist": 93,
+        "StatusResist": 101,
         "MaxWeight": 1510
       },
       "FixtureRemainingAllocatedTo": "SPI",
@@ -3137,10 +3158,10 @@
       },
       "Items": [
         {
-          "base_id": 2705,
-          "kind": "unique",
-          "name": "泪筹",
-          "required_level": 18,
+          "base_id": 2707,
+          "kind": "formation",
+          "name": "空瓢济厄 · 口罩",
+          "required_level": 60,
           "requirements": {
             "Level": 18,
             "Base": {
@@ -3159,39 +3180,44 @@
           "resolved_catalog_affixes_including_item_local": [
             {
               "Attr": 61,
-              "Value": 10,
-              "Mode": 0
+              "Value": 26,
+              "Mode": 1
             },
             {
               "Attr": 36,
-              "Value": 64,
-              "Mode": 0
-            },
-            {
-              "Attr": 34,
-              "Value": 44,
-              "Mode": 0
+              "Value": 36,
+              "Mode": 1
             },
             {
               "Attr": 17,
-              "Value": 19,
-              "Mode": 0
-            },
-            {
-              "Attr": 118,
-              "Value": 7,
+              "Value": 55,
               "Mode": 0
             },
             {
               "Attr": 70,
-              "Value": 5,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 320,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 25,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 24,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 1,
-          "socket_count": 0,
-          "version": 5
+          "socket_count": 5,
+          "version": 6
         },
         {
           "base_id": 2056,
@@ -3248,7 +3274,7 @@
           "roll_bp": 12000,
           "slot": 2,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2509,
@@ -3305,7 +3331,7 @@
           "roll_bp": 12000,
           "slot": 3,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2409,
@@ -3362,7 +3388,7 @@
           "roll_bp": 12000,
           "slot": 6,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2559,
@@ -3419,7 +3445,7 @@
           "roll_bp": 12000,
           "slot": 7,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2899,
@@ -3486,13 +3512,13 @@
           "roll_bp": 12000,
           "slot": 8,
           "socket_count": 5,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 2108,
-          "kind": "formation",
-          "name": "空瓢济厄 · 天罡之靴",
-          "required_level": 60,
+          "kind": "unique",
+          "name": "漏宿沉履",
+          "required_level": 56,
           "requirements": {
             "Level": 56,
             "Base": {
@@ -3510,53 +3536,43 @@
           },
           "resolved_catalog_affixes_including_item_local": [
             {
-              "Attr": 61,
-              "Value": 26,
-              "Mode": 1
-            },
-            {
-              "Attr": 36,
-              "Value": 36,
-              "Mode": 1
-            },
-            {
               "Attr": 17,
-              "Value": 55,
-              "Mode": 0
-            },
-            {
-              "Attr": 70,
-              "Value": 24,
+              "Value": 51,
               "Mode": 0
             },
             {
               "Attr": 34,
-              "Value": 320,
+              "Value": 236,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 15,
               "Mode": 0
             },
             {
               "Attr": 118,
-              "Value": 25,
-              "Mode": 0
-            },
-            {
-              "Attr": 5,
-              "Value": 24,
+              "Value": 10,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 9,
-          "socket_count": 5,
-          "version": 5
+          "socket_count": 0,
+          "version": 6
         },
         {
-          "base_id": 2603,
+          "base_id": 2601,
           "kind": "unique",
-          "name": "羽端白尘",
-          "required_level": 36,
+          "name": "瓶里破茧",
+          "required_level": 30,
           "requirements": {
-            "Level": 36,
+            "Level": 30,
             "Base": {
               "STR": 0,
               "VIT": 0,
@@ -3572,40 +3588,35 @@
           },
           "resolved_catalog_affixes_including_item_local": [
             {
-              "Attr": 36,
-              "Value": 211,
-              "Mode": 0
-            },
-            {
               "Attr": 61,
-              "Value": 8,
+              "Value": 24,
               "Mode": 0
             },
             {
-              "Attr": 34,
-              "Value": 41,
+              "Attr": 36,
+              "Value": 12,
               "Mode": 0
             },
             {
               "Attr": 17,
-              "Value": 17,
+              "Value": 22,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 54,
               "Mode": 0
             },
             {
               "Attr": 118,
-              "Value": 6,
-              "Mode": 0
-            },
-            {
-              "Attr": 70,
-              "Value": 6,
+              "Value": 8,
               "Mode": 0
             }
           ],
           "roll_bp": 12000,
           "slot": 10,
           "socket_count": 0,
-          "version": 5
+          "version": 6
         },
         {
           "base_id": 1310,
@@ -3672,7 +3683,7 @@
           "roll_bp": 12000,
           "slot": 13,
           "socket_count": 5,
-          "version": 5
+          "version": 6
         }
       ]
     }

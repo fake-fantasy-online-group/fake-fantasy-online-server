@@ -19,23 +19,24 @@ type SkillBehaviorContract struct {
 }
 
 type SkillBehaviorPayload struct {
-	MPCost             int32             `json:"mpCost"`
-	PrepareMS          int32             `json:"prepareMs"`
-	CooldownMS         int32             `json:"cooldownMs"`
-	CastDistance       int32             `json:"castDistance"`
-	Usable             bool              `json:"usable"`
-	RequiresInvisible  bool              `json:"requiresInvisible"`
-	RequiredWeaponType int32             `json:"requiredWeaponType"`
-	InputMode          string            `json:"inputMode"`
-	PointRequired      bool              `json:"pointRequired"`
-	SelfFallback       bool              `json:"selfFallback"`
-	TargetSelf         bool              `json:"targetSelf"`
-	TargetEnemy        bool              `json:"targetEnemy"`
-	TargetTeam         bool              `json:"targetTeam"`
-	AllowsDeadTarget   bool              `json:"allowsDeadTarget"`
-	DeadTargetOnly     bool              `json:"deadTargetOnly"`
-	GroundEffect       bool              `json:"groundEffect"`
-	Area               SkillBehaviorArea `json:"area"`
+	Variant            *EquipmentSkillVariant `json:"variant,omitempty"`
+	MPCost             int32                  `json:"mpCost"`
+	PrepareMS          int32                  `json:"prepareMs"`
+	CooldownMS         int32                  `json:"cooldownMs"`
+	CastDistance       int32                  `json:"castDistance"`
+	Usable             bool                   `json:"usable"`
+	RequiresInvisible  bool                   `json:"requiresInvisible"`
+	RequiredWeaponType int32                  `json:"requiredWeaponType"`
+	InputMode          string                 `json:"inputMode"`
+	PointRequired      bool                   `json:"pointRequired"`
+	SelfFallback       bool                   `json:"selfFallback"`
+	TargetSelf         bool                   `json:"targetSelf"`
+	TargetEnemy        bool                   `json:"targetEnemy"`
+	TargetTeam         bool                   `json:"targetTeam"`
+	AllowsDeadTarget   bool                   `json:"allowsDeadTarget"`
+	DeadTargetOnly     bool                   `json:"deadTargetOnly"`
+	GroundEffect       bool                   `json:"groundEffect"`
+	Area               SkillBehaviorArea      `json:"area"`
 }
 
 type SkillBehaviorArea struct {

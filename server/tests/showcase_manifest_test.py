@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only checks for the fixed deferred 27-item showcase plan."""
+"""Read-only checks for the fixed V6 27-item showcase plan."""
 import importlib.util
 import json
 from pathlib import Path
@@ -21,11 +21,11 @@ class ShowcaseManifestTest(unittest.TestCase):
         for name, expected in generator.outputs().items():
             self.assertEqual((HERE / name).read_text(), expected, name)
 
-    def test_original_selection_preserved(self):
+    def test_reviewed_v6_selection(self):
         expected = {
             42: [(2707,), (2049,), (2509,), (2410,), (2590,), (2895, 2896), (2108,), (2604,), (1810,)],
-            183: [(2707,), (2059,), (2506,), (2409,), (2560,), (2829, 2830), (2108,), (2610,), (1310,)],
-            206: [(2705,), (2056,), (2509,), (2409,), (2559,), (2899, 2900), (2108,), (2603,), (1310,)],
+            183: [(2707,), (2059,), (2506,), (2409,), (2558,), (2829, 2830), (2108,), (2602,), (1310,)],
+            206: [(2707,), (2056,), (2509,), (2409,), (2559,), (2899, 2900), (2108,), (2601,), (1310,)],
         }
         actual = {s["character_id"]: [tuple(c["base_id"] for c in i["candidates"]) for i in s["items"]]
                   for s in self.manifest["loadouts"]}
@@ -35,7 +35,7 @@ class ShowcaseManifestTest(unittest.TestCase):
     def test_slots_channels_and_sex_branches(self):
         for s in self.manifest["loadouts"]:
             self.assertEqual(sorted(i["slot"] for i in s["items"]), [1, 2, 3, 6, 7, 8, 9, 10, 13])
-            self.assertEqual({i["channel"] for i in s["items"] if i["kind"] == "formation"}, {"战阵", "守阵", "辅阵"})
+            self.assertEqual({i["channel"] for i in s["items"] if i["kind"] == "formation"}, {"战阵", "守阵", "辅阵"} if s["character_id"] == 206 else {"守阵", "辅阵"})
             body = next(i for i in s["items"] if i["slot"] == 8)
             self.assertEqual([(c["equipment_sex_restriction"], c["character_gender_when_selected"])
                               for c in body["candidates"]], [(1, 1), (2, 0)])
@@ -60,25 +60,35 @@ class ShowcaseManifestTest(unittest.TestCase):
                     self.assertFalse(c["unknown_innate_properties"])
                 for r in i["sockets"]:
                     self.assertEqual(r["fixed_card_affixes"], runes[r["rune_item_id"]]["affixes"])
-        self.assertEqual(socket_count, 44)  # 27 equipment + 44 embedded rune instances.
+        self.assertEqual(socket_count, 34)
+        self.assertEqual(self.manifest["embedded_rune_instance_count"], socket_count)
+        self.assertEqual(self.manifest["total_new_item_instances_if_executed"], 27 + socket_count)
 
     def test_max_roll_does_not_multiply_fixed_stats(self):
         assassin = self.manifest["loadouts"][0]
         weapon = next(i for i in assassin["items"] if i["slot"] == 13)
-        attrs = {a["Attr"]: a["Value"] for a in weapon["max_roll_authored_affixes"]}
-        self.assertEqual(attrs[47], 117)  # Fixed global attack%, not 117*1.2.
-        self.assertEqual(attrs[34], -12)  # Curse retained, not reduced by the roll.
-        self.assertEqual(attrs[23], 1540)  # Explicit variable line reaches max.
-        self.assertEqual(weapon["max_roll_local_enhancement_percent"][0]["percent"], 180)
+        self.assertEqual(weapon["kind"], "unique")
+        self.assertEqual(weapon["unique_id"], 1810)
+        for loadout in self.manifest["loadouts"]:
+            for item in loadout["items"]:
+                d = item["catalog_definition"]
+                source = d.get("Affixes", d.get("affixes", []))
+                variables = d.get("VariableAffixes", d.get("variableAffixes", []))
+                variable_ids = {v.get("Attr", v.get("attr")) for v in variables}
+                actual = {a["Attr"]: a["Value"] for a in item["max_roll_authored_affixes"]}
+                for a in source:
+                    attr = a.get("Attr", a.get("attr"))
+                    if attr not in variable_ids:
+                        self.assertEqual(actual[attr], a.get("Value", a.get("value")))
         for s in self.manifest["loadouts"]:
             for i in s["items"]:
-                self.assertEqual(i["content_version"], 5)
+                self.assertEqual(i["content_version"], 6)
                 self.assertEqual(i.get("unique_roll_bp", i.get("formation_roll_bp")), 12000)
                 self.assertEqual(i["refine_level"], 0)
                 self.assertEqual(i["rolled_affix_count"], 0)
 
-    def test_deferred_read_only_scope(self):
-        self.assertEqual(self.manifest["status"], "deferred_by_user_pending_five_class_original_skill_restoration")
+    def test_prepared_read_only_scope(self):
+        self.assertEqual(self.manifest["status"], "prepared_v6_pending_review_no_grant")
         policy = self.manifest["policy"]
         self.assertTrue(policy["preserve_existing_items"])
         self.assertFalse(policy["auto_equip"])
