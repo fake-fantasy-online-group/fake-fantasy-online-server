@@ -39,19 +39,19 @@ func (e *v5Evaluator) continuePassiveOverflow(a, b SkillDef, out *SkillDef) {
 		out.PassiveResists[i].ProgressionRestoreMP = e.overflowRanks(a.PassiveResists[i].Pct, r.Pct, 100)
 	}
 	for i, m := range b.PassiveTriggers {
-		out.PassiveTriggers[i].ManaEfficiencyRanks = e.overflowRanks(a.PassiveTriggers[i].ChanceBP, m.ChanceBP, 10000)
+		out.PassiveTriggers[i].ManaCostReductionRanks = e.overflowRanks(a.PassiveTriggers[i].ChanceBP, m.ChanceBP, 10000)
 		if a.PassiveTriggers[i].ChanceBP == m.ChanceBP && m.ChanceBP > 0 {
-			out.PassiveTriggers[i].ManaEfficiencyRanks = e.rank - 5
+			out.PassiveTriggers[i].ManaCostReductionRanks = e.rank - 5
 		}
 	}
 	for i, m := range b.PassiveTriggerEffects {
 		if m.Effect.Kind == EffectKnockback {
-			out.PassiveTriggerEffects[i].ManaEfficiencyRanks = e.overflowRanks(a.PassiveTriggerEffects[i].Effect.ChanceBP, m.Effect.ChanceBP, 10000)
+			out.PassiveTriggerEffects[i].ManaCostReductionRanks = e.overflowRanks(a.PassiveTriggerEffects[i].Effect.ChanceBP, m.Effect.ChanceBP, 10000)
 		}
 	}
 	for i, m := range b.PassiveStatusAffixes {
 		if m.Affix.Mode == ModePercent && m.Affix.Value < 0 {
-			out.PassiveStatusAffixes[i].ManaEfficiencyRanks = e.overflowRanks(-a.PassiveStatusAffixes[i].Affix.Value, -m.Affix.Value, 100)
+			out.PassiveStatusAffixes[i].ManaCostReductionRanks = e.overflowRanks(-a.PassiveStatusAffixes[i].Affix.Value, -m.Affix.Value, 100)
 		}
 	}
 	if b.PassiveCounter != nil && a.PassiveCounter.DamagePct == b.PassiveCounter.DamagePct {

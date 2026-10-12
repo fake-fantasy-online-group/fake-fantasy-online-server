@@ -224,16 +224,15 @@ func TestFunctionalSkillStatusesKeepMeaningfulManaProgression(t *testing.T) {
 			if err != nil {
 				t.Fatal(id, rank, err)
 			}
-			if got.MPCost != fifth.MPCost || got.ManaEfficiencyRanks != rank-OriginalSkillRankCap {
-				t.Fatalf("skill %d rank %d: base mana=%d, efficiency=%d", id, rank, got.MPCost, got.ManaEfficiencyRanks)
+			if got.MPCost != fifth.MPCost || got.ManaCostReductionRanks != rank-OriginalSkillRankCap {
+				t.Fatalf("skill %d rank %d: base mana=%d, efficiency=%d", id, rank, got.MPCost, got.ManaCostReductionRanks)
 			}
-			// Compare the rational average directly: integer cast charges can
-			// alternate, and floor(cost) alone would manufacture empty ranks.
-			if int64(got.MPCost)*(50+int64(previous.ManaEfficiencyRanks)) >= int64(previous.MPCost)*(50+int64(got.ManaEfficiencyRanks)) {
-				t.Fatalf("skill %d rank %d: average mana cost did not improve", id, rank)
+			FinalizeSkillManaCost(&got)
+			if got.MPCost > previous.MPCost || got.MPCost < 1 {
+				t.Fatalf("skill %d rank %d: integer mana cost increased or crossed one", id, rank)
 			}
 			if got.Area != fifth.Area || len(got.DirectEffects()) != len(fifth.DirectEffects()) || len(got.Statuses) != len(fifth.Statuses) {
-				t.Fatalf("skill %d rank %d: efficiency changed scope", id, rank)
+				t.Fatalf("skill %d rank %d: mana reduction changed scope", id, rank)
 			}
 			previous = got
 		}

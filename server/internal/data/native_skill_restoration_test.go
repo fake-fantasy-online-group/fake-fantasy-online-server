@@ -255,7 +255,15 @@ func TestNativeRestorationActualReadOnlyLoader(t *testing.T) {
 			}
 			for _, app := range skills[key].Statuses {
 				sk := domain.StatusKey{ID: app.ID, Level: app.Level}
-				if !reflect.DeepEqual(statuses[sk], fixtureStatuses[sk]) {
+				actual, historical := statuses[sk], fixtureStatuses[sk]
+				// The immutable gameplay fixture predates the recovery of the
+				// original per-level SmallMap. Compare all mechanics unchanged;
+				// native artwork is independently checked against the original
+				// binary by TestNativeStatusIconsActualReadOnlyLoader.
+				if actual.IconKnown && !historical.IconKnown {
+					actual.Icon, actual.IconKnown = historical.Icon, false
+				}
+				if !reflect.DeepEqual(actual, historical) {
 					t.Fatalf("actual restored status differs from correction fixture %v\ngot%+v\nwant%+v", sk, statuses[sk], fixtureStatuses[sk])
 				}
 			}

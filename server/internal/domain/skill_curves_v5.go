@@ -183,12 +183,12 @@ func (e *v5Evaluator) continueOriginal(a, b SkillDef) SkillDef {
 	out.Dist = b.Dist
 	out.Radius = b.Radius
 	// Utility progression invests in repeated use, never in an increasing bill.
-	// Fractions are settled after modifiers by the accepted-cast path.
+	// Integer mana reduction is finalized after equipment and passive modifiers.
 	if b.Kind.Active() && !b.HasDamageEffect() {
 		out.MPCost = b.MPCost
-		out.ManaEfficiencyRanks = e.rank - OriginalSkillRankCap
-		out.PrepareMS = int32(int64(b.PrepareMS) * 50 / (50 + int64(out.ManaEfficiencyRanks)))
-		out.CooldownMS = int32(int64(b.CooldownMS) * 50 / (50 + int64(out.ManaEfficiencyRanks)))
+		out.ManaCostReductionRanks = e.rank - OriginalSkillRankCap
+		out.PrepareMS = int32(int64(b.PrepareMS) * 50 / (50 + int64(out.ManaCostReductionRanks)))
+		out.CooldownMS = int32(int64(b.CooldownMS) * 50 / (50 + int64(out.ManaCostReductionRanks)))
 	} else {
 		out.PrepareMS = max(int32(0), e.blend(a.PrepareMS, b.PrepareMS))
 		out.CooldownMS = max(int32(0), e.blend(a.CooldownMS, b.CooldownMS))

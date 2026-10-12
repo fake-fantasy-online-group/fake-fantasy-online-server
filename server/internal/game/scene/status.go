@@ -128,10 +128,11 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	return true
 }
 
-// applyStatusSource 只在状态自身没有图标时使用本次来源。skillID=0 表示物品；
+// applyStatusSource 仅为没有原表元数据的状态补来源；原 SmallMap=0 也不可覆盖。
+// skillID=0 表示物品；
 // 客户端 Buff 身份继续回退状态号，但图标取实际使用的物品。
 func applyStatusSource(def *domain.StatusDef, icon, skillID int32) {
-	if def == nil || def.Icon > 0 || icon <= 0 {
+	if def == nil || def.IconKnown || def.Icon > 0 || icon <= 0 {
 		return
 	}
 	def.Icon = icon
@@ -653,6 +654,12 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 	e.Status.Each(func(a domain.Active) {
 		if a.Def.Hidden || (a.ExpireAt != 0 && a.ExpireAt <= s.tick) {
 			return
+		}
+		// Saved statuses created before the native SmallMap import may contain
+		// a missing or source-skill icon. Correct presentation from the exact
+		// original status level, without changing saved combat/duration values.
+		if native, ok := s.statuses.Get(a.Def.ID, a.Def.Level); ok && native.IconKnown {
+			a.Def.Icon, a.Def.IconKnown, a.Def.SourceSkillID = native.Icon, true, 0
 		}
 		remainMS := int32(1<<31 - 1) // 永久状态的客户端展示哨兵
 		if a.ExpireAt != 0 {

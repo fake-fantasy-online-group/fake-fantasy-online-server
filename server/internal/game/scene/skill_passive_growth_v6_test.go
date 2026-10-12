@@ -47,10 +47,10 @@ func TestPassiveOverflowRealRuntimeV6(t *testing.T) {
 		target, _ := skills.Get(10003, 5)
 		other, _ := skills.Get(10002, 5)
 		levels := domain.Learned{10024: rank}
-		if n := s.passiveManaEfficiencyRanks(p, target, levels); n != rank-5 {
+		if n := s.passiveManaCostReductionRanks(p, target, levels); n != rank-5 {
 			t.Fatalf("rank%d durability efficiency=%d", rank, n)
 		}
-		if n := s.passiveManaEfficiencyRanks(p, other, levels); n != 0 {
+		if n := s.passiveManaCostReductionRanks(p, other, levels); n != 0 {
 			t.Fatal("durability efficiency target expanded", n)
 		}
 	}
@@ -101,14 +101,14 @@ func TestCastEfficiencyOverflowKeepsChantScopeV6(t *testing.T) {
 		if chant.PrepareMS <= 0 || instant.PrepareMS != 0 {
 			t.Fatal("fixture does not distinguish chant/instant")
 		}
-		chantBefore, instantBefore := chant.ManaEfficiencyRanks, instant.ManaEfficiencyRanks
+		chantBefore, instantBefore := chant.ManaCostReductionRanks, instant.ManaCostReductionRanks
 		levels := domain.Learned{10415: rank}
 		s.applyPassiveSkillModifiersWithLevels(p, &chant, levels)
 		s.applyPassiveSkillModifiersWithLevels(p, &instant, levels)
-		if chant.ManaEfficiencyRanks != chantBefore+rank-17 {
-			t.Fatalf("rank%d chant overflow=%d", rank, chant.ManaEfficiencyRanks-chantBefore)
+		if chant.ManaCostReductionRanks != chantBefore+rank-17 {
+			t.Fatalf("rank%d chant overflow=%d", rank, chant.ManaCostReductionRanks-chantBefore)
 		}
-		if instant.ManaEfficiencyRanks != instantBefore {
+		if instant.ManaCostReductionRanks != instantBefore {
 			t.Fatal("chant efficiency leaked to instant skill")
 		}
 	}
@@ -143,10 +143,10 @@ func TestCastEfficiencyMembershipSurvivesRoundedTimingV6(t *testing.T) {
 		if !ok {
 			t.Fatal(rank)
 		}
-		before := d.ManaEfficiencyRanks
+		before := d.ManaCostReductionRanks
 		s.applyPassiveSkillModifiersWithLevels(p, &d, levels)
-		if d.ManaEfficiencyRanks-before != (100-17)+(100-5) {
-			t.Fatalf("rank%d lost original chant membership: %d", rank, d.ManaEfficiencyRanks-before)
+		if d.ManaCostReductionRanks-before != (100-17)+(100-5) {
+			t.Fatalf("rank%d lost original chant membership: %d", rank, d.ManaCostReductionRanks-before)
 		}
 	}
 }

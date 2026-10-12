@@ -157,7 +157,6 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 	// 应该被第二次的法力检查拦住 —— 扣在结算时就会两个都放出去。
 	caster.Player.StopResting()
 	caster.MP -= def.MPCost
-	settleSkillManaCredit(caster, def)
 	if durabilityCost.amount > 0 {
 		s.consumeSkillWeaponDurability(caster, durabilityCost, def.ID)
 	}
@@ -390,7 +389,7 @@ func (s *Scene) applyPassiveSkillModifiersWithLevels(caster *entity.Entity, def 
 		caster.Player.Char == nil || def == nil {
 		return
 	}
-	def.ManaEfficiencyRanks = domain.SaturateInt32(int64(def.ManaEfficiencyRanks) + int64(s.passiveManaEfficiencyRanks(caster, *def, levels)))
+	def.ManaCostReductionRanks = domain.SaturateInt32(int64(def.ManaCostReductionRanks) + int64(s.passiveManaCostReductionRanks(caster, *def, levels)))
 	var damageBonus, damageFlat, castReduction int32
 	var stealthDuration, stealthMove, stealthDamage, preserveInvisible int32
 	var durabilityReduction, statusPhysicalDamageTaken int32

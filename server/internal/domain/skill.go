@@ -283,7 +283,7 @@ type PassiveStatusResist struct {
 // PassiveTriggerStatus 让一个已学被动为指定主动技能追加概率状态。
 // 状态定义与持续时间仍来自 PostgreSQL 状态表；这里仅保存关联和概率。
 type PassiveTriggerStatus struct {
-	ManaEfficiencyRanks         int32
+	ManaCostReductionRanks      int32
 	ProgressionFirstDurationSec int32
 	ProgressionBaseDurationSec  int32
 	ProgressionRanks            int32
@@ -298,18 +298,18 @@ type PassiveTriggerStatus struct {
 // PassiveStatusAffix 把被动提供的属性修正合并进目标主动技能原本施加的状态，
 // 从而严格继承该状态的持续时间与覆盖规则。
 type PassiveStatusAffix struct {
-	ManaEfficiencyRanks int32
-	TargetSkill         SkillID
-	Status              StatusID
-	Affix               Affix
+	ManaCostReductionRanks int32
+	TargetSkill            SkillID
+	Status                 StatusID
+	Affix                  Affix
 }
 
 // PassiveTriggerEffect 让被动为指定主动技能追加一个有序直接效果。
 // 当前用于“命中后概率击退”，效果排在原伤害之后且要求前段命中。
 type PassiveTriggerEffect struct {
-	ManaEfficiencyRanks int32
-	TargetSkill         SkillID
-	Effect              SkillEffect
+	ManaCostReductionRanks int32
+	TargetSkill            SkillID
+	Effect                 SkillEffect
 }
 
 // PassiveCounterAttack 是成功闪避后触发的近战反击规则。
@@ -321,10 +321,9 @@ type PassiveCounterAttack struct {
 
 // SkillDef 是一个技能在某一级上的定义。
 type SkillDef struct {
-	// ManaEfficiencyRanks applies only after authored ranks; additive efficiency, not a cost increase.
-	ManaEfficiencyRanks int32
-	ManaCostNumerator   int64
-	ManaCostDenominator int64
+	ManaCostReductionApplied bool
+	// ManaCostReductionRanks is scoped high-rank mana reduction, applied once after other modifiers.
+	ManaCostReductionRanks int32
 
 	EquipmentVariant *EquipmentSkillVariant // immutable accepted cast snapshot
 

@@ -1,159 +1,122 @@
-# Skill status growth review, v6
+# 全61个状态承载技能的高等级边界核验（本轮直接mpCost版）
 
-## Scope and evidence
+日期：2026-10-12。当前149技能中61个有直接状态或被动状态触发，88个没有这类载荷。这里已经合入native restoration的7个新增状态承载技能，不能再把旧54技能fixture称为当前全量。
 
-This is a status-axis audit, not a claim that a whole skill is empty when its status stops changing. Direct damage, passive effects, mana efficiency and cooldowns are outside this comparison.
+本表以当前 SkillTable.Get + StatusTable.ResolveSkillApplication 为领域曲线证据，和实际施加路径另作区分。尤其鹰眼10327已确认未调用成长resolver，表中不把理论60秒/控制压力当作已实现。原1–5行保持逐行原值；概率固定也不是高等级触顶。
 
-The original fixture contains 149 battle skills and 1,890 status rows. 54 skills have direct status applications or passive status triggers. Each was evaluated at every integer rank 6–200 against the previous rank. Status identifiers, metadata and raw progression counters were excluded; control pressure was compared by its actual integer resistance output for every resistance value 0–90. Application chance, extra affixes, stealth bonus and vulnerability overrides were included. Native ranks 1–5 are covered by exact-row parity tests.
+统一定义：r为有效等级。U是r>5的直接整数mpCost=ceil(50×C/(r+45))（无其他被动时），正费用最低1；原吟唱/冷却=floor(50×T5/(r+45))。P是持续封顶后的r−K，实际数值抵抗=floor(clamp(抗性,0,90)×100/(100+5P))；P=1781后所有0–90结果为0，不穿透免疫。完整被动范围、56个整数蓝耗/时间终点、149覆盖与全部缺口见同目录 `skill-growth-review-v6.md`。
 
-Important: these exported fixtures predate the separate native-restoration overlay. Seven additional runtime skills acquire statuses there, for 61 status-bearing skills and 88 without direct/trigger status payloads. The overlay differences are listed below. Do not present the old fixture as an exact current-loader snapshot.
+## 61技能逐项
 
-Sources: `v5/skill-original-ranks.json`, `v5/skill-status-anchors.json`, `server/internal/domain/skill_status_scaling.go`, `server/internal/data/native_skill_restoration.go`.
+| 职业 | 技能 | 原状态 / 精确边界 | 当前实际后续 / 例外 |
+|---|---|---|---|
+| 战士 | 破防之枪（10009） | 防御-30%→-70%；8级到-100%。 | 原伤害100%为常量，6级起按100%×[1+(r−5)/50]续长；降防保持-100%。 |
+| 战士 | 狂暴术（10010） | 攻击+60%→+100%，防御-60%→-100%；防御惩罚5级到底。自控/免害持续30秒固定。 | 攻击每级再+10个百分点；并用U直接减耗/降冷却。防御不会小于-100%。 |
+| 战士 | 怒火杀意（10011） | 下次普攻+100%→+140%；20秒消耗型状态固定，没有原百分比玩法上限。 | 原下次普攻加成每级+10个百分点；U。 |
+| 战士 | 破甲（10012） | 破防之枪追加物/魔易伤20%→32%；28级各100%；触发率原100%。 | 从6级给10009定向减耗E=r−5，早于易伤封顶；原名单不扩。 |
+| 战士 | 石化之枪（10016） | 石化5→9秒；11级15秒封顶。 | 之后P=r−11压低数值抵抗；1792级所有0–90抵抗的整数结果为0。U。 |
+| 战士 | 冲锋（10018） | 移速+50%固定；持续5→13秒，1799级到3600秒。 | 持续时间封顶后只剩U；移速不再增长。 |
+| 战士 | 全力投掷（10019） | 飞翔之枪30%触发移速-50%→-90%；6级-100%，5秒固定。 | 从6级给10017减耗E=r−5；30%触发率不变。 |
+| 战士 | 重击（10027） | 眩晕6→10秒；10级15秒封顶。 | P=r−10；1791级数值抵抗全0。原100%伤害按每级2个百分点续长。 |
+| 战士 | 震慑（10029） | 眩晕5→9秒；11级15秒封顶。 | P=r−11；1792级数值抵抗全0。U。 |
+| 战士 | 缴械（10030） | 攻击-100%原已固定；缴械5→9秒，16级20秒封顶。 | P=r−16；1797级数值抵抗全0。U。 |
+| 剑客 | 幻影剑（10103） | 命中-30%→-50%；15级到-100%；持续15秒固定。 | 原145%伤害常量按每级2%原值续长；命中惩罚不再加深。 |
+| 剑客 | 铁城神盾（10107） | 物理减伤10%→22%；31级100%。 | 原减伤不超过100%；U。零实际来伤时不会凭空产生更高防护收益。 |
+| 剑客 | 仙风云体（10109） | 防御+80%→+160%；自身定身10秒固定。 | 防御每级+20个百分点；U。未延长或解除原定身。 |
+| 剑客 | 通背（10110） | 罡气剑20%附眩晕，6→10秒；10级15秒封顶。 | P=r−10，1791级数值抵抗全0；6级起给10102减耗E=r−5。 |
+| 剑客 | 金缚剑（10111） | 仅移动定身6→10秒；10级15秒封顶。 | P=r−10；1791级数值抵抗全0；原伤害145%按每级2%原值续长。不是眩晕/禁技能。 |
+| 剑客 | 封法剑（10113） | 沉默6→10秒；15级20秒封顶。 | P=r−15；1796级数值抵抗全0；原155%伤害按每级2%原值续长。 |
+| 剑客 | 锁灵剑（10114） | 免有害状态10→14秒，5级14秒已固定；免疫是开关。 | 仅U；免疫持续时间未继续延长。 |
+| 剑客 | 火字诀（10115） | 攻击+10%→+22%，防御-10%→-22%；31级防御惩罚-100%。 | 攻击每级+3个百分点；U；负面代价不再加深。 |
+| 剑客 | 混沌剑（10122） | 拒绝增益10→14秒；51级60秒封顶。 | P=r−51；1832级数值抵抗全0；原160%伤害按每级2%原值续长。 |
+| 剑客 | 山字诀（10124） | 防御+10%→+22%，攻击-10%→-22%；31级攻击惩罚-100%。 | 防御每级+3个百分点；U。 |
+| 剑客 | 强击（10126） | 眩晕6→10秒；10级15秒封顶。 | P=r−10；1791级数值抵抗全0；原100%伤害按每级2个百分点续长。 |
+| 剑客 | 煞气（10128） | 眩晕5→9秒；11级15秒封顶。 | P=r−11；1792级数值抵抗全0。U。 |
+| 剑客 | 致残（10129） | 物攻上限原0→4；超过5级仍4。持续5→9秒，16级20秒封顶。 | P=r−16；1797级数值抵抗全0。U；物攻上限没有进一步收紧。 |
+| 剑客 | 雷霆之怒（10130） | 下次普攻+100%→+140%；状态20秒固定。 | 原下次普攻加成每级+10个百分点；U。 |
+| 刺客 | 隐身术（10208） | 隐身30→38秒；1786级3600秒封顶；原5级移速惩罚0。 | 隐身伤害加成继续增长，U。但额外词条错误外推为6级+6%、21级+100%移速；这是偏差，未修。 |
+| 刺客 | 淬毒术（10211） | 普攻附毒30%→50%；15级100%。附加毒等级原21→25，5级后保持25。 | 仅U；毒的等级、每跳伤害没有新成长。 |
+| 刺客 | 陷阱：毒雾（10214） | 毒每2秒掉血12→30；持续60秒固定（原1级已到该机制界限）。 | 原每跳伤害沿1–5斜率增长，原直伤继续；不加新毒段或目标。 |
+| 刺客 | 陷阱：封印（10215） | 沉默原26→34秒，高于通常20秒安全界限；5级34秒为保留的原上界。 | 6级起P=r−5；1786级数值抵抗全0；原陷阱直伤继续增长。 |
+| 刺客 | 陷阱：冻气（10216） | 受击解除的冻结14→30秒；13级60秒封顶。 | P=r−13；1794级数值抵抗全0；原陷阱直伤继续增长。 |
+| 刺客 | 击晕（10219） | 眩晕5→9秒；11级15秒封顶。 | P=r−11；1792级数值抵抗全0；原伤害继续增长。 |
+| 刺客 | 狙击（10221） | 命中后仅移动定身5秒，1–5及之后固定。 | 原伤害继续；没有延长定身，也没有控制压力。 |
+| 刺客 | 烟雾弹（10224） | 命中/魔攻各-30%→-50%；15级各-100%；两状态原60秒固定。 | 两状态6级起P=r−5，1786级数值抵抗全0；U。未加原版不存在的魔防惩罚。 |
+| 药师 | 回春术（10303） | 回春每秒14→30；持续120→180秒，233级3600秒封顶。 | 原每秒回血每级+4；U；单次实回仍受缺血量限制。 |
+| 药师 | 祝福术（10307） | 原攻击/魔攻增益继续增长；持续300秒固定。 | 原数值轴续长，U；不延长固定300秒。 |
+| 药师 | 神圣庇护（10308） | 护盾500→1300；持续60→100秒，355级3600秒封顶；即死免疫开关固定。 | 原护盾池每级+200，U；即死免疫不叠次数或新类型。 |
+| 药师 | 减速术（10310） | 移速-30%→-70%；8级-100%；20秒固定。 | U；不再加深减速，没有新增控制压力。 |
+| 药师 | 加速术（10311） | 移速+20%→+40%；17级+100%；30秒固定。 | U；移速加成与持续时间不再增长。 |
+| 药师 | 瞬击术（10315） | 攻击间隔-25%→-33%；39级-100%。 | U；玩家攻速加成上限此轴为+100%。怪物/宠物间隔归零会落入1500ms默认分支，需单列语义风险。 |
+| 药师 | 光盾术（10320） | 护盾700→1500；持续60→100秒，355级3600秒封顶；即死免疫开关固定。 | 原护盾池每级+200，U；免疫本身没有进一步量级。 |
+| 药师 | 防御术（10321） | 物理/魔法减伤10%→22%；31级均100%；300秒固定。 | U；减伤不超过100%。 |
+| 药师 | 神术：集中（10322） | 下次状态持续加成50%→90%，每级+10个百分点；本状态20秒固定。 | U及原倍增继续，但被加长的控制最终仍受其自身持续上限；不能把乘数增加当所有控制都变长。 |
+| 药师 | 衰弱术（10324） | 攻击-20%→-60%；9级-100%；30秒固定。 | U；攻击不能靠此继续降到负数，没有新增控制压力。 |
+| 药师 | 枷锁术（10325） | 攻频降低30%→50%；字段15级100%，裸目标实际攻频最低50%导致5级已停。 | U；5级后的减速字段增长在无其他加速时没有实际减速收益。 |
+| 药师 | 神术：鹰眼（10327） | 领域曲线：禁隐10→30秒，11级60秒，1792级数值抵抗全0。实际路径：5级以后始终30秒、压力0。 | U已接；禁隐持续/压力未接入实际揭隐路径，列未完成。揭隐半径300固定。 |
+| 药师 | 神术：释能（10328） | 下次技能伤害40%→100%，每级+15个百分点；20秒固定。 | 原倍增继续、U；只作用于原下一次技能通道。 |
+| 药师 | 神术：瞬发（10329） | 下次吟唱减少60%→100%；5级已瞬发；20秒固定。 | U；下一次吟唱不能小于0，不增加次数。 |
+| 药师 | 针刺护体（10330） | 物理反伤10%→50%；10级100%；20秒固定。 | U；反伤比例不超过100%，未加新反伤段。 |
+| 术士 | 冰爆术（10410） | 冻结概率25%、15秒均原1–5固定。 | 原伤害继续；概率、持续时间与控制压力均不增长。 |
+| 术士 | 绝对零度（10411） | 冻结概率50%、5秒均原1–5固定。 | 原伤害继续；概率、持续时间与控制压力均不增长。 |
+| 术士 | 时之封印（10413） | 时封10→14秒；6级15秒封顶。 | P=r−6；1787级数值抵抗全0；U。 |
+| 术士 | 魔镜术（10417） | 全额魔法反射概率30%→50%；15级100%。 | U；反射触发率保持100%，没有超额反伤。 |
+| 术士 | 秘术：集中（10418） | 下次状态持续加成50%→90%，每级+10个百分点；20秒固定。 | U与原倍增继续，但最终控制持续受接收技能的上限限制。 |
+| 术士 | 秘术：释能（10419） | 下次技能伤害40%→100%，每级+15个百分点；20秒固定。 | 原倍增继续、U。 |
+| 术士 | 秘术：瞬发（10420） | 下次吟唱减少60%→100%；5级已瞬发；20秒固定。 | U；不变成负吟唱或多次瞬发。 |
+| 术士 | 燃烧（10421） | 原每2秒20点燃烧不随1–5增长；20→40秒，9级60秒封顶。 | 6级起同一燃烧每跳20+(r−5)；不增段数；U。 |
+| 术士 | 高热风暴（10423） | 风焰术原1/3/5级30%、2/4级35%触发燃烧；5级后固定30%；原每2秒20点、40秒固定。 | 同一燃烧每跳20+(r−5)；6级起仅10405减耗E=r−5；不新增AOE。 |
+| 术士 | 火盾术（10425） | 物理减伤30%→50%，15级100%；物理反伤5%→25%，20级100%。 | 两比例封顶后U继续；不生成无关护盾或额外反伤段。 |
+| 术士 | 冰系掌握（10427） | 原四冰法30%触发移速-20%→-60%；9级-100%。 | 6级起原10409/10410/10412/10411减耗E=r−5；30%触发率不变。 |
+| 术士 | 冰封（10428） | 受击解除的冻结20→40秒；9级60秒封顶。 | P=r−9；1790级数值抵抗全0；U。 |
+| 术士 | 淬冰风暴（10430） | 暴雪术20%触发冻结，原12→20秒；25级60秒封顶。 | P=r−25，1806级数值抵抗全0；6级起仅10412减耗E=r−5。 |
+| 术士 | 冰盾术（10435） | 物理减伤/攻击者冻结概率各30%→50%；15级各100%；10秒固定。 | U；攻击者冻结仍走原状态，未追加冻结时长/新段。 |
 
-## Full 54-skill fixture audit
+## 必须单独区分的完整边界
 
-“First empty” is the first rank in 6–200 whose resolved status payload and numerical resistance outcomes are identical to the previous rank. `—` means none in this interval. “Last growth” is the last changing rank within the interval, not a universal cap. “Empty count” counts repeated transitions in that interval. Effects can remain useful at their cap even though buying another rank no longer improves that axis.
+- 10010狂暴的原自控/免害持续30秒；10109自身定身10秒；10114锁灵免有害状态14秒。布尔机制没有“超过100%”；其固定保护/自控持续不能误称还在增长。
+- 10214毒雾60秒原固定，10423附燃烧40秒原固定；10421主动燃烧20→40秒继续到9级60秒。周期伤害仍在原每跳通道增长，没有凭空增加第二段。
+- 10019、10310、10324、10325、10410、10411和恢复的10221拥有低于本状态控制安全界限的固定时长；这些固定时长不自动得到压力。不能把恒定状态等级计数当收益。
+- 10208隐身时长1786级3600秒；10018冲锋1799级3600秒；10303回春233级3600秒；10308/10320护盾355级3600秒。旧6–200扫描没扫到，不等于无限持续。
+- 10012易伤28级100%，10107/10321减伤31级100%，10330反伤10级100%，10417反魔概率15级100%，10425减伤15/反伤20级100%，10435减伤与反冻概率15级100%。原这些轴不再增，续接见U/定向被动减耗。
+- 10329/10420下次吟唱减幅5级100%，保持一次原目标行动，不增加次数；10322/10418下次延时倍率本身继续增，但接收控制仍有最终持续界限。
+- 10211附毒概率15级100%，附加毒状态等级在五级后不再提升；不能把省蓝当毒每跳也变强。
+- 10325减速字段15级100%，但无其他加速的目标5级就到50%攻频地板；10327实际揭隐路径仍30秒、P=0（独立实际路径测试已确认）；10208额外移速0翻正为+100%是已确认偏差。上述均没有借本次审计擅自改业务。
 
-| Skill | Name | First empty before | Empty count before | Last growth before | First empty after | Empty count after |
-|---|---|---:|---:|---:|---:|---:|
-| 10010 | 狂暴术 | — | 0 | 200 | — | 0 |
-| 10011 | 怒火杀意 | — | 0 | 200 | — | 0 |
-| 10012 | 破甲 | 29 | 172 | 28 | 29 | 172 |
-| 10016 | 石化之枪 | 91 | 11 | 200 | 91 | 11 |
-| 10018 | 冲锋 | — | 0 | 200 | — | 0 |
-| 10019 | 全力投掷 | 7 | 194 | 6 | 7 | 194 |
-| 10027 | 重击 | 90 | 12 | 199 | 90 | 12 |
-| 10029 | 震慑 | 91 | 11 | 200 | 91 | 11 |
-| 10030 | 缴械 | 96 | 11 | 200 | 96 | 11 |
-| 10107 | 铁城神盾 | 32 | 169 | 31 | 32 | 169 |
-| 10109 | 仙风云体 | — | 0 | 200 | — | 0 |
-| 10110 | 通背 | 90 | 12 | 199 | 90 | 12 |
-| 10114 | 锁灵剑 | 6 | 195 | 5 | 6 | 195 |
-| 10115 | 火字诀 | — | 0 | 200 | — | 0 |
-| 10124 | 山字诀 | — | 0 | 200 | — | 0 |
-| 10126 | 强击 | 90 | 12 | 199 | 90 | 12 |
-| 10128 | 煞气 | 91 | 11 | 200 | 91 | 11 |
-| 10129 | 致残 | 96 | 11 | 200 | 96 | 11 |
-| 10130 | 雷霆之怒 | — | 0 | 200 | — | 0 |
-| 10208 | 隐身术 | — | 0 | 200 | — | 0 |
-| 10211 | 淬毒术 | 16 | 185 | 15 | 16 | 185 |
-| 10214 | 陷阱：毒雾 | — | 0 | 200 | — | 0 |
-| 10215 | 陷阱：封印 | 85 | 12 | 200 | 85 | 12 |
-| 10216 | 陷阱：冻气 | 93 | 11 | 200 | 93 | 11 |
-| 10224 | 烟雾弹 | 85 | 12 | 200 | 85 | 12 |
-| 10303 | 回春术 | — | 0 | 200 | — | 0 |
-| 10307 | 祝福术 | — | 0 | 200 | — | 0 |
-| 10308 | 神圣庇护 | — | 0 | 200 | — | 0 |
-| 10310 | 减速术 | 9 | 192 | 8 | 9 | 192 |
-| 10311 | 加速术 | 18 | 183 | 17 | 18 | 183 |
-| 10315 | 瞬击术 | 40 | 161 | 39 | 40 | 161 |
-| 10320 | 光盾术 | — | 0 | 200 | — | 0 |
-| 10321 | 防御术 | 32 | 169 | 31 | 32 | 169 |
-| 10322 | 神术：集中 | — | 0 | 200 | — | 0 |
-| 10324 | 衰弱术 | 10 | 191 | 9 | 10 | 191 |
-| 10325 | 枷锁术 | 6 | 195 | 5 | 6 | 195 |
-| 10327 | 神术：鹰眼 | 91 | 11 | 200 | 91 | 11 |
-| 10328 | 神术：释能 | — | 0 | 200 | — | 0 |
-| 10329 | 神术：瞬发 | 6 | 195 | 5 | 6 | 195 |
-| 10330 | 针刺护体 | 11 | 190 | 10 | 11 | 190 |
-| 10410 | 冰爆术 | 6 | 195 | 5 | 6 | 195 |
-| 10411 | 绝对零度 | 6 | 195 | 5 | 6 | 195 |
-| 10413 | 时之封印 | 86 | 12 | 200 | 86 | 12 |
-| 10417 | 魔镜术 | 16 | 185 | 15 | 16 | 185 |
-| 10418 | 秘术：集中 | — | 0 | 200 | — | 0 |
-| 10419 | 秘术：释能 | — | 0 | 200 | — | 0 |
-| 10420 | 秘术：瞬发 | 6 | 195 | 5 | 6 | 195 |
-| 10421 | 燃烧 | 11 | 114 | 200 | — | 0 |
-| 10423 | 高热风暴 | 6 | 117 | 200 | — | 0 |
-| 10425 | 火盾术 | 21 | 180 | 20 | 21 | 180 |
-| 10427 | 冰系掌握 | 10 | 191 | 9 | 10 | 191 |
-| 10428 | 冰封 | 89 | 12 | 200 | 89 | 12 |
-| 10430 | 淬冰风暴 | 105 | 8 | 200 | 105 | 8 |
-| 10435 | 冰盾术 | 16 | 185 | 15 | 16 | 185 |
+## 控制持续与全部数值抵抗清零首级
 
-## Exact bounded-component thresholds
+| 技能 | 持续上限 / 首次到达 | P=1781、全部0–90抵抗结果为0的首级 | 实际路径 |
+|---|---|---|---|
+| 石化之枪（10016） | 15秒 / 11级 | 1792级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 重击（10027） | 15秒 / 10级 | 1791级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 震慑（10029） | 15秒 / 11级 | 1792级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 缴械（10030） | 20秒 / 16级 | 1797级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 通背（10110） | 15秒 / 10级 | 1791级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 金缚剑（10111） | 15秒 / 10级 | 1791级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 封法剑（10113） | 20秒 / 15级 | 1796级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 混沌剑（10122） | 60秒 / 51级 | 1832级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 强击（10126） | 15秒 / 10级 | 1791级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 煞气（10128） | 15秒 / 11级 | 1792级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 致残（10129） | 20秒 / 16级 | 1797级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 陷阱：封印（10215） | 34秒 / 5级 | 1786级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 陷阱：冻气（10216） | 60秒 / 13级 | 1794级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 击晕（10219） | 15秒 / 11级 | 1792级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 烟雾弹（10224） | 60秒 / 5级 | 1786级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 神术：鹰眼（10327） | 60秒 / 11级 | 1792级 | 仅领域曲线；实际30秒/P0，未接通 |
+| 时之封印（10413） | 15秒 / 6级 | 1787级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 冰封（10428） | 60秒 / 9级 | 1790级 | 通用状态resolver已接入；非逐随机分支真人验收 |
+| 淬冰风暴（10430） | 60秒 / 25级 | 1806级 | 通用状态resolver已接入；非逐随机分支真人验收 |
 
-The ranks below are the first rank reaching the component's numerical bound, not the first empty rank. Other components can continue growing after that rank.
+说明：烟雾弹10224在原1级已60秒固定；其压力按高等级扩展从6级起，因此表中K=5是压力起点，不是声称原1–4级持续小于60秒。陷阱封印的34秒是保留高于一般沉默20秒的原五级值。
 
-| Skill(s) | Bounded component | First capped rank |
-|---|---|---:|
-| 10010 | Defense penalty -100% | 5 (authored) |
-| 10012 | Physical and magic damage taken +100% | 28 |
-| 10019 | Move-speed penalty -100% | 6 |
-| 10107, 10321 | Existing damage reduction 100% | 31 |
-| 10115 | Defense penalty -100%; attack still grows | 31 |
-| 10211 | Poison-on-hit chance 100% | 15 |
-| 10224 | Blind/magic-attack penalties -100% | 15 |
-| 10310 | Slow -100% | 8 |
-| 10311 | Move speed +100% | 17 |
-| 10315 | Attack interval percentage -100% | 39 |
-| 10324 | Attack penalty -100% | 9 |
-| 10325 (runtime overlay) | Attack-frequency penalty 100% | 15 |
-| 10329, 10420 | Next-cast reduction 100% | 5 (authored) |
-| 10330 | Physical reflection 100% | 10 |
-| 10417 | Full magic reflection chance 100% | 15 |
-| 10425 | Physical reduction 100%; reflection 100% | 15; 20 |
-| 10427 | Move-speed penalty -100% | 9 |
-| 10435 | Freeze-attacker chance and physical reduction 100% | 15 |
+## 验证与表示边界
 
-Zero fifth-rank affixes remain absent; for example stealth's zero movement penalty must not be extrapolated into a positive speed buff.
+- 原745技能行+恢复55行；61状态承载技能均有本表记录。`TestSkillGrowthAuditExactNativeBoundaries` 98个字段边界的K−1/K/K+1均通过，包含上表全部新增长时长及控制数值抵抗终点。
+- 控制压力有大量中间整数平台，P继续增不保证抵抗率继续降；到P1781后明确没有剩余数值抵抗收益。对应技能还有主伤害/U等其他轴时，不能把控制压力无收益说成整个技能全空。
+- 原有非零恒定整数伤害/治疗/盾值：增加max(r−5, floor(abs(B)×(r−5)/50))，保留符号；例如20点燃烧每级+1，零伤害不会被这条机制新增。10208零额外移动词条翻正是另一分支的偏差，不能用这一正确规则掩盖。
+- 冷却按100ms帧，蓝耗/HP/MP/单次伤害均有整数和资源地板；原目标、范围、间隔、破冰条件、免疫/布尔机制不因该续接增加。
+- r和数值最终受int32表示限制，超出可表示值会拒绝；本表没有“数学无限可用”保证。
 
-### Control duration and resistance
+## 与修改前文档的区别
 
-| Skill(s) | Duration bound | First capped rank | First rank with all numerical resistance outcomes zero |
-|---|---:|---:|---:|
-| 10016, 10029, 10128 | 15 s | 11 | 1792 |
-| 10027, 10110, 10126 | 15 s | 10 | 1791 |
-| 10030, 10129 | 20 s | 16 | 1797 |
-| 10215 | 34 s (long authored silence retained) | 5 | 1786 |
-| 10216 | 60 s, breaks on damage | 13 | 1794 |
-| 10224 | 60 s | 5 | 1786 |
-| 10327 | 60 s | 11 | 1792 |
-| 10413 | 15 s | 6 | 1787 |
-| 10428 | 60 s, breaks on damage | 9 | 1790 |
-| 10430 | 60 s, breaks on damage | 25 | 1806 |
-
-The consumed resistance rule is floor(resistChance × 100 / (100 + 5 × pressure)), with legacy resistChance bounded to 90. At pressure 1780 its maximum is 1; at 1781 every allowed integer resistance gives zero. Thus an ever-increasing pressure integer is not an ever-improving gameplay effect. The first integer plateaus occur well before this terminal point, as the 6–200 audit shows. Actual immunity/status-blocking gates remain independent and unchanged.
-
-Constant durations below their mechanism bounds do not acquire pressure: 10019 (5 s), 10310 (20 s), 10324/10325 (30 s), 10410 (15 s), 10411 (5 s), and runtime-restored 10221 (5 s). Preserving the native constant duration does not claim that its rank progression is complete.
-
-## Native-restoration overlay differences
-
-Seven skills omitted by the old fixture's status lists have these runtime status axes:
-
-| Skill | Restored axis | Exact threshold / progression |
-|---|---|---|
-| 10009 破防之枪 | Defense penalty, fixed 15 s | -100% at rank 8; status-only empty from 9 |
-| 10103 幻影剑 | Hit penalty, fixed 15 s | -100% at rank 15; status-only empty from 16 |
-| 10111 金缚剑 | Movement-only root | 15 s at rank 10; pressure thereafter, fully zero resistance at rank 1791 |
-| 10113 封法剑 | Silence | 20 s at rank 15; pressure thereafter, fully zero resistance at rank 1796 |
-| 10122 混沌剑 | Refuse beneficial states | 60 s at rank 51; pressure thereafter, fully zero resistance at rank 1832 |
-| 10219 击晕 | Native nonordinal stun rows | 15 s at rank 11; pressure thereafter, fully zero resistance at rank 1792 |
-| 10221 狙击 | Fixed 5-second movement-only root | No duration/pressure growth; status-only empty from 6 |
-
-Additional overlay changes: 10325 acquires its actual attack-frequency penalty and therefore first becomes status-only empty at rank 16, replacing the obsolete fixture result of 6. 10109 gains its native self-root but retains unbounded positive defense growth. 10124 gains its native attack penalty (bounded at -100%, rank 31) but retains positive defense growth. 10224 no longer acquires the unrelated magic-defense penalty; its hit/magic-attack penalty thresholds and pressure outcomes are unchanged.
-
-These overlay thresholds are source/formula cross-checks, separately identified from the executable old-fixture sweep above. Current-loader integration tests remain required before claiming production equivalence.
-
-## Implemented status fix
-
-Only existing nonzero constant damage/healing/shield/reflect/next-hit magnitudes change: extra magnitude is max(extraRanks, floor(abs(rank5Magnitude) × extraRanks / 50)). This retains the 2% continuation where it advances at least one native unit and removes quantized empty ranks below that slope. Signs and existing effect channels are preserved. Zero effects, chances, duration, targets, area, intervals, break conditions and boolean mechanics are unchanged.
-
-For burning status 1036, the native 20 damage per tick now increases by one per extra rank. Both 10421 and 10423 have zero empty status transitions in ranks 6–200; before the fix they had 114 and 117 respectively. No second damage segment or new periodic effect was added. Integer overflow is rejected rather than silently capped.
-
-## Unbounded existing axes and functional fallback
-
-Within representable engine fields, these native magnitude axes continue: 10010 attack; 10011/10130 next-basic damage; 10109/10124 defense; 10115 attack; 10208 stealth damage; 10214 poison damage; 10303 regeneration; 10307 attack/magic attack; 10308/10320 shield pool; 10322/10418 next-duration multiplier; 10328/10419 next-skill damage; 10421/10423 burning damage. Duration multipliers may still encounter the receiving control's duration cap; the raw multiplier is not proof of an effective improvement in every target context. Sprint 10018 continues duration up to its 3600-second bound at rank 1799 but is not an unbounded axis.
-
-Functional active skills use mana efficiency rather than unrelated damage or shields: native ranks 1–5 remain exact, while rank >5 retains the fifth-rank base mana and adds rank−5 efficiency. The rational average at efficiency E is baseMana × 50 / (50 + E). The domain regression checks strict average improvement at ranks 20, 21, 30, 50 and 100 without pretending each individual integer charge must differ. It also verifies unchanged area, status count and effect count. Authoritative fractional settlement is a separate scene integration responsibility.
-
-Passive bounded-status continuations must improve only their existing target skills. Specifically, 10012 targets 10009; 10019 targets 10017; 10427 targets its existing 10409/10410/10412/10411 list. Their frozen status values cannot be treated as successful uncapped progression merely because a progression counter changes.
-
-## Regression evidence
-
-- All original status rows return unchanged when no extended rank is requested.
-- Constant positive/negative native magnitudes strictly advance every rank across 1–200 added ranks; zero stays zero and unrepresentable arithmetic is rejected.
-- Actual burning fixture advances every rank 6–200 without changing timing or control semantics.
-- Existing status continuation, duration-boundary, resistance, source-nonmutation and large-rank bounded-probability tests pass.
-- Functional active domain averages strictly improve at 20/21/30/50/100 with no new status, direct effect or area.
-- Full domain suite passed after the status magnitude change; focused status and mana-efficiency tests passed after the functional progression changes.
+废除修改前“有理数平均扣蓝+零头返还”和“字段计数变化即可证明每级收益”的表述。主表以直接整数消耗、真实冷却帧、原目标实际费用补充领域字段审计，明确列出平台与未接通路径。该审计不替代Unity玩家实战或所有装备/目标/随机分支验证。

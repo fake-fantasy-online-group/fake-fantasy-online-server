@@ -316,8 +316,7 @@ func TestSkillBehaviorAcceptanceHighEquippedRanksAndRemoval(t *testing.T) {
 	}
 	afterDef, _ := s.skills.Get(10301, 20)
 	s.applyResolvedSkillModifiers(p, &afterDef, p.Player.Char.Skills, s.rawSkillLevels(p))
-	if views[10301].EffectiveRank != "20" || views[10301].HardRank != 20 || views[10301].Contract.Current.MPCost < before ||
-		afterDef.ManaCostNumerator*beforeDef.ManaCostDenominator <= beforeDef.ManaCostNumerator*afterDef.ManaCostDenominator {
+	if views[10301].EffectiveRank != "20" || views[10301].HardRank != 20 || views[10301].Contract.Current.MPCost < before || afterDef.ManaCostReductionRanks >= beforeDef.ManaCostReductionRanks {
 		t.Fatal("broken source retained effective cost", before, views[10301])
 	}
 }

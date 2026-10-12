@@ -34,18 +34,18 @@ func TestPassiveOverflowRanksV6(t *testing.T) {
 			}
 			for i, m := range current.PassiveTriggers {
 				n := next.PassiveTriggers[i]
-				gain = gain || n.ChanceBP > m.ChanceBP || n.ManaEfficiencyRanks > m.ManaEfficiencyRanks
+				gain = gain || n.ChanceBP > m.ChanceBP || n.ManaCostReductionRanks > m.ManaCostReductionRanks
 			}
 			for i, m := range current.PassiveTriggerEffects {
 				n := next.PassiveTriggerEffects[i]
-				gain = gain || n.Effect.ChanceBP > m.Effect.ChanceBP || n.ManaEfficiencyRanks > m.ManaEfficiencyRanks
+				gain = gain || n.Effect.ChanceBP > m.Effect.ChanceBP || n.ManaCostReductionRanks > m.ManaCostReductionRanks
 				if n.Effect.KnockbackDistance != m.Effect.KnockbackDistance {
 					t.Fatal("knockback range changed")
 				}
 			}
 			for i, m := range current.PassiveStatusAffixes {
 				n := next.PassiveStatusAffixes[i]
-				gain = gain || n.Affix.Value != m.Affix.Value || n.ManaEfficiencyRanks > m.ManaEfficiencyRanks
+				gain = gain || n.Affix.Value != m.Affix.Value || n.ManaCostReductionRanks > m.ManaCostReductionRanks
 			}
 			if current.PassiveCounter != nil {
 				gain = gain || next.PassiveCounter.DamagePct > current.PassiveCounter.DamagePct

@@ -108,10 +108,11 @@ type StatusDef struct {
 	// 生产数据始终为 true；false 时保留旧的效果符号回退，不让手工定义静默变义。
 	TypeKnown bool
 
-	// 以下是客户端展示元数据。状态自身有图标时保留；没有时由本次实际施加
-	// 来源补充：技能用技能图标，物品用物品图标。不同来源不得全局归一。
-	Icon int32
-	// SourceSkillID 只记录本次技能来源；物品来源或状态原图标为0。
+	// 原状态表按状态号+等级明确给出 SmallMap；包括 0 都是已知的原值。
+	// 只有不属于原表的自定义状态才可由实际施加来源提供展示元数据。
+	Icon      int32
+	IconKnown bool
+	// SourceSkillID 仅供无原表的来源状态使用；原表状态保持0并使用状态身份。
 	SourceSkillID int32
 	Invisible     bool
 	// PreventInvisible 表示该状态生效期间不能获得隐身。它用于神术：鹰眼

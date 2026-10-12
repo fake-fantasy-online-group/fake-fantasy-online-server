@@ -297,7 +297,7 @@ func TestOriginalSkillCostsTimingsAndUtilityEfficiency(t *testing.T) {
 					if name != "MPCost" {
 						want = int64(b) * 50 / (50 + int64(rank-5))
 					}
-					if d.ManaEfficiencyRanks != rank-5 {
+					if d.ManaCostReductionRanks != rank-5 {
 						t.Fatalf("skill%d/%d utility efficiency missing", id, rank)
 					}
 				}

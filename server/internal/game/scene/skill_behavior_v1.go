@@ -14,7 +14,7 @@ func (s *Scene) applyResolvedSkillModifiers(p *entity.Entity, def *domain.SkillD
 	s.applyEquipmentSkillVariant(p, def, hard)
 	s.applyUniqueSkillModifiers(p, def)
 	finalizeEquipmentSkillVariant(def)
-	domain.FinalizeSkillManaEfficiency(def)
+	domain.FinalizeSkillManaCost(def)
 }
 
 func (s *Scene) skillBehaviorIdentity(id domain.SkillID) *domain.SkillBehaviorContract {

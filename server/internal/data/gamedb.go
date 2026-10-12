@@ -3852,7 +3852,9 @@ func LoadStatuses(ctx context.Context, q Querier) (domain.StatusTable, StatusSta
 		SELECT d.type,
 		       COALESCE(to_jsonb(x)->>('lv' || e.except_level::text || '_name'), x.lv1_name, ''),
 		       COALESCE(to_jsonb(x)->>('lv' || e.except_level::text || '_desc'), x.lv1_desc, ''),
-		       e.except_level, e.last_time, e.interval, e.no_inform_client, e.except_type
+		       e.except_level, e.last_time, e.interval, e.no_inform_client, e.except_type,
+		       COALESCE(x.level_small_maps[e.except_level::int], 0),
+		       x.level_small_maps[e.except_level::int] IS NOT NULL
 		  FROM gamedata.ov_exceptdetail d
 		  JOIN gamedata.ov_exceptdetail_entry e ON e.row_no = d.row_no
 		  LEFT JOIN gamedata.ov_exceptdesc x ON x.type = d.type
@@ -3867,8 +3869,10 @@ func LoadStatuses(ctx context.Context, q Querier) (domain.StatusTable, StatusSta
 			last, interval   int32
 			name, desc       string
 			hidden, typClass int16
+			icon             int32
+			iconKnown        bool
 		)
-		if err := rows.Scan(&typ, &name, &desc, &level, &last, &interval, &hidden, &typClass); err != nil {
+		if err := rows.Scan(&typ, &name, &desc, &level, &last, &interval, &hidden, &typClass, &icon, &iconKnown); err != nil {
 			rows.Close()
 			return nil, st, fmt.Errorf("data: 读状态时长行: %w", err)
 		}
@@ -3881,6 +3885,7 @@ func LoadStatuses(ctx context.Context, q Querier) (domain.StatusTable, StatusSta
 			ID: id, Level: int32(level), Name: name, Desc: desc,
 			Type: domain.StatusType(typClass), TypeKnown: true,
 			DurationSec: last, IntervalSec: interval, Hidden: hidden != 0,
+			Icon: icon, IconKnown: iconKnown,
 		}
 		if id == 1032 { // 隐身：状态说明明确，且 0x8017 有独立 invisible 位
 			d.Invisible = true

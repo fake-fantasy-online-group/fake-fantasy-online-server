@@ -5,7 +5,7 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 )
 
-func (s *Scene) passiveManaEfficiencyRanks(caster *entity.Entity, def domain.SkillDef, levels domain.Learned) int32 {
+func (s *Scene) passiveManaCostReductionRanks(caster *entity.Entity, def domain.SkillDef, levels domain.Learned) int32 {
 	if s == nil || s.skills == nil || caster == nil || caster.Player == nil || caster.Player.Char == nil {
 		return 0
 	}
@@ -38,17 +38,17 @@ func (s *Scene) passiveManaEfficiencyRanks(caster *entity.Entity, def domain.Ski
 		}
 		for _, m := range p.PassiveTriggers {
 			if m.TargetSkill == def.ID {
-				total += int64(m.ManaEfficiencyRanks)
+				total += int64(m.ManaCostReductionRanks)
 			}
 		}
 		for _, m := range p.PassiveTriggerEffects {
 			if m.TargetSkill == def.ID {
-				total += int64(m.ManaEfficiencyRanks)
+				total += int64(m.ManaCostReductionRanks)
 			}
 		}
 		for _, m := range p.PassiveStatusAffixes {
 			if m.TargetSkill == def.ID {
-				total += int64(m.ManaEfficiencyRanks)
+				total += int64(m.ManaCostReductionRanks)
 			}
 		}
 	}
