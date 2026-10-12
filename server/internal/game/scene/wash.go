@@ -16,14 +16,27 @@ func washRef(cmd WashAffix) socketTargetRef {
 	return ref
 }
 
+// attackSpeedAffixText translates the stored attr25 interval sign only at the
+// display boundary. Percentage entries feed player attack-speed points, while
+// absolute entries remain interval milliseconds and must not be labeled as %.
+func attackSpeedAffixText(a domain.Affix) string {
+	if a.Mode == domain.ModePercent {
+		return fmt.Sprintf("攻击速度 %+d%%", -int64(a.Value))
+	}
+	return fmt.Sprintf("攻击间隔 %+d毫秒", a.Value)
+}
+
 func affixText(a domain.Affix) string {
+	if a.Attr == domain.AttrAtkSpeed {
+		return attackSpeedAffixText(a)
+	}
 	name := map[int32]string{
 		domain.AttrSTR: "力量", domain.AttrINT: "智慧", domain.AttrVIT: "体质",
 		domain.AttrAGI: "敏捷", domain.AttrDEX: "灵巧", domain.AttrSPI: "精神",
 		domain.AttrDef: "防御", domain.AttrMAtk: "魔法攻击", domain.AttrMDef: "魔法防御",
 		domain.AttrHit: "命中", domain.AttrCrit: "暴击率", domain.AttrMCrit: "魔法暴击率",
-		domain.AttrAtkSpeed: "攻击速度", domain.AttrMoveSpeed: "移动速度",
-		domain.AttrMinAtk: "最小攻击", domain.AttrMaxAtk: "最大攻击",
+		domain.AttrMoveSpeed: "移动速度",
+		domain.AttrMinAtk:    "最小攻击", domain.AttrMaxAtk: "最大攻击",
 		domain.AttrMaxHP: "最大生命", domain.AttrMaxMP: "最大法力", domain.AttrHPRegen: "生命恢复",
 		domain.AttrMaxWeight: "最大负重", domain.AttrAtk: "攻击",
 		domain.AttrPhysRes: "伤害抗性", domain.AttrMagicRes: "魔法抗性",

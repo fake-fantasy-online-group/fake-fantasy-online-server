@@ -884,11 +884,14 @@ func qualityColoredLine(quality uint8, line string) string {
 }
 
 func equipmentAffixLine(a domain.Affix) (string, bool) {
+	if a.Attr == domain.AttrAtkSpeed {
+		return attackSpeedAffixText(a), true
+	}
 	name := map[int32]string{
 		domain.AttrSTR: "力量", domain.AttrVIT: "体质", domain.AttrAGI: "敏捷",
 		domain.AttrINT: "智慧", domain.AttrSPI: "精神", domain.AttrDEX: "灵巧",
 		domain.AttrDef: "防御", domain.AttrMAtk: "魔法攻击", domain.AttrMDef: "魔法防御",
-		domain.AttrHit: "命中", domain.AttrCrit: "爆击率", domain.AttrAtkSpeed: "攻击速度",
+		domain.AttrHit: "命中", domain.AttrCrit: "爆击率",
 		domain.AttrMoveSpeed: "移动速度", domain.AttrMinAtk: "最小攻击",
 		domain.AttrMaxAtk: "最大攻击", domain.AttrMaxHP: "最大生命",
 		domain.AttrMaxMP: "最大法力", domain.AttrHPRegen: "生命恢复",
@@ -908,11 +911,6 @@ func equipmentAffixLine(a domain.Affix) (string, bool) {
 		suffix = "%"
 	}
 	value := int64(a.Value)
-	if a.Attr == domain.AttrAtkSpeed && a.Mode == domain.ModePercent {
-		// Stored negative interval-percent entries feed positive AtkSpeedPct.
-		// Player cadence uses base / speed, not a linear interval subtraction.
-		value = -value
-	}
 	prefix := ""
 	if value >= 0 {
 		prefix = "+"
