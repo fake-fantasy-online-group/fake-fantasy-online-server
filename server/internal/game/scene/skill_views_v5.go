@@ -144,16 +144,19 @@ func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
 		out = append(out, fmt.Sprintf("施术保护盾：吸收%d伤害，持续5秒", def.ProgressionShieldFlat))
 	}
 	for _, app := range def.Statuses {
-		d, ok := s.statuses.Get(app.ID, app.Level)
+		d, ok := s.statuses.ResolveSkillApplication(app)
 		if !ok {
 			continue
 		}
 		d.Affixes = overrideStatusAffixes(d.Affixes, app.ExtraAffixes)
 		applyProgressionStatus(app, &d)
-		if app.DurationSec > 0 {
+		if app.DurationSec > 0 && app.ProgressionRanks <= 0 {
 			d.DurationSec = app.DurationSec
 		}
 		out = append(out, fmt.Sprintf("%s：持续%d秒", d.Name, d.DurationSec))
+		if d.ControlPower > 0 {
+			out = append(out, skillControlResistanceLine(d))
+		}
 		for _, a := range d.Affixes {
 			out = append(out, skillAffixText(a))
 		}
@@ -193,12 +196,16 @@ func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
 	}
 	for _, m := range def.PassiveTriggers {
 		name, duration := s.skillStatusName(m.Status), m.DurationSec
-		if state, ok := s.statuses.Get(m.Status, m.StatusLevel); ok {
+		controlLine := ""
+		if state, ok := s.statuses.ResolveSkillApplication(domain.StatusApplication{ID: m.Status, Level: m.StatusLevel, ProgressionRanks: m.ProgressionRanks, ProgressionFirstLevel: m.ProgressionFirstLevel, DurationSec: m.DurationSec, ProgressionFirstDurationSec: m.ProgressionFirstDurationSec, ProgressionBaseDurationSec: m.ProgressionBaseDurationSec}); ok {
 			if state.Name != "" {
 				name = state.Name
 			}
-			if duration <= 0 {
+			if duration <= 0 || m.ProgressionRanks > 0 {
 				duration = state.DurationSec
+			}
+			if state.ControlPower > 0 {
+				controlLine = skillControlResistanceLine(state)
 			}
 		}
 		line := fmt.Sprintf("%s附加%s：概率%s", skillTargetName(m.TargetSkill), name, equipmentPercent(m.ChanceBP))
@@ -206,6 +213,9 @@ func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
 			line += fmt.Sprintf("，持续%d秒", duration)
 		}
 		out = append(out, line)
+		if controlLine != "" {
+			out = append(out, controlLine)
+		}
 	}
 	if def.TrainingEliteDamageBP > 0 {
 		out = append(out, fmt.Sprintf("对精英伤害加成%s", equipmentPercent(def.TrainingEliteDamageBP)))
@@ -274,7 +284,7 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 			ranks[id] = r
 			continue
 		}
-		var currentDef, nextDef domain.SkillDef
+		r.NextChangeLines = nil
 		evaluate := func(n int32) []string {
 			def, ok := s.skills.Get(id, n)
 			if !ok {
@@ -283,15 +293,13 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 			s.applyTrainingSynergiesWithHard(p, &def, ch.Skills)
 			s.applyPassiveSkillModifiersWithLevels(p, &def, raw)
 			s.applyUniqueSkillModifiers(p, &def)
-			nextDef = def
-			return s.skillEffectLines(def)
+			return s.skillOriginalEffectLines(def)
 		}
 		rank, e := r.EngineRank()
 		if e != nil {
 			r.BlockedReasons = append(r.BlockedReasons, "等级超过结算数值表示范围")
 		} else if rank > 0 {
 			r.CurrentEffectLines = evaluate(rank)
-			currentDef = nextDef
 			if rank < 2147483647 {
 				next := big.NewInt(int64(rank) + 1)
 				// A granted but uninvested skill can start accepting equipment ranks
@@ -314,10 +322,6 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 					r.NextEffectLines = evaluate(int32(n.Int64()))
 				}
 			}
-		}
-
-		if len(r.NextEffectLines) > 0 {
-			r.NextChangeLines = s.skillNextChangeLines(currentDef, nextDef, r.CurrentEffectLines, r.NextEffectLines)
 		}
 
 		if _, _, reason, ok := s.skillUpgradeTarget(p, id); !ok {

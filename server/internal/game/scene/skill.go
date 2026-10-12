@@ -458,6 +458,8 @@ func (s *Scene) applyPassiveSkillModifiersWithLevels(caster *entity.Entity, def 
 			triggerStatuses = append(triggerStatuses, domain.StatusApplication{
 				ID: trigger.Status, Level: trigger.StatusLevel,
 				ChanceBP: trigger.ChanceBP, DurationSec: trigger.DurationSec,
+				ProgressionRanks: trigger.ProgressionRanks, ProgressionFirstLevel: trigger.ProgressionFirstLevel,
+				ProgressionFirstDurationSec: trigger.ProgressionFirstDurationSec, ProgressionBaseDurationSec: trigger.ProgressionBaseDurationSec,
 			})
 		}
 		for _, modifier := range passive.PassiveStatusAffixes {
@@ -1244,11 +1246,11 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		if chanceBP < 10000 && int32(s.rng.Intn(10000)) >= chanceBP {
 			continue
 		}
-		statusDef, ok := s.statuses.Get(app.ID, app.Level)
+		statusDef, ok := s.statuses.ResolveSkillApplication(app)
 		if !ok {
 			continue
 		}
-		if app.DurationSec > 0 {
+		if app.DurationSec > 0 && app.ProgressionRanks <= 0 {
 			statusDef.DurationSec = app.DurationSec
 		}
 		statusDef.Affixes = overrideStatusAffixes(statusDef.Affixes, app.ExtraAffixes)
@@ -1268,7 +1270,10 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			statusDef.Control = app.Control
 		}
 		if statusDurationPct > 0 {
-			statusDef.DurationSec += statusDef.DurationSec * statusDurationPct / 100
+			statusDef.DurationSec = domain.SaturateInt32(int64(statusDef.DurationSec) * (100 + int64(statusDurationPct)) / 100)
+		}
+		if cap := s.statuses.SkillApplicationDurationCap(app); cap > 0 {
+			statusDef.DurationSec = min(statusDef.DurationSec, cap)
 		}
 		if app.ID == 1032 {
 			statusDef.Invisible = true

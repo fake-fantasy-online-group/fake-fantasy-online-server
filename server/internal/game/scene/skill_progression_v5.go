@@ -149,6 +149,15 @@ func (s *Scene) applyTrainingSynergiesWithHard(p *entity.Entity, def *domain.Ski
 	for i := range def.Effects {
 		e := &def.Effects[i]
 		if e.Kind == domain.EffectHeal {
+			// Exact original rows use integer fields. Seed their rational form
+			// before adding/scaling training bonuses, or numerator zero erases
+			// the original healing when a denominator is introduced.
+			if e.HealFlatDenominator <= 0 {
+				e.HealFlatNumerator, e.HealFlatDenominator = int64(e.HealFlat), 1
+			}
+			if e.HealPctDenominator <= 0 {
+				e.HealPctNumerator, e.HealPctDenominator = int64(e.HealPctOfMax), 1
+			}
 			e.HealFlat += healFlat
 			e.HealFlatNumerator += int64(healFlat) * max(int64(1), e.HealFlatDenominator)
 			if healBP != 0 {
@@ -168,13 +177,36 @@ func (s *Scene) applyTrainingSynergiesWithHard(p *entity.Entity, def *domain.Ski
 	if durationBP > 0 {
 		def.Statuses = append([]domain.StatusApplication(nil), def.Statuses...)
 		for i := range def.Statuses {
-			duration := def.Statuses[i].DurationSec
+			app := &def.Statuses[i]
+			if app.ProgressionRanks > 0 {
+				resolved, ok := s.statuses.ResolveSkillApplication(*app)
+				if !ok {
+					continue
+				}
+				if app.DurationSec <= 0 {
+					original, ok := s.statuses.Get(app.ID, app.Level)
+					if !ok {
+						continue
+					}
+					app.DurationSec = original.DurationSec
+					if app.ProgressionBaseDurationSec > 0 {
+						app.DurationSec = app.ProgressionBaseDurationSec
+					}
+				}
+				boosted := domain.ApplyUniqueBP(resolved.DurationSec, durationBP)
+				if cap := s.statuses.SkillApplicationDurationCap(*app); cap > 0 {
+					boosted = min(boosted, cap)
+				}
+				app.DurationSec = domain.SaturateInt32(int64(app.DurationSec) + int64(boosted) - int64(resolved.DurationSec))
+				continue
+			}
+			duration := app.DurationSec
 			if duration <= 0 {
-				if base, ok := s.statuses.Get(def.Statuses[i].ID, def.Statuses[i].Level); ok {
+				if base, ok := s.statuses.Get(app.ID, app.Level); ok {
 					duration = base.DurationSec
 				}
 			}
-			def.Statuses[i].DurationSec = domain.ApplyUniqueBP(duration, durationBP)
+			app.DurationSec = domain.ApplyUniqueBP(duration, durationBP)
 		}
 	}
 }

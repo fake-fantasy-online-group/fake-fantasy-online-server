@@ -135,6 +135,11 @@ type StatusDef struct {
 	MPChanges []ResourceChange
 	// Control 控制行为，非 ControlNone 时该状态会限制行动。
 	Control Control
+	// ControlPower is the number of added skill ranks after duration reaches its
+	// control boundary. A fixed original duration below that boundary adds none.
+	// It reduces numerical resistance to an existing harmful control/debuff;
+	// categorical immunity and status blocking are checked independently.
+	ControlPower int32
 
 	// 以下字段是不能塞进 Stats 的战斗状态语义。数值均来自状态效果表或
 	// 与状态逐级闭合的技能描述；百分比使用整数百分数。
@@ -208,13 +213,22 @@ const (
 
 // StatusApplication 是效果脚本里一条已经闭合的“施加某级状态”。
 type StatusApplication struct {
-	ProgressionAttackFlat   int32
-	ProgressionAffixes      []Affix
-	ProgressionHPPerTick    int32
-	ProgressionDamageShield int32
-	ProgressionReflectFlat  int32
-	ID                      StatusID
-	Level                   int32
+	// ProgressionRanks extends the original fifth-rank payload without inventing
+	// another status level. ProgressionFirstLevel identifies the skill's original
+	// first-rank status row, which need not be status level 1.
+	ProgressionRanks      int32
+	ProgressionFirstLevel int32
+	// Original skill-duration overrides; zero falls back to the corresponding
+	// stored status row. They let continuation retain source-specific durations.
+	ProgressionFirstDurationSec int32
+	ProgressionBaseDurationSec  int32
+	ProgressionAttackFlat       int32
+	ProgressionAffixes          []Affix
+	ProgressionHPPerTick        int32
+	ProgressionDamageShield     int32
+	ProgressionReflectFlat      int32
+	ID                          StatusID
+	Level                       int32
 	// ChanceBP 是这条状态在技能真实命中后的独立施加概率（万分比）。零值用于
 	// 旧的内存定义并按 10000 处理；PostgreSQL 结构化配置始终显式保存。
 	ChanceBP int32

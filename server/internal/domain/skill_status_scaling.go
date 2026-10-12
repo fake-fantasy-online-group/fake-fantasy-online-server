@@ -1,0 +1,268 @@
+package domain
+
+import "math"
+
+// ResolveSkillApplication resolves the original status row and, only above the
+// original five skill ranks, continues its existing numerical effects. Status
+// identifiers, levels, intervals and boolean mechanics remain the stored ones.
+// Application-specific overrides are applied by the caller after resolution.
+func (t StatusTable) ResolveSkillApplication(app StatusApplication) (StatusDef, bool) {
+	fifth, ok := t.Get(app.ID, app.Level)
+	if !ok || app.ProgressionRanks <= 0 {
+		return fifth, ok
+	}
+	first, ok := t.Get(app.ID, app.ProgressionFirstLevel)
+	if !ok {
+		return StatusDef{}, false
+	}
+	d := fifth
+	ranks := app.ProgressionRanks
+	valid := true
+	grow := func(a, b int32) int32 {
+		value, ok := continueStatusValue(a, b, ranks)
+		valid = valid && ok
+		return value
+	}
+	magnitude := func(a, b int32) int32 {
+		value, ok := continueStatusMagnitude(a, b, ranks)
+		valid = valid && ok
+		return value
+	}
+	pct := func(a, b int32) int32 {
+		return int32(min(int64(100), max(int64(0), continuedStatusWide(a, b, ranks, false))))
+	}
+	reflectPct := func(a, b int32) int32 {
+		return int32(min(int64(100), max(int64(0), continuedStatusWide(a, b, ranks, true))))
+	}
+
+	d.Affixes = append([]Affix(nil), fifth.Affixes...)
+	for i, b := range fifth.Affixes {
+		// Pair effects by attribute and mode, never by their incidental ordering.
+		for _, a := range first.Affixes {
+			if a.Attr != b.Attr || a.Mode != b.Mode {
+				continue
+			}
+			periodic := b.Attr == AttrHPRegen && d.IntervalSec > 0
+			v := continuedStatusWide(a.Value, b.Value, ranks, periodic)
+			if b.Mode == ModePercent {
+				// A percentage penalty cannot become negative underlying stats.
+				// Preserve any already-authored exceptional boundary unchanged.
+				v = max(min(int64(-100), int64(b.Value)), v)
+				if b.Attr == AttrMoveSpeed || b.Attr == AttrAtkSpeed || periodic {
+					v = min(max(int64(100), int64(b.Value)), v)
+				}
+			}
+			if v > math.MaxInt32 || v < math.MinInt32 {
+				valid = false
+			} else {
+				d.Affixes[i].Value = int32(v)
+			}
+			break
+		}
+	}
+	d.HPChanges, ok = continueResourceChanges(first.HPChanges, fifth.HPChanges, ranks)
+	valid = valid && ok
+	d.MPChanges, ok = continueResourceChanges(first.MPChanges, fifth.MPChanges, ranks)
+	valid = valid && ok
+	d.PhysicalDamageReductionPct = pct(first.PhysicalDamageReductionPct, fifth.PhysicalDamageReductionPct)
+	d.MagicDamageReductionPct = pct(first.MagicDamageReductionPct, fifth.MagicDamageReductionPct)
+	d.PhysicalDamageTakenPct = pct(first.PhysicalDamageTakenPct, fifth.PhysicalDamageTakenPct)
+	d.MagicDamageTakenPct = pct(first.MagicDamageTakenPct, fifth.MagicDamageTakenPct)
+	d.PhysicalReflectPct = reflectPct(first.PhysicalReflectPct, fifth.PhysicalReflectPct)
+	d.MagicReflectPct = reflectPct(first.MagicReflectPct, fifth.MagicReflectPct)
+	d.MagicFullReflectChancePct = pct(first.MagicFullReflectChancePct, fifth.MagicFullReflectChancePct)
+	d.PhysicalReflectFlat = magnitude(first.PhysicalReflectFlat, fifth.PhysicalReflectFlat)
+	d.MagicReflectFlat = magnitude(first.MagicReflectFlat, fifth.MagicReflectFlat)
+	d.DamageShield = magnitude(first.DamageShield, fifth.DamageShield)
+	d.StealthDamagePct = grow(first.StealthDamagePct, fifth.StealthDamagePct)
+	d.PoisonOnHitChance = pct(first.PoisonOnHitChance, fifth.PoisonOnHitChance)
+	d.FreezeAttackerChance = pct(first.FreezeAttackerChance, fifth.FreezeAttackerChance)
+	d.NextBasicAttackPct = magnitude(first.NextBasicAttackPct, fifth.NextBasicAttackPct)
+	d.NextSkillDamagePct = magnitude(first.NextSkillDamagePct, fifth.NextSkillDamagePct)
+	d.NextStatusDurationPct = grow(first.NextStatusDurationPct, fifth.NextStatusDurationPct)
+	d.NextCastTimeReductionPct = pct(first.NextCastTimeReductionPct, fifth.NextCastTimeReductionPct)
+	d.LifeStealPct = pct(first.LifeStealPct, fifth.LifeStealPct)
+	d.LifeStealChance = pct(first.LifeStealChance, fifth.LifeStealChance)
+	d.ManaStealPct = pct(first.ManaStealPct, fifth.ManaStealPct)
+	d.ManaStealChance = pct(first.ManaStealChance, fifth.ManaStealChance)
+	d.MaxHPFloor = grow(first.MaxHPFloor, fifth.MaxHPFloor)
+	d.ExperienceBonusPct = grow(first.ExperienceBonusPct, fifth.ExperienceBonusPct)
+	d.OutgoingMagicDamageFlat = grow(first.OutgoingMagicDamageFlat, fifth.OutgoingMagicDamageFlat)
+	d.MagicDamageReductionFlat = grow(first.MagicDamageReductionFlat, fifth.MagicDamageReductionFlat)
+	d.ManaToHealthRate = grow(first.ManaToHealthRate, fifth.ManaToHealthRate)
+
+	firstDuration, baseDuration := first.DurationSec, fifth.DurationSec
+	if app.ProgressionFirstDurationSec > 0 {
+		firstDuration = app.ProgressionFirstDurationSec
+	}
+	if app.ProgressionBaseDurationSec > 0 {
+		baseDuration = app.ProgressionBaseDurationSec
+	}
+	// Passive/unique modifiers run after curve evaluation. Their explicit
+	// source-duration adjustment is added once to the continued base duration.
+	var durationAdjustment int64
+	if app.DurationSec > 0 {
+		durationAdjustment = int64(app.DurationSec) - int64(baseDuration)
+	}
+	// Apply source-only control semantics before choosing the duration boundary.
+	timing := fifth
+	if app.Control != ControlNone {
+		timing.Control = app.Control
+	}
+	timing.BlockHarmful = timing.BlockHarmful || app.BlockHarmful
+	d.DurationSec, d.ControlPower = continueSkillStatusDuration(timing, firstDuration, baseDuration, ranks)
+	if durationAdjustment != 0 {
+		value := min(int64(skillStatusDurationCap(timing, baseDuration)), int64(d.DurationSec)+durationAdjustment)
+		if value < 1 || value > math.MaxInt32 {
+			valid = false
+		} else {
+			d.DurationSec = int32(value)
+		}
+	}
+	return d, valid
+}
+
+// Continue the original duration slope before trading further control ranks for
+// resistance pressure. An original duration above a safety boundary is retained.
+func continueSkillStatusDuration(d StatusDef, first, fifth, ranks int32) (duration, pressure int32) {
+	if first <= 0 || fifth <= 0 || ranks <= 0 {
+		return fifth, 0
+	}
+	harmfulControl := d.Harmful() && d.IntervalSec == 0
+	cap := skillStatusDurationCap(d, fifth)
+	if first == fifth {
+		if harmfulControl && fifth >= cap {
+			pressure = ranks
+		}
+		return fifth, pressure
+	}
+	value := int64(fifth) + (int64(fifth)-int64(first))*int64(ranks)/4
+	duration = int32(min(int64(cap), max(int64(1), value)))
+	if harmfulControl && fifth > first {
+		// Ceiling division locates the first added rank that reaches the cap;
+		// only ranks after that boundary become resistance pressure.
+		numerator := (int64(cap) - int64(fifth)) * 4
+		slope := int64(fifth) - int64(first)
+		ranksToCap := (numerator + slope - 1) / slope
+		pressure = int32(max(int64(0), int64(ranks)-ranksToCap))
+	}
+	return duration, pressure
+}
+
+// SkillApplicationDurationCap is the same original-source boundary used by the
+// resolver. Scene-level duration multipliers must respect it as their last step.
+// Original ranks return zero so their existing runtime behavior is unchanged.
+func (t StatusTable) SkillApplicationDurationCap(app StatusApplication) int32 {
+	if app.ProgressionRanks <= 0 {
+		return 0
+	}
+	d, ok := t.Get(app.ID, app.Level)
+	if !ok {
+		return 0
+	}
+	base := d.DurationSec
+	if app.ProgressionBaseDurationSec > 0 {
+		base = app.ProgressionBaseDurationSec
+	}
+	if app.Control != ControlNone {
+		d.Control = app.Control
+	}
+	d.BlockHarmful = d.BlockHarmful || app.BlockHarmful
+	return skillStatusDurationCap(d, base)
+}
+
+func skillStatusDurationCap(d StatusDef, fifth int32) int32 {
+	harmfulControl := d.Harmful() && d.IntervalSec == 0
+	cap := int32(3600)
+	if d.Invulnerable || d.BlockHarmful || (!harmfulControl && d.Control != ControlNone) {
+		cap = fifth
+	} else if d.Harmful() {
+		switch {
+		case d.BreakOnDamage && d.Control != ControlNone:
+			cap = 60
+		case d.Control == ControlSilence || d.CannotAttack || d.AttackCapKnown || statusDisarms(d):
+			cap = 20
+		case d.Control == ControlStun || d.Immobile != 0:
+			cap = 15
+		default:
+			cap = 60
+		}
+	}
+	return max(cap, fifth)
+}
+
+func statusDisarms(d StatusDef) bool {
+	for _, affix := range d.Affixes {
+		if affix.Attr == AttrAtk && affix.Mode == ModePercent && affix.Value <= -100 {
+			return true
+		}
+	}
+	return false
+}
+
+// Continue the skill's first-to-fifth slope over four skill-rank intervals.
+// A zero-valued fifth-rank effect stays absent, and a decreasing effect cannot
+// cross through zero and reverse its original meaning.
+func continueStatusValue(first, fifth, ranks int32) (int32, bool) {
+	value := continuedStatusWide(first, fifth, ranks, false)
+	if value > math.MaxInt32 || value < math.MinInt32 {
+		return 0, false
+	}
+	return int32(value), true
+}
+
+func continuedStatusWide(first, fifth, ranks int32, constantMagnitude bool) int64 {
+	if ranks <= 0 || fifth == 0 {
+		return int64(fifth)
+	}
+	v := int64(fifth) + (int64(fifth)-int64(first))*int64(ranks)/4
+	if first == fifth && constantMagnitude {
+		v = int64(fifth) + int64(fifth)*int64(ranks)/50
+	}
+	if fifth > 0 {
+		return max(int64(0), v)
+	}
+	return min(int64(0), v)
+}
+
+func continueStatusMagnitude(first, fifth, ranks int32) (int32, bool) {
+	// Only existing damage/healing/shield magnitudes use 2% continuation when
+	// their legacy slope is zero. Chances, timing and mechanics never use it.
+	value := continuedStatusWide(first, fifth, ranks, true)
+	if value > math.MaxInt32 || value < math.MinInt32 {
+		return 0, false
+	}
+	return int32(value), true
+}
+
+func continueResourceChanges(first, fifth []ResourceChange, ranks int32) ([]ResourceChange, bool) {
+	out := append([]ResourceChange(nil), fifth...)
+	if len(first) != len(fifth) {
+		return out, true
+	}
+	for i, b := range fifth {
+		if first[i].Mode != b.Mode {
+			continue
+		}
+		value := continuedStatusWide(first[i].Value, b.Value, ranks, true)
+		if b.Mode == ModePercent {
+			value = min(int64(100), max(int64(-100), value))
+		}
+		if value > math.MaxInt32 || value < math.MinInt32 {
+			return nil, false
+		}
+		out[i].Value = int32(value)
+	}
+	return out, true
+}
+
+// SkillStatusResistChance preserves the original numeric resistance rule and
+// applies pressure only to the numerical roll. Even raw resistance >=100 was
+// capped at90 in the original engine; actual immunity is a separate gate.
+func SkillStatusResistChance(statusResist, controlPower int32) int32 {
+	chance := ResistChance(statusResist)
+	if chance == 0 || controlPower <= 0 {
+		return chance
+	}
+	return int32(int64(chance) * 100 / (100 + 5*int64(controlPower)))
+}

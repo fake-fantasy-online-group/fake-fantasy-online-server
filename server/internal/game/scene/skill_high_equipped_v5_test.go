@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"strconv"
+	"strings"
 	"testing"
 
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -53,6 +54,8 @@ func TestV5HighEquippedSkillTooltipFixture(t *testing.T) {
 	selected := map[domain.SkillID]domain.SkillRankView{}
 	maxSoft := map[domain.SkillID]int{}
 	selectedGear := map[domain.SkillID][]string{}
+	expectedCurrent := map[domain.SkillID]string{}
+	expectedNext := map[domain.SkillID]string{}
 	var enumerate func(int, []v5PacketGear)
 	enumerate = func(index int, gear []v5PacketGear) {
 		if index < len(groups) {
@@ -84,6 +87,20 @@ func TestV5HighEquippedSkillTooltipFixture(t *testing.T) {
 				maxSoft[id] = soft
 				selected[id] = view
 				selectedGear[id] = append([]string(nil), labels...)
+				raw := s.rawSkillLevels(p)
+				for offset, output := range []map[domain.SkillID]string{expectedCurrent, expectedNext} {
+					def, ok := skills.Get(id, 19+int32(soft)+int32(offset))
+					if !ok {
+						t.Fatal("effective rank unavailable", id, soft, offset)
+					}
+					s.applyTrainingSynergiesWithHard(p, &def, ch.Skills)
+					s.applyPassiveSkillModifiersWithLevels(p, &def, raw)
+					s.applyUniqueSkillModifiers(p, &def)
+					if def.Effect.DamageFlat != 0 {
+						t.Fatal("high rank gained invented flat damage", id, def.Effect)
+					}
+					output[id] = "造成" + skillFractionText(def.Effect.DamagePct, def.Effect.DamagePctNumerator, def.Effect.DamagePctDenominator) + "%"
+				}
 			}
 		}
 	}
@@ -91,8 +108,23 @@ func TestV5HighEquippedSkillTooltipFixture(t *testing.T) {
 	rows := []domain.SkillRankView{}
 	for _, id := range []domain.SkillID{10405, 10410} {
 		view, ok := selected[id]
-		if !ok || view.HardRank != 19 || maxSoft[id] < 1 || view.EffectiveRank != strconv.Itoa(19+maxSoft[id]) || view.NextEffectiveRank != strconv.Itoa(20+maxSoft[id]) || !view.CanInvest || len(view.NextChangeLines) == 0 {
+		if !ok || view.HardRank != 19 || maxSoft[id] < 1 || view.EffectiveRank != strconv.Itoa(19+maxSoft[id]) || view.NextEffectiveRank != strconv.Itoa(20+maxSoft[id]) || !view.CanInvest || len(view.CurrentEffectLines) < 4 || len(view.NextEffectLines) < 4 {
 			t.Fatal("invalid actual high-equipment preview", id, view)
+		}
+
+		current, next := strings.Join(view.CurrentEffectLines, "\n"), strings.Join(view.NextEffectLines, "\n")
+		if current == next || !strings.Contains(current, expectedCurrent[id]) || !strings.Contains(next, expectedNext[id]) {
+			t.Fatal("complete original tooltip disagrees with effective damage", id, current, next, expectedCurrent[id], expectedNext[id])
+		}
+		for _, text := range []string{current, next} {
+			for _, label := range []string{"消耗:", "技能吟唱:", "技能间隔:"} {
+				if !strings.Contains(text, label) {
+					t.Fatal("complete tooltip lost original client field", id, label, text)
+				}
+			}
+			if strings.Contains(text, "固定伤害") || strings.Contains(text, "伤害倍率") {
+				t.Fatal("tooltip replaced original prose", id, text)
+			}
 		}
 		t.Logf("skill%d hard19 soft%d effective%s next%s unspent%d gear%v; source rows%v", id, maxSoft[id], view.EffectiveRank, view.NextEffectiveRank, ch.SkillPoints, selectedGear[id], view.TrainingSynergies)
 		rows = append(rows, view)

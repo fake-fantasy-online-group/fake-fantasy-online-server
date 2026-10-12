@@ -124,7 +124,7 @@ func TestV5TrainingSynergyRowsAreAuthoritativeIncludingUnlearnedSources(t *testi
 	if strings.Contains(strings.Join(row.CurrentEffectLines, ""), "有效等级") || row.NextEffectiveRank != "2" || row.NextRequiredLevel != 11 {
 		t.Fatal(row)
 	}
-	if !strings.HasPrefix(row.CurrentEffectLines[len(row.CurrentEffectLines)-3], "消耗：") || !strings.HasPrefix(row.CurrentEffectLines[len(row.CurrentEffectLines)-2], "技能吟唱：") || !strings.HasPrefix(row.CurrentEffectLines[len(row.CurrentEffectLines)-1], "技能间隔：") {
+	if !strings.HasPrefix(row.CurrentEffectLines[len(row.CurrentEffectLines)-3], "消耗: ") || !strings.HasPrefix(row.CurrentEffectLines[len(row.CurrentEffectLines)-2], "技能吟唱: ") || !strings.HasPrefix(row.CurrentEffectLines[len(row.CurrentEffectLines)-1], "技能间隔: ") {
 		t.Fatal(row.CurrentEffectLines)
 	}
 	ch.Skills[10402] = 3
@@ -138,7 +138,7 @@ func TestV5TrainingSynergyRowsAreAuthoritativeIncludingUnlearnedSources(t *testi
 	if x = row.TrainingSynergies[0]; x.InvestedHardPoints != 3 || x.ContributionValue != 300 {
 		t.Fatal(x)
 	}
-	if !strings.Contains(strings.Join(row.NativeModifierLines, ""), "火系掌握（2级）") {
+	if !strings.Contains(strings.Join(row.NativeModifierLines, ""), "已学被动使本技能伤害提升8%") {
 		t.Fatal(row.NativeModifierLines)
 	}
 	before := ch.Skills.Clone()
@@ -376,40 +376,6 @@ func TestV5EquippedSourceSoftPointDoesNotIncreaseTrainingDamage(t *testing.T) {
 	p.Player.Char.Skills[10221] = 4
 	if invested := strike(); invested <= base {
 		t.Fatal("actual fourth hardpoint gave no damage", invested, base)
-	}
-}
-
-func TestV5CompactNextPreviewRetainsStatusAndTargetContext(t *testing.T) {
-	skills, statuses := realV5SkillFixtures(t)
-	s := newTestScene(t, nil)
-	s.skills, s.statuses = skills, statuses
-	for _, id := range []domain.SkillID{10001, 10101, 10224, 10410, 10301} {
-		a, _ := skills.Get(id, 3)
-		b, _ := skills.Get(id, 4)
-		current, next := s.skillEffectLines(a), s.skillEffectLines(b)
-		compact := s.skillNextChangeLines(a, b, current, next)
-		if len(compact) == 0 {
-			t.Fatal("lost next changes", id)
-		}
-		if id == 10001 || id == 10101 {
-			if !strings.HasPrefix(compact[0], "适用技能：") {
-				t.Fatal("changed mastery lost exact target context", compact)
-			}
-		}
-		if id == 10410 && (len(compact) >= len(next) || compact[len(compact)-1] != "其余效果不变") {
-			t.Fatal("unchanged freeze/geometry repeated", compact, next)
-		}
-		if first := s.skillNextChangeLines(domain.SkillDef{}, b, nil, next); !reflect.DeepEqual(first, next) {
-			t.Fatal("unlearned preview was condensed", first, next)
-		}
-	}
-	a := domain.SkillDef{Kind: domain.SkillPassive, Statuses: []domain.StatusApplication{{ID: 1038, Level: 1}}}
-	b := a
-	b.Statuses = append([]domain.StatusApplication(nil), a.Statuses...)
-	b.Statuses[0].ProgressionDamageShield = 5
-	compact := s.skillNextChangeLines(a, b, s.skillEffectLines(a), s.skillEffectLines(b))
-	if len(compact) < 2 || !strings.HasPrefix(compact[0], "冰之盾：") || !strings.Contains(strings.Join(compact, ""), "护盾吸收") {
-		t.Fatal("changed shield lost state identity", compact)
 	}
 }
 

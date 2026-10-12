@@ -13,6 +13,7 @@ import (
 func (s *Scene) skillSynergyViews(target domain.SkillID, hard, raw domain.Learned) ([]domain.SkillTrainingSynergyView, []string) {
 	training := []domain.SkillTrainingSynergyView{}
 	native := []string{}
+	var nativeDamage int32
 	seenNative := map[domain.SkillID]bool{}
 	for _, edge := range domain.V5SkillSynergies {
 		if edge.Target != target {
@@ -56,7 +57,11 @@ func (s *Scene) skillSynergyViews(target domain.SkillID, hard, raw domain.Learne
 		filtered := domain.SkillDef{Kind: domain.SkillPassive}
 		for _, m := range def.PassiveModifiers {
 			if m.TargetSkill == target {
-				filtered.PassiveModifiers = append(filtered.PassiveModifiers, m)
+				if m.Kind == domain.PassiveSkillDamagePct {
+					nativeDamage += m.Value
+				} else {
+					filtered.PassiveModifiers = append(filtered.PassiveModifiers, m)
+				}
 			}
 		}
 		for _, m := range def.PassiveStatusAffixes {
@@ -66,7 +71,7 @@ func (s *Scene) skillSynergyViews(target domain.SkillID, hard, raw domain.Learne
 		}
 		for _, m := range def.PassiveTriggers {
 			if m.TargetSkill == target {
-				if m.DurationSec <= 0 {
+				if m.DurationSec <= 0 && m.ProgressionRanks <= 0 {
 					if state, found := s.statuses.Get(m.Status, m.StatusLevel); found {
 						m.DurationSec = state.DurationSec
 					}
@@ -87,6 +92,13 @@ func (s *Scene) skillSynergyViews(target domain.SkillID, hard, raw domain.Learne
 		if len(lines) > 0 {
 			native = append(native, fmt.Sprintf("%s（%d级）：%s", source.Name, rank, strings.Join(lines, "；")))
 		}
+	}
+	if nativeDamage != 0 {
+		word := "提升"
+		if nativeDamage < 0 {
+			word = "降低"
+		}
+		native = append([]string{"已学被动使本技能伤害" + word + skillMagnitude(nativeDamage) + "%"}, native...)
 	}
 	return training, native
 }
@@ -148,74 +160,6 @@ func skillPassiveModifierLines(modifiers []domain.PassiveModifier) []string {
 			out = append(out, names[0]+"："+strings.Join(group.lines, "；"))
 		} else {
 			out = append(out, "适用技能："+strings.Join(names, "、"), strings.Join(group.lines, "；"))
-		}
-	}
-	return out
-}
-
-// skillEffectLineGroups retains semantic context when making a compact next-level
-// preview. A status name/duration stays with its affixes; a precise passive target
-// set stays with its values. Full effect lines remain available to API consumers.
-func (s *Scene) skillEffectLineGroups(def domain.SkillDef, lines []string) [][]string {
-	statusBlocks := [][]string{}
-	for _, app := range def.Statuses {
-		block := s.skillEffectLines(domain.SkillDef{Kind: domain.SkillPassive, Statuses: []domain.StatusApplication{app}})
-		if len(block) > 0 {
-			statusBlocks = append(statusBlocks, block)
-		}
-	}
-	groups := [][]string{}
-	for i := 0; i < len(lines); {
-		length := 1
-		for _, block := range statusBlocks {
-			if len(block) > len(lines)-i {
-				continue
-			}
-			matches := true
-			for j, line := range block {
-				if lines[i+j] != line {
-					matches = false
-					break
-				}
-			}
-			if matches {
-				length = len(block)
-				break
-			}
-		}
-		if strings.HasPrefix(lines[i], "适用技能：") && i+1 < len(lines) {
-			length = 2
-		}
-		groups = append(groups, append([]string(nil), lines[i:i+length]...))
-		i += length
-	}
-	return groups
-}
-
-func (s *Scene) skillNextChangeLines(currentDef, nextDef domain.SkillDef, current, next []string) []string {
-	if len(current) == 0 {
-		return append([]string(nil), next...)
-	}
-	old := map[string]int{}
-	for _, group := range s.skillEffectLineGroups(currentDef, current) {
-		old[strings.Join(group, "\x00")]++
-	}
-	out := []string{}
-	unchanged := false
-	for _, group := range s.skillEffectLineGroups(nextDef, next) {
-		key := strings.Join(group, "\x00")
-		if old[key] > 0 {
-			old[key]--
-			unchanged = true
-			continue
-		}
-		out = append(out, group...)
-	}
-	if unchanged {
-		if len(out) == 0 {
-			out = append(out, "效果不变")
-		} else {
-			out = append(out, "其余效果不变")
 		}
 	}
 	return out

@@ -15,7 +15,7 @@ func ValidateSkillStatusRuntimeV5(skills SkillTable, statuses StatusTable, overl
 				return fmt.Errorf("V5 skill %d rank%d unavailable", id, rank)
 			}
 			for _, app := range def.Statuses {
-				if _, ok := statuses.Get(app.ID, app.Level); !ok {
+				if _, ok := statuses.ResolveSkillApplication(app); !ok {
 					return fmt.Errorf("V5 skill%d rank%d references missing status%d/%d", id, rank, app.ID, app.Level)
 				}
 			}

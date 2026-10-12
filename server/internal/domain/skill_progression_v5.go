@@ -335,14 +335,14 @@ func InstallV5SkillProgression(t SkillTable) error {
 		return err
 	}
 	for _, id := range V5SkillIDs() {
-		for _, rank := range []int32{1, 5} {
+		for rank := int32(1); rank <= OriginalSkillRankCap; rank++ {
 			if _, ok := t[SkillKey{ID: id, Level: rank}]; !ok {
 				return fmt.Errorf("v5 missing skill anchor %d/%d", id, rank)
 			}
 		}
 	}
 	for _, id := range V5SkillIDs() {
-		for _, rank := range []int32{1, 20, 21, 65536} {
+		for _, rank := range []int32{1, 5, 6, 20, 21, 65536} {
 			if _, err := EvaluateV5Skill(t[SkillKey{ID: id, Level: 1}], t[SkillKey{ID: id, Level: 5}], rank); err != nil {
 				return fmt.Errorf("v5 anchor preflight: %w", err)
 			}

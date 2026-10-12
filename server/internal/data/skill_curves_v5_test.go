@@ -66,25 +66,26 @@ func TestV5SkillCurvesActualReadOnlyLoader(t *testing.T) {
 		ranks = append(ranks, r)
 	}
 	for _, id := range domain.V5SkillCurveIDs() {
-		first, fifth := table[domain.SkillKey{ID: id, Level: 1}], table[domain.SkillKey{ID: id, Level: 5}]
+		first := table[domain.SkillKey{ID: id, Level: 1}]
 		for _, rank := range ranks {
-			a, err := domain.EvaluateV5Skill(first, fifth, rank)
-			if err != nil {
-				t.Fatal(err)
+			a, ok := table.Get(id, rank)
+			if !ok {
+				t.Fatalf("real skill%d rank%d unavailable", id, rank)
 			}
-			b, err := domain.EvaluateV5Skill(first, fifth, rank+1)
-			if err != nil {
-				t.Fatal(err)
+			if rank <= domain.OriginalSkillRankCap {
+				original := table[domain.SkillKey{ID: id, Level: rank}]
+				original.FormulaVersion = domain.SkillFormulaVersion
+				if !reflect.DeepEqual(a, original) {
+					t.Fatalf("real skill%d original rank%d differs from loaded row", id, rank)
+				}
 			}
-			if v5LoadedOperationalCarrier(b) <= v5LoadedOperationalCarrier(a) {
-				t.Fatalf("real skill%d has no consumed carrier growth rank%d->%d", id, rank, rank+1)
-			}
+
 			if a.ID != first.ID || a.Kind != first.Kind || a.Prof != first.Prof || a.TargetSelf != first.TargetSelf || a.TargetEnemy != first.TargetEnemy || a.TargetTeam != first.TargetTeam || a.RequiresInvisible != first.RequiresInvisible || a.RequiredWeaponType != first.RequiredWeaponType {
 				t.Fatalf("real skill%d lost original identity/condition", id)
 			}
 			original, effective := first.DirectEffects(), a.DirectEffects()
-			if len(effective) < len(original) {
-				t.Fatalf("real skill%d removed direct effects", id)
+			if len(effective) != len(original) {
+				t.Fatalf("real skill%d changed direct effect count", id)
 			}
 			for i, fx := range original {
 				fy := effective[i]
@@ -93,7 +94,7 @@ func TestV5SkillCurvesActualReadOnlyLoader(t *testing.T) {
 				}
 			}
 			for _, app := range a.Statuses {
-				if _, ok := statuses.Get(app.ID, app.Level); !ok {
+				if _, ok := statuses.ResolveSkillApplication(app); !ok {
 					t.Fatalf("real skill%d rank%d refers to missing state%d/%d", id, rank, app.ID, app.Level)
 				}
 			}
@@ -107,43 +108,7 @@ func TestV5SkillCurvesActualReadOnlyLoader(t *testing.T) {
 	if dir := os.Getenv("FANTASY_V5_EXPORT_ANCHORS_DIR"); dir != "" {
 		v5ExportReadOnlyAnchors(t, dir, table, statuses)
 	}
-	t.Logf("PASS actual read-only LoadSkills: %d class rows, %d battle skills, %d status definitions; adjacent ranks1..102,255/256,65535/65536,1000000/1000001", stats.Loaded, len(domain.V5SkillCurveIDs()), statusStats.Defs)
-}
-
-func v5LoadedOperationalCarrier(d domain.SkillDef) int64 {
-	n := int64(d.ProgressionShieldFlat)
-	for _, fx := range d.DirectEffects() {
-		n += int64(fx.DamageFlat) + int64(fx.HealFlat) + int64(fx.RestoreMPFlat) + int64(fx.TauntPower)
-	}
-	for _, m := range d.PassiveModifiers {
-		if m.Kind == domain.PassiveSkillDamageFlat || m.Kind == domain.PassiveEffectRestoreFlat {
-			n += int64(m.Value)
-		}
-	}
-	for _, m := range d.PassiveStats {
-		if m.Mode == domain.ModeAbsolute {
-			n += int64(m.Value)
-		}
-	}
-	for _, m := range d.PassiveStatusAffixes {
-		if m.Affix.Mode == domain.ModeAbsolute {
-			n += int64(m.Affix.Value)
-		}
-	}
-	for _, s := range d.Statuses {
-		n += int64(s.ProgressionDamageShield) + int64(s.ProgressionReflectFlat) + int64(s.ProgressionAttackFlat)
-		hp := int64(s.ProgressionHPPerTick)
-		if hp < 0 {
-			hp = -hp
-		}
-		n += hp
-		for _, a := range append(append([]domain.Affix(nil), s.ExtraAffixes...), s.ProgressionAffixes...) {
-			if a.Mode == domain.ModeAbsolute {
-				n += int64(a.Value)
-			}
-		}
-	}
-	return n
+	t.Logf("PASS actual read-only LoadSkills: %d class rows, %d battle skills, %d status definitions; exact original ranks1..5 and extended ranks6..101,255/256,65535/65536,1000000", stats.Loaded, len(domain.V5SkillCurveIDs()), statusStats.Defs)
 }
 
 type v5SingleUserQuerier struct {
@@ -270,6 +235,14 @@ func v5ExportReadOnlyAnchors(t *testing.T, dir string, table domain.SkillTable, 
 		b.FormulaVersion = 0
 		anchors = append(anchors, pair{id, a, b})
 	}
+	originalRanks := []domain.SkillDef{}
+	for _, id := range domain.V5SkillCurveIDs() {
+		for rank := int32(1); rank <= 5; rank++ {
+			d := table[domain.SkillKey{ID: id, Level: rank}]
+			d.FormulaVersion = 0
+			originalRanks = append(originalRanks, d)
+		}
+	}
 	allStatuses := make([]domain.StatusDef, 0, len(statuses))
 	for _, d := range statuses {
 		allStatuses = append(allStatuses, d)
@@ -281,7 +254,7 @@ func v5ExportReadOnlyAnchors(t *testing.T, dir string, table domain.SkillTable, 
 		return allStatuses[i].Level < allStatuses[j].Level
 	})
 	hashes := map[string]string{}
-	for name, value := range map[string]any{"skill-legacy-anchors.json": anchors, "skill-status-anchors.json": allStatuses} {
+	for name, value := range map[string]any{"skill-legacy-anchors.json": anchors, "skill-status-anchors.json": allStatuses, "skill-original-ranks.json": originalRanks} {
 		full, err := json.Marshal(value)
 		if err != nil {
 			t.Fatal(err)

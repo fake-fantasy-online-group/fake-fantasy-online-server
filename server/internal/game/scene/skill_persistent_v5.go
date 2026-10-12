@@ -126,13 +126,13 @@ func (s *Scene) resolvePersistentStatus(source *entity.Entity, old domain.Status
 		if app.ID != old.ID {
 			continue
 		}
-		base, ok := s.statuses.Get(app.ID, app.Level)
+		base, ok := s.statuses.ResolveSkillApplication(app)
 		if !ok {
 			return domain.StatusDef{}, false, true
 		}
 		base.Affixes = overrideStatusAffixes(base.Affixes, app.ExtraAffixes)
 		applyProgressionStatus(app, &base)
-		if app.DurationSec > 0 {
+		if app.DurationSec > 0 && app.ProgressionRanks <= 0 {
 			base.DurationSec = app.DurationSec
 		}
 		base.StealthDamagePct = app.StealthDamagePct

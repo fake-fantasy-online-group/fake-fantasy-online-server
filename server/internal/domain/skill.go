@@ -281,11 +281,15 @@ type PassiveStatusResist struct {
 // PassiveTriggerStatus 让一个已学被动为指定主动技能追加概率状态。
 // 状态定义与持续时间仍来自 PostgreSQL 状态表；这里仅保存关联和概率。
 type PassiveTriggerStatus struct {
-	TargetSkill SkillID
-	Status      StatusID
-	StatusLevel int32
-	ChanceBP    int32
-	DurationSec int32
+	ProgressionFirstDurationSec int32
+	ProgressionBaseDurationSec  int32
+	ProgressionRanks            int32
+	ProgressionFirstLevel       int32
+	TargetSkill                 SkillID
+	Status                      StatusID
+	StatusLevel                 int32
+	ChanceBP                    int32
+	DurationSec                 int32
 }
 
 // PassiveStatusAffix 把被动提供的属性修正合并进目标主动技能原本施加的状态，
@@ -493,7 +497,8 @@ func (t SkillTable) Get(id SkillID, level int32) (SkillDef, bool) {
 	if t.V5Enabled(id) {
 		first := t[SkillKey{ID: id, Level: 1}]
 		fifth := t[SkillKey{ID: id, Level: 5}]
-		d, err := EvaluateV5Skill(first, fifth, level)
+		original := t[SkillKey{ID: id, Level: level}]
+		d, err := EvaluateV5Skill(first, fifth, level, original)
 		return d, err == nil
 	}
 	d, ok := t[SkillKey{ID: id, Level: level}]

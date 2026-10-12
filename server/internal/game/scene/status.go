@@ -53,7 +53,8 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	// 不良状态抗性只挡 debuff, 不挡自己身上的增益。
 	if isHarmful(def) {
 		specific := s.passiveStatusResistPct(target, def.ID)
-		if chance := domain.ResistChance(target.Stats.StatusResist + specific); chance > 0 {
+		resist := domain.SaturateInt32(int64(target.Stats.StatusResist) + int64(specific))
+		if chance := domain.SkillStatusResistChance(resist, def.ControlPower); chance > 0 {
 			if int32(s.rng.Intn(100)) < chance {
 				s.emitTo(target.ID, event.StatusResisted{Who: target.ID, Status: int32(def.ID)})
 				return false

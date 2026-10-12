@@ -26,13 +26,14 @@ func v5PacketJSON(t *testing.T, path string, target any) {
 }
 func v5PacketActualSkills(t *testing.T) (domain.SkillTable, domain.StatusTable) {
 	t.Helper()
-	var anchors []struct{ First, Fifth domain.SkillDef }
-	v5PacketJSON(t, "v5/skill-legacy-anchors.json", &anchors)
+	var original []domain.SkillDef
+	v5PacketJSON(t, "v5/skill-original-ranks.json", &original)
+	if len(original) != 149*5 {
+		t.Fatalf("original fixture rows = %d, want 745", len(original))
+	}
 	skills := domain.SkillTable{}
-	for _, a := range anchors {
-		for _, d := range []domain.SkillDef{a.First, a.Fifth} {
-			skills[domain.SkillKey{ID: d.ID, Level: d.Level}] = d
-		}
+	for _, d := range original {
+		skills[domain.SkillKey{ID: d.ID, Level: d.Level}] = d
 	}
 	if err := domain.InstallV5SkillProgression(skills); err != nil {
 		t.Fatal(err)

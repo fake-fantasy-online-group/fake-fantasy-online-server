@@ -15,21 +15,24 @@ import (
 
 func realV5SkillFixtures(t *testing.T) (domain.SkillTable, domain.StatusTable) {
 	t.Helper()
-	b, e := os.ReadFile("../../../../docs/daoist-endgame/v5/skill-legacy-anchors.json")
+	b, e := os.ReadFile("../../../../docs/daoist-endgame/v5/skill-original-ranks.json")
 	if e != nil {
 		t.Fatal(e)
 	}
-	var rows []struct {
-		ID           domain.SkillID
-		First, Fifth domain.SkillDef
-	}
+	var rows []domain.SkillDef
 	if e = json.Unmarshal(b, &rows); e != nil {
 		t.Fatal(e)
 	}
+	if len(rows) != 149*5 {
+		t.Fatalf("original fixture rows = %d, want 745", len(rows))
+	}
 	skills := domain.SkillTable{}
-	for _, r := range rows {
-		skills[domain.SkillKey{ID: r.ID, Level: 1}] = r.First
-		skills[domain.SkillKey{ID: r.ID, Level: 5}] = r.Fifth
+	for _, d := range rows {
+		key := domain.SkillKey{ID: d.ID, Level: d.Level}
+		if _, exists := skills[key]; exists {
+			t.Fatalf("duplicate original skill rank: %+v", key)
+		}
+		skills[key] = d
 	}
 	if e = domain.InstallV5SkillProgression(skills); e != nil {
 		t.Fatal(e)
@@ -48,138 +51,191 @@ func realV5SkillFixtures(t *testing.T) (domain.SkillTable, domain.StatusTable) {
 	}
 	return skills, statuses
 }
-func TestV5StealthAndAdvancedStealthRetainEachRankAtHit(t *testing.T) {
+func TestV5StealthAndAdvancedStealthRetainOriginalPercentageAtHit(t *testing.T) {
 	skills, statuses := realV5SkillFixtures(t)
-	for _, rank := range []int32{20, 21} {
-		s := newTestScene(t, nil)
-		join(t, s, 1, 100, "刺客", 100, 100)
-		p := s.players[1]
-		p.Player.Char.Race = domain.Assassin
-		p.Player.Char.Level = 100
-		p.Player.Char.Skills = domain.Learned{10208: 20, 10207: 1}
-		s.skills = skills
-		s.statuses = statuses
-		def, _ := s.skills.Get(10208, rank)
-		s.applyPassiveSkillModifiersWithLevels(p, &def, domain.Learned{10207: 1})
-		// This unit seam supplies the already-authorized accepted rank snapshot. The
-		// live equipment down-snapshot is independently exercised in persistent tests.
-		s.skillProgressionRefreshing = true
-		if !s.applySkill(p, p, def, 0, false) {
-			t.Fatal("stealth failed")
-		}
-		s.skillProgressionRefreshing = false
-		blow := combat.Blow{SkillPct: 100, GuaranteedHit: true}
-		s.prepareBasicAttackStatuses(p, &blow)
-		if blow.FlatDamage != rank-1 {
-			t.Fatal("advanced rank1 erased base carrier", rank, blow.FlatDamage)
-		}
-		if p.Status.Invisible() {
-			t.Fatal("stealth failed to consume")
-		}
-		p.Stats.MinAtk = 100
-		p.Stats.MaxAtk = 100
-		p.Stats.CritRate = 0
-		target := &entity.Entity{ID: 999, Kind: domain.KindMonster, HP: 10000, MaxHP: 10000, Monster: &entity.Monster{}}
-		s.entities[999] = target
-		tr := &combat.HitTracker{}
-		ev, _, _ := s.resolveStrikeStatuses(p, target, tr, blow)
-		if ev.Amount < 100+rank-1 {
-			t.Fatal("consumed flat never reached real hit", rank, ev)
-		}
+	for _, rank := range []int32{1, 2, 3, 4, 5, 20, 21, 100} {
+		t.Run(fmt.Sprint(rank), func(t *testing.T) {
+			s := newTestScene(t, nil)
+			join(t, s, 1, 100, "刺客", 100, 100)
+			p := s.players[1]
+			p.Player.Char.Race = domain.Assassin
+			p.Player.Char.Level = 100
+			p.Player.Char.Skills = domain.Learned{10208: min(rank, 20), 10207: 1}
+			s.skills, s.statuses = skills, statuses
+			def, ok := skills.Get(10208, rank)
+			if !ok {
+				t.Fatal("unresolved stealth rank", rank)
+			}
+			s.applyPassiveSkillModifiersWithLevels(p, &def, domain.Learned{10207: 1})
+			// This seam supplies an accepted effective-rank snapshot. Source-loss
+			// reconciliation is covered separately, including actual equipped items.
+			s.skillProgressionRefreshing = true
+			if !s.applySkill(p, p, def, 0, false) {
+				t.Fatal("stealth failed")
+			}
+			s.skillProgressionRefreshing = false
+			blow := combat.Blow{SkillPct: 100, GuaranteedHit: true}
+			s.prepareBasicAttackStatuses(p, &blow)
+			wantPct := int32(100) + 35*rank + 5 // original stealth and advanced-stealth slopes
+			if blow.FlatDamage != 0 || blow.SkillPct != wantPct {
+				t.Fatal("stealth must retain original percentage without invented flat damage", rank, blow, wantPct)
+			}
+			if p.Status.Invisible() {
+				t.Fatal("stealth failed to consume")
+			}
+			p.Stats.MinAtk, p.Stats.MaxAtk, p.Stats.CritRate = 100, 100, 0
+			target := &entity.Entity{ID: 999, Kind: domain.KindMonster, HP: 1000000, MaxHP: 1000000, Monster: &entity.Monster{}}
+			s.entities[target.ID] = target
+			ev, _, _ := s.resolveStrikeStatuses(p, target, &combat.HitTracker{}, blow)
+			if ev.Amount != wantPct {
+				t.Fatal("consumed percentage did not reach real strike", rank, ev, wantPct)
+			}
+			next := combat.Blow{SkillPct: 100, GuaranteedHit: true}
+			s.prepareBasicAttackStatuses(p, &next)
+			if next.SkillPct != 100 || next.FlatDamage != 0 {
+				t.Fatal("stealth bonus applied twice", next)
+			}
+		})
 	}
 }
-func TestV5OneShotSpellFlatSurvivesConsumption(t *testing.T) {
+
+func TestV5OneShotSpellsRetainOriginalEffectAtConsumption(t *testing.T) {
 	skills, statuses := realV5SkillFixtures(t)
 	for _, id := range []domain.SkillID{10419, 10420, 10328, 10329} {
-		s := newTestScene(t, nil)
-		join(t, s, 1, 100, "术者", 100, 100)
-		p := s.players[1]
-		ident, _ := domain.V5SkillIdentity(id)
-		p.Player.Char.Race = domain.Race(ident.Profession - 1)
-		p.Player.Char.Level = 100
-		p.Player.Char.Skills = domain.Learned{id: 20}
-		s.skills = skills
-		s.statuses = statuses
-		buff, _ := skills.Get(id, 20)
-		buff.SnapshotRawRanks = domain.Learned{id: 20}
-		buff.SnapshotHardRanks = p.Player.Char.Skills.Clone()
-		if !s.applySkill(p, p, buff, 0, false) {
-			t.Fatal(id)
-		}
-		attack := domain.SkillDef{ID: 10401, PrepareMS: 500, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}, HurtType: domain.HurtFire}
-		s.prepareSkillStatuses(p, &attack)
-		if attack.Effect.DamageFlat != 19 {
-			t.Fatal("one-shot carrier lost", id, attack.Effect)
-		}
-		p.Stats.MAtk = 100
-		p.Stats.MCritRate = 0
-		target := &entity.Entity{ID: 999, Kind: domain.KindMonster, HP: 10000, MaxHP: 10000, Monster: &entity.Monster{}}
-		s.entities[999] = target
-		s.applySkill(p, target, attack, 0, false)
-		if target.HP >= 9900 {
-			t.Fatal("primed flat not consumed", id, target.HP)
+		for _, rank := range []int32{1, 2, 3, 4, 5, 20, 21, 100} {
+			t.Run(fmt.Sprintf("%d/%d", id, rank), func(t *testing.T) {
+				s := newTestScene(t, nil)
+				join(t, s, 1, 100, "术者", 100, 100)
+				p := s.players[1]
+				ident, _ := domain.V5SkillIdentity(id)
+				p.Player.Char.Race = domain.Race(ident.Profession - 1)
+				p.Player.Char.Level = 100
+				p.Player.Char.Skills = domain.Learned{id: min(rank, 20)}
+				s.skills, s.statuses = skills, statuses
+				buff, ok := skills.Get(id, rank)
+				if !ok {
+					t.Fatal("unresolved one-shot rank", id, rank)
+				}
+				s.skillProgressionRefreshing = true
+				if !s.applySkill(p, p, buff, 0, false) {
+					t.Fatal("one-shot cast failed", id, rank)
+				}
+				s.skillProgressionRefreshing = false
+				attack := domain.SkillDef{ID: 10401, PrepareMS: 1000, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}, HurtType: domain.HurtFire}
+				s.prepareSkillStatuses(p, &attack)
+				wantPct, wantPrepare := int32(100), int32(1000)
+				if id == 10419 || id == 10328 {
+					wantPct += 40 + 15*(rank-1)
+				} else {
+					wantPrepare -= wantPrepare * min(int32(100), 60+10*(rank-1)) / 100
+				}
+				if attack.Effect.DamageFlat != 0 || attack.Effect.DamagePct != wantPct || attack.PrepareMS != wantPrepare {
+					t.Fatal("one-shot changed original effect category or magnitude", attack, wantPct, wantPrepare)
+				}
+				if p.Status.Has(buff.Statuses[0].ID) {
+					t.Fatal("one-shot status not consumed")
+				}
+				p.Stats.MAtk, p.Stats.MCritRate = 100, 0
+				target := &entity.Entity{ID: 999, Kind: domain.KindMonster, HP: 1000000, MaxHP: 1000000, Monster: &entity.Monster{}}
+				s.entities[target.ID] = target
+				if !s.applySkill(p, target, attack, 0, false) || target.HP != 1000000-wantPct {
+					t.Fatal("one-shot percentage not consumed by real strike", id, rank, target.HP, wantPct)
+				}
+				next := domain.SkillDef{PrepareMS: 1000, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
+				s.prepareSkillStatuses(p, &next)
+				if next.Effect.DamagePct != 100 || next.Effect.DamageFlat != 0 || next.PrepareMS != 1000 {
+					t.Fatal("one-shot applied twice", next)
+				}
+			})
 		}
 	}
 }
-func TestV5ControlAddedDamageDoesNotIntroduceMiss(t *testing.T) {
+
+func TestV5PureControlsRetainStatusWithoutInventedDamageOrMiss(t *testing.T) {
 	skills, statuses := realV5SkillFixtures(t)
 	for _, id := range []domain.SkillID{10016, 10029, 10128, 10224} {
-		for _, rank := range []int32{1, 2} {
-			s := newTestScene(t, nil)
-			join(t, s, 1, 100, "控制", 100, 100)
-			p := s.players[1]
-			ident, _ := domain.V5SkillIdentity(id)
-			p.Player.Char.Race = domain.Race(ident.Profession - 1)
-			p.Player.Char.Level = 100
-			p.Player.Char.Skills = domain.Learned{id: rank}
-			s.skills = skills
-			s.statuses = statuses
-			p.Stats.Hit = -100000
-			p.Stats.CritRate = 0
-			target := &entity.Entity{ID: 999, Kind: domain.KindMonster, HP: 10000, MaxHP: 10000, Stats: domain.Stats{Def: 100000}, Monster: &entity.Monster{}}
-			s.entities[999] = target
-			def, _ := skills.Get(id, rank)
-			if !s.applySkill(p, target, def, 0, false) {
-				t.Fatal("extra carrier introduced MISS", id, rank)
-			}
-			if target.Status == nil || !target.Status.Has(def.Statuses[0].ID) {
-				t.Fatal("original control lost", id, rank)
-			}
+		for _, rank := range []int32{1, 2, 3, 4, 5, 20, 21, 100} {
+			t.Run(fmt.Sprintf("%d/%d", id, rank), func(t *testing.T) {
+				s := newTestScene(t, nil)
+				join(t, s, 1, 100, "控制", 100, 100)
+				p := s.players[1]
+				ident, _ := domain.V5SkillIdentity(id)
+				p.Player.Char.Race = domain.Race(ident.Profession - 1)
+				p.Player.Char.Level = 100
+				p.Player.Char.Skills = domain.Learned{id: min(rank, 20)}
+				s.skills, s.statuses = skills, statuses
+				p.Stats.Hit, p.Stats.CritRate = -100000, 0
+				target := &entity.Entity{ID: 999, Kind: domain.KindMonster, HP: 10000, MaxHP: 10000, Stats: domain.Stats{Def: 100000}, Monster: &entity.Monster{}}
+				s.entities[target.ID] = target
+				def, ok := skills.Get(id, rank)
+				if !ok || def.HasDamageEffect() || def.ProgressionShieldFlat != 0 {
+					t.Fatal("pure control gained a damage/shield carrier", id, rank, def)
+				}
+				if !s.applySkill(p, target, def, 0, false) {
+					t.Fatal("pure control incorrectly introduced MISS", id, rank)
+				}
+				if target.HP != 10000 {
+					t.Fatal("pure control dealt invented damage", id, rank, target.HP)
+				}
+				for _, app := range def.Statuses {
+					if app.ChanceBP < 0 || app.ChanceBP > 10000 {
+						t.Fatal("unbounded status probability", app)
+					}
+					if target.Status == nil || !target.Status.Has(app.ID) {
+						t.Fatal("original control lost", id, rank, app)
+					}
+				}
+			})
 		}
 	}
 }
 
 func TestV5FreezeSynergyUsesRealStatusDuration(t *testing.T) {
 	skills, statuses := realV5SkillFixtures(t)
-	s := newTestScene(t, nil)
-	join(t, s, 1, 100, "刺客", 100, 100)
-	p := s.players[1]
-	p.Player.Char.Race = domain.Assassin
-	p.Player.Char.Level = 100
-	p.Player.Char.Skills = domain.Learned{10216: 20, 10217: 20}
-	s.skills = skills
-	s.statuses = statuses
-	def, _ := skills.Get(10216, 20)
-	before := def.Statuses[0]
-	base, _ := statuses.Get(before.ID, before.Level)
-	if before.DurationSec != 0 || base.DurationSec <= 0 {
-		t.Fatal("fixture no longer exercises table-backed time", before, base)
-	}
-	s.applyTrainingSynergies(p, &def)
-	if def.Statuses[0].DurationSec != base.DurationSec*110/100 {
-		t.Fatal("hard source ignored table duration", def.Statuses, base.DurationSec)
-	}
-	target := &entity.Entity{ID: 999, Kind: domain.KindMonster, HP: 100000, MaxHP: 100000, Monster: &entity.Monster{}}
-	s.entities[999] = target
-	s.applySkill(p, target, trapPayload(def), 0, true)
-	var duration int32
-	target.Status.Each(func(a domain.Active) {
-		if a.Def.ID == before.ID {
-			duration = a.Def.DurationSec
-		}
-	})
-	if duration != base.DurationSec*110/100 {
-		t.Fatal("synergy duration unconsumed", duration)
+	for _, tc := range []struct{ rank, baseDuration, synergyDuration, basePressure, synergyPressure int32 }{
+		{5, 30, 33, 0, 0}, {6, 34, 37, 0, 0}, {7, 38, 41, 0, 0}, {11, 54, 59, 0, 0},
+		{12, 58, 60, 0, 0}, {13, 60, 60, 0, 0}, {20, 60, 60, 7, 7},
+	} {
+		t.Run(fmt.Sprint(tc.rank), func(t *testing.T) {
+			s := newTestScene(t, nil)
+			join(t, s, 1, 100, "刺客", 100, 100)
+			p := s.players[1]
+			p.Player.Char.Race = domain.Assassin
+			p.Player.Char.Level = 100
+			s.skills, s.statuses = skills, statuses
+			for _, synergy := range []bool{false, true} {
+				p.Player.Char.Skills = domain.Learned{10216: tc.rank}
+				if synergy {
+					p.Player.Char.Skills[10217] = 20
+				}
+				def, ok := skills.Get(10216, tc.rank)
+				if !ok {
+					t.Fatal("freeze rank unavailable", tc.rank)
+				}
+				if def.Statuses[0].DurationSec != 0 {
+					t.Fatal("fixture no longer exercises table-backed duration", def.Statuses[0])
+				}
+				s.applyTrainingSynergies(p, &def)
+				target := &entity.Entity{ID: 999, Kind: domain.KindMonster, HP: 1000000, MaxHP: 1000000, Monster: &entity.Monster{}}
+				s.entities[target.ID] = target
+				if !s.applySkill(p, target, trapPayload(def), 0, true) {
+					t.Fatal("freeze did not land")
+				}
+				var got domain.StatusDef
+				target.Status.Each(func(a domain.Active) {
+					if a.Def.ID == domain.StatusFreeze {
+						got = a.Def
+					}
+				})
+				wantDuration, wantPressure := tc.baseDuration, tc.basePressure
+				if synergy {
+					wantDuration, wantPressure = tc.synergyDuration, tc.synergyPressure
+				}
+				if got.DurationSec != wantDuration || got.ControlPower != wantPressure {
+					t.Fatal("hard synergy must scale actual duration before cap, with no intermediate rounding", synergy, got.DurationSec, got.ControlPower, wantDuration, wantPressure)
+				}
+			}
+		})
 	}
 }
 
@@ -196,14 +252,20 @@ func TestV5EveryTrainingEdgeChangesConsumedPayload(t *testing.T) {
 			ident, _ := domain.V5SkillIdentity(edge.Target)
 			p.Player.Char.Race = domain.Race(ident.Profession - 1)
 			p.Player.Char.Level = 100
-			p.Player.Char.Skills = domain.Learned{edge.Target: 20}
+			// Bounded control duration can saturate; prove the duration edge
+			// below its cap without inventing a compensating effect above it.
+			targetRank := int32(20)
+			if edge.Effect == "freeze_duration" {
+				targetRank = 5
+			}
+			p.Player.Char.Skills = domain.Learned{edge.Target: targetRank}
 			s.skills = skills
 			s.statuses = statuses
-			a, _ := skills.Get(edge.Target, 20)
+			a, _ := skills.Get(edge.Target, targetRank)
 			s.applyTrainingSynergies(p, &a)
 			s.applyPassiveSkillModifiers(p, &a)
 			p.Player.Char.Skills[edge.Source] = 20
-			b, _ := skills.Get(edge.Target, 20)
+			b, _ := skills.Get(edge.Target, targetRank)
 			s.applyTrainingSynergies(p, &b)
 			s.applyPassiveSkillModifiers(p, &b)
 			// Every retained hard edge must alter an actually consumed payload field.
