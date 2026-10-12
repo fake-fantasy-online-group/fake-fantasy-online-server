@@ -73,14 +73,14 @@
     "docs/daoist-endgame/balance/native_equipment_budget_references.json": "f1f1c27567cb09f965ec0cf8a983ebdd01730c6b737d73edd221ffb86cbad641",
     "server/docs/endgame/astral_runes.json": "fb89cbfe43577830bd274ee1fb7e49e9c91a977f3838e87bfc1aca9c56a0eaad",
     "server/internal/domain/endgame_runes_catalog.go": "7a6bbb7b8cbbf3224334b219b1585fa213cbe7740fe8d4d241563817b53c1ac9",
-    "server/internal/domain/unique_catalog_allclasses.json": "963c62da8b26df7204833ea91a20c7700cf17b809cd8e8913651b57ace21e68d",
-    "server/internal/domain/unique_catalog_assassin.json": "68e555189970c3b3a1b9d2a32579d2909fdf7784774683f84dcfc8add8625bfa",
-    "server/internal/domain/unique_catalog_healer.json": "ff1d7c06cca80bc2c95456c917883aeff37225ee887f5688460175915f995456",
-    "server/internal/domain/unique_catalog_sharedcaster.json": "3b86604098b293afbdb671b30a2bea052e90d8303bb87db20cd163394b1c8631",
-    "server/internal/domain/unique_catalog_swordsman.json": "16d26d861eebfbf84ac60f5d0b8bda344884c5f69ca2fe30c8d860ad5d692a88",
+    "server/internal/domain/unique_catalog_allclasses.json": "c1753cde00ea315798708a94100551efb06679643ac42b0b0c632b0bd9d6abb0",
+    "server/internal/domain/unique_catalog_assassin.json": "f6b7b8246c1417e3e516d04be23b6686abd4adffc9cb23d32b2515edaa684324",
+    "server/internal/domain/unique_catalog_healer.json": "6dd39e20d98ab85a11c9fb670a1add01d27b96818130bb6b524a6760df83df2a",
+    "server/internal/domain/unique_catalog_sharedcaster.json": "bbc790dcebcb3d62c030fb1a9f13c100acc644fa1c1bb1a52743c2b2af323a48",
+    "server/internal/domain/unique_catalog_swordsman.json": "416b7c51f7bc05e1ffdb406bec1bec81313f13f1aee7acc1ea787e62069fd283",
     "server/internal/domain/unique_catalog_unrestricted.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
     "server/internal/domain/unique_catalog_warlock.json": "c265f81e3cff66bf570ace6e152cb069ffa6a3df231ed2b3effb433df71377a2",
-    "server/internal/domain/unique_catalog_warrior.json": "3272b48daf6fe8b3cb33bb41fb89cba28be468da4addc07a156da0d9feacac50"
+    "server/internal/domain/unique_catalog_warrior.json": "7ea0207debe4bdee90a412d214f38d3779fc497e0979b0158b62a4ad26f14e05"
   },
   "loadouts": [
     {
@@ -1783,7 +1783,7 @@
             "Lore": "试刃石上嵌着一片龙鳞，旁边没有屠龙者的题字。只有磨刀人刻的小账：磨石一块，麻绳三尺，欠饭两顿。",
             "LoreRoot": "原型·伏龙刺穿鳞",
             "Identity": "伏龙刺专取精英要害，击晕战技的伤害与猎首会心并行；控制免疫不取消伤害，普通小怪无诛邪收益。",
-            "Benefit": "双端物攻 +99；力量 +14；命中 +14；生命 +53；灵巧 +11；物理会心bp +1400；攻击间隔% -20；本件未加工白字双端物攻 +330–380%",
+            "Benefit": "双端物攻 +99；力量 +14；命中 +14；生命 +53；灵巧 +11；物理会心bp +1400；攻击间隔% -20；本件未加工白字双端物攻 +400–450%",
             "Tradeoff": "精英条件与单技能软点不覆盖群攻和普通怪；无MF、减伤或治疗。",
             "PowerTier": "godlike",
             "Affixes": [
@@ -1826,7 +1826,7 @@
             "Traits": [
               {
                 "Kind": "elite_hunter",
-                "PowerBP": 8500,
+                "PowerBP": 9500,
                 "ThresholdPct": 0
               }
             ],
@@ -1841,9 +1841,9 @@
             "LocalEnhancements": [
               {
                 "Attr": 47,
-                "Percent": 330,
-                "MinPercent": 330,
-                "MaxPercent": 380
+                "Percent": 400,
+                "MinPercent": 400,
+                "MaxPercent": 450
               }
             ],
             "TypedEffects": [],
@@ -1895,7 +1895,7 @@
           "max_roll_local_enhancement_percent": [
             {
               "attr": 47,
-              "percent": 380,
+              "percent": 450,
               "scope": "this item's unrefined intrinsic white stats only"
             }
           ]
@@ -3566,9 +3566,9 @@
             "Name": "无名神席",
             "Lore": "杖上九个座位都没有刻像，第十个影子却总坐在持杖者脚边。九仪旧说解释不了它，只有一行小字：席满，莫请。",
             "LoreRoot": "原型·九仪来历不明的传说",
-            "Identity": "无名神席将供火送入一枚火弹，白字、火法软点、穿抗与瞬念合为单体祭火；药师与冰法不能领取火系专长。",
+            "Identity": "无名神席将供火送入一枚火弹，白字、软点、穿抗与火弹瞬念合为单体祭火；省下三成火弹法力，让有限祭炁支撑更长的法事。",
             "Benefit": "法攻 +52；法术会心bp +413；智慧 +18；精神 +18；魔防 +35；法术平减 +13；异常抵抗 +13；生命 -80；回避防御 -20；法力 +460；本件未加工白字法攻 +380–440%",
-            "Tradeoff": "生命与回避受损；增伤穿抗只限火系；高频施法仍逐次消耗法力，未学火弹不解锁技能。",
+            "Tradeoff": "生命与回避受损；增伤穿抗只限火系，瞬念和节炁只限火弹；仍逐次消耗法力，不解锁未学技能，不给药师或冰法通用节奏增益。",
             "PowerTier": "godlike",
             "Affixes": [
               {
@@ -3626,7 +3626,16 @@
               {
                 "Kind": "swift_cast",
                 "PowerBP": 3500,
-                "ThresholdPct": 0
+                "ThresholdPct": 0,
+                "SkillID": 10401,
+                "SkillName": "火弹术"
+              },
+              {
+                "Kind": "spell_economy",
+                "PowerBP": 3000,
+                "ThresholdPct": 0,
+                "SkillID": 10401,
+                "SkillName": "火弹术"
               }
             ],
             "ReservedSkills": [],
@@ -4125,9 +4134,9 @@
             "Name": "闭目神像",
             "Lore": "冠上神像闭着眼，信众争论它是否垂怜。擦像的药师却发现，眼缝里沾着整夜未干的药汁。",
             "LoreRoot": "原创·闭眼冠像",
-            "Identity": "59级神悯冠提供治疗系+2；治疗和净化范围明确，继续失去攻击系覆盖，不把药师aux当治疗。",
+            "Identity": "闭目神像把一次治愈拆成即时护生与一息后续疗；后段守原伤者，不追新伤口，不在满血时储药。",
             "Benefit": "法力 +225；精神 +16；生命 +78；魔防 +32；异常抵抗 +11；法术平减 +11",
-            "Tradeoff": "技能软点占明示预算，不解锁未学技能，不增强新增training硬点协同；既有native_modifier按effective_raw重算且计预算；换装必须移除",
+            "Tradeoff": "即时只结算原预算七成，一息后最多五成；按最初缺血预算约束，满血不储药，换装或目标死亡取消后段。",
             "PowerTier": "builddefining",
             "Affixes": [
               {

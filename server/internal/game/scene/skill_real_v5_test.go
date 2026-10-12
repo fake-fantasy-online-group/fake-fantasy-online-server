@@ -481,7 +481,8 @@ func TestV5UnlearnedViewHasFirstPointAndSoftPreview(t *testing.T) {
 	s.items = map[domain.ItemID]domain.ItemDef{2032: item}
 	st := domain.NewStack(item, 1)
 	st.UID = 2032002
-	st.Endgame = domain.EndgameItemState{UniqueID: 2032, UniqueRollBP: 10000, UniqueContentVersion: domain.UniqueContentVersion}
+	// Keep this historical V5 contract independent of the current item catalog.
+	st.Endgame = domain.EndgameItemState{UniqueID: 2032, UniqueRollBP: 10000, UniqueContentVersion: 5}
 	p.Player.Worn.Set(domain.SlotHead, st)
 	view, err := s.skillRanksForDisplay(p)
 	if err != nil {

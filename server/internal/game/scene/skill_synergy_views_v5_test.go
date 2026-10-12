@@ -333,7 +333,8 @@ func TestV5EquippedSourceSoftPointDoesNotIncreaseTrainingDamage(t *testing.T) {
 	s.items = map[domain.ItemID]domain.ItemDef{1905: item}
 	st := domain.NewStack(item, 1)
 	st.UID, st.Durability, st.MaxDurability = 19050001, 100, 100
-	st.Endgame = domain.EndgameItemState{UniqueID: 1905, UniqueRollBP: 10000, UniqueContentVersion: domain.UniqueContentVersion}
+	// Keep this historical V5 contract independent of the current item catalog.
+	st.Endgame = domain.EndgameItemState{UniqueID: 1905, UniqueRollBP: 10000, UniqueContentVersion: 5}
 	strike := func() int32 {
 		rank, _ := s.skillLevelForUse(p, 10205)
 		if rank != 20 {

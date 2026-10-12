@@ -54,6 +54,8 @@ func newNativeStatsRig(t *testing.T, results ...domain.EndgameLoadResult) *nativ
 		Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon), SocketLimit: 5, Durable: 100, Bonus: domain.Stats{MinAtk: 100, MaxAtk: 200}}}
 	items[def.ID] = def
 	st := domain.NewStack(def, 1)
+	// These wire assertions preserve the V5 formation payload and local enhancement.
+	st.Endgame.FormationContentVersion = 5
 	st.UID, st.Endgame.FormationRollBP = 81, 12000
 	recipe, _ := domain.AstralRecipeByID(11)
 	st.SocketCount = uint8(len(recipe.Runes))

@@ -147,7 +147,8 @@ func TestV5CatalogSkillGearChangesRealHealingAndRemoval(t *testing.T) {
 				s.items = map[domain.ItemID]domain.ItemDef{id: item}
 				st := domain.NewStack(item, 1)
 				st.UID = 900000 + int64(id)
-				st.Endgame = domain.EndgameItemState{UniqueID: int32(id), UniqueRollBP: 10000, UniqueContentVersion: domain.UniqueContentVersion}
+				// Keep this historical V5 contract independent of the current item catalog.
+				st.Endgame = domain.EndgameItemState{UniqueID: int32(id), UniqueRollBP: 10000, UniqueContentVersion: 5}
 				st.Durability = 100
 				st.MaxDurability = 100
 				p.Player.Worn.Set(domain.EquipSlot(u.Slot), st)

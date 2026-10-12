@@ -45,8 +45,8 @@
         "MaxMP": 1206,
         "HPRegen": 1,
         "MPRegen": 0,
-        "MinAtk": 462,
-        "MaxAtk": 682,
+        "MinAtk": 476,
+        "MaxAtk": 729,
         "Def": 258,
         "Hit": 488,
         "MAtk": 3,
@@ -605,12 +605,12 @@
             },
             {
               "Attr": 29,
-              "Value": 76,
+              "Value": 90,
               "Mode": 0
             },
             {
               "Attr": 31,
-              "Value": 250,
+              "Value": 297,
               "Mode": 0
             }
           ],
@@ -651,8 +651,8 @@
         "MaxMP": 1206,
         "HPRegen": 1,
         "MPRegen": 0,
-        "MinAtk": 462,
-        "MaxAtk": 682,
+        "MinAtk": 476,
+        "MaxAtk": 729,
         "Def": 258,
         "Hit": 488,
         "MAtk": 3,
@@ -1211,12 +1211,12 @@
             },
             {
               "Attr": 29,
-              "Value": 76,
+              "Value": 90,
               "Mode": 0
             },
             {
               "Attr": 31,
-              "Value": 250,
+              "Value": 297,
               "Mode": 0
             }
           ],
