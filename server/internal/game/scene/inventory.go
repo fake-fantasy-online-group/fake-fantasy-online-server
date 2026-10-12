@@ -895,11 +895,12 @@ func equipmentAffixLine(a domain.Affix) (string, bool) {
 		domain.AttrMaxWeight: "负重上限", domain.AttrAtk: "攻击",
 		domain.AttrMCrit: "魔法爆击率", domain.AttrPhysRes: "伤害抗性",
 		domain.AttrMagicRes: "魔法抗性", domain.AttrStatusRes: "不良状态抗性",
+		domain.AttrEffectHitBP: "效果命中",
 	}[a.Attr]
 	if name == "" {
 		return "", false
 	}
-	if a.Attr == domain.AttrCrit || a.Attr == domain.AttrMCrit {
+	if a.Attr == domain.AttrCrit || a.Attr == domain.AttrMCrit || a.Attr == domain.AttrEffectHitBP {
 		return fmt.Sprintf("%s %s", name, basisPointPercent(a.Value)), true
 	}
 	suffix := ""

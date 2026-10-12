@@ -506,7 +506,9 @@ func (s *Scene) onEnter(cmd Enter) {
 	// Revalidate self-cast V5 effects against the loaded equipment/hard ranks
 	// before exposing attributes. Detached effects are filtered by restore.
 	s.reconcileEnteringSkillStatuses(e)
-	_, e.Stats = domain.Compute(domain.StatSource{Base: ch.EffectiveBase(), Level: ch.Level, Innate: characterInnateStats(ch), Worn: s.functionalWorn(e), Defs: s.itemDef, Passive: s.passiveStatAffixes(e), Status: e.Status})
+	var growth domain.Stats
+	_, e.Stats, growth = s.computeSkillGrowthStats(e, s.functionalWorn(e))
+	e.Player.SkillGrowthMaxHP, e.Player.SkillGrowthMaxMP = growth.MaxHP, growth.MaxMP
 	e.MaxHP, e.MaxMP = e.Stats.MaxHP, e.Stats.MaxMP
 	e.HP = min(e.HP, e.MaxHP)
 	e.MP = min(e.MP, e.MaxMP)

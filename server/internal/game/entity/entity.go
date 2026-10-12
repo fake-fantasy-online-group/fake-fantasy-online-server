@@ -454,27 +454,30 @@ func clampCurrent(current, maximum int32) int32 {
 
 // Player 是玩家实体的专有部分。
 type Player struct {
-	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
-	EndgameSkillVariants    bool // negotiated equipment skill variants
-	EndgameSkillBehavior    bool // negotiated typed skill behavior; connection-scoped
-	EndgameGrowthV5         bool // negotiated V5 growth rules; connection-scoped
-	EndgameNativeStats      bool // negotiated native tooltip renderer; reset on a new login
-	refineReadyAt           domain.Tick
-	Char                    *domain.Character // 权威角色数据。存档时拷贝出去, 不把指针交出场景
-	Bag                     *domain.Bag       // 背包。与角色行一起存, 不能分开
-	Worn                    *domain.EquipSet  // 身上穿的
-	ChangeSet               *domain.ChangeSet // 1.5.8 快速换装面板托管的备用装备
-	Warehouse               *domain.Warehouse // 角色独立个人仓库；跨图携带，存档与背包同事务
-	Wardrobe                *domain.Wardrobe  // 永久外观收藏；与背包消费同一角色快照落盘
-	Stall                   *domain.Stall     // 摆摊托管物权；正常离场归还，崩溃后由登录恢复
-	StallBusy               bool              // 正在提交上架/下架/成交事务，禁止并发改摊位
-	StallMoveWarned         bool              // 本次摆摊已提示过移动受限，避免客户端位置心跳刷屏
-	TradeBusy               bool              // 双方确认后正在提交原子交易，禁止重复报价/确认
-	MailBusy                bool              // 邮件快照事务未完成，不能开始双角色交易
-	FamilyBusy              bool              // 正在提交建族/家族邮件事务，禁止重复扣费或耗材
-	RackBusy                bool              // 正在提交货架购买/退货事务，禁止重复扣物或彩玉
-	WarehouseOpen           bool              // 本场景生命周期内已打开仓库界面
-	RackOpen                bool              // 本场景生命周期内已打开神奇货架，购买包本身不带上下文
+	// Dynamic skill-growth contributions are recomputed on entry, never persisted.
+	// Removing them from max-resource deltas prevents soft-rank toggles from healing.
+	SkillGrowthMaxHP, SkillGrowthMaxMP int32
+	EquipmentAbsorbRestores            []domain.EquipmentAbsorbRestore
+	EndgameSkillVariants               bool // negotiated equipment skill variants
+	EndgameSkillBehavior               bool // negotiated typed skill behavior; connection-scoped
+	EndgameGrowthV5                    bool // negotiated V5 growth rules; connection-scoped
+	EndgameNativeStats                 bool // negotiated native tooltip renderer; reset on a new login
+	refineReadyAt                      domain.Tick
+	Char                               *domain.Character // 权威角色数据。存档时拷贝出去, 不把指针交出场景
+	Bag                                *domain.Bag       // 背包。与角色行一起存, 不能分开
+	Worn                               *domain.EquipSet  // 身上穿的
+	ChangeSet                          *domain.ChangeSet // 1.5.8 快速换装面板托管的备用装备
+	Warehouse                          *domain.Warehouse // 角色独立个人仓库；跨图携带，存档与背包同事务
+	Wardrobe                           *domain.Wardrobe  // 永久外观收藏；与背包消费同一角色快照落盘
+	Stall                              *domain.Stall     // 摆摊托管物权；正常离场归还，崩溃后由登录恢复
+	StallBusy                          bool              // 正在提交上架/下架/成交事务，禁止并发改摊位
+	StallMoveWarned                    bool              // 本次摆摊已提示过移动受限，避免客户端位置心跳刷屏
+	TradeBusy                          bool              // 双方确认后正在提交原子交易，禁止重复报价/确认
+	MailBusy                           bool              // 邮件快照事务未完成，不能开始双角色交易
+	FamilyBusy                         bool              // 正在提交建族/家族邮件事务，禁止重复扣费或耗材
+	RackBusy                           bool              // 正在提交货架购买/退货事务，禁止重复扣物或彩玉
+	WarehouseOpen                      bool              // 本场景生命周期内已打开仓库界面
+	RackOpen                           bool              // 本场景生命周期内已打开神奇货架，购买包本身不带上下文
 	// GMGod/GMOneShot 是本次在线生命周期的 GM 战斗状态。它们随跨图运行态
 	// 交接，但不进入角色快照；登出后新实体从零值开始。
 	GMGod     bool

@@ -297,7 +297,6 @@ func (s *Scene) refreshStats(p *entity.Entity) {
 	}
 	defer s.maybeSendSkillRanks(p)
 	defer s.refreshSkillPersistentEffects(p)
-	ch := p.Player.Char
 	wasAlive := p.Alive()
 	oldMaxHP, oldMaxMP := p.MaxHP, p.MaxMP
 
@@ -306,20 +305,20 @@ func (s *Scene) refreshStats(p *entity.Entity) {
 	player := *p.Player
 	player.Worn = worn
 	preview.Player = &player
-	_, stats := domain.Compute(domain.StatSource{
-		Base: ch.EffectiveBase(), Level: ch.Level, Innate: characterInnateStats(ch),
-		Worn: worn, Defs: s.itemDef, Passive: s.passiveStatAffixes(&preview), Status: p.Status,
-	})
+	_, stats, growth := s.computeSkillGrowthStats(&preview, worn)
 	p.Stats = stats
 	p.MaxHP = stats.MaxHP
 	p.MaxMP = stats.MaxMP
 
-	if d := p.MaxHP - oldMaxHP; d != 0 {
-		p.HP += d
+	// Preserve existing level/equipment resource deltas, excluding the new
+	// skill-growth maxima. Growing a skill expands capacity but grants no resources.
+	if d := int64(p.MaxHP) - int64(oldMaxHP) - int64(growth.MaxHP) + int64(p.Player.SkillGrowthMaxHP); d != 0 {
+		p.HP = domain.SaturateInt32(int64(p.HP) + d)
 	}
-	if d := p.MaxMP - oldMaxMP; d != 0 {
-		p.MP += d
+	if d := int64(p.MaxMP) - int64(oldMaxMP) - int64(growth.MaxMP) + int64(p.Player.SkillGrowthMaxMP); d != 0 {
+		p.MP = domain.SaturateInt32(int64(p.MP) + d)
 	}
+	p.Player.SkillGrowthMaxHP, p.Player.SkillGrowthMaxMP = growth.MaxHP, growth.MaxMP
 	if p.HP > p.MaxHP {
 		p.HP = p.MaxHP
 	}
@@ -347,6 +346,10 @@ func (s *Scene) passiveStatAffixes(p *entity.Entity) []domain.Affix {
 }
 
 func (s *Scene) passiveStatAffixesResolved(p *entity.Entity, resolution *equipmentRequirementResolution) []domain.Affix {
+	return s.passiveStatAffixesIncludingGrowth(p, resolution, true)
+}
+
+func (s *Scene) passiveStatAffixesIncludingGrowth(p *entity.Entity, resolution *equipmentRequirementResolution, growth bool) []domain.Affix {
 	if s == nil || p == nil || p.Player == nil ||
 		p.Player.Char == nil || p.Player.Worn == nil {
 		return nil
@@ -356,7 +359,17 @@ func (s *Scene) passiveStatAffixesResolved(p *entity.Entity, resolution *equipme
 	out = append(out, domain.AstralBonuses(p.Player.Worn, s.itemDef, ch)...)
 	for skill, level := range s.rawSkillLevelsResolved(p, resolution) {
 		def, ok := s.skills.Get(skill, level)
-		if !ok || def.Kind != domain.SkillPassive || !ch.AllowsSkill(def.ID, def.Prof) {
+		if !ok || !ch.AllowsSkill(def.ID, def.Prof) {
+			continue
+		}
+		// Active cleansing skills also confer a constant growth bonus. Soft ranks
+		// may improve learned skills, but cannot activate an unlearned one.
+		if growth && ch.Skills.LevelOf(skill) > 0 && s.skills.V5Enabled(skill) {
+			if attr, value := domain.SkillGrowthAttribute(skill, level); value > 0 {
+				out = append(out, domain.Affix{Attr: attr, Value: value, Mode: domain.ModeAbsolute})
+			}
+		}
+		if def.Kind != domain.SkillPassive {
 			continue
 		}
 		for _, modifier := range def.PassiveStats {

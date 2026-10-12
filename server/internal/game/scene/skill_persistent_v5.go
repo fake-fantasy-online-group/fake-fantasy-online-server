@@ -126,22 +126,14 @@ func (s *Scene) resolvePersistentStatus(source *entity.Entity, old domain.Status
 		if app.ID != old.ID {
 			continue
 		}
-		base, ok := s.statuses.ResolveSkillApplication(app)
+		base, ok := s.resolveSkillStatusDef(def, app, 0)
 		if !ok {
 			return domain.StatusDef{}, false, true
 		}
-		base.Affixes = overrideStatusAffixes(base.Affixes, app.ExtraAffixes)
-		applyProgressionStatus(app, &base)
-		if app.DurationSec > 0 && app.ProgressionRanks <= 0 {
-			base.DurationSec = app.DurationSec
-		}
-		base.StealthDamagePct = app.StealthDamagePct
-		base.PhysicalDamageTakenPct += app.PhysicalDamageTakenPct
-		base.InstantDeathImmune = app.InstantDeathImmune
-		base.BlockHarmful = base.BlockHarmful || app.BlockHarmful
-		if app.Control != domain.ControlNone {
-			base.Control = app.Control
-		}
+		// Reconciliation may lower a carrier's skill payload, never upgrade the
+		// holder's effect-hit snapshot merely because equipment improved later.
+		base.SourceEffectHitBP = old.SourceEffectHitBP
+		base.SourceEffectHitKnown = old.SourceEffectHitKnown
 		base.Icon = old.Icon
 		base.SourceSkillID = old.SourceSkillID
 		stampSkillStatusSnapshot(&base, def)

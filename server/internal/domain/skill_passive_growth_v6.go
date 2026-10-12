@@ -17,42 +17,24 @@ func (e *v5Evaluator) overflowRanks(first, fifth, cap int32) int32 {
 	return e.checked(max(int64(0), int64(e.rank)-capRank), "passive overflow ranks")
 }
 
+// Legacy overflow carriers no longer award mana, damage mitigation, basic
+// attack damage, or resist-triggered MP. Explicit policy helpers own the new
+// attribute and original-target damage channels.
 func (e *v5Evaluator) continuePassiveOverflow(a, b SkillDef, out *SkillDef) {
-	for i, m := range b.PassiveModifiers {
-		cap := int32(100)
-		switch m.Kind {
-		case PassiveCastTimeReductionPct, PassiveCastInterruptReductionPct, PassivePreserveInvisibleChance,
-			PassiveSkillDurabilityReductionPct, PassiveAttackDurabilityReductionPct,
-			PassiveTrapHalfDamageChance, PassiveIncomingMagicHalfChance,
-			PassiveStatusPhysicalDamageTakenPct:
-		default:
-			continue
-		}
-		out.PassiveModifiers[i].ProgressionOverflow = e.overflowRanks(a.PassiveModifiers[i].Value, m.Value, cap)
-		if a.PassiveModifiers[i].Value == m.Value && m.Value > 0 {
-			out.PassiveModifiers[i].ProgressionOverflow = e.rank - 5
-		}
-		// Never advertise impossible probabilities.
-		out.PassiveModifiers[i].Value = min(out.PassiveModifiers[i].Value, cap)
+	for i := range out.PassiveModifiers {
+		out.PassiveModifiers[i].ProgressionOverflow = 0
 	}
-	for i, r := range b.PassiveResists {
-		out.PassiveResists[i].ProgressionRestoreMP = e.overflowRanks(a.PassiveResists[i].Pct, r.Pct, 100)
+	for i := range out.PassiveResists {
+		out.PassiveResists[i].ProgressionRestoreMP = 0
 	}
-	for i, m := range b.PassiveTriggers {
-		out.PassiveTriggers[i].ManaCostReductionRanks = e.overflowRanks(a.PassiveTriggers[i].ChanceBP, m.ChanceBP, 10000)
-		if a.PassiveTriggers[i].ChanceBP == m.ChanceBP && m.ChanceBP > 0 {
-			out.PassiveTriggers[i].ManaCostReductionRanks = e.rank - 5
-		}
+	for i := range out.PassiveTriggers {
+		out.PassiveTriggers[i].ManaCostReductionRanks = 0
 	}
-	for i, m := range b.PassiveTriggerEffects {
-		if m.Effect.Kind == EffectKnockback {
-			out.PassiveTriggerEffects[i].ManaCostReductionRanks = e.overflowRanks(a.PassiveTriggerEffects[i].Effect.ChanceBP, m.Effect.ChanceBP, 10000)
-		}
+	for i := range out.PassiveTriggerEffects {
+		out.PassiveTriggerEffects[i].ManaCostReductionRanks = 0
 	}
-	for i, m := range b.PassiveStatusAffixes {
-		if m.Affix.Mode == ModePercent && m.Affix.Value < 0 {
-			out.PassiveStatusAffixes[i].ManaCostReductionRanks = e.overflowRanks(-a.PassiveStatusAffixes[i].Affix.Value, -m.Affix.Value, 100)
-		}
+	for i := range out.PassiveStatusAffixes {
+		out.PassiveStatusAffixes[i].ManaCostReductionRanks = 0
 	}
 	if b.PassiveCounter != nil && a.PassiveCounter.DamagePct == b.PassiveCounter.DamagePct {
 		out.PassiveCounter.DamagePct = e.magnitude(a.PassiveCounter.DamagePct, b.PassiveCounter.DamagePct)

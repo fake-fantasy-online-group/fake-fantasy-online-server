@@ -1246,11 +1246,9 @@ func (s *Scene) attributeSnapshot(e *entity.Entity) event.StatsChanged {
 	if s.levels != nil && ch.Level < domain.LevelCap {
 		current[2] = nonnegativeI32(s.levels.Need(ch.Level))
 	}
-	base := ch.EffectiveBase()
-	finalBase, _ := domain.Compute(domain.StatSource{
-		Base: base, Level: ch.Level, Innate: domain.Stats{MoveSpeed: baseMoveSpeed},
-		Worn: s.functionalWorn(e), Defs: s.itemDef, Status: e.Status,
-	})
+	// Use the same functional-equipment preview as combat, including growth
+	// primary stats. Unusable worn items cannot leak passive/rune stats to the panel.
+	finalBase, _, _ := s.computeSkillGrowthStats(e, s.functionalWorn(e))
 	writeKnownClientAttributes(current, finalBase, e.Stats)
 	current[24] = ch.FreePoints
 	current[clientAttrNianli] = ch.EffectiveNianli()

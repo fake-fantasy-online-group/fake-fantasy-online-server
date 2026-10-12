@@ -28,7 +28,11 @@ func TestOriginalSkillDescriptionAll745RanksRemainVerbatim(t *testing.T) {
 				t.Fatalf("unverified template %s rank%d: %q values%v", original.Name, rank, original.Description, values)
 			}
 			lines := s.skillOriginalEffectLines(def)
-			expected := []string{original.Description}
+			expectedDescription := original.Description
+			if id == 10229 || id == 10230 {
+				expectedDescription = strings.ReplaceAll(expectedDescription, "，此技能尚无法作用", "")
+			}
+			expected := []string{expectedDescription}
 			if original.Kind.Active() {
 				cost, cast := fmt.Sprintf("%d点法力", original.MPCost), skillMillisecondsText(original.PrepareMS)
 				if original.MPCost == 0 {
@@ -38,6 +42,10 @@ func TestOriginalSkillDescriptionAll745RanksRemainVerbatim(t *testing.T) {
 					cast = "瞬发"
 				}
 				expected = append(expected, "消耗: "+cost, "技能吟唱: "+cast, "技能间隔: "+skillMillisecondsText(original.CooldownMS))
+			}
+			// Maintenance alone reaches its original boundary before rank five.
+			if id == 10024 && rank == 5 {
+				expected = append(expected, "体质 +1")
 			}
 			if !reflect.DeepEqual(lines, expected) {
 				t.Fatalf("original full block differs %s rank%d: got%v want%v", original.Name, rank, lines, expected)
@@ -56,6 +64,9 @@ func TestOriginalSkillDescriptionHighRanksRetainCompleteProse(t *testing.T) {
 	s.skills, s.statuses = skills, statuses
 	for _, id := range domain.V5SkillIDs() {
 		original := skills[domain.SkillKey{ID: id, Level: 5}]
+		if id == 10229 || id == 10230 {
+			original.Description = strings.ReplaceAll(original.Description, "，此技能尚无法作用", "")
+		}
 		for _, rank := range []int32{6, 20, 21, 50, 100} {
 			def, ok := skills.Get(id, rank)
 			if !ok {
@@ -150,7 +161,7 @@ func TestOriginalSkillDescriptionBoundedChanceAndControlUseActualFields(t *testi
 		id   domain.SkillID
 		want string
 	}{
-		{10210, "100%命中，造成1390%伤害，100%几率发生即死判定。"},
+		{10210, "100%命中，造成1390%伤害，13%几率发生即死判定。"},
 		{10432, "100%几率瞬间移动至指定点。"},
 		{10016, "使敌人石化15秒。"},
 	} {
@@ -165,7 +176,7 @@ func TestOriginalSkillDescriptionBoundedChanceAndControlUseActualFields(t *testi
 	}
 }
 
-func TestOriginalSkillDescriptionControlContinuesBeforeResistanceSentence(t *testing.T) {
+func TestOriginalSkillDescriptionControlContinuesBeforeEffectHit(t *testing.T) {
 	skills, statuses := realV5SkillFixtures(t)
 	s := newTestScene(t, nil)
 	s.skills, s.statuses = skills, statuses
@@ -185,11 +196,47 @@ func TestOriginalSkillDescriptionControlContinuesBeforeResistanceSentence(t *tes
 			t.Fatalf("石化之枪 rank%d: %v", tt.rank, lines)
 		}
 		joined := strings.Join(lines, "\n")
-		if strings.Contains(joined, "状态抵抗概率") != tt.pressure {
+		if strings.Contains(joined, "本技能效果命中") != tt.pressure {
 			t.Fatalf("pressure appears before actual duration boundary rank%d: %v", tt.rank, lines)
 		}
-		if tt.pressure && !strings.Contains(joined, "目标的状态抵抗概率降至原来的95.24%（不穿透免疫）。") {
+		if tt.pressure && !strings.Contains(joined, "本技能效果命中 +5%") {
 			t.Fatal("wrong actual pressure coefficient", lines)
+		}
+		if strings.Contains(joined, "抵抗概率降至") || len(lines) < 4 || !strings.HasPrefix(lines[1], "消耗:") || !strings.HasPrefix(lines[3], "技能间隔:") {
+			t.Fatal("old pressure text or original block order changed", lines)
+		}
+	}
+}
+
+func TestOriginalSkillDescriptionGrowthAttributesUseActualEffectiveRank(t *testing.T) {
+	skills, statuses := nativeRestoredSceneFixtures(t)
+	s := newTestScene(t, nil)
+	s.skills, s.statuses = skills, statuses
+	for _, tc := range []struct {
+		id   domain.SkillID
+		cap  int32
+		name string
+	}{
+		{10024, 4, "体质"}, {10222, 10, "体质"}, {10229, 11, "体质"}, {10230, 11, "体质"},
+		{10314, 17, "智慧"}, {10415, 17, "智慧"}, {10416, 5, "智慧"}, {10329, 5, "智慧"}, {10420, 5, "智慧"},
+		{10306, 5, "精神"}, {10316, 5, "精神"}, {10318, 5, "精神"}, {10433, 5, "精神"}, {10218, 7, "精神"},
+	} {
+		for _, delta := range []int32{0, 1, 2, 50} {
+			def, ok := skills.Get(tc.id, tc.cap+delta)
+			if !ok {
+				t.Fatalf("missing skill %d/%d", tc.id, tc.cap+delta)
+			}
+			lines := s.skillOriginalEffectLines(def)
+			joined := strings.Join(lines, "\n")
+			wanted := fmt.Sprintf("%s +%d", tc.name, delta)
+			if delta == 0 && strings.Contains(joined, tc.name+" +") || delta > 0 && (lines[len(lines)-1] != wanted || strings.Count(joined, wanted) != 1) {
+				t.Fatalf("%s rank%d actual attribute missing/duplicated: %v", def.Name, def.Level, lines)
+			}
+			for _, old := range []string{"法力效率", "恢复法力", "暗器时，普通攻击伤害额外", "减伤触发后", "参数", "抵抗概率降至"} {
+				if strings.Contains(joined, old) {
+					t.Fatalf("obsolete growth %s rank%d: %v", def.Name, def.Level, lines)
+				}
+			}
 		}
 	}
 }
@@ -213,5 +260,28 @@ func TestOriginalSkillDescriptionHealingUsesActualRationalTrainingOutput(t *test
 	}
 	if len(lines) != 4 {
 		t.Fatal("full healing detail block lost", lines)
+	}
+}
+
+func TestOriginalSkillDescriptionOnlyClosedEvasionWarningsAreRemoved(t *testing.T) {
+	skills, statuses := nativeRestoredSceneFixtures(t)
+	s := newTestScene(t, nil)
+	s.skills, s.statuses = skills, statuses
+	for _, tc := range []struct {
+		id   domain.SkillID
+		want string
+	}{
+		{10229, "当触发陷阱时有100%的几率只受一半伤害。"},
+		{10230, "被魔法击中时有100%几率只受一半伤害。"},
+	} {
+		def, _ := skills.Get(tc.id, 12)
+		lines := s.skillOriginalEffectLines(def)
+		if lines[0] != tc.want || lines[1] != "体质 +1" {
+			t.Fatal("verified half-damage description changed unrelated prose", lines)
+		}
+	}
+	unknown := domain.SkillDef{ID: 10212, Description: "原机制未闭合，此技能尚无法作用。"}
+	if got := s.skillDescriptionForDisplay(unknown, unknown); got != unknown.Description {
+		t.Fatal("unresolved warning stripped", got)
 	}
 }

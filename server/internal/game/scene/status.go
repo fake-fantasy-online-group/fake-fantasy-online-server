@@ -76,17 +76,14 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	if target.Status != nil && target.Status.BlockedByOverlay(def, s.statusOverlay) {
 		return false
 	}
-	// 不良状态抗性只挡 debuff, 不挡自己身上的增益。
-	if isHarmful(def) {
-		specific := s.passiveStatusResistPct(target, def.ID)
-		resist := domain.SaturateInt32(int64(target.Stats.StatusResist) + int64(specific))
-		if chance := domain.SkillStatusResistChance(resist, def.ControlPower); chance > 0 {
-			if int32(s.rng.Intn(100)) < chance {
-				s.emitTo(target.ID, event.StatusResisted{Who: target.ID, Status: int32(def.ID)})
-				s.restorePassiveResistMP(target, def.ID)
-				return false
-			}
-		}
+	// Base chance and resistance share exactly one final draw. Buffs only use
+	// their authored chance; immunity/overlay failures above never consume RNG.
+	if !s.statusEffectLands(target, def, src) {
+		return false
+	}
+	if (def.PoisonOnHitChance > 0 || def.FreezeAttackerChance > 0) && !def.SourceEffectHitKnown {
+		def.SourceEffectHitBP = s.sourceEffectHitBP(target)
+		def.SourceEffectHitKnown = true
 	}
 	if target.Status == nil {
 		target.Status = domain.NewStatusSet()
@@ -145,7 +142,7 @@ func (s *Scene) passiveStatusResistPct(target *entity.Entity, status domain.Stat
 		return 0
 	}
 	ch := target.Player.Char
-	var total int32
+	var total int64
 	for skill, level := range s.rawSkillLevels(target) {
 		def, ok := s.skills.Get(skill, level)
 		if !ok || def.Kind != domain.SkillPassive || !ch.AllowsSkill(def.ID, def.Prof) {
@@ -153,11 +150,11 @@ func (s *Scene) passiveStatusResistPct(target *entity.Entity, status domain.Stat
 		}
 		for _, resist := range def.PassiveResists {
 			if resist.Status == status {
-				total += resist.Pct
+				total += int64(resist.Pct)
 			}
 		}
 	}
-	return total
+	return domain.SaturateInt32(total)
 }
 
 // prepareBasicAttackStatuses 在一次已受理的普通攻击起手时消耗“下一击”状态，
@@ -166,9 +163,7 @@ func (s *Scene) prepareBasicAttackStatuses(e *entity.Entity, blow *combat.Blow) 
 	if e == nil || blow == nil {
 		return
 	}
-	if overflow := s.passiveOverflow(e, domain.PassiveAttackDurabilityReductionPct, true); overflow > 0 {
-		blow.SkillPct = boostedDamagePct(blow.SkillPct, overflow)
-	}
+
 	if e.Status == nil {
 		return
 	}
@@ -302,41 +297,37 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 	} else if magic && reflectChance > 0 && int32(s.rng.Intn(100)) < reflectChance {
 		finalDamage, fullMagicReflect = 0, rawDamage
 	} else {
-		incoming := rawDamage
-		if element >= 0 {
-			incoming = domain.ElementResistanceDamage(incoming, defense.ResistBP, offense.PierceBP, pvp)
-		}
 		guard := domain.EvaluateUniqueTraits(s.uniqueTraits(dst), domain.UniqueContext{HPPercent: uniquePercent(beforeHP, dst.MaxHP), Magic: magic})
-		extraMitigation := defense.MitigationBP
+		extraMitigation := int64(defense.MitigationBP) + int64(guard.MitigationBP)
 		if !magic {
-			extraMitigation = clampI32(int64(extraMitigation) + int64(defensive.PhysicalMitigationBP))
+			extraMitigation += int64(defensive.PhysicalMitigationBP)
 		}
-		incoming = domain.ElementMitigationDamage(incoming, guard.MitigationBP, extraMitigation)
+		halfCount := 0
+		if chance := s.trapHalfDamageChance(dst); blow.Trap && chance > 0 && int32(s.rng.Intn(10000)) < chance {
+			halfCount++
+		}
+		if chance := s.incomingMagicHalfChance(dst); magic && chance > 0 && int32(s.rng.Intn(10000)) < chance {
+			halfCount++
+		}
+		flatReduction := dst.Status.DamageReductionFlat(magic)
 		if dst.Kind == domain.KindPlayer {
 			kind := "physical_reduction"
 			if magic {
 				kind = "magic_reduction"
 			}
-			incoming = clampI32(int64(incoming) - int64(s.petProcAmount(dst, kind)) - int64(s.petFlatReduction(dst, magic)))
-			if incoming < 1 {
-				incoming = 1
-			}
+			flatReduction += int64(s.petProcAmount(dst, kind)) + int64(s.petFlatReduction(dst, magic))
 		}
-		if chance := s.trapHalfDamageChance(dst); blow.Trap && chance > 0 &&
-			int32(s.rng.Intn(10000)) < chance {
-			incoming = s.passiveHalfDamage(dst, domain.PassiveTrapHalfDamageChance, incoming)
-		}
-		if chance := s.incomingMagicHalfChance(dst); magic && chance > 0 &&
-			int32(s.rng.Intn(10000)) < chance {
-			incoming = s.passiveHalfDamage(dst, domain.PassiveIncomingMagicHalfChance, incoming)
-		}
-		if dst.Status != nil {
-			finalDamage, removed = dst.Status.MitigateDamage(magic, incoming)
-			if dst.Player != nil {
-				dst.Player.MarkDirty() // 护盾剩余量也属于状态实例存档。
-			}
+		wide := dst.Status.DamageTakenAmount(magic, rawDamage)
+		wide = domain.MitigatePercentDamageV7(wide, defense.ResistBP, offense.PierceBP,
+			domain.SaturateInt32(extraMitigation), dst.Status.DamageReductionPct(magic), halfCount, pvp, flatReduction)
+		finalDamage = max(int32(0), domain.SaturateInt32(wide))
+		if dst.Status.Invulnerable() {
+			finalDamage = 0
 		} else {
-			finalDamage = incoming
+			finalDamage, removed = dst.Status.AbsorbDamage(finalDamage)
+		}
+		if dst.Status != nil && dst.Player != nil {
+			dst.Player.MarkDirty()
 		}
 		if dst.Kind == domain.KindPlayer && finalDamage > 0 {
 			finalDamage = s.petGuardDamage(dst, src.ID, finalDamage)
@@ -427,17 +418,10 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 
 	magic := ev.Flag.Has(event.DamageMagic)
 	if !magic && ev.SkillID == 0 && src.Status != nil && dst.Alive() {
-		poisonChance, poisonLevel, _, _, _, _, _ := src.Status.CombatTriggers()
-		if poisonChance > 0 && poisonLevel > 0 && int32(s.rng.Intn(100)) < poisonChance {
-			s.applyStatus(dst, domain.StatusPoison, poisonLevel, src.ID)
-		}
+		s.applyCombatTriggeredStatus(src, dst, domain.StatusPoison)
 	}
-
 	if !magic && dst.Status != nil && src.Alive() {
-		_, _, freezeChance, _, _, _, _ := dst.Status.CombatTriggers()
-		if freezeChance > 0 && int32(s.rng.Intn(100)) < freezeChance {
-			s.applyStatus(src, domain.StatusFreeze, 1, dst.ID)
-		}
+		s.applyCombatTriggeredStatus(dst, src, domain.StatusFreeze)
 	}
 
 	if src.Status != nil && src.Alive() && ev.Amount > 0 {

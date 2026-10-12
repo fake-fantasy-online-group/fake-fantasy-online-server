@@ -27,12 +27,13 @@ func affixText(a domain.Affix) string {
 		domain.AttrMaxHP: "最大生命", domain.AttrMaxMP: "最大法力", domain.AttrHPRegen: "生命恢复",
 		domain.AttrMaxWeight: "最大负重", domain.AttrAtk: "攻击",
 		domain.AttrPhysRes: "伤害抗性", domain.AttrMagicRes: "魔法抗性",
-		domain.AttrStatusRes: "不良状态抗性",
+		domain.AttrStatusRes:   "不良状态抗性",
+		domain.AttrEffectHitBP: "效果命中",
 	}[a.Attr]
 	if name == "" {
 		name = fmt.Sprintf("属性%d", a.Attr)
 	}
-	if a.Attr == domain.AttrCrit || a.Attr == domain.AttrMCrit {
+	if a.Attr == domain.AttrCrit || a.Attr == domain.AttrMCrit || a.Attr == domain.AttrEffectHitBP {
 		return fmt.Sprintf("%s %s", name, basisPointPercent(a.Value))
 	}
 	suffix := ""

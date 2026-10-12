@@ -14,10 +14,10 @@ func TestSkillManaCostMatchesEveryActualDebitV6(t *testing.T) {
 	s, p := behaviorAcceptancePlayer(t, 4)
 	var payloads []any
 	previous := int32(10000000)
-	for _, rank := range []int32{5, 20, 21, 30, 50, 100, 1000000} {
-		p.Player.Char.Skills = domain.Learned{10306: min(rank, 20)}
-		s.skillRawCache = map[domain.EntityID]skillRawCacheEntry{p.ID: {key: skillRawFingerprint(p), levels: domain.Learned{10306: rank}}}
-		d, ok := s.skills.Get(10306, rank)
+	for _, rank := range []int32{19, 20, 21, 30, 50, 100, 1000000} {
+		p.Player.Char.Skills = domain.Learned{10301: min(rank, 20)}
+		s.skillRawCache = map[domain.EntityID]skillRawCacheEntry{p.ID: {key: skillRawFingerprint(p), levels: domain.Learned{10301: rank}}}
+		d, ok := s.skills.Get(10301, rank)
 		if !ok {
 			t.Fatal(rank)
 		}
@@ -37,12 +37,12 @@ func TestSkillManaCostMatchesEveryActualDebitV6(t *testing.T) {
 			s.casts = nil
 			s.tick += 1000000
 			before := p.MP
-			s.onUseSkill(UseSkill{ID: p.ID, Skill: 10306, Target: p.ID})
+			s.onUseSkill(UseSkill{ID: p.ID, Skill: 10301, Target: p.ID})
 			if len(s.casts) != 1 || before-p.MP != d.MPCost {
 				t.Fatalf("rank%d cast%d debit%d expected%d queue%d", rank, i, before-p.MP, d.MPCost, len(s.casts))
 			}
 		}
-		payloads = append(payloads, map[string]any{"rank": rank, "payload": view, "lines": lines})
+		payloads = append(payloads, map[string]any{"id": d.ID, "name": d.Name, "rank": rank, "payload": view, "lines": lines})
 	}
 	if previous != 1 {
 		t.Fatal("positive mana floor", previous)

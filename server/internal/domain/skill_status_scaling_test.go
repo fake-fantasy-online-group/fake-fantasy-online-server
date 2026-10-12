@@ -89,7 +89,7 @@ func TestOriginalSkillStatusDurationUsesSourceOverridesAndCaps(t *testing.T) {
 		{"freeze grows before cap", StatusApplication{ID: StatusFreeze, Level: 5, ProgressionFirstLevel: 5, ProgressionRanks: 1, DurationSec: 40, ProgressionFirstDurationSec: 20, ProgressionBaseDurationSec: 40}, 45, 0},
 		{"freeze capped", StatusApplication{ID: StatusFreeze, Level: 5, ProgressionFirstLevel: 5, ProgressionRanks: 5, DurationSec: 40, ProgressionFirstDurationSec: 20, ProgressionBaseDurationSec: 40}, 60, 1},
 		{"original long silence retained", StatusApplication{ID: StatusSilence, Level: 7, ProgressionFirstLevel: 3, ProgressionRanks: 5}, 34, 5},
-		{"constant control below cap has no pressure", StatusApplication{ID: StatusFreeze, Level: 1, ProgressionFirstLevel: 1, ProgressionRanks: 5, DurationSec: 5, ProgressionFirstDurationSec: 5, ProgressionBaseDurationSec: 5}, 5, 0},
+		{"constant original control adds only local pressure", StatusApplication{ID: StatusFreeze, Level: 1, ProgressionFirstLevel: 1, ProgressionRanks: 5, DurationSec: 5, ProgressionFirstDurationSec: 5, ProgressionBaseDurationSec: 5}, 5, 5},
 		{"constant debuff at cap has pressure", StatusApplication{ID: StatusBlind, Level: 15, ProgressionFirstLevel: 11, ProgressionRanks: 5}, 60, 5},
 		{"stealth passive duration bonus", StatusApplication{ID: StatusStealth, Level: 5, ProgressionFirstLevel: 1, ProgressionRanks: 2, DurationSec: 43, ProgressionFirstDurationSec: 30, ProgressionBaseDurationSec: 38}, 47, 0},
 		{"unique bonus on continued duration", StatusApplication{ID: StatusDamageShield, Level: 5, ProgressionFirstLevel: 1, ProgressionRanks: 1, DurationSec: 111}, 121, 0},
@@ -130,21 +130,7 @@ func tableAsStatusRows(t StatusTable) map[string]StatusDef {
 	return out
 }
 
-func TestOriginalSkillStatusResistancePressure(t *testing.T) {
-	for _, resist := range []int32{-5, 0, 25, 90, 100, 200} {
-		if got := SkillStatusResistChance(resist, 0); got != ResistChance(resist) {
-			t.Fatalf("legacy resistance changed: %d => %d", resist, got)
-		}
-	}
-	if got := SkillStatusResistChance(90, 20); got != 45 {
-		t.Fatal("20 extra ranks should halve numerical resistance", got)
-	}
-	if got := SkillStatusResistChance(100, 20); got != 45 {
-		t.Fatal("raw numeric100 was never categorical immunity", got)
-	}
-	if got := SkillStatusResistChance(0, math.MaxInt32); got != 0 {
-		t.Fatal("zero resistance changed", got)
-	}
+func TestOriginalSkillStatusOverflowIsRejected(t *testing.T) {
 	if got, ok := continueStatusValue(1, math.MaxInt32, math.MaxInt32); ok {
 		t.Fatal("overflowed effect continuation silently accepted", got)
 	}
@@ -209,35 +195,31 @@ func TestOriginalLowConstantPeriodicStatusesAdvanceEveryRank(t *testing.T) {
 	}
 }
 
-func TestFunctionalSkillStatusesKeepMeaningfulManaProgression(t *testing.T) {
+func TestOnlyAuthorizedSkillsAcquireEfficiencyAfterNativeCap(t *testing.T) {
 	skills := realV5CurveAnchors(t)
-	checked := 0
+	allowed := map[SkillID]int32{10018: 5, 10227: 5, 10432: 5, 10301: 19, 10305: 11, 10309: 10}
 	for _, id := range V5SkillIDs() {
-		first, fifth := skills[SkillKey{ID: id, Level: 1}], skills[SkillKey{ID: id, Level: 5}]
-		if !fifth.Kind.Active() || fifth.HasDamageEffect() || fifth.MPCost <= 0 {
-			continue
-		}
-		checked++
-		previous := fifth
-		for _, rank := range []int32{20, 21, 30, 50, 100} {
+		first, fifth := skills[SkillKey{id, 1}], skills[SkillKey{id, 5}]
+		for _, rank := range []int32{6, 10, 11, 12, 19, 20, 21, 50, 100} {
 			got, err := EvaluateV5Skill(first, fifth, rank)
 			if err != nil {
 				t.Fatal(id, rank, err)
 			}
-			if got.MPCost != fifth.MPCost || got.ManaCostReductionRanks != rank-OriginalSkillRankCap {
-				t.Fatalf("skill %d rank %d: base mana=%d, efficiency=%d", id, rank, got.MPCost, got.ManaCostReductionRanks)
+			cap, allowed := allowed[id]
+			wantRanks := int32(0)
+			if allowed && rank > cap {
+				wantRanks = rank - cap
 			}
-			FinalizeSkillManaCost(&got)
-			if got.MPCost > previous.MPCost || got.MPCost < 1 {
-				t.Fatalf("skill %d rank %d: integer mana cost increased or crossed one", id, rank)
+			if got.ManaCostReductionRanks != wantRanks {
+				t.Fatal(id, rank, got.ManaCostReductionRanks, wantRanks)
 			}
-			if got.Area != fifth.Area || len(got.DirectEffects()) != len(fifth.DirectEffects()) || len(got.Statuses) != len(fifth.Statuses) {
-				t.Fatalf("skill %d rank %d: mana reduction changed scope", id, rank)
+			e := v5Evaluator{id: id, rank: rank}
+			if got.PrepareMS != max(int32(0), e.blend(first.PrepareMS, fifth.PrepareMS)) {
+				t.Fatal("invented chant reduction", id, rank)
 			}
-			previous = got
+			if !allowed && (got.MPCost != max(int32(0), e.blend(first.MPCost, fifth.MPCost)) || got.CooldownMS != max(int32(0), e.blend(first.CooldownMS, fifth.CooldownMS))) {
+				t.Fatal("changed original cost/cooldown", id, rank)
+			}
 		}
-	}
-	if checked == 0 {
-		t.Fatal("no functional skills audited")
 	}
 }

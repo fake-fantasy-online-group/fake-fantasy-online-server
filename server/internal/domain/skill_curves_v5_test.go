@@ -71,8 +71,15 @@ func TestOriginalSkillEveryRankPreservesScopeAndNeverInventsCarriers(t *testing.
 			if got.Level != rank || got.FormulaVersion != SkillFormulaVersion {
 				t.Fatalf("rank clamped: %+v", got)
 			}
-			if got.ID != original.ID || got.Kind != original.Kind || got.HurtType != original.HurtType || got.TargetSelf != original.TargetSelf || got.TargetEnemy != original.TargetEnemy || got.TargetTeam != original.TargetTeam || got.RequiresInvisible != original.RequiresInvisible || got.RequiredWeaponType != original.RequiredWeaponType || got.Area != original.Area {
+			if got.ID != original.ID || got.Kind != original.Kind || got.HurtType != original.HurtType || got.TargetSelf != original.TargetSelf || got.TargetEnemy != original.TargetEnemy || got.TargetTeam != original.TargetTeam || got.RequiresInvisible != original.RequiresInvisible || got.RequiredWeaponType != original.RequiredWeaponType {
 				t.Fatalf("skill%d changed identity", id)
+			}
+			p, _ := LookupSkillGrowthPolicy(id)
+			if p.RangeCapRank == 0 && got.Area != original.Area {
+				t.Fatalf("skill%d expanded an unauthorized area", id)
+			}
+			if got.Area.Shape != original.Area.Shape || got.Area.Center != original.Area.Center || got.Area.Angle != original.Area.Angle {
+				t.Fatalf("skill%d changed range geometry identity", id)
 			}
 			if got.ProgressionShieldFlat != 0 {
 				t.Fatalf("skill%d invented utility shield", id)
@@ -292,13 +299,12 @@ func TestOriginalSkillCostsTimingsAndUtilityEfficiency(t *testing.T) {
 					t.Fatalf("skill%d rank%d unavailable", id, rank)
 				}
 				want := int64(a) + (int64(b)-int64(a))*int64(rank-1)/4
-				if rank > 5 && fifth.Kind.Active() && !fifth.HasDamageEffect() {
-					want = int64(b)
-					if name != "MPCost" {
-						want = int64(b) * 50 / (50 + int64(rank-5))
-					}
-					if d.ManaCostReductionRanks != rank-5 {
-						t.Fatalf("skill%d/%d utility efficiency missing", id, rank)
+				policy, _ := LookupSkillGrowthPolicy(id)
+				if rank > 5 && policy.EfficiencyCapRank > 0 && rank > policy.EfficiencyCapRank && name != "PrepareMS" {
+					want = int64(a) + (int64(b)-int64(a))*int64(policy.EfficiencyCapRank-1)/4
+					if name == "CooldownMS" && want > 0 {
+						d := 50 + int64(rank-policy.EfficiencyCapRank)
+						want = (want*50 + d - 1) / d
 					}
 				}
 				if value(d) != int32(want) {
@@ -313,7 +319,7 @@ func TestOriginalSkillCostsTimingsAndUtilityEfficiency(t *testing.T) {
 	for _, sample := range []struct {
 		id                       SkillID
 		rank, mp, cast, cooldown int32
-	}{{10401, 6, 41, 3000, 500}, {10401, 20, 69, 3000, 500}, {10304, 6, 125, 4509, 1000}, {10428, 6, 96, 1000, 31372}} {
+	}{{10401, 6, 41, 3000, 500}, {10401, 20, 69, 3000, 500}, {10304, 6, 130, 4850, 0}, {10428, 6, 99, 0, 32500}} {
 		d, _ := skills.Get(sample.id, sample.rank)
 		// Sample checks isolate changing fields; untouched timings are audited above.
 		if d.MPCost != sample.mp {

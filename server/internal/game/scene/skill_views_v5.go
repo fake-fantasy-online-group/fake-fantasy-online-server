@@ -37,7 +37,7 @@ func skillAttrText(attr int32) string {
 	case domain.AttrSTR:
 		return "力量"
 	case domain.AttrINT:
-		return "智力"
+		return "智慧"
 	case domain.AttrVIT:
 		return "体质"
 	case domain.AttrSPI:
@@ -139,23 +139,24 @@ func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
 		if e.ClearHarmful {
 			out = append(out, "移除有害状态")
 		}
+		if e.EffectHitBP > 0 {
+			out = append(out, skillEffectHitLine(e.EffectHitBP))
+		}
 	}
 	if def.ProgressionShieldFlat > 0 {
 		out = append(out, fmt.Sprintf("施术保护盾：吸收%d伤害，持续5秒", def.ProgressionShieldFlat))
 	}
 	for _, app := range def.Statuses {
-		d, ok := s.statuses.ResolveSkillApplication(app)
+		d, ok := s.skillDescriptionStatus(app)
 		if !ok {
 			continue
 		}
-		d.Affixes = overrideStatusAffixes(d.Affixes, app.ExtraAffixes)
-		applyProgressionStatus(app, &d)
-		if app.DurationSec > 0 && app.ProgressionRanks <= 0 {
-			d.DurationSec = app.DurationSec
-		}
 		out = append(out, fmt.Sprintf("%s：持续%d秒", d.Name, d.DurationSec))
-		if d.ControlPower > 0 {
-			out = append(out, skillControlResistanceLine(d))
+		if d.EffectHitBP > 0 {
+			out = append(out, skillEffectHitLine(d.EffectHitBP))
+		}
+		if d.FreezeAttackerEffectHitBP > 0 {
+			out = append(out, "反击冻结效果命中 +"+skillFractionText(0, int64(d.EffectHitBP)+int64(d.FreezeAttackerEffectHitBP), 100)+"%")
 		}
 		for _, a := range d.Affixes {
 			out = append(out, skillAffixText(a))
@@ -194,18 +195,18 @@ func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
 	if def.PassiveCounter != nil {
 		out = append(out, fmt.Sprintf("反击概率%s；伤害倍率%d%%", equipmentPercent(def.PassiveCounter.ChanceBP), def.PassiveCounter.DamagePct))
 	}
-	for _, m := range def.PassiveTriggers {
+	for index, m := range def.PassiveTriggers {
 		name, duration := s.skillStatusName(m.Status), m.DurationSec
 		controlLine := ""
-		if state, ok := s.statuses.ResolveSkillApplication(domain.StatusApplication{ID: m.Status, Level: m.StatusLevel, ProgressionRanks: m.ProgressionRanks, ProgressionFirstLevel: m.ProgressionFirstLevel, DurationSec: m.DurationSec, ProgressionFirstDurationSec: m.ProgressionFirstDurationSec, ProgressionBaseDurationSec: m.ProgressionBaseDurationSec}); ok {
+		if state, ok := s.skillDescriptionTrigger(def, index); ok {
 			if state.Name != "" {
 				name = state.Name
 			}
 			if duration <= 0 || m.ProgressionRanks > 0 {
 				duration = state.DurationSec
 			}
-			if state.ControlPower > 0 {
-				controlLine = skillControlResistanceLine(state)
+			if state.EffectHitBP > 0 {
+				controlLine = skillEffectHitLine(state.EffectHitBP)
 			}
 		}
 		line := fmt.Sprintf("%s附加%s：概率%s", skillTargetName(m.TargetSkill), name, equipmentPercent(m.ChanceBP))
@@ -245,6 +246,9 @@ func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
 			cast = "瞬发"
 		}
 		out = append(out, "消耗："+cost, "技能吟唱："+cast, "技能间隔："+skillMillisecondsText(def.CooldownMS))
+	}
+	if attr, value := domain.SkillGrowthAttribute(def.ID, def.Level); value > 0 {
+		out = append(out, fmt.Sprintf("%s +%d", skillAttrText(attr), value))
 	}
 	return out
 }

@@ -237,14 +237,10 @@ func (s *Scene) ensureMonsterPassives(m *entity.Entity) {
 			if m.Status != nil && m.Status.Has(app.ID) {
 				continue
 			}
-			statusDef, found := s.statuses.Get(app.ID, app.Level)
-			if !found {
+			statusDef, ok := s.resolveSkillStatusDef(rule.Skill, app, 0)
+			if !ok {
 				continue
 			}
-			if app.DurationSec > 0 {
-				statusDef.DurationSec = app.DurationSec
-			}
-			applyStatusSource(&statusDef, rule.Skill.Icon, int32(rule.Skill.ID))
 			s.applyStatusDef(m, statusDef, m.ID)
 		}
 	}

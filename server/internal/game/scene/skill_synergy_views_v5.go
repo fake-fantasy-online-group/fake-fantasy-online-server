@@ -54,6 +54,7 @@ func (s *Scene) skillSynergyViews(target domain.SkillID, hard, raw domain.Learne
 		if !ok {
 			continue
 		}
+		nativeDamage += domain.SkillGrowthDamageBonusPct(edge.Source, rank, target)
 		filtered := domain.SkillDef{Kind: domain.SkillPassive}
 		for _, m := range def.PassiveModifiers {
 			if m.TargetSkill == target {

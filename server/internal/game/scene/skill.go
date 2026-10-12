@@ -389,8 +389,7 @@ func (s *Scene) applyPassiveSkillModifiersWithLevels(caster *entity.Entity, def 
 		caster.Player.Char == nil || def == nil {
 		return
 	}
-	def.ManaCostReductionRanks = domain.SaturateInt32(int64(def.ManaCostReductionRanks) + int64(s.passiveManaCostReductionRanks(caster, *def, levels)))
-	var damageBonus, damageFlat, castReduction int32
+	var damageBonus, damageFlat, castReduction, periodicBonus int32
 	var stealthDuration, stealthMove, stealthDamage, preserveInvisible int32
 	var durabilityReduction, statusPhysicalDamageTaken int32
 	effectBonus := map[domain.EffectKind]int32{}
@@ -403,6 +402,12 @@ func (s *Scene) applyPassiveSkillModifiersWithLevels(caster *entity.Entity, def 
 		if !ok || passive.Kind != domain.SkillPassive ||
 			!caster.Player.Char.AllowsSkill(passive.ID, passive.Prof) {
 			continue
+		}
+		growth := domain.SkillGrowthDamageBonusPct(passiveID, level, def.ID)
+		if def.HasDamageEffect() {
+			damageBonus = domain.SaturateInt32(int64(damageBonus) + int64(growth))
+		} else if passiveID == 10422 && def.ID == 10421 {
+			periodicBonus = domain.SaturateInt32(int64(periodicBonus) + int64(growth))
 		}
 		for _, modifier := range passive.PassiveModifiers {
 			switch modifier.Kind {
@@ -446,7 +451,7 @@ func (s *Scene) applyPassiveSkillModifiersWithLevels(caster *entity.Entity, def 
 				}
 			case domain.PassiveStatusPhysicalDamageTakenPct:
 				if modifier.TargetSkill == def.ID {
-					statusPhysicalDamageTaken += modifier.Value
+					statusPhysicalDamageTaken = domain.SaturateInt32(int64(statusPhysicalDamageTaken) + int64(modifier.Value))
 				}
 			}
 		}
@@ -456,7 +461,7 @@ func (s *Scene) applyPassiveSkillModifiersWithLevels(caster *entity.Entity, def 
 			}
 			triggerStatuses = append(triggerStatuses, domain.StatusApplication{
 				ID: trigger.Status, Level: trigger.StatusLevel,
-				ChanceBP: trigger.ChanceBP, DurationSec: trigger.DurationSec,
+				ChanceBP: trigger.ChanceBP, ChanceExplicit: trigger.ChanceExplicit, EffectHitBP: trigger.EffectHitBP, SourceSkill: passiveID, DurationSec: trigger.DurationSec,
 				ProgressionRanks: trigger.ProgressionRanks, ProgressionFirstLevel: trigger.ProgressionFirstLevel,
 				ProgressionFirstDurationSec: trigger.ProgressionFirstDurationSec, ProgressionBaseDurationSec: trigger.ProgressionBaseDurationSec,
 			})
@@ -481,10 +486,15 @@ func (s *Scene) applyPassiveSkillModifiersWithLevels(caster *entity.Entity, def 
 	}
 	def.WeaponDurabilityReductionPct = durabilityReduction
 	statusesCloned := false
-	if len(triggerStatuses) > 0 || len(statusAffixes) > 0 || statusPhysicalDamageTaken > 0 {
+	if len(triggerStatuses) > 0 || len(statusAffixes) > 0 || statusPhysicalDamageTaken > 0 || periodicBonus > 0 {
 		def.Statuses = append([]domain.StatusApplication(nil), def.Statuses...)
 		statusesCloned = true
 		def.Statuses = append(def.Statuses, triggerStatuses...)
+	}
+	for i := range def.Statuses {
+		if periodicBonus > 0 {
+			def.Statuses[i].PeriodicDamageBonusPct = domain.SaturateInt32(int64(def.Statuses[i].PeriodicDamageBonusPct) + int64(periodicBonus))
+		}
 	}
 	for _, modifier := range statusAffixes {
 		for i := range def.Statuses {
@@ -505,11 +515,8 @@ func (s *Scene) applyPassiveSkillModifiersWithLevels(caster *entity.Entity, def 
 		}
 	}
 	if statusPhysicalDamageTaken > 0 {
-		if statusPhysicalDamageTaken > 100 {
-			statusPhysicalDamageTaken = 100
-		}
 		for i := range def.Statuses {
-			def.Statuses[i].PhysicalDamageTakenPct += statusPhysicalDamageTaken
+			def.Statuses[i].PhysicalDamageTakenPct = domain.SaturateInt32(int64(def.Statuses[i].PhysicalDamageTakenPct) + int64(statusPhysicalDamageTaken))
 		}
 	}
 	if stealthDuration != 0 || stealthMove != 0 || stealthDamage != 0 {
@@ -551,7 +558,7 @@ func (s *Scene) applyPassiveSkillModifiersWithLevels(caster *entity.Entity, def 
 			return
 		}
 		if effect.Kind == domain.EffectDamage && (damageBonus > 0 || def.TrainingDamageBP > 0) {
-			def.AppliedSynergyDamageBP = damageBonus*100 + def.TrainingDamageBP
+			def.AppliedSynergyDamageBP = domain.SaturateInt32(int64(damageBonus)*100 + int64(def.TrainingDamageBP))
 			domain.ScaleSkillDamageFraction(effect, 10000+int64(def.AppliedSynergyDamageBP), 10000)
 		}
 		if effect.Kind == domain.EffectDamage {
@@ -1183,10 +1190,9 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			}
 
 		case domain.EffectInstantDeath:
-			if effectTarget.Alive() &&
-				(effect.ChanceBP >= 10000 || int32(s.rng.Intn(10000)) < effect.ChanceBP) &&
-				!gmGodEnabled(effectTarget) &&
-				(effectTarget.Status == nil || !effectTarget.Status.InstantDeathImmune()) {
+			if effectTarget.Alive() && !gmGodEnabled(effectTarget) &&
+				(effectTarget.Status == nil || !effectTarget.Status.InstantDeathImmune()) &&
+				s.instantDeathLands(src, effectTarget, def.ID, effect) {
 				amount := effectTarget.HP
 				effectTarget.HP = 0
 				flag := event.DamageFatal
@@ -1251,47 +1257,10 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		return false
 	}
 	for _, app := range def.Statuses {
-		chanceBP := app.ChanceBP
-		if chanceBP <= 0 {
-			chanceBP = 10000
+		statusDef, ok := s.resolveSkillStatusDef(def, app, statusDurationPct)
+		if ok {
+			s.applyStatusDef(dst, statusDef, src.ID)
 		}
-		if chanceBP < 10000 && int32(s.rng.Intn(10000)) >= chanceBP {
-			continue
-		}
-		statusDef, ok := s.statuses.ResolveSkillApplication(app)
-		if !ok {
-			continue
-		}
-		if app.DurationSec > 0 && app.ProgressionRanks <= 0 {
-			statusDef.DurationSec = app.DurationSec
-		}
-		statusDef.Affixes = overrideStatusAffixes(statusDef.Affixes, app.ExtraAffixes)
-		applyProgressionStatus(app, &statusDef)
-		stampSkillStatusSnapshot(&statusDef, def)
-		statusDef.StealthDamagePct = app.StealthDamagePct
-		statusDef.PhysicalDamageTakenPct += app.PhysicalDamageTakenPct
-		if statusDef.PhysicalDamageTakenPct > 100 {
-			statusDef.PhysicalDamageTakenPct = 100
-		}
-		if app.Description != "" {
-			statusDef.Desc = app.Description
-		}
-		statusDef.InstantDeathImmune = app.InstantDeathImmune
-		statusDef.BlockHarmful = statusDef.BlockHarmful || app.BlockHarmful
-		if app.Control != domain.ControlNone {
-			statusDef.Control = app.Control
-		}
-		if statusDurationPct > 0 {
-			statusDef.DurationSec = domain.SaturateInt32(int64(statusDef.DurationSec) * (100 + int64(statusDurationPct)) / 100)
-		}
-		if cap := s.statuses.SkillApplicationDurationCap(app); cap > 0 {
-			statusDef.DurationSec = min(statusDef.DurationSec, cap)
-		}
-		if app.ID == 1032 {
-			statusDef.Invisible = true
-		}
-		applyStatusSource(&statusDef, def.Icon, int32(def.ID))
-		s.applyStatusDef(dst, statusDef, src.ID)
 	}
 	s.applySkillProgressionShield(src, dst, def)
 	return true
@@ -1387,21 +1356,10 @@ func (s *Scene) applyMonsterSkillExtras(src *entity.Entity, skill domain.SkillDe
 					continue
 				}
 				app := extra.Statuses[s.aiRng.Intn(len(extra.Statuses))]
-				chance := app.ChanceBP
-				if chance <= 0 {
-					chance = 10000
-				}
-				if chance < 10000 && int32(s.aiRng.Intn(10000)) >= chance {
-					continue
-				}
-				statusDef, ok := s.statuses.Get(app.ID, app.Level)
+				statusDef, ok := s.resolveSkillStatusDef(skill, app, 0)
 				if !ok {
 					continue
 				}
-				if app.DurationSec > 0 {
-					statusDef.DurationSec = app.DurationSec
-				}
-				applyStatusSource(&statusDef, skill.Icon, int32(skill.ID))
 				s.applyStatusDef(target, statusDef, src.ID)
 			}
 		case domain.MonsterExtraDespawn:

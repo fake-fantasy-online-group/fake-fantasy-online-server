@@ -426,8 +426,8 @@ func TestStatusResistBlocksDebuff(t *testing.T) {
 		}
 		p.Status.Remove(domain.StatusWeaken)
 	}
-	if blocked < 30 {
-		t.Fatalf("90%% 抗性下 50 次只挡住 %d 次, 抗性没生效", blocked)
+	if blocked < 15 || blocked > 35 {
+		t.Fatalf("90%% 效果抵抗下预期约47%%挡住，50次实际%d次", blocked)
 	}
 	s.step()
 	if _, ok := firstOf[event.StatusResisted](sink.take()); !ok {

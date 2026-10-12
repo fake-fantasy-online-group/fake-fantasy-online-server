@@ -226,6 +226,10 @@ type SkillEffect struct {
 	// ChanceBP 是特殊机制自身的成功率（万分比）。普通伤害命中和选择性驱散
 	// 各有独立结算字段，不能复用这里制造两次概率判定。
 	ChanceBP int32
+	// ChanceExplicit distinguishes explicit zero from legacy unspecified chances.
+	ChanceExplicit bool
+	// EffectHitBP is local to this effect; ordinary attack accuracy is unrelated.
+	EffectHitBP int32
 	// LossRefundPct 仅用于复活效果，按本次死亡时已经实际扣除的经验与金钱
 	// 返还；不能按复活时余额重新推算。
 	LossRefundPct int32
@@ -283,6 +287,9 @@ type PassiveStatusResist struct {
 // PassiveTriggerStatus 让一个已学被动为指定主动技能追加概率状态。
 // 状态定义与持续时间仍来自 PostgreSQL 状态表；这里仅保存关联和概率。
 type PassiveTriggerStatus struct {
+	ChanceExplicit              bool
+	EffectHitBP                 int32
+	SourceSkill                 SkillID
 	ManaCostReductionRanks      int32
 	ProgressionFirstDurationSec int32
 	ProgressionBaseDurationSec  int32

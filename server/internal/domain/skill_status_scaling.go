@@ -8,8 +8,11 @@ import "math"
 // Application-specific overrides are applied by the caller after resolution.
 func (t StatusTable) ResolveSkillApplication(app StatusApplication) (StatusDef, bool) {
 	fifth, ok := t.Get(app.ID, app.Level)
-	if !ok || app.ProgressionRanks <= 0 {
-		return fifth, ok
+	if !ok {
+		return fifth, false
+	}
+	if app.ProgressionRanks <= 0 {
+		return applyPeriodicSkillDamageBonus(fifth, app.PeriodicDamageBonusPct)
 	}
 	first, ok := t.Get(app.ID, app.ProgressionFirstLevel)
 	if !ok {
@@ -44,6 +47,9 @@ func (t StatusTable) ResolveSkillApplication(app StatusApplication) (StatusDef, 
 			}
 			periodic := b.Attr == AttrHPRegen && d.IntervalSec > 0
 			v := continuedStatusWide(a.Value, b.Value, ranks, periodic)
+			if b.Value == 0 {
+				v = 0
+			}
 			if b.Mode == ModePercent {
 				// A percentage penalty cannot become negative underlying stats.
 				// Preserve any already-authored exceptional boundary unchanged.
@@ -64,10 +70,10 @@ func (t StatusTable) ResolveSkillApplication(app StatusApplication) (StatusDef, 
 	valid = valid && ok
 	d.MPChanges, ok = continueResourceChanges(first.MPChanges, fifth.MPChanges, ranks)
 	valid = valid && ok
-	d.PhysicalDamageReductionPct = pct(first.PhysicalDamageReductionPct, fifth.PhysicalDamageReductionPct)
-	d.MagicDamageReductionPct = pct(first.MagicDamageReductionPct, fifth.MagicDamageReductionPct)
-	d.PhysicalDamageTakenPct = pct(first.PhysicalDamageTakenPct, fifth.PhysicalDamageTakenPct)
-	d.MagicDamageTakenPct = pct(first.MagicDamageTakenPct, fifth.MagicDamageTakenPct)
+	d.PhysicalDamageReductionPct = min(int32(75), pct(first.PhysicalDamageReductionPct, fifth.PhysicalDamageReductionPct))
+	d.MagicDamageReductionPct = min(int32(75), pct(first.MagicDamageReductionPct, fifth.MagicDamageReductionPct))
+	d.PhysicalDamageTakenPct = grow(first.PhysicalDamageTakenPct, fifth.PhysicalDamageTakenPct)
+	d.MagicDamageTakenPct = grow(first.MagicDamageTakenPct, fifth.MagicDamageTakenPct)
 	d.PhysicalReflectPct = reflectPct(first.PhysicalReflectPct, fifth.PhysicalReflectPct)
 	d.MagicReflectPct = reflectPct(first.MagicReflectPct, fifth.MagicReflectPct)
 	d.MagicFullReflectChancePct = pct(first.MagicFullReflectChancePct, fifth.MagicFullReflectChancePct)
@@ -76,6 +82,17 @@ func (t StatusTable) ResolveSkillApplication(app StatusApplication) (StatusDef, 
 	d.DamageShield = magnitude(first.DamageShield, fifth.DamageShield)
 	d.StealthDamagePct = grow(first.StealthDamagePct, fifth.StealthDamagePct)
 	d.PoisonOnHitChance = pct(first.PoisonOnHitChance, fifth.PoisonOnHitChance)
+	if app.SourceSkill == 10211 {
+		d.PoisonOnHitChance = fifth.PoisonOnHitChance
+		d.PoisonOnHitProgressionRanks = ranks
+		d.PoisonOnHitFirstLevel = first.PoisonOnHitLevel
+		// Preserve the original poison's duration and tick interval. The runtime
+		// resolves its original row with these ranks, never a fabricated level.
+		if poison, ok := t.Get(StatusPoison, fifth.PoisonOnHitLevel); ok {
+			d.PoisonOnHitFirstDurationSec = poison.DurationSec
+			d.PoisonOnHitBaseDurationSec = poison.DurationSec
+		}
+	}
 	d.FreezeAttackerChance = pct(first.FreezeAttackerChance, fifth.FreezeAttackerChance)
 	d.NextBasicAttackPct = magnitude(first.NextBasicAttackPct, fifth.NextBasicAttackPct)
 	d.NextSkillDamagePct = magnitude(first.NextSkillDamagePct, fifth.NextSkillDamagePct)
@@ -111,19 +128,77 @@ func (t StatusTable) ResolveSkillApplication(app StatusApplication) (StatusDef, 
 	}
 	timing.BlockHarmful = timing.BlockHarmful || app.BlockHarmful
 	d.DurationSec, d.ControlPower = continueSkillStatusDuration(timing, firstDuration, baseDuration, ranks)
+	d.EffectHitBP = skillGrowthEffectHit(d.ControlPower)
+	if app.SourceSkill == 10018 {
+		// The new movement policy freezes charge's rank-five duration/speed.
+		d.DurationSec = baseDuration
+		d.ControlPower, d.EffectHitBP = 0, 0
+	}
+	policy := skillGrowthPolicies[app.SourceSkill]
+	if policy.ProtectionCapRank > 0 && int64(ranks)+5 > int64(policy.ProtectionCapRank) {
+		capRanks := policy.ProtectionCapRank - 5
+		atCap, _ := continueSkillStatusDuration(timing, firstDuration, baseDuration, capRanks)
+		step := max(int32(1), baseDuration/50)
+		next := int64(atCap) + int64(ranks-capRanks)*int64(step)
+		if next > math.MaxInt32 {
+			valid = false
+		} else {
+			d.DurationSec = int32(next)
+		}
+	}
+	if app.SourceSkill == 10435 {
+		d.FreezeAttackerEffectHitBP = skillGrowthEffectHit(max(int32(0), ranks-10))
+	}
 	if durationAdjustment != 0 {
-		value := min(int64(skillStatusDurationCap(timing, baseDuration)), int64(d.DurationSec)+durationAdjustment)
+		cap := skillStatusDurationCap(timing, baseDuration)
+		if policy.ProtectionCapRank > 0 {
+			cap = math.MaxInt32
+		}
+		value := min(int64(cap), int64(d.DurationSec)+durationAdjustment)
 		if value < 1 || value > math.MaxInt32 {
 			valid = false
 		} else {
 			d.DurationSec = int32(value)
 		}
 	}
+	d, ok = applyPeriodicSkillDamageBonus(d, app.PeriodicDamageBonusPct)
+	valid = valid && ok
+	return d, valid
+}
+
+// A high-rank damage-enhancing passive also applies when the target spell is
+// still within its original five ranks. Always clone the stored tick slices.
+func applyPeriodicSkillDamageBonus(d StatusDef, bonus int32) (StatusDef, bool) {
+	if bonus <= 0 || d.IntervalSec <= 0 {
+		return d, true
+	}
+	d.Affixes = append([]Affix(nil), d.Affixes...)
+	d.HPChanges = append([]ResourceChange(nil), d.HPChanges...)
+	valid := true
+	boost := func(v int32) int32 {
+		if v >= 0 {
+			return v
+		}
+		n := int64(v) * (100 + int64(bonus)) / 100
+		if n < math.MinInt32 {
+			valid = false
+			return 0
+		}
+		return int32(n)
+	}
+	for i := range d.Affixes {
+		if d.Affixes[i].Attr == AttrHPRegen {
+			d.Affixes[i].Value = boost(d.Affixes[i].Value)
+		}
+	}
+	for i := range d.HPChanges {
+		d.HPChanges[i].Value = boost(d.HPChanges[i].Value)
+	}
 	return d, valid
 }
 
 // Continue the original duration slope before trading further control ranks for
-// resistance pressure. An original duration above a safety boundary is retained.
+// local effect accuracy. An original duration above a safety boundary is retained.
 func continueSkillStatusDuration(d StatusDef, first, fifth, ranks int32) (duration, pressure int32) {
 	if first <= 0 || fifth <= 0 || ranks <= 0 {
 		return fifth, 0
@@ -131,7 +206,7 @@ func continueSkillStatusDuration(d StatusDef, first, fifth, ranks int32) (durati
 	harmfulControl := d.Harmful() && d.IntervalSec == 0
 	cap := skillStatusDurationCap(d, fifth)
 	if first == fifth {
-		if harmfulControl && fifth >= cap {
+		if harmfulControl {
 			pressure = ranks
 		}
 		return fifth, pressure
@@ -168,6 +243,12 @@ func (t StatusTable) SkillApplicationDurationCap(app StatusApplication) int32 {
 		d.Control = app.Control
 	}
 	d.BlockHarmful = d.BlockHarmful || app.BlockHarmful
+	if skillGrowthPolicies[app.SourceSkill].ProtectionCapRank > 0 {
+		return math.MaxInt32
+	}
+	if app.SourceSkill == 10018 {
+		return base
+	}
 	return skillStatusDurationCap(d, base)
 }
 
@@ -270,15 +351,4 @@ func continueResourceChanges(first, fifth []ResourceChange, ranks int32) ([]Reso
 		out[i].Value = int32(value)
 	}
 	return out, true
-}
-
-// SkillStatusResistChance preserves the original numeric resistance rule and
-// applies pressure only to the numerical roll. Even raw resistance >=100 was
-// capped at90 in the original engine; actual immunity is a separate gate.
-func SkillStatusResistChance(statusResist, controlPower int32) int32 {
-	chance := ResistChance(statusResist)
-	if chance == 0 || controlPower <= 0 {
-		return chance
-	}
-	return int32(int64(chance) * 100 / (100 + 5*int64(controlPower)))
 }

@@ -167,7 +167,7 @@ func (e *v5Evaluator) passive(a, b PassiveModifier) int32 {
 	switch b.Kind {
 	case PassiveCastTimeReductionPct, PassiveIncomingMagicHalfChance, PassivePreserveInvisibleChance,
 		PassiveSkillDurabilityReductionPct, PassiveAttackDurabilityReductionPct, PassiveTrapHalfDamageChance,
-		PassiveCastInterruptReductionPct, PassiveStatusPhysicalDamageTakenPct:
+		PassiveCastInterruptReductionPct:
 		return e.bounded(a.Value, b.Value, 0, 100, "passive chance/reduction")
 	case PassiveStealthDurationSec:
 		return e.bounded(a.Value, b.Value, 0, max(int32(3600), b.Value), "stealth duration")
@@ -182,18 +182,13 @@ func (e *v5Evaluator) continueOriginal(a, b SkillDef) SkillDef {
 	out := cloneOriginalSkill(b)
 	out.Dist = b.Dist
 	out.Radius = b.Radius
-	// Utility progression invests in repeated use, never in an increasing bill.
-	// Integer mana reduction is finalized after equipment and passive modifiers.
-	if b.Kind.Active() && !b.HasDamageEffect() {
-		out.MPCost = b.MPCost
-		out.ManaCostReductionRanks = e.rank - OriginalSkillRankCap
-		out.PrepareMS = int32(int64(b.PrepareMS) * 50 / (50 + int64(out.ManaCostReductionRanks)))
-		out.CooldownMS = int32(int64(b.CooldownMS) * 50 / (50 + int64(out.ManaCostReductionRanks)))
-	} else {
-		out.PrepareMS = max(int32(0), e.blend(a.PrepareMS, b.PrepareMS))
-		out.CooldownMS = max(int32(0), e.blend(a.CooldownMS, b.CooldownMS))
-		out.MPCost = max(int32(0), e.blend(a.MPCost, b.MPCost))
-	}
+	// Keep the authored resource/cast slope. Only six explicitly listed skills
+	// acquire efficiency, and only after their native mechanic reaches its cap.
+	out.ManaCostReductionRanks = 0
+	out.ManaCostReductionApplied = false
+	out.PrepareMS = max(int32(0), e.blend(a.PrepareMS, b.PrepareMS))
+	out.CooldownMS = max(int32(0), e.blend(a.CooldownMS, b.CooldownMS))
+	out.MPCost = max(int32(0), e.blend(a.MPCost, b.MPCost))
 	if a.Area.Shape != b.Area.Shape || a.Area.Center != b.Area.Center {
 		e.fail("area identity mismatch")
 	}
@@ -221,6 +216,7 @@ func (e *v5Evaluator) continueOriginal(a, b SkillDef) SkillDef {
 			e.fail("status identity mismatch")
 		}
 		z := y
+		z.SourceSkill = e.id
 		z.Level = y.Level
 		z.ProgressionRanks = e.rank - 5
 		z.ProgressionFirstLevel = x.Level
@@ -229,7 +225,7 @@ func (e *v5Evaluator) continueOriginal(a, b SkillDef) SkillDef {
 		z.ProgressionFirstDurationSec = x.DurationSec
 		z.ProgressionBaseDurationSec = y.DurationSec
 		z.StealthDamagePct = e.blend(x.StealthDamagePct, y.StealthDamagePct)
-		z.PhysicalDamageTakenPct = e.bounded(x.PhysicalDamageTakenPct, y.PhysicalDamageTakenPct, 0, 100, "physical vulnerability")
+		z.PhysicalDamageTakenPct = e.blend(x.PhysicalDamageTakenPct, y.PhysicalDamageTakenPct)
 		z.ExtraAffixes = e.affixes(x.ExtraAffixes, y.ExtraAffixes)
 		z.ProgressionAffixes = e.affixes(x.ProgressionAffixes, y.ProgressionAffixes)
 		out.Statuses[i] = z
@@ -256,7 +252,7 @@ func (e *v5Evaluator) continueOriginal(a, b SkillDef) SkillDef {
 		if x.Status != y.Status {
 			e.fail("passive resistance identity mismatch")
 		}
-		out.PassiveResists[i].Pct = e.bounded(x.Pct, y.Pct, 0, 100, "passive status resistance")
+		out.PassiveResists[i].Pct = e.blend(x.Pct, y.Pct)
 	}
 	out.PassiveTriggers = append([]PassiveTriggerStatus(nil), a.PassiveTriggers...)
 	for i, x := range a.PassiveTriggers {
@@ -265,6 +261,7 @@ func (e *v5Evaluator) continueOriginal(a, b SkillDef) SkillDef {
 			e.fail("passive trigger identity mismatch")
 		}
 		z := &out.PassiveTriggers[i]
+		z.SourceSkill = e.id
 		z.StatusLevel = y.StatusLevel
 		z.ProgressionRanks = e.rank - 5
 		z.ProgressionFirstLevel = x.StatusLevel
@@ -302,6 +299,7 @@ func (e *v5Evaluator) continueOriginal(a, b SkillDef) SkillDef {
 		out.PassiveCounter = &z
 	}
 	e.continuePassiveOverflow(a, b, &out)
+	e.applyGrowthPolicy(a, b, &out)
 	return out
 }
 
@@ -325,6 +323,10 @@ func (e *v5Evaluator) effect(a, b SkillEffect) SkillEffect {
 	z.DispelChanceBP = e.bounded(a.DispelChanceBP, b.DispelChanceBP, 0, 10000, "dispel chance")
 	z.TauntPower = e.blend(a.TauntPower, b.TauntPower)
 	z.ChanceBP = e.bounded(a.ChanceBP, b.ChanceBP, 0, 10000, "effect chance")
+	if e.id == 10210 && b.Kind == EffectInstantDeath {
+		z.ChanceBP = b.ChanceBP
+		z.EffectHitBP = skillGrowthEffectHit(e.rank - 5)
+	}
 	z.LossRefundPct = e.bounded(a.LossRefundPct, b.LossRefundPct, 0, 100, "death loss refund")
 	z.KnockbackDistance = b.KnockbackDistance
 	z.RemoveStatusIDs = append([]StatusID(nil), a.RemoveStatusIDs...)
@@ -355,6 +357,10 @@ func (e *v5Evaluator) affixes(a, b []Affix) []Affix {
 }
 
 func (e *v5Evaluator) affixValue(a, b Affix) int32 {
+	// A penalty which reaches zero is complete, not a new positive buff.
+	if b.Value == 0 {
+		return 0
+	}
 	if b.Attr == AttrMoveSpeed || b.Attr == AttrAtkSpeed {
 		return e.bounded(a.Value, b.Value, min(int32(-100), min(a.Value, b.Value)), max(int32(100), max(a.Value, b.Value)), "movement/attack speed")
 	}

@@ -180,7 +180,7 @@ func assertNativeRestorationContinuation(t *testing.T, skills domain.SkillTable,
 	for _, rank := range []int32{6, 20, 21, 100, 256, 65536, 1000000} {
 		for _, id := range restoredNativeSkillIDs {
 			state := nativeRestorationResolved(t, skills, statuses, id, rank, 0)
-			if id == 10221 && (state.DurationSec != 5 || state.ControlPower != 0) {
+			if id == 10221 && (state.DurationSec != 5 || state.ControlPower != rank-5 || state.EffectHitBP != (rank-5)*500) {
 				t.Fatal("fixed sniper duration drifted", rank, state)
 			}
 			if id == 10109 && state.DurationSec != 10 {
@@ -211,8 +211,8 @@ func assertNativeRestorationContinuation(t *testing.T, skills domain.SkillTable,
 	if root.DurationSec != 15 || root.ControlPower != 10 {
 		t.Fatal("root did not inherit resistance pressure", root)
 	}
-	if domain.SkillStatusResistChance(90, root.ControlPower) >= domain.SkillStatusResistChance(90, 0) {
-		t.Fatal("control ranks failed resistance extension")
+	if root.EffectHitBP != root.ControlPower*500 {
+		t.Fatal("control ranks failed local accuracy extension")
 	}
 }
 

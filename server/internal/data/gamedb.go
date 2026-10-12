@@ -489,7 +489,7 @@ func applyMonsterSkillEffects(rule *domain.MonsterSkillRule, rows []monsterSkill
 			}
 			app := domain.StatusApplication{
 				ID: domain.StatusID(e.statusID), Level: level, DurationSec: e.durationSec,
-				ChanceBP: e.chanceBP,
+				ChanceBP: e.chanceBP, ChanceExplicit: true,
 			}
 			duplicate := false
 			for i, old := range rule.Skill.Statuses {
@@ -518,7 +518,7 @@ func applyMonsterSkillEffects(rule *domain.MonsterSkillRule, rows []monsterSkill
 			}
 			app := domain.StatusApplication{
 				ID: domain.StatusID(e.statusID), Level: level, DurationSec: e.durationSec,
-				ChanceBP: e.chanceBP,
+				ChanceBP: e.chanceBP, ChanceExplicit: true,
 			}
 			found := false
 			for i := range rule.Extra {
@@ -2778,6 +2778,8 @@ func loadStructuredSkillStatuses(ctx context.Context, q Querier) (map[domain.Ski
 			return nil, fmt.Errorf("data: 技能 %d/%d 第 %d 个状态引用不存在的定义 %d/%d",
 				key.ID, key.Level, order, app.ID, app.Level)
 		}
+		app.ChanceExplicit = true
+		app.SourceSkill = key.ID
 		out[key] = append(out[key], app)
 	}
 	if err := rows.Err(); err != nil {
@@ -2825,6 +2827,7 @@ func loadStructuredSkillEffects(ctx context.Context, q Querier) (map[domain.Skil
 			return nil, fmt.Errorf("data: 读结构化技能效果: %w", err)
 		}
 		effect := domain.SkillEffect{
+			ChanceExplicit:          true,
 			GuaranteedHit:           guaranteedHit,
 			RequiresPreviousLanded:  requiresPrevious,
 			WeaponDurabilityCostPct: weaponDurabilityPct,
@@ -3095,7 +3098,7 @@ func loadSkillPassiveStatusResists(ctx context.Context, q Querier) (map[domain.S
 			&passiveOK, &statusOK); err != nil {
 			return nil, fmt.Errorf("data: 读被动状态抗性: %w", err)
 		}
-		if !passiveOK || !statusOK || resist.Pct <= 0 || resist.Pct > 100 {
+		if !passiveOK || !statusOK || resist.Pct <= 0 {
 			return nil, fmt.Errorf("data: 被动技能 %d/%d 第 %d 条状态抗性非法",
 				key.ID, key.Level, order)
 		}
@@ -3146,11 +3149,12 @@ func loadSkillPassiveTriggerStatuses(ctx context.Context, q Querier) (map[domain
 			&passiveOK, &targetOK, &statusOK); err != nil {
 			return nil, fmt.Errorf("data: 读被动触发状态: %w", err)
 		}
-		if !passiveOK || !targetOK || !statusOK || trigger.ChanceBP <= 0 ||
+		if !passiveOK || !targetOK || !statusOK || trigger.ChanceBP < 0 ||
 			trigger.ChanceBP > 10000 || trigger.DurationSec < 0 {
 			return nil, fmt.Errorf("data: 被动技能 %d/%d 第 %d 条触发状态非法",
 				key.ID, key.Level, order)
 		}
+		trigger.ChanceExplicit = true
 		out[key] = append(out[key], trigger)
 	}
 	if err := rows.Err(); err != nil {
@@ -4429,7 +4433,7 @@ func knownAttr(a int32) bool {
 		domain.AttrMoveSpeed, domain.AttrMinAtk, domain.AttrMaxAtk,
 		domain.AttrMaxHP, domain.AttrMaxMP, domain.AttrHPRegen,
 		domain.AttrMaxWeight, domain.AttrAtk, domain.AttrMCrit,
-		domain.AttrPhysRes, domain.AttrMagicRes, domain.AttrStatusRes:
+		domain.AttrPhysRes, domain.AttrMagicRes, domain.AttrStatusRes, domain.AttrEffectHitBP:
 		return true
 	}
 	return false

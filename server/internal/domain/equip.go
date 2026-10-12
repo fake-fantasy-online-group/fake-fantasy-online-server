@@ -70,6 +70,10 @@ const (
 	AttrPhysRes   = 69  // 伤害抗性
 	AttrMagicRes  = 70  // 魔法抗性
 	AttrStatusRes = 118 // 不良状态抗性
+
+	// AttrEffectHitBP is a server-owned extension outside imported native IDs.
+	// Like critical chance it is already in basis points and accepts absolute mode only.
+	AttrEffectHitBP = 1000001
 )
 
 // 词条的取值方式。**[实证]** ov_card_entry.mode: 0 绝对值, 1 百分比。
@@ -634,6 +638,10 @@ func applyAffix(a Affix, base *Base, basePct *Base, flat *Stats, pct *statPercen
 		addStat(&flat.MAtk, &pct.matk, pctMode, v)
 	case AttrMDef:
 		addStat(&flat.MDef, &pct.mdef, pctMode, v)
+	case AttrEffectHitBP:
+		if !pctMode {
+			flat.EffectHitBP = SaturateInt32(int64(flat.EffectHitBP) + int64(v))
+		}
 	case AttrCrit:
 		addStat(&flat.CritRate, nil, pctMode, v) // 本身就是万分比, 不再叠百分比
 	case AttrMCrit:
@@ -751,6 +759,7 @@ func addStats(a, b Stats) Stats {
 	a.MaxAtk = SaturateInt32(int64(a.MaxAtk) + int64(b.MaxAtk))
 	a.Def = SaturateInt32(int64(a.Def) + int64(b.Def))
 	a.Hit = SaturateInt32(int64(a.Hit) + int64(b.Hit))
+	a.EffectHitBP = SaturateInt32(int64(a.EffectHitBP) + int64(b.EffectHitBP))
 	a.MAtk = SaturateInt32(int64(a.MAtk) + int64(b.MAtk))
 	a.MDef = SaturateInt32(int64(a.MDef) + int64(b.MDef))
 	a.CritRate = SaturateInt32(int64(a.CritRate) + int64(b.CritRate))
@@ -771,7 +780,8 @@ func subStats(a, b Stats) Stats {
 		HPRegen: a.HPRegen - b.HPRegen, MPRegen: a.MPRegen - b.MPRegen,
 		MinAtk: a.MinAtk - b.MinAtk, MaxAtk: a.MaxAtk - b.MaxAtk,
 		Def: a.Def - b.Def, Hit: a.Hit - b.Hit,
-		MAtk: a.MAtk - b.MAtk, MDef: a.MDef - b.MDef,
+		EffectHitBP: a.EffectHitBP - b.EffectHitBP,
+		MAtk:        a.MAtk - b.MAtk, MDef: a.MDef - b.MDef,
 		CritRate: a.CritRate - b.CritRate, MCritRate: a.MCritRate - b.MCritRate,
 		AtkSpeedMS: a.AtkSpeedMS - b.AtkSpeedMS, AtkSpeedPct: a.AtkSpeedPct - b.AtkSpeedPct, MoveSpeed: a.MoveSpeed - b.MoveSpeed,
 		PhysResist:   a.PhysResist - b.PhysResist,

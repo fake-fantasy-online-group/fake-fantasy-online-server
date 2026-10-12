@@ -111,7 +111,7 @@ func SupportedEndgameAffix(a Affix) bool {
 		return false
 	}
 	switch a.Attr {
-	case AttrCrit, AttrMCrit, AttrPhysRes, AttrMagicRes, AttrStatusRes:
+	case AttrCrit, AttrMCrit, AttrPhysRes, AttrMagicRes, AttrStatusRes, AttrEffectHitBP:
 		return a.Mode == ModeAbsolute
 	case AttrAtkSpeed:
 		// Player basic attacks consume AtkSpeedPct, not the monster/pet ms field.

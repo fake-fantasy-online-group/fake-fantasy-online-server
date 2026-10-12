@@ -26,16 +26,24 @@ func (s *Scene) skillOriginalEffectLines(def domain.SkillDef) []string {
 		return s.skillEffectLines(def)
 	}
 	lines := []string{description}
+	var effectHitLines []string
 	if def.Level > 5 {
 		seen := map[string]bool{}
-		add := func(state domain.StatusDef, found bool) {
-			if !found || state.ControlPower <= 0 {
-				return
-			}
-			line := skillControlResistanceLine(state)
+		appendLine := func(line string) {
 			if !seen[line] {
 				seen[line] = true
-				lines = append(lines, line)
+				effectHitLines = append(effectHitLines, line)
+			}
+		}
+		add := func(state domain.StatusDef, found bool) {
+			if !found {
+				return
+			}
+			if state.EffectHitBP > 0 {
+				appendLine(skillEffectHitLine(state.EffectHitBP))
+			}
+			if state.FreezeAttackerEffectHitBP > 0 {
+				appendLine("反击冻结效果命中 +" + skillFractionText(0, int64(state.EffectHitBP)+int64(state.FreezeAttackerEffectHitBP), 100) + "%")
 			}
 		}
 		// Appended statuses come from incoming passives; their extra detail is
@@ -45,6 +53,11 @@ func (s *Scene) skillOriginalEffectLines(def domain.SkillDef) []string {
 		}
 		for i := range def.PassiveTriggers {
 			add(s.skillDescriptionTrigger(def, i))
+		}
+		for _, effect := range def.DirectEffects() {
+			if effect.EffectHitBP > 0 {
+				appendLine(skillEffectHitLine(effect.EffectHitBP))
+			}
 		}
 	}
 	if def.Kind.Active() {
@@ -57,16 +70,44 @@ func (s *Scene) skillOriginalEffectLines(def domain.SkillDef) []string {
 		}
 		lines = append(lines, "消耗: "+cost, "技能吟唱: "+cast, "技能间隔: "+skillMillisecondsText(def.CooldownMS))
 	}
+	lines = append(lines, effectHitLines...)
+	if policy, ok := domain.LookupSkillGrowthPolicy(def.ID); ok && policy.RangeCapRank > 0 && def.Level > policy.RangeCapRank {
+		switch def.ID {
+		case 10127, 10228:
+			if def.Area.Radius > 0 {
+				lines = append(lines, "作用半径: "+skillNumber(def.Area.Radius)+"像素")
+			} else if def.Radius > 0 {
+				lines = append(lines, "作用半径: "+skillNumber(def.Radius)+"像素")
+			}
+		}
+	}
+	// These three authored descriptions omit protection time altogether. Keep
+	// their original prose and expose only the duration the resolver actually uses.
+	if policy, ok := domain.LookupSkillGrowthPolicy(def.ID); ok && policy.ProtectionCapRank > 0 && def.Level > policy.ProtectionCapRank {
+		switch def.ID {
+		case 10417, 10425, 10435:
+			if len(def.Statuses) > 0 {
+				if state, found := s.skillDescriptionStatus(def.Statuses[0]); found {
+					lines = append(lines, "保护持续时间: "+skillNumber(state.DurationSec)+"秒")
+				}
+			}
+		}
+	}
 	lines = append(lines, s.passiveOverflowEffectLines(def)...)
 	return lines
 }
 
-func skillControlResistanceLine(state domain.StatusDef) string {
-	return state.Name + "：目标的状态抵抗概率降至原来的" + skillFractionText(0, 10000, 100+5*int64(state.ControlPower)) + "%（不穿透免疫）。"
+func skillEffectHitLine(effectHitBP int32) string {
+	return "本技能效果命中 +" + skillBasisPoints(effectHitBP) + "%"
 }
 
 func (s *Scene) skillDescriptionForDisplay(baseline, def domain.SkillDef) string {
 	description := baseline.Description
+	// These original placeholders are obsolete: both native half-damage paths
+	// are implemented and tested. Do not strip warnings on any other skill.
+	if def.ID == 10229 || def.ID == 10230 {
+		description = strings.ReplaceAll(description, "，此技能尚无法作用", "")
+	}
 	old, known := s.skillDescriptionValues(baseline)
 	next, nextKnown := s.skillDescriptionValues(def)
 	slots := skillDescriptionNumber.FindAllStringIndex(description, -1)
@@ -119,26 +160,14 @@ func skillDescriptionAffix(state domain.StatusDef, attr int32) string {
 	return ""
 }
 func (s *Scene) skillDescriptionStatus(app domain.StatusApplication) (domain.StatusDef, bool) {
-	d, ok := s.statuses.ResolveSkillApplication(app)
-	if !ok {
-		return domain.StatusDef{}, false
-	}
-	d.Affixes = overrideStatusAffixes(d.Affixes, app.ExtraAffixes)
-	applyProgressionStatus(app, &d)
-	if app.DurationSec > 0 && app.ProgressionRanks <= 0 {
-		d.DurationSec = app.DurationSec
-	}
-	if app.StealthDamagePct != 0 {
-		d.StealthDamagePct = app.StealthDamagePct
-	}
-	return d, true
+	return s.resolveSkillStatusDef(domain.SkillDef{}, app, 0)
 }
 func (s *Scene) skillDescriptionTrigger(def domain.SkillDef, index int) (domain.StatusDef, bool) {
 	if index >= len(def.PassiveTriggers) {
 		return domain.StatusDef{}, false
 	}
 	m := def.PassiveTriggers[index]
-	return s.skillDescriptionStatus(domain.StatusApplication{ID: m.Status, Level: m.StatusLevel, DurationSec: m.DurationSec, ProgressionRanks: m.ProgressionRanks, ProgressionFirstLevel: m.ProgressionFirstLevel, ProgressionFirstDurationSec: m.ProgressionFirstDurationSec, ProgressionBaseDurationSec: m.ProgressionBaseDurationSec})
+	return s.skillDescriptionStatus(domain.StatusApplication{ID: m.Status, Level: m.StatusLevel, ChanceBP: m.ChanceBP, ChanceExplicit: m.ChanceExplicit, EffectHitBP: m.EffectHitBP, SourceSkill: def.ID, DurationSec: m.DurationSec, ProgressionRanks: m.ProgressionRanks, ProgressionFirstLevel: m.ProgressionFirstLevel, ProgressionFirstDurationSec: m.ProgressionFirstDurationSec, ProgressionBaseDurationSec: m.ProgressionBaseDurationSec})
 }
 func skillDescriptionPeriodicTotal(d domain.StatusDef) string {
 	if d.IntervalSec <= 0 {
@@ -323,7 +352,11 @@ func (s *Scene) skillDescriptionValues(d domain.SkillDef) ([]string, bool) {
 	case 10211:
 		poisonDuration, poisonTotal := "", ""
 		if x, ok := state(0); ok {
-			if poison, found := s.statuses.Get(domain.StatusPoison, x.PoisonOnHitLevel); found {
+			if poison, found := s.statuses.ResolveSkillApplication(domain.StatusApplication{
+				ID: domain.StatusPoison, Level: x.PoisonOnHitLevel,
+				ProgressionRanks: x.PoisonOnHitProgressionRanks, ProgressionFirstLevel: x.PoisonOnHitFirstLevel,
+				ProgressionFirstDurationSec: x.PoisonOnHitFirstDurationSec, ProgressionBaseDurationSec: x.PoisonOnHitBaseDurationSec,
+			}); found {
 				poisonDuration = skillNumber(poison.DurationSec)
 				poisonTotal = skillDescriptionPeriodicTotal(poison)
 			}

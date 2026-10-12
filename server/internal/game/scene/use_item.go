@@ -211,6 +211,8 @@ func (s *Scene) onUseItem(cmd UseItem) {
 		if effect.DurationSec > 0 {
 			statusDef.DurationSec = effect.DurationSec
 		}
+		statusDef.ChanceBP, statusDef.ChanceExplicit = effect.ChanceBP, effect.ChanceExplicit
+		statusDef.EffectHitBP = effect.EffectHitBP
 		applyStatusSource(&statusDef, def.Icon, 0)
 		statusDefs = append(statusDefs, statusDef)
 	}

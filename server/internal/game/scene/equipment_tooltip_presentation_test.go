@@ -8,6 +8,24 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 )
 
+func TestEffectHitAffixUsesBasisPointsAndOriginalPalette(t *testing.T) {
+	for _, tc := range []struct {
+		value int32
+		text  string
+	}{
+		{10000, "效果命中 +100%"}, {500, "效果命中 +5%"}, {1, "效果命中 +0.01%"}, {-50, "效果命中 -0.5%"},
+	} {
+		a := domain.Affix{Attr: domain.AttrEffectHitBP, Value: tc.value, Mode: domain.ModeAbsolute}
+		line, ok := equipmentAffixLine(a)
+		if !ok || line != tc.text || affixText(a) != tc.text {
+			t.Fatalf("effect-hit unit mismatch: %v %q %q", a, line, affixText(a))
+		}
+		if got := qualityColoredLine(tooltipDarkGold, line); got != "\x035"+tc.text {
+			t.Fatal("ordinary effect-hit affix changed palette", got)
+		}
+	}
+}
+
 func TestEquipmentTooltipTextPalettePreservesOrdinaryColors(t *testing.T) {
 	for _, row := range []struct {
 		color uint8

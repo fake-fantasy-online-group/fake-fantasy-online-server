@@ -143,11 +143,16 @@ type StatusDef struct {
 	MPChanges []ResourceChange
 	// Control 控制行为，非 ControlNone 时该状态会限制行动。
 	Control Control
-	// ControlPower is the number of added skill ranks after duration reaches its
-	// control boundary. A fixed original duration below that boundary adds none.
-	// It reduces numerical resistance to an existing harmful control/debuff;
-	// categorical immunity and status blocking are checked independently.
+	// ControlPower is retained for saved-state compatibility; it no longer reduces resistance.
 	ControlPower int32
+	// EffectHitBP is this status/trigger's local effect accuracy in basis points.
+	EffectHitBP int32
+	// ChanceExplicit preserves explicit zero while legacy omitted chances mean 100%.
+	ChanceBP       int32
+	ChanceExplicit bool
+	// Persistent trigger accuracy is pinned to its holder at application, and can only weaken.
+	SourceEffectHitBP    int32
+	SourceEffectHitKnown bool
 
 	// 以下字段是不能塞进 Stats 的战斗状态语义。数值均来自状态效果表或
 	// 与状态逐级闭合的技能描述；百分比使用整数百分数。
@@ -179,9 +184,14 @@ type StatusDef struct {
 	// 被动保住隐身，后续攻击仍继续享受隐身加成。
 	StealthDamagePct int32
 
-	PoisonOnHitChance    int32
-	PoisonOnHitLevel     int32
-	FreezeAttackerChance int32
+	PoisonOnHitProgressionRanks int32
+	PoisonOnHitFirstLevel       int32
+	PoisonOnHitFirstDurationSec int32
+	PoisonOnHitBaseDurationSec  int32
+	PoisonOnHitChance           int32
+	PoisonOnHitLevel            int32
+	FreezeAttackerChance        int32
+	FreezeAttackerEffectHitBP   int32
 
 	NextBasicAttackPct       int32
 	NextSkillDamagePct       int32
@@ -221,6 +231,10 @@ const (
 
 // StatusApplication 是效果脚本里一条已经闭合的“施加某级状态”。
 type StatusApplication struct {
+	PeriodicDamageBonusPct int32
+	SourceSkill            SkillID
+	EffectHitBP            int32
+	ChanceExplicit         bool
 	// ProgressionRanks extends the original fifth-rank payload without inventing
 	// another status level. ProgressionFirstLevel identifies the skill's original
 	// first-rank status row, which need not be status level 1.
@@ -558,33 +572,68 @@ func (s *StatusSet) MitigateDamage(magic bool, damage int32) (int32, []StatusID)
 	if s == nil || damage <= 0 {
 		return damage, nil
 	}
-	var increase, reduction, flatReduction int32
-	s.Each(func(a Active) {
-		if a.Def.Invulnerable {
-			reduction = 100
-		}
-		if magic {
-			increase += a.Def.MagicDamageTakenPct
-			reduction += a.Def.MagicDamageReductionPct
-			flatReduction += a.Def.MagicDamageReductionFlat
-		} else {
-			increase += a.Def.PhysicalDamageTakenPct
-			reduction += a.Def.PhysicalDamageReductionPct
-		}
-	})
-	// Keep percentage intermediates wide until mitigation is complete. Rift
-	// attacks and HP can reach int32's ceiling without changing these formulas.
-	wideDamage := int64(damage)
-	if increase > 0 {
-		wideDamage += wideDamage * int64(increase) / 100
+	if s.Invulnerable() {
+		return 0, nil
 	}
-	if reduction > 100 {
-		reduction = 100
+	wideDamage := MitigatePercentDamageV7(s.DamageTakenAmount(magic, damage), 0, 0, 0, s.DamageReductionPct(magic), 0, false, s.DamageReductionFlat(magic))
+	damage = max(int32(0), SaturateInt32(wideDamage))
+	return s.AbsorbDamage(damage)
+}
+
+// Invulnerable is categorical immunity, never an ordinary reduction rating.
+func (s *StatusSet) Invulnerable() bool {
+	immune := false
+	if s != nil {
+		s.Each(func(a Active) { immune = immune || a.Def.Invulnerable })
 	}
-	if reduction > 0 {
-		wideDamage -= wideDamage * int64(reduction) / 100
+	return immune
+}
+
+// DamageTakenAmount intentionally retains a wide intermediate: amplification
+// can exceed 100%, and a later reduction can bring it back into int32 range.
+func (s *StatusSet) DamageTakenAmount(magic bool, damage int32) int64 {
+	var pct int64
+	if s != nil {
+		s.Each(func(a Active) {
+			if magic {
+				pct += int64(a.Def.MagicDamageTakenPct)
+			} else {
+				pct += int64(a.Def.PhysicalDamageTakenPct)
+			}
+		})
 	}
-	damage = max(int32(0), SaturateInt32(wideDamage-int64(flatReduction)))
+	pct = int64(max(int32(0), SaturateInt32(pct)))
+	return int64(damage) + int64(damage)*pct/100
+}
+
+func (s *StatusSet) DamageReductionPct(magic bool) int32 {
+	var pct int64
+	if s != nil {
+		s.Each(func(a Active) {
+			if magic {
+				pct += int64(a.Def.MagicDamageReductionPct)
+			} else {
+				pct += int64(a.Def.PhysicalDamageReductionPct)
+			}
+		})
+	}
+	return SaturateInt32(pct)
+}
+
+func (s *StatusSet) DamageReductionFlat(magic bool) int64 {
+	var flat int64
+	if s != nil && magic {
+		s.Each(func(a Active) { flat += int64(a.Def.MagicDamageReductionFlat) })
+	}
+	return flat
+}
+
+// AbsorbDamage consumes shield pools after percentage mitigation. Pools can
+// absorb an entire hit and are not percentage damage reduction.
+func (s *StatusSet) AbsorbDamage(damage int32) (int32, []StatusID) {
+	if s == nil || damage <= 0 {
+		return damage, nil
+	}
 
 	var removed []StatusID
 	for _, id := range s.sortedIDs() {
@@ -1123,19 +1172,9 @@ func (s *StatusSet) Clone() *StatusSet {
 	return out
 }
 
-// ResistChance 返回抗性把状态挡下来的概率(百分比, 0~90)。
-//
-// **这是「不良状态抗性」第一次真的起作用** —— 1404 条装备词条带这个属性,
-// 但在此之前没有任何东西会施加状态, 所以那个数是死的。
-//
-// 上限 90%: 100% 免疫会让一件装备直接废掉整条控制路线。
-// ⚠️ 上限本身是**服务端定的**, 原作数据里没有说法。
+// ResistChance is a legacy integer display helper for a 100% base effect with
+// zero effect accuracy. Combat must use EffectSuccessProbability to preserve
+// fractional chances. Resistance itself has no gameplay cap.
 func ResistChance(statusResist int32) int32 {
-	if statusResist <= 0 {
-		return 0
-	}
-	if statusResist > 90 {
-		return 90
-	}
-	return statusResist
+	return int32((1 - EffectSuccessProbability(10000, 0, int64(statusResist)*100)) * 100)
 }

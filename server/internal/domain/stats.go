@@ -54,6 +54,9 @@ type Stats struct {
 	Hit            int32 // 命中
 	MAtk, MDef     int32 // 魔攻 / 魔防
 
+	// EffectHitBP is global effect accuracy in basis points. It never affects ordinary attack hit.
+	EffectHitBP int32
+
 	CritRate  int32 // 物理爆击率, 万分比(ov_card_entry attr_id=23 的口径)
 	MCritRate int32 // 魔法爆击率, 万分比(attr_id=66)
 

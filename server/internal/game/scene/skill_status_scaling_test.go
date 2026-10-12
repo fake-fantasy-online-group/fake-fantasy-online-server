@@ -11,8 +11,8 @@ import (
 func TestOriginalControlExtensionChangesResistanceRollNotDurationOrDamage(t *testing.T) {
 	var seed int64
 	for ; ; seed++ {
-		roll := rand.New(rand.NewSource(seed)).Intn(100)
-		if roll >= 52 && roll < 90 {
+		roll := rand.New(rand.NewSource(seed)).Float64()
+		if roll >= 1.0/1.9 && roll < 1.75/1.9 {
 			break
 		}
 	}
@@ -57,7 +57,7 @@ func TestOriginalControlPressureCannotBypassHardBlocks(t *testing.T) {
 		if blocked {
 			target.Status.Apply(domain.StatusDef{ID: domain.StatusSpiritLock, Level: 1, DurationSec: 10, BlockHarmful: true}, s.tick, target.ID)
 		}
-		def := domain.StatusDef{ID: domain.StatusStun, Level: 5, Type: domain.StatusBad, TypeKnown: true, DurationSec: 9, Control: domain.ControlStun, ControlPower: 100000}
+		def := domain.StatusDef{ID: domain.StatusStun, Level: 5, Type: domain.StatusBad, TypeKnown: true, DurationSec: 9, Control: domain.ControlStun, EffectHitBP: 100000000}
 		if got := s.applyStatusDef(target, def, 1); got == blocked {
 			t.Fatalf("hard block=%t, applied=%t", blocked, got)
 		}
