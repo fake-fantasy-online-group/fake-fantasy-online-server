@@ -12,8 +12,15 @@ func endgameWorldFixture() worldData {
 	w := worldData{items: make(data.ItemDefs)}
 	var source struct {
 		Bases []struct {
-			BaseID    domain.ItemID    `json:"base_id"`
-			Intrinsic map[string]int32 `json:"intrinsic"`
+			BaseID      domain.ItemID    `json:"base_id"`
+			Intrinsic   map[string]int32 `json:"intrinsic"`
+			Name        string           `json:"base_name"`
+			Level       int32            `json:"wearer_level"`
+			Tier        int32            `json:"resource_tier"`
+			Slot        int32            `json:"slot"`
+			Professions []domain.Race    `json:"professions"`
+			Sex         uint8            `json:"sex"`
+			Beginner    bool             `json:"beginner_allowed"`
 		}
 	}
 	raw, err := os.ReadFile("../../../docs/daoist-endgame/balance/native_equipment_budget_references.json")
@@ -23,17 +30,13 @@ func endgameWorldFixture() worldData {
 	if err = json.Unmarshal(raw, &source); err != nil {
 		panic(err)
 	}
-	bases := map[domain.ItemID]map[string]int32{}
-	for _, row := range source.Bases {
-		bases[row.BaseID] = row.Intrinsic
-	}
-	for _, u := range domain.UniqueCatalog() {
-		intrinsic, ok := bases[u.BaseID]
-		if !ok {
-			panic("missing source base fixture")
+	for _, u := range source.Bases {
+		intrinsic := u.Intrinsic
+		var mask uint8
+		for _, race := range u.Professions {
+			mask |= 1 << race
 		}
-
-		w.items[u.BaseID] = domain.ItemDef{ID: u.BaseID, Name: u.BaseName, Icon: 7, InventoryTabKnown: true, Equip: &domain.EquipDef{Bonus: domain.Stats{MinAtk: intrinsic["min_atk"], MaxAtk: intrinsic["max_atk"], MAtk: intrinsic["matk"], Def: intrinsic["def"], MDef: intrinsic["mdef"]}, Slot: u.Slot, LevelReq: u.LevelRequirement, ResourceLevel: u.ResourceLevel, Need: domain.Requirement{Professions: u.Professions, BeginnerAllowed: u.BeginnerAllowed, Sex: u.Sex}}}
+		w.items[u.BaseID] = domain.ItemDef{ID: u.BaseID, Name: u.Name, Icon: 7, InventoryTabKnown: true, Equip: &domain.EquipDef{Bonus: domain.Stats{MinAtk: intrinsic["min_atk"], MaxAtk: intrinsic["max_atk"], MAtk: intrinsic["matk"], Def: intrinsic["def"], MDef: intrinsic["mdef"]}, Slot: u.Slot, LevelReq: u.Level, ResourceLevel: u.Tier, Need: domain.Requirement{Professions: mask, BeginnerAllowed: u.Beginner, Sex: u.Sex}}}
 	}
 	return w
 }

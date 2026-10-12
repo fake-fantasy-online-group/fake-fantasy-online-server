@@ -91,6 +91,10 @@ func (s *Scene) onEndgame(cmd EndgameRequest) {
 }
 func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 	x := s.endgamePlayer(p)
+	if r.Op == "skill.upgrade" && !p.Player.EndgameGrowthV5 {
+		s.endgameError(p, r, "update_required", "请更新客户端后分配技能点。")
+		return
+	}
 	if r.Mutates() {
 		rev, err := strconv.ParseInt(r.ExpectedRevision, 10, 64)
 		if err != nil || rev != x.state.Revision || strconv.FormatInt(rev, 10) != r.ExpectedRevision {
@@ -106,6 +110,9 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 	switch {
 	case r.Op == "hello":
 		caps := []string{domain.EndgameV1}
+		growth := false
+		for _, cap := range r.Capabilities { if cap == domain.EndgameGrowthV5 { growth = true } }
+		if growth { caps = append(caps, domain.EndgameGrowthV5) }
 		priorNativeStats := p.Player.EndgameNativeStats
 		p.Player.EndgameNativeStats = false
 		for _, cap := range r.Capabilities {
@@ -128,8 +135,14 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 			}
 			s.emitTo(p.ID, nativeSnapshot)
 		}
+		p.Player.EndgameGrowthV5 = growth
 		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: caps, CatalogVersion: domain.UniqueCatalogVersion})
 		s.sendEndgameSnapshot(p)
+		if growth { s.sendGrowthV5Skills(p, domain.EndgameRequest{Op:"skill.ranks"}) }
+	case r.Op == "skill.ranks":
+		s.sendGrowthV5Skills(p, r)
+	case r.Op == "skill.upgrade":
+		s.onEndgameSkillUpgrade(p, r)
 	case r.Op == "snapshot":
 		s.sendEndgameSnapshot(p)
 	case strings.HasPrefix(r.Op, "catalog"):

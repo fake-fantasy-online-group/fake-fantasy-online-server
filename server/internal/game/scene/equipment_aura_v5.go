@@ -1,0 +1,240 @@
+package scene
+
+import (
+	"fmt"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
+	"reflect"
+	"sort"
+)
+
+type equipmentAuraSource struct {
+	owner  domain.EntityID
+	uid    int64
+	party  domain.PartyID
+	effect domain.EquipmentAura
+}
+type equipmentAuraGrant struct {
+	owner   domain.EntityID
+	uid     int64
+	effect  domain.EquipmentAura
+	expires domain.Tick
+}
+
+// EquipmentAuraView is shared by authoritative observations and the status
+// presentation path. Every receiver names its winning source explicitly.
+type EquipmentAuraView = domain.EquipmentAuraView
+
+func (s *Scene) equipmentAuraViews(p *entity.Entity) []EquipmentAuraView {
+	if p == nil {
+		return nil
+	}
+	var out []EquipmentAuraView
+	for _, g := range s.equipmentState().auras[p.ID] {
+		if !s.equipmentAuraGrantValid(p, g) {
+			continue
+		}
+		a := g.effect
+		out = append(out, EquipmentAuraView{AuraID: a.ID, Family: a.Family, SourceEntityID: g.owner, SourceUID: g.uid, Rank: a.FixedRank, AssetKey: a.VisualKey, Modifier: a.Modifier, Element: a.Element, Value: a.Value, LeaseMS: a.LeaseMS})
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].AuraID < out[j].AuraID })
+	return out
+}
+func (s *Scene) stepEquipmentAuras() {
+	rt := s.equipmentState()
+	var sources []equipmentAuraSource
+	for _, id := range sortedEquipmentEntities(s.players) {
+		p := s.players[id]
+		if p == nil || !p.Alive() || s.entityMapLoading(p) || !s.equipmentCombatReady(p) {
+			continue
+		}
+		for _, e := range s.equipmentEffects(p).effects {
+			if a := e.Effect.Aura; a != nil && e.Effect.Kind == "aura" {
+				sources = append(sources, equipmentAuraSource{id, e.SourceUID, p.Player.Party, *a})
+			}
+		}
+	}
+	changed := !reflect.DeepEqual(sources, rt.auraSources)
+	if !changed && s.tick < rt.nextAuraScan {
+		for id, grants := range rt.auras {
+			for _, g := range grants {
+				target, owner := s.entities[id], s.entities[g.owner]
+				if target == nil || !target.Alive() || owner == nil || !owner.Alive() || !s.auraRecipient(owner, target) {
+					changed = true
+					break
+				}
+			}
+			if changed {
+				break
+			}
+		}
+		if !changed {
+			return
+		}
+	}
+	defer func() {
+		for _, id := range sortedEquipmentEntities(s.players) {
+			s.publishEquipmentCombatStats(s.players[id])
+		}
+	}()
+	rt.auraSources = sources
+	rt.nextAuraScan = s.tick + domain.Ticks(500)
+	next := map[domain.EntityID]map[string]equipmentAuraGrant{}
+	add := func(target *entity.Entity, source equipmentAuraSource) {
+		a := source.effect
+		g := equipmentAuraGrant{source.owner, source.uid, a, s.tick + domain.Ticks(int(a.LeaseMS))}
+		m := next[target.ID]
+		if m == nil {
+			m = map[string]equipmentAuraGrant{}
+			next[target.ID] = m
+		}
+		old, exists := m[a.Family]
+		if !exists || a.Value > old.effect.Value || a.Value == old.effect.Value && (a.Priority > old.effect.Priority || a.Priority == old.effect.Priority && (source.owner < old.owner || source.owner == old.owner && source.uid < old.uid)) {
+			m[a.Family] = g
+		}
+	}
+	for _, source := range sources {
+		owner := s.players[source.owner]
+		a := source.effect
+		r2 := float64(a.RadiusPX) * float64(a.RadiusPX)
+		candidates := []*entity.Entity{owner}
+		s.aoi.AroundRadius(owner.Pos, float64(a.RadiusPX), func(p *entity.Entity) {
+			if p.ID != owner.ID && p.Player != nil && p.Alive() && !s.entityMapLoading(p) && s.equipmentCombatReady(p) && sameParty(owner, p) && sqDist(owner.Pos, p.Pos) <= r2 {
+				candidates = append(candidates, p)
+			}
+		})
+		sort.Slice(candidates[1:], func(i, j int) bool {
+			x, y := candidates[i+1], candidates[j+1]
+			dx, dy := sqDist(owner.Pos, x.Pos), sqDist(owner.Pos, y.Pos)
+			if dx != dy {
+				return dx < dy
+			}
+			return x.ID < y.ID
+		})
+		if len(candidates) > int(a.MaxPlayers) {
+			candidates = candidates[:a.MaxPlayers]
+		}
+		for _, p := range candidates {
+			add(p, source)
+			if a.IncludeActivePet && p.Player.Pet != 0 {
+				pet := s.pets[p.Player.Pet]
+				if pet != nil && pet.Alive() && pet.Pet != nil && pet.Pet.Owner == p.ID && sqDist(owner.Pos, pet.Pos) <= r2 {
+					add(pet, source)
+				}
+			}
+		}
+	}
+	old := rt.auras
+	rt.auras = next
+	affected := map[domain.EntityID]bool{}
+	for id := range old {
+		affected[id] = true
+	}
+	for id := range next {
+		affected[id] = true
+	}
+	for _, id := range sortedEquipmentEntities(affected) {
+		e := s.entities[id]
+		if e == nil {
+			continue
+		}
+		for family, g := range old[id] {
+			n, ok := next[id][family]
+			if !ok || n.effect.VisualKey != g.effect.VisualKey {
+				s.emitEquipmentAuraRemoval(e, g)
+			}
+		}
+		// Lease renewal extends the existing keyed effect, never creates another
+		// emitter. Numeric membership stays server-authoritative if visuals are hidden.
+		s.pushStatusSnapshots(e)
+	}
+}
+func (s *Scene) auraRecipient(owner, target *entity.Entity) bool {
+	if owner == nil || target == nil {
+		return false
+	}
+	if target.Pet != nil {
+		p := s.players[target.Pet.Owner]
+		return p != nil && p.Player.Pet == target.ID && (owner.ID == p.ID || sameParty(owner, p))
+	}
+	return target.Player != nil && (target.ID == owner.ID || sameParty(owner, target))
+}
+func (s *Scene) emitEquipmentAuraRemoval(e *entity.Entity, g equipmentAuraGrant) {
+	s.emit(event.EntityStatusEffect{Who: e.ID, Effect: g.effect.VisualKey, DurationMS: 0})
+}
+func (s *Scene) equipmentAuraStatuses(e *entity.Entity) []statusPresentation {
+	if e == nil || !e.Alive() {
+		return nil
+	}
+	grants := s.equipmentState().auras[e.ID]
+	var ordered []equipmentAuraGrant
+	for _, g := range grants {
+		if g.expires > s.tick && s.equipmentAuraGrantValid(e, g) {
+			ordered = append(ordered, g)
+		}
+	}
+	sort.Slice(ordered, func(i, j int) bool {
+		if ordered[i].effect.Priority != ordered[j].effect.Priority {
+			return ordered[i].effect.Priority > ordered[j].effect.Priority
+		}
+		return ordered[i].effect.ID < ordered[j].effect.ID
+	})
+	var out []statusPresentation
+	for i, g := range ordered {
+		a := g.effect
+		id := equipmentAuraStatusID(a.ID)
+		position := uint8(domain.StatusPositionOrbit)
+		if i == 0 && g.owner == e.ID {
+			position = 0
+		}
+		label := "物理减伤"
+		if a.Modifier == "element_resist_bp" {
+			label = map[string]string{"fire": "火抗", "ice": "冰抗", "holy": "圣/光抗", "dark": "暗抗"}[a.Element]
+		}
+		desc := fmt.Sprintf("装备光环：%s +%.2f%%；范围%d；同类取最高", label, float64(a.Value)/100, a.RadiusPX)
+		remaining := nonnegativeI32((g.expires - s.tick).Millis())
+		out = append(out, statusPresentation{name: a.VisualKey, desc: desc, icon: event.StatusIconView{Status: id, Beneficial: true, RemainMS: remaining}, effect: event.EntityStatusEffect{Who: e.ID, Effect: a.VisualKey, PositionMode: position, DurationMS: remaining}, buff: event.BuffView{SkillID: id, Name: a.VisualKey, Desc: desc, Beneficial: true, RemainSec: (remaining + 999) / 1000, PositionMode: position}})
+	}
+	return out
+}
+func equipmentAuraStatusID(id string) int32 {
+	switch id {
+	case "white_tiger_guard":
+		return 1901001
+	case "ember_shelter":
+		return 1901002
+	case "holy_feather":
+		return 1901003
+	}
+	h := uint32(2166136261)
+	for _, c := range []byte(id) {
+		h = (h ^ uint32(c)) * 16777619
+	}
+	return 1902000 + int32(h%100000)
+}
+func (s *Scene) removeEquipmentEntity(id domain.EntityID) {
+	if s.equipment == nil {
+		return
+	}
+	delete(s.equipment.cache, id)
+	delete(s.equipment.observations, id)
+	delete(s.equipment.absorption, id)
+	s.equipment.nextAuraScan = 0
+	s.stepEquipmentAuras()
+}
+
+// Eligibility can change between the periodic spatial scans. Never retain a
+// numerical or observed benefit after its source became invalid in this frame.
+func (s *Scene) equipmentAuraGrantValid(target *entity.Entity, g equipmentAuraGrant) bool {
+	source := s.players[g.owner]
+	if source == nil || !source.Alive() || target == nil || !target.Alive() || g.expires <= s.tick || !s.equipmentCombatReady(source) || !s.auraRecipient(source, target) {
+		return false
+	}
+	for _, a := range s.equipmentEffects(source).effects {
+		if a.SourceUID == g.uid && a.Effect.Aura != nil && *a.Effect.Aura == g.effect {
+			return true
+		}
+	}
+	return false
+}

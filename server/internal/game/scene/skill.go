@@ -26,7 +26,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		return
 	}
 	caster, ok := s.players[cmd.ID]
-	if !ok || !caster.Alive() || s.entityMapLoading(caster) {
+	if !ok || !s.equipmentCombatReady(caster) || !caster.Alive() || s.entityMapLoading(caster) {
 		return
 	}
 	if caster.Player != nil && caster.Player.Stall != nil {
@@ -45,6 +45,10 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		return
 	}
 	ch := caster.Player.Char
+	if s.skills.V5Enabled(cmd.Skill) && ch.SkillAllocationVersion != domain.SkillFormulaVersion {
+		reject(event.RejectSkillNotUsable)
+		return
+	}
 	lv, grantedByTreasure := s.skillLevelForUse(caster, cmd.Skill)
 	if lv == 0 {
 		reject(event.RejectSkillNotLearned)
@@ -72,9 +76,14 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		reject(event.RejectWrongProf)
 		return
 	}
+	s.applyTrainingSynergies(caster, &def)
 	s.applyPassiveSkillModifiers(caster, &def)
 	def.UniqueInvisibleStart = entityInvisible(caster)
 	s.applyUniqueSkillModifiers(caster, &def)
+	if def.FormulaVersion == domain.SkillFormulaVersion {
+		def.SnapshotRawRanks = s.rawSkillLevels(caster)
+		def.SnapshotHardRanks = ch.Skills.Clone()
+	}
 	if def.RequiresInvisible && !entityInvisible(caster) {
 		reject(event.RejectRequiresInvisible)
 		return
@@ -138,6 +147,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 	}
 	visualTarget, visualAim := s.skillVisualTarget(caster, def, cmd, targets)
 	statusDurationPct := s.prepareSkillStatuses(caster, &def)
+	sourceOffense := s.captureCombatSourceV5(caster, def.UniqueInvisibleStart)
 	releaseAtWall := time.Time{}
 	if def.PrepareMS > 0 {
 		// 吟唱从 phase=0 实际广播时开始，不能用 socket 收包时间。
@@ -174,6 +184,9 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 	})
 	cast := pendingCast{
 		src: caster.ID, def: def, targets: targets, statusDurationPct: statusDurationPct,
+		sourceOffense:    sourceOffense,
+		equipmentOffense: sourceOffense.Equipment, equipmentSnapshot: true,
+		attackStats: sourceOffense.Stats, attackStatsSnapshot: true,
 		cooldownMS: def.CooldownMS, movementAt: movementAt,
 		visualTarget: visualTarget, visualAim: visualAim,
 		releaseAtWall: releaseAtWall,
@@ -370,18 +383,23 @@ func specialSkillEffect(def domain.SkillDef) (domain.SkillEffect, bool) {
 // applyPassiveSkillModifiers 把当前已学的被动技能汇总到本次施法定义的副本。
 // SkillTable 是全服共享只读表，修改切片前必须克隆，不能污染其他角色。
 func (s *Scene) applyPassiveSkillModifiers(caster *entity.Entity, def *domain.SkillDef) {
+	s.applyPassiveSkillModifiersWithLevels(caster, def, s.rawSkillLevels(caster))
+}
+
+func (s *Scene) applyPassiveSkillModifiersWithLevels(caster *entity.Entity, def *domain.SkillDef, levels domain.Learned) {
 	if s == nil || s.skills == nil || caster == nil || caster.Player == nil ||
 		caster.Player.Char == nil || def == nil {
 		return
 	}
-	var damageBonus, castReduction int32
+	var damageBonus, damageFlat, castReduction int32
 	var stealthDuration, stealthMove, stealthDamage, preserveInvisible int32
 	var durabilityReduction, statusPhysicalDamageTaken int32
 	effectBonus := map[domain.EffectKind]int32{}
+	effectFlat := map[domain.EffectKind]int32{}
 	var triggerStatuses []domain.StatusApplication
 	var statusAffixes []domain.PassiveStatusAffix
 	var triggerEffects []domain.SkillEffect
-	for passiveID, level := range caster.Player.Char.Skills {
+	for passiveID, level := range levels {
 		passive, ok := s.skills.Get(passiveID, level)
 		if !ok || passive.Kind != domain.SkillPassive ||
 			!caster.Player.Char.AllowsSkill(passive.ID, passive.Prof) {
@@ -392,6 +410,14 @@ func (s *Scene) applyPassiveSkillModifiers(caster *entity.Entity, def *domain.Sk
 			case domain.PassiveSkillDamagePct:
 				if modifier.TargetSkill == def.ID {
 					damageBonus += modifier.Value
+				}
+			case domain.PassiveSkillDamageFlat:
+				if modifier.TargetSkill == def.ID {
+					damageFlat += modifier.Value
+				}
+			case domain.PassiveEffectRestoreFlat:
+				if modifier.TargetSkill == def.ID {
+					effectFlat[modifier.EffectKind] += modifier.Value
 				}
 			case domain.PassiveEffectSourceAttackPct:
 				if modifier.TargetSkill == def.ID {
@@ -466,7 +492,15 @@ func (s *Scene) applyPassiveSkillModifiers(caster *entity.Entity, def *domain.Sk
 				continue
 			}
 			app.ExtraAffixes = append([]domain.Affix(nil), app.ExtraAffixes...)
-			adjustStatusApplicationAffix(app, modifier.Affix.Attr, modifier.Affix.Value)
+			if modifier.Affix.Mode == domain.ModeAbsolute {
+				if app.ID == domain.StatusStealth && modifier.Affix.Attr == domain.AttrAtk {
+					app.ProgressionAttackFlat += modifier.Affix.Value
+				} else {
+					app.ProgressionAffixes = append(append([]domain.Affix(nil), app.ProgressionAffixes...), modifier.Affix)
+				}
+			} else {
+				adjustStatusApplicationAffix(app, modifier.Affix.Attr, modifier.Affix.Value)
+			}
 		}
 	}
 	if statusPhysicalDamageTaken > 0 {
@@ -502,12 +536,35 @@ func (s *Scene) applyPassiveSkillModifiers(caster *entity.Entity, def *domain.Sk
 		def.Effects = append(append([]domain.SkillEffect(nil), def.DirectEffects()...), triggerEffects...)
 		def.Effect = def.Effects[0]
 	}
+	if damageFlat > 0 && !def.HasDamageEffect() {
+		def.Effects = append(append([]domain.SkillEffect(nil), def.DirectEffects()...), domain.SkillEffect{Kind: domain.EffectDamage, DamagePctNumerator: 0, DamagePctDenominator: 1})
+		if def.ID == 10421 {
+			def.HurtType = domain.HurtFire
+		}
+		if def.ID == 10428 {
+			def.HurtType = domain.HurtIce
+		}
+	}
 	apply := func(effect *domain.SkillEffect) {
 		if effect == nil {
 			return
 		}
-		if effect.Kind == domain.EffectDamage && damageBonus > 0 {
-			effect.DamagePct = boostedDamagePct(effect.DamagePct, damageBonus)
+		if effect.Kind == domain.EffectDamage && (damageBonus > 0 || def.TrainingDamageBP > 0) {
+			def.AppliedSynergyDamageBP = damageBonus*100 + def.TrainingDamageBP
+			domain.ScaleSkillDamageFraction(effect, 10000+int64(def.AppliedSynergyDamageBP), 10000)
+		}
+		if effect.Kind == domain.EffectDamage {
+			effect.DamageFlat += damageFlat
+		}
+		if flat := effectFlat[effect.Kind]; flat > 0 {
+			switch effect.Kind {
+			case domain.EffectRestoreHP:
+				effect.HealFlat += flat
+			case domain.EffectRestoreMP:
+				effect.RestoreMPFlat += flat
+			case domain.EffectDamageMP:
+				effect.DamageFlat += flat
+			}
 		}
 		if bonus := effectBonus[effect.Kind]; bonus > 0 {
 			effect.SourceAttackPct += bonus
@@ -607,7 +664,7 @@ func (s *Scene) skillLevelForUse(p *entity.Entity, id domain.SkillID) (int32, bo
 	if p == nil || p.Player == nil || p.Player.Char == nil {
 		return 0, false
 	}
-	return p.Player.Char.Skills.LevelOf(id), false
+	return s.rawSkillLevels(p).LevelOf(id), false
 }
 
 // resolveTargets 算出这次技能打到谁身上。
@@ -788,6 +845,9 @@ func skillAreaContains(area domain.SkillAreaTargeting, center domain.Pos, aimX, 
 //
 // 这是**防止治疗技能奶怪、伤害技能打自己**的地方。客户端说了不算。
 func (s *Scene) validTarget(caster, t *entity.Entity, def domain.SkillDef) bool {
+	if !s.equipmentCombatReady(caster) || !s.equipmentCombatReady(t) {
+		return false
+	}
 	if s.entityMapLoading(caster) || s.entityMapLoading(t) {
 		return false
 	}
@@ -819,19 +879,24 @@ func (s *Scene) validTarget(caster, t *entity.Entity, def domain.SkillDef) bool 
 
 // pendingCast 是本帧收到、等着结算的一次技能释放。
 type pendingCast struct {
-	src               domain.EntityID
-	def               domain.SkillDef
-	targets           []domain.EntityID
-	statusDurationPct int32
-	cooldownMS        int32
-	movementAt        *domain.Pos
-	visualTarget      domain.EntityID
-	visualAim         *domain.Pos
-	releaseAtWall     time.Time
-	resolveAtWall     time.Time
-	released          bool
-	windup            *castWindup
-	extras            []domain.MonsterSkillExtra
+	sourceOffense       *domain.CombatSourceSnapshotV5
+	attackStats         domain.Stats
+	attackStatsSnapshot bool
+	equipmentOffense    domain.EquipmentCombatStats
+	equipmentSnapshot   bool
+	src                 domain.EntityID
+	def                 domain.SkillDef
+	targets             []domain.EntityID
+	statusDurationPct   int32
+	cooldownMS          int32
+	movementAt          *domain.Pos
+	visualTarget        domain.EntityID
+	visualAim           *domain.Pos
+	releaseAtWall       time.Time
+	resolveAtWall       time.Time
+	released            bool
+	windup              *castWindup
+	extras              []domain.MonsterSkillExtra
 }
 
 type pendingSkillTeleport struct {
@@ -927,20 +992,32 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 			case domain.EffectTeleportPoint, domain.EffectTeleportTarget:
 				if c.movementAt != nil && (effect.ChanceBP >= 10000 || int32(s.rng.Intn(10000)) < effect.ChanceBP) {
 					teleports = append(teleports, pendingSkillTeleport{who: src.ID, to: *c.movementAt})
+					s.applySkillProgressionShield(src, src, c.def)
 				}
 			case domain.EffectPlaceTrap:
 				if c.movementAt != nil {
-					s.placeTrap(src, c.def, *c.movementAt, effect.TrapRadius, c.statusDurationPct)
+					s.placeTrap(src, c.def, *c.movementAt, effect.TrapRadius, c.statusDurationPct, c.sourceOffense)
 				}
 			case domain.EffectDetectTrap:
 				s.detectTraps(src, c.def.Radius, effect.ChanceBP)
+				s.applySkillProgressionShield(src, src, c.def)
 			case domain.EffectDisarmTrap:
 				s.disarmTrap(src, c.targets[0], effect.ChanceBP)
+				s.applySkillProgressionShield(src, src, c.def)
 			case domain.EffectRevealInvisible:
 				s.revealInvisible(src, c.def, effect.RevealRadius, c.statusDurationPct)
+				s.applySkillProgressionShield(src, src, c.def)
 			}
 			continue
 		}
+		offense := c.equipmentOffense
+		if !c.equipmentSnapshot {
+			offense = s.equipmentOffense(src)
+		}
+		finishEquipment := s.beginEquipmentRoot(src.ID, c.visualTarget, offense)
+		s.equipment.root.source = c.sourceOffense
+		s.equipment.root.attackStats = c.attackStats
+		s.equipment.root.attackSnapshot = c.attackStatsSnapshot
 		for _, tid := range c.targets {
 			dst, ok := s.entities[tid]
 			if !ok || !dst.Alive() && !c.def.HasResurrectEffect() || dst.Kind == domain.KindPet {
@@ -955,6 +1032,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 			s.consumeAttackDurability(src)
 		}
 		s.applyMonsterSkillExtras(src, c.def, c.targets, c.extras)
+		finishEquipment()
 	}
 	for i := len(waiting); i < originalLen; i++ {
 		s.casts[i] = pendingCast{}
@@ -971,6 +1049,9 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 
 // applySkill 把一个技能的效果落到一个目标身上。
 func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusDurationPct int32, triggeredByTrap bool) bool {
+	if !s.equipmentCombatReady(src) || !s.equipmentCombatReady(dst) {
+		return false
+	}
 	if dst.Monster != nil && s.defs != nil {
 		if monsterDef, ok := s.defs.Def(dst.Monster.TypeID); ok {
 			if _, immune := monsterDef.ImmuneSkills[def.ID]; immune {
@@ -989,6 +1070,9 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 	targetDied := false
 	startedDead := !dst.Alive()
 	for _, effect := range def.DirectEffects() {
+		if effect.Kind == domain.EffectDamage && def.TrainingEliteDamageBP > 0 && uniqueMonsterElite(dst) {
+			domain.ScaleSkillDamageFraction(&effect, 10000+int64(def.AppliedSynergyDamageBP)+int64(def.TrainingEliteDamageBP), 10000+int64(def.AppliedSynergyDamageBP))
+		}
 		if effect.RequiresPreviousLanded && !previousLanded {
 			continue
 		}
@@ -1039,7 +1123,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			effectLanded = true
 
 		case domain.EffectRestoreMP:
-			amount := clampI32(int64(effect.RestoreMPFlat) + int64(src.Stats.MaxAtk)*int64(effect.SourceAttackPct)/100)
+			amount := clampI32(int64(effect.RestoreMPFlat) + int64(s.equipmentAttackStats(src).MaxAtk)*int64(effect.SourceAttackPct)/100)
 			effectTarget.MP = clampI32(int64(effectTarget.MP) + int64(amount))
 			if effectTarget.MP > effectTarget.MaxMP {
 				effectTarget.MP = effectTarget.MaxMP
@@ -1048,7 +1132,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			effectLanded = true
 
 		case domain.EffectRestoreHP:
-			amount := clampI32(int64(src.Stats.MaxAtk) * int64(effect.SourceAttackPct) / 100)
+			amount := clampI32(int64(effect.HealFlat) + int64(s.equipmentAttackStats(src).MaxAtk)*int64(effect.SourceAttackPct)/100)
 			amount = s.uniqueHealing(src, effectTarget, amount, def)
 			ev := combat.Restore(src, effectTarget, amount, int32(def.ID))
 			s.emit(ev)
@@ -1056,7 +1140,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			effectLanded = true
 
 		case domain.EffectDamageMP:
-			amount := clampI32(int64(src.Stats.MaxAtk) * int64(effect.SourceAttackPct) / 100)
+			amount := clampI32(int64(effect.DamageFlat) + int64(s.equipmentAttackStats(src).MaxAtk)*int64(effect.SourceAttackPct)/100)
 			effectTarget.MP -= amount
 			if effectTarget.MP < 0 {
 				effectTarget.MP = 0
@@ -1113,14 +1197,15 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 				s.hits[src.ID] = tr
 			}
 			blow := combat.Blow{
-				StartedInvisible: def.UniqueInvisibleStart,
-				Area:             def.Area.Valid() || def.Radius > 0,
-				HurtType:         def.HurtType,
-				SkillID:          int32(def.ID),
-				SkillPct:         effect.DamagePct,
-				FlatDamage:       effect.DamageFlat,
-				Trap:             triggeredByTrap,
-				GuaranteedHit:    effect.GuaranteedHit,
+				StartedInvisible:  def.UniqueInvisibleStart,
+				Area:              def.Area.Valid() || def.Radius > 0,
+				HurtType:          def.HurtType,
+				SkillID:           int32(def.ID),
+				SkillPct:          effect.DamagePct,
+				FlatDamage:        effect.DamageFlat,
+				SkillPctNumerator: effect.DamagePctNumerator, SkillPctDenominator: effect.DamagePctDenominator,
+				Trap:          triggeredByTrap,
+				GuaranteedHit: effect.GuaranteedHit,
 				// 法系技能 100% 命中(docs/战斗公式.md 第一节)。
 				// 物理系技能照常判命中 —— 「法杖平砍算物理, 照样 miss」。
 				Magic: def.HurtType != domain.HurtPhysical && def.HurtType != domain.HurtNone,
@@ -1167,6 +1252,8 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			statusDef.DurationSec = app.DurationSec
 		}
 		statusDef.Affixes = overrideStatusAffixes(statusDef.Affixes, app.ExtraAffixes)
+		applyProgressionStatus(app, &statusDef)
+		stampSkillStatusSnapshot(&statusDef, def)
 		statusDef.StealthDamagePct = app.StealthDamagePct
 		statusDef.PhysicalDamageTakenPct += app.PhysicalDamageTakenPct
 		if statusDef.PhysicalDamageTakenPct > 100 {
@@ -1189,6 +1276,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		applyStatusSource(&statusDef, def.Icon, int32(def.ID))
 		s.applyStatusDef(dst, statusDef, src.ID)
 	}
+	s.applySkillProgressionShield(src, dst, def)
 	return true
 }
 
@@ -1200,7 +1288,7 @@ func overrideStatusAffixes(base, overrides []domain.Affix) []domain.Affix {
 	for _, override := range overrides {
 		kept := out[:0]
 		for _, existing := range out {
-			if existing.Attr != override.Attr {
+			if existing.Attr != override.Attr || existing.Mode != override.Mode {
 				kept = append(kept, existing)
 			}
 		}

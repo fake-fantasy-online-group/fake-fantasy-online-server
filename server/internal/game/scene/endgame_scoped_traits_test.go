@@ -26,11 +26,17 @@ func scopedArrayFixture(t *testing.T, id int32) (*Scene, *entity.Entity, domain.
 	def := domain.ItemDef{ID: 999091, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(r.Slots[0]), LevelReq: 60, Durable: 100, Need: domain.Requirement{Level: 60}}}
 	s.items[def.ID] = def
 	st := domain.NewStack(def, 1)
+	// Scoped old-trait assertions explicitly exercise frozen V4 equipment.
+	st.Endgame.FormationContentVersion = 0
 	st.SocketCount = uint8(len(r.Runes))
 	for i, rune := range r.Runes {
 		st.Sockets[i] = rune
 		st.SocketUIDs[i] = int64(900010 + i)
 		st.SocketCards[i] = s.items[rune].CardDefaults
+	}
+	r, ok = domain.MatchAstralRecipe(def, st)
+	if !ok {
+		t.Fatal("legacy formation missing")
 	}
 	p.Player.Worn = domain.NewEquipSet()
 	p.Player.Worn.Set(r.Slots[0], st)

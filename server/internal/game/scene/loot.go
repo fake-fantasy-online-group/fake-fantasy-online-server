@@ -49,9 +49,14 @@ var monsterLootGridOffsets = [...]struct{ x, y float64 }{
 
 // rollLoot 掷掉落并把东西放到地上。
 func (s *Scene) rollLoot(dead *entity.Entity, killer domain.EntityID) {
+	s.rollLootWithContextV5(dead, s.freezeLootContextV5(killer))
+}
+
+func (s *Scene) rollLootWithContextV5(dead *entity.Entity, context domain.LootContextV5) {
 	if s.items == nil || dead == nil || dead.Monster == nil {
 		return
 	}
+	killer := context.Owner
 	entries := s.lootTable[dead.Monster.TypeID]
 	fixed := s.rollBossFixedEquipment(dead)
 	if len(entries) == 0 && len(fixed) == 0 {
@@ -76,12 +81,7 @@ func (s *Scene) rollLoot(dead *entity.Entity, killer domain.EntityID) {
 		}
 		stack := domain.NewStack(def, 1)
 		stack.SocketCount = domain.RollDroppedSocketCount(def, domain.AstralDropBoss, s.rng.Int63n)
-		if choice.RollAffixes {
-			rolled := s.equipmentRoll.RollWithReservedSockets(def, profile, stack.SocketCount, s.rng.Int63n)
-			stack.RolledAffixCount = uint8(len(rolled))
-			copy(stack.RolledAffixes[:], rolled)
-		}
-		domain.RollUniqueDrop(&stack, def, s.rng.Intn)
+		s.rollNaturalEquipmentV5(def, &stack, dead, n, profile, choice.RollAffixes, context)
 		s.spawnGeneratedLoot(def, stack,
 			s.monsterLootPosition(dead.Pos, startSlot+n), killer)
 		n++
@@ -109,12 +109,7 @@ func (s *Scene) rollLoot(dead *entity.Entity, killer domain.EntityID) {
 		}
 		stack := domain.NewStack(def, 1)
 		stack.SocketCount = domain.RollDroppedSocketCount(def, s.astralDropGrade(dead), s.rng.Int63n)
-		if e.RollAffixes && def.Equip != nil {
-			rolled := s.equipmentRoll.RollWithReservedSockets(def, profile, stack.SocketCount, s.rng.Int63n)
-			stack.RolledAffixCount = uint8(len(rolled))
-			copy(stack.RolledAffixes[:], rolled)
-		}
-		domain.RollUniqueDrop(&stack, def, s.rng.Intn)
+		s.rollNaturalEquipmentV5(def, &stack, dead, n, profile, e.RollAffixes, context)
 		s.spawnGeneratedLoot(def, stack, s.monsterLootPosition(dead.Pos, startSlot+n), killer)
 		n++
 		originalDrops++

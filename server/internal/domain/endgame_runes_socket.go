@@ -159,6 +159,7 @@ func PlanAstralInsert(bag *Bag, worn *EquipSet, defs func(ItemID) (ItemDef, bool
 	if t.worn && ch.Level < EquipmentRequiredLevel(t.def, p.Target) {
 		return AstralSocketPlan{}, AstralSocketError("rune_level")
 	}
+	adoptCurrentFormationOnCompletion(t.def, t.stack, &p.Target)
 	p.Rune.Bound = card.Bound
 	p.Rune.Card = card
 	setAstralTarget(&p, t)

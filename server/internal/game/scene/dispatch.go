@@ -478,6 +478,7 @@ func (s *Scene) onEnter(cmd Enter) {
 		e.Player.RestoreExperienceBoost(ch, s.tick)
 	} else if cmd.Runtime.Status != nil {
 		e.Status = cmd.Runtime.Status.Clone()
+		e.Status.RebindSkillOwner(cmd.Runtime.V5StatusOwner, e.ID)
 	} else {
 		e.Status = domain.NewStatusSet()
 	}
@@ -502,6 +503,13 @@ func (s *Scene) onEnter(cmd Enter) {
 	// 每日耐力在登录/跨图落地时先结算，再组装 0x8003/0x8007。否则玩家会先看到
 	// 旧存档的 0/100，直到第一次点打工才突然回满。
 	s.refillStamina(ch)
+	// Revalidate self-cast V5 effects against the loaded equipment/hard ranks
+	// before exposing attributes. Detached effects are filtered by restore.
+	s.reconcileEnteringSkillStatuses(e)
+	_, e.Stats = domain.Compute(domain.StatSource{Base: ch.EffectiveBase(), Level: ch.Level, Innate: characterInnateStats(ch), Worn: s.functionalWorn(e), Defs: s.itemDef, Passive: s.passiveStatAffixes(e), Status: e.Status})
+	e.MaxHP, e.MaxMP = e.Stats.MaxHP, e.Stats.MaxMP
+	e.HP = min(e.HP, e.MaxHP)
+	e.MP = min(e.MP, e.MaxMP)
 	attributes := s.attributeSnapshot(e) // 同步 0x8003 内嵌数组，并保留下行快照
 	var activePet *entity.Entity
 	if cmd.Runtime != nil && cmd.Runtime.Pet != nil {
@@ -721,9 +729,13 @@ func (s *Scene) onLeave(cmd Leave) {
 	s.emitExcept(event.EntityDespawned{ID: e.ID, Kind: e.Kind, Reason: event.DespawnLogout}, e.ID)
 	s.flush() // 立刻冲刷: 下面就要把他从 players 里删掉, 留到帧末就发不出去了
 
+	s.revokeDepartingSkillSource(e)
 	s.aoi.Leave(e)
 	delete(s.entities, e.ID)
 	delete(s.players, e.ID)
+	delete(s.skillViewDigests, e.ID)
+	delete(s.skillRawCache, e.ID)
+	s.removeEquipmentEntity(e.ID)
 	delete(s.hits, e.ID) // 交战状态跟着人走, 不清会一直占着内存
 	delete(s.portalBlocked, e.ID)
 	delete(s.moveWindows, e.ID)
@@ -895,14 +907,14 @@ func (s *Scene) onAttack(cmd Attack) {
 		return
 	}
 	e, ok := s.entities[cmd.ID]
-	if !ok || s.entityMapLoading(e) {
+	if !ok || s.entityMapLoading(e) || !s.equipmentCombatReady(e) {
 		return
 	}
 	reject := func(r event.RejectReason) {
 		s.emitTo(e.ID, event.Rejected{Who: e.ID, Cmd: "Attack", Reason: r})
 	}
 	t, ok := s.entities[cmd.Target]
-	if !ok || s.entityMapLoading(t) {
+	if !ok || s.entityMapLoading(t) || !s.equipmentCombatReady(t) {
 		reject(event.RejectNoTarget)
 		return
 	}
@@ -940,6 +952,11 @@ func (s *Scene) onAttack(cmd Attack) {
 	if delay := s.playerBasicAttackImpactDelay(e, t); delay > 0 {
 		resolveAtWall = receivedAt.Add(delay)
 	}
+	cmd.Blow.SourceOffense = s.captureCombatSourceV5(e, cmd.Blow.StartedInvisible)
+	cmd.Blow.AttackStats = e.Stats
+	cmd.Blow.AttackStatsSnapshot = true
+	cmd.Blow.EquipmentOffense = s.equipmentOffense(e)
+	cmd.Blow.EquipmentSnapshot = true
 	s.attacks = append(s.attacks, pendingAttack{
 		src: e.ID, dst: t.ID, blow: cmd.Blow,
 		resolveAtWall: resolveAtWall,

@@ -696,13 +696,19 @@ func (s *Scene) usePetExperienceItem(owner *entity.Entity, bagSlot int, item dom
 			Text: fmt.Sprintf("宠物等级超过人物等级%d级，不能使用宝宝经验珠", rule.MaxAboveOwner)})
 		return
 	}
-	cap := s.petLvls.MaxLevel()
-	if max := pet.Pet.Def.MaxLevel; max > 0 && cap > max {
-		cap = max
+	cap := domain.PetExperienceItemCap(pet.Pet.Def, owner.Player.Char.Level, rule.MaxAboveOwner)
+	if tableCap := s.petLvls.MaxLevel(); cap > tableCap {
+		cap = tableCap
 	}
 	if inst.Level >= cap {
 		s.emitTo(owner.ID, event.ServerNotice{Who: owner.ID,
 			Text: "当前宠物已达到最高等级"})
+		return
+	}
+	probe := *inst
+	prefix, _ := s.petPrefixes.Find(inst.Prefix)
+	if gain := probe.AddExpWithPrefix(pet.Pet.Def, prefix, s.petLvls, experience, cap); gain.Reason != "" || gain.AppliedExp == 0 {
+		reject(event.RejectInvalid)
 		return
 	}
 	if !item.ConsumeOnUse || !owner.Player.Bag.RemoveAt(bagSlot, 1) {
@@ -721,6 +727,12 @@ func (s *Scene) usePetExperienceItem(owner *entity.Entity, bagSlot int, item dom
 
 func (s *Scene) useSkillBook(p *entity.Entity, bagSlot int, item domain.ItemDef,
 	reject func(event.RejectReason)) {
+	if s.skills.V5Enabled(item.UseSkillBook) {
+		// Preserve legacy books until an explicit redemption economy is approved.
+		// Books no longer manufacture permanent points outside the level budget.
+		s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: "职业技能请使用技能点学习；旧技能书已保留，可待兑换方案开放后使用"})
+		return
+	}
 	def, nextLv, reason, ok := s.skillUpgradeTarget(p, item.UseSkillBook)
 	if !ok {
 		reject(reason)

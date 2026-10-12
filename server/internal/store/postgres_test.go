@@ -307,10 +307,10 @@ func TestPetsRoundTrip(t *testing.T) {
 		UID: 700002, Item: 1800001074, Count: 1, InstanceKind: domain.ItemInstancePet})
 
 	c.Pets = []domain.PetInstance{
-		{ID: 1, Def: 1006, Name: "小龟", Level: 7, Exp: 123, ItemUID: 700001,
+		{ID: 1, Slot: 0, Hatched: true, Gender: 0, Def: 1006, Name: "小龟", Level: 7, Exp: 123, ItemUID: 700001,
 			Base: domain.Base{STR: 11, VIT: 24, INT: 18, SPI: 26, AGI: 8, DEX: 8},
 			HP:   216, MP: 234, Trust: 60, Starve: 40},
-		{ID: 2, Def: 1074, Level: 1, ItemUID: 700002, Base: domain.Base{VIT: 8, SPI: 6},
+		{ID: 2, Slot: 1, Hatched: true, Gender: 1, Def: 1074, Level: 1, ItemUID: 700002, Base: domain.Base{VIT: 8, SPI: 6},
 			HP: 72, MP: 54, Trust: 50, Starve: 50},
 	}
 	if err := p.SaveSnapshot(ctx, domain.Snapshot{Char: c, Bag: bag}); err != nil {

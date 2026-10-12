@@ -16,7 +16,13 @@ var 给经验的树妖 = domain.MonsterDef{
 
 // game_levels 的真值: 1→2 需 30, 2→3 需 110, 3→4 需 270。
 func rewardLevels() *domain.LevelTable {
-	return domain.NewLevelTable(map[int32]int64{1: 30, 2: 110, 3: 270, 4: 546, 5: 875})
+	need := map[int32]int64{1: 30, 2: 110, 3: 270, 4: 546, 5: 875}
+	// Combat tests assign roles up to 100. V5 correctly rejects absent edges,
+	// so provide explicit synthetic high-level edges instead of relying on zeros.
+	for level := int32(6); level <= domain.LevelCap; level++ {
+		need[level] = 1_000_000 + int64(level)
+	}
+	return domain.NewLevelTable(need)
 }
 
 // rewardScene 建一个能结算经验的场景, 里面一只怪。

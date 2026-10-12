@@ -123,12 +123,15 @@ func (s *Scene) sendEndgameSnapshot(p *entity.Entity) {
 	x.snapshotSequence++
 	x.snapshotID = fmt.Sprintf("%d-%d-%d", p.ID, s.tick, x.snapshotSequence)
 	x.snapshotItems = items
+	s.stepEquipmentAuras()
+	combatStats := s.equipmentCombatViewV5(p)
 	for i := 0; i < n; i++ {
 		end := (i + 1) * size
 		if end > len(items) {
 			end = len(items)
 		}
-		s.endgameReply(p, domain.EndgameResponse{Kind: "snapshot", OK: true, SnapshotID: x.snapshotID, Chunk: int32(i), Chunks: int32(n), Items: items[i*size : end], Materials: materials, Formations: formations})
+		s.endgameReply(p, domain.EndgameResponse{Kind: "snapshot", OK: true, SnapshotID: x.snapshotID, Chunk: int32(i), Chunks: int32(n), Items: items[i*size : end], Materials: materials, Formations: formations, CombatStats: combatStats})
+		combatStats = nil
 	}
 }
 func (s *Scene) sendEndgameCatalog(p *entity.Entity, req domain.EndgameRequest) {

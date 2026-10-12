@@ -48,3 +48,9 @@ func (s *Session) onEndgame(payload []byte) {
 		s.postToScene(scene.EndgameRequest{ID: id, Request: req})
 	}
 }
+
+func (s *Session) growthReady() bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.stage == StageInGame && s.growthV5
+}

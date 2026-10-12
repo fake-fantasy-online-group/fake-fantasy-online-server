@@ -93,11 +93,17 @@ const (
 
 // StatusDef 是一个状态在某一级上的定义。
 type StatusDef struct {
-	ID    StatusID
-	Level int32
-	Name  string
-	Desc  string
-	Type  StatusType
+	ProgressionAttackFlat int32
+	// Skill snapshots pin persistent effects to the lesser of cast and current sources.
+	SkillSnapshotID   SkillID
+	SkillSnapshotRank int32
+	SkillSnapshotRaw  Learned
+	SkillSnapshotHard Learned
+	ID                StatusID
+	Level             int32
+	Name              string
+	Desc              string
+	Type              StatusType
 	// TypeKnown 区分“官方数据明确为 GOOD(0)”和旧测试/内存定义的零值。
 	// 生产数据始终为 true；false 时保留旧的效果符号回退，不让手工定义静默变义。
 	TypeKnown bool
@@ -202,8 +208,13 @@ const (
 
 // StatusApplication 是效果脚本里一条已经闭合的“施加某级状态”。
 type StatusApplication struct {
-	ID    StatusID
-	Level int32
+	ProgressionAttackFlat   int32
+	ProgressionAffixes      []Affix
+	ProgressionHPPerTick    int32
+	ProgressionDamageShield int32
+	ProgressionReflectFlat  int32
+	ID                      StatusID
+	Level                   int32
 	// ChanceBP 是这条状态在技能真实命中后的独立施加概率（万分比）。零值用于
 	// 旧的内存定义并按 10000 处理；PostgreSQL 结构化配置始终显式保存。
 	ChanceBP int32
@@ -867,6 +878,9 @@ func (s *StatusSet) SaveForLogout(now Tick, wall time.Time, owner EntityID) []Sa
 	var out []SavedStatus
 	for _, id := range s.sortedIDs() {
 		for _, a := range s.act[id] {
+			if a.Def.SkillSnapshotID != 0 && (owner == 0 || a.Source != owner) {
+				continue
+			}
 			if a.ExpireAt != 0 && a.ExpireAt <= now {
 				continue
 			}
@@ -894,6 +908,9 @@ func (s *StatusSet) SaveForLogout(now Tick, wall time.Time, owner EntityID) []Sa
 func RestoreSavedStatuses(saved []SavedStatus, now Tick, wall time.Time, owner EntityID) *StatusSet {
 	out := NewStatusSet()
 	for _, record := range saved {
+		if record.Def.SkillSnapshotID != 0 && !record.SourceSelf {
+			continue
+		}
 		if record.Def.ID <= 0 || record.RemainingTicks == 0 || record.RemainingTicks < -1 {
 			continue
 		}

@@ -1,6 +1,7 @@
 package scene
 
 import (
+	"math/rand"
 	"strings"
 	"testing"
 
@@ -10,12 +11,26 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
 
+// These are explicit legacy-regression fixtures. Removed V5 generation routes
+// must not make previously owned traits or extended equipment slots disappear.
+func legacyUniqueCatalogFixture(t *testing.T) []domain.UniqueDefinition {
+	t.Helper()
+	var out []domain.UniqueDefinition
+	for _, id := range domain.UniqueAppearanceBaseIDs() {
+		d, ok := domain.UniqueOf(domain.Stack{UID: int64(id), Item: id, Count: 1, Endgame: domain.EndgameItemState{UniqueID: int32(id), UniqueRollBP: 10000}})
+		if !ok {
+			t.Fatal("legacy catalog missing", id)
+		}
+		out = append(out, d)
+	}
+	return out
+}
 func uniqueTestGear(t *testing.T, kind string) (*Scene, *entity.Entity, domain.UniqueTrait) {
 	t.Helper()
 	s := newTestScene(t, nil)
 	join(t, s, 1, 100, "甲", 100, 100)
 	p := s.players[1]
-	for _, d := range domain.UniqueCatalog() {
+	for _, d := range legacyUniqueCatalogFixture(t) {
 		for _, tr := range d.Traits {
 			if tr.Kind != kind {
 				continue
@@ -23,9 +38,7 @@ func uniqueTestGear(t *testing.T, kind string) (*Scene, *entity.Entity, domain.U
 			s.items = map[domain.ItemID]domain.ItemDef{d.BaseID: {ID: d.BaseID, Name: d.BaseName, InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment,
 				Equip: &domain.EquipDef{Slot: d.Slot, Durable: 100}}}
 			st := domain.Stack{UID: 987, Item: d.BaseID, Count: 1, MaxDurability: 100, Durability: 100, InstanceKind: domain.ItemInstanceEquipment}
-			if !domain.ApplyUnique(&st, s.items[d.BaseID], func(int) int { return 2000 }) {
-				t.Fatal("awaken fixture")
-			}
+			st.Endgame = domain.EndgameItemState{UniqueID: d.ID, UniqueRollBP: 10000}
 			p.Player.Worn = domain.NewEquipSet()
 			p.Player.Worn.Set(domain.EquipSlot(d.Slot), st)
 			p.Player.Char.Level = 120
@@ -86,7 +99,10 @@ func TestEveryUniquePowerAtExecutedBoundary(t *testing.T) {
 			p.Stats.MinAtk, p.Stats.MaxAtk, p.Stats.MAtk = 100, 100, 100
 			beforeHP := m.HP
 			plainSrc, plainDst := *p, *m
-			base := combat.Strike(&plainSrc, &plainDst, &combat.HitTracker{}, blow, s.rng)
+			// Removing stealth rebuilds geared Stats, including a nonzero crit rate.
+			// Compare the same combat roll, not two independent random crits.
+			base := combat.Strike(&plainSrc, &plainDst, &combat.HitTracker{}, blow, rand.New(rand.NewSource(1)))
+			s.rng = rand.New(rand.NewSource(1))
 			ctx := uniqueStrikeContext(p, m, blow, base, beforeHP)
 			if domain.EvaluateUniqueTraits([]domain.UniqueTrait{tr}, ctx).DamageBP <= 0 {
 				t.Fatal("test did not activate target power")
@@ -207,7 +223,7 @@ func TestUniqueExtendedSlotsActualEquipAndUnequip(t *testing.T) {
 	for slot := domain.EquipSlot(14); slot <= 25; slot++ {
 		t.Run(string(rune('A'+slot)), func(t *testing.T) {
 			var d domain.UniqueDefinition
-			for _, candidate := range domain.UniqueCatalog() {
+			for _, candidate := range legacyUniqueCatalogFixture(t) {
 				if candidate.Slot == int32(slot) {
 					d = candidate
 					break
@@ -236,9 +252,7 @@ func TestUniqueExtendedSlotsActualEquipAndUnequip(t *testing.T) {
 				}
 			}
 			st := domain.NewStack(def, 1)
-			if !domain.ApplyUnique(&st, def, func(int) int { return 2000 }) {
-				t.Fatal("awaken")
-			}
+			st.Endgame = domain.EndgameItemState{UniqueID: d.ID, UniqueRollBP: 10000}
 			p.Player.Bag.Set(200, st)
 			eligible := p.Player.Char.Race
 			for wrong := domain.Race(0); wrong <= 4; wrong++ {
@@ -295,5 +309,55 @@ func TestUniqueGoldTooltipAndExtendedSlotSnapshot(t *testing.T) {
 		if !found {
 			t.Fatal("higher slot missing", slot)
 		}
+	}
+}
+
+// Legacy stealth bonuses are captured before invisibility is consumed and apply
+// to exactly that strike, equally for a normal hit and a critical hit.
+func TestLegacyInvisibleFocusCapturedFirstHitNormalAndCritical(t *testing.T) {
+	for _, crit := range []int32{0, 10000} {
+		name := "normal"
+		if crit != 0 {
+			name = "critical"
+		}
+		t.Run(name, func(t *testing.T) {
+			s, p, tr := uniqueTestGear(t, "invisible_focus")
+			p.Status = domain.NewStatusSet()
+			p.Status.Apply(domain.StatusDef{ID: 99999, Level: 1, DurationSec: 100, Invisible: true, BreakOnAttack: true}, s.tick, p.ID)
+			blow := combat.Blow{GuaranteedHit: true}
+			s.prepareBasicAttackStatuses(p, &blow)
+			if entityInvisible(p) || !blow.StartedInvisible {
+				t.Fatal("first strike lost captured invisibility")
+			}
+			p.Stats = domain.Stats{MinAtk: 100, MaxAtk: 100, Hit: 100000, CritRate: crit}
+			m := putMonster(s, 900, 10000, domain.Stats{}, 110, 100)
+			base := int32(100)
+			if crit != 0 {
+				base *= combat.CritMultiplier
+			}
+			ctx := uniqueStrikeContext(p, m, blow, event.DamageDealt{Amount: base}, m.HP)
+			if domain.EvaluateUniqueTraits([]domain.UniqueTrait{tr}, ctx).DamageBP <= 0 {
+				t.Fatal("stealth power not active")
+			}
+			want := domain.ApplyUniqueBP(base, domain.EvaluateUniqueTraits(s.uniqueTraits(p), ctx).DamageBP)
+			got, _, _ := s.resolveStrikeStatuses(p, m, &combat.HitTracker{}, blow)
+			if got.Amount != want {
+				t.Fatalf("first strike=%d want=%d", got.Amount, want)
+			}
+			next := combat.Blow{GuaranteedHit: true}
+			s.prepareBasicAttackStatuses(p, &next)
+			if next.StartedInvisible {
+				t.Fatal("stealth context leaked to second strike")
+			}
+			ctx = uniqueStrikeContext(p, m, next, event.DamageDealt{Amount: base}, m.HP)
+			if domain.EvaluateUniqueTraits([]domain.UniqueTrait{tr}, ctx).DamageBP != 0 {
+				t.Fatal("consumed stealth power still active")
+			}
+			want = domain.ApplyUniqueBP(base, domain.EvaluateUniqueTraits(s.uniqueTraits(p), ctx).DamageBP)
+			got, _, _ = s.resolveStrikeStatuses(p, m, &combat.HitTracker{}, next)
+			if got.Amount != want {
+				t.Fatalf("second strike=%d want=%d", got.Amount, want)
+			}
+		})
 	}
 }

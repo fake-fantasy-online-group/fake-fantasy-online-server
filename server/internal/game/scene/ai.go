@@ -565,7 +565,7 @@ func (s *Scene) monsterRuleTargetsEnemies(rule domain.MonsterSkillRule) bool {
 func (s *Scene) validMonsterTarget(target *entity.Entity) bool {
 	// 隐身不等于伤害免疫。怪物不会把隐身玩家作为仇恨目标，但已经起手的
 	// 技能，或以另一名玩家为中心结算的范围效果，仍能波及并命中他。
-	if target == nil || !target.Alive() || s.entityMapLoading(target) {
+	if target == nil || !target.Alive() || s.entityMapLoading(target) || !s.equipmentCombatReady(target) {
 		return false
 	}
 	if target.Kind == domain.KindPlayer {
@@ -957,7 +957,7 @@ func (s *Scene) acquire(m *entity.Entity, p ai.Params) {
 	}
 	candidates := make([]candidate, 0, 4)
 	s.aoi.AroundPos(m.Pos, func(o *entity.Entity) {
-		if o.Kind != domain.KindPlayer || !o.Alive() || entityInvisible(o) || s.entityMapLoading(o) {
+		if o.Kind != domain.KindPlayer || !o.Alive() || entityInvisible(o) || s.entityMapLoading(o) || !s.equipmentCombatReady(o) {
 			return
 		}
 		if o.Player != nil && o.Player.Protected(s.tick) {
@@ -992,7 +992,7 @@ func (s *Scene) targetInfo(m *entity.Entity) *ai.Target {
 		return nil
 	}
 	t, ok := s.entities[id]
-	if !ok || entityInvisible(t) || s.entityMapLoading(t) {
+	if !ok || entityInvisible(t) || s.entityMapLoading(t) || !s.equipmentCombatReady(t) {
 		s.dropTarget(m) // 目标下线/传送离图：原地脱战，不回出生点
 		return nil
 	}
@@ -1084,7 +1084,7 @@ func (s *Scene) aggro(victim *entity.Entity, attacker domain.EntityID) {
 		return
 	}
 	a, ok := s.entities[attacker]
-	if !ok || a.Kind != domain.KindPlayer || entityInvisible(a) {
+	if !ok || a.Kind != domain.KindPlayer || entityInvisible(a) || !s.equipmentCombatReady(a) {
 		return
 	}
 	victim.Monster.Target = attacker
@@ -1101,7 +1101,7 @@ func (s *Scene) taunt(victim *entity.Entity, attacker domain.EntityID, power int
 		return false
 	}
 	a, ok := s.entities[attacker]
-	if !ok || a.Kind != domain.KindPlayer || !a.Alive() {
+	if !ok || a.Kind != domain.KindPlayer || !a.Alive() || !s.equipmentCombatReady(a) {
 		return false
 	}
 	if victim.Monster.Target != 0 && victim.Monster.Target != attacker && power < victim.Monster.TauntPower {

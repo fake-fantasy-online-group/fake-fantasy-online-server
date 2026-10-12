@@ -584,6 +584,7 @@ func NewStack(def ItemDef, count int32) Stack {
 	}
 	if def.InstanceKind == ItemInstanceEquipment && def.Equip != nil {
 		st.Endgame.FormationRollBP = newFormationRollBP()
+		st.Endgame.FormationContentVersion = UniqueContentVersion
 	}
 	if def.InstanceKind == ItemInstanceSocketCard {
 		st.Card = def.CardDefaults

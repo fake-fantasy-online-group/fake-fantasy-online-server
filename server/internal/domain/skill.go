@@ -24,13 +24,16 @@ type SkillID int32
 const (
 	SkillBeginnerBolt  SkillID = 13601 // 魔弹术
 	SkillBeginnerGuard SkillID = 13602 // 守护术
+	SkillAlchemy       SkillID = 11005 // 炼丹士：生活熟练度，不参与战斗预算
 	SkillFishing       SkillID = 11006 // 钓鱼（数值是熟练度，刚学会时可为 0）
 	SkillMining        SkillID = 11007 // 挖矿（数值是熟练度，刚学会时可为 0）
 )
 
 // IsLifeSkill 报告这是否是以熟练度作为数值的生活技能。
 // 它们与战斗技能不同：数值 0 也可以表示“已学会，熟练度为 0”。
-func IsLifeSkill(id SkillID) bool { return id == SkillFishing || id == SkillMining }
+func IsLifeSkill(id SkillID) bool {
+	return id == SkillAlchemy || id == SkillFishing || id == SkillMining
+}
 
 // SkillKind 是技能形态。
 type SkillKind uint8
@@ -177,13 +180,19 @@ type SkillEffect struct {
 	// RequiresPreviousLanded 用于有序链：前一段 MISS 时，本段不执行。
 	RequiresPreviousLanded bool
 	// DamagePct 伤害倍率(百分比)。「对敌人造成208%伤害」→ 208。
-	DamagePct int32
+	DamagePct            int32
+	DamagePctNumerator   int64
+	DamagePctDenominator int64
 	// DamageFlat 是命中后追加的同类型固定伤害，不参与基础攻击的护甲/抗性扣除，
 	// 但仍参与后续状态增减伤。龙杀剑用它表达“每消耗 1 点法力追加 1 点物伤”。
 	DamageFlat int32
 	// HealPctOfMax / HealFlat: 「目标恢复最大生命的10%+100点当前生命」→ 10, 100。
-	HealPctOfMax int32
-	HealFlat     int32
+	HealPctOfMax        int32
+	HealFlat            int32
+	HealFlatNumerator   int64
+	HealFlatDenominator int64
+	HealPctNumerator    int64
+	HealPctDenominator  int64
 	// RestoreMPFlat: 「目标恢复100点法力」→ 100。
 	RestoreMPFlat int32
 	// SourceAttackPct: 「攻击力的20%转化为生命/法力」→ 20。
@@ -240,6 +249,8 @@ const (
 	PassiveTrapHalfDamageChance
 	PassiveStatusPhysicalDamageTakenPct
 	PassiveCastInterruptReductionPct
+	PassiveSkillDamageFlat
+	PassiveEffectRestoreFlat
 )
 
 // PassiveModifier 是已学被动技能对战斗结算的参数化修正。
@@ -301,6 +312,14 @@ type PassiveCounterAttack struct {
 
 // SkillDef 是一个技能在某一级上的定义。
 type SkillDef struct {
+	FormulaVersion         uint32
+	SnapshotRawRanks       Learned
+	SnapshotHardRanks      Learned
+	TrainingDamageBP       int32
+	TrainingEliteDamageBP  int32
+	AppliedSynergyDamageBP int32
+	// ProgressionShieldFlat is an authored, consumed shield carrier for utility skills.
+	ProgressionShieldFlat int32
 	// UniqueInvisibleStart is a cast-local snapshot, never a static table rule.
 	UniqueInvisibleStart bool
 	ID                   SkillID
@@ -471,12 +490,21 @@ type SkillTable map[SkillKey]SkillDef
 
 // Get 取某技能某一级的定义。
 func (t SkillTable) Get(id SkillID, level int32) (SkillDef, bool) {
+	if t.V5Enabled(id) {
+		first := t[SkillKey{ID: id, Level: 1}]
+		fifth := t[SkillKey{ID: id, Level: 5}]
+		d, err := EvaluateV5Skill(first, fifth, level)
+		return d, err == nil
+	}
 	d, ok := t[SkillKey{ID: id, Level: level}]
 	return d, ok
 }
 
 // MaxLevelOf 返回某技能的最高等级。0 表示没有这个技能。
 func (t SkillTable) MaxLevelOf(id SkillID) int32 {
+	if t.V5Enabled(id) {
+		return SkillHardPointCap
+	}
 	var max int32
 	for k := range t {
 		if k.ID == id && k.Level > max {
@@ -503,6 +531,9 @@ func (c *Character) RemoveBeginnerSkills() {
 		return
 	}
 	if c.Skills != nil {
+		if c.SkillAllocationVersion == SkillFormulaVersion && c.SkillPointsKnown {
+			c.SkillPoints += max(int32(0), c.Skills[SkillBeginnerBolt]) + max(int32(0), c.Skills[SkillBeginnerGuard])
+		}
 		delete(c.Skills, SkillBeginnerBolt)
 		delete(c.Skills, SkillBeginnerGuard)
 	}
@@ -545,7 +576,7 @@ func (e SkillEffect) HealAmount(targetMaxHP int32) int32 {
 	if e.Kind != EffectHeal {
 		return 0
 	}
-	n := SaturateInt32(int64(targetMaxHP)*int64(e.HealPctOfMax)/100 + int64(e.HealFlat))
+	n := skillHealAmount(e, targetMaxHP)
 	if n < 1 {
 		return 1
 	}

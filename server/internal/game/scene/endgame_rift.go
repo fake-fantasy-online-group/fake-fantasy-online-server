@@ -174,7 +174,7 @@ func (s *Scene) startEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
 	}
 	mapID := plan.MapID
 	floor := &plan
-	d := endgameRiftPersisted{Version: 1, Floor: floor, Run: run, MapID: mapID, Return: p.Pos, Names: names, Profiles: profiles, Grants: map[domain.CharID]endgameRiftGrant{}}
+	d := endgameRiftPersisted{Version: 2, Floor: floor, Run: run, MapID: mapID, Return: p.Pos, Names: names, Profiles: profiles, Grants: map[domain.CharID]endgameRiftGrant{}}
 	candidate := s.snapshotOf(p).Clone()
 	if !candidate.Bag.Remove(domain.RiftKeyItemID, 1) {
 		s.endgameError(p, req, "key", "需要一枚洞天符钥")
@@ -243,6 +243,7 @@ func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d 
 	profile := riftProfile(s.endgamePlayer(p).state.Payload)
 	previousLevel := candidate.Char.Level
 	var gainedExp int64
+	var petGrant endgamePetGrant
 	if riftNeedsCompensation(next.Run, live, char) {
 		def, ok := s.itemDef(domain.RiftKeyItemID)
 		if !ok || candidate.Bag.AddStack(def, domain.Stack{Item: def.ID, Count: 1, Bound: true}) != 0 {
@@ -267,7 +268,18 @@ func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d 
 			}
 		}
 		gain := candidate.Char.AddExp(s.levels, grant.Exp, domain.LevelCap)
+		if gain.Reason != "" {
+			s.endgameError(p, req, "progression", gain.Reason)
+			return
+		}
 		candidate.Char.ApplyLevelUps(gain.FromLevel, gain.ToLevel)
+		gainedExp = gain.AppliedExp
+		if err := s.settleEndgamePetGrant(candidate.Char, &grant.Pet); err != nil {
+			s.endgameError(p, req, "progression", err.Error())
+			return
+		}
+		petGrant = grant.Pet
+		next.Grants[char] = grant
 		plan := domain.PlanRiftRewards(next.Run.Tier, next.Run.Timely)
 		if profile.UnlockedTier < plan.UnlockTier {
 			profile.UnlockedTier = plan.UnlockTier
@@ -289,6 +301,7 @@ func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d 
 	}
 	ok := s.endgameCommitPayload(p, req, candidate, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Message: "洞天奖励已领取", Rift: s.riftView(p, next, true, live)}, &record, revision, func() {
 		s.publishEndgameRewardExperience(p, previousLevel, gainedExp)
+		s.publishEndgamePetGrant(p, petGrant)
 		if live {
 			s.rift.data = next
 			s.rift.revision = record.Revision

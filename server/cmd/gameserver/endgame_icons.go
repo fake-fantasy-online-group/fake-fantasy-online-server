@@ -42,11 +42,11 @@ func registerEndgameEquipmentIcons(w *worldData) {
 	for _, pair := range w.itemIcons {
 		mapped[pair.Item] = true
 	}
-	for _, unique := range domain.UniqueCatalog() { // stable BaseID order
-		def := w.items[unique.BaseID]
-		if mapped[unique.BaseID] || def.Equip == nil || def.Icon <= 0 {
+	for _, baseID := range domain.UniqueAppearanceBaseIDs() { // stable order, includes legacy-owned bases
+		def := w.items[baseID]
+		if mapped[baseID] || def.Equip == nil || def.Icon <= 0 {
 			continue // Do not guess a generic weapon sprite for unknown artwork.
 		}
-		w.itemIcons = append(w.itemIcons, domain.ItemIconMapping{Item: unique.BaseID, Icon: def.Icon})
+		w.itemIcons = append(w.itemIcons, domain.ItemIconMapping{Item: baseID, Icon: def.Icon})
 	}
 }

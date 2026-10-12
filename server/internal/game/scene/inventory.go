@@ -654,6 +654,12 @@ func (s *Scene) itemTooltipForViewer(def domain.ItemDef, st domain.Stack, owner,
 			}
 			lines = append(lines, qualityColoredLine(4, text))
 		}
+		if u, ok := domain.UniqueOf(st); ok {
+			for _, text := range s.equipmentV5Lines(u.TypedEffects,u.SkillBonuses) { lines=append(lines,qualityColoredLine(4,text)) }
+		}
+		if includeFormation {
+			for _, text := range s.equipmentV5Lines(formation.TypedEffects,formation.SkillBonuses) { lines=append(lines,qualityColoredLine(4,text)) }
+		}
 		for _, line := range localEnhancementLines(def, local, roll) {
 			lines = append(lines, qualityColoredLine(4, line))
 		}

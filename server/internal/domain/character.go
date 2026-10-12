@@ -86,6 +86,9 @@ type Look struct {
 // 当前字段是 A0 骨架所需的最小集(能登录/进世界/存档)。属性系统(力量/HP/MP 等,
 // 对应 0x8003/0x8004 里那 166B 属性块)在 A3 战斗里程碑接入, 届时扩展 Stats。
 type Character struct {
+	// EquipmentProcCooldowns stores UTC millisecond expiries, surviving re-equip and reconnect.
+	EquipmentProcCooldowns map[string]int64
+
 	ID        int64  // 全局唯一角色 ID(存储分配)
 	AccountID int64  // 所属账号
 	Slot      int32  // 该账号下的槽位
@@ -113,8 +116,9 @@ type Character struct {
 	Skills Learned
 	// SkillPoints 是尚未花掉的战斗技能点。SkillPointsKnown 只区分老的内存构造
 	// 路径；PostgreSQL 角色与 NewCharacter 创建的角色始终为 true。
-	SkillPoints      int32
-	SkillPointsKnown bool
+	SkillPoints            int32
+	SkillPointsKnown       bool
+	SkillAllocationVersion uint32
 	// Hotbar 与两项本地玩法偏好由客户端上报，但服务端负责持久化并在下次
 	// 进入世界时恢复。
 	Hotbar         [HotbarSlotCount]HotbarSlot
@@ -225,25 +229,26 @@ func NewCharacter(accountID int64, slot int32, name string, race Race, ap Appear
 	base := StartingBase(race)
 	stats := DeriveFromBase(base)
 	return &Character{
-		AccountID:        accountID,
-		Slot:             slot,
-		Name:             name,
-		Race:             race,
-		Employed:         false,
-		EmploymentKnown:  true,
-		Level:            1,
-		Base:             base,
-		BagSlots:         DefaultBagSlots,
-		Pos:              spawn,
-		Appear:           ap,
-		Skills:           NewBeginnerSkills(),
-		SkillPointsKnown: true,
-		Nianli:           DefaultNianli,
-		NianliKnown:      true,
-		Stamina:          DefaultStaminaRule().Max,
-		CreatedAt:        now,
-		LastLogin:        time.Time{}, // 尚未进入世界；客户端用空串显示“从未登陆”。
-		Attrs:            initialCharacterAttrs(base, 1, stats),
+		AccountID:              accountID,
+		Slot:                   slot,
+		Name:                   name,
+		Race:                   race,
+		Employed:               false,
+		EmploymentKnown:        true,
+		Level:                  1,
+		Base:                   base,
+		BagSlots:               DefaultBagSlots,
+		Pos:                    spawn,
+		Appear:                 ap,
+		Skills:                 NewBeginnerSkills(),
+		SkillPointsKnown:       true,
+		SkillAllocationVersion: SkillFormulaVersion,
+		Nianli:                 DefaultNianli,
+		NianliKnown:            true,
+		Stamina:                DefaultStaminaRule().Max,
+		CreatedAt:              now,
+		LastLogin:              time.Time{}, // 尚未进入世界；客户端用空串显示“从未登陆”。
+		Attrs:                  initialCharacterAttrs(base, 1, stats),
 	}, nil
 }
 
@@ -328,6 +333,12 @@ func (c *Character) Clone() *Character {
 	cp.OwnedTitles = append([]string(nil), c.OwnedTitles...)
 	// map 是引用, 不深拷就还是同一份
 	cp.Skills = c.Skills.Clone()
+	if c.EquipmentProcCooldowns != nil {
+		cp.EquipmentProcCooldowns = make(map[string]int64, len(c.EquipmentProcCooldowns))
+		for key, expiry := range c.EquipmentProcCooldowns {
+			cp.EquipmentProcCooldowns[key] = expiry
+		}
+	}
 	cp.Quests = c.Quests.Clone()
 	cp.Pets = ClonePets(c.Pets)
 	cp.SavedStatuses = CloneSavedStatuses(c.SavedStatuses)

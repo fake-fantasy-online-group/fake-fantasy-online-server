@@ -1,0 +1,16 @@
+{
+  "schema": 5,
+  "scenarios": 1710,
+  "same_base_unique_count": 259,
+  "minimum_static_ratio": 1.1,
+  "authoring_stats_sha256": "ddeaeac692d4af9661258388aeca72a1ab9e526da4f879e3d4fb1ff2b22657f6",
+  "result_sha256": "9deb3a5abdbdbf15681afbc7102e2bf7a9bb3cb6bcc5657e78b1fb90c436aa93",
+  "source": "TestV5UniqueSameBaseStaticBudgetRuntime actual domain.Compute",
+  "limitations": [
+    "Static intended-lane reference only; advanced effects disabled",
+    "Yellow is compatible lane-optimized max-roll combination, not whole-item P90",
+    "No sockets, refinement, cards or other equipped items",
+    "Same-level natural-growth fixture with free points in STR or INT after requirements",
+    "Does not establish total DPS, healing, proc, aura, MF yield, full-set or visual acceptance"
+  ]
+}

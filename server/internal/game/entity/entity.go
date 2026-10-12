@@ -116,11 +116,15 @@ type Drop struct {
 // 等级。VisibleTo 是服务端的发现事实：主人天然可见，其他玩家只有侦测成功后
 // 才会收到 0x800f/SpawnTrap。
 type Trap struct {
-	Owner             domain.EntityID
-	Def               domain.SkillDef
-	Radius            int32
-	StatusDurationPct int32
-	VisibleTo         map[domain.EntityID]struct{}
+	SourceOffense       *domain.CombatSourceSnapshotV5
+	AttackStats         domain.Stats
+	AttackStatsSnapshot bool
+	EquipmentOffense    domain.EquipmentCombatStats
+	Owner               domain.EntityID
+	Def                 domain.SkillDef
+	Radius              int32
+	StatusDurationPct   int32
+	VisibleTo           map[domain.EntityID]struct{}
 }
 
 func (t *Trap) VisibleToPlayer(player domain.EntityID) bool {
@@ -185,27 +189,30 @@ type SnapshotSaver interface {
 // 攻击冷却与复活保护则直接保存剩余帧，避免目标场景 Tick 不同导致绕过冷却
 // 或丢掉保护期。打工在跨图前停止；出战宠物则把完整运行态一起交接。
 type PlayerRuntime struct {
-	EndgameNativeStats bool // session capability survives map transfer, never persisted
-	HP, MP             int32
-	Dir                uint8
-	Status             *domain.StatusSet
-	FromTick           domain.Tick
-	AttackReadyIn      domain.Tick
-	SkillReadyIn       map[domain.SkillID]domain.Tick
-	ItemReadyIn        map[int32]domain.Tick
-	ProtectedFor       domain.Tick
-	NianliReadyIn      domain.Tick
-	GMGod              bool
-	GMOneShot          bool
-	Pet                *PetRuntime
-	Riding             bool
-	MountModel         int32
-	RideEpoch          uint64
-	DeathLoss          domain.DeathLoss
-	ExpBonusPct        int32
-	ExpBonusFor        domain.Tick
-	PetExpBonusPct     int32
-	PetExpBonusFor     domain.Tick
+	V5StatusOwner           domain.EntityID
+	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
+	EndgameGrowthV5         bool // negotiated V5 growth rules; connection-scoped
+	EndgameNativeStats      bool // session capability survives map transfer, never persisted
+	HP, MP                  int32
+	Dir                     uint8
+	Status                  *domain.StatusSet
+	FromTick                domain.Tick
+	AttackReadyIn           domain.Tick
+	SkillReadyIn            map[domain.SkillID]domain.Tick
+	ItemReadyIn             map[int32]domain.Tick
+	ProtectedFor            domain.Tick
+	NianliReadyIn           domain.Tick
+	GMGod                   bool
+	GMOneShot               bool
+	Pet                     *PetRuntime
+	Riding                  bool
+	MountModel              int32
+	RideEpoch               uint64
+	DeathLoss               domain.DeathLoss
+	ExpBonusPct             int32
+	ExpBonusFor             domain.Tick
+	PetExpBonusPct          int32
+	PetExpBonusFor          domain.Tick
 }
 
 // PetRuntime 是出战宠物跨场景必须无损交接的运行态。各 deadline
@@ -239,18 +246,22 @@ func (e *Entity) CapturePlayerRuntime(now domain.Tick) PlayerRuntime {
 		return PlayerRuntime{FromTick: now}
 	}
 	r := PlayerRuntime{
-		HP:       e.HP,
-		MP:       e.MP,
-		Dir:      e.Dir,
-		Status:   e.Status.Clone(),
-		FromTick: now,
+		V5StatusOwner: e.ID,
+		HP:            e.HP,
+		MP:            e.MP,
+		Dir:           e.Dir,
+		Status:        e.Status.Clone(),
+		FromTick:      now,
 	}
+	r.Status.RebindSkillOwner(e.ID, e.ID)
 	if e.Player != nil {
 		r.AttackReadyIn = remainingTicks(e.Player.nextAt, now)
 		r.SkillReadyIn = remainingSkillCooldowns(e.Player.skillReady, now)
 		r.ItemReadyIn = remainingItemCooldowns(e.Player.itemReady, now)
 		r.ProtectedFor = remainingTicks(e.Player.safeUntil, now)
 		r.EndgameNativeStats = e.Player.EndgameNativeStats
+		r.EndgameGrowthV5 = e.Player.EndgameGrowthV5
+		r.EquipmentAbsorbRestores = append([]domain.EquipmentAbsorbRestore(nil), e.Player.EquipmentAbsorbRestores...)
 		r.GMGod = e.Player.GMGod
 		r.GMOneShot = e.Player.GMOneShot
 		r.Riding = e.Player.Riding
@@ -276,6 +287,7 @@ func (e *Entity) RestorePlayerRuntime(r PlayerRuntime, now domain.Tick) {
 	e.Dir = r.Dir
 	if r.Status != nil {
 		e.Status = r.Status.Clone()
+		e.Status.RebindSkillOwner(r.V5StatusOwner, e.ID)
 	} else {
 		e.Status = domain.NewStatusSet()
 	}
@@ -288,6 +300,8 @@ func (e *Entity) RestorePlayerRuntime(r PlayerRuntime, now domain.Tick) {
 		e.Player.itemReady = restoreItemCooldowns(r.ItemReadyIn, now)
 		e.Player.safeUntil = now + r.ProtectedFor
 		e.Player.EndgameNativeStats = r.EndgameNativeStats
+		e.Player.EndgameGrowthV5 = r.EndgameGrowthV5
+		e.Player.EquipmentAbsorbRestores = append([]domain.EquipmentAbsorbRestore(nil), r.EquipmentAbsorbRestores...)
 		e.Player.GMGod = r.GMGod
 		e.Player.GMOneShot = r.GMOneShot
 		e.Player.Riding = r.Riding
@@ -434,23 +448,25 @@ func clampCurrent(current, maximum int32) int32 {
 
 // Player 是玩家实体的专有部分。
 type Player struct {
-	EndgameNativeStats bool // negotiated native tooltip renderer; reset on a new login
-	refineReadyAt      domain.Tick
-	Char               *domain.Character // 权威角色数据。存档时拷贝出去, 不把指针交出场景
-	Bag                *domain.Bag       // 背包。与角色行一起存, 不能分开
-	Worn               *domain.EquipSet  // 身上穿的
-	ChangeSet          *domain.ChangeSet // 1.5.8 快速换装面板托管的备用装备
-	Warehouse          *domain.Warehouse // 角色独立个人仓库；跨图携带，存档与背包同事务
-	Wardrobe           *domain.Wardrobe  // 永久外观收藏；与背包消费同一角色快照落盘
-	Stall              *domain.Stall     // 摆摊托管物权；正常离场归还，崩溃后由登录恢复
-	StallBusy          bool              // 正在提交上架/下架/成交事务，禁止并发改摊位
-	StallMoveWarned    bool              // 本次摆摊已提示过移动受限，避免客户端位置心跳刷屏
-	TradeBusy          bool              // 双方确认后正在提交原子交易，禁止重复报价/确认
-	MailBusy           bool              // 邮件快照事务未完成，不能开始双角色交易
-	FamilyBusy         bool              // 正在提交建族/家族邮件事务，禁止重复扣费或耗材
-	RackBusy           bool              // 正在提交货架购买/退货事务，禁止重复扣物或彩玉
-	WarehouseOpen      bool              // 本场景生命周期内已打开仓库界面
-	RackOpen           bool              // 本场景生命周期内已打开神奇货架，购买包本身不带上下文
+	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
+	EndgameGrowthV5         bool // negotiated V5 growth rules; connection-scoped
+	EndgameNativeStats      bool // negotiated native tooltip renderer; reset on a new login
+	refineReadyAt           domain.Tick
+	Char                    *domain.Character // 权威角色数据。存档时拷贝出去, 不把指针交出场景
+	Bag                     *domain.Bag       // 背包。与角色行一起存, 不能分开
+	Worn                    *domain.EquipSet  // 身上穿的
+	ChangeSet               *domain.ChangeSet // 1.5.8 快速换装面板托管的备用装备
+	Warehouse               *domain.Warehouse // 角色独立个人仓库；跨图携带，存档与背包同事务
+	Wardrobe                *domain.Wardrobe  // 永久外观收藏；与背包消费同一角色快照落盘
+	Stall                   *domain.Stall     // 摆摊托管物权；正常离场归还，崩溃后由登录恢复
+	StallBusy               bool              // 正在提交上架/下架/成交事务，禁止并发改摊位
+	StallMoveWarned         bool              // 本次摆摊已提示过移动受限，避免客户端位置心跳刷屏
+	TradeBusy               bool              // 双方确认后正在提交原子交易，禁止重复报价/确认
+	MailBusy                bool              // 邮件快照事务未完成，不能开始双角色交易
+	FamilyBusy              bool              // 正在提交建族/家族邮件事务，禁止重复扣费或耗材
+	RackBusy                bool              // 正在提交货架购买/退货事务，禁止重复扣物或彩玉
+	WarehouseOpen           bool              // 本场景生命周期内已打开仓库界面
+	RackOpen                bool              // 本场景生命周期内已打开神奇货架，购买包本身不带上下文
 	// GMGod/GMOneShot 是本次在线生命周期的 GM 战斗状态。它们随跨图运行态
 	// 交接，但不进入角色快照；登出后新实体从零值开始。
 	GMGod     bool

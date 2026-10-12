@@ -161,6 +161,11 @@ func run() int {
 		}
 		return 1
 	}
+	if *dsn != "" && (world.progressionErr != nil || world.skillErr != nil) {
+		log.Error("progression-v5 is not ready; refusing startup", "err", world.progressionErr, "skills", world.skillErr)
+		_ = wb.Close(time.Second)
+		return 1
+	}
 	if *dsn != "" && (!world.equipmentRoll.Enabled() || world.colorProfileErr != nil) {
 		log.Error("装备随机属性矩阵未就绪或染色档位配置错误，拒绝以全白板掉落状态启动",
 			"err", world.colorProfileErr)
@@ -249,11 +254,12 @@ func run() int {
 				}
 			},
 			ID: id, Saver: wb, SaveEvery: saveEvery, Log: log,
-			Home:           returnAt,
-			Revive:         returnAt,
-			CombatTiming:   world.combatTiming,
-			MonsterDialogs: world.monsterDialogs,
-			Portals:        remapPortals(world.portals[dataMapID], dataMapID, id.MapID), Transports: world.transports, Shops: world.shops, Levels: world.levels, Defs: world.monsters,
+			RequireGrowthV5: true,
+			Home:            returnAt,
+			Revive:          returnAt,
+			CombatTiming:    world.combatTiming,
+			MonsterDialogs:  world.monsterDialogs,
+			Portals:         remapPortals(world.portals[dataMapID], dataMapID, id.MapID), Transports: world.transports, Shops: world.shops, Levels: world.levels, Defs: world.monsters,
 			Walkable: walkable,
 			Items:    world.items, Loot: world.loot, ItemIcons: world.itemIcons,
 			EquipmentRoll: world.equipmentRoll, BossFixedDrops: world.bossFixedDrops,
@@ -340,7 +346,8 @@ func run() int {
 	// 场景加载, 而且会话编的 2000000+ 实体 id 与场景里的对不上, 客户端点了没反应。
 	factory := func(sink gnet.Sink) gnet.Handler {
 		return session.New(sink, session.Deps{
-			Store: st, Router: router, AccountSessions: accountSessions, CharGate: charGate,
+			RequireGrowthV5: true,
+			Store:           st, Router: router, AccountSessions: accountSessions, CharGate: charGate,
 			Items: world.items, HelpTopics: world.helpTopics, HelpTopicsKnown: world.helpTopicsKnown,
 			WarehouseRule: world.warehouseRule, WardrobeRule: world.wardrobeRule,
 			MailRule: world.mailRule, WriteBack: wb,
@@ -650,6 +657,8 @@ type worldData struct {
 	spawns         data.SpawnTable
 	portals        data.TeleportTable
 	levels         *domain.LevelTable
+	progressionErr error
+	skillErr       error
 	items          data.ItemDefs
 	itemIcons      []domain.ItemIconMapping
 	itemIconsKnown bool
@@ -859,6 +868,7 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 	}
 	var sk data.SkillStats
 	if w.skills, sk, err = data.LoadSkills(ctx, q); err != nil {
+		w.skillErr = err
 		log.Warn("加载技能表失败", "err", err)
 	} else {
 		log.Info("技能表就绪", "装入", len(w.skills), "总行", sk.Total,
@@ -964,10 +974,16 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 	} else {
 		log.Info("宠物领悟道具就绪", "种类", len(w.petLearnItems))
 	}
-	if w.petLvls, err = data.LoadPetLevels(ctx, q, domain.LevelCap); err != nil {
+	if w.petLvls, err = data.LoadPetLevels(ctx, q, domain.PetLevelCap); err != nil {
 		log.Warn("加载宠物经验曲线失败", "err", err)
 	} else if w.petLvls != nil {
 		log.Info("宠物经验曲线就绪", "最高级", w.petLvls.MaxLevel())
+	}
+	if _, w.progressionErr = data.LoadProgressionRules(ctx, q, w.levels, w.petLvls); w.progressionErr != nil {
+		log.Error("V5 progression validation failed", "err", w.progressionErr)
+	}
+	if w.trial == nil || w.trial.MaxLevel != domain.LevelCap {
+		w.progressionErr = fmt.Errorf("trial 12–100 content is not ready")
 	}
 	if len(w.items) > 0 {
 		if w.equipmentRoll, err = data.LoadEquipmentRollTable(ctx, q); err != nil {
@@ -1042,6 +1058,7 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 	}
 	var stst data.StatusStats
 	if w.statuses, stst, err = data.LoadStatuses(ctx, q); err != nil {
+		w.skillErr = errors.Join(w.skillErr, err)
 		log.Warn("加载状态表失败", "err", err)
 	} else {
 		log.Info("状态表就绪", "状态数", stst.Statuses, "定义(状态×等级)", stst.Defs,
@@ -1049,11 +1066,13 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 	}
 	var ovst data.StatusOverlayStats
 	if w.statusOverlay, ovst, err = data.LoadStatusOverlay(ctx, q); err != nil {
+		w.skillErr = errors.Join(w.skillErr, err)
 		log.Warn("加载状态叠加矩阵失败", "err", err)
 	} else {
 		log.Info("状态叠加矩阵就绪", "已有状态行", ovst.Existing,
 			"新状态列", ovst.Incoming, "规则格", ovst.Cells)
 	}
+	w.skillErr = errors.Join(w.skillErr, domain.ValidateSkillStatusRuntimeV5(w.skills, w.statuses, w.statusOverlay))
 	return w
 }
 

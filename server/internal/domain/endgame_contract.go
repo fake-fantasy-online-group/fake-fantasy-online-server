@@ -3,6 +3,7 @@ package domain
 // EndgameV1 is explicitly negotiated; native positional packets remain unchanged.
 const EndgameV1 = "endgame.v1"
 const EndgameNativeStatsV1 = "endgame.native-stats.v1"
+const EndgameGrowthV5 = "endgame.growth.v5"
 const EndgameSchema = 1
 const EndgameMaxJSONBytes = 60 * 1024
 
@@ -12,11 +13,15 @@ type EndgameItemState struct {
 	Revision     int64
 	UniqueID     int32
 	UniqueRollBP int32
+	// Zero selects the frozen V4 catalog; versions are never inferred on load.
+	UniqueContentVersion    int32
+	FormationContentVersion int32
 	// FormationRollBP is generated once for new equipment. Legacy zero stays midpoint.
 	FormationRollBP int32
 }
 
 type EndgameRequest struct {
+	SkillID          int32    `json:"skillId,omitempty"`
 	Op               string   `json:"op"`
 	RequestID        string   `json:"requestId,omitempty"`
 	ExpectedRevision string   `json:"expectedRevision,omitempty"`
@@ -36,7 +41,7 @@ type EndgameRequest struct {
 
 func (r EndgameRequest) Mutates() bool {
 	switch r.Op {
-	case "socket.insert", "socket.remove", "cube.execute", "rift.start", "rift.claim", "rift.leave", "rift.advance":
+	case "skill.upgrade", "socket.insert", "socket.remove", "cube.execute", "rift.start", "rift.claim", "rift.leave", "rift.advance":
 		return true
 	}
 	return false
@@ -185,6 +190,8 @@ type EndgameRiftView struct {
 	Claimable        bool                    `json:"claimable"`
 }
 type EndgameResponse struct {
+	CombatStats    *EndgameCombatStatsV5  `json:"combatStats,omitempty"`
+	SkillRanks     []SkillRankView        `json:"skillRanks,omitempty"`
 	Kind           string                 `json:"kind"`
 	RequestID      string                 `json:"requestId,omitempty"`
 	OK             bool                   `json:"ok"`

@@ -48,6 +48,8 @@ type AstralRecipe struct {
 	Identity, Benefit, Tradeoff, PowerTier string
 	Traits                                 []UniqueTrait
 	ReservedSkills                         []ReservedSkillAttribute
+	SkillBonuses                           []SkillRankBonus
+	TypedEffects                           []EquipmentEffect
 }
 type AstralActivation struct {
 	Slot   EquipSlot
@@ -61,6 +63,8 @@ func cloneAstralRune(r AstralRuneDef) AstralRuneDef {
 	return r
 }
 func cloneAstralRecipe(r AstralRecipe) AstralRecipe {
+	r.TypedEffects = CloneEquipmentEffects(r.TypedEffects)
+	r.SkillBonuses = append([]SkillRankBonus(nil), r.SkillBonuses...)
 	r.VariableAffixes = append([]VariableAffix(nil), r.VariableAffixes...)
 	r.LocalEnhancements = append([]ItemLocalEnhancement(nil), r.LocalEnhancements...)
 	r.Runes = append([]ItemID(nil), r.Runes...)
@@ -161,7 +165,13 @@ func MatchAstralRecipe(def ItemDef, st Stack) (AstralRecipe, bool) {
 		}
 		seen[st.SocketUIDs[i]] = true
 	}
-	for _, r := range astralRecipeCatalog {
+	catalog := legacyAstralRecipeCatalog
+	if st.Endgame.FormationContentVersion == UniqueContentVersion {
+		catalog = astralRecipeCatalog
+	} else if st.Endgame.FormationContentVersion != 0 {
+		return AstralRecipe{}, false
+	}
+	for _, r := range catalog {
 		if len(r.Runes) != int(st.SocketCount) {
 			continue
 		}
@@ -264,6 +274,12 @@ func ValidateAstralCatalog() error {
 				return fmt.Errorf("invalid formation trait %d", r.ID)
 			}
 		}
+		if err := ValidateEquipmentEffects(r.TypedEffects); err != nil {
+			return fmt.Errorf("formation %d: %w", r.ID, err)
+		}
+		if err := ValidateSkillRankBonuses(r.SkillBonuses); err != nil {
+			return fmt.Errorf("formation %d: %w", r.ID, err)
+		}
 		for _, b := range r.ReservedSkills {
 			if !b.Valid() {
 				return fmt.Errorf("invalid reserved skill attribute %d", r.ID)
@@ -327,4 +343,24 @@ func (r AstralRuneDef) Description() string {
 		return "有效穿戴时，每2秒按生命恢复数值恢复生命。也可按孔位顺序组成宿阵。"
 	}
 	return "按镶孔顺序与其他星篆组成宿阵。"
+}
+
+// adoptCurrentFormationOnCompletion only runs as part of an explicit socket
+// mutation. Reading an existing complete V4 array never upgrades it. Removing
+// a rune and subsequently completing an array is a new formation operation and
+// opts that equipment into V5; its saved quality roll is never regenerated.
+func adoptCurrentFormationOnCompletion(def ItemDef, before Stack, after *Stack) bool {
+	if after == nil || before.UID != after.UID || before.Item != after.Item || before.Endgame.FormationContentVersion != 0 || after.Endgame.FormationContentVersion != 0 {
+		return false
+	}
+	if _, matched := MatchAstralRecipe(def, before); matched {
+		return false
+	}
+	candidate := *after
+	candidate.Endgame.FormationContentVersion = UniqueContentVersion
+	if _, matched := MatchAstralRecipe(def, candidate); !matched {
+		return false
+	}
+	after.Endgame.FormationContentVersion = UniqueContentVersion
+	return true
 }

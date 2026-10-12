@@ -85,12 +85,11 @@ func TestPetLevelIsCappedByOwner(t *testing.T) {
 	if got := PetCapFor(海龟, 30); got != 30 {
 		t.Fatalf("主人 30 级时宠物上限 %d, 该是 30", got)
 	}
-	// 主人到顶了也不能超过 60, 哪怕表里写着 80
-	if got := PetCapFor(海龟, 60); got != PetLevelCap {
-		t.Fatalf("主人满级时宠物上限 %d, 该是 %d", got, PetLevelCap)
+	if got := PetCapFor(海龟, 60); got != 60 {
+		t.Fatalf("owner 60 cap = %d", got)
 	}
-	if 海龟.MaxLevel <= PetLevelCap {
-		t.Fatal("样本的表内上限该比 MVP 上限高, 否则这条测不出东西")
+	if got := PetCapFor(海龟, LevelCap); got != PetLevelCap {
+		t.Fatalf("owner 100 pet cap = %d", got)
 	}
 	// 表内上限更低时以表为准
 	矮宠 := 海龟

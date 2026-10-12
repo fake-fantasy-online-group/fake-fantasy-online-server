@@ -34,13 +34,13 @@ func TestRegisterEndgameEquipmentIconsCoverEveryBaseAndPreserveSpecial(t *testin
 		}
 		got[pair.Item] = pair.Icon
 	}
-	for _, unique := range domain.UniqueCatalog() {
-		want := w.items[unique.BaseID].Icon
-		if unique.BaseID == special.Item {
+	for _, baseID := range domain.UniqueAppearanceBaseIDs() {
+		want := w.items[baseID].Icon
+		if baseID == special.Item {
 			want = special.Icon
 		}
-		if got[unique.BaseID] != want {
-			t.Fatalf("base %d slot %d maps to %d, want %d", unique.BaseID, unique.Slot, got[unique.BaseID], want)
+		if got[baseID] != want {
+			t.Fatalf("base %d slot %d maps to %d, want %d", baseID, w.items[baseID].Equip.Slot, got[baseID], want)
 		}
 	}
 	for id, icon := range expected {
@@ -51,7 +51,7 @@ func TestRegisterEndgameEquipmentIconsCoverEveryBaseAndPreserveSpecial(t *testin
 	// Execute the native encoder, not only a count assertion. Full loaded-world
 	// special/pet mappings are also counted by the migration-source audit.
 	packets := protocol.Encode(1, event.ItemIconMap{Who: 1, Pairs: w.itemIcons})
-	if len(packets) != 1 || len(packets[0]) != 4+8*(domain.UniqueCatalogCount+32) {
+	if len(packets) != 1 || len(packets[0]) != 4+8*(len(domain.UniqueAppearanceBaseIDs())+32) {
 		t.Fatalf("invalid equipment icon packet: %d packets", len(packets))
 	}
 	if binary.LittleEndian.Uint16(packets[0]) != protocol.SCItemIconMap || int(binary.LittleEndian.Uint16(packets[0][2:])) != len(got) {

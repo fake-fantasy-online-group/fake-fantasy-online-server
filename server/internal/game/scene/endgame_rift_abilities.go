@@ -361,6 +361,8 @@ func (s *Scene) resolveEndgameRiftAbility(m *entity.Entity, cast *endgameRiftAbi
 		ids = append(ids, id)
 	}
 	sort.Slice(ids, func(i, j int) bool { return ids[i] < ids[j] })
+	finishEquipment := s.beginEquipmentRoot(m.ID, 0, s.equipmentOffense(m))
+	defer finishEquipment()
 	for _, id := range ids {
 		// Reflection can kill the caster (and even complete the rift) on the
 		// previous victim. Do not continue damaging other players afterwards.

@@ -726,9 +726,8 @@ func LoadTeleports(ctx context.Context, q Querier, dungeons domain.DungeonTable)
 
 // LoadLevels 读 game_levels 的经验曲线。
 //
-// 只读 **level ≤ cap** 的行。理由不是省内存, 是数据在 61 级之后变了含义:
-// `exp_accum` 从"累计值"变成了 `exp` 的副本(飞升后经验另起一套账)。
-// 把飞升后的行混进来会让"多少经验算满级"这件事说不清。
+// Load only per-level edges for the configured progression track. exp_accum is
+// corrupt above 60 and has no role in V5 balances or migration.
 func LoadLevels(ctx context.Context, q Querier, cap int32) (*domain.LevelTable, error) {
 	rows, err := q.Query(ctx,
 		`SELECT level, exp FROM game_levels WHERE level >= 1 AND level <= $1 ORDER BY level`, cap)
@@ -744,13 +743,16 @@ func LoadLevels(ctx context.Context, q Querier, cap int32) (*domain.LevelTable, 
 		if err := rows.Scan(&lv, &exp); err != nil {
 			return nil, fmt.Errorf("data: 读 game_levels 行: %w", err)
 		}
+		if _, duplicate := need[lv]; duplicate {
+			return nil, fmt.Errorf("duplicate experience level %d", lv)
+		}
 		need[lv] = exp
 	}
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("data: 遍历 game_levels: %w", err)
 	}
-	if len(need) == 0 {
-		return nil, fmt.Errorf("data: game_levels 是空的")
+	if err := domain.ValidateExperienceCurve(need, cap); err != nil {
+		return nil, fmt.Errorf("data: player curve: %w", err)
 	}
 	return domain.NewLevelTable(need), nil
 }
@@ -2421,6 +2423,9 @@ func LoadEquipmentRollTable(ctx context.Context, q Querier) (domain.EquipmentRol
 	if !out.Enabled() {
 		return out, fmt.Errorf("data: 装备随机属性矩阵为空")
 	}
+	if err := domain.ValidateMagicFindColorProfilesV5(out); err != nil {
+		return out, fmt.Errorf("data: MF color distribution: %w", err)
+	}
 	return out, nil
 }
 
@@ -3808,6 +3813,12 @@ func LoadSkills(ctx context.Context, q Querier) (domain.SkillTable, SkillStats, 
 					key.ID, key.Level, dependency)
 			}
 		}
+	}
+	if err := domain.InstallV5SkillProgression(out); err != nil {
+		return nil, st, fmt.Errorf("data: v5 skills: %w", err)
+	}
+	if err := domain.ValidateEquipmentRuntimeV5(out); err != nil {
+		return nil, st, fmt.Errorf("data: v5 equipment skill payload: %w", err)
 	}
 	return out, st, nil
 }
@@ -5364,13 +5375,16 @@ func LoadPetLevels(ctx context.Context, q Querier, cap int32) (*domain.PetLevelT
 		if err := rows.Scan(&lv, &exp); err != nil {
 			return nil, fmt.Errorf("data: 读 ov_petlevelexp 行: %w", err)
 		}
+		if _, duplicate := need[lv]; duplicate {
+			return nil, fmt.Errorf("duplicate experience level %d", lv)
+		}
 		need[lv] = exp
 	}
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("data: 遍历 ov_petlevelexp: %w", err)
 	}
-	if len(need) == 0 {
-		return nil, fmt.Errorf("data: ov_petlevelexp 是空的")
+	if err := domain.ValidateExperienceCurve(need, cap); err != nil {
+		return nil, fmt.Errorf("data: pet curve: %w", err)
 	}
 	return domain.NewPetLevelTable(need), nil
 }

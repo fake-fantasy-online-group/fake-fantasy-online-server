@@ -1,0 +1,3528 @@
+{
+  "schemaVersion": 2,
+  "runes": [
+    {
+      "id": 1900028001,
+      "mansion": "角",
+      "name": "星篆·角木蛟",
+      "quadrant": "青龙",
+      "affixes": [
+        {
+          "attr": 1,
+          "value": 3,
+          "mode": 0
+        }
+      ],
+      "minLevel": 12
+    },
+    {
+      "id": 1900028002,
+      "mansion": "亢",
+      "name": "星篆·亢金龙",
+      "quadrant": "青龙",
+      "affixes": [
+        {
+          "attr": 5,
+          "value": 3,
+          "mode": 0
+        }
+      ],
+      "minLevel": 14
+    },
+    {
+      "id": 1900028003,
+      "mansion": "氐",
+      "name": "星篆·氐土貉",
+      "quadrant": "青龙",
+      "affixes": [
+        {
+          "attr": 69,
+          "value": 2,
+          "mode": 0
+        }
+      ],
+      "minLevel": 16
+    },
+    {
+      "id": 1900028004,
+      "mansion": "房",
+      "name": "星篆·房日兔",
+      "quadrant": "青龙",
+      "affixes": [
+        {
+          "attr": 34,
+          "value": 3,
+          "mode": 1
+        }
+      ],
+      "minLevel": 17
+    },
+    {
+      "id": 1900028005,
+      "mansion": "心",
+      "name": "星篆·心月狐",
+      "quadrant": "青龙",
+      "affixes": [
+        {
+          "attr": 23,
+          "value": 100,
+          "mode": 0
+        }
+      ],
+      "minLevel": 19
+    },
+    {
+      "id": 1900028006,
+      "mansion": "尾",
+      "name": "星篆·尾火虎",
+      "quadrant": "青龙",
+      "affixes": [
+        {
+          "attr": 47,
+          "value": 3,
+          "mode": 0
+        }
+      ],
+      "minLevel": 21
+    },
+    {
+      "id": 1900028007,
+      "mansion": "箕",
+      "name": "星篆·箕水豹",
+      "quadrant": "青龙",
+      "affixes": [
+        {
+          "attr": 19,
+          "value": 4,
+          "mode": 0
+        }
+      ],
+      "minLevel": 23
+    },
+    {
+      "id": 1900028008,
+      "mansion": "斗",
+      "name": "星篆·斗木獬",
+      "quadrant": "玄武",
+      "affixes": [
+        {
+          "attr": 15,
+          "value": 3,
+          "mode": 0
+        }
+      ],
+      "minLevel": 24
+    },
+    {
+      "id": 1900028009,
+      "mansion": "牛",
+      "name": "星篆·牛金牛",
+      "quadrant": "玄武",
+      "affixes": [
+        {
+          "attr": 17,
+          "value": 4,
+          "mode": 0
+        }
+      ],
+      "minLevel": 26
+    },
+    {
+      "id": 1900028010,
+      "mansion": "女",
+      "name": "星篆·女土蝠",
+      "quadrant": "玄武",
+      "affixes": [
+        {
+          "attr": 61,
+          "value": 3,
+          "mode": 0
+        }
+      ],
+      "minLevel": 28
+    },
+    {
+      "id": 1900028011,
+      "mansion": "虚",
+      "name": "星篆·虚日鼠",
+      "quadrant": "玄武",
+      "affixes": [
+        {
+          "attr": 36,
+          "value": 3,
+          "mode": 1
+        }
+      ],
+      "minLevel": 30
+    },
+    {
+      "id": 1900028012,
+      "mansion": "危",
+      "name": "星篆·危月燕",
+      "quadrant": "玄武",
+      "affixes": [
+        {
+          "attr": 118,
+          "value": 3,
+          "mode": 0
+        }
+      ],
+      "minLevel": 32
+    },
+    {
+      "id": 1900028013,
+      "mansion": "室",
+      "name": "星篆·室火猪",
+      "quadrant": "玄武",
+      "affixes": [
+        {
+          "attr": 70,
+          "value": 2,
+          "mode": 0
+        }
+      ],
+      "minLevel": 33
+    },
+    {
+      "id": 1900028014,
+      "mansion": "壁",
+      "name": "星篆·壁水貐",
+      "quadrant": "玄武",
+      "affixes": [
+        {
+          "attr": 34,
+          "value": 24,
+          "mode": 0
+        }
+      ],
+      "minLevel": 35
+    },
+    {
+      "id": 1900028015,
+      "mansion": "奎",
+      "name": "星篆·奎木狼",
+      "quadrant": "白虎",
+      "affixes": [
+        {
+          "attr": 9,
+          "value": 3,
+          "mode": 0
+        }
+      ],
+      "minLevel": 37
+    },
+    {
+      "id": 1900028016,
+      "mansion": "娄",
+      "name": "星篆·娄金狗",
+      "quadrant": "白虎",
+      "affixes": [
+        {
+          "attr": 7,
+          "value": 3,
+          "mode": 0
+        }
+      ],
+      "minLevel": 39
+    },
+    {
+      "id": 1900028017,
+      "mansion": "胃",
+      "name": "星篆·胃土雉",
+      "quadrant": "白虎",
+      "affixes": [
+        {
+          "attr": 13,
+          "value": 4,
+          "mode": 0
+        }
+      ],
+      "minLevel": 40
+    },
+    {
+      "id": 1900028018,
+      "mansion": "昴",
+      "name": "星篆·昴日鸡",
+      "quadrant": "白虎",
+      "affixes": [
+        {
+          "attr": 23,
+          "value": 100,
+          "mode": 0
+        }
+      ],
+      "minLevel": 42
+    },
+    {
+      "id": 1900028019,
+      "mansion": "毕",
+      "name": "星篆·毕月乌",
+      "quadrant": "白虎",
+      "affixes": [
+        {
+          "attr": 47,
+          "value": 3,
+          "mode": 1
+        }
+      ],
+      "minLevel": 44
+    },
+    {
+      "id": 1900028020,
+      "mansion": "觜",
+      "name": "星篆·觜火猴",
+      "quadrant": "白虎",
+      "affixes": [
+        {
+          "attr": 25,
+          "value": -2,
+          "mode": 1
+        }
+      ],
+      "minLevel": 46
+    },
+    {
+      "id": 1900028021,
+      "mansion": "参",
+      "name": "星篆·参水猿",
+      "quadrant": "白虎",
+      "affixes": [
+        {
+          "attr": 19,
+          "value": 3,
+          "mode": 1
+        }
+      ],
+      "minLevel": 48
+    },
+    {
+      "id": 1900028022,
+      "mansion": "井",
+      "name": "星篆·井木犴",
+      "quadrant": "朱雀",
+      "affixes": [
+        {
+          "attr": 3,
+          "value": 3,
+          "mode": 0
+        }
+      ],
+      "minLevel": 49
+    },
+    {
+      "id": 1900028023,
+      "mansion": "鬼",
+      "name": "星篆·鬼金羊",
+      "quadrant": "朱雀",
+      "affixes": [
+        {
+          "attr": 66,
+          "value": 100,
+          "mode": 0
+        }
+      ],
+      "minLevel": 51
+    },
+    {
+      "id": 1900028024,
+      "mansion": "柳",
+      "name": "星篆·柳土獐",
+      "quadrant": "朱雀",
+      "affixes": [
+        {
+          "attr": 17,
+          "value": 3,
+          "mode": 1
+        }
+      ],
+      "minLevel": 53
+    },
+    {
+      "id": 1900028025,
+      "mansion": "星",
+      "name": "星篆·星日马",
+      "quadrant": "朱雀",
+      "affixes": [
+        {
+          "attr": 15,
+          "value": 3,
+          "mode": 1
+        }
+      ],
+      "minLevel": 55
+    },
+    {
+      "id": 1900028026,
+      "mansion": "张",
+      "name": "星篆·张月鹿",
+      "quadrant": "朱雀",
+      "affixes": [
+        {
+          "attr": 36,
+          "value": 24,
+          "mode": 0
+        }
+      ],
+      "minLevel": 56
+    },
+    {
+      "id": 1900028027,
+      "mansion": "翼",
+      "name": "星篆·翼火蛇",
+      "quadrant": "朱雀",
+      "affixes": [
+        {
+          "attr": 27,
+          "value": 2,
+          "mode": 1
+        }
+      ],
+      "minLevel": 58
+    },
+    {
+      "id": 1900028028,
+      "mansion": "轸",
+      "name": "星篆·轸水蚓",
+      "quadrant": "朱雀",
+      "affixes": [
+        {
+          "attr": 38,
+          "value": 1,
+          "mode": 0
+        }
+      ],
+      "minLevel": 60
+    }
+  ],
+  "formations": [
+    {
+      "id": 1,
+      "name": "引火入锋",
+      "runes": [
+        1900028001,
+        1900028006
+      ],
+      "order": [
+        "角",
+        "尾"
+      ],
+      "channel": "战阵",
+      "minLevel": 21,
+      "professions": 7,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 47,
+          "value": 50,
+          "mode": 0
+        },
+        {
+          "attr": 19,
+          "value": 18,
+          "mode": 0
+        },
+        {
+          "attr": 1,
+          "value": 12,
+          "mode": 0
+        },
+        {
+          "attr": 23,
+          "value": 250,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 100,
+          "mode": 0
+        }
+      ],
+      "lore": "炼炉第一次点火时，角宿的光也跟着暗了一瞬。铸匠从此不敢熄炉，每夜都听见枪尖里有鳞片擦过铁壁的声音。",
+      "identity": "照路的初行兵阵",
+      "benefit": "物理输出为主；物攻、命中、力量、物理会心、生命提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "basic_focus",
+          "powerBP": 800,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 47,
+          "min": 50,
+          "max": 55
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "井星入瞳",
+      "runes": [
+        1900028008,
+        1900028022
+      ],
+      "order": [
+        "斗",
+        "井"
+      ],
+      "channel": "战阵",
+      "minLevel": 49,
+      "professions": 24,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 15,
+          "value": 45,
+          "mode": 1
+        },
+        {
+          "attr": 36,
+          "value": 160,
+          "mode": 0
+        },
+        {
+          "attr": 3,
+          "value": 18,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 14,
+          "mode": 0
+        },
+        {
+          "attr": 66,
+          "value": 450,
+          "mode": 0
+        }
+      ],
+      "lore": "老君演算之阵重现水魔珠旧劫时，井里的星比天上多了一颗。术者封住井口，星却出现在自己瞳中，随每次施法向眼底沉去。",
+      "identity": "收束单体术法的井影",
+      "benefit": "法术输出为主；法攻、法力、智慧、精神、法术会心提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "single_focus",
+          "powerBP": 1200,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 36,
+          "min": 160,
+          "max": 176
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "覆土埋名",
+      "runes": [
+        1900028009,
+        1900028014
+      ],
+      "order": [
+        "牛",
+        "壁"
+      ],
+      "channel": "守阵",
+      "minLevel": 35,
+      "professions": 0,
+      "slots": [
+        2,
+        5,
+        8
+      ],
+      "affixes": [
+        {
+          "attr": 34,
+          "value": 240,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 50,
+          "mode": 0
+        },
+        {
+          "attr": 70,
+          "value": 14,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 14,
+          "mode": 0
+        },
+        {
+          "attr": 5,
+          "value": 14,
+          "mode": 0
+        }
+      ],
+      "lore": "石门上的姓名被凿去七遍，第八遍仍从灰里显出来。泥匠索性将门倒埋，地下此后夜夜传来入观时的唱名。",
+      "identity": "承担法术冲击的土门",
+      "benefit": "法术承伤为主；生命、魔防、法术平减、精神、体质提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
+      "powerTier": "transition",
+      "traits": [],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 34,
+          "min": 240,
+          "max": 264
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "分月仍圆",
+      "runes": [
+        1900028010,
+        1900028011
+      ],
+      "order": [
+        "女",
+        "虚"
+      ],
+      "channel": "辅阵",
+      "minLevel": 30,
+      "professions": 8,
+      "slots": [
+        1,
+        3,
+        6,
+        7,
+        9
+      ],
+      "affixes": [
+        {
+          "attr": 61,
+          "value": 16,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 24,
+          "mode": 1
+        },
+        {
+          "attr": 34,
+          "value": 160,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 36,
+          "mode": 0
+        },
+        {
+          "attr": 118,
+          "value": 12,
+          "mode": 0
+        }
+      ],
+      "lore": "分完映月的药水，瓢中月影仍是满的。药师试着饮了一口，却忘了自己为何一直站在这口井边。",
+      "identity": "精打细算的施药仪",
+      "benefit": "治疗续航为主；精神、法力、生命、魔防、异常抵抗提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "healing_cost",
+          "powerBP": 2000,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 61,
+          "min": 16,
+          "max": 17
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "灯灭客未行",
+      "runes": [
+        1900028016,
+        1900028020
+      ],
+      "order": [
+        "娄",
+        "觜"
+      ],
+      "channel": "战阵",
+      "minLevel": 46,
+      "professions": 4,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 25,
+          "value": -25,
+          "mode": 1
+        },
+        {
+          "attr": 19,
+          "value": 36,
+          "mode": 1
+        },
+        {
+          "attr": 47,
+          "value": 100,
+          "mode": 0
+        },
+        {
+          "attr": 23,
+          "value": 450,
+          "mode": 0
+        },
+        {
+          "attr": 9,
+          "value": 20,
+          "mode": 0
+        }
+      ],
+      "lore": "客栈已经熄灯，门上却多出第十三道影子。守夜人记得店里只住十二位客人，便把刀压在灯芯上，等谁先来借火。",
+      "identity": "等待隐身起手的夜客",
+      "benefit": "物理输出为主；攻击速度、命中、物攻、物理会心、灵巧提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "invisible_focus",
+          "powerBP": 1800,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 47,
+          "min": 100,
+          "max": 110
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "担山不语",
+      "runes": [
+        1900028001,
+        1900028002
+      ],
+      "order": [
+        "角",
+        "亢"
+      ],
+      "channel": "战阵",
+      "minLevel": 14,
+      "professions": 1,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 1,
+          "value": 14,
+          "mode": 0
+        },
+        {
+          "attr": 47,
+          "value": 44,
+          "mode": 0
+        },
+        {
+          "attr": 69,
+          "value": 14,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 160,
+          "mode": 0
+        },
+        {
+          "attr": 19,
+          "value": 18,
+          "mode": 0
+        }
+      ],
+      "lore": "古阵的秤盘只称得出山的重量，称不出亡者的名字。持枪者把名册放上另一端，五岳竟一齐抬起半寸。",
+      "identity": "近身站稳的重担",
+      "benefit": "物理输出为主；力量、物攻、物理平减、生命、命中提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "physical_guard",
+          "powerBP": 800,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 1,
+          "min": 14,
+          "max": 15
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "空庭留步",
+      "runes": [
+        1900028015,
+        1900028017
+      ],
+      "order": [
+        "奎",
+        "胃"
+      ],
+      "channel": "守阵",
+      "minLevel": 40,
+      "professions": 2,
+      "slots": [
+        2,
+        5,
+        8
+      ],
+      "affixes": [
+        {
+          "attr": 13,
+          "value": 42,
+          "mode": 1
+        },
+        {
+          "attr": 19,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 7,
+          "value": 20,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 250,
+          "mode": 0
+        },
+        {
+          "attr": 69,
+          "value": 14,
+          "mode": 0
+        }
+      ],
+      "lore": "剑客在空庭里退了一步，檐下的雀鸟便倒飞回巢。此后他再没踏上那块砖，春天却一年比一年来得迟。",
+      "identity": "以闪避维持满血的庭阵",
+      "benefit": "物理承伤为主；防御、命中、敏捷、生命、物理平减提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "healthy_guard",
+          "powerBP": 1000,
+          "thresholdPct": 80
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 19,
+          "min": 24,
+          "max": 26
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "灰中见鹤",
+      "runes": [
+        1900028022,
+        1900028023
+      ],
+      "order": [
+        "井",
+        "鬼"
+      ],
+      "channel": "战阵",
+      "minLevel": 51,
+      "professions": 16,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 66,
+          "value": 700,
+          "mode": 0
+        },
+        {
+          "attr": 15,
+          "value": 47,
+          "mode": 1
+        },
+        {
+          "attr": 3,
+          "value": 20,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 140,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 32,
+          "mode": 0
+        }
+      ],
+      "lore": "符纸烧尽，灰里留下的折鹤仍在拍翅。术者将它投入灯油，才发现油面漂满了从未写过的字。",
+      "identity": "偏向火法会心的灯芯",
+      "benefit": "法术输出为主；法术会心、法攻、智慧、法力、魔防提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "fire_mastery",
+          "powerBP": 1800,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 66,
+          "min": 700,
+          "max": 770
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "不收诊金",
+      "runes": [
+        1900028004,
+        1900028028
+      ],
+      "order": [
+        "房",
+        "轸"
+      ],
+      "channel": "辅阵",
+      "minLevel": 60,
+      "professions": 8,
+      "slots": [
+        1,
+        3,
+        6,
+        7,
+        9
+      ],
+      "affixes": [
+        {
+          "attr": 17,
+          "value": 48,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 240,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 180,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 18,
+          "mode": 0
+        },
+        {
+          "attr": 118,
+          "value": 15,
+          "mode": 0
+        }
+      ],
+      "lore": "诊桌上的铜钱总会少一枚，痊愈的人则总忘记一个名字。药师终于把自己的名字写在钱眼里，等它在下一场劫阵中消失。",
+      "identity": "救助濒危同伴的诊阵",
+      "benefit": "治疗续航为主；魔防、生命、法力、精神、异常抵抗提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "rescue_heal",
+          "powerBP": 2800,
+          "thresholdPct": 30
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 17,
+          "min": 48,
+          "max": 52
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "履上驿尘",
+      "runes": [
+        1900028007,
+        1900028027
+      ],
+      "order": [
+        "箕",
+        "翼"
+      ],
+      "channel": "辅阵",
+      "minLevel": 58,
+      "professions": 0,
+      "slots": [
+        1,
+        3,
+        6,
+        7,
+        9
+      ],
+      "affixes": [
+        {
+          "attr": 27,
+          "value": 12,
+          "mode": 1
+        },
+        {
+          "attr": 9,
+          "value": 20,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 220,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 200,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 38,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 18,
+          "mode": 0
+        }
+      ],
+      "lore": "死去的驿卒每日天亮仍能赶到关前，却交不出一封信。拆开鞋底后，守关人找到一张写着自己死期的驿程。",
+      "identity": "远途疾行的驿行阵",
+      "benefit": "技能续航为主；移动速度、灵巧、法力、生命、魔防、精神提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
+      "powerTier": "transition",
+      "traits": [],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 9,
+          "min": 20,
+          "max": 22
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "铁扇不迎客",
+      "runes": [
+        1900028001,
+        1900028002,
+        1900028006
+      ],
+      "order": [
+        "角",
+        "亢",
+        "尾"
+      ],
+      "channel": "战阵",
+      "minLevel": 21,
+      "professions": 1,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 47,
+          "value": 42,
+          "mode": 1
+        },
+        {
+          "attr": 31,
+          "value": 40,
+          "mode": 0
+        },
+        {
+          "attr": 1,
+          "value": 18,
+          "mode": 0
+        },
+        {
+          "attr": 19,
+          "value": 30,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 180,
+          "mode": 0
+        },
+        {
+          "attr": 23,
+          "value": 350,
+          "mode": 0
+        }
+      ],
+      "lore": "钟离的扇影落入演阵，门人却把它画成一堵窄门：只容一个敌人挤入，也只需一个人守住。",
+      "identity": "守窄口的连环枪技战阵",
+      "benefit": "物理输出为主；物攻、攻击上限、力量、命中、生命、物理会心提供独立于星篆的完整词条；另有本件白字物攻强化90–110%，收益随所选武器固有白字而变",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "skill_focus",
+          "powerBP": 1200,
+          "thresholdPct": 0,
+          "skillID": 10002,
+          "skillName": "连环枪法"
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 31,
+          "min": 40,
+          "max": 44
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 100,
+          "minPercent": 90,
+          "maxPercent": 110
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "醉后问剑",
+      "runes": [
+        1900028015,
+        1900028016,
+        1900028019
+      ],
+      "order": [
+        "奎",
+        "娄",
+        "毕"
+      ],
+      "channel": "战阵",
+      "minLevel": 44,
+      "professions": 2,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 47,
+          "value": 75,
+          "mode": 1
+        },
+        {
+          "attr": 19,
+          "value": 40,
+          "mode": 1
+        },
+        {
+          "attr": 13,
+          "value": 28,
+          "mode": 1
+        },
+        {
+          "attr": 1,
+          "value": 18,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 200,
+          "mode": 0
+        },
+        {
+          "attr": 9,
+          "value": 20,
+          "mode": 0
+        }
+      ],
+      "lore": "酒醒时，石上只剩一道浅痕。剑客反复看了三天，才明白那不是吕仙留下的答案，而是自己没敢问完的半句。",
+      "identity": "专注单敌的问剑阵",
+      "benefit": "物理输出为主；物攻、命中、防御、力量、生命、灵巧提供独立于星篆的完整词条；另有本件白字物攻强化80–100%，收益随所选武器固有白字而变",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "single_focus",
+          "powerBP": 1500,
+          "thresholdPct": 0,
+          "skillID": 10102,
+          "skillName": "罡气剑"
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 1,
+          "min": 18,
+          "max": 19
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 90,
+          "minPercent": 80,
+          "maxPercent": 100
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "荷心藏针",
+      "runes": [
+        1900028018,
+        1900028020,
+        1900028021
+      ],
+      "order": [
+        "昴",
+        "觜",
+        "参"
+      ],
+      "channel": "战阵",
+      "minLevel": 48,
+      "professions": 4,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 23,
+          "value": 800,
+          "mode": 0
+        },
+        {
+          "attr": 25,
+          "value": -25,
+          "mode": 1
+        },
+        {
+          "attr": 31,
+          "value": 48,
+          "mode": 0
+        },
+        {
+          "attr": 47,
+          "value": 110,
+          "mode": 0
+        },
+        {
+          "attr": 19,
+          "value": 30,
+          "mode": 0
+        },
+        {
+          "attr": 9,
+          "value": 24,
+          "mode": 0
+        }
+      ],
+      "lore": "采莲人把针藏进荷心，回村却先补好一件破衣。仙姑的传说传到这里，最难的一课仍是决定何时不用针。",
+      "identity": "先手会心的荷针阵",
+      "benefit": "物理输出为主；物理会心、攻击速度、攻击上限、物攻、命中、灵巧提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "ambush",
+          "powerBP": 2000,
+          "thresholdPct": 80,
+          "skillID": 10209,
+          "skillName": "背刺"
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 23,
+          "min": 800,
+          "max": 880
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "倒骑观火",
+      "runes": [
+        1900028008,
+        1900028022,
+        1900028025
+      ],
+      "order": [
+        "斗",
+        "井",
+        "星"
+      ],
+      "channel": "战阵",
+      "minLevel": 55,
+      "professions": 16,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 15,
+          "value": 45,
+          "mode": 1
+        },
+        {
+          "attr": 3,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 66,
+          "value": 550,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 200,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 18,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 36,
+          "mode": 0
+        }
+      ],
+      "lore": "纸驴逆着火光走，背上的术者也倒坐着。他只看身后哪一盏灯熄了，便知道下一张符该落在何处。",
+      "identity": "火法输出的逆行星图",
+      "benefit": "法术输出为主；法攻、智慧、法术会心、法力、精神、魔防提供独立于星篆的完整词条；另有本件白字法攻强化100–120%，收益随所选武器固有白字而变",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "fire_mastery",
+          "powerBP": 1500,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 3,
+          "min": 24,
+          "max": 26
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 15,
+          "percent": 110,
+          "minPercent": 100,
+          "maxPercent": 120
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "name": "拐下生根",
+      "runes": [
+        1900028010,
+        1900028013,
+        1900028028
+      ],
+      "order": [
+        "女",
+        "室",
+        "轸"
+      ],
+      "channel": "辅阵",
+      "minLevel": 60,
+      "professions": 8,
+      "slots": [
+        1,
+        3,
+        6,
+        7,
+        9
+      ],
+      "affixes": [
+        {
+          "attr": 61,
+          "value": 26,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 24,
+          "mode": 1
+        },
+        {
+          "attr": 17,
+          "value": 40,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 240,
+          "mode": 0
+        },
+        {
+          "attr": 70,
+          "value": 16,
+          "mode": 0
+        },
+        {
+          "attr": 118,
+          "value": 14,
+          "mode": 0
+        }
+      ],
+      "lore": "铁拐的故事讲到尽头，村医把听书人的竹杖插入土中。第二年新根绕过坟石，仍沿着去诊所的小路生长。",
+      "identity": "治疗长战的生根阵",
+      "benefit": "治疗续航为主；精神、法力、魔防、生命、法术平减、异常抵抗提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "healing_grace",
+          "powerBP": 2000,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 61,
+          "min": 26,
+          "max": 28
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "城砖无字",
+      "runes": [
+        1900028003,
+        1900028009,
+        1900028014
+      ],
+      "order": [
+        "氐",
+        "牛",
+        "壁"
+      ],
+      "channel": "守阵",
+      "minLevel": 35,
+      "professions": 0,
+      "slots": [
+        2,
+        5,
+        8
+      ],
+      "affixes": [
+        {
+          "attr": 69,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 70,
+          "value": 20,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 280,
+          "mode": 0
+        },
+        {
+          "attr": 5,
+          "value": 18,
+          "mode": 0
+        },
+        {
+          "attr": 13,
+          "value": 30,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 30,
+          "mode": 0
+        }
+      ],
+      "lore": "泥匠烧成的砖没有字，垒入城墙后却排出了整部戒律。监造官拆掉其中一条，墙外便空出了一座他从未去过的村庄。",
+      "identity": "小额频繁伤害的双抗城墙",
+      "benefit": "物理承伤为主；物理平减、法术平减、生命、体质、防御、魔防提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
+      "powerTier": "transition",
+      "traits": [],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 69,
+          "min": 24,
+          "max": 26
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "龟背驮碑",
+      "runes": [
+        1900028017,
+        1900028002,
+        1900028004
+      ],
+      "order": [
+        "胃",
+        "亢",
+        "房"
+      ],
+      "channel": "守阵",
+      "minLevel": 40,
+      "professions": 0,
+      "slots": [
+        2,
+        5,
+        8
+      ],
+      "affixes": [
+        {
+          "attr": 34,
+          "value": 30,
+          "mode": 1
+        },
+        {
+          "attr": 13,
+          "value": 42,
+          "mode": 1
+        },
+        {
+          "attr": 27,
+          "value": -3,
+          "mode": 1
+        },
+        {
+          "attr": 5,
+          "value": 20,
+          "mode": 0
+        },
+        {
+          "attr": 69,
+          "value": 20,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 35,
+          "mode": 0
+        }
+      ],
+      "lore": "碑上的誓言比龟背还重。守阵人刮去了邀功的半面，只留下众人答应替彼此挡下的那一击。",
+      "identity": "缓行的厚血守阵",
+      "benefit": "血线容错为主；生命、防御、体质、物理平减、魔防提供独立于星篆的完整词条",
+      "tradeoff": "仍降低移动速度；占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
+      "powerTier": "transition",
+      "traits": [],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 5,
+          "min": 20,
+          "max": 22
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "雨洗空符",
+      "runes": [
+        1900028012,
+        1900028011,
+        1900028013
+      ],
+      "order": [
+        "危",
+        "虚",
+        "室"
+      ],
+      "channel": "守阵",
+      "minLevel": 33,
+      "professions": 0,
+      "slots": [
+        2,
+        5,
+        8
+      ],
+      "affixes": [
+        {
+          "attr": 17,
+          "value": 48,
+          "mode": 0
+        },
+        {
+          "attr": 118,
+          "value": 25,
+          "mode": 0
+        },
+        {
+          "attr": 70,
+          "value": 20,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 220,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 18,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 180,
+          "mode": 0
+        }
+      ],
+      "lore": "写坏的符纸挂在雨中三日，墨迹尽褪，纸里却显出另一个人的掌纹。术者将纸贴在掌心，两只手都同时冷了下去。",
+      "identity": "抗咒的无字符阵",
+      "benefit": "法术承伤为主；魔防、异常抵抗、法术平减、生命、精神、法力提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
+      "powerTier": "transition",
+      "traits": [],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 17,
+          "min": 48,
+          "max": 52
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "步斗困煞",
+      "runes": [
+        1900028007,
+        1900028026,
+        1900028027
+      ],
+      "order": [
+        "箕",
+        "张",
+        "翼"
+      ],
+      "channel": "辅阵",
+      "minLevel": 58,
+      "professions": 0,
+      "slots": [
+        1,
+        3,
+        6,
+        7,
+        9
+      ],
+      "affixes": [
+        {
+          "attr": 27,
+          "value": 14,
+          "mode": 1
+        },
+        {
+          "attr": 36,
+          "value": 250,
+          "mode": 0
+        },
+        {
+          "attr": 25,
+          "value": -25,
+          "mode": 1
+        },
+        {
+          "attr": 34,
+          "value": 200,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 38,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 20,
+          "mode": 0
+        }
+      ],
+      "lore": "行法者少踏了一颗星，追来的煞气便困在同一更鼓之间。他以为已经脱身，直到听见鼓声从自己的胸腔里响起。",
+      "identity": "机动与进退的踏斗阵",
+      "benefit": "技能续航为主；移动速度、法力、攻击速度、生命、魔防、精神提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
+      "powerTier": "transition",
+      "traits": [],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 36,
+          "min": 250,
+          "max": 275
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "name": "甘露不留瓶",
+      "runes": [
+        1900028014,
+        1900028010,
+        1900028028
+      ],
+      "order": [
+        "壁",
+        "女",
+        "轸"
+      ],
+      "channel": "辅阵",
+      "minLevel": 60,
+      "professions": 0,
+      "slots": [
+        1,
+        3,
+        6,
+        7,
+        9
+      ],
+      "affixes": [
+        {
+          "attr": 34,
+          "value": 24,
+          "mode": 1
+        },
+        {
+          "attr": 61,
+          "value": 18,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 230,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 40,
+          "mode": 0
+        },
+        {
+          "attr": 70,
+          "value": 18,
+          "mode": 0
+        },
+        {
+          "attr": 5,
+          "value": 18,
+          "mode": 0
+        }
+      ],
+      "lore": "演阵中的水魔珠再次泛起潮声，甘露瓶却始终空着。行者倒转瓶口，流出的不是水，而是一段没有被洪水吞没的旧日。",
+      "identity": "清剿小怪后的恢复阵",
+      "benefit": "血线容错为主；生命、精神、法力、魔防、法术平减、体质提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "transition",
+      "traits": [
+        {
+          "kind": "kill_mend",
+          "powerBP": 350,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 61,
+          "min": 18,
+          "max": 19
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "破阵先折旗",
+      "runes": [
+        1900028001,
+        1900028005,
+        1900028006,
+        1900028007
+      ],
+      "order": [
+        "角",
+        "心",
+        "尾",
+        "箕"
+      ],
+      "channel": "战阵",
+      "minLevel": 23,
+      "professions": 1,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 47,
+          "value": 71,
+          "mode": 1
+        },
+        {
+          "attr": 1,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": -12,
+          "mode": 0
+        },
+        {
+          "attr": 19,
+          "value": 30,
+          "mode": 0
+        },
+        {
+          "attr": 23,
+          "value": 600,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 220,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 160,
+          "mode": 0
+        }
+      ],
+      "lore": "祖师留下的战旗从不沾血，旗手却一日比一日苍白。第四夜，他割开旗脚，看见历任旗手的影子正在里面相争。",
+      "identity": "以受伤风险换精英输出",
+      "benefit": "物理输出为主；物攻、力量、命中、物理会心、生命、法力提供独立于星篆的完整词条；另有本件白字物攻强化140–170%，收益随所选武器固有白字而变",
+      "tradeoff": "仍降低魔防；占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "powerTier": "highvalue",
+      "traits": [
+        {
+          "kind": "elite_hunter",
+          "powerBP": 1800,
+          "thresholdPct": 0
+        },
+        {
+          "kind": "skill_economy",
+          "powerBP": 2500,
+          "thresholdPct": 0,
+          "skillID": 10021,
+          "skillName": "流虹之枪"
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 1,
+          "min": 24,
+          "max": 26
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 155,
+          "minPercent": 140,
+          "maxPercent": 170
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "剑不入壁",
+      "runes": [
+        1900028015,
+        1900028016,
+        1900028017,
+        1900028021
+      ],
+      "order": [
+        "奎",
+        "娄",
+        "胃",
+        "参"
+      ],
+      "channel": "守阵",
+      "minLevel": 48,
+      "professions": 2,
+      "slots": [
+        2,
+        5,
+        8
+      ],
+      "affixes": [
+        {
+          "attr": 13,
+          "value": 55,
+          "mode": 1
+        },
+        {
+          "attr": 19,
+          "value": 40,
+          "mode": 1
+        },
+        {
+          "attr": 34,
+          "value": 22,
+          "mode": 1
+        },
+        {
+          "attr": 7,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 69,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 1,
+          "value": 18,
+          "mode": 0
+        }
+      ],
+      "lore": "石壁前的剑痕越刻越深，守壁人却拔出剑，用剑脊试了试脚下松砖。第二天，整面壁后的人都撤走了。",
+      "identity": "守中反击的剑客阵",
+      "benefit": "物理承伤为主；防御、命中、生命、敏捷、物理平减、力量提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "highvalue",
+      "traits": [
+        {
+          "kind": "desperate_guard",
+          "powerBP": 1800,
+          "thresholdPct": 35
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 7,
+          "min": 24,
+          "max": 26
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "name": "缺痕断忆",
+      "runes": [
+        1900028018,
+        1900028019,
+        1900028020,
+        1900028021
+      ],
+      "order": [
+        "昴",
+        "毕",
+        "觜",
+        "参"
+      ],
+      "channel": "战阵",
+      "minLevel": 48,
+      "professions": 4,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 23,
+          "value": 1000,
+          "mode": 0
+        },
+        {
+          "attr": 25,
+          "value": -28,
+          "mode": 1
+        },
+        {
+          "attr": 47,
+          "value": 107,
+          "mode": 1
+        },
+        {
+          "attr": 19,
+          "value": 35,
+          "mode": 0
+        },
+        {
+          "attr": 1,
+          "value": 22,
+          "mode": 0
+        },
+        {
+          "attr": 9,
+          "value": 22,
+          "mode": 0
+        }
+      ],
+      "lore": "刺客清点刀口，发现月下少了一个缺痕。月落后，那个缺痕出现在他的记忆里，恰好切断了雇主的面容。",
+      "identity": "追击残血的高速刃阵",
+      "benefit": "物理输出为主；物理会心、攻击速度、物攻、命中、力量、灵巧提供独立于星篆的完整词条；另有本件白字物攻强化100–130%，收益随所选武器固有白字而变",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "powerTier": "highvalue",
+      "traits": [
+        {
+          "kind": "execution",
+          "powerBP": 2400,
+          "thresholdPct": 30
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 23,
+          "min": 1000,
+          "max": 1100
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 115,
+          "minPercent": 100,
+          "maxPercent": 130
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "name": "朱鸟衔余烬",
+      "runes": [
+        1900028022,
+        1900028023,
+        1900028024,
+        1900028025
+      ],
+      "order": [
+        "井",
+        "鬼",
+        "柳",
+        "星"
+      ],
+      "channel": "战阵",
+      "minLevel": 55,
+      "professions": 16,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 15,
+          "value": 57,
+          "mode": 1
+        },
+        {
+          "attr": 66,
+          "value": 850,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 200,
+          "mode": 0
+        },
+        {
+          "attr": 3,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 20,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 220,
+          "mode": 0
+        }
+      ],
+      "lore": "火烧过的阵图缺了一角，术者便让纸鸟叼着余烬悬在那里。风越急，它越不肯合拢那半边翅膀。",
+      "identity": "火系范围清怪的偏门阵",
+      "benefit": "法术输出为主；法攻、法术会心、法力、智慧、精神、生命提供独立于星篆的完整词条；另有本件白字法攻强化140–170%，收益随所选武器固有白字而变",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "powerTier": "highvalue",
+      "traits": [
+        {
+          "kind": "area_focus",
+          "powerBP": 1500,
+          "thresholdPct": 0,
+          "skillID": 10402,
+          "skillName": "火球术"
+        },
+        {
+          "kind": "fire_mastery",
+          "powerBP": 1200,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 66,
+          "min": 850,
+          "max": 935
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 15,
+          "percent": 155,
+          "minPercent": 140,
+          "maxPercent": 170
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "先问归处",
+      "runes": [
+        1900028008,
+        1900028010,
+        1900028013,
+        1900028028
+      ],
+      "order": [
+        "斗",
+        "女",
+        "室",
+        "轸"
+      ],
+      "channel": "辅阵",
+      "minLevel": 60,
+      "professions": 8,
+      "slots": [
+        1,
+        3,
+        6,
+        7,
+        9
+      ],
+      "affixes": [
+        {
+          "attr": 61,
+          "value": 30,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 30,
+          "mode": 1
+        },
+        {
+          "attr": 17,
+          "value": 44,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 280,
+          "mode": 0
+        },
+        {
+          "attr": 118,
+          "value": 20,
+          "mode": 0
+        },
+        {
+          "attr": 70,
+          "value": 20,
+          "mode": 0
+        }
+      ],
+      "lore": "药师没有先问伤口，只问抬来的人要回哪里。答不上来的，诊床便留到天明；能回答的，门口已经备好灯。",
+      "identity": "救助他人的长程医阵",
+      "benefit": "治疗续航为主；精神、法力、魔防、生命、异常抵抗、法术平减提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "highvalue",
+      "traits": [
+        {
+          "kind": "selfless_heal",
+          "powerBP": 2200,
+          "thresholdPct": 0,
+          "skillID": 10304,
+          "skillName": "群疗术"
+        },
+        {
+          "kind": "healing_cost",
+          "powerBP": 1600,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 61,
+          "min": 30,
+          "max": 33
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "name": "龙眠桥下",
+      "runes": [
+        1900028001,
+        1900028003,
+        1900028004,
+        1900028005
+      ],
+      "order": [
+        "角",
+        "氐",
+        "房",
+        "心"
+      ],
+      "channel": "守阵",
+      "minLevel": 19,
+      "professions": 0,
+      "slots": [
+        2,
+        5,
+        8
+      ],
+      "affixes": [
+        {
+          "attr": 34,
+          "value": 36,
+          "mode": 1
+        },
+        {
+          "attr": 69,
+          "value": 26,
+          "mode": 0
+        },
+        {
+          "attr": 5,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 13,
+          "value": 38,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 38,
+          "mode": 0
+        },
+        {
+          "attr": 70,
+          "value": 18,
+          "mode": 0
+        }
+      ],
+      "lore": "青龙没有飞上新修的阵门，而是伏在桥下。洪水拍来时，桥上的人只觉得脚下多了一道缓慢的呼吸。",
+      "identity": "维持健康的生命阵",
+      "benefit": "血线容错为主；生命、物理平减、体质、防御、魔防、法术平减提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "highvalue",
+      "traits": [
+        {
+          "kind": "healthy_guard",
+          "powerBP": 1200,
+          "thresholdPct": 75
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 69,
+          "min": 26,
+          "max": 28
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "name": "玄武不出门",
+      "runes": [
+        1900028008,
+        1900028009,
+        1900028012,
+        1900028014
+      ],
+      "order": [
+        "斗",
+        "牛",
+        "危",
+        "壁"
+      ],
+      "channel": "守阵",
+      "minLevel": 35,
+      "professions": 0,
+      "slots": [
+        2,
+        5,
+        8
+      ],
+      "affixes": [
+        {
+          "attr": 17,
+          "value": 46,
+          "mode": 1
+        },
+        {
+          "attr": 70,
+          "value": 28,
+          "mode": 0
+        },
+        {
+          "attr": 118,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 391,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 22,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 200,
+          "mode": 0
+        }
+      ],
+      "lore": "北门外的呼唤一夜没停，声音与守门人的一模一样。他让龟甲向外、蛇纹向内，从此不再回答自己的名字。",
+      "identity": "抗法与异常的北门阵",
+      "benefit": "法术承伤为主；魔防、法术平减、异常抵抗、生命、精神、法力提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "highvalue",
+      "traits": [
+        {
+          "kind": "magic_guard",
+          "powerBP": 1200,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 70,
+          "min": 28,
+          "max": 30
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "name": "鞋底藏北斗",
+      "runes": [
+        1900028016,
+        1900028017,
+        1900028026,
+        1900028027
+      ],
+      "order": [
+        "娄",
+        "胃",
+        "张",
+        "翼"
+      ],
+      "channel": "辅阵",
+      "minLevel": 58,
+      "professions": 0,
+      "slots": [
+        1,
+        3,
+        6,
+        7,
+        9
+      ],
+      "affixes": [
+        {
+          "attr": 27,
+          "value": 16,
+          "mode": 1
+        },
+        {
+          "attr": 36,
+          "value": 280,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 240,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 42,
+          "mode": 0
+        },
+        {
+          "attr": 15,
+          "value": 45,
+          "mode": 0
+        }
+      ],
+      "lore": "云游者把北斗绣在鞋底，每行一步便遮住一颗。追问升仙路的人跟了一天，只学会怎样绕过烂泥。",
+      "identity": "低耗移动施法的云游阵",
+      "benefit": "技能续航为主；移动速度、法力、精神、生命、魔防、法攻提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "highvalue",
+      "traits": [
+        {
+          "kind": "spell_economy",
+          "powerBP": 2000,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 36,
+          "min": 280,
+          "max": 308
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "name": "心灯照旧债",
+      "runes": [
+        1900028015,
+        1900028010,
+        1900028011,
+        1900028012
+      ],
+      "order": [
+        "奎",
+        "女",
+        "虚",
+        "危"
+      ],
+      "channel": "辅阵",
+      "minLevel": 37,
+      "professions": 0,
+      "slots": [
+        1,
+        3,
+        6,
+        7,
+        9
+      ],
+      "affixes": [
+        {
+          "attr": 118,
+          "value": 35,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 30,
+          "mode": 1
+        },
+        {
+          "attr": 17,
+          "value": 44,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 280,
+          "mode": 0
+        },
+        {
+          "attr": 70,
+          "value": 20,
+          "mode": 0
+        }
+      ],
+      "lore": "心灯照见的总是持灯人尚未犯下的过错。他试着换一只手提灯，墙上的影子却先一步将灯吹熄了。",
+      "identity": "稳定施法的清心阵",
+      "benefit": "治疗续航为主；异常抵抗、法力、魔防、精神、生命、法术平减提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "highvalue",
+      "traits": [
+        {
+          "kind": "swift_cast",
+          "powerBP": 2000,
+          "thresholdPct": 0,
+          "skillID": 10304,
+          "skillName": "群疗术"
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 118,
+          "min": 35,
+          "max": 38
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "name": "日月各半",
+      "runes": [
+        1900028005,
+        1900028018,
+        1900028023,
+        1900028028
+      ],
+      "order": [
+        "心",
+        "昴",
+        "鬼",
+        "轸"
+      ],
+      "channel": "战阵",
+      "minLevel": 60,
+      "professions": 0,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 47,
+          "value": 219,
+          "mode": 0
+        },
+        {
+          "attr": 15,
+          "value": 134,
+          "mode": 0
+        },
+        {
+          "attr": 23,
+          "value": 650,
+          "mode": 0
+        },
+        {
+          "attr": 66,
+          "value": 650,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 260,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 250,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 22,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 42,
+          "mode": 0
+        }
+      ],
+      "lore": "掌日与掌月的两派把铜镜掰成两半，各称自己留下了正面。劫阵重开时，两片都照不见人，只在裂缝里映出同一只眼睛。",
+      "identity": "双攻混合的日月阵",
+      "benefit": "物理与法术输出的双向配置为主；物攻、法攻、物理会心、法术会心、生命、法力、精神、魔防提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；无额外条件特性，收益集中在固定属性",
+      "powerTier": "highvalue",
+      "traits": [],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 47,
+          "min": 219,
+          "max": 240
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "name": "卸镜平秤",
+      "runes": [
+        1900028001,
+        1900028002,
+        1900028003,
+        1900028006,
+        1900028007
+      ],
+      "order": [
+        "角",
+        "亢",
+        "氐",
+        "尾",
+        "箕"
+      ],
+      "channel": "战阵",
+      "minLevel": 23,
+      "professions": 1,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 47,
+          "value": 74,
+          "mode": 1
+        },
+        {
+          "attr": 31,
+          "value": 52,
+          "mode": 0
+        },
+        {
+          "attr": 1,
+          "value": 28,
+          "mode": 0
+        },
+        {
+          "attr": 19,
+          "value": 40,
+          "mode": 1
+        },
+        {
+          "attr": 17,
+          "value": -18,
+          "mode": 0
+        },
+        {
+          "attr": 23,
+          "value": 700,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 260,
+          "mode": 0
+        },
+        {
+          "attr": 9,
+          "value": 26,
+          "mode": 0
+        }
+      ],
+      "lore": "演阵把五座山压成五枚砝码，最后一枚始终放不上秤。持枪者摘下自己的护心镜，才让两端终于相平。",
+      "identity": "舍防换取持续物理输出",
+      "benefit": "物理输出为主；物攻、攻击上限、力量、命中、物理会心、生命、灵巧提供独立于星篆的完整词条；另有本件白字物攻强化180–220%，收益随所选武器固有白字而变",
+      "tradeoff": "仍降低魔防；占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "powerTier": "builddefining",
+      "traits": [
+        {
+          "kind": "basic_focus",
+          "powerBP": 1400,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 31,
+          "min": 52,
+          "max": 57
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 200,
+          "minPercent": 180,
+          "maxPercent": 220
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "name": "问劫无回声",
+      "runes": [
+        1900028015,
+        1900028016,
+        1900028017,
+        1900028019,
+        1900028021
+      ],
+      "order": [
+        "奎",
+        "娄",
+        "胃",
+        "毕",
+        "参"
+      ],
+      "channel": "战阵",
+      "minLevel": 48,
+      "professions": 2,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 47,
+          "value": 104,
+          "mode": 1
+        },
+        {
+          "attr": 19,
+          "value": 45,
+          "mode": 1
+        },
+        {
+          "attr": 13,
+          "value": 36,
+          "mode": 1
+        },
+        {
+          "attr": 9,
+          "value": 28,
+          "mode": 0
+        },
+        {
+          "attr": 1,
+          "value": 28,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 280,
+          "mode": 0
+        },
+        {
+          "attr": 69,
+          "value": 24,
+          "mode": 0
+        }
+      ],
+      "lore": "剑落入演算之阵的最深处，没有回声。行者收剑时，刃上多出一道尚未发生的伤痕，正与他梦中断开的山脊相合。",
+      "identity": "单体精英的稳剑阵",
+      "benefit": "物理输出为主；物攻、命中、防御、灵巧、力量、生命、物理平减提供独立于星篆的完整词条；另有本件白字物攻强化160–200%，收益随所选武器固有白字而变",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "powerTier": "builddefining",
+      "traits": [
+        {
+          "kind": "single_focus",
+          "powerBP": 1800,
+          "thresholdPct": 0,
+          "skillID": 10104,
+          "skillName": "饮血剑"
+        },
+        {
+          "kind": "elite_hunter",
+          "powerBP": 1200,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 9,
+          "min": 28,
+          "max": 30
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 180,
+          "minPercent": 160,
+          "maxPercent": 200
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "name": "莲子夜游",
+      "runes": [
+        1900028018,
+        1900028005,
+        1900028019,
+        1900028020,
+        1900028021
+      ],
+      "order": [
+        "昴",
+        "心",
+        "毕",
+        "觜",
+        "参"
+      ],
+      "channel": "战阵",
+      "minLevel": 48,
+      "professions": 4,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 23,
+          "value": 1400,
+          "mode": 0
+        },
+        {
+          "attr": 25,
+          "value": -32,
+          "mode": 1
+        },
+        {
+          "attr": 47,
+          "value": 117,
+          "mode": 1
+        },
+        {
+          "attr": 34,
+          "value": -12,
+          "mode": 1
+        },
+        {
+          "attr": 19,
+          "value": 40,
+          "mode": 0
+        },
+        {
+          "attr": 1,
+          "value": 28,
+          "mode": 0
+        },
+        {
+          "attr": 9,
+          "value": 28,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 220,
+          "mode": 0
+        }
+      ],
+      "lore": "莲房里的第八颗种子每夜都会少一次，天明又重新长出。刺客不再数它，只等哪一天它带回不属于此世的花粉。",
+      "identity": "先手暴击的极端短战阵",
+      "benefit": "物理输出为主；物理会心、攻击速度、物攻、命中、力量、灵巧、法力提供独立于星篆的完整词条；另有本件白字物攻强化140–180%，收益随所选武器固有白字而变",
+      "tradeoff": "仍降低生命；占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "powerTier": "builddefining",
+      "traits": [
+        {
+          "kind": "ambush",
+          "powerBP": 2600,
+          "thresholdPct": 85
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 23,
+          "min": 1400,
+          "max": 1540
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 47,
+          "percent": 160,
+          "minPercent": 140,
+          "maxPercent": 180
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "name": "纸驴驮残夜",
+      "runes": [
+        1900028008,
+        1900028022,
+        1900028023,
+        1900028025,
+        1900028026
+      ],
+      "order": [
+        "斗",
+        "井",
+        "鬼",
+        "星",
+        "张"
+      ],
+      "channel": "战阵",
+      "minLevel": 56,
+      "professions": 16,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 15,
+          "value": 65,
+          "mode": 1
+        },
+        {
+          "attr": 3,
+          "value": 32,
+          "mode": 0
+        },
+        {
+          "attr": 66,
+          "value": 1100,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": -10,
+          "mode": 1
+        },
+        {
+          "attr": 36,
+          "value": 260,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 26,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 48,
+          "mode": 0
+        },
+        {
+          "attr": 118,
+          "value": 20,
+          "mode": 0
+        }
+      ],
+      "lore": "纸驴驮着五盏熄灯走过五更，经过的村镇便各少一刻。术者追到阵眼，才发现自己已比昨夜苍老五年。",
+      "identity": "高消耗大范围施法阵",
+      "benefit": "法术输出为主；法攻、智慧、法术会心、法力、精神、魔防、异常抵抗提供独立于星篆的完整词条；另有本件白字法攻强化180–220%，收益随所选武器固有白字而变",
+      "tradeoff": "仍降低生命；占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "powerTier": "builddefining",
+      "traits": [
+        {
+          "kind": "area_expansion",
+          "powerBP": 2200,
+          "thresholdPct": 0,
+          "skillID": 10412,
+          "skillName": "暴雪术"
+        },
+        {
+          "kind": "area_focus",
+          "powerBP": 1200,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 3,
+          "min": 32,
+          "max": 35
+        }
+      ],
+      "localEnhancements": [
+        {
+          "attr": 15,
+          "percent": 200,
+          "minPercent": 180,
+          "maxPercent": 220
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "name": "空瓢济厄",
+      "runes": [
+        1900028010,
+        1900028011,
+        1900028013,
+        1900028014,
+        1900028028
+      ],
+      "order": [
+        "女",
+        "虚",
+        "室",
+        "壁",
+        "轸"
+      ],
+      "channel": "辅阵",
+      "minLevel": 60,
+      "professions": 8,
+      "slots": [
+        1,
+        3,
+        6,
+        7,
+        9
+      ],
+      "affixes": [
+        {
+          "attr": 61,
+          "value": 26,
+          "mode": 1
+        },
+        {
+          "attr": 36,
+          "value": 36,
+          "mode": 1
+        },
+        {
+          "attr": 17,
+          "value": 50,
+          "mode": 0
+        },
+        {
+          "attr": 70,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 320,
+          "mode": 0
+        },
+        {
+          "attr": 118,
+          "value": 25,
+          "mode": 0
+        },
+        {
+          "attr": 5,
+          "value": 24,
+          "mode": 0
+        }
+      ],
+      "lore": "药瓢已经空了，药师仍背它进入劫阵。同行人伤重时，瓢底忽然响了一声，像有人在很远的地方敲开一扇门。",
+      "identity": "危急救援与长战治疗阵",
+      "benefit": "治疗续航为主；精神、法力、魔防、法术平减、生命、异常抵抗、体质提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "builddefining",
+      "traits": [
+        {
+          "kind": "rescue_heal",
+          "powerBP": 3500,
+          "thresholdPct": 30,
+          "skillID": 10301,
+          "skillName": "治愈术"
+        },
+        {
+          "kind": "healing_cost",
+          "powerBP": 2200,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 17,
+          "min": 50,
+          "max": 55
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "name": "门闩抵天倾",
+      "runes": [
+        1900028001,
+        1900028004,
+        1900028003,
+        1900028009,
+        1900028014
+      ],
+      "order": [
+        "角",
+        "房",
+        "氐",
+        "牛",
+        "壁"
+      ],
+      "channel": "守阵",
+      "minLevel": 35,
+      "professions": 0,
+      "slots": [
+        2,
+        5,
+        8
+      ],
+      "affixes": [
+        {
+          "attr": 34,
+          "value": 42,
+          "mode": 1
+        },
+        {
+          "attr": 69,
+          "value": 34,
+          "mode": 0
+        },
+        {
+          "attr": 5,
+          "value": 30,
+          "mode": 0
+        },
+        {
+          "attr": 27,
+          "value": -5,
+          "mode": 1
+        },
+        {
+          "attr": 13,
+          "value": 42,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 45,
+          "mode": 0
+        },
+        {
+          "attr": 70,
+          "value": 26,
+          "mode": 0
+        },
+        {
+          "attr": 118,
+          "value": 18,
+          "mode": 0
+        }
+      ],
+      "lore": "应劫者见阵门下沉，便用门闩撑住横梁。名册在身后一页页自行翻过，直到最后一页出现了尚未入阵者的名字。",
+      "identity": "残血撑住重击的守关阵",
+      "benefit": "物理承伤为主；生命、物理平减、体质、防御、魔防、法术平减、异常抵抗提供独立于星篆的完整词条",
+      "tradeoff": "仍降低移动速度；占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "builddefining",
+      "traits": [
+        {
+          "kind": "desperate_guard",
+          "powerBP": 2400,
+          "thresholdPct": 35
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 69,
+          "min": 34,
+          "max": 37
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "name": "寒潭照无影",
+      "runes": [
+        1900028008,
+        1900028012,
+        1900028013,
+        1900028014,
+        1900028024
+      ],
+      "order": [
+        "斗",
+        "危",
+        "室",
+        "壁",
+        "柳"
+      ],
+      "channel": "守阵",
+      "minLevel": 53,
+      "professions": 0,
+      "slots": [
+        2,
+        5,
+        8
+      ],
+      "affixes": [
+        {
+          "attr": 17,
+          "value": 60,
+          "mode": 1
+        },
+        {
+          "attr": 70,
+          "value": 36,
+          "mode": 0
+        },
+        {
+          "attr": 118,
+          "value": 40,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 488,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 28,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 250,
+          "mode": 0
+        }
+      ],
+      "lore": "寒潭能映星宿，却映不出守潭人。他取水洗脸，水面上忽然有了倒影；岸上的人反而从此不再留下脚印。",
+      "identity": "专门承受法术与异常的玄冥阵",
+      "benefit": "法术承伤为主；魔防、法术平减、异常抵抗、生命、精神、法力提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "highvalue",
+      "traits": [
+        {
+          "kind": "magic_guard",
+          "powerBP": 1800,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 70,
+          "min": 36,
+          "max": 39
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "name": "行囊漏晨光",
+      "runes": [
+        1900028007,
+        1900028015,
+        1900028016,
+        1900028027,
+        1900028028
+      ],
+      "order": [
+        "箕",
+        "奎",
+        "娄",
+        "翼",
+        "轸"
+      ],
+      "channel": "辅阵",
+      "minLevel": 60,
+      "professions": 0,
+      "slots": [
+        1,
+        3,
+        6,
+        7,
+        9
+      ],
+      "affixes": [
+        {
+          "attr": 27,
+          "value": 18,
+          "mode": 1
+        },
+        {
+          "attr": 19,
+          "value": 40,
+          "mode": 1
+        },
+        {
+          "attr": 34,
+          "value": 280,
+          "mode": 0
+        },
+        {
+          "attr": 47,
+          "value": 100,
+          "mode": 0
+        },
+        {
+          "attr": 1,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 220,
+          "mode": 0
+        }
+      ],
+      "lore": "行囊底破了一洞，晨光沿山路漏了一地。行者本想补好，后来发现落在后面的伤者循着光也能赶上来。",
+      "identity": "移动清剿的长途行阵",
+      "benefit": "物理输出为主；移动速度、命中、生命、物攻、力量、法力提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "highvalue",
+      "traits": [
+        {
+          "kind": "kill_mend",
+          "powerBP": 500,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 34,
+          "min": 280,
+          "max": 308
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "name": "五炁不争先",
+      "runes": [
+        1900028004,
+        1900028005,
+        1900028010,
+        1900028026,
+        1900028028
+      ],
+      "order": [
+        "房",
+        "心",
+        "女",
+        "张",
+        "轸"
+      ],
+      "channel": "辅阵",
+      "minLevel": 60,
+      "professions": 0,
+      "slots": [
+        1,
+        3,
+        6,
+        7,
+        9
+      ],
+      "affixes": [
+        {
+          "attr": 34,
+          "value": 32,
+          "mode": 1
+        },
+        {
+          "attr": 36,
+          "value": 38,
+          "mode": 1
+        },
+        {
+          "attr": 61,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 45,
+          "mode": 0
+        },
+        {
+          "attr": 69,
+          "value": 24,
+          "mode": 0
+        },
+        {
+          "attr": 70,
+          "value": 24,
+          "mode": 0
+        }
+      ],
+      "lore": "五道炁绕着空碗转，谁也不肯先入。药师把碗递给最口渴的人，阵中争执便随着第一口水平息了。",
+      "identity": "血蓝兼顾的清怪补给阵",
+      "benefit": "技能续航为主；生命、法力、精神、魔防、物理平减、法术平减提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "highvalue",
+      "traits": [
+        {
+          "kind": "kill_mend",
+          "powerBP": 400,
+          "thresholdPct": 0
+        },
+        {
+          "kind": "kill_mana",
+          "powerBP": 500,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 61,
+          "min": 24,
+          "max": 26
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "name": "四象让中宫",
+      "runes": [
+        1900028001,
+        1900028008,
+        1900028015,
+        1900028022,
+        1900028028
+      ],
+      "order": [
+        "角",
+        "斗",
+        "奎",
+        "井",
+        "轸"
+      ],
+      "channel": "战阵",
+      "minLevel": 60,
+      "professions": 0,
+      "slots": [
+        4,
+        13
+      ],
+      "affixes": [
+        {
+          "attr": 47,
+          "value": 218,
+          "mode": 0
+        },
+        {
+          "attr": 15,
+          "value": 145,
+          "mode": 0
+        },
+        {
+          "attr": 23,
+          "value": 900,
+          "mode": 0
+        },
+        {
+          "attr": 66,
+          "value": 900,
+          "mode": 0
+        },
+        {
+          "attr": 34,
+          "value": 320,
+          "mode": 0
+        },
+        {
+          "attr": 36,
+          "value": 300,
+          "mode": 0
+        },
+        {
+          "attr": 61,
+          "value": 26,
+          "mode": 0
+        },
+        {
+          "attr": 17,
+          "value": 48,
+          "mode": 0
+        }
+      ],
+      "lore": "四象争夺中宫百年，阵师最后在那里放了一把空椅。椅上渐渐压出第五种兽形，谁也说不出它究竟朝向哪一方。",
+      "identity": "多伤害路线兼修的中宫阵",
+      "benefit": "物理与法术输出的双向配置为主；物攻、法攻、物理会心、法术会心、生命、法力、精神、魔防提供独立于星篆的完整词条",
+      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "powerTier": "highvalue",
+      "traits": [
+        {
+          "kind": "skill_focus",
+          "powerBP": 1400,
+          "thresholdPct": 0
+        }
+      ],
+      "reservedSkills": [],
+      "variableAffixes": [
+        {
+          "attr": 47,
+          "min": 218,
+          "max": 239
+        }
+      ]
+    }
+  ]
+}

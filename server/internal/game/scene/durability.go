@@ -184,7 +184,7 @@ func (s *Scene) attackDurabilityReductionPct(p *entity.Entity, equipType int32) 
 	}
 	ch := p.Player.Char
 	var reduction int32
-	for skill, level := range ch.Skills {
+	for skill, level := range s.rawSkillLevels(p) {
 		passive, ok := s.skills.Get(skill, level)
 		if !ok || passive.Kind != domain.SkillPassive || !ch.AllowsSkill(passive.ID, passive.Prof) ||
 			passive.RequiredWeaponType != 0 && passive.RequiredWeaponType != equipType {

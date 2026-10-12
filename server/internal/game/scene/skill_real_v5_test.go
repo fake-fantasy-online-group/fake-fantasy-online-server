@@ -1,0 +1,423 @@
+package scene
+
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
+	"os"
+	"reflect"
+	"strings"
+	"testing"
+	"time"
+)
+
+func realV5SkillFixtures(t *testing.T) (domain.SkillTable, domain.StatusTable) {
+	t.Helper()
+	b, e := os.ReadFile("../../../../docs/daoist-endgame/v5/skill-legacy-anchors.json")
+	if e != nil {
+		t.Fatal(e)
+	}
+	var rows []struct {
+		ID           domain.SkillID
+		First, Fifth domain.SkillDef
+	}
+	if e = json.Unmarshal(b, &rows); e != nil {
+		t.Fatal(e)
+	}
+	skills := domain.SkillTable{}
+	for _, r := range rows {
+		skills[domain.SkillKey{ID: r.ID, Level: 1}] = r.First
+		skills[domain.SkillKey{ID: r.ID, Level: 5}] = r.Fifth
+	}
+	if e = domain.InstallV5SkillProgression(skills); e != nil {
+		t.Fatal(e)
+	}
+	b, e = os.ReadFile("../../../../docs/daoist-endgame/v5/skill-status-anchors.json")
+	if e != nil {
+		t.Fatal(e)
+	}
+	var states []domain.StatusDef
+	if e = json.Unmarshal(b, &states); e != nil {
+		t.Fatal(e)
+	}
+	statuses := domain.StatusTable{}
+	for _, d := range states {
+		statuses[domain.StatusKey{ID: d.ID, Level: d.Level}] = d
+	}
+	return skills, statuses
+}
+func TestV5StealthAndAdvancedStealthRetainEachRankAtHit(t *testing.T) {
+	skills, statuses := realV5SkillFixtures(t)
+	for _, rank := range []int32{20, 21} {
+		s := newTestScene(t, nil)
+		join(t, s, 1, 100, "刺客", 100, 100)
+		p := s.players[1]
+		p.Player.Char.Race = domain.Assassin
+		p.Player.Char.Level = 100
+		p.Player.Char.Skills = domain.Learned{10208: 20, 10207: 1}
+		s.skills = skills
+		s.statuses = statuses
+		def, _ := s.skills.Get(10208, rank)
+		s.applyPassiveSkillModifiersWithLevels(p, &def, domain.Learned{10207: 1})
+		// This unit seam supplies the already-authorized accepted rank snapshot. The
+		// live equipment down-snapshot is independently exercised in persistent tests.
+		s.skillProgressionRefreshing = true
+		if !s.applySkill(p, p, def, 0, false) {
+			t.Fatal("stealth failed")
+		}
+		s.skillProgressionRefreshing = false
+		blow := combat.Blow{SkillPct: 100, GuaranteedHit: true}
+		s.prepareBasicAttackStatuses(p, &blow)
+		if blow.FlatDamage != rank-1 {
+			t.Fatal("advanced rank1 erased base carrier", rank, blow.FlatDamage)
+		}
+		if p.Status.Invisible() {
+			t.Fatal("stealth failed to consume")
+		}
+		p.Stats.MinAtk = 100
+		p.Stats.MaxAtk = 100
+		p.Stats.CritRate = 0
+		target := &entity.Entity{ID: 999, Kind: domain.KindMonster, HP: 10000, MaxHP: 10000, Monster: &entity.Monster{}}
+		s.entities[999] = target
+		tr := &combat.HitTracker{}
+		ev, _, _ := s.resolveStrikeStatuses(p, target, tr, blow)
+		if ev.Amount < 100+rank-1 {
+			t.Fatal("consumed flat never reached real hit", rank, ev)
+		}
+	}
+}
+func TestV5OneShotSpellFlatSurvivesConsumption(t *testing.T) {
+	skills, statuses := realV5SkillFixtures(t)
+	for _, id := range []domain.SkillID{10419, 10420, 10328, 10329} {
+		s := newTestScene(t, nil)
+		join(t, s, 1, 100, "术者", 100, 100)
+		p := s.players[1]
+		ident, _ := domain.V5SkillIdentity(id)
+		p.Player.Char.Race = domain.Race(ident.Profession - 1)
+		p.Player.Char.Level = 100
+		p.Player.Char.Skills = domain.Learned{id: 20}
+		s.skills = skills
+		s.statuses = statuses
+		buff, _ := skills.Get(id, 20)
+		buff.SnapshotRawRanks = domain.Learned{id: 20}
+		buff.SnapshotHardRanks = p.Player.Char.Skills.Clone()
+		if !s.applySkill(p, p, buff, 0, false) {
+			t.Fatal(id)
+		}
+		attack := domain.SkillDef{ID: 10401, PrepareMS: 500, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}, HurtType: domain.HurtFire}
+		s.prepareSkillStatuses(p, &attack)
+		if attack.Effect.DamageFlat != 19 {
+			t.Fatal("one-shot carrier lost", id, attack.Effect)
+		}
+		p.Stats.MAtk = 100
+		p.Stats.MCritRate = 0
+		target := &entity.Entity{ID: 999, Kind: domain.KindMonster, HP: 10000, MaxHP: 10000, Monster: &entity.Monster{}}
+		s.entities[999] = target
+		s.applySkill(p, target, attack, 0, false)
+		if target.HP >= 9900 {
+			t.Fatal("primed flat not consumed", id, target.HP)
+		}
+	}
+}
+func TestV5ControlAddedDamageDoesNotIntroduceMiss(t *testing.T) {
+	skills, statuses := realV5SkillFixtures(t)
+	for _, id := range []domain.SkillID{10016, 10029, 10128, 10224} {
+		for _, rank := range []int32{1, 2} {
+			s := newTestScene(t, nil)
+			join(t, s, 1, 100, "控制", 100, 100)
+			p := s.players[1]
+			ident, _ := domain.V5SkillIdentity(id)
+			p.Player.Char.Race = domain.Race(ident.Profession - 1)
+			p.Player.Char.Level = 100
+			p.Player.Char.Skills = domain.Learned{id: rank}
+			s.skills = skills
+			s.statuses = statuses
+			p.Stats.Hit = -100000
+			p.Stats.CritRate = 0
+			target := &entity.Entity{ID: 999, Kind: domain.KindMonster, HP: 10000, MaxHP: 10000, Stats: domain.Stats{Def: 100000}, Monster: &entity.Monster{}}
+			s.entities[999] = target
+			def, _ := skills.Get(id, rank)
+			if !s.applySkill(p, target, def, 0, false) {
+				t.Fatal("extra carrier introduced MISS", id, rank)
+			}
+			if target.Status == nil || !target.Status.Has(def.Statuses[0].ID) {
+				t.Fatal("original control lost", id, rank)
+			}
+		}
+	}
+}
+
+func TestV5FreezeSynergyUsesRealStatusDuration(t *testing.T) {
+	skills, statuses := realV5SkillFixtures(t)
+	s := newTestScene(t, nil)
+	join(t, s, 1, 100, "刺客", 100, 100)
+	p := s.players[1]
+	p.Player.Char.Race = domain.Assassin
+	p.Player.Char.Level = 100
+	p.Player.Char.Skills = domain.Learned{10216: 20, 10217: 20}
+	s.skills = skills
+	s.statuses = statuses
+	def, _ := skills.Get(10216, 20)
+	before := def.Statuses[0]
+	base, _ := statuses.Get(before.ID, before.Level)
+	if before.DurationSec != 0 || base.DurationSec <= 0 {
+		t.Fatal("fixture no longer exercises table-backed time", before, base)
+	}
+	s.applyTrainingSynergies(p, &def)
+	if def.Statuses[0].DurationSec != base.DurationSec*110/100 {
+		t.Fatal("hard source ignored table duration", def.Statuses, base.DurationSec)
+	}
+	target := &entity.Entity{ID: 999, Kind: domain.KindMonster, HP: 100000, MaxHP: 100000, Monster: &entity.Monster{}}
+	s.entities[999] = target
+	s.applySkill(p, target, trapPayload(def), 0, true)
+	var duration int32
+	target.Status.Each(func(a domain.Active) {
+		if a.Def.ID == before.ID {
+			duration = a.Def.DurationSec
+		}
+	})
+	if duration != base.DurationSec*110/100 {
+		t.Fatal("synergy duration unconsumed", duration)
+	}
+}
+
+func TestV5EveryTrainingEdgeChangesConsumedPayload(t *testing.T) {
+	skills, statuses := realV5SkillFixtures(t)
+	for _, edge := range domain.V5SkillSynergies {
+		if edge.RankMode != "hard" {
+			continue
+		}
+		t.Run(fmt.Sprintf("%d-to-%d", edge.Source, edge.Target), func(t *testing.T) {
+			s := newTestScene(t, nil)
+			join(t, s, 1, 100, "协同", 100, 100)
+			p := s.players[1]
+			ident, _ := domain.V5SkillIdentity(edge.Target)
+			p.Player.Char.Race = domain.Race(ident.Profession - 1)
+			p.Player.Char.Level = 100
+			p.Player.Char.Skills = domain.Learned{edge.Target: 20}
+			s.skills = skills
+			s.statuses = statuses
+			a, _ := skills.Get(edge.Target, 20)
+			s.applyTrainingSynergies(p, &a)
+			s.applyPassiveSkillModifiers(p, &a)
+			p.Player.Char.Skills[edge.Source] = 20
+			b, _ := skills.Get(edge.Target, 20)
+			s.applyTrainingSynergies(p, &b)
+			s.applyPassiveSkillModifiers(p, &b)
+			// Every retained hard edge must alter an actually consumed payload field.
+			changed := !reflect.DeepEqual(a.DirectEffects(), b.DirectEffects()) || !reflect.DeepEqual(a.Statuses, b.Statuses) || a.MPCost != b.MPCost || a.PrepareMS != b.PrepareMS || a.Area != b.Area || a.Radius != b.Radius || a.TrainingEliteDamageBP != b.TrainingEliteDamageBP
+			if !changed {
+				t.Fatal("advertised but inert synergy", edge)
+			}
+		})
+	}
+}
+
+func TestV5TrapExpansionPersistsOnlyWhileSourceEquipped(t *testing.T) {
+	skills, statuses := realV5SkillFixtures(t)
+	s := newTestScene(t, nil)
+	join(t, s, 1, 100, "刺客", 100, 100)
+	p := s.players[1]
+	p.Player.Char.Race = domain.Assassin
+	p.Player.Char.Level = 100
+	p.Player.Char.Skills = domain.Learned{10213: 20}
+	s.skills = skills
+	s.statuses = statuses
+	item := domain.ItemDef{ID: 1908, Equip: &domain.EquipDef{Slot: 13, Durable: 100}}
+	s.items = map[domain.ItemID]domain.ItemDef{1908: item}
+	st := domain.NewStack(item, 1)
+	st.UID = 1908001
+	st.MaxDurability = 100
+	st.Durability = 100
+	st.Endgame = domain.EndgameItemState{UniqueID: 1908, UniqueRollBP: 10000, UniqueContentVersion: domain.UniqueContentVersion}
+	p.Player.Worn.Set(domain.SlotTwoHand, st)
+	rank, _ := s.skillLevelForUse(p, 10213)
+	def, _ := skills.Get(10213, rank)
+	s.applyTrainingSynergies(p, &def)
+	s.applyPassiveSkillModifiers(p, &def)
+	s.applyUniqueSkillModifiers(p, &def)
+	def.SnapshotRawRanks = s.rawSkillLevels(p)
+	def.SnapshotHardRanks = p.Player.Char.Skills.Clone()
+	radius := int32(0)
+	for _, e := range def.DirectEffects() {
+		if e.Kind == domain.EffectPlaceTrap {
+			radius = e.TrapRadius
+		}
+	}
+	base, _ := skills.Get(10213, 20)
+	native := int32(0)
+	for _, e := range base.DirectEffects() {
+		if e.Kind == domain.EffectPlaceTrap {
+			native = e.TrapRadius
+		}
+	}
+	if radius <= native {
+		t.Fatal("fixture lacks expansion", radius, native)
+	}
+	current, ok := s.lesserPersistentSkill(p, def)
+	if !ok {
+		t.Fatal("lost equipped trap")
+	}
+	currentRadius := int32(0)
+	for _, e := range current.DirectEffects() {
+		if e.Kind == domain.EffectPlaceTrap {
+			currentRadius = e.TrapRadius
+		}
+	}
+	if currentRadius != radius {
+		t.Fatal("still equipped source vanished", currentRadius, radius)
+	}
+	trap := &entity.Entity{ID: 9000, Kind: domain.KindTrap, Pos: p.Pos, Trap: &entity.Trap{Owner: p.ID, Def: current, Radius: currentRadius}}
+	target := &entity.Entity{ID: 999, Kind: domain.KindMonster, Pos: domain.Pos{MapID: p.Pos.MapID, X: p.Pos.X + float64(native+1), Y: p.Pos.Y}, HP: 10000, MaxHP: 10000, Monster: &entity.Monster{Kind: domain.MonsterNormal}}
+	s.entities[999] = target
+	s.monsters[999] = target
+	if len(s.trapTargets(trap)) != 1 {
+		t.Fatal("expanded ring enemy not targetable")
+	}
+	p.Player.Worn.Set(domain.SlotTwoHand, domain.Stack{})
+	current, ok = s.lesserPersistentSkill(p, current)
+	if !ok {
+		t.Fatal("hard20 trap lost on unequip")
+	}
+	for _, e := range current.DirectEffects() {
+		if e.Kind == domain.EffectPlaceTrap {
+			trap.Trap.Radius = min(trap.Trap.Radius, e.TrapRadius)
+		}
+	}
+	if trap.Trap.Radius != native || len(s.trapTargets(trap)) != 0 {
+		t.Fatal("unequipped expansion retained", trap.Trap.Radius, native)
+	}
+}
+
+func TestV5DetachedBuffRevokedAcrossTransferAndLogout(t *testing.T) {
+	s := newTestScene(t, nil)
+	join(t, s, 1, 100, "施术者", 100, 100)
+	join(t, s, 2, 101, "队友", 110, 100)
+	src, dst := s.players[1], s.players[2]
+	dst.Player.Char.Race = domain.Healer
+	dst.Player.Char.Skills = domain.Learned{10321: 1}
+	own := domain.StatusDef{ID: 95001, Level: 1, DurationSec: 30, Type: domain.StatusGood, TypeKnown: true, SkillSnapshotID: 10321, SkillSnapshotRank: 1}
+	external := own
+	external.ID = 95002
+	legacy := domain.StatusDef{ID: 95003, Level: 1, DurationSec: 30, Type: domain.StatusGood, TypeKnown: true}
+	dst.Status = domain.NewStatusSet()
+	dst.Status.Apply(own, s.tick, dst.ID)
+	dst.Status.Apply(external, s.tick, src.ID)
+	dst.Status.Apply(legacy, s.tick, src.ID)
+	saved := dst.Status.SaveForLogout(s.tick, time.Now(), dst.ID)
+	if len(saved) != 2 {
+		t.Fatal("detached V5 status saved", saved)
+	}
+	restored := domain.RestoreSavedStatuses(saved, 10, time.Now(), 9)
+	if restored.Has(external.ID) || !restored.Has(legacy.ID) || !restored.Has(own.ID) {
+		t.Fatal("logout restore did not preserve proper boundary")
+	}
+	rt := dst.CapturePlayerRuntime(s.tick)
+	copy := &entity.Entity{ID: 9, Player: &entity.Player{}, MaxHP: 100, MaxMP: 100}
+	copy.RestorePlayerRuntime(rt, 50)
+	if copy.Status.Has(external.ID) || !copy.Status.Has(legacy.ID) || !copy.Status.Has(own.ID) {
+		t.Fatal("cross-scene lost boundary")
+	}
+	copy.Status.Each(func(a domain.Active) {
+		if a.Def.ID == own.ID && a.Source != 9 {
+			t.Fatal("self source not rebound", a)
+		}
+	})
+	s.revokeDepartingSkillSource(src)
+	if dst.Status.Has(external.ID) || !dst.Status.Has(legacy.ID) || !dst.Status.Has(own.ID) {
+		t.Fatal("caster departure left detached V5 effect")
+	}
+	// Also reject an older saved record that already lost its source handle.
+	old := domain.SavedStatus{Def: external, RemainingTicks: 100, SourceSelf: false}
+	if domain.RestoreSavedStatuses([]domain.SavedStatus{old}, 1, time.Now(), 9).Count() != 0 {
+		t.Fatal("detached old record resurrected")
+	}
+}
+
+func TestV5StatusRequirementExpiryInvalidatesSkillCache(t *testing.T) {
+	skills, statuses := realV5SkillFixtures(t)
+	s := newTestScene(t, nil)
+	join(t, s, 1, 100, "药师", 100, 100)
+	p := s.players[1]
+	p.Player.Char.Level = 100
+	p.Player.Char.Race = domain.Healer
+	p.Player.Char.Base = domain.Base{STR: 10, VIT: 10, INT: 10, SPI: 10, AGI: 10, DEX: 10}
+	p.Player.Char.Skills = domain.Learned{10301: 20}
+	s.skills = skills
+	s.statuses = statuses
+	item := domain.ItemDef{ID: 2032, Equip: &domain.EquipDef{Slot: 2, Durable: 100, Need: domain.Requirement{Base: domain.Base{STR: 100}}}}
+	s.items = map[domain.ItemID]domain.ItemDef{2032: item}
+	st := domain.NewStack(item, 1)
+	st.UID = 2032001
+	st.MaxDurability = 100
+	st.Durability = 100
+	st.Endgame = domain.EndgameItemState{UniqueID: 2032, UniqueRollBP: 10000, UniqueContentVersion: domain.UniqueContentVersion}
+	p.Player.Worn.Set(domain.SlotHead, st)
+	buff := domain.StatusDef{ID: 95111, Level: 1, DurationSec: 1, Type: domain.StatusGood, TypeKnown: true, Affixes: []domain.Affix{{Attr: domain.AttrSTR, Value: 100, Mode: domain.ModeAbsolute}}}
+	if !s.applyStatusDef(p, buff, p.ID) {
+		t.Fatal("strength buff failed")
+	}
+	if rank, _ := s.skillLevelForUse(p, 10301); rank != 21 {
+		t.Fatal("eligible gear rank", rank)
+	}
+	// Confirm cached raw21 is present before the actual status-removal refresh.
+	if rank, _ := s.skillLevelForUse(p, 10301); rank != 21 {
+		t.Fatal(rank)
+	}
+	removed := p.Status.RemoveWhere(func(d domain.StatusDef) bool { return d.ID == buff.ID })
+	s.statusesRemoved(p, removed)
+	if !s.functionalWorn(p).At(domain.SlotHead).Empty() {
+		t.Fatal("fixture gear still usable")
+	}
+	if rank, _ := s.skillLevelForUse(p, 10301); rank != 20 {
+		t.Fatal("expired strength retained cached soft rank", rank)
+	}
+}
+
+func TestV5UnlearnedViewHasFirstPointAndSoftPreview(t *testing.T) {
+	skills, statuses := realV5SkillFixtures(t)
+	s := newTestScene(t, nil)
+	join(t, s, 1, 100, "药师", 100, 100)
+	p := s.players[1]
+	ch := p.Player.Char
+	ch.Race = domain.Healer
+	ch.Level = 100
+	ch.SkillPoints = 99
+	ch.SkillAllocationVersion = 5
+	ch.Skills = domain.Learned{}
+	s.skills = skills
+	s.statuses = statuses
+	item := domain.ItemDef{ID: 2032, Equip: &domain.EquipDef{Slot: 2}}
+	s.items = map[domain.ItemID]domain.ItemDef{2032: item}
+	st := domain.NewStack(item, 1)
+	st.UID = 2032002
+	st.Endgame = domain.EndgameItemState{UniqueID: 2032, UniqueRollBP: 10000, UniqueContentVersion: domain.UniqueContentVersion}
+	p.Player.Worn.Set(domain.SlotHead, st)
+	view, err := s.skillRanksForDisplay(p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	v := view[10301]
+	if v.CanCast || !v.CanInvest || v.SoftRank != "1" || len(v.CurrentEffectLines) != 0 || len(v.NextEffectLines) == 0 || !strings.Contains(v.NextEffectLines[0], "有效等级2") {
+		t.Fatal(v)
+	}
+	ch.Skills = domain.Learned{10305: 1}
+	view, err = s.skillRanksForDisplay(p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, line := range view[10305].CurrentEffectLines {
+		if strings.Contains(line, "成功率0%") || strings.Contains(line, "/10000") {
+			t.Fatal("misleading probability", line)
+		}
+	}
+	for _, v := range view {
+		for _, line := range append(v.CurrentEffectLines, v.NextEffectLines...) {
+			if strings.Contains(line, "属性13") || strings.Contains(line, "/19%") {
+				t.Fatal("raw technical label", line)
+			}
+		}
+	}
+}

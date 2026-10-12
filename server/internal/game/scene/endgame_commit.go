@@ -61,6 +61,7 @@ func (s *Scene) applyEndgameSnapshot(p *entity.Entity, snap domain.Snapshot) {
 	p.Player.Warehouse = snap.Warehouse
 	p.Player.Wardrobe = snap.Wardrobe
 	p.Player.Stall = snap.Stall
+	s.syncEndgamePetProjection(p)
 	p.Level = snap.Char.Level
 	s.refreshStats(p)
 	s.refreshAppearance(p)
@@ -119,6 +120,7 @@ func (s *Scene) finishEndgameCommit(p *entity.Entity, x *endgamePlayerState, r d
 		}
 	}
 	p.Player.MarkDirty()
+	s.pushPetSnapshot(p)
 	_ = s.pushInventory(p) // also publishes the extension snapshot exactly once
 	s.runDeferredTradeMutations(p.ID)
 	s.finishTradeLifecycle(p.ID)

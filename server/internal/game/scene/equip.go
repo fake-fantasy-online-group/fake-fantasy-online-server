@@ -260,6 +260,15 @@ func (s *Scene) unequipTo(p *entity.Entity, slot domain.EquipSlot) {
 // 血量按**上限的变化量**跟着走: 换上加血的装备当场补上, 换下来就扣掉。
 // 不这么做的话, 反复穿脱一件加血装备等于无限回血。
 func (s *Scene) refreshStats(p *entity.Entity) {
+	if p != nil {
+		delete(s.skillRawCache, p.ID)
+	}
+	defer s.publishEquipmentCombatStats(p)
+	if s.equipment != nil {
+		delete(s.equipment.cache, p.ID)
+	}
+	defer s.maybeSendSkillRanks(p)
+	defer s.refreshSkillPersistentEffects(p)
 	ch := p.Player.Char
 	wasAlive := p.Alive()
 	oldMaxHP, oldMaxMP := p.MaxHP, p.MaxMP
@@ -313,7 +322,7 @@ func (s *Scene) passiveStatAffixes(p *entity.Entity) []domain.Affix {
 	ch := p.Player.Char
 	out := s.petStatAffixes(p)
 	out = append(out, domain.AstralBonuses(p.Player.Worn, s.itemDef, ch)...)
-	for skill, level := range ch.Skills {
+	for skill, level := range s.rawSkillLevels(p) {
 		def, ok := s.skills.Get(skill, level)
 		if !ok || def.Kind != domain.SkillPassive || !ch.AllowsSkill(def.ID, def.Prof) {
 			continue

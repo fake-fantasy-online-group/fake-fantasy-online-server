@@ -339,7 +339,7 @@ func TestRiftTrialClaimFrozenKeysAtomic(t *testing.T) {
 	p.Player.QuestNPC = "试炼小仙"
 	p.Player.Char.Quests[99] = domain.QuestEntry{State: domain.QuestDeliver}
 	p.Player.Char.Trial = domain.TrialProgress{MonsterLevel: 60, KeyReward: 14, CompletionID: "frozen-opening", Cycle: 5}
-	s.completeTrial(p)
+	completeTrialReadyForTest(s, p)
 	if b.commits != 1 || p.Player.Bag.CountOf(domain.RiftKeyItemID) != 0 {
 		t.Fatal("key published before receipt")
 	}
@@ -351,7 +351,11 @@ func TestRiftTrialClaimFrozenKeysAtomic(t *testing.T) {
 	if p.Player.Char.Quests[99].State != domain.QuestDeliver {
 		t.Fatal("failure consumed completion")
 	}
-	s.completeTrial(p)
+	completeTrialReadyForTest(s, p)
+	if b.commit == nil {
+		s.stepEndgameTrial()
+		completeTrialReadyForTest(s, p)
+	}
 	b.finish(true)
 	s.finishEndgame(false)
 	if p.Player.Bag.CountOf(domain.RiftKeyItemID) != 14 || p.Player.Char.Quests[99].State != domain.QuestFinished {
@@ -362,7 +366,7 @@ func TestRiftTrialClaimFrozenKeysAtomic(t *testing.T) {
 			t.Fatal("key not bound")
 		}
 	})
-	s.completeTrial(p)
+	completeTrialReadyForTest(s, p)
 	if b.commits != 2 {
 		t.Fatal("double native claim")
 	}
@@ -462,7 +466,11 @@ func TestRiftTrialRewardRetainsNativeLevelGrowth(t *testing.T) {
 	p.Player.Char.Level = 12
 	p.Player.Char.Trial = domain.TrialProgress{MonsterLevel: 12, KeyReward: 1, CompletionID: "growth-receipt"}
 	p.Player.Char.Quests[99] = domain.QuestEntry{State: domain.QuestDeliver}
-	s.completeTrial(p)
+	completeTrialReadyForTest(s, p)
+	if b.commit == nil {
+		s.stepEndgameTrial()
+		completeTrialReadyForTest(s, p)
+	}
 	b.finish(true)
 	s.finishEndgame(false)
 	if p.Player.Char.Level != 15 || p.Player.Char.FreePoints != 3*domain.FreePointsPerLevel {
@@ -529,5 +537,13 @@ func TestRiftTrialReentryWaitsForOldEntitlement(t *testing.T) {
 	}
 	if p.Player.Char.Trial.CompletionID != oldNonce {
 		t.Fatal("recovered nonce changed")
+	}
+}
+
+func completeTrialReadyForTest(s *Scene, p *entity.Entity) {
+	s.completeTrial(p)
+	if s.trialRun != nil && len(s.trialRun.Recoveries) > 0 {
+		s.stepEndgameTrial()
+		s.completeTrial(p)
 	}
 }

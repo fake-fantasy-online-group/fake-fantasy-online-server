@@ -17,7 +17,7 @@ func (s *Scene) finishEndgameRunWrites() {
 	if x := s.trialRun; x != nil && x.Completed && !x.Saved {
 		for !x.Saved {
 			if x.Saving == nil {
-				c := endgameTrialCompletion{Version: 1, Kind: "trial", Nonce: x.Nonce, MonsterLevel: s.trialLevel, Keys: x.Keys}
+				c := x.Completion
 				b, _ := json.Marshal(c)
 				x.Saving = backend.SaveRun(domain.EndgameRunRecord{RunID: "trial-" + x.Nonce, Revision: 1, State: "trial.completed", Payload: string(b)}, 0)
 			}

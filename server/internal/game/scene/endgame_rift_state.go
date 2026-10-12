@@ -14,8 +14,11 @@ type endgameRiftProfile struct {
 	UnlockedTier int32  `json:"unlockedTier"`
 }
 type endgameRiftGrant struct {
-	Items []domain.Stack
-	Exp   int64
+	Items              []domain.Stack
+	Exp                int64
+	ProgressionVersion string
+	RewardVersion      string
+	Pet                endgamePetGrant
 }
 type endgameRiftPersisted struct {
 	DeathTimes      map[domain.CharID]int64
@@ -44,7 +47,7 @@ func (d endgameRiftPersisted) record(rev int64) domain.EndgameRunRecord {
 }
 func decodeEndgameRift(record *domain.EndgameRunRecord) (endgameRiftPersisted, bool) {
 	var d endgameRiftPersisted
-	if record == nil || json.Unmarshal([]byte(record.Payload), &d) != nil || d.Version != 1 || d.Run == nil || d.Run.RunID != record.RunID {
+	if record == nil || json.Unmarshal([]byte(record.Payload), &d) != nil || (d.Version != 1 && d.Version != 2) || d.Run == nil || d.Run.RunID != record.RunID {
 		return d, false
 	}
 	return d, true

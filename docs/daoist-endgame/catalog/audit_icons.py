@@ -62,8 +62,11 @@ def audit():
     specials = {r['arm_id']: r for r in sorted(
         tables['ov_item_icon_special'], key=lambda r: r['row_no'])}
     descriptor_counts = collections.Counter(r['index'] for r in tables['ov_desc'])
-    unique_files = sorted((ROOT / 'server/internal/domain').glob('unique_catalog_*.json'))
-    unique_rows = [r for p in unique_files for r in json.loads(p.read_text())]
+    current_files = sorted((ROOT / 'server/internal/domain').glob('unique_catalog_*.json'))
+    legacy_files = sorted((ROOT / 'server/internal/domain/legacy_unique_v4').glob('*.json'))
+    unique_files = legacy_files + current_files
+    # Visual aliases outlive generation eligibility: preserve all old owners.
+    unique_rows = list({r['BaseID']:r for p in unique_files for r in json.loads(p.read_text())}.values())
     errors, rows = [], []
     seen = set()
     for unique in sorted(unique_rows, key=lambda r: r['BaseID']):
@@ -120,7 +123,8 @@ def audit():
     sources.update(str(p.relative_to(ROOT)) for p in unique_files)
     result = {
         'schema_version': 1,
-        'scope': 'Frozen unique catalogue and original initialization SQL; original base IDs are retained.',
+        'scope': 'Appearance aliases for V5 and frozen V4-owned uniques; generation remains limited to259 approved bases.',
+        'new_generation_count': 259,
         'selection': {
             'descriptor': 'First ov_desc row by numeric row_no for each index (DISTINCT ON index ORDER BY index,row_no).',
             'special': 'ov_item_icon_special.icon_small overrides descriptor small_map; last row_no wins.',

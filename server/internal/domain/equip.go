@@ -164,7 +164,8 @@ const (
 
 // EquipSet 是身上穿着的一整套。按槽位索引, 空槽的 Item 为 0。
 type EquipSet struct {
-	worn map[EquipSlot]Stack
+	worn            map[EquipSlot]Stack
+	effectsRevision uint64
 }
 
 // NewEquipSet 建一套空的。
@@ -183,11 +184,36 @@ func (e *EquipSet) Set(s EquipSlot, st Stack) {
 	if e == nil {
 		return
 	}
+	if equipmentEffectIdentity(e.worn[s]) != equipmentEffectIdentity(st) {
+		e.effectsRevision++
+	}
 	if st.Empty() {
 		delete(e.worn, s)
 		return
 	}
+	if e.worn == nil {
+		e.worn = map[EquipSlot]Stack{}
+	}
 	e.worn[s] = st
+}
+
+// EffectsRevision changes only when effective equipment can change. Ordinary
+// fractional wear and positive durability loss do not rebuild combat effects.
+func (e *EquipSet) EffectsRevision() uint64 {
+	if e == nil {
+		return 0
+	}
+	return e.effectsRevision
+}
+func equipmentEffectIdentity(st Stack) Stack {
+	if st.Empty() {
+		return Stack{}
+	}
+	st.DurabilityWearRaw = 0
+	if st.Durability > 0 {
+		st.Durability = 1
+	}
+	return st
 }
 
 // Each 按客户端槽位号从小到大遍历穿着的东西。
@@ -220,6 +246,7 @@ func (e *EquipSet) Clone() *EquipSet {
 		return nil
 	}
 	out := NewEquipSet()
+	out.effectsRevision = e.effectsRevision
 	for s, st := range e.worn {
 		out.worn[s] = st
 	}

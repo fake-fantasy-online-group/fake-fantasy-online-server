@@ -133,7 +133,7 @@ func TestSaveEndgameOrdinaryRevision(t *testing.T) {
 	if err := saveEndgameItem(context.Background(), q, st); err != nil {
 		t.Fatal(err)
 	}
-	if !strings.HasPrefix(q.statement, "INSERT INTO equipment_endgame_state") || len(q.args) != 5 || q.args[1] != int64(2) || q.args[2] != int32(0) || q.args[3] != int32(0) || q.args[4] != int32(0) {
+	if !strings.HasPrefix(q.statement, "INSERT INTO equipment_endgame_state") || len(q.args) != 7 || q.args[1] != int64(2) || q.args[2] != int32(0) || q.args[3] != int32(0) || q.args[4] != int32(0) {
 		t.Fatalf("revision was not saved: %s %v", q.statement, q.args)
 	}
 	st.Endgame = domain.EndgameItemState{}
@@ -152,7 +152,7 @@ func TestFormationRollStorageValidationAndExactSave(t *testing.T) {
 		if err := saveEndgameItem(context.Background(), q, st); err != nil {
 			t.Fatal(err)
 		}
-		if roll != 0 && (len(q.args) != 5 || q.args[4] != roll) {
+		if roll != 0 && (len(q.args) != 7 || q.args[4] != roll) {
 			t.Fatal("stored roll changed", q.args)
 		}
 	}

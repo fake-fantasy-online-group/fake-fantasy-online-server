@@ -82,7 +82,7 @@ func petScene(t *testing.T) (*Scene, *fakeSink) {
 		Alloc:     domain.NewEntityAlloc(),
 		Items:     map[domain.ItemID]domain.ItemDef{3382: 捕捉球, 海龟蛋.ID: 海龟蛋},
 		Pets:      petTable(海龟种, 不可捕种),
-		PetLevels: domain.NewPetLevelTable(map[int32]int64{1: 300, 2: 1100, 3: 2700, 4: 5460}),
+		PetLevels: petFixtureLevels(),
 		PetRule: domain.PetRule{
 			NaturalLearnChanceBP: 2000,
 			InitialSkillMin:      0,
@@ -1128,4 +1128,12 @@ func TestPetSnapshotOnLoginNotOnTransfer(t *testing.T) {
 	if hasEvent[event.PetSnapshot](sink3.take()) {
 		t.Fatal("跨图落地重发了宠物栏快照")
 	}
+}
+
+func petFixtureLevels() *domain.PetLevelTable {
+	need := map[int32]int64{1: 300, 2: 1100, 3: 2700, 4: 5460}
+	for level := int32(5); level <= domain.PetLevelCap; level++ {
+		need[level] = 1_000_000 + int64(level)
+	}
+	return domain.NewPetLevelTable(need)
 }

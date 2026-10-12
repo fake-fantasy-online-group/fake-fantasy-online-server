@@ -47,7 +47,7 @@ func DecodeEndgame(payload []byte) (v domain.EndgameRequest, ok bool) {
 	if json.Unmarshal([]byte(raw), &keys) != nil {
 		return v, false
 	}
-	allowed := map[string]bool{"op": true, "requestId": true, "expectedRevision": true, "capabilities": true, "catalog": true, "cursor": true, "targetUid": true, "runeUid": true, "socket": true, "recipeId": true, "quoteId": true, "runId": true, "tier": true, "floorIndex": true, "itemUids": true}
+	allowed := map[string]bool{"skillId": true, "op": true, "requestId": true, "expectedRevision": true, "capabilities": true, "catalog": true, "cursor": true, "targetUid": true, "runeUid": true, "socket": true, "recipeId": true, "quoteId": true, "runId": true, "tier": true, "floorIndex": true, "itemUids": true}
 	for key := range keys {
 		if !allowed[key] {
 			return v, false
@@ -118,8 +118,14 @@ func endgameDecimal(s string, zero bool) bool {
 }
 func validEndgameRequest(v domain.EndgameRequest) bool {
 	switch v.Op {
-	case "hello", "snapshot", "catalog", "socket.insert", "socket.remove", "cube.quote", "cube.execute", "rift.start", "rift.state", "rift.claim", "rift.leave", "rift.advance":
+	case "skill.ranks", "skill.upgrade", "hello", "snapshot", "catalog", "socket.insert", "socket.remove", "cube.quote", "cube.execute", "rift.start", "rift.state", "rift.claim", "rift.leave", "rift.advance":
 	default:
+		return false
+	}
+	if v.Op == "skill.upgrade" && v.SkillID <= 0 {
+		return false
+	}
+	if v.Op != "skill.upgrade" && v.SkillID != 0 {
 		return false
 	}
 	if v.Mutates() && (!endgameASCII(v.RequestID, 16, 64) || !endgameDecimal(v.ExpectedRevision, true)) {

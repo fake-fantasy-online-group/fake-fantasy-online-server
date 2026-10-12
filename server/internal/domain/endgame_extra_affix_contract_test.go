@@ -61,7 +61,7 @@ func TestUniqueExtraAffixesStayNonzeroAndInt32SafeAtEveryPotency(t *testing.T) {
 	for _, d := range UniqueCatalog() {
 		for _, roll := range []int32{UniqueRollMinBP, 10000, UniqueRollMaxBP} {
 			st := Stack{UID: 9007199254740993, Item: d.BaseID, Count: 1,
-				Endgame: EndgameItemState{UniqueID: d.ID, UniqueRollBP: roll}}
+				Endgame: EndgameItemState{UniqueContentVersion: UniqueContentVersion, UniqueID: d.ID, UniqueRollBP: roll}}
 			before := st
 			rows := UniqueAffixes(st)
 			benefits := 0
@@ -143,7 +143,7 @@ func TestExtendedExtraAffixSlicesDoNotTruncateOrRewriteInstances(t *testing.T) {
 		Durability: 100, MaxDurability: 100,
 		RolledAffixes: [5]InstanceAffix{{CardID: 17, Affix: Affix{Attr: AttrSTR, Value: 7}}},
 		SocketCount:   1, Sockets: [5]ItemID{FirstAstralRune}, SocketUIDs: [5]int64{9007199254740995},
-		Endgame: EndgameItemState{UniqueID: d.ID, UniqueRollBP: 10123, Revision: 3}}
+		Endgame: EndgameItemState{UniqueContentVersion: UniqueContentVersion, UniqueID: d.ID, UniqueRollBP: 10123, Revision: 3}}
 	before := st
 	got := UniqueAffixes(st)
 	want := append([]Affix{}, d.Affixes...)

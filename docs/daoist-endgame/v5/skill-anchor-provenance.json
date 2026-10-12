@@ -1,0 +1,11 @@
+{
+  "balance_status": "Structural and numeric regression inputs, not gameplay balance certification",
+  "reproduce": "FANTASY_V5_SKILL_PG_DATA=\u003cidle disposable copied cluster\u003e PG_BIN=\u003ctrusted PostgreSQL bin\u003e FANTASY_V5_EXPORT_ANCHORS_DIR=\u003coutput\u003e go test ./internal/data -run '^TestV5SkillCurvesActualReadOnlyLoader$' -count=1 -v",
+  "sha256": {
+    "skill-legacy-anchors.json": "18d02a304d219c5a3e12200d30f5eae9075c352f1de3814853d34a069c02e4ba",
+    "skill-status-anchors.json": "4c060e83eec39958ef06a2bcafe0c98e2cd4b699dea6ff150cdd13900bebf359"
+  },
+  "skill_count": 149,
+  "source": "Actual LoadSkills and LoadStatuses via read-only PostgreSQL queries against isolated seeded test cluster",
+  "status_definition_count": 1890
+}

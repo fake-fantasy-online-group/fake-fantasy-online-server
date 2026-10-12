@@ -23,6 +23,8 @@ func TestAstralJSONMatchesExecutableCatalog(t *testing.T) {
 			Identity, Benefit, Tradeoff, PowerTier string
 			Traits                                 []UniqueTrait
 			ReservedSkills                         []ReservedSkillAttribute
+			TypedEffects                           []EquipmentEffect
+			SkillBonuses                           []SkillRankBonus
 			Runes                                  []ItemID
 			MinLevel                               int32
 			Professions                            uint8
@@ -50,6 +52,9 @@ func TestAstralJSONMatchesExecutableCatalog(t *testing.T) {
 	}
 	for i, r := range AstralRecipes() {
 		d := doc.Formations[i]
+		if !reflect.DeepEqual(d.TypedEffects, r.TypedEffects) && len(d.TypedEffects)+len(r.TypedEffects) > 0 || !reflect.DeepEqual(d.SkillBonuses, r.SkillBonuses) && len(d.SkillBonuses)+len(r.SkillBonuses) > 0 {
+			t.Fatalf("typed/skill catalog drift %d", r.ID)
+		}
 		if !reflect.DeepEqual(d.ReservedSkills, r.ReservedSkills) && !(len(d.ReservedSkills) == 0 && len(r.ReservedSkills) == 0) {
 			t.Fatalf("reserved skill definition drift %d", i)
 		}

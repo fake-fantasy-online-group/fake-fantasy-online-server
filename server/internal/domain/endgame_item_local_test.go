@@ -32,7 +32,7 @@ func TestExplicitVariablesLeaveAllOtherAffixesAndTraitsFixed(t *testing.T) {
 	uniqueByBase[d.BaseID] = d
 	def := uniqueFixture(d)
 	def.Equip.Bonus = Stats{MinAtk: 10, MaxAtk: 20}
-	st := Stack{UID: 55, Item: d.BaseID, Count: 1, Durability: 100, MaxDurability: 100, Endgame: EndgameItemState{UniqueID: d.ID, UniqueRollBP: 8000}}
+	st := Stack{UID: 55, Item: d.BaseID, Count: 1, Durability: 100, MaxDurability: 100, Endgame: EndgameItemState{UniqueContentVersion: UniqueContentVersion, UniqueID: d.ID, UniqueRollBP: 8000}}
 	lo := UniqueItemBonuses(def, st)
 	before := st
 	st.Endgame.UniqueRollBP = 12000
@@ -198,7 +198,7 @@ func TestComputeLocalEnhancementCannotScaleCharacterOtherGearOrSnapshots(t *test
 	def := uniqueFixture(d)
 	def.Equip.Bonus = Stats{MinAtk: 10, MaxAtk: 20}
 	def.Equip.RefineEffects = map[int32]RefineEffect{3: {Bonuses: []Affix{{Attr: AttrMinAtk, Value: 100}, {Attr: AttrMaxAtk, Value: 100}}}}
-	st := Stack{UID: 55, Item: d.BaseID, Count: 1, Durability: 100, MaxDurability: 100, RefineLevel: 3, RolledAffixCount: 1, RolledAffixes: [5]InstanceAffix{{Affix: Affix{Attr: AttrAtk, Value: 500}}}, SocketCount: 1, Sockets: [5]ItemID{77}, SocketUIDs: [5]int64{78}, SocketCards: [5]CardInstanceState{{Initialized: true, Count: 1, Effects: [8]CardEffect{{Op: 1, Attr: AttrAtk, Value: 200, Probability: 100}}}}, Endgame: EndgameItemState{UniqueID: d.ID, UniqueRollBP: 10000}}
+	st := Stack{UID: 55, Item: d.BaseID, Count: 1, Durability: 100, MaxDurability: 100, RefineLevel: 3, RolledAffixCount: 1, RolledAffixes: [5]InstanceAffix{{Affix: Affix{Attr: AttrAtk, Value: 500}}}, SocketCount: 1, Sockets: [5]ItemID{77}, SocketUIDs: [5]int64{78}, SocketCards: [5]CardInstanceState{{Initialized: true, Count: 1, Effects: [8]CardEffect{{Op: 1, Attr: AttrAtk, Value: 200, Probability: 100}}}}, Endgame: EndgameItemState{UniqueContentVersion: UniqueContentVersion, UniqueID: d.ID, UniqueRollBP: 10000}}
 	other := ItemDef{ID: 999999, Equip: &EquipDef{Slot: int32(SlotHead), Bonus: Stats{MinAtk: 1000, MaxAtk: 2000}}}
 	worn := NewEquipSet()
 	worn.Set(EquipSlot(d.Slot), st)

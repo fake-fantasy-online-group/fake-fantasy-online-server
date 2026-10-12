@@ -5,17 +5,29 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 	"sort"
+	"time"
 )
 
 type endgameTrialMember struct {
 	Opening               domain.TrialKeyMember
+	Progress              domain.TrialProgress
 	PresentMS, LastSeenMS int64
 }
 type endgameTrialCompletion struct {
-	Version      int
-	Kind, Nonce  string
-	MonsterLevel int32
-	Keys         map[domain.CharID]int32
+	Version         int
+	Kind, Nonce     string
+	MonsterLevel    int32
+	Keys            map[domain.CharID]int32
+	Grants          map[domain.CharID]endgameTrialGrant
+	StorageRevision int64
+}
+type endgameTrialGrant struct {
+	Reward             domain.QuestReward
+	Progress           domain.TrialProgress
+	ProgressionVersion string
+	RewardVersion      string
+	Pet                endgamePetGrant
+	Claimed            bool
 }
 type endgameTrialRecovery struct {
 	nonce string
@@ -26,6 +38,8 @@ type endgameTrialState struct {
 	StartedMS, LastMS int64
 	Members           map[domain.CharID]*endgameTrialMember
 	Keys              map[domain.CharID]int32
+	Completion        endgameTrialCompletion
+	Completions       map[string]endgameTrialCompletion
 	Completed, Saved  bool
 	Saving            <-chan domain.EndgameRunSaveResult
 	RetryAfter        int64
@@ -36,6 +50,9 @@ type endgameTrialState struct {
 func (s *Scene) trialState() *endgameTrialState {
 	if s.trialRun == nil {
 		s.trialRun = &endgameTrialState{Members: map[domain.CharID]*endgameTrialMember{}, Keys: map[domain.CharID]int32{}, Recoveries: map[domain.EntityID]endgameTrialRecovery{}}
+	}
+	if s.trialRun.Completions == nil {
+		s.trialRun.Completions = map[string]endgameTrialCompletion{}
 	}
 	if s.trialRun.RecoveryChecked == nil {
 		s.trialRun.RecoveryChecked = map[domain.EntityID]string{}
@@ -66,7 +83,7 @@ func (s *Scene) beginEndgameTrial() {
 	for _, p := range players {
 		ch := p.Player.Char
 		id := domain.CharID(ch.ID)
-		x.Members[id] = &endgameTrialMember{Opening: domain.TrialKeyMember{CharID: id, Level: ch.Level, Cycle: ch.Trial.Cycle}, LastSeenMS: x.StartedMS}
+		x.Members[id] = &endgameTrialMember{Opening: domain.TrialKeyMember{CharID: id, Level: ch.Level, Cycle: ch.Trial.Cycle}, Progress: ch.Trial, LastSeenMS: x.StartedMS}
 		ch.Trial.CompletionID = x.Nonce
 		ch.Trial.KeyReward = 0
 		p.Player.MarkDirty()
@@ -109,7 +126,7 @@ func (s *Scene) stepEndgameTrial() {
 		}
 		if !x.Saved && x.Saving == nil && now >= x.RetryAfter {
 			if backend, ok := s.endgameBackend.(domain.EndgameRunBackend); ok {
-				completion := endgameTrialCompletion{Version: 1, Kind: "trial", Nonce: x.Nonce, MonsterLevel: s.trialLevel, Keys: x.Keys}
+				completion := x.Completion
 				b, _ := json.Marshal(completion)
 				x.Saving = backend.SaveRun(domain.EndgameRunRecord{RunID: "trial-" + x.Nonce, Revision: 1, State: "trial.completed", Payload: string(b)}, 0)
 			}
@@ -128,7 +145,9 @@ func (s *Scene) stepEndgameTrial() {
 				continue
 			}
 			var c endgameTrialCompletion
-			if json.Unmarshal([]byte(result.Run.Payload), &c) == nil && c.Version == 1 && c.Kind == "trial" && c.Nonce == recovery.nonce {
+			if json.Unmarshal([]byte(result.Run.Payload), &c) == nil && (c.Version == 1 || c.Version == 2) && c.Kind == "trial" && c.Nonce == recovery.nonce {
+				c.StorageRevision = result.Run.Revision
+				x.Completions[c.Nonce] = c
 				x.RecoveryChecked[id] = recovery.nonce
 				s.assignEndgameTrial(p, c)
 			}
@@ -170,6 +189,25 @@ func (s *Scene) finishEndgameTrialKeys() {
 			x.Keys[m.CharID] = n
 		}
 	}
+	c := endgameTrialCompletion{Version: 2, Kind: "trial", Nonce: x.Nonce, MonsterLevel: s.trialLevel, Keys: x.Keys, StorageRevision: 1, Grants: map[domain.CharID]endgameTrialGrant{}}
+	day := domain.DayOf(s.now().In(time.FixedZone("Asia/Shanghai", 8*3600)))
+	for _, member := range credited {
+		m := x.Members[member.CharID]
+		owner := s.endgameRewardPlayer(member.CharID)
+		progress, level := m.Progress, member.Level
+		if owner != nil {
+			progress = owner.Player.Char.Trial
+			level = owner.Player.Char.Level
+		}
+		if progress.Day != day {
+			progress.Day = day
+			progress.DailyCompleted = 0
+		}
+		reward := s.frozenTrialReward(x.Nonce, level, s.trialLevel, progress, day)
+		c.Grants[member.CharID] = endgameTrialGrant{Reward: reward, Progress: progress, ProgressionVersion: domain.ProgressionVersion, RewardVersion: domain.TrialRewardVersion, Pet: s.freezeEndgamePetGrant(owner, reward.Exp, x.Nonce, member.CharID)}
+	}
+	x.Completion = c
+	x.Completions[c.Nonce] = c
 	x.Completed = true
 	s.stepEndgameTrial()
 }
@@ -196,12 +234,12 @@ func (s *Scene) recoverEndgameTrial(p *entity.Entity) {
 		return
 	}
 	ch := p.Player.Char
-	if ch.Trial.CompletionID == "" || ch.Quests[s.trial.Quest].State != domain.QuestActive {
+	if ch.Trial.CompletionID == "" || (ch.Quests[s.trial.Quest].State != domain.QuestActive && ch.Quests[s.trial.Quest].State != domain.QuestDeliver) {
 		return
 	}
 	x := s.trialState()
-	if x.Nonce == ch.Trial.CompletionID && x.Completed {
-		s.assignEndgameTrial(p, endgameTrialCompletion{Nonce: x.Nonce, MonsterLevel: s.trialLevel, Keys: x.Keys})
+	if c, ok := x.Completions[ch.Trial.CompletionID]; ok {
+		s.assignEndgameTrial(p, c)
 		return
 	}
 	if _, ok := x.Recoveries[p.ID]; !ok {

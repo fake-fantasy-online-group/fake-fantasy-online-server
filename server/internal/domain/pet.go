@@ -309,13 +309,8 @@ func (t *PetLevelTable) MaxLevel() int32 {
 	return int32(len(t.need)) - 2
 }
 
-// PetLevelCap 是 MVP 里宠物的等级上限。
-//
-// 表里 max_pet_level 给到 80，但**服务端定**：宠物不能超过主人，
-// 而主人 60 封顶（LevelCap）。理由是宠物经验来自主人打怪的分成，
-// 放开到 80 的话，一个 60 级玩家会挂着一只打得比自己狠的宠 ——
-// 那就不是宠物系统，是换了个皮的主角。
-const PetLevelCap = LevelCap
+// PetLevelCap is independent from the player progression cap. Species limits remain intact.
+const PetLevelCap = 80
 
 // PetCapFor 返回一只宠在某主人等级下的实际等级上限。
 func PetCapFor(d PetDef, ownerLevel int32) int32 {
@@ -682,7 +677,7 @@ func (p PetInstance) MaxMP(d PetDef) int32 {
 
 // AddExp 给宠物加经验并处理连升。
 //
-// cap 由调用方按 PetCapFor 算好传进来（宠物不能超过主人）。
+// cap 由调用方按经验来源算好传进来；普通奖励不让宠物继续超过主人，经验珠可另设上限。
 // 到顶之后经验不再累积，理由与角色那条相同（见 level.go 的 AddExp）。
 func (p *PetInstance) AddExp(d PetDef, t *PetLevelTable, gain int64, cap int32) GainResult {
 	return p.AddExpWithPrefix(d, PetPrefixDef{}, t, gain, cap)
@@ -691,32 +686,25 @@ func (p *PetInstance) AddExp(d PetDef, t *PetLevelTable, gain int64, cap int32) 
 // AddExpWithPrefix 在基础种族成长之外叠加孵化前缀成长，并发放前缀自由属性点。
 func (p *PetInstance) AddExpWithPrefix(d PetDef, prefix PetPrefixDef,
 	t *PetLevelTable, gain int64, cap int32) GainResult {
-	res := GainResult{FromLevel: p.Level, ToLevel: p.Level}
-	if gain <= 0 || t == nil {
+	hardCap := PetCapFor(d, PetLevelCap)
+	if cap > hardCap {
+		cap = hardCap
+	}
+	// XP beads can leave a valid pet above the owner's ordinary reward cap.
+	// Settle that reward at the pet's current level to discard only the new XP;
+	// saves beyond the species/absolute limit still fail normal validation.
+	if cap >= 1 && p.Level > cap && p.Level <= hardCap {
+		cap = p.Level
+	}
+	res, level, progress := settleExperience(p.Level, p.Exp, gain, cap, t.Need)
+	if res.Reason != "" {
 		return res
 	}
-	if p.Level >= cap {
-		res.Overflowed = true
-		return res
-	}
-	p.Exp += gain
-	for p.Level < cap {
-		need := t.Need(p.Level)
-		if need <= 0 || p.Exp < need {
-			break
-		}
-		p.Exp -= need
-		p.Level++
-		// 成长按**升到的那一级**的奇偶取值，与角色同一套
-		p.Base = p.Base.Add(d.GrowthAt(p.Level)).Add(prefix.GrowthAt(p.Level))
+	for lv := p.Level + 1; lv <= level; lv++ {
+		p.Base = p.Base.Add(d.GrowthAt(lv)).Add(prefix.GrowthAt(lv))
 		p.FreePoints += prefix.FreePointsPerLevel
-		res.Levels++
 	}
-	res.ToLevel = p.Level
-	if p.Level >= cap && p.Exp > 0 {
-		p.Exp = 0
-		res.Overflowed = true
-	}
+	p.Level, p.Exp = level, progress
 	return res
 }
 
@@ -734,7 +722,10 @@ const PetExpShare = 50
 // 扣的话就变成"带宠物练级更慢"，那没人会带宠物 ——
 // 而宠物系统的全部意义就是让人带着它。
 func SharedExp(exp int64) int64 {
-	return exp * PetExpShare / 100
+	if exp <= 0 {
+		return 0
+	}
+	return exp / 2
 }
 
 // MaxPets matches the ten source-owned Win05.petdlg slots.

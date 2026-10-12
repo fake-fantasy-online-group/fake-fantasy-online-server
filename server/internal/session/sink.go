@@ -37,6 +37,17 @@ func (s *eventSink) Emit(ev event.Event) {
 	if _, ok := ev.(event.EndgameMessage); ok && (s.sess == nil || !s.sess.endgameEnabled()) {
 		return
 	}
+	if e, ok := ev.(event.EndgameMessage); ok && e.Message.Kind == "hello" && e.Message.OK && s.sess != nil {
+		ready := false
+		for _, cap := range e.Message.Capabilities {
+			if cap == domain.EndgameGrowthV5 {
+				ready = true
+			}
+		}
+		s.sess.mu.Lock()
+		s.sess.growthV5 = ready
+		s.sess.mu.Unlock()
+	}
 	var pkts [][]byte
 	var refreshParty bool
 	var entered bool

@@ -639,15 +639,9 @@
       "lore": "分完映月的药水，瓢中月影仍是满的。药师试着饮了一口，却忘了自己为何一直站在这口井边。",
       "identity": "精打细算的施药仪",
       "benefit": "治疗续航为主；精神、法力、生命、魔防、异常抵抗提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "tradeoff": "以治疗系等级替换20%节蓝；保留原法力底盘，放弃旧节蓝特性；占用同类宿阵名额",
       "powerTier": "transition",
-      "traits": [
-        {
-          "kind": "healing_cost",
-          "powerBP": 2000,
-          "thresholdPct": 0
-        }
-      ],
+      "traits": [],
       "reservedSkills": [],
       "variableAffixes": [
         {
@@ -655,7 +649,26 @@
           "min": 16,
           "max": 17
         }
-      ]
+      ],
+      "typedEffects": [],
+      "skillBonuses": [
+        {
+          "scope": "school",
+          "school": "healing",
+          "levels": 1
+        }
+      ],
+      "v5BudgetExchange": {
+        "removedTraits": [
+          {
+            "kind": "healing_cost",
+            "powerBP": 2000,
+            "thresholdPct": 0
+          }
+        ],
+        "policy": "replacement_only_no_extra_free_budget",
+        "reason": "以治疗系等级替换20%节蓝；保留原法力底盘，放弃旧节蓝特性"
+      }
     },
     {
       "id": 5,
@@ -904,15 +917,9 @@
       "lore": "符纸烧尽，灰里留下的折鹤仍在拍翅。术者将它投入灯油，才发现油面漂满了从未写过的字。",
       "identity": "偏向火法会心的灯芯",
       "benefit": "法术输出为主；法术会心、法攻、智慧、法力、魔防提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "tradeoff": "火伤12%替换旧火系掌握18%，不双加；占用同类宿阵名额",
       "powerTier": "transition",
-      "traits": [
-        {
-          "kind": "fire_mastery",
-          "powerBP": 1800,
-          "thresholdPct": 0
-        }
-      ],
+      "traits": [],
       "reservedSkills": [],
       "variableAffixes": [
         {
@@ -920,7 +927,26 @@
           "min": 700,
           "max": 770
         }
-      ]
+      ],
+      "typedEffects": [
+        {
+          "kind": "element_damage_bp",
+          "element": "fire",
+          "value": 1200
+        }
+      ],
+      "skillBonuses": [],
+      "v5BudgetExchange": {
+        "removedTraits": [
+          {
+            "kind": "fire_mastery",
+            "powerBP": 1800,
+            "thresholdPct": 0
+          }
+        ],
+        "policy": "replacement_only_no_extra_free_budget",
+        "reason": "火伤12%替换旧火系掌握18%，不双加"
+      }
     },
     {
       "id": 9,
@@ -1114,17 +1140,9 @@
       "lore": "钟离的扇影落入演阵，门人却把它画成一堵窄门：只容一个敌人挤入，也只需一个人守住。",
       "identity": "守窄口的连环枪技战阵",
       "benefit": "物理输出为主；物攻、攻击上限、力量、命中、生命、物理会心提供独立于星篆的完整词条；另有本件白字物攻强化90–110%，收益随所选武器固有白字而变",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "tradeoff": "连环枪法+1替换旧专属12%增伤，不解锁技能；占用同类宿阵名额",
       "powerTier": "transition",
-      "traits": [
-        {
-          "kind": "skill_focus",
-          "powerBP": 1200,
-          "thresholdPct": 0,
-          "skillID": 10002,
-          "skillName": "连环枪法"
-        }
-      ],
+      "traits": [],
       "reservedSkills": [],
       "variableAffixes": [
         {
@@ -1140,7 +1158,28 @@
           "minPercent": 90,
           "maxPercent": 110
         }
-      ]
+      ],
+      "typedEffects": [],
+      "skillBonuses": [
+        {
+          "scope": "single",
+          "skillId": 10002,
+          "levels": 1
+        }
+      ],
+      "v5BudgetExchange": {
+        "removedTraits": [
+          {
+            "kind": "skill_focus",
+            "powerBP": 1200,
+            "thresholdPct": 0,
+            "skillID": 10002,
+            "skillName": "连环枪法"
+          }
+        ],
+        "policy": "replacement_only_no_extra_free_budget",
+        "reason": "连环枪法+1替换旧专属12%增伤，不解锁技能"
+      }
     },
     {
       "id": 12,
@@ -1355,15 +1394,9 @@
       "lore": "纸驴逆着火光走，背上的术者也倒坐着。他只看身后哪一盏灯熄了，便知道下一张符该落在何处。",
       "identity": "火法输出的逆行星图",
       "benefit": "法术输出为主；法攻、智慧、法术会心、法力、精神、魔防提供独立于星篆的完整词条；另有本件白字法攻强化100–120%，收益随所选武器固有白字而变",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "tradeoff": "火伤10%替换旧火系掌握15%，不双加；占用同类宿阵名额",
       "powerTier": "transition",
-      "traits": [
-        {
-          "kind": "fire_mastery",
-          "powerBP": 1500,
-          "thresholdPct": 0
-        }
-      ],
+      "traits": [],
       "reservedSkills": [],
       "variableAffixes": [
         {
@@ -1379,7 +1412,26 @@
           "minPercent": 100,
           "maxPercent": 120
         }
-      ]
+      ],
+      "typedEffects": [
+        {
+          "kind": "element_damage_bp",
+          "element": "fire",
+          "value": 1000
+        }
+      ],
+      "skillBonuses": [],
+      "v5BudgetExchange": {
+        "removedTraits": [
+          {
+            "kind": "fire_mastery",
+            "powerBP": 1500,
+            "thresholdPct": 0
+          }
+        ],
+        "policy": "replacement_only_no_extra_free_budget",
+        "reason": "火伤10%替换旧火系掌握15%，不双加"
+      }
     },
     {
       "id": 15,
@@ -2118,7 +2170,7 @@
       "lore": "火烧过的阵图缺了一角，术者便让纸鸟叼着余烬悬在那里。风越急，它越不肯合拢那半边翅膀。",
       "identity": "火系范围清怪的偏门阵",
       "benefit": "法术输出为主；法攻、法术会心、法力、智慧、精神、生命提供独立于星篆的完整词条；另有本件白字法攻强化140–170%，收益随所选武器固有白字而变",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "tradeoff": "火伤8%替换旧火系掌握12%，保留火球术范围特性且占同一预算；占用同类宿阵名额",
       "powerTier": "highvalue",
       "traits": [
         {
@@ -2127,11 +2179,6 @@
           "thresholdPct": 0,
           "skillID": 10402,
           "skillName": "火球术"
-        },
-        {
-          "kind": "fire_mastery",
-          "powerBP": 1200,
-          "thresholdPct": 0
         }
       ],
       "reservedSkills": [],
@@ -2149,7 +2196,26 @@
           "minPercent": 140,
           "maxPercent": 170
         }
-      ]
+      ],
+      "typedEffects": [
+        {
+          "kind": "element_damage_bp",
+          "element": "fire",
+          "value": 800
+        }
+      ],
+      "skillBonuses": [],
+      "v5BudgetExchange": {
+        "removedTraits": [
+          {
+            "kind": "fire_mastery",
+            "powerBP": 1200,
+            "thresholdPct": 0
+          }
+        ],
+        "policy": "replacement_only_no_extra_free_budget",
+        "reason": "火伤8%替换旧火系掌握12%，保留火球术范围特性且占同一预算"
+      }
     },
     {
       "id": 25,
@@ -2784,16 +2850,9 @@
       "lore": "剑落入演算之阵的最深处，没有回声。行者收剑时，刃上多出一道尚未发生的伤痕，正与他梦中断开的山脊相合。",
       "identity": "单体精英的稳剑阵",
       "benefit": "物理输出为主；物攻、命中、防御、灵巧、力量、生命、物理平减提供独立于星篆的完整词条；另有本件白字物攻强化160–200%，收益随所选武器固有白字而变",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+      "tradeoff": "饮血剑+2替换旧专属18%增伤；保留精英特性；占用同类宿阵名额",
       "powerTier": "builddefining",
       "traits": [
-        {
-          "kind": "single_focus",
-          "powerBP": 1800,
-          "thresholdPct": 0,
-          "skillID": 10104,
-          "skillName": "饮血剑"
-        },
         {
           "kind": "elite_hunter",
           "powerBP": 1200,
@@ -2815,7 +2874,28 @@
           "minPercent": 160,
           "maxPercent": 200
         }
-      ]
+      ],
+      "typedEffects": [],
+      "skillBonuses": [
+        {
+          "scope": "single",
+          "skillId": 10104,
+          "levels": 2
+        }
+      ],
+      "v5BudgetExchange": {
+        "removedTraits": [
+          {
+            "kind": "single_focus",
+            "powerBP": 1800,
+            "thresholdPct": 0,
+            "skillID": 10104,
+            "skillName": "饮血剑"
+          }
+        ],
+        "policy": "replacement_only_no_extra_free_budget",
+        "reason": "饮血剑+2替换旧专属18%增伤；保留精英特性"
+      }
     },
     {
       "id": 33,
@@ -3081,16 +3161,9 @@
       "lore": "药瓢已经空了，药师仍背它进入劫阵。同行人伤重时，瓢底忽然响了一声，像有人在很远的地方敲开一扇门。",
       "identity": "危急救援与长战治疗阵",
       "benefit": "治疗续航为主；精神、法力、魔防、法术平减、生命、异常抵抗、体质提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "tradeoff": "治疗系+1替换旧低血35%救护增幅；保留原治疗节蓝；占用同类宿阵名额",
       "powerTier": "builddefining",
       "traits": [
-        {
-          "kind": "rescue_heal",
-          "powerBP": 3500,
-          "thresholdPct": 30,
-          "skillID": 10301,
-          "skillName": "治愈术"
-        },
         {
           "kind": "healing_cost",
           "powerBP": 2200,
@@ -3104,7 +3177,28 @@
           "min": 50,
           "max": 55
         }
-      ]
+      ],
+      "typedEffects": [],
+      "skillBonuses": [
+        {
+          "scope": "school",
+          "school": "healing",
+          "levels": 1
+        }
+      ],
+      "v5BudgetExchange": {
+        "removedTraits": [
+          {
+            "kind": "rescue_heal",
+            "powerBP": 3500,
+            "thresholdPct": 30,
+            "skillID": 10301,
+            "skillName": "治愈术"
+          }
+        ],
+        "policy": "replacement_only_no_extra_free_budget",
+        "reason": "治疗系+1替换旧低血35%救护增幅；保留原治疗节蓝"
+      }
     },
     {
       "id": 36,
@@ -3254,15 +3348,9 @@
       "lore": "寒潭能映星宿，却映不出守潭人。他取水洗脸，水面上忽然有了倒影；岸上的人反而从此不再留下脚印。",
       "identity": "专门承受法术与异常的玄冥阵",
       "benefit": "法术承伤为主；魔防、法术平减、异常抵抗、生命、精神、法力提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "tradeoff": "冰抗12点与暗抗6点替换18%通用术伤防护；失去其它元素覆盖；占用同类宿阵名额",
       "powerTier": "highvalue",
-      "traits": [
-        {
-          "kind": "magic_guard",
-          "powerBP": 1800,
-          "thresholdPct": 0
-        }
-      ],
+      "traits": [],
       "reservedSkills": [],
       "variableAffixes": [
         {
@@ -3270,7 +3358,31 @@
           "min": 36,
           "max": 39
         }
-      ]
+      ],
+      "typedEffects": [
+        {
+          "kind": "element_resist_bp",
+          "element": "ice",
+          "value": 1200
+        },
+        {
+          "kind": "element_resist_bp",
+          "element": "dark",
+          "value": 600
+        }
+      ],
+      "skillBonuses": [],
+      "v5BudgetExchange": {
+        "removedTraits": [
+          {
+            "kind": "magic_guard",
+            "powerBP": 1800,
+            "thresholdPct": 0
+          }
+        ],
+        "policy": "replacement_only_no_extra_free_budget",
+        "reason": "冰抗12点与暗抗6点替换18%通用术伤防护；失去其它元素覆盖"
+      }
     },
     {
       "id": 38,
@@ -3334,15 +3446,9 @@
       "lore": "行囊底破了一洞，晨光沿山路漏了一地。行者本想补好，后来发现落在后面的伤者循着光也能赶上来。",
       "identity": "移动清剿的长途行阵",
       "benefit": "物理输出为主；移动速度、命中、生命、物攻、力量、法力提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "tradeoff": "MF15%替换击杀回血5%；刷宝让出续航；占用同类宿阵名额",
       "powerTier": "highvalue",
-      "traits": [
-        {
-          "kind": "kill_mend",
-          "powerBP": 500,
-          "thresholdPct": 0
-        }
-      ],
+      "traits": [],
       "reservedSkills": [],
       "variableAffixes": [
         {
@@ -3350,7 +3456,25 @@
           "min": 280,
           "max": 308
         }
-      ]
+      ],
+      "typedEffects": [
+        {
+          "kind": "magic_find_pct",
+          "value": 15
+        }
+      ],
+      "skillBonuses": [],
+      "v5BudgetExchange": {
+        "removedTraits": [
+          {
+            "kind": "kill_mend",
+            "powerBP": 500,
+            "thresholdPct": 0
+          }
+        ],
+        "policy": "replacement_only_no_extra_free_budget",
+        "reason": "MF15%替换击杀回血5%；刷宝让出续航"
+      }
     },
     {
       "id": 39,
@@ -3506,15 +3630,9 @@
       "lore": "四象争夺中宫百年，阵师最后在那里放了一把空椅。椅上渐渐压出第五种兽形，谁也说不出它究竟朝向哪一方。",
       "identity": "多伤害路线兼修的中宫阵",
       "benefit": "物理与法术输出的双向配置为主；物攻、法攻、物理会心、法术会心、生命、法力、精神、魔防提供独立于星篆的完整词条",
-      "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+      "tradeoff": "全技能+1替换14%技能增伤；只作用已经学会的战斗技能；占用同类宿阵名额",
       "powerTier": "highvalue",
-      "traits": [
-        {
-          "kind": "skill_focus",
-          "powerBP": 1400,
-          "thresholdPct": 0
-        }
-      ],
+      "traits": [],
       "reservedSkills": [],
       "variableAffixes": [
         {
@@ -3522,7 +3640,25 @@
           "min": 218,
           "max": 239
         }
-      ]
+      ],
+      "typedEffects": [],
+      "skillBonuses": [
+        {
+          "scope": "all",
+          "levels": 1
+        }
+      ],
+      "v5BudgetExchange": {
+        "removedTraits": [
+          {
+            "kind": "skill_focus",
+            "powerBP": 1400,
+            "thresholdPct": 0
+          }
+        ],
+        "policy": "replacement_only_no_extra_free_budget",
+        "reason": "全技能+1替换14%技能增伤；只作用已经学会的战斗技能"
+      }
     }
   ]
 }

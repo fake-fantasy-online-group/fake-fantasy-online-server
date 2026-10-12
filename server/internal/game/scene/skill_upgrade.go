@@ -26,6 +26,10 @@ func (s *Scene) onUpgradeSkill(cmd UpgradeSkill) {
 	}
 
 	ch := p.Player.Char
+	if s.skills.V5Enabled(cmd.Skill) {
+		s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: "请使用新版技能面板分配技能点"})
+		return
+	}
 	def, nextLv, reason, ok := s.skillUpgradeTarget(p, cmd.Skill)
 	if !ok {
 		reject(reason)
@@ -68,6 +72,14 @@ func (s *Scene) skillUpgradeTarget(p *entity.Entity, skill domain.SkillID) (doma
 	}
 	ch := p.Player.Char
 	nextLv := ch.Skills.LevelOf(skill) + 1
+	if s.skills.V5Enabled(skill) {
+		if nextLv > domain.SkillHardPointCap {
+			return domain.SkillDef{}, 0, event.RejectMaxLevel, false
+		}
+		if nextLv > domain.SkillHardRankLimit(ch.Level, skill) {
+			return domain.SkillDef{}, 0, event.RejectLevelTooLow, false
+		}
+	}
 	def, ok := s.skills.Get(skill, nextLv)
 	if !ok {
 		if s.skills.MaxLevelOf(skill) == 0 {
@@ -78,7 +90,7 @@ func (s *Scene) skillUpgradeTarget(p *entity.Entity, skill domain.SkillID) (doma
 	if !ch.AllowsSkill(skill, def.Prof) {
 		return domain.SkillDef{}, 0, event.RejectWrongProf, false
 	}
-	if ch.Level < def.LevelNeed {
+	if !s.skills.V5Enabled(skill) && ch.Level < def.LevelNeed {
 		return domain.SkillDef{}, 0, event.RejectLevelTooLow, false
 	}
 	for _, dependency := range def.Prerequisites {
@@ -99,7 +111,7 @@ func (s *Scene) skillSnapshot(e *entity.Entity) event.SkillSnapshot {
 	}
 	sort.Slice(skills, func(i, j int) bool { return skills[i].ID < skills[j].ID })
 	bonuses := make(map[domain.SkillID]int32)
-	for id, lv := range ch.Skills {
+	for id, lv := range s.rawSkillLevels(e) {
 		passive, ok := s.skills.Get(id, lv)
 		if !ok || passive.Kind != domain.SkillPassive || !ch.AllowsSkill(passive.ID, passive.Prof) {
 			continue

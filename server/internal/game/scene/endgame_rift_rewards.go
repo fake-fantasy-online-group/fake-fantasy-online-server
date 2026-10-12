@@ -1,9 +1,13 @@
 package scene
 
 import (
+	"crypto/sha256"
+	"encoding/binary"
+	"fmt"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
+	"math/rand"
 	"sort"
 )
 
@@ -18,20 +22,31 @@ func (s *Scene) generateEndgameRiftGrants() {
 	d := &s.rift.data
 	r := d.Run
 	plan := domain.PlanRiftRewards(r.Tier, r.Timely)
-	for char, m := range r.Members {
+	chars := make([]domain.CharID, 0, len(r.Members))
+	for char := range r.Members {
+		chars = append(chars, char)
+	}
+	sort.Slice(chars, func(i, j int) bool { return chars[i] < chars[j] })
+	for _, char := range chars {
+		m := r.Members[char]
+		hash := sha256.Sum256([]byte(fmt.Sprintf("%s/rift-reward/%d/v%d", r.RunID, char, d.Version)))
+		rng := s.rng
+		if d.Version >= 2 {
+			rng = rand.New(rand.NewSource(int64(binary.BigEndian.Uint64(hash[:8]))))
+		}
 		if !m.Eligible {
 			continue
 		}
 		grant := endgameRiftGrant{}
-		var equipment []domain.ItemID
-		best := int32(0)
+		var equipment, guaranteedUniques []domain.ItemID
+		best, bestUnique := int32(0), int32(0)
 		identity := d.Profiles[char]
 		character := &domain.Character{Race: identity.Race, Employed: identity.Employed, EmploymentKnown: true}
 		for id, def := range s.items {
 			if def.Equip == nil || def.Equip.LevelReq > m.Level {
 				continue
 			}
-			if unique, ok := domain.UniqueForBase(id); !ok || !unique.NativeDropEligible {
+			if !domain.NativeEquipmentDropEligible(def) {
 				continue
 			}
 			need := def.Equip.Need
@@ -45,6 +60,17 @@ func (s *Scene) generateEndgameRiftGrants() {
 			if need.Sex != 0 && need.Sex != sex {
 				continue
 			}
+			// A guaranteed unique slot has its own wearer-legal259-base pool.
+			// All other slots retain the complete ordinary native pool above.
+			if unique, ok := domain.UniqueForBase(id); ok && unique.NativeDropEligible && def.Equip.LevelReq <= 60 {
+				if def.Equip.LevelReq > bestUnique {
+					bestUnique = def.Equip.LevelReq
+					guaranteedUniques = nil
+				}
+				if def.Equip.LevelReq == bestUnique {
+					guaranteedUniques = append(guaranteedUniques, id)
+				}
+			}
 			if def.Equip.LevelReq > best {
 				best = def.Equip.LevelReq
 				equipment = nil
@@ -54,21 +80,28 @@ func (s *Scene) generateEndgameRiftGrants() {
 			}
 		}
 		sort.Slice(equipment, func(i, j int) bool { return equipment[i] < equipment[j] })
+		sort.Slice(guaranteedUniques, func(i, j int) bool { return guaranteedUniques[i] < guaranteedUniques[j] })
 		for i := int32(0); i < plan.Equipment && len(equipment) > 0; i++ {
-			def := s.items[equipment[s.rng.Intn(len(equipment))]]
+			candidates := equipment
+			if r.Tier >= 10 && i == 0 && len(guaranteedUniques) > 0 {
+				candidates = guaranteedUniques
+			}
+			// With no eligible unique, preserve this one ordinary reward slot;
+			// never synthesize a base or create an extra compensation item.
+			def := s.items[candidates[rng.Intn(len(candidates))]]
 			stack := domain.NewStack(def, 1)
 			stack.Bound = true
-			stack.SocketCount = domain.RollDroppedSocketCount(def, domain.AstralDropRealm, s.rng.Int63n)
-			affixes := s.equipmentRoll.RollWithReservedSockets(def, domain.DefaultColorProfile, stack.SocketCount, s.rng.Int63n)
+			stack.SocketCount = domain.RollDroppedSocketCount(def, domain.AstralDropRealm, rng.Int63n)
+			affixes := s.equipmentRoll.RollWithReservedSockets(def, domain.DefaultColorProfile, stack.SocketCount, rng.Int63n)
 			stack.RolledAffixCount = uint8(len(affixes))
 			copy(stack.RolledAffixes[:], affixes)
-			if (r.Tier >= 10 && i == 0) || s.rng.Intn(100) < int(plan.UniqueChance) {
-				domain.ApplyUnique(&stack, def, s.rng.Intn)
+			if (r.Tier >= 10 && i == 0) || rng.Intn(100) < int(plan.UniqueChance) {
+				domain.ApplyUnique(&stack, def, rng.Intn)
 			}
 			grant.Items = append(grant.Items, stack)
 		}
 		for i := int32(0); i < plan.Rune; i++ {
-			id := domain.ItemID(1900028001 + s.rng.Intn(28))
+			id := domain.ItemID(1900028001 + rng.Intn(28))
 			if def, ok := s.itemDef(id); ok {
 				stack := domain.NewStack(def, 1)
 				stack.Bound = true
@@ -81,6 +114,11 @@ func (s *Scene) generateEndgameRiftGrants() {
 			grant.Items = append(grant.Items, stack)
 		}
 		grant.Exp = s.trial.BaseExperience(m.Level, s.levels) / 2
+		if d.Version >= 2 {
+			grant.ProgressionVersion = domain.ProgressionVersion
+			grant.RewardVersion = domain.TrialRewardVersion
+			grant.Pet = s.freezeEndgamePetGrant(s.endgameRewardPlayer(char), grant.Exp, r.RunID, char)
+		}
 		d.Grants[char] = grant
 	}
 	d.GrantsReady = true

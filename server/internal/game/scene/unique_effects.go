@@ -17,8 +17,7 @@ func (s *Scene) uniqueTraits(p *entity.Entity) []domain.UniqueTrait {
 	if p == nil || p.Player == nil || p.Player.Char == nil {
 		return nil
 	}
-	worn := s.functionalWorn(p)
-	return append(domain.ActiveUniqueTraits(worn, s.itemDef, p.Player.Char), domain.AstralTraits(worn, s.itemDef, p.Player.Char)...)
+	return s.equipmentEffects(p).traits
 }
 func uniqueMonsterElite(p *entity.Entity) bool {
 	return p != nil && p.Monster != nil && (p.Monster.Kind == domain.MonsterElite || p.Monster.Kind == domain.MonsterBoss)
@@ -38,7 +37,8 @@ func (s *Scene) uniqueIncomingDamage(dst *entity.Entity, magic bool, amount, bef
 	return max(int32(1), domain.ApplyUniqueBP(amount, -x.MitigationBP))
 }
 func (s *Scene) uniqueHealing(src, dst *entity.Entity, amount int32, def domain.SkillDef) int32 {
-	x := domain.EvaluateUniqueTraits(s.uniqueTraits(src), domain.UniqueContext{SkillID: def.ID, HPPercent: uniquePercent(src.HP, src.MaxHP),
+	source, current := s.combatSourceV5(src)
+	x := sourceUniqueEffectsV5(source, current, domain.UniqueContext{SkillID: def.ID, HPPercent: uniquePercent(src.HP, src.MaxHP),
 		TargetHPPercent: uniquePercent(dst.HP, dst.MaxHP), Healing: true, Ally: src.ID != dst.ID, Skill: true})
 	return domain.ApplyUniqueBP(amount, x.HealingBP)
 }

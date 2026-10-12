@@ -156,6 +156,10 @@ func cardBudgetCharacter(t *testing.T, r cardBudgetSource, race Race) Base {
 }
 
 func cardBudgetCompute(r cardBudgetSource, base Base, natural []Affix, potency int32) Stats {
+	return cardBudgetComputeVersion(r, base, natural, potency, 0)
+}
+
+func cardBudgetComputeVersion(r cardBudgetSource, base Base, natural []Affix, potency, version int32) Stats {
 	def := cardBudgetDefinition(r)
 	st := Stack{UID: int64(r.BaseID), Item: r.BaseID, Count: 1, InstanceKind: ItemInstanceEquipment, Durability: 100, MaxDurability: 100}
 	for i, affix := range natural {
@@ -165,6 +169,7 @@ func cardBudgetCompute(r cardBudgetSource, base Base, natural []Affix, potency i
 	if potency != 0 {
 		st.Endgame.UniqueID = int32(r.BaseID)
 		st.Endgame.UniqueRollBP = potency
+		st.Endgame.UniqueContentVersion = version
 	}
 	worn := NewEquipSet()
 	worn.Set(EquipSlot(r.Slot), st)
@@ -284,7 +289,7 @@ func TestUniqueAllSourceBudgetLanesThroughWornRuntime(t *testing.T) {
 			} else if target.Evidence != "provisional_anchor" {
 				t.Fatal("missing native pool falsely represented as native evidence")
 			}
-			d, ok := UniqueForBase(r.BaseID)
+			d, ok := legacyUniqueByBase[r.BaseID]
 			if !ok || d.PowerTier != target.PowerTier || d.LegacyAffixPoolReady != r.Native {
 				t.Fatal("compiled unique and source target metadata differ")
 			}
@@ -410,7 +415,8 @@ func TestFormationAllSourceBudgetLanesThroughActivation(t *testing.T) {
 	minimum := math.Inf(1)
 	for _, target := range targets {
 		t.Run(fmt.Sprint(target.RecipeID), func(t *testing.T) {
-			recipe, ok := AstralRecipeByID(target.RecipeID)
+			recipe := legacyAstralRecipeCatalog[target.RecipeID-1]
+			ok := recipe.ID != 0
 			if !ok || seen[recipe.ID] || recipe.PowerTier != target.PowerTier || len(target.Comparisons) == 0 {
 				t.Fatal("invalid or stale formation target")
 			}

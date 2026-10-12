@@ -7,8 +7,9 @@ import (
 	"sort"
 )
 
-const UniqueCatalogVersion = "endgame-v4-local-fixed"
-const UniqueCatalogCount = 1619
+const UniqueCatalogVersion = "endgame-v5-scope259"
+const UniqueContentVersion int32 = 5
+const UniqueCatalogCount = 259
 const UniqueRollMinBP int32 = 8000
 const UniqueRollMaxBP int32 = 12000
 
@@ -26,6 +27,8 @@ type UniqueDefinition struct {
 	BaseName, Name, Lore, LoreRoot, Role     string
 	Identity, Benefit, Tradeoff, PowerTier   string
 	ReservedSkills                           []ReservedSkillAttribute
+	SkillBonuses                             []SkillRankBonus
+	TypedEffects                             []EquipmentEffect
 	Professions                              uint8
 	BeginnerAllowed, Unrestricted            bool
 	Sex                                      uint8
@@ -43,10 +46,16 @@ type UniqueDefinition struct {
 //go:embed unique_catalog_*.json
 var uniqueCatalogFiles embed.FS
 
-var uniqueDefinitions, uniqueByBase = loadUniqueCatalog()
+// Frozen legacy definitions preserve derived values for every existing instance.
+//
+//go:embed legacy_unique_v4/*.json
+var legacyUniqueCatalogFiles embed.FS
 
-func loadUniqueCatalog() ([]UniqueDefinition, map[ItemID]UniqueDefinition) {
-	entries, err := uniqueCatalogFiles.ReadDir(".")
+var legacyUniqueDefinitions, legacyUniqueByBase = loadUniqueCatalogFS(legacyUniqueCatalogFiles, "legacy_unique_v4", 1619, false)
+var uniqueDefinitions, uniqueByBase = loadUniqueCatalogFS(uniqueCatalogFiles, ".", UniqueCatalogCount, true)
+
+func loadUniqueCatalogFS(files embed.FS, directory string, expected int, v5 bool) ([]UniqueDefinition, map[ItemID]UniqueDefinition) {
+	entries, err := files.ReadDir(directory)
 	if err != nil {
 		panic(err)
 	}
@@ -54,7 +63,11 @@ func loadUniqueCatalog() ([]UniqueDefinition, map[ItemID]UniqueDefinition) {
 	byBase := make(map[ItemID]UniqueDefinition)
 	names := make(map[string]bool)
 	for _, entry := range entries {
-		body, err := uniqueCatalogFiles.ReadFile(entry.Name())
+		path := entry.Name()
+		if directory != "." {
+			path = directory + "/" + path
+		}
+		body, err := files.ReadFile(path)
 		if err != nil {
 			panic(err)
 		}
@@ -69,13 +82,16 @@ func loadUniqueCatalog() ([]UniqueDefinition, map[ItemID]UniqueDefinition) {
 			if err := validateUniqueDefinition(d); err != nil {
 				panic(err)
 			}
+			if v5 && (d.LevelRequirement > 60 || !d.NativeDropEligible || !d.LegacyAffixPoolReady) {
+				panic(fmt.Sprintf("invalid V5 scope row %d", d.BaseID))
+			}
 			names[d.Name] = true
 			byBase[d.BaseID] = d
 			all = append(all, d)
 		}
 	}
-	if len(all) != UniqueCatalogCount {
-		panic(fmt.Sprintf("unique catalogue has %d rows, want %d", len(all), UniqueCatalogCount))
+	if len(all) != expected {
+		panic(fmt.Sprintf("unique catalogue has %d rows, want %d", len(all), expected))
 	}
 	sort.Slice(all, func(i, j int) bool { return all[i].BaseID < all[j].BaseID })
 	return all, byBase
@@ -89,6 +105,12 @@ func validateUniqueDefinition(d UniqueDefinition) error {
 		return fmt.Errorf("unique %d: %w", d.BaseID, err)
 	}
 	if err := validateEndgameRollModel(d.Affixes, d.VariableAffixes, d.LocalEnhancements); err != nil {
+		return fmt.Errorf("unique %d: %w", d.BaseID, err)
+	}
+	if err := ValidateEquipmentEffects(d.TypedEffects); err != nil {
+		return fmt.Errorf("unique %d: %w", d.BaseID, err)
+	}
+	if err := ValidateSkillRankBonuses(d.SkillBonuses); err != nil {
 		return fmt.Errorf("unique %d: %w", d.BaseID, err)
 	}
 	for _, b := range d.ReservedSkills {
@@ -105,6 +127,8 @@ func validateUniqueDefinition(d UniqueDefinition) error {
 }
 
 func cloneUnique(d UniqueDefinition) UniqueDefinition {
+	d.TypedEffects = CloneEquipmentEffects(d.TypedEffects)
+	d.SkillBonuses = append([]SkillRankBonus(nil), d.SkillBonuses...)
 	d.Affixes = append([]Affix(nil), d.Affixes...)
 	d.VariableAffixes = append([]VariableAffix(nil), d.VariableAffixes...)
 	d.LocalEnhancements = append([]ItemLocalEnhancement(nil), d.LocalEnhancements...)
@@ -119,6 +143,16 @@ func UniqueCatalog() []UniqueDefinition {
 	}
 	return out
 }
+
+// UniqueAppearanceBaseIDs retains already-published native sprite aliases for
+// legacy-owned equipment. It is NOT an eligibility list for drops or awakening.
+func UniqueAppearanceBaseIDs() []ItemID {
+	out := make([]ItemID, len(legacyUniqueDefinitions))
+	for i, d := range legacyUniqueDefinitions {
+		out[i] = d.BaseID
+	}
+	return out
+}
 func UniqueForBase(id ItemID) (UniqueDefinition, bool) {
 	d, ok := uniqueByBase[id]
 	return cloneUnique(d), ok
@@ -127,7 +161,15 @@ func UniqueOf(st Stack) (UniqueDefinition, bool) {
 	if st.UID == 0 || st.Count != 1 || st.Endgame.UniqueID != int32(st.Item) || st.Endgame.UniqueRollBP < UniqueRollMinBP || st.Endgame.UniqueRollBP > UniqueRollMaxBP {
 		return UniqueDefinition{}, false
 	}
-	return UniqueForBase(st.Item)
+	switch st.Endgame.UniqueContentVersion {
+	case 0:
+		d, ok := legacyUniqueByBase[st.Item]
+		return cloneUnique(d), ok
+	case UniqueContentVersion:
+		return UniqueForBase(st.Item)
+	default:
+		return UniqueDefinition{}, false
+	}
 }
 func UniqueName(st Stack) (string, bool) { d, ok := UniqueOf(st); return d.Name, ok }
 func ApplyUnique(st *Stack, def ItemDef, intn func(int) int) bool {
@@ -141,6 +183,7 @@ func ApplyUnique(st *Stack, def ItemDef, intn func(int) int) bool {
 	if roll < 0 || roll > int(UniqueRollMaxBP-UniqueRollMinBP) {
 		return false
 	}
+	st.Endgame.UniqueContentVersion = UniqueContentVersion
 	st.Endgame.UniqueID = int32(st.Item)
 	st.Endgame.UniqueRollBP = UniqueRollMinBP + int32(roll)
 	st.Endgame.Revision++
@@ -167,15 +210,12 @@ func UniqueAffixes(st Stack) []Affix {
 	return ResolveVariableAffixes(d.Affixes, d.VariableAffixes, st.Endgame.UniqueRollBP)
 }
 func ValidateUniqueCatalog(defs map[ItemID]ItemDef) error {
-	count := 0
-	for id, def := range defs {
-		if id <= 0 || def.Equip == nil || def.Equip.NoTypeDrop {
-			continue
-		}
-		count++
-		d, ok := uniqueByBase[id]
-		if !ok {
-			return fmt.Errorf("eligible equipment %d lacks unique", id)
+	// V5 constrains only new unique generation; the ordinary equipment dictionary
+	// deliberately remains larger, including ascended and conversion-only bases.
+	for id, d := range uniqueByBase {
+		def, ok := defs[id]
+		if !ok || def.Equip == nil || def.Equip.NoTypeDrop {
+			return fmt.Errorf("V5 unique %d missing eligible equipment", id)
 		}
 		if err := validateUniqueDefinition(d); err != nil {
 			return err
@@ -189,9 +229,6 @@ func ValidateUniqueCatalog(defs map[ItemID]ItemDef) error {
 		if d.Slot != e.Slot || d.Professions != e.Need.Professions || d.BeginnerAllowed != e.Need.BeginnerAllowed || d.Sex != e.Need.Sex || d.LevelRequirement != e.LevelReq {
 			return fmt.Errorf("unique %d requirement metadata differs from loaded equipment", id)
 		}
-	}
-	if count != UniqueCatalogCount {
-		return fmt.Errorf("eligible equipment count %d differs from catalogue %d", count, UniqueCatalogCount)
 	}
 	return nil
 }

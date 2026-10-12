@@ -206,6 +206,10 @@ func (s *Scene) onEndgameRiftMonsterDeath(m, killer *entity.Entity) bool {
 	if !ok {
 		return true
 	}
+	if x.data.Run.Phase == domain.RiftCompleted && !x.data.GrantsReady {
+		s.generateEndgameRiftGrants()
+		x.data.Run.Revision++
+	}
 	for i := 0; i < orbs; i++ {
 		id := s.alloc.Drop()
 		pos := m.Pos

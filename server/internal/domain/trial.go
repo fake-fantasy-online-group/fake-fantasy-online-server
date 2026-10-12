@@ -1,5 +1,7 @@
 package domain
 
+const TrialRewardVersion = "trial-v5-need-per-anchor-unit"
+
 // TrialProgress is saved with the character, experience and inventory in one transaction.
 type TrialProgress struct {
 	Day, DailyCompleted, Cycle int32
@@ -37,10 +39,11 @@ type TrialRules struct {
 
 func (r *TrialRules) IsMap(id int32) bool { return r != nil && len(r.Maps[id]) > 0 }
 
-// BaseExperience is a straight line in character level. Preserve the fractional
+// BaseExperience preserves the old line through 60 and uses Need/AnchorUnits for V5.
+// Preserve the fractional
 // high anchor until the final integer division (E(50)/16 is not an integer).
 func (r *TrialRules) BaseExperience(level int32, levels *LevelTable) int64 {
-	if r == nil || level < r.MinLevel || level > r.MaxLevel || levels == nil {
+	if r == nil || level < r.MinLevel || level > r.MaxLevel || levels == nil || r.AnchorUnits <= 0 || r.AnchorLevel <= r.MinLevel {
 		return 0
 	}
 	n, d := r.baseFraction(level, levels)
@@ -48,17 +51,23 @@ func (r *TrialRules) BaseExperience(level int32, levels *LevelTable) int64 {
 }
 
 func (r *TrialRules) baseFraction(level int32, levels *LevelTable) (int64, int64) {
+	if level > 60 {
+		return levels.Need(level), int64(r.AnchorUnits)
+	}
 	low := levels.Need(r.MinLevel) + levels.Need(r.MinLevel+1) + levels.Need(r.MinLevel+2)
 	span, units := int64(r.AnchorLevel-r.MinLevel), int64(r.AnchorUnits)
 	return (low*units*span + int64(level-r.MinLevel)*(levels.Need(r.AnchorLevel)-low*units)), span * units
 }
 
 func (r *TrialRules) Experience(level, monsterLevel int32, p TrialProgress, day int32, levels *LevelTable) int64 {
+	if r == nil || levels == nil || len(r.Multipliers) == 0 || p.Cycle < 0 || r.AnchorUnits <= 0 || r.AnchorLevel <= r.MinLevel {
+		return 0
+	}
 	pct := r.Multipliers[int(p.Cycle)%len(r.Multipliers)]
 	if p.Day != day || p.DailyCompleted == 0 {
 		pct = r.FirstPct
 	}
-	penalty := (level - monsterLevel - r.PenaltyGap) * r.PenaltyPerLevel
+	penalty := (int64(level) - int64(monsterLevel) - int64(r.PenaltyGap)) * int64(r.PenaltyPerLevel)
 	if penalty < 0 {
 		penalty = 0
 	}

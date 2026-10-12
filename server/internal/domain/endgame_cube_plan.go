@@ -218,6 +218,9 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 	}
 	_, hasUnique := UniqueOf(target)
 	eligible := func() bool {
+		if _, ok := UniqueForBase(target.Item); !ok {
+			return false
+		}
 		if ctx.IsUniqueBase != nil {
 			return ctx.IsUniqueBase(target.Item)
 		}
@@ -226,7 +229,13 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 	}
 	switch req.RecipeID {
 	case CubeSalvageNormal, CubeSalvageUnique:
-		if !eligible() || req.RecipeID == CubeSalvageNormal && (target.Endgame.UniqueID != 0 || hasUnique) || req.RecipeID == CubeSalvageUnique && !hasUnique {
+		// V5 narrows new unique generation only. Keep the previously supported
+		// ordinary and legacy-unique salvage scope independent of that list.
+		_, salvageEligible := legacyUniqueByBase[target.Item]
+		if ctx.IsUniqueBase != nil {
+			salvageEligible = ctx.IsUniqueBase(target.Item)
+		}
+		if !salvageEligible || req.RecipeID == CubeSalvageNormal && (target.Endgame.UniqueID != 0 || hasUnique) || req.RecipeID == CubeSalvageUnique && !hasUnique {
 			return p, cubeError("requirements", "此配方不适用于所选装备")
 		}
 		p.Bag.Set(slot, Stack{})
@@ -432,6 +441,9 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		}
 	}
 	if !target.Empty() {
+		if (req.RecipeID == CubeInscribeArray || req.RecipeID == CubeReorderRunes) && adoptCurrentFormationOnCompletion(def, ctx.Bag.At(slot), &target) {
+			p.Description += " 重新成阵采用V5宿阵规则，保留原灵性值。"
+		}
 		if execute && req.RecipeID != CubeAwakenUnique {
 			target.Endgame.Revision++
 		}

@@ -11,7 +11,7 @@ func uniqueFixture(d UniqueDefinition) ItemDef {
 }
 func TestUniqueCatalogCompleteDistinctAndValid(t *testing.T) {
 	all := UniqueCatalog()
-	if len(all) != 1619 {
+	if len(all) != UniqueCatalogCount {
 		t.Fatal(len(all))
 	}
 	names, traits := map[string]bool{}, map[string]bool{}
@@ -41,7 +41,7 @@ func TestUniqueCatalogCompleteDistinctAndValid(t *testing.T) {
 		// This structural fixture needs nonzero white bases for explicit local rows.
 		defs[d.BaseID].Equip.Bonus = Stats{MinAtk: 100, MaxAtk: 200, MAtk: 100, Def: 100, MDef: 100}
 	}
-	if native != 885 || ready != 298 {
+	if native != 259 || ready != 259 {
 		t.Fatalf("native=%d ready=%d traits=%d", native, ready, len(traits))
 	}
 	if err := ValidateUniqueCatalog(defs); err != nil {

@@ -36,6 +36,8 @@ type Saver interface {
 
 // Config 建场景所需的一切。
 type Config struct {
+	RequireGrowthV5 bool
+
 	// RiftLayouts is the immutable, collision-validated startup map catalog.
 	RiftLayouts    []domain.RiftFloorTemplate
 	EndgameBackend domain.EndgameBackend
@@ -192,6 +194,11 @@ func (r ReviveAt) Enabled() bool { return r.Scene.MapID != 0 }
 //
 // 除 mailbox / quit / log 外的所有字段, **只有场景 goroutine 能碰**。
 type Scene struct {
+	requireGrowthV5 bool
+
+	equipment     *equipmentRuntime
+	equipmentSeed uint64
+
 	riftLayouts     []domain.RiftFloorTemplate
 	endgameBackend  domain.EndgameBackend
 	endgamePlayers  map[domain.EntityID]*endgamePlayerState
@@ -241,6 +248,7 @@ type Scene struct {
 	casts                []pendingCast                          // 本帧待结算的技能
 	hits                 map[domain.EntityID]*combat.HitTracker // 每个攻击者的命中步进器
 	rng                  *rand.Rand                             // 场景私有, 单线程用, 可复现
+	lootSeed             int64                                  // V5 natural quality/unique domains; never consumed by combat RNG
 	aiRng                *rand.Rand                             // AI 游荡独立随机流，不扰动伤害/掉落序列
 	playerAttackHitDelay time.Duration                          // 旧测试夹具兼容的固定命中延迟
 	combatTiming         domain.CombatTimingRule                // 正式普通攻击命中时序
@@ -255,52 +263,55 @@ type Scene struct {
 	portalBlocked map[domain.EntityID]struct{}
 	// moveWindows 只记真实客户端 0x1017 的短周期位移额度。传送和离场会清掉，
 	// 不进角色存档，也不跨场景交接。
-	moveWindows        map[domain.EntityID]playerMoveWindow
-	stallBrowsers      map[domain.EntityID]map[domain.EntityID]struct{}
-	levels             *domain.LevelTable               // 经验曲线
-	defs               spawn.Defs                       // 怪物模板, 结算经验时回查
-	items              map[domain.ItemID]domain.ItemDef // 物品模板
-	itemIcons          []domain.ItemIconMapping         // 0x804d 特殊图标覆盖
-	itemIconsKnown     bool
-	skills             domain.SkillTable    // 技能定义
-	statuses           domain.StatusTable   // 状态定义
-	statusOverlay      domain.StatusOverlay // 状态叠加矩阵
-	quests             domain.QuestTable    // 任务定义
-	dungeons           domain.DungeonTable  // 副本表
-	works              domain.WorkTable     // 打工定义
-	nianliCreation     domain.NianliCreationTable
-	requireWorkGather  bool               // 收益是否必须由 0x1025 触发
-	crafts             domain.CraftTable  // 合成配方
-	refines            domain.RefineTable // 精炼配方
-	sockets            domain.SocketTable // 打孔/镶嵌配方
-	washes             domain.WashTable   // 洗练配方
-	warehouseRule      domain.WarehouseRule
-	wardrobes          domain.WardrobeTable
-	wardrobeRule       domain.WardrobeRule
-	hairRules          domain.HairRules
-	stallOpenItems     domain.StallOpenItems
-	rack               domain.RackCatalog
-	depositRule        domain.DepositRule
-	petDefs            domain.PetTable                  // 宠物种族表
-	petLvls            *domain.PetLevelTable            // 宠物经验曲线
-	petFoods           map[domain.ItemID]domain.PetFood // 宠物食物
-	petPrefixes        domain.PetPrefixTable
-	petSkills          domain.PetSkillTable
-	petLearnItems      map[domain.ItemID]domain.PetLearningItem
-	petPPAiCap         int32
-	rideInviteSeconds  int32
-	petRule            domain.PetRule
-	skipNPC            bool                // 排查用: 不下发 NPC 落位
-	stamina            domain.StaminaRule  // 耐力规则
-	rest               domain.RestRule     // 坐下休息规则
-	death              domain.DeathRule    // 玩家死亡损失规则
-	penalty            domain.LevelPenalty // 跨级打怪的等级差惩罚
-	now                func() time.Time    // 取当前时间(耐力每日回满用)
-	dungeon            *domain.DungeonDef  // 非 nil = 本场景是副本实例
-	dungeonElapsedBase domain.Tick         // 本层创建前副本已消耗的帧数
-	everOccupied       bool                // 已有玩家真正进入过；单层副本人数归零后立即销毁
-	dungeonEncounters  domain.DungeonEncounterTable
-	encounterDone      map[domain.MonsterID]bool
+	moveWindows                map[domain.EntityID]playerMoveWindow
+	stallBrowsers              map[domain.EntityID]map[domain.EntityID]struct{}
+	levels                     *domain.LevelTable               // 经验曲线
+	defs                       spawn.Defs                       // 怪物模板, 结算经验时回查
+	items                      map[domain.ItemID]domain.ItemDef // 物品模板
+	itemIcons                  []domain.ItemIconMapping         // 0x804d 特殊图标覆盖
+	itemIconsKnown             bool
+	skillRawCache              map[domain.EntityID]skillRawCacheEntry
+	skillViewDigests           map[domain.EntityID][32]byte
+	skillProgressionRefreshing bool
+	skills                     domain.SkillTable    // 技能定义
+	statuses                   domain.StatusTable   // 状态定义
+	statusOverlay              domain.StatusOverlay // 状态叠加矩阵
+	quests                     domain.QuestTable    // 任务定义
+	dungeons                   domain.DungeonTable  // 副本表
+	works                      domain.WorkTable     // 打工定义
+	nianliCreation             domain.NianliCreationTable
+	requireWorkGather          bool               // 收益是否必须由 0x1025 触发
+	crafts                     domain.CraftTable  // 合成配方
+	refines                    domain.RefineTable // 精炼配方
+	sockets                    domain.SocketTable // 打孔/镶嵌配方
+	washes                     domain.WashTable   // 洗练配方
+	warehouseRule              domain.WarehouseRule
+	wardrobes                  domain.WardrobeTable
+	wardrobeRule               domain.WardrobeRule
+	hairRules                  domain.HairRules
+	stallOpenItems             domain.StallOpenItems
+	rack                       domain.RackCatalog
+	depositRule                domain.DepositRule
+	petDefs                    domain.PetTable                  // 宠物种族表
+	petLvls                    *domain.PetLevelTable            // 宠物经验曲线
+	petFoods                   map[domain.ItemID]domain.PetFood // 宠物食物
+	petPrefixes                domain.PetPrefixTable
+	petSkills                  domain.PetSkillTable
+	petLearnItems              map[domain.ItemID]domain.PetLearningItem
+	petPPAiCap                 int32
+	rideInviteSeconds          int32
+	petRule                    domain.PetRule
+	skipNPC                    bool                // 排查用: 不下发 NPC 落位
+	stamina                    domain.StaminaRule  // 耐力规则
+	rest                       domain.RestRule     // 坐下休息规则
+	death                      domain.DeathRule    // 玩家死亡损失规则
+	penalty                    domain.LevelPenalty // 跨级打怪的等级差惩罚
+	now                        func() time.Time    // 取当前时间(耐力每日回满用)
+	dungeon                    *domain.DungeonDef  // 非 nil = 本场景是副本实例
+	dungeonElapsedBase         domain.Tick         // 本层创建前副本已消耗的帧数
+	everOccupied               bool                // 已有玩家真正进入过；单层副本人数归零后立即销毁
+	dungeonEncounters          domain.DungeonEncounterTable
+	encounterDone              map[domain.MonsterID]bool
 
 	// emptySince 是这个实例空掉的那一帧。0 表示现在有人。
 	emptySince     domain.Tick
@@ -374,6 +385,8 @@ func New(cfg Config) *Scene {
 			(int64(cfg.ID.MapID) << 32) ^ int64(cfg.ID.Instance)
 	}
 	s := &Scene{
+		requireGrowthV5:      cfg.RequireGrowthV5,
+		equipmentSeed:        uint64(cfg.Seed),
 		riftLayouts:          cfg.RiftLayouts,
 		endgameBackend:       cfg.EndgameBackend,
 		id:                   cfg.ID,
@@ -391,6 +404,7 @@ func New(cfg Config) *Scene {
 		aoi:                  newAOI(cfg.CellSize),
 		hits:                 map[domain.EntityID]*combat.HitTracker{},
 		rng:                  rand.New(rand.NewSource(cfg.Seed)),
+		lootSeed:             cfg.Seed,
 		aiRng:                rand.New(rand.NewSource(cfg.Seed ^ 0x5deece66d)),
 		playerAttackHitDelay: cfg.PlayerAttackHitDelay,
 		combatTiming:         cfg.CombatTiming,
@@ -707,6 +721,7 @@ func (s *Scene) hitFrame(now time.Time) (ok bool) {
 			ok = s.panics < maxPanicsInARow
 		}
 	}()
+	s.stepEquipmentAuras()
 	s.stepCastsAt(now, true)
 	s.stepCombatAt(now, true)
 	s.flush()
@@ -906,6 +921,7 @@ func (s *Scene) step() {
 	if s.rift == nil || s.riftCombatReady() {
 		s.stepStatus()
 	} // 2. 状态: 周期触发与到期。**必须在任何人行动之前**
+	s.stepEquipmentAuras()
 	s.stepRest()                   // 3. 坐下休息: 周期恢复生命
 	s.stepAstralRuneRegeneration() // Standalone 轸 rune: flat, online-only recovery.
 	s.stepWork()                   // 4. 打工: 结算与扣耐力
@@ -973,6 +989,14 @@ func (s *Scene) stepCombatAt(now time.Time, timedOnly bool) {
 			tr = &combat.HitTracker{}
 			s.hits[src.ID] = tr
 		}
+		finishEquipment := s.beginEquipmentRoot(src.ID, dst.ID, at.blow.EquipmentOffense)
+		s.equipment.root.source = at.blow.SourceOffense
+		if !at.blow.EquipmentSnapshot {
+			s.equipment.root.offense = s.equipmentOffense(src)
+		}
+		if at.counter {
+			at.blow.Origin = domain.DamageCounterOrigin
+		}
 		ev, rawDamage, fullMagicReflect := s.resolveStrikeStatuses(src, dst, tr, at.blow)
 		// 伤害数值是**平衡性问题的唯一入口**: 打不死怪时, 光看"有没有伤害包"
 		// 分不出是没打中还是每下只有三十点(实测 63 级角色因为六维是空的,
@@ -994,6 +1018,7 @@ func (s *Scene) stepCombatAt(now time.Time, timedOnly bool) {
 		if ev.Flag.Has(event.DamageFatal) {
 			s.onDeath(dst, src.ID)
 		}
+		finishEquipment()
 	}
 	for i := len(waiting); i < originalLen; i++ {
 		s.attacks[i] = pendingAttack{}
@@ -1016,7 +1041,7 @@ func (s *Scene) passiveCounterPending(defender, attacker *entity.Entity) (pendin
 		return pendingAttack{}, false
 	}
 	ch := defender.Player.Char
-	for skill, level := range ch.Skills {
+	for skill, level := range s.rawSkillLevels(defender) {
 		passive, ok := s.skills.Get(skill, level)
 		if !ok || passive.Kind != domain.SkillPassive || passive.PassiveCounter == nil ||
 			!ch.AllowsSkill(passive.ID, passive.Prof) {
@@ -1043,7 +1068,13 @@ func (s *Scene) passiveCounterPending(defender, attacker *entity.Entity) (pendin
 // 死亡与「从视野里消失」是两件事: 死亡是**战斗结果**(要结算经验/掉落/仇恨),
 // 消失是**视野事件**(只影响渲染)。所以先发 EntityDied, 尸体停留若干帧后才移除。
 func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
+	// Freeze before kill XP, durability/lifecycle updates or rewards can change MF.
+	lootContext := s.freezeLootContextV5(killer)
 	delete(s.astralRuneRegen, dead.ID)
+	if s.equipment != nil {
+		s.equipment.nextAuraScan = 0
+		s.stepEquipmentAuras()
+	}
 	if dead.Monster != nil && s.rift == nil {
 		s.beginEndgameTrial()
 	}
@@ -1107,7 +1138,7 @@ func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
 		s.recordQuestKill(dead, killer)
 		s.grantQuestDrops(dead, killer)
 		s.awardKill(dead, killer)
-		s.rollLoot(dead, killer)
+		s.rollLootWithContextV5(dead, lootContext)
 		s.requestFirstKillTip(dead, killer)
 		s.advanceDungeonEncounter(dead)
 		s.updateTrialClear()
@@ -1212,7 +1243,7 @@ func (s *Scene) attributeSnapshot(e *entity.Entity) event.StatsChanged {
 	copy(current, ch.Attrs)
 	current[0] = ch.Level
 	current[1] = nonnegativeI32(ch.Exp)
-	if s.levels != nil {
+	if s.levels != nil && ch.Level < domain.LevelCap {
 		current[2] = nonnegativeI32(s.levels.Need(ch.Level))
 	}
 	base := ch.EffectiveBase()

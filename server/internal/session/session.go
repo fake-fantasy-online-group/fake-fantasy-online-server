@@ -62,9 +62,10 @@ type Sink interface {
 
 // Deps 是会话依赖(构造注入, 便于测试)。
 type Deps struct {
-	Announcements domain.AnnouncementPool
-	Store         store.Store
-	Router        *scene.Router
+	RequireGrowthV5 bool // production V5 battle requires explicit capability handshake
+	Announcements   domain.AnnouncementPool
+	Store           store.Store
+	Router          *scene.Router
 	// HelpTopics 是 PostgreSQL 在开服时加载的普通角色帮助主题。
 	HelpTopics      []domain.HelpTopic
 	HelpTopicsKnown bool
@@ -120,6 +121,7 @@ type Session struct {
 	mu            sync.Mutex
 	stage         Stage
 	endgameV1     bool
+	growthV5      bool
 	account       *store.Account
 	clientAuthTag []byte
 	char          *domain.Character
@@ -305,6 +307,10 @@ func (s *Session) OnPacket(op uint16, payload []byte) {
 	req, ok := protocol.Decode(protocol.Op(op), payload)
 	if !ok {
 		s.noteUnknown(op, payload, req.Kind)
+		return
+	}
+	if s.deps.RequireGrowthV5 && (req.Kind == protocol.ReqAttack || req.Kind == protocol.ReqUseSkill || req.Kind == protocol.ReqUpgradeSkill) && !s.growthReady() {
+		s.sink.Send(protocol.EncodeEndgame(domain.EndgameResponse{Kind: "hello", Error: "update_required", Message: "请更新客户端并完成成长系统同步后再战斗。"}))
 		return
 	}
 	switch req.Kind {
@@ -981,6 +987,7 @@ func (s *Session) leaveWorld(reason string, target Stage) bool {
 	}
 	s.stage = target
 	s.endgameV1 = false
+	s.growthV5 = false
 	s.awaitMapAck = false
 	s.mapEpoch++
 	s.entity = 0

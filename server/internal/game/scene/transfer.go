@@ -153,6 +153,7 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	}
 	s.cancelPendingCombat(combatants...)
 
+	s.revokeDepartingSkillSource(e)
 	runtime := e.CapturePlayerRuntime(s.tick)
 	// 0.5 宠物跟着主人做无损运行态交接。源场景只摘除旧实体，
 	// 不走 recallPet，因为召回会清当前技能、结束骑乘并改变客户端宠物栏。
@@ -169,6 +170,9 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	s.aoi.Leave(e)
 	delete(s.entities, e.ID)
 	delete(s.players, e.ID)
+	delete(s.skillViewDigests, e.ID)
+	delete(s.skillRawCache, e.ID)
+	s.removeEquipmentEntity(e.ID)
 	delete(s.hits, e.ID)
 	delete(s.portalBlocked, e.ID)
 	// 正在打他的怪要脱战, 否则会追着一个已经不在这张图的 id

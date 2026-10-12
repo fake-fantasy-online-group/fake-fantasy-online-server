@@ -1,49 +1,50 @@
 {
-  "schema": 2,
-  "total": 1619,
-  "native_drop_kind": 885,
-  "conversion_only": 734,
-  "legacy_affix_pool_ready": 298,
+  "schema": 5,
+  "total": 259,
+  "legacy_frozen_total": 1619,
+  "new_generation_excluded": 1360,
+  "native_drop_kind": 259,
+  "legacy_affix_pool_ready": 259,
   "class_counts": {
-    "warrior": 249,
-    "swordsman": 290,
-    "assassin": 269,
-    "healer": 237,
-    "warlock": 237,
-    "sharedcaster": 12,
-    "allclasses": 323,
-    "unrestricted": 2
+    "swordsman": 48,
+    "sharedcaster": 10,
+    "warrior": 28,
+    "assassin": 38,
+    "allclasses": 99,
+    "healer": 18,
+    "warlock": 18
   },
-  "sex_counts": {
-    "0": 1421,
-    "1": 99,
-    "2": 99
-  },
-  "catalog_sha256": {
-    "unique_catalog_allclasses.json": "c394093f6597eda4d4ad6abb3e5c7ff503608f0315d9f0515eb40a1297c4fa2d",
-    "unique_catalog_assassin.json": "8eb24ebe9ad9ca84ccc0dda95f344978864b8e6ee5e95133637bc1f4deaaa2d5",
-    "unique_catalog_healer.json": "24664600f51128f30f6436e7265f746b2c4d2f00bfe48bdde66fbe13b4f0510b",
-    "unique_catalog_sharedcaster.json": "a9d63f6989123d3d3fe2b9cd5659e3e4468a18b9a8cab09304d239b424ca0455",
-    "unique_catalog_swordsman.json": "c087ee469dd3e837d2b7299f88c7c0b92ffccfd25d62271ced5c6b40886d64a1",
-    "unique_catalog_unrestricted.json": "17d7d0a7dd3fe02064ebeec13c645dd430a949b2fea362daca6d279a696498ee",
-    "unique_catalog_warlock.json": "e3ed798518e001131b5406475d0c5afd40e38cb28a90bcc2d4b7adef2d5e3955",
-    "unique_catalog_warrior.json": "2306ba81bc423a98d26e36c3fb31439d6323271cfbcf3383aabfc8b845a55f90"
-  },
-  "source_csv_sha256": "44a64a6e266b7e02809bdc1abb658d7df25b3ce1715d568a094e726da7756006",
-  "max_catalog_bytes": 378361,
-  "authored_entry_count": 1619,
-  "legacy_template_count": 0,
   "power_tier_counts": {
-    "transition": 1080,
-    "highvalue": 449,
-    "builddefining": 84,
-    "godlike": 6
+    "transition": 183,
+    "highvalue": 54,
+    "builddefining": 18,
+    "godlike": 4
   },
-  "trait_count_distribution": {
-    "0": 1195,
-    "1": 403,
-    "2": 21
+  "variable_count_distribution": {
+    "1": 120,
+    "0": 124,
+    "2": 15
   },
-  "executable_trait_kind_count": 29,
-  "editorial_note": "Completeness and structural checks do not certify literary quality or gameplay balance."
+  "typed_effect_counts": {
+    "magic_find_pct": 22,
+    "element_resist_bp": 21,
+    "aura": 3,
+    "element_absorb_bp": 3,
+    "element_damage_bp": 7,
+    "proc": 3,
+    "enemy_element_pierce_bp": 1,
+    "element_mitigation_bp": 1
+  },
+  "skill_item_count": 28,
+  "catalog_sha256": {
+    "unique_catalog_warrior.json": "7ec7802e7a8c4d62abd72106e1546f869724a365ad6165549e0ce9af9fb8850d",
+    "unique_catalog_swordsman.json": "92964547b2c8f6e88e550c813c14563eb72d4279c9129009e463284682aeb10d",
+    "unique_catalog_assassin.json": "d31ae697e6ad4a6fb1994da2e89bc44e15f729f30e4828157a8c3af17eea66fe",
+    "unique_catalog_healer.json": "2f08496f309ac30309c9861f4e350077837be4f12d9b70fa7886f87ce7500676",
+    "unique_catalog_warlock.json": "6823f837d15c138ad37186c07e6e28693406c0952ef70933241fd4360fc91bab",
+    "unique_catalog_sharedcaster.json": "53ad75d05ae3254a32c5aba627ecdc45091e7ec583ff8363f9018d5cdb9911f5",
+    "unique_catalog_allclasses.json": "79f91732c8e64aa581f0865ed94dd1231ea0bea0505c37b90615b01acb8acd6c",
+    "unique_catalog_unrestricted.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  "validation_boundary": "Structural compilation; runtime static budget and combat/client acceptance are separate tests."
 }
