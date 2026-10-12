@@ -87,11 +87,13 @@ func TestV5OriginalPassiveScopeThroughRuntime(t *testing.T) {
 		}
 		targets := map[domain.SkillID]bool{}
 		globalCast := false
+		globalInterrupt := false
 		for _, m := range original.PassiveModifiers {
 			if m.TargetSkill != 0 {
 				targets[m.TargetSkill] = true
 			}
 			globalCast = globalCast || m.Kind == domain.PassiveCastTimeReductionPct
+			globalInterrupt = globalInterrupt || m.Kind == domain.PassiveCastInterruptReductionPct
 		}
 		for _, m := range original.PassiveTriggers {
 			targets[m.TargetSkill] = true
@@ -118,7 +120,7 @@ func TestV5OriginalPassiveScopeThroughRuntime(t *testing.T) {
 					s.applyPassiveSkillModifiersWithLevels(p, &a, domain.Learned{})
 					s.applyPassiveSkillModifiersWithLevels(p, &b, domain.Learned{original.ID: rank})
 					changed := !reflect.DeepEqual(a, b)
-					wantChange := targets[id] || globalCast && base.PrepareMS > 0
+					wantChange := targets[id] || (globalCast || globalInterrupt && rank > 5) && base.PrepareMS > 0
 					if changed != wantChange {
 						t.Fatalf("passive%d rank%d target%d changed=%t, original scope=%t", original.ID, rank, id, changed, wantChange)
 					}

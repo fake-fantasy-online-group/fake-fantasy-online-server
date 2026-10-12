@@ -26,7 +26,33 @@ func (s *Scene) applyStatus(target *entity.Entity, id domain.StatusID, level int
 	if !ok {
 		return false
 	}
+	// Secondary poison/freeze has no direct SkillDef at this point. Carry only
+	// presentation metadata from the status that caused it; mechanics stay in def.
+	if source := s.entities[src]; source != nil {
+		icon, skillID := triggeredStatusIcon(source.Status, id)
+		applyStatusSource(&def, icon, skillID)
+	}
 	return s.applyStatusDef(target, def, src)
+}
+
+func triggeredStatusIcon(statuses *domain.StatusSet, id domain.StatusID) (icon, skillID int32) {
+	if statuses == nil {
+		return
+	}
+	var strongest int32
+	statuses.Each(func(a domain.Active) {
+		var chance int32
+		switch id {
+		case domain.StatusPoison:
+			chance = a.Def.PoisonOnHitChance
+		case domain.StatusFreeze:
+			chance = a.Def.FreezeAttackerChance
+		}
+		if chance > strongest {
+			strongest, icon, skillID = chance, a.Def.Icon, a.Def.SourceSkillID
+		}
+	})
+	return
 }
 
 // applyStatusDef 让已确认来源的调用方在不改静态表的前提下补展示元数据。
@@ -57,6 +83,7 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 		if chance := domain.SkillStatusResistChance(resist, def.ControlPower); chance > 0 {
 			if int32(s.rng.Intn(100)) < chance {
 				s.emitTo(target.ID, event.StatusResisted{Who: target.ID, Status: int32(def.ID)})
+				s.restorePassiveResistMP(target, def.ID)
 				return false
 			}
 		}
@@ -135,7 +162,13 @@ func (s *Scene) passiveStatusResistPct(target *entity.Entity, status domain.Stat
 // prepareBasicAttackStatuses 在一次已受理的普通攻击起手时消耗“下一击”状态，
 // 并处理隐身的“任何攻击行为都会现形”。
 func (s *Scene) prepareBasicAttackStatuses(e *entity.Entity, blow *combat.Blow) {
-	if e == nil || e.Status == nil || blow == nil {
+	if e == nil || blow == nil {
+		return
+	}
+	if overflow := s.passiveOverflow(e, domain.PassiveAttackDurabilityReductionPct, true); overflow > 0 {
+		blow.SkillPct = boostedDamagePct(blow.SkillPct, overflow)
+	}
+	if e.Status == nil {
 		return
 	}
 	bonus := e.Status.StealthDamageBonus()
@@ -290,11 +323,11 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		}
 		if chance := s.trapHalfDamageChance(dst); blow.Trap && chance > 0 &&
 			int32(s.rng.Intn(10000)) < chance {
-			incoming = incoming/2 + incoming%2
+			incoming = s.passiveHalfDamage(dst, domain.PassiveTrapHalfDamageChance, incoming)
 		}
 		if chance := s.incomingMagicHalfChance(dst); magic && chance > 0 &&
 			int32(s.rng.Intn(10000)) < chance {
-			incoming = incoming/2 + incoming%2
+			incoming = s.passiveHalfDamage(dst, domain.PassiveIncomingMagicHalfChance, incoming)
 		}
 		if dst.Status != nil {
 			finalDamage, removed = dst.Status.MitigateDamage(magic, incoming)

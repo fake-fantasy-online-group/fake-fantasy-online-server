@@ -305,6 +305,8 @@ func TestSkillBehaviorAcceptanceHighEquippedRanksAndRemoval(t *testing.T) {
 		t.Fatal("20 hard cap/uncapped equipment identity changed", views[10301])
 	}
 	before := views[10301].Contract.Current.MPCost
+	beforeDef, _ := s.skills.Get(10301, 21)
+	s.applyResolvedSkillModifiers(p, &beforeDef, p.Player.Char.Skills, s.rawSkillLevels(p))
 	behaviorAcceptanceCast(t, s, p, 10301, p.ID)
 	st.Durability = 0
 	p.Player.Worn.Set(domain.EquipSlot(u.Slot), st)
@@ -312,7 +314,10 @@ func TestSkillBehaviorAcceptanceHighEquippedRanksAndRemoval(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if views[10301].EffectiveRank != "20" || views[10301].HardRank != 20 || views[10301].Contract.Current.MPCost >= before {
+	afterDef, _ := s.skills.Get(10301, 20)
+	s.applyResolvedSkillModifiers(p, &afterDef, p.Player.Char.Skills, s.rawSkillLevels(p))
+	if views[10301].EffectiveRank != "20" || views[10301].HardRank != 20 || views[10301].Contract.Current.MPCost < before ||
+		afterDef.ManaCostNumerator*beforeDef.ManaCostDenominator <= beforeDef.ManaCostNumerator*afterDef.ManaCostDenominator {
 		t.Fatal("broken source retained effective cost", before, views[10301])
 	}
 }

@@ -217,7 +217,16 @@ func continuedStatusWide(first, fifth, ranks int32, constantMagnitude bool) int6
 	}
 	v := int64(fifth) + (int64(fifth)-int64(first))*int64(ranks)/4
 	if first == fifth && constantMagnitude {
-		v = int64(fifth) + int64(fifth)*int64(ranks)/50
+		// Whole-number status payloads cannot carry a fractional tick or
+		// shield point. Preserve the 2% slope where it advances each rank;
+		// otherwise give the existing magnitude one native unit per rank.
+		// Do not apply this to chances, durations, or absent effects.
+		step := max(int64(ranks), absStatusWide(int64(fifth))*int64(ranks)/50)
+		if fifth > 0 {
+			v = int64(fifth) + step
+		} else {
+			v = int64(fifth) - step
+		}
 	}
 	if fifth > 0 {
 		return max(int64(0), v)
@@ -225,8 +234,15 @@ func continuedStatusWide(first, fifth, ranks int32, constantMagnitude bool) int6
 	return min(int64(0), v)
 }
 
+func absStatusWide(value int64) int64 {
+	if value < 0 {
+		return -value
+	}
+	return value
+}
+
 func continueStatusMagnitude(first, fifth, ranks int32) (int32, bool) {
-	// Only existing damage/healing/shield magnitudes use 2% continuation when
+	// Only existing damage/healing/shield magnitudes use at least 2% continuation when
 	// their legacy slope is zero. Chances, timing and mechanics never use it.
 	value := continuedStatusWide(first, fifth, ranks, true)
 	if value > math.MaxInt32 || value < math.MinInt32 {

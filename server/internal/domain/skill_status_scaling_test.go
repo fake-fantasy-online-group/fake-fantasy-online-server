@@ -48,7 +48,7 @@ func TestOriginalSkillStatusesContinueExistingEffects(t *testing.T) {
 		{"light shield", StatusDamageShield, 1, 5, 1, func(d StatusDef) int32 { return d.DamageShield }, 1700},
 		{"regeneration", 10303, 1, 5, 1, func(d StatusDef) int32 { return d.HPChanges[0].Value }, 34},
 		{"poison", StatusPoison, 22, 26, 4, func(d StatusDef) int32 { return d.Affixes[0].Value }, -48},
-		{"constant burning grows original damage", 1036, 1, 1, 50, func(d StatusDef) int32 { return d.Affixes[0].Value }, -40},
+		{"constant burning grows original damage", 1036, 1, 1, 50, func(d StatusDef) int32 { return d.Affixes[0].Value }, -70},
 		{"next basic attack", StatusKillingIntent, 1, 5, 4, func(d StatusDef) int32 { return d.NextBasicAttackPct }, 180},
 		{"next spell", StatusRelease, 1, 5, 4, func(d StatusDef) int32 { return d.NextSkillDamagePct }, 160},
 		{"duration multiplier follows original uncapped ratio", StatusFocus, 1, 5, 4, func(d StatusDef) int32 { return d.NextStatusDurationPct }, 130},
@@ -164,5 +164,81 @@ func TestOriginalSkillStatusBoundedEffectsAllowHugeRanks(t *testing.T) {
 		if !ok || d.MagicFullReflectChancePct > 100 || d.PhysicalDamageReductionPct > 100 || d.PhysicalReflectPct > 100 || d.NextCastTimeReductionPct > 100 {
 			t.Fatal("bounded effect failed before its representable cap", id, d, ok)
 		}
+	}
+}
+
+func TestConstantSkillStatusMagnitudeAdvancesEveryRepresentableRank(t *testing.T) {
+	for _, base := range []int32{-100, -75, -49, -20, -1, 1, 20, 49, 75, 100} {
+		previous := base
+		for rank := int32(1); rank <= 200; rank++ {
+			got, ok := continueStatusMagnitude(base, base, rank)
+			if !ok || base > 0 && got <= previous || base < 0 && got >= previous {
+				t.Fatalf("base=%d added rank=%d: %d -> %d, valid=%t", base, rank, previous, got, ok)
+			}
+			previous = got
+		}
+	}
+	if value, ok := continueStatusMagnitude(0, 0, 100); !ok || value != 0 {
+		t.Fatal("absent magnitude invented", value, ok)
+	}
+	if value, ok := continueStatusValue(20, 20, 100); !ok || value != 20 {
+		t.Fatal("ordinary constant field changed", value, ok)
+	}
+	for _, base := range []int32{math.MaxInt32, math.MinInt32} {
+		if _, ok := continueStatusMagnitude(base, base, 1); ok {
+			t.Fatal("unrepresentable magnitude was accepted", base)
+		}
+	}
+}
+
+func TestOriginalLowConstantPeriodicStatusesAdvanceEveryRank(t *testing.T) {
+	table := originalStatusScalingTable(t)
+	previous, ok := table.Get(1036, 1)
+	if !ok {
+		t.Fatal("burning fixture missing")
+	}
+	for rank := int32(6); rank <= 200; rank++ {
+		got, ok := table.ResolveSkillApplication(StatusApplication{ID: 1036, Level: 1, ProgressionFirstLevel: 1, ProgressionRanks: rank - 5})
+		if !ok || len(got.Affixes) != len(previous.Affixes) || got.Affixes[0].Value >= previous.Affixes[0].Value {
+			t.Fatalf("burning rank %d: damage failed to advance: %+v -> %+v", rank, previous, got)
+		}
+		if got.IntervalSec != previous.IntervalSec || got.Control != previous.Control {
+			t.Fatal("burning timing or mechanics changed", rank)
+		}
+		previous = got
+	}
+}
+
+func TestFunctionalSkillStatusesKeepMeaningfulManaProgression(t *testing.T) {
+	skills := realV5CurveAnchors(t)
+	checked := 0
+	for _, id := range V5SkillIDs() {
+		first, fifth := skills[SkillKey{ID: id, Level: 1}], skills[SkillKey{ID: id, Level: 5}]
+		if !fifth.Kind.Active() || fifth.HasDamageEffect() || fifth.MPCost <= 0 {
+			continue
+		}
+		checked++
+		previous := fifth
+		for _, rank := range []int32{20, 21, 30, 50, 100} {
+			got, err := EvaluateV5Skill(first, fifth, rank)
+			if err != nil {
+				t.Fatal(id, rank, err)
+			}
+			if got.MPCost != fifth.MPCost || got.ManaEfficiencyRanks != rank-OriginalSkillRankCap {
+				t.Fatalf("skill %d rank %d: base mana=%d, efficiency=%d", id, rank, got.MPCost, got.ManaEfficiencyRanks)
+			}
+			// Compare the rational average directly: integer cast charges can
+			// alternate, and floor(cost) alone would manufacture empty ranks.
+			if int64(got.MPCost)*(50+int64(previous.ManaEfficiencyRanks)) >= int64(previous.MPCost)*(50+int64(got.ManaEfficiencyRanks)) {
+				t.Fatalf("skill %d rank %d: average mana cost did not improve", id, rank)
+			}
+			if got.Area != fifth.Area || len(got.DirectEffects()) != len(fifth.DirectEffects()) || len(got.Statuses) != len(fifth.Statuses) {
+				t.Fatalf("skill %d rank %d: efficiency changed scope", id, rank)
+			}
+			previous = got
+		}
+	}
+	if checked == 0 {
+		t.Fatal("no functional skills audited")
 	}
 }

@@ -201,6 +201,7 @@ func (s *Scene) equipmentAuraStatuses(e *entity.Entity) []statusPresentation {
 	for i, g := range ordered {
 		a := g.effect
 		id := equipmentAuraStatusID(a.ID)
+		iconID := equipmentAuraIconID(a.ID)
 		position := uint8(domain.StatusPositionOrbit)
 		if i == 0 && g.owner == e.ID {
 			position = 0
@@ -228,7 +229,7 @@ func (s *Scene) equipmentAuraStatuses(e *entity.Entity) []statusPresentation {
 			desc += "\n来源装备有效且处于同队范围内时持续生效，来源脱装、损坏、死亡、离线或自身离队、离开范围时移除。"
 		}
 		remaining := nonnegativeI32((g.expires - s.tick).Millis())
-		out = append(out, statusPresentation{name: a.VisualKey, desc: desc, icon: event.StatusIconView{Status: id, Beneficial: true, RemainMS: -1}, effect: event.EntityStatusEffect{Who: e.ID, Effect: a.VisualKey, PositionMode: position, DurationMS: remaining}, buff: event.BuffView{SkillID: id, Name: a.VisualKey, Desc: desc, Beneficial: true, RemainSec: equipmentAuraSourceBoundSeconds, PositionMode: position}})
+		out = append(out, statusPresentation{name: a.VisualKey, desc: desc, icon: event.StatusIconView{Status: id, Icon: iconID, Beneficial: true, RemainMS: -1}, effect: event.EntityStatusEffect{Who: e.ID, Effect: a.VisualKey, PositionMode: position, DurationMS: remaining}, buff: event.BuffView{SkillID: id, Icon: iconID, Name: a.VisualKey, Desc: desc, Beneficial: true, RemainSec: equipmentAuraSourceBoundSeconds, PositionMode: position}})
 	}
 	return out
 }
@@ -303,4 +304,27 @@ func (s *Scene) equipmentAuraOffense(src *entity.Entity, out domain.EquipmentCom
 		}
 	}
 	return out
+}
+
+// Reuse installed skill artwork for new equipment auras, not their synthetic
+// status identities. IDs verified against skills.json and item/item/*.gso index.
+func equipmentAuraIconID(id string) int32 {
+	switch id {
+	case "white_tiger_guard":
+		return 5017 // 铁城神盾
+	case "ember_shelter":
+		return 7084 // 火盾术
+	case "holy_feather":
+		return 7006 // 光盾术
+	case "empty_talisman_ward":
+		return 5062 // 魔镜术
+	case "north_gate_ice":
+		return 7093 // 冰盾术
+	case "backward_flame":
+		return 7085 // 火系掌握
+	case "paper_donkey_frost":
+		return 7086 // 冰系掌握
+	default:
+		return 0
+	}
 }

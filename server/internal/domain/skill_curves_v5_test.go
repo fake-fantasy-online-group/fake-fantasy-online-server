@@ -272,7 +272,7 @@ func TestOriginalSkillChanceAndStealthGrowthUncompressedUntilBounds(t *testing.T
 	}
 }
 
-func TestOriginalSkillCostsAndTimingsContinueTheirAuthoredSlopes(t *testing.T) {
+func TestOriginalSkillCostsTimingsAndUtilityEfficiency(t *testing.T) {
 	skills := realV5CurveAnchors(t)
 	if err := InstallV5SkillProgression(skills); err != nil {
 		t.Fatal(err)
@@ -292,6 +292,15 @@ func TestOriginalSkillCostsAndTimingsContinueTheirAuthoredSlopes(t *testing.T) {
 					t.Fatalf("skill%d rank%d unavailable", id, rank)
 				}
 				want := int64(a) + (int64(b)-int64(a))*int64(rank-1)/4
+				if rank > 5 && fifth.Kind.Active() && !fifth.HasDamageEffect() {
+					want = int64(b)
+					if name != "MPCost" {
+						want = int64(b) * 50 / (50 + int64(rank-5))
+					}
+					if d.ManaEfficiencyRanks != rank-5 {
+						t.Fatalf("skill%d/%d utility efficiency missing", id, rank)
+					}
+				}
 				if value(d) != int32(want) {
 					t.Fatalf("skill%d rank%d %s=%d want%d", id, rank, name, value(d), want)
 				}
@@ -304,7 +313,7 @@ func TestOriginalSkillCostsAndTimingsContinueTheirAuthoredSlopes(t *testing.T) {
 	for _, sample := range []struct {
 		id                       SkillID
 		rank, mp, cast, cooldown int32
-	}{{10401, 6, 41, 3000, 500}, {10401, 20, 69, 3000, 500}, {10304, 6, 130, 4850, 1000}, {10428, 6, 99, 1000, 32500}} {
+	}{{10401, 6, 41, 3000, 500}, {10401, 20, 69, 3000, 500}, {10304, 6, 125, 4509, 1000}, {10428, 6, 96, 1000, 31372}} {
 		d, _ := skills.Get(sample.id, sample.rank)
 		// Sample checks isolate changing fields; untouched timings are audited above.
 		if d.MPCost != sample.mp {

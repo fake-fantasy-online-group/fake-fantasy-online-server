@@ -182,9 +182,18 @@ func (e *v5Evaluator) continueOriginal(a, b SkillDef) SkillDef {
 	out := cloneOriginalSkill(b)
 	out.Dist = b.Dist
 	out.Radius = b.Radius
-	out.PrepareMS = max(int32(0), e.blend(a.PrepareMS, b.PrepareMS))
-	out.CooldownMS = max(int32(0), e.blend(a.CooldownMS, b.CooldownMS))
-	out.MPCost = max(int32(0), e.blend(a.MPCost, b.MPCost))
+	// Utility progression invests in repeated use, never in an increasing bill.
+	// Fractions are settled after modifiers by the accepted-cast path.
+	if b.Kind.Active() && !b.HasDamageEffect() {
+		out.MPCost = b.MPCost
+		out.ManaEfficiencyRanks = e.rank - OriginalSkillRankCap
+		out.PrepareMS = int32(int64(b.PrepareMS) * 50 / (50 + int64(out.ManaEfficiencyRanks)))
+		out.CooldownMS = int32(int64(b.CooldownMS) * 50 / (50 + int64(out.ManaEfficiencyRanks)))
+	} else {
+		out.PrepareMS = max(int32(0), e.blend(a.PrepareMS, b.PrepareMS))
+		out.CooldownMS = max(int32(0), e.blend(a.CooldownMS, b.CooldownMS))
+		out.MPCost = max(int32(0), e.blend(a.MPCost, b.MPCost))
+	}
 	if a.Area.Shape != b.Area.Shape || a.Area.Center != b.Area.Center {
 		e.fail("area identity mismatch")
 	}
@@ -292,6 +301,7 @@ func (e *v5Evaluator) continueOriginal(a, b SkillDef) SkillDef {
 		z.DamagePct = e.blend(x.DamagePct, y.DamagePct)
 		out.PassiveCounter = &z
 	}
+	e.continuePassiveOverflow(a, b, &out)
 	return out
 }
 

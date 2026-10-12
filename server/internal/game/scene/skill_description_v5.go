@@ -56,7 +56,11 @@ func (s *Scene) skillOriginalEffectLines(def domain.SkillDef) []string {
 			cast = "瞬发"
 		}
 		lines = append(lines, "消耗: "+cost, "技能吟唱: "+cast, "技能间隔: "+skillMillisecondsText(def.CooldownMS))
+		if def.ManaEfficiencyRanks > 0 {
+			lines = append(lines, fmt.Sprintf("法力效率: +%d%%", int64(def.ManaEfficiencyRanks)*2))
+		}
 	}
+	lines = append(lines, s.passiveOverflowEffectLines(def)...)
 	return lines
 }
 

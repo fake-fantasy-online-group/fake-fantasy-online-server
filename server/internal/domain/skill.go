@@ -256,10 +256,11 @@ const (
 // PassiveModifier 是已学被动技能对战斗结算的参数化修正。
 // TargetSkill=0 表示全局规则；EffectKind 只供效果数值增强使用。
 type PassiveModifier struct {
-	Kind        PassiveModifierKind
-	TargetSkill SkillID
-	EffectKind  EffectKind
-	Value       int32
+	ProgressionOverflow int32 // ranks beyond the native cap; never additional probability
+	Kind                PassiveModifierKind
+	TargetSkill         SkillID
+	EffectKind          EffectKind
+	Value               int32
 }
 
 // PassiveStatModifier 是被动技能对角色基础战斗属性的确定性修正。
@@ -274,13 +275,15 @@ type PassiveStatModifier struct {
 // PassiveStatusResist 是只针对一个状态的额外抵抗率。它不能塞进通用
 // Stats.StatusResist，否则“昏迷抗性”会错误地同时抵抗中毒、封印等全部减益。
 type PassiveStatusResist struct {
-	Status StatusID
-	Pct    int32
+	ProgressionRestoreMP int32 // restored only when this exact harmful status is resisted
+	Status               StatusID
+	Pct                  int32
 }
 
 // PassiveTriggerStatus 让一个已学被动为指定主动技能追加概率状态。
 // 状态定义与持续时间仍来自 PostgreSQL 状态表；这里仅保存关联和概率。
 type PassiveTriggerStatus struct {
+	ManaEfficiencyRanks         int32
 	ProgressionFirstDurationSec int32
 	ProgressionBaseDurationSec  int32
 	ProgressionRanks            int32
@@ -295,16 +298,18 @@ type PassiveTriggerStatus struct {
 // PassiveStatusAffix 把被动提供的属性修正合并进目标主动技能原本施加的状态，
 // 从而严格继承该状态的持续时间与覆盖规则。
 type PassiveStatusAffix struct {
-	TargetSkill SkillID
-	Status      StatusID
-	Affix       Affix
+	ManaEfficiencyRanks int32
+	TargetSkill         SkillID
+	Status              StatusID
+	Affix               Affix
 }
 
 // PassiveTriggerEffect 让被动为指定主动技能追加一个有序直接效果。
 // 当前用于“命中后概率击退”，效果排在原伤害之后且要求前段命中。
 type PassiveTriggerEffect struct {
-	TargetSkill SkillID
-	Effect      SkillEffect
+	ManaEfficiencyRanks int32
+	TargetSkill         SkillID
+	Effect              SkillEffect
 }
 
 // PassiveCounterAttack 是成功闪避后触发的近战反击规则。
@@ -316,6 +321,11 @@ type PassiveCounterAttack struct {
 
 // SkillDef 是一个技能在某一级上的定义。
 type SkillDef struct {
+	// ManaEfficiencyRanks applies only after authored ranks; additive efficiency, not a cost increase.
+	ManaEfficiencyRanks int32
+	ManaCostNumerator   int64
+	ManaCostDenominator int64
+
 	EquipmentVariant *EquipmentSkillVariant // immutable accepted cast snapshot
 
 	FormulaVersion         uint32

@@ -189,6 +189,8 @@ type SnapshotSaver interface {
 // 攻击冷却与复活保护则直接保存剩余帧，避免目标场景 Tick 不同导致绕过冷却
 // 或丢掉保护期。打工在跨图前停止；出战宠物则把完整运行态一起交接。
 type PlayerRuntime struct {
+	SkillManaCredit float64 // prepaid fractional mana, retained across maps
+
 	V5StatusOwner           domain.EntityID
 	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
 	EndgameSkillVariants    bool // negotiated equipment skill variants
@@ -257,6 +259,7 @@ func (e *Entity) CapturePlayerRuntime(now domain.Tick) PlayerRuntime {
 	}
 	r.Status.RebindSkillOwner(e.ID, e.ID)
 	if e.Player != nil {
+		r.SkillManaCredit = e.Player.SkillManaCredit
 		r.AttackReadyIn = remainingTicks(e.Player.nextAt, now)
 		r.SkillReadyIn = remainingSkillCooldowns(e.Player.skillReady, now)
 		r.ItemReadyIn = remainingItemCooldowns(e.Player.itemReady, now)
@@ -299,6 +302,7 @@ func (e *Entity) RestorePlayerRuntime(r PlayerRuntime, now domain.Tick) {
 		e.Status.Rebase(r.FromTick, now)
 	}
 	if e.Player != nil {
+		e.Player.SkillManaCredit = r.SkillManaCredit
 		e.Player.nextAt = now + r.AttackReadyIn
 		e.Player.skillReady = restoreSkillCooldowns(r.SkillReadyIn, now)
 		e.Player.itemReady = restoreItemCooldowns(r.ItemReadyIn, now)
@@ -454,6 +458,8 @@ func clampCurrent(current, maximum int32) int32 {
 
 // Player 是玩家实体的专有部分。
 type Player struct {
+	SkillManaCredit float64 // <1 already paid MP; logout can only discard savings
+
 	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
 	EndgameSkillVariants    bool // negotiated equipment skill variants
 	EndgameSkillBehavior    bool // negotiated typed skill behavior; connection-scoped
