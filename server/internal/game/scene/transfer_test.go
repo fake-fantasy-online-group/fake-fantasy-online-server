@@ -408,11 +408,24 @@ func TestTeleportWithinSameSceneIsJustAMove(t *testing.T) {
 	triggerWatcher.take()
 	landingWatcher.take()
 
-	// 把“排队动作 → 同帧传送”放进同一次 drain；若先推进一帧，攻击和技能
-	// 已经结算，恰好绕过了这条回归。Inspect 只负责在 actor 内布置队列，后面的
-	// 真正的 MoveTo 踩门与断言 Inspect 按 mailbox 顺序紧随其后。
+	// 上一次 inspect 返回时，actor 可能还在 drain。只按顺序 Post 并不能保证
+	// 同帧：布置队列后如果暂时读空 mailbox，step 会先结算这些零延迟动作。
+	// 暂停 actor，直到布置、真实 MoveTo 和断言全部入队，再一次性放行。
+	queued := make(chan struct{})
+	t.Cleanup(func() {
+		select {
+		case <-queued:
+		default:
+			close(queued)
+		}
+	})
+	stagingStarted := make(chan struct{})
 	staged := make(chan struct{})
+	var stagedTick domain.Tick
 	if !src.Post(Inspect{Done: staged, Fn: func(s *Scene) {
+		close(stagingStarted)
+		<-queued
+		stagedTick = s.tick
 		e := s.EntityAt(1)
 		e.Status.Apply(domain.StatusDef{ID: domain.StatusSlow, Level: 1, DurationSec: 10}, s.tick, e.ID)
 		e.Stats.AtkSpeedMS = 1500
@@ -453,13 +466,30 @@ func TestTeleportWithinSameSceneIsJustAMove(t *testing.T) {
 	}}) {
 		t.Fatal("投递战斗队列布置失败")
 	}
+	// 故意让 actor 先取到布置命令，再投后续命令，确定性覆盖曾经偶发的交错。
+	func() {
+		deadline := time.After(2 * time.Second)
+		for {
+			select {
+			case <-stagingStarted:
+				return
+			case rig.frames[src.ID().MapID] <- time.Now():
+			case <-deadline:
+				t.Fatal("场景没开始布置战斗队列")
+			}
+		}
+	}()
 
 	// 用真实移动踩入同图门，而不是直接投 Teleport；同图门的权威落点故意在
 	// 现有跨图门区中心，后续门内小步移动必须被 portalBlocked 压住。
 	if !src.Post(MoveTo{ID: 1, To: trigger}) {
 		t.Fatal("投递同图门移动失败")
 	}
-	inspect(t, src, rig, func(s *Scene) {
+	checked := make(chan struct{})
+	if !src.Post(Inspect{Done: checked, Fn: func(s *Scene) {
+		if s.tick != stagedTick {
+			t.Errorf("战斗队列、同图传送与断言必须在同一帧: staged=%d checked=%d", stagedTick, s.tick)
+		}
 		if s.EntityAt(1) == nil {
 			t.Error("人应该还在这张图")
 		}
@@ -501,7 +531,16 @@ func TestTeleportWithinSameSceneIsJustAMove(t *testing.T) {
 		if _, blocked := s.portalBlocked[1]; !blocked {
 			t.Error("落点在门区时必须保持门触发阻断")
 		}
-	})
+	}}) {
+		t.Fatal("投递同图传送断言失败")
+	}
+	close(queued)
+	inspect(t, src, rig, func(*Scene) {})
+	select {
+	case <-checked:
+	default:
+		t.Fatal("同图传送断言命令未执行")
+	}
 	select {
 	case <-staged:
 	default:

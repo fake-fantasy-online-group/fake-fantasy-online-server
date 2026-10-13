@@ -58,47 +58,53 @@ func (s *Scene) finishEndgameRunWrites() {
 		}
 		x.transition = nil
 	}
-	if x.reload != nil || x.reloadAt > 0 {
-		for {
-			if x.reload == nil {
-				x.reload = s.endgameBackend.LoadRun(x.data.Run.RunID)
-			}
-			result := <-x.reload
-			x.reload = nil
-			d, valid := decodeEndgameRift(result.Run, s.riftRules)
-			if result.Err == nil && valid {
-				if result.Run.Revision > x.revision {
-					x.data = d
-					x.revision = result.Run.Revision
-					x.savedRevision = d.Run.Revision
-				}
-				break
-			}
-			time.Sleep(50 * time.Millisecond)
-		}
-	}
+
 	if x.saving != nil {
-		result := <-x.saving
-		x.saving = nil
-		if result.Err == nil && result.Run != nil {
-			x.revision = result.Run.Revision
-			x.savedRevision = x.savingRevision
+		s.acceptEndgameRiftSave(<-x.saving, s.riftMS())
+	}
+	s.drainEndgameRiftReload()
+	// An authoritative death can have arrived while reconciliation froze
+	// economics. Drain it exactly once before deciding what shutdown must save.
+	if len(x.delayedDeaths) > 0 {
+		deaths := x.delayedDeaths
+		x.delayedDeaths = nil
+		for _, death := range deaths {
+			s.applyEndgameRiftDeath(death)
 		}
 	}
 	if x.data.Run.Phase == domain.RiftCompleted && !x.data.GrantsReady {
 		s.generateEndgameRiftGrants()
 		x.data.Run.Revision++
 	}
-	if x.data.Run.Terminal() {
+	if x.data.Run.Terminal() || x.data.GuardianArrival != nil {
 		for x.savedRevision < x.data.Run.Revision {
 			record := x.data.record(x.revision + 1)
-			result := <-backend.SaveRun(record, x.revision)
-			if result.Err == nil && result.Run != nil {
-				x.revision = result.Run.Revision
-				x.savedRevision = x.data.Run.Revision
-			} else {
+			x.savingRecord = &record
+			x.savingRevision = x.data.Run.Revision
+			s.acceptEndgameRiftSave(<-backend.SaveRun(record, x.revision), s.riftMS())
+			s.drainEndgameRiftReload()
+			if x.savedRevision < x.data.Run.Revision {
 				time.Sleep(50 * time.Millisecond)
 			}
 		}
+	}
+}
+
+func (s *Scene) drainEndgameRiftReload() {
+	x := s.rift
+	if x.reload == nil && x.reloadAt == 0 && x.reconcilingSave == nil {
+		return
+	}
+	for {
+		if x.reload == nil {
+			x.reload = s.endgameBackend.LoadRun(x.data.Run.RunID)
+		}
+		result := <-x.reload
+		x.reload = nil
+		if s.acceptEndgameRiftReload(result) {
+			x.reloadAt = 0
+			return
+		}
+		time.Sleep(50 * time.Millisecond)
 	}
 }

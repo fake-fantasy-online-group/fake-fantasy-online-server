@@ -331,7 +331,7 @@ func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d 
 	if live {
 		s.rift.economicPending = true
 	}
-	ok := s.endgameCommitPayload(p, req, candidate, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Message: "洞天奖励已领取", Rift: s.riftView(p, next, true, live)}, &record, revision, func() {
+	ok := s.endgameCommitPayload(p, req, candidate, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Rift: s.riftView(p, next, true, live)}, &record, revision, func() {
 		s.publishEndgameRewardExperience(p, previousLevel, gainedExp)
 		s.publishEndgamePetGrant(p, petGrant)
 		if live {
@@ -363,7 +363,7 @@ func (s *Scene) leaveEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
 	profile.RunID = next.Run.RunID
 	record := next.record(x.revision + 1)
 	x.economicPending = true
-	ok := s.endgameCommitPayload(p, req, s.snapshotOf(p).Clone(), domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Message: "已离开洞天"}, &record, x.revision, func() {
+	ok := s.endgameCommitPayload(p, req, s.snapshotOf(p).Clone(), domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true}, &record, x.revision, func() {
 		x.data = next
 		x.revision = record.Revision
 		x.savedRevision = next.Run.Revision

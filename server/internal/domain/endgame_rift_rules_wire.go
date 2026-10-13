@@ -40,6 +40,8 @@ func (r *RiftRules) validateWire() error {
 	}
 	id := strings.Repeat("9", 20)
 	v := &EndgameRiftView{Name: r.Name, BossName: r.BossName, RunID: strings.Repeat("f", 32), Revision: id, Seed: id, GeneratorVersion: math.MaxInt32, FloorIndex: math.MaxInt32, MapName: strings.Repeat("<", 256), ExitX: math.MinInt32, ExitY: math.MinInt32, MaxTier: r.MaxTier, UnlockedTier: r.MaxTier, KeyCount: math.MaxInt32, KeyItemID: math.MaxInt32, Phase: "reward_pending", Tier: r.MaxTier, Progress: r.ProgressMax, ProgressMax: r.ProgressMax, RemainingSeconds: math.MaxInt32, TotalSeconds: math.MaxInt32, CanAdvance: true, Transitioning: true}
+	v.PendingLoot = 69 // Maximum configured personal reward slots, conservatively bounded.
+	v.GuardianArrival = &EndgameRiftGuardianArrivalView{ID: strings.Repeat("f", 64) + "/2147483647/guardian", Seed: id, AnchorCharID: id, X: math.MinInt32, Y: math.MinInt32, StartedAtMS: math.MaxInt64 - 5000, DeadlineMS: math.MaxInt64, DurationMS: 5000, RemainingMS: 5000}
 	for i := 0; i < 5; i++ {
 		v.Members = append(v.Members, EndgameRiftMemberView{CharID: id, Name: strings.Repeat("<", maxNameBytes), Level: math.MaxInt32})
 	}
@@ -47,6 +49,7 @@ func (r *RiftRules) validateWire() error {
 		aura := EndgameRiftAuraView{EntityID: id, Class: 3}
 		if i < 33 {
 			aura.Affixes = affixes
+			aura.OriginalName = strings.Repeat("<", 128)
 		}
 		v.Auras = append(v.Auras, aura)
 	}

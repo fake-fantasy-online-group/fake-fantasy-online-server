@@ -26,6 +26,7 @@ type endgameRiftGrant struct {
 	Pet                endgamePetGrant
 }
 type endgameRiftPersisted struct {
+	GuardianArrival *endgameRiftGuardianArrival `json:",omitempty"`
 	RewardPos       domain.Pos
 	DeathTimes      map[domain.CharID]int64
 	Floor           *domain.RiftFloorPlan
@@ -56,7 +57,7 @@ func decodeEndgameRift(record *domain.EndgameRunRecord, table *domain.RiftRuleTa
 	if record == nil || json.Unmarshal([]byte(record.Payload), &d) != nil || (d.Version != 1 && d.Version != 2) || d.Run == nil || d.Run.RunID != record.RunID {
 		return d, false
 	}
-	if d.Run.BindRules(table) != nil {
+	if d.Run.BindRules(table) != nil || !validRiftGuardianArrival(d) {
 		return d, false
 	}
 	return d, true
@@ -94,6 +95,10 @@ func withRiftProfile(payload string, p endgameRiftProfile) string {
 }
 
 type endgameRiftState struct {
+	savingRecord                                      *domain.EndgameRunRecord
+	reconcilingSave                                   *domain.EndgameRunRecord
+	originalNames                                     map[domain.EntityID]string
+	saveRetryAt                                       int64
 	rewardLayout                                      *endgameRiftRewardLayout
 	rewardFresh                                       bool
 	rewardDrops                                       map[domain.EntityID]endgameRiftGroundReward
@@ -129,6 +134,7 @@ func (s *Scene) riftView(p *entity.Entity, d endgameRiftPersisted, durable, live
 	r := d.Run
 	v := &domain.EndgameRiftView{RunID: r.RunID, Revision: strconv.FormatInt(r.Revision, 10), Name: r.Rules.Name, KeyItemID: int32(domain.RiftKeyItemID), Phase: string(r.Phase), Tier: r.Tier, Progress: r.Progress, ProgressMax: r.Rules.ProgressMax, BossName: r.Rules.BossName}
 	v.MaxTier = r.Rules.MaxTier
+	v.GuardianArrival = riftGuardianArrivalView(d, s.riftMS())
 	if d.Floor != nil {
 		v.Seed = strconv.FormatUint(d.Floor.Seed, 10)
 		v.GeneratorVersion = d.Floor.GeneratorVersion
@@ -148,6 +154,14 @@ func (s *Scene) riftView(p *entity.Entity, d endgameRiftPersisted, durable, live
 			v.Telegraphs = s.riftAbilityTelegraphs(s.riftMS())
 		}
 		v.KeyCount = p.Player.Bag.CountOf(domain.RiftKeyItemID)
+		char := domain.CharID(p.Player.Char.ID)
+		if member := r.Members[char]; member != nil && member.Eligible && !member.Claimed {
+			for i := range d.Grants[char].Items {
+				if !d.Grants[char].Collected[i] {
+					v.PendingLoot++
+				}
+			}
+		}
 	}
 	if p != nil && live {
 		if inst, ok := s.router.riftScene(r.RunID); ok && !s.router.ActiveRiftForCharacter(inst, domain.CharID(p.Player.Char.ID)) {
@@ -189,12 +203,15 @@ func (s *Scene) riftView(p *entity.Entity, d endgameRiftPersisted, durable, live
 	if live {
 		for id, m := range r.Monsters {
 			if !m.Dead {
-				v.Auras = append(v.Auras, domain.EndgameRiftAuraView{EntityID: strconv.FormatUint(uint64(id), 10), Class: m.Class, Affixes: s.riftMonsterAffixes(id)})
+				v.Auras = append(v.Auras, domain.EndgameRiftAuraView{EntityID: strconv.FormatUint(uint64(id), 10), Class: m.Class, OriginalName: s.riftMonsterOriginalName(id), Affixes: s.riftMonsterAffixes(id)})
 			}
 		}
 		for id, g := range r.Globes {
 			v.Globes = append(v.Globes, domain.EndgameRiftGlobeView{EntityID: strconv.FormatUint(uint64(id), 10), X: int32(g.Pos.X), Y: int32(g.Pos.Y), Value: g.Value})
 		}
+	}
+	if v.Phase != string(domain.RiftBossArriving) {
+		v.GuardianArrival = nil
 	}
 	return v
 }

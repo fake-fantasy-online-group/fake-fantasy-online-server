@@ -21,13 +21,14 @@ const (
 type RiftPhase string
 
 const (
-	RiftReserved  RiftPhase = "reserved"
-	RiftActive    RiftPhase = "active"
-	RiftBoss      RiftPhase = "boss"
-	RiftCompleted RiftPhase = "completed"
-	RiftFailed    RiftPhase = "failed"
-	RiftAborted   RiftPhase = "aborted"
-	RiftClosed    RiftPhase = "closed"
+	RiftReserved     RiftPhase = "reserved"
+	RiftActive       RiftPhase = "active"
+	RiftBoss         RiftPhase = "boss"
+	RiftBossArriving RiftPhase = "boss_arriving"
+	RiftCompleted    RiftPhase = "completed"
+	RiftFailed       RiftPhase = "failed"
+	RiftAborted      RiftPhase = "aborted"
+	RiftClosed       RiftPhase = "closed"
 )
 
 type TrialKeyMember struct {
@@ -192,7 +193,7 @@ func (r *RiftRun) RecordKill(id EntityID, now int64) (int, bool) {
 		return 0, false
 	}
 	m := r.Monsters[id]
-	if m == nil || m.Dead {
+	if m == nil || m.Dead || (m.Class == 3 && r.Phase != RiftBoss) {
 		return 0, false
 	}
 	m.Dead = true
@@ -234,6 +235,9 @@ func (r *RiftRun) advance() {
 	if r.Progress >= r.Rules.ProgressMax {
 		r.Progress = r.Rules.ProgressMax
 		r.Phase = RiftBoss
+		if r.Rules.GuardianArrivalMS > 0 {
+			r.Phase = RiftBossArriving
+		}
 		r.Globes = map[EntityID]RiftGlobe{}
 	}
 }

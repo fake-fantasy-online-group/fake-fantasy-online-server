@@ -159,7 +159,7 @@ func validEndgameRequest(v domain.EndgameRequest) bool {
 	if v.RuneUID != "" && !endgameDecimal(v.RuneUID, false) {
 		return false
 	}
-	if len(v.CubeInputs) > 12 || len(v.CubeInputs) > 0 && (v.Op != "cube.quote" || v.RecipeID != 0 || v.TargetUID != "" || v.RuneUID != "") {
+	if len(v.CubeInputs) > domain.CubeInputCapacity || len(v.CubeInputs) > 0 && (v.Op != "cube.quote" || v.RecipeID != 0 || v.TargetUID != "" || v.RuneUID != "") {
 		return false
 	}
 	for _, input := range v.CubeInputs {

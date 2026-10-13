@@ -4,6 +4,10 @@ import (
 	"strconv"
 )
 
+// CubeInputCapacity is the number of reservations in the native 5-by-7 grid.
+// It bounds selected identities, not stack quantities or recipe requirements.
+const CubeInputCapacity = 35
+
 // CubeInput is a reservation in the player's bag, never a second inventory.
 // An instance uses UID/count=1; a stackable material uses ItemID/count. Both
 // forms together, duplicate identities and quantities not actually owned fail.
@@ -24,7 +28,7 @@ func MatchCubeInputs(ctx CubeContext, input EndgameRequest) ([]EndgameRequest, [
 	if ctx.Rules == nil || ctx.Bag == nil {
 		return fail("configuration", "周天鼎配置尚未载入")
 	}
-	if input.RecipeID != 0 || input.TargetUID != "" || input.RuneUID != "" || len(input.CubeInputs) == 0 || len(input.CubeInputs) > 12 {
+	if input.RecipeID != 0 || input.TargetUID != "" || input.RuneUID != "" || len(input.CubeInputs) == 0 || len(input.CubeInputs) > CubeInputCapacity {
 		return fail("invalid_request", "请将背包中的物品放入鼎中")
 	}
 	materials := map[ItemID]int32{}

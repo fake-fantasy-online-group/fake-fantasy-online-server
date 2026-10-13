@@ -248,7 +248,6 @@ func (s *Scene) stepEndgameRiftAbilities(now int64) {
 		// Existing client movement / speech and (when available) skill effects
 		// provide feedback; no invented resource IDs or external art are used.
 		s.emit(event.EntityMoved{ID: id, To: m.Pos, Snap: true})
-		s.emit(event.MonsterSpoke{Who: id, Text: cast.ability.warning(s.currentRiftRules())})
 		if cast.visual.ID != 0 {
 			center := cast.center
 			s.emit(event.SkillCastChanged{Caster: id, Skill: cast.visual.ID, Phase: event.SkillCastChant,

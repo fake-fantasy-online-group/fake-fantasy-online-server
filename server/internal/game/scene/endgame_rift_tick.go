@@ -32,13 +32,7 @@ func (s *Scene) stepEndgameRift() {
 	if x.saving != nil {
 		select {
 		case result := <-x.saving:
-			x.saving = nil
-			if result.Err == nil && result.Run != nil {
-				x.revision = result.Run.Revision
-				x.savedRevision = x.savingRevision
-			} else {
-				x.lastSave = now
-			}
+			s.acceptEndgameRiftSave(result, now)
 		default:
 		}
 	}
@@ -106,9 +100,8 @@ func (s *Scene) stepEndgameRift() {
 					}
 				}
 			}
-			if r.Phase == domain.RiftBoss {
-				s.clearRiftMonsters()
-				s.populateEndgameRift(true)
+			if r.Phase == domain.RiftBoss || r.Phase == domain.RiftBossArriving {
+				s.beginEndgameRiftGuardian()
 			}
 		}
 		if !r.Terminal() && r.Phase != domain.RiftReserved && len(present) == 0 {
@@ -124,14 +117,17 @@ func (s *Scene) stepEndgameRift() {
 				r.Revision++
 			}
 		}
+		s.stepEndgameRiftGuardian(now)
 		if r.Phase == domain.RiftCompleted && !x.data.GrantsReady {
 			s.generateEndgameRiftGrants()
 			r.Revision++
 		}
-		if x.saving == nil && x.savedRevision < r.Revision && (r.Terminal() || now-x.lastSave >= 5000) {
+		arrivalDirty := x.data.GuardianArrival != nil && (r.Phase == domain.RiftBossArriving || r.Phase == domain.RiftBoss)
+		if !x.economicPending && x.saving == nil && x.savedRevision < r.Revision && now >= x.saveRetryAt && (r.Terminal() || arrivalDirty || now-x.lastSave >= 5000) {
 			if backend, ok := s.endgameBackend.(domain.EndgameRunBackend); ok {
 				x.savingRevision = r.Revision
 				record := x.data.record(x.revision + 1)
+				x.savingRecord = &record
 				x.saving = backend.SaveRun(record, x.revision)
 				x.lastSave = now
 			}
@@ -180,17 +176,10 @@ func (s *Scene) pollEndgameRiftReload(now int64) {
 	select {
 	case result := <-x.reload:
 		x.reload = nil
-		d, valid := decodeEndgameRift(result.Run, s.riftRules)
-		if result.Err != nil || !valid {
+		if !s.acceptEndgameRiftReload(result) {
 			x.reloadAt = now + 1000
 			return
 		}
-		if result.Run.Revision > x.revision {
-			x.data = d
-			x.revision = result.Run.Revision
-			x.savedRevision = d.Run.Revision
-		}
-		x.economicPending = false
 		for id, p := range s.players {
 			char := domain.CharID(p.Player.Char.ID)
 			if !x.data.Run.Admitted(char) {

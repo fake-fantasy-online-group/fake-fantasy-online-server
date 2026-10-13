@@ -77,7 +77,11 @@ func (s *Scene) populateSeededEndgameRift(boss bool) {
 	}
 	points := plan.Spawns
 	if boss {
-		points = []domain.RiftFloorSpawn{plan.Guardian}
+		guardian := plan.Guardian
+		if x.data.GuardianArrival != nil {
+			guardian.Point.Pos = x.data.GuardianArrival.Pos
+		}
+		points = []domain.RiftFloorSpawn{guardian}
 	}
 	type prepared struct {
 		point domain.RiftFloorSpawn
@@ -105,7 +109,9 @@ func (s *Scene) populateSeededEndgameRift(boss bool) {
 		def.EliteID = 0
 		lookup[def.ID] = def
 		if boss {
-			def.Name = x.data.Run.Rules.BossName
+			if x.data.Run.Rules.GuardianArrivalMS == 0 {
+				def.Name = x.data.Run.Rules.BossName
+			}
 			def.Kind = domain.MonsterBoss
 		} else if p.Class > 0 {
 			def.Kind = domain.MonsterElite
@@ -122,6 +128,7 @@ func (s *Scene) populateSeededEndgameRift(boss bool) {
 	s.defs = endgameRiftDefs{base: s.defs, trial: lookup}
 	for i, p := range population {
 		m := spawn.Encounter(s.alloc.Monster(), p.point.Point.Pos, uint8(p.point.Point.Dir), p.def)
+		x.originalNames[m.ID] = lookup[p.def.ID].Name
 		m.Monster.EliteRing = p.point.Class == 1 || p.point.Class == 2
 		x.baseStats[m.ID] = p.def.Stats
 		s.initializeMonster(m)

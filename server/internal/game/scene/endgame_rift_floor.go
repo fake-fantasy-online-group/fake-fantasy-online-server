@@ -231,7 +231,7 @@ func (s *Scene) completeEndgameRiftTransition() {
 	x.delayedDeaths = nil
 	s.clearRiftMonsters()
 	for _, p := range s.players {
-		s.endgameReply(p, domain.EndgameResponse{Kind: "rift.advance", RequestID: t.request.RequestID, OK: true, Message: "进入下一层，进度与计时保留", Rift: s.riftView(p, t.next, true, true)})
+		s.endgameReply(p, domain.EndgameResponse{Kind: "rift.advance", RequestID: t.request.RequestID, OK: true, Rift: s.riftView(p, t.next, true, true)})
 	}
 	s.transferRetiredRiftPlayers()
 }

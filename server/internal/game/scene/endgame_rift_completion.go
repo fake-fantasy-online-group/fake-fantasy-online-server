@@ -324,7 +324,7 @@ func (s *Scene) pickUpEndgameRiftReward(p, drop *entity.Entity, pickupRange int3
 	}
 	candidate := s.snapshotOf(p).Clone()
 	if candidate.Bag.AddStack(def, stack) != 0 {
-		s.trialNotice(p, "背包空间不足，洞天所得仍留在原处。")
+		s.endgameReply(p, domain.EndgameResponse{Kind: "rift.reward", OK: false, Error: "bag_full", Rift: s.riftView(p, x.data, true, true)})
 		return true
 	}
 	next := x.data.clone()
@@ -336,8 +336,7 @@ func (s *Scene) pickUpEndgameRiftReward(p, drop *entity.Entity, pickupRange int3
 	next.Grants[char] = grant
 	next.Run.Revision++
 	markEndgameRiftGrantClaimed(&next, char)
-	message := fmt.Sprintf("获得了 %s ×%d", itemDisplayName(def, stack), stack.Count)
-	s.commitEndgameRiftReward(p, next, candidate, fmt.Sprintf("item/%d", ref.Index), message, func() { s.trialNotice(p, message) })
+	s.commitEndgameRiftReward(p, next, candidate, fmt.Sprintf("item/%d", ref.Index), "", nil)
 	return true
 }
 
@@ -364,7 +363,7 @@ func (s *Scene) settleEndgameRiftExperience(p *entity.Entity) bool {
 	next.Grants[char] = grant
 	next.Run.Revision++
 	markEndgameRiftGrantClaimed(&next, char)
-	return s.commitEndgameRiftReward(p, next, candidate, "experience", "洞天首领修为已结算", func() {
+	return s.commitEndgameRiftReward(p, next, candidate, "experience", "", func() {
 		s.publishEndgameRewardExperience(p, previousLevel, gain.AppliedExp)
 		s.publishEndgamePetGrant(p, grant.Pet)
 	})

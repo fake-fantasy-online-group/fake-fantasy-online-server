@@ -71,7 +71,7 @@ func (s *Scene) initEndgameRift(d endgameRiftPersisted) bool {
 	if s.rift != nil {
 		portals = s.rift.portals
 	}
-	s.rift = &endgameRiftState{baseStats: map[domain.EntityID]domain.Stats{}, data: d, revision: 1, savedRevision: d.Run.Revision, ready: map[domain.CharID]bool{}, deathAt: map[domain.CharID]int64{}, loadUntil: s.riftMS() + 60000}
+	s.rift = &endgameRiftState{baseStats: map[domain.EntityID]domain.Stats{}, originalNames: map[domain.EntityID]string{}, data: d, revision: 1, savedRevision: d.Run.Revision, ready: map[domain.CharID]bool{}, deathAt: map[domain.CharID]int64{}, loadUntil: s.riftMS() + 60000}
 	s.rift.portals = portals
 	for char, at := range d.DeathTimes {
 		s.rift.deathAt[char] = at
@@ -155,8 +155,10 @@ func cacheRiftRewardContext(data *endgameRiftPersisted, char domain.CharID, cont
 func (s *Scene) clearRiftMonsters() {
 	s.clearEndgameRiftAbilities()
 	for id, m := range s.monsters {
+		s.cancelPendingCombat(id)
 		if s.rift != nil {
 			delete(s.rift.baseStats, id)
+			delete(s.rift.originalNames, id)
 			if registered := s.rift.data.Run.Monsters[id]; registered != nil {
 				registered.Dead = true
 			}
@@ -169,6 +171,12 @@ func (s *Scene) clearRiftMonsters() {
 	}
 }
 func (s *Scene) populateEndgameRift(boss bool) {
+	if s.rift.data.Run.Phase == domain.RiftBossArriving {
+		return
+	}
+	if boss && !s.endgameRiftGuardianCanPopulate() {
+		return
+	}
 	if s.rift.data.Floor != nil {
 		s.populateSeededEndgameRift(boss)
 		return
@@ -218,10 +226,13 @@ func (s *Scene) populateEndgameRift(boss bool) {
 		if !ok {
 			continue
 		}
+		originalName := def.Name
 		class := int32(0)
 		if boss {
 			class = 3
-			def.Name = r.Rules.BossName
+			if r.Rules.GuardianArrivalMS == 0 {
+				def.Name = r.Rules.BossName
+			}
 			def.Kind = domain.MonsterBoss
 		} else if i >= 98 {
 			class = 2
@@ -237,7 +248,12 @@ func (s *Scene) populateEndgameRift(boss bool) {
 		def.Stats.MinAtk = domain.RiftScaledStat(def.Stats.MinAtk, r.Tier, len(r.Members), class, false, r.Rules)
 		def.Stats.MaxAtk = domain.RiftScaledStat(def.Stats.MaxAtk, r.Tier, len(r.Members), class, false, r.Rules)
 		def.Stats.MAtk = domain.RiftScaledStat(def.Stats.MAtk, r.Tier, len(r.Members), class, false, r.Rules)
-		m := spawn.Encounter(s.alloc.Monster(), point.Point.Pos, uint8(point.Point.Dir), def)
+		pos := point.Point.Pos
+		if boss && s.rift.data.GuardianArrival != nil {
+			pos = s.rift.data.GuardianArrival.Pos
+		}
+		m := spawn.Encounter(s.alloc.Monster(), pos, uint8(point.Point.Dir), def)
+		s.rift.originalNames[m.ID] = originalName
 		m.Monster.EliteRing = class == 1 || class == 2
 		s.rift.baseStats[m.ID] = def.Stats
 		s.initializeMonster(m)
@@ -302,9 +318,8 @@ func (s *Scene) applyEndgameRiftDeath(death endgameRiftDeath) bool {
 		pos.X += float64(i * 15)
 		x.data.Run.Globes[id] = domain.RiftGlobe{ID: id, Pos: pos, Value: x.data.Run.Rules.GlobeProgress}
 	}
-	if before == domain.RiftActive && x.data.Run.Phase == domain.RiftBoss {
-		s.clearRiftMonsters()
-		s.populateEndgameRift(true)
+	if before == domain.RiftActive && (x.data.Run.Phase == domain.RiftBoss || x.data.Run.Phase == domain.RiftBossArriving) {
+		s.beginEndgameRiftGuardian()
 	}
 	return true
 }

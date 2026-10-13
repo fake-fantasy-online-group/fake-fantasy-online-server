@@ -1,10 +1,106 @@
 package domain
 
 import (
+	"math"
 	"reflect"
 	"strconv"
 	"testing"
 )
+
+// Use synthetic test-only material requirements so the boundary exercises a
+// successful match without expanding or changing any shipped recipe.
+func cubeCapacityFixture(t *testing.T, count int) (CubeContext, EndgameRequest) {
+	t.Helper()
+	ctx, legacy := cubeInputs(CubeOpenSocket)
+	recipe, _ := ctx.Rules.Recipe(legacy.RecipeID)
+	recipe.Materials = nil
+	for i := 0; i < count-1; i++ {
+		id := ItemID(1999990000 + i)
+		ctx.Items[id] = ItemDef{ID: id, Name: "容量测试材料", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
+		ctx.Bag.Set(100+i, Stack{Item: id, Count: 5})
+		recipe.Materials = append(recipe.Materials, CubeMaterialDef{ItemID: id, Count: 2})
+	}
+	var err error
+	ctx.Rules, err = NewCubeRuleTable([]CubeRecipeDef{recipe}, ctx.Items)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return ctx, inputSelection(ctx, legacy)
+}
+
+func TestCubeInputCapacityPreservesMatchingAndAtomicity(t *testing.T) {
+	if CubeInputCapacity != 35 {
+		t.Fatalf("native 5-by-7 grid capacity = %d, want 35", CubeInputCapacity)
+	}
+	for _, count := range []int{1, 12, 13, 35, 36} {
+		t.Run(strconv.Itoa(count), func(t *testing.T) {
+			ctx, req := cubeCapacityFixture(t, count)
+			before, money := ctx.Bag.Clone(), ctx.Money
+			ctx.Intn = func(int) int { t.Fatal("preview rolled RNG"); return 0 }
+			ctx.NewUID = func() int64 { t.Fatal("preview allocated UID"); return 0 }
+			matches, plans, err := MatchCubeInputs(ctx, req)
+			if count > CubeInputCapacity {
+				if err == nil || CubeErrorCode(err) != "invalid_request" || len(matches) != 0 || len(plans) != 0 {
+					t.Fatalf("oversize selection did not fail closed: %v", err)
+				}
+			} else {
+				if err != nil || len(matches) != 1 || len(plans) != 1 || matches[0].RecipeID != CubeOpenSocket || matches[0].TargetUID != "42" || len(plans[0].Materials) != count-1 {
+					t.Fatalf("valid %d-slot match failed: requests=%+v err=%v", count, matches, err)
+				}
+				for i, j := 0, len(req.CubeInputs)-1; i < j; i, j = i+1, j-1 {
+					req.CubeInputs[i], req.CubeInputs[j] = req.CubeInputs[j], req.CubeInputs[i]
+				}
+				reordered, _, err := MatchCubeInputs(ctx, req)
+				if err != nil || !reflect.DeepEqual(matches, reordered) {
+					t.Fatalf("grid order changed recipe match: %v", err)
+				}
+			}
+			if !reflect.DeepEqual(before, ctx.Bag) || ctx.Money != money {
+				t.Fatal("matching mutated live inventory or money")
+			}
+		})
+	}
+}
+
+func TestCubeFullGridRejectsInvalidSelectionsWithoutConsumption(t *testing.T) {
+	cases := map[string]struct {
+		alter func(*CubeContext, *EndgameRequest)
+		code  string
+	}{
+		"duplicate material": {func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[33] = r.CubeInputs[0] }, "invalid_request"},
+		"duplicate instance": {func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[33] = r.CubeInputs[34] }, "invalid_request"},
+		"moved out of bag":   {func(c *CubeContext, r *EndgameRequest) { c.Bag.Set(200, Stack{}) }, "not_owner"},
+		"locked instance": {func(c *CubeContext, r *EndgameRequest) {
+			st := c.Bag.At(200)
+			st.Locked = true
+			c.Bag.Set(200, st)
+		}, "locked"},
+		"locked material": {func(c *CubeContext, r *EndgameRequest) {
+			st := c.Bag.At(133)
+			st.Locked = true
+			c.Bag.Set(133, st)
+		}, "materials"},
+		"unavailable quantity": {func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[33].Count = 6 }, "materials"},
+		"maximum quantity":     {func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[33].Count = math.MaxInt32 }, "materials"},
+		"wrong quantity":       {func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[33].Count = 1 }, "no_match"},
+		"zero quantity":        {func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[33].Count = 0 }, "invalid_request"},
+		"negative quantity":    {func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[33].Count = -1 }, "invalid_request"},
+	}
+	for name, tc := range cases {
+		t.Run(name, func(t *testing.T) {
+			ctx, req := cubeCapacityFixture(t, CubeInputCapacity)
+			tc.alter(&ctx, &req)
+			before, money := ctx.Bag.Clone(), ctx.Money
+			matches, plans, err := MatchCubeInputs(ctx, req)
+			if err == nil || CubeErrorCode(err) != tc.code || len(matches) != 0 || len(plans) != 0 {
+				t.Fatalf("invalid selection: error=%v, want %s", err, tc.code)
+			}
+			if !reflect.DeepEqual(before, ctx.Bag) || ctx.Money != money {
+				t.Fatal("invalid full grid consumed inventory or money")
+			}
+		})
+	}
+}
 
 func inputSelection(ctx CubeContext, legacy EndgameRequest) EndgameRequest {
 	r := EndgameRequest{Op: "cube.quote", ExpectedRevision: "0"}

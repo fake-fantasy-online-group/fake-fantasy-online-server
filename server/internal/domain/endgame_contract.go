@@ -142,9 +142,10 @@ type EndgameRiftMemberView struct {
 	Claimed  bool   `json:"claimed"`
 }
 type EndgameRiftAuraView struct {
-	EntityID string   `json:"entityId"`
-	Class    int32    `json:"class"`
-	Affixes  []string `json:"affixes,omitempty"`
+	OriginalName string   `json:"originalName,omitempty"`
+	EntityID     string   `json:"entityId"`
+	Class        int32    `json:"class"`
+	Affixes      []string `json:"affixes,omitempty"`
 }
 type EndgameRiftGlobeView struct {
 	EntityID string `json:"entityId"`
@@ -165,18 +166,31 @@ type EndgameRiftTelegraphView struct {
 	InnerRadius int32  `json:"innerRadius"`
 	RemainingMS int32  `json:"remainingMS"`
 }
+type EndgameRiftGuardianArrivalView struct {
+	ID           string `json:"id"`
+	Seed         string `json:"seed"`
+	AnchorCharID string `json:"anchorCharId"`
+	X            int32  `json:"x"`
+	Y            int32  `json:"y"`
+	StartedAtMS  int64  `json:"startedAtMS"`
+	DeadlineMS   int64  `json:"deadlineMS"`
+	DurationMS   int32  `json:"durationMS"`
+	RemainingMS  int32  `json:"remainingMS"`
+}
 type EndgameRiftView struct {
-	Seed             string                     `json:"seed,omitempty"`
-	GeneratorVersion int32                      `json:"generatorVersion,omitempty"`
-	FloorIndex       int32                      `json:"floorIndex,omitempty"`
-	MapName          string                     `json:"mapName,omitempty"`
-	CanAdvance       bool                       `json:"canAdvance,omitempty"`
-	Transitioning    bool                       `json:"transitioning,omitempty"`
-	ExitX            int32                      `json:"exitX,omitempty"`
-	ExitY            int32                      `json:"exitY,omitempty"`
-	MaxTier          int32                      `json:"maxTier,omitempty"`
-	UnlockedTier     int32                      `json:"unlockedTier,omitempty"`
-	Telegraphs       []EndgameRiftTelegraphView `json:"telegraphs,omitempty"`
+	GuardianArrival  *EndgameRiftGuardianArrivalView `json:"guardianArrival,omitempty"`
+	PendingLoot      int32                           `json:"pendingLoot,omitempty"`
+	Seed             string                          `json:"seed,omitempty"`
+	GeneratorVersion int32                           `json:"generatorVersion,omitempty"`
+	FloorIndex       int32                           `json:"floorIndex,omitempty"`
+	MapName          string                          `json:"mapName,omitempty"`
+	CanAdvance       bool                            `json:"canAdvance,omitempty"`
+	Transitioning    bool                            `json:"transitioning,omitempty"`
+	ExitX            int32                           `json:"exitX,omitempty"`
+	ExitY            int32                           `json:"exitY,omitempty"`
+	MaxTier          int32                           `json:"maxTier,omitempty"`
+	UnlockedTier     int32                           `json:"unlockedTier,omitempty"`
+	Telegraphs       []EndgameRiftTelegraphView      `json:"telegraphs,omitempty"`
 
 	Name             string                  `json:"name,omitempty"`
 	KeyCount         int32                   `json:"keyCount"`

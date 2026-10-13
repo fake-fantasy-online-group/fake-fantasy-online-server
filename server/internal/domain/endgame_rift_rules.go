@@ -17,6 +17,8 @@ type RiftAbilityRule struct {
 	DamagePct                   int32
 }
 type RiftRules struct {
+	// Zero keeps historical immediate guardians; v5 freezes a five-second arrival.
+	GuardianArrivalMS int64 `json:",omitempty"`
 	// New runs freeze reward level at guardian death; old runs keep admission level.
 	CompletionLevelExperience bool `json:",omitempty"`
 	// Zero preserves historical snapshots: tier one is the unscaled anchor.
@@ -90,7 +92,7 @@ func (r *RiftRules) Validate() error {
 	if r == nil || r.FloorPopulationMultiplier < 0 || r.FloorPopulationMultiplier > 2 || r.Version < 1 || r.Loot == nil || r.LootVersion != r.Loot.Version || r.MaxTier < 1 || r.MaxTier > 150 || r.ProgressMax < 1 || r.ProgressMax > 100000000 || r.NormalProgress < 1 || r.NormalProgress > r.ProgressMax || r.GlobeProgress < 1 || r.GlobeProgress > r.ProgressMax || r.BlueOrbs < 1 || r.BlueOrbs > 32 || r.GoldOrbs < 1 || r.GoldOrbs > 32 {
 		return fmt.Errorf("invalid rift identity/progress rules")
 	}
-	if r.TimedMS < 1000 || r.HardMS < r.TimedMS || r.HardMS > 86400000 || r.ReconnectMS < 0 || r.ReconnectMS > r.HardMS || r.DeathPenaltyMS < 0 || r.DeathPenaltyMS > r.HardMS || r.PresenceBP < 1 || r.PresenceBP > 10000 || r.TierJumpSeconds < 1 {
+	if (r.GuardianArrivalMS != 0 && r.GuardianArrivalMS != 5000) || r.TimedMS < 1000 || r.HardMS < r.TimedMS || r.HardMS > 86400000 || r.ReconnectMS < 0 || r.ReconnectMS > r.HardMS || r.DeathPenaltyMS < 0 || r.DeathPenaltyMS > r.HardMS || r.PresenceBP < 1 || r.PresenceBP > 10000 || r.TierJumpSeconds < 1 {
 		return fmt.Errorf("invalid rift time rules")
 	}
 	if r.StatAnchorTier < 0 || r.StatAnchorTier > r.MaxTier || r.HPGrowthBP < 10000 || r.HPGrowthBP > 100000 || r.DamageGrowthBP < 10000 || r.DamageGrowthBP > 100000 || r.PartyHPBP < 0 || r.PartyHPBP > 100000 || len(r.Classes) != 4 {
