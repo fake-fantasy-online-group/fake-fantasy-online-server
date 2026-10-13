@@ -113,7 +113,7 @@ func (s *Scene) generateEndgameRiftGrants() {
 			stack.Bound = true
 			grant.Items = append(grant.Items, stack)
 		}
-		grant.Exp = s.trial.BaseExperience(m.Level, s.levels) / 2
+		grant.Exp = domain.RiftBossExperience(s.trial.BaseExperience(m.Level, s.levels), r.Tier)
 		if d.Version >= 2 {
 			grant.ProgressionVersion = domain.ProgressionVersion
 			grant.RewardVersion = domain.TrialRewardVersion

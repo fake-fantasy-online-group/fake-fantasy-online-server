@@ -1014,7 +1014,7 @@ func (s *Scene) sendAllEntities(to domain.EntityID) {
 		if s.entityMapLoading(o) {
 			continue
 		}
-		if o.ID == to || (o.Kind == domain.KindNPC && s.skipNPC) {
+		if o.ID == to || (o.Kind == domain.KindNPC && s.skipNPC && !s.isEndgameRiftExitNPC(o)) {
 			continue
 		}
 		if o.Kind == domain.KindPet && o.Pet != nil {

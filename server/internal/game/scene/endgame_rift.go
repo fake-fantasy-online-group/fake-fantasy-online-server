@@ -102,7 +102,15 @@ func (s *Scene) stepEndgameRiftRequests() {
 					s.endgameError(p, x.req, "active_run", "上次洞天仍在进行")
 					continue
 				}
-				s.continueEndgameRiftStart(p, x.req)
+				if x.req.RunID == "" {
+					// A restored/legacy completion may already be claimed while its
+					// profile still has the old progression rule. Admit from the
+					// durable entitlement and materialize it with the new run only.
+					profile := riftProfileWithCompletion(s.endgamePlayer(p).state.Payload, d.Run, char)
+					s.startEndgameRiftWithProfile(p, x.req, profile)
+				} else {
+					s.continueEndgameRiftStart(p, x.req)
+				}
 				continue
 			}
 			switch x.req.Op {
@@ -112,7 +120,7 @@ func (s *Scene) stepEndgameRiftRequests() {
 				s.joinEndgameRift(p, x.req, d)
 			case "rift.claim":
 				if live {
-					s.endgameError(p, x.req, "reenter", "请先重返洞天领取奖励")
+					s.endgameError(p, x.req, "reenter", "洞天尚未收束，可重返拾取；收束后可补领。")
 					continue
 				}
 				s.claimEndgameRift(p, x.req, d, result.Run.Revision, false)
@@ -131,11 +139,14 @@ func (s *Scene) continueEndgameRiftStart(p *entity.Entity, req domain.EndgameReq
 	}
 }
 func (s *Scene) startEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
+	s.startEndgameRiftWithProfile(p, req, riftProfile(s.endgamePlayer(p).state.Payload))
+}
+
+func (s *Scene) startEndgameRiftWithProfile(p *entity.Entity, req domain.EndgameRequest, profile endgameRiftProfile) {
 	if s.router == nil || s.trial == nil || !p.Alive() || !s.trialEntryNPC(p) {
 		s.endgameError(p, req, "entrance", "请与妖魔结界守卫交谈后开启洞天")
 		return
 	}
-	profile := riftProfile(s.endgamePlayer(p).state.Payload)
 	if req.Tier < 1 || req.Tier > profile.UnlockedTier || req.Tier > domain.RiftMaxTier {
 		s.endgameError(p, req, "tier", "尚未解锁此层")
 		return
@@ -191,7 +202,9 @@ func (s *Scene) startEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
 	}
 	record := d.record(1)
 	profile.RunID = run.RunID
-	ok := s.endgameCommitPayload(p, req, candidate, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Rift: s.riftView(p, d, true, true)}, &record, 0, func() {
+	view := s.riftView(p, d, true, true)
+	view.UnlockedTier = profile.UnlockedTier
+	ok := s.endgameCommitPayload(p, req, candidate, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Rift: view}, &record, 0, func() {
 		s.router.payEndgameRift(inst)
 		for _, id := range peers {
 			if peer := s.players[id]; peer != nil {
@@ -237,6 +250,10 @@ func (s *Scene) replyLiveRift(p *entity.Entity, req domain.EndgameRequest) {
 	s.endgameReply(p, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Rift: s.riftView(p, s.rift.data, s.rift.savedRevision >= s.rift.data.Run.Revision, true)})
 }
 func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d endgameRiftPersisted, revision int64, live bool) {
+	if live && (d.Run.Phase == domain.RiftCompleted || d.Run.Phase == domain.RiftClosed) {
+		s.endgameError(p, req, "ground_rewards", "请拾取地面上的洞天所得；洞天收束后可补领未拾之物。")
+		return
+	}
 	if live && (s.rift.saving != nil || s.rift.economicPending || s.rift.savedRevision < d.Run.Revision) {
 		s.endgameError(p, req, "pending", "结算正在保存，请稍候")
 		return
@@ -263,31 +280,33 @@ func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d 
 			return
 		}
 		grant := next.Grants[char]
-		gainedExp = grant.Exp
-		for _, stack := range grant.Items {
+		for index, stack := range grant.Items {
+			if grant.Collected[index] {
+				continue
+			}
 			def, ok := s.itemDef(stack.Item)
 			if !ok || candidate.Bag.AddStack(def, stack) != 0 {
 				s.endgameError(p, req, "bag_full", "背包空间不足，奖励将保留")
 				return
 			}
 		}
-		gain := candidate.Char.AddExp(s.levels, grant.Exp, domain.LevelCap)
-		if gain.Reason != "" {
-			s.endgameError(p, req, "progression", gain.Reason)
-			return
+		if !grant.ExperienceClaimed {
+			gain := candidate.Char.AddExp(s.levels, grant.Exp, domain.LevelCap)
+			if gain.Reason != "" {
+				s.endgameError(p, req, "progression", gain.Reason)
+				return
+			}
+			candidate.Char.ApplyLevelUps(gain.FromLevel, gain.ToLevel)
+			gainedExp = gain.AppliedExp
+			if err := s.settleEndgamePetGrant(candidate.Char, &grant.Pet); err != nil {
+				s.endgameError(p, req, "progression", err.Error())
+				return
+			}
+			petGrant = grant.Pet
+			grant.ExperienceClaimed = true
 		}
-		candidate.Char.ApplyLevelUps(gain.FromLevel, gain.ToLevel)
-		gainedExp = gain.AppliedExp
-		if err := s.settleEndgamePetGrant(candidate.Char, &grant.Pet); err != nil {
-			s.endgameError(p, req, "progression", err.Error())
-			return
-		}
-		petGrant = grant.Pet
 		next.Grants[char] = grant
-		plan := domain.PlanRiftRewards(next.Run.Tier, next.Run.Timely)
-		if profile.UnlockedTier < plan.UnlockTier {
-			profile.UnlockedTier = plan.UnlockTier
-		}
+		profile = riftProfileWithCompletion(s.endgamePlayer(p).state.Payload, next.Run, char)
 	}
 	profile.RunID = next.Run.RunID
 	all := true
@@ -311,9 +330,7 @@ func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d 
 			s.rift.revision = record.Revision
 			s.rift.savedRevision = next.Run.Revision
 			s.rift.economicPending = false
-			if next.Run.Phase == domain.RiftClosed {
-				s.rift.terminalUntil = s.riftMS() + 1000
-			}
+			s.syncEndgameRiftCompletion()
 		}
 	}, withRiftProfile(s.endgamePlayer(p).state.Payload, profile))
 	if live {
@@ -333,9 +350,11 @@ func (s *Scene) leaveEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
 	next := x.data.clone()
 	char := domain.CharID(p.Player.Char.ID)
 	next.Run.Leave(char)
+	profile := riftProfileWithCompletion(s.endgamePlayer(p).state.Payload, next.Run, char)
+	profile.RunID = next.Run.RunID
 	record := next.record(x.revision + 1)
 	x.economicPending = true
-	ok := s.endgameCommit(p, req, s.snapshotOf(p).Clone(), domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Message: "已离开洞天"}, &record, x.revision, func() {
+	ok := s.endgameCommitPayload(p, req, s.snapshotOf(p).Clone(), domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Message: "已离开洞天"}, &record, x.revision, func() {
 		x.data = next
 		x.revision = record.Revision
 		x.savedRevision = next.Run.Revision
@@ -349,7 +368,7 @@ func (s *Scene) leaveEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
 				s.onTeleport(Teleport{ID: id, To: domain.SceneID{MapID: next.Return.MapID}, At: next.Return})
 			}
 		})
-	})
+	}, withRiftProfile(s.endgamePlayer(p).state.Payload, profile))
 	if ok {
 		s.endgamePlayer(p).onFailure = func() { s.reloadEndgameRift() }
 	} else {

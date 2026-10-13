@@ -24,9 +24,14 @@ func (d endgameRiftDefs) Def(id domain.MonsterID) (domain.MonsterDef, bool) {
 	return domain.MonsterDef{}, false
 }
 
+// Delayed economic writes must preserve authoritative event time and ordering.
+// CharID identifies a player death; otherwise ID/Pos identify a monster death.
 type endgameRiftDeath struct {
-	ID  domain.EntityID
-	Pos domain.Pos
+	ID      domain.EntityID
+	Pos     domain.Pos
+	MS      int64
+	CharID  domain.CharID
+	Present map[domain.CharID]bool
 }
 
 func (s *Scene) prepareEndgameRift(cmd Enter) bool {
@@ -85,6 +90,7 @@ func (s *Scene) syncEndgameRift(p *entity.Entity) {
 	}
 	s.rift.ready[char] = true
 	s.rift.data.Run.Members[char].LastSeenMS = s.riftMS()
+	s.syncEndgameRiftCompletion()
 	s.replyLiveRift(p, domain.EndgameRequest{Op: "rift.state"})
 }
 func (s *Scene) disconnectEndgameRift(p *entity.Entity) {
@@ -196,10 +202,6 @@ func (s *Scene) onEndgameRiftMonsterDeath(m, killer *entity.Entity) bool {
 	if x.transition != nil || x.retired || x.floorLoading {
 		return true
 	}
-	if x.economicPending {
-		x.delayedDeaths = append(x.delayedDeaths, endgameRiftDeath{ID: m.ID, Pos: m.Pos})
-		return true
-	}
 	present := map[domain.CharID]bool{}
 	for _, p := range s.players {
 		char := domain.CharID(p.Player.Char.ID)
@@ -207,19 +209,35 @@ func (s *Scene) onEndgameRiftMonsterDeath(m, killer *entity.Entity) bool {
 			present[char] = true
 		}
 	}
-	x.data.Run.ObserveClock(s.riftMS(), present)
+	death := endgameRiftDeath{ID: m.ID, Pos: m.Pos, MS: s.riftMS(), Present: present}
+	if x.economicPending {
+		x.delayedDeaths = append(x.delayedDeaths, death)
+		return true
+	}
+	return s.applyEndgameRiftDeath(death)
+}
+
+func (s *Scene) applyEndgameRiftDeath(death endgameRiftDeath) bool {
+	x := s.rift
+	if death.CharID != 0 {
+		x.data.Run.RecordDeath(death.CharID)
+		return true
+	}
+	x.data.Run.ObserveClock(death.MS, death.Present)
 	before := x.data.Run.Phase
-	orbs, ok := x.data.Run.RecordKill(m.ID, s.riftMS())
+	orbs, ok := x.data.Run.RecordKill(death.ID, death.MS)
 	if !ok {
 		return true
 	}
 	if x.data.Run.Phase == domain.RiftCompleted && !x.data.GrantsReady {
+		x.data.RewardPos = death.Pos
+		x.rewardFresh = true
 		s.generateEndgameRiftGrants()
 		x.data.Run.Revision++
 	}
 	for i := 0; i < orbs; i++ {
 		id := s.alloc.Drop()
-		pos := m.Pos
+		pos := death.Pos
 		pos.X += float64(i * 15)
 		x.data.Run.Globes[id] = domain.RiftGlobe{ID: id, Pos: pos, Value: domain.RiftGlobeProgress}
 	}
@@ -235,7 +253,7 @@ func (s *Scene) onEndgameRiftPlayerDeath(p *entity.Entity) bool {
 	}
 	id := domain.CharID(p.Player.Char.ID)
 	if s.rift.economicPending {
-		s.rift.delayedPlayerDeaths = append(s.rift.delayedPlayerDeaths, id)
+		s.rift.delayedDeaths = append(s.rift.delayedDeaths, endgameRiftDeath{CharID: id, MS: s.riftMS()})
 	} else {
 		s.rift.data.Run.RecordDeath(id)
 	}

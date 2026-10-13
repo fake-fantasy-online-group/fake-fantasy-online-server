@@ -118,13 +118,14 @@ type Session struct {
 	deps Deps
 	log  *slog.Logger
 
-	mu            sync.Mutex
-	stage         Stage
-	endgameV1     bool
-	growthV5      bool
-	account       *store.Account
-	clientAuthTag []byte
-	char          *domain.Character
+	mu                   sync.Mutex
+	stage                Stage
+	endgameV1            bool
+	growthV5             bool
+	groundPresentationV1 bool
+	account              *store.Account
+	clientAuthTag        []byte
+	char                 *domain.Character
 	// entity 是本会话在场景里的实体 id。**进世界之前分配好**, 这样后续每条命令
 	// 都能直接带上它, 不需要等场景回调告诉我们"你是几号"。
 	entity domain.EntityID
@@ -264,8 +265,9 @@ func (s *Session) OnPacket(op uint16, payload []byte) {
 			s.noteUnknown(op, payload, req.Kind)
 			return
 		}
-		// 固定 1.5.8 服务端不做运行时能力协商。该包只需被完整消费，
-		// 背包/仓库/试衣/宠物均直接走 1.5.8 标准协议。
+		s.mu.Lock()
+		s.groundPresentationV1 = req.ClientCaps&protocol.ClientCapGroundPresentationV1 != 0
+		s.mu.Unlock()
 		return
 	}
 	if protocol.ChangeSetOpcode(protocol.Op(op)) {

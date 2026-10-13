@@ -2,7 +2,6 @@ package scene
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
-	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 )
 
 func (s *Scene) stepEndgameRift() {
@@ -41,17 +40,11 @@ func (s *Scene) stepEndgameRift() {
 		default:
 		}
 	}
-	if !x.economicPending {
-		for _, id := range x.delayedPlayerDeaths {
-			x.data.Run.RecordDeath(id)
-		}
-		x.delayedPlayerDeaths = nil
-	}
 	if !x.economicPending && len(x.delayedDeaths) > 0 {
 		ids := x.delayedDeaths
 		x.delayedDeaths = nil
 		for _, death := range ids {
-			s.onEndgameRiftMonsterDeath(&entity.Entity{ID: death.ID, Pos: death.Pos}, nil)
+			s.applyEndgameRiftDeath(death)
 		}
 		r = x.data.Run
 	}
@@ -142,6 +135,7 @@ func (s *Scene) stepEndgameRift() {
 			}
 		}
 	}
+	s.syncEndgameRiftCompletion()
 	s.stepEndgameRiftAbilities(now)
 	if now-x.lastBroadcast >= 1000 {
 		x.lastBroadcast = now

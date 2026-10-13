@@ -496,6 +496,7 @@ func (s *Scene) placeNPCs(list []domain.NPCSpawn) {
 		return
 	}
 	for _, n := range list {
+		n = s.endgameRiftEntranceAppearance(n)
 		e := &entity.Entity{
 			ID: s.alloc.NPC(), Kind: domain.KindNPC, Name: n.Name,
 			Pos: n.Pos, Dir: uint8(n.Dir),
@@ -1359,6 +1360,7 @@ func (s *Scene) spawnEvent(e *entity.Entity) event.EntitySpawned {
 	ev.Ground = &event.GroundItemView{
 		Item: e.Drop.Item, Count: e.Drop.Count, Owner: e.Drop.Owner,
 		ProtectionMS: int32(protectionMS), Quality: quality,
+		UniqueID: groundUniqueID(e.Drop.Stack), DropToken: e.Drop.PresentationToken,
 	}
 	return ev
 }

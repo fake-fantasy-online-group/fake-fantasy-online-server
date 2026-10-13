@@ -111,6 +111,9 @@ type GroundItemView struct {
 	Owner        domain.EntityID
 	ProtectionMS int32
 	Quality      uint8
+	UniqueID     int32 // Validated unique identity; quality 4 also includes ordinary yellow gear.
+	FreshDrop    bool  // First creation broadcast only; visibility snapshots are always silent.
+	DropToken    int64 // Per ground lifetime identity, never an inventory UID.
 }
 
 // NPCView 是 NPC 落位包(0x8046)要的展示数据。

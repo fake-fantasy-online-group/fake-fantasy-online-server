@@ -124,6 +124,15 @@ func (s *eventSink) Emit(ev event.Event) {
 	}
 	stateEncoded := false
 	switch e := ev.(type) {
+	case event.EntitySpawned:
+		if e.Kind == domain.KindDrop && e.Ground != nil && s.sess != nil {
+			s.sess.mu.Lock()
+			enabled := s.sess.groundPresentationV1
+			s.sess.mu.Unlock()
+			if enabled {
+				pkts, stateEncoded = [][]byte{protocol.GroundSpawnPresentation(s.observer, e)}, true
+			}
+		}
 	case event.InventorySnapshot:
 		pkts, stateEncoded = s.inventoryPackets(e), true
 	case event.WarehouseSnapshot:

@@ -606,15 +606,8 @@ func (s *Scene) itemTooltipForViewer(def domain.ItemDef, st domain.Stack, owner,
 		roll = st.Endgame.FormationRollBP
 	}
 	equipBase, equipStats := domain.EnhancedIntrinsic(e, st.RefineLevel, local, roll)
-	if nativeStats {
-		var white []string
-		appendIntrinsicEquipmentStats(&white, equipStats, equipBase)
-		for _, line := range white {
-			lines = append(lines, "\x030"+line)
-		}
-	} else {
-		appendIntrinsicEquipmentStats(&lines, equipStats, equipBase)
-	}
+	_, refinedStats := e.RefinedIntrinsic(st.RefineLevel)
+	appendIntrinsicEquipmentStats(&lines, equipStats, equipBase, refinedStats, nativeStats)
 	if def.Weight != 0 {
 		lines = append(lines, fmt.Sprintf("重量 %d", def.Weight))
 	}
@@ -829,25 +822,35 @@ func appendEquipmentRequirements(lines *[]string, e *domain.EquipDef, ch *domain
 	}
 }
 
-// appendIntrinsicEquipmentStats 展示固有属性与加工增量合并后的白字。
+// appendIntrinsicEquipmentStats 展示固有属性与加工增量合并后的基础数值。
 //
 // 原服的主表属性显示为“命中 6 / 力量 8”，不带附加词条才有的
-// 正号或百分号。这一层不得读 game_equip_extra。
-func appendIntrinsicEquipmentStats(lines *[]string, stats domain.Stats, base domain.Base) {
+// 正号或百分号。这一层不得读 game_equip_extra。只将相对同级精炼数值
+// 确有本件强化增量的对应行标为暗金；零基数、零百分比及取整为零仍白色。
+func appendIntrinsicEquipmentStats(lines *[]string, stats domain.Stats, base domain.Base, refined domain.Stats, explicitWhite bool) {
+	add := func(line string, enhanced bool) {
+		if enhanced {
+			line = qualityColoredLine(tooltipDarkGold, line)
+		} else if explicitWhite {
+			line = "\x030" + line
+		}
+		*lines = append(*lines, line)
+	}
 	if stats.MinAtk != 0 || stats.MaxAtk != 0 {
-		*lines = append(*lines, fmt.Sprintf("攻击 %d~%d", stats.MinAtk, stats.MaxAtk))
+		add(fmt.Sprintf("攻击 %d~%d", stats.MinAtk, stats.MaxAtk), stats.MinAtk != refined.MinAtk || stats.MaxAtk != refined.MaxAtk)
 	}
 	for _, row := range []struct {
-		name  string
-		value int32
+		name     string
+		value    int32
+		enhanced bool
 	}{
-		{"防御", stats.Def}, {"魔法攻击", stats.MAtk}, {"魔法防御", stats.MDef},
-		{"命中", stats.Hit}, {"负重上限", stats.MaxWeight},
-		{"力量", base.STR}, {"体质", base.VIT}, {"敏捷", base.AGI},
-		{"智慧", base.INT}, {"精神", base.SPI}, {"灵巧", base.DEX},
+		{"防御", stats.Def, stats.Def != refined.Def}, {"魔法攻击", stats.MAtk, stats.MAtk != refined.MAtk}, {"魔法防御", stats.MDef, stats.MDef != refined.MDef},
+		{"命中", stats.Hit, false}, {"负重上限", stats.MaxWeight, false},
+		{"力量", base.STR, false}, {"体质", base.VIT, false}, {"敏捷", base.AGI, false},
+		{"智慧", base.INT, false}, {"精神", base.SPI, false}, {"灵巧", base.DEX, false},
 	} {
 		if row.value != 0 {
-			*lines = append(*lines, fmt.Sprintf("%s %d", row.name, row.value))
+			add(fmt.Sprintf("%s %d", row.name, row.value), row.enhanced)
 		}
 	}
 }

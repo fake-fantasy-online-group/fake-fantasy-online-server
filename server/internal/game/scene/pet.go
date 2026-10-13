@@ -1808,6 +1808,9 @@ func (s *Scene) nearestPickable(e *entity.Entity, owner *entity.Entity) *entity.
 // 宠物没有自己的背包 —— 给它一个就得回答"宠物死了里面的东西去哪"，
 // 而那个问题的任何答案都会让人丢东西。
 func (s *Scene) petTake(e *entity.Entity, owner *entity.Entity, drop *entity.Entity) {
+	if s.pickUpEndgameRiftReward(owner, drop, petPickupRange) {
+		return
+	}
 	if owner.Player.TradeBusy {
 		return // Keep the drop on the ground; the pet retries after settlement.
 	}

@@ -358,7 +358,7 @@ func (s *Scene) spawnGeneratedLoot(def domain.ItemDef, stack domain.Stack, at do
 	s.entities[id] = e
 	s.ground[id] = e
 	s.aoi.Enter(e)
-	s.emit(s.spawnEvent(e))
+	s.emit(s.freshGroundSpawnEvent(e))
 
 	// 到期自动消失。不设过期的话, 一张图刷一整天就会堆满没人捡的树枝。
 	s.timer.after(s.tick, lootTTLTicks, func() {
@@ -383,7 +383,7 @@ func (s *Scene) spawnPlayerDrop(def domain.ItemDef, st domain.Stack, at domain.P
 	s.entities[id] = e
 	s.ground[id] = e
 	s.aoi.Enter(e)
-	s.emit(s.spawnEvent(e))
+	s.emit(s.freshGroundSpawnEvent(e))
 	s.timer.after(s.tick, lootTTLTicks, func() {
 		if _, ok := s.entities[id]; ok {
 			s.removeLoot(id, event.DespawnTimeout)
@@ -431,6 +431,9 @@ func (s *Scene) onPickUp(cmd PickUp) {
 	} // 仅用于无数据库的场景夹具
 	if sqDist(p.Pos, e.Pos) > float64(rangePX)*float64(rangePX) {
 		reject(event.RejectTooFar)
+		return
+	}
+	if s.pickUpEndgameRiftReward(p, e, rangePX) {
 		return
 	}
 	// 归属保护: 谁打死的谁先捡。过了保护期谁都能捡。

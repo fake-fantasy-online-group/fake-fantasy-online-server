@@ -99,8 +99,9 @@ type Pet struct {
 
 // Drop 是地上一件掉落物的专有部分。
 type Drop struct {
-	Item  domain.ItemID
-	Count int32
+	PresentationToken int64 // Process-unique creation token, preserved across visibility snapshots.
+	Item              domain.ItemID
+	Count             int32
 	// Stack 非空表示这是玩家从背包丢出的真实实例。拾取时必须原样恢复 UID、
 	// 耐久与绑定状态，不能按模板重新创建一件满耐久装备。
 	Stack domain.Stack

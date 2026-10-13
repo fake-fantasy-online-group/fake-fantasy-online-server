@@ -125,7 +125,7 @@ func TestRiftCloneAndPersistence(t *testing.T) {
 }
 func TestRiftRewardAndStatBounds(t *testing.T) {
 	p := PlanRiftRewards(50, true)
-	if p.UnlockTier != 51 || p.Dust != 19 || p.Equipment != 2 || p.Rune != 2 || p.UniqueChance != 60 {
+	if p.Dust != 19 || p.Equipment != 2 || p.Rune != 2 || p.UniqueChance != 60 {
 		t.Fatal(p)
 	}
 	if RiftScaledStat(100, 1, 5, 2, true) != 2720 {
@@ -211,12 +211,11 @@ func TestRiftRewardsDifficultyTierBounds(t *testing.T) {
 	for tier := int32(1); tier <= 150; tier++ {
 		for _, timely := range []bool{false, true} {
 			got := PlanRiftRewards(tier, timely)
-			wantUnlock, wantDust := tier, 6+(tier-1)/5
+			wantDust := 6 + (tier-1)/5
 			if timely {
-				wantUnlock = min(int32(150), tier+1)
 				wantDust += 4
 			}
-			if got.UnlockTier != wantUnlock || got.Dust != wantDust || got.UniqueChance != min(int32(60), 20+2*tier) {
+			if got.Dust != wantDust || got.UniqueChance != min(int32(60), 20+2*tier) {
 				t.Fatalf("tier %d timely=%v: %+v", tier, timely, got)
 			}
 		}

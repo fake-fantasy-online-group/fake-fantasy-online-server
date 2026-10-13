@@ -316,11 +316,13 @@ func RiftScaledStat(base int32, tier int32, party int, class int32, hp bool) int
 	return int32(math.Ceil(v))
 }
 
-type RiftRewardPlan struct{ Equipment, Rune, Dust, UniqueChance, UnlockTier int32 }
+// Loot timing bonuses are separate from difficulty progression; use
+// RiftRun.UnlockedTierFor for the completion-time tier entitlement.
+type RiftRewardPlan struct{ Equipment, Rune, Dust, UniqueChance int32 }
 
 func PlanRiftRewards(tier int32, timely bool) RiftRewardPlan {
 	tier = clampRiftTier(tier)
-	p := RiftRewardPlan{Equipment: 1, Rune: 1, Dust: 6 + (tier-1)/5, UniqueChance: 20 + 2*tier, UnlockTier: tier}
+	p := RiftRewardPlan{Equipment: 1, Rune: 1, Dust: 6 + (tier-1)/5, UniqueChance: 20 + 2*tier}
 	if p.UniqueChance > 60 {
 		p.UniqueChance = 60
 	}
@@ -328,10 +330,6 @@ func PlanRiftRewards(tier int32, timely bool) RiftRewardPlan {
 		p.Equipment++
 		p.Rune++
 		p.Dust += 4
-		p.UnlockTier++
-		if p.UnlockTier > RiftMaxTier {
-			p.UnlockTier = RiftMaxTier
-		}
 	}
 	return p
 }

@@ -162,19 +162,34 @@ func TestRiftNativePopulationProgressGuardianClaim(t *testing.T) {
 	}
 	s.stepEndgameRift()
 	p := s.players[1]
-	if !s.riftView(p, s.rift.data, true, true).Claimable {
-		t.Fatal("no credit")
+	if s.riftView(p, s.rift.data, true, true).Claimable {
+		t.Fatal("live reward bypassed ground pickup")
 	}
-	before := p.Player.Bag.CountOf(1900028202)
-	req := domain.EndgameRequest{Op: "rift.claim", RequestID: "claim-natural-0001", ExpectedRevision: "0"}
-	s.onEndgameRift(p, req)
-	if b.commits != 1 || p.Player.Bag.CountOf(1900028202) != before {
-		t.Fatal("premature grant")
+	if b.commits != 1 || p.Player.Bag.CountOf(1900028202) != 0 {
+		t.Fatal("expected one pending automatic experience settlement")
 	}
 	b.finish(true)
 	s.finishEndgame(false)
+	for len(s.rift.rewardDrops) > 0 {
+		var drop *entity.Entity
+		for id := range s.rift.rewardDrops {
+			drop = s.ground[id]
+			break
+		}
+		if drop == nil {
+			t.Fatal("missing projected ground reward")
+		}
+		p.Pos = drop.Pos
+		before, commits := p.Player.Bag.CountOf(drop.Drop.Item), b.commits
+		s.onPickUp(PickUp{ID: p.ID, Target: drop.ID})
+		if b.commits != commits+1 || p.Player.Bag.CountOf(drop.Drop.Item) != before {
+			t.Fatal("pickup was not staged atomically")
+		}
+		b.finish(true)
+		s.finishEndgame(false)
+	}
 	if p.Player.Bag.CountOf(1900028202) != 10 || !s.rift.data.Run.Members[100].Claimed {
-		t.Fatal("claim failed")
+		t.Fatal("ground rewards not collected")
 	}
 	if s.rift.data.Run.Phase != domain.RiftClosed {
 		t.Fatal("sequential run blocked")
@@ -278,7 +293,7 @@ func TestRiftPreviousRewardCannotBeHidden(t *testing.T) {
 	}
 }
 
-func TestRiftClaimFailureAndLostACKRunRecovery(t *testing.T) {
+func TestRiftPickupFailureAndLostACKRunRecovery(t *testing.T) {
 	s, b, now := riftFixture(t)
 	activateTestRift(t, s, b, *now)
 	s.stepEndgameRift()
@@ -286,12 +301,20 @@ func TestRiftClaimFailureAndLostACKRunRecovery(t *testing.T) {
 	x.data.Run.Phase = domain.RiftCompleted
 	x.data.Run.Members[100].Eligible = true
 	x.data.GrantsReady = true
-	x.data.Grants[100] = endgameRiftGrant{Items: []domain.Stack{{Item: 1900028202, Count: 10, Bound: true}}}
+	x.data.Grants[100] = endgameRiftGrant{ExperienceClaimed: true, Items: []domain.Stack{{Item: 1900028202, Count: 10, Bound: true}}}
 	x.savedRevision = x.data.Run.Revision
 	b.runs[x.data.Run.RunID] = x.data.record(x.revision)
 	p := s.players[1]
-	req := domain.EndgameRequest{Op: "rift.claim", RequestID: "claim-storage-001", ExpectedRevision: "0"}
-	s.claimEndgameRift(p, req, x.data, x.revision, true)
+	s.syncEndgameRiftCompletion()
+	var drop *entity.Entity
+	for id := range x.rewardDrops {
+		drop = s.ground[id]
+	}
+	if drop == nil {
+		t.Fatal("missing durable ground reward")
+	}
+	p.Pos = drop.Pos
+	s.onPickUp(PickUp{ID: p.ID, Target: drop.ID})
 	b.finish(false)
 	s.finishEndgame(false)
 	if !x.economicPending {
@@ -299,9 +322,9 @@ func TestRiftClaimFailureAndLostACKRunRecovery(t *testing.T) {
 	}
 	s.pollEndgameRiftReload(*now)
 	if x.economicPending || p.Player.Bag.CountOf(1900028202) != 0 || x.data.Run.Members[100].Claimed {
-		t.Fatal("failed claim mutated")
+		t.Fatal("failed pickup mutated")
 	}
-	s.claimEndgameRift(p, req, x.data, x.revision, true)
+	s.onPickUp(PickUp{ID: p.ID, Target: drop.ID})
 	plan := b.plan
 	b.runs[plan.Run.RunID] = *plan.Run
 	authoritative := plan.Snapshot.Clone()

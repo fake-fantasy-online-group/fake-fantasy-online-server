@@ -14,6 +14,8 @@ type endgameRiftProfile struct {
 	UnlockedTier int32  `json:"unlockedTier"`
 }
 type endgameRiftGrant struct {
+	ExperienceClaimed  bool
+	Collected          map[int]bool
 	Items              []domain.Stack
 	Exp                int64
 	ProgressionVersion string
@@ -21,6 +23,7 @@ type endgameRiftGrant struct {
 	Pet                endgamePetGrant
 }
 type endgameRiftPersisted struct {
+	RewardPos       domain.Pos
 	DeathTimes      map[domain.CharID]int64
 	Floor           *domain.RiftFloorPlan
 	StorageRevision int64
@@ -85,6 +88,10 @@ func withRiftProfile(payload string, p endgameRiftProfile) string {
 }
 
 type endgameRiftState struct {
+	rewardLayout                                      *endgameRiftRewardLayout
+	rewardFresh                                       bool
+	rewardDrops                                       map[domain.EntityID]endgameRiftGroundReward
+	exitNPC                                           domain.EntityID
 	portals                                           []domain.Portal
 	abilities                                         map[domain.EntityID]*endgameRiftAbilityState
 	transition                                        *endgameRiftTransition
@@ -101,7 +108,6 @@ type endgameRiftState struct {
 	loadUntil, terminalUntil, lastSave, lastBroadcast int64
 	economicPending                                   bool
 	delayedDeaths                                     []endgameRiftDeath
-	delayedPlayerDeaths                               []domain.CharID
 }
 type endgameRiftRequestState struct {
 	req   domain.EndgameRequest
@@ -127,6 +133,9 @@ func (s *Scene) riftView(p *entity.Entity, d endgameRiftPersisted, durable, live
 	}
 	if p != nil {
 		v.UnlockedTier = riftProfile(s.endgamePlayer(p).state.Payload).UnlockedTier
+		if durable {
+			v.UnlockedTier = r.UnlockedTierFor(domain.CharID(p.Player.Char.ID), v.UnlockedTier)
+		}
 		if s.rift != nil && live && s.rift.data.Run.RunID == r.RunID {
 			v.Transitioning = s.rift.transition != nil || s.rift.floorLoading || s.rift.retired
 			v.CanAdvance = s.canAdvanceEndgameRift(p)
@@ -159,15 +168,15 @@ func (s *Scene) riftView(p *entity.Entity, d endgameRiftPersisted, durable, live
 			v.Phase = "closed"
 		}
 	}
-	remain := (domain.RiftTimedMS - (s.riftMS() - r.StartedMS) - r.PenaltyMS) / 1000
-	if remain > 0 && r.StartedMS > 0 {
-		v.RemainingSeconds = int32(remain)
-	}
+	v.RemainingSeconds = r.RemainingSeconds(s.riftMS())
 	for id, m := range r.Members {
 		v.Members = append(v.Members, domain.EndgameRiftMemberView{CharID: strconv.FormatInt(int64(id), 10), Name: d.Names[id], Level: m.Level, Eligible: m.Eligible, Claimed: m.Claimed})
 		if p != nil && int64(id) == p.Player.Char.ID && m.Eligible && !m.Claimed && durable && (r.Phase == domain.RiftCompleted || r.Phase == domain.RiftClosed) {
 			v.Claimable = true
 		}
+	}
+	if live && (r.Phase == domain.RiftCompleted || r.Phase == domain.RiftClosed) {
+		v.Claimable = false // live entitlements are collected from ground entities
 	}
 	if live {
 		for id, m := range r.Monsters {

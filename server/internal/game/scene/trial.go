@@ -52,6 +52,10 @@ func (s *Scene) onTrialAction(cmd TrialAction) {
 		s.onEnterDungeon(EnterDungeon{ID: p.ID, MapID: ids[0]})
 	case "trialleave":
 		if s.rift != nil {
+			if !s.canUseEndgameRiftExit(p) {
+				s.trialNotice(p, "请在镇境劫影消散后，与附近的归元道使交谈。")
+				return
+			}
 			s.onEndgame(EndgameRequest{ID: p.ID, Request: domain.EndgameRequest{Op: "rift.leave", RequestID: "native-leave-" + riftNonce(), ExpectedRevision: strconv.FormatInt(s.endgamePlayer(p).state.Revision, 10)}})
 			return
 		}
