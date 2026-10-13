@@ -14,6 +14,10 @@ type mapLoadSink interface {
 }
 
 // Separate from mapLoadSink so the existing loading handshake keeps its boundary.
+type clientGateReadySink interface {
+	ConfirmClientGateReady(domain.EntityID, domain.SceneID, uint64) bool
+}
+
 type currentSceneReadySink interface {
 	CurrentSceneReady(domain.EntityID, domain.SceneID, uint64) bool
 }
@@ -29,16 +33,21 @@ type MapReady struct {
 	ID    domain.EntityID
 	Scene domain.SceneID
 	Epoch uint64
+	// At is the existing native entered=1 coordinate, not a new wire field.
+	// Zero MapID keeps non-network internal callers on their legacy contract.
+	At domain.Pos
 }
 
 func (MapReady) CmdName() string { return "MapReady" }
 
 // ClientSceneReady is an entered=1 for the current, already settled scene. Epoch
-// identifies the session binding at receipt; the command carries no client coordinates.
+// identifies the session binding at receipt. At is used only to recognize an
+// exact configured client-owned same-map gate; normal rebuilds never move.
 type ClientSceneReady struct {
 	ID    domain.EntityID
 	Scene domain.SceneID
 	Epoch uint64
+	At    domain.Pos
 }
 
 func (ClientSceneReady) CmdName() string { return "ClientSceneReady" }
@@ -56,6 +65,17 @@ func (s *Scene) onClientSceneReady(cmd ClientSceneReady) {
 	// Session teardown may run while a flush is delivering prior events.
 	if !sink.CurrentSceneReady(e.ID, s.id, cmd.Epoch) {
 		return
+	}
+	if s.id.Persistent() && cmd.At != e.Pos {
+		for _, portal := range s.portals {
+			if portal.ClientOwned && !portal.Dungeon && portal.To == cmd.At && portal.To.MapID == s.id.MapID {
+				// The final native movement report is periodic, not a mandatory
+				// pre-transfer packet. Match the source map's configured landing,
+				// not a guessed time/distance or a rounded source polygon hit.
+				s.onTeleport(Teleport{ID: e.ID, To: s.id, At: portal.To, Dir: uint8(portal.ToDir), ClientMapReady: true, ClientGateReady: true, ClientGateEpoch: cmd.Epoch})
+				return
+			}
+		}
 	}
 	s.syncWorldAfterLoad(e)
 	s.flush()
@@ -104,6 +124,14 @@ func (s *Scene) onMapReady(cmd MapReady) {
 	if e == nil || loading == nil || cmd.Scene != s.id || loading.epoch != cmd.Epoch {
 		return
 	}
+	if cmd.At.MapID != 0 && (cmd.At.MapID != s.id.MapID ||
+		cmd.At.X != float64(int32(float32(int32(e.Pos.X)))) || cmd.At.Y != float64(int32(float32(int32(e.Pos.Y))))) {
+		// An independent forced teleport may cross an earlier locally built
+		// ready for this map. Only the authoritative landing can open this
+		// snapshot; 803a truncates to int32, the client stores a float32, and
+		// the original ReportPos truncates back to int32.
+		return
+	}
 	sink, ok := e.Player.Sink.(mapLoadSink)
 	if !ok {
 		return
@@ -125,6 +153,7 @@ func (s *Scene) onMapReady(cmd MapReady) {
 }
 
 func (s *Scene) syncWorldAfterLoad(e *entity.Entity) {
+	s.syncEndgameRift(e)
 	if s.trial.IsMap(s.id.MapID) {
 		s.emitTo(e.ID, event.NewbieTextNotice{Who: e.ID, Text: "进入妖魔结界！"})
 	}

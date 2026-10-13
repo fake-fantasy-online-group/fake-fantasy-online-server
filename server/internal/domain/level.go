@@ -7,15 +7,10 @@ package domain
 //	game_levels          150 级的经验曲线（客户端 .bin 解出）
 //	ov_levelup.*_odd/even 每级六维成长, **按等级奇偶取值**
 //
-// ⚠️ **`game_levels.exp_accum` 只在 1~60 级是真正的累加值。**
-// 从 61 级起它变成了 `exp` 的副本（实测 61 级两列都是 27027200）——
-// 也就是飞升之后经验另起一套账。60 级正好是我们的 MVP 边界, 所以本文件
-// 只按飞升前那一套实现; 将来做飞升时**必须**为 61+ 单独开一条经验轨。
-
-// LevelCap 是 MVP 的等级上限。飞升前 60 级封顶。
-//
-// 表里有 150 级的数据, 但 61+ 属于飞升后, 不在 MVP 范围(见 docs/MVP边界.md)。
-const LevelCap = 60
+// V5 is a continuous 1–100 progression track using per-level exp only.
+// Historical exp_accum is corrupt above 60 and is never used or migrated.
+const LevelCap = 100
+const ProgressionVersion = "progression-v5"
 
 // LevelTable 是经验曲线。
 //
@@ -59,10 +54,12 @@ func (t *LevelTable) Need(level int32) int64 {
 
 // GainResult 是一次加经验的结果。
 type GainResult struct {
-	Levels     int32 // 升了几级
-	FromLevel  int32
-	ToLevel    int32
-	Overflowed bool // 因为到了等级上限而丢弃了溢出的经验
+	Levels                   int32 // 升了几级
+	FromLevel                int32
+	ToLevel                  int32
+	Overflowed               bool // 因为到了等级上限而丢弃了溢出的经验
+	AppliedExp, DiscardedExp int64
+	Reason                   string // nonempty rejects invalid input without mutating the character
 }
 
 // AddExp 给角色加经验并处理连升。
@@ -73,31 +70,9 @@ type GainResult struct {
 // 到达上限之后经验不再累积(Overflowed=true)。留着一个涨不动的数只会让人困惑,
 // 而且将来飞升解锁时那笔存量该怎么算是笔糊涂账。
 func (c *Character) AddExp(t *LevelTable, gain int64, cap int32) GainResult {
-	res := GainResult{FromLevel: c.Level, ToLevel: c.Level}
-	if gain <= 0 || t == nil {
-		return res
-	}
-	if c.Level >= cap {
-		res.Overflowed = true
-		return res
-	}
-
-	c.Exp += gain
-	for c.Level < cap {
-		need := t.Need(c.Level)
-		if need <= 0 || c.Exp < need {
-			break
-		}
-		c.Exp -= need
-		c.Level++
-		res.Levels++
-	}
-	res.ToLevel = c.Level
-
-	// 顶级之后把零头也清掉, 免得面板上挂着一条永远满不了的经验条
-	if c.Level >= cap && c.Exp > 0 {
-		c.Exp = 0
-		res.Overflowed = true
+	res, level, progress := settleExperience(c.Level, c.Exp, gain, cap, t.Need)
+	if res.Reason == "" {
+		c.Level, c.Exp = level, progress
 	}
 	return res
 }

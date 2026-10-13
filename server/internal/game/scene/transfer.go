@@ -11,6 +11,14 @@ type transferSink interface {
 	TransferScene(id domain.EntityID, from, to domain.SceneID, handoff func() bool) bool
 }
 
+// Optional production seam, leaving non-network scene consumers unchanged.
+type clientReadyTransferSink interface {
+	TransferSceneWithClientReady(domain.EntityID, domain.SceneID, domain.SceneID,
+		domain.Pos, bool, uint64, bool, func(bool) bool) bool
+	ClientMapReadyCurrent(domain.EntityID, domain.SceneID, uint64) bool
+	RetireClientMapReady(uint64)
+}
+
 // 跨场景传送 —— Actor 模型里最容易写错的一段。
 //
 // 铁律: **实体的所有权随消息转移, 同一时刻只有一个场景持有它。**
@@ -34,6 +42,20 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	}
 	e, ok := s.players[cmd.ID]
 	if !ok {
+		return false
+	}
+	if cmd.ClientReadyReceipt != 0 {
+		owner, ok := e.Player.Sink.(clientReadyTransferSink)
+		if !ok || !owner.ClientMapReadyCurrent(e.ID, s.id, cmd.ClientReadyReceipt) {
+			return true // The source generation was replaced; never replay its request.
+		}
+		defer owner.RetireClientMapReady(cmd.ClientReadyReceipt)
+	}
+	if s.rift != nil && cmd.To != s.id && !s.rift.data.Run.Terminal() && s.rift.data.Run.Admitted(domain.CharID(e.Player.Char.ID)) && !(s.rift.retired && s.rift.transition != nil && cmd.To == s.rift.transition.target) {
+		s.trialNotice(e, "请通过演劫洞天面板离开；离开会放弃本次奖励资格。")
+		if cmd.ClientMapReady {
+			return s.onTeleport(Teleport{ID: e.ID, To: s.id, At: e.Pos})
+		}
 		return false
 	}
 	if loading := s.mapLoads[cmd.ID]; loading != nil {
@@ -108,7 +130,12 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 		// flush，本人跨格后反而不在旧格视野里，会漏掉收工事件。传送本来就是
 		// 生命周期边界，先把此前事件按旧坐标冲刷完，再下发权威落点。
 		s.flush()
-		if !s.beginMapLoad(e, cmd.ClientMapReady) {
+		if cmd.ClientGateReady {
+			owner, ok := e.Player.Sink.(clientGateReadySink)
+			if !ok || !owner.ConfirmClientGateReady(e.ID, s.id, cmd.ClientGateEpoch) {
+				return true // Superseded/closed during the old-world flush.
+			}
+		} else if !s.beginMapLoad(e, cmd.ClientMapReady) {
 			return true
 		}
 		if s.mapLoads[e.ID] != nil {
@@ -117,12 +144,18 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 		}
 		// 只有落点真的处于门区才上锁；落在普通位置不能吞掉下一次正常入门。
 		s.blockPortalLanding(e.ID, cmd.At)
-		// 本人也必须收到权威落点；普通 EntityMoved 刻意排除了本人，只改服务端
-		// 会让同图门后的客户端仍停在旧坐标。0x803a 对同图同样是精确定义的传送事件。
-		s.emitTo(e.ID, event.Teleported{Who: e.ID, Scene: s.id, To: cmd.At})
+		// A server-initiated move still needs its native teleport. A client-owned
+		// same-map gate has already rebuilt at this exact configured landing.
+		if !cmd.ClientGateReady {
+			s.emitTo(e.ID, event.Teleported{Who: e.ID, Scene: s.id, To: cmd.At})
+		}
 		// 不再次检查传送门；否则落点仍在门区时会同步递归。force=true 让眩晕
 		// 只限制主动移动，不阻止服务端传送。
 		s.move(MoveTo{ID: cmd.ID, To: cmd.At, Dir: cmd.Dir, Stop: true}, false, true)
+		if cmd.ClientGateReady {
+			s.syncWorldAfterLoad(e)
+			s.flush()
+		}
 		return true
 	}
 	if s.router == nil {
@@ -132,6 +165,8 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	// Character.Pos 在线期间不随每次移动更新，源场景的权威位置是实体位置。
 	// 交接失败时玩家只能断线重登，届时必须从这个源坐标恢复，不能把尚未成功
 	// 到达的目标落点写进存档。
+	s.disconnectEndgameRift(e)
+	s.stepEndgameTrial()
 	sourcePos := e.Pos
 	s.endSharedRide(e)
 
@@ -144,6 +179,7 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	}
 	s.cancelPendingCombat(combatants...)
 
+	s.revokeDepartingSkillSource(e)
 	runtime := e.CapturePlayerRuntime(s.tick)
 	// 0.5 宠物跟着主人做无损运行态交接。源场景只摘除旧实体，
 	// 不走 recallPet，因为召回会清当前技能、结束骑乘并改变客户端宠物栏。
@@ -151,6 +187,13 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	s.removeOwnerTraps(e.ID)
 	// 传送命令携带的是目标落地方向；不能让运行态快照里的旧朝向把它覆盖掉。
 	runtime.Dir = cmd.Dir
+
+	// Native ground/NPC packets have no map guard. The client may have built
+	// its target while ready was still upstream, so source rows arriving in
+	// that interval must be removed before any destination snapshot. Player,
+	// monster and pet packets already carry their own map guard; do not clear
+	// those unrelated registries or the local player here.
+	s.clearSourceMaplessEntities(e.ID)
 
 	// 1~2. 让周围的人看到他走了
 	s.emitExcept(event.EntityDespawned{ID: e.ID, Kind: e.Kind, Reason: event.DespawnTimeout}, e.ID)
@@ -160,6 +203,9 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	s.aoi.Leave(e)
 	delete(s.entities, e.ID)
 	delete(s.players, e.ID)
+	delete(s.skillViewDigests, e.ID)
+	delete(s.skillRawCache, e.ID)
+	s.removeEquipmentEntity(e.ID)
 	delete(s.hits, e.ID)
 	delete(s.portalBlocked, e.ID)
 	// 正在打他的怪要脱战, 否则会追着一个已经不在这张图的 id
@@ -187,22 +233,29 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	partyID := e.Player.Party
 	id := e.ID // 实体 id 跟着人走 —— 是同一个实体换了地方, 不是新生成一个
 
-	handoff := func() bool {
-		return s.router.PostHandoff(cmd.To, Enter{
+	handoff := func(inheritedReady bool) bool {
+		enter := Enter{
 			ID: id, Char: char, Runtime: &runtime, Bag: bag, Worn: worn, Warehouse: warehouse,
 			ChangeSet: changeSet,
 			Wardrobe:  wardrobe,
 			Stall:     stall,
 			Party:     partyID, DungeonElapsed: s.transferDungeonElapsed(cmd.To),
-			Sink: sink, ClientMapReady: cmd.ClientMapReady,
+			Sink: sink, ClientMapReady: cmd.ClientMapReady && cmd.ClientReadyReceipt == 0 || inheritedReady,
 			FinalSaver: finalSaver,
-		})
+		}
+		if cmd.RiftRunID != "" {
+			return s.router.postExistingRiftHandoff(cmd.To, cmd.RiftRunID, enter)
+		}
+		return s.router.PostHandoff(cmd.To, enter)
 	}
 	handedOff := false
-	if owner, ok := sink.(transferSink); ok {
-		handedOff = owner.TransferScene(id, s.id, cmd.To, handoff)
+	if owner, ok := sink.(clientReadyTransferSink); ok {
+		handedOff = owner.TransferSceneWithClientReady(id, s.id, cmd.To, cmd.At,
+			cmd.PortalTransfer, cmd.ClientReadyReceipt, cmd.ClientMapReady, handoff)
+	} else if owner, ok := sink.(transferSink); ok {
+		handedOff = owner.TransferScene(id, s.id, cmd.To, func() bool { return handoff(false) })
 	} else {
-		handedOff = handoff()
+		handedOff = handoff(false)
 	}
 	if !handedOff {
 		// 目标场景建不出来/满了。人已经从这边摘掉了, 不能装作没事 ——
@@ -210,7 +263,10 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 		s.log.Error("传送失败, 目标场景不可用", "char", name, "to", cmd.To)
 		char.Pos = sourcePos
 		char.SceneInstance = s.id.Instance
-		if s.dungeon != nil {
+		if s.rift != nil && s.rift.retired && s.rift.transition != nil {
+			char.Pos = s.rift.data.Floor.Entry
+			char.SceneInstance = s.rift.transition.target.Instance
+		} else if s.dungeon != nil {
 			char.Pos = s.dungeon.Exit
 			char.SceneInstance = 0
 		}
@@ -250,6 +306,13 @@ func (s *Scene) checkPortals(e *domain.Pos, id domain.EntityID) bool {
 		return false
 	}
 	p := &s.portals[portal]
+	if p.ClientOwned {
+		// The native client owns the polygon edge and builds locally. Movement
+		// alone is not a transfer request: it may be a rounded boundary point,
+		// spawn-inside suppression, or a build that fails. Keep source ownership
+		// until its existing entered=1 arrives; never race that ready with 803a.
+		return false
+	}
 	if s.dungeon != nil {
 		if target, ok := s.dungeons[p.To.MapID]; ok && target.ID == s.dungeon.ID {
 			if s.enterDungeonFloor(id, p.To, uint8(p.ToDir)) {
@@ -268,7 +331,7 @@ func (s *Scene) checkPortals(e *domain.Pos, id domain.EntityID) bool {
 		return false
 	}
 	dst := domain.SceneID{MapID: p.To.MapID}
-	if !s.onTeleport(Teleport{ID: id, To: dst, At: p.To, Dir: uint8(p.ToDir)}) {
+	if !s.onTeleport(Teleport{ID: id, To: dst, At: p.To, Dir: uint8(p.ToDir), PortalTransfer: true}) {
 		s.log.Warn("传送门触发未执行, 玩家留在原场景", "id", id,
 			"proc", p.ProcID, "to", dst)
 		return false
@@ -377,5 +440,21 @@ func (s *Scene) attachRouter(r *Router) {
 	s.router = r
 	if s.alloc == nil { // Config 里显式给过就不覆盖
 		s.alloc = r.Alloc()
+	}
+}
+
+// Only the old source's live network IDs are retired. Initial static scenery is
+// never an entity here, and skipNPC uses the same publication rule as snapshots.
+// A source row already removed earlier has its native removal before this FIFO
+// boundary. Same-scene native gates do not call this: their rows remain valid.
+func (s *Scene) clearSourceMaplessEntities(to domain.EntityID) {
+	for _, o := range s.entities {
+		if o.Kind != domain.KindDrop && o.Kind != domain.KindNPC {
+			continue
+		}
+		if o.Kind == domain.KindNPC && s.skipNPC && !s.isEndgameRiftExitNPC(o) {
+			continue
+		}
+		s.emitTo(to, event.EntityDespawned{ID: o.ID, Kind: o.Kind, Reason: event.DespawnTimeout})
 	}
 }

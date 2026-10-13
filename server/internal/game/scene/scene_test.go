@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"context"
@@ -78,7 +81,7 @@ func (s *fakeSaver) count(id int64) int {
 
 func newTestScene(t *testing.T, saver Saver) *Scene {
 	t.Helper()
-	return New(Config{ID: domain.SceneID{MapID: 7}, Saver: saver, SaveEvery: 10})
+	return New(Config{LootRules: lootRulesTableFixture(), RiftRules: riftRulesTableFixture(), EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, Saver: saver, SaveEvery: 10})
 }
 
 // join 让一个玩家进场景并推进一帧, 返回它的 sink。
@@ -422,7 +425,7 @@ func TestRepeatedPanicGivesUp(t *testing.T) {
 // mailbox 满了要丢并返回 false, 不能阻塞投递方 ——
 // 一个刷包的客户端不能把整张图的循环拖住。
 func TestMailboxFullDropsInsteadOfBlocking(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}, Mailbox: 2})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, Mailbox: 2})
 	if !s.Post(MoveTo{ID: 1}) || !s.Post(MoveTo{ID: 1}) {
 		t.Fatal("前两条应该进得去")
 	}
@@ -441,7 +444,7 @@ func TestMailboxFullDropsInsteadOfBlocking(t *testing.T) {
 // Leave 不能沿用普通 Post 的“队列满就丢”。它可以等一个场景帧腾出位置；否则
 // 同一客户端重登后，旧玩家会永久留在场景里并以 0x8023 发给新实体。
 func TestLifecyclePostWaitsForMailboxSpace(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}, Mailbox: 2})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, Mailbox: 2})
 	if !s.Post(MoveTo{ID: 1}) || !s.Post(MoveTo{ID: 1}) {
 		t.Fatal("测试前提：mailbox 应已填满")
 	}
@@ -467,7 +470,7 @@ func TestLifecyclePostWaitsForMailboxSpace(t *testing.T) {
 }
 
 func TestLifecyclePostStopsWaitingWhenSceneStops(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}, Mailbox: 1})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, Mailbox: 1})
 	if !s.Post(MoveTo{ID: 1}) {
 		t.Fatal("测试前提：mailbox 应已填满")
 	}

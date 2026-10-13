@@ -9,7 +9,7 @@ import (
 )
 
 func (p *Postgres) RecordDeposit(ctx context.Context, charID int64, chain string, amount int32, caiyu int64) (int64, error) {
-	return recordDeposit(ctx, p.pool, charID, chain, amount, caiyu)
+	return recordDeposit(ctx, p.catalogQuery(), charID, chain, amount, caiyu)
 }
 
 func (t *pgTx) RecordDeposit(ctx context.Context, charID int64, chain string, amount int32, caiyu int64) (int64, error) {

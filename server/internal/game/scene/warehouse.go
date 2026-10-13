@@ -31,7 +31,7 @@ func (s *Scene) warehouseSnapshot(p *entity.Entity) (event.WarehouseSnapshot, bo
 		}
 		view := event.WarehouseItemView{Tab: uint8(page), Slot: int32(slot), Item: st.Item,
 			Count: st.Count, Name: itemDisplayName(def, st), Desc: s.ownedItemTooltip(def, st, p),
-			Blocked: s.equipmentBlockedFor(p, def), Quality: equipmentQuality(def, st)}
+			Blocked: s.equipmentBlockedFor(p, def, st), Quality: equipmentQuality(def, st)}
 		if def.Equip != nil {
 			view.CurrentDurability = st.Durability
 			view.MaxDurability = domain.MaxDurabilityOf(st, def)

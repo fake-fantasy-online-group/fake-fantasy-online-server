@@ -1,0 +1,10760 @@
+[
+  {
+    "BaseID": 1001,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 5,
+        "Max": 6
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1002,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 120,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 26,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 50
+      }
+    ],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 6
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1003,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 27,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 149,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 6,
+        "Max": 7
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10102,
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 1004,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 39,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 184,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1005,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 182,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 46,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 10,
+        "Max": 11
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 100,
+        "MinPercent": 100,
+        "MaxPercent": 120
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1006,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 32,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 68,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 225,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 32,
+        "Max": 35
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1007,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 39,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 220,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 59,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 100,
+        "MinPercent": 100,
+        "MaxPercent": 120
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1008,
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 350,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 104,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 350,
+        "Max": 385
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1009,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 131,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 288,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 79,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 131,
+        "Max": 144
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10104,
+        "levels": 2
+      }
+    ]
+  },
+  {
+    "BaseID": 1010,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 91,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 311,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 66,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": -8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 311,
+        "Max": 342
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 100,
+        "MinPercent": 100,
+        "MaxPercent": 120
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10102,
+        "levels": 2
+      }
+    ]
+  },
+  {
+    "BaseID": 1102,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1103,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 25,
+        "Value": 2,
+        "Mode": 1
+      },
+      {
+        "Attr": 13,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 60,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1104,
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 77,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 8,
+        "Max": 9
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "fire",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1105,
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 12,
+        "Max": 13
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1106,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 77,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 60,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1107,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 224,
+        "Mode": 0
+      },
+      {
+        "Attr": 25,
+        "Value": 2,
+        "Mode": 1
+      },
+      {
+        "Attr": 13,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 7,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 60,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ],
+    "TypedEffects": [
+      {
+        "kind": "aura",
+        "aura": {
+          "id": "white_tiger_guard",
+          "fixedRank": 1,
+          "family": "white_tiger_guard",
+          "modifier": "physical_mitigation_bp",
+          "value": 400,
+          "radiusPx": 240,
+          "refreshMs": 500,
+          "leaseMs": 1000,
+          "maxPlayers": 6,
+          "includeActivePet": true,
+          "visualKey": "白虎卫身",
+          "priority": 30,
+          "pvpScaleBP": 5000
+        }
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1108,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 29,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 263,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 30,
+        "MinPercent": 30,
+        "MaxPercent": 40
+      }
+    ],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "dark",
+        "value": 1000
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1109,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 291,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 33,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 100,
+        "MinPercent": 100,
+        "MaxPercent": 120
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1110,
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 34,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 474,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 64,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 70,
+        "Min": 12,
+        "Max": 13
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 50
+      }
+    ],
+    "TypedEffects": [
+      {
+        "kind": "element_absorb_bp",
+        "element": "holy",
+        "value": 400
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1111,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 391,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 391,
+        "Max": 430
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "aura",
+        "aura": {
+          "id": "ember_shelter",
+          "fixedRank": 1,
+          "family": "ember_shelter",
+          "modifier": "element_resist_bp",
+          "element": "fire",
+          "value": 800,
+          "radiusPx": 240,
+          "refreshMs": 500,
+          "leaseMs": 1000,
+          "maxPlayers": 6,
+          "includeActivePet": true,
+          "visualKey": "余烬庇佑",
+          "priority": 20,
+          "pvpScaleBP": 5000
+        }
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1301,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 41,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 41,
+        "Max": 45
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1302,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 41,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 19,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": -2,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 5,
+        "Max": 6
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1303,
+    "Affixes": [
+      {
+        "Attr": 3,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 128,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": -5,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 60
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10401,
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 1304,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 65,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 29,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 184,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": -4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 65,
+        "Max": 71
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1305,
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 39,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 157,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": -40,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 90,
+        "MinPercent": 90,
+        "MaxPercent": 110
+      }
+    ],
+    "TypedEffects": [
+      {
+        "kind": "element_damage_bp",
+        "element": "fire",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1306,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 53,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 46,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 155,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 40,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": -8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 53,
+        "Max": 58
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "proc",
+        "proc": {
+          "id": "firebolt_echo",
+          "trigger": "on_direct_hit",
+          "skillId": 10401,
+          "fixedRank": 10,
+          "chanceBP": 1000,
+          "icdMs": 4000,
+          "sharedGroup": "firebolt_echo",
+          "payload": "damage",
+          "targetRule": "hit_target",
+          "maxTargets": 1,
+          "scaleBP": 10000,
+          "pvpScaleBP": 3500,
+          "requireMagic": true,
+          "priority": 10
+        }
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1307,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 70,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 50,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 53,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 200,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 70,
+        "Max": 77
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "holy",
+        "value": 1000
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1308,
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 61,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 61,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 25,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": -180,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 80,
+        "MinPercent": 80,
+        "MaxPercent": 100
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "school",
+        "school": "frost",
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 1309,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 102,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 92,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 279,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": -60,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 102,
+        "Max": 112
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1310,
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 52,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 413,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 87,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 35,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": -80,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": -20,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 413,
+        "Max": 454
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 160,
+        "MinPercent": 160,
+        "MaxPercent": 190
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "all",
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 1501,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 5,
+        "Max": 6
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1502,
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 31,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 5,
+        "Max": 6
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1503,
+    "Affixes": [
+      {
+        "Attr": 31,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 50,
+        "MinPercent": 50,
+        "MaxPercent": 70
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1504,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 59,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 41,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 184,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 59,
+        "Max": 64
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1505,
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 269,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 57,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 51,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 269,
+        "Max": 295
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1506,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 32,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 187,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 48,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 12,
+        "Max": 13
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 100,
+        "MinPercent": 100,
+        "MaxPercent": 120
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1507,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 51,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 189,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 50,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 13,
+        "Max": 14
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 90,
+        "MinPercent": 90,
+        "MaxPercent": 110
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10121,
+        "levels": 2
+      }
+    ]
+  },
+  {
+    "BaseID": 1508,
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 258,
+        "Mode": 0
+      },
+      {
+        "Attr": 31,
+        "Value": 40,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 49,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 60,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "holy",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1509,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 148,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 25,
+        "Value": 3,
+        "Mode": 1
+      },
+      {
+        "Attr": 19,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 299,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 82,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 148,
+        "Max": 162
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1510,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 106,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 289,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 80,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": -10,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": -20,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 21,
+        "Max": 23
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 180,
+        "MinPercent": 180,
+        "MaxPercent": 220
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1601,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 41,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 41,
+        "Max": 45
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1602,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 17,
+        "Max": 18
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1603,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 29,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 164,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 38,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 7,
+        "Max": 8
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1604,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 27,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 158,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 38,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 80,
+        "MinPercent": 80,
+        "MaxPercent": 100
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10005,
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 1605,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 38,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 178,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 45,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 50,
+        "MinPercent": 50,
+        "MaxPercent": 70
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1606,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 79,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 225,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 58,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 14,
+        "Max": 15
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1607,
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 54,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 214,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 57,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 70,
+        "MinPercent": 70,
+        "MaxPercent": 90
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1608,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 75,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 204,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 56,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 14,
+        "Max": 15
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 90,
+        "MinPercent": 90,
+        "MaxPercent": 110
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10002,
+        "levels": 2
+      }
+    ]
+  },
+  {
+    "BaseID": 1609,
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 21,
+        "Max": 23
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1610,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 123,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 223,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 62,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 13,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 16,
+        "Max": 17
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 120,
+        "MinPercent": 120,
+        "MaxPercent": 150
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "class",
+        "profession": 1,
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 1801,
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 5,
+        "Max": 6
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1802,
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 10,
+        "Max": 11
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1803,
+    "Affixes": [
+      {
+        "Attr": 29,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 50,
+        "MinPercent": 50,
+        "MaxPercent": 70
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1804,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 109,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 26,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 100,
+        "MinPercent": 100,
+        "MaxPercent": 120
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1805,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 34,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 166,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 42,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 80,
+        "MinPercent": 80,
+        "MaxPercent": 100
+      }
+    ],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "dark",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1806,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 38,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 177,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 25,
+        "Value": -4,
+        "Mode": 1
+      },
+      {
+        "Attr": 34,
+        "Value": -40,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 11,
+        "Max": 12
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 100,
+        "MinPercent": 100,
+        "MaxPercent": 120
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1807,
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 69,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 13,
+        "Min": 17,
+        "Max": 18
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1808,
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 24,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 82,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 266,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 24,
+        "Max": 26
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1809,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 400,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 96,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 400,
+        "Max": 440
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1810,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 99,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 190,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 53,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 1,
+        "Min": 14,
+        "Max": 15
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 120,
+        "MinPercent": 120,
+        "MaxPercent": 150
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10219,
+        "levels": 2
+      }
+    ]
+  },
+  {
+    "BaseID": 1903,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 4,
+        "Max": 5
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1904,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 12,
+        "Max": 13
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1905,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 83,
+        "Mode": 0
+      },
+      {
+        "Attr": 29,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 174,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 83,
+        "Max": 91
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10221,
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 1906,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 38,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 33,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 38,
+        "Max": 41
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1907,
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 29,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 26,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 50,
+        "MinPercent": 50,
+        "MaxPercent": 70
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1908,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 178,
+        "Mode": 0
+      },
+      {
+        "Attr": 29,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 52,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 208,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 54,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 178,
+        "Max": 195
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "school",
+        "school": "trap",
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 1909,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 49,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 110,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 156,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 41,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 110,
+        "Max": 121
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 100,
+        "MinPercent": 100,
+        "MaxPercent": 120
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1910,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 43,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 83,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 230,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 43,
+        "Max": 47
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "dark",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1911,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 73,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 207,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 57,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 15,
+        "Max": 16
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 100,
+        "MinPercent": 100,
+        "MaxPercent": 120
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 1912,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 122,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 211,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 59,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 16,
+        "Max": 17
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "proc",
+        "proc": {
+          "id": "snipe_echo",
+          "trigger": "on_direct_hit",
+          "skillId": 10221,
+          "fixedRank": 5,
+          "chanceBP": 1500,
+          "icdMs": 6000,
+          "sharedGroup": "snipe_echo",
+          "payload": "damage",
+          "targetRule": "hit_target",
+          "maxTargets": 1,
+          "scaleBP": 10000,
+          "pvpScaleBP": 3500,
+          "priority": 10
+        }
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2001,
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 29,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 17,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2002,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2003,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 50,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 164,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2004,
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 184,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2005,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 21,
+        "Max": 23
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2006,
+    "Affixes": [
+      {
+        "Attr": 3,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 70,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 164,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2007,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 25,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 65,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2008,
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2009,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 41,
+        "Mode": 0
+      },
+      {
+        "Attr": 25,
+        "Value": 2,
+        "Mode": 1
+      },
+      {
+        "Attr": 13,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 19,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2010,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 42,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2011,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 23,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 45,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 19,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 23,
+        "Max": 25
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2012,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 68,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 41,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 17,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "dark",
+        "value": 600
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2013,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 241,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 13,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 241,
+        "Max": 265
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2014,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 204,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2015,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 57,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2016,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 41,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 20,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 60
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2017,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 51,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2018,
+    "Affixes": [
+      {
+        "Attr": 3,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 54,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 217,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 54,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 3,
+        "Min": 12,
+        "Max": 13
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10401,
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 2019,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 78,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 8
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2020,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 54,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 36,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 8
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2023,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 62,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 331,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 17,
+        "Min": 62,
+        "Max": 68
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "holy",
+        "value": 800
+      },
+      {
+        "kind": "element_resist_bp",
+        "element": "dark",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2024,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 210,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 70,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 210,
+        "Max": 231
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 30
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2025,
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 323,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 65,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2026,
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2027,
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 239,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 63,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 16,
+        "Max": 17
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "branch",
+        "profession": 3,
+        "branch": "right",
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 2028,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 46,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 70,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 46,
+        "Max": 50
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "branch",
+        "profession": 3,
+        "branch": "right",
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 2029,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 35,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 65,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2030,
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 140,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2031,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 74,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 27,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 74,
+        "Max": 81
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2032,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 83,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 73,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 18,
+        "Max": 19
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "school",
+        "school": "healing",
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 2033,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 61,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 65,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 27,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2034,
+    "Affixes": [
+      {
+        "Attr": 66,
+        "Value": 296,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 61,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 296,
+        "Max": 325
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_damage_bp",
+        "element": "fire",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2035,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 27,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2036,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 45,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 6
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2037,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2038,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 124,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2039,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 69,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2040,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 81,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2041,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 72,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2042,
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2043,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 124,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2044,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 81,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2045,
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 23,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 23,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 354,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 35,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 23,
+        "Max": 25
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2046,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 201,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 60
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2047,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 35,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 426,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "holy",
+        "value": 1200
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2048,
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 25,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 162,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2049,
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 19,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 255,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 71,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 9,
+        "Min": 19,
+        "Max": 20
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2050,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 73,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 243,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "dark",
+        "value": 1200
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2051,
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 79,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 32,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2052,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 88,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 60
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2053,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 286,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 80,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 21,
+        "Max": 23
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "class",
+        "profession": 2,
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 2054,
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 24,
+        "Mode": 0
+      },
+      {
+        "Attr": 7,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2055,
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 214,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 21,
+        "Max": 23
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 25
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2056,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 225,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 78,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 32,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 225,
+        "Max": 247
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "school",
+        "school": "healing",
+        "levels": 2
+      }
+    ]
+  },
+  {
+    "BaseID": 2057,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 99,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 79,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 32,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 99,
+        "Max": 108
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2058,
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 33,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 220,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 20,
+        "MinPercent": 20,
+        "MaxPercent": 30
+      }
+    ],
+    "TypedEffects": [
+      {
+        "kind": "element_mitigation_bp",
+        "element": "ice",
+        "value": 400
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2059,
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 69,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 249,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 10,
+        "Max": 11
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "class",
+        "profession": 5,
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 2060,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 72,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2061,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 163,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2062,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2063,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 81,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2101,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 27,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 37,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 5
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2102,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 23,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 19,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2103,
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 7,
+        "Min": 12,
+        "Max": 13
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2104,
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 21,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "fire",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2105,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 178,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 27,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 15
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2106,
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 344,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 29,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 18,
+        "Max": 19
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2107,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 35,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 27,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 77,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 15,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 20
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2108,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 51,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 236,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2401,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 29,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2402,
+    "Affixes": [
+      {
+        "Attr": 29,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 164,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2403,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 32,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 70,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2404,
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 189,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 12
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2405,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 81,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 62,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 26,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 15,
+        "Max": 16
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10301,
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 2406,
+    "Affixes": [
+      {
+        "Attr": 29,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 208,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 55,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 29,
+        "Min": 18,
+        "Max": 19
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2407,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 135,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 72,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 29,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2408,
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 390,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 81,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 390,
+        "Max": 429
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2409,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 20,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 198,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 76,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 20,
+        "Max": 22
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "all",
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 2410,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 19,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 289,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 25,
+        "Value": -7,
+        "Mode": 1
+      },
+      {
+        "Attr": 34,
+        "Value": -120,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 19,
+        "Max": 20
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2501,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 20,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 62,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "holy",
+        "value": 600
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2502,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 19,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 45,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 10,
+        "Max": 11
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2503,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 193,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 48,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 10
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2504,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 78,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 54,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 15
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2505,
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 102,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 27,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2506,
+    "Affixes": [
+      {
+        "Attr": 66,
+        "Value": 450,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 72,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 450,
+        "Max": 495
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2507,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 58,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 286,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "holy",
+        "value": 800
+      },
+      {
+        "kind": "element_resist_bp",
+        "element": "dark",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2508,
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 35,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 573,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 13,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 118,
+        "Min": 14,
+        "Max": 15
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_absorb_bp",
+        "element": "holy",
+        "value": 400
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2509,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 131,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 523,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 24,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 16,
+        "Max": 17
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "proc",
+        "proc": {
+          "id": "emergency_heal",
+          "trigger": "on_direct_damage_taken",
+          "skillId": 10301,
+          "fixedRank": 5,
+          "chanceBP": 2000,
+          "icdMs": 15000,
+          "sharedGroup": "emergency_heal",
+          "payload": "heal",
+          "targetRule": "self",
+          "maxTargets": 1,
+          "scaleBP": 10000,
+          "pvpScaleBP": 3500,
+          "hpBelowPct": 30,
+          "priority": 10
+        }
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2551,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 29,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 5
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2552,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 38,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 9,
+        "Max": 10
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2553,
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 34,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 142,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 34,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 60
+      }
+    ],
+    "TypedEffects": [
+      {
+        "kind": "element_damage_bp",
+        "element": "fire",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2554,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 91,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 20,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 47,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 12
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2555,
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 45,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 173,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 45,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 60
+      }
+    ],
+    "TypedEffects": [
+      {
+        "kind": "element_damage_bp",
+        "element": "ice",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2556,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 60,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 221,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "dark",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2557,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 144,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 26,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 65,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 20
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2558,
+    "Affixes": [
+      {
+        "Attr": 66,
+        "Value": 301,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 60,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 60,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 301,
+        "Max": 331
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 15,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 60
+      }
+    ],
+    "TypedEffects": [
+      {
+        "kind": "element_damage_bp",
+        "element": "fire",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2559,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 24,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 144,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 83,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 34,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 24,
+        "Max": 26
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10301,
+        "levels": 2
+      }
+    ]
+  },
+  {
+    "BaseID": 2560,
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 416,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 68,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 68,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 66,
+        "Min": 416,
+        "Max": 457
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "enemy_element_pierce_bp",
+        "element": "ice",
+        "value": 600
+      },
+      {
+        "kind": "element_damage_bp",
+        "element": "ice",
+        "value": 1000
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2581,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 47,
+        "Min": 2,
+        "Max": 3
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2582,
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 155,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 8
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2583,
+    "Affixes": [
+      {
+        "Attr": 29,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 184,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2584,
+    "Affixes": [
+      {
+        "Attr": 29,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 136,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 34,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 60
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2585,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 33,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 209,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 54,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 15
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2586,
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 450,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 65,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2587,
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 72,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 29,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2588,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 221,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 60,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 12,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 60
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2589,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 298,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 83,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 17,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 19,
+        "Min": 30,
+        "Max": 33
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10002,
+        "levels": 2
+      }
+    ]
+  },
+  {
+    "BaseID": 2590,
+    "Affixes": [
+      {
+        "Attr": 47,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 390,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 83,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 25,
+        "Value": -7,
+        "Mode": 1
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 390,
+        "Max": 429
+      }
+    ],
+    "LocalEnhancements": [
+      {
+        "Attr": 47,
+        "Percent": 60,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2601,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 24,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 54,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 12
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2602,
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 58,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 217,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 58,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 12,
+        "Max": 13
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_absorb_bp",
+        "element": "dark",
+        "value": 400
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2603,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 192,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 41,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 192,
+        "Max": 211
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "aura",
+        "aura": {
+          "id": "holy_feather",
+          "fixedRank": 1,
+          "family": "holy_feather",
+          "modifier": "element_resist_bp",
+          "element": "holy",
+          "value": 800,
+          "radiusPx": 240,
+          "refreshMs": 500,
+          "leaseMs": 1000,
+          "maxPlayers": 6,
+          "includeActivePet": true,
+          "visualKey": "圣羽护佑",
+          "priority": 10,
+          "pvpScaleBP": 5000
+        }
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2604,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 32,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 204,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 51,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2605,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 29,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 6
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2606,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 88,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 19,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 8,
+        "Max": 9
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2607,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 177,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 52,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 177,
+        "Max": 194
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 25
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2608,
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 30,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2609,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 93,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "holy",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2610,
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 41,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 163,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 41,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 9,
+        "Max": 10
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_damage_bp",
+        "element": "ice",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": [
+      {
+        "scope": "school",
+        "school": "frost",
+        "levels": 1
+      }
+    ]
+  },
+  {
+    "BaseID": 2701,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2702,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 36,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 8
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2703,
+    "Affixes": [
+      {
+        "Attr": 23,
+        "Value": 250,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 3,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 45,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 23,
+        "Min": 250,
+        "Max": 275
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2704,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 67,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 19,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 45,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2705,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 64,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 44,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 19,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 5,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 61,
+        "Min": 9,
+        "Max": 10
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2706,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 43,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "magic_find_pct",
+        "value": 10
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2707,
+    "Affixes": [
+      {
+        "Attr": 118,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 141,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 19,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2803,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 51,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2804,
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 50,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2805,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 7,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 204,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2806,
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2807,
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2808,
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 164,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2809,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 51,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2810,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 37,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2811,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 76,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2812,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 38,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 17,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2813,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 29,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 51,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2814,
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 124,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 15,
+        "MinPercent": 15,
+        "MaxPercent": 25
+      }
+    ],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "ice",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2815,
+    "Affixes": [
+      {
+        "Attr": 3,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 50,
+        "Mode": 0
+      },
+      {
+        "Attr": 15,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 164,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2816,
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 21,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 17,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2817,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 39,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 180,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2818,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 124,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 72,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 29,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2819,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 53,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 17,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2820,
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 41,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 17,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2821,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 36,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 20,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 60
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2822,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 51,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2823,
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 102,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 24,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2824,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 204,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "holy",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2825,
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 19,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 7,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 60
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2826,
+    "Affixes": [
+      {
+        "Attr": 9,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 225,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2827,
+    "Affixes": [
+      {
+        "Attr": 27,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 7,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 69,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 58,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2828,
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2829,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 201,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 32,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 69,
+        "Min": 15,
+        "Max": 16
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2830,
+    "Affixes": [
+      {
+        "Attr": 15,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 3,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 67,
+        "Mode": 0
+      },
+      {
+        "Attr": 66,
+        "Value": 242,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 15,
+        "Min": 18,
+        "Max": 19
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10401,
+        "levels": 2
+      }
+    ]
+  },
+  {
+    "BaseID": 2831,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 225,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 58,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2832,
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 131,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 24,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2867,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 72,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2868,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 81,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2869,
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 178,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2870,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 164,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2871,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 81,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2872,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 72,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2877,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 164,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2878,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 72,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2879,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 81,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2880,
+    "Affixes": [
+      {
+        "Attr": 19,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 1,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2883,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 100,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 27,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 60
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2884,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 88,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 29,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2885,
+    "Affixes": [
+      {
+        "Attr": 1,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 2,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 23,
+        "Value": 266,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 72,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2886,
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 9,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 143,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2887,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 60,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 29,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2888,
+    "Affixes": [
+      {
+        "Attr": 7,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 95,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 152,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 14,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2889,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 37,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 51,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2890,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 24,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 6,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2891,
+    "Affixes": [
+      {
+        "Attr": 69,
+        "Value": 12,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 76,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 13,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 27,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 40,
+        "MinPercent": 40,
+        "MaxPercent": 60
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2892,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 36,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 17,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 268,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 10,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 15,
+        "MinPercent": 15,
+        "MaxPercent": 25
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2893,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 361,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 16,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 32,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 34,
+        "Min": 361,
+        "Max": 397
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2894,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 119,
+        "Mode": 0
+      },
+      {
+        "Attr": 19,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 67,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 9,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 119,
+        "Max": 130
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10102,
+        "levels": 2
+      }
+    ]
+  },
+  {
+    "BaseID": 2895,
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 283,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 23,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 60,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2896,
+    "Affixes": [
+      {
+        "Attr": 5,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 175,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 32,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 5,
+        "Min": 28,
+        "Max": 30
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2897,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 99,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 58,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 8,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 24,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2898,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 28,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 9,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 154,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "dark",
+        "value": 800
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2899,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 169,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 20,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 76,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 11,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 169,
+        "Max": 185
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": [
+      {
+        "scope": "single",
+        "skillId": 10301,
+        "levels": 2
+      }
+    ]
+  },
+  {
+    "BaseID": 2900,
+    "Affixes": [
+      {
+        "Attr": 13,
+        "Value": 34,
+        "Mode": 1
+      },
+      {
+        "Attr": 36,
+        "Value": 104,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 226,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 16,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [
+      {
+        "Attr": 36,
+        "Min": 104,
+        "Max": 114
+      }
+    ],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2901,
+    "Affixes": [
+      {
+        "Attr": 34,
+        "Value": 448,
+        "Mode": 0
+      },
+      {
+        "Attr": 47,
+        "Value": 20,
+        "Mode": 0
+      },
+      {
+        "Attr": 5,
+        "Value": 15,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 31,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 13,
+        "Percent": 60,
+        "MinPercent": 60,
+        "MaxPercent": 80
+      }
+    ],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2902,
+    "Affixes": [
+      {
+        "Attr": 70,
+        "Value": 10,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 587,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 22,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 11,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 8,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [
+      {
+        "Attr": 17,
+        "Percent": 15,
+        "MinPercent": 15,
+        "MaxPercent": 25
+      }
+    ],
+    "TypedEffects": [
+      {
+        "kind": "element_resist_bp",
+        "element": "fire",
+        "value": 1200
+      }
+    ],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2903,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 69,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 17,
+        "Value": 14,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2904,
+    "Affixes": [
+      {
+        "Attr": 36,
+        "Value": 81,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2905,
+    "Affixes": [
+      {
+        "Attr": 61,
+        "Value": 5,
+        "Mode": 0
+      },
+      {
+        "Attr": 36,
+        "Value": 72,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 31,
+        "Mode": 0
+      },
+      {
+        "Attr": 69,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 13,
+        "Value": 4,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  },
+  {
+    "BaseID": 2906,
+    "Affixes": [
+      {
+        "Attr": 17,
+        "Value": 18,
+        "Mode": 0
+      },
+      {
+        "Attr": 34,
+        "Value": 164,
+        "Mode": 0
+      },
+      {
+        "Attr": 70,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 61,
+        "Value": 4,
+        "Mode": 0
+      },
+      {
+        "Attr": 118,
+        "Value": 6,
+        "Mode": 0
+      }
+    ],
+    "VariableAffixes": [],
+    "LocalEnhancements": [],
+    "TypedEffects": [],
+    "SkillBonuses": []
+  }
+]

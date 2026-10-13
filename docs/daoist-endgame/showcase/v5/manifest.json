@@ -1,0 +1,5735 @@
+{
+  "schema_version": 1,
+  "account": "test001",
+  "source_baseline_commit": "d9c06ddd53bbb777bc87248b881871ff64d2f947",
+  "source_catalogs": {
+    "unique_catalog_version": "endgame-v5-scope259",
+    "unique_count": 259,
+    "formation_count": 40,
+    "rune_count": 28,
+    "content_version": 5
+  },
+  "intent": "各新增9件背包装备供看属性，保留旧物品；不自动穿戴，不改角色等级、技能或六维。",
+  "status": "deferred_by_user_pending_five_class_original_skill_restoration",
+  "grant_count": 27,
+  "embedded_rune_instance_count": 44,
+  "total_new_item_instances_if_executed": 71,
+  "slots_per_character": [
+    1,
+    2,
+    3,
+    6,
+    7,
+    8,
+    9,
+    10,
+    13
+  ],
+  "excluded_slots": {
+    "4": "与双手武器冲突",
+    "5": "与双手武器冲突",
+    "11": "259目录无对应法宝，不能虚构",
+    "14-25": "不扩大到目录外飞升槽"
+  },
+  "policy": {
+    "execution_status": "deferred_by_user_pending_five_class_original_skill_restoration",
+    "max_catalog_roll_bp": 12000,
+    "max_roll_scope": "仅显式可变词条与局部强化取合法最高档；固定词条、诅咒、技能、触发和光环原值保留，不能整体乘1.2。",
+    "destination": "backpack_only",
+    "auto_equip": false,
+    "preserve_existing_items": true,
+    "change_character_level_skills_stats_or_free_points": false,
+    "unique_natural_affixes": "新建0普通随机词条的目录展示件，不叠满黄装附加或目录外卡片。",
+    "unique_socket_policy": "0孔；同一唯一装备不能再结宿阵。",
+    "formation_socket_policy": "天生零附加、无套装、属性已确认白底；精确4/5孔及配方顺序，各孔真实新UID星篆和固定Card快照，无多余空孔。",
+    "new_item_upgrades": "加工0、融合0；不触碰旧件加工、融合、孔位、绑定、UID或位置。",
+    "wearability": "职业、等级、性别必须匹配；六维门槛原样展示，可因现有加点未满足，不因此降级替换、不洗点、不强穿。",
+    "power_claim": "按所选玩法的强力目录组合，不宣称全敌人、全加点、黄装词条或加工条件下的数学全局最优。",
+    "inventory": "各9件、共27件；每条衣服仅选实际性别的一件。重新查空格，不能覆盖、删除或换掉旧物品。"
+  },
+  "factory_contract": {
+    "unique": [
+      "加载实际已部署ItemDef，核对职业、等级、性别及目录版本。",
+      "domain.NewStack(def,1)生成新装备UID和满耐久，不复制现有UID。",
+      "domain.ApplyUnique(&stack,def,func(n int) int { return n-1 })，确认成功、UniqueID=BaseID、UniqueContentVersion=5、UniqueRollBP=12000。",
+      "不伪造Affixes；目录属性由实际ItemDef和生产域函数解析。"
+    ],
+    "formation": [
+      "从真实白底ItemDef调用domain.NewStack(def,1)；确认AstralBaseEligible与EquipmentSocketCapacity。",
+      "新展示件固定FormationContentVersion=5、FormationRollBP=12000，UniqueID=0。",
+      "精确孔数和顺序；每枚星篆用真实Rune ItemDef调用NewStack，保留其Card快照、独立UID及正确槽序。",
+      "MatchAstralRecipe必须匹配指定ID；ActiveAstralRecipes模拟中每频道只有一个所选宿阵。"
+    ],
+    "persistence": "复用本地已存在的隔离展示发放工具及服务端物品持久化路径；不用修改业务代码，不手编SQL绕过实例、归属、插槽不变量。",
+    "preflight": [
+      "本计划暂缓执行；待用户五职业原版技能复原工作允许发放后再继续。",
+      "确认目标仍为test001及角色42/183/206，重读名称、职业、60级、实际性别及装备背包空格。",
+      "正式环境及实际加载目录复核；若不符，停下对应发放，不改其他账号或角色。",
+      "复用已有安全在线同步或离线维护流程及原子保存，避免旧会话覆盖新增库存。",
+      "保存前后快照及此次27装备UID、所有镶嵌星篆UID；完成后重读归属、版本、roll、属性、孔序、唯一性和位置。"
+    ]
+  },
+  "source_sha256": {
+    "docs/daoist-endgame/balance/native_equipment_budget_references.json": "f1f1c27567cb09f965ec0cf8a983ebdd01730c6b737d73edd221ffb86cbad641",
+    "server/docs/endgame/astral_runes.json": "2850bf9011ef9aea594fe978d2e517faca219fbe92e4d1e2e5ed0f449707d20c",
+    "server/internal/domain/endgame_runes_catalog.go": "7204dc93e4ec346c64acf275ffe0fc75d816523a4428878e76ae7dbbb2bf44e7",
+    "server/internal/domain/unique_catalog_allclasses.json": "79f91732c8e64aa581f0865ed94dd1231ea0bea0505c37b90615b01acb8acd6c",
+    "server/internal/domain/unique_catalog_assassin.json": "d31ae697e6ad4a6fb1994da2e89bc44e15f729f30e4828157a8c3af17eea66fe",
+    "server/internal/domain/unique_catalog_healer.json": "2f08496f309ac30309c9861f4e350077837be4f12d9b70fa7886f87ce7500676",
+    "server/internal/domain/unique_catalog_sharedcaster.json": "53ad75d05ae3254a32c5aba627ecdc45091e7ec583ff8363f9018d5cdb9911f5",
+    "server/internal/domain/unique_catalog_swordsman.json": "92964547b2c8f6e88e550c813c14563eb72d4279c9129009e463284682aeb10d",
+    "server/internal/domain/unique_catalog_unrestricted.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "server/internal/domain/unique_catalog_warlock.json": "6823f837d15c138ad37186c07e6e28693406c0952ef70933241fd4360fc91bab",
+    "server/internal/domain/unique_catalog_warrior.json": "7ec7802e7a8c4d62abd72106e1546f869724a365ad6165549e0ce9af9fb8850d"
+  },
+  "loadouts": [
+    {
+      "character_id": 42,
+      "character_name": "春霞姐姐",
+      "class": "assassin",
+      "race_zero_based": 2,
+      "profession_one_based": 3,
+      "expected_level": 60,
+      "gender": "resolve locally; never infer from name",
+      "build": "先手会心／普攻输出",
+      "count": 9,
+      "items": [
+        {
+          "slot": 1,
+          "slot_name": "面饰",
+          "quantity": 1,
+          "kind": "formation",
+          "candidates": [
+            {
+              "base_id": 2707,
+              "base_name": "口罩",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 18,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 0,
+                "mdef": 3,
+                "hit_rate": 4,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 3,
+              "equipment_type": 101,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-26.sql:855",
+              "source_desc": "server/migrations/000000_init-29.sql:3490"
+            }
+          ],
+          "rationale": "低白字面饰承载辅阵，保留项链救命触发与鞋的防护。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 5,
+          "sockets": [
+            {
+              "index": 0,
+              "rune_item_id": 1900028007,
+              "rune_name": "星篆·箕水豹",
+              "minimum_level": 23,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 19,
+                  "value": 4,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "rune_item_id": 1900028015,
+              "rune_name": "星篆·奎木狼",
+              "minimum_level": 37,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 9,
+                  "value": 3,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "rune_item_id": 1900028016,
+              "rune_name": "星篆·娄金狗",
+              "minimum_level": 39,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 7,
+                  "value": 3,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "rune_item_id": 1900028027,
+              "rune_name": "星篆·翼火蛇",
+              "minimum_level": 58,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 27,
+                  "value": 2,
+                  "mode": 1
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "rune_item_id": 1900028028,
+              "rune_name": "星篆·轸水蚓",
+              "minimum_level": 60,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 38,
+                  "value": 1,
+                  "mode": 0
+                }
+              ]
+            }
+          ],
+          "display_name": "行囊漏晨光 · 口罩",
+          "formation_id": 38,
+          "unique_id": 0,
+          "channel": "辅阵",
+          "formation_roll_bp": 12000,
+          "required_level": 60,
+          "catalog_definition": {
+            "id": 38,
+            "name": "行囊漏晨光",
+            "runes": [
+              1900028007,
+              1900028015,
+              1900028016,
+              1900028027,
+              1900028028
+            ],
+            "order": [
+              "箕",
+              "奎",
+              "娄",
+              "翼",
+              "轸"
+            ],
+            "channel": "辅阵",
+            "minLevel": 60,
+            "professions": 0,
+            "slots": [
+              1,
+              3,
+              6,
+              7,
+              9
+            ],
+            "affixes": [
+              {
+                "attr": 27,
+                "value": 18,
+                "mode": 1
+              },
+              {
+                "attr": 19,
+                "value": 40,
+                "mode": 1
+              },
+              {
+                "attr": 34,
+                "value": 280,
+                "mode": 0
+              },
+              {
+                "attr": 47,
+                "value": 100,
+                "mode": 0
+              },
+              {
+                "attr": 1,
+                "value": 24,
+                "mode": 0
+              },
+              {
+                "attr": 36,
+                "value": 220,
+                "mode": 0
+              }
+            ],
+            "lore": "行囊底破了一洞，晨光沿山路漏了一地。行者本想补好，后来发现落在后面的伤者循着光也能赶上来。",
+            "identity": "移动清剿的长途行阵",
+            "benefit": "物理输出为主；移动速度、命中、生命、物攻、力量、法力提供独立于星篆的完整词条",
+            "tradeoff": "MF15%替换击杀回血5%；刷宝让出续航；占用同类宿阵名额",
+            "powerTier": "highvalue",
+            "traits": [],
+            "reservedSkills": [],
+            "variableAffixes": [
+              {
+                "attr": 34,
+                "min": 280,
+                "max": 308
+              }
+            ],
+            "typedEffects": [
+              {
+                "kind": "magic_find_pct",
+                "value": 15
+              }
+            ],
+            "skillBonuses": [],
+            "v5BudgetExchange": {
+              "removedTraits": [
+                {
+                  "kind": "kill_mend",
+                  "powerBP": 500,
+                  "thresholdPct": 0
+                }
+              ],
+              "policy": "replacement_only_no_extra_free_budget",
+              "reason": "MF15%替换击杀回血5%；刷宝让出续航"
+            }
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 27,
+              "Value": 18,
+              "Mode": 1
+            },
+            {
+              "Attr": 19,
+              "Value": 40,
+              "Mode": 1
+            },
+            {
+              "Attr": 34,
+              "Value": 308,
+              "Mode": 0
+            },
+            {
+              "Attr": 47,
+              "Value": 100,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 220,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 2,
+          "slot_name": "头饰",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2049,
+              "base_name": "夜魔头巾",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 52,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 216,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 58,
+                "mdef": 0,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 7,
+              "equipment_type": 102,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:485",
+              "source_desc": "server/migrations/000000_init-28.sql:6700"
+            }
+          ],
+          "rationale": "普攻增伤18%，配合会心与攻速；不是简单选择最高等级的防御头巾。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "夜市收摊人",
+          "unique_id": 2049,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 52,
+          "catalog_definition": {
+            "ID": 2049,
+            "BaseID": 2049,
+            "BaseName": "夜魔头巾",
+            "Role": "assassin",
+            "Professions": 4,
+            "BeginnerAllowed": false,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 2,
+            "LevelRequirement": 52,
+            "ResourceLevel": 7,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-25.sql:485",
+            "SourceDesc": "server/migrations/000000_init-28.sql:6700",
+            "Name": "夜市收摊人",
+            "Lore": "帽内黑线能吸住街灯投下的一小段影子。收摊时，主人把影子从线间逐条放出，巷口的灯便会依次再亮一瞬。",
+            "LoreRoot": "原型·夜魔头巾夜行",
+            "Identity": "夜行普攻头巾",
+            "Benefit": "物理输出底盘：灵巧、物攻双端、力量、命中、物理会心bp、生命",
+            "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+            "PowerTier": "highvalue",
+            "Affixes": [
+              {
+                "Attr": 9,
+                "Value": 19,
+                "Mode": 0
+              },
+              {
+                "Attr": 47,
+                "Value": 6,
+                "Mode": 0
+              },
+              {
+                "Attr": 1,
+                "Value": 14,
+                "Mode": 0
+              },
+              {
+                "Attr": 19,
+                "Value": 14,
+                "Mode": 0
+              },
+              {
+                "Attr": 23,
+                "Value": 255,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 71,
+                "Mode": 0
+              }
+            ],
+            "Traits": [
+              {
+                "Kind": "basic_focus",
+                "PowerBP": 1800,
+                "ThresholdPct": 0
+              }
+            ],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 9,
+                "Min": 19,
+                "Max": 20
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [],
+            "SkillBonuses": []
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 9,
+              "Value": 20,
+              "Mode": 0
+            },
+            {
+              "Attr": 47,
+              "Value": 6,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 19,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 255,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 71,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 3,
+          "slot_name": "项链",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2509,
+              "base_name": "天使泪项链",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 56,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 0,
+                "mdef": 13,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 9,
+              "equipment_type": 103,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:5699",
+              "source_desc": "server/migrations/000000_init-29.sql:1246"
+            }
+          ],
+          "rationale": "523生命与低血自疗触发，补足武器和手套的生命代价。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "凝泪未干",
+          "unique_id": 2509,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 56,
+          "catalog_definition": {
+            "ID": 2509,
+            "BaseID": 2509,
+            "BaseName": "天使泪项链",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 3,
+            "LevelRequirement": 56,
+            "ResourceLevel": 9,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-25.sql:5699",
+            "SourceDesc": "server/migrations/000000_init-29.sql:1246",
+            "Name": "凝泪未干",
+            "Lore": "传说中的泪石表面始终干燥，内里却有一滴水在往上流。到顶时水不会落下，只会暂时映出一个苍白的月。",
+            "LoreRoot": "原型·天使泪凝宝石传说",
+            "Identity": "56级救急治疗链改为受直接伤害后存活且低于30%生命的自救触发；长冷却换跨职业救急搭配，不能脱战换装自动触发或复活。",
+            "Benefit": "生命容错底盘：精神、法力、生命、魔防、状态抗性、魔法平减；存活且生命不高于30%时自救：20%触发固定5级治愈术，冷却15秒",
+            "Tradeoff": "触发约占40%总预算；失去原全部Traits及原局部强化，空窗仍过被动底线",
+            "PowerTier": "builddefining",
+            "Affixes": [
+              {
+                "Attr": 61,
+                "Value": 16,
+                "Mode": 0
+              },
+              {
+                "Attr": 36,
+                "Value": 131,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 523,
+                "Mode": 0
+              },
+              {
+                "Attr": 17,
+                "Value": 24,
+                "Mode": 0
+              },
+              {
+                "Attr": 118,
+                "Value": 8,
+                "Mode": 0
+              },
+              {
+                "Attr": 70,
+                "Value": 8,
+                "Mode": 0
+              }
+            ],
+            "Traits": [],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 61,
+                "Min": 16,
+                "Max": 17
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [
+              {
+                "kind": "proc",
+                "proc": {
+                  "id": "emergency_heal",
+                  "trigger": "on_direct_damage_taken",
+                  "skillId": 10301,
+                  "fixedRank": 5,
+                  "chanceBP": 2000,
+                  "icdMs": 15000,
+                  "sharedGroup": "emergency_heal",
+                  "payload": "heal",
+                  "targetRule": "self",
+                  "maxTargets": 1,
+                  "scaleBP": 10000,
+                  "pvpScaleBP": 3500,
+                  "hpBelowPct": 30,
+                  "priority": 10
+                }
+              }
+            ],
+            "SkillBonuses": []
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 61,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 131,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 523,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 8,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 8,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 6,
+          "slot_name": "手套",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2410,
+              "base_name": "魔牙护腕",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 60,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 0,
+                "mdef": 0,
+                "hit_rate": 24,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 10,
+              "equipment_type": 106,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:4577",
+              "source_desc": "server/migrations/000000_init-29.sql:124"
+            }
+          ],
+          "rationale": "物攻与7%普攻间隔缩短；低血强攻只计条件收益。2408的会心16%会被2590较强同名18%覆盖，故不选2408。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "牙根的梦",
+          "unique_id": 2410,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 60,
+          "catalog_definition": {
+            "ID": 2410,
+            "BaseID": 2410,
+            "BaseName": "魔牙护腕",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 6,
+            "LevelRequirement": 60,
+            "ResourceLevel": 10,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-25.sql:4577",
+            "SourceDesc": "server/migrations/000000_init-29.sql:124",
+            "Name": "牙根的梦",
+            "Lore": "魔牙护腕内的牙根总在缓慢生长，磨下的粉会结成齿形。梦里听见咀嚼的人，醒来往往发现腕扣又紧了一格。",
+            "LoreRoot": "原典·魔牙护腕魔王牙传说",
+            "Identity": "危险低血伤害腕",
+            "Benefit": "物理输出底盘：物攻双端、力量、命中、物理会心bp、灵巧、普攻间隔百分比",
+            "Tradeoff": "仍降低生命；特性须满足原有技能或战况条件",
+            "PowerTier": "highvalue",
+            "Affixes": [
+              {
+                "Attr": 47,
+                "Value": 19,
+                "Mode": 0
+              },
+              {
+                "Attr": 1,
+                "Value": 16,
+                "Mode": 0
+              },
+              {
+                "Attr": 19,
+                "Value": 16,
+                "Mode": 0
+              },
+              {
+                "Attr": 23,
+                "Value": 289,
+                "Mode": 0
+              },
+              {
+                "Attr": 9,
+                "Value": 16,
+                "Mode": 0
+              },
+              {
+                "Attr": 25,
+                "Value": -7,
+                "Mode": 1
+              },
+              {
+                "Attr": 34,
+                "Value": -120,
+                "Mode": 0
+              }
+            ],
+            "Traits": [
+              {
+                "Kind": "desperate_assault",
+                "PowerBP": 2600,
+                "ThresholdPct": 25
+              }
+            ],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 47,
+                "Min": 19,
+                "Max": 20
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [],
+            "SkillBonuses": []
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 47,
+              "Value": 20,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 19,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 289,
+              "Mode": 0
+            },
+            {
+              "Attr": 9,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -7,
+              "Mode": 1
+            },
+            {
+              "Attr": 34,
+              "Value": -120,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 7,
+          "slot_name": "戒指",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2590,
+              "base_name": "猫眼石武力之戒",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 60,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 10,
+                "max_atk": 10,
+                "matk": 0,
+                "def": 0,
+                "mdef": 0,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 10,
+              "equipment_type": 107,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-26.sql:92",
+              "source_desc": "server/migrations/000000_init-29.sql:2164"
+            }
+          ],
+          "rationale": "会心特性18%、会心底盘与攻速7%，本件戒指白字物攻强化最高80%。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "窄瞳杀机",
+          "unique_id": 2590,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 60,
+          "catalog_definition": {
+            "ID": 2590,
+            "BaseID": 2590,
+            "BaseName": "猫眼石武力之戒",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 7,
+            "LevelRequirement": 60,
+            "ResourceLevel": 10,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-26.sql:92",
+            "SourceDesc": "server/migrations/000000_init-29.sql:2164",
+            "Name": "窄瞳杀机",
+            "Lore": "猫眼里的竖瞳会在将要出手时收细，迟疑时反而张开。收藏者把它收进暗匣后，匣缝仍留着一点凝视般的光。",
+            "LoreRoot": "原创·猫眼石武力戒",
+            "Identity": "60级猫眼武戒保留会心追逐；纯数值会心率与条件会心收益可形成质变，不额外塞一次施法机制。",
+            "Benefit": "物理输出底盘：物攻双端、物理会心bp、力量、命中、生命、灵巧、普攻间隔百分比；本件未加工白字物攻强化60–80%，不放大其它来源",
+            "Tradeoff": "本件白字局部强化占预算，不放大其它装备、卡、加工、固有六维或额外词条",
+            "PowerTier": "builddefining",
+            "Affixes": [
+              {
+                "Attr": 47,
+                "Value": 10,
+                "Mode": 0
+              },
+              {
+                "Attr": 23,
+                "Value": 390,
+                "Mode": 0
+              },
+              {
+                "Attr": 1,
+                "Value": 17,
+                "Mode": 0
+              },
+              {
+                "Attr": 19,
+                "Value": 17,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 83,
+                "Mode": 0
+              },
+              {
+                "Attr": 9,
+                "Value": 17,
+                "Mode": 0
+              },
+              {
+                "Attr": 25,
+                "Value": -7,
+                "Mode": 1
+              }
+            ],
+            "Traits": [
+              {
+                "Kind": "critical_focus",
+                "PowerBP": 1800,
+                "ThresholdPct": 0
+              }
+            ],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 23,
+                "Min": 390,
+                "Max": 429
+              }
+            ],
+            "LocalEnhancements": [
+              {
+                "Attr": 47,
+                "Percent": 60,
+                "MinPercent": 60,
+                "MaxPercent": 80
+              }
+            ],
+            "TypedEffects": [],
+            "SkillBonuses": []
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 47,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 429,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 19,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 83,
+              "Mode": 0
+            },
+            {
+              "Attr": 9,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -7,
+              "Mode": 1
+            }
+          ],
+          "max_roll_local_enhancement_percent": [
+            {
+              "attr": 47,
+              "percent": 80,
+              "scope": "this item's unrefined intrinsic white stats only"
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "slot_name": "衣服",
+          "quantity": 1,
+          "kind": "formation",
+          "candidates": [
+            {
+              "base_id": 2895,
+              "base_name": "青龙铠（男）",
+              "equipment_sex_restriction": 1,
+              "character_gender_when_selected": 1,
+              "base_required_level": 48,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 196,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 54,
+                "mdef": 27,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 6,
+              "equipment_type": 108,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-24.sql:10097",
+              "source_desc": "server/migrations/000000_init-27.sql:13330"
+            },
+            {
+              "base_id": 2896,
+              "base_name": "青龙铠（女）",
+              "equipment_sex_restriction": 2,
+              "character_gender_when_selected": 0,
+              "base_required_level": 48,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 196,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 54,
+                "mdef": 27,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 6,
+              "equipment_type": 108,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-24.sql:10098",
+              "source_desc": "server/migrations/000000_init-27.sql:13343"
+            }
+          ],
+          "rationale": "守阵增加生命、防御、双平减与低血保护；选真实性别匹配的白底。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 5,
+          "sockets": [
+            {
+              "index": 0,
+              "rune_item_id": 1900028001,
+              "rune_name": "星篆·角木蛟",
+              "minimum_level": 12,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 1,
+                  "value": 3,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "rune_item_id": 1900028004,
+              "rune_name": "星篆·房日兔",
+              "minimum_level": 17,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 34,
+                  "value": 3,
+                  "mode": 1
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "rune_item_id": 1900028003,
+              "rune_name": "星篆·氐土貉",
+              "minimum_level": 16,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 69,
+                  "value": 2,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "rune_item_id": 1900028009,
+              "rune_name": "星篆·牛金牛",
+              "minimum_level": 26,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 17,
+                  "value": 4,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "rune_item_id": 1900028014,
+              "rune_name": "星篆·壁水貐",
+              "minimum_level": 35,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 34,
+                  "value": 24,
+                  "mode": 0
+                }
+              ]
+            }
+          ],
+          "display_name": "门闩抵天倾 · 青龙铠",
+          "formation_id": 36,
+          "unique_id": 0,
+          "channel": "守阵",
+          "formation_roll_bp": 12000,
+          "required_level": 48,
+          "catalog_definition": {
+            "id": 36,
+            "name": "门闩抵天倾",
+            "runes": [
+              1900028001,
+              1900028004,
+              1900028003,
+              1900028009,
+              1900028014
+            ],
+            "order": [
+              "角",
+              "房",
+              "氐",
+              "牛",
+              "壁"
+            ],
+            "channel": "守阵",
+            "minLevel": 35,
+            "professions": 0,
+            "slots": [
+              2,
+              5,
+              8
+            ],
+            "affixes": [
+              {
+                "attr": 34,
+                "value": 42,
+                "mode": 1
+              },
+              {
+                "attr": 69,
+                "value": 34,
+                "mode": 0
+              },
+              {
+                "attr": 5,
+                "value": 30,
+                "mode": 0
+              },
+              {
+                "attr": 27,
+                "value": -5,
+                "mode": 1
+              },
+              {
+                "attr": 13,
+                "value": 42,
+                "mode": 0
+              },
+              {
+                "attr": 17,
+                "value": 45,
+                "mode": 0
+              },
+              {
+                "attr": 70,
+                "value": 26,
+                "mode": 0
+              },
+              {
+                "attr": 118,
+                "value": 18,
+                "mode": 0
+              }
+            ],
+            "lore": "应劫者见阵门下沉，便用门闩撑住横梁。名册在身后一页页自行翻过，直到最后一页出现了尚未入阵者的名字。",
+            "identity": "残血撑住重击的守关阵",
+            "benefit": "物理承伤为主；生命、物理平减、体质、防御、魔防、法术平减、异常抵抗提供独立于星篆的完整词条",
+            "tradeoff": "仍降低移动速度；占用同类宿阵名额；技能与战况条件仍按各特性生效",
+            "powerTier": "builddefining",
+            "traits": [
+              {
+                "kind": "desperate_guard",
+                "powerBP": 2400,
+                "thresholdPct": 35
+              }
+            ],
+            "reservedSkills": [],
+            "variableAffixes": [
+              {
+                "attr": 69,
+                "min": 34,
+                "max": 37
+              }
+            ]
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 34,
+              "Value": 42,
+              "Mode": 1
+            },
+            {
+              "Attr": 69,
+              "Value": 37,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 30,
+              "Mode": 0
+            },
+            {
+              "Attr": 27,
+              "Value": -5,
+              "Mode": 1
+            },
+            {
+              "Attr": 13,
+              "Value": 42,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 45,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 18,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 9,
+          "slot_name": "鞋",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2108,
+              "base_name": "天罡之靴",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 56,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 8,
+                "mdef": 0,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 8,
+              "equipment_type": 109,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:1154",
+              "source_desc": "server/migrations/000000_init-28.sql:7367"
+            }
+          ],
+          "rationale": "高血线防护12%，法防、生命和异常抗性补足近战容错。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "漏宿沉履",
+          "unique_id": 2108,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 56,
+          "catalog_definition": {
+            "ID": 2108,
+            "BaseID": 2108,
+            "BaseName": "天罡之靴",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 9,
+            "LevelRequirement": 56,
+            "ResourceLevel": 8,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-25.sql:1154",
+            "SourceDesc": "server/migrations/000000_init-28.sql:7367",
+            "Name": "漏宿沉履",
+            "Lore": "抄星图的人漏掉一处星宿，照图制成的靴每到那方天际便沉如铅。他索性留在观星台，把错处刻给后来人看。",
+            "LoreRoot": "原型·天罡靴与三十六星力",
+            "Identity": "健康守势星图靴",
+            "Benefit": "法术守势底盘：魔防、生命、魔法平减、精神、状态抗性",
+            "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+            "PowerTier": "transition",
+            "Affixes": [
+              {
+                "Attr": 17,
+                "Value": 51,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 236,
+                "Mode": 0
+              },
+              {
+                "Attr": 70,
+                "Value": 10,
+                "Mode": 0
+              },
+              {
+                "Attr": 61,
+                "Value": 15,
+                "Mode": 0
+              },
+              {
+                "Attr": 118,
+                "Value": 10,
+                "Mode": 0
+              }
+            ],
+            "Traits": [
+              {
+                "Kind": "healthy_guard",
+                "PowerBP": 1200,
+                "ThresholdPct": 85
+              }
+            ],
+            "ReservedSkills": [],
+            "VariableAffixes": [],
+            "LocalEnhancements": [],
+            "TypedEffects": [],
+            "SkillBonuses": []
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 17,
+              "Value": 51,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 236,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 15,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 10,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 10,
+          "slot_name": "背饰",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2604,
+              "base_name": "雄鹰之翼",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 24,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 0,
+                "mdef": 0,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 4,
+              "equipment_type": 110,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-26.sql:250",
+              "source_desc": "server/migrations/000000_init-29.sql:2322"
+            }
+          ],
+          "rationale": "背饰选择命中、物攻、力量和物理会心同向的路线。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "鹰羽量崖",
+          "unique_id": 2604,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 24,
+          "catalog_definition": {
+            "ID": 2604,
+            "BaseID": 2604,
+            "BaseName": "雄鹰之翼",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 10,
+            "LevelRequirement": 24,
+            "ResourceLevel": 4,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-26.sql:250",
+            "SourceDesc": "server/migrations/000000_init-29.sql:2322",
+            "Name": "鹰羽量崖",
+            "Lore": "鹰翼的羽尖各有一道山崖刻线，合起来正好是一圈悬崖。航图师找不到出口，只在最低处标了一个向上的箭头。",
+            "LoreRoot": "原型·鹰羽背翼",
+            "Identity": "精准背饰",
+            "Benefit": "物理输出底盘：命中、物攻双端、力量、物理会心bp、生命",
+            "Tradeoff": "投入集中在物理输出；不提供法攻、法术会心专精",
+            "PowerTier": "transition",
+            "Affixes": [
+              {
+                "Attr": 19,
+                "Value": 32,
+                "Mode": 0
+              },
+              {
+                "Attr": 47,
+                "Value": 4,
+                "Mode": 0
+              },
+              {
+                "Attr": 1,
+                "Value": 9,
+                "Mode": 0
+              },
+              {
+                "Attr": 23,
+                "Value": 204,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 51,
+                "Mode": 0
+              }
+            ],
+            "Traits": [],
+            "ReservedSkills": [],
+            "VariableAffixes": [],
+            "LocalEnhancements": [],
+            "TypedEffects": [],
+            "SkillBonuses": []
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 19,
+              "Value": 32,
+              "Mode": 0
+            },
+            {
+              "Attr": 47,
+              "Value": 4,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 9,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 204,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 51,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 13,
+          "slot_name": "双手武器",
+          "quantity": 1,
+          "kind": "formation",
+          "candidates": [
+            {
+              "base_id": 1810,
+              "base_name": "煞刺·伏龙",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 54,
+              "requirements": {
+                "str_need": 53,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 167
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 20,
+                "max_atk": 66,
+                "matk": 0,
+                "def": 0,
+                "mdef": 0,
+                "hit_rate": 107,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 10,
+              "equipment_type": 8,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-24.sql:11340",
+              "source_desc": "server/migrations/000000_init-28.sql:5782"
+            }
+          ],
+          "rationale": "5孔短刺战阵：物攻117%、本件白字物攻最高180%、攻速32%、初锋26%；承担生命-12%。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 5,
+          "sockets": [
+            {
+              "index": 0,
+              "rune_item_id": 1900028018,
+              "rune_name": "星篆·昴日鸡",
+              "minimum_level": 42,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 23,
+                  "value": 100,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "rune_item_id": 1900028005,
+              "rune_name": "星篆·心月狐",
+              "minimum_level": 19,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 23,
+                  "value": 100,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "rune_item_id": 1900028019,
+              "rune_name": "星篆·毕月乌",
+              "minimum_level": 44,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 47,
+                  "value": 3,
+                  "mode": 1
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "rune_item_id": 1900028020,
+              "rune_name": "星篆·觜火猴",
+              "minimum_level": 46,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 25,
+                  "value": -2,
+                  "mode": 1
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "rune_item_id": 1900028021,
+              "rune_name": "星篆·参水猿",
+              "minimum_level": 48,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 19,
+                  "value": 3,
+                  "mode": 1
+                }
+              ]
+            }
+          ],
+          "display_name": "莲子夜游 · 煞刺·伏龙",
+          "formation_id": 33,
+          "unique_id": 0,
+          "channel": "战阵",
+          "formation_roll_bp": 12000,
+          "required_level": 54,
+          "catalog_definition": {
+            "id": 33,
+            "name": "莲子夜游",
+            "runes": [
+              1900028018,
+              1900028005,
+              1900028019,
+              1900028020,
+              1900028021
+            ],
+            "order": [
+              "昴",
+              "心",
+              "毕",
+              "觜",
+              "参"
+            ],
+            "channel": "战阵",
+            "minLevel": 48,
+            "professions": 4,
+            "slots": [
+              4,
+              13
+            ],
+            "affixes": [
+              {
+                "attr": 23,
+                "value": 1400,
+                "mode": 0
+              },
+              {
+                "attr": 25,
+                "value": -32,
+                "mode": 1
+              },
+              {
+                "attr": 47,
+                "value": 117,
+                "mode": 1
+              },
+              {
+                "attr": 34,
+                "value": -12,
+                "mode": 1
+              },
+              {
+                "attr": 19,
+                "value": 40,
+                "mode": 0
+              },
+              {
+                "attr": 1,
+                "value": 28,
+                "mode": 0
+              },
+              {
+                "attr": 9,
+                "value": 28,
+                "mode": 0
+              },
+              {
+                "attr": 36,
+                "value": 220,
+                "mode": 0
+              }
+            ],
+            "lore": "莲房里的第八颗种子每夜都会少一次，天明又重新长出。刺客不再数它，只等哪一天它带回不属于此世的花粉。",
+            "identity": "先手暴击的极端短战阵",
+            "benefit": "物理输出为主；物理会心、攻击速度、物攻、命中、力量、灵巧、法力提供独立于星篆的完整词条；另有本件白字物攻强化140–180%，收益随所选武器固有白字而变",
+            "tradeoff": "仍降低生命；占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+            "powerTier": "builddefining",
+            "traits": [
+              {
+                "kind": "ambush",
+                "powerBP": 2600,
+                "thresholdPct": 85
+              }
+            ],
+            "reservedSkills": [],
+            "variableAffixes": [
+              {
+                "attr": 23,
+                "min": 1400,
+                "max": 1540
+              }
+            ],
+            "localEnhancements": [
+              {
+                "attr": 47,
+                "percent": 160,
+                "minPercent": 140,
+                "maxPercent": 180
+              }
+            ]
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 23,
+              "Value": 1540,
+              "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -32,
+              "Mode": 1
+            },
+            {
+              "Attr": 47,
+              "Value": 117,
+              "Mode": 1
+            },
+            {
+              "Attr": 34,
+              "Value": -12,
+              "Mode": 1
+            },
+            {
+              "Attr": 19,
+              "Value": 40,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 28,
+              "Mode": 0
+            },
+            {
+              "Attr": 9,
+              "Value": 28,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 220,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": [
+            {
+              "attr": 47,
+              "percent": 180,
+              "scope": "this item's unrefined intrinsic white stats only"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "character_id": 183,
+      "character_name": "术士姐姐",
+      "class": "warlock",
+      "race_zero_based": 4,
+      "profession_one_based": 5,
+      "expected_level": 60,
+      "gender": "resolve locally; never infer from name",
+      "build": "冰系／暴雪范围施法",
+      "count": 9,
+      "items": [
+        {
+          "slot": 1,
+          "slot_name": "面饰",
+          "quantity": 1,
+          "kind": "formation",
+          "candidates": [
+            {
+              "base_id": 2707,
+              "base_name": "口罩",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 18,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 0,
+                "mdef": 3,
+                "hit_rate": 4,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 3,
+              "equipment_type": 101,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-26.sql:855",
+              "source_desc": "server/migrations/000000_init-29.sql:3490"
+            }
+          ],
+          "rationale": "4孔辅阵提供45法攻、施法节蓝20%和移速，保留冰戒及技能手套。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 4,
+          "sockets": [
+            {
+              "index": 0,
+              "rune_item_id": 1900028016,
+              "rune_name": "星篆·娄金狗",
+              "minimum_level": 39,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 7,
+                  "value": 3,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "rune_item_id": 1900028017,
+              "rune_name": "星篆·胃土雉",
+              "minimum_level": 40,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 13,
+                  "value": 4,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "rune_item_id": 1900028026,
+              "rune_name": "星篆·张月鹿",
+              "minimum_level": 56,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 36,
+                  "value": 24,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "rune_item_id": 1900028027,
+              "rune_name": "星篆·翼火蛇",
+              "minimum_level": 58,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 27,
+                  "value": 2,
+                  "mode": 1
+                }
+              ]
+            }
+          ],
+          "display_name": "鞋底藏北斗 · 口罩",
+          "formation_id": 28,
+          "unique_id": 0,
+          "channel": "辅阵",
+          "formation_roll_bp": 12000,
+          "required_level": 58,
+          "catalog_definition": {
+            "id": 28,
+            "name": "鞋底藏北斗",
+            "runes": [
+              1900028016,
+              1900028017,
+              1900028026,
+              1900028027
+            ],
+            "order": [
+              "娄",
+              "胃",
+              "张",
+              "翼"
+            ],
+            "channel": "辅阵",
+            "minLevel": 58,
+            "professions": 0,
+            "slots": [
+              1,
+              3,
+              6,
+              7,
+              9
+            ],
+            "affixes": [
+              {
+                "attr": 27,
+                "value": 16,
+                "mode": 1
+              },
+              {
+                "attr": 36,
+                "value": 280,
+                "mode": 0
+              },
+              {
+                "attr": 61,
+                "value": 24,
+                "mode": 0
+              },
+              {
+                "attr": 34,
+                "value": 240,
+                "mode": 0
+              },
+              {
+                "attr": 17,
+                "value": 42,
+                "mode": 0
+              },
+              {
+                "attr": 15,
+                "value": 45,
+                "mode": 0
+              }
+            ],
+            "lore": "云游者把北斗绣在鞋底，每行一步便遮住一颗。追问升仙路的人跟了一天，只学会怎样绕过烂泥。",
+            "identity": "低耗移动施法的云游阵",
+            "benefit": "技能续航为主；移动速度、法力、精神、生命、魔防、法攻提供独立于星篆的完整词条",
+            "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+            "powerTier": "highvalue",
+            "traits": [
+              {
+                "kind": "spell_economy",
+                "powerBP": 2000,
+                "thresholdPct": 0
+              }
+            ],
+            "reservedSkills": [],
+            "variableAffixes": [
+              {
+                "attr": 36,
+                "min": 280,
+                "max": 308
+              }
+            ]
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 27,
+              "Value": 16,
+              "Mode": 1
+            },
+            {
+              "Attr": 36,
+              "Value": 308,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 240,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 42,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 45,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 2,
+          "slot_name": "头饰",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2059,
+              "base_name": "术神冠",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 59,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 244,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 12,
+                "mdef": 57,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 8,
+              "equipment_type": 102,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:600",
+              "source_desc": "server/migrations/000000_init-28.sql:6813"
+            }
+          ],
+          "rationale": "术士职业技能+1，法攻与智慧服务施法。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "无主诰",
+          "unique_id": 2059,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 59,
+          "catalog_definition": {
+            "ID": 2059,
+            "BaseID": 2059,
+            "BaseName": "术神冠",
+            "Role": "warlock",
+            "Professions": 16,
+            "BeginnerAllowed": false,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 2,
+            "LevelRequirement": 59,
+            "ResourceLevel": 8,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-25.sql:600",
+            "SourceDesc": "server/migrations/000000_init-28.sql:6813",
+            "Name": "无主诰",
+            "Lore": "封神告书最后一页被叠成冠，受封者一栏空着。借冠的人纷纷填名，翌日名字又全部变白。",
+            "LoreRoot": "原创·未领封神告书",
+            "Identity": "59级术神冠承担术士职业+1与法攻集中；无免费四元素减抗、全技能和吟唱速度叠加。",
+            "Benefit": "法术输出底盘：法攻、智慧、法力、法术会心bp、精神；术士本职业已学技能 +1级，仅已学技能",
+            "Tradeoff": "技能软点占明示预算，不解锁未学技能，不增强新增training硬点协同；既有native_modifier按effective_raw重算且计预算；换装必须移除",
+            "PowerTier": "builddefining",
+            "Affixes": [
+              {
+                "Attr": 15,
+                "Value": 10,
+                "Mode": 0
+              },
+              {
+                "Attr": 3,
+                "Value": 14,
+                "Mode": 0
+              },
+              {
+                "Attr": 36,
+                "Value": 69,
+                "Mode": 0
+              },
+              {
+                "Attr": 66,
+                "Value": 249,
+                "Mode": 0
+              },
+              {
+                "Attr": 61,
+                "Value": 14,
+                "Mode": 0
+              }
+            ],
+            "Traits": [],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 15,
+                "Min": 10,
+                "Max": 11
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [],
+            "SkillBonuses": [
+              {
+                "scope": "class",
+                "profession": 5,
+                "levels": 1
+              }
+            ]
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 15,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 69,
+              "Mode": 0
+            },
+            {
+              "Attr": 66,
+              "Value": 249,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 14,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 3,
+          "slot_name": "项链",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2506,
+              "base_name": "水晶项链",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 38,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 0,
+                "mdef": 9,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 6,
+              "equipment_type": 103,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:5664",
+              "source_desc": "server/migrations/000000_init-29.sql:1211"
+            }
+          ],
+          "rationale": "法术会心450bp、法攻与智慧，不将物理或火系属性算作冰系收益。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "无人坐的晶椅",
+          "unique_id": 2506,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 38,
+          "catalog_definition": {
+            "ID": 2506,
+            "BaseID": 2506,
+            "BaseName": "水晶项链",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 3,
+            "LevelRequirement": 38,
+            "ResourceLevel": 6,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-25.sql:5664",
+            "SourceDesc": "server/migrations/000000_init-29.sql:1211",
+            "Name": "无人坐的晶椅",
+            "Lore": "七面水晶珠照不见彼此，只能照出不在屋里的东西。最后一珠永远映着一把空椅，任谁坐下都不会改变。",
+            "LoreRoot": "原型·水晶串链",
+            "Identity": "38级水晶项链让魔攻会心在项链位成形；避免只选武器才有输出成长。",
+            "Benefit": "法术输出底盘：法术会心bp、法攻、智慧、法力、精神",
+            "Tradeoff": "投入集中在法术输出；不提供物攻、命中专精",
+            "PowerTier": "highvalue",
+            "Affixes": [
+              {
+                "Attr": 66,
+                "Value": 450,
+                "Mode": 0
+              },
+              {
+                "Attr": 15,
+                "Value": 11,
+                "Mode": 0
+              },
+              {
+                "Attr": 3,
+                "Value": 14,
+                "Mode": 0
+              },
+              {
+                "Attr": 36,
+                "Value": 72,
+                "Mode": 0
+              },
+              {
+                "Attr": 61,
+                "Value": 14,
+                "Mode": 0
+              }
+            ],
+            "Traits": [],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 66,
+                "Min": 450,
+                "Max": 495
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [],
+            "SkillBonuses": []
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 66,
+              "Value": 495,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 72,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 14,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 6,
+          "slot_name": "手套",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2409,
+              "base_name": "乾坤手套",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 54,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 0,
+                "mdef": 0,
+                "hit_rate": 21,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 9,
+              "equipment_type": 106,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:4564",
+              "source_desc": "server/migrations/000000_init-29.sql:113"
+            }
+          ],
+          "rationale": "全部已学技能+1，并带法力、精神。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "翻掌乾坤",
+          "unique_id": 2409,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 54,
+          "catalog_definition": {
+            "ID": 2409,
+            "BaseID": 2409,
+            "BaseName": "乾坤手套",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 6,
+            "LevelRequirement": 54,
+            "ResourceLevel": 9,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-25.sql:4564",
+            "SourceDesc": "server/migrations/000000_init-29.sql:113",
+            "Name": "翻掌乾坤",
+            "Lore": "掌纹里的乾坤图正反相通，沙从一面落下会从另一面升起。装入最后一粒沙后，整只手套突然像有了一点呼吸。",
+            "LoreRoot": "原型·乾坤手套聚灵",
+            "Identity": "54级通用吟唱手套提供全技能+1，仍需先学技能；放弃普攻攻速、MF和大额法攻，是跨职业技能搭配核心。",
+            "Benefit": "法力续航底盘：精神、法力、生命、魔防、体质、状态抗性；穿戴者已学本职业可受软点技能 +1级，仅已学技能",
+            "Tradeoff": "技能软点占明示预算，不解锁未学技能，不增强新增training硬点协同；既有native_modifier按effective_raw重算且计预算；换装必须移除",
+            "PowerTier": "builddefining",
+            "Affixes": [
+              {
+                "Attr": 61,
+                "Value": 20,
+                "Mode": 0
+              },
+              {
+                "Attr": 36,
+                "Value": 198,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 76,
+                "Mode": 0
+              },
+              {
+                "Attr": 17,
+                "Value": 31,
+                "Mode": 0
+              },
+              {
+                "Attr": 5,
+                "Value": 16,
+                "Mode": 0
+              },
+              {
+                "Attr": 118,
+                "Value": 9,
+                "Mode": 0
+              }
+            ],
+            "Traits": [],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 61,
+                "Min": 20,
+                "Max": 22
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [],
+            "SkillBonuses": [
+              {
+                "scope": "all",
+                "levels": 1
+              }
+            ]
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 61,
+              "Value": 22,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 198,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 76,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 31,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 9,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 7,
+          "slot_name": "戒指",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2560,
+              "base_name": "猫眼石魔力之戒",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 60,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 15,
+                "def": 0,
+                "mdef": 0,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 10,
+              "equipment_type": 107,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:6276",
+              "source_desc": "server/migrations/000000_init-29.sql:1823"
+            }
+          ],
+          "rationale": "冰伤10%、敌冰抗穿透6个百分点，匹配暴雪与冰箭。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "猫眼认夜",
+          "unique_id": 2560,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 60,
+          "catalog_definition": {
+            "ID": 2560,
+            "BaseID": 2560,
+            "BaseName": "猫眼石魔力之戒",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 7,
+            "LevelRequirement": 60,
+            "ResourceLevel": 10,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-25.sql:6276",
+            "SourceDesc": "server/migrations/000000_init-29.sql:1823",
+            "Name": "猫眼认夜",
+            "Lore": "猫眼石的细线并非随光移动，而是追随屋里最深的暗处。搬空屋子后，细线仍盯着原来床脚的位置。",
+            "LoreRoot": "原型·猫眼石魔力戒",
+            "Identity": "60级猫眼魔戒专注冰系穿透和冰系伤害，取代原来的泛魔攻爆发身份；冰箭/冰爆/暴雪已有真实入口，暗伤虚空70级才解锁，故不让60级核心先闲置十级。",
+            "Benefit": "法术输出底盘：法攻、法术会心bp、智慧、法力、精神、生命；冰穿透 +6%；冰伤害 +10%",
+            "Tradeoff": "单系投资只提升匹配的真实伤害包；敌人不匹配时不是全能增伤/减伤",
+            "PowerTier": "builddefining",
+            "Affixes": [
+              {
+                "Attr": 15,
+                "Value": 17,
+                "Mode": 0
+              },
+              {
+                "Attr": 66,
+                "Value": 416,
+                "Mode": 0
+              },
+              {
+                "Attr": 3,
+                "Value": 14,
+                "Mode": 0
+              },
+              {
+                "Attr": 36,
+                "Value": 68,
+                "Mode": 0
+              },
+              {
+                "Attr": 61,
+                "Value": 14,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 68,
+                "Mode": 0
+              }
+            ],
+            "Traits": [],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 66,
+                "Min": 416,
+                "Max": 457
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [
+              {
+                "kind": "enemy_element_pierce_bp",
+                "element": "ice",
+                "value": 600
+              },
+              {
+                "kind": "element_damage_bp",
+                "element": "ice",
+                "value": 1000
+              }
+            ],
+            "SkillBonuses": []
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 15,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 66,
+              "Value": 457,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 68,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 68,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 8,
+          "slot_name": "衣服",
+          "quantity": 1,
+          "kind": "formation",
+          "candidates": [
+            {
+              "base_id": 2829,
+              "base_name": "冥法服（男）",
+              "equipment_sex_restriction": 1,
+              "character_gender_when_selected": 1,
+              "base_required_level": 48,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 196,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 57,
+                "def": 20,
+                "mdef": 94,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 6,
+              "equipment_type": 108,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-24.sql:10021",
+              "source_desc": "server/migrations/000000_init-27.sql:12582"
+            },
+            {
+              "base_id": 2830,
+              "base_name": "冥法服（女）",
+              "equipment_sex_restriction": 2,
+              "character_gender_when_selected": 0,
+              "base_required_level": 48,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 196,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 57,
+                "def": 20,
+                "mdef": 94,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 6,
+              "equipment_type": 108,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-24.sql:10022",
+              "source_desc": "server/migrations/000000_init-27.sql:12593"
+            }
+          ],
+          "rationale": "保留底材57法攻，守阵增加物理安全边际；不将女袍的火弹+2算作冰系收益。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 5,
+          "sockets": [
+            {
+              "index": 0,
+              "rune_item_id": 1900028001,
+              "rune_name": "星篆·角木蛟",
+              "minimum_level": 12,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 1,
+                  "value": 3,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "rune_item_id": 1900028004,
+              "rune_name": "星篆·房日兔",
+              "minimum_level": 17,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 34,
+                  "value": 3,
+                  "mode": 1
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "rune_item_id": 1900028003,
+              "rune_name": "星篆·氐土貉",
+              "minimum_level": 16,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 69,
+                  "value": 2,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "rune_item_id": 1900028009,
+              "rune_name": "星篆·牛金牛",
+              "minimum_level": 26,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 17,
+                  "value": 4,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "rune_item_id": 1900028014,
+              "rune_name": "星篆·壁水貐",
+              "minimum_level": 35,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 34,
+                  "value": 24,
+                  "mode": 0
+                }
+              ]
+            }
+          ],
+          "display_name": "门闩抵天倾 · 冥法服",
+          "formation_id": 36,
+          "unique_id": 0,
+          "channel": "守阵",
+          "formation_roll_bp": 12000,
+          "required_level": 48,
+          "catalog_definition": {
+            "id": 36,
+            "name": "门闩抵天倾",
+            "runes": [
+              1900028001,
+              1900028004,
+              1900028003,
+              1900028009,
+              1900028014
+            ],
+            "order": [
+              "角",
+              "房",
+              "氐",
+              "牛",
+              "壁"
+            ],
+            "channel": "守阵",
+            "minLevel": 35,
+            "professions": 0,
+            "slots": [
+              2,
+              5,
+              8
+            ],
+            "affixes": [
+              {
+                "attr": 34,
+                "value": 42,
+                "mode": 1
+              },
+              {
+                "attr": 69,
+                "value": 34,
+                "mode": 0
+              },
+              {
+                "attr": 5,
+                "value": 30,
+                "mode": 0
+              },
+              {
+                "attr": 27,
+                "value": -5,
+                "mode": 1
+              },
+              {
+                "attr": 13,
+                "value": 42,
+                "mode": 0
+              },
+              {
+                "attr": 17,
+                "value": 45,
+                "mode": 0
+              },
+              {
+                "attr": 70,
+                "value": 26,
+                "mode": 0
+              },
+              {
+                "attr": 118,
+                "value": 18,
+                "mode": 0
+              }
+            ],
+            "lore": "应劫者见阵门下沉，便用门闩撑住横梁。名册在身后一页页自行翻过，直到最后一页出现了尚未入阵者的名字。",
+            "identity": "残血撑住重击的守关阵",
+            "benefit": "物理承伤为主；生命、物理平减、体质、防御、魔防、法术平减、异常抵抗提供独立于星篆的完整词条",
+            "tradeoff": "仍降低移动速度；占用同类宿阵名额；技能与战况条件仍按各特性生效",
+            "powerTier": "builddefining",
+            "traits": [
+              {
+                "kind": "desperate_guard",
+                "powerBP": 2400,
+                "thresholdPct": 35
+              }
+            ],
+            "reservedSkills": [],
+            "variableAffixes": [
+              {
+                "attr": 69,
+                "min": 34,
+                "max": 37
+              }
+            ]
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 34,
+              "Value": 42,
+              "Mode": 1
+            },
+            {
+              "Attr": 69,
+              "Value": 37,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 30,
+              "Mode": 0
+            },
+            {
+              "Attr": 27,
+              "Value": -5,
+              "Mode": 1
+            },
+            {
+              "Attr": 13,
+              "Value": 42,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 45,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 18,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 9,
+          "slot_name": "鞋",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2108,
+              "base_name": "天罡之靴",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 56,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 8,
+                "mdef": 0,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 8,
+              "equipment_type": 109,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:1154",
+              "source_desc": "server/migrations/000000_init-28.sql:7367"
+            }
+          ],
+          "rationale": "高血线防护12%，法防、生命、异常抗性补足战阵生命短板。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "漏宿沉履",
+          "unique_id": 2108,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 56,
+          "catalog_definition": {
+            "ID": 2108,
+            "BaseID": 2108,
+            "BaseName": "天罡之靴",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 9,
+            "LevelRequirement": 56,
+            "ResourceLevel": 8,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-25.sql:1154",
+            "SourceDesc": "server/migrations/000000_init-28.sql:7367",
+            "Name": "漏宿沉履",
+            "Lore": "抄星图的人漏掉一处星宿，照图制成的靴每到那方天际便沉如铅。他索性留在观星台，把错处刻给后来人看。",
+            "LoreRoot": "原型·天罡靴与三十六星力",
+            "Identity": "健康守势星图靴",
+            "Benefit": "法术守势底盘：魔防、生命、魔法平减、精神、状态抗性",
+            "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+            "PowerTier": "transition",
+            "Affixes": [
+              {
+                "Attr": 17,
+                "Value": 51,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 236,
+                "Mode": 0
+              },
+              {
+                "Attr": 70,
+                "Value": 10,
+                "Mode": 0
+              },
+              {
+                "Attr": 61,
+                "Value": 15,
+                "Mode": 0
+              },
+              {
+                "Attr": 118,
+                "Value": 10,
+                "Mode": 0
+              }
+            ],
+            "Traits": [
+              {
+                "Kind": "healthy_guard",
+                "PowerBP": 1200,
+                "ThresholdPct": 85
+              }
+            ],
+            "ReservedSkills": [],
+            "VariableAffixes": [],
+            "LocalEnhancements": [],
+            "TypedEffects": [],
+            "SkillBonuses": []
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 17,
+              "Value": 51,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 236,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 15,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 10,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 10,
+          "slot_name": "背饰",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2610,
+              "base_name": "雪山结晶",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 24,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 4,
+                "mdef": 0,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 4,
+              "equipment_type": 110,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-26.sql:318",
+              "source_desc": "server/migrations/000000_init-29.sql:2390"
+            }
+          ],
+          "rationale": "冰系技能+1、冰伤8%；低等级仍是此构筑的有效核心。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "雪轮",
+          "unique_id": 2610,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 24,
+          "catalog_definition": {
+            "ID": 2610,
+            "BaseID": 2610,
+            "BaseName": "雪山结晶",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 10,
+            "LevelRequirement": 24,
+            "ResourceLevel": 4,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-26.sql:318",
+            "SourceDesc": "server/migrations/000000_init-29.sql:2390",
+            "Name": "雪轮",
+            "Lore": "结晶每融一次便多出一圈白线，从不减小。冰匠试着数年轮，数到最里一圈时突然听见了从未见过的暴雪。",
+            "LoreRoot": "原型·千年雪晶",
+            "Identity": "冰法专用背晶",
+            "Benefit": "法术输出底盘：法攻、智慧、法力、法术会心bp、精神、生命；冰伤害 +8%；术士冰系十项注册技能 +1级，仅已学技能",
+            "Tradeoff": "技能软点占明示预算，不解锁未学技能，不增强新增training硬点协同；既有native_modifier按effective_raw重算且计预算；换装必须移除；单系投资只提升匹配的真实伤害包；敌人不匹配时不是全能增伤/减伤",
+            "PowerTier": "highvalue",
+            "Affixes": [
+              {
+                "Attr": 15,
+                "Value": 9,
+                "Mode": 0
+              },
+              {
+                "Attr": 3,
+                "Value": 7,
+                "Mode": 0
+              },
+              {
+                "Attr": 36,
+                "Value": 41,
+                "Mode": 0
+              },
+              {
+                "Attr": 66,
+                "Value": 163,
+                "Mode": 0
+              },
+              {
+                "Attr": 61,
+                "Value": 7,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 41,
+                "Mode": 0
+              }
+            ],
+            "Traits": [],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 15,
+                "Min": 9,
+                "Max": 10
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [
+              {
+                "kind": "element_damage_bp",
+                "element": "ice",
+                "value": 800
+              }
+            ],
+            "SkillBonuses": [
+              {
+                "scope": "school",
+                "school": "frost",
+                "levels": 1
+              }
+            ]
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 15,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 7,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 41,
+              "Mode": 0
+            },
+            {
+              "Attr": 66,
+              "Value": 163,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 7,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 41,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 13,
+          "slot_name": "双手武器",
+          "quantity": 1,
+          "kind": "formation",
+          "candidates": [
+            {
+              "base_id": 1310,
+              "base_name": "神杖·九仪",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 54,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 81,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 10,
+                "max_atk": 118,
+                "matk": 64,
+                "def": 0,
+                "mdef": 0,
+                "hit_rate": 57,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 10,
+              "equipment_type": 16,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-24.sql:10661",
+              "source_desc": "server/migrations/000000_init-27.sql:18975"
+            }
+          ],
+          "rationale": "5孔法杖战阵：法攻65%、本件白字法攻最高220%、暴雪范围22%及范围伤害12%，生命-10%。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 5,
+          "sockets": [
+            {
+              "index": 0,
+              "rune_item_id": 1900028008,
+              "rune_name": "星篆·斗木獬",
+              "minimum_level": 24,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 15,
+                  "value": 3,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "rune_item_id": 1900028022,
+              "rune_name": "星篆·井木犴",
+              "minimum_level": 49,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 3,
+                  "value": 3,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "rune_item_id": 1900028023,
+              "rune_name": "星篆·鬼金羊",
+              "minimum_level": 51,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 66,
+                  "value": 100,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "rune_item_id": 1900028025,
+              "rune_name": "星篆·星日马",
+              "minimum_level": 55,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 15,
+                  "value": 3,
+                  "mode": 1
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "rune_item_id": 1900028026,
+              "rune_name": "星篆·张月鹿",
+              "minimum_level": 56,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 36,
+                  "value": 24,
+                  "mode": 0
+                }
+              ]
+            }
+          ],
+          "display_name": "纸驴驮残夜 · 神杖·九仪",
+          "formation_id": 34,
+          "unique_id": 0,
+          "channel": "战阵",
+          "formation_roll_bp": 12000,
+          "required_level": 56,
+          "catalog_definition": {
+            "id": 34,
+            "name": "纸驴驮残夜",
+            "runes": [
+              1900028008,
+              1900028022,
+              1900028023,
+              1900028025,
+              1900028026
+            ],
+            "order": [
+              "斗",
+              "井",
+              "鬼",
+              "星",
+              "张"
+            ],
+            "channel": "战阵",
+            "minLevel": 56,
+            "professions": 16,
+            "slots": [
+              4,
+              13
+            ],
+            "affixes": [
+              {
+                "attr": 15,
+                "value": 65,
+                "mode": 1
+              },
+              {
+                "attr": 3,
+                "value": 32,
+                "mode": 0
+              },
+              {
+                "attr": 66,
+                "value": 1100,
+                "mode": 0
+              },
+              {
+                "attr": 34,
+                "value": -10,
+                "mode": 1
+              },
+              {
+                "attr": 36,
+                "value": 260,
+                "mode": 0
+              },
+              {
+                "attr": 61,
+                "value": 26,
+                "mode": 0
+              },
+              {
+                "attr": 17,
+                "value": 48,
+                "mode": 0
+              },
+              {
+                "attr": 118,
+                "value": 20,
+                "mode": 0
+              }
+            ],
+            "lore": "纸驴驮着五盏熄灯走过五更，经过的村镇便各少一刻。术者追到阵眼，才发现自己已比昨夜苍老五年。",
+            "identity": "高消耗大范围施法阵",
+            "benefit": "法术输出为主；法攻、智慧、法术会心、法力、精神、魔防、异常抵抗提供独立于星篆的完整词条；另有本件白字法攻强化180–220%，收益随所选武器固有白字而变",
+            "tradeoff": "仍降低生命；占用同类宿阵名额；技能与战况条件仍按各特性生效；零对应白字的底材不获得本件强化增量，五条以上原有额外属性仍独立生效",
+            "powerTier": "builddefining",
+            "traits": [
+              {
+                "kind": "area_expansion",
+                "powerBP": 2200,
+                "thresholdPct": 0,
+                "skillID": 10412,
+                "skillName": "暴雪术"
+              },
+              {
+                "kind": "area_focus",
+                "powerBP": 1200,
+                "thresholdPct": 0
+              }
+            ],
+            "reservedSkills": [],
+            "variableAffixes": [
+              {
+                "attr": 3,
+                "min": 32,
+                "max": 35
+              }
+            ],
+            "localEnhancements": [
+              {
+                "attr": 15,
+                "percent": 200,
+                "minPercent": 180,
+                "maxPercent": 220
+              }
+            ]
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 15,
+              "Value": 65,
+              "Mode": 1
+            },
+            {
+              "Attr": 3,
+              "Value": 35,
+              "Mode": 0
+            },
+            {
+              "Attr": 66,
+              "Value": 1100,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": -10,
+              "Mode": 1
+            },
+            {
+              "Attr": 36,
+              "Value": 260,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 48,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 20,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": [
+            {
+              "attr": 15,
+              "percent": 220,
+              "scope": "this item's unrefined intrinsic white stats only"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "character_id": 206,
+      "character_name": "骚骚霞",
+      "class": "healer",
+      "race_zero_based": 3,
+      "profession_one_based": 4,
+      "expected_level": 60,
+      "gender": "resolve locally; never infer from name",
+      "build": "救急／长战治疗支援",
+      "count": 9,
+      "items": [
+        {
+          "slot": 1,
+          "slot_name": "面饰",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2705,
+              "base_name": "哭丧面具",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 18,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 0,
+                "mdef": 3,
+                "hit_rate": 4,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 3,
+              "equipment_type": 101,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-26.sql:853",
+              "source_desc": "server/migrations/000000_init-29.sql:3468"
+            }
+          ],
+          "rationale": "目标生命不高于25%时治疗提高19%，与等级和节蓝独立。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "泪筹",
+          "unique_id": 2705,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 18,
+          "catalog_definition": {
+            "ID": 2705,
+            "BaseID": 2705,
+            "BaseName": "哭丧面具",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 1,
+            "LevelRequirement": 18,
+            "ResourceLevel": 3,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-26.sql:853",
+            "SourceDesc": "server/migrations/000000_init-29.sql:3468",
+            "Name": "泪筹",
+            "Lore": "哭面内藏着三颗算盘珠，每掉一滴水便动一颗。拨回原位之后，面具外侧会出现三道比原来更深的泪痕。",
+            "LoreRoot": "原型·哭丧面具",
+            "Identity": "危血救护面",
+            "Benefit": "治疗续航底盘：精神、法力、生命、魔防、状态抗性、魔法平减",
+            "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
+            "PowerTier": "highvalue",
+            "Affixes": [
+              {
+                "Attr": 61,
+                "Value": 9,
+                "Mode": 0
+              },
+              {
+                "Attr": 36,
+                "Value": 64,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 44,
+                "Mode": 0
+              },
+              {
+                "Attr": 17,
+                "Value": 19,
+                "Mode": 0
+              },
+              {
+                "Attr": 118,
+                "Value": 7,
+                "Mode": 0
+              },
+              {
+                "Attr": 70,
+                "Value": 5,
+                "Mode": 0
+              }
+            ],
+            "Traits": [
+              {
+                "Kind": "rescue_heal",
+                "PowerBP": 1900,
+                "ThresholdPct": 25
+              }
+            ],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 61,
+                "Min": 9,
+                "Max": 10
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [],
+            "SkillBonuses": []
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 61,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 64,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 44,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 19,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 7,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 5,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 2,
+          "slot_name": "头饰",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2056,
+              "base_name": "神悯冠",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 59,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 182,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 12,
+                "mdef": 42,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 8,
+              "equipment_type": 102,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:565",
+              "source_desc": "server/migrations/000000_init-28.sql:6778"
+            }
+          ],
+          "rationale": "治疗系技能+2，不把攻击系当作治疗。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "闭目神像",
+          "unique_id": 2056,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 59,
+          "catalog_definition": {
+            "ID": 2056,
+            "BaseID": 2056,
+            "BaseName": "神悯冠",
+            "Role": "healer",
+            "Professions": 8,
+            "BeginnerAllowed": false,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 2,
+            "LevelRequirement": 59,
+            "ResourceLevel": 8,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-25.sql:565",
+            "SourceDesc": "server/migrations/000000_init-28.sql:6778",
+            "Name": "闭目神像",
+            "Lore": "冠上神像闭着眼，信众争论它是否垂怜。擦像的药师却发现，眼缝里沾着整夜未干的药汁。",
+            "LoreRoot": "原创·闭眼冠像",
+            "Identity": "59级神悯冠提供治疗系+2；治疗和净化范围明确，继续失去攻击系覆盖，不把药师aux当治疗。",
+            "Benefit": "治疗续航底盘：法力、精神、生命、魔防、状态抗性、魔法平减；药师治疗净化九项 +2级，仅已学技能",
+            "Tradeoff": "技能软点占明示预算，不解锁未学技能，不增强新增training硬点协同；既有native_modifier按effective_raw重算且计预算；换装必须移除",
+            "PowerTier": "builddefining",
+            "Affixes": [
+              {
+                "Attr": 36,
+                "Value": 225,
+                "Mode": 0
+              },
+              {
+                "Attr": 61,
+                "Value": 16,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 78,
+                "Mode": 0
+              },
+              {
+                "Attr": 17,
+                "Value": 32,
+                "Mode": 0
+              },
+              {
+                "Attr": 118,
+                "Value": 11,
+                "Mode": 0
+              },
+              {
+                "Attr": 70,
+                "Value": 11,
+                "Mode": 0
+              }
+            ],
+            "Traits": [],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 36,
+                "Min": 225,
+                "Max": 247
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [],
+            "SkillBonuses": [
+              {
+                "scope": "school",
+                "school": "healing",
+                "levels": 2
+              }
+            ]
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 36,
+              "Value": 247,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 78,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 32,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 11,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 3,
+          "slot_name": "项链",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2509,
+              "base_name": "天使泪项链",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 56,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 0,
+                "mdef": 13,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 9,
+              "equipment_type": 103,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:5699",
+              "source_desc": "server/migrations/000000_init-29.sql:1246"
+            }
+          ],
+          "rationale": "523生命、自救触发和续航，保证治疗者存活。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "凝泪未干",
+          "unique_id": 2509,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 56,
+          "catalog_definition": {
+            "ID": 2509,
+            "BaseID": 2509,
+            "BaseName": "天使泪项链",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 3,
+            "LevelRequirement": 56,
+            "ResourceLevel": 9,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-25.sql:5699",
+            "SourceDesc": "server/migrations/000000_init-29.sql:1246",
+            "Name": "凝泪未干",
+            "Lore": "传说中的泪石表面始终干燥，内里却有一滴水在往上流。到顶时水不会落下，只会暂时映出一个苍白的月。",
+            "LoreRoot": "原型·天使泪凝宝石传说",
+            "Identity": "56级救急治疗链改为受直接伤害后存活且低于30%生命的自救触发；长冷却换跨职业救急搭配，不能脱战换装自动触发或复活。",
+            "Benefit": "生命容错底盘：精神、法力、生命、魔防、状态抗性、魔法平减；存活且生命不高于30%时自救：20%触发固定5级治愈术，冷却15秒",
+            "Tradeoff": "触发约占40%总预算；失去原全部Traits及原局部强化，空窗仍过被动底线",
+            "PowerTier": "builddefining",
+            "Affixes": [
+              {
+                "Attr": 61,
+                "Value": 16,
+                "Mode": 0
+              },
+              {
+                "Attr": 36,
+                "Value": 131,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 523,
+                "Mode": 0
+              },
+              {
+                "Attr": 17,
+                "Value": 24,
+                "Mode": 0
+              },
+              {
+                "Attr": 118,
+                "Value": 8,
+                "Mode": 0
+              },
+              {
+                "Attr": 70,
+                "Value": 8,
+                "Mode": 0
+              }
+            ],
+            "Traits": [],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 61,
+                "Min": 16,
+                "Max": 17
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [
+              {
+                "kind": "proc",
+                "proc": {
+                  "id": "emergency_heal",
+                  "trigger": "on_direct_damage_taken",
+                  "skillId": 10301,
+                  "fixedRank": 5,
+                  "chanceBP": 2000,
+                  "icdMs": 15000,
+                  "sharedGroup": "emergency_heal",
+                  "payload": "heal",
+                  "targetRule": "self",
+                  "maxTargets": 1,
+                  "scaleBP": 10000,
+                  "pvpScaleBP": 3500,
+                  "hpBelowPct": 30,
+                  "priority": 10
+                }
+              }
+            ],
+            "SkillBonuses": []
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 61,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 131,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 523,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 8,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 8,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 6,
+          "slot_name": "手套",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2409,
+              "base_name": "乾坤手套",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 54,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 0,
+                "mdef": 0,
+                "hit_rate": 21,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 9,
+              "equipment_type": 106,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:4564",
+              "source_desc": "server/migrations/000000_init-29.sql:113"
+            }
+          ],
+          "rationale": "全部已学技能+1，覆盖治疗及辅助，保留精神与法力。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "翻掌乾坤",
+          "unique_id": 2409,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 54,
+          "catalog_definition": {
+            "ID": 2409,
+            "BaseID": 2409,
+            "BaseName": "乾坤手套",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 6,
+            "LevelRequirement": 54,
+            "ResourceLevel": 9,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-25.sql:4564",
+            "SourceDesc": "server/migrations/000000_init-29.sql:113",
+            "Name": "翻掌乾坤",
+            "Lore": "掌纹里的乾坤图正反相通，沙从一面落下会从另一面升起。装入最后一粒沙后，整只手套突然像有了一点呼吸。",
+            "LoreRoot": "原型·乾坤手套聚灵",
+            "Identity": "54级通用吟唱手套提供全技能+1，仍需先学技能；放弃普攻攻速、MF和大额法攻，是跨职业技能搭配核心。",
+            "Benefit": "法力续航底盘：精神、法力、生命、魔防、体质、状态抗性；穿戴者已学本职业可受软点技能 +1级，仅已学技能",
+            "Tradeoff": "技能软点占明示预算，不解锁未学技能，不增强新增training硬点协同；既有native_modifier按effective_raw重算且计预算；换装必须移除",
+            "PowerTier": "builddefining",
+            "Affixes": [
+              {
+                "Attr": 61,
+                "Value": 20,
+                "Mode": 0
+              },
+              {
+                "Attr": 36,
+                "Value": 198,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 76,
+                "Mode": 0
+              },
+              {
+                "Attr": 17,
+                "Value": 31,
+                "Mode": 0
+              },
+              {
+                "Attr": 5,
+                "Value": 16,
+                "Mode": 0
+              },
+              {
+                "Attr": 118,
+                "Value": 9,
+                "Mode": 0
+              }
+            ],
+            "Traits": [],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 61,
+                "Min": 20,
+                "Max": 22
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [],
+            "SkillBonuses": [
+              {
+                "scope": "all",
+                "levels": 1
+              }
+            ]
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 61,
+              "Value": 22,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 198,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 76,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 31,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 9,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 7,
+          "slot_name": "戒指",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2559,
+              "base_name": "晶钻魔力之戒",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 54,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 13,
+                "def": 0,
+                "mdef": 0,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 9,
+              "equipment_type": 107,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:6265",
+              "source_desc": "server/migrations/000000_init-29.sql:1812"
+            }
+          ],
+          "rationale": "治愈术10301+2，精神与法力符合治疗路线。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "结晶的叹息",
+          "unique_id": 2559,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 54,
+          "catalog_definition": {
+            "ID": 2559,
+            "BaseID": 2559,
+            "BaseName": "晶钻魔力之戒",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 7,
+            "LevelRequirement": 54,
+            "ResourceLevel": 9,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-25.sql:6265",
+            "SourceDesc": "server/migrations/000000_init-29.sql:1812",
+            "Name": "结晶的叹息",
+            "Lore": "晶钻里有一团白雾，贴近听时像有人缓慢吐气。越珍惜这枚戒的人，白雾反而越难散去。",
+            "LoreRoot": "原型·晶钻戒泪意象",
+            "Identity": "救急治疗戒",
+            "Benefit": "治疗续航底盘：精神、法力、生命、魔防、状态抗性、魔法平减；药师基础治疗技能10301 +2级，仅已学技能",
+            "Tradeoff": "技能软点占明示预算，不解锁未学技能，不增强新增training硬点协同；既有native_modifier按effective_raw重算且计预算；换装必须移除",
+            "PowerTier": "highvalue",
+            "Affixes": [
+              {
+                "Attr": 61,
+                "Value": 24,
+                "Mode": 0
+              },
+              {
+                "Attr": 36,
+                "Value": 144,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 83,
+                "Mode": 0
+              },
+              {
+                "Attr": 17,
+                "Value": 34,
+                "Mode": 0
+              },
+              {
+                "Attr": 118,
+                "Value": 12,
+                "Mode": 0
+              },
+              {
+                "Attr": 70,
+                "Value": 12,
+                "Mode": 0
+              }
+            ],
+            "Traits": [],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 61,
+                "Min": 24,
+                "Max": 26
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [],
+            "SkillBonuses": [
+              {
+                "scope": "single",
+                "skillId": 10301,
+                "levels": 2
+              }
+            ]
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 61,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 144,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 83,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 34,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 12,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 12,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 8,
+          "slot_name": "衣服",
+          "quantity": 1,
+          "kind": "formation",
+          "candidates": [
+            {
+              "base_id": 2899,
+              "base_name": "圣贤服（男）",
+              "equipment_sex_restriction": 1,
+              "character_gender_when_selected": 1,
+              "base_required_level": 48,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 145,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 20,
+                "mdef": 69,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 6,
+              "equipment_type": 108,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-24.sql:10101",
+              "source_desc": "server/migrations/000000_init-27.sql:13376"
+            },
+            {
+              "base_id": 2900,
+              "base_name": "圣贤服（女）",
+              "equipment_sex_restriction": 2,
+              "character_gender_when_selected": 0,
+              "base_required_level": 48,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 145,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 20,
+                "mdef": 69,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 6,
+              "equipment_type": 108,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-24.sql:10102",
+              "source_desc": "server/migrations/000000_init-27.sql:13387"
+            }
+          ],
+          "rationale": "守阵的生命、防御与双平减提高站场能力；按角色原性别选底材。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 5,
+          "sockets": [
+            {
+              "index": 0,
+              "rune_item_id": 1900028001,
+              "rune_name": "星篆·角木蛟",
+              "minimum_level": 12,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 1,
+                  "value": 3,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "rune_item_id": 1900028004,
+              "rune_name": "星篆·房日兔",
+              "minimum_level": 17,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 34,
+                  "value": 3,
+                  "mode": 1
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "rune_item_id": 1900028003,
+              "rune_name": "星篆·氐土貉",
+              "minimum_level": 16,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 69,
+                  "value": 2,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "rune_item_id": 1900028009,
+              "rune_name": "星篆·牛金牛",
+              "minimum_level": 26,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 17,
+                  "value": 4,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "rune_item_id": 1900028014,
+              "rune_name": "星篆·壁水貐",
+              "minimum_level": 35,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 34,
+                  "value": 24,
+                  "mode": 0
+                }
+              ]
+            }
+          ],
+          "display_name": "门闩抵天倾 · 圣贤服",
+          "formation_id": 36,
+          "unique_id": 0,
+          "channel": "守阵",
+          "formation_roll_bp": 12000,
+          "required_level": 48,
+          "catalog_definition": {
+            "id": 36,
+            "name": "门闩抵天倾",
+            "runes": [
+              1900028001,
+              1900028004,
+              1900028003,
+              1900028009,
+              1900028014
+            ],
+            "order": [
+              "角",
+              "房",
+              "氐",
+              "牛",
+              "壁"
+            ],
+            "channel": "守阵",
+            "minLevel": 35,
+            "professions": 0,
+            "slots": [
+              2,
+              5,
+              8
+            ],
+            "affixes": [
+              {
+                "attr": 34,
+                "value": 42,
+                "mode": 1
+              },
+              {
+                "attr": 69,
+                "value": 34,
+                "mode": 0
+              },
+              {
+                "attr": 5,
+                "value": 30,
+                "mode": 0
+              },
+              {
+                "attr": 27,
+                "value": -5,
+                "mode": 1
+              },
+              {
+                "attr": 13,
+                "value": 42,
+                "mode": 0
+              },
+              {
+                "attr": 17,
+                "value": 45,
+                "mode": 0
+              },
+              {
+                "attr": 70,
+                "value": 26,
+                "mode": 0
+              },
+              {
+                "attr": 118,
+                "value": 18,
+                "mode": 0
+              }
+            ],
+            "lore": "应劫者见阵门下沉，便用门闩撑住横梁。名册在身后一页页自行翻过，直到最后一页出现了尚未入阵者的名字。",
+            "identity": "残血撑住重击的守关阵",
+            "benefit": "物理承伤为主；生命、物理平减、体质、防御、魔防、法术平减、异常抵抗提供独立于星篆的完整词条",
+            "tradeoff": "仍降低移动速度；占用同类宿阵名额；技能与战况条件仍按各特性生效",
+            "powerTier": "builddefining",
+            "traits": [
+              {
+                "kind": "desperate_guard",
+                "powerBP": 2400,
+                "thresholdPct": 35
+              }
+            ],
+            "reservedSkills": [],
+            "variableAffixes": [
+              {
+                "attr": 69,
+                "min": 34,
+                "max": 37
+              }
+            ]
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 34,
+              "Value": 42,
+              "Mode": 1
+            },
+            {
+              "Attr": 69,
+              "Value": 37,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 30,
+              "Mode": 0
+            },
+            {
+              "Attr": 27,
+              "Value": -5,
+              "Mode": 1
+            },
+            {
+              "Attr": 13,
+              "Value": 42,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 45,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 18,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 9,
+          "slot_name": "鞋",
+          "quantity": 1,
+          "kind": "formation",
+          "candidates": [
+            {
+              "base_id": 2108,
+              "base_name": "天罡之靴",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 56,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 8,
+                "mdef": 0,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 8,
+              "equipment_type": 109,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-25.sql:1154",
+              "source_desc": "server/migrations/000000_init-28.sql:7367"
+            }
+          ],
+          "rationale": "5孔辅阵：治疗系+1、治疗节蓝22%、精神26%与法力36%；鞋位保留救急面饰和技能戒指。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 5,
+          "sockets": [
+            {
+              "index": 0,
+              "rune_item_id": 1900028010,
+              "rune_name": "星篆·女土蝠",
+              "minimum_level": 28,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 61,
+                  "value": 3,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "rune_item_id": 1900028011,
+              "rune_name": "星篆·虚日鼠",
+              "minimum_level": 30,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 36,
+                  "value": 3,
+                  "mode": 1
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "rune_item_id": 1900028013,
+              "rune_name": "星篆·室火猪",
+              "minimum_level": 33,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 70,
+                  "value": 2,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "rune_item_id": 1900028014,
+              "rune_name": "星篆·壁水貐",
+              "minimum_level": 35,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 34,
+                  "value": 24,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "rune_item_id": 1900028028,
+              "rune_name": "星篆·轸水蚓",
+              "minimum_level": 60,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 38,
+                  "value": 1,
+                  "mode": 0
+                }
+              ]
+            }
+          ],
+          "display_name": "空瓢济厄 · 天罡之靴",
+          "formation_id": 35,
+          "unique_id": 0,
+          "channel": "辅阵",
+          "formation_roll_bp": 12000,
+          "required_level": 60,
+          "catalog_definition": {
+            "id": 35,
+            "name": "空瓢济厄",
+            "runes": [
+              1900028010,
+              1900028011,
+              1900028013,
+              1900028014,
+              1900028028
+            ],
+            "order": [
+              "女",
+              "虚",
+              "室",
+              "壁",
+              "轸"
+            ],
+            "channel": "辅阵",
+            "minLevel": 60,
+            "professions": 8,
+            "slots": [
+              1,
+              3,
+              6,
+              7,
+              9
+            ],
+            "affixes": [
+              {
+                "attr": 61,
+                "value": 26,
+                "mode": 1
+              },
+              {
+                "attr": 36,
+                "value": 36,
+                "mode": 1
+              },
+              {
+                "attr": 17,
+                "value": 50,
+                "mode": 0
+              },
+              {
+                "attr": 70,
+                "value": 24,
+                "mode": 0
+              },
+              {
+                "attr": 34,
+                "value": 320,
+                "mode": 0
+              },
+              {
+                "attr": 118,
+                "value": 25,
+                "mode": 0
+              },
+              {
+                "attr": 5,
+                "value": 24,
+                "mode": 0
+              }
+            ],
+            "lore": "药瓢已经空了，药师仍背它进入劫阵。同行人伤重时，瓢底忽然响了一声，像有人在很远的地方敲开一扇门。",
+            "identity": "危急救援与长战治疗阵",
+            "benefit": "治疗续航为主；精神、法力、魔防、法术平减、生命、异常抵抗、体质提供独立于星篆的完整词条",
+            "tradeoff": "治疗系+1替换旧低血35%救护增幅；保留原治疗节蓝；占用同类宿阵名额",
+            "powerTier": "builddefining",
+            "traits": [
+              {
+                "kind": "healing_cost",
+                "powerBP": 2200,
+                "thresholdPct": 0
+              }
+            ],
+            "reservedSkills": [],
+            "variableAffixes": [
+              {
+                "attr": 17,
+                "min": 50,
+                "max": 55
+              }
+            ],
+            "typedEffects": [],
+            "skillBonuses": [
+              {
+                "scope": "school",
+                "school": "healing",
+                "levels": 1
+              }
+            ],
+            "v5BudgetExchange": {
+              "removedTraits": [
+                {
+                  "kind": "rescue_heal",
+                  "powerBP": 3500,
+                  "thresholdPct": 30,
+                  "skillID": 10301,
+                  "skillName": "治愈术"
+                }
+              ],
+              "policy": "replacement_only_no_extra_free_budget",
+              "reason": "治疗系+1替换旧低血35%救护增幅；保留原治疗节蓝"
+            }
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 61,
+              "Value": 26,
+              "Mode": 1
+            },
+            {
+              "Attr": 36,
+              "Value": 36,
+              "Mode": 1
+            },
+            {
+              "Attr": 17,
+              "Value": 55,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 320,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 25,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 24,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 10,
+          "slot_name": "背饰",
+          "quantity": 1,
+          "kind": "unique",
+          "candidates": [
+            {
+              "base_id": 2603,
+              "base_name": "天使之翼",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 36,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 0,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 0,
+                "max_atk": 0,
+                "matk": 0,
+                "def": 6,
+                "mdef": 0,
+                "hit_rate": 0,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 6,
+              "equipment_type": 110,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-26.sql:239",
+              "source_desc": "server/migrations/000000_init-29.sql:2311"
+            }
+          ],
+          "rationale": "圣羽护佑：小队圣抗8个百分点，240像素半径，最多6名玩家并覆盖活动宠物；不是全抗。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 0,
+          "sockets": [],
+          "display_name": "羽端白尘",
+          "unique_id": 2603,
+          "formation_id": 0,
+          "unique_roll_bp": 12000,
+          "required_level": 36,
+          "catalog_definition": {
+            "ID": 2603,
+            "BaseID": 2603,
+            "BaseName": "天使之翼",
+            "Role": "allclasses",
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "Sex": 0,
+            "Slot": 10,
+            "LevelRequirement": 36,
+            "ResourceLevel": 6,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
+            "SourceArm": "server/migrations/000000_init-26.sql:239",
+            "SourceDesc": "server/migrations/000000_init-29.sql:2311",
+            "Name": "羽端白尘",
+            "Lore": "白翼每抖一次就落一点白尘，落到地上却比影子更暗。工匠把尘扫进火里，炉膛一夜之间白得看不见边界。",
+            "LoreRoot": "原型·洁白天使翼",
+            "Identity": "36级天使翼以圣抗支援光环提供跨职业组队核心；原治疗放大移入光环预算，不与其免费共存。",
+            "Benefit": "法力续航底盘：法力、精神、生命、魔防、状态抗性、魔法平减；240像素组队光环：圣抗性 +8%，同名取最高",
+            "Tradeoff": "光环约占45%总预算；半径/组队/同名最强限制，原Traits移除",
+            "PowerTier": "builddefining",
+            "Affixes": [
+              {
+                "Attr": 36,
+                "Value": 192,
+                "Mode": 0
+              },
+              {
+                "Attr": 61,
+                "Value": 8,
+                "Mode": 0
+              },
+              {
+                "Attr": 34,
+                "Value": 41,
+                "Mode": 0
+              },
+              {
+                "Attr": 17,
+                "Value": 17,
+                "Mode": 0
+              },
+              {
+                "Attr": 118,
+                "Value": 6,
+                "Mode": 0
+              },
+              {
+                "Attr": 70,
+                "Value": 6,
+                "Mode": 0
+              }
+            ],
+            "Traits": [],
+            "ReservedSkills": [],
+            "VariableAffixes": [
+              {
+                "Attr": 36,
+                "Min": 192,
+                "Max": 211
+              }
+            ],
+            "LocalEnhancements": [],
+            "TypedEffects": [
+              {
+                "kind": "aura",
+                "aura": {
+                  "id": "holy_feather",
+                  "fixedRank": 1,
+                  "family": "holy_feather",
+                  "modifier": "element_resist_bp",
+                  "element": "holy",
+                  "value": 800,
+                  "radiusPx": 240,
+                  "refreshMs": 500,
+                  "leaseMs": 1000,
+                  "maxPlayers": 6,
+                  "includeActivePet": true,
+                  "visualKey": "圣羽护佑",
+                  "priority": 10,
+                  "pvpScaleBP": 5000
+                }
+              }
+            ],
+            "SkillBonuses": []
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 36,
+              "Value": 211,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 8,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 41,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 6,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 6,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        },
+        {
+          "slot": 13,
+          "slot_name": "双手武器",
+          "quantity": 1,
+          "kind": "formation",
+          "candidates": [
+            {
+              "base_id": 1310,
+              "base_name": "神杖·九仪",
+              "equipment_sex_restriction": 0,
+              "character_gender_when_selected": null,
+              "base_required_level": 54,
+              "requirements": {
+                "str_need": 0,
+                "vit_need": 0,
+                "int_need": 81,
+                "spi_need": 0,
+                "agi_need": 0,
+                "dex_need": 0
+              },
+              "intrinsic_white_stats": {
+                "min_atk": 10,
+                "max_atk": 118,
+                "matk": 64,
+                "def": 0,
+                "mdef": 0,
+                "hit_rate": 57,
+                "str": 0,
+                "vit": 0,
+                "int_": 0,
+                "spi": 0,
+                "agi": 0,
+                "dex": 0
+              },
+              "resource_tier": 10,
+              "equipment_type": 16,
+              "natural_affix_count": 0,
+              "fixed_affixes": [],
+              "unknown_innate_properties": false,
+              "suit_id": 0,
+              "source_arm": "server/migrations/000000_init-24.sql:10661",
+              "source_desc": "server/migrations/000000_init-27.sql:18975"
+            }
+          ],
+          "rationale": "5孔战阵：全部已学技能+1、生命320、法力300、精神26；相较纯法攻神杖更贴合支援，且无生命负值。",
+          "destination": "backpack",
+          "auto_equip": false,
+          "rolled_affix_count": 0,
+          "rolled_affixes": [],
+          "refine_level": 0,
+          "fused_appearance": 0,
+          "fused_soul": 0,
+          "fused_dragon": 0,
+          "content_version": 5,
+          "socket_count": 5,
+          "sockets": [
+            {
+              "index": 0,
+              "rune_item_id": 1900028001,
+              "rune_name": "星篆·角木蛟",
+              "minimum_level": 12,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 1,
+                  "value": 3,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "rune_item_id": 1900028008,
+              "rune_name": "星篆·斗木獬",
+              "minimum_level": 24,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 15,
+                  "value": 3,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "rune_item_id": 1900028015,
+              "rune_name": "星篆·奎木狼",
+              "minimum_level": 37,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 9,
+                  "value": 3,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 3,
+              "rune_item_id": 1900028022,
+              "rune_name": "星篆·井木犴",
+              "minimum_level": 49,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 3,
+                  "value": 3,
+                  "mode": 0
+                }
+              ]
+            },
+            {
+              "index": 4,
+              "rune_item_id": 1900028028,
+              "rune_name": "星篆·轸水蚓",
+              "minimum_level": 60,
+              "new_distinct_uid_required": true,
+              "card_snapshot_source": "domain.NewStack(actual rune ItemDef,1).Card",
+              "fixed_card_affixes": [
+                {
+                  "attr": 38,
+                  "value": 1,
+                  "mode": 0
+                }
+              ]
+            }
+          ],
+          "display_name": "四象让中宫 · 神杖·九仪",
+          "formation_id": 40,
+          "unique_id": 0,
+          "channel": "战阵",
+          "formation_roll_bp": 12000,
+          "required_level": 60,
+          "catalog_definition": {
+            "id": 40,
+            "name": "四象让中宫",
+            "runes": [
+              1900028001,
+              1900028008,
+              1900028015,
+              1900028022,
+              1900028028
+            ],
+            "order": [
+              "角",
+              "斗",
+              "奎",
+              "井",
+              "轸"
+            ],
+            "channel": "战阵",
+            "minLevel": 60,
+            "professions": 0,
+            "slots": [
+              4,
+              13
+            ],
+            "affixes": [
+              {
+                "attr": 47,
+                "value": 218,
+                "mode": 0
+              },
+              {
+                "attr": 15,
+                "value": 145,
+                "mode": 0
+              },
+              {
+                "attr": 23,
+                "value": 900,
+                "mode": 0
+              },
+              {
+                "attr": 66,
+                "value": 900,
+                "mode": 0
+              },
+              {
+                "attr": 34,
+                "value": 320,
+                "mode": 0
+              },
+              {
+                "attr": 36,
+                "value": 300,
+                "mode": 0
+              },
+              {
+                "attr": 61,
+                "value": 26,
+                "mode": 0
+              },
+              {
+                "attr": 17,
+                "value": 48,
+                "mode": 0
+              }
+            ],
+            "lore": "四象争夺中宫百年，阵师最后在那里放了一把空椅。椅上渐渐压出第五种兽形，谁也说不出它究竟朝向哪一方。",
+            "identity": "多伤害路线兼修的中宫阵",
+            "benefit": "物理与法术输出的双向配置为主；物攻、法攻、物理会心、法术会心、生命、法力、精神、魔防提供独立于星篆的完整词条",
+            "tradeoff": "全技能+1替换14%技能增伤；只作用已经学会的战斗技能；占用同类宿阵名额",
+            "powerTier": "highvalue",
+            "traits": [],
+            "reservedSkills": [],
+            "variableAffixes": [
+              {
+                "attr": 47,
+                "min": 218,
+                "max": 239
+              }
+            ],
+            "typedEffects": [],
+            "skillBonuses": [
+              {
+                "scope": "all",
+                "levels": 1
+              }
+            ],
+            "v5BudgetExchange": {
+              "removedTraits": [
+                {
+                  "kind": "skill_focus",
+                  "powerBP": 1400,
+                  "thresholdPct": 0
+                }
+              ],
+              "policy": "replacement_only_no_extra_free_budget",
+              "reason": "全技能+1替换14%技能增伤；只作用已经学会的战斗技能"
+            }
+          },
+          "max_roll_authored_affixes": [
+            {
+              "Attr": 47,
+              "Value": 239,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 145,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 900,
+              "Mode": 0
+            },
+            {
+              "Attr": 66,
+              "Value": 900,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 320,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 300,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 48,
+              "Mode": 0
+            }
+          ],
+          "max_roll_local_enhancement_percent": []
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "rerun_test": "TestShowcaseThreeCatalogLoadouts",
+    "python_check": "python3 docs/daoist-endgame/showcase/generate_showcase.py --check",
+    "historical_verification": "2026-10-12原工作区在d9c06dd生产domain通过6套/54件检查；该历史结果不是本次重跑的替代。",
+    "actual_character_wearability": "not read; do not change character allocation"
+  }
+}

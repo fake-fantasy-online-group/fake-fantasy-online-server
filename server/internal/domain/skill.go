@@ -24,13 +24,16 @@ type SkillID int32
 const (
 	SkillBeginnerBolt  SkillID = 13601 // 魔弹术
 	SkillBeginnerGuard SkillID = 13602 // 守护术
+	SkillAlchemy       SkillID = 11005 // 炼丹士：生活熟练度，不参与战斗预算
 	SkillFishing       SkillID = 11006 // 钓鱼（数值是熟练度，刚学会时可为 0）
 	SkillMining        SkillID = 11007 // 挖矿（数值是熟练度，刚学会时可为 0）
 )
 
 // IsLifeSkill 报告这是否是以熟练度作为数值的生活技能。
 // 它们与战斗技能不同：数值 0 也可以表示“已学会，熟练度为 0”。
-func IsLifeSkill(id SkillID) bool { return id == SkillFishing || id == SkillMining }
+func IsLifeSkill(id SkillID) bool {
+	return id == SkillAlchemy || id == SkillFishing || id == SkillMining
+}
 
 // SkillKind 是技能形态。
 type SkillKind uint8
@@ -158,6 +161,7 @@ const (
 	EffectInstantDeath
 	EffectResurrect
 	EffectKnockback
+	EffectStealItem
 )
 
 // SkillEffectTarget 决定一个有序效果作用于已解析目标还是施法者自身。
@@ -170,20 +174,27 @@ const (
 
 // SkillEffect 是从 desc_ 解出来的效果。
 type SkillEffect struct {
-	Kind EffectKind
+	TheftMaxSuccesses int32 `json:",omitempty"`
+	Kind              EffectKind
 	// Target 默认为客户端/场景解析出的目标；Caster 用于饮血剑、噬魂剑这类
 	// 命中敌人后恢复施法者自身资源的后续段。
 	Target SkillEffectTarget
 	// RequiresPreviousLanded 用于有序链：前一段 MISS 时，本段不执行。
 	RequiresPreviousLanded bool
 	// DamagePct 伤害倍率(百分比)。「对敌人造成208%伤害」→ 208。
-	DamagePct int32
+	DamagePct            int32
+	DamagePctNumerator   int64
+	DamagePctDenominator int64
 	// DamageFlat 是命中后追加的同类型固定伤害，不参与基础攻击的护甲/抗性扣除，
 	// 但仍参与后续状态增减伤。龙杀剑用它表达“每消耗 1 点法力追加 1 点物伤”。
 	DamageFlat int32
 	// HealPctOfMax / HealFlat: 「目标恢复最大生命的10%+100点当前生命」→ 10, 100。
-	HealPctOfMax int32
-	HealFlat     int32
+	HealPctOfMax        int32
+	HealFlat            int32
+	HealFlatNumerator   int64
+	HealFlatDenominator int64
+	HealPctNumerator    int64
+	HealPctDenominator  int64
 	// RestoreMPFlat: 「目标恢复100点法力」→ 100。
 	RestoreMPFlat int32
 	// SourceAttackPct: 「攻击力的20%转化为生命/法力」→ 20。
@@ -217,6 +228,10 @@ type SkillEffect struct {
 	// ChanceBP 是特殊机制自身的成功率（万分比）。普通伤害命中和选择性驱散
 	// 各有独立结算字段，不能复用这里制造两次概率判定。
 	ChanceBP int32
+	// ChanceExplicit distinguishes explicit zero from legacy unspecified chances.
+	ChanceExplicit bool
+	// EffectHitBP is local to this effect; ordinary attack accuracy is unrelated.
+	EffectHitBP int32
 	// LossRefundPct 仅用于复活效果，按本次死亡时已经实际扣除的经验与金钱
 	// 返还；不能按复活时余额重新推算。
 	LossRefundPct int32
@@ -240,15 +255,18 @@ const (
 	PassiveTrapHalfDamageChance
 	PassiveStatusPhysicalDamageTakenPct
 	PassiveCastInterruptReductionPct
+	PassiveSkillDamageFlat
+	PassiveEffectRestoreFlat
 )
 
 // PassiveModifier 是已学被动技能对战斗结算的参数化修正。
 // TargetSkill=0 表示全局规则；EffectKind 只供效果数值增强使用。
 type PassiveModifier struct {
-	Kind        PassiveModifierKind
-	TargetSkill SkillID
-	EffectKind  EffectKind
-	Value       int32
+	ProgressionOverflow int32 // ranks beyond the native cap; never additional probability
+	Kind                PassiveModifierKind
+	TargetSkill         SkillID
+	EffectKind          EffectKind
+	Value               int32
 }
 
 // PassiveStatModifier 是被动技能对角色基础战斗属性的确定性修正。
@@ -263,33 +281,44 @@ type PassiveStatModifier struct {
 // PassiveStatusResist 是只针对一个状态的额外抵抗率。它不能塞进通用
 // Stats.StatusResist，否则“昏迷抗性”会错误地同时抵抗中毒、封印等全部减益。
 type PassiveStatusResist struct {
-	Status StatusID
-	Pct    int32
+	ProgressionRestoreMP int32 // restored only when this exact harmful status is resisted
+	Status               StatusID
+	Pct                  int32
 }
 
 // PassiveTriggerStatus 让一个已学被动为指定主动技能追加概率状态。
 // 状态定义与持续时间仍来自 PostgreSQL 状态表；这里仅保存关联和概率。
 type PassiveTriggerStatus struct {
-	TargetSkill SkillID
-	Status      StatusID
-	StatusLevel int32
-	ChanceBP    int32
-	DurationSec int32
+	ChanceExplicit              bool
+	EffectHitBP                 int32
+	SourceSkill                 SkillID
+	ManaCostReductionRanks      int32
+	ProgressionFirstDurationSec int32
+	ProgressionBaseDurationSec  int32
+	ProgressionRanks            int32
+	ProgressionFirstLevel       int32
+	TargetSkill                 SkillID
+	Status                      StatusID
+	StatusLevel                 int32
+	ChanceBP                    int32
+	DurationSec                 int32
 }
 
 // PassiveStatusAffix 把被动提供的属性修正合并进目标主动技能原本施加的状态，
 // 从而严格继承该状态的持续时间与覆盖规则。
 type PassiveStatusAffix struct {
-	TargetSkill SkillID
-	Status      StatusID
-	Affix       Affix
+	ManaCostReductionRanks int32
+	TargetSkill            SkillID
+	Status                 StatusID
+	Affix                  Affix
 }
 
 // PassiveTriggerEffect 让被动为指定主动技能追加一个有序直接效果。
 // 当前用于“命中后概率击退”，效果排在原伤害之后且要求前段命中。
 type PassiveTriggerEffect struct {
-	TargetSkill SkillID
-	Effect      SkillEffect
+	ManaCostReductionRanks int32
+	TargetSkill            SkillID
+	Effect                 SkillEffect
 }
 
 // PassiveCounterAttack 是成功闪避后触发的近战反击规则。
@@ -301,9 +330,35 @@ type PassiveCounterAttack struct {
 
 // SkillDef 是一个技能在某一级上的定义。
 type SkillDef struct {
-	ID    SkillID
-	Level int32 // 1~5
-	Name  string
+	TargetFamilies           []MonsterFamily          `json:",omitempty"`
+	Progression              *SkillProgressionCatalog `json:"-"`
+	ManaCostReductionApplied bool
+	// ManaCostReductionRanks is scoped high-rank mana reduction, applied once after other modifiers.
+	ManaCostReductionRanks int32
+	// Exact post-cap rates are server-only; previews do not consume character credit.
+	ManaCostFractionNumerator   int64              `json:"-"`
+	ManaCostFractionDenominator int64              `json:"-"`
+	CooldownFractionNumeratorMS int64              `json:"-"`
+	CooldownFractionDenominator int64              `json:"-"`
+	RoundingPreviewReady        bool               `json:"-"`
+	CooldownRoundingApplied     bool               `json:"-"`
+	RoundingPreviewNext         SkillRoundingState `json:"-"`
+
+	EquipmentVariant *EquipmentSkillVariant // immutable accepted cast snapshot
+
+	FormulaVersion         uint32
+	SnapshotRawRanks       Learned
+	SnapshotHardRanks      Learned
+	TrainingDamageBP       int32
+	TrainingEliteDamageBP  int32
+	AppliedSynergyDamageBP int32
+	// ProgressionShieldFlat is an authored, consumed shield carrier for utility skills.
+	ProgressionShieldFlat int32
+	// UniqueInvisibleStart is a cast-local snapshot, never a static table rule.
+	UniqueInvisibleStart bool
+	ID                   SkillID
+	Level                int32 // 1~5
+	Name                 string
 	// Description 是 PostgreSQL ov_skilldesc.desc_ 的原始技能说明。
 	Description string
 	// Icon 来自 ov_skilldesc.small_map；该列与客户端 skills.json.icon 逐行闭合。
@@ -469,12 +524,22 @@ type SkillTable map[SkillKey]SkillDef
 
 // Get 取某技能某一级的定义。
 func (t SkillTable) Get(id SkillID, level int32) (SkillDef, bool) {
+	if t.V5Enabled(id) {
+		first := t[SkillKey{ID: id, Level: 1}]
+		fifth := t[SkillKey{ID: id, Level: 5}]
+		original := t[SkillKey{ID: id, Level: level}]
+		d, err := EvaluateV5Skill(first, fifth, level, original)
+		return d, err == nil
+	}
 	d, ok := t[SkillKey{ID: id, Level: level}]
 	return d, ok
 }
 
 // MaxLevelOf 返回某技能的最高等级。0 表示没有这个技能。
 func (t SkillTable) MaxLevelOf(id SkillID) int32 {
+	if t.V5Enabled(id) {
+		return SkillHardPointCap
+	}
 	var max int32
 	for k := range t {
 		if k.ID == id && k.Level > max {
@@ -501,6 +566,9 @@ func (c *Character) RemoveBeginnerSkills() {
 		return
 	}
 	if c.Skills != nil {
+		if c.SkillAllocationVersion == SkillFormulaVersion && c.SkillPointsKnown {
+			c.SkillPoints += max(int32(0), c.Skills[SkillBeginnerBolt]) + max(int32(0), c.Skills[SkillBeginnerGuard])
+		}
 		delete(c.Skills, SkillBeginnerBolt)
 		delete(c.Skills, SkillBeginnerGuard)
 	}
@@ -543,7 +611,7 @@ func (e SkillEffect) HealAmount(targetMaxHP int32) int32 {
 	if e.Kind != EffectHeal {
 		return 0
 	}
-	n := targetMaxHP*e.HealPctOfMax/100 + e.HealFlat
+	n := skillHealAmount(e, targetMaxHP)
 	if n < 1 {
 		return 1
 	}

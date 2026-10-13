@@ -49,12 +49,18 @@ var monsterLootGridOffsets = [...]struct{ x, y float64 }{
 
 // rollLoot 掷掉落并把东西放到地上。
 func (s *Scene) rollLoot(dead *entity.Entity, killer domain.EntityID) {
+	s.rollLootWithContextV5(dead, s.freezeLootContextV5(killer))
+}
+
+func (s *Scene) rollLootWithContextV5(dead *entity.Entity, context domain.LootContextV5) {
 	if s.items == nil || dead == nil || dead.Monster == nil {
 		return
 	}
+	killer := context.Owner
 	entries := s.lootTable[dead.Monster.TypeID]
 	fixed := s.rollBossFixedEquipment(dead)
 	if len(entries) == 0 && len(fixed) == 0 {
+		s.rollAstralRuneLoot(dead, killer, 0)
 		return
 	}
 	// 跨级惩罚的掉率倍率按击杀者等级对怪模板等级算；宠物补刀归主人。
@@ -74,11 +80,8 @@ func (s *Scene) rollLoot(dead *entity.Entity, killer domain.EntityID) {
 			continue
 		}
 		stack := domain.NewStack(def, 1)
-		if choice.RollAffixes {
-			rolled := s.equipmentRoll.Roll(def, profile, s.rng.Int63n)
-			stack.RolledAffixCount = uint8(len(rolled))
-			copy(stack.RolledAffixes[:], rolled)
-		}
+		stack.SocketCount = domain.RollDroppedSocketCount(def, domain.AstralDropBoss, s.rng.Int63n, s.lootRules.Active())
+		s.rollNaturalEquipmentV5(def, &stack, dead, n, profile, choice.RollAffixes, context)
 		s.spawnGeneratedLoot(def, stack,
 			s.monsterLootPosition(dead.Pos, startSlot+n), killer)
 		n++
@@ -105,15 +108,13 @@ func (s *Scene) rollLoot(dead *entity.Entity, killer domain.EntityID) {
 			continue
 		}
 		stack := domain.NewStack(def, 1)
-		if e.RollAffixes && def.Equip != nil {
-			rolled := s.equipmentRoll.Roll(def, profile, s.rng.Int63n)
-			stack.RolledAffixCount = uint8(len(rolled))
-			copy(stack.RolledAffixes[:], rolled)
-		}
+		stack.SocketCount = domain.RollDroppedSocketCount(def, s.astralDropGrade(dead), s.rng.Int63n, s.lootRules.Active())
+		s.rollNaturalEquipmentV5(def, &stack, dead, n, profile, e.RollAffixes, context)
 		s.spawnGeneratedLoot(def, stack, s.monsterLootPosition(dead.Pos, startSlot+n), killer)
 		n++
 		originalDrops++
 	}
+	s.rollAstralRuneLoot(dead, killer, startSlot+n)
 }
 
 func (s *Scene) fixedEquipmentManaged(monster domain.MonsterID, item domain.ItemID) bool {
@@ -344,7 +345,7 @@ func (s *Scene) spawnGeneratedLoot(def domain.ItemDef, stack domain.Stack, at do
 	e := &entity.Entity{
 		ID:   id,
 		Kind: domain.KindDrop,
-		Name: def.Name,
+		Name: itemDisplayName(def, stack),
 		Pos:  at,
 		Drop: &entity.Drop{
 			Item:       stack.Item,
@@ -357,7 +358,7 @@ func (s *Scene) spawnGeneratedLoot(def domain.ItemDef, stack domain.Stack, at do
 	s.entities[id] = e
 	s.ground[id] = e
 	s.aoi.Enter(e)
-	s.emit(s.spawnEvent(e))
+	s.emit(s.freshGroundSpawnEvent(e))
 
 	// 到期自动消失。不设过期的话, 一张图刷一整天就会堆满没人捡的树枝。
 	s.timer.after(s.tick, lootTTLTicks, func() {
@@ -373,7 +374,7 @@ func (s *Scene) spawnGeneratedLoot(def domain.ItemDef, stack domain.Stack, at do
 func (s *Scene) spawnPlayerDrop(def domain.ItemDef, st domain.Stack, at domain.Pos, owner domain.EntityID) {
 	id := s.alloc.Drop()
 	e := &entity.Entity{
-		ID: id, Kind: domain.KindDrop, Name: def.Name, Pos: at,
+		ID: id, Kind: domain.KindDrop, Name: itemDisplayName(def, st), Pos: at,
 		Drop: &entity.Drop{
 			Item: st.Item, Count: st.Count, Stack: st,
 			Owner: owner, OwnerUntil: s.tick + lootOwnerTicks,
@@ -382,7 +383,7 @@ func (s *Scene) spawnPlayerDrop(def domain.ItemDef, st domain.Stack, at domain.P
 	s.entities[id] = e
 	s.ground[id] = e
 	s.aoi.Enter(e)
-	s.emit(s.spawnEvent(e))
+	s.emit(s.freshGroundSpawnEvent(e))
 	s.timer.after(s.tick, lootTTLTicks, func() {
 		if _, ok := s.entities[id]; ok {
 			s.removeLoot(id, event.DespawnTimeout)
@@ -432,6 +433,9 @@ func (s *Scene) onPickUp(cmd PickUp) {
 		reject(event.RejectTooFar)
 		return
 	}
+	if s.pickUpEndgameRiftReward(p, e, rangePX) {
+		return
+	}
 	// 归属保护: 谁打死的谁先捡。过了保护期谁都能捡。
 	if e.Drop.Owner != 0 && e.Drop.Owner != p.ID && s.tick < e.Drop.OwnerUntil {
 		reject(event.RejectNoTarget)
@@ -442,6 +446,10 @@ func (s *Scene) onPickUp(cmd PickUp) {
 	if !ok {
 		s.removeLoot(e.ID, event.DespawnPickedUp) // 配置没了, 别让它永远躺着
 		return
+	}
+	itemName := def.Name
+	if !e.Drop.Stack.Empty() {
+		itemName = itemDisplayName(def, e.Drop.Stack)
 	}
 	bag := p.Player.Bag
 	originalCount := e.Drop.Count
@@ -464,16 +472,16 @@ func (s *Scene) onPickUp(cmd PickUp) {
 		}
 		s.pushInventory(p)
 		p.Player.MarkDirty()
-		s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: fmt.Sprintf("获得了 %s ×%d", def.Name, originalCount-left)})
+		s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: fmt.Sprintf("获得了 %s ×%d", itemName, originalCount-left)})
 		s.requestNewbieTip(p.ID, 2)
 		return
 	}
 	s.removeLoot(e.ID, event.DespawnPickedUp)
-	s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: fmt.Sprintf("获得了 %s ×%d", def.Name, originalCount)})
+	s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: fmt.Sprintf("获得了 %s ×%d", itemName, originalCount)})
 	s.pushInventory(p)
 	p.Player.MarkDirty()
 	s.requestNewbieTip(p.ID, 2)
-	s.log.Debug("拾取", "char", p.Name, "物品", def.Name, "数量", e.Drop.Count)
+	s.log.Debug("拾取", "char", p.Name, "物品", itemName, "数量", e.Drop.Count)
 }
 
 // pickUpRange 拾取距离。取近战攻击距离的量级 —— 够得着打就够得着捡。

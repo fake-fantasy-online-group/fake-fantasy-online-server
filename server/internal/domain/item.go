@@ -64,9 +64,10 @@ type EquipDef struct {
 	ResourceLevel int32
 	// NoTypeDrop 对应 ov_arm.no_type_drop。只有 false 的模板能进入
 	// “物品种类 + 等级区间”随机掉落池；显式 item_id 掉落不受它影响。
-	NoTypeDrop  bool
-	LevelReq    int32
-	RefineLimit int32
+	NoTypeDrop         bool
+	NativeDropEligible bool // loaded from native SQL drop classification; never inferred from a compiled ID list
+	LevelReq           int32
+	RefineLimit        int32
 	// RefineEffects 按精炼等级索引；启动时把原表百分比按本装备固有属性
 	// 折算为固定增量，显示与战斗共用，不含随机词条、镶嵌或套装。
 	RefineEffects map[int32]RefineEffect
@@ -101,6 +102,10 @@ type EquipDef struct {
 	// Affixes 是词条(game_equip_extra, 17717 行)。**Stats 里的暴击率与各种抗性
 	// 只从这里来** —— 没有词条的话那些字段永远是零。
 	Affixes []Affix
+	// UnknownInnateProperties 标记 game_equip_extra 中尚未解析/实现、没有
+	// 载入 Affixes 的源行。这不证明实例实际获得了该属性；仅表示不能确认
+	// 是白板底材。它不读取随机属性池，也不改变属性计算和孔位预算。
+	UnknownInnateProperties bool
 	// Need 是穿戴门槛(等级 + 六维 + 性别 + 职业)。
 	Need Requirement
 	// ProfessionNames 是 ov_arm 的初行者/五职业/五飞升职业开关
@@ -160,6 +165,7 @@ type EquipAppearance struct {
 
 // ItemDef 是一种物品的模板。
 type ItemDef struct {
+	EndgameCatalog     *EndgameCatalog `json:"-"` // immutable startup dependency, never instance state
 	PetCarrierSpecies  PetID
 	HornTier, HornSkin uint8 // PostgreSQL game_horn_items
 	GrantPetID         PetID // 来自game_item_pet_eggs；使用后获得未孵化宠物。
@@ -468,6 +474,8 @@ func (d ItemDef) IsEquip() bool { return d.Equip != nil }
 
 // Stack 是背包里的一格。Item == 0 表示空格。
 type Stack struct {
+	Endgame EndgameItemState // durable per-instance extension; omitted from native packets
+
 	// UID 是**这一件东西**的唯一标识, 与 ItemID(哪一种)不是一回事。
 	//
 	// 现在只有装备用得上(每件的耐久不同), 但交易、仓库、摆摊都要靠它来说
@@ -575,6 +583,10 @@ func NewStack(def ItemDef, count int32) Stack {
 		InstanceKind: def.InstanceKind}
 	if def.InstanceKind != ItemInstanceNone {
 		st.UID = NewItemInstanceID()
+	}
+	if def.InstanceKind == ItemInstanceEquipment && def.Equip != nil {
+		st.Endgame.FormationRollBP = newFormationRollBP()
+		st.Endgame.FormationContentVersion = UniqueContentVersion
 	}
 	if def.InstanceKind == ItemInstanceSocketCard {
 		st.Card = def.CardDefaults

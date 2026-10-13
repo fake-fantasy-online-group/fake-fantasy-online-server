@@ -1,4 +1,7 @@
 package session
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"log/slog"
@@ -48,7 +51,7 @@ func TestStaleMoveAfterCrossMapIsDropped(t *testing.T) {
 	sink := &capSink{}
 
 	s := &Session{
-		deps:  Deps{Router: r.router, Log: slog.Default(), Store: store.NewMemory()},
+		deps:  Deps{Router: r.router, Log: slog.Default(), Store: store.NewMemory(catalogfixture.EndgameCatalog())},
 		log:   slog.Default(),
 		stage: StageInGame, entity: 1, scene: domain.SceneID{MapID: 1},
 		char: &domain.Character{ID: 100, Name: "片姐司马"},
@@ -184,7 +187,7 @@ func TestClientReadyTransferWaitsForTargetOwnershipThenAllowsMovement(t *testing
 	r.enter(1, 1, 100, "片姐司马")
 	sink := &capSink{}
 	s := &Session{
-		deps: Deps{Router: r.router, Log: slog.Default(), Store: store.NewMemory()},
+		deps: Deps{Router: r.router, Log: slog.Default(), Store: store.NewMemory(catalogfixture.EndgameCatalog())},
 		log:  slog.Default(), sink: sink,
 		stage: StageInGame, entity: 1, scene: domain.SceneID{MapID: 1},
 		char: &domain.Character{ID: 100, Name: "片姐司马"},

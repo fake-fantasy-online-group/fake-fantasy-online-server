@@ -1,4 +1,7 @@
 package session
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"context"
@@ -37,7 +40,7 @@ func newTwoMapRig(t *testing.T) *twoMapRig {
 		if !ok {
 			t.Fatalf("测试没准备 %d 号图的节拍", id.MapID)
 		}
-		return scene.New(scene.Config{ID: id, Frames: ch}), nil
+		return scene.New(scene.Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Frames: ch}), nil
 	}
 	router := scene.NewRouter(build, slog.Default())
 	ctx, cancel := context.WithCancel(context.Background())

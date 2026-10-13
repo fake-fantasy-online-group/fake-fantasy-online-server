@@ -66,6 +66,12 @@ func (t EquipmentRollTable) Roll(def ItemDef, profile ColorProfile, intn func(in
 	}
 	count := weightedAffixCount(counts, intn)
 	count = uint8(min(int(count), max(0, MaxEquipmentAttributes-len(def.Equip.Affixes))))
+	return t.rollAffixOptions(def, count, intn)
+}
+
+// rollAffixOptions is shared by legacy and MF generators; MF never alters the
+// candidate pool, relative option weights, values or per-attribute uniqueness.
+func (t EquipmentRollTable) rollAffixOptions(def ItemDef, count uint8, intn func(int64) int64) []InstanceAffix {
 	if count == 0 {
 		return nil
 	}

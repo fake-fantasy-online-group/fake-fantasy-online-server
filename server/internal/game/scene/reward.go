@@ -4,6 +4,7 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
+	"math"
 )
 
 // 击杀结算: 经验与升级。
@@ -68,7 +69,7 @@ func (s *Scene) expAfterPenalty(exp int64, playerLevel int32, monster domain.Mon
 	if mult >= 10000 {
 		return exp
 	}
-	return exp * int64(mult) / 10000
+	return exp/10000*int64(mult) + exp%10000*int64(mult)/10000
 }
 
 // monsterExp 取这只怪的经验值。
@@ -105,13 +106,27 @@ func (s *Scene) grantExpWithBonus(p *entity.Entity, exp int64, applyBonus bool) 
 		bonus = itemBonus
 	}
 	if applyBonus && bonus != 0 {
-		exp += exp * int64(bonus) / 100
+		var err error
+		exp, err = domain.ExperienceWithBonus(exp, bonus)
+		if err != nil {
+			s.log.Error("experience rejected", "error", err)
+			return
+		}
 	}
 	if applyBonus && exp > 0 {
-		exp += s.petExperienceBonus(p, exp)
+		extra := s.petExperienceBonus(p, exp)
+		if extra < 0 || exp > math.MaxInt64-extra {
+			s.log.Error("experience overflow")
+			return
+		}
+		exp += extra
 	}
 	ch := p.Player.Char
 	res := ch.AddExp(s.levels, exp, domain.LevelCap)
+	if res.Reason != "" {
+		s.log.Error("experience rejected", "reason", res.Reason)
+		return
+	}
 	p.Player.MarkDirty()
 
 	if res.Levels > 0 {
@@ -126,7 +141,7 @@ func (s *Scene) grantExpWithBonus(p *entity.Entity, exp int64, applyBonus bool) 
 
 	// 真实击杀顺序：先权威状态，再表现包。
 	s.emitTo(p.ID, s.attributeSnapshot(p))
-	s.emitTo(p.ID, event.ExpGained{Who: p.ID, Delta: exp, Total: ch.Exp})
+	s.emitTo(p.ID, event.ExpGained{Who: p.ID, Delta: res.AppliedExp, Total: ch.Exp})
 
 	if res.Levels == 0 {
 		return

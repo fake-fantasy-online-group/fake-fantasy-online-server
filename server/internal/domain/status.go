@@ -93,25 +93,45 @@ const (
 
 // StatusDef 是一个状态在某一级上的定义。
 type StatusDef struct {
-	ID    StatusID
-	Level int32
-	Name  string
-	Desc  string
-	Type  StatusType
+	// OverlayStrength is current database metadata, never persisted or sent on wire.
+	OverlayStrength *StatusOverlayStrength `json:"-"`
+	// LegacyOverlayLevelBP aliases storage identity only for cross-ID comparisons.
+	LegacyOverlayLevelBP int64 `json:"-"`
+	// Hundredths of original absolute tick damage, consumed by each Active instance.
+	PeriodicDamageFraction100 int64 `json:",omitempty"`
+	ProgressionAttackFlat int32
+	// Skill snapshots pin persistent effects to the lesser of cast and current sources.
+	SkillSnapshotID   SkillID
+	SkillSnapshotRank int32
+	SkillSnapshotRaw  Learned
+	SkillSnapshotHard Learned
+	ID                StatusID
+	Level             int32
+	Name              string
+	Desc              string
+	Type              StatusType
 	// TypeKnown 区分“官方数据明确为 GOOD(0)”和旧测试/内存定义的零值。
 	// 生产数据始终为 true；false 时保留旧的效果符号回退，不让手工定义静默变义。
 	TypeKnown bool
 
-	// 以下是客户端展示元数据。状态自身有图标时保留；没有时由本次实际施加
-	// 来源补充：技能用技能图标，物品用物品图标。不同来源不得全局归一。
-	Icon int32
-	// SourceSkillID 只记录本次技能来源；物品来源或状态原图标为0。
+	// 原状态表按状态号+等级明确给出 SmallMap；包括 0 都是已知的原值。
+	// 只有不属于原表的自定义状态才可由实际施加来源提供展示元数据。
+	Icon      int32
+	IconKnown bool
+	// SourceSkillID 仅供无原表的来源状态使用；原表状态保持0并使用状态身份。
 	SourceSkillID int32
 	Invisible     bool
 	// PreventInvisible 表示该状态生效期间不能获得隐身。它用于神术：鹰眼
 	// 破隐后的持续压制；不能借用减速/禁无敌等旧状态来附带实现。
 	PreventInvisible bool
 	Immobile         uint8
+	// BlockMove restricts voluntary movement only. It is independent of stun
+	// and silence, so a rooted entity may still attack and cast in place.
+	BlockMove bool
+	// AttackSpeedIsFrequency identifies source-verified frequency penalties
+	// (枷锁术). Their attack-speed affix is already correct for player speed;
+	// monster intervals require inversion, not the legacy interval multiplier.
+	AttackSpeedIsFrequency bool
 	// Hidden 来自 no_inform_client；这类运行时状态参与数值结算，但不得进入任何
 	// 客户端 Buff、目标栏或实体状态列表。
 	Hidden bool
@@ -129,6 +149,16 @@ type StatusDef struct {
 	MPChanges []ResourceChange
 	// Control 控制行为，非 ControlNone 时该状态会限制行动。
 	Control Control
+	// ControlPower is retained for saved-state compatibility; it no longer reduces resistance.
+	ControlPower int32
+	// EffectHitBP is this status/trigger's local effect accuracy in basis points.
+	EffectHitBP int32
+	// ChanceExplicit preserves explicit zero while legacy omitted chances mean 100%.
+	ChanceBP       int32
+	ChanceExplicit bool
+	// Persistent trigger accuracy is pinned to its holder at application, and can only weaken.
+	SourceEffectHitBP    int32
+	SourceEffectHitKnown bool
 
 	// 以下字段是不能塞进 Stats 的战斗状态语义。数值均来自状态效果表或
 	// 与状态逐级闭合的技能描述；百分比使用整数百分数。
@@ -160,9 +190,14 @@ type StatusDef struct {
 	// 被动保住隐身，后续攻击仍继续享受隐身加成。
 	StealthDamagePct int32
 
-	PoisonOnHitChance    int32
-	PoisonOnHitLevel     int32
-	FreezeAttackerChance int32
+	PoisonOnHitProgressionRanks int32
+	PoisonOnHitFirstLevel       int32
+	PoisonOnHitFirstDurationSec int32
+	PoisonOnHitBaseDurationSec  int32
+	PoisonOnHitChance           int32
+	PoisonOnHitLevel            int32
+	FreezeAttackerChance        int32
+	FreezeAttackerEffectHitBP   int32
 
 	NextBasicAttackPct       int32
 	NextSkillDamagePct       int32
@@ -202,8 +237,34 @@ const (
 
 // StatusApplication 是效果脚本里一条已经闭合的“施加某级状态”。
 type StatusApplication struct {
-	ID    StatusID
-	Level int32
+	// RandomGroup > 0 chooses one weighted candidate per landed, living target.
+	// Zero keeps ordinary independent applications. These are configuration
+	// fields, never part of an applied/saved status or the client protocol.
+	RandomGroup  int32 `json:",omitempty"`
+	RandomWeight int32 `json:",omitempty"`
+	// TargetType selects the actual target class without widening skill admission.
+	TargetType SkillStatusTarget `json:",omitempty"`
+	Progression            *SkillProgressionCatalog `json:"-"`
+	PeriodicDamageBonusPct int32
+	SourceSkill            SkillID
+	EffectHitBP            int32
+	ChanceExplicit         bool
+	// ProgressionRanks extends the original fifth-rank payload without inventing
+	// another status level. ProgressionFirstLevel identifies the skill's original
+	// first-rank status row, which need not be status level 1.
+	ProgressionRanks      int32
+	ProgressionFirstLevel int32
+	// Original skill-duration overrides; zero falls back to the corresponding
+	// stored status row. They let continuation retain source-specific durations.
+	ProgressionFirstDurationSec int32
+	ProgressionBaseDurationSec  int32
+	ProgressionAttackFlat       int32
+	ProgressionAffixes          []Affix
+	ProgressionHPPerTick        int32
+	ProgressionDamageShield     int32
+	ProgressionReflectFlat      int32
+	ID                          StatusID
+	Level                       int32
 	// ChanceBP 是这条状态在技能真实命中后的独立施加概率（万分比）。零值用于
 	// 旧的内存定义并按 10000 处理；PostgreSQL 结构化配置始终显式保存。
 	ChanceBP int32
@@ -242,7 +303,7 @@ func (d StatusDef) Harmful() bool {
 	if d.TypeKnown {
 		return d.Type == StatusBad
 	}
-	if d.Control != ControlNone {
+	if d.Control != ControlNone || d.BlockMove {
 		return true
 	}
 	for _, a := range d.Affixes {
@@ -296,6 +357,9 @@ func (m StatusOverlay) Rule(existing, incoming StatusID) (OverlayRule, bool) {
 // Active 是一个实体身上正在生效的一个状态。
 type Active struct {
 	Def StatusDef
+	PeriodicDamageRemainder100 int64 `json:",omitempty"`
+	// Tick-only whole damage emitted by DueTicks; never shared between instances.
+	PeriodicDamageTickExtra int32 `json:"-"`
 	// ExpireAt 到期帧。
 	ExpireAt Tick
 	// NextTickAt 下次周期触发的帧。非周期状态为 0。
@@ -310,6 +374,7 @@ type Active struct {
 // 减益保存 UTC 到期时间；RemainingTicks=-1 表示永久状态。
 // Source 是场景实体号，重登后不能沿用，故不进入存档。
 type SavedStatus struct {
+	PeriodicDamageRemainder100 int64 `json:",omitempty"`
 	Def             StatusDef
 	RemainingTicks  int64
 	ExpiresAtUnixMS int64
@@ -342,12 +407,15 @@ func (s *StatusSet) Apply(def StatusDef, now Tick, src EntityID) {
 	if s == nil {
 		return
 	}
+	if _, valid := def.OverlayPriority(); !valid {
+		return
+	}
 	if s.act == nil {
 		s.act = map[StatusID][]Active{}
 	}
 	a := newActive(def, now, src)
 	old := s.act[def.ID]
-	if len(old) > 0 && old[0].Def.Level > def.Level {
+	if len(old) > 0 && overlayReplacementBlocked(old[0].Def, def) {
 		// 低等级盖不掉高等级的效果, 但可以续时长
 		a.Def = old[0].Def
 		if old[0].ExpireAt > a.ExpireAt {
@@ -378,8 +446,11 @@ type StatusApplyResult struct {
 }
 
 // BlockedByOverlay 只做预检，不修改状态集。
-// REPLACE 比较等级；MUSTREPLACE 不比较。
+// REPLACE 比较同ID显式强度或原逻辑等级；MUSTREPLACE 不比较。
 func (s *StatusSet) BlockedByOverlay(def StatusDef, overlay StatusOverlay) bool {
+	if _, valid := def.OverlayPriority(); !valid {
+		return true
+	}
 	if s == nil || len(s.act) == 0 || len(overlay) == 0 {
 		return false
 	}
@@ -393,7 +464,7 @@ func (s *StatusSet) BlockedByOverlay(def StatusDef, overlay StatusOverlay) bool 
 		}
 		if rule == OverlayReplace {
 			for _, old := range list {
-				if old.Def.Level > def.Level {
+				if overlayReplacementBlocked(old.Def, def) {
 					return true
 				}
 			}
@@ -405,6 +476,9 @@ func (s *StatusSet) BlockedByOverlay(def StatusDef, overlay StatusOverlay) bool 
 // ApplyWithOverlay 按矩阵一次性解算所有已有状态与新状态的关系。
 func (s *StatusSet) ApplyWithOverlay(def StatusDef, now Tick, src EntityID, overlay StatusOverlay) StatusApplyResult {
 	if s == nil {
+		return StatusApplyResult{Blocked: true}
+	}
+	if _, valid := def.OverlayPriority(); !valid {
 		return StatusApplyResult{Blocked: true}
 	}
 	// 没注入矩阵的是旧测试/手工场景，保持 Apply 的单实例、高等级优先语义。
@@ -525,32 +599,74 @@ func (s *StatusSet) MitigateDamage(magic bool, damage int32) (int32, []StatusID)
 	if s == nil || damage <= 0 {
 		return damage, nil
 	}
-	var increase, reduction, flatReduction int32
-	s.Each(func(a Active) {
-		if a.Def.Invulnerable {
-			reduction = 100
-		}
-		if magic {
-			increase += a.Def.MagicDamageTakenPct
-			reduction += a.Def.MagicDamageReductionPct
-			flatReduction += a.Def.MagicDamageReductionFlat
-		} else {
-			increase += a.Def.PhysicalDamageTakenPct
-			reduction += a.Def.PhysicalDamageReductionPct
-		}
-	})
-	if increase > 0 {
-		damage += damage * increase / 100
+	if s.Invulnerable() {
+		return 0, nil
 	}
-	if reduction > 100 {
-		reduction = 100
+	buckets := CombatDamageBuckets{DamageTakenIncreasePct: s.DamageTakenIncreasePct(magic),
+		DamageReductionPct: s.DamageReductionPct(magic), FlatReduction: s.DamageReductionFlat(magic)}
+	damage = buckets.IncomingDamage(damage)
+	return s.AbsorbDamage(damage)
+}
+
+// Invulnerable is categorical immunity, never an ordinary reduction rating.
+func (s *StatusSet) Invulnerable() bool {
+	immune := false
+	if s != nil {
+		s.Each(func(a Active) { immune = immune || a.Def.Invulnerable })
 	}
-	if reduction > 0 {
-		damage -= damage * reduction / 100
+	return immune
+}
+
+// DamageTakenAmount intentionally retains a wide intermediate: amplification
+// can exceed 100%, and a later reduction can bring it back into int32 range.
+func (s *StatusSet) DamageTakenAmount(magic bool, damage int32) int64 {
+	pct := int64(s.DamageTakenIncreasePct(magic))
+	return int64(damage) + int64(damage)*pct/100
+}
+
+// DamageTakenIncreasePct supplies the same additive status bucket to either
+// standalone status settlement or the scene's shared combat modifier stage.
+func (s *StatusSet) DamageTakenIncreasePct(magic bool) int32 {
+	var pct int64
+	if s != nil {
+		s.Each(func(a Active) {
+			if magic {
+				pct += int64(a.Def.MagicDamageTakenPct)
+			} else {
+				pct += int64(a.Def.PhysicalDamageTakenPct)
+			}
+		})
 	}
-	damage -= flatReduction
-	if damage < 0 {
-		damage = 0
+	return max(int32(0), SaturateInt32(pct))
+}
+
+func (s *StatusSet) DamageReductionPct(magic bool) int32 {
+	var pct int64
+	if s != nil {
+		s.Each(func(a Active) {
+			if magic {
+				pct += int64(a.Def.MagicDamageReductionPct)
+			} else {
+				pct += int64(a.Def.PhysicalDamageReductionPct)
+			}
+		})
+	}
+	return SaturateInt32(pct)
+}
+
+func (s *StatusSet) DamageReductionFlat(magic bool) int64 {
+	var flat int64
+	if s != nil && magic {
+		s.Each(func(a Active) { flat += int64(a.Def.MagicDamageReductionFlat) })
+	}
+	return flat
+}
+
+// AbsorbDamage consumes shield pools after percentage mitigation. Pools can
+// absorb an entire hit and are not percentage damage reduction.
+func (s *StatusSet) AbsorbDamage(damage int32) (int32, []StatusID) {
+	if s == nil || damage <= 0 {
+		return damage, nil
 	}
 
 	var removed []StatusID
@@ -867,10 +983,13 @@ func (s *StatusSet) SaveForLogout(now Tick, wall time.Time, owner EntityID) []Sa
 	var out []SavedStatus
 	for _, id := range s.sortedIDs() {
 		for _, a := range s.act[id] {
+			if a.Def.SkillSnapshotID != 0 && (owner == 0 || a.Source != owner) {
+				continue
+			}
 			if a.ExpireAt != 0 && a.ExpireAt <= now {
 				continue
 			}
-			record := SavedStatus{Def: a.Def, ShieldLeft: a.ShieldLeft, SourceSelf: owner != 0 && a.Source == owner}
+			record := SavedStatus{Def: a.Def, ShieldLeft: a.ShieldLeft, SourceSelf: owner != 0 && a.Source == owner, PeriodicDamageRemainder100: a.PeriodicDamageRemainder100}
 			if a.ExpireAt == 0 {
 				record.RemainingTicks = -1
 			} else {
@@ -894,10 +1013,14 @@ func (s *StatusSet) SaveForLogout(now Tick, wall time.Time, owner EntityID) []Sa
 func RestoreSavedStatuses(saved []SavedStatus, now Tick, wall time.Time, owner EntityID) *StatusSet {
 	out := NewStatusSet()
 	for _, record := range saved {
+		if record.Def.SkillSnapshotID != 0 && !record.SourceSelf {
+			continue
+		}
 		if record.Def.ID <= 0 || record.RemainingTicks == 0 || record.RemainingTicks < -1 {
 			continue
 		}
-		a := Active{Def: record.Def, ShieldLeft: record.ShieldLeft}
+		a := Active{Def: record.Def, ShieldLeft: record.ShieldLeft, PeriodicDamageRemainder100: record.PeriodicDamageRemainder100}
+		if a.PeriodicDamageRemainder100 < 0 || a.PeriodicDamageRemainder100 >= 100 { continue }
 		if record.SourceSelf {
 			a.Source = owner
 		}
@@ -980,7 +1103,14 @@ func (s *StatusSet) DueTicks(now Tick) []Active {
 			if a.NextTickAt == 0 || now < a.NextTickAt {
 				continue
 			}
+			// Update the owned instance before returning its value-copy tick receipt.
+			if a.Def.PeriodicDamageFraction100 > 0 {
+				total := a.PeriodicDamageRemainder100 + a.Def.PeriodicDamageFraction100
+				a.PeriodicDamageTickExtra = SaturateInt32(total / 100)
+				a.PeriodicDamageRemainder100 = total % 100
+			}
 			due = append(due, a)
+			a.PeriodicDamageTickExtra = 0
 			a.NextTickAt = now + Ticks(int(a.Def.IntervalSec)*1000)
 			list[i] = a
 		}
@@ -1008,6 +1138,23 @@ func (s *StatusSet) Controlled() Control {
 		}
 	}
 	return out
+}
+
+// BlocksMovement includes full incapacitation and source-specific movement
+// locks. Reading active states rather than caching a flag makes expiration,
+// dispels and source reconciliation release the restriction immediately.
+func (s *StatusSet) BlocksMovement() bool {
+	if s == nil {
+		return false
+	}
+	for _, list := range s.act {
+		for _, a := range list {
+			if a.Def.BlockMove || a.Def.Control == ControlStun {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // Affixes 把身上所有状态的属性影响摊平，交给属性管线。
@@ -1067,19 +1214,9 @@ func (s *StatusSet) Clone() *StatusSet {
 	return out
 }
 
-// ResistChance 返回抗性把状态挡下来的概率(百分比, 0~90)。
-//
-// **这是「不良状态抗性」第一次真的起作用** —— 1404 条装备词条带这个属性,
-// 但在此之前没有任何东西会施加状态, 所以那个数是死的。
-//
-// 上限 90%: 100% 免疫会让一件装备直接废掉整条控制路线。
-// ⚠️ 上限本身是**服务端定的**, 原作数据里没有说法。
+// ResistChance is a legacy integer display helper for a 100% base effect with
+// zero effect accuracy. Combat must use EffectSuccessProbability to preserve
+// fractional chances. Resistance itself has no gameplay cap.
 func ResistChance(statusResist int32) int32 {
-	if statusResist <= 0 {
-		return 0
-	}
-	if statusResist > 90 {
-		return 90
-	}
-	return statusResist
+	return int32((1 - EffectSuccessProbability(10000, 0, int64(statusResist)*100)) * 100)
 }

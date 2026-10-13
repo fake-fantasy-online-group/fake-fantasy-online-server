@@ -35,7 +35,10 @@ const (
 	// SlotCharm 保留为旧代码兼容名；客户端与 ov_arm 已确认 11 号槽实际是法宝。
 	SlotCharm    EquipSlot = SlotTreasure
 	SlotTwoHand  EquipSlot = 13 // 双手武器
-	maxEquipSlot EquipSlot = 13
+	SlotEar      EquipSlot = 14
+	SlotBangle   EquipSlot = 15
+	SlotBelt     EquipSlot = 16
+	maxEquipSlot EquipSlot = 25 // Keep original slot IDs for post-ascension equipment.
 )
 
 // 装备属性词条的 attr_id。
@@ -67,6 +70,10 @@ const (
 	AttrPhysRes   = 69  // 伤害抗性
 	AttrMagicRes  = 70  // 魔法抗性
 	AttrStatusRes = 118 // 不良状态抗性
+
+	// AttrEffectHitBP is a server-owned extension outside imported native IDs.
+	// Like critical chance it is already in basis points and accepts absolute mode only.
+	AttrEffectHitBP = 1000001
 )
 
 // 词条的取值方式。**[实证]** ov_card_entry.mode: 0 绝对值, 1 百分比。
@@ -161,7 +168,8 @@ const (
 
 // EquipSet 是身上穿着的一整套。按槽位索引, 空槽的 Item 为 0。
 type EquipSet struct {
-	worn map[EquipSlot]Stack
+	worn            map[EquipSlot]Stack
+	effectsRevision uint64
 }
 
 // NewEquipSet 建一套空的。
@@ -180,11 +188,36 @@ func (e *EquipSet) Set(s EquipSlot, st Stack) {
 	if e == nil {
 		return
 	}
+	if equipmentEffectIdentity(e.worn[s]) != equipmentEffectIdentity(st) {
+		e.effectsRevision++
+	}
 	if st.Empty() {
 		delete(e.worn, s)
 		return
 	}
+	if e.worn == nil {
+		e.worn = map[EquipSlot]Stack{}
+	}
 	e.worn[s] = st
+}
+
+// EffectsRevision changes only when effective equipment can change. Ordinary
+// fractional wear and positive durability loss do not rebuild combat effects.
+func (e *EquipSet) EffectsRevision() uint64 {
+	if e == nil {
+		return 0
+	}
+	return e.effectsRevision
+}
+func equipmentEffectIdentity(st Stack) Stack {
+	if st.Empty() {
+		return Stack{}
+	}
+	st.DurabilityWearRaw = 0
+	if st.Durability > 0 {
+		st.Durability = 1
+	}
+	return st
 }
 
 // Each 按客户端槽位号从小到大遍历穿着的东西。
@@ -217,6 +250,7 @@ func (e *EquipSet) Clone() *EquipSet {
 		return nil
 	}
 	out := NewEquipSet()
+	out.effectsRevision = e.effectsRevision
 	for s, st := range e.worn {
 		out.worn[s] = st
 	}
@@ -445,7 +479,7 @@ func Compute(in StatSource) (Base, Stats) {
 
 	src.Worn.Each(func(slot EquipSlot, st Stack) {
 		def, ok := src.Defs(st.Item)
-		if !ok || def.Equip == nil || !EquipmentFunctional(st, def) {
+		if !ok || def.Equip == nil || !EquipmentFunctional(st, def) || src.Level < EquipmentRequiredLevel(def, st) {
 			return
 		}
 		if suit := def.Equip.Suit; suit != nil && !seenSuits[suit.ID] {
@@ -464,6 +498,9 @@ func Compute(in StatSource) (Base, Stats) {
 		base = base.Add(equipBase)
 
 		for _, a := range def.Equip.Affixes {
+			applyAffix(a, &base, &basePct, &flat, &pct)
+		}
+		for _, a := range UniqueItemBonuses(def, st) {
 			applyAffix(a, &base, &basePct, &flat, &pct)
 		}
 		for i := 0; i < int(st.RolledAffixCount) && i < len(st.RolledAffixes); i++ {
@@ -601,6 +638,10 @@ func applyAffix(a Affix, base *Base, basePct *Base, flat *Stats, pct *statPercen
 		addStat(&flat.MAtk, &pct.matk, pctMode, v)
 	case AttrMDef:
 		addStat(&flat.MDef, &pct.mdef, pctMode, v)
+	case AttrEffectHitBP:
+		if !pctMode {
+			flat.EffectHitBP = SaturateInt32(int64(flat.EffectHitBP) + int64(v))
+		}
 	case AttrCrit:
 		addStat(&flat.CritRate, nil, pctMode, v) // 本身就是万分比, 不再叠百分比
 	case AttrMCrit:
@@ -683,20 +724,20 @@ func applyStatPercent(s Stats, p statPercent) Stats {
 }
 
 func addStatPercentFrom(out, baseline Stats, p statPercent) Stats {
-	out.MaxHP += baseline.MaxHP * p.maxHP / 100
-	out.MaxMP += baseline.MaxMP * p.maxMP / 100
-	out.MinAtk += baseline.MinAtk * p.atk / 100
-	out.MaxAtk += baseline.MaxAtk * p.atk / 100
-	out.Def += baseline.Def * p.def / 100
-	out.Hit += baseline.Hit * p.hit / 100
-	out.MAtk += baseline.MAtk * p.matk / 100
-	out.MDef += baseline.MDef * p.mdef / 100
-	out.MoveSpeed += baseline.MoveSpeed * p.moveSpeed / 100
-	out.AtkSpeedMS += baseline.AtkSpeedMS * p.atkSpeed / 100
-	out.PhysResist += baseline.PhysResist * p.physRes / 100
-	out.MagicResist += baseline.MagicResist * p.magicRes / 100
-	out.StatusResist += baseline.StatusResist * p.statusRes / 100
-	out.MaxWeight += baseline.MaxWeight * p.maxWeight / 100
+	out.MaxHP = SaturateInt32(int64(out.MaxHP) + int64(baseline.MaxHP)*int64(p.maxHP)/100)
+	out.MaxMP = SaturateInt32(int64(out.MaxMP) + int64(baseline.MaxMP)*int64(p.maxMP)/100)
+	out.MinAtk = SaturateInt32(int64(out.MinAtk) + int64(baseline.MinAtk)*int64(p.atk)/100)
+	out.MaxAtk = SaturateInt32(int64(out.MaxAtk) + int64(baseline.MaxAtk)*int64(p.atk)/100)
+	out.Def = SaturateInt32(int64(out.Def) + int64(baseline.Def)*int64(p.def)/100)
+	out.Hit = SaturateInt32(int64(out.Hit) + int64(baseline.Hit)*int64(p.hit)/100)
+	out.MAtk = SaturateInt32(int64(out.MAtk) + int64(baseline.MAtk)*int64(p.matk)/100)
+	out.MDef = SaturateInt32(int64(out.MDef) + int64(baseline.MDef)*int64(p.mdef)/100)
+	out.MoveSpeed = SaturateInt32(int64(out.MoveSpeed) + int64(baseline.MoveSpeed)*int64(p.moveSpeed)/100)
+	out.AtkSpeedMS = SaturateInt32(int64(out.AtkSpeedMS) + int64(baseline.AtkSpeedMS)*int64(p.atkSpeed)/100)
+	out.PhysResist = SaturateInt32(int64(out.PhysResist) + int64(baseline.PhysResist)*int64(p.physRes)/100)
+	out.MagicResist = SaturateInt32(int64(out.MagicResist) + int64(baseline.MagicResist)*int64(p.magicRes)/100)
+	out.StatusResist = SaturateInt32(int64(out.StatusResist) + int64(baseline.StatusResist)*int64(p.statusRes)/100)
+	out.MaxWeight = SaturateInt32(int64(out.MaxWeight) + int64(baseline.MaxWeight)*int64(p.maxWeight)/100)
 	return out
 }
 
@@ -710,25 +751,26 @@ func pctOf(v, p int32) int32 {
 }
 
 func addStats(a, b Stats) Stats {
-	a.MaxHP += b.MaxHP
-	a.MaxMP += b.MaxMP
-	a.HPRegen += b.HPRegen
-	a.MPRegen += b.MPRegen
-	a.MinAtk += b.MinAtk
-	a.MaxAtk += b.MaxAtk
-	a.Def += b.Def
-	a.Hit += b.Hit
-	a.MAtk += b.MAtk
-	a.MDef += b.MDef
-	a.CritRate += b.CritRate
-	a.MCritRate += b.MCritRate
-	a.AtkSpeedMS += b.AtkSpeedMS
-	a.AtkSpeedPct += b.AtkSpeedPct
-	a.MoveSpeed += b.MoveSpeed
-	a.PhysResist += b.PhysResist
-	a.MagicResist += b.MagicResist
-	a.StatusResist += b.StatusResist
-	a.MaxWeight += b.MaxWeight
+	a.MaxHP = SaturateInt32(int64(a.MaxHP) + int64(b.MaxHP))
+	a.MaxMP = SaturateInt32(int64(a.MaxMP) + int64(b.MaxMP))
+	a.HPRegen = SaturateInt32(int64(a.HPRegen) + int64(b.HPRegen))
+	a.MPRegen = SaturateInt32(int64(a.MPRegen) + int64(b.MPRegen))
+	a.MinAtk = SaturateInt32(int64(a.MinAtk) + int64(b.MinAtk))
+	a.MaxAtk = SaturateInt32(int64(a.MaxAtk) + int64(b.MaxAtk))
+	a.Def = SaturateInt32(int64(a.Def) + int64(b.Def))
+	a.Hit = SaturateInt32(int64(a.Hit) + int64(b.Hit))
+	a.EffectHitBP = SaturateInt32(int64(a.EffectHitBP) + int64(b.EffectHitBP))
+	a.MAtk = SaturateInt32(int64(a.MAtk) + int64(b.MAtk))
+	a.MDef = SaturateInt32(int64(a.MDef) + int64(b.MDef))
+	a.CritRate = SaturateInt32(int64(a.CritRate) + int64(b.CritRate))
+	a.MCritRate = SaturateInt32(int64(a.MCritRate) + int64(b.MCritRate))
+	a.AtkSpeedMS = SaturateInt32(int64(a.AtkSpeedMS) + int64(b.AtkSpeedMS))
+	a.AtkSpeedPct = SaturateInt32(int64(a.AtkSpeedPct) + int64(b.AtkSpeedPct))
+	a.MoveSpeed = SaturateInt32(int64(a.MoveSpeed) + int64(b.MoveSpeed))
+	a.PhysResist = SaturateInt32(int64(a.PhysResist) + int64(b.PhysResist))
+	a.MagicResist = SaturateInt32(int64(a.MagicResist) + int64(b.MagicResist))
+	a.StatusResist = SaturateInt32(int64(a.StatusResist) + int64(b.StatusResist))
+	a.MaxWeight = SaturateInt32(int64(a.MaxWeight) + int64(b.MaxWeight))
 	return a
 }
 
@@ -738,7 +780,8 @@ func subStats(a, b Stats) Stats {
 		HPRegen: a.HPRegen - b.HPRegen, MPRegen: a.MPRegen - b.MPRegen,
 		MinAtk: a.MinAtk - b.MinAtk, MaxAtk: a.MaxAtk - b.MaxAtk,
 		Def: a.Def - b.Def, Hit: a.Hit - b.Hit,
-		MAtk: a.MAtk - b.MAtk, MDef: a.MDef - b.MDef,
+		EffectHitBP: a.EffectHitBP - b.EffectHitBP,
+		MAtk:        a.MAtk - b.MAtk, MDef: a.MDef - b.MDef,
 		CritRate: a.CritRate - b.CritRate, MCritRate: a.MCritRate - b.MCritRate,
 		AtkSpeedMS: a.AtkSpeedMS - b.AtkSpeedMS, AtkSpeedPct: a.AtkSpeedPct - b.AtkSpeedPct, MoveSpeed: a.MoveSpeed - b.MoveSpeed,
 		PhysResist:   a.PhysResist - b.PhysResist,

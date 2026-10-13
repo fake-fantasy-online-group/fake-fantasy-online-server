@@ -27,7 +27,7 @@ func (s *Scene) changeSetSnapshot(p *entity.Entity) (event.ChangeSetSnapshot, er
 			Cell: cell, Item: st.Item, Name: itemDisplayName(def, st), Desc: s.ownedItemTooltip(def, st, p),
 			CurDur: st.Durability, MaxDur: domain.MaxDurabilityOf(st, def),
 			Refine: st.RefineLevel, Quality: equipmentQuality(def, st),
-			Blocked: s.equipmentBlockedFor(p, def),
+			Blocked: s.equipmentBlockedFor(p, def, st),
 		})
 	})
 	if buildErr != nil {
@@ -171,6 +171,7 @@ func (s *Scene) onChangeSetSwap(cmd ChangeSetSwap) {
 		def, ok := s.itemDef(st.Item)
 		if !ok || def.Equip == nil || st.Locked ||
 			domain.ChangeSetCell(domain.EquipSlot(def.Equip.Slot)) != cell ||
+			p.Player.Char.Level < domain.EquipmentRequiredLevel(def, st) ||
 			def.Equip.Need.Meet(p.Player.Char.Level, s.equipmentRequirementBaseFromWorn(p, s.functionalWorn(p), domain.EquipSlot(def.Equip.Slot)),
 				p.Player.Char.Appear.Gender) != domain.RejectNone ||
 			!def.Equip.Need.AllowsCharacter(p.Player.Char) ||

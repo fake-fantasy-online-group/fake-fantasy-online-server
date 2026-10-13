@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -31,7 +34,7 @@ var sureHit = domain.Stats{MinAtk: 7, MaxAtk: 7, Hit: 1 << 20}
 
 func newCombatScene(t *testing.T) *Scene {
 	t.Helper()
-	return New(Config{ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000, Seed: 12345})
+	return New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000, Seed: 12345})
 }
 
 // 进图的玩家必须是活的。
@@ -300,7 +303,7 @@ func TestAttackOnEntityKilledSameFrame(t *testing.T) {
 // 场景给定种子后, 同样的命令序列必须打出同样的结果 —— 出了问题能重放。
 func TestSceneCombatIsReproducible(t *testing.T) {
 	run := func() []int32 {
-		s := New(Config{ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000, Seed: 777})
+		s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000, Seed: 777})
 		sink := &fakeSink{}
 		s.exec(Enter{ID: 1, Char: &domain.Character{ID: 100, Name: "甲",
 			Pos: domain.Pos{MapID: 7, X: 100, Y: 100}}, Sink: sink})
@@ -335,7 +338,7 @@ func TestSceneCombatIsReproducible(t *testing.T) {
 func TestPlayerAttackUsesExactRequestTimeHitDelay(t *testing.T) {
 	received := time.Unix(1_700_000_000, 0)
 	now := received.Add(100 * time.Millisecond) // 模拟命令等到下一个 100ms 主帧才被消费
-	s := New(Config{
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(),
 		ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000, Seed: 12345,
 		PlayerAttackHitDelay: 350 * time.Millisecond,
 		Now:                  func() time.Time { return now },

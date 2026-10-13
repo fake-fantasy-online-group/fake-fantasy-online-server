@@ -8,14 +8,21 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
 
-func (s *Scene) placeTrap(owner *entity.Entity, def domain.SkillDef, at domain.Pos, radius int32, statusDurationPct int32) {
+func (s *Scene) placeTrap(owner *entity.Entity, def domain.SkillDef, at domain.Pos, radius int32, statusDurationPct int32, accepted ...*domain.CombatSourceSnapshotV5) {
 	if owner == nil || (owner.Player == nil && owner.Monster == nil) || s.alloc == nil || radius <= 0 {
 		return
+	}
+	source := s.captureCombatSourceV5(owner, def.UniqueInvisibleStart || entityInvisible(owner))
+	if len(accepted) > 0 && accepted[0] != nil {
+		source = accepted[0]
 	}
 	trap := &entity.Entity{
 		ID: s.alloc.Trap(), Kind: domain.KindTrap, Name: def.Name, Pos: at,
 		Trap: &entity.Trap{
 			Owner: owner.ID, Def: def, Radius: radius, StatusDurationPct: statusDurationPct,
+			EquipmentOffense: source.Equipment,
+			SourceOffense:    source,
+			AttackStats:      source.Stats, AttackStatsSnapshot: true,
 			VisibleTo: map[domain.EntityID]struct{}{owner.ID: {}},
 		},
 	}
@@ -48,11 +55,39 @@ func (s *Scene) stepTraps() {
 			s.removeTrap(id)
 			continue
 		}
+		if trap.Trap.Def.FormulaVersion == domain.SkillFormulaVersion {
+			current, ok := s.lesserPersistentSkill(owner, trap.Trap.Def)
+			if !ok {
+				s.removeTrap(id)
+				continue
+			}
+			trap.Trap.Def = current
+			for _, fx := range current.DirectEffects() {
+				if fx.Kind == domain.EffectPlaceTrap {
+					trap.Trap.Radius = min(trap.Trap.Radius, fx.TrapRadius)
+				}
+			}
+		}
 		targets := s.trapTargets(trap)
 		if len(targets) == 0 {
 			continue
 		}
 		payload := trapPayload(trap.Trap.Def)
+		offense := trap.Trap.EquipmentOffense
+		currentOffense := s.equipmentOffense(owner)
+		for i := range offense.Elements {
+			offense.Elements[i].DamageBP = min(offense.Elements[i].DamageBP, currentOffense.Elements[i].DamageBP)
+			offense.Elements[i].PierceBP = min(offense.Elements[i].PierceBP, currentOffense.Elements[i].PierceBP)
+		}
+		finishEquipment := s.beginEquipmentRoot(owner.ID, targets[0], offense)
+		s.equipment.root.source = trap.Trap.SourceOffense
+		if trap.Trap.SourceOffense != nil {
+			s.equipment.root.currentSource = s.captureCombatSourceV5(owner, entityInvisible(owner))
+		}
+		if trap.Trap.AttackStatsSnapshot {
+			s.equipment.root.attackStats = lesserTrapAttackStats(trap.Trap.AttackStats, owner.Stats)
+			s.equipment.root.attackSnapshot = true
+		}
 		for _, targetID := range targets {
 			target := s.entities[targetID]
 			if target == nil || !target.Alive() {
@@ -60,6 +95,7 @@ func (s *Scene) stepTraps() {
 			}
 			_ = s.applySkill(owner, target, payload, trap.Trap.StatusDurationPct, true)
 		}
+		finishEquipment()
 		s.removeTrap(id)
 	}
 }
@@ -166,4 +202,14 @@ func (s *Scene) removeTrap(id domain.EntityID) {
 	s.aoi.Leave(trap)
 	delete(s.entities, id)
 	delete(s.traps, id)
+}
+
+func lesserTrapAttackStats(cast, current domain.Stats) domain.Stats {
+	cast.MinAtk = min(cast.MinAtk, current.MinAtk)
+	cast.MaxAtk = min(cast.MaxAtk, current.MaxAtk)
+	cast.MAtk = min(cast.MAtk, current.MAtk)
+	cast.Hit = min(cast.Hit, current.Hit)
+	cast.CritRate = min(cast.CritRate, current.CritRate)
+	cast.MCritRate = min(cast.MCritRate, current.MCritRate)
+	return cast
 }

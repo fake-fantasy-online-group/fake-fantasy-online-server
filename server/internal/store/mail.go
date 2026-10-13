@@ -187,7 +187,7 @@ func (p *Postgres) loadMailAttachments(ctx context.Context, mailID int64) ([]dom
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
-	facts, err := loadItemInstances(ctx, p.pool, instanceUIDs)
+	facts, err := loadItemInstances(ctx, p.catalogQuery(), instanceUIDs)
 	if err != nil {
 		return nil, err
 	}

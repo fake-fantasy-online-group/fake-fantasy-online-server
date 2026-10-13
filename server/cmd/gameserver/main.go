@@ -82,13 +82,13 @@ func run() int {
 		log.Warn("存储: 内存(重启丢档, 仅自测)。生产请用 -dsn")
 	}
 	defer st.Close()
-	seedChars(ctx, st, log)
 
 	// ── 写回队列: 场景与数据库之间的缓冲, 保证场景 goroutine 永不等 IO ──
 	wb := store.NewWriteBack(st, time.Second, log)
 	// 全服只建一个角色 gate：租约从 Enter 前持续到离场最终快照成功提交。
 	// 若每连接各建一份，新 TCP 秒连仍会绕过旧连接的写回屏障。
 	charGate := store.NewCharacterGate(wb)
+	endgameBackend := store.NewEndgameBackend(st, wb)
 	// 写回循环不能共用网关的 signal context。收到停服信号后，场景会在
 	// Router.Drain 中才交出最后一批在线存档；若 wb 也同时因 ctx.Done 退出，
 	// 这批迟到快照就只会留在 pending，服务端重启后丢档。wb 的生命周期只由
@@ -99,6 +99,11 @@ func run() int {
 	parties := party.NewRegistry()
 	onlineIdx := online.NewRegistry()
 	world := loadWorldData(ctx, st, log)
+	if err := registerEndgameItems(&world); err != nil {
+		log.Error("演劫规则校验失败", "err", err)
+		_ = wb.Close(time.Second)
+		return 1
+	}
 	var staticQ data.Querier
 	var mapCatalog *data.MapCatalog
 	if pg, ok := st.(*store.Postgres); ok {
@@ -123,6 +128,11 @@ func run() int {
 			}
 			return 1
 		}
+	}
+	if *dsn != "" && (world.endgameDataErr != nil || world.endgameCatalog == nil || world.cubeRules == nil || world.lootRules == nil || world.riftRules == nil) {
+		log.Error("演劫数据库配置未就绪，拒绝启动", "err", world.endgameDataErr)
+		_ = wb.Close(time.Second)
+		return 1
 	}
 	if *dsn != "" && world.monsterDialogs == nil {
 		log.Error("怪物台词目录未就绪，拒绝启动")
@@ -156,6 +166,11 @@ func run() int {
 		}
 		return 1
 	}
+	if *dsn != "" && (world.progressionErr != nil || world.skillErr != nil) {
+		log.Error("progression-v5 is not ready; refusing startup", "err", world.progressionErr, "skills", world.skillErr)
+		_ = wb.Close(time.Second)
+		return 1
+	}
 	if *dsn != "" && (!world.equipmentRoll.Enabled() || world.colorProfileErr != nil) {
 		log.Error("装备随机属性矩阵未就绪或染色档位配置错误，拒绝以全白板掉落状态启动",
 			"err", world.colorProfileErr)
@@ -164,8 +179,30 @@ func run() int {
 		}
 		return 1
 	}
+	if world.endgameCatalog != nil {
+		if err := store.SetEndgameCatalog(st, world.endgameCatalog); err != nil {
+			log.Error("安装存档校验目录失败，拒绝启动", "err", err)
+			_ = wb.Close(time.Second)
+			return 1
+		}
+	}
+	// Even optional seed imports must use the same validated catalog as live saves.
+	seedChars(ctx, st, log)
 	// Router 在写锁内串行调用 Builder，因此这份按静态地图号共享的懒加载缓存
 	// 不需要额外锁；副本实例也不会重复吃一份 1~2MB 的碰撞网格。
+	// Validate rift topology before starting actors. A failed catalog disables new
+	// seeded runs rather than spending a key on an unverified destination.
+	var riftLayouts []domain.RiftFloorTemplate
+	if mapCatalog != nil && staticQ != nil {
+		var err error
+		riftLayouts, err = data.LoadRiftFloorTemplates(ctx, staticQ, mapCatalog, world.spawns, world.monsters)
+		if err != nil {
+			log.Error("洞天地形目录加载失败，新洞天暂不可用", "err", err)
+			riftLayouts = nil
+		} else {
+			log.Info("洞天地形目录就绪", "可达地图", len(riftLayouts))
+		}
+	}
 	maskCache := make(map[int32]*data.CollisionMask)
 	maskTried := make(map[int32]bool)
 	// ── 场景路由: 按需建场景。371 张图不会全部常驻, 有人进才起 ──
@@ -210,7 +247,9 @@ func run() int {
 		if mask != nil {
 			walkable = mask.Walkable
 		}
-		cfg := scene.Config{Trial: world.trial,
+		cfg := scene.Config{Trial: world.trial, EndgameBackend: endgameBackend, RiftLayouts: riftLayouts,
+			EndgameCatalog: world.endgameCatalog, CubeRules: world.cubeRules,
+			LootRules: world.lootRules, RiftRules: world.riftRules,
 			DungeonParty: func(char domain.CharID) domain.DungeonParty {
 				p, ok := parties.Get(parties.PartyOf(char))
 				if !ok {
@@ -231,13 +270,15 @@ func run() int {
 				}
 			},
 			ID: id, Saver: wb, SaveEvery: saveEvery, Log: log,
-			Home:           returnAt,
-			Revive:         returnAt,
-			CombatTiming:   world.combatTiming,
-			MonsterDialogs: world.monsterDialogs,
-			Portals:        remapPortals(world.portals[dataMapID], dataMapID, id.MapID), Transports: world.transports, Shops: world.shops, Levels: world.levels, Defs: world.monsters,
-			Walkable: walkable,
-			Items:    world.items, Loot: world.loot, ItemIcons: world.itemIcons,
+			RequireGrowthV5: true,
+			Home:            returnAt,
+			Revive:          returnAt,
+			CombatTiming:    world.combatTiming,
+			MonsterDialogs:  world.monsterDialogs,
+			Portals:         remapPortals(world.portals[dataMapID], dataMapID, id.MapID), Transports: world.transports, Shops: world.shops, Levels: world.levels, Defs: world.monsters,
+			RiftPortalAreas: remapRiftPortalAreas(world.riftPortals[dataMapID], id.MapID),
+			Walkable:        walkable,
+			Items:           world.items, Loot: world.loot, ItemIcons: world.itemIcons,
 			EquipmentRoll: world.equipmentRoll, BossFixedDrops: world.bossFixedDrops,
 			ItemIconsKnown: world.itemIconsKnown,
 			Skills:         world.skills, Statuses: world.statuses,
@@ -322,7 +363,8 @@ func run() int {
 	// 场景加载, 而且会话编的 2000000+ 实体 id 与场景里的对不上, 客户端点了没反应。
 	factory := func(sink gnet.Sink) gnet.Handler {
 		return session.New(sink, session.Deps{
-			Store: st, Router: router, AccountSessions: accountSessions, CharGate: charGate,
+			RequireGrowthV5: true,
+			Store:           st, Router: router, AccountSessions: accountSessions, CharGate: charGate,
 			Items: world.items, HelpTopics: world.helpTopics, HelpTopicsKnown: world.helpTopicsKnown,
 			WarehouseRule: world.warehouseRule, WardrobeRule: world.wardrobeRule,
 			MailRule: world.mailRule, WriteBack: wb,
@@ -406,7 +448,8 @@ func npcSpawns(list []data.NPCPlacement, mapID int32) []domain.NPCSpawn {
 			greeting = domain.DefaultNPCGreeting(role)
 		}
 		out = append(out, domain.NPCSpawn{
-			Name: n.Name, Sprite: n.Sprite, Pos: pos, Dir: n.Dir, Portrait: n.Portrait,
+			NPCID: n.NPCID,
+			Name:  n.Name, Sprite: n.Sprite, Pos: pos, Dir: n.Dir, Portrait: n.Portrait,
 			Script: n.Script,
 			Sell:   n.Sell, Trans: n.Trans, Role: role, Greeting: greeting})
 	}
@@ -457,6 +500,18 @@ func remapPortals(list []domain.Portal, dataMapID, mapID int32) []domain.Portal 
 			t.Back.MapID = mapID
 		}
 		out = append(out, domain.NewPortal(t))
+	}
+	return out
+}
+
+func remapRiftPortalAreas(areas []domain.Polygon, mapID int32) []domain.Polygon {
+	out := make([]domain.Polygon, 0, len(areas))
+	for _, area := range areas {
+		copy := append(domain.Polygon(nil), area...)
+		for i := range copy {
+			copy[i].MapID = mapID
+		}
+		out = append(out, copy)
 	}
 	return out
 }
@@ -624,6 +679,11 @@ func dungeonPortalCount(portals data.TeleportTable) int {
 // 读完就只读, 所有场景共用同一份 —— 371 张图各自持一份表的话内存会爆,
 // 而这些表在运行期从不改动。
 type worldData struct {
+	lootRules      *domain.LootRuleTable
+	riftRules      *domain.RiftRuleTable
+	endgameCatalog *domain.EndgameCatalog
+	cubeRules      *domain.CubeRuleTable
+	endgameDataErr error
 	trial          *domain.TrialRules
 	pickupRange    int32
 	mapReturns     data.MapReturnTable
@@ -631,7 +691,10 @@ type worldData struct {
 	monsterDialogs *domain.MonsterDialogs
 	spawns         data.SpawnTable
 	portals        data.TeleportTable
+	riftPortals    data.RiftPortalAreas
 	levels         *domain.LevelTable
+	progressionErr error
+	skillErr       error
 	items          data.ItemDefs
 	itemIcons      []domain.ItemIconMapping
 	itemIconsKnown bool
@@ -738,6 +801,9 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 		}
 	}
 	var ts data.TeleportStats
+	if w.riftPortals, err = data.LoadRiftPortalAreas(ctx, q); err != nil {
+		log.Warn("加载洞天传送门区域失败", "err", err)
+	}
 	if w.portals, ts, err = data.LoadTeleports(ctx, q, w.dungeons); err != nil {
 		log.Warn("加载传送门失败", "err", err)
 	} else {
@@ -841,6 +907,7 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 	}
 	var sk data.SkillStats
 	if w.skills, sk, err = data.LoadSkills(ctx, q); err != nil {
+		w.skillErr = err
 		log.Warn("加载技能表失败", "err", err)
 	} else {
 		log.Info("技能表就绪", "装入", len(w.skills), "总行", sk.Total,
@@ -946,10 +1013,16 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 	} else {
 		log.Info("宠物领悟道具就绪", "种类", len(w.petLearnItems))
 	}
-	if w.petLvls, err = data.LoadPetLevels(ctx, q, domain.LevelCap); err != nil {
+	if w.petLvls, err = data.LoadPetLevels(ctx, q, domain.PetLevelCap); err != nil {
 		log.Warn("加载宠物经验曲线失败", "err", err)
 	} else if w.petLvls != nil {
 		log.Info("宠物经验曲线就绪", "最高级", w.petLvls.MaxLevel())
+	}
+	if _, w.progressionErr = data.LoadProgressionRules(ctx, q, w.levels, w.petLvls); w.progressionErr != nil {
+		log.Error("V5 progression validation failed", "err", w.progressionErr)
+	}
+	if w.trial == nil || w.trial.MaxLevel != domain.LevelCap {
+		w.progressionErr = fmt.Errorf("trial 12–100 content is not ready")
 	}
 	if len(w.items) > 0 {
 		if w.equipmentRoll, err = data.LoadEquipmentRollTable(ctx, q); err != nil {
@@ -1024,6 +1097,7 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 	}
 	var stst data.StatusStats
 	if w.statuses, stst, err = data.LoadStatuses(ctx, q); err != nil {
+		w.skillErr = errors.Join(w.skillErr, err)
 		log.Warn("加载状态表失败", "err", err)
 	} else {
 		log.Info("状态表就绪", "状态数", stst.Statuses, "定义(状态×等级)", stst.Defs,
@@ -1031,11 +1105,14 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 	}
 	var ovst data.StatusOverlayStats
 	if w.statusOverlay, ovst, err = data.LoadStatusOverlay(ctx, q); err != nil {
+		w.skillErr = errors.Join(w.skillErr, err)
 		log.Warn("加载状态叠加矩阵失败", "err", err)
 	} else {
 		log.Info("状态叠加矩阵就绪", "已有状态行", ovst.Existing,
 			"新状态列", ovst.Incoming, "规则格", ovst.Cells)
 	}
+	w.skillErr = errors.Join(w.skillErr, domain.ValidateSkillStatusRuntimeV5(w.skills, w.statuses, w.statusOverlay))
+	loadEndgameData(ctx, q, &w, log)
 	return w
 }
 

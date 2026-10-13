@@ -94,12 +94,13 @@ func (s *Scene) socketInfo(p *entity.Entity, ref socketTargetRef) event.SocketIn
 
 func (s *Scene) onDrillItem(cmd DrillItem) {
 	p := s.players[cmd.ID]
-	if p == nil || !p.Alive() || p.Player == nil || p.Player.Char == nil || s.sockets == nil {
+	if p == nil || !p.Alive() || p.Player == nil || p.Player.Char == nil {
 		return
 	}
 	ref := socketTargetRef{kind: cmd.TargetKind, equipSlot: cmd.EquipSlot, tab: cmd.Tab, bagSlot: cmd.BagSlot}
 	info := s.socketInfo(p, ref)
 	if !cmd.Execute {
+		s.rememberNativeSocketSelection(p, ref)
 		s.emitTo(p.ID, info)
 		return
 	}
@@ -145,6 +146,7 @@ func (s *Scene) onDrillItem(cmd DrillItem) {
 		text = "打孔失败，装备损毁。"
 	}
 	s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: text})
+	s.rememberNativeSocketSelection(p, ref)
 	s.emitTo(p.ID, s.socketInfo(p, ref))
 	if s.saver != nil {
 		s.saver.Save(s.snapshotOf(p))
@@ -153,7 +155,7 @@ func (s *Scene) onDrillItem(cmd DrillItem) {
 
 func (s *Scene) onInlayItem(cmd InlayItem) {
 	p := s.players[cmd.ID]
-	if p == nil || !p.Alive() || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil || s.sockets == nil {
+	if p == nil || !p.Alive() || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil {
 		return
 	}
 	ref := socketTargetRef{kind: cmd.TargetKind, equipSlot: cmd.EquipSlot, tab: cmd.Tab, bagSlot: cmd.BagSlot}
@@ -164,6 +166,13 @@ func (s *Scene) onInlayItem(cmd InlayItem) {
 		return
 	}
 	rune := p.Player.Bag.At(int(cmd.RuneBagSlot))
+	if s.isNativeAstralSlot(p, cmd.RuneBagSlot, rune.Item) {
+		s.onNativeAstralInlay(p, cmd)
+		return
+	}
+	if s.sockets == nil {
+		return
+	}
 	runeDef, ok := s.itemDef(rune.Item)
 	if !ok || rune.Empty() || rune.Locked || !rune.Card.Initialized || rune.Count != 1 || rune.UID <= 0 ||
 		rune.InstanceKind != domain.ItemInstanceSocketCard ||
@@ -220,6 +229,7 @@ func (s *Scene) onInlayItem(cmd InlayItem) {
 		text = "镶嵌失败，装备损毁。"
 	}
 	s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: text})
+	s.rememberNativeSocketSelection(p, ref)
 	s.emitTo(p.ID, s.socketInfo(p, ref))
 	if s.saver != nil {
 		s.saver.Save(s.snapshotOf(p))
@@ -287,6 +297,7 @@ func (s *Scene) onUseItemOn(cmd UseItemOn) {
 		s.refreshStats(p)
 	}
 	s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: text})
+	s.rememberNativeSocketSelection(p, ref)
 	s.emitTo(p.ID, s.socketInfo(p, ref))
 	if s.saver != nil {
 		s.saver.Save(s.snapshotOf(p))

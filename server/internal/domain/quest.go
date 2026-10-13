@@ -560,6 +560,7 @@ func (l QuestLog) Done(id QuestID) bool {
 // NPC 在场景里是**实体**, 不是一批静态包。它们不动、不打人、不会死,
 // 但要能被看见、被靠近 —— 接任务得判"你站在那个 NPC 面前"。
 type NPCSpawn struct {
+	NPCID    int32 // Original map_npcs.npc_id, retained for configured world services.
 	Name     string
 	Sprite   int32
 	Pos      Pos

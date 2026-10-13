@@ -1,0 +1,19 @@
+{
+  "balance_status": "Structural and numeric regression inputs, not gameplay balance certification",
+  "reproduce": "FANTASY_V5_SKILL_PG_DATA=<idle disposable copied cluster> PG_BIN=<trusted PostgreSQL bin> FANTASY_V5_EXPORT_ANCHORS_DIR=<output> go test ./internal/data -run '^TestV5SkillCurvesActualReadOnlyLoader$' -count=1 -v",
+  "sha256": {
+    "skill-legacy-anchors.json": "18d02a304d219c5a3e12200d30f5eae9075c352f1de3814853d34a069c02e4ba",
+    "skill-status-anchors.json": "4c060e83eec39958ef06a2bcafe0c98e2cd4b699dea6ff150cdd13900bebf359",
+    "skill-original-ranks.json": "846603cd2da83f4c1812028bd3f157e6db94ad568e6c5b691bb07b31badd95a6"
+  },
+  "skill_count": 149,
+  "source": "Actual LoadSkills and LoadStatuses via read-only PostgreSQL queries against isolated seeded test cluster",
+  "status_definition_count": 1890,
+  "original_rank_row_count": 745,
+  "original_row_provenance": {
+    "raw_root_commit": "a9c747c",
+    "pre_v5_commit": "fe7ed90",
+    "loader_change_in_5269260": "Only enables formula evaluation after loading; stored original skill rows remain unchanged except first-row FormulaVersion marker, removed from export",
+    "full_rank_export": "Read-only actual LoadSkills export; all745 rows stored separately; no interpolated ranks"
+  }
+}

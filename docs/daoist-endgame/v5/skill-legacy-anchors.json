@@ -1,0 +1,9294 @@
+[
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "提高枪系攻击技能的攻击力10%。",
+      "Effect": {},
+      "ID": 10001,
+      "Icon": 5001,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 19,
+      "Name": "枪法修炼",
+      "PassiveModifiers": [
+        {
+          "Kind": 1,
+          "TargetSkill": 10002,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10003,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10004,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10005,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10006,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10007,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10009,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10013,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10015,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10017,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10021,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10022,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10023,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10027,
+          "Value": 10
+        }
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1
+    },
+    "first": {
+      "Area": {},
+      "Description": "提高枪系攻击技能的攻击力2%。",
+      "Effect": {},
+      "ID": 10001,
+      "Icon": 5001,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "Name": "枪法修炼",
+      "PassiveModifiers": [
+        {
+          "Kind": 1,
+          "TargetSkill": 10002,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10003,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10004,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10005,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10006,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10007,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10009,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10013,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10015,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10017,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10021,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10022,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10023,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10027,
+          "Value": 2
+        }
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1
+    },
+    "id": 10001
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "低级枪系攻击技能，对敌人造成150%伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 150,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10002,
+      "Icon": 5002,
+      "ImpactDelayMS": 50,
+      "LearnMoney": 5000,
+      "Level": 5,
+      "LevelNeed": 14,
+      "MPCost": 20,
+      "Name": "连环枪法",
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "低级枪系攻击技能，对敌人造成130%伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 130,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10002,
+      "Icon": 5002,
+      "ImpactDelayMS": 50,
+      "LearnMoney": 5000,
+      "Level": 1,
+      "LevelNeed": 10,
+      "MPCost": 8,
+      "Name": "连环枪法",
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "id": 10002
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "以武器耐久度的9%换取对敌人的220%伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 220,
+        "Kind": 1,
+        "WeaponDurabilityCostPct": 9
+      },
+      "Effects": [
+        {
+          "DamagePct": 220,
+          "Kind": 1,
+          "WeaponDurabilityCostPct": 9
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10003,
+      "Icon": 5003,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 59,
+      "Name": "裂空之枪",
+      "Prerequisites": [
+        10013
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "以武器耐久度的5%换取对敌人的180%伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 180,
+        "Kind": 1,
+        "WeaponDurabilityCostPct": 5
+      },
+      "Effects": [
+        {
+          "DamagePct": 180,
+          "Kind": 1,
+          "WeaponDurabilityCostPct": 5
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10003,
+      "Icon": 5003,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 35,
+      "Name": "裂空之枪",
+      "Prerequisites": [
+        10013
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "id": 10003
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3804,
+      "CooldownMS": 3000,
+      "Description": "100%命中，对敌人造成240%伤害，3%几率发生即死判定。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 240,
+        "GuaranteedHit": true,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 240,
+          "GuaranteedHit": true,
+          "Kind": 1
+        },
+        {
+          "ChanceBP": 300,
+          "Kind": 14,
+          "RequiresPreviousLanded": true
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10004,
+      "Icon": 5004,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "MPCost": 256,
+      "Name": "荆棘之枪",
+      "Prerequisites": [
+        10016
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3804,
+      "CooldownMS": 3000,
+      "Description": "100%命中，对敌人造成200%伤害，3%几率发生即死判定。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 200,
+        "GuaranteedHit": true,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 200,
+          "GuaranteedHit": true,
+          "Kind": 1
+        },
+        {
+          "ChanceBP": 300,
+          "Kind": 14,
+          "RequiresPreviousLanded": true
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10004,
+      "Icon": 5004,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 164,
+      "Name": "荆棘之枪",
+      "Prerequisites": [
+        10016
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "id": 10004
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Length": 150,
+        "Shape": 1,
+        "Width": 50
+      },
+      "CooldownMS": 1000,
+      "Description": "对50*150长方形范围内的敌人造成115%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 115,
+        "Kind": 1
+      },
+      "HitEffect": "TFX004_30",
+      "HurtType": 1,
+      "ID": 10005,
+      "Icon": 5005,
+      "ImpactDelayMS": 180,
+      "Kind": 1,
+      "LearnMoney": 5000,
+      "Level": 5,
+      "LevelNeed": 14,
+      "MPCost": 20,
+      "Name": "穿刺之枪",
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Length": 150,
+        "Shape": 1,
+        "Width": 50
+      },
+      "CooldownMS": 1000,
+      "Description": "对50*150长方形范围内的敌人造成95%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 95,
+        "Kind": 1
+      },
+      "HitEffect": "TFX004_30",
+      "HurtType": 1,
+      "ID": 10005,
+      "Icon": 5005,
+      "ImpactDelayMS": 180,
+      "Kind": 1,
+      "LearnMoney": 5000,
+      "Level": 1,
+      "LevelNeed": 10,
+      "MPCost": 8,
+      "Name": "穿刺之枪",
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "id": 10005
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Angle": 120,
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 3
+      },
+      "CooldownMS": 2000,
+      "Description": "对120度角，半径150扇形范围内的敌人造成150%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 150,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 1,
+      "ID": 10006,
+      "Icon": 5006,
+      "Kind": 1,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 34,
+      "MPCost": 47,
+      "Name": "震地之枪",
+      "Prerequisites": [
+        10017
+      ],
+      "Prof": 1,
+      "Radius": 150,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Angle": 120,
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 3
+      },
+      "CooldownMS": 2000,
+      "Description": "对120度角，半径150扇形范围内的敌人造成130%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 130,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 1,
+      "ID": 10006,
+      "Icon": 5006,
+      "Kind": 1,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "MPCost": 27,
+      "Name": "震地之枪",
+      "Prerequisites": [
+        10017
+      ],
+      "Prof": 1,
+      "Radius": 150,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "id": 10006
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Angle": 360,
+        "Center": 2,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "Book": 3807,
+      "CooldownMS": 1000,
+      "Description": "范围攻击技能，对半径150的圆范围内的敌人造成215%的伤害。",
+      "Dist": 350,
+      "Effect": {
+        "DamagePct": 215,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 1,
+      "ID": 10007,
+      "Icon": 5007,
+      "Kind": 1,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "MPCost": 256,
+      "Name": "死翔之枪",
+      "PrepareMS": 3000,
+      "Prerequisites": [
+        10023
+      ],
+      "Prof": 1,
+      "Radius": 150,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Angle": 360,
+        "Center": 2,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "Book": 3807,
+      "CooldownMS": 1000,
+      "Description": "范围攻击技能，对半径150的圆范围内的敌人造成175%的伤害。",
+      "Dist": 350,
+      "Effect": {
+        "DamagePct": 175,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 1,
+      "ID": 10007,
+      "Icon": 5007,
+      "Kind": 1,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 164,
+      "Name": "死翔之枪",
+      "PrepareMS": 3000,
+      "Prerequisites": [
+        10023
+      ],
+      "Prof": 1,
+      "Radius": 150,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "id": 10007
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "昏迷抗性+50%。",
+      "Effect": {},
+      "ID": 10008,
+      "Icon": 5008,
+      "Kind": 2,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 28,
+      "Name": "意志",
+      "PassiveResists": [
+        {
+          "Pct": 50,
+          "Status": 1002
+        }
+      ],
+      "Prerequisites": [
+        10001
+      ],
+      "Prof": 1
+    },
+    "first": {
+      "Area": {},
+      "Description": "昏迷抗性+10%。",
+      "Effect": {},
+      "ID": 10008,
+      "Icon": 5008,
+      "Kind": 2,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "Name": "意志",
+      "PassiveResists": [
+        {
+          "Pct": 10,
+          "Status": 1002
+        }
+      ],
+      "Prerequisites": [
+        10001
+      ],
+      "Prof": 1
+    },
+    "id": 10008
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "造成100%伤害，15秒内降低敌人防御70%。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10009,
+      "Icon": 5009,
+      "ImpactDelayMS": 40,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 19,
+      "MPCost": 24,
+      "Name": "破防之枪",
+      "Prerequisites": [
+        10002
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "造成100%伤害，15秒内降低敌人防御30%。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10009,
+      "Icon": 5009,
+      "ImpactDelayMS": 40,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "MPCost": 12,
+      "Name": "破防之枪",
+      "Prerequisites": [
+        10002
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "id": 10009
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3810,
+      "CooldownMS": 300000,
+      "Description": "30秒内，攻击力增加100%，移动速度增加50%，防御下降100%，所有状态免疫，不可使用技能。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10010,
+      "Icon": 5010,
+      "ImpactDelayMS": 500,
+      "LearnMoney": 40000,
+      "Level": 5,
+      "LevelNeed": 88,
+      "MPCost": 369,
+      "Name": "狂暴术",
+      "Prerequisites": [
+        10026
+      ],
+      "Prof": 1,
+      "Statuses": [
+        {
+          "BlockHarmful": true,
+          "Control": 2,
+          "ID": 1013,
+          "Level": 10
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3810,
+      "CooldownMS": 300000,
+      "Description": "30秒内，攻击力增加60%，移动速度增加50%，防御下降60%，所有状态免疫，不可使用技能。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10010,
+      "Icon": 5010,
+      "ImpactDelayMS": 500,
+      "LearnMoney": 40000,
+      "Level": 1,
+      "LevelNeed": 80,
+      "MPCost": 249,
+      "Name": "狂暴术",
+      "Prerequisites": [
+        10026
+      ],
+      "Prof": 1,
+      "Statuses": [
+        {
+          "BlockHarmful": true,
+          "Control": 2,
+          "ID": 1013,
+          "Level": 6
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10010
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3881,
+      "CooldownMS": 5000,
+      "Description": "使用后下一次普通攻击的伤害增加140%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10011,
+      "Icon": 7008,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "MPCost": 192,
+      "Name": "怒火杀意",
+      "Prerequisites": [
+        10030
+      ],
+      "Prof": 1,
+      "Statuses": [
+        {
+          "ID": 1025,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3881,
+      "CooldownMS": 5000,
+      "Description": "使用后下一次普通攻击的伤害增加100%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10011,
+      "Icon": 7008,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 100,
+      "Name": "怒火杀意",
+      "Prerequisites": [
+        10030
+      ],
+      "Prof": 1,
+      "Statuses": [
+        {
+          "ID": 1025,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10011
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "破防之枪可以使对方15秒内多受32%的物理伤害和魔法伤害。",
+      "Effect": {},
+      "ID": 10012,
+      "Icon": 7009,
+      "Kind": 2,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 28,
+      "Name": "破甲",
+      "PassiveTriggers": [
+        {
+          "ChanceBP": 10000,
+          "Status": 10012,
+          "StatusLevel": 5,
+          "TargetSkill": 10009
+        }
+      ],
+      "Prerequisites": [
+        10009
+      ],
+      "Prof": 1
+    },
+    "first": {
+      "Area": {},
+      "Description": "破防之枪可以使对方15秒内多受20%的物理伤害和魔法伤害。",
+      "Effect": {},
+      "ID": 10012,
+      "Icon": 7009,
+      "Kind": 2,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "Name": "破甲",
+      "PassiveTriggers": [
+        {
+          "ChanceBP": 10000,
+          "Status": 10012,
+          "StatusLevel": 1,
+          "TargetSkill": 10009
+        }
+      ],
+      "Prerequisites": [
+        10009
+      ],
+      "Prof": 1
+    },
+    "id": 10012
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "造成100%伤害，同时敌人的法力值受到攻击力100%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 100,
+          "Kind": 1
+        },
+        {
+          "Kind": 5,
+          "RequiresPreviousLanded": true,
+          "SourceAttackPct": 100
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10013,
+      "Icon": 7010,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 29,
+      "MPCost": 37,
+      "Name": "破法之枪",
+      "Prerequisites": [
+        10009
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "造成100%伤害，同时敌人的法力值受到攻击力60%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 100,
+          "Kind": 1
+        },
+        {
+          "Kind": 5,
+          "RequiresPreviousLanded": true,
+          "SourceAttackPct": 60
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10013,
+      "Icon": 7010,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "MPCost": 21,
+      "Name": "破法之枪",
+      "Prerequisites": [
+        10009
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "id": 10013
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "破法之枪伤害法力的效果增加50%。",
+      "Effect": {},
+      "ID": 10014,
+      "Icon": 7011,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 38,
+      "Name": "破魔",
+      "PassiveModifiers": [
+        {
+          "EffectKind": 5,
+          "Kind": 2,
+          "TargetSkill": 10013,
+          "Value": 50
+        }
+      ],
+      "Prerequisites": [
+        10013
+      ],
+      "Prof": 1
+    },
+    "first": {
+      "Area": {},
+      "Description": "破法之枪伤害法力的效果增加10%。",
+      "Effect": {},
+      "ID": 10014,
+      "Icon": 7011,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "Name": "破魔",
+      "PassiveModifiers": [
+        {
+          "EffectKind": 5,
+          "Kind": 2,
+          "TargetSkill": 10013,
+          "Value": 10
+        }
+      ],
+      "Prerequisites": [
+        10013
+      ],
+      "Prof": 1
+    },
+    "id": 10014
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "100%命中敌人，造成181%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 181,
+        "GuaranteedHit": true,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 181,
+          "GuaranteedHit": true,
+          "Kind": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10015,
+      "Icon": 7012,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "MPCost": 117,
+      "Name": "心眼之枪",
+      "Prerequisites": [
+        10003
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "100%命中敌人，造成165%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 165,
+        "GuaranteedHit": true,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 165,
+          "GuaranteedHit": true,
+          "Kind": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10015,
+      "Icon": 7012,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "MPCost": 69,
+      "Name": "心眼之枪",
+      "Prerequisites": [
+        10003
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "id": 10015
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3886,
+      "CooldownMS": 300000,
+      "Description": "使敌人石化9秒。",
+      "Dist": 100,
+      "Effect": {},
+      "HurtType": 1,
+      "ID": 10016,
+      "Icon": 7013,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "MPCost": 185,
+      "Name": "石化之枪",
+      "Prerequisites": [
+        10015
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 9,
+          "ID": 1005,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3886,
+      "CooldownMS": 300000,
+      "Description": "使敌人石化5秒。",
+      "Dist": 100,
+      "Effect": {},
+      "HurtType": 1,
+      "ID": 10016,
+      "Icon": 7013,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "MPCost": 113,
+      "Name": "石化之枪",
+      "Prerequisites": [
+        10015
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 5,
+          "ID": 1005,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10016
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "远程枪术，对敌人造成125%的伤害。",
+      "Dist": 300,
+      "Effect": {
+        "DamagePct": 125,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10017,
+      "Icon": 7014,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 24,
+      "MPCost": 28,
+      "Name": "飞翔之枪",
+      "PrepareMS": 1000,
+      "Prerequisites": [
+        10005
+      ],
+      "Prof": 1,
+      "ProjectileSpeedPXPerSec": 545,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "远程枪术，对敌人造成105%的伤害。",
+      "Dist": 300,
+      "Effect": {
+        "DamagePct": 105,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10017,
+      "Icon": 7014,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "MPCost": 16,
+      "Name": "飞翔之枪",
+      "PrepareMS": 1000,
+      "Prerequisites": [
+        10005
+      ],
+      "Prof": 1,
+      "ProjectileSpeedPXPerSec": 545,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "id": 10017
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 20000,
+      "Description": "13秒内移动速度提升50%。",
+      "Effect": {},
+      "ID": 10018,
+      "Icon": 7015,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 23,
+      "MPCost": 24,
+      "Name": "冲锋",
+      "Prerequisites": [
+        10005
+      ],
+      "Prof": 1,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10018,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 20000,
+      "Description": "5秒内移动速度提升50%。",
+      "Effect": {},
+      "ID": 10018,
+      "Icon": 7015,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "MPCost": 12,
+      "Name": "冲锋",
+      "Prerequisites": [
+        10005
+      ],
+      "Prof": 1,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10018,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10018
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "敌人被飞翔之枪击中时5秒内速度降低90%，成功率30%。",
+      "Effect": {},
+      "ID": 10019,
+      "Icon": 7016,
+      "Kind": 2,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 33,
+      "Name": "全力投掷",
+      "PassiveTriggers": [
+        {
+          "ChanceBP": 3000,
+          "Status": 10019,
+          "StatusLevel": 5,
+          "TargetSkill": 10017
+        }
+      ],
+      "Prerequisites": [
+        10017
+      ],
+      "Prof": 1
+    },
+    "first": {
+      "Area": {},
+      "Description": "敌人被飞翔之枪击中时5秒内速度降低50%，成功率30%。",
+      "Effect": {},
+      "ID": 10019,
+      "Icon": 7016,
+      "Kind": 2,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "Name": "全力投掷",
+      "PassiveTriggers": [
+        {
+          "ChanceBP": 3000,
+          "Status": 10019,
+          "StatusLevel": 1,
+          "TargetSkill": 10017
+        }
+      ],
+      "Prerequisites": [
+        10017
+      ],
+      "Prof": 1
+    },
+    "id": 10019
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "敌人受到震地枪法攻击时，40%的几率被震退。",
+      "Effect": {},
+      "ID": 10020,
+      "Icon": 7017,
+      "Kind": 2,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "Name": "震空枪气",
+      "PassiveTriggerEffects": [
+        {
+          "Effect": {
+            "ChanceBP": 4000,
+            "Kind": 16,
+            "KnockbackDistance": 100,
+            "RequiresPreviousLanded": true
+          },
+          "TargetSkill": 10006
+        }
+      ],
+      "Prerequisites": [
+        10006
+      ],
+      "Prof": 1
+    },
+    "first": {
+      "Area": {},
+      "Description": "敌人受到震地枪法攻击时，20%的几率被震退。",
+      "Effect": {},
+      "ID": 10020,
+      "Icon": 7017,
+      "Kind": 2,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "Name": "震空枪气",
+      "PassiveTriggerEffects": [
+        {
+          "Effect": {
+            "ChanceBP": 2000,
+            "Kind": 16,
+            "KnockbackDistance": 100,
+            "RequiresPreviousLanded": true
+          },
+          "TargetSkill": 10006
+        }
+      ],
+      "Prerequisites": [
+        10006
+      ],
+      "Prof": 1
+    },
+    "id": 10020
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Length": 250,
+        "Shape": 1,
+        "Width": 80
+      },
+      "CooldownMS": 2000,
+      "Description": "对80*250的长方形范围内的敌人造成165%的伤害。",
+      "Dist": 50,
+      "Effect": {
+        "DamagePct": 165,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10021,
+      "Icon": 7018,
+      "Kind": 1,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 78,
+      "Name": "流虹之枪",
+      "Prerequisites": [
+        10006
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Length": 250,
+        "Shape": 1,
+        "Width": 80
+      },
+      "CooldownMS": 2000,
+      "Description": "对80*250的长方形范围内的敌人造成145%的伤害。",
+      "Dist": 50,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10021,
+      "Icon": 7018,
+      "Kind": 1,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 46,
+      "Name": "流虹之枪",
+      "Prerequisites": [
+        10006
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "id": 10021
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "CooldownMS": 2000,
+      "Description": "对以自己为中心半径150圆范围内的敌人造成175%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 175,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10022,
+      "Icon": 7019,
+      "ImpactDelayMS": 320,
+      "Kind": 1,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "MPCost": 117,
+      "Name": "野战八荒",
+      "Prerequisites": [
+        10021
+      ],
+      "Prof": 1,
+      "Radius": 150,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "CooldownMS": 2000,
+      "Description": "对以自己为中心半径150圆范围内的敌人造成155%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 155,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10022,
+      "Icon": 7019,
+      "ImpactDelayMS": 320,
+      "Kind": 1,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "MPCost": 69,
+      "Name": "野战八荒",
+      "Prerequisites": [
+        10021
+      ],
+      "Prof": 1,
+      "Radius": 150,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "id": 10022
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3893,
+      "Description": "远程枪术，100%命中，对敌人造成185%的伤害。",
+      "Dist": 350,
+      "Effect": {
+        "DamagePct": 185,
+        "GuaranteedHit": true,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 185,
+          "GuaranteedHit": true,
+          "Kind": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10023,
+      "Icon": 7020,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "MPCost": 185,
+      "Name": "战神之枪",
+      "PrepareMS": 2000,
+      "Prerequisites": [
+        10022
+      ],
+      "Prof": 1,
+      "ProjectileSpeedPXPerSec": 636,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3893,
+      "Description": "远程枪术，100%命中，对敌人造成165%的伤害。",
+      "Dist": 350,
+      "Effect": {
+        "DamagePct": 165,
+        "GuaranteedHit": true,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 165,
+          "GuaranteedHit": true,
+          "Kind": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10023,
+      "Icon": 7020,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "MPCost": 113,
+      "Name": "战神之枪",
+      "PrepareMS": 2000,
+      "Prerequisites": [
+        10022
+      ],
+      "Prof": 1,
+      "ProjectileSpeedPXPerSec": 636,
+      "RequiredWeaponType": 1,
+      "TargetEnemy": true
+    },
+    "id": 10023
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "降低裂空枪法使用时消耗的武器耐久度，升级使此效果增强。",
+      "Effect": {},
+      "ID": 10024,
+      "Icon": 7021,
+      "Kind": 2,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "Name": "维护",
+      "PassiveModifiers": [
+        {
+          "Kind": 9,
+          "TargetSkill": 10003,
+          "Value": 100
+        }
+      ],
+      "Prerequisites": [
+        10003
+      ],
+      "Prof": 1
+    },
+    "first": {
+      "Area": {},
+      "Description": "降低裂空枪法使用时消耗的武器耐久度，升级使此效果增强。",
+      "Effect": {},
+      "ID": 10024,
+      "Icon": 7021,
+      "Kind": 2,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "Name": "维护",
+      "PassiveModifiers": [
+        {
+          "Kind": 9,
+          "TargetSkill": 10003,
+          "Value": 25
+        }
+      ],
+      "Prerequisites": [
+        10003
+      ],
+      "Prof": 1
+    },
+    "id": 10024
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "减速抗性+50%。",
+      "Effect": {},
+      "ID": 10025,
+      "Icon": 7022,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 38,
+      "Name": "强健",
+      "PassiveResists": [
+        {
+          "Pct": 50,
+          "Status": 1009
+        }
+      ],
+      "Prerequisites": [
+        10008
+      ],
+      "Prof": 1
+    },
+    "first": {
+      "Area": {},
+      "Description": "减速抗性+10%。",
+      "Effect": {},
+      "ID": 10025,
+      "Icon": 7022,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "Name": "强健",
+      "PassiveResists": [
+        {
+          "Pct": 10,
+          "Status": 1009
+        }
+      ],
+      "Prerequisites": [
+        10008
+      ],
+      "Prof": 1
+    },
+    "id": 10025
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "冰冻，石化，定身，攻击力下降抗性+50%。",
+      "Effect": {},
+      "ID": 10026,
+      "Icon": 7023,
+      "Kind": 2,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "Name": "抗魔",
+      "PassiveResists": [
+        {
+          "Pct": 50,
+          "Status": 1004
+        },
+        {
+          "Pct": 50,
+          "Status": 1005
+        },
+        {
+          "Pct": 50,
+          "Status": 1034
+        },
+        {
+          "Pct": 50,
+          "Status": 1006
+        }
+      ],
+      "Prerequisites": [
+        10025
+      ],
+      "Prof": 1
+    },
+    "first": {
+      "Area": {},
+      "Description": "冰冻，石化，定身，攻击力下降抗性+10%。",
+      "Effect": {},
+      "ID": 10026,
+      "Icon": 7023,
+      "Kind": 2,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "Name": "抗魔",
+      "PassiveResists": [
+        {
+          "Pct": 10,
+          "Status": 1004
+        },
+        {
+          "Pct": 10,
+          "Status": 1005
+        },
+        {
+          "Pct": 10,
+          "Status": 1034
+        },
+        {
+          "Pct": 10,
+          "Status": 1006
+        }
+      ],
+      "Prerequisites": [
+        10025
+      ],
+      "Prof": 1
+    },
+    "id": 10026
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成100%伤害，使敌人昏迷10秒，昏迷中的敌人无法回避攻击。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10027,
+      "Icon": 7024,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 33,
+      "MPCost": 37,
+      "Name": "重击",
+      "Prerequisites": [
+        10001
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "Statuses": [
+        {
+          "ID": 1002,
+          "Level": 15
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成100%伤害，使敌人昏迷6秒，昏迷中的敌人无法回避攻击。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10027,
+      "Icon": 7024,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "MPCost": 21,
+      "Name": "重击",
+      "Prerequisites": [
+        10001
+      ],
+      "Prof": 1,
+      "RequiredWeaponType": 1,
+      "Statuses": [
+        {
+          "ID": 1002,
+          "Level": 11
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10027
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "CooldownMS": 1000,
+      "Description": "将以自己为中心半径100的圆范围内的敌人吸引过来，每次升级吸引敌人的效果更佳。",
+      "Effect": {
+        "Kind": 6,
+        "TauntPower": 5
+      },
+      "Effects": [
+        {
+          "Kind": 6,
+          "TauntPower": 5
+        }
+      ],
+      "ID": 10028,
+      "Icon": 7025,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 59,
+      "Name": "战吼",
+      "Prerequisites": [
+        10027
+      ],
+      "Prof": 1,
+      "Radius": 200,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "CooldownMS": 1000,
+      "Description": "将以自己为中心半径100的圆范围内的敌人吸引过来，每次升级吸引敌人的效果更佳。",
+      "Effect": {
+        "Kind": 6,
+        "TauntPower": 1
+      },
+      "Effects": [
+        {
+          "Kind": 6,
+          "TauntPower": 1
+        }
+      ],
+      "ID": 10028,
+      "Icon": 7025,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 35,
+      "Name": "战吼",
+      "Prerequisites": [
+        10027
+      ],
+      "Prof": 1,
+      "Radius": 200,
+      "TargetEnemy": true
+    },
+    "id": 10028
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "CooldownMS": 300000,
+      "Description": "将以自己为中心半径150的圆范围内的敌人震晕9秒。",
+      "Effect": {},
+      "ID": 10029,
+      "Icon": 7026,
+      "ImpactDelayMS": 550,
+      "Kind": 1,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "MPCost": 117,
+      "Name": "震慑",
+      "Prerequisites": [
+        10028
+      ],
+      "Prof": 1,
+      "Radius": 150,
+      "Statuses": [
+        {
+          "ID": 1002,
+          "Level": 14
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "CooldownMS": 300000,
+      "Description": "将以自己为中心半径150的圆范围内的敌人震晕5秒。",
+      "Effect": {},
+      "ID": 10029,
+      "Icon": 7026,
+      "ImpactDelayMS": 550,
+      "Kind": 1,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "MPCost": 69,
+      "Name": "震慑",
+      "Prerequisites": [
+        10028
+      ],
+      "Prof": 1,
+      "Radius": 150,
+      "Statuses": [
+        {
+          "ID": 1002,
+          "Level": 16
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10029
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3900,
+      "CooldownMS": 120000,
+      "Description": "9秒之内使敌人的攻击力下降至0。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10030,
+      "Icon": 7027,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "MPCost": 185,
+      "Name": "缴械",
+      "Prerequisites": [
+        10029
+      ],
+      "Prof": 1,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 9,
+          "ID": 1006,
+          "Level": 10
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3900,
+      "CooldownMS": 120000,
+      "Description": "5秒之内使敌人的攻击力下降至0。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10030,
+      "Icon": 7027,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "MPCost": 113,
+      "Name": "缴械",
+      "Prerequisites": [
+        10029
+      ],
+      "Prof": 1,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 5,
+          "ID": 1006,
+          "Level": 10
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10030
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "使剑系攻击技能的伤害提升10%。",
+      "Effect": {},
+      "ID": 10101,
+      "Icon": 5011,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 19,
+      "Name": "剑术修炼",
+      "PassiveModifiers": [
+        {
+          "Kind": 1,
+          "TargetSkill": 10102,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10103,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10104,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10111,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10113,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10116,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10117,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10119,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10121,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10122,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10123,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10125,
+          "Value": 10
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10126,
+          "Value": 10
+        }
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6
+    },
+    "first": {
+      "Area": {},
+      "Description": "使剑系攻击技能的伤害提升2%。",
+      "Effect": {},
+      "ID": 10101,
+      "Icon": 5011,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "Name": "剑术修炼",
+      "PassiveModifiers": [
+        {
+          "Kind": 1,
+          "TargetSkill": 10102,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10103,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10104,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10111,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10113,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10116,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10117,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10119,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10121,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10122,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10123,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10125,
+          "Value": 2
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10126,
+          "Value": 2
+        }
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6
+    },
+    "id": 10101
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "造成142%伤害，震退敌人。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 142,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10102,
+      "Icon": 5012,
+      "LearnMoney": 5000,
+      "Level": 5,
+      "LevelNeed": 14,
+      "MPCost": 28,
+      "Name": "罡气剑",
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "造成130%伤害，震退敌人。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 130,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10102,
+      "Icon": 5012,
+      "LearnMoney": 5000,
+      "Level": 1,
+      "LevelNeed": 10,
+      "MPCost": 12,
+      "Name": "罡气剑",
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "id": 10102
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 4000,
+      "Description": "造成145%伤害，15秒内使敌人命中下降50%。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10103,
+      "Icon": 5013,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 24,
+      "MPCost": 44,
+      "Name": "幻影剑",
+      "Prerequisites": [
+        10117
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 4000,
+      "Description": "造成145%伤害，15秒内使敌人命中下降30%。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10103,
+      "Icon": 5013,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "MPCost": 24,
+      "Name": "幻影剑",
+      "Prerequisites": [
+        10117
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "id": 10103
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 3000,
+      "Description": "造成170%伤害，攻击力的28%转化为生命。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 170,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 170,
+          "Kind": 1
+        },
+        {
+          "Kind": 4,
+          "RequiresPreviousLanded": true,
+          "SourceAttackPct": 28,
+          "Target": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10104,
+      "Icon": 5014,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 29,
+      "MPCost": 56,
+      "Name": "饮血剑",
+      "Prerequisites": [
+        10111
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 3000,
+      "Description": "造成150%伤害，攻击力的20%转化为生命。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 150,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 150,
+          "Kind": 1
+        },
+        {
+          "Kind": 4,
+          "RequiresPreviousLanded": true,
+          "SourceAttackPct": 20,
+          "Target": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10104,
+      "Icon": 5014,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "MPCost": 32,
+      "Name": "饮血剑",
+      "Prerequisites": [
+        10111
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "id": 10104
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3815,
+      "Description": "消耗大量法力，消耗法力的一部分转化为攻击力，每次升级消耗的法力增加。",
+      "Dist": 400,
+      "Effect": {
+        "DamageFlat": 383,
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamageFlat": 383,
+          "DamagePct": 100,
+          "Kind": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10105,
+      "Icon": 5015,
+      "Kind": 3,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "MPCost": 383,
+      "Name": "龙杀剑",
+      "PrepareMS": 4000,
+      "Prerequisites": [
+        10116
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 2,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3815,
+      "Description": "消耗大量法力，消耗法力的一部分转化为攻击力，每次升级消耗的法力增加。",
+      "Dist": 400,
+      "Effect": {
+        "DamageFlat": 247,
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamageFlat": 247,
+          "DamagePct": 100,
+          "Kind": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10105,
+      "Icon": 5015,
+      "Kind": 3,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 247,
+      "Name": "龙杀剑",
+      "PrepareMS": 4000,
+      "Prerequisites": [
+        10116
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 2,
+      "TargetEnemy": true
+    },
+    "id": 10105
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "使用盾牌时的总体防御力提升10%。",
+      "Effect": {},
+      "ID": 10106,
+      "Icon": 5016,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 38,
+      "Name": "盾防修炼",
+      "PassiveStats": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "RequiredEquipType": 105,
+          "Value": 10
+        }
+      ],
+      "Prerequisites": [
+        10108
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 105
+    },
+    "first": {
+      "Area": {},
+      "Description": "使用盾牌时的总体防御力提升2%。",
+      "Effect": {},
+      "ID": 10106,
+      "Icon": 5016,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "Name": "盾防修炼",
+      "PassiveStats": [
+        {
+          "Attr": 13,
+          "Mode": 1,
+          "RequiredEquipType": 105,
+          "Value": 2
+        }
+      ],
+      "Prerequisites": [
+        10108
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 105
+    },
+    "id": 10106
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "30秒内伤害抗性提升22%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10107,
+      "Icon": 5017,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 117,
+      "Name": "铁城神盾",
+      "Prerequisites": [
+        10106
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 105,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1012,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "30秒内伤害抗性提升10%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10107,
+      "Icon": 5017,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 69,
+      "Name": "铁城神盾",
+      "Prerequisites": [
+        10106
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 105,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1012,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10107
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "昏迷抗性+50%。",
+      "Dist": 10,
+      "Effect": {},
+      "ID": 10108,
+      "Icon": 5018,
+      "Kind": 2,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 28,
+      "Name": "心镜",
+      "PassiveResists": [
+        {
+          "Pct": 50,
+          "Status": 1002
+        }
+      ],
+      "Prerequisites": [
+        10101
+      ],
+      "Prof": 2
+    },
+    "first": {
+      "Area": {},
+      "Description": "昏迷抗性+10%。",
+      "Dist": 10,
+      "Effect": {},
+      "ID": 10108,
+      "Icon": 5018,
+      "Kind": 2,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "Name": "心镜",
+      "PassiveResists": [
+        {
+          "Pct": 10,
+          "Status": 1002
+        }
+      ],
+      "Prerequisites": [
+        10101
+      ],
+      "Prof": 2
+    },
+    "id": 10108
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3819,
+      "CooldownMS": 300000,
+      "Description": "10秒内无法移动，防御力增加160%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10109,
+      "Icon": 5019,
+      "LearnMoney": 40000,
+      "Level": 5,
+      "LevelNeed": 88,
+      "MPCost": 554,
+      "Name": "仙风云体",
+      "Prerequisites": [
+        10107
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 10,
+          "ID": 1019,
+          "Level": 20
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3819,
+      "CooldownMS": 300000,
+      "Description": "10秒内无法移动，防御力增加80%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10109,
+      "Icon": 5019,
+      "LearnMoney": 40000,
+      "Level": 1,
+      "LevelNeed": 80,
+      "MPCost": 374,
+      "Name": "仙风云体",
+      "Prerequisites": [
+        10107
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 10,
+          "ID": 1019,
+          "Level": 16
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10109
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "使罡气剑有20%的几率击晕敌人10秒。",
+      "Effect": {},
+      "ID": 10110,
+      "Icon": 7028,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 23,
+      "Name": "通背",
+      "PassiveTriggers": [
+        {
+          "ChanceBP": 2000,
+          "Status": 1002,
+          "StatusLevel": 15,
+          "TargetSkill": 10102
+        }
+      ],
+      "Prerequisites": [
+        10102
+      ],
+      "Prof": 2
+    },
+    "first": {
+      "Area": {},
+      "Description": "使罡气剑有20%的几率击晕敌人6秒。",
+      "Effect": {},
+      "ID": 10110,
+      "Icon": 7028,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "Name": "通背",
+      "PassiveTriggers": [
+        {
+          "ChanceBP": 2000,
+          "Status": 1002,
+          "StatusLevel": 11,
+          "TargetSkill": 10102
+        }
+      ],
+      "Prerequisites": [
+        10102
+      ],
+      "Prof": 2
+    },
+    "id": 10110
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成145%伤害，敌人无法移动10秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10111,
+      "Icon": 7029,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 24,
+      "MPCost": 44,
+      "Name": "金缚剑",
+      "Prerequisites": [
+        10102
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成145%伤害，敌人无法移动6秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10111,
+      "Icon": 7029,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "MPCost": 24,
+      "Name": "金缚剑",
+      "Prerequisites": [
+        10102
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "id": 10111
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "饮血剑的伤害转为生命效果增加10%。",
+      "Effect": {},
+      "ID": 10112,
+      "Icon": 7030,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 38,
+      "Name": "血影",
+      "PassiveModifiers": [
+        {
+          "EffectKind": 4,
+          "Kind": 2,
+          "TargetSkill": 10104,
+          "Value": 10
+        }
+      ],
+      "Prerequisites": [
+        10104
+      ],
+      "Prof": 2
+    },
+    "first": {
+      "Area": {},
+      "Description": "饮血剑的伤害转为生命效果增加2%。",
+      "Effect": {},
+      "ID": 10112,
+      "Icon": 7030,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "Name": "血影",
+      "PassiveModifiers": [
+        {
+          "EffectKind": 4,
+          "Kind": 2,
+          "TargetSkill": 10104,
+          "Value": 2
+        }
+      ],
+      "Prerequisites": [
+        10104
+      ],
+      "Prof": 2
+    },
+    "id": 10112
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成155%伤害，敌人无法使用技能10秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 155,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10113,
+      "Icon": 7031,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 89,
+      "Name": "封法剑",
+      "Prerequisites": [
+        10104
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成155%伤害，敌人无法使用技能6秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 155,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10113,
+      "Icon": 7031,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 53,
+      "Name": "封法剑",
+      "Prerequisites": [
+        10104
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "id": 10113
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "14秒使自己内不会受到任何有害状态影响。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10114,
+      "Icon": 7032,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 117,
+      "Name": "锁灵剑",
+      "Prerequisites": [
+        10113
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 14,
+          "ID": 1022,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "10秒使自己内不会受到任何有害状态影响。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10114,
+      "Icon": 7032,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 69,
+      "Name": "锁灵剑",
+      "Prerequisites": [
+        10113
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 10,
+          "ID": 1022,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10114
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3906,
+      "Description": "30秒内，防御降低22%，攻击力提升22%。",
+      "Effect": {},
+      "ID": 10115,
+      "Icon": 7033,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "MPCost": 278,
+      "Name": "火字诀",
+      "PrepareMS": 3000,
+      "Prerequisites": [
+        10114
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10115,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3906,
+      "Description": "30秒内，防御降低10%，攻击力提升10%。",
+      "Effect": {},
+      "ID": 10115,
+      "Icon": 7033,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "MPCost": 170,
+      "Name": "火字诀",
+      "PrepareMS": 3000,
+      "Prerequisites": [
+        10114
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10115,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10115
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "100%命中，造成敌人215%伤害。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 215,
+        "GuaranteedHit": true,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 215,
+          "GuaranteedHit": true,
+          "Kind": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10116,
+      "Icon": 7034,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "MPCost": 172,
+      "Name": "狮心剑",
+      "Prerequisites": [
+        10114
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "100%命中，造成敌人175%伤害。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 175,
+        "GuaranteedHit": true,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 175,
+          "GuaranteedHit": true,
+          "Kind": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10116,
+      "Icon": 7034,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "MPCost": 104,
+      "Name": "狮心剑",
+      "Prerequisites": [
+        10114
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "id": 10116
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "远程剑技，对敌人造成115%的伤害。",
+      "Dist": 300,
+      "Effect": {
+        "DamagePct": 115,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10117,
+      "Icon": 7035,
+      "LearnMoney": 5000,
+      "Level": 5,
+      "LevelNeed": 14,
+      "MPCost": 28,
+      "Name": "真空剑",
+      "Prof": 2,
+      "ProjectileSpeedPXPerSec": 545,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "远程剑技，对敌人造成95%的伤害。",
+      "Dist": 300,
+      "Effect": {
+        "DamagePct": 95,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10117,
+      "Icon": 7035,
+      "LearnMoney": 5000,
+      "Level": 1,
+      "LevelNeed": 10,
+      "MPCost": 12,
+      "Name": "真空剑",
+      "Prof": 2,
+      "ProjectileSpeedPXPerSec": 545,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "id": 10117
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "真空斩威力增加25%。",
+      "Effect": {},
+      "ID": 10118,
+      "Icon": 7036,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 23,
+      "Name": "风斩",
+      "PassiveModifiers": [
+        {
+          "Kind": 1,
+          "TargetSkill": 10117,
+          "Value": 25
+        }
+      ],
+      "Prerequisites": [
+        10117
+      ],
+      "Prof": 2
+    },
+    "first": {
+      "Area": {},
+      "Description": "真空斩威力增加5%。",
+      "Effect": {},
+      "ID": 10118,
+      "Icon": 7036,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "Name": "风斩",
+      "PassiveModifiers": [
+        {
+          "Kind": 1,
+          "TargetSkill": 10117,
+          "Value": 5
+        }
+      ],
+      "Prerequisites": [
+        10117
+      ],
+      "Prof": 2
+    },
+    "id": 10118
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 3000,
+      "Description": "造成170%的伤害，攻击力的28%转化为法力。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 170,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 170,
+          "Kind": 1
+        },
+        {
+          "Kind": 3,
+          "RequiresPreviousLanded": true,
+          "SourceAttackPct": 28,
+          "Target": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10119,
+      "Icon": 7037,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 29,
+      "MPCost": 56,
+      "Name": "噬魂剑",
+      "Prerequisites": [
+        10103
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 3000,
+      "Description": "造成150%的伤害，攻击力的20%转化为法力。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 150,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 150,
+          "Kind": 1
+        },
+        {
+          "Kind": 3,
+          "RequiresPreviousLanded": true,
+          "SourceAttackPct": 20,
+          "Target": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10119,
+      "Icon": 7037,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "MPCost": 32,
+      "Name": "噬魂剑",
+      "Prerequisites": [
+        10103
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "id": 10119
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "噬魂剑的伤害转为法力效果增加10%。",
+      "Effect": {},
+      "ID": 10120,
+      "Icon": 7038,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 38,
+      "Name": "魔光",
+      "PassiveModifiers": [
+        {
+          "EffectKind": 3,
+          "Kind": 2,
+          "TargetSkill": 10119,
+          "Value": 10
+        }
+      ],
+      "Prerequisites": [
+        10119
+      ],
+      "Prof": 2
+    },
+    "first": {
+      "Area": {},
+      "Description": "噬魂剑的伤害转为法力效果增加2%。",
+      "Effect": {},
+      "ID": 10120,
+      "Icon": 7038,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "Name": "魔光",
+      "PassiveModifiers": [
+        {
+          "EffectKind": 3,
+          "Kind": 2,
+          "TargetSkill": 10119,
+          "Value": 2
+        }
+      ],
+      "Prerequisites": [
+        10119
+      ],
+      "Prof": 2
+    },
+    "id": 10120
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 100,
+        "Shape": 2
+      },
+      "CooldownMS": 2000,
+      "Description": "对以自己为中心半径100的圆范围内的敌人造成150%的伤害。",
+      "Effect": {
+        "DamagePct": 150,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10121,
+      "Icon": 7039,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 89,
+      "Name": "旋风剑",
+      "Prerequisites": [
+        10119
+      ],
+      "Prof": 2,
+      "Radius": 100,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 100,
+        "Shape": 2
+      },
+      "CooldownMS": 2000,
+      "Description": "对以自己为中心半径100的圆范围内的敌人造成130%的伤害。",
+      "Effect": {
+        "DamagePct": 130,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10121,
+      "Icon": 7039,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 53,
+      "Name": "旋风剑",
+      "Prerequisites": [
+        10119
+      ],
+      "Prof": 2,
+      "Radius": 100,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "id": 10121
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "对敌人造成160%伤害，14秒内，敌人无法受到任何有益的状态的效果。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 160,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10122,
+      "Icon": 7040,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 117,
+      "Name": "混沌剑",
+      "Prerequisites": [
+        10121
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "对敌人造成160%伤害，10秒内，敌人无法受到任何有益的状态的效果。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 160,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10122,
+      "Icon": 7040,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 69,
+      "Name": "混沌剑",
+      "Prerequisites": [
+        10121
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "id": 10122
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "对敌人造成205%的伤害，2%的几率出现即死判定。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 205,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 205,
+          "Kind": 1
+        },
+        {
+          "ChanceBP": 200,
+          "Kind": 14,
+          "RequiresPreviousLanded": true
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10123,
+      "Icon": 7041,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "MPCost": 172,
+      "Name": "陨星剑",
+      "Prerequisites": [
+        10122
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "对敌人造成165%的伤害，2%的几率出现即死判定。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 165,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 165,
+          "Kind": 1
+        },
+        {
+          "ChanceBP": 200,
+          "Kind": 14,
+          "RequiresPreviousLanded": true
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10123,
+      "Icon": 7041,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "MPCost": 104,
+      "Name": "陨星剑",
+      "Prerequisites": [
+        10122
+      ],
+      "Prof": 2,
+      "RequiredWeaponType": 6,
+      "TargetEnemy": true
+    },
+    "id": 10123
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3915,
+      "Description": "30秒内，攻击力下降22%，防御力上升22%。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10124,
+      "Icon": 7042,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "MPCost": 278,
+      "Name": "山字诀",
+      "PrepareMS": 3000,
+      "Prerequisites": [
+        10122
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1019,
+          "Level": 15
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3915,
+      "Description": "30秒内，攻击力下降10%，防御力上升10%。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10124,
+      "Icon": 7042,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "MPCost": 170,
+      "Name": "山字诀",
+      "PrepareMS": 3000,
+      "Prerequisites": [
+        10122
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1019,
+          "Level": 11
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10124
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "Book": 3916,
+      "Description": "对以自己为中心半径150的圆范围内的敌人造成190%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 190,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10125,
+      "Icon": 7043,
+      "ImpactDelayMS": 200,
+      "Kind": 1,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "MPCost": 383,
+      "Name": "血雨剑",
+      "PrepareMS": 4000,
+      "Prerequisites": [
+        10123
+      ],
+      "Prof": 2,
+      "Radius": 150,
+      "RequiredWeaponType": 2,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "Book": 3916,
+      "Description": "对以自己为中心半径150的圆范围内的敌人造成150%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 150,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10125,
+      "Icon": 7043,
+      "ImpactDelayMS": 200,
+      "Kind": 1,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 247,
+      "Name": "血雨剑",
+      "PrepareMS": 4000,
+      "Prerequisites": [
+        10123
+      ],
+      "Prof": 2,
+      "Radius": 150,
+      "RequiredWeaponType": 2,
+      "TargetEnemy": true
+    },
+    "id": 10125
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成100%伤害，使敌人昏迷10秒，昏迷中的敌人无法回避攻击。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10126,
+      "Icon": 7044,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 33,
+      "MPCost": 56,
+      "Name": "强击",
+      "Prerequisites": [
+        10101
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ID": 1002,
+          "Level": 15
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成100%伤害，使敌人昏迷6秒，昏迷中的敌人无法回避攻击。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10126,
+      "Icon": 7044,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "MPCost": 32,
+      "Name": "强击",
+      "Prerequisites": [
+        10101
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ID": 1002,
+          "Level": 11
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10126
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "CooldownMS": 1000,
+      "Description": "将以自己为中心半径100的圆范围内的敌人吸引过来，每次升级吸引敌人的效果更好。",
+      "Effect": {
+        "Kind": 6,
+        "TauntPower": 5
+      },
+      "Effects": [
+        {
+          "Kind": 6,
+          "TauntPower": 5
+        }
+      ],
+      "ID": 10127,
+      "Icon": 7045,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 89,
+      "Name": "挑衅",
+      "Prerequisites": [
+        10126
+      ],
+      "Prof": 2,
+      "Radius": 200,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "CooldownMS": 1000,
+      "Description": "将以自己为中心半径100的圆范围内的敌人吸引过来，每次升级吸引敌人的效果更好。",
+      "Effect": {
+        "Kind": 6,
+        "TauntPower": 1
+      },
+      "Effects": [
+        {
+          "Kind": 6,
+          "TauntPower": 1
+        }
+      ],
+      "ID": 10127,
+      "Icon": 7045,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 53,
+      "Name": "挑衅",
+      "Prerequisites": [
+        10126
+      ],
+      "Prof": 2,
+      "Radius": 200,
+      "TargetEnemy": true
+    },
+    "id": 10127
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 100,
+        "Shape": 2
+      },
+      "CooldownMS": 300000,
+      "Description": "将以自己为中心半径150的圆范围内的敌人震晕9秒。",
+      "Effect": {},
+      "ID": 10128,
+      "Icon": 7046,
+      "Kind": 1,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "MPCost": 172,
+      "Name": "煞气",
+      "Prerequisites": [
+        10127
+      ],
+      "Prof": 2,
+      "Radius": 100,
+      "Statuses": [
+        {
+          "ID": 1002,
+          "Level": 14
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 100,
+        "Shape": 2
+      },
+      "CooldownMS": 300000,
+      "Description": "将以自己为中心半径150的圆范围内的敌人震晕5秒。",
+      "Effect": {},
+      "ID": 10128,
+      "Icon": 7046,
+      "Kind": 1,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "MPCost": 104,
+      "Name": "煞气",
+      "Prerequisites": [
+        10127
+      ],
+      "Prof": 2,
+      "Radius": 100,
+      "Statuses": [
+        {
+          "ID": 1002,
+          "Level": 16
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10128
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3920,
+      "CooldownMS": 120000,
+      "Description": "9秒之内使敌人的攻击力下降至4。",
+      "Dist": 75,
+      "Effect": {},
+      "ID": 10129,
+      "Icon": 7047,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "MPCost": 278,
+      "Name": "致残",
+      "Prerequisites": [
+        10128
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10129,
+          "Level": 5
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3920,
+      "CooldownMS": 120000,
+      "Description": "5秒之内使敌人的攻击力下降至0。",
+      "Dist": 75,
+      "Effect": {},
+      "ID": 10129,
+      "Icon": 7047,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "MPCost": 170,
+      "Name": "致残",
+      "Prerequisites": [
+        10128
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10129,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10129
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3921,
+      "CooldownMS": 5000,
+      "Description": "使用后下一次普通攻击的伤害增加140%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10130,
+      "Icon": 7048,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "MPCost": 325,
+      "Name": "雷霆之怒",
+      "Prerequisites": [
+        10129
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ID": 1025,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3921,
+      "CooldownMS": 5000,
+      "Description": "使用后下一次普通攻击的伤害增加100%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10130,
+      "Icon": 7048,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 189,
+      "Name": "雷霆之怒",
+      "Prerequisites": [
+        10129
+      ],
+      "Prof": 2,
+      "Statuses": [
+        {
+          "ID": 1025,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10130
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "背刺时20%的几率不会中止隐身状态，25%几率击晕对手。",
+      "Effect": {},
+      "ID": 10201,
+      "Icon": 5020,
+      "Kind": 2,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "Name": "进阶背刺",
+      "PassiveModifiers": [
+        {
+          "Kind": 8,
+          "TargetSkill": 10209,
+          "Value": 20
+        }
+      ],
+      "Prerequisites": [
+        10209
+      ],
+      "Prof": 3
+    },
+    "first": {
+      "Area": {},
+      "Description": "背刺时20%的几率不会中止隐身状态，5%几率击晕对手。",
+      "Effect": {},
+      "ID": 10201,
+      "Icon": 5020,
+      "Kind": 2,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "Name": "进阶背刺",
+      "PassiveModifiers": [
+        {
+          "Kind": 8,
+          "TargetSkill": 10209,
+          "Value": 20
+        }
+      ],
+      "Prerequisites": [
+        10209
+      ],
+      "Prof": 3
+    },
+    "id": 10201
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "使用双刃时的攻击力+15%。",
+      "Effect": {},
+      "ID": 10202,
+      "Icon": 5021,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 23,
+      "Name": "双刃修炼",
+      "PassiveStats": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "RequiredEquipType": 8,
+          "Value": 15
+        }
+      ],
+      "Prerequisites": [
+        10219
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 8
+    },
+    "first": {
+      "Area": {},
+      "Description": "使用双刃时的攻击力+3%。",
+      "Effect": {},
+      "ID": 10202,
+      "Icon": 5021,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "Name": "双刃修炼",
+      "PassiveStats": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "RequiredEquipType": 8,
+          "Value": 3
+        }
+      ],
+      "Prerequisites": [
+        10219
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 8
+    },
+    "id": 10202
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "成功回避敌人攻击的时候52%的几率反击对手。",
+      "Dist": 75,
+      "Effect": {},
+      "ID": 10203,
+      "Icon": 5022,
+      "Kind": 2,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 24,
+      "Name": "反击术",
+      "PassiveCounter": {
+        "ChanceBP": 5200,
+        "DamagePct": 100,
+        "RequiredEquipType": 8
+      },
+      "Prerequisites": [
+        10219
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 8,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "Description": "成功回避敌人攻击的时候40%的几率反击对手。",
+      "Dist": 75,
+      "Effect": {},
+      "ID": 10203,
+      "Icon": 5022,
+      "Kind": 2,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "Name": "反击术",
+      "PassiveCounter": {
+        "ChanceBP": 4000,
+        "DamagePct": 100,
+        "RequiredEquipType": 8
+      },
+      "Prerequisites": [
+        10219
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 8,
+      "TargetEnemy": true
+    },
+    "id": 10203
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "使用暗器时攻击力+15%。",
+      "Effect": {},
+      "ID": 10204,
+      "Icon": 5023,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 23,
+      "Name": "暗器修炼",
+      "PassiveStats": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "RequiredEquipType": 32,
+          "Value": 15
+        }
+      ],
+      "Prerequisites": [
+        10221
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 32
+    },
+    "first": {
+      "Area": {},
+      "Description": "使用暗器时攻击力+3%。",
+      "Effect": {},
+      "ID": 10204,
+      "Icon": 5023,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "Name": "暗器修炼",
+      "PassiveStats": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "RequiredEquipType": 32,
+          "Value": 3
+        }
+      ],
+      "Prerequisites": [
+        10221
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 32
+    },
+    "id": 10204
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 3000,
+      "Description": "远程技能，对敌人造成170%的伤害。",
+      "Dist": 400,
+      "Effect": {
+        "DamagePct": 170,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10205,
+      "Icon": 5024,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 28,
+      "MPCost": 28,
+      "Name": "连续投掷",
+      "Prerequisites": [
+        10221
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 32,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 3000,
+      "Description": "远程技能，对敌人造成150%的伤害。",
+      "Dist": 400,
+      "Effect": {
+        "DamagePct": 150,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10205,
+      "Icon": 5024,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "MPCost": 16,
+      "Name": "连续投掷",
+      "Prerequisites": [
+        10221
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 32,
+      "TargetEnemy": true
+    },
+    "id": 10205
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Angle": 120,
+        "Center": 1,
+        "Radius": 500,
+        "Shape": 3
+      },
+      "CooldownMS": 2000,
+      "Description": "对120度角200半径的扇形范围内的敌人造成165%的伤害。",
+      "Dist": 50,
+      "Effect": {
+        "DamagePct": 165,
+        "Kind": 1
+      },
+      "HitEffect": "TFX096_50",
+      "HurtType": 1,
+      "ID": 10206,
+      "Icon": 5025,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 40,
+      "MPCost": 59,
+      "Name": "多重投掷",
+      "Prerequisites": [
+        10223
+      ],
+      "Prof": 3,
+      "Radius": 500,
+      "RequiredWeaponType": 32,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Angle": 120,
+        "Center": 1,
+        "Radius": 500,
+        "Shape": 3
+      },
+      "CooldownMS": 2000,
+      "Description": "对120度角200半径的扇形范围内的敌人造成145%的伤害。",
+      "Dist": 50,
+      "Effect": {
+        "DamagePct": 145,
+        "Kind": 1
+      },
+      "HitEffect": "TFX096_50",
+      "HurtType": 1,
+      "ID": 10206,
+      "Icon": 5025,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 35,
+      "Name": "多重投掷",
+      "Prerequisites": [
+        10223
+      ],
+      "Prof": 3,
+      "Radius": 500,
+      "RequiredWeaponType": 32,
+      "TargetEnemy": true
+    },
+    "id": 10206
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "增加隐身状态的时限（+10秒），移动速度（+25%），伤害加成（+25%）。",
+      "Effect": {},
+      "ID": 10207,
+      "Icon": 5026,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 34,
+      "Name": "进阶隐身",
+      "PassiveModifiers": [
+        {
+          "Kind": 5,
+          "TargetSkill": 10208,
+          "Value": 10
+        },
+        {
+          "Kind": 6,
+          "TargetSkill": 10208,
+          "Value": 25
+        },
+        {
+          "Kind": 7,
+          "TargetSkill": 10208,
+          "Value": 25
+        }
+      ],
+      "Prerequisites": [
+        10208
+      ],
+      "Prof": 3
+    },
+    "first": {
+      "Area": {},
+      "Description": "增加隐身状态的时限（+2秒），移动速度（+5%），伤害加成（+5%）。",
+      "Effect": {},
+      "ID": 10207,
+      "Icon": 5026,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "Name": "进阶隐身",
+      "PassiveModifiers": [
+        {
+          "Kind": 5,
+          "TargetSkill": 10208,
+          "Value": 2
+        },
+        {
+          "Kind": 6,
+          "TargetSkill": 10208,
+          "Value": 5
+        },
+        {
+          "Kind": 7,
+          "TargetSkill": 10208,
+          "Value": 5
+        }
+      ],
+      "Prerequisites": [
+        10208
+      ],
+      "Prof": 3
+    },
+    "id": 10207
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 60000,
+      "Description": "隐身38秒，伤害提升175%。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10208,
+      "Icon": 5027,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 33,
+      "MPCost": 37,
+      "Name": "隐身术",
+      "Prerequisites": [
+        10203
+      ],
+      "Prof": 3,
+      "Statuses": [
+        {
+          "DurationSec": 38,
+          "ExtraAffixes": [
+            {
+              "Attr": 27,
+              "Mode": 1
+            }
+          ],
+          "ID": 1032,
+          "Level": 5,
+          "StealthDamagePct": 175
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 60000,
+      "Description": "隐身30秒，移动速度降低25%，伤害提升35%。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10208,
+      "Icon": 5027,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "MPCost": 21,
+      "Name": "隐身术",
+      "Prerequisites": [
+        10203
+      ],
+      "Prof": 3,
+      "Statuses": [
+        {
+          "DurationSec": 30,
+          "ExtraAffixes": [
+            {
+              "Attr": 27,
+              "Mode": 1,
+              "Value": -25
+            }
+          ],
+          "ID": 1032,
+          "Level": 1,
+          "StealthDamagePct": 35
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10208
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "只能在隐身状态下使用，100%命中，造成380%的伤害。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 380,
+        "GuaranteedHit": true,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 380,
+          "GuaranteedHit": true,
+          "Kind": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10209,
+      "Icon": 5028,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 59,
+      "Name": "背刺",
+      "Prerequisites": [
+        10208
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 8,
+      "RequiresInvisible": true,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "只能在隐身状态下使用，100%命中，造成300%的伤害。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 300,
+        "GuaranteedHit": true,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 300,
+          "GuaranteedHit": true,
+          "Kind": 1
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10209,
+      "Icon": 5028,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 35,
+      "Name": "背刺",
+      "Prerequisites": [
+        10208
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 8,
+      "RequiresInvisible": true,
+      "TargetEnemy": true
+    },
+    "id": 10209
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3829,
+      "CooldownMS": 2000,
+      "Description": "100%命中，造成440%伤害，13%几率发生即死判定。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 440,
+        "GuaranteedHit": true,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 440,
+          "GuaranteedHit": true,
+          "Kind": 1
+        },
+        {
+          "ChanceBP": 1300,
+          "Kind": 14,
+          "RequiresPreviousLanded": true
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10210,
+      "Icon": 5029,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "MPCost": 185,
+      "Name": "暗杀术",
+      "Prerequisites": [
+        10201
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 8,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3829,
+      "CooldownMS": 2000,
+      "Description": "100%命中，造成400%伤害，5%几率发生即死判定。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 400,
+        "GuaranteedHit": true,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 400,
+          "GuaranteedHit": true,
+          "Kind": 1
+        },
+        {
+          "ChanceBP": 500,
+          "Kind": 14,
+          "RequiresPreviousLanded": true
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10210,
+      "Icon": 5029,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "MPCost": 113,
+      "Name": "暗杀术",
+      "Prerequisites": [
+        10201
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 8,
+      "TargetEnemy": true
+    },
+    "id": 10210
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 10000,
+      "Description": "30秒内，50%几率进行普通攻击时让敌人中毒，目标将在60秒内损失720点生命。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10211,
+      "Icon": 5030,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 23,
+      "MPCost": 24,
+      "Name": "淬毒术",
+      "Prof": 3,
+      "Statuses": [
+        {
+          "ID": 1018,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 10000,
+      "Description": "30秒内，30%几率进行普通攻击时让敌人中毒，目标将在60秒内损失300点生命。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10211,
+      "Icon": 5030,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "MPCost": 12,
+      "Name": "淬毒术",
+      "Prof": 3,
+      "Statuses": [
+        {
+          "ID": 1018,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10211
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "造成112%的伤害。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 112,
+        "Kind": 1
+      },
+      "ID": 10212,
+      "Icon": 5031,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "MPCost": 117,
+      "Name": "游龙掌",
+      "Prerequisites": [
+        10209
+      ],
+      "Prof": 3,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "造成100%的伤害。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "ID": 10212,
+      "Icon": 5031,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "MPCost": 69,
+      "Name": "游龙掌",
+      "Prerequisites": [
+        10209
+      ],
+      "Prof": 3,
+      "TargetEnemy": true
+    },
+    "id": 10212
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "放置一个陷阱，对半径100的圆形范围内的敌人造成240%的伤害。",
+      "Dist": 150,
+      "Effect": {
+        "Kind": 9,
+        "Target": 1,
+        "TrapRadius": 100
+      },
+      "Effects": [
+        {
+          "Kind": 9,
+          "Target": 1,
+          "TrapRadius": 100
+        },
+        {
+          "DamagePct": 240,
+          "Kind": 1
+        }
+      ],
+      "ID": 10213,
+      "Icon": 7049,
+      "Kind": 1,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 29,
+      "MPCost": 37,
+      "Name": "陷阱：爆弹",
+      "Prof": 3
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "放置一个陷阱，对半径100的圆形范围内的敌人造成200%的伤害。",
+      "Dist": 150,
+      "Effect": {
+        "Kind": 9,
+        "Target": 1,
+        "TrapRadius": 100
+      },
+      "Effects": [
+        {
+          "Kind": 9,
+          "Target": 1,
+          "TrapRadius": 100
+        },
+        {
+          "DamagePct": 200,
+          "Kind": 1
+        }
+      ],
+      "ID": 10213,
+      "Icon": 7049,
+      "Kind": 1,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "MPCost": 21,
+      "Name": "陷阱：爆弹",
+      "Prof": 3
+    },
+    "id": 10213
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "放置一个陷阱，对半径100的圆形范围内的敌人造成130%的伤害并使其中毒，目标将在60秒内损失900点生命。",
+      "Dist": 150,
+      "Effect": {
+        "Kind": 9,
+        "Target": 1,
+        "TrapRadius": 100
+      },
+      "Effects": [
+        {
+          "Kind": 9,
+          "Target": 1,
+          "TrapRadius": 100
+        },
+        {
+          "DamagePct": 130,
+          "Kind": 1
+        }
+      ],
+      "ID": 10214,
+      "Icon": 7050,
+      "Kind": 1,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 38,
+      "MPCost": 47,
+      "Name": "陷阱：毒雾",
+      "Prerequisites": [
+        10213
+      ],
+      "Prof": 3,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1001,
+          "Level": 26
+        }
+      ]
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "放置一个陷阱，对半径100的圆形范围内的敌人造成130%的伤害并使其中毒，目标将在60秒内损失360点生命。",
+      "Dist": 150,
+      "Effect": {
+        "Kind": 9,
+        "Target": 1,
+        "TrapRadius": 100
+      },
+      "Effects": [
+        {
+          "Kind": 9,
+          "Target": 1,
+          "TrapRadius": 100
+        },
+        {
+          "DamagePct": 130,
+          "Kind": 1
+        }
+      ],
+      "ID": 10214,
+      "Icon": 7050,
+      "Kind": 1,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "MPCost": 27,
+      "Name": "陷阱：毒雾",
+      "Prerequisites": [
+        10213
+      ],
+      "Prof": 3,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1001,
+          "Level": 22
+        }
+      ]
+    },
+    "id": 10214
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "放置一个陷阱，对半径100的圆形范围内的敌人造成150%的伤害，并使其34秒内无法使用技能。",
+      "Dist": 150,
+      "Effect": {
+        "Kind": 9,
+        "Target": 1,
+        "TrapRadius": 100
+      },
+      "Effects": [
+        {
+          "Kind": 9,
+          "Target": 1,
+          "TrapRadius": 100
+        },
+        {
+          "DamagePct": 150,
+          "Kind": 1
+        }
+      ],
+      "ID": 10215,
+      "Icon": 7051,
+      "Kind": 1,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 78,
+      "Name": "陷阱：封印",
+      "Prerequisites": [
+        10214
+      ],
+      "Prof": 3,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1003,
+          "Level": 7
+        }
+      ]
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "放置一个陷阱，对半径100的圆形范围内的敌人造成150%的伤害，并使其26秒内无法使用技能。",
+      "Dist": 150,
+      "Effect": {
+        "Kind": 9,
+        "Target": 1,
+        "TrapRadius": 100
+      },
+      "Effects": [
+        {
+          "Kind": 9,
+          "Target": 1,
+          "TrapRadius": 100
+        },
+        {
+          "DamagePct": 150,
+          "Kind": 1
+        }
+      ],
+      "ID": 10215,
+      "Icon": 7051,
+      "Kind": 1,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 46,
+      "Name": "陷阱：封印",
+      "Prerequisites": [
+        10214
+      ],
+      "Prof": 3,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1003,
+          "Level": 3
+        }
+      ]
+    },
+    "id": 10215
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "放置一个陷阱，对半径100的圆形范围内的敌人造成170%的伤害并使其被冻结30秒。",
+      "Dist": 150,
+      "Effect": {
+        "Kind": 9,
+        "Target": 1,
+        "TrapRadius": 100
+      },
+      "Effects": [
+        {
+          "Kind": 9,
+          "Target": 1,
+          "TrapRadius": 100
+        },
+        {
+          "DamagePct": 170,
+          "Kind": 1
+        }
+      ],
+      "ID": 10216,
+      "Icon": 7052,
+      "Kind": 1,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 49,
+      "MPCost": 185,
+      "Name": "陷阱：冻气",
+      "Prerequisites": [
+        10215
+      ],
+      "Prof": 3,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1004,
+          "Level": 10
+        }
+      ]
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "放置一个陷阱，对半径100的圆形范围内的敌人造成170%的伤害并使其被冻结14秒。",
+      "Dist": 150,
+      "Effect": {
+        "Kind": 9,
+        "Target": 1,
+        "TrapRadius": 100
+      },
+      "Effects": [
+        {
+          "Kind": 9,
+          "Target": 1,
+          "TrapRadius": 100
+        },
+        {
+          "DamagePct": 170,
+          "Kind": 1
+        }
+      ],
+      "ID": 10216,
+      "Icon": 7052,
+      "Kind": 1,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 45,
+      "MPCost": 113,
+      "Name": "陷阱：冻气",
+      "Prerequisites": [
+        10215
+      ],
+      "Prof": 3,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1004,
+          "Level": 2
+        }
+      ]
+    },
+    "id": 10216
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3926,
+      "CooldownMS": 2000,
+      "Description": "放置一个陷阱，对半径100的圆形范围内的敌人造成210%的伤害，敌人同时失去70%的法力。",
+      "Dist": 150,
+      "Effect": {
+        "Kind": 9,
+        "Target": 1,
+        "TrapRadius": 100
+      },
+      "Effects": [
+        {
+          "Kind": 9,
+          "Target": 1,
+          "TrapRadius": 100
+        },
+        {
+          "DamagePct": 210,
+          "Kind": 1
+        },
+        {
+          "Kind": 12,
+          "MaxResourcePct": 70,
+          "RequiresPreviousLanded": true
+        }
+      ],
+      "ID": 10217,
+      "Icon": 7053,
+      "Kind": 1,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 74,
+      "MPCost": 256,
+      "Name": "陷阱：新星",
+      "Prerequisites": [
+        10216
+      ],
+      "Prof": 3
+    },
+    "first": {
+      "Area": {},
+      "Book": 3926,
+      "CooldownMS": 2000,
+      "Description": "放置一个陷阱，对半径100的圆形范围内的敌人造成185%的伤害，敌人同时失去30%的法力。",
+      "Dist": 150,
+      "Effect": {
+        "Kind": 9,
+        "Target": 1,
+        "TrapRadius": 100
+      },
+      "Effects": [
+        {
+          "Kind": 9,
+          "Target": 1,
+          "TrapRadius": 100
+        },
+        {
+          "DamagePct": 185,
+          "Kind": 1
+        },
+        {
+          "Kind": 12,
+          "MaxResourcePct": 30,
+          "RequiresPreviousLanded": true
+        }
+      ],
+      "ID": 10217,
+      "Icon": 7053,
+      "Kind": 1,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 164,
+      "Name": "陷阱：新星",
+      "Prerequisites": [
+        10216
+      ],
+      "Prof": 3
+    },
+    "id": 10217
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "解除看到的陷阱，成功率87%。",
+      "Dist": 250,
+      "Effect": {
+        "ChanceBP": 8700,
+        "Kind": 11
+      },
+      "Effects": [
+        {
+          "ChanceBP": 8700,
+          "Kind": 11
+        }
+      ],
+      "ID": 10218,
+      "Icon": 7054,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 59,
+      "Name": "解除陷阱",
+      "Prerequisites": [
+        10228
+      ],
+      "Prof": 3,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "解除看到的陷阱，成功率55%。",
+      "Dist": 250,
+      "Effect": {
+        "ChanceBP": 5500,
+        "Kind": 11
+      },
+      "Effects": [
+        {
+          "ChanceBP": 5500,
+          "Kind": 11
+        }
+      ],
+      "ID": 10218,
+      "Icon": 7054,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 35,
+      "Name": "解除陷阱",
+      "Prerequisites": [
+        10228
+      ],
+      "Prof": 3,
+      "TargetEnemy": true
+    },
+    "id": 10218
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成130%伤害，击晕对手9秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 130,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10219,
+      "Icon": 7055,
+      "LearnMoney": 5000,
+      "Level": 5,
+      "LevelNeed": 14,
+      "MPCost": 20,
+      "Name": "击晕",
+      "Prof": 3,
+      "RequiredWeaponType": 8,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成130%伤害，击晕对手5秒。",
+      "Dist": 75,
+      "Effect": {
+        "DamagePct": 130,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10219,
+      "Icon": 7055,
+      "LearnMoney": 5000,
+      "Level": 1,
+      "LevelNeed": 10,
+      "MPCost": 8,
+      "Name": "击晕",
+      "Prof": 3,
+      "RequiredWeaponType": 8,
+      "TargetEnemy": true
+    },
+    "id": 10219
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3929,
+      "Description": "使用暗杀术时52%的几率不会中止隐身术。",
+      "Effect": {},
+      "ID": 10220,
+      "Icon": 7056,
+      "Kind": 2,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "Name": "进阶暗杀",
+      "PassiveModifiers": [
+        {
+          "Kind": 8,
+          "TargetSkill": 10210,
+          "Value": 52
+        }
+      ],
+      "Prerequisites": [
+        10210
+      ],
+      "Prof": 3
+    },
+    "first": {
+      "Area": {},
+      "Book": 3929,
+      "Description": "使用暗杀术时20%的几率不会中止隐身术。",
+      "Effect": {},
+      "ID": 10220,
+      "Icon": 7056,
+      "Kind": 2,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "Name": "进阶暗杀",
+      "PassiveModifiers": [
+        {
+          "Kind": 8,
+          "TargetSkill": 10210,
+          "Value": 20
+        }
+      ],
+      "Prerequisites": [
+        10210
+      ],
+      "Prof": 3
+    },
+    "id": 10220
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成160%伤害，使敌人无法移动5秒。",
+      "Dist": 350,
+      "Effect": {
+        "DamagePct": 160,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10221,
+      "Icon": 7057,
+      "LearnMoney": 5000,
+      "Level": 5,
+      "LevelNeed": 14,
+      "MPCost": 20,
+      "Name": "狙击",
+      "Prof": 3,
+      "RequiredWeaponType": 32,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "造成135%伤害，使敌人无法移动5秒。",
+      "Dist": 350,
+      "Effect": {
+        "DamagePct": 135,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10221,
+      "Icon": 7057,
+      "LearnMoney": 5000,
+      "Level": 1,
+      "LevelNeed": 10,
+      "MPCost": 8,
+      "Name": "狙击",
+      "Prof": 3,
+      "RequiredWeaponType": 32,
+      "TargetEnemy": true
+    },
+    "id": 10221
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "使用暗器类武器的耐久度消耗降低，每次升级效果增强。",
+      "Effect": {},
+      "ID": 10222,
+      "Icon": 7058,
+      "Kind": 2,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 33,
+      "Name": "暗器回收",
+      "PassiveModifiers": [
+        {
+          "Kind": 10,
+          "Value": 50
+        }
+      ],
+      "Prerequisites": [
+        10204
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 32
+    },
+    "first": {
+      "Area": {},
+      "Description": "使用暗器类武器的耐久度消耗降低，每次升级效果增强。",
+      "Effect": {},
+      "ID": 10222,
+      "Icon": 7058,
+      "Kind": 2,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "Name": "暗器回收",
+      "PassiveModifiers": [
+        {
+          "Kind": 10,
+          "Value": 10
+        }
+      ],
+      "Prerequisites": [
+        10204
+      ],
+      "Prof": 3,
+      "RequiredWeaponType": 32
+    },
+    "id": 10222
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "造成180%伤害并震退敌人。",
+      "Dist": 350,
+      "Effect": {
+        "DamagePct": 180,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 180,
+          "Kind": 1
+        },
+        {
+          "Kind": 16,
+          "KnockbackDistance": 100,
+          "RequiresPreviousLanded": true
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10223,
+      "Icon": 7059,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 34,
+      "MPCost": 47,
+      "Name": "雷火弹",
+      "Prerequisites": [
+        10205
+      ],
+      "Prof": 3,
+      "ProjectileSpeedPXPerSec": 636,
+      "RequiredWeaponType": 32,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "造成160%伤害并震退敌人。",
+      "Dist": 350,
+      "Effect": {
+        "DamagePct": 160,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 160,
+          "Kind": 1
+        },
+        {
+          "Kind": 16,
+          "KnockbackDistance": 100,
+          "RequiresPreviousLanded": true
+        }
+      ],
+      "HurtType": 1,
+      "ID": 10223,
+      "Icon": 7059,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "MPCost": 27,
+      "Name": "雷火弹",
+      "Prerequisites": [
+        10205
+      ],
+      "Prof": 3,
+      "ProjectileSpeedPXPerSec": 636,
+      "RequiredWeaponType": 32,
+      "TargetEnemy": true
+    },
+    "id": 10223
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 10000,
+      "Description": "降低敌人的命中，魔法攻击力50%。",
+      "Dist": 350,
+      "Effect": {},
+      "HurtType": 1,
+      "ID": 10224,
+      "Icon": 7060,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 78,
+      "Name": "烟雾弹",
+      "Prerequisites": [
+        10206
+      ],
+      "Prof": 3,
+      "ProjectileSpeedPXPerSec": 636,
+      "RequiredWeaponType": 32,
+      "Statuses": [
+        {
+          "ID": 1008,
+          "Level": 15
+        },
+        {
+          "ID": 1007,
+          "Level": 15
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 10000,
+      "Description": "降低敌人的命中，魔法攻击力30%。",
+      "Dist": 350,
+      "Effect": {},
+      "HurtType": 1,
+      "ID": 10224,
+      "Icon": 7060,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 46,
+      "Name": "烟雾弹",
+      "Prerequisites": [
+        10206
+      ],
+      "Prof": 3,
+      "ProjectileSpeedPXPerSec": 636,
+      "RequiredWeaponType": 32,
+      "Statuses": [
+        {
+          "ID": 1008,
+          "Level": 11
+        },
+        {
+          "ID": 1007,
+          "Level": 11
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10224
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "CooldownMS": 2000,
+      "Description": "对以自己为中心半径200的圆形范围内敌人造成207%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 207,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10225,
+      "Icon": 7061,
+      "Kind": 1,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "MPCost": 117,
+      "Name": "环形爆发",
+      "Prerequisites": [
+        10224
+      ],
+      "Prof": 3,
+      "Radius": 200,
+      "RequiredWeaponType": 32,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "CooldownMS": 2000,
+      "Description": "对以自己为中心半径200的圆形范围内敌人造成175%的伤害。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 175,
+        "Kind": 1
+      },
+      "HurtType": 1,
+      "ID": 10225,
+      "Icon": 7061,
+      "Kind": 1,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "MPCost": 69,
+      "Name": "环形爆发",
+      "Prerequisites": [
+        10224
+      ],
+      "Prof": 3,
+      "Radius": 200,
+      "RequiredWeaponType": 32,
+      "TargetEnemy": true
+    },
+    "id": 10225
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3935,
+      "Description": "使环形爆发有30%的几率震退敌人。",
+      "Effect": {},
+      "ID": 10226,
+      "Icon": 7062,
+      "Kind": 2,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "Name": "爆发冲击",
+      "PassiveTriggerEffects": [
+        {
+          "Effect": {
+            "ChanceBP": 3000,
+            "Kind": 16,
+            "KnockbackDistance": 100,
+            "RequiresPreviousLanded": true
+          },
+          "TargetSkill": 10225
+        }
+      ],
+      "Prerequisites": [
+        10225
+      ],
+      "Prof": 3
+    },
+    "first": {
+      "Area": {},
+      "Book": 3935,
+      "Description": "使环形爆发有10%的几率震退敌人。",
+      "Effect": {},
+      "ID": 10226,
+      "Icon": 7062,
+      "Kind": 2,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "Name": "爆发冲击",
+      "PassiveTriggerEffects": [
+        {
+          "Effect": {
+            "ChanceBP": 1000,
+            "Kind": 16,
+            "KnockbackDistance": 100,
+            "RequiresPreviousLanded": true
+          },
+          "TargetSkill": 10225
+        }
+      ],
+      "Prerequisites": [
+        10225
+      ],
+      "Prof": 3
+    },
+    "id": 10226
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3936,
+      "CooldownMS": 100000,
+      "Description": "跳跃至选中敌人或队友旁边，每次升级增加跳跃距离，此技能尚无法作用。",
+      "Dist": 300,
+      "Effect": {
+        "ChanceBP": 10000,
+        "Kind": 8
+      },
+      "Effects": [
+        {
+          "ChanceBP": 10000,
+          "Kind": 8
+        }
+      ],
+      "ID": 10227,
+      "Icon": 7063,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "MPCost": 256,
+      "Name": "阴影跳跃",
+      "Prerequisites": [
+        10226
+      ],
+      "Prof": 3
+    },
+    "first": {
+      "Area": {},
+      "Book": 3936,
+      "CooldownMS": 100000,
+      "Description": "跳跃至选中敌人或队友旁边，每次升级增加跳跃距离，此技能尚无法作用。",
+      "Dist": 300,
+      "Effect": {
+        "ChanceBP": 10000,
+        "Kind": 8
+      },
+      "Effects": [
+        {
+          "ChanceBP": 10000,
+          "Kind": 8
+        }
+      ],
+      "ID": 10227,
+      "Icon": 7063,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 164,
+      "Name": "阴影跳跃",
+      "Prerequisites": [
+        10226
+      ],
+      "Prof": 3
+    },
+    "id": 10227
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "CooldownMS": 1000,
+      "Description": "查看以自己为中心的大范围区域内是否有陷阱，成功率77%。",
+      "Effect": {
+        "ChanceBP": 7700,
+        "Kind": 10,
+        "Target": 1
+      },
+      "Effects": [
+        {
+          "ChanceBP": 7700,
+          "Kind": 10,
+          "Target": 1
+        }
+      ],
+      "ID": 10228,
+      "Icon": 7064,
+      "ImpactDelayMS": 300,
+      "Kind": 1,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 28,
+      "MPCost": 28,
+      "Name": "侦测陷阱",
+      "Prof": 3,
+      "Radius": 200
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "CooldownMS": 1000,
+      "Description": "查看以自己为中心的大范围区域内是否有陷阱，成功率45%。",
+      "Effect": {
+        "ChanceBP": 4500,
+        "Kind": 10,
+        "Target": 1
+      },
+      "Effects": [
+        {
+          "ChanceBP": 4500,
+          "Kind": 10,
+          "Target": 1
+        }
+      ],
+      "ID": 10228,
+      "Icon": 7064,
+      "ImpactDelayMS": 300,
+      "Kind": 1,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "MPCost": 16,
+      "Name": "侦测陷阱",
+      "Prof": 3,
+      "Radius": 200
+    },
+    "id": 10228
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "当触发陷阱时有52%的几率只受一半伤害，此技能尚无法作用。",
+      "Effect": {},
+      "ID": 10229,
+      "Icon": 7065,
+      "Kind": 2,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "Name": "陷阱回避",
+      "PassiveModifiers": [
+        {
+          "Kind": 11,
+          "Value": 52
+        }
+      ],
+      "Prerequisites": [
+        10218
+      ],
+      "Prof": 3
+    },
+    "first": {
+      "Area": {},
+      "Description": "当触发陷阱时有20%的几率只受一半伤害，此技能尚无法作用。",
+      "Effect": {},
+      "ID": 10229,
+      "Icon": 7065,
+      "Kind": 2,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "Name": "陷阱回避",
+      "PassiveModifiers": [
+        {
+          "Kind": 11,
+          "Value": 20
+        }
+      ],
+      "Prerequisites": [
+        10218
+      ],
+      "Prof": 3
+    },
+    "id": 10229
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3939,
+      "Description": "被魔法击中时有52%几率只受一半伤害，此技能尚无法作用。",
+      "Effect": {},
+      "ID": 10230,
+      "Icon": 7066,
+      "Kind": 2,
+      "LearnMoney": 40000,
+      "Level": 5,
+      "LevelNeed": 88,
+      "Name": "魔法回避",
+      "PassiveModifiers": [
+        {
+          "Kind": 4,
+          "Value": 52
+        }
+      ],
+      "Prerequisites": [
+        10229
+      ],
+      "Prof": 3
+    },
+    "first": {
+      "Area": {},
+      "Book": 3939,
+      "Description": "被魔法击中时有20%几率只受一半伤害，此技能尚无法作用。",
+      "Effect": {},
+      "ID": 10230,
+      "Icon": 7066,
+      "Kind": 2,
+      "LearnMoney": 40000,
+      "Level": 1,
+      "LevelNeed": 80,
+      "Name": "魔法回避",
+      "PassiveModifiers": [
+        {
+          "Kind": 4,
+          "Value": 20
+        }
+      ],
+      "Prerequisites": [
+        10229
+      ],
+      "Prof": 3
+    },
+    "id": 10230
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "目标恢复最大生命的30%+220点当前生命。",
+      "Dist": 450,
+      "Effect": {
+        "HealFlat": 220,
+        "HealPctOfMax": 30,
+        "Kind": 2
+      },
+      "HurtType": 12,
+      "ID": 10301,
+      "Icon": 5032,
+      "ImpactDelayMS": 260,
+      "LearnMoney": 5000,
+      "Level": 5,
+      "LevelNeed": 14,
+      "MPCost": 31,
+      "Name": "治愈术",
+      "Prof": 4,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "目标恢复最大生命的10%+100点当前生命。",
+      "Dist": 450,
+      "Effect": {
+        "HealFlat": 100,
+        "HealPctOfMax": 10,
+        "Kind": 2
+      },
+      "HurtType": 12,
+      "ID": 10301,
+      "Icon": 5032,
+      "ImpactDelayMS": 260,
+      "LearnMoney": 5000,
+      "Level": 1,
+      "LevelNeed": 10,
+      "MPCost": 23,
+      "Name": "治愈术",
+      "Prof": 4,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10301
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "目标恢复500点法力。",
+      "Dist": 450,
+      "Effect": {
+        "Kind": 3,
+        "RestoreMPFlat": 500
+      },
+      "Effects": [
+        {
+          "Kind": 3,
+          "RestoreMPFlat": 500
+        }
+      ],
+      "ID": 10302,
+      "Icon": 5033,
+      "ImpactDelayMS": 380,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 33,
+      "MPCost": 500,
+      "Name": "复法术",
+      "Prerequisites": [
+        10301
+      ],
+      "Prof": 4,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {},
+      "Description": "目标恢复100点法力。",
+      "Dist": 450,
+      "Effect": {
+        "Kind": 3,
+        "RestoreMPFlat": 100
+      },
+      "Effects": [
+        {
+          "Kind": 3,
+          "RestoreMPFlat": 100
+        }
+      ],
+      "ID": 10302,
+      "Icon": 5033,
+      "ImpactDelayMS": 380,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "MPCost": 100,
+      "Name": "复法术",
+      "Prerequisites": [
+        10301
+      ],
+      "Prof": 4,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10302
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 10000,
+      "Description": "180秒内，目标每秒恢复生命值30点。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10303,
+      "Icon": 5034,
+      "ImpactDelayMS": 450,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "MPCost": 240,
+      "Name": "回春术",
+      "Prerequisites": [
+        10304
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10303,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 10000,
+      "Description": "120秒内，目标每秒恢复生命值14点。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10303,
+      "Icon": 5034,
+      "ImpactDelayMS": 450,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "MPCost": 208,
+      "Name": "回春术",
+      "Prerequisites": [
+        10304
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10303,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10303
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 300,
+        "Shape": 2
+      },
+      "Description": "以自己为中心半径300像素的圆形范围内，队伍成员恢复最大生命的25%+340点生命值。",
+      "Effect": {
+        "HealFlat": 340,
+        "HealPctOfMax": 25,
+        "Kind": 2
+      },
+      "HitEffect": "TFX021_50",
+      "ID": 10304,
+      "Icon": 5035,
+      "ImpactDelayMS": 415,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 125,
+      "Name": "群疗术",
+      "PrepareMS": 4600,
+      "Prerequisites": [
+        10302
+      ],
+      "Prof": 4,
+      "Radius": 300,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 300,
+        "Shape": 2
+      },
+      "Description": "以自己为中心半径300像素的圆形范围内，队伍成员恢复最大生命的5%+180点生命值。",
+      "Effect": {
+        "HealFlat": 180,
+        "HealPctOfMax": 5,
+        "Kind": 2
+      },
+      "HitEffect": "TFX021_50",
+      "ID": 10304,
+      "Icon": 5035,
+      "ImpactDelayMS": 415,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 105,
+      "Name": "群疗术",
+      "PrepareMS": 3600,
+      "Prerequisites": [
+        10302
+      ],
+      "Prof": 4,
+      "Radius": 300,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10304
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 10000,
+      "Description": "使队友复活并恢复45%的生命值,被复活的角色将取回死亡时失去的经验与金钱的100%。",
+      "Dist": 450,
+      "Effect": {
+        "HealPctOfMax": 45,
+        "Kind": 15,
+        "LossRefundPct": 100
+      },
+      "Effects": [
+        {
+          "HealPctOfMax": 45,
+          "Kind": 15,
+          "LossRefundPct": 100
+        }
+      ],
+      "ID": 10305,
+      "Icon": 5036,
+      "ImpactDelayMS": 400,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 38,
+      "MPCost": 101,
+      "Name": "复活术",
+      "PrepareMS": 4000,
+      "Prerequisites": [
+        10301
+      ],
+      "Prof": 4,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 10000,
+      "Description": "使队友复活并恢复5%的生命值,被复活的角色将取回死亡时失去的经验与金钱的60%。",
+      "Dist": 450,
+      "Effect": {
+        "HealPctOfMax": 5,
+        "Kind": 15,
+        "LossRefundPct": 60
+      },
+      "Effects": [
+        {
+          "HealPctOfMax": 5,
+          "Kind": 15,
+          "LossRefundPct": 60
+        }
+      ],
+      "ID": 10305,
+      "Icon": 5036,
+      "ImpactDelayMS": 400,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "MPCost": 81,
+      "Name": "复活术",
+      "PrepareMS": 3000,
+      "Prerequisites": [
+        10301
+      ],
+      "Prof": 4,
+      "TargetTeam": true
+    },
+    "id": 10305
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "消除队友身上昏迷和中毒的效果，每次升级消除的效果增强。",
+      "Dist": 450,
+      "Effect": {
+        "DispelChanceBP": 10000,
+        "RemoveStatusIDs": [
+          1001,
+          1002
+        ]
+      },
+      "Effects": [
+        {
+          "DispelChanceBP": 10000,
+          "RemoveStatusIDs": [
+            1001,
+            1002
+          ]
+        }
+      ],
+      "ID": 10306,
+      "Icon": 5037,
+      "ImpactDelayMS": 480,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 28,
+      "MPCost": 64,
+      "Name": "净化术",
+      "Prerequisites": [
+        10301
+      ],
+      "Prof": 4,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "消除队友身上昏迷和中毒的效果，每次升级消除的效果增强。",
+      "Dist": 450,
+      "Effect": {
+        "DispelChanceBP": 2000,
+        "RemoveStatusIDs": [
+          1001,
+          1002
+        ]
+      },
+      "Effects": [
+        {
+          "DispelChanceBP": 2000,
+          "RemoveStatusIDs": [
+            1001,
+            1002
+          ]
+        }
+      ],
+      "ID": 10306,
+      "Icon": 5037,
+      "ImpactDelayMS": 480,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "MPCost": 48,
+      "Name": "净化术",
+      "Prerequisites": [
+        10301
+      ],
+      "Prof": 4,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10306
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "Description": "以自己为中心半径200圆形范围内的队友5分钟内攻击力增加18%；魔法攻击力增加25%。",
+      "Effect": {},
+      "ID": 10307,
+      "Icon": 5038,
+      "Kind": 1,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 19,
+      "MPCost": 43,
+      "Name": "祝福术",
+      "PrepareMS": 3000,
+      "Prof": 4,
+      "Radius": 200,
+      "Statuses": [
+        {
+          "Description": "攻击力上升18%；魔法攻击力上升25%。",
+          "DurationSec": 300,
+          "ExtraAffixes": [
+            {
+              "Attr": 15,
+              "Mode": 1,
+              "Value": 25
+            }
+          ],
+          "ID": 1014,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "Description": "以自己为中心半径200圆形范围内的队友5分钟内攻击力增加10%；魔法攻击力增加5%。",
+      "Effect": {},
+      "ID": 10307,
+      "Icon": 5038,
+      "Kind": 1,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 15,
+      "MPCost": 35,
+      "Name": "祝福术",
+      "PrepareMS": 2000,
+      "Prof": 4,
+      "Radius": 200,
+      "Statuses": [
+        {
+          "Description": "攻击力上升10%；魔法攻击力上升5%。",
+          "DurationSec": 300,
+          "ExtraAffixes": [
+            {
+              "Attr": 15,
+              "Mode": 1,
+              "Value": 5
+            }
+          ],
+          "ID": 1014,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10307
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "Book": 3839,
+      "Description": "以自己为中心半径150圆形范围内的队友得到吸收伤害1300点的护盾，免疫即死效果。",
+      "Dist": 100,
+      "Effect": {},
+      "GroundEffect": true,
+      "ID": 10308,
+      "Icon": 5039,
+      "ImpactDelayMS": 440,
+      "Kind": 1,
+      "LearnMoney": 40000,
+      "Level": 5,
+      "LevelNeed": 88,
+      "MPCost": 819,
+      "Name": "神圣庇护",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10330,
+        10315,
+        10325
+      ],
+      "Prof": 4,
+      "Radius": 150,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "Description": "吸收伤害1300点；免疫即死效果。",
+          "ID": 1021,
+          "InstantDeathImmune": true,
+          "Level": 15
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "Book": 3839,
+      "Description": "以自己为中心半径150圆形范围内的队友得到吸收伤害500点的护盾，免疫即死效果。",
+      "Dist": 100,
+      "Effect": {},
+      "GroundEffect": true,
+      "ID": 10308,
+      "Icon": 5039,
+      "ImpactDelayMS": 440,
+      "Kind": 1,
+      "LearnMoney": 40000,
+      "Level": 1,
+      "LevelNeed": 80,
+      "MPCost": 747,
+      "Name": "神圣庇护",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10330,
+        10315,
+        10325
+      ],
+      "Prof": 4,
+      "Radius": 150,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "Description": "吸收伤害500点；免疫即死效果。",
+          "ID": 1021,
+          "InstantDeathImmune": true,
+          "Level": 11
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10308
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3840,
+      "Description": "消去目标身上全部负面状态并恢复75%的生命值，如果对方已经死亡则使其复活，被复活的角色将取回死亡时失去的经验与金钱的100%。",
+      "Dist": 450,
+      "Effect": {
+        "ClearHarmful": true
+      },
+      "Effects": [
+        {
+          "ClearHarmful": true
+        },
+        {
+          "HealPctOfMax": 75,
+          "Kind": 2
+        },
+        {
+          "HealPctOfMax": 75,
+          "Kind": 15,
+          "LossRefundPct": 100
+        }
+      ],
+      "ID": 10309,
+      "Icon": 5040,
+      "ImpactDelayMS": 460,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "MPCost": 549,
+      "Name": "光之奇迹",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10305,
+        10318,
+        10303
+      ],
+      "Prof": 4,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3840,
+      "Description": "消去目标身上全部负面状态并恢复55%的生命值，如果对方已经死亡则使其复活，被复活的角色将取回死亡时失去的经验与金钱的80%。",
+      "Dist": 450,
+      "Effect": {
+        "ClearHarmful": true
+      },
+      "Effects": [
+        {
+          "ClearHarmful": true
+        },
+        {
+          "HealPctOfMax": 55,
+          "Kind": 2
+        },
+        {
+          "HealPctOfMax": 55,
+          "Kind": 15,
+          "LossRefundPct": 80
+        }
+      ],
+      "ID": 10309,
+      "Icon": 5040,
+      "ImpactDelayMS": 460,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 493,
+      "Name": "光之奇迹",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10305,
+        10318,
+        10303
+      ],
+      "Prof": 4,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10309
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "20秒内，敌人移动速度降低70%。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10310,
+      "Icon": 5041,
+      "ImpactDelayMS": 400,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 162,
+      "Name": "减速术",
+      "Prerequisites": [
+        10324
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 20,
+          "ID": 1009,
+          "Level": 7
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "20秒内，敌人移动速度降低30%。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10310,
+      "Icon": 5041,
+      "ImpactDelayMS": 400,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 138,
+      "Name": "减速术",
+      "Prerequisites": [
+        10324
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 20,
+          "ID": 1009,
+          "Level": 3
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10310
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "Description": "以自己为中心半径150圆形范围内的队友30秒内移动速度增加40%。",
+      "Effect": {},
+      "ID": 10311,
+      "Icon": 5042,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 125,
+      "Name": "加速术",
+      "PrepareMS": 4600,
+      "Prerequisites": [
+        10307
+      ],
+      "Prof": 4,
+      "Radius": 150,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1016,
+          "Level": 8
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "Description": "以自己为中心半径150圆形范围内的队友30秒内移动速度增加20%。",
+      "Effect": {},
+      "ID": 10311,
+      "Icon": 5042,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 105,
+      "Name": "加速术",
+      "PrepareMS": 3600,
+      "Prerequisites": [
+        10307
+      ],
+      "Prof": 4,
+      "Radius": 150,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1016,
+          "Level": 4
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10311
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 2,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "CooldownMS": 4000,
+      "Description": "对半径150范围内的不死系和恶魔系敌人造成320%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 320,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 12,
+      "ID": 10312,
+      "Icon": 5043,
+      "ImpactDelayMS": 420,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 125,
+      "Name": "驱魔术",
+      "Prerequisites": [
+        10317
+      ],
+      "Prof": 4,
+      "Radius": 150,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 2,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "CooldownMS": 4000,
+      "Description": "对半径150范围内的不死系和恶魔系敌人造成280%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 280,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 12,
+      "ID": 10312,
+      "Icon": 5043,
+      "ImpactDelayMS": 420,
+      "Kind": 1,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 105,
+      "Name": "驱魔术",
+      "Prerequisites": [
+        10317
+      ],
+      "Prof": 4,
+      "Radius": 150,
+      "TargetEnemy": true
+    },
+    "id": 10312
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 2,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "Book": 3844,
+      "Description": "对半径150范围内的敌人造成340%的伤害，随机使敌人中各种负面状态。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 340,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 12,
+      "ID": 10313,
+      "Icon": 5044,
+      "Kind": 1,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "MPCost": 549,
+      "Name": "天罚",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10326
+      ],
+      "Prof": 4,
+      "Radius": 200,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 2,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "Book": 3844,
+      "Description": "对半径150范围内的敌人造成300%的伤害，随机使敌人中各种负面状态。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 300,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 12,
+      "ID": 10313,
+      "Icon": 5044,
+      "Kind": 1,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 493,
+      "Name": "天罚",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10326
+      ],
+      "Prof": 4,
+      "Radius": 200,
+      "TargetEnemy": true
+    },
+    "id": 10313
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "技能吟唱被打断的几率下降40%（最小值为5%），同时技能吟唱时间降低40%。",
+      "Effect": {},
+      "ID": 10314,
+      "Icon": 5045,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 23,
+      "Name": "术法精研",
+      "PassiveModifiers": [
+        {
+          "Kind": 3,
+          "Value": 40
+        },
+        {
+          "Kind": 13,
+          "Value": 40
+        }
+      ],
+      "Prof": 4
+    },
+    "first": {
+      "Area": {},
+      "Description": "技能吟唱被打断的几率下降20%（最小值为5%），同时技能吟唱时间降低20%。",
+      "Effect": {},
+      "ID": 10314,
+      "Icon": 5045,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "Name": "术法精研",
+      "PassiveModifiers": [
+        {
+          "Kind": 3,
+          "Value": 20
+        },
+        {
+          "Kind": 13,
+          "Value": 20
+        }
+      ],
+      "Prof": 4
+    },
+    "id": 10314
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "Book": 3870,
+      "CooldownMS": 10000,
+      "Description": "以自己为中心半径150圆形范围内的队友一分钟内攻击速度增加33%。",
+      "Effect": {},
+      "ID": 10315,
+      "Icon": 7001,
+      "Kind": 1,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "MPCost": 549,
+      "Name": "瞬击术",
+      "Prerequisites": [
+        10311
+      ],
+      "Prof": 4,
+      "Radius": 150,
+      "Statuses": [
+        {
+          "ID": 1020,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "Book": 3870,
+      "CooldownMS": 10000,
+      "Description": "以自己为中心半径150圆形范围内的队友一分钟内攻击速度增加25%。",
+      "Effect": {},
+      "ID": 10315,
+      "Icon": 7001,
+      "Kind": 1,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 493,
+      "Name": "瞬击术",
+      "Prerequisites": [
+        10311
+      ],
+      "Prof": 4,
+      "Radius": 150,
+      "Statuses": [
+        {
+          "ID": 1020,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10315
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "消除队友身上的减速，防御力下降，攻击力下降的状态，每次升级消除的效果增加。",
+      "Dist": 450,
+      "Effect": {
+        "DispelChanceBP": 10000,
+        "RemoveStatusIDs": [
+          1006,
+          1007,
+          1009
+        ]
+      },
+      "Effects": [
+        {
+          "DispelChanceBP": 10000,
+          "RemoveStatusIDs": [
+            1006,
+            1007,
+            1009
+          ]
+        }
+      ],
+      "ID": 10316,
+      "Icon": 7002,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 162,
+      "Name": "清身术",
+      "Prerequisites": [
+        10306
+      ],
+      "Prof": 4,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "消除队友身上的减速，防御力下降，攻击力下降的状态，每次升级消除的效果增加。",
+      "Dist": 450,
+      "Effect": {
+        "DispelChanceBP": 2000,
+        "RemoveStatusIDs": [
+          1006,
+          1007,
+          1009
+        ]
+      },
+      "Effects": [
+        {
+          "DispelChanceBP": 2000,
+          "RemoveStatusIDs": [
+            1006,
+            1007,
+            1009
+          ]
+        }
+      ],
+      "ID": 10316,
+      "Icon": 7002,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 138,
+      "Name": "清身术",
+      "Prerequisites": [
+        10306
+      ],
+      "Prof": 4,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10316
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "对敌人造成280%的伤害，并使其致盲。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 280,
+        "Kind": 1
+      },
+      "HurtType": 12,
+      "ID": 10317,
+      "Icon": 7003,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 28,
+      "MPCost": 64,
+      "Name": "圣光术",
+      "Prerequisites": [
+        10319
+      ],
+      "Prof": 4,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "对敌人造成240%的伤害，并使其致盲。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 240,
+        "Kind": 1
+      },
+      "HurtType": 12,
+      "ID": 10317,
+      "Icon": 7003,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "MPCost": 48,
+      "Name": "圣光术",
+      "Prerequisites": [
+        10319
+      ],
+      "Prof": 4,
+      "TargetEnemy": true
+    },
+    "id": 10317
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3873,
+      "CooldownMS": 1000,
+      "Description": "消除队友身上定身，冻结，石化，封印的效果，每次升级消除的效果增加。",
+      "Dist": 450,
+      "Effect": {
+        "DispelChanceBP": 10000,
+        "RemoveStatusIDs": [
+          1003,
+          1004,
+          1005,
+          1034
+        ]
+      },
+      "Effects": [
+        {
+          "DispelChanceBP": 10000,
+          "RemoveStatusIDs": [
+            1003,
+            1004,
+            1005,
+            1034
+          ]
+        }
+      ],
+      "ID": 10318,
+      "Icon": 7004,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "MPCost": 384,
+      "Name": "解咒术",
+      "Prerequisites": [
+        10316
+      ],
+      "Prof": 4,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3873,
+      "CooldownMS": 1000,
+      "Description": "消除队友身上定身，冻结，石化，封印的效果，每次升级消除的效果增加。",
+      "Dist": 450,
+      "Effect": {
+        "DispelChanceBP": 2000,
+        "RemoveStatusIDs": [
+          1003,
+          1004,
+          1005,
+          1034
+        ]
+      },
+      "Effects": [
+        {
+          "DispelChanceBP": 2000,
+          "RemoveStatusIDs": [
+            1003,
+            1004,
+            1005,
+            1034
+          ]
+        }
+      ],
+      "ID": 10318,
+      "Icon": 7004,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "MPCost": 340,
+      "Name": "解咒术",
+      "Prerequisites": [
+        10316
+      ],
+      "Prof": 4,
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10318
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "对目标造成270%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 270,
+        "Kind": 1
+      },
+      "HurtType": 12,
+      "ID": 10319,
+      "Icon": 7005,
+      "LearnMoney": 5000,
+      "Level": 5,
+      "LevelNeed": 14,
+      "MPCost": 31,
+      "Name": "光弹术",
+      "Prof": 4,
+      "ProjectileSpeedPXPerSec": 818,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "对目标造成210%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 210,
+        "Kind": 1
+      },
+      "HurtType": 12,
+      "ID": 10319,
+      "Icon": 7005,
+      "LearnMoney": 5000,
+      "Level": 1,
+      "LevelNeed": 10,
+      "MPCost": 23,
+      "Name": "光弹术",
+      "Prof": 4,
+      "ProjectileSpeedPXPerSec": 818,
+      "TargetEnemy": true
+    },
+    "id": 10319
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "为队友附加一个吸收伤害1500点的盾并免疫即死效果。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10320,
+      "Icon": 7006,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 38,
+      "MPCost": 101,
+      "Name": "光盾术",
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "Description": "吸收伤害1500点；免疫即死效果。",
+          "ID": 1021,
+          "InstantDeathImmune": true,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "为队友附加一个吸收伤害700点的盾并免疫即死效果。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10320,
+      "Icon": 7006,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "MPCost": 81,
+      "Name": "光盾术",
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "Description": "吸收伤害700点；免疫即死效果。",
+          "ID": 1021,
+          "InstantDeathImmune": true,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10320
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "Description": "以自己为中心半径200圆形范围内的队友5分钟内所受到的伤害降低22%。",
+      "Effect": {},
+      "HitEffect": "TFX051_30",
+      "ID": 10321,
+      "Icon": 7007,
+      "Kind": 1,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 28,
+      "MPCost": 64,
+      "Name": "防御术",
+      "PrepareMS": 3000,
+      "Prof": 4,
+      "Radius": 200,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10321,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 200,
+        "Shape": 2
+      },
+      "Description": "以自己为中心半径200圆形范围内的队友5分钟内所受到的伤害降低10%。",
+      "Effect": {},
+      "HitEffect": "TFX051_30",
+      "ID": 10321,
+      "Icon": 7007,
+      "Kind": 1,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 20,
+      "MPCost": 48,
+      "Name": "防御术",
+      "PrepareMS": 2000,
+      "Prof": 4,
+      "Radius": 200,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10321,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10321
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 3000,
+      "Description": "使下一个技能的时限延长90%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10322,
+      "Icon": 7067,
+      "ImpactDelayMS": 720,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 38,
+      "MPCost": 101,
+      "Name": "神术：集中",
+      "Prerequisites": [
+        10314
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ID": 1026,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 3000,
+      "Description": "使下一个技能的时限延长50%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10322,
+      "Icon": 7067,
+      "ImpactDelayMS": 720,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "MPCost": 81,
+      "Name": "神术：集中",
+      "Prerequisites": [
+        10314
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ID": 1026,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10322
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "使敌人30秒内攻击力下降60%。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10324,
+      "Icon": 7069,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 33,
+      "MPCost": 83,
+      "Name": "衰弱术",
+      "PrepareMS": 3500,
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1006,
+          "Level": 6
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "Description": "使敌人30秒内攻击力下降20%。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10324,
+      "Icon": 7069,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "MPCost": 63,
+      "Name": "衰弱术",
+      "PrepareMS": 2500,
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1006,
+          "Level": 2
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10324
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3943,
+      "CooldownMS": 5000,
+      "Description": "使敌人30秒内攻击速度降低50%。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10325,
+      "Icon": 7070,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "MPCost": 384,
+      "Name": "枷锁术",
+      "Prerequisites": [
+        10310
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1009,
+          "Level": 15
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3943,
+      "CooldownMS": 5000,
+      "Description": "使敌人30秒内攻击速度降低30%。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10325,
+      "Icon": 7070,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "MPCost": 340,
+      "Name": "枷锁术",
+      "Prerequisites": [
+        10310
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 30,
+          "ID": 1009,
+          "Level": 11
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10325
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 2,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "CooldownMS": 30000,
+      "Description": "对半径150的圆形范围内的敌人造成280%的伤害，并有一定几率使其定身10秒。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 280,
+        "Kind": 1
+      },
+      "HitEffect": "TFX072_30",
+      "HurtType": 12,
+      "ID": 10326,
+      "Icon": 7071,
+      "Kind": 1,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "MPCost": 240,
+      "Name": "神威术",
+      "Prerequisites": [
+        10317
+      ],
+      "Prof": 4,
+      "Radius": 150,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 2,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "CooldownMS": 30000,
+      "Description": "对半径150的圆形范围内的敌人造成260%的伤害，并有一定几率使其定身6秒。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 260,
+        "Kind": 1
+      },
+      "HitEffect": "TFX072_30",
+      "HurtType": 12,
+      "ID": 10326,
+      "Icon": 7071,
+      "Kind": 1,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "MPCost": 208,
+      "Name": "神威术",
+      "Prerequisites": [
+        10317
+      ],
+      "Prof": 4,
+      "Radius": 150,
+      "TargetEnemy": true
+    },
+    "id": 10326
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 350,
+        "Shape": 2
+      },
+      "CooldownMS": 5000,
+      "Description": "使以自己为中心半径300的圆形范围内的隐身敌人现形，现行的敌人无法隐身一段时间，每次升级效果增强。",
+      "Effect": {
+        "Kind": 13,
+        "RevealRadius": 300,
+        "Target": 1
+      },
+      "Effects": [
+        {
+          "Kind": 13,
+          "RevealRadius": 300,
+          "Target": 1
+        }
+      ],
+      "ID": 10327,
+      "Icon": 7072,
+      "Kind": 1,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 33,
+      "MPCost": 83,
+      "Name": "神术：鹰眼",
+      "Prerequisites": [
+        10314
+      ],
+      "Prof": 4,
+      "Radius": 350,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10327,
+          "Level": 5
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 350,
+        "Shape": 2
+      },
+      "CooldownMS": 5000,
+      "Description": "使以自己为中心半径300的圆形范围内的隐身敌人现形，现行的敌人无法隐身一段时间，每次升级效果增强。",
+      "Effect": {
+        "Kind": 13,
+        "RevealRadius": 300,
+        "Target": 1
+      },
+      "Effects": [
+        {
+          "Kind": 13,
+          "RevealRadius": 300,
+          "Target": 1
+        }
+      ],
+      "ID": 10327,
+      "Icon": 7072,
+      "Kind": 1,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "MPCost": 63,
+      "Name": "神术：鹰眼",
+      "Prerequisites": [
+        10314
+      ],
+      "Prof": 4,
+      "Radius": 350,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 10327,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10327
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 60000,
+      "Description": "使下一个使用的法术的威力增加100%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10328,
+      "Icon": 7073,
+      "ImpactDelayMS": 500,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 170,
+      "Name": "神术：释能",
+      "Prerequisites": [
+        10322
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ID": 1027,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 60000,
+      "Description": "使下一个使用的法术的威力增加40%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10328,
+      "Icon": 7073,
+      "ImpactDelayMS": 500,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 138,
+      "Name": "神术：释能",
+      "Prerequisites": [
+        10322
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ID": 1027,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10328
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3947,
+      "CooldownMS": 2000,
+      "Description": "使下一个技能的吟唱时间缩短100%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10329,
+      "Icon": 7074,
+      "ImpactDelayMS": 350,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "MPCost": 384,
+      "Name": "神术：瞬发",
+      "Prerequisites": [
+        10328
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ID": 1028,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3947,
+      "CooldownMS": 2000,
+      "Description": "使下一个技能的吟唱时间缩短60%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10329,
+      "Icon": 7074,
+      "ImpactDelayMS": 350,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "MPCost": 340,
+      "Name": "神术：瞬发",
+      "Prerequisites": [
+        10328
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ID": 1028,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10329
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "使队友在20秒内反射普通攻击伤害50%。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10330,
+      "Icon": 7075,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "MPCost": 240,
+      "Name": "针刺护体",
+      "PrepareMS": 3600,
+      "Prerequisites": [
+        10320
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 20,
+          "ID": 1010,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "first": {
+      "Area": {},
+      "Description": "使队友在20秒内反射普通攻击伤害10%。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10330,
+      "Icon": 7075,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "MPCost": 208,
+      "Name": "针刺护体",
+      "PrepareMS": 3600,
+      "Prerequisites": [
+        10320
+      ],
+      "Prof": 4,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 20,
+          "ID": 1010,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true,
+      "TargetTeam": true
+    },
+    "id": 10330
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "对敌人造成240%伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 240,
+        "Kind": 1
+      },
+      "HurtType": 8,
+      "ID": 10401,
+      "Icon": 5046,
+      "LearnMoney": 5000,
+      "Level": 5,
+      "LevelNeed": 14,
+      "MPCost": 39,
+      "Name": "火弹术",
+      "PrepareMS": 1000,
+      "Prof": 5,
+      "ProjectileSpeedPXPerSec": 900,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "对敌人造成208%伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 208,
+        "Kind": 1
+      },
+      "HurtType": 8,
+      "ID": 10401,
+      "Icon": 5046,
+      "LearnMoney": 5000,
+      "Level": 1,
+      "LevelNeed": 10,
+      "MPCost": 31,
+      "Name": "火弹术",
+      "PrepareMS": 1000,
+      "Prof": 5,
+      "ProjectileSpeedPXPerSec": 900,
+      "TargetEnemy": true
+    },
+    "id": 10401
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 2,
+        "Radius": 100,
+        "Shape": 2
+      },
+      "CooldownMS": 1500,
+      "Description": "对半径100的圆形范围内的敌人造成215%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 215,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 8,
+      "ID": 10402,
+      "Icon": 5047,
+      "Kind": 1,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 24,
+      "MPCost": 76,
+      "Name": "火球术",
+      "PrepareMS": 1000,
+      "Prerequisites": [
+        10401
+      ],
+      "Prof": 5,
+      "ProjectileSpeedPXPerSec": 1184,
+      "Radius": 100,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 2,
+        "Radius": 100,
+        "Shape": 2
+      },
+      "CooldownMS": 1500,
+      "Description": "对半径100的圆形范围内的敌人造成195%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 195,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 8,
+      "ID": 10402,
+      "Icon": 5047,
+      "Kind": 1,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "MPCost": 64,
+      "Name": "火球术",
+      "PrepareMS": 1000,
+      "Prerequisites": [
+        10401
+      ],
+      "Prof": 5,
+      "ProjectileSpeedPXPerSec": 1184,
+      "Radius": 100,
+      "TargetEnemy": true
+    },
+    "id": 10402
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 2,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "CooldownMS": 10000,
+      "Description": "对半径150的圆形范围内的敌人造成274%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 274,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 8,
+      "ID": 10405,
+      "Icon": 5050,
+      "ImpactDelayMS": 130,
+      "Kind": 1,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 216,
+      "Name": "风焰术",
+      "Prerequisites": [
+        10425
+      ],
+      "Prof": 5,
+      "Radius": 150,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 2,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "CooldownMS": 10000,
+      "Description": "对半径150的圆形范围内的敌人造成250%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 250,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 8,
+      "ID": 10405,
+      "Icon": 5050,
+      "ImpactDelayMS": 130,
+      "Kind": 1,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 184,
+      "Name": "风焰术",
+      "Prerequisites": [
+        10425
+      ],
+      "Prof": 5,
+      "Radius": 150,
+      "TargetEnemy": true
+    },
+    "id": 10405
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3850,
+      "Description": "对敌人造成360%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 360,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 8,
+      "ID": 10408,
+      "Icon": 5053,
+      "ImpactDelayMS": 360,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "MPCost": 729,
+      "Name": "陨石术",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10405
+      ],
+      "Prof": 5,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3850,
+      "Description": "对敌人造成300%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 300,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 8,
+      "ID": 10408,
+      "Icon": 5053,
+      "ImpactDelayMS": 360,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 657,
+      "Name": "陨石术",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10405
+      ],
+      "Prof": 5,
+      "TargetEnemy": true
+    },
+    "id": 10408
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "对敌人造成120%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 120,
+        "Kind": 1
+      },
+      "HurtType": 9,
+      "ID": 10409,
+      "Icon": 5054,
+      "LearnMoney": 5000,
+      "Level": 5,
+      "LevelNeed": 14,
+      "MPCost": 39,
+      "Name": "冰箭术",
+      "Prof": 5,
+      "ProjectileSpeedPXPerSec": 1216,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "对敌人造成100%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 100,
+        "Kind": 1
+      },
+      "HurtType": 9,
+      "ID": 10409,
+      "Icon": 5054,
+      "LearnMoney": 5000,
+      "Level": 1,
+      "LevelNeed": 10,
+      "MPCost": 31,
+      "Name": "冰箭术",
+      "Prof": 5,
+      "ProjectileSpeedPXPerSec": 1216,
+      "TargetEnemy": true
+    },
+    "id": 10409
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 1,
+        "Radius": 100,
+        "Shape": 2
+      },
+      "CooldownMS": 2500,
+      "Description": "对以自己为中心半径100的圆形范围内的敌人造成195%的伤害，有25%的几率使敌人冻结15秒。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 195,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 9,
+      "ID": 10410,
+      "Icon": 5055,
+      "ImpactDelayMS": 150,
+      "Kind": 1,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 24,
+      "MPCost": 76,
+      "Name": "冰爆术",
+      "Prerequisites": [
+        10409
+      ],
+      "Prof": 5,
+      "Radius": 100,
+      "Statuses": [
+        {
+          "ChanceBP": 2500,
+          "DurationSec": 15,
+          "ID": 1004,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 1,
+        "Radius": 100,
+        "Shape": 2
+      },
+      "CooldownMS": 2500,
+      "Description": "对以自己为中心半径100的圆形范围内的敌人造成175%的伤害，有25%的几率使敌人冻结15秒。",
+      "Dist": 100,
+      "Effect": {
+        "DamagePct": 175,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 9,
+      "ID": 10410,
+      "Icon": 5055,
+      "ImpactDelayMS": 150,
+      "Kind": 1,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "MPCost": 64,
+      "Name": "冰爆术",
+      "Prerequisites": [
+        10409
+      ],
+      "Prof": 5,
+      "Radius": 100,
+      "Statuses": [
+        {
+          "ChanceBP": 2500,
+          "DurationSec": 15,
+          "ID": 1004,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10410
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3856,
+      "Description": "对敌人造成282%的伤害，50%几率冻结对手5秒。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 282,
+        "Kind": 1
+      },
+      "HurtType": 9,
+      "ID": 10411,
+      "Icon": 5056,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "MPCost": 729,
+      "Name": "绝对零度",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10412
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ChanceBP": 5000,
+          "DurationSec": 5,
+          "ID": 1004,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3856,
+      "Description": "对敌人造成250%的伤害，50%几率冻结对手5秒。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 250,
+        "Kind": 1
+      },
+      "HurtType": 9,
+      "ID": 10411,
+      "Icon": 5056,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 657,
+      "Name": "绝对零度",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10412
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ChanceBP": 5000,
+          "DurationSec": 5,
+          "ID": 1004,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10411
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 2,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "CooldownMS": 10000,
+      "Description": "对半径150的圆形范围内的敌人造成232%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 232,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 9,
+      "ID": 10412,
+      "Icon": 5057,
+      "ImpactDelayMS": 450,
+      "Kind": 1,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 216,
+      "Name": "暴雪术",
+      "Prerequisites": [
+        10435
+      ],
+      "Prof": 5,
+      "Radius": 150,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 2,
+        "Radius": 150,
+        "Shape": 2
+      },
+      "CooldownMS": 10000,
+      "Description": "对半径150的圆形范围内的敌人造成200%的伤害。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 200,
+        "Kind": 1
+      },
+      "GroundEffect": true,
+      "HurtType": 9,
+      "ID": 10412,
+      "Icon": 5057,
+      "ImpactDelayMS": 450,
+      "Kind": 1,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 184,
+      "Name": "暴雪术",
+      "Prerequisites": [
+        10435
+      ],
+      "Prof": 5,
+      "Radius": 150,
+      "TargetEnemy": true
+    },
+    "id": 10412
+  },
+  {
+    "fifth": {
+      "Area": {
+        "Center": 2,
+        "Radius": 300,
+        "Shape": 2
+      },
+      "Book": 3965,
+      "CooldownMS": 120000,
+      "Description": "将半径200的圆形范围的敌人定身14秒。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10413,
+      "Icon": 7076,
+      "Kind": 1,
+      "LearnMoney": 40000,
+      "Level": 5,
+      "LevelNeed": 88,
+      "MPCost": 1092,
+      "Name": "时之封印",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10420
+      ],
+      "Prof": 5,
+      "Radius": 300,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 14,
+          "ID": 1034,
+          "Level": 18
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {
+        "Center": 2,
+        "Radius": 300,
+        "Shape": 2
+      },
+      "Book": 3965,
+      "CooldownMS": 120000,
+      "Description": "将半径200的圆形范围的敌人定身10秒。",
+      "Dist": 100,
+      "Effect": {},
+      "ID": 10413,
+      "Icon": 7076,
+      "Kind": 1,
+      "LearnMoney": 40000,
+      "Level": 1,
+      "LevelNeed": 80,
+      "MPCost": 996,
+      "Name": "时之封印",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10420
+      ],
+      "Prof": 5,
+      "Radius": 300,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 10,
+          "ID": 1034,
+          "Level": 18
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10413
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3858,
+      "Description": "对敌人造成390%的伤害，4%几率发生即死判定。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 390,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 390,
+          "Kind": 1
+        },
+        {
+          "ChanceBP": 400,
+          "Kind": 14,
+          "RequiresPreviousLanded": true
+        }
+      ],
+      "HurtType": 13,
+      "ID": 10414,
+      "Icon": 5059,
+      "LearnMoney": 35000,
+      "Level": 5,
+      "LevelNeed": 78,
+      "MPCost": 729,
+      "Name": "虚空",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10417
+      ],
+      "Prof": 5,
+      "ProjectileSpeedPXPerSec": 900,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3858,
+      "Description": "对敌人造成350%的伤害，4%几率发生即死判定。",
+      "Dist": 450,
+      "Effect": {
+        "DamagePct": 350,
+        "Kind": 1
+      },
+      "Effects": [
+        {
+          "DamagePct": 350,
+          "Kind": 1
+        },
+        {
+          "ChanceBP": 400,
+          "Kind": 14,
+          "RequiresPreviousLanded": true
+        }
+      ],
+      "HurtType": 13,
+      "ID": 10414,
+      "Icon": 5059,
+      "LearnMoney": 35000,
+      "Level": 1,
+      "LevelNeed": 70,
+      "MPCost": 657,
+      "Name": "虚空",
+      "PrepareMS": 5000,
+      "Prerequisites": [
+        10417
+      ],
+      "Prof": 5,
+      "ProjectileSpeedPXPerSec": 900,
+      "TargetEnemy": true
+    },
+    "id": 10414
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "技能吟唱时间降低40%。",
+      "Effect": {},
+      "ID": 10415,
+      "Icon": 5060,
+      "Kind": 2,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 33,
+      "Name": "魔法修炼",
+      "PassiveModifiers": [
+        {
+          "Kind": 3,
+          "Value": 40
+        }
+      ],
+      "Prerequisites": [
+        10416
+      ],
+      "Prof": 5
+    },
+    "first": {
+      "Area": {},
+      "Description": "技能吟唱时间降低20%。",
+      "Effect": {},
+      "ID": 10415,
+      "Icon": 5060,
+      "Kind": 2,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "Name": "魔法修炼",
+      "PassiveModifiers": [
+        {
+          "Kind": 3,
+          "Value": 20
+        }
+      ],
+      "Prerequisites": [
+        10416
+      ],
+      "Prof": 5
+    },
+    "id": 10415
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "技能吟唱被打断的几率下降100%，技能被打断几率的最小值为5%",
+      "Effect": {},
+      "ID": 10416,
+      "Icon": 5061,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 23,
+      "Name": "魔法精研",
+      "PassiveModifiers": [
+        {
+          "Kind": 13,
+          "Value": 100
+        }
+      ],
+      "Prof": 5
+    },
+    "first": {
+      "Area": {},
+      "Description": "技能吟唱被打断的几率下降20%，技能被打断几率的最小值为5%",
+      "Effect": {},
+      "ID": 10416,
+      "Icon": 5061,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "Name": "魔法精研",
+      "PassiveModifiers": [
+        {
+          "Kind": 13,
+          "Value": 20
+        }
+      ],
+      "Prof": 5
+    },
+    "id": 10416
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "为自己附加一个50%几率抵抗对方魔法造成的伤害的护盾。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10417,
+      "Icon": 5062,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "MPCost": 318,
+      "Name": "魔镜术",
+      "Prerequisites": [
+        10415
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1011,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 1000,
+      "Description": "为自己附加一个30%几率抵抗对方魔法造成的伤害的护盾。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10417,
+      "Icon": 5062,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "MPCost": 278,
+      "Name": "魔镜术",
+      "Prerequisites": [
+        10415
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "ID": 1011,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10417
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 2400,
+      "Description": "使下一个技能的时限延长90%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10418,
+      "Icon": 7077,
+      "ImpactDelayMS": 720,
+      "LearnMoney": 10000,
+      "Level": 5,
+      "LevelNeed": 28,
+      "MPCost": 88,
+      "Name": "秘术：集中",
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ID": 1026,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "使下一个技能的时限延长50%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10418,
+      "Icon": 7077,
+      "ImpactDelayMS": 720,
+      "LearnMoney": 10000,
+      "Level": 1,
+      "LevelNeed": 20,
+      "MPCost": 64,
+      "Name": "秘术：集中",
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ID": 1026,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10418
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 60400,
+      "Description": "使下一个使用的法术的威力增加100%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10419,
+      "Icon": 7078,
+      "ImpactDelayMS": 500,
+      "LearnMoney": 21500,
+      "Level": 5,
+      "LevelNeed": 51,
+      "MPCost": 216,
+      "Name": "秘术：释能",
+      "Prerequisites": [
+        10433
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ID": 1027,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 60000,
+      "Description": "使下一个使用的法术的威力增加40%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10419,
+      "Icon": 7078,
+      "ImpactDelayMS": 500,
+      "LearnMoney": 21500,
+      "Level": 1,
+      "LevelNeed": 43,
+      "MPCost": 184,
+      "Name": "秘术：释能",
+      "Prerequisites": [
+        10433
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ID": 1027,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10419
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3951,
+      "CooldownMS": 3000,
+      "Description": "使下一个技能的吟唱时间缩短100%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10420,
+      "Icon": 7079,
+      "ImpactDelayMS": 350,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "MPCost": 510,
+      "Name": "秘术：瞬发",
+      "Prerequisites": [
+        10419
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ID": 1028,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "Book": 3951,
+      "CooldownMS": 3000,
+      "Description": "使下一个技能的吟唱时间缩短60%。",
+      "Dist": 1,
+      "Effect": {},
+      "ID": 10420,
+      "Icon": 7079,
+      "ImpactDelayMS": 350,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "MPCost": 454,
+      "Name": "秘术：瞬发",
+      "Prerequisites": [
+        10419
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ID": 1028,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10420
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "使敌人40秒内持续的损失400点生命。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10421,
+      "Icon": 7080,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 29,
+      "MPCost": 96,
+      "Name": "燃烧",
+      "Prerequisites": [
+        10402
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 40,
+          "ID": 1036,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 5000,
+      "Description": "使敌人20秒内持续的损失200点生命。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10421,
+      "Icon": 7080,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "MPCost": 84,
+      "Name": "燃烧",
+      "Prerequisites": [
+        10402
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 20,
+          "ID": 1036,
+          "Level": 1
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10421
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "使燃烧中的对手魔法防御力降低50%。",
+      "Effect": {},
+      "ID": 10422,
+      "Icon": 7081,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 38,
+      "Name": "燃烧强化",
+      "PassiveStatusAffixes": [
+        {
+          "Affix": {
+            "Attr": 17,
+            "Mode": 1,
+            "Value": -50
+          },
+          "Status": 1036,
+          "TargetSkill": 10421
+        }
+      ],
+      "Prerequisites": [
+        10421
+      ],
+      "Prof": 5
+    },
+    "first": {
+      "Area": {},
+      "Description": "使燃烧中的对手魔法防御力降低30%。",
+      "Effect": {},
+      "ID": 10422,
+      "Icon": 7081,
+      "Kind": 2,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "Name": "燃烧强化",
+      "PassiveStatusAffixes": [
+        {
+          "Affix": {
+            "Attr": 17,
+            "Mode": 1,
+            "Value": -30
+          },
+          "Status": 1036,
+          "TargetSkill": 10421
+        }
+      ],
+      "Prerequisites": [
+        10421
+      ],
+      "Prof": 5
+    },
+    "id": 10422
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "使被风焰术击中的敌人30%几率受到3级燃烧的效果影响。",
+      "Effect": {},
+      "ID": 10423,
+      "Icon": 7082,
+      "Kind": 2,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 55,
+      "Name": "高热风暴",
+      "PassiveTriggers": [
+        {
+          "ChanceBP": 3000,
+          "Status": 1036,
+          "StatusLevel": 3,
+          "TargetSkill": 10405
+        }
+      ],
+      "Prerequisites": [
+        10405
+      ],
+      "Prof": 5
+    },
+    "first": {
+      "Area": {},
+      "Description": "使被风焰术击中的敌人30%几率受到1级燃烧的效果影响。",
+      "Effect": {},
+      "ID": 10423,
+      "Icon": 7082,
+      "Kind": 2,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "Name": "高热风暴",
+      "PassiveTriggers": [
+        {
+          "ChanceBP": 3000,
+          "Status": 1036,
+          "StatusLevel": 1,
+          "TargetSkill": 10405
+        }
+      ],
+      "Prerequisites": [
+        10405
+      ],
+      "Prof": 5
+    },
+    "id": 10423
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3955,
+      "Description": "火弹术，火球术，风焰术，陨石术的攻击力增加20%。",
+      "Effect": {},
+      "ID": 10424,
+      "Icon": 7083,
+      "Kind": 2,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "Name": "红莲之魂",
+      "PassiveModifiers": [
+        {
+          "Kind": 1,
+          "TargetSkill": 10401,
+          "Value": 20
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10402,
+          "Value": 20
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10405,
+          "Value": 20
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10408,
+          "Value": 20
+        }
+      ],
+      "Prerequisites": [
+        10423
+      ],
+      "Prof": 5
+    },
+    "first": {
+      "Area": {},
+      "Book": 3955,
+      "Description": "火弹术，火球术，风焰术，陨石术的攻击力增加4%。",
+      "Effect": {},
+      "ID": 10424,
+      "Icon": 7083,
+      "Kind": 2,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "Name": "红莲之魂",
+      "PassiveModifiers": [
+        {
+          "Kind": 1,
+          "TargetSkill": 10401,
+          "Value": 4
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10402,
+          "Value": 4
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10405,
+          "Value": 4
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10408,
+          "Value": 4
+        }
+      ],
+      "Prerequisites": [
+        10423
+      ],
+      "Prof": 5
+    },
+    "id": 10424
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "为自己附加火焰之盾，增加伤害抗性50%，敌人攻击会受到反射伤害25%。",
+      "Effect": {},
+      "ID": 10425,
+      "Icon": 7084,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 168,
+      "Name": "火盾术",
+      "Prerequisites": [
+        10421
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ID": 1037,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "为自己附加火焰之盾，增加伤害抗性30%，敌人攻击会受到反射伤害5%。",
+      "Effect": {},
+      "ID": 10425,
+      "Icon": 7084,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 140,
+      "Name": "火盾术",
+      "Prerequisites": [
+        10421
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ID": 1037,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10425
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "火弹术，火球术的攻击力增加20%。",
+      "Effect": {},
+      "ID": 10426,
+      "Icon": 7085,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 23,
+      "Name": "火系掌握",
+      "PassiveModifiers": [
+        {
+          "Kind": 1,
+          "TargetSkill": 10401,
+          "Value": 20
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10402,
+          "Value": 20
+        }
+      ],
+      "Prerequisites": [
+        10401
+      ],
+      "Prof": 5
+    },
+    "first": {
+      "Area": {},
+      "Description": "火弹术，火球术的攻击力增加4%。",
+      "Effect": {},
+      "ID": 10426,
+      "Icon": 7085,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "Name": "火系掌握",
+      "PassiveModifiers": [
+        {
+          "Kind": 1,
+          "TargetSkill": 10401,
+          "Value": 4
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10402,
+          "Value": 4
+        }
+      ],
+      "Prerequisites": [
+        10401
+      ],
+      "Prof": 5
+    },
+    "id": 10426
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "冰箭术，冰爆术，暴雪术，绝对零度30%的几率造成对方移动速度下降60%。",
+      "Effect": {},
+      "ID": 10427,
+      "Icon": 7086,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 5,
+      "LevelNeed": 23,
+      "Name": "冰系掌握",
+      "PassiveTriggers": [
+        {
+          "ChanceBP": 3000,
+          "Status": 10427,
+          "StatusLevel": 5,
+          "TargetSkill": 10409
+        },
+        {
+          "ChanceBP": 3000,
+          "Status": 10427,
+          "StatusLevel": 5,
+          "TargetSkill": 10410
+        },
+        {
+          "ChanceBP": 3000,
+          "Status": 10427,
+          "StatusLevel": 5,
+          "TargetSkill": 10412
+        },
+        {
+          "ChanceBP": 3000,
+          "Status": 10427,
+          "StatusLevel": 5,
+          "TargetSkill": 10411
+        }
+      ],
+      "Prerequisites": [
+        10409
+      ],
+      "Prof": 5
+    },
+    "first": {
+      "Area": {},
+      "Description": "冰箭术，冰爆术，暴雪术，绝对零度30%的几率造成对方移动速度下降20%。",
+      "Effect": {},
+      "ID": 10427,
+      "Icon": 7086,
+      "Kind": 2,
+      "LearnMoney": 7500,
+      "Level": 1,
+      "LevelNeed": 15,
+      "Name": "冰系掌握",
+      "PassiveTriggers": [
+        {
+          "ChanceBP": 3000,
+          "Status": 10427,
+          "StatusLevel": 1,
+          "TargetSkill": 10409
+        },
+        {
+          "ChanceBP": 3000,
+          "Status": 10427,
+          "StatusLevel": 1,
+          "TargetSkill": 10410
+        },
+        {
+          "ChanceBP": 3000,
+          "Status": 10427,
+          "StatusLevel": 1,
+          "TargetSkill": 10412
+        },
+        {
+          "ChanceBP": 3000,
+          "Status": 10427,
+          "StatusLevel": 1,
+          "TargetSkill": 10411
+        }
+      ],
+      "Prerequisites": [
+        10409
+      ],
+      "Prof": 5
+    },
+    "id": 10427
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 32000,
+      "Description": "使敌人冻结40秒。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10428,
+      "Icon": 7087,
+      "LearnMoney": 12500,
+      "Level": 5,
+      "LevelNeed": 29,
+      "MPCost": 96,
+      "Name": "冰封",
+      "Prerequisites": [
+        10410
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 40,
+          "ID": 1004,
+          "Level": 5
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 30000,
+      "Description": "使敌人冻结20秒。",
+      "Dist": 450,
+      "Effect": {},
+      "ID": 10428,
+      "Icon": 7087,
+      "LearnMoney": 12500,
+      "Level": 1,
+      "LevelNeed": 25,
+      "MPCost": 84,
+      "Name": "冰封",
+      "Prerequisites": [
+        10410
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ChanceBP": 10000,
+          "DurationSec": 20,
+          "ID": 1004,
+          "Level": 5
+        }
+      ],
+      "TargetEnemy": true
+    },
+    "id": 10428
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "使冰封中的对手受到的物理伤害增加。",
+      "Effect": {},
+      "ID": 10429,
+      "Icon": 7088,
+      "Kind": 2,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "Name": "冰封强化",
+      "PassiveModifiers": [
+        {
+          "Kind": 12,
+          "TargetSkill": 10428,
+          "Value": 40
+        }
+      ],
+      "Prerequisites": [
+        10428
+      ],
+      "Prof": 5
+    },
+    "first": {
+      "Area": {},
+      "Description": "使冰封中的对手受到的物理伤害增加。",
+      "Effect": {},
+      "ID": 10429,
+      "Icon": 7088,
+      "Kind": 2,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "Name": "冰封强化",
+      "PassiveModifiers": [
+        {
+          "Kind": 12,
+          "TargetSkill": 10428,
+          "Value": 20
+        }
+      ],
+      "Prerequisites": [
+        10428
+      ],
+      "Prof": 5
+    },
+    "id": 10429
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Description": "被暴雪术击中的敌人有20%的几率被冻结20秒。",
+      "Effect": {},
+      "ID": 10430,
+      "Icon": 7089,
+      "Kind": 2,
+      "LearnMoney": 25500,
+      "Level": 5,
+      "LevelNeed": 59,
+      "Name": "淬冰风暴",
+      "PassiveTriggers": [
+        {
+          "ChanceBP": 2000,
+          "Status": 1004,
+          "StatusLevel": 5,
+          "TargetSkill": 10412
+        }
+      ],
+      "Prerequisites": [
+        10412
+      ],
+      "Prof": 5
+    },
+    "first": {
+      "Area": {},
+      "Description": "被暴雪术击中的敌人有20%的几率被冻结12秒。",
+      "Effect": {},
+      "ID": 10430,
+      "Icon": 7089,
+      "Kind": 2,
+      "LearnMoney": 25500,
+      "Level": 1,
+      "LevelNeed": 51,
+      "Name": "淬冰风暴",
+      "PassiveTriggers": [
+        {
+          "ChanceBP": 2000,
+          "Status": 1004,
+          "StatusLevel": 1,
+          "TargetSkill": 10412
+        }
+      ],
+      "Prerequisites": [
+        10412
+      ],
+      "Prof": 5
+    },
+    "id": 10430
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "Book": 3962,
+      "Description": "冰箭术，冰爆术，暴雪术，绝对零度的攻击力增加20%。",
+      "Effect": {},
+      "ID": 10431,
+      "Icon": 7090,
+      "Kind": 2,
+      "LearnMoney": 30000,
+      "Level": 5,
+      "LevelNeed": 68,
+      "Name": "寒冰之魂",
+      "PassiveModifiers": [
+        {
+          "Kind": 1,
+          "TargetSkill": 10409,
+          "Value": 20
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10410,
+          "Value": 20
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10411,
+          "Value": 20
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10412,
+          "Value": 20
+        }
+      ],
+      "Prerequisites": [
+        10430
+      ],
+      "Prof": 5
+    },
+    "first": {
+      "Area": {},
+      "Book": 3962,
+      "Description": "冰箭术，冰爆术，暴雪术，绝对零度的攻击力增加4%。",
+      "Effect": {},
+      "ID": 10431,
+      "Icon": 7090,
+      "Kind": 2,
+      "LearnMoney": 30000,
+      "Level": 1,
+      "LevelNeed": 60,
+      "Name": "寒冰之魂",
+      "PassiveModifiers": [
+        {
+          "Kind": 1,
+          "TargetSkill": 10409,
+          "Value": 4
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10410,
+          "Value": 4
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10411,
+          "Value": 4
+        },
+        {
+          "Kind": 1,
+          "TargetSkill": 10412,
+          "Value": 4
+        }
+      ],
+      "Prerequisites": [
+        10430
+      ],
+      "Prof": 5
+    },
+    "id": 10431
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 20000,
+      "Description": "100%几率瞬间移动至指定点。",
+      "Dist": 450,
+      "Effect": {
+        "ChanceBP": 10000,
+        "Kind": 7,
+        "Target": 1
+      },
+      "Effects": [
+        {
+          "ChanceBP": 10000,
+          "Kind": 7,
+          "Target": 1
+        }
+      ],
+      "ID": 10432,
+      "Icon": 7091,
+      "ImpactDelayMS": 500,
+      "Kind": 1,
+      "LearnMoney": 15000,
+      "Level": 5,
+      "LevelNeed": 38,
+      "MPCost": 136,
+      "Name": "秘术：幻影",
+      "Prerequisites": [
+        10418
+      ],
+      "Prof": 5
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 20000,
+      "Description": "60%几率瞬间移动至指定点。",
+      "Dist": 450,
+      "Effect": {
+        "ChanceBP": 6000,
+        "Kind": 7,
+        "Target": 1
+      },
+      "Effects": [
+        {
+          "ChanceBP": 6000,
+          "Kind": 7,
+          "Target": 1
+        }
+      ],
+      "ID": 10432,
+      "Icon": 7091,
+      "ImpactDelayMS": 500,
+      "Kind": 1,
+      "LearnMoney": 15000,
+      "Level": 1,
+      "LevelNeed": 30,
+      "MPCost": 108,
+      "Name": "秘术：幻影",
+      "Prerequisites": [
+        10418
+      ],
+      "Prof": 5
+    },
+    "id": 10432
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "消除敌人的防御魔法，包括光盾术，火盾术，冰盾术，魔镜术，针刺护体，每次升级消除的效果增加。",
+      "Dist": 450,
+      "Effect": {
+        "DispelChanceBP": 10000,
+        "RemoveStatusIDs": [
+          1010,
+          1011,
+          1021,
+          1037,
+          1038
+        ]
+      },
+      "Effects": [
+        {
+          "DispelChanceBP": 10000,
+          "RemoveStatusIDs": [
+            1010,
+            1011,
+            1021,
+            1037,
+            1038
+          ]
+        }
+      ],
+      "ID": 10433,
+      "Icon": 7092,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 168,
+      "Name": "秘术：消除",
+      "Prerequisites": [
+        10432
+      ],
+      "Prof": 5,
+      "TargetEnemy": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 2000,
+      "Description": "消除敌人的防御魔法，包括光盾术，火盾术，冰盾术，魔镜术，针刺护体，每次升级消除的效果增加。",
+      "Dist": 450,
+      "Effect": {
+        "DispelChanceBP": 2000,
+        "RemoveStatusIDs": [
+          1010,
+          1011,
+          1021,
+          1037,
+          1038
+        ]
+      },
+      "Effects": [
+        {
+          "DispelChanceBP": 2000,
+          "RemoveStatusIDs": [
+            1010,
+            1011,
+            1021,
+            1037,
+            1038
+          ]
+        }
+      ],
+      "ID": 10433,
+      "Icon": 7092,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 140,
+      "Name": "秘术：消除",
+      "Prerequisites": [
+        10432
+      ],
+      "Prof": 5,
+      "TargetEnemy": true
+    },
+    "id": 10433
+  },
+  {
+    "fifth": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "为自己附加冰洁之盾，增加伤害抗性50%，敌人攻击会有50%的几率被冻结。",
+      "Effect": {},
+      "ID": 10435,
+      "Icon": 7093,
+      "LearnMoney": 18000,
+      "Level": 5,
+      "LevelNeed": 44,
+      "MPCost": 168,
+      "Name": "冰盾术",
+      "Prerequisites": [
+        10428
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ID": 1038,
+          "Level": 5
+        }
+      ],
+      "TargetSelf": true
+    },
+    "first": {
+      "Area": {},
+      "CooldownMS": 120000,
+      "Description": "为自己附加冰洁之盾，增加伤害抗性30%，敌人攻击会有30%的几率被冻结。",
+      "Effect": {},
+      "ID": 10435,
+      "Icon": 7093,
+      "LearnMoney": 18000,
+      "Level": 1,
+      "LevelNeed": 36,
+      "MPCost": 140,
+      "Name": "冰盾术",
+      "Prerequisites": [
+        10428
+      ],
+      "Prof": 5,
+      "Statuses": [
+        {
+          "ID": 1038,
+          "Level": 1
+        }
+      ],
+      "TargetSelf": true
+    },
+    "id": 10435
+  }
+]

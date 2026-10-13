@@ -1,0 +1,53 @@
+{
+  "schema": 6,
+  "total": 259,
+  "legacy_frozen_total": 1619,
+  "legacy_v5_total": 259,
+  "power_tier_counts": {
+    "transition": 183,
+    "highvalue": 54,
+    "builddefining": 18,
+    "godlike": 4
+  },
+  "typed_effect_counts": {
+    "magic_find_pct": 35,
+    "proc": 10,
+    "skill_variant": 5,
+    "element_resist_bp": 30,
+    "element_mitigation_bp": 4,
+    "element_absorb_bp": 7,
+    "element_damage_bp": 17,
+    "enemy_element_pierce_bp": 11
+  },
+  "skill_item_count": 30,
+  "validation_boundary": "Structural checks only; actual combat acceptance is tested separately.",
+  "native_drop_kind": 259,
+  "legacy_affix_pool_ready": 259,
+  "new_generation_excluded": 1360,
+  "class_counts": {
+    "swordsman": 48,
+    "sharedcaster": 10,
+    "warrior": 28,
+    "assassin": 38,
+    "allclasses": 99,
+    "healer": 18,
+    "warlock": 18
+  },
+  "variable_count_distribution": {
+    "1": 120,
+    "0": 124,
+    "2": 15
+  },
+  "catalog_sha256": {
+    "unique_catalog_warrior.json": "7ea0207debe4bdee90a412d214f38d3779fc497e0979b0158b62a4ad26f14e05",
+    "unique_catalog_swordsman.json": "416b7c51f7bc05e1ffdb406bec1bec81313f13f1aee7acc1ea787e62069fd283",
+    "unique_catalog_assassin.json": "f6b7b8246c1417e3e516d04be23b6686abd4adffc9cb23d32b2515edaa684324",
+    "unique_catalog_healer.json": "6dd39e20d98ab85a11c9fb670a1add01d27b96818130bb6b524a6760df83df2a",
+    "unique_catalog_warlock.json": "c265f81e3cff66bf570ace6e152cb069ffa6a3df231ed2b3effb433df71377a2",
+    "unique_catalog_sharedcaster.json": "bbc790dcebcb3d62c030fb1a9f13c100acc644fa1c1bb1a52743c2b2af323a48",
+    "unique_catalog_allclasses.json": "c1753cde00ea315798708a94100551efb06679643ac42b0b0c632b0bd9d6abb0",
+    "unique_catalog_unrestricted.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  "attack_speed_item_count": 19,
+  "trait_item_count": 80
+}

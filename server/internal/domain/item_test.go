@@ -4,9 +4,9 @@ import "testing"
 
 // 真实物品做样本: 树枝(4103, 树妖 31.4% 掉)、牛肉面(3002)、铁剑(装备)。
 var (
-	树枝  = ItemDef{ID: 4103, Name: "树枝", Stackable: true, Price: 2}
-	牛肉面 = ItemDef{ID: 3002, Name: "牛肉面", Stackable: true, Price: 10}
-	铁剑  = ItemDef{ID: 4001, Name: "铁剑", Stackable: false, Price: 300,
+	树枝  = ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 4103, Name: "树枝", Stackable: true, Price: 2}
+	牛肉面 = ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 3002, Name: "牛肉面", Stackable: true, Price: 10}
+	铁剑  = ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 4001, Name: "铁剑", Stackable: false, Price: 300,
 		Equip: &EquipDef{Slot: 4, LevelReq: 5, Durable: 100}}
 )
 

@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -8,7 +11,7 @@ import (
 )
 
 // 钢剑: game_equipment 真值 —— 6 级, 单手, 需力量14/敏捷14, 攻击 8~14。
-var 场景钢剑 = domain.ItemDef{ID: 4002, Name: "钢剑", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{
+var 场景钢剑 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 4002, Name: "钢剑", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{
 	Slot: int32(domain.SlotWeapon), LevelReq: 6, Durable: 100,
 	Bonus: domain.Stats{MinAtk: 8, MaxAtk: 14},
 	Need:  domain.Requirement{Level: 6, Base: domain.Base{STR: 14, AGI: 14}},
@@ -18,7 +21,7 @@ var 场景钢剑 = domain.ItemDef{ID: 4002, Name: "钢剑", InventoryTab: 2, Inv
 	},
 }}
 
-var 场景铁甲 = domain.ItemDef{ID: 5001, Name: "铁甲", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{
+var 场景铁甲 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 5001, Name: "铁甲", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{
 	Slot: int32(domain.SlotBody), Durable: 80,
 	Affixes: []domain.Affix{
 		{Attr: domain.AttrVIT, Value: 10},
@@ -26,13 +29,13 @@ var 场景铁甲 = domain.ItemDef{ID: 5001, Name: "铁甲", InventoryTab: 2, Inv
 	},
 }}
 
-var 场景盾 = domain.ItemDef{ID: 5100, Name: "圆木盾", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{
+var 场景盾 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 5100, Name: "圆木盾", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{
 	Slot: int32(domain.SlotShield), Bonus: domain.Stats{Def: 5}}}
 
-var 场景双手剑 = domain.ItemDef{ID: 5200, Name: "双手剑", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{
+var 场景双手剑 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 5200, Name: "双手剑", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{
 	Slot: int32(domain.SlotTwoHand), Bonus: domain.Stats{MinAtk: 20, MaxAtk: 30}}}
 
-var 场景药 = domain.ItemDef{ID: 3002, Name: "牛肉面", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
+var 场景药 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 3002, Name: "牛肉面", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
 
 // equipScene 建一个能穿装备的场景, 玩家已进图。
 func equipScene(t *testing.T) (*Scene, *fakeSink) {
@@ -41,7 +44,7 @@ func equipScene(t *testing.T) (*Scene, *fakeSink) {
 		场景钢剑.ID: 场景钢剑, 场景铁甲.ID: 场景铁甲,
 		场景盾.ID: 场景盾, 场景双手剑.ID: 场景双手剑, 场景药.ID: 场景药,
 	}
-	s := New(Config{ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000, Items: items})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000, Items: items})
 	sink := join(t, s, 1, 100, "甲", 100, 100)
 	s.step()
 	sink.take()
@@ -112,7 +115,7 @@ func TestEquipMovesItemAndUpdatesStats(t *testing.T) {
 // 模拟重启后从 char_equipment 读回穿戴：characters.equip_view 即使是旧缓存，
 // 也必须在 SelfEntered(0x8003) 和公开 Look 构造前由穿戴修正。
 func TestEnterRecomputesAppearanceFromPersistedWorn(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000,
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000,
 		Items: map[domain.ItemID]domain.ItemDef{场景钢剑.ID: 场景钢剑}})
 	worn := domain.NewEquipSet()
 	worn.Set(domain.SlotWeapon, domain.Stack{Item: 场景钢剑.ID, Count: 1, Durability: 77})
@@ -263,7 +266,7 @@ func TestRequirementUsesEquipBonus(t *testing.T) {
 	ch.Base = domain.Base{STR: 10, AGI: 20} // 力量差 4 点
 
 	// 先穿一件加 10 力量的戒指
-	ring := domain.ItemDef{ID: 7001, Name: "力戒", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{
+	ring := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 7001, Name: "力戒", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{
 		Slot: int32(domain.SlotRing), Base: domain.Base{STR: 10}}}
 	s.items[ring.ID] = ring
 	putInBag(s, 0, ring)

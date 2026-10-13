@@ -47,6 +47,10 @@ func (s *Scene) onEquip(cmd Equip) {
 		return
 	}
 	ch := p.Player.Char
+	if ch.Level < domain.EquipmentRequiredLevel(def, st) {
+		reject(event.RejectLevelTooLow)
+		return
+	}
 	slot := domain.EquipSlot(def.Equip.Slot)
 
 	// 门槛按当前有效六维判定，但先移除目标槽位和冲突槽位的旧装备。
@@ -105,12 +109,23 @@ func (s *Scene) equipmentRequirementBase(p *entity.Entity, slot domain.EquipSlot
 }
 
 func (s *Scene) equipmentRequirementBaseFromWorn(p *entity.Entity, worn *domain.EquipSet, slot domain.EquipSlot) domain.Base {
+	return s.equipmentRequirementBaseResolved(p, worn, slot, newEquipmentRequirementResolution())
+}
+
+func (s *Scene) equipmentRequirementBaseResolved(p *entity.Entity, worn *domain.EquipSet, slot domain.EquipSlot, resolution *equipmentRequirementResolution) domain.Base {
 	if p == nil || p.Player == nil || p.Player.Char == nil {
 		return domain.Base{}
 	}
 	worn = worn.Clone()
 	for _, conflict := range append(domain.ConflictSlots(slot), slot) {
 		worn.Set(conflict, domain.Stack{})
+	}
+	key := equipmentRequirementMask(worn)
+	if resolution != nil {
+		if base, ok := resolution.bases[key]; ok {
+			resolution.baseHits++
+			return base
+		}
 	}
 	// 被动技能的装备条件也必须使用试算后的穿戴，不能借用旧武器激活的被动。
 	preview := *p
@@ -120,8 +135,11 @@ func (s *Scene) equipmentRequirementBaseFromWorn(p *entity.Entity, worn *domain.
 	ch := p.Player.Char
 	base, _ := domain.Compute(domain.StatSource{
 		Base: ch.EffectiveBase(), Level: ch.Level, Innate: characterInnateStats(ch),
-		Worn: worn, Defs: s.itemDef, Passive: s.passiveStatAffixes(&preview), Status: p.Status,
+		Worn: worn, Defs: s.itemDef, Passive: s.passiveStatAffixesResolved(&preview, resolution), Status: p.Status,
 	})
+	if resolution != nil {
+		resolution.bases[key] = base
+	}
 	return base
 }
 
@@ -131,8 +149,19 @@ func (s *Scene) equipmentRequirementBaseFromWorn(p *entity.Entity, worn *domain.
 // mutual dependency therefore activates neither item instead of making both appear
 // valid merely because they happen to be persisted in the worn slots.
 func (s *Scene) functionalWorn(p *entity.Entity) *domain.EquipSet {
+	return s.functionalWornResolved(p, newEquipmentRequirementResolution())
+}
+
+func (s *Scene) functionalWornResolved(p *entity.Entity, resolution *equipmentRequirementResolution) *domain.EquipSet {
 	if p == nil || p.Player == nil || p.Player.Worn == nil {
 		return domain.NewEquipSet()
+	}
+	key := equipmentRequirementMask(p.Player.Worn)
+	if resolution != nil {
+		if worn, ok := resolution.worn[key]; ok {
+			resolution.wornHits++
+			return worn.Clone()
+		}
 	}
 	source := p.Player.Worn
 	active := domain.NewEquipSet()
@@ -148,7 +177,7 @@ func (s *Scene) functionalWorn(p *entity.Entity) *domain.EquipSet {
 				return
 			}
 			ch := p.Player.Char
-			if def.Equip.Need.Meet(ch.Level, s.equipmentRequirementBaseFromWorn(p, active, slot), ch.Appear.Gender) != domain.RejectNone ||
+			if ch.Level < domain.EquipmentRequiredLevel(def, st) || def.Equip.Need.Meet(ch.Level, s.equipmentRequirementBaseResolved(p, active, slot, resolution), ch.Appear.Gender) != domain.RejectNone ||
 				!def.Equip.Need.AllowsCharacter(ch) {
 				return
 			}
@@ -162,6 +191,9 @@ func (s *Scene) functionalWorn(p *entity.Entity) *domain.EquipSet {
 		if !changed {
 			break
 		}
+	}
+	if resolution != nil {
+		resolution.worn[key] = active.Clone()
 	}
 	return active
 }
@@ -256,7 +288,15 @@ func (s *Scene) unequipTo(p *entity.Entity, slot domain.EquipSlot) {
 // 血量按**上限的变化量**跟着走: 换上加血的装备当场补上, 换下来就扣掉。
 // 不这么做的话, 反复穿脱一件加血装备等于无限回血。
 func (s *Scene) refreshStats(p *entity.Entity) {
-	ch := p.Player.Char
+	if p != nil {
+		delete(s.skillRawCache, p.ID)
+	}
+	defer s.publishEquipmentCombatStats(p)
+	if s.equipment != nil {
+		delete(s.equipment.cache, p.ID)
+	}
+	defer s.maybeSendSkillRanks(p)
+	defer s.refreshSkillPersistentEffects(p)
 	wasAlive := p.Alive()
 	oldMaxHP, oldMaxMP := p.MaxHP, p.MaxMP
 
@@ -265,20 +305,20 @@ func (s *Scene) refreshStats(p *entity.Entity) {
 	player := *p.Player
 	player.Worn = worn
 	preview.Player = &player
-	_, stats := domain.Compute(domain.StatSource{
-		Base: ch.EffectiveBase(), Level: ch.Level, Innate: characterInnateStats(ch),
-		Worn: worn, Defs: s.itemDef, Passive: s.passiveStatAffixes(&preview), Status: p.Status,
-	})
+	_, stats, growth := s.computeSkillGrowthStats(&preview, worn)
 	p.Stats = stats
 	p.MaxHP = stats.MaxHP
 	p.MaxMP = stats.MaxMP
 
-	if d := p.MaxHP - oldMaxHP; d != 0 {
-		p.HP += d
+	// Preserve existing level/equipment resource deltas, excluding the new
+	// skill-growth maxima. Growing a skill expands capacity but grants no resources.
+	if d := int64(p.MaxHP) - int64(oldMaxHP) - int64(growth.MaxHP) + int64(p.Player.SkillGrowthMaxHP); d != 0 {
+		p.HP = domain.SaturateInt32(int64(p.HP) + d)
 	}
-	if d := p.MaxMP - oldMaxMP; d != 0 {
-		p.MP += d
+	if d := int64(p.MaxMP) - int64(oldMaxMP) - int64(growth.MaxMP) + int64(p.Player.SkillGrowthMaxMP); d != 0 {
+		p.MP = domain.SaturateInt32(int64(p.MP) + d)
 	}
+	p.Player.SkillGrowthMaxHP, p.Player.SkillGrowthMaxMP = growth.MaxHP, growth.MaxMP
 	if p.HP > p.MaxHP {
 		p.HP = p.MaxHP
 	}
@@ -296,20 +336,40 @@ func (s *Scene) refreshStats(p *entity.Entity) {
 	if p.MP < 0 {
 		p.MP = 0
 	}
+	s.invalidateAstralRuneRegen(p, worn)
 	s.emitTo(p.ID, s.attributeSnapshot(p))
 	s.refreshWarehouseBlocked(p)
 }
 
 func (s *Scene) passiveStatAffixes(p *entity.Entity) []domain.Affix {
+	return s.passiveStatAffixesResolved(p, newEquipmentRequirementResolution())
+}
+
+func (s *Scene) passiveStatAffixesResolved(p *entity.Entity, resolution *equipmentRequirementResolution) []domain.Affix {
+	return s.passiveStatAffixesIncludingGrowth(p, resolution, true)
+}
+
+func (s *Scene) passiveStatAffixesIncludingGrowth(p *entity.Entity, resolution *equipmentRequirementResolution, growth bool) []domain.Affix {
 	if s == nil || p == nil || p.Player == nil ||
 		p.Player.Char == nil || p.Player.Worn == nil {
 		return nil
 	}
 	ch := p.Player.Char
 	out := s.petStatAffixes(p)
-	for skill, level := range ch.Skills {
+	out = append(out, domain.AstralBonuses(p.Player.Worn, s.itemDef, ch)...)
+	for skill, level := range s.rawSkillLevelsResolved(p, resolution) {
 		def, ok := s.skills.Get(skill, level)
-		if !ok || def.Kind != domain.SkillPassive || !ch.AllowsSkill(def.ID, def.Prof) {
+		if !ok || !ch.AllowsSkill(def.ID, def.Prof) {
+			continue
+		}
+		// Active cleansing skills also confer a constant growth bonus. Soft ranks
+		// may improve learned skills, but cannot activate an unlearned one.
+		if growth && ch.Skills.LevelOf(skill) > 0 && s.skills.V5Enabled(skill) {
+			if attr, value := domain.SkillGrowthAttribute(skill, level, def.Progression); value > 0 {
+				out = append(out, domain.Affix{Attr: attr, Value: value, Mode: domain.ModeAbsolute})
+			}
+		}
+		if def.Kind != domain.SkillPassive {
 			continue
 		}
 		for _, modifier := range def.PassiveStats {
@@ -335,7 +395,7 @@ func (s *Scene) hasFunctionalEquipType(p *entity.Entity, equipType int32) bool {
 		}
 		def, ok := s.itemDef(stack.Item)
 		found = ok && def.Equip != nil && def.Equip.Type == equipType &&
-			domain.EquipmentFunctional(stack, def)
+			domain.EquipmentFunctional(stack, def) && p.Player.Char != nil && p.Player.Char.Level >= domain.EquipmentRequiredLevel(def, stack)
 	})
 	return found
 }

@@ -162,6 +162,7 @@ const (
 	wireHitCrit   = 1
 	wireHitMiss   = 2
 	wireHitFatal  = 4
+	wireHitSkill  = 8 // suppress ordinary weapon hit sound and remote basic projectile
 )
 
 // 0x800c CombatNumber.SpawnOn 的目标锚点与表现类型。target 不是实体号：
@@ -186,6 +187,11 @@ const (
 // 与聊天提示；调用方必须按返回顺序逐包发送，不能只取第一包。
 func Encode(observer domain.EntityID, ev event.Event) [][]byte {
 	switch e := ev.(type) {
+	case event.EndgameMessage:
+		if e.Who != observer {
+			return nil
+		}
+		return packets(EncodeEndgame(e.Message))
 	case event.MonsterSpoke:
 		return packets(EntityBubble(int32(e.Who), e.Text))
 	case event.EntityOwnerChanged:
@@ -890,11 +896,20 @@ func encodeDespawn(e event.EntityDespawned) []byte {
 //
 // 校验过的不变量: 上次剩余 − 本次剩余 == 伤害(11/11 样本); 致死时伤害可以大于剩余血。
 func encodeDamage(e event.DamageDealt) []byte {
+	flags := wireHitFlag(e.Flag)
+	// Skill release/fire audio is delivered separately by 0x800e. Its damage
+	// must not also play the equipped weapon's ordinary hit sound/projectile.
+	// Status ticks have no SkillID, but are explicitly marked as periodic.
+	// Classify each result, not its caster: a basic hit followed by an equipment
+	// proc (or interleaved with a multi-hit skill) retains its own weapon sound.
+	if e.SkillID > 0 || e.Origin == domain.DamageDOTOrigin {
+		flags |= wireHitSkill
+	}
 	return NewW(SCCombat).
 		I32(int32(e.Src)).
 		I32(int32(e.Dst)).
 		I32(e.Amount).
-		U8(wireHitFlag(e.Flag)).
+		U8(flags).
 		I32(e.DstHP).
 		Bytes()
 }

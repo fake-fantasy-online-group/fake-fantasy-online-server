@@ -101,6 +101,7 @@ type Request struct {
 	S1, S2        string
 	S3, S4        string
 	DeviceID      string  // Login 的客户端设备标识；认证暂不使用，但协议层不得丢字段
+	ClientCaps    int32   // Feature bits advertised before world entry.
 	ClientVersion string  // Login 固定版本字段；当前只接受 1.6.0
 	ClientVM      uint8   // 1.5.8 VmDetect 结果，只接受 0/1
 	ClientDebug   uint8   // 1.5.8 DebugDetect 结果，只接受 0/1
@@ -685,13 +686,12 @@ func CapabilityOpcode(op Op) bool { return op == OpClientCaps }
 
 func DecodeClientCaps(payload []byte) (Request, bool) {
 	r := newReader(payload)
-	r.i32()
+	caps := r.i32()
 	if !r.done() {
 		return Request{Kind: ReqClientCaps}, false
 	}
-	// 0x1091 是 1.5.8 客户端固定发送的版本标记。服务端只消费它以保持
-	// 包边界闭合，不保存、不回协商，也不让它改变任何业务或下行路径。
-	return Request{Kind: ReqClientCaps}, true
+	// Existing clients advertise 31; bit 5 opts into the optional ground presentation tail.
+	return Request{Kind: ReqClientCaps, ClientCaps: caps}, true
 }
 
 func ChangeSetOpcode(op Op) bool { return op == 0x109a || op == 0x109b }

@@ -33,7 +33,7 @@ func colorRollTable() EquipmentRollTable {
 }
 
 func colorRollDef() ItemDef {
-	return ItemDef{ID: 1001, Equip: &EquipDef{ResourceLevel: 1, Type: 101}}
+	return ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 1001, Equip: &EquipDef{ResourceLevel: 1, Type: 101}}
 }
 
 // 普通档只配了 0/1/2 三档，任何一次抽取都不得超过 2 条（天蓝上限）。

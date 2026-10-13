@@ -26,7 +26,33 @@ func (s *Scene) applyStatus(target *entity.Entity, id domain.StatusID, level int
 	if !ok {
 		return false
 	}
+	// Secondary poison/freeze has no direct SkillDef at this point. Carry only
+	// presentation metadata from the status that caused it; mechanics stay in def.
+	if source := s.entities[src]; source != nil {
+		icon, skillID := triggeredStatusIcon(source.Status, id)
+		applyStatusSource(&def, icon, skillID)
+	}
 	return s.applyStatusDef(target, def, src)
+}
+
+func triggeredStatusIcon(statuses *domain.StatusSet, id domain.StatusID) (icon, skillID int32) {
+	if statuses == nil {
+		return
+	}
+	var strongest int32
+	statuses.Each(func(a domain.Active) {
+		var chance int32
+		switch id {
+		case domain.StatusPoison:
+			chance = a.Def.PoisonOnHitChance
+		case domain.StatusFreeze:
+			chance = a.Def.FreezeAttackerChance
+		}
+		if chance > strongest {
+			strongest, icon, skillID = chance, a.Def.Icon, a.Def.SourceSkillID
+		}
+	})
+	return
 }
 
 // applyStatusDef 让已确认来源的调用方在不改静态表的前提下补展示元数据。
@@ -50,15 +76,14 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	if target.Status != nil && target.Status.BlockedByOverlay(def, s.statusOverlay) {
 		return false
 	}
-	// 不良状态抗性只挡 debuff, 不挡自己身上的增益。
-	if isHarmful(def) {
-		specific := s.passiveStatusResistPct(target, def.ID)
-		if chance := domain.ResistChance(target.Stats.StatusResist + specific); chance > 0 {
-			if int32(s.rng.Intn(100)) < chance {
-				s.emitTo(target.ID, event.StatusResisted{Who: target.ID, Status: int32(def.ID)})
-				return false
-			}
-		}
+	// Base chance and resistance share exactly one final draw. Buffs only use
+	// their authored chance; immunity/overlay failures above never consume RNG.
+	if !s.statusEffectLands(target, def, src) {
+		return false
+	}
+	if (def.PoisonOnHitChance > 0 || def.FreezeAttackerChance > 0) && !def.SourceEffectHitKnown {
+		def.SourceEffectHitBP = s.sourceEffectHitBP(target)
+		def.SourceEffectHitKnown = true
 	}
 	if target.Status == nil {
 		target.Status = domain.NewStatusSet()
@@ -69,6 +94,9 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 		}))
 	}
 	wasInvisible := entityInvisible(target)
+	// Periodic damage may outlive a pet/summon/trap entity. Keep its responsible
+	// player's stable source ID now; MF itself is read only at the fatal tick.
+	src = s.periodicDamageOwnerV5(def, src)
 	result := target.Status.ApplyWithOverlay(def, s.tick, src, s.statusOverlay)
 	for _, removed := range result.Removed {
 		s.emit(event.StatusRemoved{Who: target.ID, Status: int32(removed)})
@@ -97,10 +125,11 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	return true
 }
 
-// applyStatusSource 只在状态自身没有图标时使用本次来源。skillID=0 表示物品；
+// applyStatusSource 仅为没有原表元数据的状态补来源；原 SmallMap=0 也不可覆盖。
+// skillID=0 表示物品；
 // 客户端 Buff 身份继续回退状态号，但图标取实际使用的物品。
 func applyStatusSource(def *domain.StatusDef, icon, skillID int32) {
-	if def == nil || def.Icon > 0 || icon <= 0 {
+	if def == nil || def.IconKnown || def.Icon > 0 || icon <= 0 {
 		return
 	}
 	def.Icon = icon
@@ -113,28 +142,34 @@ func (s *Scene) passiveStatusResistPct(target *entity.Entity, status domain.Stat
 		return 0
 	}
 	ch := target.Player.Char
-	var total int32
-	for skill, level := range ch.Skills {
+	var total int64
+	for skill, level := range s.rawSkillLevels(target) {
 		def, ok := s.skills.Get(skill, level)
 		if !ok || def.Kind != domain.SkillPassive || !ch.AllowsSkill(def.ID, def.Prof) {
 			continue
 		}
 		for _, resist := range def.PassiveResists {
 			if resist.Status == status {
-				total += resist.Pct
+				total += int64(resist.Pct)
 			}
 		}
 	}
-	return total
+	return domain.SaturateInt32(total)
 }
 
 // prepareBasicAttackStatuses 在一次已受理的普通攻击起手时消耗“下一击”状态，
 // 并处理隐身的“任何攻击行为都会现形”。
 func (s *Scene) prepareBasicAttackStatuses(e *entity.Entity, blow *combat.Blow) {
-	if e == nil || e.Status == nil || blow == nil {
+	if e == nil || blow == nil {
+		return
+	}
+
+	if e.Status == nil {
 		return
 	}
 	bonus := e.Status.StealthDamageBonus()
+	blow.FlatDamage += e.Status.ProgressionAttackBonus(false, true, false)
+	blow.StartedInvisible = entityInvisible(e)
 	oneShotBonus, _, _, removed := e.Status.ConsumeAttackModifiers(false, true, false, false)
 	bonus += oneShotBonus
 	if bonus > 0 {
@@ -152,6 +187,7 @@ func (s *Scene) prepareSkillStatuses(e *entity.Entity, def *domain.SkillDef) int
 	if e == nil || e.Status == nil || def == nil {
 		return 0
 	}
+	flat := e.Status.ProgressionAttackBonus(true, def.HasDamageEffect(), def.PrepareMS > 0)
 	bonus, duration, castReduction, removed := e.Status.ConsumeAttackModifiers(
 		true,
 		def.HasDamageEffect(),
@@ -165,20 +201,26 @@ func (s *Scene) prepareSkillStatuses(e *entity.Entity, def *domain.SkillDef) int
 		if len(def.Effects) > 0 {
 			for i := range def.Effects {
 				if def.Effects[i].Kind == domain.EffectDamage {
-					def.Effects[i].DamagePct = boostedDamagePct(def.Effects[i].DamagePct, bonus)
+					domain.BoostSkillDamage(&def.Effects[i], bonus)
 				}
 			}
 			def.Effect = def.Effects[0]
 		} else if def.Effect.Kind == domain.EffectDamage {
-			def.Effect.DamagePct = boostedDamagePct(def.Effect.DamagePct, bonus)
+			domain.BoostSkillDamage(&def.Effect, bonus)
 		}
 	}
-	if castReduction > 100 {
-		castReduction = 100
+	if flat > 0 {
+		def.Effects = append([]domain.SkillEffect(nil), def.DirectEffects()...)
+		for i := range def.Effects {
+			if def.Effects[i].Kind == domain.EffectDamage {
+				def.Effects[i].DamageFlat += flat
+			}
+		}
+		if len(def.Effects) > 0 {
+			def.Effect = def.Effects[0]
+		}
 	}
-	if castReduction > 0 {
-		def.PrepareMS -= def.PrepareMS * castReduction / 100
-	}
+	def.PrepareMS = skillPrepareAfterReduction(def.PrepareMS, castReduction)
 	preserveInvisible := false
 	if def.PreserveInvisibleChanceBP > 0 && e.Status.Invisible() {
 		chance := def.PreserveInvisibleChanceBP
@@ -198,19 +240,24 @@ func boostedDamagePct(base, bonus int32) int32 {
 	if base == 0 {
 		base = 100
 	}
-	return base * (100 + bonus) / 100
+	return clampI32(int64(base) * (100 + int64(bonus)) / 100)
 }
 
 // resolveStrikeStatuses 把普通战斗公式的结果再经过状态减伤/护盾。
 func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTracker, blow combat.Blow) (event.DamageDealt, int32, int32) {
+	if !s.equipmentCombatReady(src) || !s.equipmentCombatReady(dst) {
+		return event.DamageDealt{Src: src.ID, Dst: dst.ID, DstHP: dst.HP, SkillID: blow.SkillID, Flag: event.DamageMiss}, 0, 0
+	}
 	beforeHP := dst.HP
-	ev := combat.Strike(src, dst, tr, blow, s.rng)
+	blow = s.equipmentBlow(src, blow)
+	ev := combat.CalculateStrike(src, dst, tr, blow, s.rng)
 	rawDamage := ev.Amount
-	if ev.Flag.Has(event.DamageMiss) || rawDamage <= 0 {
+	if ev.Flag.Has(event.DamageMiss) || rawDamage <= 0 && blow.FlatDamage <= 0 {
+		s.collectEquipmentHit(src, dst, blow, ev)
 		return ev, rawDamage, 0
 	}
 	if blow.FlatDamage > 0 {
-		rawDamage += blow.FlatDamage
+		rawDamage = clampI32(int64(rawDamage) + int64(blow.FlatDamage))
 	}
 	if gmGodEnabled(dst) {
 		dst.HP = beforeHP
@@ -219,19 +266,29 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		return ev, 0, 0
 	}
 	magic := ev.Flag.Has(event.DamageMagic)
-	if src.Kind == domain.KindPlayer {
-		kind := "physical_extra"
-		if magic {
-			kind = "magic_extra"
-		}
-		rawDamage += s.petProcAmount(src, kind)
+	rawDamage = clampI32(int64(rawDamage) + int64(s.sourcePetExtraV5(blow.SourceOffense, blow.CurrentSourceOffense, magic)))
+	if blow.SourceOffense.StatusPresent || blow.CurrentSourceOffense != nil && blow.CurrentSourceOffense.StatusPresent {
+		rawDamage = max(int32(1), clampI32(int64(rawDamage)+int64(sourceStatusFlatV5(blow.SourceOffense, blow.CurrentSourceOffense, magic))))
 	}
-	if src.Status != nil {
-		rawDamage += src.Status.OutgoingDamageFlat(magic)
-		if rawDamage < 1 {
-			rawDamage = 1
-		}
+	pvp := s.equipmentPVP(src, dst)
+	element := domain.HurtElementIndex(blow.HurtType)
+	var offense, defense domain.ElementCombatStats
+	defensive := s.equipmentDefense(dst, pvp)
+	if element >= 0 {
+		offense = blow.EquipmentOffense.Elements[element]
+		defense = defensive.Elements[element]
 	}
+	x := sourceUniqueEffectsV5(blow.SourceOffense, blow.CurrentSourceOffense, uniqueStrikeContext(src, dst, blow, ev, beforeHP))
+	if blow.Origin == domain.DamageProcOrigin {
+		x.DamageBP = 0
+	}
+	buckets := domain.CombatDamageBuckets{
+		DamageIncreaseBP: int64(x.DamageBP), PVPScaledDamageIncreaseBP: int64(offense.DamageBP),
+		ResistanceBP: defense.ResistBP, ResistancePierceBP: offense.PierceBP,
+		ScaledDamageIncreaseNumerator: s.equipmentAuraDamageNumerator(src, element, pvp),
+		PayloadScaleBP:                blow.PayloadScaleBP, PayloadScaleKnown: blow.PayloadScaleKnown, PVP: pvp,
+	}
+	rawDamage = buckets.OutgoingDamage(rawDamage)
 	finalDamage, fullMagicReflect := rawDamage, int32(0)
 	removed := []domain.StatusID(nil)
 	reflectChance := int32(0)
@@ -243,47 +300,67 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 	} else if magic && reflectChance > 0 && int32(s.rng.Intn(100)) < reflectChance {
 		finalDamage, fullMagicReflect = 0, rawDamage
 	} else {
-		incoming := rawDamage
+		guard := domain.EvaluateUniqueTraits(s.uniqueTraits(dst), domain.UniqueContext{HPPercent: uniquePercent(beforeHP, dst.MaxHP), Magic: magic})
+		extraMitigation := int64(defense.MitigationBP) + int64(guard.MitigationBP)
+		if !magic {
+			extraMitigation += int64(defensive.PhysicalMitigationBP)
+		}
+		halfCount := 0
+		if chance := s.trapHalfDamageChance(dst); blow.Trap && chance > 0 && int32(s.rng.Intn(10000)) < chance {
+			halfCount++
+		}
+		if chance := s.incomingMagicHalfChance(dst); magic && chance > 0 && int32(s.rng.Intn(10000)) < chance {
+			halfCount++
+		}
+		flatReduction := dst.Status.DamageReductionFlat(magic)
 		if dst.Kind == domain.KindPlayer {
 			kind := "physical_reduction"
 			if magic {
 				kind = "magic_reduction"
 			}
-			incoming -= s.petProcAmount(dst, kind)
-			incoming -= s.petFlatReduction(dst, magic)
-			if incoming < 1 {
-				incoming = 1
-			}
+			flatReduction += int64(s.petProcAmount(dst, kind)) + int64(s.petFlatReduction(dst, magic))
 		}
-		if chance := s.trapHalfDamageChance(dst); blow.Trap && chance > 0 &&
-			int32(s.rng.Intn(10000)) < chance {
-			incoming = (incoming + 1) / 2
-		}
-		if chance := s.incomingMagicHalfChance(dst); magic && chance > 0 &&
-			int32(s.rng.Intn(10000)) < chance {
-			incoming = (incoming + 1) / 2
-		}
-		if dst.Status != nil {
-			finalDamage, removed = dst.Status.MitigateDamage(magic, incoming)
-			if dst.Player != nil {
-				dst.Player.MarkDirty() // 护盾剩余量也属于状态实例存档。
-			}
+		buckets.MitigationBP = extraMitigation
+		buckets.DamageTakenIncreasePct = dst.Status.DamageTakenIncreasePct(magic)
+		buckets.DamageReductionPct = dst.Status.DamageReductionPct(magic)
+		buckets.HalfDamageLayers, buckets.FlatReduction = halfCount, flatReduction
+		finalDamage = buckets.IncomingDamage(rawDamage)
+		if dst.Status.Invulnerable() {
+			finalDamage = 0
 		} else {
-			finalDamage = incoming
+			finalDamage, removed = dst.Status.AbsorbDamage(finalDamage)
+		}
+		if dst.Status != nil && dst.Player != nil {
+			dst.Player.MarkDirty()
 		}
 		if dst.Kind == domain.KindPlayer && finalDamage > 0 {
 			finalDamage = s.petGuardDamage(dst, src.ID, finalDamage)
 		}
 	}
-	dst.HP = beforeHP - finalDamage
+	absorbedHeal := int32(0)
+	if element >= 0 && fullMagicReflect == 0 && s.equipmentAbsorptionEligible(src, dst, blow) {
+		absorbed := s.equipmentAbsorb(dst, finalDamage, defense.AbsorbBP, pvp)
+		finalDamage = absorbed.Damage
+		absorbedHeal = absorbed.Heal
+		dst.HP = absorbed.HP
+	} else {
+		dst.HP = clampI32(max(int64(0), int64(beforeHP)-int64(finalDamage)))
+	}
 	if dst.HP <= 0 {
 		dst.HP = 0
 		ev.Flag |= event.DamageFatal
 	} else {
 		ev.Flag &^= event.DamageFatal
 	}
-	ev.Amount, ev.DstHP = finalDamage, dst.HP
+	ev.Amount, ev.DstHP, ev.AbsorbHeal = finalDamage, dst.HP-absorbedHeal, absorbedHeal
+	if finalDamage > 0 {
+		s.beginEndgameTrial()
+	}
 	s.statusesRemoved(dst, removed)
+	if beforeHP > 0 && (blow.Origin == domain.DamageNormalOrigin || blow.Origin == domain.DamageCounterOrigin) && blow.ProcDepth == 0 {
+		s.afterUniqueStrike(src, dst, ev)
+	}
+	s.collectEquipmentHit(src, dst, blow, ev)
 	return ev, rawDamage, fullMagicReflect
 }
 
@@ -300,7 +377,7 @@ func (s *Scene) passiveGlobalChanceBP(target *entity.Entity, kind domain.Passive
 		return 0
 	}
 	var chance int32
-	for passiveID, level := range target.Player.Char.Skills {
+	for passiveID, level := range s.rawSkillLevels(target) {
 		passive, ok := s.skills.Get(passiveID, level)
 		if !ok || passive.Kind != domain.SkillPassive ||
 			!target.Player.Char.AllowsSkill(passive.ID, passive.Prof) {
@@ -322,6 +399,9 @@ func (s *Scene) passiveGlobalChanceBP(target *entity.Entity, kind domain.Passive
 // 反射伤害不再触发反射，避免两个反射状态无限递归。
 func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDealt, rawDamage, fullMagicReflect int32) {
 	s.afterCastDamage(ev, true)
+	if ev.AbsorbHeal > 0 && dst != nil {
+		s.emit(event.HealDone{Src: dst.ID, Dst: dst.ID, Amount: ev.AbsorbHeal, DstHP: dst.HP, DstKind: dst.Kind})
+	}
 	if src == nil || dst == nil || ev.Flag.Has(event.DamageMiss) || rawDamage <= 0 {
 		return
 	}
@@ -336,31 +416,28 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 		}))
 	}
 
-	magic := ev.Flag.Has(event.DamageMagic)
-	if !magic && ev.SkillID == 0 && src.Status != nil && dst.Alive() {
-		poisonChance, poisonLevel, _, _, _, _, _ := src.Status.CombatTriggers()
-		if poisonChance > 0 && poisonLevel > 0 && int32(s.rng.Intn(100)) < poisonChance {
-			s.applyStatus(dst, domain.StatusPoison, poisonLevel, src.ID)
-		}
+	if ev.Origin == domain.DamageProcOrigin || ev.Origin == domain.DamageAuraOrigin {
+		return
 	}
 
+	magic := ev.Flag.Has(event.DamageMagic)
+	if !magic && ev.SkillID == 0 && src.Status != nil && dst.Alive() {
+		s.applyCombatTriggeredStatus(src, dst, domain.StatusPoison)
+	}
 	if !magic && dst.Status != nil && src.Alive() {
-		_, _, freezeChance, _, _, _, _ := dst.Status.CombatTriggers()
-		if freezeChance > 0 && int32(s.rng.Intn(100)) < freezeChance {
-			s.applyStatus(src, domain.StatusFreeze, 1, dst.ID)
-		}
+		s.applyCombatTriggeredStatus(dst, src, domain.StatusFreeze)
 	}
 
 	if src.Status != nil && src.Alive() && ev.Amount > 0 {
 		_, _, _, lifePct, lifeChance, manaPct, manaChance := src.Status.CombatTriggers()
 		if lifePct > 0 && int32(s.rng.Intn(100)) < lifeChance {
-			amount := ev.Amount * lifePct / 100
+			amount := clampI32(int64(ev.Amount) * int64(lifePct) / 100)
 			if amount > 0 {
 				s.emit(combat.Restore(src, src, amount, ev.SkillID))
 			}
 		}
 		if manaPct > 0 && int32(s.rng.Intn(100)) < manaChance {
-			src.MP += ev.Amount * manaPct / 100
+			src.MP = clampI32(int64(src.MP) + int64(ev.Amount)*int64(manaPct)/100)
 			if src.MP > src.MaxMP {
 				src.MP = src.MaxMP
 			}
@@ -373,7 +450,7 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 	}
 	reflectPct := dst.Status.ReflectPct(magic)
 	reflectFlat, reflectFlatAsMagic := dst.Status.ReflectFlat(magic)
-	reflected := ev.Amount*reflectPct/100 + reflectFlat
+	reflected := clampI32(int64(ev.Amount)*int64(reflectPct)/100 + int64(reflectFlat))
 	s.emitReflectedDamage(dst, src, reflected, magic || reflectFlatAsMagic)
 }
 
@@ -382,7 +459,7 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 		return
 	}
 	attacker.HP -= amount
-	reflectEvent := event.DamageDealt{Src: reflector.ID, Dst: attacker.ID, Amount: amount, DstHP: attacker.HP}
+	reflectEvent := event.DamageDealt{Origin: domain.DamageReflectionOrigin, Src: reflector.ID, Dst: attacker.ID, Amount: amount, DstHP: attacker.HP}
 	if magic {
 		reflectEvent.Flag |= event.DamageMagic
 	}
@@ -555,13 +632,22 @@ func statusPositionMode(def domain.StatusDef) uint8 {
 // 按状态号排序。
 // no_inform_client 的状态只参与结算，不会从任何展示通道泄漏出去。
 func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
-	if e == nil || e.Status == nil {
+	if e == nil {
 		return nil
 	}
-	var out []statusPresentation
+	out := s.equipmentAuraStatuses(e)
+	if e.Status == nil {
+		return out
+	}
 	e.Status.Each(func(a domain.Active) {
 		if a.Def.Hidden || (a.ExpireAt != 0 && a.ExpireAt <= s.tick) {
 			return
+		}
+		// Saved statuses created before the native SmallMap import may contain
+		// a missing or source-skill icon. Correct presentation from the exact
+		// original status level, without changing saved combat/duration values.
+		if native, ok := s.statuses.Get(a.Def.ID, a.Def.Level); ok && native.IconKnown {
+			a.Def.Icon, a.Def.IconKnown, a.Def.SourceSkillID = native.Icon, true, 0
 		}
 		remainMS := int32(1<<31 - 1) // 永久状态的客户端展示哨兵
 		if a.ExpireAt != 0 {
@@ -569,7 +655,7 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 		}
 		beneficial := !isHarmful(a.Def)
 		immobile := a.Def.Immobile
-		if immobile == 0 && a.Def.Control == domain.ControlStun {
+		if immobile == 0 && (a.Def.Control == domain.ControlStun || a.Def.BlockMove) {
 			immobile = 1
 		}
 		icon := event.StatusIconView{
@@ -630,7 +716,7 @@ func (s *Scene) pushStatusSnapshots(e *entity.Entity) {
 		s.emitTo(e.ID, s.buffSnapshot(e))
 	}
 	// 玩家本人由 Buff 快照显示特效；怪物没有本人快照，必须广播世界特效。
-	if e.Kind == domain.KindMonster || (e.Kind == domain.KindPlayer && e.Player != nil) {
+	if e.Kind == domain.KindMonster || e.Kind == domain.KindPet || (e.Kind == domain.KindPlayer && e.Player != nil) {
 		for _, st := range statuses {
 			if st.effect.Effect != "" {
 				s.emitExcept(st.effect, e.ID)
@@ -642,7 +728,7 @@ func (s *Scene) pushStatusSnapshots(e *entity.Entity) {
 // sendEntityStatusEffects 紧跟怪物或远端玩家的出场包补齐当前世界特效。
 // 怪物出场包的状态尾只含图标；远端玩家也收不到本人的 Buff 快照。
 func (s *Scene) sendEntityStatusEffects(to domain.EntityID, e *entity.Entity) {
-	if e == nil || (e.Kind != domain.KindMonster && (e.Kind != domain.KindPlayer || e.Player == nil)) || to == e.ID {
+	if e == nil || (e.Kind != domain.KindMonster && e.Kind != domain.KindPet && (e.Kind != domain.KindPlayer || e.Player == nil)) || to == e.ID {
 		return
 	}
 	for _, st := range s.visibleStatuses(e) {
@@ -655,7 +741,7 @@ func (s *Scene) sendEntityStatusEffects(to domain.EntityID, e *entity.Entity) {
 // emitRemovedEntityStatusEffects 负责提前移除。状态集合的删除 API 返回状态号，
 // 所以从数据库加载的静态表里确定性选取最低等级定义，恢复客户端使用的同名特效键。
 func (s *Scene) emitRemovedEntityStatusEffects(e *entity.Entity, ids []domain.StatusID) {
-	if e == nil || (e.Kind != domain.KindMonster && (e.Kind != domain.KindPlayer || e.Player == nil)) || len(ids) == 0 {
+	if e == nil || (e.Kind != domain.KindMonster && e.Kind != domain.KindPet && (e.Kind != domain.KindPlayer || e.Player == nil)) || len(ids) == 0 {
 		return
 	}
 	seen := make(map[domain.StatusID]struct{}, len(ids))
@@ -693,21 +779,22 @@ func (s *Scene) statusDefByID(id domain.StatusID) (domain.StatusDef, bool) {
 // attr38 与 attr446 修改当前生命，attr447 修改当前法力。Mode=1 按对应
 // 上限取百分比；此前把“每两秒减少生命上限6%”错算成固定 6 点。
 func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
-	var hpDelta, mpDelta int32
+	var hpDelta, mpDelta int64
+	hpDelta -= int64(a.PeriodicDamageTickExtra)
 	for _, af := range a.Def.Affixes {
 		if af.Attr == domain.AttrHPRegen {
-			hpDelta += resourceDelta(af.Value, af.Mode, e.MaxHP)
+			hpDelta += int64(resourceDelta(af.Value, af.Mode, e.MaxHP))
 		}
 	}
 	for _, change := range a.Def.HPChanges {
-		hpDelta += resourceDelta(change.Value, change.Mode, e.MaxHP)
+		hpDelta += int64(resourceDelta(change.Value, change.Mode, e.MaxHP))
 	}
 	for _, change := range a.Def.MPChanges {
-		mpDelta += resourceDelta(change.Value, change.Mode, e.MaxMP)
+		mpDelta += int64(resourceDelta(change.Value, change.Mode, e.MaxMP))
 	}
-	if a.Def.ManaToHealthRate > 0 && e.MP+mpDelta > 0 && e.HP+hpDelta < e.MaxHP {
+	if a.Def.ManaToHealthRate > 0 && int64(e.MP)+mpDelta > 0 && int64(e.HP)+hpDelta < int64(e.MaxHP) {
 		mpDelta--
-		hpDelta += a.Def.ManaToHealthRate
+		hpDelta += int64(a.Def.ManaToHealthRate)
 	}
 	if (hpDelta == 0 && mpDelta == 0) || !e.Alive() {
 		return
@@ -717,16 +804,16 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 		src = o
 	}
 	if hpDelta > 0 {
-		s.emit(combat.Restore(src, e, hpDelta, int32(a.Def.ID)))
+		s.emit(combat.Restore(src, e, clampI32(hpDelta), int32(a.Def.ID)))
 	} else if hpDelta < 0 {
 		// 掉血。走一条独立的路径而不是 combat.Strike ——
 		// 周期伤害不判命中、不吃暴击、不触发“挨打还手”。
 		if gmGodEnabled(e) {
 			hpDelta = 0
 		} else {
-			dmg := -hpDelta
+			dmg := clampI32(-hpDelta)
 			e.HP -= dmg
-			ev := event.DamageDealt{Src: a.Source, Dst: e.ID, Amount: dmg, DstHP: e.HP}
+			ev := event.DamageDealt{Origin: domain.DamageDOTOrigin, Src: a.Source, Dst: e.ID, Amount: dmg, DstHP: e.HP}
 			if e.HP <= 0 {
 				e.HP = 0
 				ev.DstHP = 0
@@ -734,6 +821,9 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 			}
 			s.emit(ev)
 			s.afterCastDamage(ev, false)
+			if ev.Amount > 0 {
+				s.beginEndgameTrial()
+			}
 			if ev.Amount > 0 && e.Status != nil {
 				s.statusesRemoved(e, e.Status.RemoveWhere(func(d domain.StatusDef) bool {
 					return d.BreakOnDamage
@@ -747,7 +837,7 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 		}
 	}
 	if mpDelta != 0 {
-		e.MP += mpDelta
+		e.MP = clampI32(int64(e.MP) + mpDelta)
 		if e.MP < 0 {
 			e.MP = 0
 		}
@@ -768,7 +858,7 @@ func gmOneShotEnabled(e *entity.Entity) bool {
 
 func resourceDelta(value, mode, max int32) int32 {
 	if mode == domain.ModePercent {
-		return max * value / 100
+		return domain.SaturateInt32(int64(max) * int64(value) / 100)
 	}
 	return value
 }
@@ -790,7 +880,13 @@ func (s *Scene) refreshEntityStats(e *entity.Entity) {
 		return
 	}
 	// 从模板重新起算；固定 buff 与百分比 buff 分桶后一次性相加，禁止复利。
-	e.Stats = domain.ApplyStatusStats(def.Stats, e.Status.Affixes())
+	base := def.Stats
+	if s.rift != nil {
+		if scaled, exists := s.rift.baseStats[e.ID]; exists {
+			base = scaled
+		}
+	}
+	e.Stats = domain.ApplyMonsterStatusStats(base, e.Status)
 	applyStatusAttackCap(e)
 }
 
@@ -827,9 +923,14 @@ func applyStatusAttackCap(e *entity.Entity) {
 	}
 }
 
-// canAct 报告实体现在能不能行动(移动/攻击)。昏迷、冰冻、石化都不能。
+// canAct reports general action admission. Movement-only locks are checked by
+// canMove, leaving attacks and casts available while rooted.
 func canAct(e *entity.Entity) bool {
 	return (e.Player == nil || e.Player.RideAnchor == 0) && e.Status.Controlled() != domain.ControlStun
+}
+
+func canMove(e *entity.Entity) bool {
+	return (e.Player == nil || e.Player.RideAnchor == 0) && !e.Status.BlocksMovement()
 }
 
 func canDealDamage(e *entity.Entity) bool {

@@ -51,7 +51,7 @@ func SupportsEquipmentSuitAffix(a Affix) bool {
 		AttrHit, AttrMAtk, AttrMDef, AttrAtkSpeed, AttrMoveSpeed,
 		AttrPhysRes, AttrMagicRes, AttrStatusRes, AttrMaxWeight:
 		return true
-	case AttrCrit, AttrMCrit, AttrHPRegen:
+	case AttrCrit, AttrMCrit, AttrHPRegen, AttrEffectHitBP:
 		return a.Mode == ModeAbsolute
 	}
 	return false

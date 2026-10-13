@@ -36,9 +36,18 @@ type Saver interface {
 
 // Config 建场景所需的一切。
 type Config struct {
-	Trial         *domain.TrialRules
-	DungeonParty  func(domain.CharID) domain.DungeonParty
-	DungeonNotify func(string, string)
+	LootRules       *domain.LootRuleTable
+	RiftRules       *domain.RiftRuleTable
+	EndgameCatalog  *domain.EndgameCatalog
+	CubeRules       *domain.CubeRuleTable
+	RequireGrowthV5 bool
+
+	// RiftLayouts is the immutable, collision-validated startup map catalog.
+	RiftLayouts    []domain.RiftFloorTemplate
+	EndgameBackend domain.EndgameBackend
+	Trial          *domain.TrialRules
+	DungeonParty   func(domain.CharID) domain.DungeonParty
+	DungeonNotify  func(string, string)
 
 	PickupRange int32
 	ID          domain.SceneID
@@ -69,6 +78,9 @@ type Config struct {
 
 	// Portals 是本图的传送门。踩上去就走人。
 	Portals []domain.Portal
+	// RiftPortalAreas includes native gate geometry even when the scenery's
+	// public destination is unavailable. Only private rift admission reads it.
+	RiftPortalAreas []domain.Polygon
 	// Transports 是 NPC TransList 对应的权威目的地配置。
 	Transports domain.TransportTable
 	// Shops 是 NPC SellList 对应的权威库存配置。
@@ -189,19 +201,38 @@ func (r ReviveAt) Enabled() bool { return r.Scene.MapID != 0 }
 //
 // 除 mailbox / quit / log 外的所有字段, **只有场景 goroutine 能碰**。
 type Scene struct {
-	trial         *domain.TrialRules
-	trialLevel    int32
-	trialCleared  bool
-	dungeonParty  func(domain.CharID) domain.DungeonParty
-	dungeonNotify func(string, string)
+	lootRules       *domain.LootRuleTable
+	riftRules       *domain.RiftRuleTable
+	endgameCatalog  *domain.EndgameCatalog
+	cubeRules       *domain.CubeRuleTable
+	requireGrowthV5 bool
+
+	equipment     *equipmentRuntime
+	equipmentSeed uint64
+
+	riftLayouts     []domain.RiftFloorTemplate
+	endgameBackend  domain.EndgameBackend
+	endgamePlayers  map[domain.EntityID]*endgamePlayerState
+	astralRuneRegen map[domain.EntityID]astralRuneRegenClock
+	rift            *endgameRiftState
+	riftRequests    map[domain.EntityID]*endgameRiftRequestState
+	trialRun        *endgameTrialState
+	trial           *domain.TrialRules
+	trialLevel      int32
+	trialCleared    bool
+	dungeonParty    func(domain.CharID) domain.DungeonParty
+	dungeonNotify   func(string, string)
 
 	pickupRange int32
 	id          domain.SceneID
 	mailbox     chan Command
-	quit        chan struct{}
-	done        chan struct{} // Run 已退出；与 quit 分开，ctx 取消也会关闭它
-	log         *slog.Logger
-	saver       Saver
+	// Actor-owned command already dequeued while a preceding handoff is prepared.
+	// Retained across an unrelated handoff panic; never replayed after execution begins.
+	pendingMailbox Command
+	quit           chan struct{}
+	done           chan struct{} // Run 已退出；与 quit 分开，ctx 取消也会关闭它
+	log            *slog.Logger
+	saver          Saver
 	// postMu 把“确认仍接客 + 入 mailbox”与 Stop 的封门做成同一个顺序点。
 	// 锁只覆盖内存状态与非阻塞 send，绝不跨 IO。
 	postMu  sync.RWMutex
@@ -231,6 +262,7 @@ type Scene struct {
 	casts                []pendingCast                          // 本帧待结算的技能
 	hits                 map[domain.EntityID]*combat.HitTracker // 每个攻击者的命中步进器
 	rng                  *rand.Rand                             // 场景私有, 单线程用, 可复现
+	lootSeed             int64                                  // V5 natural quality/unique domains; never consumed by combat RNG
 	aiRng                *rand.Rand                             // AI 游荡独立随机流，不扰动伤害/掉落序列
 	playerAttackHitDelay time.Duration                          // 旧测试夹具兼容的固定命中延迟
 	combatTiming         domain.CombatTimingRule                // 正式普通攻击命中时序
@@ -238,59 +270,63 @@ type Scene struct {
 	spawner              *spawn.Spawner                         // nil = 这张图不刷怪
 	walkable             func(domain.Pos) bool                  // 怪物游荡和局部追击寻路的 MASK 判定
 	portals              []domain.Portal                        // 本图的传送门
-	transports           domain.TransportTable                  // NPC 传送菜单
-	shops                domain.ShopTable                       // NPC 商店库存
+	riftPortalAreas      []domain.Polygon
+	transports           domain.TransportTable // NPC 传送菜单
+	shops                domain.ShopTable      // NPC 商店库存
 	// portalBlocked 记录“刚被服务端传送到门区内”的玩家。只要仍处于任意
 	// 门区，后续移动包都不能再次触门；完全离开后才重新武装边沿触发。
 	portalBlocked map[domain.EntityID]struct{}
 	// moveWindows 只记真实客户端 0x1017 的短周期位移额度。传送和离场会清掉，
 	// 不进角色存档，也不跨场景交接。
-	moveWindows        map[domain.EntityID]playerMoveWindow
-	stallBrowsers      map[domain.EntityID]map[domain.EntityID]struct{}
-	levels             *domain.LevelTable               // 经验曲线
-	defs               spawn.Defs                       // 怪物模板, 结算经验时回查
-	items              map[domain.ItemID]domain.ItemDef // 物品模板
-	itemIcons          []domain.ItemIconMapping         // 0x804d 特殊图标覆盖
-	itemIconsKnown     bool
-	skills             domain.SkillTable    // 技能定义
-	statuses           domain.StatusTable   // 状态定义
-	statusOverlay      domain.StatusOverlay // 状态叠加矩阵
-	quests             domain.QuestTable    // 任务定义
-	dungeons           domain.DungeonTable  // 副本表
-	works              domain.WorkTable     // 打工定义
-	nianliCreation     domain.NianliCreationTable
-	requireWorkGather  bool               // 收益是否必须由 0x1025 触发
-	crafts             domain.CraftTable  // 合成配方
-	refines            domain.RefineTable // 精炼配方
-	sockets            domain.SocketTable // 打孔/镶嵌配方
-	washes             domain.WashTable   // 洗练配方
-	warehouseRule      domain.WarehouseRule
-	wardrobes          domain.WardrobeTable
-	wardrobeRule       domain.WardrobeRule
-	hairRules          domain.HairRules
-	stallOpenItems     domain.StallOpenItems
-	rack               domain.RackCatalog
-	depositRule        domain.DepositRule
-	petDefs            domain.PetTable                  // 宠物种族表
-	petLvls            *domain.PetLevelTable            // 宠物经验曲线
-	petFoods           map[domain.ItemID]domain.PetFood // 宠物食物
-	petPrefixes        domain.PetPrefixTable
-	petSkills          domain.PetSkillTable
-	petLearnItems      map[domain.ItemID]domain.PetLearningItem
-	petPPAiCap         int32
-	rideInviteSeconds  int32
-	petRule            domain.PetRule
-	skipNPC            bool                // 排查用: 不下发 NPC 落位
-	stamina            domain.StaminaRule  // 耐力规则
-	rest               domain.RestRule     // 坐下休息规则
-	death              domain.DeathRule    // 玩家死亡损失规则
-	penalty            domain.LevelPenalty // 跨级打怪的等级差惩罚
-	now                func() time.Time    // 取当前时间(耐力每日回满用)
-	dungeon            *domain.DungeonDef  // 非 nil = 本场景是副本实例
-	dungeonElapsedBase domain.Tick         // 本层创建前副本已消耗的帧数
-	everOccupied       bool                // 已有玩家真正进入过；单层副本人数归零后立即销毁
-	dungeonEncounters  domain.DungeonEncounterTable
-	encounterDone      map[domain.MonsterID]bool
+	moveWindows                map[domain.EntityID]playerMoveWindow
+	stallBrowsers              map[domain.EntityID]map[domain.EntityID]struct{}
+	levels                     *domain.LevelTable               // 经验曲线
+	defs                       spawn.Defs                       // 怪物模板, 结算经验时回查
+	items                      map[domain.ItemID]domain.ItemDef // 物品模板
+	itemIcons                  []domain.ItemIconMapping         // 0x804d 特殊图标覆盖
+	itemIconsKnown             bool
+	skillRawCache              map[domain.EntityID]skillRawCacheEntry
+	skillViewDigests           map[domain.EntityID][32]byte
+	skillProgressionRefreshing bool
+	skills                     domain.SkillTable    // 技能定义
+	statuses                   domain.StatusTable   // 状态定义
+	statusOverlay              domain.StatusOverlay // 状态叠加矩阵
+	quests                     domain.QuestTable    // 任务定义
+	dungeons                   domain.DungeonTable  // 副本表
+	works                      domain.WorkTable     // 打工定义
+	nianliCreation             domain.NianliCreationTable
+	requireWorkGather          bool               // 收益是否必须由 0x1025 触发
+	crafts                     domain.CraftTable  // 合成配方
+	refines                    domain.RefineTable // 精炼配方
+	sockets                    domain.SocketTable // 打孔/镶嵌配方
+	washes                     domain.WashTable   // 洗练配方
+	warehouseRule              domain.WarehouseRule
+	wardrobes                  domain.WardrobeTable
+	wardrobeRule               domain.WardrobeRule
+	hairRules                  domain.HairRules
+	stallOpenItems             domain.StallOpenItems
+	rack                       domain.RackCatalog
+	depositRule                domain.DepositRule
+	petDefs                    domain.PetTable                  // 宠物种族表
+	petLvls                    *domain.PetLevelTable            // 宠物经验曲线
+	petFoods                   map[domain.ItemID]domain.PetFood // 宠物食物
+	petPrefixes                domain.PetPrefixTable
+	petSkills                  domain.PetSkillTable
+	petLearnItems              map[domain.ItemID]domain.PetLearningItem
+	petPPAiCap                 int32
+	rideInviteSeconds          int32
+	petRule                    domain.PetRule
+	skipNPC                    bool                // 排查用: 不下发 NPC 落位
+	stamina                    domain.StaminaRule  // 耐力规则
+	rest                       domain.RestRule     // 坐下休息规则
+	death                      domain.DeathRule    // 玩家死亡损失规则
+	penalty                    domain.LevelPenalty // 跨级打怪的等级差惩罚
+	now                        func() time.Time    // 取当前时间(耐力每日回满用)
+	dungeon                    *domain.DungeonDef  // 非 nil = 本场景是副本实例
+	dungeonElapsedBase         domain.Tick         // 本层创建前副本已消耗的帧数
+	everOccupied               bool                // 已有玩家真正进入过；单层副本人数归零后立即销毁
+	dungeonEncounters          domain.DungeonEncounterTable
+	encounterDone              map[domain.MonsterID]bool
 
 	// emptySince 是这个实例空掉的那一帧。0 表示现在有人。
 	emptySince     domain.Tick
@@ -364,6 +400,14 @@ func New(cfg Config) *Scene {
 			(int64(cfg.ID.MapID) << 32) ^ int64(cfg.ID.Instance)
 	}
 	s := &Scene{
+		lootRules:            cfg.LootRules,
+		riftRules:            cfg.RiftRules,
+		endgameCatalog:       cfg.EndgameCatalog,
+		cubeRules:            cfg.CubeRules,
+		requireGrowthV5:      cfg.RequireGrowthV5,
+		equipmentSeed:        uint64(cfg.Seed),
+		riftLayouts:          cfg.RiftLayouts,
+		endgameBackend:       cfg.EndgameBackend,
 		id:                   cfg.ID,
 		mailbox:              make(chan Command, cfg.Mailbox),
 		quit:                 make(chan struct{}),
@@ -379,6 +423,7 @@ func New(cfg Config) *Scene {
 		aoi:                  newAOI(cfg.CellSize),
 		hits:                 map[domain.EntityID]*combat.HitTracker{},
 		rng:                  rand.New(rand.NewSource(cfg.Seed)),
+		lootSeed:             cfg.Seed,
 		aiRng:                rand.New(rand.NewSource(cfg.Seed ^ 0x5deece66d)),
 		playerAttackHitDelay: cfg.PlayerAttackHitDelay,
 		combatTiming:         cfg.CombatTiming,
@@ -389,6 +434,7 @@ func New(cfg Config) *Scene {
 		trial:                cfg.Trial, dungeonParty: cfg.DungeonParty, dungeonNotify: cfg.DungeonNotify,
 		walkable:          cfg.Walkable,
 		portals:           cfg.Portals,
+		riftPortalAreas:   cfg.RiftPortalAreas,
 		transports:        cfg.Transports,
 		shops:             cfg.Shops,
 		portalBlocked:     map[domain.EntityID]struct{}{},
@@ -477,6 +523,7 @@ func (s *Scene) placeNPCs(list []domain.NPCSpawn) {
 			// sprite 的资源名是 "npc" + 模型号(见 data.NpcEntry.Index 的注释)。
 			// 立绘使用数据库中核实过的资源名；未配置时保持为空。
 			NPC: &entity.NPCInfo{
+				ConfigID: n.NPCID,
 				Sprite:   fmt.Sprintf("npc%d", n.Sprite),
 				Portrait: n.Portrait,
 				Script:   n.Script,
@@ -695,6 +742,7 @@ func (s *Scene) hitFrame(now time.Time) (ok bool) {
 			ok = s.panics < maxPanicsInARow
 		}
 	}()
+	s.stepEquipmentAuras()
 	s.stepCastsAt(now, true)
 	s.stepCombatAt(now, true)
 	s.flush()
@@ -740,19 +788,23 @@ func (s *Scene) drainForShutdown() {
 		s.execTracked(enter)
 	}
 	for {
-		select {
-		case c := <-s.mailbox:
-			// 关服时不再发起新的跨场景所有权交接。Router 已封门，
-			// 若执行 onTeleport，玩家会先从源场景删除，再因目标
-			// Post 失败而两边都不保存。保留在源场景才能被最终快照。
-			if cmd, ok := c.(Teleport); ok && cmd.To != s.id {
-				s.log.Debug("关服时保留玩家在原场景", "id", cmd.ID, "to", cmd.To)
-				continue
+		c := s.pendingMailbox
+		if c == nil {
+			select {
+			case c = <-s.mailbox:
+			default:
+				return
 			}
-			s.execTracked(c)
-		default:
-			return
 		}
+		s.pendingMailbox = nil
+		// 关服时不再发起新的跨场景所有权交接。Router 已封门，
+		// 若执行 onTeleport，玩家会先从源场景删除，再因目标
+		// Post 失败而两边都不保存。保留在源场景才能被最终快照。
+		if cmd, ok := c.(Teleport); ok && cmd.To != s.id {
+			s.log.Debug("关服时保留玩家在原场景", "id", cmd.ID, "to", cmd.To)
+			continue
+		}
+		s.execTracked(c)
 	}
 }
 
@@ -792,20 +844,38 @@ func (s *Scene) frame() (ok bool) {
 // 到达顺序无关(除了显式排序的部分), 这是"可复现"的前提。
 // 循环有上界, 否则一个疯狂刷包的客户端能让这里永远出不去。
 func (s *Scene) drain() {
-	for {
+	s.drainHandoffs()
+	for i := 0; i < cap(s.mailbox); i++ {
+		if s.pendingMailbox == nil {
+			select {
+			case s.pendingMailbox = <-s.mailbox:
+			default:
+				return
+			}
+		}
+		// A source actor can hand off while this actor is already inside its
+		// mailbox loop. Session rebinding precedes MapReady/Leave enqueueing,
+		// so after dequeue their Enter is guaranteed to be available here.
+		// Keep the dequeued command if an unrelated Enter panics during preparation.
+		s.drainHandoffs()
+		c := s.pendingMailbox
+		s.pendingMailbox = nil // Once its own execution begins, preserve existing panic semantics.
+		s.execTracked(c)
+	}
+}
+
+func (s *Scene) drainHandoffs() {
+	// Only the accepted prefix present at this boundary precedes the dequeued
+	// command. Continuous incoming transfers must not starve that mailbox command.
+	s.postMu.RLock()
+	count := len(s.handoffs)
+	s.postMu.RUnlock()
+	for i := 0; i < count; i++ {
 		enter, ok := s.popHandoff()
 		if !ok {
-			break
-		}
-		s.execTracked(enter)
-	}
-	for i := 0; i < cap(s.mailbox); i++ {
-		select {
-		case c := <-s.mailbox:
-			s.execTracked(c)
-		default:
 			return
 		}
+		s.execTracked(enter)
 	}
 }
 
@@ -843,6 +913,10 @@ func (s *Scene) execTracked(c Command) {
 // finalizePendingEnters 仅用于场景因连续 panic 放弃恢复之后。此时执行普通命令可能
 // 继续破坏状态；未入场 Enter 的加载快照却仍是完整所有权，可以安全直接写回。
 func (s *Scene) finalizePendingEnters() {
+	if enter, ok := s.pendingMailbox.(Enter); ok {
+		s.finalizeUnentered(enter)
+	}
+	s.pendingMailbox = nil
 	for {
 		enter, ok := s.popHandoff()
 		if !ok {
@@ -883,24 +957,30 @@ func (s *Scene) finalizeUnentered(cmd Enter) {
 
 // step 推进一帧的游戏逻辑。**顺序是固定的, 不能随便调。**
 func (s *Scene) step() {
+	s.finishEndgame(false)
+	s.stepEndgameRift()
 	s.finishReadyTrades(false)
 	s.tick++
 	if s.dungeon == nil && s.spawner != nil && s.tick%spawn.EliteChanceInterval == 0 {
 		s.spawner.RecordMinute()
 	}
-	s.timer.advance(s.tick)     // 1. 冷却/刷怪/重生/尸体移除
-	s.stepStatus()              // 2. 状态: 周期触发与到期。**必须在任何人行动之前**
-	s.stepRest()                // 3. 坐下休息: 周期恢复生命
-	s.stepWork()                // 4. 打工: 结算与扣耐力
-	s.stepNianli()              // 5. 念力: 只累计在线时间
-	s.stepPets()                // 6. 宠物: 跟随主人、推进出战期饥饿与信赖
-	s.stepAI()                  // 7. 怪物寻敌、移动、决定出手
-	s.stepTraps()               // 8. 怪物踏入后触发上一帧已经落地的陷阱
-	s.stepCasts()               // 9. 结算本帧全部技能
-	s.stepCombat()              // 10. 结算本帧全部普通攻击
-	s.checkDungeonEligibility() // 11. 副本退队宽限到期时只清退本人
-	s.flush()                   // 12. 按 AOI 把本帧事件广播出去
-	s.checkInstanceLife()       // 13. 副本实例: 限时到 / 空了就收摊
+	s.timer.advance(s.tick) // 1. 冷却/刷怪/重生/尸体移除
+	if s.rift == nil || s.riftCombatReady() {
+		s.stepStatus()
+	} // 2. 状态: 周期触发与到期。**必须在任何人行动之前**
+	s.stepEquipmentAuras()
+	s.stepRest()                   // 3. 坐下休息: 周期恢复生命
+	s.stepAstralRuneRegeneration() // Standalone 轸 rune: flat, online-only recovery.
+	s.stepWork()                   // 4. 打工: 结算与扣耐力
+	s.stepNianli()                 // 5. 念力: 只累计在线时间
+	s.stepPets()                   // 6. 宠物: 跟随主人、推进出战期饥饿与信赖
+	s.stepAI()                     // 7. 怪物寻敌、移动、决定出手
+	s.stepTraps()                  // 8. 怪物踏入后触发上一帧已经落地的陷阱
+	s.stepCasts()                  // 9. 结算本帧全部技能
+	s.stepCombat()                 // 10. 结算本帧全部普通攻击
+	s.checkDungeonEligibility()    // 11. 副本退队宽限到期时只清退本人
+	s.flush()                      // 12. 按 AOI 把本帧事件广播出去
+	s.checkInstanceLife()          // 13. 副本实例: 限时到 / 空了就收摊
 
 	if s.tick%s.saveEvery == 0 {
 		s.saveDirty()
@@ -918,6 +998,9 @@ func (s *Scene) stepCombat() {
 // stepCombatAt 在主帧或精确命中相位结算攻击。timedOnly=true 时保留怪物/宠物
 // 的主帧攻击，避免 50ms 表现定时器改变它们原有的攻速节奏。
 func (s *Scene) stepCombatAt(now time.Time, timedOnly bool) {
+	if s.rift != nil && !s.riftCombatReady() {
+		return
+	}
 	if len(s.attacks) == 0 {
 		return
 	}
@@ -953,6 +1036,14 @@ func (s *Scene) stepCombatAt(now time.Time, timedOnly bool) {
 			tr = &combat.HitTracker{}
 			s.hits[src.ID] = tr
 		}
+		finishEquipment := s.beginEquipmentRoot(src.ID, dst.ID, at.blow.EquipmentOffense)
+		s.equipment.root.source = at.blow.SourceOffense
+		if !at.blow.EquipmentSnapshot {
+			s.equipment.root.offense = s.equipmentOffense(src)
+		}
+		if at.counter {
+			at.blow.Origin = domain.DamageCounterOrigin
+		}
 		ev, rawDamage, fullMagicReflect := s.resolveStrikeStatuses(src, dst, tr, at.blow)
 		// 伤害数值是**平衡性问题的唯一入口**: 打不死怪时, 光看"有没有伤害包"
 		// 分不出是没打中还是每下只有三十点(实测 63 级角色因为六维是空的,
@@ -974,6 +1065,7 @@ func (s *Scene) stepCombatAt(now time.Time, timedOnly bool) {
 		if ev.Flag.Has(event.DamageFatal) {
 			s.onDeath(dst, src.ID)
 		}
+		finishEquipment()
 	}
 	for i := len(waiting); i < originalLen; i++ {
 		s.attacks[i] = pendingAttack{}
@@ -996,7 +1088,7 @@ func (s *Scene) passiveCounterPending(defender, attacker *entity.Entity) (pendin
 		return pendingAttack{}, false
 	}
 	ch := defender.Player.Char
-	for skill, level := range ch.Skills {
+	for skill, level := range s.rawSkillLevels(defender) {
 		passive, ok := s.skills.Get(skill, level)
 		if !ok || passive.Kind != domain.SkillPassive || passive.PassiveCounter == nil ||
 			!ch.AllowsSkill(passive.ID, passive.Prof) {
@@ -1023,6 +1115,16 @@ func (s *Scene) passiveCounterPending(defender, attacker *entity.Entity) (pendin
 // 死亡与「从视野里消失」是两件事: 死亡是**战斗结果**(要结算经验/掉落/仇恨),
 // 消失是**视野事件**(只影响渲染)。所以先发 EntityDied, 尸体停留若干帧后才移除。
 func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
+	// Freeze before kill XP, durability/lifecycle updates or rewards can change MF.
+	lootContext := s.freezeLootContextV5(killer)
+	delete(s.astralRuneRegen, dead.ID)
+	if s.equipment != nil {
+		s.equipment.nextAuraScan = 0
+		s.stepEquipmentAuras()
+	}
+	if dead.Monster != nil && s.rift == nil {
+		s.beginEndgameTrial()
+	}
 	if dead.Monster != nil {
 		s.monsterSpeak(dead, domain.MonsterSceneDie)
 	} else if dead.Kind == domain.KindPlayer {
@@ -1032,7 +1134,7 @@ func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
 	}
 	s.endSharedRide(dead)
 	s.clearCastWindup(dead.ID)
-	if dead.Kind == domain.KindPlayer {
+	if dead.Kind == domain.KindPlayer && s.rift == nil {
 		s.consumeDeathDurability(dead)
 	}
 	// 死亡会终止本次战斗产生的状态，只保留跨死亡继续计时的经验增益。
@@ -1049,7 +1151,9 @@ func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
 		AllowSkillRevive: dead.Kind == domain.KindPlayer,
 	})
 	if dead.Kind == domain.KindPlayer {
-		s.recordPlayerDeathLoss(dead)
+		if !s.onEndgameRiftPlayerDeath(dead) {
+			s.recordPlayerDeathLoss(dead)
+		}
 	}
 
 	// 打它的那些怪要脱战, 否则会一直对着尸体挥空
@@ -1076,12 +1180,12 @@ func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
 	}
 
 	// 临时召唤物不代表刷怪点产出，不提供经验、任务进度或掉落。
-	if dead.Monster == nil || dead.Monster.Summoner == 0 {
+	if !s.onEndgameRiftMonsterDeath(dead, s.entities[killer]) && (dead.Monster == nil || dead.Monster.Summoner == 0) {
 		// 结算击杀回报：任务专属收集品直入背包；普通掉落仍生成地面实体。
 		s.recordQuestKill(dead, killer)
 		s.grantQuestDrops(dead, killer)
 		s.awardKill(dead, killer)
-		s.rollLoot(dead, killer)
+		s.rollLootWithContextV5(dead, lootContext)
 		s.requestFirstKillTip(dead, killer)
 		s.advanceDungeonEncounter(dead)
 		s.updateTrialClear()
@@ -1186,14 +1290,12 @@ func (s *Scene) attributeSnapshot(e *entity.Entity) event.StatsChanged {
 	copy(current, ch.Attrs)
 	current[0] = ch.Level
 	current[1] = nonnegativeI32(ch.Exp)
-	if s.levels != nil {
+	if s.levels != nil && ch.Level < domain.LevelCap {
 		current[2] = nonnegativeI32(s.levels.Need(ch.Level))
 	}
-	base := ch.EffectiveBase()
-	finalBase, _ := domain.Compute(domain.StatSource{
-		Base: base, Level: ch.Level, Innate: domain.Stats{MoveSpeed: baseMoveSpeed},
-		Worn: s.functionalWorn(e), Defs: s.itemDef, Status: e.Status,
-	})
+	// Use the same functional-equipment preview as combat, including growth
+	// primary stats. Unusable worn items cannot leak passive/rune stats to the panel.
+	finalBase, _, _ := s.computeSkillGrowthStats(e, s.functionalWorn(e))
 	writeKnownClientAttributes(current, finalBase, e.Stats)
 	current[24] = ch.FreePoints
 	current[clientAttrNianli] = ch.EffectiveNianli()
@@ -1304,6 +1406,7 @@ func (s *Scene) spawnEvent(e *entity.Entity) event.EntitySpawned {
 	ev.Ground = &event.GroundItemView{
 		Item: e.Drop.Item, Count: e.Drop.Count, Owner: e.Drop.Owner,
 		ProtectionMS: int32(protectionMS), Quality: quality,
+		UniqueID: s.groundUniqueID(e.Drop.Stack), DropToken: e.Drop.PresentationToken,
 	}
 	return ev
 }
@@ -1447,6 +1550,8 @@ func (s *Scene) snapshotOf(e *entity.Entity) domain.Snapshot {
 func (s *Scene) shutdown(reason string) {
 	// WriteBack stays alive until all scenes have drained. Resolve each accepted
 	// pair before saving final snapshots, even after normal Post has been closed.
+	s.finishEndgame(true)
+	s.finishEndgameRunWrites()
 	s.finishReadyTrades(true)
 	s.log.Info("场景停止", "reason", reason, "tick", s.tick, "在线", len(s.players))
 	for _, e := range s.players {

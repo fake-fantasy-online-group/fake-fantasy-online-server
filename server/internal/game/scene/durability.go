@@ -14,6 +14,23 @@ const (
 	durabilityWearDeath
 )
 
+// A pending hit belongs to this equipment instance and original slot. Persisted
+// equipment always has a UID; zero-UID fixtures cannot safely replay after swaps.
+type durabilityWearTarget struct {
+	slot domain.EquipSlot
+	uid  int64
+	item domain.ItemID
+	raw  int32
+}
+
+func (target durabilityWearTarget) stillWorn(p *entity.Entity) bool {
+	if p == nil || p.Player == nil || p.Player.Worn == nil || target.uid == 0 {
+		return false
+	}
+	st := p.Player.Worn.At(target.slot)
+	return !st.Empty() && st.UID == target.uid && st.Item == target.item
+}
+
 // consumeAttackDurability 在一次已经结算的玩家攻击/伤害技能之后磨损当前武器。
 // miss 也算完成一次攻击动作；本次伤害仍使用出手前属性，武器若在本次归零，
 // 从下一次行动起才失效。
@@ -45,6 +62,14 @@ func (s *Scene) consumeSkillWeaponDurability(p *entity.Entity, cost skillWeaponD
 	if !ok || st.Empty() || def.Equip == nil {
 		return
 	}
+	target := durabilityWearTarget{slot: cost.slot, uid: st.UID, item: st.Item}
+	if s.deferTradeMutation(p.ID, func() {
+		if target.stillWorn(p) {
+			s.consumeSkillWeaponDurability(p, cost, skill)
+		}
+	}) {
+		return
+	}
 	st.Durability -= cost.amount
 	broken := st.Durability <= 0
 	if broken {
@@ -70,8 +95,7 @@ func (s *Scene) consumeWornDurability(p *entity.Entity, kind durabilityWearKind)
 	if p == nil || p.Kind != domain.KindPlayer || p.Player == nil || p.Player.Worn == nil {
 		return
 	}
-	oldTreasureSkill := s.equippedTreasureSkill(p)
-	changedAny, displayChanged, equipmentBroke := false, false, false
+	var targets []durabilityWearTarget
 	p.Player.Worn.Each(func(slot domain.EquipSlot, st domain.Stack) {
 		def, ok := s.itemDef(st.Item)
 		if !ok || def.Equip == nil {
@@ -92,19 +116,47 @@ func (s *Scene) consumeWornDurability(p *entity.Entity, kind durabilityWearKind)
 		case durabilityWearDeath:
 			raw = def.Equip.DeathDurabilityCostRaw
 		}
-		changed, visible, broken := domain.ConsumeDurabilityRaw(&st, def, raw)
+		// Check a value copy: a broken/infinite-durability item incurs no wear,
+		// and the effective passive-adjusted cost belongs to the original hit.
+		if changed, _, _ := domain.ConsumeDurabilityRaw(&st, def, raw); changed {
+			targets = append(targets, durabilityWearTarget{slot: slot, uid: st.UID, item: st.Item, raw: raw})
+		}
+	})
+	if len(targets) > 0 {
+		s.applyWornDurability(p, kind, targets, false)
+	}
+}
+func (s *Scene) applyWornDurability(p *entity.Entity, kind durabilityWearKind, targets []durabilityWearTarget, deferred bool) {
+	if p == nil || p.Player == nil || p.Player.Worn == nil {
+		return
+	}
+	if s.deferTradeMutation(p.ID, func() { s.applyWornDurability(p, kind, targets, true) }) {
+		return
+	}
+	oldTreasureSkill := s.equippedTreasureSkill(p)
+	changedAny, displayChanged, equipmentBroke := false, false, false
+	for _, target := range targets {
+		if deferred && !target.stillWorn(p) {
+			continue
+		}
+		st := p.Player.Worn.At(target.slot)
+		def, ok := s.itemDef(st.Item)
+		if !ok || def.Equip == nil {
+			continue
+		}
+		changed, visible, broken := domain.ConsumeDurabilityRaw(&st, def, target.raw)
 		if !changed {
-			return
+			continue
 		}
 		changedAny = true
 		displayChanged = displayChanged || visible
 		equipmentBroke = equipmentBroke || broken
 		if broken && def.Equip.DisappearIfZero {
-			p.Player.Worn.Set(slot, domain.Stack{})
+			p.Player.Worn.Set(target.slot, domain.Stack{})
 		} else {
-			p.Player.Worn.Set(slot, st)
+			p.Player.Worn.Set(target.slot, st)
 		}
-	})
+	}
 	if !changedAny {
 		return
 	}
@@ -132,7 +184,7 @@ func (s *Scene) attackDurabilityReductionPct(p *entity.Entity, equipType int32) 
 	}
 	ch := p.Player.Char
 	var reduction int32
-	for skill, level := range ch.Skills {
+	for skill, level := range s.rawSkillLevels(p) {
 		passive, ok := s.skills.Get(skill, level)
 		if !ok || passive.Kind != domain.SkillPassive || !ch.AllowsSkill(passive.ID, passive.Prof) ||
 			passive.RequiredWeaponType != 0 && passive.RequiredWeaponType != equipType {

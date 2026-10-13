@@ -355,7 +355,7 @@ func (s *Scene) petSnapshot(owner *entity.Entity) event.PetSnapshot {
 func (s *Scene) petView(inst *domain.PetInstance, def domain.PetDef) event.PetView {
 	st := domain.DeriveFromBase(inst.Base)
 	var need int64
-	if s.petLvls != nil {
+	if s.petLvls != nil && inst.Level < domain.PetLevelCap && (def.MaxLevel <= 0 || inst.Level < def.MaxLevel) {
 		need = s.petLvls.Need(inst.Level)
 	}
 	return event.PetView{
@@ -1489,16 +1489,14 @@ func (s *Scene) despawnOrphanPet(e *entity.Entity) {
 // **不从主人那份里扣**（见 domain.SharedExp）。
 // 上限按 PetCapFor 算：宠物不能超过主人。
 func (s *Scene) grantPetExp(owner *entity.Entity, exp int64) {
-	if owner.Player == nil || owner.Player.Pet == 0 || s.petLvls == nil {
+	e := s.experienceEligiblePet(owner)
+	if e == nil || s.petLvls == nil {
 		return
 	}
-	e, ok := s.entities[owner.Player.Pet]
-	if !ok || e.Pet == nil || e.Pet.Inst == nil {
+	share, err := domain.PetRewardExperience(exp, owner.Player.PetExperienceBonusPct(s.tick))
+	if err != nil {
+		s.log.Error("pet experience rejected", "error", err)
 		return
-	}
-	share := domain.SharedExp(exp)
-	if bonus := owner.Player.PetExperienceBonusPct(s.tick); bonus > 0 {
-		share += share * int64(bonus) / 100
 	}
 	if share <= 0 {
 		return
@@ -1516,6 +1514,10 @@ func (s *Scene) addPetExperience(owner, e *entity.Entity, experience int64, cap 
 	prefix, _ := s.petPrefixes.Find(inst.Prefix)
 	fromLevel := inst.Level
 	res := inst.AddExpWithPrefix(def, prefix, s.petLvls, experience, cap)
+	if res.Reason != "" {
+		s.log.Error("pet experience rejected", "reason", res.Reason)
+		return res
+	}
 	owner.Player.MarkDirty()
 
 	if res.Levels > 0 {
@@ -1532,7 +1534,7 @@ func (s *Scene) addPetExperience(owner, e *entity.Entity, experience int64, cap 
 		inst.HP, inst.MP = e.HP, e.MP
 	}
 	s.emitTo(owner.ID, event.PetExpGained{Who: owner.ID, Inst: inst.ID,
-		Exp: experience, Level: inst.Level, Ups: res.Levels})
+		Exp: res.AppliedExp, Level: inst.Level, Ups: res.Levels})
 	s.pushPetSnapshot(owner)
 	return res
 }
@@ -1541,7 +1543,11 @@ func (s *Scene) addPetExperience(owner, e *entity.Entity, experience int64, cap 
 // 指定领悟；药丸失败后仍保留本级自然领悟机会，成功则本级不再额外抽一个技能。
 func (s *Scene) resolvePetSkillLevelUp(owner *entity.Entity, inst *domain.PetInstance,
 	def domain.PetDef, level int32) {
-	upgraded := inst.LevelKnownSkills(s.petSkills)
+	s.resolvePetSkillLevelUpWithRNG(inst, def, level, s.rng.Intn)
+}
+
+func (s *Scene) resolvePetSkillLevelUpWithRNG(inst *domain.PetInstance, def domain.PetDef, level int32, intn func(int) int) {
+	inst.LevelKnownSkills(s.petSkills)
 	learned := domain.SkillID(0)
 
 	if pending := inst.PendingLearn; pending.Item != 0 {
@@ -1549,12 +1555,12 @@ func (s *Scene) resolvePetSkillLevelUp(owner *entity.Entity, inst *domain.PetIns
 		skillDef, exists := s.petSkills[pending.Skill]
 		chance := s.petLearningChance(inst, pending.ChanceBP)
 		if exists && skillDef.LearnLevel <= level && s.canLearnPetSkill(inst, def, pending.Skill) && chance > 0 &&
-			int32(s.rng.Intn(10000)) < chance && s.learnPetSkill(inst, pending.Skill) {
+			int32(intn(10000)) < chance && s.learnPetSkill(inst, pending.Skill) {
 			learned = pending.Skill
 		}
 	}
 	naturalChance := s.petLearningChance(inst, s.petRule.NaturalLearnChanceBP)
-	if learned == 0 && naturalChance > 0 && int32(s.rng.Intn(10000)) < naturalChance {
+	if learned == 0 && naturalChance > 0 && int32(intn(10000)) < naturalChance {
 		pool := make([]domain.SkillID, 0, len(def.Learnable))
 		for _, id := range def.Learnable {
 			if skillDef, ok := s.petSkills[id]; ok && skillDef.LearnLevel <= level &&
@@ -1563,20 +1569,13 @@ func (s *Scene) resolvePetSkillLevelUp(owner *entity.Entity, inst *domain.PetIns
 			}
 		}
 		if len(pool) > 0 {
-			candidate := pool[s.rng.Intn(len(pool))]
+			candidate := pool[intn(len(pool))]
 			if s.learnPetSkill(inst, candidate) {
 				learned = candidate
 			}
 		}
 	}
-	if len(upgraded) > 0 || learned != 0 {
-		learnedName := ""
-		if skill, ok := s.petSkills[learned]; ok {
-			learnedName = skill.Name
-		}
-		s.log.Info("宠物升级技能结算", "char", owner.Name, "宠实例", inst.ID,
-			"等级", level, "升级技能数", len(upgraded), "新领悟", learnedName)
-	}
+
 }
 
 // ── 饥饿与信赖 ──
@@ -1809,6 +1808,9 @@ func (s *Scene) nearestPickable(e *entity.Entity, owner *entity.Entity) *entity.
 // 宠物没有自己的背包 —— 给它一个就得回答"宠物死了里面的东西去哪"，
 // 而那个问题的任何答案都会让人丢东西。
 func (s *Scene) petTake(e *entity.Entity, owner *entity.Entity, drop *entity.Entity) {
+	if s.pickUpEndgameRiftReward(owner, drop, petPickupRange) {
+		return
+	}
 	if owner.Player.TradeBusy {
 		return // Keep the drop on the ground; the pet retries after settlement.
 	}
@@ -1817,7 +1819,15 @@ func (s *Scene) petTake(e *entity.Entity, owner *entity.Entity, drop *entity.Ent
 		s.removeLoot(drop.ID, event.DespawnPickedUp) // 配置没了, 别让它永远躺着
 		return
 	}
-	left := owner.Player.Bag.Add(def, drop.Drop.Count)
+	itemName := def.Name
+	left := drop.Drop.Count
+	if drop.Drop.Stack.Empty() {
+		left = owner.Player.Bag.Add(def, drop.Drop.Count)
+	} else {
+		// Transfer the owned instance, never recreate its UID or rolled metadata.
+		itemName = itemDisplayName(def, drop.Drop.Stack)
+		left = owner.Player.Bag.AddStack(def, drop.Drop.Stack)
+	}
 	if left == drop.Drop.Count {
 		// 一件都装不下: 说一次就别再刷屏了, 让它回去跟着主人
 		if !e.Pet.BagWarned {
@@ -1833,10 +1843,13 @@ func (s *Scene) petTake(e *entity.Entity, owner *entity.Entity, drop *entity.Ent
 
 	if left > 0 {
 		drop.Drop.Count = left // 只装下一部分, 剩下的留在地上
+		if !drop.Drop.Stack.Empty() {
+			drop.Drop.Stack.Count = left
+		}
 		return
 	}
 	s.removeLoot(drop.ID, event.DespawnPickedUp)
 	s.emitTo(owner.ID, event.PetPickedUp{Who: owner.ID, Pet: e.ID,
-		Item: int32(def.ID), Name: def.Name})
-	s.log.Debug("宠物拾取", "char", owner.Name, "宠", e.Name, "物品", def.Name)
+		Item: int32(def.ID), Name: itemName})
+	s.log.Debug("宠物拾取", "char", owner.Name, "宠", e.Name, "物品", itemName)
 }

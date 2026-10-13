@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -12,8 +15,8 @@ import (
 //	蜗壳笛(24)     小叶发布   1~10级  交蜗牛壳(4161)×20
 //	糊涂的妈妈(22) 纪宓发布   1~10级  纯对话
 var (
-	蜗牛壳 = domain.ItemDef{ID: 4161, Name: "蜗牛壳", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
-	铁护头 = domain.ItemDef{ID: 2001, Name: "铁护头", InventoryTab: 2, InventoryTabKnown: true, Stackable: false,
+	蜗牛壳 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 4161, Name: "蜗牛壳", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
+	铁护头 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 2001, Name: "铁护头", InventoryTab: 2, InventoryTabKnown: true, Stackable: false,
 		Equip: &domain.EquipDef{Slot: int32(domain.SlotHead), Durable: 50}}
 
 	交物任务 = domain.QuestDef{
@@ -50,7 +53,7 @@ func questTable(defs ...domain.QuestDef) domain.QuestTable {
 // questScene 建一个有 NPC「小叶」站在 (120,100) 的场景, 玩家在 (100,100)。
 func questScene(t *testing.T) (*Scene, *fakeSink) {
 	t.Helper()
-	s := New(Config{
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(),
 		ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000, Seed: 31,
 		Alloc:  domain.NewEntityAlloc(),
 		Quests: questTable(交物任务, 对话任务, 高级任务, 重复任务),
@@ -96,7 +99,7 @@ func TestNPCsAreEntities(t *testing.T) {
 
 // 玩家进图应看到附近的 NPC 出场。
 func TestPlayerSeesNPC(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000,
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000,
 		Alloc: domain.NewEntityAlloc(),
 		NPCs:  []domain.NPCSpawn{{Name: "小叶", Sprite: 601, Pos: domain.Pos{MapID: 7, X: 120, Y: 100}}}})
 	sink := join(t, s, 1, 100, "甲", 100, 100)
@@ -374,7 +377,7 @@ func TestQuestMarksDirty(t *testing.T) {
 
 // 没配任务表的场景不该崩。
 func TestNoQuestTableIsSafe(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000})
 	join(t, s, 1, 100, "甲", 100, 100)
 	s.step()
 	s.exec(AcceptQuest{ID: 1, Quest: 24, NPC: "小叶"})

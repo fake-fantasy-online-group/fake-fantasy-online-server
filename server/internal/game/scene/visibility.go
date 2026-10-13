@@ -60,20 +60,10 @@ func (s *Scene) revealInvisible(caster *entity.Entity, def domain.SkillDef, radi
 		})
 		s.statusesRemoved(target, removed)
 		for _, app := range def.Statuses {
-			statusDef, ok := s.statuses.Get(app.ID, app.Level)
+			statusDef, ok := s.resolveSkillStatusDef(def, app, statusDurationPct)
 			if !ok {
 				continue
 			}
-			if app.DurationSec > 0 {
-				statusDef.DurationSec = app.DurationSec
-			}
-			if statusDurationPct > 0 {
-				statusDef.DurationSec += statusDef.DurationSec * statusDurationPct / 100
-			}
-			if app.Description != "" {
-				statusDef.Desc = app.Description
-			}
-			applyStatusSource(&statusDef, def.Icon, int32(def.ID))
 			s.applyStatusDef(target, statusDef, caster.ID)
 		}
 	}

@@ -1,0 +1,379 @@
+{
+  "audited_server_gameplay_commit": "d9c06ddd53bbb777bc87248b881871ff64d2f947",
+  "scope": "Runtime findings before new remediation; source audit only, not a completed implementation report",
+  "parameter_closed": [
+    {
+      "id": 10009,
+      "name": "破防之枪",
+      "status_at_audited_server_d9c06dd": "closed_parameter_gap",
+      "required": {
+        "defense_loss_pct": [
+          30,
+          40,
+          50,
+          60,
+          70
+        ],
+        "duration_sec": 15
+      },
+      "missing_or_blocker": "No defense-loss status; current payload only damage.",
+      "safe_mapping": "Skill-local percent AttrDef debuff, no original status identity established.",
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10103,
+      "name": "幻影剑",
+      "status_at_audited_server_d9c06dd": "closed_parameter_gap",
+      "required": {
+        "hit_loss_pct": [
+          30,
+          35,
+          40,
+          45,
+          50
+        ],
+        "duration_sec": 15
+      },
+      "missing_or_blocker": "No hit-loss status.",
+      "safe_mapping": "Status1008/11..15 plus duration15; /6..10 has same magnitude.",
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10109,
+      "name": "仙风云体",
+      "status_at_audited_server_d9c06dd": "closed_parameter_gap",
+      "required": {
+        "movement_lock_sec": 10,
+        "defense_gain_pct": [
+          80,
+          100,
+          120,
+          140,
+          160
+        ]
+      },
+      "missing_or_blocker": "Status1019/16..20 includes only defense gain, missing movement restriction.",
+      "safe_mapping": "Skill-local movement-only lock; preserve attacks/casts unless other restrictions apply.",
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10111,
+      "name": "金缚剑",
+      "status_at_audited_server_d9c06dd": "closed_parameter_gap",
+      "required": {
+        "movement_lock_sec": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      "missing_or_blocker": "No movement restriction.",
+      "safe_mapping": "Do not copy1034 whole: it also full-stuns and decreases defense100%.",
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10113,
+      "name": "封法剑",
+      "status_at_audited_server_d9c06dd": "closed_parameter_gap",
+      "required": {
+        "silence_sec": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      "missing_or_blocker": "No silence status.",
+      "safe_mapping": "Status1003 ControlSilence with explicit per-skill duration.",
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10122,
+      "name": "混沌剑",
+      "status_at_audited_server_d9c06dd": "closed_parameter_gap",
+      "required": {
+        "block_beneficial_sec": [
+          10,
+          11,
+          12,
+          13,
+          14
+        ]
+      },
+      "missing_or_blocker": "No beneficial-status block.",
+      "safe_mapping": "Status1029 BlockBeneficial with explicit per-skill duration.",
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10124,
+      "name": "山字诀",
+      "status_at_audited_server_d9c06dd": "closed_parameter_gap",
+      "required": {
+        "attack_loss_pct": [
+          10,
+          13,
+          16,
+          19,
+          22
+        ],
+        "defense_gain_pct": [
+          10,
+          13,
+          16,
+          19,
+          22
+        ],
+        "duration_sec": 30
+      },
+      "missing_or_blocker": "Status1019/11..15 has defense gain only; attack cost absent.",
+      "safe_mapping": "Skill-local negative AttrAtk matching description; do not invent mutual exclusion from modified resource.",
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10219,
+      "name": "击晕",
+      "status_at_audited_server_d9c06dd": "closed_parameter_gap",
+      "required": {
+        "stun_sec": [
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "missing_or_blocker": "Damage only, stun absent.",
+      "safe_mapping": "Status1002 levels16,11,12,13,14 or explicit duration override.",
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10221,
+      "name": "狙击",
+      "status_at_audited_server_d9c06dd": "closed_parameter_gap",
+      "required": {
+        "movement_lock_sec": 5
+      },
+      "missing_or_blocker": "Damage only; original allfive ranks fixed5s movement lock absent.",
+      "safe_mapping": "Movement-only lock, not1034 full-stun/defense loss.",
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10224,
+      "name": "烟雾弹",
+      "status_at_audited_server_d9c06dd": "extra_unsupported_effect",
+      "required": {
+        "hit_loss_pct": [
+          30,
+          35,
+          40,
+          45,
+          50
+        ],
+        "magic_attack_loss_pct": [
+          30,
+          35,
+          40,
+          45,
+          50
+        ]
+      },
+      "missing_or_blocker": "Status1007/11..15 receives unsupported magic-defense loss from unscoped MAtk→MDef completion.",
+      "safe_mapping": "Restrict supplement by exact original status range or application; preserve genuine1007/1..10 dual debuff.",
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10325,
+      "name": "枷锁术",
+      "status_at_audited_server_d9c06dd": "closed_parameter_gap",
+      "required": {
+        "attack_speed_loss_pct": [
+          30,
+          35,
+          40,
+          45,
+          50
+        ],
+        "duration_sec": 30
+      },
+      "missing_or_blocker": "Status1009/11..15 has no effect fields; applying it is currently ineffective.",
+      "safe_mapping": "Use established attack-speed/attack-interval convention (Attr25), not move-speed slow.",
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    }
+  ],
+  "blocked": [
+    {
+      "id": 10102,
+      "name": "罡气剑",
+      "status_at_audited_server_d9c06dd": "unresolved_runtime_gap",
+      "required": {
+        "knockback": true
+      },
+      "missing_or_blocker": "Original displacement magnitude is absent; do not copy authored100px from雷火弹 as official.",
+      "safe_mapping": null,
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10201,
+      "name": "进阶背刺",
+      "status_at_audited_server_d9c06dd": "unresolved_runtime_gap",
+      "required": {
+        "stun_chance_pct": [
+          5,
+          10,
+          15,
+          20,
+          25
+        ]
+      },
+      "missing_or_blocker": "Stun duration absent. Current preserve-invisibility20% is implemented and must remain.",
+      "safe_mapping": null,
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10212,
+      "name": "偷窃术",
+      "status_at_audited_server_d9c06dd": "unresolved_identity_and_economy",
+      "required": {
+        "native_identity": "偷窃术",
+        "historical_probability_candidate": [
+          50,
+          56,
+          62,
+          68,
+          74
+        ]
+      },
+      "missing_or_blocker": "ServerName游龙掌 and pure damage contradict resource identity/historical gameplay; exact eligible pool, successful-theft limits and economy/ownership rules unproven. Do not overwrite native client name with server anomaly.",
+      "safe_mapping": null,
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10312,
+      "name": "驱魔术",
+      "status_at_audited_server_d9c06dd": "unresolved_target_filter",
+      "required": {
+        "allowed_taxonomy": [
+          "undead",
+          "demon"
+        ]
+      },
+      "missing_or_blocker": "Runtime lacks independently audited creature taxonomy; species restriction currently absent.",
+      "safe_mapping": null,
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10313,
+      "name": "天罚",
+      "status_at_audited_server_d9c06dd": "unresolved_runtime_gap",
+      "required": {
+        "random_harmful_states": true
+      },
+      "missing_or_blocker": "Status pool, probabilities and durations unknown; radius150prose/200data also unresolved.",
+      "safe_mapping": null,
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10317,
+      "name": "圣光术",
+      "status_at_audited_server_d9c06dd": "unresolved_runtime_gap",
+      "required": {
+        "blind": true
+      },
+      "missing_or_blocker": "Blind magnitude and duration unknown; target should still be restored single.",
+      "safe_mapping": null,
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    },
+    {
+      "id": 10326,
+      "name": "神威术",
+      "status_at_audited_server_d9c06dd": "unresolved_runtime_gap",
+      "required": {
+        "immobilize_sec": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      "missing_or_blocker": "Probability is absent; cannot invent100%.",
+      "safe_mapping": null,
+      "sources": [
+        "docs/daoist-endgame/v5/skill-original-ranks.json",
+        "docs/daoist-endgame/v5/skill-status-anchors.json",
+        "server/internal/data/gamedb.go:skillStatusApplications/completeKnownStatusSemantics"
+      ]
+    }
+  ]
+}

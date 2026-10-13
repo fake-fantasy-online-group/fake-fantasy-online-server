@@ -223,6 +223,9 @@ func LoadMonsters(ctx context.Context, q Querier) (MonsterDefs, error) {
 	if err := loadMonsterSkills(ctx, q, out); err != nil {
 		return nil, err
 	}
+	if err := loadMonsterFamilies(ctx, q, out); err != nil {
+		return nil, err
+	}
 	return out, nil
 }
 
@@ -489,7 +492,7 @@ func applyMonsterSkillEffects(rule *domain.MonsterSkillRule, rows []monsterSkill
 			}
 			app := domain.StatusApplication{
 				ID: domain.StatusID(e.statusID), Level: level, DurationSec: e.durationSec,
-				ChanceBP: e.chanceBP,
+				ChanceBP: e.chanceBP, ChanceExplicit: true,
 			}
 			duplicate := false
 			for i, old := range rule.Skill.Statuses {
@@ -518,7 +521,7 @@ func applyMonsterSkillEffects(rule *domain.MonsterSkillRule, rows []monsterSkill
 			}
 			app := domain.StatusApplication{
 				ID: domain.StatusID(e.statusID), Level: level, DurationSec: e.durationSec,
-				ChanceBP: e.chanceBP,
+				ChanceBP: e.chanceBP, ChanceExplicit: true,
 			}
 			found := false
 			for i := range rule.Extra {
@@ -656,10 +659,11 @@ func LoadTeleports(ctx context.Context, q Querier, dungeons domain.DungeonTable)
 	rows, err := q.Query(ctx, `
 		SELECT src.id, t.proc_id, t.map_to, t.to_x, t.to_y, t.to_dir,
 		       t.back_x, t.back_y, t.back_dir, t.poly, t.script,
-		       dst.id IS NOT NULL
+		       dst.id IS NOT NULL, t.transition_owner
 		  FROM map_teleports t
 		  LEFT JOIN map_defs src ON src.file = t.map_file
-		  LEFT JOIN map_defs dst ON dst.id   = t.map_to`)
+		  LEFT JOIN map_defs dst ON dst.id   = t.map_to
+		 ORDER BY src.id, t.proc_id`)
 	if err != nil {
 		return nil, TeleportStats{}, fmt.Errorf("data: 查 map_teleports: %w", err)
 	}
@@ -677,9 +681,10 @@ func LoadTeleports(ctx context.Context, q Querier, dungeons domain.DungeonTable)
 			poly   []int32
 			script string
 			destOK bool
+			owner  string
 		)
 		if err := rows.Scan(&srcID, &tp.ProcID, &mapTo, &tx, &ty, &tp.ToDir,
-			&bx, &by, &tp.BackDir, &poly, &script, &destOK); err != nil {
+			&bx, &by, &tp.BackDir, &poly, &script, &destOK, &owner); err != nil {
 			return nil, st, fmt.Errorf("data: 读传送门行: %w", err)
 		}
 		st.Total++
@@ -707,6 +712,10 @@ func LoadTeleports(ctx context.Context, q Querier, dungeons domain.DungeonTable)
 			st.NoArea++
 			continue
 		}
+		// Script-admitted gates always retain their server-side admission path,
+		// even if an administrator accidentally marks one client-owned. Unknown
+		// policy values are conservative too; the schema accepts only these two.
+		tp.ClientOwned = owner == "client" && script == "" && !tp.Dungeon
 		tp.To = domain.Pos{MapID: mapTo, X: float64(tx), Y: float64(ty)}
 		tp.Back = domain.Pos{MapID: *srcID, X: float64(bx), Y: float64(by)}
 		tp.Area = make(domain.Polygon, 0, len(poly)/2)
@@ -726,9 +735,8 @@ func LoadTeleports(ctx context.Context, q Querier, dungeons domain.DungeonTable)
 
 // LoadLevels 读 game_levels 的经验曲线。
 //
-// 只读 **level ≤ cap** 的行。理由不是省内存, 是数据在 61 级之后变了含义:
-// `exp_accum` 从"累计值"变成了 `exp` 的副本(飞升后经验另起一套账)。
-// 把飞升后的行混进来会让"多少经验算满级"这件事说不清。
+// Load only per-level edges for the configured progression track. exp_accum is
+// corrupt above 60 and has no role in V5 balances or migration.
 func LoadLevels(ctx context.Context, q Querier, cap int32) (*domain.LevelTable, error) {
 	rows, err := q.Query(ctx,
 		`SELECT level, exp FROM game_levels WHERE level >= 1 AND level <= $1 ORDER BY level`, cap)
@@ -744,13 +752,16 @@ func LoadLevels(ctx context.Context, q Querier, cap int32) (*domain.LevelTable, 
 		if err := rows.Scan(&lv, &exp); err != nil {
 			return nil, fmt.Errorf("data: 读 game_levels 行: %w", err)
 		}
+		if _, duplicate := need[lv]; duplicate {
+			return nil, fmt.Errorf("duplicate experience level %d", lv)
+		}
 		need[lv] = exp
 	}
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("data: 遍历 game_levels: %w", err)
 	}
-	if len(need) == 0 {
-		return nil, fmt.Errorf("data: game_levels 是空的")
+	if err := domain.ValidateExperienceCurve(need, cap); err != nil {
+		return nil, fmt.Errorf("data: player curve: %w", err)
 	}
 	return domain.NewLevelTable(need), nil
 }
@@ -868,7 +879,7 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 		       COALESCE(ao.avatar,d.avatar,''), COALESCE(d.category,-1), COALESCE(d.type,0),
 		       COALESCE(d.atk_dist,0), COALESCE(d.atk_type,0),
 		       COALESCE(d.desc_,''), COALESCE(d.small_map,0),
-		       COALESCE(a.position_,0), COALESCE(a.level,0), COALESCE(a.no_type_drop,1),
+		       COALESCE(a.position_,0), COALESCE(a.level,0), COALESCE(a.no_type_drop,1), COALESCE(a.query_type,0),
 		       COALESCE(a.refine_limit,0), COALESCE(a.enchase_limit,0),
 		       COALESCE(a.binding_skill,0), COALESCE(a.can_mail,0), COALESCE(a.can_deal,0), COALESCE(bs.skill_id,0),
 		       COALESCE(bs.name,''), COALESCE(bs.desc_,'')
@@ -896,27 +907,27 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 	defer erows.Close()
 	for erows.Next() {
 		var (
-			d                                                domain.ItemDef
-			e                                                domain.EquipDef
-			atkMin, atkMax, def, matk, mdef, hit             int32
-			str, vit, wis, spi, agi, dex                     int32
-			nLv, nStr, nVit, nInt, nSpi                      int64
-			nAgi, nDex, sex                                  int64
-			newbie, warrior, swordman, stabber               int64
-			druggist, magician                               int64
-			srWarrior, srSwordman, srStabber                 int64
-			srDruggist, srMagician                           int64
-			maxWeight                                        int32
-			avatar                                           string
-			avatarCategory, avatarType                       int32
-			avatarAtkDist, avatarAtkType                     int32
-			position, resourceLevel, noTypeDrop              int32
-			refineLimit, socketLimit                         int32
-			bindingSkill, canMail, canTrade, reciprocalSkill int64
-			bindingSkillName, bindingSkillDesc               string
-			sellEnabled                                      int32
-			canRepair, canSpecialRepair                      int64
-			disappearIfZero, noLimitDurability               int64
+			d                                                    domain.ItemDef
+			e                                                    domain.EquipDef
+			atkMin, atkMax, def, matk, mdef, hit                 int32
+			str, vit, wis, spi, agi, dex                         int32
+			nLv, nStr, nVit, nInt, nSpi                          int64
+			nAgi, nDex, sex                                      int64
+			newbie, warrior, swordman, stabber                   int64
+			druggist, magician                                   int64
+			srWarrior, srSwordman, srStabber                     int64
+			srDruggist, srMagician                               int64
+			maxWeight                                            int32
+			avatar                                               string
+			avatarCategory, avatarType                           int32
+			avatarAtkDist, avatarAtkType                         int32
+			position, resourceLevel, noTypeDrop, nativeQueryType int32
+			refineLimit, socketLimit                             int32
+			bindingSkill, canMail, canTrade, reciprocalSkill     int64
+			bindingSkillName, bindingSkillDesc                   string
+			sellEnabled                                          int32
+			canRepair, canSpecialRepair                          int64
+			disappearIfZero, noLimitDurability                   int64
 		)
 		if err := erows.Scan(&d.ID, &d.Name, &d.Price, &sellEnabled,
 			&e.LevelReq, &e.Slot, &d.Weight, &e.Durable, &e.AttackDurabilityCostRaw,
@@ -929,7 +940,7 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 			&newbie, &warrior, &swordman, &stabber, &druggist, &magician,
 			&srWarrior, &srSwordman, &srStabber, &srDruggist, &srMagician,
 			&avatar, &avatarCategory, &avatarType, &avatarAtkDist, &avatarAtkType,
-			&d.Description, &d.Icon, &position, &resourceLevel, &noTypeDrop,
+			&d.Description, &d.Icon, &position, &resourceLevel, &noTypeDrop, &nativeQueryType,
 			&refineLimit, &socketLimit,
 			&bindingSkill, &canMail, &canTrade, &reciprocalSkill,
 			&bindingSkillName, &bindingSkillDesc); err != nil {
@@ -985,6 +996,7 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 		// 是单字节level，不能再将“99 + 套装号*256”当成配方等级。
 		e.Position, e.Tier = position, resourceLevel
 		e.ResourceLevel, e.NoTypeDrop = resourceLevel, noTypeDrop != 0
+		e.NativeDropEligible = !e.NoTypeDrop && resourceLevel >= 0 && (equipmentDropKind(nativeQueryType) != "" || position == 114 || position == 116)
 		e.RefineLimit, e.SocketLimit = refineLimit, socketLimit
 		e.Appearance = parseEquipAppearance(d.ID, e.Slot, avatar, avatarCategory,
 			avatarType, avatarAtkDist, avatarAtkType)
@@ -999,6 +1011,9 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 		return nil, err
 	}
 	if err := loadSocketAffixes(ctx, q, out); err != nil {
+		return nil, err
+	}
+	if err := domain.ValidateEndgameItemDefinitions(out); err != nil {
 		return nil, err
 	}
 	if err := loadEquipmentSuits(ctx, q, out); err != nil {
@@ -2276,7 +2291,8 @@ func countUnnamedAffixes(ctx context.Context, q Querier) (int, error) {
 // **Stats 里的暴击率与各种抗性只从这里来** —— 没有词条那些字段永远是零,
 // 整套战斗公式就有一半参数拿不到值。
 //
-// 跳掉两类行, 都有明确依据:
+// 下列两类行不载入可结算 Affixes，但标记 UnknownInnateProperties，
+// 保留“尚不能确认白板底材”的不确定性，不宣称实例实际获得了此属性:
 //
 //	prob < 100    "有几率触发"的词条(全表只有 2 条, 30% 的爆击率)。
 //	              当成固定加成算等于白送 —— 宁可不给, 也别给错。
@@ -2286,25 +2302,27 @@ func countUnnamedAffixes(ctx context.Context, q Querier) (int, error) {
 //	              所以"有没有名字"就是这份数据自带的质量信号, 比我们另立一套白名单可靠。
 func loadAffixes(ctx context.Context, q Querier, items ItemDefs) (skipped int, err error) {
 	rows, err := q.Query(ctx, `
-		SELECT arm_id, attr_id, value, mode, attr_name <> '' AS named
-		  FROM game_equip_extra WHERE prob >= 100 ORDER BY arm_id, seq`)
+		SELECT arm_id, attr_id, value, mode, prob, attr_name <> '' AS named
+		  FROM game_equip_extra ORDER BY arm_id, seq`)
 	if err != nil {
 		return 0, fmt.Errorf("data: 查 game_equip_extra: %w", err)
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var armID, attr, value, mode int32
+		var armID, attr, value, mode, probability int32
 		var named bool
-		if err := rows.Scan(&armID, &attr, &value, &mode, &named); err != nil {
+		if err := rows.Scan(&armID, &attr, &value, &mode, &probability, &named); err != nil {
 			return skipped, fmt.Errorf("data: 读词条行: %w", err)
-		}
-		if !named {
-			skipped++
-			continue
 		}
 		d, ok := items[domain.ItemID(armID)]
 		if !ok || d.Equip == nil {
 			skipped++ // 词条挂在一件不存在的装备上
+			continue
+		}
+		if probability < 100 || !named {
+			d.Equip.UnknownInnateProperties = true
+			items[domain.ItemID(armID)] = d
+			skipped++
 			continue
 		}
 		d.Equip.Affixes = append(d.Equip.Affixes,
@@ -2417,6 +2435,9 @@ func LoadEquipmentRollTable(ctx context.Context, q Querier) (domain.EquipmentRol
 	}
 	if !out.Enabled() {
 		return out, fmt.Errorf("data: 装备随机属性矩阵为空")
+	}
+	if err := domain.ValidateMagicFindColorProfilesV5(out); err != nil {
+		return out, fmt.Errorf("data: MF color distribution: %w", err)
 	}
 	return out, nil
 }
@@ -2732,7 +2753,7 @@ func loadStructuredSkillStatuses(ctx context.Context, q Querier) (map[domain.Ski
 	rows, err := q.Query(ctx, `
 		SELECT s.skill_id, s.skill_level, s.status_order,
 		       s.status_id, s.status_level, s.chance_bp, s.duration_sec, s.description_override,
-		       s.instant_death_immune,
+		       s.instant_death_immune, COALESCE(to_jsonb(s)->>'target_type','any'),
 		       EXISTS (
 		           SELECT 1
 		             FROM gamedata.ov_exceptdetail d
@@ -2745,7 +2766,9 @@ func loadStructuredSkillStatuses(ctx context.Context, q Querier) (map[domain.Ski
 		             FROM game_custom_statuses c
 		            WHERE c.status_id = s.status_id
 		              AND c.status_level = s.status_level
-		       )
+		       ),
+		       COALESCE((to_jsonb(s)->>'random_group')::integer,0),
+		       COALESCE((to_jsonb(s)->>'random_weight')::integer,0)
 		  FROM game_skill_statuses s
 		 ORDER BY s.skill_id, s.skill_level, s.status_order`)
 	if err != nil {
@@ -2756,24 +2779,42 @@ func loadStructuredSkillStatuses(ctx context.Context, q Querier) (map[domain.Ski
 	out := make(map[domain.SkillKey][]domain.StatusApplication)
 	for rows.Next() {
 		var (
-			key      domain.SkillKey
-			order    int32
-			app      domain.StatusApplication
-			statusOK bool
+			key        domain.SkillKey
+			order      int32
+			app        domain.StatusApplication
+			targetType string
+			statusOK   bool
 		)
 		if err := rows.Scan(&key.ID, &key.Level, &order,
 			&app.ID, &app.Level, &app.ChanceBP, &app.DurationSec, &app.Description,
-			&app.InstantDeathImmune, &statusOK); err != nil {
+			&app.InstantDeathImmune, &targetType, &statusOK, &app.RandomGroup, &app.RandomWeight); err != nil {
 			return nil, fmt.Errorf("data: 读结构化技能状态: %w", err)
 		}
 		if !statusOK {
 			return nil, fmt.Errorf("data: 技能 %d/%d 第 %d 个状态引用不存在的定义 %d/%d",
 				key.ID, key.Level, order, app.ID, app.Level)
 		}
+		switch targetType {
+		case "any":
+			app.TargetType = domain.SkillStatusTargetAny
+		case "player":
+			app.TargetType = domain.SkillStatusTargetPlayer
+		case "non_player":
+			app.TargetType = domain.SkillStatusTargetNonPlayer
+		default:
+			return nil, fmt.Errorf("data: 技能 %d/%d 第 %d 个状态目标类型 %q 未实现", key.ID, key.Level, order, targetType)
+		}
+		app.ChanceExplicit = true
+		app.SourceSkill = key.ID
 		out[key] = append(out[key], app)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("data: 遍历结构化技能状态: %w", err)
+	}
+	for key, apps := range out {
+		if err := domain.ValidateRandomStatusGroups(apps); err != nil {
+			return nil, fmt.Errorf("data: skill %d/%d random status group: %w", key.ID, key.Level, err)
+		}
 	}
 	return out, nil
 }
@@ -2817,6 +2858,7 @@ func loadStructuredSkillEffects(ctx context.Context, q Querier) (map[domain.Skil
 			return nil, fmt.Errorf("data: 读结构化技能效果: %w", err)
 		}
 		effect := domain.SkillEffect{
+			ChanceExplicit:          true,
 			GuaranteedHit:           guaranteedHit,
 			RequiresPreviousLanded:  requiresPrevious,
 			WeaponDurabilityCostPct: weaponDurabilityPct,
@@ -2932,7 +2974,12 @@ func loadStructuredSkillEffects(ctx context.Context, q Querier) (map[domain.Skil
 				effect.Target != domain.EffectTargetResolved || lossRefundPct != 0 {
 				return nil, fmt.Errorf("data: 技能 %d/%d 第 %d 个 knockback 效果参数非法", key.ID, key.Level, order)
 			}
-			effect.Kind, effect.KnockbackDistance = domain.EffectKnockback, flat
+			effect.Kind, effect.KnockbackDistance, effect.ChanceBP = domain.EffectKnockback, flat, chanceBP
+		case "steal_item":
+			if powerPct != 0 || resourcePct != 0 || flat != 1 || guaranteedHit || effect.Target != domain.EffectTargetResolved || lossRefundPct != 0 || effect.RequiresPreviousLanded {
+				return nil, fmt.Errorf("data: skill %d/%d effect %d invalid theft configuration", key.ID, key.Level, order)
+			}
+			effect.Kind, effect.ChanceBP, effect.TheftMaxSuccesses = domain.EffectStealItem, chanceBP, flat
 		case "clear_harmful":
 			if powerPct != 0 || resourcePct != 0 || flat != 0 || guaranteedHit || chanceBP != 10000 || lossRefundPct != 0 {
 				return nil, fmt.Errorf("data: 技能 %d/%d 第 %d 个 clear_harmful 效果参数非法", key.ID, key.Level, order)
@@ -3087,7 +3134,7 @@ func loadSkillPassiveStatusResists(ctx context.Context, q Querier) (map[domain.S
 			&passiveOK, &statusOK); err != nil {
 			return nil, fmt.Errorf("data: 读被动状态抗性: %w", err)
 		}
-		if !passiveOK || !statusOK || resist.Pct <= 0 || resist.Pct > 100 {
+		if !passiveOK || !statusOK || resist.Pct <= 0 {
 			return nil, fmt.Errorf("data: 被动技能 %d/%d 第 %d 条状态抗性非法",
 				key.ID, key.Level, order)
 		}
@@ -3138,11 +3185,12 @@ func loadSkillPassiveTriggerStatuses(ctx context.Context, q Querier) (map[domain
 			&passiveOK, &targetOK, &statusOK); err != nil {
 			return nil, fmt.Errorf("data: 读被动触发状态: %w", err)
 		}
-		if !passiveOK || !targetOK || !statusOK || trigger.ChanceBP <= 0 ||
+		if !passiveOK || !targetOK || !statusOK || trigger.ChanceBP < 0 ||
 			trigger.ChanceBP > 10000 || trigger.DurationSec < 0 {
 			return nil, fmt.Errorf("data: 被动技能 %d/%d 第 %d 条触发状态非法",
 				key.ID, key.Level, order)
 		}
+		trigger.ChanceExplicit = true
 		out[key] = append(out[key], trigger)
 	}
 	if err := rows.Err(); err != nil {
@@ -3806,6 +3854,16 @@ func LoadSkills(ctx context.Context, q Querier) (domain.SkillTable, SkillStats, 
 			}
 		}
 	}
+	if err := loadSkillTargetFamilies(ctx, q, out); err != nil {
+		return nil, st, err
+	}
+	skillCatalog, err := LoadSkillProgressionCatalog(ctx, q, out)
+	if err != nil {
+		return nil, st, err
+	}
+	if err := domain.InstallV5SkillProgression(out, skillCatalog); err != nil {
+		return nil, st, fmt.Errorf("data: v5 skills: %w", err)
+	}
 	return out, st, nil
 }
 
@@ -3835,7 +3893,9 @@ func LoadStatuses(ctx context.Context, q Querier) (domain.StatusTable, StatusSta
 		SELECT d.type,
 		       COALESCE(to_jsonb(x)->>('lv' || e.except_level::text || '_name'), x.lv1_name, ''),
 		       COALESCE(to_jsonb(x)->>('lv' || e.except_level::text || '_desc'), x.lv1_desc, ''),
-		       e.except_level, e.last_time, e.interval, e.no_inform_client, e.except_type
+		       e.except_level, e.last_time, e.interval, e.no_inform_client, e.except_type,
+		       COALESCE(x.level_small_maps[e.except_level::int], 0),
+		       x.level_small_maps[e.except_level::int] IS NOT NULL
 		  FROM gamedata.ov_exceptdetail d
 		  JOIN gamedata.ov_exceptdetail_entry e ON e.row_no = d.row_no
 		  LEFT JOIN gamedata.ov_exceptdesc x ON x.type = d.type
@@ -3850,8 +3910,10 @@ func LoadStatuses(ctx context.Context, q Querier) (domain.StatusTable, StatusSta
 			last, interval   int32
 			name, desc       string
 			hidden, typClass int16
+			icon             int32
+			iconKnown        bool
 		)
-		if err := rows.Scan(&typ, &name, &desc, &level, &last, &interval, &hidden, &typClass); err != nil {
+		if err := rows.Scan(&typ, &name, &desc, &level, &last, &interval, &hidden, &typClass, &icon, &iconKnown); err != nil {
 			rows.Close()
 			return nil, st, fmt.Errorf("data: 读状态时长行: %w", err)
 		}
@@ -3864,6 +3926,7 @@ func LoadStatuses(ctx context.Context, q Querier) (domain.StatusTable, StatusSta
 			ID: id, Level: int32(level), Name: name, Desc: desc,
 			Type: domain.StatusType(typClass), TypeKnown: true,
 			DurationSec: last, IntervalSec: interval, Hidden: hidden != 0,
+			Icon: icon, IconKnown: iconKnown,
 		}
 		if id == 1032 { // 隐身：状态说明明确，且 0x8017 有独立 invisible 位
 			d.Invisible = true
@@ -4013,6 +4076,10 @@ func LoadStatuses(ctx context.Context, q Querier) (domain.StatusTable, StatusSta
 		return nil, st, err
 	}
 
+	if err := loadStatusOverlayStrengths(ctx, q, out); err != nil {
+		return nil, st, err
+	}
+
 	seen := map[domain.StatusID]bool{}
 	for k := range out {
 		seen[k.ID] = true
@@ -4029,8 +4096,10 @@ func loadCustomStatuses(ctx context.Context, q Querier, out domain.StatusTable) 
 		       duration_sec, interval_sec, hp_change_value, hp_change_mode,
 		       physical_damage_reduction_pct, magic_damage_reduction_pct,
 		       physical_damage_taken_pct, magic_damage_taken_pct,
-		       damage_shield, attack_cap, prevent_invisible
-		  FROM game_custom_statuses
+		       damage_shield, attack_cap, prevent_invisible, replace_native, block_move, immobile,
+               attack_speed_is_frequency, icon, icon_known, hidden,
+               COALESCE((to_jsonb(c)->>'legacy_overlay_level_bp')::bigint,0)
+		  FROM game_custom_statuses c
 		 ORDER BY status_id, status_level`)
 	if err != nil {
 		return fmt.Errorf("data: 查自定义状态: %w", err)
@@ -4038,21 +4107,25 @@ func loadCustomStatuses(ctx context.Context, q Querier, out domain.StatusTable) 
 	defer rows.Close()
 	for rows.Next() {
 		var (
-			d          domain.StatusDef
-			statusType int16
-			hpValue    int32
-			hpMode     int32
-			attackCap  *int32
+			d             domain.StatusDef
+			statusType    int16
+			hpValue       int32
+			hpMode        int32
+			attackCap     *int32
+			replaceNative bool
 		)
 		if err := rows.Scan(&d.ID, &d.Level, &d.Name, &d.Desc, &statusType,
 			&d.DurationSec, &d.IntervalSec, &hpValue, &hpMode,
 			&d.PhysicalDamageReductionPct, &d.MagicDamageReductionPct,
 			&d.PhysicalDamageTakenPct, &d.MagicDamageTakenPct,
-			&d.DamageShield, &attackCap, &d.PreventInvisible); err != nil {
+			&d.DamageShield, &attackCap, &d.PreventInvisible, &replaceNative, &d.BlockMove, &d.Immobile, &d.AttackSpeedIsFrequency, &d.Icon, &d.IconKnown, &d.Hidden, &d.LegacyOverlayLevelBP); err != nil {
 			return fmt.Errorf("data: 读自定义状态: %w", err)
 		}
 		if statusType < int16(domain.StatusGood) || statusType > int16(domain.StatusGoodNew) {
 			return fmt.Errorf("data: 自定义状态 %d/%d 的 status_type=%d 越界", d.ID, d.Level, statusType)
+		}
+		if d.LegacyOverlayLevelBP < 0 {
+			return fmt.Errorf("data: 自定义状态 %d/%d 逻辑覆盖等级不能为负", d.ID, d.Level)
 		}
 		d.Type, d.TypeKnown = domain.StatusType(statusType), true
 		if hpValue != 0 {
@@ -4062,7 +4135,7 @@ func loadCustomStatuses(ctx context.Context, q Querier, out domain.StatusTable) 
 			d.AttackCapKnown, d.AttackCap = true, *attackCap
 		}
 		key := domain.StatusKey{ID: d.ID, Level: d.Level}
-		if _, exists := out[key]; exists {
+		if _, exists := out[key]; exists != replaceNative {
 			return fmt.Errorf("data: 自定义状态 %d/%d 与已有状态定义冲突", d.ID, d.Level)
 		}
 		out[key] = d
@@ -4197,7 +4270,9 @@ func completeKnownStatusSemantics(d *domain.StatusDef) {
 	case domain.StatusFreeze:
 		d.BreakOnDamage = true
 	case domain.StatusDampen:
-		mirrorStatusAffix(d, domain.AttrMAtk, domain.AttrMDef)
+		if d.Level >= 1 && d.Level <= 10 {
+			mirrorStatusAffix(d, domain.AttrMAtk, domain.AttrMDef)
+		}
 	case domain.StatusIronSkin:
 		if v, ok := removeStatusAffix(d, domain.AttrPhysRes); ok {
 			d.PhysicalDamageReductionPct = v
@@ -4401,7 +4476,7 @@ func knownAttr(a int32) bool {
 		domain.AttrMoveSpeed, domain.AttrMinAtk, domain.AttrMaxAtk,
 		domain.AttrMaxHP, domain.AttrMaxMP, domain.AttrHPRegen,
 		domain.AttrMaxWeight, domain.AttrAtk, domain.AttrMCrit,
-		domain.AttrPhysRes, domain.AttrMagicRes, domain.AttrStatusRes:
+		domain.AttrPhysRes, domain.AttrMagicRes, domain.AttrStatusRes, domain.AttrEffectHitBP:
 		return true
 	}
 	return false
@@ -5361,13 +5436,16 @@ func LoadPetLevels(ctx context.Context, q Querier, cap int32) (*domain.PetLevelT
 		if err := rows.Scan(&lv, &exp); err != nil {
 			return nil, fmt.Errorf("data: 读 ov_petlevelexp 行: %w", err)
 		}
+		if _, duplicate := need[lv]; duplicate {
+			return nil, fmt.Errorf("duplicate experience level %d", lv)
+		}
 		need[lv] = exp
 	}
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("data: 遍历 ov_petlevelexp: %w", err)
 	}
-	if len(need) == 0 {
-		return nil, fmt.Errorf("data: ov_petlevelexp 是空的")
+	if err := domain.ValidateExperienceCurve(need, cap); err != nil {
+		return nil, fmt.Errorf("data: pet curve: %w", err)
 	}
 	return domain.NewPetLevelTable(need), nil
 }

@@ -1,0 +1,343 @@
+[
+  {
+    "ids": [
+      10102
+    ],
+    "field": "target_shape",
+    "category": "confirmed_resource_conversion",
+    "detail": "External tgt1/castkind1 has cone shape3/radius120/rwidth120/dist100; imported five-rank baseline is single shape0/dist75. Stage fix restores entity-single and75px admission.",
+    "evidence": [
+      "read-only local resource MD5 cbe007d8955b60a992dd4ef3da682c37",
+      "client66c7712 NativeSwordSkillTargeting.cs"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10122
+    ],
+    "field": "target_shape",
+    "category": "confirmed_resource_conversion",
+    "detail": "External tgt1/castkind1 has circle shape2/radius150/dist75; imported baseline is single shape0/dist75. Stage fix restores entity-single.",
+    "evidence": [
+      "read-only local resource MD5 cbe007d8955b60a992dd4ef3da682c37",
+      "client66c7712 NativeSwordSkillTargeting.cs"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10009
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Description requires15s defense reduction30% at rank1; loaded skill has damage only, no status application.",
+    "evidence": [
+      "skill-original-ranks.json",
+      "gamedb.go skillStatusApplications"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10109,
+      10124
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Status1019 loses original secondary effects:10109 movement lock10s;10124 attack penalty10/13/16/19/22% for30s.",
+    "evidence": [
+      "skill-status-anchors.json status1019/11..20",
+      "runtime-restoration-gaps.json"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10325
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Status1009/11..15 has no effect fields despite original30s attack-speed reduction30/35/40/45/50%.",
+    "evidence": [
+      "skill-status-anchors.json",
+      "runtime-restoration-gaps.json"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10317
+    ],
+    "field": "target_shape",
+    "category": "confirmed_resource_conversion",
+    "detail": "Historical/current local resource proves original single shape0 converted to circle shape2 radius110; SQL/historical profession page corroborate single.",
+    "evidence": [
+      "verified-asset-differences.json"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10102
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Description requires knockback; loaded skill contains damage only. Historical knockback distance not established.",
+    "evidence": [
+      "skill-original-ranks.json",
+      "init-31.sql"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10103
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Description requires15s accuracy reduction30..50%; loaded skill has no status. Status1008 levels6..10 or11..15 match magnitude but require15s duration override.",
+    "evidence": [
+      "skill-original-ranks.json",
+      "skill-status-anchors.json"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10111,
+      10221
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Descriptions require movement restriction (10111:6..10s;10221:fixed5s at all five ranks). No status is applied; status1034 cannot be copied unchanged because it also stuns and removes defense.",
+    "evidence": [
+      "skill-original-ranks.json",
+      "skill-status-anchors.json status1034"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10113
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Description requires6..10s inability to use skills; no status. Status1003 is verified silence but duration needs explicit skill override.",
+    "evidence": [
+      "skill-original-ranks.json",
+      "skill-status-anchors.json status1003"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10122
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Description requires10..14s rejection of beneficial states; no status. Status1029 BlockBeneficial matches semantic but needs explicit duration.",
+    "evidence": [
+      "skill-original-ranks.json",
+      "skill-status-anchors.json status1029"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10201
+    ],
+    "field": "effect",
+    "category": "partial_passive_implementation",
+    "detail": "Native descriptions include5/10/15/20/25% stun chance in addition to preserving invisibility. Loaded passive only supplies preserve-invisibility; no stun trigger. Duration not established.",
+    "evidence": [
+      "skill-original-ranks.json",
+      "init-33.sql"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10219
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Description requires stun5..9s; loaded skill has damage only, no status.",
+    "evidence": [
+      "skill-original-ranks.json",
+      "gamedb.go skillStatusApplications"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10224
+    ],
+    "field": "effect",
+    "category": "unscoped_status_completion",
+    "detail": "Description and status1007/11..15 mention hit and magic-attack loss only. completeKnownStatusSemantics mirrors magic attack to magic defense for every StatusDampen rank, yielding an extra magic-defense penalty.",
+    "evidence": [
+      "gamedb.go completeKnownStatusSemantics",
+      "skill-status-anchors.json status1007/11..15"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10312
+    ],
+    "field": "target_filter",
+    "category": "missing_native_restriction",
+    "detail": "Description limits damage to undead/demon enemies. SkillDef and target resolution contain no creature-taxonomy restriction; runtime documentation admits no audited taxonomy.",
+    "evidence": [
+      "skill-original-ranks.json",
+      "scene/skill.go resolveTargets",
+      "skill-implementation.md"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10313
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Description promises random harmful states, but loaded skill has damage only. Status pool/probabilities/durations unproven.",
+    "evidence": [
+      "skill-original-ranks.json"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10317
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Description promises blindness after damage; no status. Magnitude/duration are not provided in the imported skill prose.",
+    "evidence": [
+      "skill-original-ranks.json"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10326
+    ],
+    "field": "effect",
+    "category": "missing_native_effect",
+    "detail": "Descriptions promise a chance of immobilization6..10s; no status. The original chance is not specified.",
+    "evidence": [
+      "skill-original-ranks.json"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10306,
+      10316,
+      10318,
+      10433
+    ],
+    "field": "probability",
+    "category": "explicit_authored_assumption",
+    "detail": "init-33 says original success scripts were missing and deliberately authors20/40/60/80/100% dispel chance. These are implementation choices, not verified original values.",
+    "evidence": [
+      "init-33.sql B3 comment"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10327
+    ],
+    "field": "duration",
+    "category": "explicit_authored_assumption",
+    "detail": "init-33 explicitly authors10/15/20/25/30s anti-invisibility suppression because original timing was absent.",
+    "evidence": [
+      "init-33.sql D4 comment"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10223,
+      10020,
+      10226
+    ],
+    "field": "distance",
+    "category": "explicit_authored_assumption",
+    "detail": "init-33 explicitly sets10223 knockback100 world units with no historical distance evidence;10020/10226 reuse it.",
+    "evidence": [
+      "init-33.sql D5 comment and passive trigger effects"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10024,
+      10222
+    ],
+    "field": "progression",
+    "category": "unproven_numeric_supplement",
+    "detail": "Imported descriptions give no numeric durability curve; supplements set maintenance25% per rank (cap100) and thrown recovery10% per rank. Historical support needs verification.",
+    "evidence": [
+      "init-31.sql",
+      "init-33.sql"
+    ],
+    "confidence": "confirmed_vs_imported_baseline"
+  },
+  {
+    "ids": [
+      10212
+    ],
+    "field": "name_effect",
+    "category": "historical_identity_conflict",
+    "detail": "Imported/current server identity 游龙掌 deals100% damage; historical profession table lists 偷窃 in the corresponding slot. Requires version corroboration before selecting restore baseline.",
+    "evidence": [
+      "research worker fo.17173.com/character/character_3.html"
+    ],
+    "confidence": "candidate_version_sensitive"
+  },
+  {
+    "ids": [
+      10030
+    ],
+    "field": "target_shape",
+    "category": "historical_target_conflict",
+    "detail": "Historical static warrior page describes area disarm, while imported table is enemy-single. Version boundary unresolved.",
+    "evidence": [
+      "research worker fo.17173.com/character/character_2.html",
+      "init-31.sql"
+    ],
+    "confidence": "candidate_version_sensitive"
+  },
+  {
+    "ids": [
+      10115,
+      10124
+    ],
+    "field": "duration",
+    "category": "historical_duration_conflict",
+    "detail": "Historical static sword page reports15s; imported table uses30s. May be a later patch rather than arbitrary mutation.",
+    "evidence": [
+      "research worker fo.17173.com/character/character_1.html",
+      "init-31.sql"
+    ],
+    "confidence": "candidate_version_sensitive"
+  },
+  {
+    "ids": [
+      10408,
+      10411
+    ],
+    "field": "target_shape",
+    "category": "historical_single_target_crosscheck",
+    "detail": "Historical character5 page and imported raw rows both describe enemy-single with450px range. Full resource comparison confirms no shape conversion for either skill; current changes are timing only.",
+    "evidence": [
+      "research worker fo.17173.com/character/character_5.html",
+      "init-31.sql"
+    ],
+    "confidence": "supported_current_resource_checked"
+  }
+]

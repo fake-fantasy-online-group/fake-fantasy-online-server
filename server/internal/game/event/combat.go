@@ -27,6 +27,12 @@ func (f DamageFlag) Has(x DamageFlag) bool { return f&x != 0 }
 //
 // Amount 是**结算完的最终值**(已扣抗性、已乘暴击倍率), 协议层不做任何再计算。
 type DamageDealt struct {
+	AbsorbHeal int32 // Internal: emitted after damage, never qualifies as a new trigger.
+
+	Origin    domain.DamageOrigin
+	RootID    uint64
+	ProcDepth uint8
+
 	Src, Dst domain.EntityID
 	Amount   int32
 	Flag     DamageFlag

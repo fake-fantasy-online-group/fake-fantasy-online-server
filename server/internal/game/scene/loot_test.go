@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"testing"
 
@@ -10,8 +12,8 @@ import (
 
 // 真实数据: 树妖(1001) 掉树枝(4103) 31.4%、牛肉面(3002) 5.7%。
 var (
-	掉落树枝  = domain.ItemDef{ID: 4103, Name: "树枝", InventoryTab: 1, InventoryTabKnown: true, Stackable: true, Price: 2}
-	掉落牛肉面 = domain.ItemDef{ID: 3002, Name: "牛肉面", InventoryTab: 1, InventoryTabKnown: true, Stackable: true, Price: 10}
+	掉落树枝  = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 4103, Name: "树枝", InventoryTab: 1, InventoryTabKnown: true, Stackable: true, Price: 2}
+	掉落牛肉面 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 3002, Name: "牛肉面", InventoryTab: 1, InventoryTabKnown: true, Stackable: true, Price: 10}
 	必掉的怪  = domain.MonsterDef{
 		ID: 1001, Name: "树妖", Kind: domain.MonsterNormal, Level: 14, HP: 246, Exp: 58,
 		Stats: domain.NewMonsterStats(14, 6, 42, 0, 0, 2000, 110),
@@ -31,7 +33,7 @@ func lootScene(t *testing.T, entries []domain.DropEntry) (*Scene, domain.EntityI
 	sp, _ := spawn.New(
 		[]domain.SpawnPoint{{ID: 1, Monster: 必掉的怪.ID, Pos: domain.Pos{MapID: 14, X: 120, Y: 100}}},
 		defs, domain.NewEntityAlloc())
-	s := New(Config{
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), LootRules: lootRulesTableFixture(),
 		ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 3,
 		Spawner: sp, Defs: defs, Items: items,
 		Loot:  map[domain.MonsterID][]domain.DropEntry{必掉的怪.ID: entries},

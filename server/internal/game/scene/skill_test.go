@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -102,7 +105,7 @@ func skillScene(t *testing.T, monsters ...domain.Pos) (*Scene, []domain.EntityID
 			}},
 		},
 	}
-	s := New(Config{ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 11,
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 11,
 		Spawner: sp, Defs: defs,
 		Skills:   skillTable(火弹术, 火球术, 治愈术, 祝福术, 连环枪法, 隐身术, 剑术修炼),
 		Statuses: statuses})
@@ -518,7 +521,7 @@ func TestDeadCannotCast(t *testing.T) {
 
 // 没配技能表的场景不该崩。
 func TestNoSkillTableIsSafe(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000})
 	join(t, s, 1, 100, "甲", 100, 100)
 	s.step()
 	s.exec(UseSkill{ID: 1, Skill: 10401, Target: 0})

@@ -19,6 +19,8 @@ func (s *Scene) exec(c Command) {
 		return
 	}
 	switch cmd := c.(type) {
+	case EndgameRequest:
+		s.onEndgame(cmd)
 	case SharedRide:
 		s.onSharedRide(cmd)
 	case LeaveSharedRide:
@@ -402,6 +404,15 @@ func (s *Scene) onQueryTargetStatus(cmd QueryTargetStatus) {
 // 摆到自己周围, 反过来发会让先到的实体没有参照系。
 func (s *Scene) onEnter(cmd Enter) {
 	ch := cmd.Char
+	if !s.prepareEndgameRift(cmd) {
+		if cmd.Sink != nil {
+			cmd.Sink.Close()
+		}
+		if cmd.FinalSaver != nil {
+			cmd.FinalSaver.Save(domain.Snapshot{Char: cmd.Char, Bag: cmd.Bag, Worn: cmd.Worn, ChangeSet: cmd.ChangeSet, Warehouse: cmd.Warehouse, Wardrobe: cmd.Wardrobe, Stall: cmd.Stall}.Clone())
+		}
+		return
+	}
 	s.prepareTrial(cmd)
 	if s.dungeon != nil && cmd.DungeonElapsed > s.dungeonElapsed() {
 		s.dungeonElapsedBase += cmd.DungeonElapsed - s.dungeonElapsed()
@@ -467,6 +478,7 @@ func (s *Scene) onEnter(cmd Enter) {
 		e.Player.RestoreExperienceBoost(ch, s.tick)
 	} else if cmd.Runtime.Status != nil {
 		e.Status = cmd.Runtime.Status.Clone()
+		e.Status.RebindSkillOwner(cmd.Runtime.V5StatusOwner, e.ID)
 	} else {
 		e.Status = domain.NewStatusSet()
 	}
@@ -491,6 +503,15 @@ func (s *Scene) onEnter(cmd Enter) {
 	// 每日耐力在登录/跨图落地时先结算，再组装 0x8003/0x8007。否则玩家会先看到
 	// 旧存档的 0/100，直到第一次点打工才突然回满。
 	s.refillStamina(ch)
+	// Revalidate self-cast V5 effects against the loaded equipment/hard ranks
+	// before exposing attributes. Detached effects are filtered by restore.
+	s.reconcileEnteringSkillStatuses(e)
+	var growth domain.Stats
+	_, e.Stats, growth = s.computeSkillGrowthStats(e, s.functionalWorn(e))
+	e.Player.SkillGrowthMaxHP, e.Player.SkillGrowthMaxMP = growth.MaxHP, growth.MaxMP
+	e.MaxHP, e.MaxMP = e.Stats.MaxHP, e.Stats.MaxMP
+	e.HP = min(e.HP, e.MaxHP)
+	e.MP = min(e.MP, e.MaxMP)
 	attributes := s.attributeSnapshot(e) // 同步 0x8003 内嵌数组，并保留下行快照
 	var activePet *entity.Entity
 	if cmd.Runtime != nil && cmd.Runtime.Pet != nil {
@@ -580,6 +601,12 @@ func (s *Scene) onEnter(cmd Enter) {
 		return
 	}
 
+	// Private ownership must precede the map edge; releasing ordinary gates
+	// waits until its authoritative teleport has started on the client.
+	if s.rift != nil {
+		s.sendRiftSceneContext(e)
+	}
+
 	// 1. 先告诉客户端本人生命周期。初次登录走 8033+8003；服务端发起的跨场景
 	// 走专用 803a。客户端已经自行加载目标图时不能再发 803a，否则异步重复清图会
 	// 把紧随其后的 NPC/怪物删掉；会话路由已在所有权交接时同步改绑。
@@ -593,6 +620,9 @@ func (s *Scene) onEnter(cmd Enter) {
 		// SeedServer 依赖当前角色身份，所以要紧跟 0x8003；同时又必须赶在
 		// 0x8015/0x800b 之前，否则登录快照会先把旧提示弹出来。
 		s.emitTo(e.ID, event.NewbieTipSeed{Who: e.ID, TipIDs: cmd.SeenTips})
+	}
+	if s.rift == nil {
+		s.sendRiftSceneContext(e)
 	}
 	// 1.5 初次登录才下发完整角色 bootstrap；跨图保留客户端已有的本人状态。
 	if cmd.Runtime == nil {
@@ -625,6 +655,9 @@ func (s *Scene) onEnter(cmd Enter) {
 			s.syncWorldAfterLoad(e)
 		} else {
 			// Initial 8003 builds the client world synchronously before later packets.
+			// Reconnecting into a live rift takes this fresh-login path too;
+			// restore its presence without waiting for a transfer-only map ACK.
+			s.syncEndgameRift(e)
 			s.pushNpcChatter(e.ID)
 			s.sendAllEntities(e.ID)
 			s.sendStallSigns(e.ID)
@@ -692,6 +725,8 @@ func (s *Scene) onLeave(cmd Leave) {
 		}
 		return
 	}
+	s.disconnectEndgameRift(e)
+	s.stepEndgameTrial()
 	s.clearCastWindup(e.ID)
 	s.endSharedRide(e)
 	// 宠物实体先摘 —— **必须在摘除主人之前**，否则当前血量无法抄回实例。
@@ -705,9 +740,13 @@ func (s *Scene) onLeave(cmd Leave) {
 	s.emitExcept(event.EntityDespawned{ID: e.ID, Kind: e.Kind, Reason: event.DespawnLogout}, e.ID)
 	s.flush() // 立刻冲刷: 下面就要把他从 players 里删掉, 留到帧末就发不出去了
 
+	s.revokeDepartingSkillSource(e)
 	s.aoi.Leave(e)
 	delete(s.entities, e.ID)
 	delete(s.players, e.ID)
+	delete(s.skillViewDigests, e.ID)
+	delete(s.skillRawCache, e.ID)
+	s.removeEquipmentEntity(e.ID)
 	delete(s.hits, e.ID) // 交战状态跟着人走, 不清会一直占着内存
 	delete(s.portalBlocked, e.ID)
 	delete(s.moveWindows, e.ID)
@@ -823,8 +862,8 @@ func (s *Scene) move(cmd MoveTo, checkPortal, force bool) {
 		s.stallNotice(e, "摆摊中不能攻击，请先结束摊位")
 		return
 	}
-	if !force && e.Kind == domain.KindPlayer && !canAct(e) {
-		return // 昏迷中不能动。移动没有回执 —— 客户端每秒发好几次, 回执只会刷屏
+	if !force && e.Kind == domain.KindPlayer && !canMove(e) {
+		return // 昏迷/移动锁中不能动；强制传送仍沿用服务端的独立放行路径。
 	}
 	positionChanged := e.Pos.X != cmd.To.X || e.Pos.Y != cmd.To.Y || e.Pos.MapID != cmd.To.MapID
 	if !force && positionChanged && e.Player != nil {
@@ -875,15 +914,18 @@ func (s *Scene) move(cmd MoveTo, checkPortal, force bool) {
 // 真正的命中与伤害在 stepCombat 里结算 —— 攻击必须落在固定的帧序里,
 // 不能谁的包先到谁先打, 那样帧率高、网络好的客户端就白占便宜了。
 func (s *Scene) onAttack(cmd Attack) {
+	if s.rift != nil && !s.riftCombatReady() {
+		return
+	}
 	e, ok := s.entities[cmd.ID]
-	if !ok || s.entityMapLoading(e) {
+	if !ok || s.entityMapLoading(e) || !s.equipmentCombatReady(e) {
 		return
 	}
 	reject := func(r event.RejectReason) {
 		s.emitTo(e.ID, event.Rejected{Who: e.ID, Cmd: "Attack", Reason: r})
 	}
 	t, ok := s.entities[cmd.Target]
-	if !ok || s.entityMapLoading(t) {
+	if !ok || s.entityMapLoading(t) || !s.equipmentCombatReady(t) {
 		reject(event.RejectNoTarget)
 		return
 	}
@@ -921,6 +963,11 @@ func (s *Scene) onAttack(cmd Attack) {
 	if delay := s.playerBasicAttackImpactDelay(e, t); delay > 0 {
 		resolveAtWall = receivedAt.Add(delay)
 	}
+	cmd.Blow.SourceOffense = s.captureCombatSourceV5(e, cmd.Blow.StartedInvisible)
+	cmd.Blow.AttackStats = e.Stats
+	cmd.Blow.AttackStatsSnapshot = true
+	cmd.Blow.EquipmentOffense = s.equipmentOffense(e)
+	cmd.Blow.EquipmentSnapshot = true
 	s.attacks = append(s.attacks, pendingAttack{
 		src: e.ID, dst: t.ID, blow: cmd.Blow,
 		resolveAtWall: resolveAtWall,
@@ -967,7 +1014,7 @@ func (s *Scene) sendAllEntities(to domain.EntityID) {
 		if s.entityMapLoading(o) {
 			continue
 		}
-		if o.ID == to || (o.Kind == domain.KindNPC && s.skipNPC) {
+		if o.ID == to || (o.Kind == domain.KindNPC && s.skipNPC && !s.isEndgameRiftExitNPC(o)) {
 			continue
 		}
 		if o.Kind == domain.KindPet && o.Pet != nil {

@@ -1,4 +1,7 @@
 package session
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"bytes"
@@ -28,7 +31,7 @@ type friendRig struct {
 
 func newFriendRig(t *testing.T) *friendRig {
 	t.Helper()
-	return &friendRig{t: t, store: store.NewMemory(),
+	return &friendRig{t: t, store: store.NewMemory(catalogfixture.EndgameCatalog()),
 		idx: online.NewRegistry(), reqs: social.NewRequests()}
 }
 
@@ -293,7 +296,7 @@ func closeRig(t *testing.T) (*friendRig, *scene.Router, func()) {
 	r := newFriendRig(t)
 	frames := make(chan time.Time, 4)
 	build := func(id domain.SceneID) (*scene.Scene, error) {
-		return scene.New(scene.Config{ID: id, Frames: frames}), nil
+		return scene.New(scene.Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Frames: frames}), nil
 	}
 	router := scene.NewRouter(build, slog.Default())
 	ctx, cancel := context.WithCancel(context.Background())

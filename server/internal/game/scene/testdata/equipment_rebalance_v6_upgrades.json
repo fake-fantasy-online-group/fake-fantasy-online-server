@@ -1,0 +1,5834 @@
+{
+  "1001": {
+    "Native": true,
+    "Position": 2,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:9923",
+    "RefineSource": "server/migrations/000000_init-30.sql:17772",
+    "Durable": 4,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 80
+  },
+  "1002": {
+    "Native": true,
+    "Position": 2,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:9924",
+    "RefineSource": "server/migrations/000000_init-30.sql:19465",
+    "Durable": 17,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 340
+  },
+  "1003": {
+    "Native": true,
+    "Position": 2,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11057",
+    "RefineSource": "server/migrations/000000_init-31.sql:3",
+    "Durable": 24,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 480
+  },
+  "1004": {
+    "Native": true,
+    "Position": 2,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:417",
+    "RefineSource": "server/migrations/000000_init-31.sql:243",
+    "Durable": 54,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1080
+  },
+  "1005": {
+    "Native": true,
+    "Position": 2,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:1550",
+    "RefineSource": "server/migrations/000000_init-30.sql:16971",
+    "Durable": 57,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1140
+  },
+  "1006": {
+    "Native": true,
+    "Position": 2,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:2683",
+    "RefineSource": "server/migrations/000000_init-30.sql:17208",
+    "Durable": 72,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1440
+  },
+  "1007": {
+    "Native": true,
+    "Position": 2,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:3816",
+    "RefineSource": "server/migrations/000000_init-30.sql:17445",
+    "Durable": 79,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1580
+  },
+  "1008": {
+    "Native": true,
+    "Position": 2,
+    "Tier": 8,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:4949",
+    "RefineSource": "server/migrations/000000_init-30.sql:17704",
+    "Durable": 81,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1620
+  },
+  "1009": {
+    "Native": true,
+    "Position": 2,
+    "Tier": 9,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:6082",
+    "RefineSource": "server/migrations/000000_init-30.sql:17909",
+    "Durable": 85,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1700
+  },
+  "1010": {
+    "Native": true,
+    "Position": 2,
+    "Tier": 10,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:690",
+    "RefineSource": "server/migrations/000000_init-30.sql:18110",
+    "Durable": 89,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1780
+  },
+  "1102": {
+    "Native": true,
+    "Position": 105,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:577",
+    "RefineSource": "server/migrations/000000_init-30.sql:17907",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "1103": {
+    "Native": true,
+    "Position": 105,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:691",
+    "RefineSource": "server/migrations/000000_init-30.sql:19478",
+    "Durable": 24,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 480
+  },
+  "1104": {
+    "Native": true,
+    "Position": 105,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:793",
+    "RefineSource": "server/migrations/000000_init-31.sql:19",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "1105": {
+    "Native": true,
+    "Position": 105,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:806",
+    "RefineSource": "server/migrations/000000_init-31.sql:256",
+    "Durable": 57,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1140
+  },
+  "1106": {
+    "Native": true,
+    "Position": 105,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:817",
+    "RefineSource": "server/migrations/000000_init-30.sql:16984",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "1107": {
+    "Native": true,
+    "Position": 105,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:828",
+    "RefineSource": "server/migrations/000000_init-30.sql:17221",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "1108": {
+    "Native": true,
+    "Position": 105,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:839",
+    "RefineSource": "server/migrations/000000_init-30.sql:17458",
+    "Durable": 81,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1620
+  },
+  "1109": {
+    "Native": true,
+    "Position": 105,
+    "Tier": 8,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:850",
+    "RefineSource": "server/migrations/000000_init-30.sql:17718",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "1110": {
+    "Native": true,
+    "Position": 105,
+    "Tier": 9,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:861",
+    "RefineSource": "server/migrations/000000_init-30.sql:17917",
+    "Durable": 89,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1780
+  },
+  "1301": {
+    "Native": true,
+    "Position": 16,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10559",
+    "RefineSource": "server/migrations/000000_init-30.sql:17805",
+    "Durable": 4,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 80
+  },
+  "1302": {
+    "Native": true,
+    "Position": 16,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10570",
+    "RefineSource": "server/migrations/000000_init-30.sql:19468",
+    "Durable": 17,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 340
+  },
+  "1303": {
+    "Native": true,
+    "Position": 16,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10581",
+    "RefineSource": "server/migrations/000000_init-31.sql:6",
+    "Durable": 24,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 480
+  },
+  "1304": {
+    "Native": true,
+    "Position": 16,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10592",
+    "RefineSource": "server/migrations/000000_init-31.sql:246",
+    "Durable": 54,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1080
+  },
+  "1305": {
+    "Native": true,
+    "Position": 16,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10604",
+    "RefineSource": "server/migrations/000000_init-30.sql:16974",
+    "Durable": 57,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1140
+  },
+  "1306": {
+    "Native": true,
+    "Position": 16,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10615",
+    "RefineSource": "server/migrations/000000_init-30.sql:17211",
+    "Durable": 72,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1440
+  },
+  "1307": {
+    "Native": true,
+    "Position": 16,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10626",
+    "RefineSource": "server/migrations/000000_init-30.sql:17448",
+    "Durable": 79,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1580
+  },
+  "1308": {
+    "Native": true,
+    "Position": 16,
+    "Tier": 8,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10639",
+    "RefineSource": "server/migrations/000000_init-30.sql:17707",
+    "Durable": 81,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1620
+  },
+  "1309": {
+    "Native": true,
+    "Position": 16,
+    "Tier": 9,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10650",
+    "RefineSource": "server/migrations/000000_init-30.sql:17912",
+    "Durable": 85,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1700
+  },
+  "1310": {
+    "Native": true,
+    "Position": 16,
+    "Tier": 10,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10661",
+    "RefineSource": "server/migrations/000000_init-30.sql:18114",
+    "Durable": 89,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1780
+  },
+  "1501": {
+    "Native": true,
+    "Position": 4,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10785",
+    "RefineSource": "server/migrations/000000_init-30.sql:17783",
+    "Durable": 4,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 80
+  },
+  "1502": {
+    "Native": true,
+    "Position": 4,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10796",
+    "RefineSource": "server/migrations/000000_init-30.sql:19466",
+    "Durable": 17,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 340
+  },
+  "1503": {
+    "Native": true,
+    "Position": 4,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10807",
+    "RefineSource": "server/migrations/000000_init-31.sql:4",
+    "Durable": 24,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 480
+  },
+  "1504": {
+    "Native": true,
+    "Position": 4,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10818",
+    "RefineSource": "server/migrations/000000_init-31.sql:244",
+    "Durable": 54,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1080
+  },
+  "1505": {
+    "Native": true,
+    "Position": 4,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10830",
+    "RefineSource": "server/migrations/000000_init-30.sql:16972",
+    "Durable": 57,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1140
+  },
+  "1506": {
+    "Native": true,
+    "Position": 4,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10843",
+    "RefineSource": "server/migrations/000000_init-30.sql:17209",
+    "Durable": 72,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1440
+  },
+  "1507": {
+    "Native": true,
+    "Position": 4,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10854",
+    "RefineSource": "server/migrations/000000_init-30.sql:17446",
+    "Durable": 79,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1580
+  },
+  "1508": {
+    "Native": true,
+    "Position": 4,
+    "Tier": 8,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10865",
+    "RefineSource": "server/migrations/000000_init-30.sql:17705",
+    "Durable": 81,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1620
+  },
+  "1509": {
+    "Native": true,
+    "Position": 4,
+    "Tier": 9,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10876",
+    "RefineSource": "server/migrations/000000_init-30.sql:17910",
+    "Durable": 85,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1700
+  },
+  "1510": {
+    "Native": true,
+    "Position": 4,
+    "Tier": 10,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10887",
+    "RefineSource": "server/migrations/000000_init-30.sql:18111",
+    "Durable": 89,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1780
+  },
+  "1601": {
+    "Native": true,
+    "Position": 1,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11011",
+    "RefineSource": "server/migrations/000000_init-30.sql:17759",
+    "Durable": 4,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 80
+  },
+  "1602": {
+    "Native": true,
+    "Position": 1,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11022",
+    "RefineSource": "server/migrations/000000_init-30.sql:19464",
+    "Durable": 17,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 340
+  },
+  "1603": {
+    "Native": true,
+    "Position": 1,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11033",
+    "RefineSource": "server/migrations/000000_init-31.sql:2",
+    "Durable": 24,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 480
+  },
+  "1604": {
+    "Native": true,
+    "Position": 1,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11046",
+    "RefineSource": "server/migrations/000000_init-31.sql:242",
+    "Durable": 54,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1080
+  },
+  "1605": {
+    "Native": true,
+    "Position": 1,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11059",
+    "RefineSource": "server/migrations/000000_init-30.sql:16970",
+    "Durable": 57,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1140
+  },
+  "1606": {
+    "Native": true,
+    "Position": 1,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11070",
+    "RefineSource": "server/migrations/000000_init-30.sql:17207",
+    "Durable": 72,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1440
+  },
+  "1607": {
+    "Native": true,
+    "Position": 1,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11081",
+    "RefineSource": "server/migrations/000000_init-30.sql:17444",
+    "Durable": 79,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1580
+  },
+  "1608": {
+    "Native": true,
+    "Position": 1,
+    "Tier": 8,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11092",
+    "RefineSource": "server/migrations/000000_init-30.sql:17702",
+    "Durable": 81,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1620
+  },
+  "1609": {
+    "Native": true,
+    "Position": 1,
+    "Tier": 9,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11103",
+    "RefineSource": "server/migrations/000000_init-30.sql:17908",
+    "Durable": 85,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1700
+  },
+  "1610": {
+    "Native": true,
+    "Position": 1,
+    "Tier": 10,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11114",
+    "RefineSource": "server/migrations/000000_init-30.sql:18109",
+    "Durable": 89,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1780
+  },
+  "1801": {
+    "Native": true,
+    "Position": 8,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11238",
+    "RefineSource": "server/migrations/000000_init-30.sql:17794",
+    "Durable": 4,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 80
+  },
+  "1802": {
+    "Native": true,
+    "Position": 8,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11251",
+    "RefineSource": "server/migrations/000000_init-30.sql:19467",
+    "Durable": 17,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 340
+  },
+  "1803": {
+    "Native": true,
+    "Position": 8,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11262",
+    "RefineSource": "server/migrations/000000_init-31.sql:5",
+    "Durable": 24,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 480
+  },
+  "1804": {
+    "Native": true,
+    "Position": 8,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11273",
+    "RefineSource": "server/migrations/000000_init-31.sql:245",
+    "Durable": 54,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1080
+  },
+  "1805": {
+    "Native": true,
+    "Position": 8,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11285",
+    "RefineSource": "server/migrations/000000_init-30.sql:16973",
+    "Durable": 57,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1140
+  },
+  "1806": {
+    "Native": true,
+    "Position": 8,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11296",
+    "RefineSource": "server/migrations/000000_init-30.sql:17210",
+    "Durable": 72,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1440
+  },
+  "1807": {
+    "Native": true,
+    "Position": 8,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11307",
+    "RefineSource": "server/migrations/000000_init-30.sql:17447",
+    "Durable": 79,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1580
+  },
+  "1808": {
+    "Native": true,
+    "Position": 8,
+    "Tier": 8,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11318",
+    "RefineSource": "server/migrations/000000_init-30.sql:17706",
+    "Durable": 81,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1620
+  },
+  "1809": {
+    "Native": true,
+    "Position": 8,
+    "Tier": 9,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11329",
+    "RefineSource": "server/migrations/000000_init-30.sql:17911",
+    "Durable": 85,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1700
+  },
+  "1810": {
+    "Native": true,
+    "Position": 8,
+    "Tier": 10,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11340",
+    "RefineSource": "server/migrations/000000_init-30.sql:18113",
+    "Durable": 89,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1780
+  },
+  "1903": {
+    "Native": true,
+    "Position": 32,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11488",
+    "RefineSource": "server/migrations/000000_init-30.sql:17861",
+    "Durable": 4,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 80
+  },
+  "1904": {
+    "Native": true,
+    "Position": 32,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11499",
+    "RefineSource": "server/migrations/000000_init-30.sql:19474",
+    "Durable": 17,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 340
+  },
+  "1905": {
+    "Native": true,
+    "Position": 32,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11511",
+    "RefineSource": "server/migrations/000000_init-31.sql:15",
+    "Durable": 24,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 480
+  },
+  "1906": {
+    "Native": true,
+    "Position": 32,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11522",
+    "RefineSource": "server/migrations/000000_init-31.sql:252",
+    "Durable": 54,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1080
+  },
+  "1907": {
+    "Native": true,
+    "Position": 32,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11533",
+    "RefineSource": "server/migrations/000000_init-30.sql:16980",
+    "Durable": 57,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1140
+  },
+  "1908": {
+    "Native": true,
+    "Position": 32,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11544",
+    "RefineSource": "server/migrations/000000_init-30.sql:17217",
+    "Durable": 72,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1440
+  },
+  "1909": {
+    "Native": true,
+    "Position": 32,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11557",
+    "RefineSource": "server/migrations/000000_init-30.sql:17454",
+    "Durable": 79,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1580
+  },
+  "1910": {
+    "Native": true,
+    "Position": 32,
+    "Tier": 8,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11568",
+    "RefineSource": "server/migrations/000000_init-30.sql:17713",
+    "Durable": 81,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1620
+  },
+  "1911": {
+    "Native": true,
+    "Position": 32,
+    "Tier": 9,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11579",
+    "RefineSource": "server/migrations/000000_init-30.sql:17913",
+    "Durable": 85,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1700
+  },
+  "1912": {
+    "Native": true,
+    "Position": 32,
+    "Tier": 10,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 29,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 31,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11590",
+    "RefineSource": "server/migrations/000000_init-30.sql:18115",
+    "Durable": 89,
+    "AttackWear": 1,
+    "HitWear": 0,
+    "DeathWear": 1780
+  },
+  "2001": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11714",
+    "RefineSource": "server/migrations/000000_init-30.sql:17885",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2002": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11725",
+    "RefineSource": "server/migrations/000000_init-30.sql:17885",
+    "Durable": 4,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 80
+  },
+  "2003": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11737",
+    "RefineSource": "server/migrations/000000_init-30.sql:17885",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2004": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11748",
+    "RefineSource": "server/migrations/000000_init-30.sql:19476",
+    "Durable": 24,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 480
+  },
+  "2005": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11761",
+    "RefineSource": "server/migrations/000000_init-30.sql:17885",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2006": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:11772",
+    "RefineSource": "server/migrations/000000_init-30.sql:17885",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2007": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:10",
+    "RefineSource": "server/migrations/000000_init-31.sql:254",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2008": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:21",
+    "RefineSource": "server/migrations/000000_init-30.sql:19476",
+    "Durable": 24,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 480
+  },
+  "2009": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:32",
+    "RefineSource": "server/migrations/000000_init-30.sql:19476",
+    "Durable": 24,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 480
+  },
+  "2010": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:43",
+    "RefineSource": "server/migrations/000000_init-30.sql:17885",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2011": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:54",
+    "RefineSource": "server/migrations/000000_init-30.sql:19476",
+    "Durable": 24,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 480
+  },
+  "2012": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:65",
+    "RefineSource": "server/migrations/000000_init-30.sql:19476",
+    "Durable": 24,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 480
+  },
+  "2013": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:77",
+    "RefineSource": "server/migrations/000000_init-31.sql:254",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2014": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:90",
+    "RefineSource": "server/migrations/000000_init-31.sql:17",
+    "Durable": 57,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1140
+  },
+  "2015": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:101",
+    "RefineSource": "server/migrations/000000_init-31.sql:17",
+    "Durable": 57,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1140
+  },
+  "2016": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:112",
+    "RefineSource": "server/migrations/000000_init-31.sql:17",
+    "Durable": 57,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1140
+  },
+  "2017": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:123",
+    "RefineSource": "server/migrations/000000_init-31.sql:17",
+    "Durable": 57,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1140
+  },
+  "2018": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:134",
+    "RefineSource": "server/migrations/000000_init-31.sql:17",
+    "Durable": 57,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1140
+  },
+  "2019": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:145",
+    "RefineSource": "server/migrations/000000_init-31.sql:17",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2020": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:156",
+    "RefineSource": "server/migrations/000000_init-31.sql:17",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2023": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:192",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 81,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1620
+  },
+  "2024": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:203",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 81,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1620
+  },
+  "2025": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:214",
+    "RefineSource": "server/migrations/000000_init-31.sql:254",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2026": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:225",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2027": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:236",
+    "RefineSource": "server/migrations/000000_init-31.sql:254",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2028": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:247",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2029": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:258",
+    "RefineSource": "server/migrations/000000_init-31.sql:254",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2030": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:269",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2031": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:280",
+    "RefineSource": "server/migrations/000000_init-31.sql:254",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2032": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:293",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2033": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:305",
+    "RefineSource": "server/migrations/000000_init-31.sql:254",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2034": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:316",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2035": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:327",
+    "RefineSource": "server/migrations/000000_init-30.sql:19476",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2036": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:338",
+    "RefineSource": "server/migrations/000000_init-30.sql:19476",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2037": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:349",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2038": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:360",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2039": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:371",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2040": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:382",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2041": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:395",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2042": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:406",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2043": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:419",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2044": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:430",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2045": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:441",
+    "RefineSource": "server/migrations/000000_init-30.sql:17219",
+    "Durable": 81,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1620
+  },
+  "2046": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:452",
+    "RefineSource": "server/migrations/000000_init-30.sql:17456",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2048": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:474",
+    "RefineSource": "server/migrations/000000_init-30.sql:17219",
+    "Durable": 81,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1620
+  },
+  "2049": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:485",
+    "RefineSource": "server/migrations/000000_init-30.sql:17456",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2051": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:509",
+    "RefineSource": "server/migrations/000000_init-30.sql:17219",
+    "Durable": 81,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1620
+  },
+  "2052": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:520",
+    "RefineSource": "server/migrations/000000_init-30.sql:17456",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2054": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:543",
+    "RefineSource": "server/migrations/000000_init-30.sql:17219",
+    "Durable": 81,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1620
+  },
+  "2055": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:554",
+    "RefineSource": "server/migrations/000000_init-30.sql:17456",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2057": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:576",
+    "RefineSource": "server/migrations/000000_init-30.sql:17219",
+    "Durable": 81,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1620
+  },
+  "2058": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:587",
+    "RefineSource": "server/migrations/000000_init-30.sql:17456",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2060": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:611",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2061": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:622",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2062": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:633",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2063": {
+    "Native": true,
+    "Position": 102,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:645",
+    "RefineSource": "server/migrations/000000_init-30.sql:16982",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2101": {
+    "Native": true,
+    "Position": 109,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:1074",
+    "RefineSource": "server/migrations/000000_init-30.sql:17951",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2102": {
+    "Native": true,
+    "Position": 109,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:1085",
+    "RefineSource": "server/migrations/000000_init-30.sql:19482",
+    "Durable": 24,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 480
+  },
+  "2103": {
+    "Native": true,
+    "Position": 109,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:1097",
+    "RefineSource": "server/migrations/000000_init-31.sql:23",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2104": {
+    "Native": true,
+    "Position": 109,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:1110",
+    "RefineSource": "server/migrations/000000_init-31.sql:260",
+    "Durable": 57,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1140
+  },
+  "2105": {
+    "Native": true,
+    "Position": 109,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:1121",
+    "RefineSource": "server/migrations/000000_init-30.sql:16988",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2106": {
+    "Native": true,
+    "Position": 109,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:1132",
+    "RefineSource": "server/migrations/000000_init-30.sql:17225",
+    "Durable": 81,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1620
+  },
+  "2107": {
+    "Native": true,
+    "Position": 109,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:1143",
+    "RefineSource": "server/migrations/000000_init-30.sql:17464",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2401": {
+    "Native": true,
+    "Position": 106,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 25,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:4475",
+    "RefineSource": "server/migrations/000000_init-30.sql:17918",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2402": {
+    "Native": true,
+    "Position": 106,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 25,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:4486",
+    "RefineSource": "server/migrations/000000_init-30.sql:19479",
+    "Durable": 24,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 480
+  },
+  "2403": {
+    "Native": true,
+    "Position": 106,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 25,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:4498",
+    "RefineSource": "server/migrations/000000_init-31.sql:20",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2404": {
+    "Native": true,
+    "Position": 106,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 25,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:4509",
+    "RefineSource": "server/migrations/000000_init-31.sql:257",
+    "Durable": 57,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1140
+  },
+  "2405": {
+    "Native": true,
+    "Position": 106,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 25,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:4520",
+    "RefineSource": "server/migrations/000000_init-30.sql:16985",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2406": {
+    "Native": true,
+    "Position": 106,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 25,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:4531",
+    "RefineSource": "server/migrations/000000_init-30.sql:17222",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2407": {
+    "Native": true,
+    "Position": 106,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 25,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:4542",
+    "RefineSource": "server/migrations/000000_init-30.sql:17459",
+    "Durable": 81,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1620
+  },
+  "2408": {
+    "Native": true,
+    "Position": 106,
+    "Tier": 8,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 25,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:4553",
+    "RefineSource": "server/migrations/000000_init-30.sql:17719",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2409": {
+    "Native": true,
+    "Position": 106,
+    "Tier": 9,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 25,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:4564",
+    "RefineSource": "server/migrations/000000_init-30.sql:17919",
+    "Durable": 89,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1780
+  },
+  "2501": {
+    "Native": true,
+    "Position": 103,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:5608",
+    "RefineSource": "server/migrations/000000_init-30.sql:17896",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2502": {
+    "Native": true,
+    "Position": 103,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:5619",
+    "RefineSource": "server/migrations/000000_init-30.sql:19477",
+    "Durable": 24,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 480
+  },
+  "2503": {
+    "Native": true,
+    "Position": 103,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:5631",
+    "RefineSource": "server/migrations/000000_init-31.sql:18",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2504": {
+    "Native": true,
+    "Position": 103,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:5642",
+    "RefineSource": "server/migrations/000000_init-31.sql:255",
+    "Durable": 57,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1140
+  },
+  "2505": {
+    "Native": true,
+    "Position": 103,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:5653",
+    "RefineSource": "server/migrations/000000_init-30.sql:16983",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2506": {
+    "Native": true,
+    "Position": 103,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:5664",
+    "RefineSource": "server/migrations/000000_init-30.sql:17220",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2507": {
+    "Native": true,
+    "Position": 103,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:5675",
+    "RefineSource": "server/migrations/000000_init-30.sql:17457",
+    "Durable": 81,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1620
+  },
+  "2508": {
+    "Native": true,
+    "Position": 103,
+    "Tier": 8,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:5686",
+    "RefineSource": "server/migrations/000000_init-30.sql:17717",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2551": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:6174",
+    "RefineSource": "server/migrations/000000_init-30.sql:17929",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2552": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:6185",
+    "RefineSource": "server/migrations/000000_init-30.sql:19480",
+    "Durable": 24,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 480
+  },
+  "2553": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:6197",
+    "RefineSource": "server/migrations/000000_init-31.sql:21",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2554": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:6210",
+    "RefineSource": "server/migrations/000000_init-31.sql:258",
+    "Durable": 57,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1140
+  },
+  "2555": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:6221",
+    "RefineSource": "server/migrations/000000_init-30.sql:16986",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2556": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:6232",
+    "RefineSource": "server/migrations/000000_init-30.sql:17223",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2557": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:6243",
+    "RefineSource": "server/migrations/000000_init-30.sql:17460",
+    "Durable": 81,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1620
+  },
+  "2558": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 8,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:6254",
+    "RefineSource": "server/migrations/000000_init-30.sql:17720",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2559": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 9,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:6265",
+    "RefineSource": "server/migrations/000000_init-30.sql:17920",
+    "Durable": 89,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1780
+  },
+  "2581": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-25.sql:6515",
+    "RefineSource": "server/migrations/000000_init-30.sql:17929",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2582": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:1",
+    "RefineSource": "server/migrations/000000_init-30.sql:19480",
+    "Durable": 24,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 480
+  },
+  "2583": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:13",
+    "RefineSource": "server/migrations/000000_init-31.sql:21",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2584": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:24",
+    "RefineSource": "server/migrations/000000_init-31.sql:258",
+    "Durable": 57,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1140
+  },
+  "2585": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:35",
+    "RefineSource": "server/migrations/000000_init-30.sql:16986",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2586": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:46",
+    "RefineSource": "server/migrations/000000_init-30.sql:17223",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2587": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 7,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:57",
+    "RefineSource": "server/migrations/000000_init-30.sql:17460",
+    "Durable": 81,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1620
+  },
+  "2588": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 8,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:68",
+    "RefineSource": "server/migrations/000000_init-30.sql:17720",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2589": {
+    "Native": true,
+    "Position": 107,
+    "Tier": 9,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 15,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 47,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:79",
+    "RefineSource": "server/migrations/000000_init-30.sql:17920",
+    "Durable": 89,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1780
+  },
+  "2601": {
+    "Native": true,
+    "Position": 110,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 40,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:216",
+    "RefineSource": "server/migrations/000000_init-30.sql:16989",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2602": {
+    "Native": true,
+    "Position": 110,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 40,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:227",
+    "RefineSource": "server/migrations/000000_init-30.sql:17226",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2603": {
+    "Native": true,
+    "Position": 110,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 40,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:239",
+    "RefineSource": "server/migrations/000000_init-30.sql:17226",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2604": {
+    "Native": true,
+    "Position": 110,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 40,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:250",
+    "RefineSource": "server/migrations/000000_init-31.sql:261",
+    "Durable": 57,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1140
+  },
+  "2605": {
+    "Native": true,
+    "Position": 110,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 40,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:261",
+    "RefineSource": "server/migrations/000000_init-30.sql:17962",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2606": {
+    "Native": true,
+    "Position": 110,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 40,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:272",
+    "RefineSource": "server/migrations/000000_init-31.sql:24",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2607": {
+    "Native": true,
+    "Position": 110,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 40,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:283",
+    "RefineSource": "server/migrations/000000_init-30.sql:16989",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2608": {
+    "Native": true,
+    "Position": 110,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 40,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:296",
+    "RefineSource": "server/migrations/000000_init-31.sql:24",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2609": {
+    "Native": true,
+    "Position": 110,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 40,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:307",
+    "RefineSource": "server/migrations/000000_init-30.sql:19483",
+    "Durable": 24,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 480
+  },
+  "2610": {
+    "Native": true,
+    "Position": 110,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 40,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:318",
+    "RefineSource": "server/migrations/000000_init-31.sql:261",
+    "Durable": 57,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1140
+  },
+  "2701": {
+    "Native": true,
+    "Position": 101,
+    "Tier": 1,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:848",
+    "RefineSource": "server/migrations/000000_init-30.sql:17874",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2702": {
+    "Native": true,
+    "Position": 101,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:849",
+    "RefineSource": "server/migrations/000000_init-30.sql:19475",
+    "Durable": 24,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 480
+  },
+  "2703": {
+    "Native": true,
+    "Position": 101,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:851",
+    "RefineSource": "server/migrations/000000_init-31.sql:16",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2704": {
+    "Native": true,
+    "Position": 101,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:852",
+    "RefineSource": "server/migrations/000000_init-31.sql:16",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2705": {
+    "Native": true,
+    "Position": 101,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:853",
+    "RefineSource": "server/migrations/000000_init-31.sql:16",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2706": {
+    "Native": true,
+    "Position": 101,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:854",
+    "RefineSource": "server/migrations/000000_init-31.sql:16",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2707": {
+    "Native": true,
+    "Position": 101,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-26.sql:855",
+    "RefineSource": "server/migrations/000000_init-31.sql:16",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2803": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:9993",
+    "RefineSource": "server/migrations/000000_init-30.sql:19481",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2804": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:9994",
+    "RefineSource": "server/migrations/000000_init-30.sql:19481",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2805": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:9995",
+    "RefineSource": "server/migrations/000000_init-31.sql:22",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2806": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:9996",
+    "RefineSource": "server/migrations/000000_init-31.sql:22",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2807": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:9997",
+    "RefineSource": "server/migrations/000000_init-30.sql:19481",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2808": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:9998",
+    "RefineSource": "server/migrations/000000_init-30.sql:19481",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2809": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:9999",
+    "RefineSource": "server/migrations/000000_init-31.sql:22",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2810": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10000",
+    "RefineSource": "server/migrations/000000_init-31.sql:22",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2811": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10001",
+    "RefineSource": "server/migrations/000000_init-30.sql:19481",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2812": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10002",
+    "RefineSource": "server/migrations/000000_init-30.sql:19481",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2813": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10004",
+    "RefineSource": "server/migrations/000000_init-31.sql:22",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2814": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10005",
+    "RefineSource": "server/migrations/000000_init-31.sql:22",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2815": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10006",
+    "RefineSource": "server/migrations/000000_init-30.sql:19481",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2816": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10007",
+    "RefineSource": "server/migrations/000000_init-30.sql:19481",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2817": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10008",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2818": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10009",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2819": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10010",
+    "RefineSource": "server/migrations/000000_init-30.sql:19481",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2820": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 2,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10011",
+    "RefineSource": "server/migrations/000000_init-30.sql:19481",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2821": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10012",
+    "RefineSource": "server/migrations/000000_init-31.sql:22",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2822": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10013",
+    "RefineSource": "server/migrations/000000_init-31.sql:22",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2823": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10015",
+    "RefineSource": "server/migrations/000000_init-31.sql:259",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2824": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10016",
+    "RefineSource": "server/migrations/000000_init-31.sql:259",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2825": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10017",
+    "RefineSource": "server/migrations/000000_init-31.sql:259",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2826": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10018",
+    "RefineSource": "server/migrations/000000_init-31.sql:259",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2827": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10019",
+    "RefineSource": "server/migrations/000000_init-31.sql:259",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2828": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10020",
+    "RefineSource": "server/migrations/000000_init-31.sql:259",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2829": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10021",
+    "RefineSource": "server/migrations/000000_init-30.sql:17224",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2830": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10022",
+    "RefineSource": "server/migrations/000000_init-30.sql:17224",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2831": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10025",
+    "RefineSource": "server/migrations/000000_init-31.sql:259",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2832": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10026",
+    "RefineSource": "server/migrations/000000_init-31.sql:259",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2867": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10066",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2868": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10067",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2869": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10068",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2870": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10069",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2871": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10070",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2872": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10071",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2877": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10077",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2878": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10078",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2879": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10079",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2880": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10080",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2883": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10084",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2884": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10085",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2885": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10086",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2886": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10087",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2887": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10088",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2888": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10089",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2889": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10090",
+    "RefineSource": "server/migrations/000000_init-31.sql:22",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2890": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 3,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10091",
+    "RefineSource": "server/migrations/000000_init-31.sql:22",
+    "Durable": 54,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1080
+  },
+  "2891": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10092",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2892": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10093",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 79,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1580
+  },
+  "2893": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10095",
+    "RefineSource": "server/migrations/000000_init-30.sql:17224",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2894": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10096",
+    "RefineSource": "server/migrations/000000_init-30.sql:17224",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2895": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10097",
+    "RefineSource": "server/migrations/000000_init-30.sql:17224",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2896": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10098",
+    "RefineSource": "server/migrations/000000_init-30.sql:17224",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2897": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10099",
+    "RefineSource": "server/migrations/000000_init-31.sql:259",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2898": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 4,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10100",
+    "RefineSource": "server/migrations/000000_init-31.sql:259",
+    "Durable": 72,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1440
+  },
+  "2899": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10101",
+    "RefineSource": "server/migrations/000000_init-30.sql:17224",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2900": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10102",
+    "RefineSource": "server/migrations/000000_init-30.sql:17224",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2901": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10103",
+    "RefineSource": "server/migrations/000000_init-30.sql:17224",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2902": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 6,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10104",
+    "RefineSource": "server/migrations/000000_init-30.sql:17224",
+    "Durable": 85,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 1700
+  },
+  "2903": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10106",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2904": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10107",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2905": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10108",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  },
+  "2906": {
+    "Native": true,
+    "Position": 108,
+    "Tier": 5,
+    "RefineLevel": 10,
+    "RawRefine": [
+      {
+        "Attr": 13,
+        "Mode": 1,
+        "Value": 100
+      },
+      {
+        "Attr": 17,
+        "Mode": 1,
+        "Value": 100
+      }
+    ],
+    "Source": "server/migrations/000000_init-24.sql:10109",
+    "RefineSource": "server/migrations/000000_init-30.sql:16987",
+    "Durable": 17,
+    "AttackWear": 0,
+    "HitWear": 1,
+    "DeathWear": 340
+  }
+}

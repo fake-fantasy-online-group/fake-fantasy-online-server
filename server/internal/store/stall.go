@@ -10,7 +10,7 @@ import (
 )
 
 func (p *Postgres) LoadStall(ctx context.Context, charID int64) (*domain.Stall, error) {
-	return loadStall(ctx, p.pool, charID)
+	return loadStall(ctx, p.catalogQuery(), charID)
 }
 
 func (t *pgTx) LoadStall(ctx context.Context, charID int64) (*domain.Stall, error) {

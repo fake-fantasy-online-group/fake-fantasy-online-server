@@ -27,7 +27,7 @@ var (
 )
 
 func (p *Postgres) LoadFamily(ctx context.Context, charID int64) (*domain.Family, error) {
-	return loadFamily(ctx, p.pool, charID)
+	return loadFamily(ctx, p.catalogQuery(), charID)
 }
 func (t *pgTx) LoadFamily(ctx context.Context, charID int64) (*domain.Family, error) {
 	return loadFamily(ctx, t.tx, charID)
@@ -116,7 +116,7 @@ func browseFamilies(ctx context.Context, q querier) ([]domain.FamilyBrowseEntry,
 }
 
 func (p *Postgres) FamilyPositions(ctx context.Context, charID int64) ([]domain.FamilyPosition, error) {
-	return familyPositions(ctx, p.pool, charID)
+	return familyPositions(ctx, p.catalogQuery(), charID)
 }
 func (t *pgTx) FamilyPositions(ctx context.Context, charID int64) ([]domain.FamilyPosition, error) {
 	return familyPositions(ctx, t.tx, charID)
@@ -153,7 +153,7 @@ func familyPositions(ctx context.Context, q querier, charID int64) ([]domain.Fam
 }
 
 func (p *Postgres) FamilyByName(ctx context.Context, name string) (int64, domain.CharID, bool, error) {
-	return familyByName(ctx, p.pool, name)
+	return familyByName(ctx, p.catalogQuery(), name)
 }
 func (t *pgTx) FamilyByName(ctx context.Context, name string) (int64, domain.CharID, bool, error) {
 	return familyByName(ctx, t.tx, name)
@@ -242,7 +242,7 @@ func (t *pgTx) JoinFamily(ctx context.Context, charID, familyID int64, invited b
 }
 
 func (p *Postgres) LeaveFamily(ctx context.Context, charID int64) error {
-	return leaveFamily(ctx, p.pool, charID)
+	return leaveFamily(ctx, p.catalogQuery(), charID)
 }
 func (t *pgTx) LeaveFamily(ctx context.Context, charID int64) error {
 	return leaveFamily(ctx, t.tx, charID)
@@ -281,7 +281,7 @@ func familyHasPermission(ctx context.Context, q querier, actorID int64, column s
 }
 
 func (p *Postgres) SetFamilyProclaim(ctx context.Context, actorID int64, proclaim string) error {
-	return setFamilyProclaim(ctx, p.pool, actorID, proclaim)
+	return setFamilyProclaim(ctx, p.catalogQuery(), actorID, proclaim)
 }
 func (t *pgTx) SetFamilyProclaim(ctx context.Context, actorID int64, proclaim string) error {
 	return setFamilyProclaim(ctx, t.tx, actorID, proclaim)
@@ -300,7 +300,7 @@ func setFamilyProclaim(ctx context.Context, q querier, actorID int64, proclaim s
 }
 
 func (p *Postgres) SetFamilyResist(ctx context.Context, actorID int64, resist bool) error {
-	return setFamilyResist(ctx, p.pool, actorID, resist)
+	return setFamilyResist(ctx, p.catalogQuery(), actorID, resist)
 }
 func (t *pgTx) SetFamilyResist(ctx context.Context, actorID int64, resist bool) error {
 	return setFamilyResist(ctx, t.tx, actorID, resist)
@@ -315,7 +315,7 @@ func setFamilyResist(ctx context.Context, q querier, actorID int64, resist bool)
 }
 
 func (p *Postgres) SetFamilyMemberPosition(ctx context.Context, actorID int64, targetName string, position domain.FamilyPositionID) (domain.CharID, error) {
-	return setFamilyMemberPosition(ctx, p.pool, actorID, targetName, position)
+	return setFamilyMemberPosition(ctx, p.catalogQuery(), actorID, targetName, position)
 }
 func (t *pgTx) SetFamilyMemberPosition(ctx context.Context, actorID int64, targetName string, position domain.FamilyPositionID) (domain.CharID, error) {
 	return setFamilyMemberPosition(ctx, t.tx, actorID, targetName, position)
@@ -377,7 +377,7 @@ func (t *pgTx) TransferFamilyLeader(ctx context.Context, actorID int64, targetNa
 }
 
 func (p *Postgres) KickFamilyMember(ctx context.Context, actorID int64, targetName string) (domain.CharID, error) {
-	return kickFamilyMember(ctx, p.pool, actorID, targetName)
+	return kickFamilyMember(ctx, p.catalogQuery(), actorID, targetName)
 }
 func (t *pgTx) KickFamilyMember(ctx context.Context, actorID int64, targetName string) (domain.CharID, error) {
 	return kickFamilyMember(ctx, t.tx, actorID, targetName)
@@ -398,7 +398,7 @@ func kickFamilyMember(ctx context.Context, q querier, actorID int64, targetName 
 }
 
 func (p *Postgres) RenameFamilyPosition(ctx context.Context, actorID int64, position domain.FamilyPositionID, name string) error {
-	return renameFamilyPosition(ctx, p.pool, actorID, position, name)
+	return renameFamilyPosition(ctx, p.catalogQuery(), actorID, position, name)
 }
 func (t *pgTx) RenameFamilyPosition(ctx context.Context, actorID int64, position domain.FamilyPositionID, name string) error {
 	return renameFamilyPosition(ctx, t.tx, actorID, position, name)
@@ -466,7 +466,7 @@ func sendFamilyMail(ctx context.Context, q querier, actorID int64, senderName, t
 }
 
 func (p *Postgres) FamilyMemberIDs(ctx context.Context, charID int64) ([]domain.CharID, error) {
-	return familyMemberIDs(ctx, p.pool, charID)
+	return familyMemberIDs(ctx, p.catalogQuery(), charID)
 }
 func (t *pgTx) FamilyMemberIDs(ctx context.Context, charID int64) ([]domain.CharID, error) {
 	return familyMemberIDs(ctx, t.tx, charID)

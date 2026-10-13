@@ -1,0 +1,142 @@
+{
+  "status": "audit_only_not_official_baseline_certification",
+  "current_resource_md5": "cbe007d8955b60a992dd4ef3da682c37",
+  "historical_resource_md5": "0a25fd994d85e4cf858511d1847c7949",
+  "current_count": 146,
+  "historical_count": 149,
+  "modified": 68,
+  "removed": [
+    10316,
+    10318,
+    10321
+  ],
+  "per_profession": {
+    "战士": {
+      "modified": 15,
+      "removed": 0
+    },
+    "剑客": {
+      "modified": 13,
+      "removed": 0
+    },
+    "刺客": {
+      "modified": 10,
+      "removed": 0
+    },
+    "药师": {
+      "modified": 18,
+      "removed": 3
+    },
+    "术士": {
+      "modified": 12,
+      "removed": 0
+    }
+  },
+  "field_changed_skill_counts": {
+    "desc": 25,
+    "levels.desc": 35,
+    "name": 8,
+    "levels.lreq": 12,
+    "radius": 18,
+    "levels.cast": 15,
+    "levels.cd": 15,
+    "rwidth": 1,
+    "shape": 14,
+    "castkind": 1,
+    "canFriendly": 1,
+    "levels.mp": 2,
+    "pre": 3,
+    "dist": 2,
+    "presence": 3
+  },
+  "historical_rows_with_sql_differences": 146,
+  "historical_extra_level_rows": [
+    {
+      "id": 10001,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10015,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10022,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10101,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10106,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10116,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10202,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10204,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10212,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10225,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10303,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10320,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10326,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10421,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10423,
+      "levels": 10,
+      "maxlv": 5
+    },
+    {
+      "id": 10430,
+      "levels": 10,
+      "maxlv": 5
+    }
+  ],
+  "notes": [
+    "68 modified means changed between two local artifacts, not 68 independently authenticated original bugs.",
+    "Three removed combat skills are independent from the life skill11005, which neither projection includes.",
+    "SQL comparison uses like-for-like exported fields; target permissions may encode different concepts and require loader validation.",
+    "Client cast is milliseconds; client cd is deciseconds. Raw SQL prepare and sep match those units.",
+    "Old/current resource mp is verified directly flattened at rank1 for most skills; local full-JSON reprojection matched exactly. Do not adopt it as server growth truth."
+  ]
+}

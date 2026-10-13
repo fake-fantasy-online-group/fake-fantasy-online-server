@@ -1,0 +1,63 @@
+{
+  "client_commit": "66c7712170d4a6eb73da828f870026af7089c401",
+  "server_commit": "db608afea9032e243b3f5d3f60e9c92f1ce1e10f",
+  "status": "audit_only_not_original_certification",
+  "profession_ids": 150,
+  "combat_ids": 149,
+  "raw_rows": 750,
+  "loaded_combat_rows": 745,
+  "resource_projection_available": true,
+  "resource_rows": 146,
+  "known_issue_groups": 26,
+  "known_issue_skill_ids": 32,
+  "per_profession": {
+    "战士": {
+      "total": 30,
+      "with_known_issues": 4
+    },
+    "剑客": {
+      "total": 30,
+      "with_known_issues": 8
+    },
+    "刺客": {
+      "total": 30,
+      "with_known_issues": 8
+    },
+    "药师": {
+      "total": 30,
+      "with_known_issues": 9
+    },
+    "术士": {
+      "total": 30,
+      "with_known_issues": 3
+    }
+  },
+  "sources": [
+    {
+      "repository": "server",
+      "path": "server/migrations/000000_init-31.sql",
+      "sha256": "3d6c26ccadc38b2cef3a496f950f0ff14f8a363506e4be66137c19fc21392b01"
+    },
+    {
+      "repository": "server",
+      "path": "server/migrations/000000_init-33.sql",
+      "sha256": "63e2edd6d9cfbf5cf24044a4700c9e9541a258b6597de79e411c5dbb35e37898"
+    },
+    {
+      "repository": "server",
+      "path": "server/internal/data/gamedb.go",
+      "sha256": "4fafacef751687c85d4d650d55a9e4a9ca7c8a36fc4120a783fcceca2b00e5be"
+    },
+    {
+      "repository": "server",
+      "path": "docs/daoist-endgame/v5/skill-original-ranks.json",
+      "sha256": "846603cd2da83f4c1812028bd3f157e6db94ad568e6c5b691bb07b31badd95a6"
+    },
+    {
+      "repository": "server",
+      "path": "docs/daoist-endgame/v5/skill-status-anchors.json",
+      "sha256": "4c060e83eec39958ef06a2bcafe0c98e2cd4b699dea6ff150cdd13900bebf359"
+    }
+  ],
+  "warning": "Earliest tracked imported rows, actual loader output, current resource, and dated historical documentation are separate authorities. Do not equate them."
+}

@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"context"
@@ -47,7 +50,7 @@ func twoScenes(t *testing.T) (*Router, *sceneRig) {
 			ch = make(chan time.Time)
 			rig.frames[id.MapID] = ch
 		}
-		cfg := Config{ID: id, SaveEvery: 10_000, Seed: 7, Frames: ch,
+		cfg := Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, SaveEvery: 10_000, Seed: 7, Frames: ch,
 			Items: map[domain.ItemID]domain.ItemDef{
 				场景钢剑.ID: 场景钢剑,
 				掉落树枝.ID: 掉落树枝,
@@ -79,7 +82,9 @@ func inspect(t *testing.T, s *Scene, rig *sceneRig, fn func(*Scene)) {
 		t.Fatalf("图 %d 没有节拍通道", s.ID().MapID)
 	}
 	inspectPump(t, s, frames, fn)
-	inspectPump(t, s, frames, func(*Scene) {}) // 栅栏: 确认上一帧已经冲刷完
+	// drain can consume a newly queued second Inspect in the same frame. An
+	// explicit actor-owned flush makes this a real event barrier under -race.
+	inspectPump(t, s, frames, func(scene *Scene) { scene.flush() })
 }
 
 func inspectPump(t *testing.T, s *Scene, frames chan time.Time, fn func(*Scene)) {
@@ -184,7 +189,7 @@ func TestTeleportMovesOwnership(t *testing.T) {
 		if id.MapID == 14 {
 			return nil, errors.New("目标场景不可用")
 		}
-		return New(Config{ID: id, Saver: fallbackSaver, SaveEvery: 10_000, Frames: failedFrames}), nil
+		return New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Saver: fallbackSaver, SaveEvery: 10_000, Frames: failedFrames}), nil
 	}, nil)
 	failedCtx, failedCancel := context.WithCancel(context.Background())
 	failedRouter.Start(failedCtx)
@@ -705,7 +710,7 @@ func TestWalkingNearPortalDoesNotTeleport(t *testing.T) {
 
 // 怪不走传送门。它们要是能跟着穿图, 一张图的怪会漏到另一张图去。
 func TestMonstersDoNotUsePortals(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000,
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000,
 		Portals: []domain.Portal{南郊门}})
 	m := putMonster(s, 900, 100, domain.Stats{}, 5442, 6986) // 直接站在门中心
 	s.step()

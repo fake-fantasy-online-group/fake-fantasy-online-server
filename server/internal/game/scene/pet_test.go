@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -28,11 +31,11 @@ var (
 		ID: 1006, Name: "海龟", Kind: domain.MonsterNormal, Level: 15, HP: 200, Exp: 60,
 		Stats: domain.NewMonsterStats(15, 6, 42, 0, 0, 2000, 110),
 	}
-	捕捉球 = domain.ItemDef{ID: 3382, Name: "初级宠物球", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
+	捕捉球 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 3382, Name: "初级宠物球", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
 
 	// 宠物载体物品：宠物背包上线后，每只宠物都要在背包第 4 页占一个载体物品。
 	// 生产数据里 bag_tab 恒为 3，item_id 规律是 1800000000 + pet_id。
-	海龟蛋 = domain.ItemDef{
+	海龟蛋 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(),
 		ID: 1800001006, Name: "海龟宠物蛋", InventoryTab: 3, InventoryTabKnown: true,
 		Stackable: false, InstanceKind: domain.ItemInstancePet, PetCarrierSpecies: 1006,
 	}
@@ -76,13 +79,13 @@ func petScene(t *testing.T) (*Scene, *fakeSink) {
 	sp, _ := spawn.New(
 		[]domain.SpawnPoint{{ID: 1, Monster: 海龟怪.ID, Pos: domain.Pos{MapID: 7, X: 140, Y: 100}}},
 		defs, domain.NewEntityAlloc())
-	s := New(Config{
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(),
 		ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000, Seed: 42,
 		Spawner: sp, Defs: defs, Levels: rewardLevels(),
 		Alloc:     domain.NewEntityAlloc(),
 		Items:     map[domain.ItemID]domain.ItemDef{3382: 捕捉球, 海龟蛋.ID: 海龟蛋},
 		Pets:      petTable(海龟种, 不可捕种),
-		PetLevels: domain.NewPetLevelTable(map[int32]int64{1: 300, 2: 1100, 3: 2700, 4: 5460}),
+		PetLevels: petFixtureLevels(),
 		PetRule: domain.PetRule{
 			NaturalLearnChanceBP: 2000,
 			InitialSkillMin:      0,
@@ -691,7 +694,7 @@ func TestFeedPetCommand(t *testing.T) {
 	p := s.players[1]
 	inst := &p.Player.Char.Pets[0]
 	inst.Starve = 40
-	p.Player.Bag.Add(domain.ItemDef{ID: 3020, Name: "百叶草", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}, 5)
+	p.Player.Bag.Add(domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 3020, Name: "百叶草", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}, 5)
 	sink.take()
 
 	do(s, FeedPet{ID: 1, Inst: 1, Item: 3020})
@@ -722,13 +725,13 @@ func TestFeedRejects(t *testing.T) {
 		t.Fatalf("背包没食物该拒, 得到 %v", r)
 	}
 	// 不是食物
-	p.Player.Bag.Add(domain.ItemDef{ID: 9001, Name: "石头", InventoryTab: 1, InventoryTabKnown: true}, 1)
+	p.Player.Bag.Add(domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 9001, Name: "石头", InventoryTab: 1, InventoryTabKnown: true}, 1)
 	do(s, FeedPet{ID: 1, Inst: 1, Item: 9001})
 	if r := lastReject(sink.take()); r != event.RejectNotFood {
 		t.Fatalf("不是食物该拒, 得到 %v", r)
 	}
 	// 档位不对
-	p.Player.Bag.Add(domain.ItemDef{ID: 3026, Name: "百果草", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}, 1)
+	p.Player.Bag.Add(domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 3026, Name: "百果草", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}, 1)
 	do(s, FeedPet{ID: 1, Inst: 1, Item: 3026})
 	if r := lastReject(sink.take()); r != event.RejectWrongFoodTier {
 		t.Fatalf("饥渴 40 用高档粮(76~100)该拒, 得到 %v", r)
@@ -764,7 +767,7 @@ func TestLegacyZeroStarvePetUsesGlobalNeedTimer(t *testing.T) {
 
 // ── 辅助宠物不代替玩家拾取 ──
 
-var 掉落物 = domain.ItemDef{ID: 3002, Name: "牛肉面", InventoryTab: 1, InventoryTabKnown: true, Stackable: true, Price: 10}
+var 掉落物 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 3002, Name: "牛肉面", InventoryTab: 1, InventoryTabKnown: true, Stackable: true, Price: 10}
 
 // pickupScene 建一个宠物会捡东西、地上有东西的场景。
 func pickupScene(t *testing.T) (*Scene, *entity.Entity, *fakeSink) {
@@ -925,7 +928,7 @@ func TestFullBagDoesNotProducePetPickupWarnings(t *testing.T) {
 	s, _, sink := pickupScene(t)
 	p := s.players[1]
 	p.Player.Bag = domain.NewBag(1)
-	p.Player.Bag.Add(domain.ItemDef{ID: 9999, Name: "石头", InventoryTab: 1, InventoryTabKnown: true}, 1)
+	p.Player.Bag.Add(domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 9999, Name: "石头", InventoryTab: 1, InventoryTabKnown: true}, 1)
 	dropAt(s, 150, 100, p.ID)
 	sink.take()
 
@@ -1128,4 +1131,12 @@ func TestPetSnapshotOnLoginNotOnTransfer(t *testing.T) {
 	if hasEvent[event.PetSnapshot](sink3.take()) {
 		t.Fatal("跨图落地重发了宠物栏快照")
 	}
+}
+
+func petFixtureLevels() *domain.PetLevelTable {
+	need := map[int32]int64{1: 300, 2: 1100, 3: 2700, 4: 5460}
+	for level := int32(5); level <= domain.PetLevelCap; level++ {
+		need[level] = 1_000_000 + int64(level)
+	}
+	return domain.NewPetLevelTable(need)
 }

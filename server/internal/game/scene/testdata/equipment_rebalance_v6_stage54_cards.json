@@ -1,0 +1,1293 @@
+[
+  {
+    "card": {
+      "card_id": 7183,
+      "name": "武力+6",
+      "family": "武力",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        102,
+        105,
+        106,
+        108,
+        109,
+        110
+      ],
+      "effects": [
+        {
+          "attr": 1,
+          "attr_name": "STR",
+          "value": 12,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:75989",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67378",
+      "item_source": "server/migrations/000000_init-30.sql:698",
+      "descriptor_source": "server/migrations/000000_init-28.sql:7702"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:698",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7625,
+      "name": "仙魂+6",
+      "family": "仙魂",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        16,
+        102,
+        106,
+        108,
+        109,
+        110
+      ],
+      "effects": [
+        {
+          "attr": 3,
+          "attr_name": "INT",
+          "value": 12,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:76491",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67880",
+      "item_source": "server/migrations/000000_init-30.sql:1200",
+      "descriptor_source": "server/migrations/000000_init-28.sql:8201"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:1200",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7574,
+      "name": "根骨+6",
+      "family": "根骨",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        102,
+        105,
+        106,
+        108,
+        109,
+        110
+      ],
+      "effects": [
+        {
+          "attr": 5,
+          "attr_name": "VIT",
+          "value": 12,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:76431",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67820",
+      "item_source": "server/migrations/000000_init-30.sql:1141",
+      "descriptor_source": "server/migrations/000000_init-28.sql:8145"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:1141",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7251,
+      "name": "迅捷+6",
+      "family": "迅捷",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        102,
+        105,
+        106,
+        108,
+        109,
+        110
+      ],
+      "effects": [
+        {
+          "attr": 7,
+          "attr_name": "AGI",
+          "value": 12,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:76067",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67456",
+      "item_source": "server/migrations/000000_init-30.sql:774",
+      "descriptor_source": "server/migrations/000000_init-28.sql:7779"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:774",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7217,
+      "name": "巧技+6",
+      "family": "巧技",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        102,
+        105,
+        106,
+        108,
+        109,
+        110
+      ],
+      "effects": [
+        {
+          "attr": 9,
+          "attr_name": "DEX",
+          "value": 12,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:76026",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67415",
+      "item_source": "server/migrations/000000_init-30.sql:737",
+      "descriptor_source": "server/migrations/000000_init-28.sql:7739"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:737",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7030,
+      "name": "盾+6",
+      "family": "盾",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        102,
+        105,
+        106,
+        108,
+        109,
+        110
+      ],
+      "effects": [
+        {
+          "attr": 13,
+          "attr_name": "Def",
+          "value": 12,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:75826",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67204",
+      "item_source": "server/migrations/000000_init-30.sql:525",
+      "descriptor_source": "server/migrations/000000_init-28.sql:7528"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:525",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 3708,
+      "name": "小野猪卡",
+      "family": "小野猪卡",
+      "rank_kind": "unranked",
+      "named_rank": null,
+      "descriptor_resource_level": 1,
+      "item_resource_level": 1,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        102,
+        105,
+        106,
+        108,
+        109,
+        110
+      ],
+      "effects": [
+        {
+          "attr": 13,
+          "attr_name": "Def",
+          "value": 3,
+          "mode": 1,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:80613",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-27.sql:4008",
+      "item_source": "server/migrations/000000_init-30.sql:5654",
+      "descriptor_source": "server/migrations/000000_init-28.sql:3428"
+    },
+    "itemDropLevel": 1,
+    "itemQueryType": 28,
+    "itemSource": "server/migrations/000000_init-30.sql:5654",
+    "drop": {
+      "monster_id": 1001,
+      "seq": 1,
+      "rate": "0.2",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 1,
+      "_source": "server/migrations/000000_init-32.sql:13939"
+    },
+    "monster": {
+      "id": 1001,
+      "sprite": 201,
+      "name": "树妖",
+      "raw": "decode('e9030000c9000000caf7d1fd00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:1790",
+      "level": 14,
+      "kind": "普通",
+      "level_source": "server/migrations/000000_init-32.sql:8675"
+    },
+    "spawn": {
+      "map_file": "qw0014",
+      "spawn_id": 104,
+      "monster": 1001,
+      "x": 9710,
+      "y": 4095,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:23593"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7373,
+      "name": "魔牙+5",
+      "family": "魔牙",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 5,
+      "descriptor_resource_level": 5,
+      "item_resource_level": 5,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        16
+      ],
+      "effects": [
+        {
+          "attr": 15,
+          "attr_name": "MAtk",
+          "value": 24,
+          "mode": 1,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:76204",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67593",
+      "item_source": "server/migrations/000000_init-30.sql:913",
+      "descriptor_source": "server/migrations/000000_init-28.sql:7918"
+    },
+    "itemDropLevel": 5,
+    "itemQueryType": 32,
+    "itemSource": "server/migrations/000000_init-30.sql:913",
+    "drop": {
+      "monster_id": 1092,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 5,
+      "_source": "server/migrations/000000_init-32.sql:14927"
+    },
+    "monster": {
+      "id": 1092,
+      "sprite": 292,
+      "name": "黑白无常",
+      "raw": "decode('4404000024010000badab0d7cedeb3a3000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:1947",
+      "level": 42,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8721"
+    },
+    "spawn": {
+      "map_file": "qw0909",
+      "spawn_id": 59,
+      "monster": 1092,
+      "x": 5694,
+      "y": 756,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:49921"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7325,
+      "name": "天护+6",
+      "family": "天护",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        16,
+        102,
+        105,
+        108,
+        110
+      ],
+      "effects": [
+        {
+          "attr": 17,
+          "attr_name": "MDef",
+          "value": 27,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:76151",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67538",
+      "item_source": "server/migrations/000000_init-30.sql:858",
+      "descriptor_source": "server/migrations/000000_init-28.sql:7862"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:858",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7285,
+      "name": "精准+6",
+      "family": "精准",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        106
+      ],
+      "effects": [
+        {
+          "attr": 19,
+          "attr_name": "Hit",
+          "value": 12,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:76104",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67493",
+      "item_source": "server/migrations/000000_init-30.sql:813",
+      "descriptor_source": "server/migrations/000000_init-28.sql:7818"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:813",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7728,
+      "name": "锐利+6",
+      "family": "锐利",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ],
+      "effects": [
+        {
+          "attr": 29,
+          "attr_name": "MinAtk",
+          "value": 12,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:76607",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-27.sql:67",
+      "item_source": "server/migrations/000000_init-30.sql:1317",
+      "descriptor_source": "server/migrations/000000_init-28.sql:8319"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:1317",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7694,
+      "name": "锋刃+6",
+      "family": "锋刃",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ],
+      "effects": [
+        {
+          "attr": 31,
+          "attr_name": "MaxAtk",
+          "value": 36,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:76569",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-27.sql:27",
+      "item_source": "server/migrations/000000_init-30.sql:1276",
+      "descriptor_source": "server/migrations/000000_init-28.sql:8280"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:1276",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7514,
+      "name": "体+6",
+      "family": "体",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        102,
+        105,
+        106,
+        108,
+        109,
+        110
+      ],
+      "effects": [
+        {
+          "attr": 34,
+          "attr_name": "HP",
+          "value": 54,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:76364",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67751",
+      "item_source": "server/migrations/000000_init-30.sql:1073",
+      "descriptor_source": "server/migrations/000000_init-28.sql:8076"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:1073",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 6995,
+      "name": "魂+6",
+      "family": "魂",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        102,
+        105,
+        106,
+        108,
+        109,
+        110
+      ],
+      "effects": [
+        {
+          "attr": 36,
+          "attr_name": "MP",
+          "value": 54,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:75785",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67165",
+      "item_source": "server/migrations/000000_init-30.sql:485",
+      "descriptor_source": "server/migrations/000000_init-28.sql:7487"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:485",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7149,
+      "name": "神气+6",
+      "family": "神气",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        102,
+        105,
+        106,
+        108,
+        109,
+        110
+      ],
+      "effects": [
+        {
+          "attr": 61,
+          "attr_name": "SPI",
+          "value": 12,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:75951",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67338",
+      "item_source": "server/migrations/000000_init-30.sql:659",
+      "descriptor_source": "server/migrations/000000_init-28.sql:7663"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:659",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7445,
+      "name": "石肤+6",
+      "family": "石肤",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        108
+      ],
+      "effects": [
+        {
+          "attr": 69,
+          "attr_name": "flat_physical_reduction",
+          "value": 12,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:76286",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67675",
+      "item_source": "server/migrations/000000_init-30.sql:995",
+      "descriptor_source": "server/migrations/000000_init-28.sql:7998"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:995",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  },
+  {
+    "card": {
+      "card_id": 7411,
+      "name": "抗魔+6",
+      "family": "抗魔",
+      "rank_kind": "named_plus_rank",
+      "named_rank": 6,
+      "descriptor_resource_level": 6,
+      "item_resource_level": 6,
+      "item_use_level": 0,
+      "card_level_need": 0,
+      "card_min_level": 0,
+      "card_max_level": 0,
+      "category": 100,
+      "fun_type": 0,
+      "source_part_types": [
+        108
+      ],
+      "effects": [
+        {
+          "attr": 70,
+          "attr_name": "flat_magic_reduction",
+          "value": 12,
+          "mode": 0,
+          "op": 1,
+          "probability": 100,
+          "source": "server/migrations/000000_init-31.sql:76248",
+          "active_general_equipment_stat": true
+        }
+      ],
+      "card_source": "server/migrations/000000_init-26.sql:67635",
+      "item_source": "server/migrations/000000_init-30.sql:956",
+      "descriptor_source": "server/migrations/000000_init-28.sql:7960"
+    },
+    "itemDropLevel": 6,
+    "itemQueryType": 33,
+    "itemSource": "server/migrations/000000_init-30.sql:956",
+    "drop": {
+      "monster_id": 1118,
+      "seq": 1,
+      "rate": "2.0",
+      "item_id": 0,
+      "item_name": "",
+      "item_src": "",
+      "kind_name": "卡片",
+      "lv_min": 1,
+      "lv_max": 6,
+      "_source": "server/migrations/000000_init-32.sql:15286"
+    },
+    "monster": {
+      "id": 1118,
+      "sprite": 318,
+      "name": "美人鱼王",
+      "raw": "decode('5e0400003e010000c3c0c8cbd3e3cdf5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000','hex')",
+      "_source": "server/migrations/000000_init-2.sql:2010",
+      "level": 50,
+      "kind": "BOSS",
+      "level_source": "server/migrations/000000_init-32.sql:8737"
+    },
+    "spawn": {
+      "map_file": "qw0918",
+      "spawn_id": 29,
+      "monster": 1118,
+      "x": 4788,
+      "y": 4425,
+      "dir": 67,
+      "_source": "server/migrations/000000_init-0.sql:50357"
+    }
+  }
+]

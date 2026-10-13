@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -16,7 +19,13 @@ var 给经验的树妖 = domain.MonsterDef{
 
 // game_levels 的真值: 1→2 需 30, 2→3 需 110, 3→4 需 270。
 func rewardLevels() *domain.LevelTable {
-	return domain.NewLevelTable(map[int32]int64{1: 30, 2: 110, 3: 270, 4: 546, 5: 875})
+	need := map[int32]int64{1: 30, 2: 110, 3: 270, 4: 546, 5: 875}
+	// Combat tests assign roles up to 100. V5 correctly rejects absent edges,
+	// so provide explicit synthetic high-level edges instead of relying on zeros.
+	for level := int32(6); level <= domain.LevelCap; level++ {
+		need[level] = 1_000_000 + int64(level)
+	}
+	return domain.NewLevelTable(need)
 }
 
 // rewardScene 建一个能结算经验的场景, 里面一只怪。
@@ -26,7 +35,7 @@ func rewardScene(t *testing.T, def domain.MonsterDef) (*Scene, domain.EntityID) 
 	sp, _ := spawn.New(
 		[]domain.SpawnPoint{{ID: 1, Monster: def.ID, Pos: domain.Pos{MapID: 14, X: 140, Y: 100}}},
 		defs, domain.NewEntityAlloc())
-	s := New(Config{ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 5,
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 5,
 		Spawner: sp, Levels: rewardLevels(), Defs: defs})
 	var id domain.EntityID
 	for eid, e := range s.entities {
@@ -235,7 +244,7 @@ func TestNoLevelTableIsSafe(t *testing.T) {
 	sp, _ := spawn.New(
 		[]domain.SpawnPoint{{ID: 1, Monster: 给经验的树妖.ID, Pos: domain.Pos{MapID: 14, X: 140, Y: 100}}},
 		defs, domain.NewEntityAlloc())
-	s := New(Config{ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Spawner: sp}) // Levels/Defs 都是 nil
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Spawner: sp}) // Levels/Defs 都是 nil
 
 	var mid domain.EntityID
 	for eid, e := range s.entities {
@@ -277,7 +286,7 @@ func TestExpMarksDirty(t *testing.T) {
 	sp, _ := spawn.New(
 		[]domain.SpawnPoint{{ID: 1, Monster: 给经验的树妖.ID, Pos: domain.Pos{MapID: 14, X: 140, Y: 100}}},
 		defs, domain.NewEntityAlloc())
-	s := New(Config{ID: domain.SceneID{MapID: 14}, SaveEvery: 10, Seed: 5,
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 14}, SaveEvery: 10, Seed: 5,
 		Spawner: sp, Levels: rewardLevels(), Defs: defs, Saver: sv})
 
 	var mid domain.EntityID

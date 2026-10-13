@@ -60,8 +60,11 @@ func PartyExpShare(base int64, n int) int64 {
 	if n > MaxPartySize {
 		n = MaxPartySize
 	}
-	total := base * int64(100+PartyExpBonusPerExtra*(n-1)) / 100
-	return total / int64(n)
+	if base <= 0 {
+		return 0
+	}
+	d, m := int64(100*n), int64(100+PartyExpBonusPerExtra*(n-1))
+	return base/d*m + base%d*m/d
 }
 
 // CanShareExp 报告某个队员够不够格分这次经验。

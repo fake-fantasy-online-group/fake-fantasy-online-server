@@ -3,7 +3,7 @@ package domain
 import "testing"
 
 // 钢剑: game_equipment 真值 —— 6 级, 单手(slot 4), 需要力量14/敏捷14。
-var 钢剑 = ItemDef{ID: 4002, Name: "钢剑", Equip: &EquipDef{
+var 钢剑 = ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 4002, Name: "钢剑", Equip: &EquipDef{
 	Slot: int32(SlotWeapon), LevelReq: 6, Durable: 100,
 	Bonus: Stats{MinAtk: 8, MaxAtk: 14},
 	Need:  Requirement{Level: 6, Base: Base{STR: 14, AGI: 14}},
@@ -55,7 +55,7 @@ func TestComputeEquipBonus(t *testing.T) {
 // **这是整个文件最重要的一条**: 装备加的六维必须先进六维、再参与推导,
 // 不能当二级属性直接加。战士体质 +10 应该变成 +90 血, 而不是 +10 血。
 func TestEquipBaseFeedsDerivation(t *testing.T) {
-	armor := ItemDef{ID: 5001, Name: "铁甲", Equip: &EquipDef{
+	armor := ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 5001, Name: "铁甲", Equip: &EquipDef{
 		Slot: int32(SlotBody), Base: Base{VIT: 10},
 	}}
 	b := StartingBase(Warrior)
@@ -74,7 +74,7 @@ func TestEquipBaseFeedsDerivation(t *testing.T) {
 
 // 词条里的六维同样要先进六维。
 func TestAffixBaseFeedsDerivation(t *testing.T) {
-	ring := ItemDef{ID: 5002, Name: "力量戒指", Equip: &EquipDef{
+	ring := ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 5002, Name: "力量戒指", Equip: &EquipDef{
 		Slot:    int32(SlotRing),
 		Affixes: []Affix{{Attr: AttrSTR, Value: 20, Mode: ModeAbsolute}},
 	}}
@@ -93,7 +93,7 @@ func TestAffixBaseFeedsDerivation(t *testing.T) {
 
 // 二级属性词条直接加。这些字段**只从装备来** —— 没有词条它们永远是零。
 func TestAffixSecondaryStats(t *testing.T) {
-	amulet := ItemDef{ID: 5003, Name: "全能护符", Equip: &EquipDef{
+	amulet := ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 5003, Name: "全能护符", Equip: &EquipDef{
 		Slot: int32(SlotNeck),
 		Affixes: []Affix{
 			{Attr: AttrCrit, Value: 800, Mode: ModeAbsolute},      // 万分比 = 8%
@@ -131,7 +131,7 @@ func TestAffixSecondaryStats(t *testing.T) {
 
 // attr47「攻击」同时加上下限。
 func TestAttrAtkAddsBothBounds(t *testing.T) {
-	w := ItemDef{ID: 5004, Equip: &EquipDef{Slot: int32(SlotWeapon),
+	w := ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 5004, Equip: &EquipDef{Slot: int32(SlotWeapon),
 		Affixes: []Affix{{Attr: AttrAtk, Value: 50, Mode: ModeAbsolute}}}}
 	base := StartingBase(Warrior)
 	_, s := Compute(StatSource{Base: base, Level: 10,
@@ -146,7 +146,7 @@ func TestAttrAtkAddsBothBounds(t *testing.T) {
 // 百分比词条最后乘。mode=1 的值域实测是 2~50, 确实是百分比。
 func TestPercentAffixAppliedLast(t *testing.T) {
 	// 一件加 10 体质(绝对) + 20% 最大生命的衣服
-	armor := ItemDef{ID: 5005, Equip: &EquipDef{Slot: int32(SlotBody),
+	armor := ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 5005, Equip: &EquipDef{Slot: int32(SlotBody),
 		Affixes: []Affix{
 			{Attr: AttrVIT, Value: 10, Mode: ModeAbsolute},
 			{Attr: AttrMaxHP, Value: 20, Mode: ModePercent},
@@ -167,7 +167,7 @@ func TestPercentAffixAppliedLast(t *testing.T) {
 
 // 六维的百分比词条作用在六维上, 然后才推导。
 func TestBasePercentAffix(t *testing.T) {
-	ring := ItemDef{ID: 5006, Equip: &EquipDef{Slot: int32(SlotRing),
+	ring := ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 5006, Equip: &EquipDef{Slot: int32(SlotRing),
 		Affixes: []Affix{{Attr: AttrVIT, Value: 50, Mode: ModePercent}}}}
 	base := StartingBase(Warrior) // 战士体质 24
 	gotBase, s := Compute(StatSource{Base: base, Level: 10,
@@ -229,9 +229,9 @@ func TestMonsterStatusPercentUsesTemplateBaseline(t *testing.T) {
 
 // 多件装备的加成要累加。
 func TestMultipleEquipsStack(t *testing.T) {
-	a := ItemDef{ID: 6001, Equip: &EquipDef{Slot: int32(SlotHead),
+	a := ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 6001, Equip: &EquipDef{Slot: int32(SlotHead),
 		Affixes: []Affix{{Attr: AttrCrit, Value: 300}}}}
-	b := ItemDef{ID: 6002, Equip: &EquipDef{Slot: int32(SlotGlove),
+	b := ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 6002, Equip: &EquipDef{Slot: int32(SlotGlove),
 		Affixes: []Affix{{Attr: AttrCrit, Value: 500}}}}
 	worn := NewEquipSet()
 	worn.Set(SlotHead, Stack{Item: a.ID, Count: 1})
@@ -246,7 +246,7 @@ func TestMultipleEquipsStack(t *testing.T) {
 
 // 认不出的 attr_id 静静跳过, 不能崩也不能乱加。
 func TestUnknownAffixIgnored(t *testing.T) {
-	odd := ItemDef{ID: 6003, Equip: &EquipDef{Slot: int32(SlotHead),
+	odd := ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 6003, Equip: &EquipDef{Slot: int32(SlotHead),
 		Affixes: []Affix{{Attr: 9999, Value: 12345}}}}
 	base := StartingBase(Warrior)
 	gotBase, s := Compute(StatSource{Base: base, Level: 10,
@@ -355,10 +355,10 @@ func TestComputeNilWorn(t *testing.T) {
 }
 
 func TestAppearanceFromEquipmentStarterSet(t *testing.T) {
-	shirt := ItemDef{ID: 2875, Equip: &EquipDef{Slot: int32(SlotBody), Appearance: EquipAppearance{
+	shirt := ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 2875, Equip: &EquipDef{Slot: int32(SlotBody), Appearance: EquipAppearance{
 		Part: AppearanceBody, Model: 143, Known: true,
 	}}}
-	sword := ItemDef{ID: 1011, Equip: &EquipDef{Slot: int32(SlotWeapon), Appearance: EquipAppearance{
+	sword := ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 1011, Equip: &EquipDef{Slot: int32(SlotWeapon), Appearance: EquipAppearance{
 		Part: AppearanceWeaponR, Model: 1, Known: true,
 		AtkVariant: 1, WeaponCType: 2, AtkDist: 75, AttackKnown: true,
 	}}}

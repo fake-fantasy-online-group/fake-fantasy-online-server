@@ -27,7 +27,7 @@ func LoadTrial(ctx context.Context, q Querier, defs MonsterDefs, dungeons domain
 	if err != nil {
 		return nil, err
 	}
-	if r.NormalCount < 1 || r.BossCount < 1 || r.MinLevel < 1 || r.MaxLevel < r.AnchorLevel || r.AnchorLevel <= r.MinLevel || r.AnchorUnits <= 0 || r.BossOffset < 0 || r.PenaltyGap < 0 || r.PenaltyPerLevel < 0 || r.FirstPct <= 0 || r.RewardChance < 0 || r.RewardChance > 100 || r.RewardMin < 1 || r.RewardMax < r.RewardMin {
+	if r.NormalCount < 1 || r.BossCount < 1 || r.MinLevel < 1 || r.MaxLevel < r.AnchorLevel || r.AnchorLevel <= r.MinLevel || r.AnchorUnits <= 0 || r.BossOffset < 0 || r.PenaltyGap < 0 || r.PenaltyPerLevel < 0 || r.FirstPct <= 0 || r.FirstPct > 100000 || r.RewardChance < 0 || r.RewardChance > 100 || r.RewardMin < 1 || r.RewardMax < r.RewardMin {
 		return nil, fmt.Errorf("invalid trial rules")
 	}
 	rows, err := q.Query(ctx, `SELECT cycle,experience_pct FROM game_trial_rounds ORDER BY cycle`)
@@ -40,7 +40,7 @@ func LoadTrial(ctx context.Context, q Querier, defs MonsterDefs, dungeons domain
 			rows.Close()
 			return nil, err
 		}
-		if int(cycle) != len(r.Multipliers) || pct <= 0 {
+		if int(cycle) != len(r.Multipliers) || pct <= 0 || pct > 100000 {
 			rows.Close()
 			return nil, fmt.Errorf("invalid trial cycle")
 		}

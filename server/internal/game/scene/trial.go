@@ -3,6 +3,7 @@ package scene
 import (
 	"fmt"
 	"sort"
+	"strconv"
 	"time"
 
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -50,6 +51,14 @@ func (s *Scene) onTrialAction(cmd TrialAction) {
 		ids := s.trialMapIDs()
 		s.onEnterDungeon(EnterDungeon{ID: p.ID, MapID: ids[0]})
 	case "trialleave":
+		if s.rift != nil {
+			if !s.canUseEndgameRiftExit(p) {
+				s.trialNotice(p, "请在镇境劫影消散后，与附近的归元道使交谈。")
+				return
+			}
+			s.onEndgame(EndgameRequest{ID: p.ID, Request: domain.EndgameRequest{Op: "rift.leave", RequestID: "native-leave-" + riftNonce(), ExpectedRevision: strconv.FormatInt(s.endgamePlayer(p).state.Revision, 10)}})
+			return
+		}
 		if s.trial.IsMap(s.id.MapID) && s.dungeon != nil {
 			s.onTeleport(Teleport{ID: p.ID, To: domain.SceneID{MapID: s.dungeon.Exit.MapID}, At: s.dungeon.Exit})
 		}
@@ -75,6 +84,8 @@ func (s *Scene) acceptTrial(p *entity.Entity) {
 	}
 	ch.Quests[r.Quest] = domain.QuestEntry{State: domain.QuestActive}
 	ch.Trial.MonsterLevel = 0
+	ch.Trial.KeyReward = 0
+	ch.Trial.CompletionID = ""
 	p.Player.MarkDirty()
 	s.emitTo(p.ID, event.QuestAccepted{Who: p.ID, Quest: int32(r.Quest), Name: "试炼"})
 	s.pushQuestLog(p)
@@ -82,6 +93,10 @@ func (s *Scene) acceptTrial(p *entity.Entity) {
 	s.trialNotice(p, "已领取试炼任务，请前往妖魔结界守卫。")
 }
 func (s *Scene) completeTrial(p *entity.Entity) {
+	if s.endgameBackend != nil {
+		s.completeEndgameTrial(p)
+		return
+	}
 	ch := p.Player.Char
 	r := s.trial
 	if !s.trialClaimNPC(p) {
@@ -166,7 +181,7 @@ func (s *Scene) trialMapIDs() []int32 {
 
 // prepareTrial runs only in the destination actor, before its first player enters.
 func (s *Scene) prepareTrial(cmd Enter) {
-	if !s.trial.IsMap(s.id.MapID) || s.trialLevel != 0 {
+	if s.rift != nil || !s.trial.IsMap(s.id.MapID) || s.trialLevel != 0 {
 		return
 	}
 	level := s.router.trialLevelOf(s.id)
@@ -215,11 +230,12 @@ func (s *Scene) trialRemaining() int {
 	return n
 }
 func (s *Scene) updateTrialClear() {
-	if !s.trial.IsMap(s.id.MapID) || s.trialLevel == 0 || s.trialCleared {
+	if s.rift != nil || !s.trial.IsMap(s.id.MapID) || s.trialLevel == 0 || s.trialCleared {
 		return
 	}
 	remaining := s.trialRemaining()
 	if remaining == 0 {
+		s.finishEndgameTrialKeys()
 		s.trialCleared = true
 		s.router.finishTrial(s.id)
 	}
@@ -236,6 +252,15 @@ func (s *Scene) updateTrialClear() {
 			q.State = domain.QuestDeliver
 			ch.Quests[s.trial.Quest] = q
 			ch.Trial.MonsterLevel = s.trialLevel
+			if s.endgameBackend != nil {
+				ch.Trial.KeyReward = 1
+				if s.trialRun != nil {
+					ch.Trial.CompletionID = s.trialRun.Nonce
+					if n := s.trialRun.Keys[domain.CharID(ch.ID)]; n > 0 {
+						ch.Trial.KeyReward = n
+					}
+				}
+			}
 			p.Player.MarkDirty()
 			s.trialNotice(p, "妖魔已全部消灭！试炼任务完成，请回试炼小仙领取奖励。")
 			s.pushQuestLog(p)

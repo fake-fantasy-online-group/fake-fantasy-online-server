@@ -39,7 +39,7 @@ func (s *Scene) onInspectPlayer(cmd InspectPlayer) {
 			return
 		}
 		out.Equipped = append(out.Equipped, event.EquippedItemView{
-			Slot: row.slot, Item: row.item.Item, Name: itemDisplayName(def, row.item), Desc: s.ownedItemTooltip(def, row.item, target),
+			Slot: row.slot, Item: row.item.Item, Name: itemDisplayName(def, row.item), Desc: s.itemTooltipForViewer(def, row.item, target, requester),
 			CurrentDurability: row.item.Durability,
 			MaxDurability:     domain.MaxDurabilityOf(row.item, def),
 			Avatar:            0,

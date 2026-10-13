@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -8,7 +11,7 @@ import (
 )
 
 func TestReviveRespawn(t *testing.T) {
-	s := New(Config{
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(),
 		ID:     domain.SceneID{MapID: 7},
 		Revive: ReviveAt{Scene: domain.SceneID{MapID: 1}, Pos: domain.Pos{MapID: 1, X: 50, Y: 50}},
 	})
@@ -52,7 +55,7 @@ func TestReviveRespawn(t *testing.T) {
 }
 
 func TestReviveInPlaceNotImplemented(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}})
 	ch := &domain.Character{
 		ID: 100, Name: "测试", Level: 10, Race: domain.Warrior,
 		Pos: domain.Pos{MapID: 7, X: 100, Y: 100},
@@ -88,7 +91,7 @@ func TestReviveInPlaceNotImplemented(t *testing.T) {
 }
 
 func TestReviveAlreadyAlive(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}})
 	ch := &domain.Character{
 		ID: 100, Name: "测试", Level: 10, Race: domain.Warrior,
 		Pos: domain.Pos{MapID: 7, X: 100, Y: 100},
@@ -113,7 +116,7 @@ func TestReviveAlreadyAlive(t *testing.T) {
 }
 
 func TestDeathWaitsForClientRevive(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}})
 	ch := &domain.Character{
 		ID: 100, Name: "测试", Level: 10, Race: domain.Warrior,
 		Pos: domain.Pos{MapID: 7, X: 100, Y: 100},
@@ -141,7 +144,7 @@ func TestDeathWaitsForClientRevive(t *testing.T) {
 }
 
 func TestClientReviveOnlyHappensOnce(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}})
 	ch := &domain.Character{
 		ID: 100, Name: "测试", Level: 10, Race: domain.Warrior,
 		Pos: domain.Pos{MapID: 7, X: 100, Y: 100},

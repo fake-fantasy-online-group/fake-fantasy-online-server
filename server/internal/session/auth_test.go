@@ -1,4 +1,7 @@
 package session
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"context"
@@ -75,7 +78,7 @@ type authRig struct {
 
 func newAuthRig(t *testing.T) *authRig {
 	t.Helper()
-	st := store.NewMemory()
+	st := store.NewMemory(catalogfixture.EndgameCatalog())
 	sink := &capSink{}
 	s := &Session{
 		deps: Deps{Store: st, Log: slog.Default()},

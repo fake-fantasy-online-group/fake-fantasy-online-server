@@ -1,0 +1,3691 @@
+{
+  "catalog_formation_count": 40,
+  "catalog_unique_count": 259,
+  "content_version": 6,
+  "database_access": false,
+  "item_grant_executed": false,
+  "items_validated": 54,
+  "limits": [
+    "Both gender branches are tested; actual character gender, attributes, skills and inventory were not read.",
+    "Fixture panels use legal level60 natural growth and free-point allocation; these are NOT current test001 character panels.",
+    "No random yellow affixes, non-rune cards, refinement or fusion. Full-combat DPS/HPS optimality is not claimed.",
+    "Actual local ItemDef, role identity and backpack state must be revalidated before any later authorized grant."
+  ],
+  "loadout_variants_tested": 6,
+  "method": "Production domain test and original-source base fixtures",
+  "status": "passed",
+  "variants": [
+    {
+      "CharacterID": 42,
+      "Class": "assassin",
+      "Gender": 0,
+      "ItemCount": 9,
+      "FormationIDs": [
+        36,
+        38
+      ],
+      "FixtureNakedBase": {
+        "STR": 121,
+        "VIT": 216,
+        "INT": 6,
+        "SPI": 63,
+        "AGI": 189,
+        "DEX": 167
+      },
+      "FixtureComputedBase": {
+        "STR": 219,
+        "VIT": 246,
+        "INT": 6,
+        "SPI": 95,
+        "AGI": 192,
+        "DEX": 234
+      },
+      "FixturePanel": {
+        "MaxHP": 4992,
+        "MaxMP": 1206,
+        "HPRegen": 1,
+        "MPRegen": 0,
+        "MinAtk": 476,
+        "MaxAtk": 729,
+        "Def": 258,
+        "Hit": 488,
+        "MAtk": 3,
+        "MDef": 214,
+        "CritRate": 4128,
+        "MCritRate": 0,
+        "AtkSpeedPct": 67,
+        "AtkSpeedMS": 0,
+        "MoveSpeed": 115,
+        "PhysResist": 39,
+        "MagicResist": 44,
+        "StatusResist": 36,
+        "MaxWeight": 2690
+      },
+      "FixtureRemainingAllocatedTo": "STR",
+      "Skills": {
+        "10219": "5"
+      },
+      "Items": [
+        {
+          "base_id": 2707,
+          "kind": "formation",
+          "name": "行囊漏晨光 · 口罩",
+          "required_level": 60,
+          "requirements": {
+            "Level": 18,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 27,
+              "Value": 18,
+              "Mode": 1
+            },
+            {
+              "Attr": 19,
+              "Value": 40,
+              "Mode": 1
+            },
+            {
+              "Attr": 34,
+              "Value": 308,
+              "Mode": 0
+            },
+            {
+              "Attr": 47,
+              "Value": 100,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 220,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 1,
+          "socket_count": 5,
+          "version": 6
+        },
+        {
+          "base_id": 2049,
+          "kind": "unique",
+          "name": "夜市收摊人",
+          "required_level": 52,
+          "requirements": {
+            "Level": 52,
+            "Base": {
+              "STR": 0,
+              "VIT": 216,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 4,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 9,
+              "Value": 20,
+              "Mode": 0
+            },
+            {
+              "Attr": 47,
+              "Value": 6,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 19,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 255,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 71,
+              "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -22,
+              "Mode": 1
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 2,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2509,
+          "kind": "unique",
+          "name": "凝泪未干",
+          "required_level": 56,
+          "requirements": {
+            "Level": 56,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 131,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 523,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 8,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 8,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 3,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2410,
+          "kind": "unique",
+          "name": "牙根的梦",
+          "required_level": 60,
+          "requirements": {
+            "Level": 60,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 47,
+              "Value": 20,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 19,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 289,
+              "Mode": 0
+            },
+            {
+              "Attr": 9,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": -120,
+              "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -18,
+              "Mode": 1
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 6,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2590,
+          "kind": "unique",
+          "name": "窄瞳杀机",
+          "required_level": 60,
+          "requirements": {
+            "Level": 60,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 47,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 19,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 83,
+              "Mode": 0
+            },
+            {
+              "Attr": 9,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -7,
+              "Mode": 1
+            },
+            {
+              "Attr": 23,
+              "Value": 1980,
+              "Mode": 0
+            },
+            {
+              "Attr": 29,
+              "Value": 8,
+              "Mode": 0
+            },
+            {
+              "Attr": 31,
+              "Value": 8,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 7,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2896,
+          "kind": "formation",
+          "name": "门闩抵天倾 · 青龙铠",
+          "required_level": 48,
+          "requirements": {
+            "Level": 48,
+            "Base": {
+              "STR": 0,
+              "VIT": 196,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 2,
+            "Professions": 4,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 34,
+              "Value": 42,
+              "Mode": 1
+            },
+            {
+              "Attr": 69,
+              "Value": 37,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 30,
+              "Mode": 0
+            },
+            {
+              "Attr": 27,
+              "Value": -5,
+              "Mode": 1
+            },
+            {
+              "Attr": 13,
+              "Value": 42,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 45,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 18,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 8,
+          "socket_count": 5,
+          "version": 6
+        },
+        {
+          "base_id": 2108,
+          "kind": "unique",
+          "name": "漏宿沉履",
+          "required_level": 56,
+          "requirements": {
+            "Level": 56,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 17,
+              "Value": 51,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 236,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 15,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 10,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 9,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2604,
+          "kind": "unique",
+          "name": "鹰羽量崖",
+          "required_level": 24,
+          "requirements": {
+            "Level": 24,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 19,
+              "Value": 32,
+              "Mode": 0
+            },
+            {
+              "Attr": 47,
+              "Value": 4,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 9,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 204,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 51,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 10,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 1810,
+          "kind": "unique",
+          "name": "鳞下不留名",
+          "required_level": 54,
+          "requirements": {
+            "Level": 54,
+            "Base": {
+              "STR": 53,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 167
+            },
+            "Sex": 0,
+            "Professions": 4,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 47,
+              "Value": 99,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 15,
+              "Mode": 0
+            },
+            {
+              "Attr": 19,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 53,
+              "Mode": 0
+            },
+            {
+              "Attr": 9,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 1400,
+              "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -20,
+              "Mode": 1
+            },
+            {
+              "Attr": 29,
+              "Value": 90,
+              "Mode": 0
+            },
+            {
+              "Attr": 31,
+              "Value": 297,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 13,
+          "socket_count": 0,
+          "version": 6
+        }
+      ]
+    },
+    {
+      "CharacterID": 42,
+      "Class": "assassin",
+      "Gender": 1,
+      "ItemCount": 9,
+      "FormationIDs": [
+        36,
+        38
+      ],
+      "FixtureNakedBase": {
+        "STR": 121,
+        "VIT": 216,
+        "INT": 6,
+        "SPI": 63,
+        "AGI": 189,
+        "DEX": 167
+      },
+      "FixtureComputedBase": {
+        "STR": 219,
+        "VIT": 246,
+        "INT": 6,
+        "SPI": 95,
+        "AGI": 192,
+        "DEX": 234
+      },
+      "FixturePanel": {
+        "MaxHP": 4992,
+        "MaxMP": 1206,
+        "HPRegen": 1,
+        "MPRegen": 0,
+        "MinAtk": 476,
+        "MaxAtk": 729,
+        "Def": 258,
+        "Hit": 488,
+        "MAtk": 3,
+        "MDef": 214,
+        "CritRate": 4128,
+        "MCritRate": 0,
+        "AtkSpeedPct": 67,
+        "AtkSpeedMS": 0,
+        "MoveSpeed": 115,
+        "PhysResist": 39,
+        "MagicResist": 44,
+        "StatusResist": 36,
+        "MaxWeight": 2690
+      },
+      "FixtureRemainingAllocatedTo": "STR",
+      "Skills": {
+        "10219": "5"
+      },
+      "Items": [
+        {
+          "base_id": 2707,
+          "kind": "formation",
+          "name": "行囊漏晨光 · 口罩",
+          "required_level": 60,
+          "requirements": {
+            "Level": 18,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 27,
+              "Value": 18,
+              "Mode": 1
+            },
+            {
+              "Attr": 19,
+              "Value": 40,
+              "Mode": 1
+            },
+            {
+              "Attr": 34,
+              "Value": 308,
+              "Mode": 0
+            },
+            {
+              "Attr": 47,
+              "Value": 100,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 220,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 1,
+          "socket_count": 5,
+          "version": 6
+        },
+        {
+          "base_id": 2049,
+          "kind": "unique",
+          "name": "夜市收摊人",
+          "required_level": 52,
+          "requirements": {
+            "Level": 52,
+            "Base": {
+              "STR": 0,
+              "VIT": 216,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 4,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 9,
+              "Value": 20,
+              "Mode": 0
+            },
+            {
+              "Attr": 47,
+              "Value": 6,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 19,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 255,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 71,
+              "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -22,
+              "Mode": 1
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 2,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2509,
+          "kind": "unique",
+          "name": "凝泪未干",
+          "required_level": 56,
+          "requirements": {
+            "Level": 56,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 131,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 523,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 8,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 8,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 3,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2410,
+          "kind": "unique",
+          "name": "牙根的梦",
+          "required_level": 60,
+          "requirements": {
+            "Level": 60,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 47,
+              "Value": 20,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 19,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 289,
+              "Mode": 0
+            },
+            {
+              "Attr": 9,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": -120,
+              "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -18,
+              "Mode": 1
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 6,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2590,
+          "kind": "unique",
+          "name": "窄瞳杀机",
+          "required_level": 60,
+          "requirements": {
+            "Level": 60,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 47,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 19,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 83,
+              "Mode": 0
+            },
+            {
+              "Attr": 9,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -7,
+              "Mode": 1
+            },
+            {
+              "Attr": 23,
+              "Value": 1980,
+              "Mode": 0
+            },
+            {
+              "Attr": 29,
+              "Value": 8,
+              "Mode": 0
+            },
+            {
+              "Attr": 31,
+              "Value": 8,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 7,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2895,
+          "kind": "formation",
+          "name": "门闩抵天倾 · 青龙铠",
+          "required_level": 48,
+          "requirements": {
+            "Level": 48,
+            "Base": {
+              "STR": 0,
+              "VIT": 196,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 1,
+            "Professions": 4,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 34,
+              "Value": 42,
+              "Mode": 1
+            },
+            {
+              "Attr": 69,
+              "Value": 37,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 30,
+              "Mode": 0
+            },
+            {
+              "Attr": 27,
+              "Value": -5,
+              "Mode": 1
+            },
+            {
+              "Attr": 13,
+              "Value": 42,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 45,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 18,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 8,
+          "socket_count": 5,
+          "version": 6
+        },
+        {
+          "base_id": 2108,
+          "kind": "unique",
+          "name": "漏宿沉履",
+          "required_level": 56,
+          "requirements": {
+            "Level": 56,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 17,
+              "Value": 51,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 236,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 15,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 10,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 9,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2604,
+          "kind": "unique",
+          "name": "鹰羽量崖",
+          "required_level": 24,
+          "requirements": {
+            "Level": 24,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 19,
+              "Value": 32,
+              "Mode": 0
+            },
+            {
+              "Attr": 47,
+              "Value": 4,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 9,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 204,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 51,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 10,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 1810,
+          "kind": "unique",
+          "name": "鳞下不留名",
+          "required_level": 54,
+          "requirements": {
+            "Level": 54,
+            "Base": {
+              "STR": 53,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 167
+            },
+            "Sex": 0,
+            "Professions": 4,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 47,
+              "Value": 99,
+              "Mode": 0
+            },
+            {
+              "Attr": 1,
+              "Value": 15,
+              "Mode": 0
+            },
+            {
+              "Attr": 19,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 53,
+              "Mode": 0
+            },
+            {
+              "Attr": 9,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 1400,
+              "Mode": 0
+            },
+            {
+              "Attr": 25,
+              "Value": -20,
+              "Mode": 1
+            },
+            {
+              "Attr": 29,
+              "Value": 90,
+              "Mode": 0
+            },
+            {
+              "Attr": 31,
+              "Value": 297,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 13,
+          "socket_count": 0,
+          "version": 6
+        }
+      ]
+    },
+    {
+      "CharacterID": 183,
+      "Class": "warlock",
+      "Gender": 0,
+      "ItemCount": 9,
+      "FormationIDs": [
+        28,
+        36
+      ],
+      "FixtureNakedBase": {
+        "STR": 6,
+        "VIT": 189,
+        "INT": 197,
+        "SPI": 244,
+        "AGI": 63,
+        "DEX": 63
+      },
+      "FixtureComputedBase": {
+        "STR": 9,
+        "VIT": 235,
+        "INT": 266,
+        "SPI": 374,
+        "AGI": 66,
+        "DEX": 63
+      },
+      "FixturePanel": {
+        "MaxHP": 3957,
+        "MaxMP": 4615,
+        "HPRegen": 0,
+        "MPRegen": 0,
+        "MinAtk": 14,
+        "MaxAtk": 122,
+        "Def": 99,
+        "Hit": 113,
+        "MAtk": 700,
+        "MDef": 558,
+        "CritRate": 0,
+        "MCritRate": 1746,
+        "AtkSpeedPct": 0,
+        "AtkSpeedMS": 0,
+        "MoveSpeed": 113,
+        "PhysResist": 39,
+        "MagicResist": 49,
+        "StatusResist": 50,
+        "MaxWeight": 590
+      },
+      "FixtureRemainingAllocatedTo": "INT",
+      "Skills": {
+        "10401": "7",
+        "10402": "2",
+        "10405": "2",
+        "10408": "2",
+        "10409": "2",
+        "10410": "2",
+        "10411": "2",
+        "10412": "2",
+        "10413": "2",
+        "10414": "2",
+        "10415": "2",
+        "10416": "2",
+        "10417": "2",
+        "10418": "2",
+        "10419": "2",
+        "10420": "2",
+        "10421": "2",
+        "10422": "2",
+        "10423": "2",
+        "10424": "2",
+        "10425": "2",
+        "10426": "2",
+        "10427": "2",
+        "10428": "2",
+        "10429": "2",
+        "10430": "2",
+        "10431": "2",
+        "10432": "2",
+        "10433": "2",
+        "10435": "2"
+      },
+      "Items": [
+        {
+          "base_id": 2707,
+          "kind": "formation",
+          "name": "鞋底藏北斗 · 口罩",
+          "required_level": 58,
+          "requirements": {
+            "Level": 18,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 27,
+              "Value": 16,
+              "Mode": 1
+            },
+            {
+              "Attr": 36,
+              "Value": 308,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 240,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 42,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 45,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 1,
+          "socket_count": 4,
+          "version": 6
+        },
+        {
+          "base_id": 2059,
+          "kind": "unique",
+          "name": "无主诰",
+          "required_level": 59,
+          "requirements": {
+            "Level": 59,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 244,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 16,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 15,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 69,
+              "Mode": 0
+            },
+            {
+              "Attr": 66,
+              "Value": 249,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 14,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 2,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2506,
+          "kind": "unique",
+          "name": "无人坐的晶椅",
+          "required_level": 38,
+          "requirements": {
+            "Level": 38,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 66,
+              "Value": 495,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 72,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 14,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 3,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2409,
+          "kind": "unique",
+          "name": "翻掌乾坤",
+          "required_level": 54,
+          "requirements": {
+            "Level": 54,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 22,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 198,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 76,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 31,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 9,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 6,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2558,
+          "kind": "unique",
+          "name": "红石晚霞",
+          "required_level": 48,
+          "requirements": {
+            "Level": 48,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 66,
+              "Value": 331,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 12,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 60,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 12,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 60,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 7,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 7,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2830,
+          "kind": "formation",
+          "name": "门闩抵天倾 · 冥法服",
+          "required_level": 48,
+          "requirements": {
+            "Level": 48,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 196,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 2,
+            "Professions": 16,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 34,
+              "Value": 42,
+              "Mode": 1
+            },
+            {
+              "Attr": 69,
+              "Value": 37,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 30,
+              "Mode": 0
+            },
+            {
+              "Attr": 27,
+              "Value": -5,
+              "Mode": 1
+            },
+            {
+              "Attr": 13,
+              "Value": 42,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 45,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 18,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 8,
+          "socket_count": 5,
+          "version": 6
+        },
+        {
+          "base_id": 2108,
+          "kind": "unique",
+          "name": "漏宿沉履",
+          "required_level": 56,
+          "requirements": {
+            "Level": 56,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 17,
+              "Value": 51,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 236,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 15,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 10,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 9,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2602,
+          "kind": "unique",
+          "name": "错生的翼骨",
+          "required_level": 36,
+          "requirements": {
+            "Level": 36,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 15,
+              "Value": 13,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 58,
+              "Mode": 0
+            },
+            {
+              "Attr": 66,
+              "Value": 217,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 58,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 10,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 1310,
+          "kind": "unique",
+          "name": "无名神席",
+          "required_level": 54,
+          "requirements": {
+            "Level": 54,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 81,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 24,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 15,
+              "Value": 52,
+              "Mode": 0
+            },
+            {
+              "Attr": 66,
+              "Value": 454,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 18,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 18,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 35,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 13,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 13,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": -80,
+              "Mode": 0
+            },
+            {
+              "Attr": 13,
+              "Value": -20,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 460,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 281,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 13,
+          "socket_count": 0,
+          "version": 6
+        }
+      ]
+    },
+    {
+      "CharacterID": 183,
+      "Class": "warlock",
+      "Gender": 1,
+      "ItemCount": 9,
+      "FormationIDs": [
+        28,
+        36
+      ],
+      "FixtureNakedBase": {
+        "STR": 6,
+        "VIT": 189,
+        "INT": 197,
+        "SPI": 244,
+        "AGI": 63,
+        "DEX": 63
+      },
+      "FixtureComputedBase": {
+        "STR": 9,
+        "VIT": 235,
+        "INT": 266,
+        "SPI": 374,
+        "AGI": 66,
+        "DEX": 63
+      },
+      "FixturePanel": {
+        "MaxHP": 3957,
+        "MaxMP": 4615,
+        "HPRegen": 0,
+        "MPRegen": 0,
+        "MinAtk": 14,
+        "MaxAtk": 122,
+        "Def": 99,
+        "Hit": 113,
+        "MAtk": 700,
+        "MDef": 558,
+        "CritRate": 0,
+        "MCritRate": 1746,
+        "AtkSpeedPct": 0,
+        "AtkSpeedMS": 0,
+        "MoveSpeed": 113,
+        "PhysResist": 39,
+        "MagicResist": 49,
+        "StatusResist": 50,
+        "MaxWeight": 590
+      },
+      "FixtureRemainingAllocatedTo": "INT",
+      "Skills": {
+        "10401": "7",
+        "10402": "2",
+        "10405": "2",
+        "10408": "2",
+        "10409": "2",
+        "10410": "2",
+        "10411": "2",
+        "10412": "2",
+        "10413": "2",
+        "10414": "2",
+        "10415": "2",
+        "10416": "2",
+        "10417": "2",
+        "10418": "2",
+        "10419": "2",
+        "10420": "2",
+        "10421": "2",
+        "10422": "2",
+        "10423": "2",
+        "10424": "2",
+        "10425": "2",
+        "10426": "2",
+        "10427": "2",
+        "10428": "2",
+        "10429": "2",
+        "10430": "2",
+        "10431": "2",
+        "10432": "2",
+        "10433": "2",
+        "10435": "2"
+      },
+      "Items": [
+        {
+          "base_id": 2707,
+          "kind": "formation",
+          "name": "鞋底藏北斗 · 口罩",
+          "required_level": 58,
+          "requirements": {
+            "Level": 18,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 27,
+              "Value": 16,
+              "Mode": 1
+            },
+            {
+              "Attr": 36,
+              "Value": 308,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 240,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 42,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 45,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 1,
+          "socket_count": 4,
+          "version": 6
+        },
+        {
+          "base_id": 2059,
+          "kind": "unique",
+          "name": "无主诰",
+          "required_level": 59,
+          "requirements": {
+            "Level": 59,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 244,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 16,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 15,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 69,
+              "Mode": 0
+            },
+            {
+              "Attr": 66,
+              "Value": 249,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 14,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 2,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2506,
+          "kind": "unique",
+          "name": "无人坐的晶椅",
+          "required_level": 38,
+          "requirements": {
+            "Level": 38,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 66,
+              "Value": 495,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 72,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 14,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 3,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2409,
+          "kind": "unique",
+          "name": "翻掌乾坤",
+          "required_level": 54,
+          "requirements": {
+            "Level": 54,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 22,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 198,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 76,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 31,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 9,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 6,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2558,
+          "kind": "unique",
+          "name": "红石晚霞",
+          "required_level": 48,
+          "requirements": {
+            "Level": 48,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 66,
+              "Value": 331,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 14,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 12,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 60,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 12,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 60,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 7,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 7,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2829,
+          "kind": "formation",
+          "name": "门闩抵天倾 · 冥法服",
+          "required_level": 48,
+          "requirements": {
+            "Level": 48,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 196,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 1,
+            "Professions": 16,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 34,
+              "Value": 42,
+              "Mode": 1
+            },
+            {
+              "Attr": 69,
+              "Value": 37,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 30,
+              "Mode": 0
+            },
+            {
+              "Attr": 27,
+              "Value": -5,
+              "Mode": 1
+            },
+            {
+              "Attr": 13,
+              "Value": 42,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 45,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 18,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 8,
+          "socket_count": 5,
+          "version": 6
+        },
+        {
+          "base_id": 2108,
+          "kind": "unique",
+          "name": "漏宿沉履",
+          "required_level": 56,
+          "requirements": {
+            "Level": 56,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 17,
+              "Value": 51,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 236,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 15,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 10,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 9,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2602,
+          "kind": "unique",
+          "name": "错生的翼骨",
+          "required_level": 36,
+          "requirements": {
+            "Level": 36,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 15,
+              "Value": 13,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 58,
+              "Mode": 0
+            },
+            {
+              "Attr": 66,
+              "Value": 217,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 58,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 10,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 1310,
+          "kind": "unique",
+          "name": "无名神席",
+          "required_level": 54,
+          "requirements": {
+            "Level": 54,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 81,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 24,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 15,
+              "Value": 52,
+              "Mode": 0
+            },
+            {
+              "Attr": 66,
+              "Value": 454,
+              "Mode": 0
+            },
+            {
+              "Attr": 3,
+              "Value": 18,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 18,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 35,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 13,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 13,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": -80,
+              "Mode": 0
+            },
+            {
+              "Attr": 13,
+              "Value": -20,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 460,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 281,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 13,
+          "socket_count": 0,
+          "version": 6
+        }
+      ]
+    },
+    {
+      "CharacterID": 206,
+      "Class": "healer",
+      "Gender": 0,
+      "ItemCount": 9,
+      "FormationIDs": [
+        35,
+        36,
+        40
+      ],
+      "FixtureNakedBase": {
+        "STR": 95,
+        "VIT": 193,
+        "INT": 95,
+        "SPI": 248,
+        "AGI": 63,
+        "DEX": 63
+      },
+      "FixtureComputedBase": {
+        "STR": 101,
+        "VIT": 263,
+        "INT": 98,
+        "SPI": 500,
+        "AGI": 63,
+        "DEX": 66
+      },
+      "FixturePanel": {
+        "MaxHP": 5952,
+        "MaxMP": 7689,
+        "HPRegen": 2,
+        "MPRegen": 0,
+        "MinAtk": 299,
+        "MaxAtk": 407,
+        "Def": 118,
+        "Hit": 115,
+        "MAtk": 274,
+        "MDef": 723,
+        "CritRate": 900,
+        "MCritRate": 900,
+        "AtkSpeedPct": 0,
+        "AtkSpeedMS": 0,
+        "MoveSpeed": 95,
+        "PhysResist": 39,
+        "MagicResist": 93,
+        "StatusResist": 101,
+        "MaxWeight": 1510
+      },
+      "FixtureRemainingAllocatedTo": "SPI",
+      "Skills": {
+        "10301": "7",
+        "10302": "5",
+        "10303": "5",
+        "10304": "5",
+        "10305": "5",
+        "10306": "5",
+        "10307": "2",
+        "10308": "2",
+        "10309": "5",
+        "10310": "2",
+        "10311": "2",
+        "10312": "2",
+        "10313": "2",
+        "10314": "2",
+        "10315": "2",
+        "10316": "5",
+        "10317": "2",
+        "10318": "5",
+        "10319": "2",
+        "10320": "2",
+        "10321": "2",
+        "10322": "2",
+        "10324": "2",
+        "10325": "2",
+        "10326": "2",
+        "10327": "2",
+        "10328": "2",
+        "10329": "2",
+        "10330": "2"
+      },
+      "Items": [
+        {
+          "base_id": 2707,
+          "kind": "formation",
+          "name": "空瓢济厄 · 口罩",
+          "required_level": 60,
+          "requirements": {
+            "Level": 18,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 26,
+              "Mode": 1
+            },
+            {
+              "Attr": 36,
+              "Value": 36,
+              "Mode": 1
+            },
+            {
+              "Attr": 17,
+              "Value": 55,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 320,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 25,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 24,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 1,
+          "socket_count": 5,
+          "version": 6
+        },
+        {
+          "base_id": 2056,
+          "kind": "unique",
+          "name": "闭目神像",
+          "required_level": 59,
+          "requirements": {
+            "Level": 59,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 182,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 8,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 36,
+              "Value": 247,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 78,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 32,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 11,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 2,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2509,
+          "kind": "unique",
+          "name": "凝泪未干",
+          "required_level": 56,
+          "requirements": {
+            "Level": 56,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 131,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 523,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 8,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 8,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 3,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2409,
+          "kind": "unique",
+          "name": "翻掌乾坤",
+          "required_level": 54,
+          "requirements": {
+            "Level": 54,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 22,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 198,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 76,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 31,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 9,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 6,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2559,
+          "kind": "unique",
+          "name": "结晶的叹息",
+          "required_level": 54,
+          "requirements": {
+            "Level": 54,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 144,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 83,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 34,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 12,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 12,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 7,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2900,
+          "kind": "formation",
+          "name": "门闩抵天倾 · 圣贤服",
+          "required_level": 48,
+          "requirements": {
+            "Level": 48,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 145,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 2,
+            "Professions": 8,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 34,
+              "Value": 42,
+              "Mode": 1
+            },
+            {
+              "Attr": 69,
+              "Value": 37,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 30,
+              "Mode": 0
+            },
+            {
+              "Attr": 27,
+              "Value": -5,
+              "Mode": 1
+            },
+            {
+              "Attr": 13,
+              "Value": 42,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 45,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 18,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 8,
+          "socket_count": 5,
+          "version": 6
+        },
+        {
+          "base_id": 2108,
+          "kind": "unique",
+          "name": "漏宿沉履",
+          "required_level": 56,
+          "requirements": {
+            "Level": 56,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 17,
+              "Value": 51,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 236,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 15,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 10,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 9,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2601,
+          "kind": "unique",
+          "name": "瓶里破茧",
+          "required_level": 30,
+          "requirements": {
+            "Level": 30,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 12,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 22,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 54,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 8,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 10,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 1310,
+          "kind": "formation",
+          "name": "四象让中宫 · 神杖·九仪",
+          "required_level": 60,
+          "requirements": {
+            "Level": 54,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 81,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 24,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 47,
+              "Value": 239,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 145,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 900,
+              "Mode": 0
+            },
+            {
+              "Attr": 66,
+              "Value": 900,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 320,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 300,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 48,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 13,
+          "socket_count": 5,
+          "version": 6
+        }
+      ]
+    },
+    {
+      "CharacterID": 206,
+      "Class": "healer",
+      "Gender": 1,
+      "ItemCount": 9,
+      "FormationIDs": [
+        35,
+        36,
+        40
+      ],
+      "FixtureNakedBase": {
+        "STR": 95,
+        "VIT": 193,
+        "INT": 95,
+        "SPI": 248,
+        "AGI": 63,
+        "DEX": 63
+      },
+      "FixtureComputedBase": {
+        "STR": 101,
+        "VIT": 263,
+        "INT": 98,
+        "SPI": 500,
+        "AGI": 63,
+        "DEX": 66
+      },
+      "FixturePanel": {
+        "MaxHP": 5952,
+        "MaxMP": 7689,
+        "HPRegen": 2,
+        "MPRegen": 0,
+        "MinAtk": 299,
+        "MaxAtk": 407,
+        "Def": 118,
+        "Hit": 115,
+        "MAtk": 274,
+        "MDef": 723,
+        "CritRate": 900,
+        "MCritRate": 900,
+        "AtkSpeedPct": 0,
+        "AtkSpeedMS": 0,
+        "MoveSpeed": 95,
+        "PhysResist": 39,
+        "MagicResist": 93,
+        "StatusResist": 101,
+        "MaxWeight": 1510
+      },
+      "FixtureRemainingAllocatedTo": "SPI",
+      "Skills": {
+        "10301": "7",
+        "10302": "5",
+        "10303": "5",
+        "10304": "5",
+        "10305": "5",
+        "10306": "5",
+        "10307": "2",
+        "10308": "2",
+        "10309": "5",
+        "10310": "2",
+        "10311": "2",
+        "10312": "2",
+        "10313": "2",
+        "10314": "2",
+        "10315": "2",
+        "10316": "5",
+        "10317": "2",
+        "10318": "5",
+        "10319": "2",
+        "10320": "2",
+        "10321": "2",
+        "10322": "2",
+        "10324": "2",
+        "10325": "2",
+        "10326": "2",
+        "10327": "2",
+        "10328": "2",
+        "10329": "2",
+        "10330": "2"
+      },
+      "Items": [
+        {
+          "base_id": 2707,
+          "kind": "formation",
+          "name": "空瓢济厄 · 口罩",
+          "required_level": 60,
+          "requirements": {
+            "Level": 18,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 26,
+              "Mode": 1
+            },
+            {
+              "Attr": 36,
+              "Value": 36,
+              "Mode": 1
+            },
+            {
+              "Attr": 17,
+              "Value": 55,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 320,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 25,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 24,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 1,
+          "socket_count": 5,
+          "version": 6
+        },
+        {
+          "base_id": 2056,
+          "kind": "unique",
+          "name": "闭目神像",
+          "required_level": 59,
+          "requirements": {
+            "Level": 59,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 182,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 8,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 36,
+              "Value": 247,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 78,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 32,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 11,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 11,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 2,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2509,
+          "kind": "unique",
+          "name": "凝泪未干",
+          "required_level": 56,
+          "requirements": {
+            "Level": 56,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 17,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 131,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 523,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 8,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 8,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 3,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2409,
+          "kind": "unique",
+          "name": "翻掌乾坤",
+          "required_level": 54,
+          "requirements": {
+            "Level": 54,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 22,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 198,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 76,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 31,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 16,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 9,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 6,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2559,
+          "kind": "unique",
+          "name": "结晶的叹息",
+          "required_level": 54,
+          "requirements": {
+            "Level": 54,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 144,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 83,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 34,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 12,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 12,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 7,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2899,
+          "kind": "formation",
+          "name": "门闩抵天倾 · 圣贤服",
+          "required_level": 48,
+          "requirements": {
+            "Level": 48,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 145,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 1,
+            "Professions": 8,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 34,
+              "Value": 42,
+              "Mode": 1
+            },
+            {
+              "Attr": 69,
+              "Value": 37,
+              "Mode": 0
+            },
+            {
+              "Attr": 5,
+              "Value": 30,
+              "Mode": 0
+            },
+            {
+              "Attr": 27,
+              "Value": -5,
+              "Mode": 1
+            },
+            {
+              "Attr": 13,
+              "Value": 42,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 45,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 18,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 8,
+          "socket_count": 5,
+          "version": 6
+        },
+        {
+          "base_id": 2108,
+          "kind": "unique",
+          "name": "漏宿沉履",
+          "required_level": 56,
+          "requirements": {
+            "Level": 56,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 17,
+              "Value": 51,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 236,
+              "Mode": 0
+            },
+            {
+              "Attr": 70,
+              "Value": 10,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 15,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 10,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 9,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 2601,
+          "kind": "unique",
+          "name": "瓶里破茧",
+          "required_level": 30,
+          "requirements": {
+            "Level": 30,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 0,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 31,
+            "BeginnerAllowed": true,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 61,
+              "Value": 24,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 12,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 22,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 54,
+              "Mode": 0
+            },
+            {
+              "Attr": 118,
+              "Value": 8,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 10,
+          "socket_count": 0,
+          "version": 6
+        },
+        {
+          "base_id": 1310,
+          "kind": "formation",
+          "name": "四象让中宫 · 神杖·九仪",
+          "required_level": 60,
+          "requirements": {
+            "Level": 54,
+            "Base": {
+              "STR": 0,
+              "VIT": 0,
+              "INT": 81,
+              "SPI": 0,
+              "AGI": 0,
+              "DEX": 0
+            },
+            "Sex": 0,
+            "Professions": 24,
+            "BeginnerAllowed": false,
+            "ProfessionRestricted": true
+          },
+          "resolved_catalog_affixes_including_item_local": [
+            {
+              "Attr": 47,
+              "Value": 239,
+              "Mode": 0
+            },
+            {
+              "Attr": 15,
+              "Value": 145,
+              "Mode": 0
+            },
+            {
+              "Attr": 23,
+              "Value": 900,
+              "Mode": 0
+            },
+            {
+              "Attr": 66,
+              "Value": 900,
+              "Mode": 0
+            },
+            {
+              "Attr": 34,
+              "Value": 320,
+              "Mode": 0
+            },
+            {
+              "Attr": 36,
+              "Value": 300,
+              "Mode": 0
+            },
+            {
+              "Attr": 61,
+              "Value": 26,
+              "Mode": 0
+            },
+            {
+              "Attr": 17,
+              "Value": 48,
+              "Mode": 0
+            }
+          ],
+          "roll_bp": 12000,
+          "slot": 13,
+          "socket_count": 5,
+          "version": 6
+        }
+      ]
+    }
+  ]
+}

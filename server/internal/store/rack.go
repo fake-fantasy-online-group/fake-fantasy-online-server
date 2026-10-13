@@ -32,7 +32,7 @@ func loadRackRefundRule(ctx context.Context, q querier) (domain.RackRefundRule, 
 
 func (p *Postgres) LoadRackRefundOffers(ctx context.Context, charID int64,
 	rule domain.RackRefundRule) ([]domain.RackRefundOffer, error) {
-	return loadRackRefundOffers(ctx, p.pool, charID, rule)
+	return loadRackRefundOffers(ctx, p.catalogQuery(), charID, rule)
 }
 
 func (t *pgTx) LoadRackRefundOffers(ctx context.Context, charID int64,

@@ -336,7 +336,15 @@ func (s *Scene) petExperienceBonus(owner *entity.Entity, experience int64) int64
 	var bonus int64
 	s.eachPetEffect(owner, func(_ *domain.PetInstance, e domain.PetSkillEffect, level int32) {
 		if e.Kind == "experience_bonus" && int32(s.rng.Intn(10000)) < e.Chance(level) {
-			bonus += experience * int64(e.Amount(level)) / 100
+			if bonus < 0 {
+				return
+			}
+			total, err := domain.ExperienceWithBonus(experience, e.Amount(level))
+			if err != nil || bonus > int64(^uint64(0)>>1)-(total-experience) {
+				bonus = -1
+				return
+			}
+			bonus += total - experience
 		}
 	})
 	return bonus

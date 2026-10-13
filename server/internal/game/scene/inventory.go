@@ -63,7 +63,7 @@ func (s *Scene) inventorySnapshot(p *entity.Entity) (event.InventorySnapshot, er
 		view := event.InventoryItemView{
 			BagIndex: int32(clientSlot), Item: st.Item, Count: st.Count,
 			Tab: def.InventoryTab, Name: itemDisplayName(def, st), Desc: s.ownedItemTooltip(def, st, p),
-			Sell: def.SellPrice, Slot: -1, Bound: st.Bound, Blocked: s.equipmentBlockedFor(p, def),
+			Sell: def.SellPrice, Slot: -1, Bound: st.Bound, Blocked: s.equipmentBlockedFor(p, def, st),
 			Locked: st.Locked, Quality: equipmentQuality(def, st), Cosmetic: def.AvatarFusion != nil,
 			FusedDesc: s.fusedDescription(st),
 		}
@@ -446,6 +446,9 @@ func equipmentQuality(def domain.ItemDef, stacks ...domain.Stack) uint8 {
 	if len(stacks) != 0 {
 		st = stacks[0]
 	}
+	if _, ok := domain.UniqueOf(st,def.EndgameCatalog); ok {
+		return 4
+	}
 	n := domain.EquipmentAttributeCount(def, st)
 	if n > 5 {
 		n = 5
@@ -463,12 +466,12 @@ func equipmentQuality(def domain.ItemDef, stacks ...domain.Stack) uint8 {
 // equipmentBlockedFor 为 0x8006 item.blocked 提供角色当下的可穿戴状态。
 // 这与 locked（玩家手动锁定实例）、bound（永久绑定）不是同一件事。
 // 真正穿戴时 onEquip 会使用同一组规则再做一次权威校验，不信任客户端。
-func (s *Scene) equipmentBlockedFor(p *entity.Entity, def domain.ItemDef) bool {
+func (s *Scene) equipmentBlockedFor(p *entity.Entity, def domain.ItemDef, st domain.Stack) bool {
 	if def.Equip == nil || p == nil || p.Player == nil || p.Player.Char == nil {
 		return false
 	}
 	ch := p.Player.Char
-	if def.Equip.Need.Meet(ch.Level, s.equipmentRequirementBaseFromWorn(p, s.functionalWorn(p), domain.EquipSlot(def.Equip.Slot)), ch.Appear.Gender) != domain.RejectNone {
+	if ch.Level < domain.EquipmentRequiredLevel(def, st) || def.Equip.Need.Meet(ch.Level, s.equipmentRequirementBaseFromWorn(p, s.functionalWorn(p), domain.EquipSlot(def.Equip.Slot)), ch.Appear.Gender) != domain.RejectNone {
 		return true
 	}
 	return !def.Equip.Need.AllowsCharacter(ch)
@@ -486,12 +489,24 @@ func (s *Scene) itemTooltip(def domain.ItemDef, st domain.Stack) string {
 // ownedItemTooltip 的人物上下文仅用于需求颜色和套装激活判定。
 // 不在服务端描述中添加“已装备/未装备”标签。
 func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *entity.Entity) string {
+	return s.itemTooltipForViewer(def, st, owner, owner)
+}
+
+// Viewer controls renderer negotiation; owner controls requirements/activation.
+func (s *Scene) itemTooltipForViewer(def domain.ItemDef, st domain.Stack, owner, viewer *entity.Entity) string {
 	var ch *domain.Character
 	if owner != nil && owner.Player != nil {
 		ch = owner.Player.Char
 	}
 	if def.Equip == nil {
 		lines := make([]string, 0, 2)
+		if rune, ok := domain.AstralRune(st.Item,s.endgameCatalog); ok {
+			level := fmt.Sprintf("需要等级: %d", rune.MinLevel)
+			if ch != nil && ch.Level < rune.MinLevel {
+				level = "\x02" + level
+			}
+			lines = append(lines, level)
+		}
 		if def.Weight != 0 {
 			lines = append(lines, fmt.Sprintf("重量 %d", def.Weight))
 		}
@@ -499,7 +514,7 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 		if st.InstanceKind == domain.ItemInstanceSocketCard && len(st.Card.StaticAffixes()) > 0 {
 			// 数值只取实例；原始描述仅保留部位限制，避免模板旧数值与实例并列。
 			for _, affix := range st.Card.StaticAffixes() {
-				lines = append(lines, affixText(affix))
+				lines = append(lines, s.astralRuneAffixText(st.Item, affix))
 			}
 			if at := strings.Index(text, "只可"); at >= 0 {
 				lines = append(lines, text[at:])
@@ -513,10 +528,31 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 	e := def.Equip
 	quality := equipmentQuality(def, st)
 	textQuality := quality
-	if domain.EquipmentAttributeCount(def, st) == 2 {
+	_, unique := domain.UniqueOf(st,s.endgameCatalog)
+	_, formed := domain.MatchAstralRecipe(def, st)
+	nativeStats := s.nativeEndgameStats(viewer) && (unique || formed)
+	if nativeStats {
+		textQuality = tooltipDarkGold
+	} else if !unique && domain.EquipmentAttributeCount(def, st) == 2 {
 		textQuality = tooltipLightBlue
 	}
+	var specialEffects []string
 	lines := []string{"\x07(" + equipmentKindName(e) + ")", ""}
+	if d, ok := domain.UniqueOf(st,s.endgameCatalog); ok {
+		lines = append(lines, qualityColoredLine(textQuality, "仙遗·"+d.Name), "基底："+def.Name)
+		if !nativeStats {
+			for _, a := range domain.UniqueAffixes(st,s.endgameCatalog) {
+				lines = append(lines, qualityColoredLine(4, affixText(a)))
+			}
+			for _, line := range localEnhancementLines(def, d.LocalEnhancements, st.Endgame.UniqueRollBP) {
+				lines = append(lines, qualityColoredLine(4, line))
+			}
+		}
+		for _, tr := range d.Traits {
+			specialEffects = append(specialEffects, tr.Describe(10000))
+		}
+		lines = append(lines, "同名仙遗特性取最高值；不同特性按通道上限叠加。", d.Description(), "")
+	}
 	if st.Bound {
 		lines = append(lines, "（绑定）（可用天工剪解除绑定）")
 	}
@@ -555,10 +591,23 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 			actual = s.equipmentRequirementBaseFromWorn(owner, s.functionalWorn(owner), domain.EquipSlot(e.Slot))
 		}
 	}
-	appendEquipmentRequirements(&lines, e, ch, actual)
+	requirements := *e
+	requirements.Need.Level = domain.EquipmentRequiredLevel(def, st)
+	appendEquipmentRequirements(&lines, &requirements, ch, actual)
 	lines = append(lines, "")
-	equipBase, equipStats := e.RefinedIntrinsic(st.RefineLevel)
-	appendIntrinsicEquipmentStats(&lines, equipStats, equipBase)
+	var local []domain.ItemLocalEnhancement
+	roll := st.Endgame.UniqueRollBP
+	if d, ok := domain.UniqueOf(st,s.endgameCatalog); ok {
+		local = d.LocalEnhancements
+	}
+	formation, includeFormation := s.tooltipFormation(def, st, owner)
+	if nativeStats && includeFormation {
+		local = append(local, formation.LocalEnhancements...)
+		roll = st.Endgame.FormationRollBP
+	}
+	equipBase, equipStats := domain.EnhancedIntrinsic(e, st.RefineLevel, local, roll)
+	_, refinedStats := e.RefinedIntrinsic(st.RefineLevel)
+	appendIntrinsicEquipmentStats(&lines, equipStats, equipBase, refinedStats, nativeStats)
 	if def.Weight != 0 {
 		lines = append(lines, fmt.Sprintf("重量 %d", def.Weight))
 	}
@@ -580,18 +629,74 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 	for i := 0; i < int(st.WashCount) && i < len(st.WashAffixes); i++ {
 		appendEquipmentAffixes(&lines, []domain.Affix{st.WashAffixes[i]}, textQuality)
 	}
-	// 镶嵌显示与 Compute 读取相同的卡实例属性快照。
+	// The native-stat renderer owns one authoritative extra-attribute block.
+	// Rune snapshots and active formation extras merge only on identical scope.
 	usedSockets := domain.UsedEquipmentSockets(st)
-	for i := 0; i < int(st.SocketCount) && i < len(st.Sockets); i++ {
-		if st.Sockets[i] == 0 {
-			continue
+	if nativeStats {
+		var socketAffixes []domain.Affix
+		periodic := make(domain.PeriodicRecoveryBuckets)
+		for i := 0; i < int(st.SocketCount) && i < len(st.Sockets); i++ {
+			if st.Sockets[i] != 0 {
+				rune, known := s.endgameCatalog.Rune(st.Sockets[i])
+				for _, a := range st.SocketCards[i].StaticAffixes() {
+					if known && periodicRecoveryAffix(rune, a) {
+						periodic.AddFlatHP(rune.RegenerationIntervalMS, int64(a.Value))
+					} else {
+						socketAffixes = append(socketAffixes, a)
+					}
+				}
+			}
 		}
-		appendEquipmentAffixes(&lines, st.SocketCards[i].StaticAffixes(), textQuality)
+		var formationAffixes []domain.Affix
+		if includeFormation {
+			formationAffixes = domain.ResolveVariableAffixes(formation.Affixes, formation.VariableAffixes, st.Endgame.FormationRollBP)
+		}
+		for _, a := range mergedEndgameAffixes(domain.UniqueAffixes(st,s.endgameCatalog), socketAffixes, formationAffixes) {
+			lines = append(lines, qualityColoredLine(tooltipDarkGold, affixText(a)))
+		}
+		// Different execution scopes never merge just because they share attr38.
+		intervals := make([]int, 0, len(periodic))
+		for interval := range periodic { intervals = append(intervals, int(interval)) }
+		sort.Ints(intervals)
+		for _, interval := range intervals {
+			lines = append(lines, qualityColoredLine(tooltipDarkGold, periodicRecoveryText(int32(interval), periodic[int32(interval)])))
+		}
+		appendV5 := func(effects []domain.EquipmentEffect, bonuses []domain.SkillRankBonus) {
+			attributes, special := s.equipmentV5Lines(effects, bonuses)
+			for _, text := range attributes {
+				lines = append(lines, qualityColoredLine(tooltipDarkGold, text))
+			}
+			specialEffects = append(specialEffects, special...)
+		}
+		if u, ok := domain.UniqueOf(st,s.endgameCatalog); ok {
+			appendV5(u.TypedEffects, u.SkillBonuses)
+		}
+		if includeFormation {
+			appendV5(formation.TypedEffects, formation.SkillBonuses)
+			for _, tr := range formation.Traits {
+				specialEffects = append(specialEffects, tr.Describe(10000))
+			}
+		}
+		for _, line := range localEnhancementLines(def, local, roll) {
+			lines = append(lines, qualityColoredLine(tooltipDarkGold, line))
+		}
+	} else {
+		for i := 0; i < int(st.SocketCount) && i < len(st.Sockets); i++ {
+			if st.Sockets[i] != 0 {
+				for _, a := range st.SocketCards[i].StaticAffixes() {
+					lines = append(lines, qualityColoredLine(textQuality, s.astralRuneAffixText(st.Sockets[i], a)))
+				}
+			}
+		}
 	}
 	// 分母是这件装备实际已打出的孔，不是模板可打孔上限。
 	// 无孔装备不显示；空孔计入分母，只有已镶嵌的孔计入分子。
 	if st.SocketCount > 0 {
-		lines = append(lines, qualityColoredLine(textQuality, fmt.Sprintf("孔数 %d/%d", usedSockets, st.SocketCount)))
+		socketQuality := textQuality
+		if nativeStats {
+			socketQuality = tooltipDarkGold
+		}
+		lines = append(lines, qualityColoredLine(socketQuality, fmt.Sprintf("孔数 %d/%d", usedSockets, st.SocketCount)))
 	}
 	s.appendSuitTooltip(&lines, e.Suit, owner)
 	if e.Skill != nil {
@@ -600,11 +705,22 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 			lines = append(lines, "技能效果: "+text)
 		}
 	}
-	if text := strings.TrimSpace(def.Description); text != "" {
-		lines = append(lines, text)
+	// Unique and formed astral equipment use their authored lore. Omit only
+	// the base template prose here, before it becomes an unstructured tooltip;
+	// requirements, set/skill effects and binding notices remain untouched.
+	// Recipe identity, not current activation, also covers bag and broken gear.
+	if _, formed := domain.MatchAstralRecipe(def, st); !unique && !formed {
+		if text := strings.TrimSpace(def.Description); text != "" {
+			lines = append(lines, text)
+		}
 	}
 	if st.Bound {
 		lines = append(lines, "（绑定物品不可交易/摆摊/邮寄, 可卖NPC）")
+	}
+	// Special effects are the final block, after native metadata and lore.
+	// 0x06 is the existing orange text marker, independent of item quality.
+	for _, text := range specialEffects {
+		lines = append(lines, "\x06"+text)
 	}
 	return strings.Join(lines, "\n")
 }
@@ -666,10 +782,14 @@ func equipmentKindName(e *domain.EquipDef) string {
 
 func itemDisplayName(def domain.ItemDef, st domain.Stack) string {
 	name := def.Name
+	uniqueName, unique := domain.UniqueName(st,def.EndgameCatalog)
+	if unique {
+		name = uniqueName
+	}
 	if def.Equip != nil && st.RefineLevel > 0 {
 		name = fmt.Sprintf("%s+%d", name, st.RefineLevel)
 	}
-	if domain.EquipmentAttributeCount(def, st) == 2 {
+	if !unique && domain.EquipmentAttributeCount(def, st) == 2 {
 		name = "\x05" + name
 	}
 	return name
@@ -713,25 +833,35 @@ func appendEquipmentRequirements(lines *[]string, e *domain.EquipDef, ch *domain
 	}
 }
 
-// appendIntrinsicEquipmentStats 展示固有属性与加工增量合并后的白字。
+// appendIntrinsicEquipmentStats 展示固有属性与加工增量合并后的基础数值。
 //
 // 原服的主表属性显示为“命中 6 / 力量 8”，不带附加词条才有的
-// 正号或百分号。这一层不得读 game_equip_extra。
-func appendIntrinsicEquipmentStats(lines *[]string, stats domain.Stats, base domain.Base) {
+// 正号或百分号。这一层不得读 game_equip_extra。只将相对同级精炼数值
+// 确有本件强化增量的对应行标为暗金；零基数、零百分比及取整为零仍白色。
+func appendIntrinsicEquipmentStats(lines *[]string, stats domain.Stats, base domain.Base, refined domain.Stats, explicitWhite bool) {
+	add := func(line string, enhanced bool) {
+		if enhanced {
+			line = qualityColoredLine(tooltipDarkGold, line)
+		} else if explicitWhite {
+			line = "\x030" + line
+		}
+		*lines = append(*lines, line)
+	}
 	if stats.MinAtk != 0 || stats.MaxAtk != 0 {
-		*lines = append(*lines, fmt.Sprintf("攻击 %d~%d", stats.MinAtk, stats.MaxAtk))
+		add(fmt.Sprintf("攻击 %d~%d", stats.MinAtk, stats.MaxAtk), stats.MinAtk != refined.MinAtk || stats.MaxAtk != refined.MaxAtk)
 	}
 	for _, row := range []struct {
-		name  string
-		value int32
+		name     string
+		value    int32
+		enhanced bool
 	}{
-		{"防御", stats.Def}, {"魔法攻击", stats.MAtk}, {"魔法防御", stats.MDef},
-		{"命中", stats.Hit}, {"负重上限", stats.MaxWeight},
-		{"力量", base.STR}, {"体质", base.VIT}, {"敏捷", base.AGI},
-		{"智慧", base.INT}, {"精神", base.SPI}, {"灵巧", base.DEX},
+		{"防御", stats.Def, stats.Def != refined.Def}, {"魔法攻击", stats.MAtk, stats.MAtk != refined.MAtk}, {"魔法防御", stats.MDef, stats.MDef != refined.MDef},
+		{"命中", stats.Hit, false}, {"负重上限", stats.MaxWeight, false},
+		{"力量", base.STR, false}, {"体质", base.VIT, false}, {"敏捷", base.AGI, false},
+		{"智慧", base.INT, false}, {"精神", base.SPI, false}, {"灵巧", base.DEX, false},
 	} {
 		if row.value != 0 {
-			*lines = append(*lines, fmt.Sprintf("%s %d", row.name, row.value))
+			add(fmt.Sprintf("%s %d", row.name, row.value), row.enhanced)
 		}
 	}
 }
@@ -746,11 +876,18 @@ func appendEquipmentAffixes(lines *[]string, affixes []domain.Affix, quality uin
 	}
 }
 
-// tooltipLightBlue 仅用于文本，不是协议品质值。
-const tooltipLightBlue uint8 = 5
+// Text-only colors are not equipment-quality protocol values. In particular,
+// retain the existing light-blue value; dark gold emits quality marker 5.
+const (
+	tooltipLightBlue uint8 = 5
+	tooltipDarkGold  uint8 = 6
+)
 
 // qualityColoredLine 使用客户端已有的品质前缀或淡蓝文本前缀。
 func qualityColoredLine(quality uint8, line string) string {
+	if quality == tooltipDarkGold && line != "" {
+		return "\x035" + line
+	}
 	if quality == tooltipLightBlue && line != "" {
 		return "\x05" + line
 	}
@@ -761,29 +898,38 @@ func qualityColoredLine(quality uint8, line string) string {
 }
 
 func equipmentAffixLine(a domain.Affix) (string, bool) {
+	if a.Attr == domain.AttrAtkSpeed {
+		return attackSpeedAffixText(a), true
+	}
 	name := map[int32]string{
 		domain.AttrSTR: "力量", domain.AttrVIT: "体质", domain.AttrAGI: "敏捷",
 		domain.AttrINT: "智慧", domain.AttrSPI: "精神", domain.AttrDEX: "灵巧",
 		domain.AttrDef: "防御", domain.AttrMAtk: "魔法攻击", domain.AttrMDef: "魔法防御",
-		domain.AttrHit: "命中", domain.AttrCrit: "爆击率", domain.AttrAtkSpeed: "攻击速度",
+		domain.AttrHit: "命中", domain.AttrCrit: "爆击率",
 		domain.AttrMoveSpeed: "移动速度", domain.AttrMinAtk: "最小攻击",
 		domain.AttrMaxAtk: "最大攻击", domain.AttrMaxHP: "最大生命",
 		domain.AttrMaxMP: "最大法力", domain.AttrHPRegen: "生命恢复",
 		domain.AttrMaxWeight: "负重上限", domain.AttrAtk: "攻击",
 		domain.AttrMCrit: "魔法爆击率", domain.AttrPhysRes: "伤害抗性",
 		domain.AttrMagicRes: "魔法抗性", domain.AttrStatusRes: "不良状态抗性",
+		domain.AttrEffectHitBP: "效果命中",
 	}[a.Attr]
 	if name == "" {
 		return "", false
 	}
-	if a.Attr == domain.AttrCrit || a.Attr == domain.AttrMCrit {
+	if a.Attr == domain.AttrCrit || a.Attr == domain.AttrMCrit || a.Attr == domain.AttrEffectHitBP {
 		return fmt.Sprintf("%s %s", name, basisPointPercent(a.Value)), true
 	}
 	suffix := ""
 	if a.Mode == domain.ModePercent {
 		suffix = "%"
 	}
-	return fmt.Sprintf("%s %s%d%s", name, signedPrefix(a.Value), a.Value, suffix), true
+	value := int64(a.Value)
+	prefix := ""
+	if value >= 0 {
+		prefix = "+"
+	}
+	return fmt.Sprintf("%s %s%d%s", name, prefix, value, suffix), true
 }
 
 func signedPrefix(v int32) string {
@@ -814,6 +960,7 @@ func (s *Scene) pushInventory(p *entity.Entity) error {
 	if s.skills != nil {
 		s.emitTo(p.ID, s.lifeSkillSnapshot(p))
 	}
+	s.sendEndgameSnapshot(p)
 	return nil
 }
 

@@ -1,0 +1,161 @@
+package data
+
+import (
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+	"reflect"
+	"testing"
+)
+
+type riftFloorTestDefs map[domain.MonsterID]domain.MonsterDef
+
+func (d riftFloorTestDefs) Def(id domain.MonsterID) (domain.MonsterDef, bool) {
+	v, ok := d[id]
+	return v, ok
+}
+func riftGeometryFixture() (*CollisionMask, riftFloorTestDefs, []domain.SpawnPoint) {
+	mask := &CollisionMask{width: 140, height: 100, cellWidth: 16, cellHeight: 16, cells: make([]byte, 140*100)}
+	defs := riftFloorTestDefs{1: {ID: 1, Sprite: 20, HP: 100, Kind: domain.MonsterNormal}, 2: {ID: 2, Sprite: 21, HP: 200, Kind: domain.MonsterBoss}, 3: {ID: 3, Sprite: 22, HP: 10, Kind: domain.MonsterProp}, 4: {ID: 4, HP: 100, Kind: domain.MonsterNormal}, 5: {ID: 5, Sprite: 25, HP: 100, NoAttack: true}}
+	var points []domain.SpawnPoint
+	for i := 0; i < 50; i++ {
+		points = append(points, domain.SpawnPoint{ID: int32(i + 1), Monster: 1, Pos: domain.Pos{MapID: 7, X: float64(8 + (i%5)*96), Y: float64(8 + (i/5)*144)}})
+	}
+	for i := 0; i < 20; i++ {
+		points = append(points, domain.SpawnPoint{ID: int32(100 + i), Monster: 1, Pos: domain.Pos{MapID: 7, X: float64(1288 + (i%5)*96), Y: float64(8 + (i/5)*144)}})
+	}
+	return mask, defs, points
+}
+func TestRiftFloorTemplateConnectedNativeAnchors(t *testing.T) {
+	mask, defs, points := riftGeometryFixture()
+	for y := 0; y < int(mask.height); y++ {
+		mask.cells[y*int(mask.width)+65] = maskBlockedBit
+	}
+	points = append(points, domain.SpawnPoint{ID: 200, Monster: 2, Pos: domain.Pos{MapID: 7, X: 500, Y: 600}}, domain.SpawnPoint{ID: 201, Monster: 3, Pos: domain.Pos{MapID: 7, X: 510, Y: 600}}, domain.SpawnPoint{ID: 202, Monster: 4, Pos: domain.Pos{MapID: 7, X: 520, Y: 600}}, domain.SpawnPoint{ID: 203, Monster: 5, Pos: domain.Pos{MapID: 7, X: 530, Y: 600}}, domain.SpawnPoint{ID: 204, Monster: 1, Pos: domain.Pos{MapID: 7, X: 1040, Y: 600}})
+	layout, ok := BuildRiftFloorTemplate(7, "森林", points, defs, mask)
+	if !ok || len(layout.Anchors) != 51 || len(layout.Monsters) != 1 || len(layout.Guardians) != 1 || layout.Guardians[0] != 2 {
+		t.Fatalf("bad validated component: %+v", layout)
+	}
+	if layout.WalkableArea != 65*100*16*16 || len(layout.Population) <= len(layout.Anchors)*3 {
+		t.Fatalf("missing verified area/dense candidate positions: area=%v population=%d", layout.WalkableArea, len(layout.Population))
+	}
+	for _, p := range layout.Anchors {
+		if p.Pos.X >= 1040 || !mask.Walkable(p.Pos) {
+			t.Fatal("unreachable or blocked anchor")
+		}
+	}
+	seen := map[domain.Pos]bool{}
+	for _, p := range layout.Population {
+		if p.Pos.X >= 1040 || !mask.Walkable(p.Pos) || seen[p.Pos] {
+			t.Fatal("unreachable, blocked or overlapping population point")
+		}
+		seen[p.Pos] = true
+		nearNative := false
+		for _, native := range layout.Anchors {
+			dx, dy := p.Pos.X-native.Pos.X, p.Pos.Y-native.Pos.Y
+			nearNative = nearNative || dx*dx+dy*dy <= domain.RiftFloorPopulationRadius*domain.RiftFloorPopulationRadius
+		}
+		if !nearNative {
+			t.Fatal("population escaped verified native encounter regions")
+		}
+	}
+	for floor := int32(1); floor <= 30; floor++ {
+		p, err := domain.PlanRiftFloor("geometry", floor, []domain.RiftFloorTemplate{layout}, 0)
+		if err != nil || !p.Valid() {
+			t.Fatal("validated map failed generation", err)
+		}
+		if len(p.Spawns) < domain.RiftFloorMinPopulation {
+			t.Fatalf("small map stayed sparse despite safe positions: %d", len(p.Spawns))
+		}
+		for _, monster := range p.Spawns {
+			if !seen[monster.Point.Pos] {
+				t.Fatal("spawn did not use a verified population position")
+			}
+		}
+	}
+}
+
+func TestRiftFloorDenseCandidatesKeepNativeInputOrderIndependent(t *testing.T) {
+	mask, defs, points := riftGeometryFixture()
+	a, ok := BuildRiftFloorTemplate(7, "森林", points, defs, mask)
+	if !ok {
+		t.Fatal("fixture rejected")
+	}
+	for i, j := 0, len(points)-1; i < j; i, j = i+1, j-1 {
+		points[i], points[j] = points[j], points[i]
+	}
+	b, ok := BuildRiftFloorTemplate(7, "森林", points, defs, mask)
+	if !ok || !reflect.DeepEqual(a, b) {
+		t.Fatal("native input order changed collision-verified population")
+	}
+}
+func TestRiftFloorTemplateFollowsWindingCorridor(t *testing.T) {
+	mask, defs, points := riftGeometryFixture()
+	for y := 0; y < int(mask.height)-1; y++ {
+		mask.cells[y*int(mask.width)+65] = maskBlockedBit
+	}
+	layout, ok := BuildRiftFloorTemplate(7, "洞穴", points, defs, mask)
+	if !ok || len(layout.Anchors) != 70 {
+		t.Fatal("lost reachable anchors around winding wall", len(layout.Anchors))
+	}
+}
+func TestRiftFloorTemplateRejectsUnverifiedAssets(t *testing.T) {
+	mask, defs, points := riftGeometryFixture()
+	if _, ok := BuildRiftFloorTemplate(7, "", points, defs, nil); ok {
+		t.Fatal("accepted absent mask")
+	}
+	if _, ok := BuildRiftFloorTemplate(7, "", points[:4], defs, mask); ok {
+		t.Fatal("accepted sparse floor")
+	}
+	for i := range mask.cells {
+		mask.cells[i] = maskBlockedBit
+	}
+	if _, ok := BuildRiftFloorTemplate(7, "", points, defs, mask); ok {
+		t.Fatal("accepted blocked floor")
+	}
+	mask, defs, points = riftGeometryFixture()
+	for i := range points {
+		points[i].Monster = 4
+	}
+	if _, ok := BuildRiftFloorTemplate(7, "", points, defs, mask); ok {
+		t.Fatal("accepted missing model")
+	}
+}
+
+func TestRiftFloorCompactMapGetsAlignedVerifiedExpansion(t *testing.T) {
+	mask, defs, _ := riftGeometryFixture()
+	for y := 0; y < int(mask.height); y++ {
+		for x := 20; x < int(mask.width); x++ {
+			mask.cells[y*int(mask.width)+x] = maskBlockedBit
+		}
+	}
+	var anchors []domain.SpawnPoint
+	for i := 0; i < 18; i++ {
+		anchors = append(anchors, domain.SpawnPoint{ID: int32(i + 1), Monster: 1, Pos: domain.Pos{MapID: 7, X: 80 + float64(i%2)*160, Y: 100 + float64(i/2)*144}})
+	}
+	layout, ok := BuildRiftFloorTemplate(7, "narrow", anchors, defs, mask)
+	if !ok || len(layout.ExtraPopulation) == 0 {
+		t.Fatal("compact map was excluded instead of safely expanded")
+	}
+	verified := map[domain.Pos]bool{}
+	for _, p := range append(append([]domain.SpawnPoint(nil), layout.Population...), layout.ExtraPopulation...) {
+		if !mask.Walkable(p.Pos) || p.Pos.X >= 320 || int(p.Pos.X)%32 != 0 || int(p.Pos.Y)%32 != 0 || verified[p.Pos] {
+			t.Fatal("extra candidate not aligned, distinct or walkable")
+		}
+		verified[p.Pos] = true
+	}
+	for floor := int32(1); floor <= 150; floor++ {
+		base, err := domain.PlanRiftFloor("compact", floor, []domain.RiftFloorTemplate{layout}, 0, 1)
+		if err != nil {
+			t.Fatal(err)
+		}
+		doubled, err := domain.PlanRiftFloor("compact", floor, []domain.RiftFloorTemplate{layout}, 0, 2)
+		if err != nil || !doubled.Valid() || len(doubled.Spawns) != 2*len(base.Spawns) || doubled.Guardian != base.Guardian {
+			t.Fatal("compact map failed exact double", floor, err)
+		}
+		for _, p := range doubled.Spawns {
+			if !verified[p.Point.Pos] {
+				t.Fatal("invented doubled coordinate")
+			}
+		}
+	}
+	t.Logf("compact geometry: original %d candidates + %d supplementary candidates", len(layout.Population), len(layout.ExtraPopulation))
+}

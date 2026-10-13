@@ -88,10 +88,16 @@ func (q *monsterPathQueue) Pop() any {
 
 // stepAI 推进本图所有怪的行为。
 func (s *Scene) stepAI() {
+	if s.rift != nil && !s.riftCombatReady() {
+		return
+	}
 	if len(s.monsters) == 0 {
 		return
 	}
 	for _, m := range s.monsters {
+		if s.riftMonsterAbilityBusy(m.ID) {
+			continue
+		}
 		if !m.Alive() || m.Monster == nil {
 			continue
 		}
@@ -231,14 +237,10 @@ func (s *Scene) ensureMonsterPassives(m *entity.Entity) {
 			if m.Status != nil && m.Status.Has(app.ID) {
 				continue
 			}
-			statusDef, found := s.statuses.Get(app.ID, app.Level)
-			if !found {
+			statusDef, ok := s.resolveSkillStatusDef(rule.Skill, app, 0)
+			if !ok {
 				continue
 			}
-			if app.DurationSec > 0 {
-				statusDef.DurationSec = app.DurationSec
-			}
-			applyStatusSource(&statusDef, rule.Skill.Icon, int32(rule.Skill.ID))
 			s.applyStatusDef(m, statusDef, m.ID)
 		}
 	}
@@ -376,7 +378,7 @@ func monsterHPPct(m *entity.Entity) int32 {
 	if m == nil || m.MaxHP <= 0 {
 		return 0
 	}
-	return m.HP * 100 / m.MaxHP
+	return int32(max(int64(0), min(int64(100), int64(m.HP)*100/int64(m.MaxHP))))
 }
 
 func monsterRuleInHPRange(rule domain.MonsterSkillRule, hpPct int32) bool {
@@ -559,7 +561,7 @@ func (s *Scene) monsterRuleTargetsEnemies(rule domain.MonsterSkillRule) bool {
 func (s *Scene) validMonsterTarget(target *entity.Entity) bool {
 	// 隐身不等于伤害免疫。怪物不会把隐身玩家作为仇恨目标，但已经起手的
 	// 技能，或以另一名玩家为中心结算的范围效果，仍能波及并命中他。
-	if target == nil || !target.Alive() || s.entityMapLoading(target) {
+	if target == nil || !target.Alive() || s.entityMapLoading(target) || !s.equipmentCombatReady(target) {
 		return false
 	}
 	if target.Kind == domain.KindPlayer {
@@ -666,6 +668,9 @@ func (s *Scene) stepWander(m *entity.Entity, p ai.Params) bool {
 	d := m.Monster
 	if d == nil || p.MoveSpeed <= 0 || !d.Kind.Hostile() {
 		return false // 花草、箱子和天生移速为 0 的怪保持静止
+	}
+	if !canMove(m) {
+		return true // Do not send a new client-side roaming path while rooted.
 	}
 
 	if !d.Roaming {
@@ -951,7 +956,7 @@ func (s *Scene) acquire(m *entity.Entity, p ai.Params) {
 	}
 	candidates := make([]candidate, 0, 4)
 	s.aoi.AroundPos(m.Pos, func(o *entity.Entity) {
-		if o.Kind != domain.KindPlayer || !o.Alive() || entityInvisible(o) || s.entityMapLoading(o) {
+		if o.Kind != domain.KindPlayer || !o.Alive() || entityInvisible(o) || s.entityMapLoading(o) || !s.equipmentCombatReady(o) {
 			return
 		}
 		if o.Player != nil && o.Player.Protected(s.tick) {
@@ -986,7 +991,7 @@ func (s *Scene) targetInfo(m *entity.Entity) *ai.Target {
 		return nil
 	}
 	t, ok := s.entities[id]
-	if !ok || entityInvisible(t) || s.entityMapLoading(t) {
+	if !ok || entityInvisible(t) || s.entityMapLoading(t) || !s.equipmentCombatReady(t) {
 		s.dropTarget(m) // 目标下线/传送离图：原地脱战，不回出生点
 		return nil
 	}
@@ -1040,7 +1045,7 @@ func (s *Scene) dropMonsterAggroForPlayer(player domain.EntityID) {
 //
 // 怪与宠物共用它: 这段代码从头到尾没碰过 m.Monster, 本来就是通用的。
 func (s *Scene) moveEntity(m *entity.Entity, to domain.Pos) {
-	if to == m.Pos {
+	if to == m.Pos || !canMove(m) {
 		return
 	}
 	s.aoi.Move(m, to)
@@ -1078,7 +1083,7 @@ func (s *Scene) aggro(victim *entity.Entity, attacker domain.EntityID) {
 		return
 	}
 	a, ok := s.entities[attacker]
-	if !ok || a.Kind != domain.KindPlayer || entityInvisible(a) {
+	if !ok || a.Kind != domain.KindPlayer || entityInvisible(a) || !s.equipmentCombatReady(a) {
 		return
 	}
 	victim.Monster.Target = attacker
@@ -1095,7 +1100,7 @@ func (s *Scene) taunt(victim *entity.Entity, attacker domain.EntityID, power int
 		return false
 	}
 	a, ok := s.entities[attacker]
-	if !ok || a.Kind != domain.KindPlayer || !a.Alive() {
+	if !ok || a.Kind != domain.KindPlayer || !a.Alive() || !s.equipmentCombatReady(a) {
 		return false
 	}
 	if victim.Monster.Target != 0 && victim.Monster.Target != attacker && power < victim.Monster.TauntPower {

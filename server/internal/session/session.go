@@ -62,9 +62,10 @@ type Sink interface {
 
 // Deps 是会话依赖(构造注入, 便于测试)。
 type Deps struct {
-	Announcements domain.AnnouncementPool
-	Store         store.Store
-	Router        *scene.Router
+	RequireGrowthV5 bool // production V5 battle requires explicit capability handshake
+	Announcements   domain.AnnouncementPool
+	Store           store.Store
+	Router          *scene.Router
 	// HelpTopics 是 PostgreSQL 在开服时加载的普通角色帮助主题。
 	HelpTopics      []domain.HelpTopic
 	HelpTopicsKnown bool
@@ -117,11 +118,14 @@ type Session struct {
 	deps Deps
 	log  *slog.Logger
 
-	mu            sync.Mutex
-	stage         Stage
-	account       *store.Account
-	clientAuthTag []byte
-	char          *domain.Character
+	mu                   sync.Mutex
+	stage                Stage
+	endgameV1            bool
+	growthV5             bool
+	groundPresentationV1 bool
+	account              *store.Account
+	clientAuthTag        []byte
+	char                 *domain.Character
 	// entity 是本会话在场景里的实体 id。**进世界之前分配好**, 这样后续每条命令
 	// 都能直接带上它, 不需要等场景回调告诉我们"你是几号"。
 	entity domain.EntityID
@@ -136,8 +140,10 @@ type Session struct {
 	//
 	// 只有目标地图的 entered=1 才投递 MapReady；场景完成快照后释放闸门。
 	// 普通 entered=0 存点不能作为建图完成，实际耗时不受固定秒数限制。
-	awaitMapAck bool
-	mapEpoch    uint64
+	awaitMapAck          bool
+	mapEpoch             uint64
+	clientMapReadySerial uint64
+	clientMapReady       *clientMapReadyReceipt
 	// mutedUntil 是 GM 对本次在线会话施加的禁言截止时间；不落盘，断线即清。
 	mutedUntil time.Time
 	// seenTips 是本次在线期间已经展示或由客户端确认展示过的固定新手提示。
@@ -199,6 +205,10 @@ func (s *Session) OnPacket(op uint16, payload []byte) {
 			return
 		}
 	}
+	if op == protocol.OpEndgame {
+		s.onEndgame(payload)
+		return
+	}
 	if protocol.Op(op) == protocol.OpRideTogether || protocol.Op(op) == protocol.OpRideInvite {
 		target, ok := protocol.DecodeRideTarget(payload)
 		if ok {
@@ -257,8 +267,9 @@ func (s *Session) OnPacket(op uint16, payload []byte) {
 			s.noteUnknown(op, payload, req.Kind)
 			return
 		}
-		// 固定 1.5.8 服务端不做运行时能力协商。该包只需被完整消费，
-		// 背包/仓库/试衣/宠物均直接走 1.5.8 标准协议。
+		s.mu.Lock()
+		s.groundPresentationV1 = req.ClientCaps&protocol.ClientCapGroundPresentationV1 != 0
+		s.mu.Unlock()
 		return
 	}
 	if protocol.ChangeSetOpcode(protocol.Op(op)) {
@@ -300,6 +311,10 @@ func (s *Session) OnPacket(op uint16, payload []byte) {
 	req, ok := protocol.Decode(protocol.Op(op), payload)
 	if !ok {
 		s.noteUnknown(op, payload, req.Kind)
+		return
+	}
+	if s.deps.RequireGrowthV5 && (req.Kind == protocol.ReqAttack || req.Kind == protocol.ReqUseSkill || req.Kind == protocol.ReqUpgradeSkill) && !s.growthReady() {
+		s.sink.Send(protocol.EncodeEndgame(domain.EndgameResponse{Kind: "hello", Error: "update_required", Message: "请更新客户端并完成成长系统同步后再战斗。"}))
 		return
 	}
 	switch req.Kind {
@@ -975,7 +990,10 @@ func (s *Session) leaveWorld(reason string, target Stage) bool {
 		return false
 	}
 	s.stage = target
+	s.endgameV1 = false
+	s.growthV5 = false
 	s.awaitMapAck = false
+	s.clientMapReady = nil
 	s.mapEpoch++
 	s.entity = 0
 	s.scene = domain.SceneID{}
@@ -1524,7 +1542,10 @@ func (s *Session) onEnter(req protocol.Request) {
 		ok = s.deps.Router.Post(sc, enter)
 	} else {
 		def := s.deps.Dungeons[sc.MapID]
-		ok = s.deps.Router.PostExistingForOwner(sc, def.Owner(domain.CharID(char.ID), partyID), enter)
+		ok = s.deps.Router.PostExistingRift(sc, domain.CharID(char.ID), enter)
+		if !ok {
+			ok = s.deps.Router.PostExistingForOwner(sc, def.Owner(domain.CharID(char.ID), partyID), enter)
+		}
 	}
 	if !ok {
 		s.stage = StageAuthed
@@ -1550,16 +1571,29 @@ func (s *Session) resolveLoginScene(ctx context.Context, char *domain.Character,
 	if char == nil {
 		return domain.SceneID{}, fmt.Errorf("角色为空")
 	}
+	if id, entry, ok := s.deps.Router.ActiveRiftDestination(domain.CharID(char.ID)); ok {
+		if entry.MapID != 0 {
+			char.Pos = entry
+		}
+		char.SceneInstance = id.Instance
+		return id, nil
+	}
 	def, dungeon := s.deps.Dungeons[char.Pos.MapID]
 	if char.SceneInstance == 0 && !dungeon {
 		return domain.SceneID{MapID: char.Pos.MapID}, nil
 	}
 	saved := domain.SceneID{MapID: char.Pos.MapID, Instance: char.SceneInstance}
-	if dungeon && s.deps.Router.ActiveForOwner(saved, def.Owner(domain.CharID(char.ID), partyID)) {
+	if dungeon && (s.deps.Router.ActiveRiftForCharacter(saved, domain.CharID(char.ID)) || s.deps.Router.ActiveForOwner(saved, def.Owner(domain.CharID(char.ID), partyID))) {
 		return saved, nil
 	}
 	if !dungeon {
-		return domain.SceneID{}, fmt.Errorf("副本地图 %d 缺少出口配置", char.Pos.MapID)
+		// A lost rift on an ordinary map can safely return to the public
+		// counterpart at the last collision-valid position; no instance recreation.
+		char.SceneInstance = 0
+		if err := s.deps.Store.SaveChar(ctx, char); err != nil {
+			return domain.SceneID{}, err
+		}
+		return domain.SceneID{MapID: char.Pos.MapID}, nil
 	}
 	char.Pos = def.Exit
 	char.SceneInstance = 0
@@ -1581,7 +1615,7 @@ func (s *Session) onMove(req protocol.Request) {
 		s.mu.Unlock()
 		if confirmed {
 			// Keep the barrier closed until the scene consumes this lifecycle command.
-			if s.deps.Router == nil || !s.deps.Router.PostLifecycle(sc, scene.MapReady{ID: id, Scene: sc, Epoch: epoch}) {
+			if s.deps.Router == nil || !s.deps.Router.PostLifecycle(sc, scene.MapReady{ID: id, Scene: sc, Epoch: epoch, At: domain.Pos{MapID: req.MapID, X: float64(req.X), Y: float64(req.Y)}}) {
 				s.log.Error("地图确认无法投递到目标场景", "entity", id, "scene", sc, "epoch", epoch)
 				s.sink.Close()
 			}
@@ -1595,9 +1629,11 @@ func (s *Session) onMove(req protocol.Request) {
 		epoch := s.mapEpoch
 		s.mu.Unlock()
 		// The client has rebuilt this scene even though its map ID did not change.
-		// Coordinates are not a movement command at this lifecycle boundary.
+		// Scene validates an exact configured native gate landing; otherwise
+		// these coordinates do not move the player at this lifecycle boundary.
 		if s.deps.Router == nil || !s.deps.Router.PostLifecycle(sc, scene.ClientSceneReady{
 			ID: id, Scene: sc, Epoch: epoch,
+			At: domain.Pos{MapID: req.MapID, X: float64(req.X), Y: float64(req.Y)},
 		}) {
 			s.log.Error("同图重建确认无法投递到场景", "entity", id, "scene", sc, "epoch", epoch)
 			s.sink.Close()
@@ -1605,26 +1641,25 @@ func (s *Session) onMove(req protocol.Request) {
 		return
 	}
 	// 幻想小岛的村庄选择等旧客户端功能会先在本地切图，再用 0x100a 把新地图和
-	// 落点报上来；它们不会先发 OpenTeleport/Teleport。切图开始时先报 entered=0，
-	// 地图和 CombatWorld 真正建好后才报 entered=1。若在第一包就交接，下发的 NPC、
-	// 怪物会被客户端随后完成的建图清空。因此只把 entered=1 当作客户端发起的传送，
+	// 落点报上来；它们不会先发 OpenTeleport/Teleport。普通门也没有提前通知目标图，
+	// 周期 entered=0 仍报告当时的当前图；地图和 CombatWorld 真正建好后才报 entered=1。
+	// 只把 entered=1 当作客户端发起的传送，
 	// 此时再让现有场景交接链路追上客户端并下发目标图实体。
 	clientTeleport := inGame && req.Kind == protocol.ReqSavePos &&
 		req.Flag == 1 && req.MapID > 0 && req.MapID != sc.MapID
 	// 0x1017 不带图号(decMoveXY 留 0, 而没有任何一张图的 id 是 0), 0x100a 带。
 	// 服务端已经发起跨图时，图号不符的仍是旧图滞后包；没有图号的移动也继续关在闸外。
 	drop := inGame && req.MapID != 0 && req.MapID != sc.MapID
+	var readyReceipt uint64
+	if clientTeleport {
+		readyReceipt = s.registerClientMapReadyLocked(id, sc, req.MapID, req.X, req.Y)
+	}
 	s.mu.Unlock()
 	if !inGame {
 		return
 	}
 	if clientTeleport {
-		s.deps.Router.Post(sc, scene.Teleport{
-			ID:             id,
-			To:             domain.SceneID{MapID: req.MapID},
-			At:             domain.Pos{MapID: req.MapID, X: float64(req.X), Y: float64(req.Y)},
-			ClientMapReady: true,
-		})
+		s.postClientMapReady(id, sc, req, readyReceipt)
 		return
 	}
 	if drop {
@@ -1660,6 +1695,9 @@ func (s *Session) rebind(id domain.EntityID, sc domain.SceneID) {
 	changed := s.entity != id || s.scene != sc
 	// 只有真的换了图才拉闸: 同图改绑(初次入场、实体号变化)没有滞后上报问题,
 	// 拉闸反而会把正常移动挡在外面。
+	if changed {
+		s.clientMapReady = nil
+	}
 	if from.MapID != sc.MapID {
 		s.mapEpoch++
 		s.awaitMapAck = true
@@ -1698,6 +1736,15 @@ func (s *Session) rebind(id domain.EntityID, sc domain.SceneID) {
 // “源实体已删、目标 Enter 已排队、会话/在线索引仍指向源场景”的危险窗口。
 func (s *Session) transferScene(id domain.EntityID, from, to domain.SceneID,
 	handoff func() bool) bool {
+	return s.transferSceneWithClientReady(id, from, to, domain.Pos{}, false, 0, false,
+		func(bool) bool { return handoff() })
+}
+
+// transferSceneWithClientReady preserves the same ownership lock as transferScene.
+// Only a real ordinary portal may adopt an already received ready for this exact
+// source generation and landing; no protocol identity or time window is inferred.
+func (s *Session) transferSceneWithClientReady(id domain.EntityID, from, to domain.SceneID,
+	at domain.Pos, portal bool, receipt uint64, directReady bool, handoff func(bool) bool) bool {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.stage != StageInGame || s.entity != id || s.scene != from {
@@ -1705,7 +1752,21 @@ func (s *Session) transferScene(id domain.EntityID, from, to domain.SceneID,
 			"scene", s.scene, "wantEntity", id, "from", from, "to", to)
 		return false
 	}
-	if !handoff() {
+	ready := portal && s.matchesClientMapReadyLocked(id, from, to, at)
+	if receipt != 0 {
+		// The actor may have validated this command before a newer network ready
+		// arrived. Recheck at the ownership commit, never authorize from that
+		// earlier observation. A rejected handoff takes the existing safe close path.
+		if !s.clientMapReadyCurrentLocked(id, from, receipt) {
+			s.clientMapReady = nil
+			return false
+		}
+		ready = directReady
+	}
+	// Whether matched, corrected, rejected or failed, this source generation's
+	// receipt cannot acknowledge another transfer later.
+	s.clientMapReady = nil
+	if !handoff(ready) {
 		return false
 	}
 	s.scene = to

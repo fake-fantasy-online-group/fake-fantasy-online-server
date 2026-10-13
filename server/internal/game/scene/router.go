@@ -17,6 +17,7 @@ import (
 // router.Post(id, cmd) —— 拿不到 *Scene 就不可能绕过 mailbox 直接碰实体,
 // 这条约束是靠"只有 Router 有那张表"来保证的, 不是靠自觉。
 type Router struct {
+	riftAdmissions   map[domain.SceneID]*endgameRiftAdmission
 	mu               sync.RWMutex
 	scenes           map[domain.SceneID]*Scene
 	instanceOwners   map[domain.SceneID]domain.DungeonOwner
@@ -119,6 +120,7 @@ func (r *Router) Ensure(id domain.SceneID) (*Scene, error) {
 			delete(r.trialLevels, id)
 			delete(r.trialCompleted, id)
 			delete(r.instanceAdmitted, id)
+			delete(r.riftAdmissions, id)
 		}
 		r.mu.Unlock()
 	}()

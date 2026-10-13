@@ -30,6 +30,9 @@ func (s *Scene) onRevive(cmd Revive) {
 		return
 	}
 
+	if s.reviveEndgameRift(p) {
+		return
+	}
 	switch cmd.ReviveType {
 	case ReviveTypeRespawn:
 		// 回魂娃娃不是普通双击物品。玩家在死亡面板选择回城时，若背包有
@@ -119,6 +122,7 @@ func (s *Scene) reviveItem(p *entity.Entity) (int, domain.ItemDef, bool) {
 // 由 onRevive 和明确的 GM 复活能力调用；死亡流程自身不调用。
 func (s *Scene) doRevive(e *entity.Entity, respawn bool) {
 	id := e.ID
+	delete(s.astralRuneRegen, id)
 	e.HP = e.MaxHP
 	e.MP = e.MaxMP
 	// 主动回城/原地复活不会返还死亡损失；尸体的可返还记录至此失效。
