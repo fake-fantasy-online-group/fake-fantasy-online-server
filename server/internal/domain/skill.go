@@ -161,6 +161,7 @@ const (
 	EffectInstantDeath
 	EffectResurrect
 	EffectKnockback
+	EffectStealItem
 )
 
 // SkillEffectTarget 决定一个有序效果作用于已解析目标还是施法者自身。
@@ -173,7 +174,8 @@ const (
 
 // SkillEffect 是从 desc_ 解出来的效果。
 type SkillEffect struct {
-	Kind EffectKind
+	TheftMaxSuccesses int32 `json:",omitempty"`
+	Kind              EffectKind
 	// Target 默认为客户端/场景解析出的目标；Caster 用于饮血剑、噬魂剑这类
 	// 命中敌人后恢复施法者自身资源的后续段。
 	Target SkillEffectTarget
@@ -328,18 +330,19 @@ type PassiveCounterAttack struct {
 
 // SkillDef 是一个技能在某一级上的定义。
 type SkillDef struct {
+	TargetFamilies           []MonsterFamily          `json:",omitempty"`
 	Progression              *SkillProgressionCatalog `json:"-"`
 	ManaCostReductionApplied bool
 	// ManaCostReductionRanks is scoped high-rank mana reduction, applied once after other modifiers.
 	ManaCostReductionRanks int32
 	// Exact post-cap rates are server-only; previews do not consume character credit.
-	ManaCostFractionNumerator int64 `json:"-"`
-	ManaCostFractionDenominator int64 `json:"-"`
-	CooldownFractionNumeratorMS int64 `json:"-"`
-	CooldownFractionDenominator int64 `json:"-"`
-	RoundingPreviewReady bool `json:"-"`
-	CooldownRoundingApplied bool `json:"-"`
-	RoundingPreviewNext SkillRoundingState `json:"-"`
+	ManaCostFractionNumerator   int64              `json:"-"`
+	ManaCostFractionDenominator int64              `json:"-"`
+	CooldownFractionNumeratorMS int64              `json:"-"`
+	CooldownFractionDenominator int64              `json:"-"`
+	RoundingPreviewReady        bool               `json:"-"`
+	CooldownRoundingApplied     bool               `json:"-"`
+	RoundingPreviewNext         SkillRoundingState `json:"-"`
 
 	EquipmentVariant *EquipmentSkillVariant // immutable accepted cast snapshot
 

@@ -23,7 +23,7 @@ const maxSkillRoundingDenominator int64 = (int64(math.MaxInt32) + 50) * TickMS
 
 func skillRoundingAllowed(id SkillID) bool {
 	switch id {
-	case 10018, 10227, 10301, 10305, 10309, 10432:
+	case 10018, 10212, 10227, 10301, 10305, 10309, 10432:
 		return true
 	}
 	return false
@@ -71,7 +71,7 @@ func RoundSkillCost(n, d int64, old SkillRoundingCredit) (int64, SkillRoundingCr
 	return whole, SkillRoundingCredit{Numerator: credit, Denominator: d}
 }
 
-// PreviewSkillRounding applies only the six approved post-cap continuations.
+// PreviewSkillRounding applies only the approved post-cap continuations.
 // Authored levels and absent costs keep their previous behaviour. Fractional
 // cooldowns are paid in actual 100ms ticks, including the phase-0 receipt.
 func PreviewSkillRounding(def *SkillDef, old SkillRoundingState) SkillRoundingState {

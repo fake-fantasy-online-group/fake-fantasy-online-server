@@ -29,6 +29,9 @@ func (s *Scene) skillOriginalEffectLines(def domain.SkillDef) []string {
 	if scoped := s.skillScopedStatusDescription(def); scoped != "" {
 		lines = append(lines, scoped)
 	}
+	if random := s.skillRandomStatusDescription(def); random != "" {
+		lines = append(lines, random)
+	}
 	var effectHitLines []string
 	if def.Level > 5 {
 		seen := map[string]bool{}
@@ -263,7 +266,12 @@ func (s *Scene) skillDescriptionValues(d domain.SkillDef) ([]string, bool) {
 	switch d.ID {
 	case 10001, 10101, 10118, 10424, 10426, 10431:
 		return []string{passive(domain.PassiveSkillDamagePct)}, true
-	case 10002, 10017, 10102, 10117, 10205, 10212, 10223, 10317, 10319, 10401, 10408, 10409:
+	case 10002, 10017, 10102, 10117, 10205, 10223, 10317, 10319, 10401, 10408, 10409:
+		return []string{damage}, true
+	case 10212:
+		if effect, ok := d.TheftEffect(); ok {
+			return []string{skillBasisPoints(effect.ChanceBP)}, true
+		}
 		return []string{damage}, true
 	case 10003:
 		return []string{effectValue(domain.EffectDamage, func(x domain.SkillEffect) string { return skillNumber(x.WeaponDurabilityCostPct) }), damage}, true

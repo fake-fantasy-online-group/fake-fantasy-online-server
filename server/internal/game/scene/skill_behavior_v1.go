@@ -21,12 +21,14 @@ func (s *Scene) applyResolvedSkillModifiers(p *entity.Entity, def *domain.SkillD
 func (s *Scene) skillBehaviorIdentity(id domain.SkillID) *domain.SkillBehaviorContract {
 	// Both resource histories identify 10212 as theft; the existing server row
 	// is an unresolved damage placeholder. Never export that false identity.
-	if id == 10212 {
-		return nil
-	}
 	def, ok := s.skills[domain.SkillKey{ID: id, Level: 1}]
 	if !ok {
 		return nil
+	}
+	if id == 10212 {
+		if _, resolved := def.TheftEffect(); !resolved {
+			return nil
+		}
 	}
 	kind := map[domain.SkillKind]string{domain.SkillSingle: "single", domain.SkillArea: "area", domain.SkillPassive: "passive", domain.SkillSpecial: "special"}[def.Kind]
 	prerequisites := append([]domain.SkillID{}, def.Prerequisites...)

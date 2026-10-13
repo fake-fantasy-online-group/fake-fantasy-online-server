@@ -59,6 +59,7 @@ func (k MonsterKind) Hostile() bool {
 // MonsterDef 是一种怪的模板 —— **"哪种怪"，不是"哪一只"**。
 // 对应 game_monsters 的一行；运行时的每一只由 EntityID 标识。
 type MonsterDef struct {
+	Family  MonsterFamily `json:",omitempty"`
 	ID      MonsterID
 	Name    string
 	Kind    MonsterKind

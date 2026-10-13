@@ -147,7 +147,13 @@ func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
 	if def.ProgressionShieldFlat > 0 {
 		out = append(out, fmt.Sprintf("施术保护盾：吸收%d伤害，持续5秒", def.ProgressionShieldFlat))
 	}
+	if line := s.skillRandomStatusDescription(def); line != "" {
+		out = append(out, line)
+	}
 	for _, app := range def.Statuses {
+		if app.RandomGroup > 0 {
+			continue
+		}
 		d, ok := s.skillDescriptionStatus(app)
 		if !ok {
 			continue
@@ -288,7 +294,7 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 		r.TrainingSynergies, r.NativeModifierLines = s.skillSynergyViews(id, ch.Skills, raw)
 		if p.Player.EndgameSkillBehavior {
 			r.Contract = s.skillBehaviorIdentity(id)
-			r.ContractUnavailable = id == 10212
+			r.ContractUnavailable = id == 10212 && r.Contract == nil
 		}
 		evaluate := func(n int32, nextInvestment bool) ([]string, *domain.SkillBehaviorPayload) {
 			def, ok := s.skills.Get(id, n)
@@ -396,7 +402,7 @@ func (s *Scene) maybeSendSkillRanks(p *entity.Entity) {
 		_, _, castReduction, _ = p.Status.Clone().ConsumeAttackModifiers(true, false, false, true)
 	}
 	payload, _ := json.Marshal(struct {
-		RoundingCredits map[domain.SkillID]domain.SkillRoundingState
+		RoundingCredits     map[domain.SkillID]domain.SkillRoundingState
 		TypedBehavior       bool
 		CastReduction       int32
 		Ranks               domain.SkillResolutionSnapshot

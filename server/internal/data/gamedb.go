@@ -223,6 +223,9 @@ func LoadMonsters(ctx context.Context, q Querier) (MonsterDefs, error) {
 	if err := loadMonsterSkills(ctx, q, out); err != nil {
 		return nil, err
 	}
+	if err := loadMonsterFamilies(ctx, q, out); err != nil {
+		return nil, err
+	}
 	return out, nil
 }
 
@@ -2763,7 +2766,9 @@ func loadStructuredSkillStatuses(ctx context.Context, q Querier) (map[domain.Ski
 		             FROM game_custom_statuses c
 		            WHERE c.status_id = s.status_id
 		              AND c.status_level = s.status_level
-		       )
+		       ),
+		       COALESCE((to_jsonb(s)->>'random_group')::integer,0),
+		       COALESCE((to_jsonb(s)->>'random_weight')::integer,0)
 		  FROM game_skill_statuses s
 		 ORDER BY s.skill_id, s.skill_level, s.status_order`)
 	if err != nil {
@@ -2782,7 +2787,7 @@ func loadStructuredSkillStatuses(ctx context.Context, q Querier) (map[domain.Ski
 		)
 		if err := rows.Scan(&key.ID, &key.Level, &order,
 			&app.ID, &app.Level, &app.ChanceBP, &app.DurationSec, &app.Description,
-			&app.InstantDeathImmune, &targetType, &statusOK); err != nil {
+			&app.InstantDeathImmune, &targetType, &statusOK, &app.RandomGroup, &app.RandomWeight); err != nil {
 			return nil, fmt.Errorf("data: 读结构化技能状态: %w", err)
 		}
 		if !statusOK {
@@ -2805,6 +2810,11 @@ func loadStructuredSkillStatuses(ctx context.Context, q Querier) (map[domain.Ski
 	}
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("data: 遍历结构化技能状态: %w", err)
+	}
+	for key, apps := range out {
+		if err := domain.ValidateRandomStatusGroups(apps); err != nil {
+			return nil, fmt.Errorf("data: skill %d/%d random status group: %w", key.ID, key.Level, err)
+		}
 	}
 	return out, nil
 }
@@ -2965,6 +2975,11 @@ func loadStructuredSkillEffects(ctx context.Context, q Querier) (map[domain.Skil
 				return nil, fmt.Errorf("data: 技能 %d/%d 第 %d 个 knockback 效果参数非法", key.ID, key.Level, order)
 			}
 			effect.Kind, effect.KnockbackDistance, effect.ChanceBP = domain.EffectKnockback, flat, chanceBP
+		case "steal_item":
+			if powerPct != 0 || resourcePct != 0 || flat != 1 || guaranteedHit || effect.Target != domain.EffectTargetResolved || lossRefundPct != 0 || effect.RequiresPreviousLanded {
+				return nil, fmt.Errorf("data: skill %d/%d effect %d invalid theft configuration", key.ID, key.Level, order)
+			}
+			effect.Kind, effect.ChanceBP, effect.TheftMaxSuccesses = domain.EffectStealItem, chanceBP, flat
 		case "clear_harmful":
 			if powerPct != 0 || resourcePct != 0 || flat != 0 || guaranteedHit || chanceBP != 10000 || lossRefundPct != 0 {
 				return nil, fmt.Errorf("data: 技能 %d/%d 第 %d 个 clear_harmful 效果参数非法", key.ID, key.Level, order)
@@ -3838,6 +3853,9 @@ func LoadSkills(ctx context.Context, q Querier) (domain.SkillTable, SkillStats, 
 					key.ID, key.Level, dependency)
 			}
 		}
+	}
+	if err := loadSkillTargetFamilies(ctx, q, out); err != nil {
+		return nil, st, err
 	}
 	skillCatalog, err := LoadSkillProgressionCatalog(ctx, q, out)
 	if err != nil {

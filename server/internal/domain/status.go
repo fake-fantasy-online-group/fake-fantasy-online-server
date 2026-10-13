@@ -237,6 +237,11 @@ const (
 
 // StatusApplication 是效果脚本里一条已经闭合的“施加某级状态”。
 type StatusApplication struct {
+	// RandomGroup > 0 chooses one weighted candidate per landed, living target.
+	// Zero keeps ordinary independent applications. These are configuration
+	// fields, never part of an applied/saved status or the client protocol.
+	RandomGroup  int32 `json:",omitempty"`
+	RandomWeight int32 `json:",omitempty"`
 	// TargetType selects the actual target class without widening skill admission.
 	TargetType SkillStatusTarget `json:",omitempty"`
 	Progression            *SkillProgressionCatalog `json:"-"`

@@ -56,7 +56,7 @@ func (q skillMechanismStatusQuery) Query(_ context.Context, sql string, _ ...any
 func TestSkillMechanismsLoadScopedStatusTargets(t *testing.T) {
 	for _, target := range []string{"any", "player", "non_player", "invalid"} {
 		var row []json.RawMessage
-		raw := fmt.Sprintf(`[10317,1,1,1008,2,10000,60,"",false,%q,true]`, target)
+		raw := fmt.Sprintf(`[10317,1,1,1008,2,10000,60,"",false,%q,true,0,0]`, target)
 		if err := json.Unmarshal([]byte(raw), &row); err != nil {
 			t.Fatal(err)
 		}

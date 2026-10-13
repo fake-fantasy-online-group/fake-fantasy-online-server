@@ -863,6 +863,12 @@ func (s *Scene) validTarget(caster, t *entity.Entity, def domain.SkillDef) bool 
 	if s.entityMapLoading(caster) || s.entityMapLoading(t) {
 		return false
 	}
+	if !s.matchesSkillTargetFamilies(t, def) {
+		return false
+	}
+	if effect, ok := def.TheftEffect(); ok {
+		return s.theftTargetEligible(caster, t, def, effect)
+	}
 	if t.ID == caster.ID {
 		return def.TargetSelf
 	}
@@ -1073,6 +1079,9 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 	if !s.equipmentCombatReady(src) || !s.equipmentCombatReady(dst) {
 		return false
 	}
+	if !s.matchesSkillTargetFamilies(dst, def) {
+		return false
+	}
 	if dst.Monster != nil && s.defs != nil {
 		if monsterDef, ok := s.defs.Def(dst.Monster.TypeID); ok {
 			if _, immune := monsterDef.ImmuneSkills[def.ID]; immune {
@@ -1186,6 +1195,9 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		case domain.EffectResurrect:
 			effectLanded = s.reviveBySkill(src, effectTarget, def, effect)
 
+		case domain.EffectStealItem:
+			effectLanded = s.stealMonsterItem(src, effectTarget, def, effect)
+
 		case domain.EffectKnockback:
 			if effect.ChanceBP >= 10000 || int32(s.rng.Intn(10000)) < effect.ChanceBP {
 				effectLanded = s.knockbackMonster(src, effectTarget, effect.KnockbackDistance)
@@ -1252,13 +1264,13 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		previousLanded = effectLanded
 		landed = landed || effectLanded
 	}
-	if targetDied {
+	if targetDied || !dst.Alive() {
 		return landed
 	}
 	if !landed {
 		return false
 	}
-	for _, app := range def.Statuses {
+	for _, app := range s.selectSkillStatuses(def.Statuses, dst.Kind) {
 		if !app.TargetType.Matches(dst.Kind) {
 			continue
 		}

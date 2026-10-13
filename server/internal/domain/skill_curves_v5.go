@@ -70,6 +70,7 @@ func EvaluateV5Skill(first, fifth SkillDef, rank int32, originalRows ...SkillDef
 func cloneOriginalSkill(d SkillDef) SkillDef {
 	out := d
 	out.Prerequisites = append([]SkillID(nil), d.Prerequisites...)
+	out.TargetFamilies = append([]MonsterFamily(nil), d.TargetFamilies...)
 	out.SnapshotRawRanks = d.SnapshotRawRanks.Clone()
 	out.SnapshotHardRanks = d.SnapshotHardRanks.Clone()
 	cloneEffect := func(f SkillEffect) SkillEffect {
@@ -217,7 +218,7 @@ func (e *v5Evaluator) continueOriginal(a, b SkillDef) SkillDef {
 	out.Statuses = make([]StatusApplication, len(a.Statuses))
 	for i, x := range a.Statuses {
 		y := b.Statuses[i]
-		if x.ID != y.ID || x.TargetType != y.TargetType {
+		if x.ID != y.ID || x.TargetType != y.TargetType || x.RandomGroup != y.RandomGroup || x.RandomWeight != y.RandomWeight {
 			e.fail("status identity mismatch")
 		}
 		z := y

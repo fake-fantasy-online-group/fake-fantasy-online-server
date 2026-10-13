@@ -15,13 +15,12 @@ import (
 	"testing"
 )
 
-// The reviewed v7 baseline remains intact. Migration66/68 changes are an
-// explicit 50-row delta: two new scoped status mechanics and three restored
-// radii, each at ten reviewed ranks. Every other snapshot remains unchanged.
+// The reviewed v7 baseline remains intact. Explicit v8/v9 deltas cover only
+// independently reviewed mechanics, with every prior hash preserved as an anchor.
 func TestSkillConfigurationDatabaseGolden(t *testing.T) {
 	path := os.Getenv("FANTASY_SKILL_CONFIG_PG_DATA")
 	if path == "" {
-		t.Skip("explicit isolated migration68 cluster required")
+		t.Skip("explicit isolated migration72 cluster required")
 	}
 	q := &v5SingleUserQuerier{bin: os.Getenv("PG_BIN"), path: path, database: "postgres"}
 	table, _, err := LoadSkills(context.Background(), q)
@@ -43,8 +42,22 @@ func TestSkillConfigurationDatabaseGolden(t *testing.T) {
 	for _, id := range c.IDs() {
 		a, _ := c.Identity(id)
 		b, _ := expected.Identity(id)
+		// Migration70 closes the verified theft identity instead of the imported
+		// Youlong damage placeholder. All other identity and policy fields stay pinned.
+		if id == 10212 {
+			if b.Name != "游龙掌" {
+				t.Fatal("theft identity delta lost its historical anchor", b.Name)
+			}
+			b.Name = "偷窃术"
+		}
 		p, _ := c.Policy(id)
 		e, _ := expected.Policy(id)
+		if id == 10212 {
+			if e.EfficiencyCapRank != 0 {
+				t.Fatal("theft growth delta lost its zero-cap anchor", e)
+			}
+			e.EfficiencyCapRank = 10
+		}
 		if !reflect.DeepEqual(a, b) || !reflect.DeepEqual(p, e) {
 			t.Fatalf("identity/policy changed %d: %+v %+v", id, a, p)
 		}
@@ -99,7 +112,7 @@ func (q skillConfigurationQueryEdit) Query(ctx context.Context, sql string, args
 func TestSkillConfigurationDatabaseRejectsMissingAndUsesConfiguredPolicy(t *testing.T) {
 	path := os.Getenv("FANTASY_SKILL_CONFIG_PG_DATA")
 	if path == "" {
-		t.Skip("explicit isolated migration68 cluster required")
+		t.Skip("explicit isolated migration72 cluster required")
 	}
 	q := &v5SingleUserQuerier{bin: os.Getenv("PG_BIN"), path: path, database: "postgres"}
 	table, _, err := LoadSkills(context.Background(), q)
