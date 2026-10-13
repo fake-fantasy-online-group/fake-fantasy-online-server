@@ -30,22 +30,22 @@ func (s *Scene) endgameItem(st domain.Stack, loc string, slot int32) domain.Endg
 		// restrictions remain in the native equipment requirements/tooltip.
 		v.Profession = int32(d.Equip.Need.Professions)
 	}
-	if rune, ok := domain.AstralRune(st.Item); ok {
+	if rune, ok := domain.AstralRune(st.Item, s.endgameCatalog); ok {
 		v.Level = rune.MinLevel
 	}
 	for i := 0; i < int(st.SocketCount) && i < len(st.Sockets); i++ {
 		name := ""
-		if rune, ok := domain.AstralRune(st.Sockets[i]); ok {
+		if rune, ok := domain.AstralRune(st.Sockets[i], s.endgameCatalog); ok {
 			name = rune.Name
 		} else if card, ok := s.itemDef(st.Sockets[i]); ok {
 			name = card.Name
 		}
 		v.Sockets = append(v.Sockets, domain.EndgameSocketView{Name: name, Index: int32(i), ItemID: int32(st.Sockets[i]), UID: strconv.FormatInt(st.SocketUIDs[i], 10)})
 	}
-	if u, ok := domain.UniqueOf(st); ok {
+	if u, ok := domain.UniqueOf(st, s.endgameCatalog); ok {
 		v.Name = u.Name
 		v.Description = u.Description()
-		v.Stats = endgameStats(domain.UniqueAffixes(st))
+		v.Stats = endgameStats(domain.UniqueAffixes(st, s.endgameCatalog))
 		ts := []string{}
 		for _, t := range u.Traits {
 			ts = append(ts, t.Describe(10000))
@@ -98,7 +98,7 @@ func (s *Scene) sendEndgameSnapshot(p *entity.Entity) {
 		items = append(items, v)
 	})
 	materials := []domain.EndgameMaterialView{}
-	for _, id := range append([]domain.ItemID{domain.RiftKeyItemID, domain.CubeStarMarrow, domain.CubePurifiedDust, domain.CubeImmortalEcho}, astralItemIDs()...) {
+	for _, id := range append([]domain.ItemID{domain.RiftKeyItemID, domain.CubeStarMarrow, domain.CubePurifiedDust, domain.CubeImmortalEcho}, s.astralItemIDs()...) {
 		if d, ok := s.itemDef(id); ok {
 			materials = append(materials, domain.EndgameMaterialView{ItemID: int32(id), Name: d.Name, Count: p.Player.Bag.CountOf(id)})
 		}
@@ -115,24 +115,19 @@ func (s *Scene) sendEndgameSnapshot(p *entity.Entity) {
 		}
 		formations = append(formations, v)
 	}
-	const size = 32
-	n := (len(items) + size - 1) / size
-	if n == 0 {
-		n = 1
-	}
 	x.snapshotSequence++
 	x.snapshotID = fmt.Sprintf("%d-%d-%d", p.ID, s.tick, x.snapshotSequence)
-	x.snapshotItems = items
 	s.stepEquipmentAuras()
-	combatStats := s.equipmentCombatViewV5(p)
-	for i := 0; i < n; i++ {
-		end := (i + 1) * size
-		if end > len(items) {
-			end = len(items)
-		}
-		s.endgameReply(p, domain.EndgameResponse{Kind: "snapshot", OK: true, SnapshotID: x.snapshotID, Chunk: int32(i), Chunks: int32(n), Items: items[i*size : end], Materials: materials, Formations: formations, CombatStats: combatStats})
-		combatStats = nil
+	chunks, ok := splitEndgameSnapshot(domain.EndgameResponse{Kind: "snapshot", OK: true, SnapshotID: x.snapshotID, Materials: materials, Formations: formations, CombatStats: s.equipmentCombatViewV5(p)}, items)
+	if !ok {
+		s.endgameReply(p, domain.EndgameResponse{Kind: "snapshot", Error: "snapshot_size", Message: "器物资料超出传输限制，请检查配置"})
+		return
 	}
+	x.snapshotItems = items
+	for _, chunk := range chunks {
+		s.endgameReply(p, chunk)
+	}
+
 }
 func (s *Scene) sendEndgameCatalog(p *entity.Entity, req domain.EndgameRequest) {
 	kind := req.Catalog
@@ -153,7 +148,7 @@ func (s *Scene) sendEndgameCatalog(p *entity.Entity, req domain.EndgameRequest) 
 	total := 0
 	switch kind {
 	case "uniques":
-		all := domain.UniqueCatalog()
+		all := domain.UniqueCatalog(s.endgameCatalog)
 		total = len(all)
 		for i := start; i < len(all) && i < start+page; i++ {
 			u := all[i]
@@ -162,14 +157,14 @@ func (s *Scene) sendEndgameCatalog(p *entity.Entity, req domain.EndgameRequest) 
 				Stats: endgameStats(domain.ResolveVariableAffixes(u.Affixes, u.VariableAffixes, uniqueCatalogDisplayRollBP)), Trait: uniqueTraitDescription(u.Traits)})
 		}
 	case "runes":
-		all := domain.AstralRunes()
+		all := domain.AstralRunes(s.endgameCatalog)
 		total = len(all)
 		for i := start; i < len(all) && i < start+page; i++ {
 			u := all[i]
 			r.Runes = append(r.Runes, domain.EndgameRuneView{MinLevel: u.MinLevel, ItemID: int32(u.Item), Name: u.Name, Mansion: u.Mansion, Description: u.Description(), Quadrant: u.Quadrant, Stats: endgameStats(u.Affixes)})
 		}
 	case "formations":
-		all := domain.AstralRecipes()
+		all := domain.AstralRecipes(s.endgameCatalog)
 		total = len(all)
 		for i := start; i < len(all) && i < start+page; i++ {
 			u := all[i]
@@ -196,8 +191,9 @@ func (s *Scene) sendEndgameCatalog(p *entity.Entity, req domain.EndgameRequest) 
 		s.endgameError(p, req, "cursor", "目录游标越界")
 		return
 	}
-	if start+page < total {
-		r.NextCursor = strconv.Itoa(start + page)
+	if !fitEndgameCatalogPage(&r, start, total) {
+		s.endgameError(p, req, "catalog_size", "目录条目超出传输限制，请检查配置")
+		return
 	}
 	s.endgameReply(p, r)
 }
@@ -210,9 +206,9 @@ func uniqueTraitDescription(traits []domain.UniqueTrait) string {
 	return strings.Join(out, "；")
 }
 
-func astralItemIDs() []domain.ItemID {
+func (s *Scene) astralItemIDs() []domain.ItemID {
 	ids := []domain.ItemID{}
-	for _, r := range domain.AstralRunes() {
+	for _, r := range domain.AstralRunes(s.endgameCatalog) {
 		ids = append(ids, r.Item)
 	}
 	return ids

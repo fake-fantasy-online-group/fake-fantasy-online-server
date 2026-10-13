@@ -149,7 +149,7 @@ func ActiveUniqueTraits(worn *EquipSet, defs func(ItemID) (ItemDef, bool), ch *C
 		if !ok || def.Equip == nil || int32(slot) != def.Equip.Slot || !EquipmentFunctional(st, def) || !def.Equip.Need.AllowsCharacter(ch) || ch.Level < EquipmentRequiredLevel(def, st) {
 			return
 		}
-		d, ok := UniqueOf(st)
+		d, ok := UniqueOf(st,def.EndgameCatalog)
 		if !ok {
 			return
 		}

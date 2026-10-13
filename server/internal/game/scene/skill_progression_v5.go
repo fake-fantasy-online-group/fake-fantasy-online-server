@@ -24,7 +24,7 @@ func (s *Scene) skillRankBonusesResolved(p *entity.Entity, resolution *equipment
 	}
 	var out []domain.SkillRankBonus
 	worn.Each(func(slot domain.EquipSlot, st domain.Stack) {
-		if d, ok := domain.UniqueOf(st); ok {
+		if d, ok := domain.UniqueOf(st, s.endgameCatalog); ok {
 			for i, b := range d.SkillBonuses {
 				b.SourceID = fmt.Sprintf("item:%d:unique:%d", st.UID, i)
 				out = append(out, b)
@@ -52,7 +52,7 @@ func (s *Scene) skillRanksResolved(p *entity.Entity, resolution *equipmentRequir
 	if treasure := s.equippedTreasureSkill(p); treasure != nil {
 		grants = append(grants, domain.SkillGrant{SourceID: "treasure", SkillID: treasure.ID, Rank: 1, Origin: "treasure_grant"})
 	}
-	return domain.ResolveSkillLoadout(int32(ch.Race)+1, ch.Skills, s.skillRankBonusesResolved(p, resolution), grants)
+	return domain.ResolveSkillLoadout(int32(ch.Race)+1, ch.Skills, s.skillRankBonusesResolved(p, resolution), grants, s.skills.ProgressionCatalog())
 }
 
 // rawSkillLevels is the single raw, nonrecursive snapshot used by every passive consumer.
@@ -121,7 +121,7 @@ func (s *Scene) applyTrainingSynergiesWithHard(p *entity.Entity, def *domain.Ski
 		return
 	}
 	var damageBP, healBP, healFlat, manaBP, radiusBP, widthBP, delayBP, durationBP int32
-	for _, e := range domain.V5SkillSynergies {
+	for _, e := range s.skills.ProgressionCatalog().Synergies() {
 		if e.Target != def.ID || e.RankMode != "hard" {
 			continue
 		}

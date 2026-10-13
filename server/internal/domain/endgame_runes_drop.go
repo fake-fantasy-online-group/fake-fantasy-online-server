@@ -11,8 +11,8 @@ const (
 
 // Only new combat-equipment drops are rolled. Old instances never pass through
 // this generator; pickup, trade and mail retain their existing whole Stack.
-func RollDroppedSocketCount(def ItemDef, grade AstralDropGrade, intn func(int64) int64) uint8 {
-	if def.Equip == nil || intn == nil || def.Equip.LevelReq < 10 {
+func RollDroppedSocketCount(def ItemDef, grade AstralDropGrade, intn func(int64) int64, rule *LootRuleSet) uint8 {
+	if rule == nil || def.Equip == nil || intn == nil {
 		return 0
 	}
 	slot := EquipSlot(def.Equip.Slot)
@@ -20,19 +20,12 @@ func RollDroppedSocketCount(def ItemDef, grade AstralDropGrade, intn func(int64)
 		return 0
 	}
 	cap := max(0, MaxEquipmentAttributes-len(def.Equip.Affixes))
-	levelCap := 2
-	if def.Equip.LevelReq >= 50 {
-		levelCap = 5
-	} else if def.Equip.LevelReq >= 40 {
-		levelCap = 4
-	} else if def.Equip.LevelReq >= 20 {
-		levelCap = 3
-	}
+	levelCap := rule.SocketCapacity(def.Equip.LevelReq)
 	cap = min(cap, levelCap)
 	if cap == 0 {
 		return 0
 	}
-	weights := [4][6]int64{{72, 21, 6, 1, 0, 0}, {45, 25, 18, 9, 3, 0}, {25, 25, 23, 17, 8, 2}, {15, 20, 25, 22, 13, 5}}
+
 	if grade > AstralDropRealm {
 		grade = AstralDropOrdinary
 	}
@@ -40,7 +33,7 @@ func RollDroppedSocketCount(def ItemDef, grade AstralDropGrade, intn func(int64)
 	if roll < 0 || roll >= 100 {
 		return 0
 	}
-	for n, w := range weights[grade] {
+	for n, w := range rule.Grades[grade].SocketWeights {
 		if roll < w {
 			return uint8(min(n, cap))
 		}

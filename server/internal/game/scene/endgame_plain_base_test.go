@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -15,7 +18,7 @@ func TestAstralInnateAffixEquipRelogAndCombat(t *testing.T) {
 			def.Equip.Affixes = []domain.Affix{{Attr: domain.AttrSTR, Value: 7}}
 			s.items[def.ID] = def
 		}
-		recipe, _ := domain.AstralRecipeByID(1)
+		recipe, _ := domain.AstralRecipeByID(1, catalogfixture.EndgameCatalog())
 		target := p.Player.Bag.At(200)
 		target.Bound = true
 		target.SocketCount = uint8(len(recipe.Runes))

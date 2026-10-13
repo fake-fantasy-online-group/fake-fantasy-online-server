@@ -1,5 +1,7 @@
 package session
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"bytes"
 	"context"
@@ -47,17 +49,17 @@ func newNativeStatsRig(t *testing.T, results ...domain.EndgameLoadResult) *nativ
 		r.backend.loads <- result
 	}
 	items := map[domain.ItemID]domain.ItemDef{}
-	for _, def := range domain.AstralRuneItems(7) {
+	for _, def := range astralRuneItemsFixture(7) {
 		items[def.ID] = def
 	}
-	def := domain.ItemDef{ID: 999001, Name: "测试剑", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment,
+	def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 999001, Name: "测试剑", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment,
 		Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon), SocketLimit: 5, Durable: 100, Bonus: domain.Stats{MinAtk: 100, MaxAtk: 200}}}
 	items[def.ID] = def
 	st := domain.NewStack(def, 1)
 	// These wire assertions preserve the V5 formation payload and local enhancement.
 	st.Endgame.FormationContentVersion = 5
 	st.UID, st.Endgame.FormationRollBP = 81, 12000
-	recipe, _ := domain.AstralRecipeByID(11)
+	recipe, _ := domain.AstralRecipeByID(11, catalogfixture.EndgameCatalog())
 	st.SocketCount = uint8(len(recipe.Runes))
 	for i, id := range recipe.Runes {
 		st.Sockets[i], st.SocketUIDs[i], st.SocketCards[i] = id, int64(100+i), items[id].CardDefaults
@@ -70,8 +72,9 @@ func newNativeStatsRig(t *testing.T, results ...domain.EndgameLoadResult) *nativ
 	worn := domain.NewEquipSet()
 	st.UID = 82
 	worn.Set(domain.SlotWeapon, st)
+	skills := sessionSkillTableFixture(t)
 	r.router = scene.NewRouter(func(id domain.SceneID) (*scene.Scene, error) {
-		return scene.New(scene.Config{ID: id, Frames: r.frames, Items: items, EndgameBackend: r.backend}), nil
+		return scene.New(scene.Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Frames: r.frames, Items: items, Skills: skills, EndgameBackend: r.backend}), nil
 	}, slog.Default())
 	ctx, cancel := context.WithCancel(context.Background())
 	r.router.Start(ctx)
@@ -85,7 +88,9 @@ func newNativeStatsRig(t *testing.T, results ...domain.EndgameLoadResult) *nativ
 	})
 	r.s = New(r.out, Deps{Router: r.router})
 	r.s.stage, r.s.entity, r.s.scene = StageInGame, 1, domain.SceneID{MapID: 1}
-	r.s.char = &domain.Character{ID: 100, Name: "甲", Race: domain.Warrior, Level: 60, Pos: domain.Pos{MapID: 1}}
+	// Store.LoadSkills returns an allocated empty table even for an untrained
+	// character; preserve that loaded-character contract in this direct entry rig.
+	r.s.char = &domain.Character{ID: 100, Name: "甲", Race: domain.Warrior, Level: 60, Pos: domain.Pos{MapID: 1}, Skills: domain.Learned{}}
 	if !r.router.Post(r.s.scene, scene.Enter{ID: 1, Char: r.s.char, Bag: bag, Worn: worn,
 		Sink: &eventSink{out: r.out, log: r.s.log, sess: r.s, observer: 1}}) {
 		t.Fatal("enter not queued")
@@ -195,10 +200,15 @@ func assertNativeStatsHandshake(t *testing.T, packets [][]byte, native, refresh 
 	packet := packets[inventory]
 	if native {
 		// Same flat/global scope sums 3 + 18 once for each bag/equipped item.
-		for _, line := range []string{"\x035力量 +21\n", "\x035攻击 +3\n", "\x035攻击 +42%\n", "\x035攻击强化 +110%\n", "\x030攻击 210~420\n"} {
+		// The 100~200 base gains a real local 110% increment, so its resulting
+		// 210~420 row follows the existing enhanced-base dark-gold contract.
+		for _, line := range []string{"\x035力量 +21\n", "\x035攻击 +3\n", "\x035攻击 +42%\n", "\x035攻击强化 +110%\n", "\x035攻击 210~420\n"} {
 			if bytes.Count(packet, []byte(line)) != 2 {
 				t.Fatalf("bag/equipped merged/local/global line missing or repeated: %q in %q", line, packet)
 			}
+		}
+		if bytes.Contains(packet, []byte("\x030攻击 210~420\n")) {
+			t.Fatal("locally enhanced base attack retained an unenhanced white row")
 		}
 		if bytes.Contains(packet, []byte("力量 +3\n")) || bytes.Contains(packet, []byte("力量 +18\n")) {
 			t.Fatal("unmerged rune or recipe value leaked into native tooltip")

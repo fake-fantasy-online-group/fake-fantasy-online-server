@@ -62,11 +62,15 @@ def audit():
     specials = {r['arm_id']: r for r in sorted(
         tables['ov_item_icon_special'], key=lambda r: r['row_no'])}
     descriptor_counts = collections.Counter(r['index'] for r in tables['ov_desc'])
-    current_files = sorted((ROOT / 'server/internal/domain').glob('unique_catalog_*.json'))
-    legacy_files = sorted((ROOT / 'server/internal/domain/legacy_unique_v4').glob('*.json'))
-    unique_files = legacy_files + current_files
-    # Visual aliases outlive generation eligibility: preserve all old owners.
-    unique_rows = list({r['BaseID']:r for p in unique_files for r in json.loads(p.read_text())}.values())
+    from database_catalog import MIGRATION, definition_rows
+    unique_files = [MIGRATION]
+    # Seed provenance is the normalized SQL migration. Runtime appearance aliases
+    # use the same DB-backed 0/5/6 definitions, retaining old owners' base IDs.
+    definitions = sorted(definition_rows(), key=lambda row: row['content_version'])
+    unique_rows = list({r['base_id']: {
+        'BaseID': r['base_id'], 'ID': r['definition_id'],
+        'BaseName': r['base_name'], 'Slot': r['slot']
+    } for r in definitions if r['owner_kind'] == 'unique'}.values())
     errors, rows = [], []
     seen = set()
     for unique in sorted(unique_rows, key=lambda r: r['BaseID']):
@@ -123,7 +127,7 @@ def audit():
     sources.update(str(p.relative_to(ROOT)) for p in unique_files)
     result = {
         'schema_version': 1,
-        'scope': 'Appearance aliases for V5 and frozen V4-owned uniques; generation remains limited to259 approved bases.',
+        'scope': 'Migration60 SQL seed appearance aliases for all saved versions 0/5/6; runtime loads database definitions.',
         'new_generation_count': 259,
         'selection': {
             'descriptor': 'First ov_desc row by numeric row_no for each index (DISTINCT ON index ORDER BY index,row_no).',

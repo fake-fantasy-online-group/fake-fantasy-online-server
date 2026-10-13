@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"math"
@@ -10,6 +13,8 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
+
+const astralRuneRegenInterval = domain.Tick(2000 / domain.TickMS)
 
 func astralRuneRegenFixture(t *testing.T) (*Scene, *entity.Entity, *fakeSink, domain.Stack) {
 	t.Helper()
@@ -252,7 +257,7 @@ func TestAstralRuneRegenTooltipUsesSnapshotAndCadence(t *testing.T) {
 		t.Fatal("rune tooltip used template instead of instance", tip)
 	}
 	a := domain.Affix{Attr: domain.AttrHPRegen, Value: 7}
-	if astralRuneAffixText(999, a) != affixText(a) {
+	if s.astralRuneAffixText(999, a) != affixText(a) {
 		t.Fatal("ordinary card tooltip changed")
 	}
 }
@@ -260,7 +265,7 @@ func TestAstralRuneRegenTooltipUsesSnapshotAndCadence(t *testing.T) {
 func TestAstralRuneRegenRemainsActiveWhenFormationSuppressed(t *testing.T) {
 	s, p, _, _ := astralRuneRegenFixture(t)
 	var recipe domain.AstralRecipe
-	for _, r := range domain.AstralRecipes() {
+	for _, r := range domain.AstralRecipes(catalogfixture.EndgameCatalog()) {
 		for _, id := range r.Runes {
 			if id == domain.LastAstralRune && len(r.Slots) >= 2 {
 				recipe = r
@@ -487,5 +492,121 @@ func TestAstralRuneSpeedTooltipUsesPositivePlayerSpeedAndStoredValue(t *testing.
 	}
 	if st.SocketCards[0] != before || card.Card != before {
 		t.Fatal("tooltip formatting rewrote the durable snapshot")
+	}
+}
+
+func configureRecoveryTestCatalog(t *testing.T, s *Scene, edit func(*domain.EndgameCatalogData)) {
+	t.Helper()
+	input := catalogfixture.EndgameCatalogData()
+	edit(&input)
+	catalog, err := domain.NewEndgameCatalog(input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s.endgameCatalog = catalog
+	domain.AttachEndgameCatalog(s.items, catalog)
+}
+
+func TestPeriodicRecoveryUsesConfiguredSourceAndCadence(t *testing.T) {
+	s, p, _, st := astralRuneRegenFixture(t)
+	replacement := domain.LastAstralRune - 1
+	configureRecoveryTestCatalog(t, s, func(input *domain.EndgameCatalogData) {
+		var oldIndex, replacementIndex int
+		for i := range input.Runes {
+			if input.Runes[i].Item == domain.LastAstralRune {
+				oldIndex = i
+			}
+			if input.Runes[i].Item == replacement {
+				replacementIndex = i
+			}
+		}
+		input.Runes[oldIndex].Affixes, input.Runes[replacementIndex].Affixes = input.Runes[replacementIndex].Affixes, input.Runes[oldIndex].Affixes
+		input.Runes[oldIndex].RegenerationIntervalMS = 0
+		input.Runes[replacementIndex].RegenerationIntervalMS = 1500
+	})
+	// Identical durable numbers on the old ID no longer grant the behavior.
+	if got := s.astralRuneRegenAmount(p); got != 0 {
+		t.Fatal("runtime still dispatches original rune ID", got)
+	}
+	st.Sockets[0] = replacement
+	st.SocketCards[0].Effects[0].Value = 3
+	p.Player.Worn.Set(domain.SlotWeapon, st)
+	if got := s.astralRuneRegenAmount(p); got != 3 {
+		t.Fatal("configured new source ignored", got)
+	}
+	if got := s.astralRuneAffixText(replacement, domain.Affix{Attr: domain.AttrHPRegen, Value: 3}); got != "有效穿戴时每1.5秒恢复3点生命" {
+		t.Fatal(got)
+	}
+	s.stepAstralRuneRegeneration()
+	s.tick += domain.Tick(1400 / domain.TickMS)
+	s.stepAstralRuneRegeneration()
+	if p.HP != 500 {
+		t.Fatal("configured cadence fired early", p.HP)
+	}
+	s.tick++
+	s.stepAstralRuneRegeneration()
+	if p.HP != 503 {
+		t.Fatal("configured cadence not used", p.HP)
+	}
+}
+
+func TestPeriodicRecoveryMixedCadencesDoNotCrossMultiply(t *testing.T) {
+	s, p, _, st := astralRuneRegenFixture(t)
+	other := domain.LastAstralRune - 1
+	configureRecoveryTestCatalog(t, s, func(input *domain.EndgameCatalogData) {
+		for i := range input.Runes {
+			if input.Runes[i].Item == other {
+				input.Runes[i].RegenerationIntervalMS = 1000
+			}
+		}
+	})
+	st.SocketCount = 2
+	st.SocketCards[0].Effects[0].Value = 3
+	st.Sockets[1], st.SocketUIDs[1], st.SocketCards[1] = other, 91829, st.SocketCards[0]
+	st.SocketCards[1].Effects[0].Value = 7
+	p.Player.Worn.Set(domain.SlotWeapon, st)
+	s.stepAstralRuneRegeneration()
+	s.tick += domain.Tick(1000 / domain.TickMS)
+	s.stepAstralRuneRegeneration()
+	if p.HP != 507 {
+		t.Fatal("1 second bucket wrong", p.HP)
+	}
+	s.tick += domain.Tick(1000 / domain.TickMS)
+	s.stepAstralRuneRegeneration()
+	if p.HP != 517 {
+		t.Fatal("simultaneous buckets counted more than once", p.HP)
+	}
+	s.tick += domain.Tick(100000 / domain.TickMS)
+	s.stepAstralRuneRegeneration()
+	if p.HP != 527 {
+		t.Fatal("mixed cadence caught up missed pulses", p.HP)
+	}
+}
+
+func TestNativeTooltipSeparatesOrdinaryAndPeriodicRecoveryBuckets(t *testing.T) {
+	s, p, _, st := astralRuneRegenFixture(t)
+	// Make an actual unique item so the native combined-attribute renderer runs.
+	// The extra ordinary card deliberately uses the same numeric attribute.
+	def := s.items[st.Item]
+	def.ID = 1001
+	def.EndgameCatalog = s.endgameCatalog
+	s.items[def.ID] = def
+	st.Item = def.ID
+	st.Endgame = domain.EndgameItemState{UniqueID: 1001, UniqueContentVersion: domain.UniqueContentVersion, UniqueRollBP: 10000}
+	st.SocketCount = 2
+	st.SocketCards[0].Effects[0].Value = 3
+	st.Sockets[1], st.SocketUIDs[1], st.SocketCards[1] = 998888, 91829, st.SocketCards[0]
+	st.SocketCards[1].Effects[0].Value = 7
+	p.Player.Worn.Set(domain.SlotWeapon, st)
+	p.Player.EndgameNativeStats = true
+	tip := s.ownedItemTooltip(def, st, p)
+	if !strings.Contains(tip, "有效穿戴时每2秒恢复3点生命") || !strings.Contains(tip, affixText(domain.Affix{Attr: domain.AttrHPRegen, Value: 7})) || strings.Contains(tip, "每2秒恢复10点生命") {
+		t.Fatal("different recovery scopes merged", tip)
+	}
+	s.stepAstralRuneRegeneration()
+	s.tick += astralRuneRegenInterval
+	s.stepAstralRuneRegeneration()
+	if p.HP != 503 {
+		t.Fatal("ordinary attr38 entered online recovery", p.HP)
 	}
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Scene) onEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
-	if s.endgameBackend == nil {
+	if s.endgameBackend == nil || s.riftRules.Active() == nil {
 		s.endgameError(p, req, "unavailable", "洞天暂不可用")
 		return
 	}
@@ -48,7 +48,7 @@ func (s *Scene) onEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
 		return
 	}
 	if id == "" {
-		s.endgameReply(p, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Rift: &domain.EndgameRiftView{Phase: "idle", MaxTier: domain.RiftMaxTier, UnlockedTier: profile.UnlockedTier, Name: "演劫洞天", KeyCount: p.Player.Bag.CountOf(domain.RiftKeyItemID), KeyItemID: int32(domain.RiftKeyItemID)}})
+		s.endgameReply(p, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Rift: &domain.EndgameRiftView{Phase: "idle", MaxTier: s.riftRules.Active().MaxTier, UnlockedTier: profile.UnlockedTier, Name: s.riftRules.Active().Name, KeyCount: p.Player.Bag.CountOf(domain.RiftKeyItemID), KeyItemID: int32(domain.RiftKeyItemID)}})
 		return
 	}
 	s.loadEndgameRift(p, req, id, false)
@@ -75,8 +75,12 @@ func (s *Scene) stepEndgameRiftRequests() {
 				s.endgameError(p, x.req, "storage", "读取洞天失败，请重试")
 				continue
 			}
-			d, ok := decodeEndgameRift(result.Run)
+			d, ok := decodeEndgameRift(result.Run, s.riftRules)
 			if !ok {
+				if result.Run != nil {
+					s.endgameError(p, x.req, "configuration", "洞天存档或规则版本无法读取")
+					continue
+				}
 				if x.prior {
 					s.continueEndgameRiftStart(p, x.req)
 				} else {
@@ -143,11 +147,16 @@ func (s *Scene) startEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
 }
 
 func (s *Scene) startEndgameRiftWithProfile(p *entity.Entity, req domain.EndgameRequest, profile endgameRiftProfile) {
+	rules := s.riftRules.Active()
+	if rules == nil {
+		s.endgameError(p, req, "configuration", "洞天规则尚未载入")
+		return
+	}
 	if s.router == nil || s.trial == nil || !p.Alive() || !s.trialEntryNPC(p) {
 		s.endgameError(p, req, "entrance", "请与妖魔结界守卫交谈后开启洞天")
 		return
 	}
-	if req.Tier < 1 || req.Tier > profile.UnlockedTier || req.Tier > domain.RiftMaxTier {
+	if req.Tier < 1 || req.Tier > profile.UnlockedTier || req.Tier > rules.MaxTier {
 		s.endgameError(p, req, "tier", "尚未解锁此层")
 		return
 	}
@@ -177,7 +186,7 @@ func (s *Scene) startEndgameRiftWithProfile(p *entity.Entity, req domain.Endgame
 		peers = append(peers, peer.ID)
 	}
 	sort.Slice(roster, func(i, j int) bool { return roster[i].CharID < roster[j].CharID })
-	run, err := domain.NewRiftRun(riftNonce(), req.Tier, domain.CharID(p.Player.Char.ID), roster, s.riftMS())
+	run, err := domain.NewRiftRun(riftNonce(), req.Tier, domain.CharID(p.Player.Char.ID), roster, s.riftMS(), rules)
 	if err != nil {
 		s.endgameError(p, req, "roster", "洞天限1至5名合适等级队员")
 		return

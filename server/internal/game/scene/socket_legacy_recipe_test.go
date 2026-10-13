@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"math/rand"
@@ -17,7 +20,7 @@ func TestNativeSocketFormulaRemainsIncremental(t *testing.T) {
 		def.Equip.Type = 1
 		def.Equip.Tier = 99
 		s.items[1001] = def
-		s.items[4006] = domain.ItemDef{ID: 4006, Name: "火铜", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
+		s.items[4006] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 4006, Name: "火铜", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
 		p.Player.Char.Skills = domain.Learned{11002: 1}
 		p.Player.Bag.Set(102, domain.Stack{Item: 4006, Count: 20})
 		recipe := domain.SocketRecipe{RowNo: 45, Hole: 0, EquipClass: 1, EquipTier: 99, DrillCost: 1000, InlayCost: 1000, RequiredSkill: 11002, ProtectItem: 4478, SuccessRate: 80, Materials: []domain.CraftMaterial{{Item: 4006, Qty: 10}}}

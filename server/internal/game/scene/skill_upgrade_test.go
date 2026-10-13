@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -21,7 +24,7 @@ func testSkills() domain.SkillTable {
 }
 
 func TestUpgradeSkill(t *testing.T) {
-	s := New(Config{
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(),
 		ID:     domain.SceneID{MapID: 7},
 		Skills: testSkills(),
 	})
@@ -55,7 +58,7 @@ func TestUpgradeSkill(t *testing.T) {
 
 // 升级已学技能。
 func TestUpgradeSkillToLevel2(t *testing.T) {
-	s := New(Config{
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(),
 		ID:     domain.SceneID{MapID: 7},
 		Skills: testSkills(),
 	})
@@ -80,7 +83,7 @@ func TestUpgradeSkillToLevel2(t *testing.T) {
 
 // 等级不够, 拒掉。
 func TestUpgradeSkillLevelTooLow(t *testing.T) {
-	s := New(Config{
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(),
 		ID:     domain.SceneID{MapID: 7},
 		Skills: testSkills(),
 	})
@@ -109,7 +112,7 @@ func TestUpgradeSkillLevelTooLow(t *testing.T) {
 
 // 职业不符, 拒掉。
 func TestUpgradeSkillWrongProf(t *testing.T) {
-	s := New(Config{
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(),
 		ID:     domain.SceneID{MapID: 7},
 		Skills: testSkills(),
 	})
@@ -138,7 +141,7 @@ func TestUpgradeSkillWrongProf(t *testing.T) {
 
 // 已满级(5 级), 拒掉。
 func TestUpgradeSkillMaxLevel(t *testing.T) {
-	s := New(Config{
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(),
 		ID:     domain.SceneID{MapID: 7},
 		Skills: testSkills(),
 	})

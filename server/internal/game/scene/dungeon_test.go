@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"context"
@@ -63,7 +66,7 @@ func dungeonSetup(t *testing.T) *dungeonRig {
 	rig.r = NewRouter(func(id domain.SceneID) (*Scene, error) {
 		ch := make(chan time.Time)
 		rig.put(id, ch)
-		cfg := Config{ID: id, SaveEvery: 10_000, Seed: 5, Frames: ch,
+		cfg := Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, SaveEvery: 10_000, Seed: 5, Frames: ch,
 			Dungeons: tbl, Alloc: domain.NewEntityAlloc(),
 			NPCs: []domain.NPCSpawn{{Name: "通天塔守卫", Sprite: 1,
 				Pos: domain.Pos{MapID: id.MapID, X: 120, Y: 100}}}}
@@ -340,7 +343,7 @@ func TestDungeonTimeoutEvictsToExit(t *testing.T) {
 	rig.r = NewRouter(func(id domain.SceneID) (*Scene, error) {
 		ch := make(chan time.Time)
 		rig.put(id, ch)
-		cfg := Config{ID: id, SaveEvery: 10_000, Seed: 5, Frames: ch,
+		cfg := Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, SaveEvery: 10_000, Seed: 5, Frames: ch,
 			Dungeons: tbl, Alloc: domain.NewEntityAlloc()}
 		if !id.Persistent() {
 			d := short

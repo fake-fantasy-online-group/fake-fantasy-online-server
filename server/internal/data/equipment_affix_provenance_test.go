@@ -1,4 +1,7 @@
 package data
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"context"
@@ -57,7 +60,7 @@ func (q affixProvenanceQuery) Query(_ context.Context, sql string, _ ...any) (pg
 func TestLoadAffixesPreservesUnknownSourceWithoutGrantingStats(t *testing.T) {
 	items := ItemDefs{}
 	for id := domain.ItemID(1); id <= 5; id++ {
-		items[id] = domain.ItemDef{ID: id, Equip: &domain.EquipDef{Slot: 4}}
+		items[id] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Equip: &domain.EquipDef{Slot: 4}}
 	}
 	rows := &affixProvenanceRows{rows: []affixProvenanceRow{
 		{1, domain.AttrSTR, 9, 0, 100, true},

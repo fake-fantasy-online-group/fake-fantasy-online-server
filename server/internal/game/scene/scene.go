@@ -36,6 +36,10 @@ type Saver interface {
 
 // Config 建场景所需的一切。
 type Config struct {
+	LootRules       *domain.LootRuleTable
+	RiftRules       *domain.RiftRuleTable
+	EndgameCatalog  *domain.EndgameCatalog
+	CubeRules       *domain.CubeRuleTable
 	RequireGrowthV5 bool
 
 	// RiftLayouts is the immutable, collision-validated startup map catalog.
@@ -194,6 +198,10 @@ func (r ReviveAt) Enabled() bool { return r.Scene.MapID != 0 }
 //
 // 除 mailbox / quit / log 外的所有字段, **只有场景 goroutine 能碰**。
 type Scene struct {
+	lootRules       *domain.LootRuleTable
+	riftRules       *domain.RiftRuleTable
+	endgameCatalog  *domain.EndgameCatalog
+	cubeRules       *domain.CubeRuleTable
 	requireGrowthV5 bool
 
 	equipment     *equipmentRuntime
@@ -385,6 +393,10 @@ func New(cfg Config) *Scene {
 			(int64(cfg.ID.MapID) << 32) ^ int64(cfg.ID.Instance)
 	}
 	s := &Scene{
+		lootRules:            cfg.LootRules,
+		riftRules:            cfg.RiftRules,
+		endgameCatalog:       cfg.EndgameCatalog,
+		cubeRules:            cfg.CubeRules,
 		requireGrowthV5:      cfg.RequireGrowthV5,
 		equipmentSeed:        uint64(cfg.Seed),
 		riftLayouts:          cfg.RiftLayouts,
@@ -1360,7 +1372,7 @@ func (s *Scene) spawnEvent(e *entity.Entity) event.EntitySpawned {
 	ev.Ground = &event.GroundItemView{
 		Item: e.Drop.Item, Count: e.Drop.Count, Owner: e.Drop.Owner,
 		ProtectionMS: int32(protectionMS), Quality: quality,
-		UniqueID: groundUniqueID(e.Drop.Stack), DropToken: e.Drop.PresentationToken,
+		UniqueID: s.groundUniqueID(e.Drop.Stack), DropToken: e.Drop.PresentationToken,
 	}
 	return ev
 }

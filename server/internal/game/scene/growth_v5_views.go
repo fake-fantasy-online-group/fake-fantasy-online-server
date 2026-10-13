@@ -47,6 +47,7 @@ func equipmentPercent(bp int32) string {
 // The caller owns their native colors and placement; never infer effect type
 // from a localized display string.
 func (s *Scene) equipmentV5Lines(effects []domain.EquipmentEffect, bonuses []domain.SkillRankBonus) (attributes, specialEffects []string) {
+	skillCatalog := s.skills.ProgressionCatalog()
 	for _, b := range bonuses {
 		scope := ""
 		switch b.Scope {
@@ -59,7 +60,7 @@ func (s *Scene) equipmentV5Lines(effects []domain.EquipmentEffect, bonuses []dom
 		case "school":
 			scope = map[string]string{"flame": "火系技能", "frost": "冰系技能", "healing": "治疗技能", "trap": "陷阱技能"}[b.School]
 		case "single":
-			if id, ok := domain.V5SkillIdentity(b.SkillID); ok {
+			if id, ok := domain.V5SkillIdentity(b.SkillID, skillCatalog); ok {
 				scope = id.Name
 			} else {
 				scope = fmt.Sprintf("技能%d", b.SkillID)
@@ -96,7 +97,7 @@ func (s *Scene) equipmentV5Lines(effects []domain.EquipmentEffect, bonuses []dom
 					when = "攻击时"
 				}
 				name := fmt.Sprintf("技能%d", v.SkillID)
-				if id, ok := domain.V5SkillIdentity(v.SkillID); ok {
+				if id, ok := domain.V5SkillIdentity(v.SkillID, skillCatalog); ok {
 					name = id.Name
 				}
 				if v.RequireMagic {
@@ -118,7 +119,7 @@ func (s *Scene) equipmentV5Lines(effects []domain.EquipmentEffect, bonuses []dom
 				}
 			}
 		case "skill_variant":
-			if v, ok := domain.EquipmentSkillVariantByID(e.VariantID); ok {
+			if v, ok := s.endgameCatalog.Variant(e.VariantID); ok {
 				text = "已学技能形态·" + v.Name + "：" + v.Description + "（同技能主形态不叠加；需新版客户端）"
 			}
 		case "aura":

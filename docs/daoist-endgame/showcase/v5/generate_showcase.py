@@ -262,17 +262,7 @@ def outputs():
 
 
 def main():
-    p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--check", action="store_true")
-    args = p.parse_args()
-    for name, body in outputs().items():
-        path = OUT / name
-        if args.check:
-            if not path.exists() or path.read_text() != body:
-                raise SystemExit(f"Stale or missing generated showcase artifact: {path.relative_to(ROOT)}")
-        else:
-            path.write_text(body)
-    print("Verified fixed 27-item showcase plan: 3 classes, 9 slots each, 3 gender branches, 259/40/28 source coverage. No grant executed.")
+    raise SystemExit("Retired embedded-catalog writer: production reads database migrations 59-63. See docs/daoist-endgame/catalog/README.md. Historical validation functions remain importable for regression tests.")
 
 if __name__ == "__main__":
     main()

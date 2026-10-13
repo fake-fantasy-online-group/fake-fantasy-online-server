@@ -35,7 +35,7 @@ func assertV5OverOwnerPetCapped(t *testing.T, grant endgamePetGrant) {
 func TestV5RiftClaimWithLegalOverOwnerPet(t *testing.T) {
 	s, b, owner := v5OverOwnerPetFixture(t)
 	before := owner.Player.Char.Clone()
-	run, err := domain.NewRiftRun("v5-over-owner", 1, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, 0)
+	run, err := domain.NewRiftRun("v5-over-owner", 1, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, 0, riftRulesFixture())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -52,7 +52,7 @@ func TestV5RiftClaimWithLegalOverOwnerPet(t *testing.T) {
 	if first.Level != 60 || first.Exp != before.Exp+200 || !reflect.DeepEqual(first.Pets, before.Pets) || owner.Player.Char.Exp != before.Exp {
 		t.Fatal("reward was not detached or changed the capped pet", first)
 	}
-	persisted, ok := decodeEndgameRift(b.plan.Run)
+	persisted, ok := decodeEndgameRift(b.plan.Run, riftRulesTableFixture())
 	if !ok || !persisted.Run.Members[100].Claimed {
 		t.Fatal("claim was not included in the reward transaction")
 	}

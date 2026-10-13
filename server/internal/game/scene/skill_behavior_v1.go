@@ -30,7 +30,7 @@ func (s *Scene) skillBehaviorIdentity(id domain.SkillID) *domain.SkillBehaviorCo
 	kind := map[domain.SkillKind]string{domain.SkillSingle: "single", domain.SkillArea: "area", domain.SkillPassive: "passive", domain.SkillSpecial: "special"}[def.Kind]
 	prerequisites := append([]domain.SkillID{}, def.Prerequisites...)
 	level := def.LevelNeed
-	if identity, known := domain.V5SkillIdentity(id); known {
+	if identity, known := domain.V5SkillIdentity(id, s.skills.ProgressionCatalog()); known {
 		level = identity.UnlockLevel
 		prerequisites = append([]domain.SkillID{}, identity.Prerequisites...)
 	}

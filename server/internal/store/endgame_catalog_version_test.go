@@ -1,4 +1,7 @@
 package store
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"context"
@@ -19,17 +22,21 @@ func TestV5CatalogVersionStorageDoesNotRewriteLegacy(t *testing.T) {
 		}
 	}
 	legacy := domain.Stack{UID: 42, Item: 15043, Count: 1, InstanceKind: domain.ItemInstanceEquipment, Endgame: domain.EndgameItemState{UniqueID: 15043, UniqueRollBP: 10123}}
-	if err := validateEndgameItem(legacy); err != nil {
+	if err := validateEndgameItem(legacy, catalogfixture.EndgameCatalog()); err != nil {
 		t.Fatal("rejected excluded legacy instance", err)
 	}
 	legacy.Endgame.UniqueContentVersion = 5
-	if validateEndgameItem(legacy) == nil {
+	if validateEndgameItem(legacy, catalogfixture.EndgameCatalog()) == nil {
 		t.Fatal("V5 outside259 accepted")
 	}
 	legacy.Item = 1001
 	legacy.Endgame.UniqueID = 1001
 	legacy.Endgame.UniqueContentVersion = domain.UniqueContentVersion + 1
-	if validateEndgameItem(legacy) == nil {
+	if validateEndgameItem(legacy, catalogfixture.EndgameCatalog()) == nil {
 		t.Fatal("unknown future version silently consumed")
 	}
+}
+
+func (q *revisionRecordingQuerier) EndgameCatalog() *domain.EndgameCatalog {
+	return catalogfixture.EndgameCatalog()
 }

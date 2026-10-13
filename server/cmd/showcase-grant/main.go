@@ -77,19 +77,26 @@ func run() error {
 		if e != nil {
 			return fmt.Errorf("production item catalog load failed: %w", e)
 		}
-		if e = domain.ValidateUniqueCatalog(defs); e != nil {
+		skills, _, e := data.LoadSkills(ctx, q)
+		if e != nil {
 			return e
 		}
-		if e = domain.ValidateAstralCatalog(); e != nil {
+		catalog, e := data.LoadEndgameCatalog(ctx, q, defs, skills.ProgressionCatalog())
+		if e != nil {
 			return e
 		}
-		// The server registers these same production rune definitions after DB items.
-		// Icon is display-only, never part of the persisted Stack/Card snapshot.
-		for _, r := range domain.AstralRuneItems(0) {
-			if _, exists := defs[r.ID]; exists {
-				return fmt.Errorf("rune item ID collision")
-			}
-			defs[r.ID] = r
+		if e = domain.ValidateEquipmentRuntimeV5(skills, catalog); e != nil {
+			return e
+		}
+		domain.AttachEndgameCatalog(defs, catalog)
+		if e = store.SetEndgameCatalog(tx, catalog); e != nil {
+			return e
+		}
+		if e = domain.ValidateUniqueCatalog(defs, catalog); e != nil {
+			return e
+		}
+		if e = domain.ValidateAstralCatalog(catalog); e != nil {
+			return e
 		}
 		d, e := showcase.PlanDigest(defs)
 		if e != nil {

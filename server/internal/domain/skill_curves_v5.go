@@ -9,15 +9,15 @@ import (
 // immutable gameplay definitions, not endpoints to spread across hard ranks.
 const OriginalSkillRankCap int32 = 5
 
-func HasV5SkillCurve(id SkillID) bool { _, ok := v5SkillIdentities[id]; return ok }
-func V5SkillCurveIDs() []SkillID      { return V5SkillIDs() }
+func HasV5SkillCurve(id SkillID, c *SkillProgressionCatalog) bool { _, ok := c.Identity(id); return ok }
+func V5SkillCurveIDs(c *SkillProgressionCatalog) []SkillID        { return V5SkillIDs(c) }
 
 // EvaluateV5Skill preserves exact supplied legacy rows. Ranks 2–4 require their
 // own row: nonordinal status IDs and authored rounding cannot be reconstructed
 // from endpoints. Above rank 5 only original numeric effects are extended; no
 // damage, stat, shield or passive target is invented to force rank growth.
 func EvaluateV5Skill(first, fifth SkillDef, rank int32, originalRows ...SkillDef) (SkillDef, error) {
-	if !HasV5SkillCurve(first.ID) {
+	if !HasV5SkillCurve(first.ID, first.Progression) {
 		return SkillDef{}, fmt.Errorf("skill %d is outside the class-battle catalogue", first.ID)
 	}
 	if rank < 1 {
@@ -51,7 +51,7 @@ func EvaluateV5Skill(first, fifth SkillDef, rank int32, originalRows ...SkillDef
 		out.FormulaVersion = SkillFormulaVersion
 		return out, nil
 	}
-	e := v5Evaluator{id: first.ID, rank: rank}
+	e := v5Evaluator{id: first.ID, rank: rank, catalog: first.Progression}
 	out := e.continueOriginal(first, fifth)
 	if e.err != nil {
 		return SkillDef{}, e.err
@@ -105,9 +105,10 @@ func cloneOriginalSkill(d SkillDef) SkillDef {
 }
 
 type v5Evaluator struct {
-	id   SkillID
-	rank int32
-	err  error
+	catalog *SkillProgressionCatalog
+	id      SkillID
+	rank    int32
+	err     error
 }
 
 func (e *v5Evaluator) fail(reason string) {

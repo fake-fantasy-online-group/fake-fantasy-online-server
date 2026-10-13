@@ -12,8 +12,8 @@ import (
 // Allocated process-wide, not scene-local, so reconnects and map changes cannot alias IDs.
 var groundPresentationToken = time.Now().UnixNano()
 
-func groundUniqueID(stack domain.Stack) int32 {
-	if _, ok := domain.UniqueOf(stack); ok {
+func (s *Scene) groundUniqueID(stack domain.Stack) int32 {
+	if _, ok := domain.UniqueOf(stack,s.endgameCatalog); ok {
 		return stack.Endgame.UniqueID
 	}
 	return 0

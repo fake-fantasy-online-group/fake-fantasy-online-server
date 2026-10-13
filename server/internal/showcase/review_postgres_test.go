@@ -1,4 +1,7 @@
 package showcase
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"context"
@@ -48,7 +51,7 @@ func TestReviewPostgresShowcaseProductionRoundTrip(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, r := range domain.AstralRuneItems(0) {
+	for _, r := range astralRuneItemsFixture(0) {
 		defs[r.ID] = r
 	}
 	reviewValidateRuntimeSkills(t, ctx, c)
@@ -87,7 +90,7 @@ func TestReviewPostgresShowcaseProductionRoundTrip(t *testing.T) {
 		// Existing V5 items must survive a V6 additive grant byte-for-byte.
 		oldUnique := domain.NewStack(defs[2509], 1)
 		oldUnique.Endgame = domain.EndgameItemState{UniqueID: 2509, UniqueRollBP: 10000, UniqueContentVersion: 5}
-		if _, ok := domain.UniqueOf(oldUnique); !ok {
+		if _, ok := domain.UniqueOf(oldUnique, catalogfixture.EndgameCatalog()); !ok {
 			t.Fatal("invalid legacy V5 unique fixture")
 		}
 		bag.Set(200, oldUnique)
@@ -168,7 +171,7 @@ func TestReviewPostgresShowcaseProductionRoundTrip(t *testing.T) {
 			if e != nil {
 				return e
 			}
-			for _, r := range domain.AstralRuneItems(0) {
+			for _, r := range astralRuneItemsFixture(0) {
 				loaded[r.ID] = r
 			}
 			r, e = RunTransaction(ctx, tx, loaded, apply, rule)
@@ -275,7 +278,7 @@ func TestReviewPostgresRoundTripDiagnosis(t *testing.T) {
 		if e != nil {
 			return e
 		}
-		for _, r := range domain.AstralRuneItems(0) {
+		for _, r := range astralRuneItemsFixture(0) {
 			defs[r.ID] = r
 		}
 		report, grantErr := RunTransaction(ctx, tx, defs, true, rule)
@@ -308,7 +311,7 @@ func reviewValidateRuntimeSkills(t *testing.T, ctx context.Context, q data.Queri
 	if err != nil {
 		t.Fatalf("actual production skill loader: %v", err)
 	}
-	if err = domain.ValidateEquipmentRuntimeV5(skills); err != nil {
+	if err = domain.ValidateEquipmentRuntimeV5(skills, catalogfixture.EndgameCatalog()); err != nil {
 		t.Fatalf("production equipment runtime validator: %v", err)
 	}
 	procs := 0
@@ -324,10 +327,10 @@ func reviewValidateRuntimeSkills(t *testing.T, ctx context.Context, q data.Queri
 			}
 		}
 	}
-	for _, d := range domain.UniqueCatalog() {
+	for _, d := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
 		check(fmt.Sprintf("unique-%d", d.ID), d.TypedEffects)
 	}
-	for _, d := range domain.AstralRecipes() {
+	for _, d := range domain.AstralRecipes(catalogfixture.EndgameCatalog()) {
 		check(fmt.Sprintf("formation-%d", d.ID), d.TypedEffects)
 	}
 	if procs != 10 {

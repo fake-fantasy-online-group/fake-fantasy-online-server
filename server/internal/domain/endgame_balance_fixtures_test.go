@@ -188,10 +188,10 @@ func TestFiveRunePhysicalSpecialistCompetesWithStrongYellow(t *testing.T) {
 	a := arms[1610]
 	base, innate := fixtureBuild(t, Warrior, 54, a)
 	yellow := fixtureYellow(t, Warrior, a, p90)
-	r, _ := AstralRecipeByID(31)
+	r, _ := AstralRecipeByID(31, testEndgameCatalog())
 	affixes := append([]Affix{}, r.Affixes...)
 	for _, id := range r.Runes {
-		rune, _ := AstralRune(id)
+		rune, _ := AstralRune(id, testEndgameCatalog())
 		affixes = append(affixes, rune.Affixes...)
 	}
 	ctx := UniqueContext{HPPercent: 100, TargetHPPercent: 100}

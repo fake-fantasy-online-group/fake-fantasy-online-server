@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -8,24 +11,24 @@ import (
 )
 
 func TestUniqueGroundPresentationAllMapsAndSnapshots(t *testing.T) {
-	u := domain.UniqueCatalog()[0]
+	u := domain.UniqueCatalog(catalogfixture.EndgameCatalog())[0]
 	st := domain.Stack{UID: 999, Item: u.BaseID, Count: 1, Endgame: domain.EndgameItemState{UniqueID: u.ID, UniqueRollBP: 10000, UniqueContentVersion: domain.UniqueContentVersion}}
-	if groundUniqueID(st) != u.ID {
+	if (&Scene{endgameCatalog: catalogfixture.EndgameCatalog()}).groundUniqueID(st) != u.ID {
 		t.Fatal("valid unique identity missing")
 	}
 	ordinary := st
 	ordinary.Endgame = domain.EndgameItemState{}
-	if groundUniqueID(ordinary) != 0 {
+	if (&Scene{endgameCatalog: catalogfixture.EndgameCatalog()}).groundUniqueID(ordinary) != 0 {
 		t.Fatal("base ID misclassified as unique")
 	}
 	yellow := ordinary
 	yellow.RolledAffixCount = 5
-	yellowDef := domain.ItemDef{ID: yellow.Item, Equip: &domain.EquipDef{}}
-	if equipmentQuality(yellowDef, yellow) != 4 || groundUniqueID(yellow) != 0 {
+	yellowDef := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: yellow.Item, Equip: &domain.EquipDef{}}
+	if equipmentQuality(yellowDef, yellow) != 4 || (&Scene{endgameCatalog: catalogfixture.EndgameCatalog()}).groundUniqueID(yellow) != 0 {
 		t.Fatal("ordinary five-affix yellow item must never be unique")
 	}
-	r := domain.AstralRecipes()[0]
-	fd := domain.ItemDef{ID: 999001, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(r.Slots[0]), LevelReq: 100, Durable: 10}}
+	r := domain.AstralRecipes(catalogfixture.EndgameCatalog())[0]
+	fd := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 999001, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(r.Slots[0]), LevelReq: 100, Durable: 10}}
 	formation := domain.NewStack(fd, 1)
 	formation.Endgame.FormationContentVersion = domain.UniqueContentVersion
 	formation.SocketCount = uint8(len(r.Runes))
@@ -36,17 +39,17 @@ func TestUniqueGroundPresentationAllMapsAndSnapshots(t *testing.T) {
 	if _, ok := domain.MatchAstralRecipe(fd, formation); !ok {
 		t.Fatal("invalid formation fixture")
 	}
-	if groundUniqueID(formation) != 0 {
+	if (&Scene{endgameCatalog: catalogfixture.EndgameCatalog()}).groundUniqueID(formation) != 0 {
 		t.Fatal("real runeword misclassified as unique")
 	}
 	malformed := st
 	malformed.Endgame.UniqueRollBP = 0
-	if groundUniqueID(malformed) != 0 {
+	if (&Scene{endgameCatalog: catalogfixture.EndgameCatalog()}).groundUniqueID(malformed) != 0 {
 		t.Fatal("malformed unique marker accepted")
 	}
 	var previous int64
 	for _, mapID := range []int32{14, 920, 20001} {
-		s := New(Config{ID: domain.SceneID{MapID: mapID}})
+		s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: mapID}})
 		e := &entity.Entity{ID: 12, Kind: domain.KindDrop, Drop: &entity.Drop{Item: st.Item, Count: 1, Stack: st}}
 		fresh := s.freshGroundSpawnEvent(e)
 		if fresh.Ground == nil || !fresh.Ground.FreshDrop || fresh.Ground.UniqueID != u.ID || fresh.Ground.DropToken <= previous {

@@ -54,8 +54,10 @@ func (s *Scene) endgameRiftEntranceAppearance(n domain.NPCSpawn) domain.NPCSpawn
 	}
 	for _, entrance := range s.trial.Entrances {
 		if entrance.EntryMap == s.id.MapID && entrance.EntryNPC == n.Name {
-			n.Sprite = endgameRiftImmortalModel
-			n.Portrait = "N630"
+			if rule := s.currentRiftRules(); rule != nil {
+				n.Sprite = rule.NPCModel
+				n.Portrait = rule.ExitPortrait
+			}
 			break
 		}
 	}
@@ -68,7 +70,7 @@ func (s *Scene) isEndgameRiftExitNPC(e *entity.Entity) bool {
 
 func (s *Scene) canUseEndgameRiftExit(p *entity.Entity) bool {
 	x := s.rift
-	if x == nil || p == nil || p.Player == nil || !p.Alive() || p.Player.QuestNPC != endgameRiftExitName {
+	if x == nil || p == nil || p.Player == nil || !p.Alive() || p.Player.QuestNPC != x.data.Run.Rules.ExitName {
 		return false
 	}
 	if x.data.Run.Phase != domain.RiftCompleted && x.data.Run.Phase != domain.RiftClosed {
@@ -179,7 +181,7 @@ func (s *Scene) syncEndgameRiftCompletion() {
 	npcPos, npcOK, positions := layout.NPC, layout.NPCReady, layout.Positions
 	if x.exitNPC == 0 && npcOK {
 		pos := npcPos
-		npc := &entity.Entity{ID: s.alloc.NPC(), Kind: domain.KindNPC, Name: endgameRiftExitName, Pos: pos, Dir: 3, Look: domain.Look{ModelID: endgameRiftImmortalModel}, NPC: &entity.NPCInfo{Sprite: "npc630", Portrait: "N630", Script: endgameRiftExitScript, Role: domain.NPCRoleGuide, Greeting: "劫影已散，尘缘未了。且收好洞天所得，贫道送诸位归还人间。"}}
+		npc := &entity.Entity{ID: s.alloc.NPC(), Kind: domain.KindNPC, Name: x.data.Run.Rules.ExitName, Pos: pos, Dir: 3, Look: domain.Look{ModelID: x.data.Run.Rules.NPCModel}, NPC: &entity.NPCInfo{Sprite: x.data.Run.Rules.ExitSprite, Portrait: x.data.Run.Rules.ExitPortrait, Script: endgameRiftExitScript, Role: domain.NPCRoleGuide, Greeting: x.data.Run.Rules.ExitGreeting}}
 		x.exitNPC = npc.ID
 		s.entities[npc.ID] = npc
 		s.aoi.Enter(npc)
@@ -390,4 +392,11 @@ func (s *Scene) settleEndgameRiftExperience(p *entity.Entity) bool {
 		s.publishEndgameRewardExperience(p, previousLevel, gain.AppliedExp)
 		s.publishEndgamePetGrant(p, grant.Pet)
 	})
+}
+
+func (s *Scene) currentRiftRules() *domain.RiftRules {
+	if s.rift != nil && s.rift.data.Run != nil {
+		return s.rift.data.Run.Rules
+	}
+	return s.riftRules.Active()
 }

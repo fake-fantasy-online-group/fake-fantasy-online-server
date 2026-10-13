@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"math/rand"
 	"strings"
@@ -16,8 +18,8 @@ import (
 func legacyUniqueCatalogFixture(t *testing.T) []domain.UniqueDefinition {
 	t.Helper()
 	var out []domain.UniqueDefinition
-	for _, id := range domain.UniqueAppearanceBaseIDs() {
-		d, ok := domain.UniqueOf(domain.Stack{UID: int64(id), Item: id, Count: 1, Endgame: domain.EndgameItemState{UniqueID: int32(id), UniqueRollBP: 10000}})
+	for _, id := range domain.UniqueAppearanceBaseIDs(catalogfixture.EndgameCatalog()) {
+		d, ok := domain.UniqueOf(domain.Stack{UID: int64(id), Item: id, Count: 1, Endgame: domain.EndgameItemState{UniqueID: int32(id), UniqueRollBP: 10000}}, catalogfixture.EndgameCatalog())
 		if !ok {
 			t.Fatal("legacy catalog missing", id)
 		}
@@ -35,7 +37,7 @@ func uniqueTestGear(t *testing.T, kind string) (*Scene, *entity.Entity, domain.U
 			if tr.Kind != kind {
 				continue
 			}
-			s.items = map[domain.ItemID]domain.ItemDef{d.BaseID: {ID: d.BaseID, Name: d.BaseName, InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment,
+			s.items = map[domain.ItemID]domain.ItemDef{d.BaseID: {EndgameCatalog: catalogfixture.EndgameCatalog(), ID: d.BaseID, Name: d.BaseName, InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment,
 				Equip: &domain.EquipDef{Slot: d.Slot, Durable: 100}}}
 			st := domain.Stack{UID: 987, Item: d.BaseID, Count: 1, MaxDurability: 100, Durability: 100, InstanceKind: domain.ItemInstanceEquipment}
 			st.Endgame = domain.EndgameItemState{UniqueID: d.ID, UniqueRollBP: 10000}
@@ -235,7 +237,7 @@ func TestUniqueExtendedSlotsActualEquipAndUnequip(t *testing.T) {
 			s := newTestScene(t, nil)
 			join(t, s, 1, 100, "甲", 100, 100)
 			p := s.players[1]
-			def := domain.ItemDef{ID: d.BaseID, Name: d.BaseName, InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment,
+			def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: d.BaseID, Name: d.BaseName, InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment,
 				Equip: &domain.EquipDef{Slot: d.Slot, Durable: 100, LevelReq: d.LevelRequirement, Need: domain.Requirement{Level: d.LevelRequirement, Sex: d.Sex, Professions: d.Professions, ProfessionRestricted: !d.Unrestricted, BeginnerAllowed: d.BeginnerAllowed}}}
 			s.items = map[domain.ItemID]domain.ItemDef{d.BaseID: def}
 			p.Player.Bag = domain.NewBag(domain.DefaultBagSlots)
@@ -286,14 +288,14 @@ func TestUniqueGoldTooltipAndExtendedSlotSnapshot(t *testing.T) {
 		if equipmentQuality(def, st) != 4 {
 			t.Fatal("not gold")
 		}
-		name, _ := domain.UniqueName(st)
+		name, _ := domain.UniqueName(st, catalogfixture.EndgameCatalog())
 		if itemDisplayName(def, st) != name || !strings.Contains(s.itemTooltip(def, st), "仙遗") {
 			t.Fatal("name or tooltip absent")
 		}
 	})
 	for slot := domain.EquipSlot(14); slot <= 25; slot++ {
 		st := domain.Stack{UID: int64(slot) + 100, Item: 4002, Count: 1, InstanceKind: domain.ItemInstanceEquipment}
-		s.items[4002] = domain.ItemDef{ID: 4002, Name: "高阶装备", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: int32(slot)}}
+		s.items[4002] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 4002, Name: "高阶装备", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: int32(slot)}}
 		p.Player.Worn = domain.NewEquipSet()
 		p.Player.Worn.Set(slot, st)
 		snap, err := s.inventorySnapshot(p)

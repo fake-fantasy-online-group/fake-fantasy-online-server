@@ -9,8 +9,10 @@ The seven unresolved entries in `runtime-restoration-gaps.json` remain unresolve
 The immutable `../v5/skill-original-ranks.json` and `../v5/skill-status-anchors.json`
 are prior read-only loader snapshots. They are not rewritten by this change.
 `runtime-restoration-gaps.json` records the source evidence and limitations.
-`server/internal/data/native_skill_restoration.go` contains the explicit correction
-layer. Existing migrations and databases are unchanged.
+The explicit correction layer now lives in migration `000000_init-62.sql` through
+`game_skill_statuses`, `game_custom_statuses` and `game_custom_status_affixes`.
+The former Go post-load correction file was removed on 2026-10-13. Original
+source rows and player saves remain unchanged; see [database skill configuration](../DATABASE_SKILL_CONFIGURATION.md).
 
 ## Implemented original ranks 1–5
 

@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -10,9 +13,9 @@ import (
 
 func astralPetFixture(t *testing.T) (*Scene, *entity.Entity, *entity.Entity, *fakeSink, domain.ItemDef, domain.Stack, domain.ItemDef, domain.Stack) {
 	t.Helper()
-	base := domain.UniqueCatalog()[0].BaseID
-	gd := domain.ItemDef{ID: base, Name: "普通原型", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon), Durable: 30}}
-	rd := domain.AstralRuneItems(7)[0]
+	base := domain.UniqueCatalog(catalogfixture.EndgameCatalog())[0].BaseID
+	gd := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: base, Name: "普通原型", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon), Durable: 30}}
+	rd := astralRuneItemsFixture(7)[0]
 	gear := domain.NewStack(gd, 1)
 	if !domain.ApplyUnique(&gear, gd, func(int) int { return 123 }) {
 		t.Fatal("unique fixture")
@@ -41,7 +44,7 @@ func astralPetFixture(t *testing.T) (*Scene, *entity.Entity, *entity.Entity, *fa
 	rune.Bound = true
 	rune.Card.Bound = true
 	rune.Card.Effects[0].Value = 23
-	s := New(Config{ID: domain.SceneID{MapID: 7}, Alloc: domain.NewEntityAlloc(), SaveEvery: 10000, Items: map[domain.ItemID]domain.ItemDef{gd.ID: gd, rd.ID: rd}})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, Alloc: domain.NewEntityAlloc(), SaveEvery: 10000, Items: map[domain.ItemID]domain.ItemDef{gd.ID: gd, rd.ID: rd}})
 	sink := join(t, s, 1, 100, "拾宝者", 100, 100)
 	owner := s.players[1]
 	owner.Player.Bag = domain.NewBag(domain.DefaultBagSlots)
@@ -122,7 +125,7 @@ func TestPetTakeFullBagLeavesRealInstance(t *testing.T) {
 }
 func TestPetTakePartialStackDoesNotDuplicateOrUnbind(t *testing.T) {
 	s, owner, pet, sink, _, _, _, _ := astralPetFixture(t)
-	def := domain.ItemDef{ID: 990010, Name: "绑定材料", Stackable: true, InventoryTab: 1, InventoryTabKnown: true}
+	def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 990010, Name: "绑定材料", Stackable: true, InventoryTab: 1, InventoryTabKnown: true}
 	s.items[def.ID] = def
 	original := domain.Stack{Item: def.ID, Count: 10, Bound: true}
 	for i := 100; i < 200; i++ {

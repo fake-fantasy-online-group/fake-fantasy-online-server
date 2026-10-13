@@ -4,7 +4,7 @@ import "testing"
 
 func TestLegacyPassiveOverflowCarriersRemoved(t *testing.T) {
 	table := realV5CurveAnchors(t)
-	for _, id := range V5SkillIDs() {
+	for _, id := range V5SkillIDs(testSkillProgressionCatalog()) {
 		for _, rank := range []int32{6, 20, 50, 100} {
 			got, err := EvaluateV5Skill(table[SkillKey{id, 1}], table[SkillKey{id, 5}], rank)
 			if err != nil {

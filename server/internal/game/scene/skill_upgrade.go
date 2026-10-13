@@ -76,7 +76,7 @@ func (s *Scene) skillUpgradeTarget(p *entity.Entity, skill domain.SkillID) (doma
 		if nextLv > domain.SkillHardPointCap {
 			return domain.SkillDef{}, 0, event.RejectMaxLevel, false
 		}
-		if nextLv > domain.SkillHardRankLimit(ch.Level, skill) {
+		if nextLv > domain.SkillHardRankLimit(ch.Level, skill, s.skills.ProgressionCatalog()) {
 			return domain.SkillDef{}, 0, event.RejectLevelTooLow, false
 		}
 	}

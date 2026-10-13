@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "scope": "Appearance aliases for V5 and frozen V4-owned uniques; generation remains limited to259 approved bases.",
+  "scope": "Migration60 SQL seed appearance aliases for all saved versions 0/5/6; runtime loads database definitions.",
   "new_generation_count": 259,
   "selection": {
     "descriptor": "First ov_desc row by numeric row_no for each index (DISTINCT ON index ORDER BY index,row_no).",
@@ -24,26 +24,11 @@
     "wire_frame_limit_bytes": 1048576
   },
   "source_sha256": {
-    "server/internal/domain/legacy_unique_v4/unique_catalog_allclasses.json": "c394093f6597eda4d4ad6abb3e5c7ff503608f0315d9f0515eb40a1297c4fa2d",
-    "server/internal/domain/legacy_unique_v4/unique_catalog_assassin.json": "8eb24ebe9ad9ca84ccc0dda95f344978864b8e6ee5e95133637bc1f4deaaa2d5",
-    "server/internal/domain/legacy_unique_v4/unique_catalog_healer.json": "24664600f51128f30f6436e7265f746b2c4d2f00bfe48bdde66fbe13b4f0510b",
-    "server/internal/domain/legacy_unique_v4/unique_catalog_sharedcaster.json": "a9d63f6989123d3d3fe2b9cd5659e3e4468a18b9a8cab09304d239b424ca0455",
-    "server/internal/domain/legacy_unique_v4/unique_catalog_swordsman.json": "c087ee469dd3e837d2b7299f88c7c0b92ffccfd25d62271ced5c6b40886d64a1",
-    "server/internal/domain/legacy_unique_v4/unique_catalog_unrestricted.json": "17d7d0a7dd3fe02064ebeec13c645dd430a949b2fea362daca6d279a696498ee",
-    "server/internal/domain/legacy_unique_v4/unique_catalog_warlock.json": "e3ed798518e001131b5406475d0c5afd40e38cb28a90bcc2d4b7adef2d5e3955",
-    "server/internal/domain/legacy_unique_v4/unique_catalog_warrior.json": "2306ba81bc423a98d26e36c3fb31439d6323271cfbcf3383aabfc8b845a55f90",
-    "server/internal/domain/unique_catalog_allclasses.json": "79f91732c8e64aa581f0865ed94dd1231ea0bea0505c37b90615b01acb8acd6c",
-    "server/internal/domain/unique_catalog_assassin.json": "d31ae697e6ad4a6fb1994da2e89bc44e15f729f30e4828157a8c3af17eea66fe",
-    "server/internal/domain/unique_catalog_healer.json": "2f08496f309ac30309c9861f4e350077837be4f12d9b70fa7886f87ce7500676",
-    "server/internal/domain/unique_catalog_sharedcaster.json": "53ad75d05ae3254a32c5aba627ecdc45091e7ec583ff8363f9018d5cdb9911f5",
-    "server/internal/domain/unique_catalog_swordsman.json": "92964547b2c8f6e88e550c813c14563eb72d4279c9129009e463284682aeb10d",
-    "server/internal/domain/unique_catalog_unrestricted.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
-    "server/internal/domain/unique_catalog_warlock.json": "6823f837d15c138ad37186c07e6e28693406c0952ef70933241fd4360fc91bab",
-    "server/internal/domain/unique_catalog_warrior.json": "7ec7802e7a8c4d62abd72106e1546f869724a365ad6165549e0ce9af9fb8850d",
     "server/migrations/000000_init-27.sql": "8e3a66223fd557f10c35f61450d42ede9298932eea93d18c0028ea165dca7c8b",
     "server/migrations/000000_init-28.sql": "67505e790e811c44b3fa3095f2e7d09e13b3875fb72231629d4168388468188c",
     "server/migrations/000000_init-29.sql": "753b1c470d8a016ae9fa2e55338f27d2873c2a718c38de3372169f730dfdbc53",
-    "server/migrations/000000_init-30.sql": "31e63311fc67df69b3264fc235f05f1ef28c64ed5d3fb5c797ab2252310d7e06"
+    "server/migrations/000000_init-30.sql": "31e63311fc67df69b3264fc235f05f1ef28c64ed5d3fb5c797ab2252310d7e06",
+    "server/migrations/000000_init-60.sql": "b2cc1105da62ba83d93e65dbfb520597771121088a73eb95cdfbe54487c121d6"
   },
   "category_counts": [
     {

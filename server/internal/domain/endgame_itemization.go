@@ -125,8 +125,10 @@ func SupportedEndgameAffix(a Affix) bool {
 	return false
 }
 
-// SupportedAstralRuneAffix permits the one snapshot-backed regeneration consumer.
-// It does not enable ordinary equipment regeneration or another rune's Attr38.
-func SupportedAstralRuneAffix(item ItemID, a Affix) bool {
-	return SupportedEndgameAffix(a) || (item == LastAstralRune && a.Attr == AttrHPRegen && a.Mode == ModeAbsolute && a.Value > 0)
+// SupportedAstralRuneDefinitionAffix dispatches on a finite effect rule, not an item ID.
+func SupportedAstralRuneDefinitionAffix(r AstralRuneDef, a Affix) bool {
+	if a.Attr == AttrHPRegen {
+		return r.RegenerationIntervalMS > 0 && a.Mode == ModeAbsolute && a.Value > 0
+	}
+	return SupportedEndgameAffix(a)
 }

@@ -27,24 +27,22 @@ func (s *Scene) rollAstralRuneLoot(dead *entity.Entity, killer domain.EntityID, 
 	if dead == nil || dead.Monster == nil || s.defs == nil || !dead.Monster.Kind.Hostile() {
 		return
 	}
+	rule := s.lootRules.Active()
+	if rule == nil {
+		return
+	}
 	md, ok := s.defs.Def(dead.Monster.TypeID)
-	if !ok || md.Level < 20 {
+	if !ok || md.Level < rule.MinRuneLevel {
 		return
 	}
 	if _, ok := s.itemDef(domain.FirstAstralRune); !ok {
 		return
 	}
-	rate := 0.6
-	switch s.astralDropGrade(dead) {
-	case domain.AstralDropElite:
-		rate = 8
-	case domain.AstralDropBoss:
-		rate = 20
-	}
-	if !(domain.DropEntry{RatePct: rate}).RollWithMult(s.rng.Intn, s.dropMultBP(killer, dead.Monster.TypeID)) {
+	entry := rule.RuneDrop(s.astralDropGrade(dead))
+	if !entry.RollWithMult(s.rng.Intn, s.dropMultBP(killer, dead.Monster.TypeID)) {
 		return
 	}
-	def, ok := s.itemDef(domain.FirstAstralRune + domain.ItemID(s.rng.Intn(28)))
+	def, ok := s.itemDef(entry.Choices[s.rng.Intn(len(entry.Choices))])
 	if !ok {
 		return
 	}

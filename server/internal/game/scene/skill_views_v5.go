@@ -50,11 +50,11 @@ func skillAttrText(attr int32) string {
 	return fmt.Sprintf("属性%d", attr)
 }
 func skillAffixText(a domain.Affix) string { return affixText(a) }
-func skillTargetName(id domain.SkillID) string {
+func skillTargetName(id domain.SkillID, catalog *domain.SkillProgressionCatalog) string {
 	if id == 0 {
 		return "自身"
 	}
-	if d, ok := domain.V5SkillIdentity(id); ok {
+	if d, ok := domain.V5SkillIdentity(id, catalog); ok {
 		return d.Name
 	}
 	return "技能"
@@ -83,6 +83,7 @@ func (s *Scene) skillStatusNames(ids []domain.StatusID) string {
 	return strings.Join(names, "、")
 }
 func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
+	skillCatalog := s.skills.ProgressionCatalog()
 	out := []string{}
 	for _, e := range def.DirectEffects() {
 		switch e.Kind {
@@ -185,9 +186,9 @@ func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
 		}
 		out = append(out, line)
 	}
-	out = append(out, skillPassiveModifierLines(def.PassiveModifiers)...)
+	out = append(out, skillPassiveModifierLines(def.PassiveModifiers, skillCatalog)...)
 	for _, m := range def.PassiveStatusAffixes {
-		out = append(out, fmt.Sprintf("%s：%s", skillTargetName(m.TargetSkill), skillAffixText(m.Affix)))
+		out = append(out, fmt.Sprintf("%s：%s", skillTargetName(m.TargetSkill, skillCatalog), skillAffixText(m.Affix)))
 	}
 	for _, m := range def.PassiveResists {
 		out = append(out, fmt.Sprintf("%s抗性%+d%%", s.skillStatusName(m.Status), m.Pct))
@@ -209,7 +210,7 @@ func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
 				controlLine = skillEffectHitLine(state.EffectHitBP)
 			}
 		}
-		line := fmt.Sprintf("%s附加%s：概率%s", skillTargetName(m.TargetSkill), name, equipmentPercent(m.ChanceBP))
+		line := fmt.Sprintf("%s附加%s：概率%s", skillTargetName(m.TargetSkill, skillCatalog), name, equipmentPercent(m.ChanceBP))
 		if duration > 0 {
 			line += fmt.Sprintf("，持续%d秒", duration)
 		}
@@ -247,7 +248,7 @@ func (s *Scene) skillEffectLines(def domain.SkillDef) []string {
 		}
 		out = append(out, "消耗："+cost, "技能吟唱："+cast, "技能间隔："+skillMillisecondsText(def.CooldownMS))
 	}
-	if attr, value := domain.SkillGrowthAttribute(def.ID, def.Level); value > 0 {
+	if attr, value := domain.SkillGrowthAttribute(def.ID, def.Level, skillCatalog); value > 0 {
 		out = append(out, fmt.Sprintf("%s +%d", skillAttrText(attr), value))
 	}
 	return out
@@ -264,6 +265,7 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 	if err != nil {
 		return nil, err
 	}
+	skillCatalog := s.skills.ProgressionCatalog()
 	raw := domain.Learned{}
 	for id, r := range ranks {
 		if r.CanCast {
@@ -280,7 +282,7 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 		r.NextEffectLines = []string{}
 		r.BlockedReasons = []string{}
 		r.NextEffectiveRank = ""
-		if ident, ok := domain.V5SkillIdentity(id); ok && r.HardRank < domain.SkillHardPointCap {
+		if ident, ok := domain.V5SkillIdentity(id, skillCatalog); ok && r.HardRank < domain.SkillHardPointCap {
 			r.NextRequiredLevel = ident.UnlockLevel + r.HardRank
 		}
 		r.TrainingSynergies, r.NativeModifierLines = s.skillSynergyViews(id, ch.Skills, raw)
@@ -332,7 +334,7 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 				// A granted but uninvested skill can start accepting equipment ranks
 				// on its first hard point. Read all eligible authored bonuses then.
 				if r.HardRank == 0 && r.GrantRank != "0" {
-					ident, _ := domain.V5SkillIdentity(id)
+					ident, _ := domain.V5SkillIdentity(id, skillCatalog)
 					next = firstSkillInvestmentRank(r.GrantRank, ident, bonuses)
 				}
 				if next.IsInt64() && next.Int64() <= 2147483647 {

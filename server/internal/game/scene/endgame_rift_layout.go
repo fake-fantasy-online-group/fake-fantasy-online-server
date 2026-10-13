@@ -101,18 +101,18 @@ func (s *Scene) populateSeededEndgameRift(boss bool) {
 		def.EliteID = 0
 		lookup[def.ID] = def
 		if boss {
-			def.Name = "镇境劫影"
+			def.Name = x.data.Run.Rules.BossName
 			def.Kind = domain.MonsterBoss
 		} else if p.Class > 0 {
 			def.Kind = domain.MonsterElite
 		} else {
 			def.Kind = domain.MonsterNormal
 		}
-		def.HP = domain.RiftScaledStat(def.HP, x.data.Run.Tier, len(x.data.Run.Members), p.Class, true)
+		def.HP = domain.RiftScaledStat(def.HP, x.data.Run.Tier, len(x.data.Run.Members), p.Class, true, x.data.Run.Rules)
 		def.Stats.MaxHP = def.HP
-		def.Stats.MinAtk = domain.RiftScaledStat(def.Stats.MinAtk, x.data.Run.Tier, len(x.data.Run.Members), p.Class, false)
-		def.Stats.MaxAtk = domain.RiftScaledStat(def.Stats.MaxAtk, x.data.Run.Tier, len(x.data.Run.Members), p.Class, false)
-		def.Stats.MAtk = domain.RiftScaledStat(def.Stats.MAtk, x.data.Run.Tier, len(x.data.Run.Members), p.Class, false)
+		def.Stats.MinAtk = domain.RiftScaledStat(def.Stats.MinAtk, x.data.Run.Tier, len(x.data.Run.Members), p.Class, false, x.data.Run.Rules)
+		def.Stats.MaxAtk = domain.RiftScaledStat(def.Stats.MaxAtk, x.data.Run.Tier, len(x.data.Run.Members), p.Class, false, x.data.Run.Rules)
+		def.Stats.MAtk = domain.RiftScaledStat(def.Stats.MAtk, x.data.Run.Tier, len(x.data.Run.Members), p.Class, false, x.data.Run.Rules)
 		population = append(population, prepared{p, def})
 	}
 	s.defs = endgameRiftDefs{base: s.defs, trial: lookup}

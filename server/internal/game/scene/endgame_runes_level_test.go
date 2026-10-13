@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"fmt"
@@ -12,10 +15,10 @@ import (
 // Follow the same completed item across the native equip command, persisted-worn
 // recovery, combat sources, native tooltip and sidecar snapshot at the boundary.
 func TestAstralAllFormationLevelGatesAndViews(t *testing.T) {
-	for _, recipe := range domain.AstralRecipes() {
+	for _, recipe := range domain.AstralRecipes(catalogfixture.EndgameCatalog()) {
 		maxRune := int32(0)
 		for _, id := range recipe.Runes {
-			rune, _ := domain.AstralRune(id)
+			rune, _ := domain.AstralRune(id, catalogfixture.EndgameCatalog())
 			maxRune = max(maxRune, rune.MinLevel)
 		}
 		if recipe.MinLevel != maxRune {

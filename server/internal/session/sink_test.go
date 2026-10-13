@@ -1,4 +1,7 @@
 package session
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"context"
@@ -73,7 +76,7 @@ type rig struct {
 func newRig(t *testing.T) *rig {
 	t.Helper()
 	frames := make(chan time.Time)
-	s := scene.New(scene.Config{ID: domain.SceneID{MapID: 7}, Frames: frames})
+	s := scene.New(scene.Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, Frames: frames})
 	ctx, cancel := context.WithCancel(context.Background())
 	go s.Run(ctx)
 	t.Cleanup(cancel)

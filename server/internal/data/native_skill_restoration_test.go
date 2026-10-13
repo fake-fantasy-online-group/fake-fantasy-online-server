@@ -1,5 +1,7 @@
 package data
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"context"
 	"encoding/json"
@@ -49,7 +51,7 @@ func nativeRestorationFixtures(t *testing.T) (domain.SkillTable, domain.StatusTa
 	if err := installRestoredNativeStatuses(statuses); err != nil {
 		t.Fatal(err)
 	}
-	if err := domain.InstallV5SkillProgression(skills); err != nil {
+	if err := domain.InstallV5SkillProgression(skills, catalogfixture.SkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
 	return skills, statuses
@@ -318,7 +320,7 @@ func TestNativeRestorationExportAcceptanceFixture(t *testing.T) {
 		Skills   []domain.SkillDef  `json:"skills"`
 		Statuses []domain.StatusDef `json:"statuses"`
 	}{
-		"Immutable original LoadSkills/LoadStatuses snapshots plus native_skill_restoration.go; not a new original-source export", skillRows, statusRows,
+		"Immutable original LoadSkills/LoadStatuses snapshots plus migration62 status restoration; not a new original-source export", skillRows, statusRows,
 	}
 	full, err := json.Marshal(payload)
 	if err != nil {

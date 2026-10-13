@@ -231,6 +231,7 @@ const (
 
 // StatusApplication 是效果脚本里一条已经闭合的“施加某级状态”。
 type StatusApplication struct {
+	Progression            *SkillProgressionCatalog `json:"-"`
 	PeriodicDamageBonusPct int32
 	SourceSkill            SkillID
 	EffectHitBP            int32
@@ -575,8 +576,9 @@ func (s *StatusSet) MitigateDamage(magic bool, damage int32) (int32, []StatusID)
 	if s.Invulnerable() {
 		return 0, nil
 	}
-	wideDamage := MitigatePercentDamageV7(s.DamageTakenAmount(magic, damage), 0, 0, 0, s.DamageReductionPct(magic), 0, false, s.DamageReductionFlat(magic))
-	damage = max(int32(0), SaturateInt32(wideDamage))
+	buckets := CombatDamageBuckets{DamageTakenIncreasePct: s.DamageTakenIncreasePct(magic),
+		DamageReductionPct: s.DamageReductionPct(magic), FlatReduction: s.DamageReductionFlat(magic)}
+	damage = buckets.IncomingDamage(damage)
 	return s.AbsorbDamage(damage)
 }
 
@@ -592,6 +594,13 @@ func (s *StatusSet) Invulnerable() bool {
 // DamageTakenAmount intentionally retains a wide intermediate: amplification
 // can exceed 100%, and a later reduction can bring it back into int32 range.
 func (s *StatusSet) DamageTakenAmount(magic bool, damage int32) int64 {
+	pct := int64(s.DamageTakenIncreasePct(magic))
+	return int64(damage) + int64(damage)*pct/100
+}
+
+// DamageTakenIncreasePct supplies the same additive status bucket to either
+// standalone status settlement or the scene's shared combat modifier stage.
+func (s *StatusSet) DamageTakenIncreasePct(magic bool) int32 {
 	var pct int64
 	if s != nil {
 		s.Each(func(a Active) {
@@ -602,8 +611,7 @@ func (s *StatusSet) DamageTakenAmount(magic bool, damage int32) int64 {
 			}
 		})
 	}
-	pct = int64(max(int32(0), SaturateInt32(pct)))
-	return int64(damage) + int64(damage)*pct/100
+	return max(int32(0), SaturateInt32(pct))
 }
 
 func (s *StatusSet) DamageReductionPct(magic bool) int32 {

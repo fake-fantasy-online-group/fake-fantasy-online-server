@@ -44,13 +44,13 @@ func TestAstralJSONMatchesExecutableCatalog(t *testing.T) {
 	if doc.SchemaVersion != 2 || len(doc.Runes) != 28 || len(doc.Formations) != 40 {
 		t.Fatal("incomplete external catalog")
 	}
-	for i, r := range AstralRunes() {
+	for i, r := range AstralRunes(testEndgameCatalog()) {
 		d := doc.Runes[i]
 		if d.ID != r.Item || d.MinLevel != r.MinLevel || d.Name != r.Name || d.Mansion != r.Mansion || d.Quadrant != r.Quadrant || !reflect.DeepEqual(d.Affixes, r.Affixes) {
 			t.Fatalf("rune row %d drift", i)
 		}
 	}
-	for i, r := range AstralRecipes() {
+	for i, r := range AstralRecipes(testEndgameCatalog()) {
 		d := doc.Formations[i]
 		if !reflect.DeepEqual(d.TypedEffects, r.TypedEffects) && len(d.TypedEffects)+len(r.TypedEffects) > 0 || !reflect.DeepEqual(d.SkillBonuses, r.SkillBonuses) && len(d.SkillBonuses)+len(r.SkillBonuses) > 0 {
 			t.Fatalf("typed/skill catalog drift %d", r.ID)

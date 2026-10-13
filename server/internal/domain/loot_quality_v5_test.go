@@ -25,7 +25,7 @@ func TestMagicFindV5GoldenProbabilities(t *testing.T) {
 				t.Fatalf("MF%d profile%d: got %v err %v want %v", tc.mf, profile, got, err, want)
 			}
 		}
-		if got := UniqueProbabilityV5(tc.mf); got != tc.unique {
+		if got := UniqueProbabilityV5(tc.mf, lootRulesFixture()); got != tc.unique {
 			t.Fatalf("MF%d unique=%d want=%d", tc.mf, got, tc.unique)
 		}
 	}
@@ -55,10 +55,10 @@ func TestMagicFindV5MonotoneClosedAndOverflowSafe(t *testing.T) {
 			}
 		}
 	}
-	if got := UniqueProbabilityV5(math.MaxInt64); got != 29_999_999 {
+	if got := UniqueProbabilityV5(math.MaxInt64, lootRulesFixture()); got != 29_999_999 {
 		t.Fatal("unique asymptote overflow", got)
 	}
-	if UniqueProbabilityV5(math.MinInt64) != UniqueProbabilityV5(0) {
+	if UniqueProbabilityV5(math.MinInt64, lootRulesFixture()) != UniqueProbabilityV5(0, lootRulesFixture()) {
 		t.Fatal("negative MF not clamped")
 	}
 	for _, counts := range [][]WeightedAffixCount{
@@ -121,7 +121,7 @@ func TestMagicFindV5QuotaDistinctOptionsAndUnchangedValues(t *testing.T) {
 
 func TestMagicFindV5UniqueEligibilityThresholdAndVariableIsolation(t *testing.T) {
 	var unique UniqueDefinition
-	for _, u := range UniqueCatalog() {
+	for _, u := range UniqueCatalog(testEndgameCatalog()) {
 		if u.NativeDropEligible {
 			unique = u
 			break
@@ -130,16 +130,16 @@ func TestMagicFindV5UniqueEligibilityThresholdAndVariableIsolation(t *testing.T)
 	if unique.BaseID == 0 {
 		t.Fatal("no natural unique fixture")
 	}
-	def := ItemDef{ID: unique.BaseID, InstanceKind: ItemInstanceEquipment, Equip: &EquipDef{}}
+	def := ItemDef{EndgameCatalog: testEndgameCatalog(), ID: unique.BaseID, InstanceKind: ItemInstanceEquipment, Equip: &EquipDef{}}
 	newStack := func() Stack {
 		return Stack{UID: 17, Item: def.ID, Count: 1, SocketCount: 2, RolledAffixCount: 1, RolledAffixes: [5]InstanceAffix{{Affix: Affix{Attr: AttrSTR, Value: 7}}}}
 	}
 	for _, mf := range []int64{0, 100, 800, math.MaxInt64} {
-		threshold := UniqueProbabilityV5(mf)
+		threshold := UniqueProbabilityV5(mf, lootRulesFixture())
 		for _, draw := range []int64{threshold - 1, threshold, LootProbabilityScaleV5 - 1} {
 			st := newStack()
 			variableCalls := 0
-			ok := RollNaturalUniqueWithMagicFindV5(&st, def, mf, func(int64) int64 { return draw }, func(int) int { variableCalls++; return 1234 })
+			ok := RollNaturalUniqueWithMagicFindV5(&st, def, mf, func(int64) int64 { return draw }, func(int) int { variableCalls++; return 1234 }, lootRulesFixture())
 			if ok != (draw < threshold) || variableCalls != boolInt(ok) {
 				t.Fatal("chance threshold/variable calls", mf, draw, ok, variableCalls)
 			}
@@ -151,7 +151,7 @@ func TestMagicFindV5UniqueEligibilityThresholdAndVariableIsolation(t *testing.T)
 	for _, ineligible := range []ItemDef{{ID: 999999999, Equip: &EquipDef{}}, {ID: def.ID, Equip: &EquipDef{NoTypeDrop: true}}, {ID: def.ID}} {
 		st := Stack{UID: 17, Item: ineligible.ID, Count: 1}
 		called := false
-		if RollNaturalUniqueWithMagicFindV5(&st, ineligible, 800, func(int64) int64 { called = true; return 0 }, func(int) int { return 0 }) || called {
+		if RollNaturalUniqueWithMagicFindV5(&st, ineligible, 800, func(int64) int64 { called = true; return 0 }, func(int) int { return 0 }, lootRulesFixture()) || called {
 			t.Fatal("ineligible source reached RNG", ineligible)
 		}
 	}

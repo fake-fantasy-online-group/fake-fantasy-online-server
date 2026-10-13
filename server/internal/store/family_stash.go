@@ -12,7 +12,7 @@ import (
 )
 
 func (p *Postgres) LoadFamilyStash(ctx context.Context, charID int64) (*domain.FamilyStash, error) {
-	return loadFamilyStash(ctx, p.pool, charID)
+	return loadFamilyStash(ctx, p.catalogQuery(), charID)
 }
 
 func (t *pgTx) LoadFamilyStash(ctx context.Context, charID int64) (*domain.FamilyStash, error) {

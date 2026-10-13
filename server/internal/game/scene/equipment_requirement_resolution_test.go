@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"encoding/json"
 	"math/rand"
@@ -25,10 +27,10 @@ func requirementResolutionFixture(t testing.TB) (*Scene, *entity.Entity) {
 	for _, d := range defs {
 		skills[domain.SkillKey{ID: d.ID, Level: d.Level}] = d
 	}
-	if err := domain.InstallV5SkillProgression(skills); err != nil {
+	if err := domain.InstallV5SkillProgression(skills, catalogfixture.SkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
-	s := &Scene{items: map[domain.ItemID]domain.ItemDef{}, skills: skills}
+	s := &Scene{items: map[domain.ItemID]domain.ItemDef{}, skills: skills, endgameCatalog: catalogfixture.EndgameCatalog()}
 	p := &entity.Entity{ID: 1, Player: &entity.Player{Char: &domain.Character{
 		Level: 60, Race: domain.Warlock, Base: domain.Base{STR: 20, INT: 20, VIT: 20, AGI: 20, DEX: 20, SPI: 20},
 		Skills: domain.Learned{10401: 20}, EmploymentKnown: true, Employed: true,
@@ -38,7 +40,7 @@ func requirementResolutionFixture(t testing.TB) (*Scene, *entity.Entity) {
 
 func requirementResolutionItem(s *Scene, p *entity.Entity, slot domain.EquipSlot, need, bonus int32) {
 	id := domain.ItemID(990000 + slot)
-	d := domain.ItemDef{ID: id, Equip: &domain.EquipDef{Slot: int32(slot), Durable: 100,
+	d := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Equip: &domain.EquipDef{Slot: int32(slot), Durable: 100,
 		Need: domain.Requirement{Base: domain.Base{STR: need}}, Base: domain.Base{STR: bonus}}}
 	s.items[id] = d
 	st := domain.NewStack(d, 1)
@@ -136,7 +138,7 @@ func TestEquipmentRequirementResolutionNoSelfSupportOrStaleReuse(t *testing.T) {
 func TestEquipmentRequirementResolutionSoftRanksRemainSeparate(t *testing.T) {
 	s, p := requirementResolutionFixture(t)
 	// Real unique single-skill +2; the item must first pass its own requirement.
-	d := domain.ItemDef{ID: 2018, Equip: &domain.EquipDef{Slot: int32(domain.SlotHead), Durable: 100}}
+	d := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 2018, Equip: &domain.EquipDef{Slot: int32(domain.SlotHead), Durable: 100}}
 	s.items[d.ID] = d
 	st := domain.NewStack(d, 1)
 	st.UID = 2018

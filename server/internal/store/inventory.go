@@ -50,7 +50,7 @@ func loadWashArrays(st *domain.Stack, quality, count int16, attrs, values, modes
 
 // LoadSkills 读一个角色学会的技能。没有时返回空表, 不是 nil。
 func (p *Postgres) LoadSkills(ctx context.Context, charID int64) (domain.Learned, error) {
-	return loadSkills(ctx, p.pool, charID)
+	return loadSkills(ctx, p.catalogQuery(), charID)
 }
 func loadSkills(ctx context.Context, q querier, charID int64) (domain.Learned, error) {
 	rows, err := q.Query(ctx,
@@ -103,7 +103,7 @@ func saveSkills(ctx context.Context, tx pgx.Tx, charID int64, l domain.Learned) 
 
 // LoadQuests 读一个角色的任务本。没有时返回空表, 不是 nil。
 func (p *Postgres) LoadQuests(ctx context.Context, charID int64) (domain.QuestLog, error) {
-	return loadQuests(ctx, p.pool, charID)
+	return loadQuests(ctx, p.catalogQuery(), charID)
 }
 func loadQuests(ctx context.Context, q querier, charID int64) (domain.QuestLog, error) {
 	rows, err := q.Query(ctx,
@@ -208,7 +208,7 @@ func saveQuests(ctx context.Context, tx pgx.Tx, charID int64, l domain.QuestLog)
 
 // LoadEquips 读一个角色身上穿的。没有任何行时返回空的一套, 不是 nil。
 func (p *Postgres) LoadEquips(ctx context.Context, charID int64) (*domain.EquipSet, error) {
-	return loadEquips(ctx, p.pool, charID)
+	return loadEquips(ctx, p.catalogQuery(), charID)
 }
 func loadEquips(ctx context.Context, q querier, charID int64) (*domain.EquipSet, error) {
 	rows, err := q.Query(ctx,
@@ -279,7 +279,7 @@ func (t *pgTx) LoadEquips(ctx context.Context, charID int64) (*domain.EquipSet, 
 // LoadChangeSet 读取快速换装面板托管的备用装备。表内 cell 是客户端部位号，
 // 物品真实穿戴槽仍在 game_equipment 中，切换时由场景重新复核。
 func (p *Postgres) LoadChangeSet(ctx context.Context, charID int64) (*domain.ChangeSet, error) {
-	return loadChangeSet(ctx, p.pool, charID)
+	return loadChangeSet(ctx, p.catalogQuery(), charID)
 }
 func loadChangeSet(ctx context.Context, q querier, charID int64) (*domain.ChangeSet, error) {
 	rows, err := q.Query(ctx,
@@ -410,7 +410,7 @@ func saveChangeSet(ctx context.Context, tx pgx.Tx, charID int64, set *domain.Cha
 
 // LoadBag 读一个角色的背包。没有任何物品行时返回空背包, 不是 nil。
 func (p *Postgres) LoadBag(ctx context.Context, charID int64, slots int) (*domain.Bag, error) {
-	return loadBag(ctx, p.pool, charID, slots)
+	return loadBag(ctx, p.catalogQuery(), charID, slots)
 }
 func loadBag(ctx context.Context, q querier, charID int64, slots int) (*domain.Bag, error) {
 	rows, err := q.Query(ctx,
@@ -485,7 +485,7 @@ func (t *pgTx) LoadBag(ctx context.Context, charID int64, slots int) (*domain.Ba
 }
 
 func (p *Postgres) LoadWarehouse(ctx context.Context, charID int64, rule domain.WarehouseRule) (*domain.Warehouse, error) {
-	return loadWarehouse(ctx, p.pool, charID, rule)
+	return loadWarehouse(ctx, p.catalogQuery(), charID, rule)
 }
 
 func (t *pgTx) LoadWarehouse(ctx context.Context, charID int64, rule domain.WarehouseRule) (*domain.Warehouse, error) {
@@ -493,7 +493,7 @@ func (t *pgTx) LoadWarehouse(ctx context.Context, charID int64, rule domain.Ware
 }
 
 func (p *Postgres) LoadWardrobe(ctx context.Context, charID int64, rule domain.WardrobeRule) (*domain.Wardrobe, error) {
-	return loadWardrobe(ctx, p.pool, charID, rule)
+	return loadWardrobe(ctx, p.catalogQuery(), charID, rule)
 }
 
 func (t *pgTx) LoadWardrobe(ctx context.Context, charID int64, rule domain.WardrobeRule) (*domain.Wardrobe, error) {
@@ -641,7 +641,7 @@ func loadWarehouse(ctx context.Context, q querier, charID int64, rule domain.War
 // 增量更新要跟踪每一格的变化, 那套簿记出一次错就是刷物品漏洞;
 // 一个角色最多几十格, 整包重写的代价完全可以接受。
 func (p *Postgres) SaveSnapshot(ctx context.Context, snap domain.Snapshot) error {
-	if err := validateEndgameSnapshot(snap); err != nil {
+	if err := validateEndgameSnapshot(snap,p.endgameCatalog); err != nil {
 		return err
 	}
 	if err := validatePetItems(snap); err != nil {
@@ -650,7 +650,7 @@ func (p *Postgres) SaveSnapshot(ctx context.Context, snap domain.Snapshot) error
 	if snap.Char == nil {
 		return nil
 	}
-	tx, err := p.pool.Begin(ctx)
+	tx, err := p.begin(ctx)
 	if err != nil {
 		return fmt.Errorf("store: 开事务: %w", err)
 	}
@@ -838,7 +838,7 @@ func saveTitles(ctx context.Context, tx pgx.Tx, charID int64, titles []string) e
 }
 
 func (t *pgTx) SaveSnapshot(ctx context.Context, snap domain.Snapshot) error {
-	if err := validateEndgameSnapshot(snap); err != nil {
+	if err := validateEndgameSnapshot(snap,t.endgameCatalog); err != nil {
 		return err
 	}
 	if err := validatePetItems(snap); err != nil {
@@ -899,7 +899,7 @@ func (t *pgTx) SaveSnapshot(ctx context.Context, snap domain.Snapshot) error {
 
 // LoadPets 读一个角色养的宠物。没有时返回 nil。
 func (p *Postgres) LoadPets(ctx context.Context, charID int64) ([]domain.PetInstance, error) {
-	return loadPets(ctx, p.pool, charID)
+	return loadPets(ctx, p.catalogQuery(), charID)
 }
 
 func (t *pgTx) LoadPets(ctx context.Context, charID int64) ([]domain.PetInstance, error) {
@@ -1113,7 +1113,7 @@ func (p *Postgres) AddFriend(ctx context.Context, a, b int64) error {
 	if a == b {
 		return fmt.Errorf("store: 不能加自己为好友")
 	}
-	tx, err := p.pool.Begin(ctx)
+	tx, err := p.begin(ctx)
 	if err != nil {
 		return fmt.Errorf("store: 开事务: %w", err)
 	}
@@ -1135,7 +1135,7 @@ func (p *Postgres) AddFriend(ctx context.Context, a, b int64) error {
 // **单方面删除也是双向的**：留着"他还当我是好友"这半边，
 // 只会让他一直收到我的上下线通知，而我这边看不到他。
 func (p *Postgres) RemoveFriend(ctx context.Context, a, b int64) error {
-	tx, err := p.pool.Begin(ctx)
+	tx, err := p.begin(ctx)
 	if err != nil {
 		return fmt.Errorf("store: 开事务: %w", err)
 	}

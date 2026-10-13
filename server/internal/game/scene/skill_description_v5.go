@@ -71,7 +71,7 @@ func (s *Scene) skillOriginalEffectLines(def domain.SkillDef) []string {
 		lines = append(lines, "消耗: "+cost, "技能吟唱: "+cast, "技能间隔: "+skillMillisecondsText(def.CooldownMS))
 	}
 	lines = append(lines, effectHitLines...)
-	if policy, ok := domain.LookupSkillGrowthPolicy(def.ID); ok && policy.RangeCapRank > 0 && def.Level > policy.RangeCapRank {
+	if policy, ok := domain.LookupSkillGrowthPolicy(def.ID, s.skills.ProgressionCatalog()); ok && policy.RangeCapRank > 0 && def.Level > policy.RangeCapRank {
 		switch def.ID {
 		case 10127, 10228:
 			if def.Area.Radius > 0 {
@@ -83,7 +83,7 @@ func (s *Scene) skillOriginalEffectLines(def domain.SkillDef) []string {
 	}
 	// These three authored descriptions omit protection time altogether. Keep
 	// their original prose and expose only the duration the resolver actually uses.
-	if policy, ok := domain.LookupSkillGrowthPolicy(def.ID); ok && policy.ProtectionCapRank > 0 && def.Level > policy.ProtectionCapRank {
+	if policy, ok := domain.LookupSkillGrowthPolicy(def.ID, s.skills.ProgressionCatalog()); ok && policy.ProtectionCapRank > 0 && def.Level > policy.ProtectionCapRank {
 		switch def.ID {
 		case 10417, 10425, 10435:
 			if len(def.Statuses) > 0 {
@@ -167,7 +167,7 @@ func (s *Scene) skillDescriptionTrigger(def domain.SkillDef, index int) (domain.
 		return domain.StatusDef{}, false
 	}
 	m := def.PassiveTriggers[index]
-	return s.skillDescriptionStatus(domain.StatusApplication{ID: m.Status, Level: m.StatusLevel, ChanceBP: m.ChanceBP, ChanceExplicit: m.ChanceExplicit, EffectHitBP: m.EffectHitBP, SourceSkill: def.ID, DurationSec: m.DurationSec, ProgressionRanks: m.ProgressionRanks, ProgressionFirstLevel: m.ProgressionFirstLevel, ProgressionFirstDurationSec: m.ProgressionFirstDurationSec, ProgressionBaseDurationSec: m.ProgressionBaseDurationSec})
+	return s.skillDescriptionStatus(domain.StatusApplication{Progression: def.Progression, ID: m.Status, Level: m.StatusLevel, ChanceBP: m.ChanceBP, ChanceExplicit: m.ChanceExplicit, EffectHitBP: m.EffectHitBP, SourceSkill: def.ID, DurationSec: m.DurationSec, ProgressionRanks: m.ProgressionRanks, ProgressionFirstLevel: m.ProgressionFirstLevel, ProgressionFirstDurationSec: m.ProgressionFirstDurationSec, ProgressionBaseDurationSec: m.ProgressionBaseDurationSec})
 }
 func skillDescriptionPeriodicTotal(d domain.StatusDef) string {
 	if d.IntervalSec <= 0 {

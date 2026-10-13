@@ -403,7 +403,7 @@ func (s *Scene) applyPassiveSkillModifiersWithLevels(caster *entity.Entity, def 
 			!caster.Player.Char.AllowsSkill(passive.ID, passive.Prof) {
 			continue
 		}
-		growth := domain.SkillGrowthDamageBonusPct(passiveID, level, def.ID)
+		growth := domain.SkillGrowthDamageBonusPct(passiveID, level, def.ID, s.skills.ProgressionCatalog())
 		if def.HasDamageEffect() {
 			damageBonus = domain.SaturateInt32(int64(damageBonus) + int64(growth))
 		} else if passiveID == 10422 && def.ID == 10421 {
@@ -460,7 +460,7 @@ func (s *Scene) applyPassiveSkillModifiersWithLevels(caster *entity.Entity, def 
 				continue
 			}
 			triggerStatuses = append(triggerStatuses, domain.StatusApplication{
-				ID: trigger.Status, Level: trigger.StatusLevel,
+				ID: trigger.Status, Level: trigger.StatusLevel, Progression: passive.Progression,
 				ChanceBP: trigger.ChanceBP, ChanceExplicit: trigger.ChanceExplicit, EffectHitBP: trigger.EffectHitBP, SourceSkill: passiveID, DurationSec: trigger.DurationSec,
 				ProgressionRanks: trigger.ProgressionRanks, ProgressionFirstLevel: trigger.ProgressionFirstLevel,
 				ProgressionFirstDurationSec: trigger.ProgressionFirstDurationSec, ProgressionBaseDurationSec: trigger.ProgressionBaseDurationSec,

@@ -33,7 +33,7 @@ func saveItemInstances(ctx context.Context, q querier, source string, stacks ...
 		if st.Empty() {
 			continue
 		}
-		if err := validateEndgameItem(st); err != nil {
+		if err := validateEndgameItem(st,catalogOfQuerier(q)); err != nil {
 			return err
 		}
 		kind := st.InstanceKind

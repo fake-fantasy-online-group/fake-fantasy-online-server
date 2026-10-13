@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"context"
@@ -72,7 +75,7 @@ func newDrainRig(t *testing.T, maps ...int32) *drainRig {
 		if !ok {
 			t.Fatalf("测试没准备 %d 号图的节拍", id.MapID)
 		}
-		return New(Config{ID: id, Frames: ch, Saver: r.saver,
+		return New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Frames: ch, Saver: r.saver,
 			SaveEvery: 100_000}), nil // 存档间隔调得极长: 只测关服那一次
 	}
 	r.router = NewRouter(build, slog.Default())

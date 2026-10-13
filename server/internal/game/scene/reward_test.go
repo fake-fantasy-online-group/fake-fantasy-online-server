@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -32,7 +35,7 @@ func rewardScene(t *testing.T, def domain.MonsterDef) (*Scene, domain.EntityID) 
 	sp, _ := spawn.New(
 		[]domain.SpawnPoint{{ID: 1, Monster: def.ID, Pos: domain.Pos{MapID: 14, X: 140, Y: 100}}},
 		defs, domain.NewEntityAlloc())
-	s := New(Config{ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 5,
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 5,
 		Spawner: sp, Levels: rewardLevels(), Defs: defs})
 	var id domain.EntityID
 	for eid, e := range s.entities {
@@ -241,7 +244,7 @@ func TestNoLevelTableIsSafe(t *testing.T) {
 	sp, _ := spawn.New(
 		[]domain.SpawnPoint{{ID: 1, Monster: 给经验的树妖.ID, Pos: domain.Pos{MapID: 14, X: 140, Y: 100}}},
 		defs, domain.NewEntityAlloc())
-	s := New(Config{ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Spawner: sp}) // Levels/Defs 都是 nil
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Spawner: sp}) // Levels/Defs 都是 nil
 
 	var mid domain.EntityID
 	for eid, e := range s.entities {
@@ -283,7 +286,7 @@ func TestExpMarksDirty(t *testing.T) {
 	sp, _ := spawn.New(
 		[]domain.SpawnPoint{{ID: 1, Monster: 给经验的树妖.ID, Pos: domain.Pos{MapID: 14, X: 140, Y: 100}}},
 		defs, domain.NewEntityAlloc())
-	s := New(Config{ID: domain.SceneID{MapID: 14}, SaveEvery: 10, Seed: 5,
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 14}, SaveEvery: 10, Seed: 5,
 		Spawner: sp, Levels: rewardLevels(), Defs: defs, Saver: sv})
 
 	var mid domain.EntityID

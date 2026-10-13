@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"encoding/json"
 	"fmt"
@@ -40,7 +42,7 @@ func nativeRestoredSceneFixtures(t *testing.T) (domain.SkillTable, domain.Status
 	for _, d := range fixture.Statuses {
 		statuses[domain.StatusKey{ID: d.ID, Level: d.Level}] = d
 	}
-	if err := domain.InstallV5SkillProgression(skills); err != nil {
+	if err := domain.InstallV5SkillProgression(skills, catalogfixture.SkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
 	return skills, statuses

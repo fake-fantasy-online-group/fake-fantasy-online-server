@@ -1,5 +1,7 @@
 package store
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"context"
 	"errors"
@@ -17,14 +19,14 @@ func TestOrdinaryCubeSocketRevisionDurableReplayAndCAS(t *testing.T) {
 	m, s := endgameFixture(t)
 	s.Char.Money = domain.Money{Silver: 100}
 	s.Bag.Set(0, domain.Stack{})
-	def := domain.ItemDef{ID: 1001, InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: 4, LevelReq: 50, Durable: 100}}
+	def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 1001, InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: 4, LevelReq: 50, Durable: 100}}
 	s.Bag.Set(200, domain.NewStack(def, 1))
 	target := s.Bag.At(200)
 	target.UID = 42
 	s.Bag.Set(200, target)
 	s.Bag.Set(100, domain.Stack{Item: domain.CubeStarMarrow, Count: 100})
 	s.Bag.Set(101, domain.Stack{Item: domain.CubePurifiedDust, Count: 100})
-	runes := domain.AstralRuneItems(7)
+	runes := astralRuneItemsFixture(7)
 	for i, index := range []int{0, 5} {
 		rune := domain.NewStack(runes[index], 1)
 		rune.UID = int64(501 + i)
@@ -36,19 +38,20 @@ func TestOrdinaryCubeSocketRevisionDurableReplayAndCAS(t *testing.T) {
 	backend := NewEndgameBackend(m, nil)
 	money := int64(100000)
 	items := map[domain.ItemID]domain.ItemDef{1001: def}
-	for _, d := range domain.CubeMaterialDefinitions() {
+	for _, d := range cubeMaterialDefinitionsFixture() {
 		items[d.ID] = d
 	}
 	for _, d := range runes {
 		items[d.ID] = d
 	}
+	domain.AttachEndgameCatalog(items, catalogfixture.EndgameCatalog())
 	for revision := int64(1); revision <= 2; revision++ {
 		req := domain.EndgameRequest{RecipeID: domain.CubeOpenSocket, TargetUID: "42"}
 		if revision == 2 {
 			req.RecipeID = domain.CubeInscribeArray
 			req.ItemUIDs = []string{"501", "502"}
 		}
-		cube, err := domain.PlanCube(domain.CubeContext{Level: 60, Bag: s.Bag, Money: money, Items: items, Intn: func(int) int { return 1 }}, req, true)
+		cube, err := domain.PlanCube(domain.CubeContext{Catalog: catalogfixture.EndgameCatalog(), Rules: cubeRulesFixture(items), Level: 60, Bag: s.Bag, Money: money, Items: items, Intn: func(int) int { return 1 }}, req, true)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -92,7 +95,7 @@ func TestOrdinaryCubeSocketRevisionDurableReplayAndCAS(t *testing.T) {
 
 func TestEndgameOrdinaryMetadataValidation(t *testing.T) {
 	valid := domain.Stack{UID: 42, Item: 1001, Count: 1, InstanceKind: domain.ItemInstanceEquipment, Endgame: domain.EndgameItemState{Revision: 3}}
-	if err := validateEndgameItem(valid); err != nil {
+	if err := validateEndgameItem(valid, nil); err != nil {
 		t.Fatal(err)
 	}
 	for name, change := range map[string]func(*domain.Stack){
@@ -107,7 +110,7 @@ func TestEndgameOrdinaryMetadataValidation(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			s := valid
 			change(&s)
-			if validateEndgameItem(s) == nil {
+			if validateEndgameItem(s, nil) == nil {
 				t.Fatal("accepted corrupt metadata")
 			}
 		})
@@ -158,7 +161,7 @@ func TestFormationRollStorageValidationAndExactSave(t *testing.T) {
 	}
 	for _, roll := range []int32{-1, 1, 7999, 12001} {
 		st := domain.Stack{UID: 42, Item: 1001, Count: 1, InstanceKind: domain.ItemInstanceEquipment, Endgame: domain.EndgameItemState{FormationRollBP: roll}}
-		if validateEndgameItem(st) == nil {
+		if validateEndgameItem(st, nil) == nil {
 			t.Fatal("invalid formation roll accepted", roll)
 		}
 	}

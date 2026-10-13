@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -31,7 +34,7 @@ func sceneWithSpawns(t *testing.T, defs spawn.MapDefs, points []domain.SpawnPoin
 	if skipped != 0 {
 		t.Fatalf("测试数据里有 %d 个点位引用不到模板", skipped)
 	}
-	return New(Config{
+	return New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(),
 		ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 4242, Spawner: sp,
 	})
 }
@@ -193,7 +196,7 @@ func TestPropsDoNotRespawn(t *testing.T) {
 
 // 没有刷怪器的图(主城)照常工作, 不该崩。
 func TestSceneWithoutSpawnerWorks(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000})
 	if len(s.entities) != 0 {
 		t.Fatal("没有刷怪器就不该有怪")
 	}

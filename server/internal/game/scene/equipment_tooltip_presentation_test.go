@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"fmt"
@@ -100,14 +103,14 @@ func TestEveryUniqueNativeTooltipAttributeAndEffectPresentation(t *testing.T) {
 	p := s.players[1]
 	p.Player.EndgameNativeStats = true
 	for _, version := range []int32{0, domain.UniqueContentVersion} {
-		for _, entry := range domain.UniqueCatalog() {
+		for _, entry := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
 			t.Run(fmt.Sprintf("v%d/%d", version, entry.ID), func(t *testing.T) {
-				def := domain.ItemDef{ID: entry.BaseID, Name: entry.BaseName, InstanceKind: domain.ItemInstanceEquipment, Equip: nativePresentationEquip(entry.Slot)}
+				def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: entry.BaseID, Name: entry.BaseName, InstanceKind: domain.ItemInstanceEquipment, Equip: nativePresentationEquip(entry.Slot)}
 				s.items[def.ID] = def
 				st := domain.NewStack(def, 1)
 				st.UID, st.Bound, st.SocketCount = 42, true, 1
 				st.Endgame = domain.EndgameItemState{UniqueID: entry.ID, UniqueRollBP: 12000, UniqueContentVersion: version}
-				u, ok := domain.UniqueOf(st)
+				u, ok := domain.UniqueOf(st, catalogfixture.EndgameCatalog())
 				if !ok {
 					t.Fatal("invalid unique fixture")
 				}
@@ -138,7 +141,7 @@ func TestEveryFormationNativeTooltipAttributeAndEffectPresentation(t *testing.T)
 	p.Player.EndgameNativeStats = true
 	p.Player.Char.Level = 1 // Potential effects remain visible when ineligible.
 	for _, version := range []int32{0, domain.UniqueContentVersion} {
-		for _, entry := range domain.AstralRecipes() {
+		for _, entry := range domain.AstralRecipes(catalogfixture.EndgameCatalog()) {
 			t.Run(fmt.Sprintf("v%d/%d", version, entry.ID), func(t *testing.T) {
 				def := s.items[999001]
 				def.Equip = nativePresentationEquip(int32(entry.Slots[0]))

@@ -93,7 +93,7 @@ func Build(ch *domain.Character, defs map[domain.ItemID]domain.ItemDef) ([]domai
 	if err := ValidateTarget(ch); err != nil {
 		return nil, err
 	}
-	if err := validateCatalog(); err != nil {
+	if err := validateCatalog(domain.EndgameCatalogOf(defs)); err != nil {
 		return nil, err
 	}
 	var plan target
@@ -103,9 +103,9 @@ func Build(ch *domain.Character, defs map[domain.ItemID]domain.ItemDef) ([]domai
 			break
 		}
 	}
-	canonicalRunes := map[domain.ItemID]domain.ItemDef{}
-	for _, d := range domain.AstralRuneItems(0) {
-		canonicalRunes[d.ID] = d
+	canonicalRunes := map[domain.ItemID]domain.CardInstanceState{}
+	for _, r := range domain.AstralRunes(domain.EndgameCatalogOf(defs)) {
+		canonicalRunes[r.Item], _ = defs[r.Item].CardDefaults, true
 	}
 	out := make([]domain.Stack, 0, 9)
 	seen := map[int64]bool{}
@@ -147,12 +147,12 @@ func Build(ch *domain.Character, defs map[domain.ItemID]domain.ItemDef) ([]domai
 				return nil, fmt.Errorf("showcase: unique construction failed for %d", id)
 			}
 
-			unique, ok := domain.UniqueOf(st)
+			unique, ok := domain.UniqueOf(st,domain.EndgameCatalogOf(defs))
 			if !ok || unique.Slot != def.Equip.Slot || unique.Professions != need.Professions || unique.BeginnerAllowed != need.BeginnerAllowed || unique.Sex != need.Sex || unique.LevelRequirement != def.Equip.LevelReq || (unique.Professions != 0 && unique.Professions&(1<<uint8(ch.Race)) == 0) {
 				return nil, fmt.Errorf("showcase: unique %d catalog/base metadata mismatch", id)
 			}
 		} else {
-			recipe, ok := domain.AstralRecipeByID(item.Recipe)
+			recipe, ok := domain.AstralRecipeByID(item.Recipe,domain.EndgameCatalogOf(defs))
 			if !ok || !reflect.DeepEqual(recipe.Runes, item.Runes) || recipe.MinLevel > ch.Level || (recipe.Professions != 0 && recipe.Professions&(1<<uint8(ch.Race)) == 0) || !domain.AstralBaseEligible(def, st) || domain.EquipmentSocketCapacity(def, st) < len(item.Runes) {
 				return nil, fmt.Errorf("showcase: formation %d/base %d is not eligible", item.Recipe, id)
 			}
@@ -160,7 +160,7 @@ func Build(ch *domain.Character, defs map[domain.ItemID]domain.ItemDef) ([]domai
 			st.SocketCount = uint8(len(item.Runes))
 			for i, runeID := range item.Runes {
 				rd, ok := defs[runeID]
-				if !ok || rd.ID != runeID || rd.InstanceKind != domain.ItemInstanceSocketCard || rd.Equip != nil || rd.Level > ch.Level || rd.UseLevel > ch.Level || rd.CardDefaults != canonicalRunes[runeID].CardDefaults || !reflect.DeepEqual(rd.SocketAffixes, canonicalRunes[runeID].SocketAffixes) {
+				if !ok || rd.ID != runeID || rd.InstanceKind != domain.ItemInstanceSocketCard || rd.Equip != nil || rd.Level > ch.Level || rd.UseLevel > ch.Level || rd.CardDefaults != canonicalRunes[runeID] || !reflect.DeepEqual(rd.SocketAffixes, canonicalRunes[runeID].StaticAffixes()) {
 					return nil, fmt.Errorf("showcase: missing/invalid rune definition %d", runeID)
 				}
 				rune := domain.NewStack(rd, 1)
@@ -193,8 +193,8 @@ func Build(ch *domain.Character, defs map[domain.ItemID]domain.ItemDef) ([]domai
 	return out, nil
 }
 
-func validateCatalog() error {
-	if domain.UniqueCatalogVersion != "endgame-v6-scope259" || domain.UniqueContentVersion != 6 || len(domain.UniqueCatalog()) != 259 || len(domain.AstralRecipes()) != 40 || len(domain.AstralRunes()) != 28 {
+func validateCatalog(c *domain.EndgameCatalog) error {
+	if domain.UniqueCatalogVersion != "endgame-v6-scope259" || domain.UniqueContentVersion != 6 || len(domain.UniqueCatalog(c)) != 259 || len(domain.AstralRecipes(c)) != 40 || len(domain.AstralRunes(c)) != 28 {
 		return fmt.Errorf("showcase: catalog version or coverage changed")
 	}
 	return nil
@@ -204,7 +204,7 @@ func validateCatalog() error {
 // variants, relevant loaded item definitions, and the compiled effect catalogs.
 // It is deterministic and never allocates item instances.
 func PlanDigest(defs map[domain.ItemID]domain.ItemDef) (string, error) {
-	if err := validateCatalog(); err != nil {
+	if err := validateCatalog(domain.EndgameCatalogOf(defs)); err != nil {
 		return "", err
 	}
 	ids := map[domain.ItemID]bool{}
@@ -238,7 +238,7 @@ func PlanDigest(defs map[domain.ItemID]domain.ItemDef) (string, error) {
 		Uniques     any
 		Recipes     any
 		Runes       any
-	}{targets, relevant, domain.UniqueCatalog(), domain.AstralRecipes(), domain.AstralRunes()})
+	}{targets, relevant, domain.UniqueCatalog(domain.EndgameCatalogOf(defs)), domain.AstralRecipes(domain.EndgameCatalogOf(defs)), domain.AstralRunes(domain.EndgameCatalogOf(defs))})
 	if err != nil {
 		return "", fmt.Errorf("showcase: digest: %w", err)
 	}

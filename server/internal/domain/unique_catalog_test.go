@@ -6,11 +6,11 @@ import (
 )
 
 func uniqueFixture(d UniqueDefinition) ItemDef {
-	return ItemDef{ID: d.BaseID, Name: d.BaseName, InstanceKind: ItemInstanceEquipment, Equip: &EquipDef{Slot: d.Slot, LevelReq: d.LevelRequirement, ResourceLevel: d.ResourceLevel, Durable: 100,
+	return ItemDef{EndgameCatalog: testEndgameCatalog(), ID: d.BaseID, Name: d.BaseName, InstanceKind: ItemInstanceEquipment, Equip: &EquipDef{NativeDropEligible: d.NativeDropEligible, Slot: d.Slot, LevelReq: d.LevelRequirement, ResourceLevel: d.ResourceLevel, Durable: 100,
 		Need: Requirement{Professions: d.Professions, BeginnerAllowed: d.BeginnerAllowed, ProfessionRestricted: !d.Unrestricted, Sex: d.Sex}}}
 }
 func TestUniqueCatalogCompleteDistinctAndValid(t *testing.T) {
-	all := UniqueCatalog()
+	all := UniqueCatalog(testEndgameCatalog())
 	if len(all) != UniqueCatalogCount {
 		t.Fatal(len(all))
 	}
@@ -28,7 +28,7 @@ func TestUniqueCatalogCompleteDistinctAndValid(t *testing.T) {
 		if d.LegacyAffixPoolReady {
 			ready++
 		}
-		if d.Slot < 1 || d.Slot > 25 || validateUniqueDefinition(d) != nil {
+		if d.Slot < 1 || d.Slot > 25 || validateUniqueDefinition(d, testEndgameCatalog()) != nil {
 			t.Fatal(d.ID)
 		}
 		for _, tr := range d.Traits {
@@ -44,20 +44,20 @@ func TestUniqueCatalogCompleteDistinctAndValid(t *testing.T) {
 	if native != 259 || ready != 259 {
 		t.Fatalf("native=%d ready=%d traits=%d", native, ready, len(traits))
 	}
-	if err := ValidateUniqueCatalog(defs); err != nil {
+	if err := ValidateUniqueCatalog(defs, testEndgameCatalog()); err != nil {
 		t.Fatal(err)
 	}
 	delete(defs, all[0].BaseID)
-	if ValidateUniqueCatalog(defs) == nil {
+	if ValidateUniqueCatalog(defs, testEndgameCatalog()) == nil {
 		t.Fatal("accepted coverage drift")
 	}
 	all[0].Affixes[0].Value = -999
-	if again, _ := UniqueForBase(all[0].BaseID); again.Affixes[0].Value < 0 {
+	if again, _ := UniqueForBase(all[0].BaseID, testEndgameCatalog()); again.Affixes[0].Value < 0 {
 		t.Fatal("catalogue escaped mutable slice")
 	}
 }
 func TestUniqueApplicationPreservesAllLegacyState(t *testing.T) {
-	d := UniqueCatalog()[0]
+	d := UniqueCatalog(testEndgameCatalog())[0]
 	def := uniqueFixture(d)
 	st := Stack{UID: 77, Item: d.BaseID, Count: 1, InstanceKind: ItemInstanceEquipment, Durability: 70, MaxDurability: 100, DurabilityWearRaw: 12,
 		RefineLevel: 3, RolledAffixCount: 2, RolledAffixes: [5]InstanceAffix{{Affix: Affix{Attr: AttrAtk, Value: 37, Mode: ModePercent}}, {Affix: Affix{Attr: AttrMaxAtk, Value: 57, Mode: ModeAbsolute}}}, SocketCount: 1, Sockets: [5]ItemID{123}, SocketUIDs: [5]int64{987}, Bound: true, Locked: true, FusedSoul: 5, WashCount: 1}
@@ -75,7 +75,7 @@ func TestUniqueApplicationPreservesAllLegacyState(t *testing.T) {
 		t.Fatal("awakened twice")
 	}
 	st.Endgame.UniqueRollBP = 7999
-	if _, ok := UniqueOf(st); ok {
+	if _, ok := UniqueOf(st, testEndgameCatalog()); ok {
 		t.Fatal("accepted malformed potency")
 	}
 	st = before
@@ -84,7 +84,7 @@ func TestUniqueApplicationPreservesAllLegacyState(t *testing.T) {
 	}
 }
 func TestUniqueStatsAndAllExtendedSlots(t *testing.T) {
-	d := UniqueCatalog()[0]
+	d := UniqueCatalog(testEndgameCatalog())[0]
 	def := uniqueFixture(d)
 	defs := func(id ItemID) (ItemDef, bool) { return def, id == def.ID }
 	st := Stack{UID: 77, Item: def.ID, Count: 1, MaxDurability: 100, Durability: 100}
@@ -114,7 +114,7 @@ func TestUniqueStatsAndAllExtendedSlots(t *testing.T) {
 	}
 }
 func TestUniqueDropsRespectNativeMembership(t *testing.T) {
-	for _, d := range UniqueCatalog() {
+	for _, d := range UniqueCatalog(testEndgameCatalog()) {
 		def := uniqueFixture(d)
 		st := Stack{UID: 77, Item: d.BaseID, Count: 1}
 		got := RollUniqueDrop(&st, def, func(int) int { return 0 })

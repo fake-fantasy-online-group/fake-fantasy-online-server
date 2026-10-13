@@ -1,4 +1,7 @@
 package store
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"context"
@@ -12,7 +15,7 @@ import (
 
 func endgameFixture(t *testing.T) (*Memory, domain.Snapshot) {
 	t.Helper()
-	m := NewMemory()
+	m := NewMemory(catalogfixture.EndgameCatalog())
 	ctx := context.Background()
 	a, err := m.CreateAccount(ctx, "endgame", "hash")
 	if err != nil {

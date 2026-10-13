@@ -19,19 +19,10 @@ type SkillIdentity struct {
 	Prerequisites []SkillID
 }
 
-func V5SkillIdentity(id SkillID) (SkillIdentity, bool) {
-	d, ok := v5SkillIdentities[id]
-	d.Prerequisites = append([]SkillID(nil), d.Prerequisites...)
-	return d, ok
+func V5SkillIdentity(id SkillID, c *SkillProgressionCatalog) (SkillIdentity, bool) {
+	return c.Identity(id)
 }
-func V5SkillIDs() []SkillID {
-	ids := make([]SkillID, 0, len(v5SkillIdentities))
-	for id := range v5SkillIdentities {
-		ids = append(ids, id)
-	}
-	sort.Slice(ids, func(i, j int) bool { return ids[i] < ids[j] })
-	return ids
-}
+func V5SkillIDs(c *SkillProgressionCatalog) []SkillID { return c.IDs() }
 
 type SkillRankBonus struct {
 	SourceID   string  `json:"sourceId,omitempty"`
@@ -87,7 +78,10 @@ type SkillRankView struct {
 }
 type SkillResolutionSnapshot map[SkillID]SkillRankView
 
-func ValidateSkillRankBonuses(bonuses []SkillRankBonus) error {
+func ValidateSkillRankBonuses(bonuses []SkillRankBonus, c *SkillProgressionCatalog) error {
+	if c == nil {
+		return fmt.Errorf("skill progression catalog missing")
+	}
 	for _, b := range bonuses {
 		if b.Levels <= 0 {
 			return fmt.Errorf("skill bonus must be positive: %+v", b)
@@ -110,7 +104,7 @@ func ValidateSkillRankBonuses(bonuses []SkillRankBonus) error {
 				return fmt.Errorf("invalid school skill bonus")
 			}
 		case "single":
-			if _, ok := v5SkillIdentities[b.SkillID]; !ok || b.Profession != 0 || b.Branch != "" || b.School != "" {
+			if _, ok := c.Identity(b.SkillID); !ok || b.Profession != 0 || b.Branch != "" || b.School != "" {
 				return fmt.Errorf("invalid single skill bonus %d", b.SkillID)
 			}
 		default:
@@ -149,11 +143,11 @@ func (b SkillRankBonus) Matches(d SkillIdentity, profession int32) bool {
 
 // ResolveSkillLoadout stores integral decimal ranks without a gameplay ceiling.
 // Narrow engine representations are checked explicitly by EngineRank, never capped.
-func ResolveSkillLoadout(profession int32, hard Learned, bonuses []SkillRankBonus, grants []SkillGrant) (SkillResolutionSnapshot, error) {
+func ResolveSkillLoadout(profession int32, hard Learned, bonuses []SkillRankBonus, grants []SkillGrant, c *SkillProgressionCatalog) (SkillResolutionSnapshot, error) {
 	if profession < 1 || profession > 5 {
 		return nil, fmt.Errorf("invalid profession %d", profession)
 	}
-	if err := ValidateSkillRankBonuses(bonuses); err != nil {
+	if err := ValidateSkillRankBonuses(bonuses, c); err != nil {
 		return nil, err
 	}
 	unique := make([]SkillRankBonus, 0, len(bonuses))
@@ -193,8 +187,8 @@ func ResolveSkillLoadout(profession int32, hard Learned, bonuses []SkillRankBonu
 		softAllowed[g.SkillID] = softAllowed[g.SkillID] || g.BenefitsFromSkillRanks
 	}
 	out := SkillResolutionSnapshot{}
-	for _, id := range V5SkillIDs() {
-		d := v5SkillIdentities[id]
+	for _, id := range V5SkillIDs(c) {
+		d, _ := c.Identity(id)
 		if d.Profession != profession {
 			if hard[id] > 0 {
 				return nil, fmt.Errorf("cross-profession hard rank %d", id)
@@ -249,21 +243,24 @@ func SkillPointBudget(level int32) int32 {
 	}
 	return level - 1
 }
-func SkillHardRankLimit(level int32, id SkillID) int32 {
-	d, ok := v5SkillIdentities[id]
+func SkillHardRankLimit(level int32, id SkillID, c *SkillProgressionCatalog) int32 {
+	d, ok := c.Identity(id)
 	if !ok || level < d.UnlockLevel {
 		return 0
 	}
 	return min(SkillHardPointCap, level-d.UnlockLevel+1)
 }
-func ValidateSkillAllocation(level, profession int32, hard Learned, unspent int32) error {
+func ValidateSkillAllocation(level, profession int32, hard Learned, unspent int32, c *SkillProgressionCatalog) error {
+	if c == nil {
+		return fmt.Errorf("skill progression catalog missing")
+	}
 	var spent int64
 	for id, h := range hard {
-		d, ok := v5SkillIdentities[id]
+		d, ok := c.Identity(id)
 		if !ok {
 			continue
 		}
-		if h < 0 || h > SkillHardRankLimit(level, id) || d.Profession != profession {
+		if h < 0 || h > SkillHardRankLimit(level, id, c) || d.Profession != profession {
 			return fmt.Errorf("invalid allocation %d/%d", id, h)
 		}
 		if h > 0 {
@@ -293,12 +290,15 @@ type SkillSynergy struct {
 	PerPointBP       int32
 }
 
-func ValidateSkillSynergies(edges []SkillSynergy) error {
+func ValidateSkillSynergies(edges []SkillSynergy, c *SkillProgressionCatalog) error {
+	if c == nil {
+		return fmt.Errorf("skill progression catalog missing")
+	}
 	sources := map[SkillID]map[SkillID]bool{}
 	exact := map[SkillSynergy]bool{}
 	for _, e := range edges {
-		t, tok := v5SkillIdentities[e.Target]
-		s, sok := v5SkillIdentities[e.Source]
+		t, tok := c.Identity(e.Target)
+		s, sok := c.Identity(e.Source)
 		if !tok || !sok || t.Profession != s.Profession || e.Target == e.Source {
 			return fmt.Errorf("invalid synergy %d -> %d", e.Source, e.Target)
 		}
@@ -314,11 +314,22 @@ func ValidateSkillSynergies(edges []SkillSynergy) error {
 			if e.PerPointBP <= 0 || e.PerPointBP > 10000 || (e.Effect == "heal_flat" && e.PerPointBP%100 != 0) {
 				return fmt.Errorf("invalid training coefficient: %+v", e)
 			}
+		} else {
+			switch e.Effect {
+			case "skill_damage_pct", "slow", "knockback", "preserve_stealth", "durability_economy", "vulnerability", "damage_mp_conversion", "stun", "restore_hp_conversion", "restore_mp_conversion", "stealth_duration_speed_damage", "burn", "freeze", "magic_defense_reduction", "physical_vulnerability":
+			default:
+				return fmt.Errorf("unsupported native synergy effect %q", e.Effect)
+			}
+			if e.PerPointBP != 0 {
+				return fmt.Errorf("native synergy must use original skill payload: %+v", e)
+			}
 		}
-		if exact[e] {
+		key := e
+		key.PerPointBP = 0
+		if exact[key] {
 			return fmt.Errorf("duplicate synergy edge")
 		}
-		exact[e] = true
+		exact[key] = true
 		if sources[e.Target] == nil {
 			sources[e.Target] = map[SkillID]bool{}
 		}
@@ -332,25 +343,31 @@ func ValidateSkillSynergies(edges []SkillSynergy) error {
 
 // InstallV5SkillProgression verifies the entire class catalogue before activation.
 // The original five rows stay immutable anchors; Get computes the requested rank.
-func InstallV5SkillProgression(t SkillTable) error {
-	if err := ValidateSkillSynergies(V5SkillSynergies); err != nil {
+func InstallV5SkillProgression(t SkillTable, c *SkillProgressionCatalog) error {
+	if c == nil {
+		return fmt.Errorf("skill progression catalog missing")
+	}
+	if err := ValidateSkillSynergies(c.Synergies(), c); err != nil {
 		return err
 	}
-	for _, id := range V5SkillIDs() {
+	for _, id := range V5SkillIDs(c) {
 		for rank := int32(1); rank <= OriginalSkillRankCap; rank++ {
 			if _, ok := t[SkillKey{ID: id, Level: rank}]; !ok {
 				return fmt.Errorf("v5 missing skill anchor %d/%d", id, rank)
 			}
 		}
 	}
-	for _, id := range V5SkillIDs() {
+	for _, id := range V5SkillIDs(c) {
 		for _, rank := range []int32{1, 5, 6, 20, 21, 65536} {
-			if _, err := EvaluateV5Skill(t[SkillKey{ID: id, Level: 1}], t[SkillKey{ID: id, Level: 5}], rank); err != nil {
+			first, fifth := t[SkillKey{ID: id, Level: 1}], t[SkillKey{ID: id, Level: 5}]
+			first.Progression, fifth.Progression = c, c
+			if _, err := EvaluateV5Skill(first, fifth, rank); err != nil {
 				return fmt.Errorf("v5 anchor preflight: %w", err)
 			}
 		}
 	}
-	for _, id := range V5SkillIDs() {
+	AttachSkillProgression(t, c)
+	for _, id := range V5SkillIDs(c) {
 		k := SkillKey{ID: id, Level: 1}
 		d := t[k]
 		d.FormulaVersion = SkillFormulaVersion

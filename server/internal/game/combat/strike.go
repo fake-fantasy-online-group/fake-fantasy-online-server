@@ -19,6 +19,8 @@ type Blow struct {
 	SkillPctNumerator, SkillPctDenominator int64
 	// PayloadScaleBP is used only by approved equipment proc payloads.
 	PayloadScaleBP int32
+	// PayloadScaleKnown distinguishes a deliberately zero coefficient from unset.
+	PayloadScaleKnown bool
 
 	// Cast-local context survives stealth consumption and trap delays.
 	StartedInvisible bool

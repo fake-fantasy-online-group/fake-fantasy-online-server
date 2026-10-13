@@ -41,7 +41,7 @@ func TestTrialKeyInvalidRoster(t *testing.T) {
 	}
 }
 func testRift(t *testing.T) *RiftRun {
-	r, e := NewRiftRun("run", 1, 1, []TrialKeyMember{{1, 60, 0}}, 1000)
+	r, e := NewRiftRun("run", 1, 1, []TrialKeyMember{{1, 60, 0}}, 1000, riftRulesFixture())
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -98,7 +98,7 @@ func TestRiftTimeoutAndPenalty(t *testing.T) {
 	}
 }
 func TestRiftLoadingLeaveNoRefund(t *testing.T) {
-	r, e := NewRiftRun("run", 1, 1, []TrialKeyMember{{1, 60, 0}}, 1000)
+	r, e := NewRiftRun("run", 1, 1, []TrialKeyMember{{1, 60, 0}}, 1000, riftRulesFixture())
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -124,14 +124,14 @@ func TestRiftCloneAndPersistence(t *testing.T) {
 	}
 }
 func TestRiftRewardAndStatBounds(t *testing.T) {
-	p := PlanRiftRewards(50, true)
+	p := PlanRiftRewards(50, true, riftRulesFixture())
 	if p.Dust != 19 || p.Equipment != 2 || p.Rune != 2 || p.UniqueChance != 60 {
 		t.Fatal(p)
 	}
-	if RiftScaledStat(100, 1, 5, 2, true) != 2720 {
+	if RiftScaledStat(100, 1, 5, 2, true, riftRulesFixture()) != 2720 {
 		t.Fatal("elite party HP")
 	}
-	if RiftScaledStat(2147483647, 50, 5, 3, true) != 2147483647 {
+	if RiftScaledStat(2147483647, 50, 5, 3, true, riftRulesFixture()) != 2147483647 {
 		t.Fatal("overflow")
 	}
 }
@@ -139,13 +139,13 @@ func TestRiftRewardAndStatBounds(t *testing.T) {
 func TestRiftDifficultyTierAdmissionBounds(t *testing.T) {
 	roster := []TrialKeyMember{{1, 60, 0}}
 	for tier := int32(1); tier <= 150; tier++ {
-		r, err := NewRiftRun("run", tier, 1, roster, 1000)
+		r, err := NewRiftRun("run", tier, 1, roster, 1000, riftRulesFixture())
 		if err != nil || r == nil || r.Tier != tier {
 			t.Fatalf("tier %d: run=%+v err=%v", tier, r, err)
 		}
 	}
 	for _, tier := range []int32{math.MinInt32, -1, 0, 151, math.MaxInt32} {
-		if r, err := NewRiftRun("run", tier, 1, roster, 1000); err == nil || r != nil {
+		if r, err := NewRiftRun("run", tier, 1, roster, 1000, riftRulesFixture()); err == nil || r != nil {
 			t.Fatalf("invalid difficulty tier %d admitted: %+v", tier, r)
 		}
 	}
@@ -158,7 +158,7 @@ func TestRiftScaledStatAllDifficultyTiers(t *testing.T) {
 				for _, base := range []int32{1, 100, 10000, math.MaxInt32} {
 					last := int32(0)
 					for tier := int32(1); tier <= 150; tier++ {
-						got := RiftScaledStat(base, tier, party, class, hp)
+						got := RiftScaledStat(base, tier, party, class, hp, riftRulesFixture())
 						if got < base || got < last {
 							t.Fatalf("tier=%d party=%d class=%d hp=%v base=%d: got=%d previous=%d", tier, party, class, hp, base, got, last)
 						}
@@ -168,14 +168,14 @@ func TestRiftScaledStatAllDifficultyTiers(t *testing.T) {
 			}
 		}
 	}
-	if got := RiftScaledStat(10000, 150, 5, 3, true); got != math.MaxInt32 {
+	if got := RiftScaledStat(10000, 150, 5, 3, true, riftRulesFixture()); got != math.MaxInt32 {
 		t.Fatalf("guardian HP must saturate: %d", got)
 	}
 	want := int32(math.Ceil(100 * math.Pow(1.04, 149)))
-	if got := RiftScaledStat(100, 150, 1, 0, false); got != want {
+	if got := RiftScaledStat(100, 150, 1, 0, false, riftRulesFixture()); got != want {
 		t.Fatalf("tier 150 attack=%d want=%d", got, want)
 	}
-	if RiftScaledStat(100, 150, 1, 0, false) <= RiftScaledStat(100, 50, 1, 0, false) {
+	if RiftScaledStat(100, 150, 1, 0, false, riftRulesFixture()) <= RiftScaledStat(100, 50, 1, 0, false, riftRulesFixture()) {
 		t.Fatal("difficulty above tier 50 stopped scaling")
 	}
 }
@@ -193,14 +193,14 @@ func TestRiftScaledStatClampsInvalidInputs(t *testing.T) {
 			{151, 150, 6, 5, 4, 3},
 			{math.MaxInt32, 150, maxInt, 5, math.MaxInt32, 3},
 		} {
-			got := RiftScaledStat(100, tc.tier, tc.party, tc.class, hp)
-			want := RiftScaledStat(100, tc.wantTier, tc.wantParty, tc.wantClass, hp)
+			got := RiftScaledStat(100, tc.tier, tc.party, tc.class, hp, riftRulesFixture())
+			want := RiftScaledStat(100, tc.wantTier, tc.wantParty, tc.wantClass, hp, riftRulesFixture())
 			if got != want {
 				t.Fatalf("%+v hp=%v: got=%d want=%d", tc, hp, got, want)
 			}
 		}
 		for _, base := range []int32{math.MinInt32, -1, 0} {
-			if got := RiftScaledStat(base, 150, 5, 3, hp); got != 0 {
+			if got := RiftScaledStat(base, 150, 5, 3, hp, riftRulesFixture()); got != 0 {
 				t.Fatalf("nonpositive base %d: %d", base, got)
 			}
 		}
@@ -210,7 +210,7 @@ func TestRiftScaledStatClampsInvalidInputs(t *testing.T) {
 func TestRiftRewardsDifficultyTierBounds(t *testing.T) {
 	for tier := int32(1); tier <= 150; tier++ {
 		for _, timely := range []bool{false, true} {
-			got := PlanRiftRewards(tier, timely)
+			got := PlanRiftRewards(tier, timely, riftRulesFixture())
 			wantDust := 6 + (tier-1)/5
 			if timely {
 				wantDust += 4
@@ -222,7 +222,7 @@ func TestRiftRewardsDifficultyTierBounds(t *testing.T) {
 	}
 	for _, timely := range []bool{false, true} {
 		for _, tc := range []struct{ tier, wantTier int32 }{{math.MinInt32, 1}, {0, 1}, {151, 150}, {math.MaxInt32, 150}} {
-			if got, want := PlanRiftRewards(tc.tier, timely), PlanRiftRewards(tc.wantTier, timely); got != want {
+			if got, want := PlanRiftRewards(tc.tier, timely, riftRulesFixture()), PlanRiftRewards(tc.wantTier, timely, riftRulesFixture()); got != want {
 				t.Fatalf("tier %d timely=%v: got=%+v want=%+v", tc.tier, timely, got, want)
 			}
 		}

@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"encoding/json"
 	"fmt"
@@ -109,7 +111,7 @@ func TestV5OriginalPassiveScopeThroughRuntime(t *testing.T) {
 				join(t, s, 1, 100, "被动范围", 100, 100)
 				p := s.players[1]
 				p.Player.Char.Race = domain.Race(original.Prof - 1)
-				for _, id := range domain.V5SkillIDs() {
+				for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
 					base, ok := skills.Get(id, 5)
 					if !ok || base.Prof != original.Prof || !base.Kind.Active() {
 						continue

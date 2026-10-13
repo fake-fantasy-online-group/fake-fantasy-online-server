@@ -1,5 +1,7 @@
 package main
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"context"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -28,7 +30,7 @@ func TestV5ActualWorldStartup(t *testing.T) {
 	if w.levels == nil || w.levels.MaxLevel() != 100 {
 		t.Fatal("missing 100-level progression")
 	}
-	for _, id := range domain.V5SkillIDs() {
+	for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
 		if d, ok := w.skills.Get(id, 21); !ok || d.FormulaVersion != 5 {
 			t.Fatalf("skill %d missing", id)
 		}

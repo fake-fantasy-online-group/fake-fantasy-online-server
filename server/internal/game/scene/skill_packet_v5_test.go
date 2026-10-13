@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"bytes"
 	"encoding/json"
@@ -35,7 +37,7 @@ func v5PacketActualSkills(t *testing.T) (domain.SkillTable, domain.StatusTable) 
 	for _, d := range original {
 		skills[domain.SkillKey{ID: d.ID, Level: d.Level}] = d
 	}
-	if err := domain.InstallV5SkillProgression(skills); err != nil {
+	if err := domain.InstallV5SkillProgression(skills, catalogfixture.SkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
 	var defs []domain.StatusDef
@@ -73,7 +75,7 @@ func v5PacketActualEquipment(t *testing.T) map[domain.ItemID]domain.ItemDef {
 		for _, race := range r.Professions {
 			mask |= 1 << race
 		}
-		d := domain.ItemDef{ID: r.ID, Name: r.Name, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: r.Slot, LevelReq: r.Level, ResourceLevel: r.Tier, Type: r.Type, Durable: 100, Affixes: append([]domain.Affix(nil), r.Fixed...), UnknownInnateProperties: r.Unknown,
+		d := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: r.ID, Name: r.Name, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: r.Slot, LevelReq: r.Level, ResourceLevel: r.Tier, Type: r.Type, Durable: 100, Affixes: append([]domain.Affix(nil), r.Fixed...), UnknownInnateProperties: r.Unknown,
 			Base: domain.Base{STR: i["str"], VIT: i["vit"], INT: i["int_"], SPI: i["spi"], AGI: i["agi"], DEX: i["dex"]}, Bonus: domain.Stats{MinAtk: i["min_atk"], MaxAtk: i["max_atk"], MAtk: i["matk"], Def: i["def"], MDef: i["mdef"], Hit: i["hit_rate"]},
 			Need: domain.Requirement{Level: r.Level, Sex: r.Sex, Professions: mask, BeginnerAllowed: r.Beginner, ProfessionRestricted: r.Restricted, Base: domain.Base{STR: req["str_need"], VIT: req["vit_need"], INT: req["int_need"], SPI: req["spi_need"], AGI: req["agi_need"], DEX: req["dex_need"]}},
 		}}
@@ -82,7 +84,7 @@ func v5PacketActualEquipment(t *testing.T) map[domain.ItemID]domain.ItemDef {
 		}
 		out[d.ID] = d
 	}
-	for _, d := range domain.AstralRuneItems(7) {
+	for _, d := range astralRuneItemsFixture(7) {
 		out[d.ID] = d
 	}
 	return out
@@ -99,8 +101,8 @@ func v5PacketGearCandidates(t *testing.T, s *Scene, p *entity.Entity) [][]v5Pack
 	ch := p.Player.Char
 	useful := func(bonuses []domain.SkillRankBonus) bool {
 		for _, b := range bonuses {
-			for _, id := range domain.V5SkillIDs() {
-				identity, _ := domain.V5SkillIdentity(id)
+			for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
+				identity, _ := domain.V5SkillIdentity(id, catalogfixture.SkillProgressionCatalog())
 				if b.Matches(identity, int32(ch.Race)+1) {
 					return true
 				}
@@ -120,7 +122,7 @@ func v5PacketGearCandidates(t *testing.T, s *Scene, p *entity.Entity) [][]v5Pack
 		}
 		groups[group] = append(groups[group], v5PacketGear{slot, st, label})
 	}
-	for _, u := range domain.UniqueCatalog() {
+	for _, u := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
 		if !useful(u.SkillBonuses) {
 			continue
 		}
@@ -140,7 +142,7 @@ func v5PacketGearCandidates(t *testing.T, s *Scene, p *entity.Entity) [][]v5Pack
 		ids = append(ids, id)
 	}
 	sort.Slice(ids, func(i, j int) bool { return ids[i] < ids[j] })
-	for _, r := range domain.AstralRecipes() {
+	for _, r := range domain.AstralRecipes(catalogfixture.EndgameCatalog()) {
 		if !useful(r.SkillBonuses) || r.Professions != 0 && r.Professions&(1<<ch.Race) == 0 {
 			continue
 		}
@@ -200,8 +202,8 @@ func TestV5SkillRanksPacketAllFiveClassesActualLegalGear(t *testing.T) {
 	for race := domain.Warrior; race <= domain.Warlock; race++ {
 		t.Run(fmt.Sprintf("class%d", race+1), func(t *testing.T) {
 			classIDs := []domain.SkillID{}
-			for _, id := range domain.V5SkillIDs() {
-				d, _ := domain.V5SkillIdentity(id)
+			for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
+				d, _ := domain.V5SkillIdentity(id, catalogfixture.SkillProgressionCatalog())
 				if d.Profession == int32(race)+1 {
 					classIDs = append(classIDs, id)
 				}
@@ -272,7 +274,7 @@ func TestV5SkillRanksPacketAllFiveClassesActualLegalGear(t *testing.T) {
 						ch.Skills = domain.Learned{}
 						ch.SkillPoints = 99
 					}
-					if err := domain.ValidateSkillAllocation(100, int32(race)+1, ch.Skills, ch.SkillPoints); err != nil {
+					if err := domain.ValidateSkillAllocation(100, int32(race)+1, ch.Skills, ch.SkillPoints, catalogfixture.SkillProgressionCatalog()); err != nil {
 						t.Fatalf("illegal test hard allocation: %v", err)
 					}
 					var enumerate func(int, []v5PacketGear)

@@ -1,4 +1,7 @@
 package main
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"encoding/binary"
@@ -34,7 +37,7 @@ func TestRegisterEndgameEquipmentIconsCoverEveryBaseAndPreserveSpecial(t *testin
 		}
 		got[pair.Item] = pair.Icon
 	}
-	for _, baseID := range domain.UniqueAppearanceBaseIDs() {
+	for _, baseID := range domain.UniqueAppearanceBaseIDs(catalogfixture.EndgameCatalog()) {
 		want := w.items[baseID].Icon
 		if baseID == special.Item {
 			want = special.Icon
@@ -51,7 +54,7 @@ func TestRegisterEndgameEquipmentIconsCoverEveryBaseAndPreserveSpecial(t *testin
 	// Execute the native encoder, not only a count assertion. Full loaded-world
 	// special/pet mappings are also counted by the migration-source audit.
 	packets := protocol.Encode(1, event.ItemIconMap{Who: 1, Pairs: w.itemIcons})
-	if len(packets) != 1 || len(packets[0]) != 4+8*(len(domain.UniqueAppearanceBaseIDs())+32) {
+	if len(packets) != 1 || len(packets[0]) != 4+8*(len(domain.UniqueAppearanceBaseIDs(catalogfixture.EndgameCatalog()))+32) {
 		t.Fatalf("invalid equipment icon packet: %d packets", len(packets))
 	}
 	if binary.LittleEndian.Uint16(packets[0]) != protocol.SCItemIconMap || int(binary.LittleEndian.Uint16(packets[0][2:])) != len(got) {

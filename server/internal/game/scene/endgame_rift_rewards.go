@@ -21,7 +21,7 @@ type endgameRiftIdentity struct {
 func (s *Scene) generateEndgameRiftGrants() {
 	d := &s.rift.data
 	r := d.Run
-	plan := domain.PlanRiftRewards(r.Tier, r.Timely)
+	plan := domain.PlanRiftRewards(r.Tier, r.Timely, r.Rules)
 	chars := make([]domain.CharID, 0, len(r.Members))
 	for char := range r.Members {
 		chars = append(chars, char)
@@ -62,7 +62,7 @@ func (s *Scene) generateEndgameRiftGrants() {
 			}
 			// A guaranteed unique slot has its own wearer-legal259-base pool.
 			// All other slots retain the complete ordinary native pool above.
-			if unique, ok := domain.UniqueForBase(id); ok && unique.NativeDropEligible && def.Equip.LevelReq <= 60 {
+			if unique, ok := domain.UniqueForBase(id, s.endgameCatalog); ok && unique.NativeDropEligible && def.Equip.LevelReq <= 60 {
 				if def.Equip.LevelReq > bestUnique {
 					bestUnique = def.Equip.LevelReq
 					guaranteedUniques = nil
@@ -83,7 +83,7 @@ func (s *Scene) generateEndgameRiftGrants() {
 		sort.Slice(guaranteedUniques, func(i, j int) bool { return guaranteedUniques[i] < guaranteedUniques[j] })
 		for i := int32(0); i < plan.Equipment && len(equipment) > 0; i++ {
 			candidates := equipment
-			if r.Tier >= 10 && i == 0 && len(guaranteedUniques) > 0 {
+			if r.Tier >= r.Rules.GuaranteedUniqueTier && i == 0 && len(guaranteedUniques) > 0 {
 				candidates = guaranteedUniques
 			}
 			// With no eligible unique, preserve this one ordinary reward slot;
@@ -91,29 +91,29 @@ func (s *Scene) generateEndgameRiftGrants() {
 			def := s.items[candidates[rng.Intn(len(candidates))]]
 			stack := domain.NewStack(def, 1)
 			stack.Bound = true
-			stack.SocketCount = domain.RollDroppedSocketCount(def, domain.AstralDropRealm, rng.Int63n)
+			stack.SocketCount = domain.RollDroppedSocketCount(def, domain.AstralDropRealm, rng.Int63n, r.Rules.Loot)
 			affixes := s.equipmentRoll.RollWithReservedSockets(def, domain.DefaultColorProfile, stack.SocketCount, rng.Int63n)
 			stack.RolledAffixCount = uint8(len(affixes))
 			copy(stack.RolledAffixes[:], affixes)
-			if (r.Tier >= 10 && i == 0) || rng.Intn(100) < int(plan.UniqueChance) {
+			if (r.Tier >= r.Rules.GuaranteedUniqueTier && i == 0) || rng.Intn(100) < int(plan.UniqueChance) {
 				domain.ApplyUnique(&stack, def, rng.Intn)
 			}
 			grant.Items = append(grant.Items, stack)
 		}
 		for i := int32(0); i < plan.Rune; i++ {
-			id := domain.ItemID(1900028001 + rng.Intn(28))
+			id := r.Rules.Loot.RunePool[rng.Intn(len(r.Rules.Loot.RunePool))]
 			if def, ok := s.itemDef(id); ok {
 				stack := domain.NewStack(def, 1)
 				stack.Bound = true
 				grant.Items = append(grant.Items, stack)
 			}
 		}
-		if def, ok := s.itemDef(1900028202); ok {
+		if def, ok := s.itemDef(r.Rules.DustItem); ok {
 			stack := domain.NewStack(def, plan.Dust)
 			stack.Bound = true
 			grant.Items = append(grant.Items, stack)
 		}
-		grant.Exp = domain.RiftBossExperience(s.trial.BaseExperience(m.Level, s.levels), r.Tier)
+		grant.Exp = domain.RiftBossExperience(s.trial.BaseExperience(m.Level, s.levels), r.Tier, r.Rules)
 		if d.Version >= 2 {
 			grant.ProgressionVersion = domain.ProgressionVersion
 			grant.RewardVersion = domain.TrialRewardVersion

@@ -70,13 +70,13 @@ func TestElementAbsorptionV5SingleCommit(t *testing.T) {
 	}
 }
 func TestEquipmentV5DefinitionValidation(t *testing.T) {
-	for _, d := range UniqueCatalog() {
-		if err := ValidateEquipmentEffects(d.TypedEffects); err != nil {
+	for _, d := range UniqueCatalog(testEndgameCatalog()) {
+		if err := ValidateEquipmentEffects(d.TypedEffects, testEndgameCatalog()); err != nil {
 			t.Fatal(d.ID, err)
 		}
 	}
 	for _, e := range []EquipmentEffect{{Kind: "element_damage_bp", Element: "lightning", Value: 5}, {Kind: "element_absorb_bp", Element: "fire", Value: -1}, {Kind: "proc", Proc: &EquipmentProc{ID: "bad"}}, {Kind: "unknown"}} {
-		if ValidateEquipmentEffects([]EquipmentEffect{e}) == nil {
+		if ValidateEquipmentEffects([]EquipmentEffect{e}, testEndgameCatalog()) == nil {
 			t.Fatal(e)
 		}
 	}

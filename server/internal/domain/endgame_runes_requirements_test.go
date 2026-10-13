@@ -7,7 +7,7 @@ import (
 
 func TestAstralEveryRuneRequiredLevelAndAtomicInsert(t *testing.T) {
 	defs, lookup := astralFixture()
-	runes := AstralRunes()
+	runes := AstralRunes(testEndgameCatalog())
 	if runes[0].MinLevel != 12 || runes[27].MinLevel != 60 {
 		t.Fatal("progression endpoints")
 	}
@@ -45,7 +45,7 @@ func TestAstralEveryRuneRequiredLevelAndAtomicInsert(t *testing.T) {
 
 func TestAstralFormationMaxRuneInsertGateAndExtractionRecovery(t *testing.T) {
 	defs, lookup := astralFixture()
-	recipe, _ := AstralRecipeByID(6) // Ingredient levels 12/14; there is no independent formation tier.
+	recipe, _ := AstralRecipeByID(6, testEndgameCatalog()) // Ingredient levels 12/14; there is no independent formation tier.
 	target := NewStack(defs[999001], 1)
 	target.SocketCount = 2
 	bag := NewBag(4)
@@ -102,7 +102,7 @@ func TestAstralCubeCannotBypassLevelOnPreviewOrExecute(t *testing.T) {
 
 func TestAstralEveryFormationIngredientAndLevelBoundaries(t *testing.T) {
 	defs, lookup := astralFixture()
-	for _, r := range AstralRecipes() {
+	for _, r := range AstralRecipes(testEndgameCatalog()) {
 		def := defs[999001]
 		eq := *def.Equip
 		eq.Slot = int32(r.Slots[0])
@@ -110,7 +110,7 @@ func TestAstralEveryFormationIngredientAndLevelBoundaries(t *testing.T) {
 		defs[def.ID] = def
 		maxRune := int32(0)
 		for _, id := range r.Runes {
-			rune, _ := AstralRune(id)
+			rune, _ := AstralRune(id, testEndgameCatalog())
 			if rune.MinLevel > maxRune {
 				maxRune = rune.MinLevel
 			}

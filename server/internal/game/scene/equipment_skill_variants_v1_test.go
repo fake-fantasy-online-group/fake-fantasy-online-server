@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"encoding/json"
@@ -23,7 +26,7 @@ func cacheVariant(t *testing.T, s *Scene, p *entity.Entity, id string) {
 }
 func TestEquipmentSkillVariantsAllRanksSnapshotAndOriginal(t *testing.T) {
 	for _, id := range []string{"sword_gale_fan", "warrior_piercing_lance", "assassin_bomb_fuse", "healer_guarded_mend", "warlock_flash_fire"} {
-		v, _ := domain.EquipmentSkillVariantByID(id)
+		v, _ := catalogfixture.EndgameCatalog().Variant(id)
 		for _, rank := range []int32{1, 5, 20, 21, 60, 100} {
 			t.Run(fmt.Sprintf("%s/rank%d", id, rank), func(t *testing.T) {
 				s, p := behaviorAcceptancePlayer(t, v.Profession)
@@ -69,7 +72,7 @@ func TestEquipmentSkillVariantsAllRanksSnapshotAndOriginal(t *testing.T) {
 }
 func TestEquipmentSkillVariantsGeometryAndBudget(t *testing.T) {
 	for _, id := range []string{"sword_gale_fan", "warrior_piercing_lance"} {
-		v, _ := domain.EquipmentSkillVariantByID(id)
+		v, _ := catalogfixture.EndgameCatalog().Variant(id)
 		s, p := behaviorAcceptancePlayer(t, v.Profession)
 		cacheVariant(t, s, p, id)
 		p.Player.Char.Skills[v.SkillID] = 1
@@ -219,7 +222,7 @@ func TestEquipmentSkillVariantsFlashFirePaidSixtySeconds(t *testing.T) {
 func TestEquipmentSkillVariantsRealCatalogWearBreakRemove(t *testing.T) {
 	for _, itemID := range []int32{1009, 1610, 1908, 2056, 1306} {
 		var item domain.UniqueDefinition
-		for _, d := range domain.UniqueCatalog() {
+		for _, d := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
 			if d.ID == itemID {
 				item = d
 				break
@@ -228,7 +231,7 @@ func TestEquipmentSkillVariantsRealCatalogWearBreakRemove(t *testing.T) {
 		var v domain.EquipmentSkillVariant
 		for _, e := range item.TypedEffects {
 			if e.Kind == "skill_variant" {
-				v, _ = domain.EquipmentSkillVariantByID(e.VariantID)
+				v, _ = catalogfixture.EndgameCatalog().Variant(e.VariantID)
 			}
 		}
 		if v.ID == "" {
@@ -264,7 +267,7 @@ func TestEquipmentSkillVariantsRealCatalogWearBreakRemove(t *testing.T) {
 func TestEquipmentSkillVariantsWireFixtures(t *testing.T) {
 	out := os.Getenv("SKILL_VARIANTS_FIXTURE_DIR")
 	for _, id := range []string{"sword_gale_fan", "warrior_piercing_lance", "assassin_bomb_fuse", "healer_guarded_mend", "warlock_flash_fire"} {
-		v, _ := domain.EquipmentSkillVariantByID(id)
+		v, _ := catalogfixture.EndgameCatalog().Variant(id)
 		s, p := behaviorAcceptancePlayer(t, v.Profession)
 		p.Player.Char.Skills[v.SkillID] = 5
 		cacheVariant(t, s, p, id)
@@ -296,7 +299,7 @@ func TestEquipmentSkillVariantsWireFixtures(t *testing.T) {
 
 func TestEquipmentSkillVariantsAcceptedCastAndUnequipFlight(t *testing.T) {
 	for _, id := range []string{"sword_gale_fan", "warrior_piercing_lance"} {
-		v, _ := domain.EquipmentSkillVariantByID(id)
+		v, _ := catalogfixture.EndgameCatalog().Variant(id)
 		s, p := behaviorAcceptancePlayer(t, v.Profession)
 		cacheVariant(t, s, p, id)
 		p.Player.Char.Skills[v.SkillID] = 5
@@ -330,5 +333,46 @@ func TestEquipmentSkillVariantsFirstPointPreview(t *testing.T) {
 	r := rows[10102]
 	if r.Contract.Current != nil || r.Contract.Next == nil || r.Contract.Next.Variant == nil || p.Player.Char.Skills[10102] != 0 {
 		t.Fatal("first investment preview mismatch", r)
+	}
+}
+
+func TestEquipmentVariantBehaviorUsesConfiguredIdentityAndParameters(t *testing.T) {
+	s, p := behaviorAcceptancePlayer(t, 5)
+	input := catalogfixture.EndgameCatalogData()
+	const renamed = "same_behavior_different_content_identity"
+	for i := range input.Variants {
+		if input.Variants[i].ID == "warlock_flash_fire" {
+			input.Variants[i].ID = renamed
+			input.Variants[i].Params.MinCooldownMS = 2300
+		}
+	}
+	for i := range input.Uniques {
+		for j := range input.Uniques[i].Definition.TypedEffects {
+			effect := &input.Uniques[i].Definition.TypedEffects[j]
+			if effect.VariantID == "warlock_flash_fire" {
+				effect.VariantID = renamed
+			}
+		}
+	}
+	catalog, err := domain.NewEndgameCatalog(input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s.endgameCatalog = catalog
+	domain.AttachEndgameCatalog(s.items, catalog)
+	cacheVariant(t, s, p, renamed)
+	p.Player.Char.Skills[10401] = 1
+	def, _ := s.skills.Get(10401, 1)
+	before := def
+	s.applyEquipmentSkillVariant(p, &def, p.Player.Char.Skills)
+	if def.EquipmentVariant == nil || def.EquipmentVariant.ID != renamed || def.PrepareMS != 0 || def.CooldownMS != max(before.CooldownMS, int32(2300)) || def.MPCost != before.MPCost {
+		t.Fatal("behavior depended on preset ID or hardcoded cooldown", def)
+	}
+	raw, err := json.Marshal(def.EquipmentVariant)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(raw), "Behavior") || strings.Contains(string(raw), "Params") || strings.Contains(string(raw), "instant_cast") {
+		t.Fatal("server behavior config leaked into strict client DTO", string(raw))
 	}
 }

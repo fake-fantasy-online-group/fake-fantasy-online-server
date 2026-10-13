@@ -1,4 +1,7 @@
 package showcase
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"encoding/json"
@@ -35,7 +38,7 @@ func cardBudgetDefinition(r cardBudgetSource) domain.ItemDef {
 	for _, class := range r.Professions {
 		mask |= 1 << class
 	}
-	def := domain.ItemDef{ID: r.BaseID, Name: r.Name, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{
+	def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: r.BaseID, Name: r.Name, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{
 		Slot: r.Slot, LevelReq: r.Level, ResourceLevel: r.Tier, Type: r.Type,
 		Durable: 100, Affixes: append([]domain.Affix(nil), r.Fixed...), UnknownInnateProperties: r.Unknown,
 		Base:  domain.Base{STR: i["str"], VIT: i["vit"], INT: i["int_"], SPI: i["spi"], AGI: i["agi"], DEX: i["dex"]},
@@ -66,7 +69,7 @@ func fixtureDefs(t *testing.T) map[domain.ItemID]domain.ItemDef {
 	for _, row := range source.Bases {
 		defs[row.BaseID] = cardBudgetDefinition(row)
 	}
-	for _, d := range domain.AstralRuneItems(0) {
+	for _, d := range astralRuneItemsFixture(0) {
 		defs[d.ID] = d
 	}
 	return defs

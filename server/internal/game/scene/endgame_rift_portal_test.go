@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"reflect"
@@ -207,7 +210,7 @@ func TestRiftPublicExitContextFollowsAuthoritativeTeleport(t *testing.T) {
 	// SAME map: map identity cannot be used to infer ownership in either direction.
 	delete(s.dungeons, s.id.MapID) // This case models reused wilderness, not the fixture dungeon.
 	publicID := domain.SceneID{MapID: s.id.MapID}
-	public := New(Config{ID: publicID, Now: s.now, Alloc: s.alloc, Defs: s.defs, Items: s.items, EndgameBackend: s.endgameBackend})
+	public := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: publicID, Now: s.now, Alloc: s.alloc, Defs: s.defs, Items: s.items, EndgameBackend: s.endgameBackend})
 	public.router = s.router
 	s.router.scenes[publicID] = public
 	s.rift.data.Run.Members[100].Departed = true

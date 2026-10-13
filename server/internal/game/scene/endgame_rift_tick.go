@@ -9,7 +9,9 @@ func (s *Scene) stepEndgameRift() {
 	s.stepEndgameTrial()
 	if s.rift == nil {
 		if d, ok := s.router.riftAdmission(s.id); ok {
-			s.initEndgameRift(d)
+			if !s.initEndgameRift(d) {
+				return
+			}
 		} else {
 			return
 		}
@@ -116,7 +118,7 @@ func (s *Scene) stepEndgameRift() {
 					latest = m.LastSeenMS
 				}
 			}
-			if now-latest > domain.RiftReconnectMS {
+			if now-latest > x.data.Run.Rules.ReconnectMS {
 				r.Phase = domain.RiftAborted
 				r.Reason = "abandoned"
 				r.Revision++
@@ -178,7 +180,7 @@ func (s *Scene) pollEndgameRiftReload(now int64) {
 	select {
 	case result := <-x.reload:
 		x.reload = nil
-		d, valid := decodeEndgameRift(result.Run)
+		d, valid := decodeEndgameRift(result.Run, s.riftRules)
 		if result.Err != nil || !valid {
 			x.reloadAt = now + 1000
 			return

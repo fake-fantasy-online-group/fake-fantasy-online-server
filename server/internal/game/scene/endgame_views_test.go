@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"encoding/json"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -89,11 +91,11 @@ func TestEndgameSnapshotEmptyAndChunkEnvelope(t *testing.T) {
 
 func TestEndgameItemRequirementsUseNativeCharacterGate(t *testing.T) {
 	s := newTestScene(t, nil)
-	u := domain.UniqueCatalog()[0]
+	u := domain.UniqueCatalog(catalogfixture.EndgameCatalog())[0]
 	s.items = map[domain.ItemID]domain.ItemDef{
 		123: {ID: 123, Name: "双法系装备", Equip: &domain.EquipDef{ResourceLevel: 99, LevelReq: 60,
 			Need: domain.Requirement{Level: 45, Professions: 24, ProfessionRestricted: true}}},
-		u.BaseID: {ID: u.BaseID, Name: u.BaseName, Equip: &domain.EquipDef{ResourceLevel: u.ResourceLevel, LevelReq: u.LevelRequirement,
+		u.BaseID: {EndgameCatalog: catalogfixture.EndgameCatalog(), ID: u.BaseID, Name: u.BaseName, Equip: &domain.EquipDef{ResourceLevel: u.ResourceLevel, LevelReq: u.LevelRequirement,
 			Need: domain.Requirement{Level: u.LevelRequirement, Professions: u.Professions, ProfessionRestricted: !u.Unrestricted}}},
 		124: {ID: 124, Name: "材料"},
 		125: {ID: 125, Name: "初行者装备", Equip: &domain.EquipDef{Need: domain.Requirement{
@@ -150,7 +152,7 @@ func TestEndgameUniqueCatalogEveryPageBoundedAndComplete(t *testing.T) {
 				t.Fatal("duplicate")
 			}
 			seen[x.UniqueID] = true
-			u, ok := domain.UniqueForBase(domain.ItemID(x.ItemID))
+			u, ok := domain.UniqueForBase(domain.ItemID(x.ItemID), catalogfixture.EndgameCatalog())
 			if !ok || x.UniqueID != u.ID || x.Name != u.Name || x.Level != u.LevelRequirement ||
 				x.Profession != int32(u.Professions) || x.UniqueRollBP != 10000 {
 				t.Fatalf("catalog identity/requirement/reference mapping differs for %d: %+v", x.ItemID, x)

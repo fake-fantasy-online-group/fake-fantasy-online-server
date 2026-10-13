@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -12,14 +15,14 @@ import (
 
 func wearEquipmentV5(t *testing.T, s *Scene, p *entity.Entity, id domain.ItemID, uid int64) domain.Stack {
 	t.Helper()
-	d, ok := domain.UniqueForBase(id)
+	d, ok := domain.UniqueForBase(id, catalogfixture.EndgameCatalog())
 	if !ok {
 		t.Fatal(id)
 	}
 	if s.items == nil {
 		s.items = map[domain.ItemID]domain.ItemDef{}
 	}
-	def := domain.ItemDef{ID: id, Name: d.BaseName, InstanceKind: domain.ItemInstanceEquipment, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: d.Slot, Durable: 100}}
+	def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Name: d.BaseName, InstanceKind: domain.ItemInstanceEquipment, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: d.Slot, Durable: 100}}
 	s.items[id] = def
 	st := domain.Stack{UID: uid, Item: id, Count: 1, InstanceKind: domain.ItemInstanceEquipment, Durability: 100, MaxDurability: 100}
 	if !domain.ApplyUnique(&st, def, func(int) int { return 2000 }) {

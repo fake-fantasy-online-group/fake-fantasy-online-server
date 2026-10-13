@@ -60,7 +60,7 @@ func TestV6UniqueSameBaseStaticBudgetRuntime(t *testing.T) {
 	var report []result
 	for _, item := range items {
 		r := bases[item.BaseID]
-		d, ok := UniqueForBase(item.BaseID)
+		d, ok := UniqueForBase(item.BaseID, testEndgameCatalog())
 		if !ok || d.Name != item.UniqueName || d.PowerTier != item.Tier || !r.Native || r.Level > 60 {
 			t.Fatalf("V5 identity/scope mismatch %d", item.BaseID)
 		}
@@ -125,11 +125,11 @@ func TestV5CatalogVersionPreservesAllOldInstances(t *testing.T) {
 	for _, old := range legacyUniqueDefinitions {
 		st := Stack{UID: int64(old.BaseID), Item: old.BaseID, Count: 1, Endgame: EndgameItemState{UniqueID: old.ID, UniqueRollBP: 10000}}
 		before := st
-		got, ok := UniqueOf(st)
+		got, ok := UniqueOf(st, testEndgameCatalog())
 		if !ok || !reflect.DeepEqual(got, cloneUnique(old)) || st != before {
 			t.Fatalf("legacy instance altered %d", old.BaseID)
 		}
-		if _, allowed := UniqueForBase(old.BaseID); !allowed {
+		if _, allowed := UniqueForBase(old.BaseID, testEndgameCatalog()); !allowed {
 			excluded++
 			plain := st
 			plain.Endgame = EndgameItemState{}
@@ -138,7 +138,7 @@ func TestV5CatalogVersionPreservesAllOldInstances(t *testing.T) {
 				t.Fatalf("outside scope generated %d", old.BaseID)
 			}
 			st.Endgame.UniqueContentVersion = UniqueContentVersion
-			if _, ok := UniqueOf(st); ok {
+			if _, ok := UniqueOf(st, testEndgameCatalog()); ok {
 				t.Fatal("V5 accepted excluded base", old.BaseID)
 			}
 		}
@@ -146,7 +146,7 @@ func TestV5CatalogVersionPreservesAllOldInstances(t *testing.T) {
 	if excluded != 1360 {
 		t.Fatal(excluded)
 	}
-	for _, d := range UniqueCatalog() {
+	for _, d := range UniqueCatalog(testEndgameCatalog()) {
 		st := Stack{UID: int64(d.BaseID), Item: d.BaseID, Count: 1}
 		if !ApplyUnique(&st, uniqueFixture(d), func(int) int { return 0 }) || st.Endgame.UniqueContentVersion != UniqueContentVersion {
 			t.Fatal(fmt.Sprintf("new V5 instance %d", d.BaseID))
@@ -376,7 +376,7 @@ func TestV5AdvancedCatalogExactCountsAndDetachedCopies(t *testing.T) {
 func TestV5NarrowingDoesNotRemoveOrdinaryOrLegacySalvage(t *testing.T) {
 	var old UniqueDefinition
 	for _, candidate := range legacyUniqueDefinitions {
-		if _, ok := UniqueForBase(candidate.BaseID); !ok {
+		if _, ok := UniqueForBase(candidate.BaseID, testEndgameCatalog()); !ok {
 			old = candidate
 			break
 		}
@@ -411,7 +411,7 @@ func TestV5NarrowingDoesNotRemoveOrdinaryOrLegacySalvage(t *testing.T) {
 
 func TestV5CompletionUpgradesOldBlankAndPartialWithoutReroll(t *testing.T) {
 	defs, lookup := astralFixture()
-	r, _ := AstralRecipeByID(11)
+	r, _ := AstralRecipeByID(11, testEndgameCatalog())
 	def := defs[999001]
 	eq := *def.Equip
 	eq.Slot = int32(r.Slots[0])
@@ -515,7 +515,7 @@ func TestV5OrdinaryTypeDropPoolRetainsOriginalScope(t *testing.T) {
 			t.Fatal("ordinary source classification changed", old.BaseID)
 		}
 		if old.NativeDropEligible {
-			if _, ok := UniqueForBase(old.BaseID); !ok {
+			if _, ok := UniqueForBase(old.BaseID, testEndgameCatalog()); !ok {
 				outside++
 			}
 		}

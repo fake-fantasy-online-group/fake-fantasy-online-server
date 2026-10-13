@@ -870,7 +870,7 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 		       COALESCE(ao.avatar,d.avatar,''), COALESCE(d.category,-1), COALESCE(d.type,0),
 		       COALESCE(d.atk_dist,0), COALESCE(d.atk_type,0),
 		       COALESCE(d.desc_,''), COALESCE(d.small_map,0),
-		       COALESCE(a.position_,0), COALESCE(a.level,0), COALESCE(a.no_type_drop,1),
+		       COALESCE(a.position_,0), COALESCE(a.level,0), COALESCE(a.no_type_drop,1), COALESCE(a.query_type,0),
 		       COALESCE(a.refine_limit,0), COALESCE(a.enchase_limit,0),
 		       COALESCE(a.binding_skill,0), COALESCE(a.can_mail,0), COALESCE(a.can_deal,0), COALESCE(bs.skill_id,0),
 		       COALESCE(bs.name,''), COALESCE(bs.desc_,'')
@@ -898,27 +898,27 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 	defer erows.Close()
 	for erows.Next() {
 		var (
-			d                                                domain.ItemDef
-			e                                                domain.EquipDef
-			atkMin, atkMax, def, matk, mdef, hit             int32
-			str, vit, wis, spi, agi, dex                     int32
-			nLv, nStr, nVit, nInt, nSpi                      int64
-			nAgi, nDex, sex                                  int64
-			newbie, warrior, swordman, stabber               int64
-			druggist, magician                               int64
-			srWarrior, srSwordman, srStabber                 int64
-			srDruggist, srMagician                           int64
-			maxWeight                                        int32
-			avatar                                           string
-			avatarCategory, avatarType                       int32
-			avatarAtkDist, avatarAtkType                     int32
-			position, resourceLevel, noTypeDrop              int32
-			refineLimit, socketLimit                         int32
-			bindingSkill, canMail, canTrade, reciprocalSkill int64
-			bindingSkillName, bindingSkillDesc               string
-			sellEnabled                                      int32
-			canRepair, canSpecialRepair                      int64
-			disappearIfZero, noLimitDurability               int64
+			d                                                    domain.ItemDef
+			e                                                    domain.EquipDef
+			atkMin, atkMax, def, matk, mdef, hit                 int32
+			str, vit, wis, spi, agi, dex                         int32
+			nLv, nStr, nVit, nInt, nSpi                          int64
+			nAgi, nDex, sex                                      int64
+			newbie, warrior, swordman, stabber                   int64
+			druggist, magician                                   int64
+			srWarrior, srSwordman, srStabber                     int64
+			srDruggist, srMagician                               int64
+			maxWeight                                            int32
+			avatar                                               string
+			avatarCategory, avatarType                           int32
+			avatarAtkDist, avatarAtkType                         int32
+			position, resourceLevel, noTypeDrop, nativeQueryType int32
+			refineLimit, socketLimit                             int32
+			bindingSkill, canMail, canTrade, reciprocalSkill     int64
+			bindingSkillName, bindingSkillDesc                   string
+			sellEnabled                                          int32
+			canRepair, canSpecialRepair                          int64
+			disappearIfZero, noLimitDurability                   int64
 		)
 		if err := erows.Scan(&d.ID, &d.Name, &d.Price, &sellEnabled,
 			&e.LevelReq, &e.Slot, &d.Weight, &e.Durable, &e.AttackDurabilityCostRaw,
@@ -931,7 +931,7 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 			&newbie, &warrior, &swordman, &stabber, &druggist, &magician,
 			&srWarrior, &srSwordman, &srStabber, &srDruggist, &srMagician,
 			&avatar, &avatarCategory, &avatarType, &avatarAtkDist, &avatarAtkType,
-			&d.Description, &d.Icon, &position, &resourceLevel, &noTypeDrop,
+			&d.Description, &d.Icon, &position, &resourceLevel, &noTypeDrop, &nativeQueryType,
 			&refineLimit, &socketLimit,
 			&bindingSkill, &canMail, &canTrade, &reciprocalSkill,
 			&bindingSkillName, &bindingSkillDesc); err != nil {
@@ -987,6 +987,7 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 		// 是单字节level，不能再将“99 + 套装号*256”当成配方等级。
 		e.Position, e.Tier = position, resourceLevel
 		e.ResourceLevel, e.NoTypeDrop = resourceLevel, noTypeDrop != 0
+		e.NativeDropEligible = !e.NoTypeDrop && resourceLevel >= 0 && (equipmentDropKind(nativeQueryType) != "" || position == 114 || position == 116)
 		e.RefineLimit, e.SocketLimit = refineLimit, socketLimit
 		e.Appearance = parseEquipAppearance(d.ID, e.Slot, avatar, avatarCategory,
 			avatarType, avatarAtkDist, avatarAtkType)
@@ -1001,6 +1002,9 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 		return nil, err
 	}
 	if err := loadSocketAffixes(ctx, q, out); err != nil {
+		return nil, err
+	}
+	if err := domain.ValidateEndgameItemDefinitions(out); err != nil {
 		return nil, err
 	}
 	if err := loadEquipmentSuits(ctx, q, out); err != nil {
@@ -3436,9 +3440,6 @@ func mpCost(raw int64, control int32) int32 {
 // 缺概率（神威术）、必须覆盖状态时长（燃烧/时之封印）或仅名称相同的技能
 // 不在这里猜，等各自参数闭合后再加入。
 func skillStatusApplications(id domain.SkillID, level int32) []domain.StatusApplication {
-	if restored := restoredNativeSkillApplications(id, level); restored != nil {
-		return restored
-	}
 	status := func(id domain.StatusID, level int32) []domain.StatusApplication {
 		return []domain.StatusApplication{{ID: id, Level: level}}
 	}
@@ -3821,11 +3822,12 @@ func LoadSkills(ctx context.Context, q Querier) (domain.SkillTable, SkillStats, 
 			}
 		}
 	}
-	if err := domain.InstallV5SkillProgression(out); err != nil {
-		return nil, st, fmt.Errorf("data: v5 skills: %w", err)
+	skillCatalog, err := LoadSkillProgressionCatalog(ctx, q, out)
+	if err != nil {
+		return nil, st, err
 	}
-	if err := domain.ValidateEquipmentRuntimeV5(out); err != nil {
-		return nil, st, fmt.Errorf("data: v5 equipment skill payload: %w", err)
+	if err := domain.InstallV5SkillProgression(out, skillCatalog); err != nil {
+		return nil, st, fmt.Errorf("data: v5 skills: %w", err)
 	}
 	return out, st, nil
 }
@@ -4038,9 +4040,6 @@ func LoadStatuses(ctx context.Context, q Querier) (domain.StatusTable, StatusSta
 	if err := loadCustomStatuses(ctx, q, out); err != nil {
 		return nil, st, err
 	}
-	if err := installRestoredNativeStatuses(out); err != nil {
-		return nil, st, err
-	}
 
 	seen := map[domain.StatusID]bool{}
 	for k := range out {
@@ -4058,7 +4057,8 @@ func loadCustomStatuses(ctx context.Context, q Querier, out domain.StatusTable) 
 		       duration_sec, interval_sec, hp_change_value, hp_change_mode,
 		       physical_damage_reduction_pct, magic_damage_reduction_pct,
 		       physical_damage_taken_pct, magic_damage_taken_pct,
-		       damage_shield, attack_cap, prevent_invisible
+		       damage_shield, attack_cap, prevent_invisible, replace_native, block_move, immobile,
+               attack_speed_is_frequency, icon, icon_known, hidden
 		  FROM game_custom_statuses
 		 ORDER BY status_id, status_level`)
 	if err != nil {
@@ -4067,17 +4067,18 @@ func loadCustomStatuses(ctx context.Context, q Querier, out domain.StatusTable) 
 	defer rows.Close()
 	for rows.Next() {
 		var (
-			d          domain.StatusDef
-			statusType int16
-			hpValue    int32
-			hpMode     int32
-			attackCap  *int32
+			d             domain.StatusDef
+			statusType    int16
+			hpValue       int32
+			hpMode        int32
+			attackCap     *int32
+			replaceNative bool
 		)
 		if err := rows.Scan(&d.ID, &d.Level, &d.Name, &d.Desc, &statusType,
 			&d.DurationSec, &d.IntervalSec, &hpValue, &hpMode,
 			&d.PhysicalDamageReductionPct, &d.MagicDamageReductionPct,
 			&d.PhysicalDamageTakenPct, &d.MagicDamageTakenPct,
-			&d.DamageShield, &attackCap, &d.PreventInvisible); err != nil {
+			&d.DamageShield, &attackCap, &d.PreventInvisible, &replaceNative, &d.BlockMove, &d.Immobile, &d.AttackSpeedIsFrequency, &d.Icon, &d.IconKnown, &d.Hidden); err != nil {
 			return fmt.Errorf("data: 读自定义状态: %w", err)
 		}
 		if statusType < int16(domain.StatusGood) || statusType > int16(domain.StatusGoodNew) {
@@ -4091,7 +4092,7 @@ func loadCustomStatuses(ctx context.Context, q Querier, out domain.StatusTable) 
 			d.AttackCapKnown, d.AttackCap = true, *attackCap
 		}
 		key := domain.StatusKey{ID: d.ID, Level: d.Level}
-		if _, exists := out[key]; exists {
+		if _, exists := out[key]; exists != replaceNative {
 			return fmt.Errorf("data: 自定义状态 %d/%d 与已有状态定义冲突", d.ID, d.Level)
 		}
 		out[key] = d
@@ -4318,7 +4319,6 @@ func completeKnownStatusSemantics(d *domain.StatusDef) {
 			d.MagicDamageReductionPct = v
 		}
 	}
-	completeRestoredNativeStatus(d)
 }
 
 func mirrorStatusAffix(d *domain.StatusDef, from, to int32) {

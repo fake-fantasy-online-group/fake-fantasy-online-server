@@ -8,11 +8,11 @@ import (
 )
 
 func TestAstralEveryFormationCraftingUsesMaxRuneLevel(t *testing.T) {
-	for _, recipe := range AstralRecipes() {
+	for _, recipe := range AstralRecipes(testEndgameCatalog()) {
 		t.Run(fmt.Sprintf("recipe%d", recipe.ID), func(t *testing.T) {
 			maxRune := int32(0)
 			for _, id := range recipe.Runes {
-				rune, _ := AstralRune(id)
+				rune, _ := AstralRune(id, testEndgameCatalog())
 				maxRune = max(maxRune, rune.MinLevel)
 			}
 			for _, op := range []int32{CubeInscribeArray, CubeReorderRunes} {

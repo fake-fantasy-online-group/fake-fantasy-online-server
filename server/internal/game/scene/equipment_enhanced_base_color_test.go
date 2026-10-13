@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"encoding/json"
@@ -157,17 +160,17 @@ func TestEquipmentEnhancedBaseTooltipCatalogAndEntrances(t *testing.T) {
 		e := nativePresentationEquip(slot)
 		e.Affixes = []domain.Affix{{Attr: domain.AttrAtk, Value: 50, Mode: domain.ModePercent}, {Attr: domain.AttrDef, Value: 11}}
 		e.RefineEffects = map[int32]domain.RefineEffect{1: {Bonuses: []domain.Affix{{Attr: domain.AttrMinAtk, Value: 40}, {Attr: domain.AttrMaxAtk, Value: 60}, {Attr: domain.AttrDef, Value: 30}}}}
-		return domain.ItemDef{ID: id, Name: "颜色回归底材", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: e, Weight: 5}
+		return domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Name: "颜色回归底材", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: e, Weight: 5}
 	}
 	for _, version := range []int32{0, 5, domain.UniqueContentVersion} {
-		for _, entry := range domain.UniqueCatalog() {
+		for _, entry := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
 			def := makeDef(entry.BaseID, entry.Slot)
 			for _, roll := range []int32{8000, 10000, 12000} {
 				st := domain.NewStack(def, 1)
 				st.UID, st.RefineLevel, st.RolledAffixCount = 42, 1, 1
 				st.RolledAffixes[0].Affix = domain.Affix{Attr: domain.AttrMAtk, Value: 70, Mode: domain.ModePercent}
 				st.Endgame = domain.EndgameItemState{UniqueID: int32(st.Item), UniqueRollBP: roll, UniqueContentVersion: version}
-				u, ok := domain.UniqueOf(st)
+				u, ok := domain.UniqueOf(st, catalogfixture.EndgameCatalog())
 				if !ok {
 					continue
 				} // A new base need not exist in the frozen old catalog.
@@ -188,7 +191,7 @@ func TestEquipmentEnhancedBaseTooltipCatalogAndEntrances(t *testing.T) {
 				}
 			}
 		}
-		for _, entry := range domain.AstralRecipes() {
+		for _, entry := range domain.AstralRecipes(catalogfixture.EndgameCatalog()) {
 			def := makeDef(999001, int32(entry.Slots[0]))
 			def.Equip.Affixes = nil // Formations require a naturally plain base.
 			st := domain.NewStack(def, 1)

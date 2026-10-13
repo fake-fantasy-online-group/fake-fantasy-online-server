@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"errors"
 	"reflect"
@@ -76,7 +78,7 @@ func seededRiftFloorFixture(t *testing.T, members ...domain.TrialKeyMember) (*Sc
 	if len(members) == 0 {
 		members = []domain.TrialKeyMember{{CharID: 100, Level: 60}}
 	}
-	r, err := domain.NewRiftRun("seeded-floor-lifecycle", 7, 100, members, *now)
+	r, err := domain.NewRiftRun("seeded-floor-lifecycle", 7, 100, members, *now, riftRulesFixture())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -123,7 +125,7 @@ func prepareRiftFloorTarget(t *testing.T, s *Scene) *Scene {
 		t.Fatal(err)
 	}
 	id := domain.SceneID{MapID: plan.MapID, Instance: s.router.nextInst.Load() + 1}
-	target := New(Config{ID: id, Now: s.now, Alloc: s.alloc, Trial: s.trial, Dungeons: s.dungeons, Defs: s.defs, Items: s.items, EndgameBackend: s.endgameBackend, RiftLayouts: s.riftLayouts, Walkable: s.walkable})
+	target := New(Config{LootRules: s.lootRules, RiftRules: s.riftRules, EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Now: s.now, Alloc: s.alloc, Trial: s.trial, Dungeons: s.dungeons, Defs: s.defs, Items: s.items, EndgameBackend: s.endgameBackend, RiftLayouts: s.riftLayouts, Walkable: s.walkable})
 	target.router = s.router
 	s.router.scenes[id] = target
 	return target

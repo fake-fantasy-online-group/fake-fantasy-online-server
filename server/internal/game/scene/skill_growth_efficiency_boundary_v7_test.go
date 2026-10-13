@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"fmt"
 	"testing"
@@ -18,7 +20,7 @@ func TestSixGrowthEfficiencyCapsPreserveActualCostAndCooldown(t *testing.T) {
 			t.Run(fmt.Sprintf("%d/zero=%t", tc.id, zero), func(t *testing.T) {
 				var previousCost, previousCooldown int32
 				for _, rank := range []int32{tc.cap, tc.cap + 1, tc.cap + 2} {
-					identity, _ := domain.V5SkillIdentity(tc.id)
+					identity, _ := domain.V5SkillIdentity(tc.id, catalogfixture.SkillProgressionCatalog())
 					s, p := behaviorAcceptancePlayer(t, identity.Profession)
 					join(t, s, 2, 200, "效率边界目标", 110, 100)
 					target := s.players[2]

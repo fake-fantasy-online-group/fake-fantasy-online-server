@@ -365,7 +365,7 @@ func (s *Scene) passiveStatAffixesIncludingGrowth(p *entity.Entity, resolution *
 		// Active cleansing skills also confer a constant growth bonus. Soft ranks
 		// may improve learned skills, but cannot activate an unlearned one.
 		if growth && ch.Skills.LevelOf(skill) > 0 && s.skills.V5Enabled(skill) {
-			if attr, value := domain.SkillGrowthAttribute(skill, level); value > 0 {
+			if attr, value := domain.SkillGrowthAttribute(skill, level, def.Progression); value > 0 {
 				out = append(out, domain.Affix{Attr: attr, Value: value, Mode: domain.ModeAbsolute})
 			}
 		}

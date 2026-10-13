@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -47,7 +50,7 @@ func workScene(t *testing.T) (*Scene, *fakeSink) {
 	sp, _ := spawn.New(
 		[]domain.SpawnPoint{{ID: 1, Monster: 技能怪.ID, Pos: domain.Pos{MapID: 7, X: 140, Y: 100}}},
 		defs, domain.NewEntityAlloc())
-	s := New(Config{
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(),
 		ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000, Seed: 42,
 		Works:   workTable(打扫卫生, 贩卖物品, 必给钱的活, 八成给钱的活),
 		Stamina: domain.StaminaRule{Max: 100, RefillDaily: true, CostPerMin: 1},
@@ -362,7 +365,7 @@ func TestWorkMarksDirty(t *testing.T) {
 
 // 没配打工表的场景不该崩。
 func TestNoWorkTableIsSafe(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000})
 	join(t, s, 1, 100, "甲", 100, 100)
 	s.step()
 	s.exec(StartWork{ID: 1, Work: 0})
@@ -375,9 +378,9 @@ func TestNoWorkTableIsSafe(t *testing.T) {
 // 真值取自 game_work_items：钓鱼第 10 档（practise 8100~10000）十条鱼，
 // 概率正好加满 1000。杂务管理合计 1910，是另一种掷法。
 var (
-	小鱼 = domain.ItemDef{ID: 4401, Name: "小鱼", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
-	草鱼 = domain.ItemDef{ID: 4402, Name: "草鱼", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
-	鲶鱼 = domain.ItemDef{ID: 4403, Name: "鲶鱼", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
+	小鱼 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 4401, Name: "小鱼", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
+	草鱼 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 4402, Name: "草鱼", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
+	鲶鱼 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 4403, Name: "鲶鱼", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
 
 	// 钓鱼: 权重单选, 三条加满 1000
 	钓鱼 = domain.WorkDef{ID: 10, Title: "钓鱼中的", LevelMin: 12, LevelMax: 150,
@@ -399,7 +402,7 @@ var (
 func fishScene(t *testing.T) (*Scene, *fakeSink) {
 	t.Helper()
 	defs := spawn.MapDefs{}
-	s := New(Config{
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(),
 		ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000, Seed: 42,
 		Works:   workTable(钓鱼, 杂务),
 		Stamina: domain.StaminaRule{Max: 100, RefillDaily: true, CostPerMin: 1},
@@ -485,7 +488,7 @@ func TestWorkStopsWhenBagIsFull(t *testing.T) {
 	p.Player.Char.Level = 30
 	// 把背包塞满: 一格的包, 里面放一件不可叠的东西, 鱼就再也放不进去
 	p.Player.Bag = domain.NewBag(1)
-	p.Player.Bag.Add(domain.ItemDef{ID: 9999, Name: "石头", InventoryTab: 1, InventoryTabKnown: true}, 1)
+	p.Player.Bag.Add(domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 9999, Name: "石头", InventoryTab: 1, InventoryTabKnown: true}, 1)
 
 	s.exec(StartWork{ID: 1, Work: 钓鱼.ID})
 	sink.take()

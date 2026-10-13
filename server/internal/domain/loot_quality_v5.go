@@ -78,27 +78,30 @@ func ValidateMagicFindColorProfilesV5(t EquipmentRollTable) error {
 
 // UniqueProbabilityV5 is the natural-drop 1% baseline with the approved bounded
 // curve 0.01*(1+2*M/(250+M)). This is not a scripted-reward or crafting chance.
-func UniqueProbabilityV5(magicFind int64) int64 {
+func UniqueProbabilityV5(magicFind int64, rule *LootRuleSet) int64 {
+	if rule == nil {
+		return 0
+	}
 	m := big.NewInt(max(int64(0), magicFind))
-	numerator := new(big.Int).Add(new(big.Int).Mul(m, big.NewInt(3)), big.NewInt(250))
-	numerator.Mul(numerator, big.NewInt(LootProbabilityScaleV5/100))
-	denominator := new(big.Int).Add(m, big.NewInt(250))
+	numerator := new(big.Int).Add(new(big.Int).Mul(m, big.NewInt(1+rule.UniqueMFBoost)), big.NewInt(rule.UniqueMFDivisor))
+	numerator.Mul(numerator, big.NewInt(rule.UniqueBasePPB))
+	denominator := new(big.Int).Add(m, big.NewInt(rule.UniqueMFDivisor))
 	return numerator.Quo(numerator, denominator).Int64()
 }
 
 // RollNaturalUniqueWithMagicFindV5 is ONLY for explicit natural monster drop
 // sources. New-generation catalog membership and NativeDropEligible are both
 // required. The independent variable stream preserves the original unique rolls.
-func RollNaturalUniqueWithMagicFindV5(st *Stack, def ItemDef, magicFind int64, chance func(int64) int64, variable func(int) int) bool {
+func RollNaturalUniqueWithMagicFindV5(st *Stack, def ItemDef, magicFind int64, chance func(int64) int64, variable func(int) int, rule *LootRuleSet) bool {
 	if st == nil || chance == nil || variable == nil || def.Equip == nil || def.Equip.NoTypeDrop {
 		return false
 	}
-	u, ok := UniqueForBase(st.Item)
+	u, ok := UniqueForBase(st.Item, def.EndgameCatalog)
 	if !ok || !u.NativeDropEligible {
 		return false
 	}
 	roll := chance(LootProbabilityScaleV5)
-	if roll < 0 || roll >= UniqueProbabilityV5(magicFind) {
+	if roll < 0 || roll >= UniqueProbabilityV5(magicFind, rule) {
 		return false
 	}
 	return ApplyUnique(st, def, variable)

@@ -46,11 +46,16 @@ func (s *Scene) prepareEndgameRift(cmd Enter) bool {
 		return false
 	}
 	if s.rift == nil {
-		s.initEndgameRift(d)
+		if !s.initEndgameRift(d) {
+			return false
+		}
 	}
 	return true
 }
-func (s *Scene) initEndgameRift(d endgameRiftPersisted) {
+func (s *Scene) initEndgameRift(d endgameRiftPersisted) bool {
+	if d.Run == nil || d.Run.BindRules(s.riftRules) != nil {
+		return false
+	}
 	// Keep only the native gate geometry for authoritative floor admission. Its
 	// original destination and script must never execute in this private run.
 	portals := s.portals
@@ -78,6 +83,7 @@ func (s *Scene) initEndgameRift(d endgameRiftPersisted) {
 			delete(s.entities, id)
 		}
 	}
+	return true
 }
 func (s *Scene) syncEndgameRift(p *entity.Entity) {
 	s.recoverEndgameTrial(p)
@@ -167,7 +173,7 @@ func (s *Scene) populateEndgameRift(boss bool) {
 		class := int32(0)
 		if boss {
 			class = 3
-			def.Name = "镇境劫影"
+			def.Name = r.Rules.BossName
 			def.Kind = domain.MonsterBoss
 		} else if i >= 98 {
 			class = 2
@@ -178,11 +184,11 @@ func (s *Scene) populateEndgameRift(boss bool) {
 		} else {
 			def.Kind = domain.MonsterNormal
 		}
-		def.HP = domain.RiftScaledStat(def.HP, r.Tier, len(r.Members), class, true)
+		def.HP = domain.RiftScaledStat(def.HP, r.Tier, len(r.Members), class, true, r.Rules)
 		def.Stats.MaxHP = def.HP
-		def.Stats.MinAtk = domain.RiftScaledStat(def.Stats.MinAtk, r.Tier, len(r.Members), class, false)
-		def.Stats.MaxAtk = domain.RiftScaledStat(def.Stats.MaxAtk, r.Tier, len(r.Members), class, false)
-		def.Stats.MAtk = domain.RiftScaledStat(def.Stats.MAtk, r.Tier, len(r.Members), class, false)
+		def.Stats.MinAtk = domain.RiftScaledStat(def.Stats.MinAtk, r.Tier, len(r.Members), class, false, r.Rules)
+		def.Stats.MaxAtk = domain.RiftScaledStat(def.Stats.MaxAtk, r.Tier, len(r.Members), class, false, r.Rules)
+		def.Stats.MAtk = domain.RiftScaledStat(def.Stats.MAtk, r.Tier, len(r.Members), class, false, r.Rules)
 		m := spawn.Encounter(s.alloc.Monster(), point.Point.Pos, uint8(point.Point.Dir), def)
 		m.Monster.EliteRing = class == 1 || class == 2
 		s.rift.baseStats[m.ID] = def.Stats
@@ -239,7 +245,7 @@ func (s *Scene) applyEndgameRiftDeath(death endgameRiftDeath) bool {
 		id := s.alloc.Drop()
 		pos := death.Pos
 		pos.X += float64(i * 15)
-		x.data.Run.Globes[id] = domain.RiftGlobe{ID: id, Pos: pos, Value: domain.RiftGlobeProgress}
+		x.data.Run.Globes[id] = domain.RiftGlobe{ID: id, Pos: pos, Value: x.data.Run.Rules.GlobeProgress}
 	}
 	if before == domain.RiftActive && x.data.Run.Phase == domain.RiftBoss {
 		s.clearRiftMonsters()

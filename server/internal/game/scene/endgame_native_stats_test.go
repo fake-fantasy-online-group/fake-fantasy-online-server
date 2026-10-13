@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"strings"
@@ -100,7 +103,7 @@ func TestNativeSpecialStatsMergeScopesAndPreserveOrdinaryTooltips(t *testing.T) 
 	if s.ownedItemTooltip(def, plain, owner) != legacy {
 		t.Fatal("ordinary tooltip changed after negotiation")
 	}
-	rune, _ := domain.AstralRune(domain.FirstAstralRune)
+	rune, _ := domain.AstralRune(domain.FirstAstralRune, catalogfixture.EndgameCatalog())
 	plain.SocketCount = 2
 	plain.Sockets[0] = rune.Item
 	plain.SocketUIDs[0] = 22
@@ -111,7 +114,7 @@ func TestNativeSpecialStatsMergeScopesAndPreserveOrdinaryTooltips(t *testing.T) 
 	if s.ownedItemTooltip(def, plain, owner) != legacy {
 		t.Fatal("unformed rune tooltip changed after negotiation")
 	}
-	recipe, _ := domain.AstralRecipeByID(1)
+	recipe, _ := domain.AstralRecipeByID(1, catalogfixture.EndgameCatalog())
 	formed := plain
 	formed.SocketCount = uint8(len(recipe.Runes))
 	formed.Endgame.FormationRollBP = 12000

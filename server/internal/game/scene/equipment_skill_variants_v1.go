@@ -15,7 +15,7 @@ func (s *Scene) applyEquipmentSkillVariant(p *entity.Entity, def *domain.SkillDe
 	}
 	var candidates []domain.ActiveEquipmentEffect
 	for _, a := range s.equipmentEffects(p).effects {
-		v, ok := domain.EquipmentSkillVariantByID(a.Effect.VariantID)
+		v, ok := s.endgameCatalog.Variant(a.Effect.VariantID)
 		if a.Effect.Kind == "skill_variant" && ok && v.SkillID == def.ID && v.Profession == def.Prof {
 			candidates = append(candidates, a)
 		}
@@ -32,25 +32,20 @@ func (s *Scene) applyEquipmentSkillVariant(p *entity.Entity, def *domain.SkillDe
 			return
 		}
 	}
-	v, _ := domain.EquipmentSkillVariantByID(a.Effect.VariantID)
+	v, _ := s.endgameCatalog.Variant(a.Effect.VariantID)
 	v.SourceUID, v.Item = a.SourceUID, a.Item
 	v.EquipmentRevision = p.Player.Worn.EffectsRevision()
 	def.EquipmentVariant = &v
-	switch v.ID {
-	case "sword_gale_fan":
+	switch v.Behavior {
+	case domain.VariantAreaFan, domain.VariantAreaLine:
 		def.Kind = domain.SkillArea
-		def.Area = domain.SkillAreaTargeting{Shape: domain.SkillAreaCone, Center: domain.SkillAreaCenterCaster, Radius: 100, Angle: 90}
-		def.Radius = 100
+		def.Area = v.Params.Area
+		def.Radius = v.Params.Area.Radius
 		def.GroundEffect = false
-	case "warrior_piercing_lance":
-		def.Kind = domain.SkillArea
-		def.Area = domain.SkillAreaTargeting{Shape: domain.SkillAreaRectangle, Center: domain.SkillAreaCenterCaster, Length: 240, Width: 48}
-		def.Radius = 0
-		def.GroundEffect = false
-		scaleVariantDamage(def, 80)
-	case "warlock_flash_fire":
+		scaleVariantDamage(def, int64(v.Params.DamagePercent))
+	case domain.VariantInstantCast:
 		def.PrepareMS = 0
-		def.CooldownMS = max(def.CooldownMS, 1200)
+		def.CooldownMS = max(def.CooldownMS, v.Params.MinCooldownMS)
 	}
 }
 func scaleVariantDamage(def *domain.SkillDef, percent int64) {
@@ -63,9 +58,15 @@ func scaleVariantDamage(def *domain.SkillDef, percent int64) {
 	}
 }
 func variantTargetDef(def domain.SkillDef, index int) domain.SkillDef {
-	if def.EquipmentVariant != nil && def.EquipmentVariant.ID == "sword_gale_fan" && index > 0 {
-		scaleVariantDamage(&def, 60)
+	v := def.EquipmentVariant
+	if v == nil || index <= 0 || (v.Behavior != domain.VariantAreaFan && v.Behavior != domain.VariantAreaLine) {
+		return def
+	}
+	scaleVariantDamage(&def, int64(v.Params.SecondaryDamagePercent))
+	if v.Params.SecondaryNoStatuses {
 		def.Statuses = nil
+	}
+	if v.Params.SecondaryNoKnockback {
 		effects := def.Effects[:0]
 		for _, effect := range def.Effects {
 			if effect.Kind != domain.EffectKnockback {
@@ -76,6 +77,7 @@ func variantTargetDef(def domain.SkillDef, index int) domain.SkillDef {
 	}
 	return def
 }
+
 func (s *Scene) limitVariantTargets(caster *entity.Entity, def domain.SkillDef, ids []domain.EntityID, primary domain.EntityID) []domain.EntityID {
 	if def.EquipmentVariant == nil {
 		return ids
@@ -109,15 +111,17 @@ type variantMend struct {
 	uid            int64
 	revision       uint64
 	amount         int32
+	skill          domain.SkillID
+	variantID      string
 	due            time.Time
 }
 
 func (s *Scene) startVariantMend(src, dst *entity.Entity, def domain.SkillDef, amount int32) int32 {
 	rt := s.equipmentState()
-	if def.ID == 10301 {
+	if old, ok := rt.variantMends[dst.ID]; ok && old.skill == def.ID {
 		delete(rt.variantMends, dst.ID)
 	}
-	if def.EquipmentVariant == nil || def.EquipmentVariant.ID != "healer_guarded_mend" {
+	if def.EquipmentVariant == nil || def.EquipmentVariant.Behavior != domain.VariantDelayedHeal {
 		return amount
 	}
 	if rt.variantMends == nil {
@@ -126,9 +130,12 @@ func (s *Scene) startVariantMend(src, dst *entity.Entity, def domain.SkillDef, a
 	delete(rt.variantMends, dst.ID)
 	budget := min(max(int32(0), dst.MaxHP-dst.HP), amount)
 	if budget > 0 {
-		rt.variantMends[dst.ID] = variantMend{src.ID, dst.ID, def.EquipmentVariant.SourceUID, def.EquipmentVariant.EquipmentRevision, budget / 2, s.now().Add(time.Second)}
+		v := def.EquipmentVariant
+		rt.variantMends[dst.ID] = variantMend{source: src.ID, target: dst.ID, uid: v.SourceUID, revision: v.EquipmentRevision,
+			amount: domain.SaturateInt32(int64(budget) * int64(v.Params.DelayedHealPercent) / 100), skill: def.ID, variantID: v.ID,
+			due: s.now().Add(time.Duration(v.Params.DelayMS) * time.Millisecond)}
 	}
-	return int32(int64(budget) * 70 / 100)
+	return int32(int64(budget) * int64(def.EquipmentVariant.Params.ImmediateHealPercent) / 100)
 }
 func (s *Scene) stepVariantMends(now time.Time) {
 	rt := s.equipmentState()
@@ -138,7 +145,7 @@ func (s *Scene) stepVariantMends(now time.Time) {
 		found := false
 		if valid {
 			for _, a := range s.equipmentEffects(src).effects {
-				if a.SourceUID == m.uid && a.Effect.VariantID == "healer_guarded_mend" {
+				if a.SourceUID == m.uid && a.Effect.VariantID == m.variantID {
 					found = true
 					break
 				}
@@ -152,11 +159,11 @@ func (s *Scene) stepVariantMends(now time.Time) {
 			continue
 		}
 		delete(rt.variantMends, id)
-		def, ok := s.skills.Get(10301, 1)
+		def, ok := s.skills.Get(m.skill, 1)
 		if !ok || !s.validTarget(src, dst, def) || !s.equipmentCombatReady(dst) {
 			continue
 		}
-		s.emit(combat.Restore(src, dst, m.amount, 10301))
+		s.emit(combat.Restore(src, dst, m.amount, int32(m.skill)))
 		s.emitAttributesIfPlayer(dst)
 	}
 }
@@ -170,7 +177,7 @@ func variantDisplayLines(def domain.SkillDef, lines []string) []string {
 // Reuse the already paid trap payload. Its own placement snapshot is retained;
 // the projectile never supplies a new rank or a second proc root to the bomb.
 func (s *Scene) detonateVariantBomb(src, dst *entity.Entity, def domain.SkillDef, impact ...domain.Pos) {
-	if def.EquipmentVariant == nil || def.EquipmentVariant.ID != "assassin_bomb_fuse" || src == nil || dst == nil {
+	if def.EquipmentVariant == nil || def.EquipmentVariant.Behavior != domain.VariantDetonateOwnedTrap || src == nil || dst == nil {
 		return
 	}
 	positiveHit := false
@@ -190,9 +197,10 @@ func (s *Scene) detonateVariantBomb(src, dst *entity.Entity, def domain.SkillDef
 		at = impact[0]
 	}
 	var chosen *entity.Entity
-	best := float64(160 * 160)
+	params := def.EquipmentVariant.Params
+	best := float64(params.TrapSearchRadius) * float64(params.TrapSearchRadius)
 	for _, t := range s.traps {
-		if t == nil || t.Trap == nil || t.Trap.Owner != src.ID || t.Trap.Def.ID != 10213 {
+		if t == nil || t.Trap == nil || t.Trap.Owner != src.ID || t.Trap.Def.ID != params.TrapSkillID {
 			continue
 		}
 		d := sqDist(t.Pos, at)
@@ -219,10 +227,10 @@ func (s *Scene) detonateVariantBomb(src, dst *entity.Entity, def domain.SkillDef
 			}
 		}
 	}
-	chosen.Trap.Radius = max(chosen.Trap.Radius, 160)
+	chosen.Trap.Radius = max(chosen.Trap.Radius, params.TrapMinRadius)
 	targets := s.trapTargets(chosen)
-	if len(targets) > 6 {
-		targets = targets[:6]
+	if len(targets) > int(params.TrapMaxTargets) {
+		targets = targets[:params.TrapMaxTargets]
 	}
 	// Consume before settlement. Trap damage is marked and cannot proc equipment.
 	s.removeTrap(chosen.ID)
@@ -252,11 +260,22 @@ func finalizeEquipmentSkillVariant(def *domain.SkillDef) {
 		return
 	}
 	v := *def.EquipmentVariant
-	switch v.ID {
-	case "sword_gale_fan":
-		v.Description = fmt.Sprintf("罡气剑改为%d度、半径%d的近身扇面，最多4敌；首目标全额伤害与震退，其余60%%伤害且不震退。", def.Area.Angle, def.Area.Radius)
-	case "warrior_piercing_lance":
-		v.Description = fmt.Sprintf("飞翔之枪改为向前%d距离、%d宽的贯穿枪线，最多4敌，每敌80%%伤害。", def.Area.Length, def.Area.Width)
+	switch v.Behavior {
+	case domain.VariantAreaFan:
+		primary := fmt.Sprintf("%d%%伤害", v.Params.DamagePercent)
+		if v.Params.DamagePercent == 100 {
+			primary = "全额伤害"
+		}
+		v.Description = fmt.Sprintf("%s改为%d度、半径%d的近身扇面，最多%d敌；首目标%s，其余%g%%伤害", def.Name, def.Area.Angle, def.Area.Radius, v.MaxTargets, primary, float64(v.Params.DamagePercent)*float64(v.Params.SecondaryDamagePercent)/100)
+		if v.Params.SecondaryNoStatuses {
+			v.Description += "且不附加状态"
+		}
+		if v.Params.SecondaryNoKnockback {
+			v.Description += "且不震退"
+		}
+		v.Description += "。"
+	case domain.VariantAreaLine:
+		v.Description = fmt.Sprintf("%s改为向前%d距离、%d宽的贯穿枪线，最多%d敌，每敌%d%%伤害。", def.Name, def.Area.Length, def.Area.Width, v.MaxTargets, v.Params.DamagePercent)
 	}
 	def.EquipmentVariant = &v
 }

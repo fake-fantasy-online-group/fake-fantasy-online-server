@@ -93,7 +93,8 @@ func HurtElementIndex(hurt int32) int {
 	return -1
 }
 
-func ValidateEquipmentEffects(effects []EquipmentEffect) error {
+func ValidateEquipmentEffects(effects []EquipmentEffect, catalog *EndgameCatalog) error {
+	c := catalog
 	if len(effects) > 16 {
 		return fmt.Errorf("too many typed equipment effects")
 	}
@@ -104,7 +105,7 @@ func ValidateEquipmentEffects(effects []EquipmentEffect) error {
 		}
 		switch e.Kind {
 		case "skill_variant":
-			_, known := EquipmentSkillVariantByID(e.VariantID)
+			_, known := c.Variant(e.VariantID)
 			valid = known && e.Value == 0 && e.Element == "" && e.Proc == nil && e.Aura == nil
 		case "magic_find_pct":
 			valid = e.Value >= 0 && e.Value <= 1000000 && e.Element == "" && e.Proc == nil && e.Aura == nil
@@ -113,18 +114,18 @@ func ValidateEquipmentEffects(effects []EquipmentEffect) error {
 		case "proc":
 			p := e.Proc
 			if p != nil && e.Aura == nil && e.Value == 0 && e.Element == "" {
-				valid = p.ID != "" && p.SharedGroup != "" && p.FixedRank > 0 && p.FixedRank <= 100000 && p.ChanceBP >= 0 && p.ChanceBP <= 10000 && p.ICDMS >= 4000 && p.ICDMS <= 60000 && p.MaxTargets == 1 && p.ScaleBP > 0 && p.ScaleBP <= 10000 && p.PVPScaleBP == 3500 && p.HPBelowPct >= 0 && p.HPBelowPct <= 100
+				valid = p.ID != "" && p.SharedGroup != "" && p.FixedRank > 0 && p.FixedRank <= 100000 && p.ChanceBP >= 0 && p.ChanceBP <= 10000 && p.ICDMS >= 4000 && p.ICDMS <= 60000 && p.MaxTargets == 1 && p.ScaleBP > 0 && p.ScaleBP <= 10000 && p.PVPScaleBP >= 0 && p.PVPScaleBP <= 10000 && p.HPBelowPct >= 0 && p.HPBelowPct <= 100
 				valid = valid && (p.Trigger == "on_direct_hit" || p.Trigger == "on_direct_damage_taken" || p.Trigger == "on_attack")
 				if p.Payload == "heal" {
-					valid = valid && p.SkillID == 10301 && p.TargetRule == "self"
+					valid = valid && p.SkillID > 0 && p.TargetRule == "self"
 				} else {
-					valid = valid && p.Payload == "damage" && p.TargetRule == "hit_target" && (p.SkillID == 10002 || p.SkillID == 10102 || p.SkillID == 10223 || p.SkillID == 10319 || p.SkillID == 10401 || p.SkillID == 10409 || p.SkillID == 10221)
+					valid = valid && p.Payload == "damage" && p.TargetRule == "hit_target" && p.SkillID > 0
 				}
 			}
 		case "aura":
 			a := e.Aura
 			if a != nil && e.Proc == nil && e.Value == 0 && e.Element == "" {
-				valid = a.ID != "" && a.Family != "" && a.FixedRank > 0 && a.Value > 0 && a.Value <= 4500 && a.RadiusPX == 240 && a.RefreshMS == 500 && a.LeaseMS == 1000 && a.MaxPlayers >= 1 && a.MaxPlayers <= 6 && a.VisualKey != "" && a.PVPScaleBP == 5000 && ((a.Modifier == "physical_mitigation_bp" && a.Element == "") || ((a.Modifier == "element_resist_bp" || a.Modifier == "element_damage_bp") && ElementIndex(a.Element) >= 0))
+				valid = a.ID != "" && a.Family != "" && a.FixedRank > 0 && a.Value > 0 && a.Value <= 4500 && a.RadiusPX > 0 && a.RadiusPX <= 2000 && a.RefreshMS >= int32(TickMS) && a.RefreshMS <= 60000 && a.RefreshMS%int32(TickMS) == 0 && a.LeaseMS >= a.RefreshMS && a.LeaseMS <= 120000 && a.LeaseMS%int32(TickMS) == 0 && a.MaxPlayers >= 1 && a.MaxPlayers <= 6 && a.VisualKey != "" && a.PVPScaleBP >= 0 && a.PVPScaleBP <= 10000 && ((a.Modifier == "physical_mitigation_bp" && a.Element == "") || ((a.Modifier == "element_resist_bp" || a.Modifier == "element_damage_bp") && ElementIndex(a.Element) >= 0))
 			}
 		}
 		if !valid {
@@ -146,7 +147,7 @@ func ActiveEquipmentEffects(worn *EquipSet, defs func(ItemID) (ItemDef, bool), c
 		if !ok || def.Equip == nil || int32(slot) != def.Equip.Slot || !EquipmentFunctional(st, def) || !def.Equip.Need.AllowsCharacter(ch) || ch.Level < EquipmentRequiredLevel(def, st) {
 			return
 		}
-		if d, ok := UniqueOf(st); ok {
+		if d, ok := UniqueOf(st, def.EndgameCatalog); ok {
 			for _, e := range d.TypedEffects {
 				out = append(out, ActiveEquipmentEffect{st.UID, st.Item, e})
 			}
@@ -162,22 +163,26 @@ func ActiveEquipmentEffects(worn *EquipSet, defs func(ItemID) (ItemDef, bool), c
 
 // ValidateEquipmentRuntimeV5 refuses content whose advertised fixed rank has no
 // executable approved payload. Catalog-only validation cannot establish this.
-func ValidateEquipmentRuntimeV5(skills SkillTable) error {
+func ValidateEquipmentRuntimeV5(skills SkillTable, catalog *EndgameCatalog) error {
+	c := catalog
+	if c == nil {
+		return fmt.Errorf("endgame catalog is not loaded")
+	}
 	check := func(effects []EquipmentEffect) error {
-		if err := ValidateEquipmentEffects(effects); err != nil {
+		if err := ValidateEquipmentEffects(effects, c); err != nil {
 			return err
 		}
 		procs, auras := 0, 0
 		variantSkills := map[SkillID]bool{}
 		for _, e := range effects {
 			if e.Kind == "skill_variant" {
-				v, _ := EquipmentSkillVariantByID(e.VariantID)
+				v, _ := c.Variant(e.VariantID)
 				def, ok := skills.Get(v.SkillID, 1)
 				if !ok || !def.Usable() || def.Prof != v.Profession || variantSkills[v.SkillID] {
 					return fmt.Errorf("invalid or duplicate skill variant %s", v.ID)
 				}
 				expected := EffectDamage
-				if v.SkillID == 10301 {
+				if v.Behavior == VariantDelayedHeal {
 					expected = EffectHeal
 				}
 				executable := false
@@ -187,8 +192,8 @@ func ValidateEquipmentRuntimeV5(skills SkillTable) error {
 				if !executable {
 					return fmt.Errorf("skill variant %s has no required payload", v.ID)
 				}
-				if v.ID == "assassin_bomb_fuse" {
-					trap, exists := skills.Get(10213, 1)
+				if v.Behavior == VariantDetonateOwnedTrap {
+					trap, exists := skills.Get(v.Params.TrapSkillID, 1)
 					placed, damage := false, false
 					for _, effect := range trap.DirectEffects() {
 						placed = placed || effect.Kind == EffectPlaceTrap
@@ -223,14 +228,16 @@ func ValidateEquipmentRuntimeV5(skills SkillTable) error {
 		}
 		return nil
 	}
-	for _, d := range UniqueCatalog() {
-		if err := check(d.TypedEffects); err != nil {
-			return fmt.Errorf("unique %d: %w", d.ID, err)
+	for _, version := range []int32{0, 5, UniqueContentVersion} {
+		for _, d := range c.Uniques(version) {
+			if err := check(d.TypedEffects); err != nil {
+				return fmt.Errorf("unique %d/%d: %w", version, d.ID, err)
+			}
 		}
-	}
-	for _, d := range AstralRecipes() {
-		if err := check(d.TypedEffects); err != nil {
-			return fmt.Errorf("formation %d: %w", d.ID, err)
+		for _, d := range c.Recipes(version) {
+			if err := check(d.TypedEffects); err != nil {
+				return fmt.Errorf("formation %d/%d: %w", version, d.ID, err)
+			}
 		}
 	}
 	return nil

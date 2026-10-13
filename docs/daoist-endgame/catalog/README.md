@@ -1,6 +1,27 @@
-# Current catalogue: V6
+# Current configuration: database-backed catalogs (2026-10-13)
 
-New generation uses `compile_v6.py` and `v6/authored_catalog.json`; see [V6_CATALOG.md](V6_CATALOG.md) for current effects, compatibility and verification. `compile_v5.py` now verifies frozen V5 only; `generate.py` verifies frozen V4. Neither historical catalogue describes current new-item power.
+The production source is PostgreSQL, loaded once before actors start. Migration 59 seeds native item/card definitions; migration 60 seeds normalized versioned unique/formation rows, rune metadata and finite skill-variant parameters. Migrations 61–63 supply cube, skills and loot/rift rules. No Go embed or process-global installer supplies production catalog data.
+
+- Edit/review configuration through versioned SQL migrations and the queryable `game_endgame_*` tables/views. Preserve historical version 0/5 definitions and saved instance IDs/rolls. A restart loads one immutable snapshot. Missing rows, references, child order or manifest entries prevent startup.
+- `compile_database_catalog.py` reproduces the initial migration 60 from its frozen, pre-migration golden export under `server/internal/testfixture/catalog`. That export exists only for regression comparison and reproducing this historical migration; changing it alone never changes a deployed game. Subsequent changes belong in a new SQL migration, not in the frozen export or an old initialization migration.
+- `database_catalog.py`, `audit_icons.py` and the current `../showcase/generate_showcase.py` read normalized migration 59/60 seed SQL for offline documentation. They do not claim that a deployed database has no later/operator changes. Actual `cmd/showcase-grant` dry-run and execution load the live database and bind the reviewed plan digest.
+- The old standalone `generate.py`, `compile_v5.py`, `compile_v6.py`, `compile_astral.py` and V5 showcase generator are retired and fail clearly. Their pure historical validation functions remain importable by archival tests. They cannot overwrite production-looking Go or JSON catalogs.
+- `server/internal/domain/unique_catalog_*.json`, `legacy_unique_v4/`, `legacy_unique_v5/`, authoring files and old showcase artifacts are frozen provenance only. Nothing in the production binary reads them.
+
+Verification:
+
+```sh
+python3 -B docs/daoist-endgame/catalog/audit_icons.py --check
+python3 -B docs/daoist-endgame/showcase/generate_showcase.py --check
+python3 -B server/tests/showcase_manifest_test.py
+cd server && go test ./internal/domain ./internal/data ./internal/store ./internal/showcase ./internal/arch
+```
+
+Actual PostgreSQL validation requires the documented isolated test cluster. `tests/sql/validate_endgame_catalog.py` verifies fresh schema, repeat application and preservation of configured values. `TestEndgameCatalogActualReadOnlyPostgres` exercises the real 59–63 loader sequence and compares every 0/5/6 definition against the pre-migration golden export.
+
+## Historical authoring and balance evidence
+
+The sections below describe earlier catalog stages and are not current editing or deployment instructions.
 
 # 仙遗装备：独立撰写源与冻结编译
 

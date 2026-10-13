@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"encoding/json"
 	"fmt"
@@ -34,7 +36,7 @@ func realV5SkillFixtures(t *testing.T) (domain.SkillTable, domain.StatusTable) {
 		}
 		skills[key] = d
 	}
-	if e = domain.InstallV5SkillProgression(skills); e != nil {
+	if e = domain.InstallV5SkillProgression(skills, catalogfixture.SkillProgressionCatalog()); e != nil {
 		t.Fatal(e)
 	}
 	b, e = os.ReadFile("../../../../docs/daoist-endgame/v5/skill-status-anchors.json")
@@ -107,7 +109,7 @@ func TestV5OneShotSpellsRetainOriginalEffectAtConsumption(t *testing.T) {
 				s := newTestScene(t, nil)
 				join(t, s, 1, 100, "术者", 100, 100)
 				p := s.players[1]
-				ident, _ := domain.V5SkillIdentity(id)
+				ident, _ := domain.V5SkillIdentity(id, catalogfixture.SkillProgressionCatalog())
 				p.Player.Char.Race = domain.Race(ident.Profession - 1)
 				p.Player.Char.Level = 100
 				p.Player.Char.Skills = domain.Learned{id: min(rank, 20)}
@@ -159,7 +161,7 @@ func TestV5PureControlsRetainStatusWithoutInventedDamageOrMiss(t *testing.T) {
 				s := newTestScene(t, nil)
 				join(t, s, 1, 100, "控制", 100, 100)
 				p := s.players[1]
-				ident, _ := domain.V5SkillIdentity(id)
+				ident, _ := domain.V5SkillIdentity(id, catalogfixture.SkillProgressionCatalog())
 				p.Player.Char.Race = domain.Race(ident.Profession - 1)
 				p.Player.Char.Level = 100
 				p.Player.Char.Skills = domain.Learned{id: min(rank, 20)}
@@ -241,7 +243,7 @@ func TestV5FreezeSynergyUsesRealStatusDuration(t *testing.T) {
 
 func TestV5EveryTrainingEdgeChangesConsumedPayload(t *testing.T) {
 	skills, statuses := realV5SkillFixtures(t)
-	for _, edge := range domain.V5SkillSynergies {
+	for _, edge := range catalogfixture.SkillProgressionCatalog().Synergies() {
 		if edge.RankMode != "hard" {
 			continue
 		}
@@ -249,7 +251,7 @@ func TestV5EveryTrainingEdgeChangesConsumedPayload(t *testing.T) {
 			s := newTestScene(t, nil)
 			join(t, s, 1, 100, "协同", 100, 100)
 			p := s.players[1]
-			ident, _ := domain.V5SkillIdentity(edge.Target)
+			ident, _ := domain.V5SkillIdentity(edge.Target, catalogfixture.SkillProgressionCatalog())
 			p.Player.Char.Race = domain.Race(ident.Profession - 1)
 			p.Player.Char.Level = 100
 			// Bounded control duration can saturate; prove the duration edge
@@ -287,7 +289,7 @@ func TestV5TrapExpansionPersistsOnlyWhileSourceEquipped(t *testing.T) {
 	p.Player.Char.Skills = domain.Learned{10213: 20}
 	s.skills = skills
 	s.statuses = statuses
-	item := domain.ItemDef{ID: 1908, Equip: &domain.EquipDef{Slot: 13, Durable: 100}}
+	item := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 1908, Equip: &domain.EquipDef{Slot: 13, Durable: 100}}
 	s.items = map[domain.ItemID]domain.ItemDef{1908: item}
 	st := domain.NewStack(item, 1)
 	st.UID = 1908001
@@ -411,7 +413,7 @@ func TestV5StatusRequirementExpiryInvalidatesSkillCache(t *testing.T) {
 			p.Player.Char.Skills = domain.Learned{10301: 20}
 			s.skills = skills
 			s.statuses = statuses
-			item := domain.ItemDef{ID: 2032, Equip: &domain.EquipDef{Slot: 2, Durable: 100, Need: domain.Requirement{Base: domain.Base{STR: 100}}}}
+			item := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 2032, Equip: &domain.EquipDef{Slot: 2, Durable: 100, Need: domain.Requirement{Base: domain.Base{STR: 100}}}}
 			s.items = map[domain.ItemID]domain.ItemDef{2032: item}
 			st := domain.NewStack(item, 1)
 			st.UID = 2032001
@@ -419,7 +421,7 @@ func TestV5StatusRequirementExpiryInvalidatesSkillCache(t *testing.T) {
 			st.Durability = 100
 			st.Endgame = domain.EndgameItemState{UniqueID: 2032, UniqueRollBP: 10000, UniqueContentVersion: version}
 			p.Player.Worn.Set(domain.SlotHead, st)
-			unique, ok := domain.UniqueOf(st)
+			unique, ok := domain.UniqueOf(st, catalogfixture.EndgameCatalog())
 			if !ok {
 				t.Fatal("missing versioned unique fixture", version)
 			}
@@ -427,7 +429,7 @@ func TestV5StatusRequirementExpiryInvalidatesSkillCache(t *testing.T) {
 			for i := range bonuses {
 				bonuses[i].SourceID = fmt.Sprintf("fixture:%d", i)
 			}
-			ranks, err := domain.ResolveSkillLoadout(int32(p.Player.Char.Race)+1, p.Player.Char.Skills, bonuses, nil)
+			ranks, err := domain.ResolveSkillLoadout(int32(p.Player.Char.Race)+1, p.Player.Char.Skills, bonuses, nil, catalogfixture.SkillProgressionCatalog())
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -477,7 +479,7 @@ func TestV5UnlearnedViewHasFirstPointAndSoftPreview(t *testing.T) {
 	ch.Skills = domain.Learned{}
 	s.skills = skills
 	s.statuses = statuses
-	item := domain.ItemDef{ID: 2032, Equip: &domain.EquipDef{Slot: 2}}
+	item := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 2032, Equip: &domain.EquipDef{Slot: 2}}
 	s.items = map[domain.ItemID]domain.ItemDef{2032: item}
 	st := domain.NewStack(item, 1)
 	st.UID = 2032002

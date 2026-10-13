@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"fmt"
 	"testing"
@@ -41,7 +43,7 @@ func TestSkillGrowthAttributesAllBoundariesV7(t *testing.T) {
 	}
 	for _, tc := range cases {
 		t.Run(fmt.Sprint(tc.id), func(t *testing.T) {
-			ident, _ := domain.V5SkillIdentity(tc.id)
+			ident, _ := domain.V5SkillIdentity(tc.id, catalogfixture.SkillProgressionCatalog())
 			s, p := growthAttributePlayer(t, ident.Profession)
 			original := p.Player.Char.Base
 			for _, rank := range []int32{0, 1, 2, 3, 4, 5, tc.cap, tc.cap + 1, 20, 21, 100} {
@@ -183,7 +185,7 @@ func TestReplacedPassiveCompensationsRemovedV7(t *testing.T) {
 }
 
 func growthAllSkillGear(s *Scene) (domain.ItemDef, domain.Stack) {
-	item := domain.ItemDef{ID: 2409, Equip: &domain.EquipDef{Slot: int32(domain.SlotGlove), Durable: 100}}
+	item := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 2409, Equip: &domain.EquipDef{Slot: int32(domain.SlotGlove), Durable: 100}}
 	s.items = map[domain.ItemID]domain.ItemDef{item.ID: item}
 	st := domain.NewStack(item, 1)
 	st.UID = 992409
@@ -250,7 +252,7 @@ func TestSkillGrowthCannotSelfQualifyEquipmentV7(t *testing.T) {
 		t.Fatalf("soft growth met its own equipment requirement: %d", got)
 	}
 	// Two individually unusable sources cannot bootstrap one another.
-	ring := domain.ItemDef{ID: 990001, Equip: &domain.EquipDef{Slot: int32(domain.SlotRing), Need: domain.Requirement{Base: domain.Base{VIT: 101}}, Base: domain.Base{VIT: 1}}}
+	ring := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 990001, Equip: &domain.EquipDef{Slot: int32(domain.SlotRing), Need: domain.Requirement{Base: domain.Base{VIT: 101}}, Base: domain.Base{VIT: 1}}}
 	s.items[ring.ID] = ring
 	p.Player.Worn.Set(domain.SlotRing, domain.NewStack(ring, 1))
 	s.skillRawCache = nil
@@ -272,7 +274,7 @@ func TestSkillGrowthCannotSelfQualifyEquipmentV7(t *testing.T) {
 
 func TestPersistentGrowthRebuildKeepsEffectHitSnapshotV7(t *testing.T) {
 	for _, id := range []domain.SkillID{10211, 10435} {
-		ident, _ := domain.V5SkillIdentity(id)
+		ident, _ := domain.V5SkillIdentity(id, catalogfixture.SkillProgressionCatalog())
 		s, p := growthAttributePlayer(t, ident.Profession)
 		p.Player.Char.Skills = domain.Learned{id: 20}
 		def, _ := s.skills.Get(id, 20)

@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"fmt"
 	"testing"
@@ -14,7 +16,7 @@ func verifiedEffectScene(t *testing.T, id domain.SkillID, rank int32) (*Scene, *
 	s := newTestScene(t, nil)
 	join(t, s, 1, 100, "效果验收", 100, 100)
 	p := s.players[1]
-	ident, _ := domain.V5SkillIdentity(id)
+	ident, _ := domain.V5SkillIdentity(id, catalogfixture.SkillProgressionCatalog())
 	p.Player.Char.Race = domain.Race(ident.Profession - 1)
 	p.Player.Char.Level = 100
 	p.Player.Char.Skills = domain.Learned{id: rank}

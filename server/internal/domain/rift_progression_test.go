@@ -10,10 +10,10 @@ func TestRiftTierJumpRemainingTimeBoundaries(t *testing.T) {
 	for _, tc := range []struct{ remaining, jump int32 }{
 		{-1, 1}, {0, 1}, {179, 1}, {180, 1}, {359, 1}, {360, 2}, {540, 3}, {899, 4}, {900, 5},
 	} {
-		if got := RiftTierJump(tc.remaining); got != tc.jump {
+		if got := RiftTierJump(tc.remaining, riftRulesFixture()); got != tc.jump {
 			t.Fatalf("remaining=%d: jump=%d want=%d", tc.remaining, got, tc.jump)
 		}
-		if got := RiftUnlockedTier(1, 20, tc.remaining); got != 20+tc.jump {
+		if got := RiftUnlockedTier(1, 20, tc.remaining, riftRulesFixture()); got != 20+tc.jump {
 			t.Fatalf("remaining=%d: unlocked=%d want=%d", tc.remaining, got, 20+tc.jump)
 		}
 	}
@@ -21,7 +21,7 @@ func TestRiftTierJumpRemainingTimeBoundaries(t *testing.T) {
 		{1, 149, 360, 150}, {1, 150, 0, 150}, {150, 1, 900, 150}, {90, 10, 540, 90},
 		{0, 1, 0, 2}, {math.MaxInt32, 1, 0, 150}, {1, math.MaxInt32, math.MaxInt32, 150},
 	} {
-		if got := RiftUnlockedTier(tc.old, tc.tier, tc.remaining); got != tc.want {
+		if got := RiftUnlockedTier(tc.old, tc.tier, tc.remaining, riftRulesFixture()); got != tc.want {
 			t.Fatalf("%+v: got=%d", tc, got)
 		}
 	}
@@ -52,7 +52,7 @@ func TestRiftCompletionFreezesTimeAndPenaltyAcrossPersistence(t *testing.T) {
 			if got := restored.RemainingSeconds(completed + 24*60*60*1000); got != int32(remaining) {
 				t.Fatalf("phase=%s remaining=%d: got=%d", phase, remaining, got)
 			}
-			want := int32(20) + RiftTierJump(int32(remaining))
+			want := int32(20) + RiftTierJump(int32(remaining), riftRulesFixture())
 			if got := restored.UnlockedTierFor(1, 1); got != want {
 				t.Fatalf("remaining=%d: unlocked=%d want=%d", remaining, got, want)
 			}
@@ -64,7 +64,7 @@ func TestRiftCompletionFreezesTimeAndPenaltyAcrossPersistence(t *testing.T) {
 }
 
 func TestRiftCompletedTeamUnlocksWithoutLeaderClaimOrPersonalTierGate(t *testing.T) {
-	r, err := NewRiftRun("party", 20, 1, []TrialKeyMember{{1, 60, 0}, {2, 60, 0}, {3, 60, 0}, {4, 60, 0}}, 1000)
+	r, err := NewRiftRun("party", 20, 1, []TrialKeyMember{{1, 60, 0}, {2, 60, 0}, {3, 60, 0}, {4, 60, 0}}, 1000, riftRulesFixture())
 	if err != nil {
 		t.Fatal(err)
 	}

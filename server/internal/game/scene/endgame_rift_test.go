@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"context"
 	"encoding/json"
@@ -75,19 +77,19 @@ func riftFixture(t *testing.T) (*Scene, *riftTestBackend, *int64) {
 	s.now = func() time.Time { return time.UnixMilli(now) }
 	s.alloc = domain.NewEntityAlloc()
 	s.items = map[domain.ItemID]domain.ItemDef{}
-	s.items[domain.RiftKeyItemID] = domain.ItemDef{ID: domain.RiftKeyItemID, Name: "洞天符钥", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
-	s.items[1900028202] = domain.ItemDef{ID: 1900028202, Name: "净煞尘", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
-	for _, d := range domain.AstralRuneItems(7) {
+	s.items[domain.RiftKeyItemID] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.RiftKeyItemID, Name: "洞天符钥", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
+	s.items[1900028202] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 1900028202, Name: "净煞尘", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
+	for _, d := range astralRuneItemsFixture(7) {
 		s.items[d.ID] = d
 	}
 	var u domain.UniqueDefinition
-	for _, candidate := range domain.UniqueCatalog() {
+	for _, candidate := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
 		if candidate.NativeDropEligible {
 			u = candidate
 			break
 		}
 	}
-	s.items[u.BaseID] = domain.ItemDef{ID: u.BaseID, Name: "测试法器", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: 1, LevelReq: 12, Durable: 100}}
+	s.items[u.BaseID] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: u.BaseID, Name: "测试法器", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{NativeDropEligible: true, Slot: 1, LevelReq: 12, Durable: 100}}
 	s.trial = &domain.TrialRules{Quest: 99, MinLevel: 12, MaxLevel: 60, AnchorLevel: 50, AnchorUnits: 16, Maps: map[int32][]domain.TrialSpawn{7: {{Point: domain.SpawnPoint{ID: 1, Pos: domain.Pos{MapID: 7, X: 100, Y: 100}}, Candidates: []domain.MonsterID{1}}, {Point: domain.SpawnPoint{ID: 2, Pos: domain.Pos{MapID: 7, X: 110, Y: 110}}, Candidates: []domain.MonsterID{2}}}}, Monsters: map[int32]map[domain.MonsterID]domain.MonsterDef{60: {1: {ID: 1, Name: "妖影", Kind: domain.MonsterNormal, Level: 60, HP: 100}, 2: {ID: 2, Name: "劫影", Kind: domain.MonsterBoss, Level: 60, HP: 1000}}}, Multipliers: []int32{100, 100, 100, 100, 100, 100}}
 	s.dungeons = map[int32]domain.DungeonDef{7: {Enter: domain.Pos{MapID: 7, X: 100, Y: 100}}}
 	s.router = NewRouter(nil, nil)
@@ -107,7 +109,7 @@ func riftFixture(t *testing.T) (*Scene, *riftTestBackend, *int64) {
 }
 func activateTestRift(t *testing.T, s *Scene, b *riftTestBackend, now int64) {
 	t.Helper()
-	r, err := domain.NewRiftRun("test-rift", 1, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, now)
+	r, err := domain.NewRiftRun("test-rift", 1, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, now, riftRulesFixture())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -197,7 +199,7 @@ func TestRiftNativePopulationProgressGuardianClaim(t *testing.T) {
 }
 func TestRiftOrphanCompensationOnceAndClosedProjection(t *testing.T) {
 	s, b, now := riftFixture(t)
-	r, _ := domain.NewRiftRun("orphan", 1, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, *now)
+	r, _ := domain.NewRiftRun("orphan", 1, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, *now, riftRulesFixture())
 	r.Activate(*now)
 	d := endgameRiftPersisted{Version: 1, Run: r, Names: map[domain.CharID]string{100: "甲"}}
 	p := s.players[1]
@@ -212,7 +214,7 @@ func TestRiftOrphanCompensationOnceAndClosedProjection(t *testing.T) {
 		t.Fatal("missing compensation")
 	}
 	saved := b.runs[r.RunID]
-	d, _ = decodeEndgameRift(&saved)
+	d, _ = decodeEndgameRift(&saved, riftRulesTableFixture())
 	s.claimEndgameRift(p, domain.EndgameRequest{Op: "rift.claim", RequestID: "compensation-002", ExpectedRevision: "1"}, d, 2, false)
 	if b.commits != 1 {
 		t.Fatal("double refund")
@@ -264,7 +266,7 @@ func TestRiftTrialOfflineEntitlementAndSameTick(t *testing.T) {
 }
 func TestRiftPreviousRewardCannotBeHidden(t *testing.T) {
 	s, b, now := riftFixture(t)
-	r, _ := domain.NewRiftRun("owed", 1, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, *now)
+	r, _ := domain.NewRiftRun("owed", 1, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, *now, riftRulesFixture())
 	r.Phase = domain.RiftCompleted
 	r.Members[100].Eligible = true
 	d := endgameRiftPersisted{Version: 1, Run: r}
@@ -400,7 +402,7 @@ func TestRiftStartOneKeyAndDefiniteFailureReservation(t *testing.T) {
 			s, b, _ := riftFixture(t)
 			frames := make(chan time.Time)
 			router := NewRouter(func(id domain.SceneID) (*Scene, error) {
-				return New(Config{ID: id, Frames: frames, Trial: s.trial, Dungeons: s.dungeons}), nil
+				return New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Frames: frames, Trial: s.trial, Dungeons: s.dungeons}), nil
 			}, nil)
 			router.Start(context.Background())
 			defer router.Drain(time.Second)

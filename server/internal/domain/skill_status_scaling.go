@@ -134,7 +134,7 @@ func (t StatusTable) ResolveSkillApplication(app StatusApplication) (StatusDef, 
 		d.DurationSec = baseDuration
 		d.ControlPower, d.EffectHitBP = 0, 0
 	}
-	policy := skillGrowthPolicies[app.SourceSkill]
+	policy, _ := app.Progression.Policy(app.SourceSkill)
 	if policy.ProtectionCapRank > 0 && int64(ranks)+5 > int64(policy.ProtectionCapRank) {
 		capRanks := policy.ProtectionCapRank - 5
 		atCap, _ := continueSkillStatusDuration(timing, firstDuration, baseDuration, capRanks)
@@ -243,7 +243,7 @@ func (t StatusTable) SkillApplicationDurationCap(app StatusApplication) int32 {
 		d.Control = app.Control
 	}
 	d.BlockHarmful = d.BlockHarmful || app.BlockHarmful
-	if skillGrowthPolicies[app.SourceSkill].ProtectionCapRank > 0 {
+	if policy, _ := app.Progression.Policy(app.SourceSkill); policy.ProtectionCapRank > 0 {
 		return math.MaxInt32
 	}
 	if app.SourceSkill == 10018 {

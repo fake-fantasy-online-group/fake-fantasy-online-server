@@ -28,6 +28,7 @@ func (c AstralChannel) String() string {
 }
 
 type AstralRuneDef struct {
+	RegenerationIntervalMS  int32
 	Item                    ItemID
 	MinLevel                int32
 	Mansion, Name, Quadrant string
@@ -74,45 +75,20 @@ func cloneAstralRecipe(r AstralRecipe) AstralRecipe {
 	r.ReservedSkills = append([]ReservedSkillAttribute(nil), r.ReservedSkills...)
 	return r
 }
-func AstralRunes() []AstralRuneDef {
-	out := make([]AstralRuneDef, len(astralRuneCatalog))
-	for i, r := range astralRuneCatalog {
-		out[i] = cloneAstralRune(r)
-	}
-	return out
+func AstralRunes(catalog *EndgameCatalog) []AstralRuneDef { return catalog.Runes() }
+func AstralRecipes(catalog *EndgameCatalog) []AstralRecipe {
+	return catalog.Recipes(UniqueContentVersion)
 }
-func AstralRecipes() []AstralRecipe {
-	out := make([]AstralRecipe, len(astralRecipeCatalog))
-	for i, r := range astralRecipeCatalog {
-		out[i] = cloneAstralRecipe(r)
-	}
-	return out
+func AstralRune(id ItemID, catalog *EndgameCatalog) (AstralRuneDef, bool) {
+	return catalog.Rune(id)
 }
-func AstralRune(id ItemID) (AstralRuneDef, bool) {
-	if id < FirstAstralRune || id > LastAstralRune {
-		return AstralRuneDef{}, false
-	}
-	return cloneAstralRune(astralRuneCatalog[id-FirstAstralRune]), true
-}
-func AstralRecipeByID(id int32) (AstralRecipe, bool) {
-	if id < 1 || int(id) > len(astralRecipeCatalog) {
-		return AstralRecipe{}, false
-	}
-	return cloneAstralRecipe(astralRecipeCatalog[id-1]), true
-}
-
-// The icon is an existing, startup-verified asset. Every rune is a real durable
-// SocketCard, with fixed effects snapshotted when its unique instance is created.
-func AstralRuneItems(icon int32) []ItemDef {
-	out := make([]ItemDef, 0, 28)
-	for _, r := range astralRuneCatalog {
-		card := CardInstanceState{Initialized: true, Count: uint8(len(r.Affixes))}
-		for i, a := range r.Affixes {
-			card.Effects[i] = CardEffect{Op: 1, Attr: a.Attr, Value: a.Value, Mode: a.Mode, Probability: 100}
+func AstralRecipeByID(id int32, catalog *EndgameCatalog) (AstralRecipe, bool) {
+	for _, r := range catalog.Recipes(UniqueContentVersion) {
+		if r.ID == id {
+			return r, true
 		}
-		out = append(out, ItemDef{ID: r.Item, Name: r.Name, Description: "按孔位顺序镶入星篆，可结成宿阵。", Level: r.MinLevel, UseLevel: r.MinLevel, Weight: 1, Icon: icon, InventoryTab: 1, InventoryTabKnown: true, InstanceKind: ItemInstanceSocketCard, CanMail: true, CanTrade: true, CardDefaults: card, SocketAffixes: append([]Affix(nil), r.Affixes...)})
 	}
-	return out
+	return AstralRecipe{}, false
 }
 
 // AstralBaseEligible checks the equipment's innate extra properties, not its
@@ -160,19 +136,12 @@ func MatchAstralRecipe(def ItemDef, st Stack) (AstralRecipe, bool) {
 			}
 			continue
 		}
-		if _, ok := AstralRune(st.Sockets[i]); !ok || st.SocketUIDs[i] <= 0 || !st.SocketCards[i].Initialized || seen[st.SocketUIDs[i]] {
+		if _, ok := AstralRune(st.Sockets[i], def.EndgameCatalog); !ok || st.SocketUIDs[i] <= 0 || !st.SocketCards[i].Initialized || seen[st.SocketUIDs[i]] {
 			return AstralRecipe{}, false
 		}
 		seen[st.SocketUIDs[i]] = true
 	}
-	catalog := legacyAstralRecipeCatalog
-	if st.Endgame.FormationContentVersion == UniqueContentVersion {
-		catalog = astralRecipeCatalog
-	} else if st.Endgame.FormationContentVersion == 5 {
-		catalog = legacyV5AstralRecipeCatalog
-	} else if st.Endgame.FormationContentVersion != 0 {
-		return AstralRecipe{}, false
-	}
+	catalog := def.EndgameCatalog.Recipes(st.Endgame.FormationContentVersion)
 	for _, r := range catalog {
 		if len(r.Runes) != int(st.SocketCount) {
 			continue
@@ -245,25 +214,37 @@ func AstralBonuses(worn *EquipSet, defs func(ItemID) (ItemDef, bool), ch *Charac
 	}
 	return out
 }
-func ValidateAstralCatalog() error {
-	if len(astralRuneCatalog) != 28 || len(astralRecipeCatalog) != 40 {
-		return fmt.Errorf("astral catalog requires 28 runes and 40 formations")
+func ValidateAstralCatalog(catalog *EndgameCatalog) error {
+	return validateAstralCatalogVersion(catalog, UniqueContentVersion)
+}
+func validateAstralCatalogVersion(c *EndgameCatalog, version int32) error {
+	astralRuneCatalog := c.Runes()
+	astralRecipeCatalog := c.Recipes(version)
+	if len(astralRuneCatalog) == 0 || len(astralRecipeCatalog) == 0 {
+		return fmt.Errorf("astral catalog requires rune and formation definitions")
 	}
 	used := map[ItemID]bool{}
 	seen := map[string]bool{}
 	for i, r := range astralRuneCatalog {
-		if r.Item != FirstAstralRune+ItemID(i) || r.Name == "" || r.MinLevel < 12 || r.MinLevel > 60 || (i > 0 && r.MinLevel <= astralRuneCatalog[i-1].MinLevel) || len(r.Affixes) == 0 || len(r.Affixes) > len((CardInstanceState{}).Effects) {
+		if r.Item <= 0 || r.Name == "" || r.MinLevel <= 0 || len(r.Affixes) == 0 || len(r.Affixes) > len((CardInstanceState{}).Effects) {
 			return fmt.Errorf("invalid rune row %d", i)
 		}
 		for _, a := range r.Affixes {
-			if !SupportedAstralRuneAffix(r.Item, a) {
+			if !SupportedAstralRuneDefinitionAffix(r, a) {
 				return fmt.Errorf("unsupported rune affix %d/%+v", r.Item, a)
 			}
 		}
 	}
-	for i, r := range astralRecipeCatalog {
-		if r.ID != int32(i+1) || r.Name == "" || r.Channel < AstralBattle || r.Channel > AstralSupport || len(r.Runes) < 2 || len(r.Runes) > 5 || len(r.Slots) == 0 || len(r.Traits) > 3 || !validEndgamePowerTier(r.PowerTier) || r.Professions&^uint8(31) != 0 || r.MinLevel < 12 || r.MinLevel > 60 {
+	for _, r := range astralRecipeCatalog {
+		if r.Name == "" || r.Channel < AstralBattle || r.Channel > AstralSupport || len(r.Runes) < 2 || len(r.Runes) > 5 || len(r.Slots) == 0 || len(r.Slots) > 32 || len(r.Traits) > 3 || !validEndgamePowerTier(r.PowerTier) || r.Professions&^uint8(31) != 0 || r.MinLevel <= 0 {
 			return fmt.Errorf("invalid formation %d", r.ID)
+		}
+		seenSlots := map[EquipSlot]bool{}
+		for _, slot := range r.Slots {
+			if slot < SlotFace || slot > maxEquipSlot || seenSlots[slot] {
+				return fmt.Errorf("invalid formation %d slot %d", r.ID, slot)
+			}
+			seenSlots[slot] = true
 		}
 		if err := validateEndgameExtraAffixes(r.Affixes, false); err != nil {
 			return fmt.Errorf("formation %d: %w", r.ID, err)
@@ -276,10 +257,10 @@ func ValidateAstralCatalog() error {
 				return fmt.Errorf("invalid formation trait %d", r.ID)
 			}
 		}
-		if err := ValidateEquipmentEffects(r.TypedEffects); err != nil {
+		if err := ValidateEquipmentEffects(r.TypedEffects, c); err != nil {
 			return fmt.Errorf("formation %d: %w", r.ID, err)
 		}
-		if err := ValidateSkillRankBonuses(r.SkillBonuses); err != nil {
+		if err := ValidateSkillRankBonuses(r.SkillBonuses, c.skills); err != nil {
 			return fmt.Errorf("formation %d: %w", r.ID, err)
 		}
 		for _, b := range r.ReservedSkills {
@@ -294,18 +275,18 @@ func ValidateAstralCatalog() error {
 		seen[key] = true
 		maxRuneLevel := int32(0)
 		for _, id := range r.Runes {
-			if rune, ok := AstralRune(id); !ok {
+			if rune, ok := AstralRune(id, c); !ok {
 				return fmt.Errorf("unknown rune %d", id)
 			} else if rune.MinLevel > maxRuneLevel {
 				maxRuneLevel = rune.MinLevel
 			}
 			used[id] = true
 		}
-		if r.MinLevel != maxRuneLevel {
+		if version == UniqueContentVersion && r.MinLevel != maxRuneLevel {
 			return fmt.Errorf("formation %d requirement must equal highest rune level %d", r.ID, maxRuneLevel)
 		}
 	}
-	if len(used) != 28 {
+	if len(used) != len(astralRuneCatalog) {
 		return fmt.Errorf("not all mansions used")
 	}
 	return nil
@@ -322,7 +303,7 @@ func EquipmentRequiredLevel(def ItemDef, st Stack) int32 {
 		level = def.Equip.Need.Level
 	}
 	for i := 0; i < int(st.SocketCount) && i < len(st.Sockets); i++ {
-		if rune, ok := AstralRune(st.Sockets[i]); ok && rune.MinLevel > level {
+		if rune, ok := AstralRune(st.Sockets[i], def.EndgameCatalog); ok && rune.MinLevel > level {
 			level = rune.MinLevel
 		}
 	}
@@ -341,8 +322,8 @@ func AstralTraits(worn *EquipSet, defs func(ItemID) (ItemDef, bool), ch *Charact
 func (r AstralRecipe) Description() string { return r.Lore }
 
 func (r AstralRuneDef) Description() string {
-	if r.Item == LastAstralRune {
-		return "有效穿戴时，每2秒按生命恢复数值恢复生命。也可按孔位顺序组成宿阵。"
+	if r.RegenerationIntervalMS > 0 {
+		return fmt.Sprintf("有效穿戴时，每%g秒按生命恢复数值恢复生命。也可按孔位顺序组成宿阵。", float64(r.RegenerationIntervalMS)/1000)
 	}
 	return "按镶孔顺序与其他星篆组成宿阵。"
 }

@@ -14,13 +14,14 @@ func cubeFixture() CubeContext {
 	for _, d := range AstralRuneItems(7) {
 		items[d.ID] = d
 	}
-	items[1001] = ItemDef{ID: 1001, Name: "铁剑", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: ItemInstanceEquipment, Equip: &EquipDef{Slot: 4, LevelReq: 50, Durable: 100}}
+	items[1001] = ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 1001, Name: "铁剑", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: ItemInstanceEquipment, Equip: &EquipDef{Slot: 4, LevelReq: 50, Durable: 100}}
 	b := NewBag(DefaultBagSlots)
 	for i, id := range []ItemID{CubeStarMarrow, CubePurifiedDust, CubeImmortalEcho} {
 		b.Set(100+i, Stack{Item: id, Count: 800, Bound: true})
 	}
 	b.Set(200, Stack{UID: 42, Item: 1001, Count: 1, InstanceKind: ItemInstanceEquipment, Durability: 77, MaxDurability: 95, DurabilityWearRaw: 12, RefineLevel: 3, FusedAppearance: 999, FusedSoul: 111, FusedDragon: 222})
-	return CubeContext{Level: 60, Bag: b, Money: 10000000, Items: items, Intn: func(n int) int { return n / 2 }, NewUID: func() int64 { return 999999 }}
+	AttachEndgameCatalog(items, testEndgameCatalog())
+	return CubeContext{Catalog: testEndgameCatalog(), Rules: cubeRulesFixture(items), Level: 60, Bag: b, Money: 10000000, Items: items, Intn: func(n int) int { return n / 2 }, NewUID: func() int64 { return 999999 }}
 }
 func cubeRune(ctx CubeContext, id ItemID, uid int64) Stack {
 	return Stack{UID: uid, Item: id, Count: 1, InstanceKind: ItemInstanceSocketCard, Card: ctx.Items[id].CardDefaults}
@@ -88,7 +89,7 @@ func cubeInputs(id int32) (CubeContext, EndgameRequest) {
 	return ctx, req
 }
 func TestCubeEveryRecipePreviewAndExecution(t *testing.T) {
-	all := CubeRecipes(cubeFixture().Items)
+	all := CubeRecipes(cubeFixture().Rules, cubeFixture().Items)
 	if len(all) != 66 {
 		t.Fatalf("recipes=%d", len(all))
 	}

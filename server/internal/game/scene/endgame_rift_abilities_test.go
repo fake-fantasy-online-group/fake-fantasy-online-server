@@ -100,7 +100,7 @@ func TestRiftAbilityShapesMatchWarningGeometry(t *testing.T) {
 		{riftFissure, domain.Pos{MapID: 7, X: math.Inf(1)}, false},
 	}
 	for _, tc := range tests {
-		c := newRiftAbilityCast(tc.ability, origin, origin, 1, 0)
+		c := newRiftAbilityCast(tc.ability, origin, origin, 1, 0, riftRulesFixture())
 		if got := c.contains(tc.p); got != tc.hit {
 			t.Fatalf("ability %d pos %+v got %v", tc.ability, tc.p, got)
 		}
@@ -341,9 +341,9 @@ func TestRiftGuardianCyclesAllAffixesWithoutFloorDamageMultiplier(t *testing.T) 
 		*now = state.pending.dueAt
 		s.stepEndgameRiftAbilities(*now)
 	}
-	one := newRiftAbilityCast(riftEruption, m.Pos, m.Pos, 3, 0)
+	one := newRiftAbilityCast(riftEruption, m.Pos, m.Pos, 3, 0, riftRulesFixture())
 	s.registerEndgameRiftAbilities(m, 3, 10, 71, 99)
-	two := newRiftAbilityCast(riftEruption, m.Pos, m.Pos, 3, 0)
+	two := newRiftAbilityCast(riftEruption, m.Pos, m.Pos, 3, 0, riftRulesFixture())
 	if one.damagePct != two.damagePct || one.dueAt != two.dueAt {
 		t.Fatal("floor number changed damage/warning")
 	}

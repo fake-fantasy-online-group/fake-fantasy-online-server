@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"fmt"
@@ -11,7 +14,7 @@ import (
 )
 
 func TestAstralEveryRuneEquipUseAndRelogRequirements(t *testing.T) {
-	for _, r := range domain.AstralRunes() {
+	for _, r := range domain.AstralRunes(catalogfixture.EndgameCatalog()) {
 		t.Run(r.Name, func(t *testing.T) {
 			s, sink, _ := astralSceneFixture(t)
 			p := s.players[1]
@@ -113,7 +116,7 @@ func TestAstralCatalogAndChannelReasonsAreAuthoritative(t *testing.T) {
 	for _, ev := range astralTake(s, sink) {
 		if message, ok := ev.(event.EndgameMessage); ok {
 			for _, r := range message.Message.Runes {
-				def, _ := domain.AstralRune(domain.ItemID(r.ItemID))
+				def, _ := domain.AstralRune(domain.ItemID(r.ItemID), catalogfixture.EndgameCatalog())
 				if r.MinLevel != def.MinLevel {
 					t.Fatal("catalog missing level")
 				}
@@ -124,7 +127,7 @@ func TestAstralCatalogAndChannelReasonsAreAuthoritative(t *testing.T) {
 	if rows != 28 {
 		t.Fatal("missing rune catalog rows", rows)
 	}
-	recipe, _ := domain.AstralRecipeByID(3) // Universal guard array allows head and body.
+	recipe, _ := domain.AstralRecipeByID(3, catalogfixture.EndgameCatalog()) // Universal guard array allows head and body.
 	makeGear := func(id domain.ItemID, slot domain.EquipSlot) domain.Stack {
 		def := s.items[999001]
 		eq := *def.Equip

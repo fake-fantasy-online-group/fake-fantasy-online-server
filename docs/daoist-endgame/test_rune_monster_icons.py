@@ -43,9 +43,9 @@ class RuneMonsterIcons(unittest.TestCase):
         self.assertEqual(self.assets["rune_provenance"], "rune-monster-icons.json")
         expected = [row["sprite"] for row in rows]
         self.assertEqual(self.assets["runes"], expected)
-        source = (ROOT / "server/cmd/gameserver/endgame_icons.go").read_text()
-        array = source.split("var astralRuneIcons = [...]int32{", 1)[1].split("}", 1)[0]
-        self.assertEqual([int(x) for x in re.findall(r"\d+", re.sub(r"//[^\n]*", "", array))], expected)
+        source = (ROOT / "server/migrations/000000_init-59.sql").read_text()
+        items = json.loads(source.split("$endgame_items$")[1])
+        self.assertEqual([row["icon"] for row in items[:28]], expected)
 
     def test_verified_monster_drop_collectible_sprite_chain(self):
         verified = [r for r in self.proof["runes"] if r["status"] == "verified_monster_collectible"]

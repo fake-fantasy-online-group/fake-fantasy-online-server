@@ -33,13 +33,12 @@ func AggregateEquipmentCombat(effects []ActiveEquipmentEffect) EquipmentCombatSt
 	}
 	return out
 }
+
+// ElementOutgoingDamage is the compatibility API for the shared numeric bucket.
 func ElementOutgoingDamage(amount, existingBP, elementBP int32, pvp bool) int32 {
-	if pvp {
-		elementBP /= 2
-	}
-	bp := min(int64(10000), max(int64(0), int64(existingBP)+int64(elementBP)))
-	return max(int32(1), ApplyUniqueBP(amount, int32(bp)))
+	return (CombatDamageBuckets{DamageIncreaseBP: int64(existingBP), PVPScaledDamageIncreaseBP: int64(elementBP), PVP: pvp}).OutgoingDamage(amount)
 }
+
 func ElementResistanceDamage(amount, rawResist, pierce int32, pvp bool) int32 {
 	cap := int32(3000)
 	if pvp {

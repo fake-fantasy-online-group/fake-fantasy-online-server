@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"encoding/json"
 	"fmt"
@@ -121,7 +123,7 @@ func skillGrowthPayload(t *testing.T, d domain.SkillDef, states domain.StatusTab
 		}
 	}
 	flat("area", reflect.ValueOf(d.Area))
-	if attr, value := domain.SkillGrowthAttribute(d.ID, d.Level); value > 0 {
+	if attr, value := domain.SkillGrowthAttribute(d.ID, d.Level, catalogfixture.SkillProgressionCatalog()); value > 0 {
 		out[fmt.Sprintf("character.attribute[%d]", attr)] = strconv.Itoa(int(value))
 	}
 	domain.FinalizeSkillManaCost(&d)
@@ -165,7 +167,7 @@ func skillGrowthRuntimePayload(t *testing.T, s *Scene, p *entity.Entity, d domai
 	p.Player.Char.Skills = domain.Learned{d.ID: min(d.Level, 20)}
 	levels := domain.Learned{d.ID: d.Level}
 	s.skillRawCache = map[domain.EntityID]skillRawCacheEntry{p.ID: {key: skillRawFingerprint(p), levels: levels}}
-	for _, id := range domain.V5SkillIDs() {
+	for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
 		target, ok := s.skills.Get(id, 5)
 		if !ok || !target.Kind.Active() || target.Prof != d.Prof {
 			continue
@@ -209,7 +211,7 @@ func TestSkillGrowthAuditAll149NativeFixtures(t *testing.T) {
 	p.Player.Char.Level = 100
 	if path := os.Getenv("SKILL_GROWTH_ANCHORS_PATH"); path != "" {
 		var anchors []map[string]any
-		for _, id := range domain.V5SkillIDs() {
+		for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
 			first, _ := skills.Get(id, 1)
 			fifth, _ := skills.Get(id, 5)
 			anchors = append(anchors, map[string]any{"id": id, "first": first, "fifth": fifth, "firstPayload": skillGrowthPayload(t, first, states), "fifthPayload": skillGrowthPayload(t, fifth, states)})
@@ -224,7 +226,7 @@ func TestSkillGrowthAuditAll149NativeFixtures(t *testing.T) {
 	}
 	rows := []skillGrowthAuditRow{}
 	missing := []string{}
-	for _, id := range domain.V5SkillIDs() {
+	for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
 		get := func(rank int32) map[string]string {
 			d, ok := skills.Get(id, rank)
 			if !ok {
@@ -385,7 +387,7 @@ func TestSkillGrowthAuditExactNativeBoundaries(t *testing.T) {
 
 func TestSkillGrowthAuditOnlySixUtilitySavings(t *testing.T) {
 	skills, _ := nativeRestoredSceneFixtures(t)
-	for _, id := range domain.V5SkillIDs() {
+	for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
 		base, _ := skills.Get(id, 5)
 		first, _ := skills.Get(id, 1)
 		original := func(a, b, rank int32) int32 {

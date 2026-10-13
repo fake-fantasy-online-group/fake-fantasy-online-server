@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"encoding/json"
 	"os"
@@ -34,8 +36,8 @@ func TestV5HighEquippedSkillTooltipFixture(t *testing.T) {
 	ch.Base.DEX += 18
 	p.HP, p.MaxHP, p.MP, p.MaxMP = 10000, 10000, 10000, 10000
 	ch.Skills = domain.Learned{}
-	for _, id := range domain.V5SkillIDs() {
-		identity, _ := domain.V5SkillIdentity(id)
+	for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
+		identity, _ := domain.V5SkillIdentity(id, catalogfixture.SkillProgressionCatalog())
 		if identity.Profession == 5 {
 			ch.Skills[id] = 1
 		}
@@ -47,7 +49,7 @@ func TestV5HighEquippedSkillTooltipFixture(t *testing.T) {
 	for _, rank := range ch.Skills {
 		ch.SkillPoints -= rank
 	}
-	if err := domain.ValidateSkillAllocation(100, 5, ch.Skills, ch.SkillPoints); err != nil {
+	if err := domain.ValidateSkillAllocation(100, 5, ch.Skills, ch.SkillPoints, catalogfixture.SkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
 	groups := v5PacketGearCandidates(t, s, p)

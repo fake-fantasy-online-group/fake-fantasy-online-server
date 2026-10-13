@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"errors"
 	"fmt"
@@ -16,6 +18,7 @@ func v5TestSkillTable(id domain.SkillID, prof int32, fx domain.SkillEffect) doma
 	for rank := int32(1); rank <= 5; rank++ {
 		table[domain.SkillKey{ID: id, Level: rank}] = domain.SkillDef{ID: id, Prof: prof, Level: rank, FormulaVersion: 5, Kind: domain.SkillSingle, Effect: fx, TargetEnemy: true, LevelNeed: 10 + rank - 1}
 	}
+	domain.AttachSkillProgression(table, catalogfixture.SkillProgressionCatalog())
 	return table
 }
 func TestV5UpgradeUsesReceiptAtomicAndReplay(t *testing.T) {
@@ -139,11 +142,11 @@ func TestV5CatalogSkillGearChangesRealHealingAndRemoval(t *testing.T) {
 				ch.Level = 100
 				ch.Skills = domain.Learned{10301: hardRank}
 				s.skills, s.statuses = realV5SkillFixtures(t)
-				u, ok := domain.UniqueForBase(id)
+				u, ok := domain.UniqueForBase(id, catalogfixture.EndgameCatalog())
 				if !ok {
 					t.Fatal(id)
 				}
-				item := domain.ItemDef{ID: id, Equip: &domain.EquipDef{Slot: int32(u.Slot), Durable: 100}}
+				item := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Equip: &domain.EquipDef{Slot: int32(u.Slot), Durable: 100}}
 				s.items = map[domain.ItemID]domain.ItemDef{id: item}
 				st := domain.NewStack(item, 1)
 				st.UID = 900000 + int64(id)

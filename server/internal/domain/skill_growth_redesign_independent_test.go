@@ -78,7 +78,7 @@ func TestRedesignIndependentEffectContestHasNoHiddenRatingCap(t *testing.T) {
 func TestRedesignIndependentEfficiencyKeepsAbsentCostsAbsent(t *testing.T) {
 	// Original zero means the channel is absent, not a hidden value to grow.
 	for _, id := range []SkillID{10018, 10227, 10301, 10305, 10309, 10432} {
-		first := SkillDef{ID: id, Kind: SkillSingle, Level: 1}
+		first := SkillDef{ID: id, Kind: SkillSingle, Level: 1, Progression: testSkillProgressionCatalog()}
 		fifth := first
 		fifth.Level = 5
 		for _, rank := range []int32{6, 20, 100, 1000000} {

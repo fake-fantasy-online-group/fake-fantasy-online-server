@@ -123,27 +123,27 @@ func saveEndgameRun(ctx context.Context, q querier, v domain.EndgameRunRecord, e
 }
 
 func (p *Postgres) LoadEndgameState(ctx context.Context, id int64) (domain.EndgameState, error) {
-	return loadEndgameState(ctx, p.pool, id)
+	return loadEndgameState(ctx, p.catalogQuery(), id)
 }
 
 func (p *Postgres) SaveEndgameState(ctx context.Context, id int64, v domain.EndgameState, expected int64) error {
-	return saveEndgameState(ctx, p.pool, id, v, expected)
+	return saveEndgameState(ctx, p.catalogQuery(), id, v, expected)
 }
 
 func (p *Postgres) LoadEndgameReceipt(ctx context.Context, id int64, key string) (*domain.EndgameReceipt, error) {
-	return loadEndgameReceipt(ctx, p.pool, id, key)
+	return loadEndgameReceipt(ctx, p.catalogQuery(), id, key)
 }
 
 func (p *Postgres) SaveEndgameReceipt(ctx context.Context, v domain.EndgameReceipt) error {
-	return saveEndgameReceipt(ctx, p.pool, v)
+	return saveEndgameReceipt(ctx, p.catalogQuery(), v)
 }
 
 func (p *Postgres) LoadEndgameRun(ctx context.Context, id string) (*domain.EndgameRunRecord, error) {
-	return loadEndgameRun(ctx, p.pool, id)
+	return loadEndgameRun(ctx, p.catalogQuery(), id)
 }
 
 func (p *Postgres) SaveEndgameRun(ctx context.Context, v domain.EndgameRunRecord, expected int64) error {
-	return saveEndgameRun(ctx, p.pool, v, expected)
+	return saveEndgameRun(ctx, p.catalogQuery(), v, expected)
 }
 
 func (t *pgTx) LoadEndgameState(ctx context.Context, id int64) (domain.EndgameState, error) {

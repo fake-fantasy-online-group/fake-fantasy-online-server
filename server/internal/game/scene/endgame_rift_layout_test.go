@@ -24,7 +24,7 @@ func seededRiftLayoutFixture(t *testing.T, floor int32) (*Scene, domain.RiftFloo
 	if err != nil {
 		t.Fatal(err)
 	}
-	run, err := domain.NewRiftRun("seeded-scene", 1, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, *now)
+	run, err := domain.NewRiftRun("seeded-scene", 1, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, *now, riftRulesFixture())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,7 +46,7 @@ func TestSeededRiftPopulationUsesFrozenPlanAndScaledBases(t *testing.T) {
 		if m.Look.ModelID != 600 || m.Level != 60 {
 			t.Fatal("lost existing visual or frozen level")
 		}
-		if m.MaxHP != domain.RiftScaledStat(100, 1, 1, class, true) || m.Stats.MinAtk != domain.RiftScaledStat(30, 1, 1, class, false) {
+		if m.MaxHP != domain.RiftScaledStat(100, 1, 1, class, true, riftRulesFixture()) || m.Stats.MinAtk != domain.RiftScaledStat(30, 1, 1, class, false, riftRulesFixture()) {
 			t.Fatal("natural map stats changed rift difficulty", m.MaxHP, m.Stats)
 		}
 		if class > 0 && (m.Monster.Kind != domain.MonsterElite || s.rift.abilities[id] == nil) {
@@ -82,7 +82,7 @@ func TestSeededRiftFloorIndexDoesNotScaleCombat(t *testing.T) {
 		s.populateEndgameRift(false)
 		for id, m := range s.monsters {
 			class := s.rift.data.Run.Monsters[id].Class
-			if m.MaxHP != domain.RiftScaledStat(100, 1, 1, class, true) {
+			if m.MaxHP != domain.RiftScaledStat(100, 1, 1, class, true, riftRulesFixture()) {
 				t.Fatal("floor changed tier scaling")
 			}
 		}
@@ -130,7 +130,7 @@ func TestSeededRiftDensePopulationUsesFullPlanAtLowAndMaxTier(t *testing.T) {
 		seen := map[domain.Pos]bool{}
 		for id, m := range s.monsters {
 			class := s.rift.data.Run.Monsters[id].Class
-			if seen[m.Pos] || !s.walkable(m.Pos) || m.MaxHP != domain.RiftScaledStat(100, tier, 1, class, true) {
+			if seen[m.Pos] || !s.walkable(m.Pos) || m.MaxHP != domain.RiftScaledStat(100, tier, 1, class, true, riftRulesFixture()) {
 				t.Fatal("density changed geometry or difficulty stats")
 			}
 			seen[m.Pos] = true

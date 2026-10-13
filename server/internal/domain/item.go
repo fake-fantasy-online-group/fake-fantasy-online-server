@@ -64,9 +64,10 @@ type EquipDef struct {
 	ResourceLevel int32
 	// NoTypeDrop 对应 ov_arm.no_type_drop。只有 false 的模板能进入
 	// “物品种类 + 等级区间”随机掉落池；显式 item_id 掉落不受它影响。
-	NoTypeDrop  bool
-	LevelReq    int32
-	RefineLimit int32
+	NoTypeDrop         bool
+	NativeDropEligible bool // loaded from native SQL drop classification; never inferred from a compiled ID list
+	LevelReq           int32
+	RefineLimit        int32
 	// RefineEffects 按精炼等级索引；启动时把原表百分比按本装备固有属性
 	// 折算为固定增量，显示与战斗共用，不含随机词条、镶嵌或套装。
 	RefineEffects map[int32]RefineEffect
@@ -164,6 +165,7 @@ type EquipAppearance struct {
 
 // ItemDef 是一种物品的模板。
 type ItemDef struct {
+	EndgameCatalog     *EndgameCatalog `json:"-"` // immutable startup dependency, never instance state
 	PetCarrierSpecies  PetID
 	HornTier, HornSkin uint8 // PostgreSQL game_horn_items
 	GrantPetID         PetID // 来自game_item_pet_eggs；使用后获得未孵化宠物。

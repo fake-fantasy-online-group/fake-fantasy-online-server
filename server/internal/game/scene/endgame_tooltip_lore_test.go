@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"fmt"
@@ -33,10 +36,10 @@ func assertSpecialTooltipOmitsBaseLore(t *testing.T, s *Scene, def domain.ItemDe
 }
 
 func TestEveryUniqueTooltipReplacesBaseLoreOnly(t *testing.T) {
-	for _, unique := range domain.UniqueCatalog() {
+	for _, unique := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
 		t.Run(unique.Name, func(t *testing.T) {
 			s := newTestScene(t, nil)
-			def := domain.ItemDef{ID: unique.BaseID, Name: unique.BaseName, Description: tooltipBaseLore, Weight: 5,
+			def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: unique.BaseID, Name: unique.BaseName, Description: tooltipBaseLore, Weight: 5,
 				InstanceKind: domain.ItemInstanceEquipment,
 				Equip: &domain.EquipDef{Slot: unique.Slot, Durable: 100, Need: domain.Requirement{Level: 12},
 					Skill: &domain.EquipmentSkill{Name: "原生技能", Description: "原生技能效果。"},
@@ -69,7 +72,7 @@ func TestEveryUniqueTooltipReplacesBaseLoreOnly(t *testing.T) {
 func TestEveryFormationTooltipOmitsBaseLoreRegardlessOfActivation(t *testing.T) {
 	s, _, _ := astralSceneFixture(t)
 	p := s.players[1]
-	for _, recipe := range domain.AstralRecipes() {
+	for _, recipe := range domain.AstralRecipes(catalogfixture.EndgameCatalog()) {
 		t.Run(recipe.Name, func(t *testing.T) {
 			def := s.items[999001]
 			equip := *def.Equip
@@ -119,7 +122,7 @@ func TestOrdinaryItemTooltipKeepsBaseLore(t *testing.T) {
 			t.Fatal("ordinary equipment description disappeared", sockets)
 		}
 	}
-	material := domain.ItemDef{ID: 999002, Description: tooltipBaseLore}
+	material := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 999002, Description: tooltipBaseLore}
 	if s.itemTooltip(material, domain.NewStack(material, 1)) != tooltipBaseLore {
 		t.Fatal("ordinary non-equipment description changed")
 	}

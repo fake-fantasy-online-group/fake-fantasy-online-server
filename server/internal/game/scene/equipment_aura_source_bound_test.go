@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -147,12 +150,12 @@ func TestEquipmentAuraStrongestWinsAndFallsBack(t *testing.T) {
 
 func wearFormationAuraTest(t *testing.T, s *Scene, p *entity.Entity, recipeID int32, uid int64) domain.Stack {
 	t.Helper()
-	r, ok := domain.AstralRecipeByID(recipeID)
+	r, ok := domain.AstralRecipeByID(recipeID, catalogfixture.EndgameCatalog())
 	if !ok {
 		t.Fatal("missing formation", recipeID)
 	}
 	item := domain.ItemID(990000 + recipeID)
-	def := domain.ItemDef{ID: item, Name: "普通宿阵基底", InstanceKind: domain.ItemInstanceEquipment, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: int32(r.Slots[0]), Durable: 100}}
+	def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: item, Name: "普通宿阵基底", InstanceKind: domain.ItemInstanceEquipment, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: int32(r.Slots[0]), Durable: 100}}
 	if s.items == nil {
 		s.items = map[domain.ItemID]domain.ItemDef{}
 	}
@@ -164,7 +167,7 @@ func wearFormationAuraTest(t *testing.T, s *Scene, p *entity.Entity, recipeID in
 	st.Endgame.FormationRollBP = 10000
 	st.SocketCount = uint8(len(r.Runes))
 	runeDefs := map[domain.ItemID]domain.ItemDef{}
-	for _, rd := range domain.AstralRuneItems(7) {
+	for _, rd := range astralRuneItemsFixture(7) {
 		runeDefs[rd.ID] = rd
 	}
 	for i, runeID := range r.Runes {
@@ -189,7 +192,7 @@ func wearFormationAuraTest(t *testing.T, s *Scene, p *entity.Entity, recipeID in
 
 func formationAuraTest(t *testing.T, recipeID int32) domain.EquipmentAura {
 	t.Helper()
-	r, ok := domain.AstralRecipeByID(recipeID)
+	r, ok := domain.AstralRecipeByID(recipeID, catalogfixture.EndgameCatalog())
 	if !ok {
 		t.Fatal("missing recipe", recipeID)
 	}
@@ -273,7 +276,7 @@ func TestFormationOffensiveAuraRealStrikesAndWithdrawal(t *testing.T) {
 			for _, src := range []*entity.Entity{p, q, pet} {
 				src.Stats = domain.Stats{MAtk: 1000}
 				base := s.equipmentOffense(src)
-				if got := s.equipmentAuraOffense(src, base).Elements[element].DamageBP; got != base.Elements[element].DamageBP+aura.Value {
+				if got := base.Elements[element].DamageBP + int32(s.equipmentAuraDamageNumerator(src, element, false)/10000); got != base.Elements[element].DamageBP+aura.Value {
 					t.Fatalf("aura not granted once to %d: %d", src.ID, got)
 				}
 				for _, dst := range []*entity.Entity{monster, enemy} {
@@ -333,7 +336,7 @@ func TestOffensiveAuraSameElementStrongestAndDefenseCoexist(t *testing.T) {
 	}
 	s.equipmentState().cache[q.ID] = c
 	s.stepEquipmentAuras()
-	if got := s.equipmentAuraOffense(r, domain.EquipmentCombatStats{}).Elements[0].DamageBP; got != 2000 {
+	if got := int32(s.equipmentAuraDamageNumerator(r, 0, false) / 10000); got != 2000 {
 		t.Fatal("same-element damage auras stacked across families", got)
 	}
 	if got := s.equipmentDefense(r, false).Elements[0].ResistBP; got != formationAuraTest(t, 24).Value {
@@ -344,7 +347,7 @@ func TestOffensiveAuraSameElementStrongestAndDefenseCoexist(t *testing.T) {
 	}
 	q.HP = 0
 	s.stepEquipmentAuras()
-	if got := s.equipmentAuraOffense(r, domain.EquipmentCombatStats{}).Elements[0].DamageBP; got != formationAuraTest(t, 14).Value {
+	if got := int32(s.equipmentAuraDamageNumerator(r, 0, false) / 10000); got != formationAuraTest(t, 14).Value {
 		t.Fatal("weaker source did not resume", got)
 	}
 }

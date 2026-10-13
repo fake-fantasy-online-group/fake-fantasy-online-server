@@ -132,5 +132,5 @@ func (s *Scene) rollNaturalEquipmentV5(def domain.ItemDef, stack *domain.Stack, 
 		stack.RolledAffixCount = uint8(len(rolled))
 		copy(stack.RolledAffixes[:], rolled)
 	}
-	domain.RollNaturalUniqueWithMagicFindV5(stack, def, context.MagicFind, unique.Int63n, variables.Intn)
+	domain.RollNaturalUniqueWithMagicFindV5(stack, def, context.MagicFind, unique.Int63n, variables.Intn, s.lootRules.Active())
 }

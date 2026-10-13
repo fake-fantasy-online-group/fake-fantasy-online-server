@@ -24,7 +24,7 @@ func (s *Scene) onEndgameSkillUpgrade(p *entity.Entity, r domain.EndgameRequest)
 		s.endgameError(p, r, "allocation_migration", "技能存档尚未完成新版迁移")
 		return
 	}
-	if err := domain.ValidateSkillAllocation(ch.Level, int32(ch.Race)+1, ch.Skills, ch.SkillPoints); err != nil {
+	if err := domain.ValidateSkillAllocation(ch.Level, int32(ch.Race)+1, ch.Skills, ch.SkillPoints, s.skills.ProgressionCatalog()); err != nil {
 		s.endgameError(p, r, "allocation_invalid", err.Error())
 		return
 	}
@@ -43,10 +43,13 @@ func (s *Scene) onEndgameSkillUpgrade(p *entity.Entity, r domain.EndgameRequest)
 	}
 	candidate.Char.Skills[id] = next
 	candidate.Char.SkillPoints--
-	if err := domain.ValidateSkillAllocation(candidate.Char.Level, int32(candidate.Char.Race)+1, candidate.Char.Skills, candidate.Char.SkillPoints); err != nil {
+	if err := domain.ValidateSkillAllocation(candidate.Char.Level, int32(candidate.Char.Race)+1, candidate.Char.Skills, candidate.Char.SkillPoints, s.skills.ProgressionCatalog()); err != nil {
 		s.endgameError(p, r, "allocation_invalid", err.Error())
 		return
 	}
 	response := domain.EndgameResponse{Kind: "skill.upgrade", Message: fmt.Sprintf("%s投入等级提升至%d", def.Name, next), Result: map[string]string{"skillId": strconv.Itoa(int(id)), "hardRank": strconv.Itoa(int(next)), "skillPoints": strconv.Itoa(int(candidate.Char.SkillPoints))}}
-	s.endgameCommit(p, r, candidate, response, nil, 0, func() { s.emitTo(p.ID, s.skillSnapshot(p)); s.sendGrowthV5Skills(p,domain.EndgameRequest{Op:"skill.ranks"}) })
+	s.endgameCommit(p, r, candidate, response, nil, 0, func() {
+		s.emitTo(p.ID, s.skillSnapshot(p))
+		s.sendGrowthV5Skills(p, domain.EndgameRequest{Op: "skill.ranks"})
+	})
 }

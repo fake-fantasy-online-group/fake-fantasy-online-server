@@ -14,6 +14,7 @@ import (
 // 生产用 PostgreSQL 实现(接同一接口)。这里刻意做成线程安全, 语义与真实存储对齐,
 // 以便上层逻辑在两种实现下行为一致。
 type Memory struct {
+ endgameCatalog *domain.EndgameCatalog
 	endgameStates   map[int64]domain.EndgameState
 	endgameReceipts map[endgameReceiptKey]domain.EndgameReceipt
 	endgameRuns     map[string]domain.EndgameRunRecord
@@ -38,8 +39,10 @@ type Memory struct {
 	nextChar        int64
 }
 
-func NewMemory() *Memory {
+func NewMemory(catalogs ...*domain.EndgameCatalog) *Memory {
+ var catalog *domain.EndgameCatalog;if len(catalogs)==1{catalog=catalogs[0]}
 	return &Memory{
+ endgameCatalog:catalog,
 		endgameStates:   map[int64]domain.EndgameState{},
 		endgameReceipts: map[endgameReceiptKey]domain.EndgameReceipt{},
 		endgameRuns:     map[string]domain.EndgameRunRecord{},
@@ -463,7 +466,7 @@ func (m *Memory) saveSnapshotLocked(snap domain.Snapshot) error {
 	if snap.Char.Caiyu < 0 {
 		return fmt.Errorf("store: 彩玉余额不能为负")
 	}
-	if err := validateEndgameSnapshot(snap); err != nil {
+	if err := validateEndgameSnapshot(snap,m.endgameCatalog); err != nil {
 		return err
 	}
 	cloned := snap.Clone()

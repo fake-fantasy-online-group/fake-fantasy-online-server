@@ -44,6 +44,7 @@ type equipmentRuntime struct {
 	root            *equipmentRoot
 	sequence        uint64
 	auraSources     []equipmentAuraSource
+	auraSchedules   map[equipmentAuraSource]equipmentAuraSchedule
 	auras           map[domain.EntityID]map[string]equipmentAuraGrant
 	nextAuraScan    domain.Tick
 	suppressedProcs uint64
@@ -170,10 +171,7 @@ func (s *Scene) equipmentBlow(src *entity.Entity, blow combat.Blow) combat.Blow 
 		blow.EquipmentOffense = s.equipmentOffense(src)
 		blow.EquipmentSnapshot = true
 	}
-	// Source-bound auras are evaluated at settlement, never persisted into an
-	// accepted cast/trap equipment snapshot. The existing elemental bucket handles
-	// its shared cap and PvP half effectiveness exactly once.
-	blow.EquipmentOffense = s.equipmentAuraOffense(src, blow.EquipmentOffense)
+	// Live aura contributions are resolved after the target/PvP context is known.
 	return blow
 }
 func (s *Scene) collectEquipmentHit(src, dst *entity.Entity, blow combat.Blow, ev event.DamageDealt) {

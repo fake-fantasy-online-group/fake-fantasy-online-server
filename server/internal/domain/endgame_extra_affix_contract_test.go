@@ -58,12 +58,12 @@ func TestUniqueExtraAffixesStayNonzeroAndInt32SafeAtEveryPotency(t *testing.T) {
 			t.Fatal("invalid scaled unique value accepted", value)
 		}
 	}
-	for _, d := range UniqueCatalog() {
+	for _, d := range UniqueCatalog(testEndgameCatalog()) {
 		for _, roll := range []int32{UniqueRollMinBP, 10000, UniqueRollMaxBP} {
 			st := Stack{UID: 9007199254740993, Item: d.BaseID, Count: 1,
 				Endgame: EndgameItemState{UniqueContentVersion: UniqueContentVersion, UniqueID: d.ID, UniqueRollBP: roll}}
 			before := st
-			rows := UniqueAffixes(st)
+			rows := UniqueAffixes(st, testEndgameCatalog())
 			benefits := 0
 			for _, a := range rows {
 				if a.Value == 0 {
@@ -81,18 +81,18 @@ func TestUniqueExtraAffixesStayNonzeroAndInt32SafeAtEveryPotency(t *testing.T) {
 }
 
 func TestUniqueLoaderCannotCountTraitsReservedLevelsOrNativeStats(t *testing.T) {
-	d := UniqueCatalog()[0]
+	d := UniqueCatalog(testEndgameCatalog())[0]
 	d.PowerTier = "transition"
 	d.Affixes = validFiveExtraAffixes()[:4]
 	d.Traits = []UniqueTrait{{Kind: "basic_focus", PowerBP: 2000}}
 	d.ReservedSkills = []ReservedSkillAttribute{{Scope: "all", Levels: 3}}
-	if err := validateUniqueDefinition(d); err == nil || !strings.Contains(err.Error(), "at least five beneficial") {
+	if err := validateUniqueDefinition(d, testEndgameCatalog()); err == nil || !strings.Contains(err.Error(), "at least five beneficial") {
 		t.Fatal("other effect sources padded missing unique extra", err)
 	}
 	for _, tier := range []string{"niche", "specialist", "chase", ""} {
 		d.PowerTier = tier
 		d.Affixes = validFiveExtraAffixes()
-		if validateUniqueDefinition(d) == nil {
+		if validateUniqueDefinition(d, testEndgameCatalog()) == nil {
 			t.Fatal("legacy tier accepted", tier)
 		}
 	}
@@ -115,18 +115,18 @@ func TestAstralRuntimeGateCannotCountRunesTraitsOrReservedLevels(t *testing.T) {
 	} {
 		astralRecipeCatalog[0] = cloneAstralRecipe(original)
 		mutate(&astralRecipeCatalog[0])
-		if err := ValidateAstralCatalog(); err == nil {
+		if err := ValidateAstralCatalog(testEndgameCatalog()); err == nil {
 			t.Fatal("invalid formation extras accepted")
 		}
 	}
 	astralRecipeCatalog[0] = original
-	if err := ValidateAstralCatalog(); err != nil {
+	if err := ValidateAstralCatalog(testEndgameCatalog()); err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestExtendedExtraAffixSlicesDoNotTruncateOrRewriteInstances(t *testing.T) {
-	d := UniqueCatalog()[0]
+	d := UniqueCatalog(testEndgameCatalog())[0]
 	original := uniqueByBase[d.BaseID]
 	t.Cleanup(func() { uniqueByBase[d.BaseID] = original })
 	d.VariableAffixes = nil
@@ -135,7 +135,7 @@ func TestExtendedExtraAffixSlicesDoNotTruncateOrRewriteInstances(t *testing.T) {
 		Affix{Attr: AttrDEX, Value: 12}, Affix{Attr: AttrAtk, Value: 30, Mode: ModePercent},
 		Affix{Attr: AttrMDef, Value: -8}, Affix{Attr: AttrMaxMP, Value: -10})
 	d.PowerTier = "godlike"
-	if err := validateUniqueDefinition(d); err != nil {
+	if err := validateUniqueDefinition(d, testEndgameCatalog()); err != nil {
 		t.Fatal(err)
 	}
 	uniqueByBase[d.BaseID] = d
@@ -145,7 +145,7 @@ func TestExtendedExtraAffixSlicesDoNotTruncateOrRewriteInstances(t *testing.T) {
 		SocketCount:   1, Sockets: [5]ItemID{FirstAstralRune}, SocketUIDs: [5]int64{9007199254740995},
 		Endgame: EndgameItemState{UniqueContentVersion: UniqueContentVersion, UniqueID: d.ID, UniqueRollBP: 10123, Revision: 3}}
 	before := st
-	got := UniqueAffixes(st)
+	got := UniqueAffixes(st, testEndgameCatalog())
 	want := append([]Affix{}, d.Affixes...)
 	want = ResolveVariableAffixes(want, d.VariableAffixes, st.Endgame.UniqueRollBP)
 	if len(got) != 10 || !reflect.DeepEqual(got, want) || st != before {
@@ -171,7 +171,7 @@ func TestAstralRuneSnapshotCapacityStillBoundsOnlyRunes(t *testing.T) {
 	for i := range astralRuneCatalog[0].Affixes {
 		astralRuneCatalog[0].Affixes[i] = Affix{Attr: AttrSTR, Value: 20}
 	}
-	if err := ValidateAstralCatalog(); err == nil {
+	if err := ValidateAstralCatalog(testEndgameCatalog()); err == nil {
 		t.Fatal("oversized persisted rune snapshot accepted")
 	}
 }

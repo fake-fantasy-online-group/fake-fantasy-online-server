@@ -6,7 +6,7 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 )
 
-func validateEndgameItem(st domain.Stack) error {
+func validateEndgameItem(st domain.Stack, catalog *domain.EndgameCatalog) error {
 	v := st.Endgame
 	// A revision belongs to every mutated equipment instance, not only uniques.
 	// Legacy ordinary items without metadata need no overlay row.
@@ -26,7 +26,7 @@ func validateEndgameItem(st domain.Stack) error {
 		return fmt.Errorf("endgame: ordinary item has unique version uid=%d", st.UID)
 	}
 	if v.UniqueContentVersion != 0 {
-		if _, ok := domain.UniqueOf(st); !ok {
+		if _, ok := domain.UniqueOf(st, catalog); !ok {
 			return fmt.Errorf("endgame: versioned unique outside approved scope uid=%d", st.UID)
 		}
 	}
@@ -42,11 +42,11 @@ func validateEndgameItem(st domain.Stack) error {
 	}
 	return nil
 }
-func validateEndgameSnapshot(s domain.Snapshot) error {
+func validateEndgameSnapshot(s domain.Snapshot, catalog *domain.EndgameCatalog) error {
 	var err error
 	visit := func(st domain.Stack) {
 		if err == nil {
-			err = validateEndgameItem(st)
+			err = validateEndgameItem(st, catalog)
 		}
 	}
 	s.Bag.Each(func(_ int, st domain.Stack) { visit(st) })
@@ -64,7 +64,7 @@ func validateEndgameSnapshot(s domain.Snapshot) error {
 	return err
 }
 func saveEndgameItem(ctx context.Context, q querier, st domain.Stack) error {
-	if err := validateEndgameItem(st); err != nil {
+	if err := validateEndgameItem(st, catalogOfQuerier(q)); err != nil {
 		return err
 	}
 	if st.Endgame == (domain.EndgameItemState{}) {
@@ -95,7 +95,7 @@ func loadEndgameItems(ctx context.Context, q querier, items map[int64]domain.Sta
 		}
 		st := items[id]
 		st.Endgame = v
-		if err := validateEndgameItem(st); err != nil {
+		if err := validateEndgameItem(st, catalogOfQuerier(q)); err != nil {
 			return err
 		}
 		items[id] = st

@@ -13,13 +13,10 @@ parser.add_argument('--mode', choices=('q21', 'classic'), required=True)
 args = parser.parse_args()
 folder = Path(__file__).resolve().parent
 manifest = json.loads((folder / 'icon-assets.json').read_text())
-source = (folder.parents[1] / 'server/cmd/gameserver/endgame_icons.go').read_text()
-array = source.split('var astralRuneIcons = [...]int32{', 1)[1].split('}', 1)[0]
-array = re.sub(r'//[^\n]*', '', array)
-assert [int(n) for n in re.findall(r'\d+', array)] == manifest['runes'], 'rune map differs from pixel review'
-for case, sprite in zip(('RiftKeyItemID', 'CubeStarMarrow', 'CubePurifiedDust', 'CubeImmortalEcho'),
-                        [manifest['key']] + manifest['materials']):
-    assert re.search(r'case domain\.' + case + r':\s*return ' + str(sprite) + r'\b', source), case + ' differs from pixel review'
+source = (folder.parents[1] / 'server/migrations/000000_init-59.sql').read_text()
+items = json.loads(source.split('$endgame_items$')[1])
+assert [row['icon'] for row in items[:28]] == manifest['runes'], 'rune map differs from pixel review'
+assert [row['icon'] for row in items[28:]] == [manifest['key']] + manifest['materials'], 'key/material map differs from pixel review'
 primary = manifest['runes'] + [manifest['key']] + manifest['materials']
 assert len(primary) == len(set(primary)) == 32, 'primary icons must remain distinct'
 assert len(set(manifest['fallbacks'])) == 11, 'fallback semantic groups collapsed'

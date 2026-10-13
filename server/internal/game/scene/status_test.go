@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -42,7 +45,7 @@ func statusTable(defs ...domain.StatusDef) domain.StatusTable {
 
 // 抗性护符: 状态抗性只能从**装备**来 —— 直接写 p.Stats 会被 refreshStats 重算掉,
 // 那正是"属性只有一个真相来源"这条设计在起作用。
-var 抗性护符 = domain.ItemDef{ID: 8001, Name: "抗性护符", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{
+var 抗性护符 = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 8001, Name: "抗性护符", InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{
 	Slot:    int32(domain.SlotNeck),
 	Affixes: []domain.Affix{{Attr: domain.AttrStatusRes, Value: 90}},
 }}
@@ -64,7 +67,7 @@ func statusScene(t *testing.T) (*Scene, domain.EntityID, *fakeSink) {
 	sp, _ := spawn.New(
 		[]domain.SpawnPoint{{ID: 1, Monster: 技能怪.ID, Pos: domain.Pos{MapID: 14, X: 140, Y: 100}}},
 		defs, domain.NewEntityAlloc())
-	s := New(Config{ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 21,
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 21,
 		Spawner: sp, Defs: defs,
 		Statuses: statusTable(中毒, 昏迷, 封印, 衰弱, 狂暴),
 		Skills:   skillTable(火弹术),
@@ -360,7 +363,7 @@ func TestStunnedMonsterDoesNothing(t *testing.T) {
 	sp, _ := spawn.New(
 		[]domain.SpawnPoint{{ID: 1, Monster: 主动树妖.ID, Pos: domain.Pos{MapID: 14, X: 300, Y: 100}}},
 		defs, domain.NewEntityAlloc())
-	s := New(Config{ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 3,
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 3,
 		Spawner: sp, Defs: defs, Statuses: statusTable(昏迷)})
 	join(t, s, 1, 100, "甲", 100, 100)
 	var mid domain.EntityID
@@ -484,7 +487,7 @@ func TestReapplyRefreshes(t *testing.T) {
 
 // 没配状态表的场景不该崩。
 func TestNoStatusTableIsSafe(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 7}, SaveEvery: 10_000})
 	join(t, s, 1, 100, "甲", 100, 100)
 	s.step()
 	if s.applyStatus(s.entities[1], domain.StatusStun, 1, 0) {

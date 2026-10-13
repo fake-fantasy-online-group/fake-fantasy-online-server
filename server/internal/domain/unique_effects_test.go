@@ -44,8 +44,8 @@ func TestUniqueBoundariesCapsAndFunctionalClassRules(t *testing.T) {
 	if ApplyUniqueBP(2147483647, 10000) != 2147483647 || ApplyUniqueBP(100, -4500) != 55 {
 		t.Fatal("unsafe scaling")
 	}
-	d := UniqueCatalog()[0]
-	for _, candidate := range UniqueCatalog() {
+	d := UniqueCatalog(testEndgameCatalog())[0]
+	for _, candidate := range UniqueCatalog(testEndgameCatalog()) {
 		if len(candidate.Traits) > 0 {
 			d = candidate
 			break

@@ -102,7 +102,7 @@ func cardBudgetDefinition(r cardBudgetSource) ItemDef {
 	for _, class := range r.Professions {
 		mask |= 1 << class
 	}
-	def := ItemDef{ID: r.BaseID, Name: r.Name, InstanceKind: ItemInstanceEquipment, Equip: &EquipDef{
+	def := ItemDef{EndgameCatalog: testEndgameCatalog(), ID: r.BaseID, Name: r.Name, InstanceKind: ItemInstanceEquipment, Equip: &EquipDef{
 		Slot: r.Slot, LevelReq: r.Level, ResourceLevel: r.Tier, Type: r.Type,
 		Durable: 100, Affixes: append([]Affix(nil), r.Fixed...), UnknownInnateProperties: r.Unknown,
 		Base:  Base{STR: i["str"], VIT: i["vit"], INT: i["int_"], SPI: i["spi"], AGI: i["agi"], DEX: i["dex"]},
@@ -436,7 +436,7 @@ func TestFormationAllSourceBudgetLanesThroughActivation(t *testing.T) {
 				}
 				level := max(recipe.MinLevel, r.Level)
 				for i, id := range recipe.Runes {
-					rune, valid := AstralRune(id)
+					rune, valid := AstralRune(id, testEndgameCatalog())
 					if !valid {
 						t.Fatal("recipe ingredient absent")
 					}

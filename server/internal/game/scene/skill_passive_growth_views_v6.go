@@ -9,7 +9,7 @@ import (
 // aggregation. They stay on their own skill and never invent outgoing bonuses.
 func (s *Scene) passiveOverflowEffectLines(def domain.SkillDef) []string {
 	var lines []string
-	if attr, value := domain.SkillGrowthAttribute(def.ID, def.Level); value > 0 {
+	if attr, value := domain.SkillGrowthAttribute(def.ID, def.Level, s.skills.ProgressionCatalog()); value > 0 {
 		lines = append(lines, fmt.Sprintf("%s +%d", skillAttrText(attr), value))
 	}
 	if def.Level > 5 && def.Kind == domain.SkillPassive && def.PassiveCounter != nil {

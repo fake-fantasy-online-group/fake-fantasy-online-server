@@ -63,9 +63,9 @@ A level20+ combat kill rolls at most one supplemental rune: ordinary0.6%, elite8
 
 ## Integration contracts
 
-Domain exports: `AstralRuneItems(icon)`, `AstralRunes`, `AstralRecipes`, `AstralRecipeByID`, `MatchAstralRecipe`, `ActiveAstralRecipes`, `AstralBonuses`, `ValidateAstralCatalog`, `RollDroppedSocketCount`, `EquipmentRollTable.RollWithReservedSockets`, `PlanAstralInsert`, `PlanAstralRemove`.
+Base rune items and physical-card defaults load through `data.LoadItems` from migration 59's original item/card tables. There is no production `AstralRuneItems` constructor. Gameplay exports: `AstralRunes`, `AstralRecipes`, `AstralRecipeByID`, `MatchAstralRecipe`, `ActiveAstralRecipes`, `AstralBonuses`, `ValidateAstralCatalog`, `RollDroppedSocketCount`, `EquipmentRollTable.RollWithReservedSockets`, `PlanAstralInsert`, `PlanAstralRemove`.
 
-Scene owns `onEndgameSocket`, `astralDropGrade`, `rollAstralRuneLoot`; root startup registers actual rune definitions with an existing icon, validates the catalogue, dispatches extension operations and projects catalogues/sidecar views. Unique combat lane adds `AstralBonuses` once in `passiveStatAffixes`.
+Scene owns `onEndgameSocket`, `astralDropGrade`, `rollAstralRuneLoot`; root startup loads persisted rune definitions and effects, publishes their reviewed icon mappings, validates the catalogue, dispatches extension operations and projects catalogues/sidecar views. Unique combat lane adds `AstralBonuses` once in `passiveStatAffixes`.
 
 Tests cover all40 recipes, order/gap/extra-hole/duplicate UID failures, profession/level/broken equipment, deterministic channel selection, legacy hydration, clone isolation, bindings, five-property limits, durable commit/replay/failure, real combat-stat changes, native-path denial, and complete-Stack pet pickup/full-bag/partial retry. Test pass claims belong in verified logs, not implied by this list. No live database migration, deployment or Unity run is part of this reconstruction.
 

@@ -48,9 +48,12 @@ func (d endgameRiftPersisted) record(rev int64) domain.EndgameRunRecord {
 	b, _ := json.Marshal(d)
 	return domain.EndgameRunRecord{RunID: d.Run.RunID, Revision: rev, State: string(d.Run.Phase), Payload: string(b)}
 }
-func decodeEndgameRift(record *domain.EndgameRunRecord) (endgameRiftPersisted, bool) {
+func decodeEndgameRift(record *domain.EndgameRunRecord, table *domain.RiftRuleTable) (endgameRiftPersisted, bool) {
 	var d endgameRiftPersisted
 	if record == nil || json.Unmarshal([]byte(record.Payload), &d) != nil || (d.Version != 1 && d.Version != 2) || d.Run == nil || d.Run.RunID != record.RunID {
+		return d, false
+	}
+	if d.Run.BindRules(table) != nil {
 		return d, false
 	}
 	return d, true
@@ -121,8 +124,8 @@ func riftNeedsCompensation(r *domain.RiftRun, live bool, char domain.CharID) boo
 }
 func (s *Scene) riftView(p *entity.Entity, d endgameRiftPersisted, durable, live bool) *domain.EndgameRiftView {
 	r := d.Run
-	v := &domain.EndgameRiftView{RunID: r.RunID, Revision: strconv.FormatInt(r.Revision, 10), Name: "演劫洞天", KeyItemID: int32(domain.RiftKeyItemID), Phase: string(r.Phase), Tier: r.Tier, Progress: r.Progress, ProgressMax: domain.RiftProgressMax, BossName: "镇境劫影"}
-	v.MaxTier = domain.RiftMaxTier
+	v := &domain.EndgameRiftView{RunID: r.RunID, Revision: strconv.FormatInt(r.Revision, 10), Name: r.Rules.Name, KeyItemID: int32(domain.RiftKeyItemID), Phase: string(r.Phase), Tier: r.Tier, Progress: r.Progress, ProgressMax: r.Rules.ProgressMax, BossName: r.Rules.BossName}
+	v.MaxTier = r.Rules.MaxTier
 	if d.Floor != nil {
 		v.Seed = strconv.FormatUint(d.Floor.Seed, 10)
 		v.GeneratorVersion = d.Floor.GeneratorVersion

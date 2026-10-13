@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -15,15 +18,15 @@ func scopedArrayFixture(t *testing.T, id int32) (*Scene, *entity.Entity, domain.
 	s := newTestScene(t, nil)
 	join(t, s, 1, 100, "星阵", 100, 100)
 	p := s.players[1]
-	r, ok := domain.AstralRecipeByID(id)
+	r, ok := domain.AstralRecipeByID(id, catalogfixture.EndgameCatalog())
 	if !ok {
 		t.Fatal(id)
 	}
 	s.items = map[domain.ItemID]domain.ItemDef{}
-	for _, d := range domain.AstralRuneItems(7) {
+	for _, d := range astralRuneItemsFixture(7) {
 		s.items[d.ID] = d
 	}
-	def := domain.ItemDef{ID: 999091, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(r.Slots[0]), LevelReq: 60, Durable: 100, Need: domain.Requirement{Level: 60}}}
+	def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 999091, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(r.Slots[0]), LevelReq: 60, Durable: 100, Need: domain.Requirement{Level: 60}}}
 	s.items[def.ID] = def
 	st := domain.NewStack(def, 1)
 	// Scoped old-trait assertions explicitly exercise frozen V4 equipment.
@@ -89,7 +92,8 @@ func TestScopedStrikeAndBasicAttackIdentity(t *testing.T) {
 		id   int32
 		want int32
 	}{{10002, 112}, {10021, 100}, {0, 100}} {
-		got := s.uniqueOutgoingDamage(p, m, combat.Blow{SkillID: tc.id}, event.DamageDealt{}, 100, m.HP)
+		effects := domain.EvaluateUniqueTraits(s.uniqueTraits(p), uniqueStrikeContext(p, m, combat.Blow{SkillID: tc.id}, event.DamageDealt{}, m.HP))
+		got := (domain.CombatDamageBuckets{DamageIncreaseBP: int64(effects.DamageBP)}).OutgoingDamage(100)
 		if got != tc.want {
 			t.Fatalf("skill%d damage%d want%d", tc.id, got, tc.want)
 		}

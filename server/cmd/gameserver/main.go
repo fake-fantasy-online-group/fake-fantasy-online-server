@@ -82,7 +82,6 @@ func run() int {
 		log.Warn("存储: 内存(重启丢档, 仅自测)。生产请用 -dsn")
 	}
 	defer st.Close()
-	seedChars(ctx, st, log)
 
 	// ── 写回队列: 场景与数据库之间的缓冲, 保证场景 goroutine 永不等 IO ──
 	wb := store.NewWriteBack(st, time.Second, log)
@@ -102,6 +101,7 @@ func run() int {
 	world := loadWorldData(ctx, st, log)
 	if err := registerEndgameItems(&world); err != nil {
 		log.Error("演劫规则校验失败", "err", err)
+		_ = wb.Close(time.Second)
 		return 1
 	}
 	var staticQ data.Querier
@@ -128,6 +128,11 @@ func run() int {
 			}
 			return 1
 		}
+	}
+	if *dsn != "" && (world.endgameDataErr != nil || world.endgameCatalog == nil || world.cubeRules == nil || world.lootRules == nil || world.riftRules == nil) {
+		log.Error("演劫数据库配置未就绪，拒绝启动", "err", world.endgameDataErr)
+		_ = wb.Close(time.Second)
+		return 1
 	}
 	if *dsn != "" && world.monsterDialogs == nil {
 		log.Error("怪物台词目录未就绪，拒绝启动")
@@ -174,6 +179,15 @@ func run() int {
 		}
 		return 1
 	}
+	if world.endgameCatalog != nil {
+		if err := store.SetEndgameCatalog(st, world.endgameCatalog); err != nil {
+			log.Error("安装存档校验目录失败，拒绝启动", "err", err)
+			_ = wb.Close(time.Second)
+			return 1
+		}
+	}
+	// Even optional seed imports must use the same validated catalog as live saves.
+	seedChars(ctx, st, log)
 	// Router 在写锁内串行调用 Builder，因此这份按静态地图号共享的懒加载缓存
 	// 不需要额外锁；副本实例也不会重复吃一份 1~2MB 的碰撞网格。
 	// Validate rift topology before starting actors. A failed catalog disables new
@@ -234,6 +248,8 @@ func run() int {
 			walkable = mask.Walkable
 		}
 		cfg := scene.Config{Trial: world.trial, EndgameBackend: endgameBackend, RiftLayouts: riftLayouts,
+			EndgameCatalog: world.endgameCatalog, CubeRules: world.cubeRules,
+			LootRules: world.lootRules, RiftRules: world.riftRules,
 			DungeonParty: func(char domain.CharID) domain.DungeonParty {
 				p, ok := parties.Get(parties.PartyOf(char))
 				if !ok {
@@ -649,6 +665,11 @@ func dungeonPortalCount(portals data.TeleportTable) int {
 // 读完就只读, 所有场景共用同一份 —— 371 张图各自持一份表的话内存会爆,
 // 而这些表在运行期从不改动。
 type worldData struct {
+	lootRules      *domain.LootRuleTable
+	riftRules      *domain.RiftRuleTable
+	endgameCatalog *domain.EndgameCatalog
+	cubeRules      *domain.CubeRuleTable
+	endgameDataErr error
 	trial          *domain.TrialRules
 	pickupRange    int32
 	mapReturns     data.MapReturnTable
@@ -1073,6 +1094,7 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 			"新状态列", ovst.Incoming, "规则格", ovst.Cells)
 	}
 	w.skillErr = errors.Join(w.skillErr, domain.ValidateSkillStatusRuntimeV5(w.skills, w.statuses, w.statusOverlay))
+	loadEndgameData(ctx, q, &w, log)
 	return w
 }
 

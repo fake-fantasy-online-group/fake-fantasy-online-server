@@ -84,7 +84,7 @@ func (b *endgameBackend) Commit(p domain.EndgameCommitPlan) <-chan domain.Endgam
 	}
 	go func() {
 		defer close(ch)
-		if err := validateEndgamePlan(p); err != nil {
+		if err := validateEndgamePlan(p, catalogOfStore(b.raw)); err != nil {
 			ch <- domain.EndgameCommitResult{Err: err}
 			return
 		}
@@ -161,7 +161,7 @@ func (b *endgameBackend) Commit(p domain.EndgameCommitPlan) <-chan domain.Endgam
 	}()
 	return ch
 }
-func validateEndgamePlan(p domain.EndgameCommitPlan) error {
+func validateEndgamePlan(p domain.EndgameCommitPlan, catalog *domain.EndgameCatalog) error {
 	if p.Before.Char == nil || p.Snapshot.Char == nil || p.Snapshot.Char.ID <= 0 || p.Snapshot.Char.AccountID <= 0 || p.Before.Char.ID != p.Snapshot.Char.ID || p.Before.Char.AccountID != p.Snapshot.Char.AccountID || p.Receipt.CharID != p.Snapshot.Char.ID {
 		return fmt.Errorf("endgame: invalid snapshot ownership")
 	}
@@ -180,10 +180,10 @@ func validateEndgamePlan(p domain.EndgameCommitPlan) error {
 	if p.Run != nil && (p.ExpectedRunRevision < 0 || p.Run.Revision <= 0 || p.Run.Revision != p.ExpectedRunRevision+1 || len(p.Run.RunID) < 1 || len(p.Run.RunID) > 64 || !json.Valid([]byte(p.Run.Payload))) {
 		return fmt.Errorf("endgame: invalid run plan")
 	}
-	if err := validateEndgameSnapshot(p.Before); err != nil {
+	if err := validateEndgameSnapshot(p.Before, catalog); err != nil {
 		return err
 	}
-	return validateEndgameSnapshot(p.Snapshot)
+	return validateEndgameSnapshot(p.Snapshot, catalog)
 }
 func endgameRecover(ctx context.Context, e EndgameStore, p domain.EndgameCommitPlan, state domain.EndgameState, cause error, result *domain.EndgameCommitResult) error {
 	snap, err := e.LoadEndgameSnapshot(ctx, p.Before)

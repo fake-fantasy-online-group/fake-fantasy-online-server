@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"testing"
@@ -40,7 +43,7 @@ func aiScene(t *testing.T, def domain.MonsterDef, mx, my float64) (*Scene, domai
 	if skipped != 0 {
 		t.Fatal("测试数据有问题")
 	}
-	s := New(Config{ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 99, Spawner: sp})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000, Seed: 99, Spawner: sp})
 	var id domain.EntityID
 	for eid, e := range s.entities {
 		if e.Kind == domain.KindMonster {
@@ -347,7 +350,7 @@ func TestReviveGraceBlocksAcquisitionThenExpires(t *testing.T) {
 
 // 索敌是按帧错开的, 不是每只怪每帧都扫九宫格。
 func TestScanIsStaggered(t *testing.T) {
-	s := New(Config{ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000})
+	s := New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: domain.SceneID{MapID: 14}, SaveEvery: 10_000})
 	// 连续的实体 id 应该落在不同的扫描帧上
 	seen := map[uint64]bool{}
 	for id := domain.EntityID(1); id <= aiScanEvery; id++ {

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compile the fixed 27-item display plan from current catalogs. Never grants items.
+"""Compile the fixed 27-item display plan from migration59/60 SQL seeds. Never grants items.
 
 Selection is deliberately explicit. This is not a power-tier selector or balance
 solver. --check is read-only; default rewrites the three documented artifacts.
@@ -99,17 +99,36 @@ FACTORY = {
 
 
 def load_sources():
-    paths = sorted((ROOT / "server/internal/domain").glob("unique_catalog_*.json"))
-    uniques = {r["ID"]: r for p in paths for r in json.loads(p.read_text())}
-    astral_path = ROOT / "server/docs/endgame/astral_runes.json"
-    astral = json.loads(astral_path.read_text())
+    # This documentation generator reads committed normalized SQL seeds. Actual
+    # grants load the deployed database through cmd/showcase-grant, never this file.
+    import sys
+    sys.path.insert(0, str(ROOT / "docs/daoist-endgame/catalog"))
+    from database_catalog import MIGRATION, configured_definitions, table_rows
+    definitions = configured_definitions()
+    uniques = {key[2]: row for key, row in definitions.items() if key[:2] == ('unique', 6)}
+    def lower(value):
+        if isinstance(value, list):
+            return [lower(v) for v in value]
+        if isinstance(value, dict):
+            return {('id' if k == 'ID' else k[0].lower() + k[1:]): lower(v) for k, v in value.items()}
+        return value
+    formations = {key[2]: lower(row) for key, row in definitions.items() if key[:2] == ('formation', 6)}
+    item_path = ROOT / "server/migrations/000000_init-59.sql"
+    items = {r['id']: r for r in json.loads(item_path.read_text().split('$endgame_items$')[1])}
+    rules = table_rows('game_endgame_rune_rules', ['item_id', 'mansion', 'quadrant', 'regeneration_interval_ms'])
+    runes = {r['item_id']: {'id': r['item_id'], 'mansion': r['mansion'], 'quadrant': r['quadrant'],
+              'name': items[r['item_id']]['name'], 'minLevel': items[r['item_id']]['level'],
+              'affixes': items[r['item_id']]['effects']} for r in rules}
+    for row in formations.values():
+        row['channel'] = {1: '战阵', 2: '守阵', 3: '辅阵'}[row['channel']]
+        row['order'] = [runes[r]['mansion'] for r in row['runes']]
     bases_path = ROOT / "docs/daoist-endgame/balance/native_equipment_budget_references.json"
     bases = {r["base_id"]: r for r in json.loads(bases_path.read_text())["bases"]}
-    paths += [astral_path, bases_path, ROOT / "server/internal/domain/endgame_runes_catalog.go"]
-    if len(uniques) != 259 or len(astral["formations"]) != 40 or len(astral["runes"]) != 28:
+    if len(uniques) != 259 or len(formations) != 40 or len(runes) != 28:
         raise ValueError("Catalog coverage changed; review the fixed showcase selection.")
+    paths = [MIGRATION, item_path, bases_path]
     hashes = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(paths)}
-    return uniques, {r["id"]: r for r in astral["formations"]}, {r["id"]: r for r in astral["runes"]}, bases, hashes
+    return uniques, formations, runes, bases, hashes
 
 
 def build_manifest():
@@ -217,7 +236,7 @@ def compact_plan(m):
 
 
 def markdown(m):
-    lines = ["# test001 V6 三角色毕业装备计划", "", "仅准备并离线验证，未实际发放。各9件共27件放背包；保留旧物品、等级60、技能和六维，不自动穿戴。", "",
+    lines = ["# test001 V6 三角色毕业装备计划", "", "仅准备并离线验证，未实际发放。此文档读迁移59/60规范SQL；实际发放工具会重新读取部署数据库。各9件共27件放背包；保留旧物品、等级60、技能和六维，不自动穿戴。", "",
         f"当前目录259暗金／40宿阵／28星篆，版本6、合法最高roll12000；共{m['embedded_rune_instance_count']}枚独立UID/Card星篆，{m['total_new_item_instances_if_executed']}个新实例。", "",
         "此处毕业指所选玩法的高档协同路线，不声称所有敌人、加点与装备组合的全局最优；MF、防护、技能形态不折算成虚构DPS。", "",
         "## 文件与验证", "- grant-plan.json：可审阅选号；manifest.json：全量目录、白字、门槛、孔序和哈希。",

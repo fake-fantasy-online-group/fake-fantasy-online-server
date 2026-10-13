@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"strconv"
@@ -53,7 +56,7 @@ func ownedRiftDrop(s *Scene, char domain.CharID) *entity.Entity {
 func TestRiftCompletionGroundNPCAndExperienceExactlyOnce(t *testing.T) {
 	s, b, now := completedRiftRewards(t)
 	p := s.players[1]
-	want := domain.RiftBossExperience(s.trial.BaseExperience(60, s.levels), 1)
+	want := domain.RiftBossExperience(s.trial.BaseExperience(60, s.levels), 1, riftRulesFixture())
 	if want <= 0 || p.Player.Char.Exp != 0 || b.commits != 1 {
 		t.Fatal("XP published early", want, b.commits)
 	}
@@ -132,7 +135,7 @@ func TestRiftGroundOwnershipDistanceBagAndRecovery(t *testing.T) {
 	p.Pos = drop.Pos
 	original := p.Player.Bag
 	p.Player.Bag = domain.NewBag(1)
-	p.Player.Bag.Add(domain.ItemDef{ID: 987654, Stackable: true}, domain.MaxStack)
+	p.Player.Bag.Add(domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 987654, Stackable: true}, domain.MaxStack)
 	s.onPickUp(PickUp{ID: p.ID, Target: drop.ID})
 	if b.commits != count || s.ground[drop.ID] == nil {
 		t.Fatal("full bag consumed reward")
@@ -208,7 +211,7 @@ func TestRiftPendingPickupDisconnectAndOfflineRemainder(t *testing.T) {
 		t.Fatal("disconnect did not wait then finish")
 	}
 	saved := b.runs[s.rift.data.Run.RunID]
-	durable, ok := decodeEndgameRift(&saved)
+	durable, ok := decodeEndgameRift(&saved, riftRulesTableFixture())
 	if !ok || !durable.Grants[100].Collected[ref.Index] || !durable.Grants[100].ExperienceClaimed {
 		t.Fatal("pickup ledger not durable")
 	}
@@ -235,7 +238,7 @@ func TestRiftPendingPickupDisconnectAndOfflineRemainder(t *testing.T) {
 	if after != want {
 		t.Fatal("offline claim duplicated ground item", before, after, want)
 	}
-	restored, ok := decodeEndgameRift(b.plan.Run)
+	restored, ok := decodeEndgameRift(b.plan.Run, riftRulesTableFixture())
 	if !ok || !restored.Run.Members[100].Claimed {
 		t.Fatal("offline remainder not consumed")
 	}
@@ -279,7 +282,7 @@ func TestRiftFrozenPersonalExperienceDoesNotUseClaimLevel(t *testing.T) {
 	// Completion already froze level 60 and tier 1; changing present character
 	// level while the transaction is outstanding must not change its grant.
 	frozen := s.rift.data.Grants[100].Exp
-	if frozen != domain.RiftBossExperience(s.trial.BaseExperience(60, s.levels), 1) {
+	if frozen != domain.RiftBossExperience(s.trial.BaseExperience(60, s.levels), 1, riftRulesFixture()) {
 		t.Fatal("wrong frozen base")
 	}
 	if b.plan.Snapshot.Char.Exp != frozen {
@@ -327,7 +330,7 @@ func TestRiftNativeExitDialogueCommandFlow(t *testing.T) {
 	s.entities[npc.ID] = npc
 	// Full inventory is irrelevant to leaving; unpicked entitlement stays durable.
 	p.Player.Bag = domain.NewBag(1)
-	p.Player.Bag.Add(domain.ItemDef{ID: 987654, Stackable: true}, domain.MaxStack)
+	p.Player.Bag.Add(domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 987654, Stackable: true}, domain.MaxStack)
 	s.exec(TrialAction{ID: p.ID, Action: "trialleave"})
 	s.finishEndgame(false)
 	if b.commits != before+1 || !s.rift.economicPending {
@@ -339,7 +342,7 @@ func TestRiftNativeExitDialogueCommandFlow(t *testing.T) {
 		t.Fatal("repeated exit duplicated pending commit")
 	}
 	finishRiftRewardCommit(t, s, b)
-	durable, ok := decodeEndgameRift(b.plan.Run)
+	durable, ok := decodeEndgameRift(b.plan.Run, riftRulesTableFixture())
 	if !ok || durable.Run.Members[100].Claimed || !durable.Grants[100].ExperienceClaimed || len(durable.Grants[100].Items) == 0 {
 		t.Fatal("exit lost unpicked entitlement")
 	}

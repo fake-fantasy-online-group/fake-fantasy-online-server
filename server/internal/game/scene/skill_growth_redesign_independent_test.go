@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
@@ -88,7 +90,7 @@ func TestRedesignIndependentGrowthTransferAndLoginInitialization(t *testing.T) {
 
 func TestRedesignIndependentGrowthAndOrdinaryEquipmentResourceDeltas(t *testing.T) {
 	s, p := growthAttributePlayer(t, 1)
-	item := domain.ItemDef{ID: 990771, Equip: &domain.EquipDef{Slot: int32(domain.SlotBody), Durable: 100, Bonus: domain.Stats{MaxHP: 100, MaxMP: 40}}}
+	item := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 990771, Equip: &domain.EquipDef{Slot: int32(domain.SlotBody), Durable: 100, Bonus: domain.Stats{MaxHP: 100, MaxMP: 40}}}
 	s.items = map[domain.ItemID]domain.ItemDef{item.ID: item}
 	p.Player.Char.Skills = domain.Learned{10024: 4}
 	s.refreshStats(p)
@@ -148,7 +150,7 @@ func TestRedesignIndependentApprovedSupportRangeReachesActualNewTargets(t *testi
 
 func TestRedesignIndependentSixSavingsNeverReverseAtCap(t *testing.T) {
 	for id, cap := range redesignUtilityCaps {
-		ident, _ := domain.V5SkillIdentity(id)
+		ident, _ := domain.V5SkillIdentity(id, catalogfixture.SkillProgressionCatalog())
 		s, p := behaviorAcceptancePlayer(t, ident.Profession)
 		var previous domain.SkillDef
 		for _, rank := range []int32{cap, cap + 1, cap + 2, cap + 20, cap + 100} {

@@ -8,7 +8,11 @@ func ValidateSkillStatusRuntimeV5(skills SkillTable, statuses StatusTable, overl
 	if len(statuses) == 0 || len(overlay) == 0 {
 		return fmt.Errorf("V5 status definitions/overlay missing")
 	}
-	for _, id := range V5SkillIDs() {
+	c := skills.ProgressionCatalog()
+	if c == nil {
+		return fmt.Errorf("V5 skill progression catalog missing")
+	}
+	for _, id := range V5SkillIDs(c) {
 		for rank := int32(1); rank <= 21; rank++ {
 			def, ok := skills.Get(id, rank)
 			if !ok || def.FormulaVersion != SkillFormulaVersion {

@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"encoding/json"
@@ -45,13 +48,16 @@ func cubeSceneFixture(t *testing.T) (*Scene, *fakeSink, *cubeTestBackend) {
 	t.Helper()
 	s := newTestScene(t, nil)
 	s.items = map[domain.ItemID]domain.ItemDef{}
-	for _, d := range domain.CubeMaterialDefinitions() {
+	for _, d := range cubeMaterialDefinitionsFixture() {
 		s.items[d.ID] = d
 	}
-	for _, d := range domain.AstralRuneItems(7) {
+	for _, d := range astralRuneItemsFixture(7) {
 		s.items[d.ID] = d
 	}
-	s.items[1001] = domain.ItemDef{ID: 1001, Name: "铁剑", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: 4, LevelReq: 1, Durable: 100}}
+	s.items[1001] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 1001, Name: "铁剑", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: 4, LevelReq: 1, Durable: 100}}
+	s.endgameCatalog = catalogfixture.EndgameCatalog()
+	domain.AttachEndgameCatalog(s.items, s.endgameCatalog)
+	s.cubeRules = cubeRulesFixture(s.items)
 	sink := join(t, s, 1, 100, "甲", 100, 100)
 	p := s.players[1]
 	p.Player.Bag = domain.NewBag(domain.DefaultBagSlots)

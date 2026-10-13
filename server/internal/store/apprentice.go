@@ -18,7 +18,7 @@ var (
 )
 
 func (p *Postgres) CheckApprenticeship(ctx context.Context, masterID, apprenticeID int64) error {
-	return checkApprenticeship(ctx, p.pool, masterID, apprenticeID)
+	return checkApprenticeship(ctx, p.catalogQuery(), masterID, apprenticeID)
 }
 func (t *pgTx) CheckApprenticeship(ctx context.Context, masterID, apprenticeID int64) error {
 	return checkApprenticeship(ctx, t.tx, masterID, apprenticeID)
@@ -68,7 +68,7 @@ func checkApprenticeship(ctx context.Context, q querier, masterID, apprenticeID 
 }
 
 func (p *Postgres) LoadApprenticeSnapshot(ctx context.Context, charID int64) (domain.ApprenticeSnapshot, error) {
-	return loadApprenticeSnapshot(ctx, p.pool, charID)
+	return loadApprenticeSnapshot(ctx, p.catalogQuery(), charID)
 }
 func (t *pgTx) LoadApprenticeSnapshot(ctx context.Context, charID int64) (domain.ApprenticeSnapshot, error) {
 	return loadApprenticeSnapshot(ctx, t.tx, charID)

@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"reflect"
@@ -17,7 +20,7 @@ func TestV6ReviewMendSourceGeneration(t *testing.T) {
 			p.Player.EndgameSkillVariants = true
 			p.Player.Char.Skills[10301] = 5
 			var item domain.UniqueDefinition
-			for _, d := range domain.UniqueCatalog() {
+			for _, d := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
 				if d.ID == 2056 {
 					item = d
 					break

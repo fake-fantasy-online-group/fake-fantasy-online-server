@@ -59,16 +59,19 @@ def audit():
         assert digest == expected, f"profession {profession} original raw definitions changed"
     first = {int(r["skill_id"]): r for r in rows if r["skill_level"] == "1"}
     assert len(first) == 150 and 11005 in first
-    catalog_text = (ROOT / "server/internal/domain/skill_catalog_v5.go").read_text()
-    pattern = r'^\s*(\d+): \{ID: \d+, Name: "([^"]+)", Profession: (\d+), Branch: "([^"]+)", UnlockLevel: (\d+), Prerequisites: \[\]SkillID\{([^}]*)\}\},'
-    catalog = list(re.finditer(pattern, catalog_text, re.M))
-    assert len(catalog) == 149
-    for match in catalog:
-        identity = int(match[1]); raw = first[identity]
-        assert match[2] == raw["name"] and int(match[3]) == int(raw["prof"])
-        assert int(match[5]) == int(raw["level_need"])
+    migration = (ROOT / "server/migrations/000000_init-62.sql").read_text()
+    catalog = json.loads(migration.split("$skill_config$")[1])
+    assert len(catalog["Skills"]) == 149
+    for member in catalog["Skills"]:
+        configured = member["Identity"]
+        identity = configured["ID"]; raw = first[identity]
+        assert configured["Name"] == raw["name"] and configured["Profession"] == int(raw["prof"])
+        assert configured["UnlockLevel"] == int(raw["level_need"])
         original_pre = [int(raw[f"depend{i}_id"]) for i in range(1, 5) if int(raw[f"depend{i}_id"])]
-        assert [int(v.strip()) for v in match[6].split(",") if v.strip()] == original_pre
+        assert (configured["Prerequisites"] or []) == original_pre
+    # All identities reuse native rows. One explicit prerequisite exception
+    # preserves the current runtime's earlier original-source restoration.
+    assert [r["Identity"]["ID"] for r in catalog["Skills"] if not r["UseNativePrerequisites"]] == [10311]
     loaded = json.loads((ROOT / "docs/daoist-endgame/v5/skill-original-ranks.json").read_text())
     assert len(loaded) == 745
     raw_by_key = {(int(r["skill_id"]), int(r["skill_level"])): r for r in rows}
@@ -91,8 +94,9 @@ def audit():
                 native_scopes[identity] = sorted(targets)
     assert native_scopes == NATIVE_TARGETS, "original passive affected-skill lists changed"
     live_scopes = {}
-    for target, source in re.findall(r'\{Target: (\d+), Source: (\d+), RankMode: "effective_raw"', catalog_text):
-        live_scopes.setdefault(int(source), set()).add(int(target))
+    for edge in catalog["Synergies"]:
+        if edge["RankMode"] == "effective_raw":
+            live_scopes.setdefault(edge["Source"], set()).add(edge["Target"])
     assert {k: sorted(v) for k, v in live_scopes.items()} == NATIVE_TARGETS, "native passive synergy scope expanded or lost"
     sword_area = sorted(identity for identity, r in first.items() if r["prof"] == "2" and r["skill_type"] == "2")
     assert sword_area == [10121, 10125, 10127, 10128]

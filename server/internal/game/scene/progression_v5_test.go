@@ -100,7 +100,7 @@ func TestV5PetEligibilityMatchesOrdinaryEvenIfNotAlive(t *testing.T) {
 }
 func TestV5RiftClaimPersistsPetWithReceipt(t *testing.T) {
 	s, b, owner := v5PetFixture(t)
-	run, _ := domain.NewRiftRun("v5-claim", 150, 100, []domain.TrialKeyMember{{CharID: 100, Level: 100}}, 0)
+	run, _ := domain.NewRiftRun("v5-claim", 150, 100, []domain.TrialKeyMember{{CharID: 100, Level: 100}}, 0, riftRulesFixture())
 	run.Phase = domain.RiftCompleted
 	run.Members[100].Eligible = true
 	grant := endgameRiftGrant{Exp: 200, ProgressionVersion: domain.ProgressionVersion, Pet: s.freezeEndgamePetGrant(owner, 200, run.RunID, 100)}
@@ -109,7 +109,7 @@ func TestV5RiftClaimPersistsPetWithReceipt(t *testing.T) {
 	if b.commits != 1 || b.plan.Snapshot.Char.Pets[0].Level != 80 || owner.Player.Char.Pets[0].Level != 79 {
 		t.Fatal("not detached/atomic", b.commits)
 	}
-	frozen, ok := decodeEndgameRift(b.plan.Run)
+	frozen, ok := decodeEndgameRift(b.plan.Run, riftRulesTableFixture())
 	if !ok || !frozen.Grants[100].Pet.Settled || frozen.Grants[100].Pet.PetInstanceID != 900001 {
 		t.Fatal("no grant in run transaction", frozen)
 	}
@@ -121,11 +121,11 @@ func TestV5RiftClaimPersistsPetWithReceipt(t *testing.T) {
 }
 func TestV5LegacyRiftNoRetroactivePet(t *testing.T) {
 	s, _, owner := v5PetFixture(t)
-	run, _ := domain.NewRiftRun("legacy", 1, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, 0)
+	run, _ := domain.NewRiftRun("legacy", 1, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, 0, riftRulesFixture())
 	d := endgameRiftPersisted{Version: 1, Run: run, Grants: map[domain.CharID]endgameRiftGrant{100: {Exp: 10000}}, GrantsReady: true}
 	raw, _ := json.Marshal(d)
 	record := &domain.EndgameRunRecord{RunID: run.RunID, Payload: string(raw)}
-	decoded, ok := decodeEndgameRift(record)
+	decoded, ok := decodeEndgameRift(record, riftRulesTableFixture())
 	if !ok {
 		t.Fatal("v1 rejected")
 	}

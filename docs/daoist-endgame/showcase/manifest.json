@@ -71,16 +71,8 @@
   },
   "source_sha256": {
     "docs/daoist-endgame/balance/native_equipment_budget_references.json": "f1f1c27567cb09f965ec0cf8a983ebdd01730c6b737d73edd221ffb86cbad641",
-    "server/docs/endgame/astral_runes.json": "fb89cbfe43577830bd274ee1fb7e49e9c91a977f3838e87bfc1aca9c56a0eaad",
-    "server/internal/domain/endgame_runes_catalog.go": "7a6bbb7b8cbbf3224334b219b1585fa213cbe7740fe8d4d241563817b53c1ac9",
-    "server/internal/domain/unique_catalog_allclasses.json": "c1753cde00ea315798708a94100551efb06679643ac42b0b0c632b0bd9d6abb0",
-    "server/internal/domain/unique_catalog_assassin.json": "f6b7b8246c1417e3e516d04be23b6686abd4adffc9cb23d32b2515edaa684324",
-    "server/internal/domain/unique_catalog_healer.json": "6dd39e20d98ab85a11c9fb670a1add01d27b96818130bb6b524a6760df83df2a",
-    "server/internal/domain/unique_catalog_sharedcaster.json": "bbc790dcebcb3d62c030fb1a9f13c100acc644fa1c1bb1a52743c2b2af323a48",
-    "server/internal/domain/unique_catalog_swordsman.json": "416b7c51f7bc05e1ffdb406bec1bec81313f13f1aee7acc1ea787e62069fd283",
-    "server/internal/domain/unique_catalog_unrestricted.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
-    "server/internal/domain/unique_catalog_warlock.json": "c265f81e3cff66bf570ace6e152cb069ffa6a3df231ed2b3effb433df71377a2",
-    "server/internal/domain/unique_catalog_warrior.json": "7ea0207debe4bdee90a412d214f38d3779fc497e0979b0158b62a4ad26f14e05"
+    "server/migrations/000000_init-59.sql": "4d0af0b8d6754b24498cb72a82a5353fff01ec346d8327539205193a989780f2",
+    "server/migrations/000000_init-60.sql": "b2cc1105da62ba83d93e65dbfb520597771121088a73eb95cdfbe54487c121d6"
   },
   "loadouts": [
     {
@@ -234,31 +226,29 @@
           "required_level": 60,
           "catalog_definition": {
             "id": 38,
+            "baseName": "",
             "name": "行囊漏晨光",
-            "runes": [
-              1900028007,
-              1900028015,
-              1900028016,
-              1900028027,
-              1900028028
-            ],
-            "order": [
-              "箕",
-              "奎",
-              "娄",
-              "翼",
-              "轸"
-            ],
+            "lore": "行囊底破了一洞，晨光沿山路漏了一地。行者本想补好，后来发现落在后面的伤者循着光也能赶上来。",
+            "loreRoot": "",
+            "role": "",
+            "identity": "移动清剿的长途行阵",
+            "benefit": "物理输出为主；移动速度、命中、生命、物攻、力量、法力提供独立于星篆的完整词条",
+            "tradeoff": "MF15%替换击杀回血5%；刷宝让出续航；占用同类宿阵名额",
+            "powerTier": "highvalue",
+            "sourceArm": "",
+            "sourceDesc": "",
+            "baseID": 0,
+            "professions": 0,
+            "sex": 0,
+            "slot": 0,
+            "levelRequirement": 0,
+            "resourceLevel": 0,
             "channel": "辅阵",
             "minLevel": 60,
-            "professions": 0,
-            "slots": [
-              1,
-              3,
-              6,
-              7,
-              9
-            ],
+            "beginnerAllowed": false,
+            "unrestricted": false,
+            "nativeDropEligible": false,
+            "legacyAffixPoolReady": false,
             "affixes": [
               {
                 "attr": 27,
@@ -291,13 +281,6 @@
                 "mode": 0
               }
             ],
-            "lore": "行囊底破了一洞，晨光沿山路漏了一地。行者本想补好，后来发现落在后面的伤者循着光也能赶上来。",
-            "identity": "移动清剿的长途行阵",
-            "benefit": "物理输出为主；移动速度、命中、生命、物攻、力量、法力提供独立于星篆的完整词条",
-            "tradeoff": "MF15%替换击杀回血5%；刷宝让出续航；占用同类宿阵名额",
-            "powerTier": "highvalue",
-            "traits": [],
-            "reservedSkills": [],
             "variableAffixes": [
               {
                 "attr": 34,
@@ -305,28 +288,45 @@
                 "max": 308
               }
             ],
+            "localEnhancements": [],
+            "traits": [],
+            "reservedSkills": [],
+            "skillBonuses": [],
             "typedEffects": [
               {
                 "kind": "magic_find_pct",
+                "variantID": "",
+                "element": "",
                 "value": 15
               },
               {
                 "kind": "magic_find_pct",
+                "variantID": "",
+                "element": "",
                 "value": 55
               }
             ],
-            "skillBonuses": [],
-            "v5BudgetExchange": {
-              "removedTraits": [
-                {
-                  "kind": "kill_mend",
-                  "powerBP": 500,
-                  "thresholdPct": 0
-                }
-              ],
-              "policy": "replacement_only_no_extra_free_budget",
-              "reason": "MF15%替换击杀回血5%；刷宝让出续航"
-            }
+            "runes": [
+              1900028007,
+              1900028015,
+              1900028016,
+              1900028027,
+              1900028028
+            ],
+            "slots": [
+              1,
+              3,
+              6,
+              7,
+              9
+            ],
+            "order": [
+              "箕",
+              "奎",
+              "娄",
+              "翼",
+              "轸"
+            ]
           },
           "max_roll_authored_affixes": [
             {
@@ -425,27 +425,29 @@
           "required_level": 52,
           "catalog_definition": {
             "ID": 2049,
-            "BaseID": 2049,
             "BaseName": "夜魔头巾",
-            "Role": "assassin",
-            "Professions": 4,
-            "BeginnerAllowed": false,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 2,
-            "LevelRequirement": 52,
-            "ResourceLevel": 7,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:485",
-            "SourceDesc": "server/migrations/000000_init-28.sql:6700",
             "Name": "夜市收摊人",
             "Lore": "帽内黑线能吸住街灯投下的一小段影子。收摊时，主人把影子从线间逐条放出，巷口的灯便会依次再亮一瞬。",
             "LoreRoot": "原型·夜魔头巾夜行",
+            "Role": "assassin",
             "Identity": "夜行普攻头巾",
             "Benefit": "灵巧 +19；双端物攻 +6；力量 +14；命中 +14；物理会心bp +255；生命 +71；攻击间隔% -22",
             "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
             "PowerTier": "highvalue",
+            "SourceArm": "server/migrations/000000_init-25.sql:485",
+            "SourceDesc": "server/migrations/000000_init-28.sql:6700",
+            "BaseID": 2049,
+            "Professions": 4,
+            "Sex": 0,
+            "Slot": 2,
+            "LevelRequirement": 52,
+            "ResourceLevel": 7,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": false,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 9,
@@ -483,14 +485,6 @@
                 "Mode": 1
               }
             ],
-            "Traits": [
-              {
-                "Kind": "basic_focus",
-                "PowerBP": 3500,
-                "ThresholdPct": 0
-              }
-            ],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 9,
@@ -499,8 +493,20 @@
               }
             ],
             "LocalEnhancements": [],
+            "Traits": [
+              {
+                "Kind": "basic_focus",
+                "PowerBP": 3500,
+                "ThresholdPct": 0,
+                "SkillID": 0,
+                "SkillName": ""
+              }
+            ],
+            "ReservedSkills": [],
+            "SkillBonuses": [],
             "TypedEffects": [],
-            "SkillBonuses": []
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -604,27 +610,29 @@
           "required_level": 56,
           "catalog_definition": {
             "ID": 2509,
-            "BaseID": 2509,
             "BaseName": "天使泪项链",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 3,
-            "LevelRequirement": 56,
-            "ResourceLevel": 9,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:5699",
-            "SourceDesc": "server/migrations/000000_init-29.sql:1246",
             "Name": "凝泪未干",
             "Lore": "传说中的泪石表面始终干燥，内里却有一滴水在往上流。到顶时水不会落下，只会暂时映出一个苍白的月。",
             "LoreRoot": "原型·天使泪凝宝石传说",
+            "Role": "allclasses",
             "Identity": "56级救急治疗链改为受直接伤害后存活且低于30%生命的自救触发；长冷却换跨职业救急搭配，不能脱战换装自动触发或复活。",
             "Benefit": "精神 +16；法力 +131；生命 +523；魔防 +24；异常抵抗 +8；法术平减 +8",
             "Tradeoff": "触发约占40%总预算；失去原全部Traits及原局部强化，空窗仍过被动底线",
             "PowerTier": "builddefining",
+            "SourceArm": "server/migrations/000000_init-25.sql:5699",
+            "SourceDesc": "server/migrations/000000_init-29.sql:1246",
+            "BaseID": 2509,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 3,
+            "LevelRequirement": 56,
+            "ResourceLevel": 9,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 61,
@@ -657,8 +665,6 @@
                 "Mode": 0
               }
             ],
-            "Traits": [],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 61,
@@ -667,28 +673,37 @@
               }
             ],
             "LocalEnhancements": [],
+            "Traits": [],
+            "ReservedSkills": [],
+            "SkillBonuses": [],
             "TypedEffects": [
               {
                 "kind": "proc",
+                "variantID": "",
+                "element": "",
+                "value": 0,
                 "proc": {
                   "id": "emergency_heal",
                   "trigger": "on_direct_damage_taken",
-                  "skillId": 10301,
+                  "skillID": 10301,
                   "fixedRank": 5,
                   "chanceBP": 2000,
-                  "icdMs": 15000,
+                  "iCDMS": 15000,
                   "sharedGroup": "emergency_heal",
                   "payload": "heal",
                   "targetRule": "self",
                   "maxTargets": 1,
                   "scaleBP": 10000,
-                  "pvpScaleBP": 3500,
-                  "hpBelowPct": 30,
-                  "priority": 10
+                  "pVPScaleBP": 3500,
+                  "hPBelowPct": 30,
+                  "requireMagic": false,
+                  "priority": 10,
+                  "visualKey": ""
                 }
               }
             ],
-            "SkillBonuses": []
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -787,27 +802,29 @@
           "required_level": 60,
           "catalog_definition": {
             "ID": 2410,
-            "BaseID": 2410,
             "BaseName": "魔牙护腕",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 6,
-            "LevelRequirement": 60,
-            "ResourceLevel": 10,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:4577",
-            "SourceDesc": "server/migrations/000000_init-29.sql:124",
             "Name": "牙根的梦",
             "Lore": "魔牙护腕内的牙根总在缓慢生长，磨下的粉会结成齿形。梦里听见咀嚼的人，醒来往往发现腕扣又紧了一格。",
             "LoreRoot": "原典·魔牙护腕魔王牙传说",
+            "Role": "allclasses",
             "Identity": "危险低血伤害腕",
             "Benefit": "双端物攻 +19；力量 +16；命中 +16；物理会心bp +289；灵巧 +16；生命 -120；攻击间隔% -18",
             "Tradeoff": "仍降低生命；特性须满足原有技能或战况条件",
             "PowerTier": "highvalue",
+            "SourceArm": "server/migrations/000000_init-25.sql:4577",
+            "SourceDesc": "server/migrations/000000_init-29.sql:124",
+            "BaseID": 2410,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 6,
+            "LevelRequirement": 60,
+            "ResourceLevel": 10,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 47,
@@ -845,14 +862,6 @@
                 "Mode": 1
               }
             ],
-            "Traits": [
-              {
-                "Kind": "desperate_assault",
-                "PowerBP": 4500,
-                "ThresholdPct": 25
-              }
-            ],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 47,
@@ -861,8 +870,20 @@
               }
             ],
             "LocalEnhancements": [],
+            "Traits": [
+              {
+                "Kind": "desperate_assault",
+                "PowerBP": 4500,
+                "ThresholdPct": 25,
+                "SkillID": 0,
+                "SkillName": ""
+              }
+            ],
+            "ReservedSkills": [],
+            "SkillBonuses": [],
             "TypedEffects": [],
-            "SkillBonuses": []
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -966,27 +987,29 @@
           "required_level": 60,
           "catalog_definition": {
             "ID": 2590,
-            "BaseID": 2590,
             "BaseName": "猫眼石武力之戒",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 7,
-            "LevelRequirement": 60,
-            "ResourceLevel": 10,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-26.sql:92",
-            "SourceDesc": "server/migrations/000000_init-29.sql:2164",
             "Name": "窄瞳杀机",
             "Lore": "猫眼里的竖瞳会在将要出手时收细，迟疑时反而张开。收藏者把它收进暗匣后，匣缝仍留着一点凝视般的光。",
             "LoreRoot": "原创·猫眼石武力戒",
+            "Role": "allclasses",
             "Identity": "60级猫眼武戒保留会心追逐；纯数值会心率与条件会心收益可形成质变，不额外塞一次施法机制。",
             "Benefit": "双端物攻 +10；力量 +17；命中 +17；生命 +83；灵巧 +17；攻击间隔% -7；物理会心bp +1800；本件未加工白字双端物攻 +60–80%",
             "Tradeoff": "本件白字局部强化占预算，不放大其它装备、卡、加工、固有六维或额外词条",
             "PowerTier": "builddefining",
+            "SourceArm": "server/migrations/000000_init-26.sql:92",
+            "SourceDesc": "server/migrations/000000_init-29.sql:2164",
+            "BaseID": 2590,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 7,
+            "LevelRequirement": 60,
+            "ResourceLevel": 10,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 47,
@@ -1024,14 +1047,6 @@
                 "Mode": 0
               }
             ],
-            "Traits": [
-              {
-                "Kind": "critical_focus",
-                "PowerBP": 5500,
-                "ThresholdPct": 0
-              }
-            ],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 23,
@@ -1047,8 +1062,20 @@
                 "MaxPercent": 80
               }
             ],
+            "Traits": [
+              {
+                "Kind": "critical_focus",
+                "PowerBP": 5500,
+                "ThresholdPct": 0,
+                "SkillID": 0,
+                "SkillName": ""
+              }
+            ],
+            "ReservedSkills": [],
+            "SkillBonuses": [],
             "TypedEffects": [],
-            "SkillBonuses": []
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -1272,29 +1299,29 @@
           "required_level": 48,
           "catalog_definition": {
             "id": 36,
+            "baseName": "",
             "name": "门闩抵天倾",
-            "runes": [
-              1900028001,
-              1900028004,
-              1900028003,
-              1900028009,
-              1900028014
-            ],
-            "order": [
-              "角",
-              "房",
-              "氐",
-              "牛",
-              "壁"
-            ],
+            "lore": "应劫者见阵门下沉，便用门闩撑住横梁。名册在身后一页页自行翻过，直到最后一页出现了尚未入阵者的名字。",
+            "loreRoot": "",
+            "role": "",
+            "identity": "残血撑住重击的守关阵",
+            "benefit": "物理承伤为主；生命、物理平减、体质、防御、魔防、法术平减、异常抵抗提供独立于星篆的完整词条",
+            "tradeoff": "仍降低移动速度；占用同类宿阵名额；技能与战况条件仍按各特性生效",
+            "powerTier": "builddefining",
+            "sourceArm": "",
+            "sourceDesc": "",
+            "baseID": 0,
+            "professions": 0,
+            "sex": 0,
+            "slot": 0,
+            "levelRequirement": 0,
+            "resourceLevel": 0,
             "channel": "守阵",
             "minLevel": 35,
-            "professions": 0,
-            "slots": [
-              2,
-              5,
-              8
-            ],
+            "beginnerAllowed": false,
+            "unrestricted": false,
+            "nativeDropEligible": false,
+            "legacyAffixPoolReady": false,
             "affixes": [
               {
                 "attr": 34,
@@ -1337,25 +1364,44 @@
                 "mode": 0
               }
             ],
-            "lore": "应劫者见阵门下沉，便用门闩撑住横梁。名册在身后一页页自行翻过，直到最后一页出现了尚未入阵者的名字。",
-            "identity": "残血撑住重击的守关阵",
-            "benefit": "物理承伤为主；生命、物理平减、体质、防御、魔防、法术平减、异常抵抗提供独立于星篆的完整词条",
-            "tradeoff": "仍降低移动速度；占用同类宿阵名额；技能与战况条件仍按各特性生效",
-            "powerTier": "builddefining",
-            "traits": [
-              {
-                "kind": "desperate_guard",
-                "powerBP": 3500,
-                "thresholdPct": 35
-              }
-            ],
-            "reservedSkills": [],
             "variableAffixes": [
               {
                 "attr": 69,
                 "min": 34,
                 "max": 37
               }
+            ],
+            "localEnhancements": [],
+            "traits": [
+              {
+                "kind": "desperate_guard",
+                "powerBP": 3500,
+                "thresholdPct": 35,
+                "skillID": 0,
+                "skillName": ""
+              }
+            ],
+            "reservedSkills": [],
+            "skillBonuses": [],
+            "typedEffects": [],
+            "runes": [
+              1900028001,
+              1900028004,
+              1900028003,
+              1900028009,
+              1900028014
+            ],
+            "slots": [
+              2,
+              5,
+              8
+            ],
+            "order": [
+              "角",
+              "房",
+              "氐",
+              "牛",
+              "壁"
             ]
           },
           "max_roll_authored_affixes": [
@@ -1465,27 +1511,29 @@
           "required_level": 56,
           "catalog_definition": {
             "ID": 2108,
-            "BaseID": 2108,
             "BaseName": "天罡之靴",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 9,
-            "LevelRequirement": 56,
-            "ResourceLevel": 8,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:1154",
-            "SourceDesc": "server/migrations/000000_init-28.sql:7367",
             "Name": "漏宿沉履",
             "Lore": "抄星图的人漏掉一处星宿，照图制成的靴每到那方天际便沉如铅。他索性留在观星台，把错处刻给后来人看。",
             "LoreRoot": "原型·天罡靴与三十六星力",
+            "Role": "allclasses",
             "Identity": "健康守势星图靴",
             "Benefit": "魔防 +51；生命 +236；法术平减 +10；精神 +15；异常抵抗 +10",
             "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
             "PowerTier": "transition",
+            "SourceArm": "server/migrations/000000_init-25.sql:1154",
+            "SourceDesc": "server/migrations/000000_init-28.sql:7367",
+            "BaseID": 2108,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 9,
+            "LevelRequirement": 56,
+            "ResourceLevel": 8,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 17,
@@ -1513,18 +1561,22 @@
                 "Mode": 0
               }
             ],
+            "VariableAffixes": [],
+            "LocalEnhancements": [],
             "Traits": [
               {
                 "Kind": "healthy_guard",
                 "PowerBP": 1200,
-                "ThresholdPct": 85
+                "ThresholdPct": 85,
+                "SkillID": 0,
+                "SkillName": ""
               }
             ],
             "ReservedSkills": [],
-            "VariableAffixes": [],
-            "LocalEnhancements": [],
+            "SkillBonuses": [],
             "TypedEffects": [],
-            "SkillBonuses": []
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -1618,27 +1670,29 @@
           "required_level": 24,
           "catalog_definition": {
             "ID": 2604,
-            "BaseID": 2604,
             "BaseName": "雄鹰之翼",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 10,
-            "LevelRequirement": 24,
-            "ResourceLevel": 4,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-26.sql:250",
-            "SourceDesc": "server/migrations/000000_init-29.sql:2322",
             "Name": "鹰羽量崖",
             "Lore": "鹰翼的羽尖各有一道山崖刻线，合起来正好是一圈悬崖。航图师找不到出口，只在最低处标了一个向上的箭头。",
             "LoreRoot": "原型·鹰羽背翼",
+            "Role": "allclasses",
             "Identity": "精准背饰",
             "Benefit": "命中 +32；双端物攻 +4；力量 +9；物理会心bp +204；生命 +51",
             "Tradeoff": "投入集中在物理输出；不提供法攻、法术会心专精",
             "PowerTier": "transition",
+            "SourceArm": "server/migrations/000000_init-26.sql:250",
+            "SourceDesc": "server/migrations/000000_init-29.sql:2322",
+            "BaseID": 2604,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 10,
+            "LevelRequirement": 24,
+            "ResourceLevel": 4,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 19,
@@ -1666,12 +1720,14 @@
                 "Mode": 0
               }
             ],
-            "Traits": [],
-            "ReservedSkills": [],
             "VariableAffixes": [],
             "LocalEnhancements": [],
+            "Traits": [],
+            "ReservedSkills": [],
+            "SkillBonuses": [],
             "TypedEffects": [],
-            "SkillBonuses": []
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -1765,27 +1821,29 @@
           "required_level": 54,
           "catalog_definition": {
             "ID": 1810,
-            "BaseID": 1810,
             "BaseName": "煞刺·伏龙",
-            "Role": "assassin",
-            "Professions": 4,
-            "BeginnerAllowed": false,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 13,
-            "LevelRequirement": 54,
-            "ResourceLevel": 10,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-24.sql:11340",
-            "SourceDesc": "server/migrations/000000_init-28.sql:5782",
             "Name": "鳞下不留名",
             "Lore": "试刃石上嵌着一片龙鳞，旁边没有屠龙者的题字。只有磨刀人刻的小账：磨石一块，麻绳三尺，欠饭两顿。",
             "LoreRoot": "原型·伏龙刺穿鳞",
+            "Role": "assassin",
             "Identity": "伏龙刺专取精英要害，击晕战技的伤害与猎首会心并行；控制免疫不取消伤害，普通小怪无诛邪收益。",
             "Benefit": "双端物攻 +99；力量 +14；命中 +14；生命 +53；灵巧 +11；物理会心bp +1400；攻击间隔% -20；本件未加工白字双端物攻 +400–450%",
             "Tradeoff": "精英条件与单技能软点不覆盖群攻和普通怪；无MF、减伤或治疗。",
             "PowerTier": "godlike",
+            "SourceArm": "server/migrations/000000_init-24.sql:11340",
+            "SourceDesc": "server/migrations/000000_init-28.sql:5782",
+            "BaseID": 1810,
+            "Professions": 4,
+            "Sex": 0,
+            "Slot": 13,
+            "LevelRequirement": 54,
+            "ResourceLevel": 10,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": false,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 47,
@@ -1823,14 +1881,6 @@
                 "Mode": 1
               }
             ],
-            "Traits": [
-              {
-                "Kind": "elite_hunter",
-                "PowerBP": 9500,
-                "ThresholdPct": 0
-              }
-            ],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 1,
@@ -1846,14 +1896,29 @@
                 "MaxPercent": 450
               }
             ],
-            "TypedEffects": [],
+            "Traits": [
+              {
+                "Kind": "elite_hunter",
+                "PowerBP": 9500,
+                "ThresholdPct": 0,
+                "SkillID": 0,
+                "SkillName": ""
+              }
+            ],
+            "ReservedSkills": [],
             "SkillBonuses": [
               {
                 "scope": "single",
-                "levels": 5,
-                "skillId": 10219
+                "profession": 0,
+                "branch": "",
+                "school": "",
+                "skillID": 10219,
+                "levels": 5
               }
-            ]
+            ],
+            "TypedEffects": [],
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -2038,29 +2103,29 @@
           "required_level": 58,
           "catalog_definition": {
             "id": 28,
+            "baseName": "",
             "name": "鞋底藏北斗",
-            "runes": [
-              1900028016,
-              1900028017,
-              1900028026,
-              1900028027
-            ],
-            "order": [
-              "娄",
-              "胃",
-              "张",
-              "翼"
-            ],
+            "lore": "云游者把北斗绣在鞋底，每行一步便遮住一颗。追问升仙路的人跟了一天，只学会怎样绕过烂泥。",
+            "loreRoot": "",
+            "role": "",
+            "identity": "低耗移动施法的云游阵",
+            "benefit": "技能续航为主；移动速度、法力、精神、生命、魔防、法攻提供独立于星篆的完整词条",
+            "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
+            "powerTier": "highvalue",
+            "sourceArm": "",
+            "sourceDesc": "",
+            "baseID": 0,
+            "professions": 0,
+            "sex": 0,
+            "slot": 0,
+            "levelRequirement": 0,
+            "resourceLevel": 0,
             "channel": "辅阵",
             "minLevel": 58,
-            "professions": 0,
-            "slots": [
-              1,
-              3,
-              6,
-              7,
-              9
-            ],
+            "beginnerAllowed": false,
+            "unrestricted": false,
+            "nativeDropEligible": false,
+            "legacyAffixPoolReady": false,
             "affixes": [
               {
                 "attr": 27,
@@ -2093,25 +2158,44 @@
                 "mode": 0
               }
             ],
-            "lore": "云游者把北斗绣在鞋底，每行一步便遮住一颗。追问升仙路的人跟了一天，只学会怎样绕过烂泥。",
-            "identity": "低耗移动施法的云游阵",
-            "benefit": "技能续航为主；移动速度、法力、精神、生命、魔防、法攻提供独立于星篆的完整词条",
-            "tradeoff": "占用同类宿阵名额；技能与战况条件仍按各特性生效",
-            "powerTier": "highvalue",
-            "traits": [
-              {
-                "kind": "spell_economy",
-                "powerBP": 2000,
-                "thresholdPct": 0
-              }
-            ],
-            "reservedSkills": [],
             "variableAffixes": [
               {
                 "attr": 36,
                 "min": 280,
                 "max": 308
               }
+            ],
+            "localEnhancements": [],
+            "traits": [
+              {
+                "kind": "spell_economy",
+                "powerBP": 2000,
+                "thresholdPct": 0,
+                "skillID": 0,
+                "skillName": ""
+              }
+            ],
+            "reservedSkills": [],
+            "skillBonuses": [],
+            "typedEffects": [],
+            "runes": [
+              1900028016,
+              1900028017,
+              1900028026,
+              1900028027
+            ],
+            "slots": [
+              1,
+              3,
+              6,
+              7,
+              9
+            ],
+            "order": [
+              "娄",
+              "胃",
+              "张",
+              "翼"
             ]
           },
           "max_roll_authored_affixes": [
@@ -2211,27 +2295,29 @@
           "required_level": 59,
           "catalog_definition": {
             "ID": 2059,
-            "BaseID": 2059,
             "BaseName": "术神冠",
-            "Role": "warlock",
-            "Professions": 16,
-            "BeginnerAllowed": false,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 2,
-            "LevelRequirement": 59,
-            "ResourceLevel": 8,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:600",
-            "SourceDesc": "server/migrations/000000_init-28.sql:6813",
             "Name": "无主诰",
             "Lore": "封神告书最后一页被叠成冠，受封者一栏空着。借冠的人纷纷填名，翌日名字又全部变白。",
             "LoreRoot": "原创·未领封神告书",
+            "Role": "warlock",
             "Identity": "59级术神冠承担术士职业+1与法攻集中；无免费四元素减抗、全技能和吟唱速度叠加。",
             "Benefit": "法攻 +10；智慧 +14；法力 +69；法术会心bp +249；精神 +14",
             "Tradeoff": "技能软点占明示预算，不解锁未学技能，不增强新增training硬点协同；既有native_modifier按effective_raw重算且计预算；换装必须移除",
             "PowerTier": "builddefining",
+            "SourceArm": "server/migrations/000000_init-25.sql:600",
+            "SourceDesc": "server/migrations/000000_init-28.sql:6813",
+            "BaseID": 2059,
+            "Professions": 16,
+            "Sex": 0,
+            "Slot": 2,
+            "LevelRequirement": 59,
+            "ResourceLevel": 8,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": false,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 15,
@@ -2259,14 +2345,6 @@
                 "Mode": 0
               }
             ],
-            "Traits": [
-              {
-                "Kind": "swift_cast",
-                "PowerBP": 2500,
-                "ThresholdPct": 0
-              }
-            ],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 15,
@@ -2275,14 +2353,29 @@
               }
             ],
             "LocalEnhancements": [],
-            "TypedEffects": [],
+            "Traits": [
+              {
+                "Kind": "swift_cast",
+                "PowerBP": 2500,
+                "ThresholdPct": 0,
+                "SkillID": 0,
+                "SkillName": ""
+              }
+            ],
+            "ReservedSkills": [],
             "SkillBonuses": [
               {
                 "scope": "class",
                 "profession": 5,
+                "branch": "",
+                "school": "",
+                "skillID": 0,
                 "levels": 1
               }
-            ]
+            ],
+            "TypedEffects": [],
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -2376,27 +2469,29 @@
           "required_level": 38,
           "catalog_definition": {
             "ID": 2506,
-            "BaseID": 2506,
             "BaseName": "水晶项链",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 3,
-            "LevelRequirement": 38,
-            "ResourceLevel": 6,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:5664",
-            "SourceDesc": "server/migrations/000000_init-29.sql:1211",
             "Name": "无人坐的晶椅",
             "Lore": "七面水晶珠照不见彼此，只能照出不在屋里的东西。最后一珠永远映着一把空椅，任谁坐下都不会改变。",
             "LoreRoot": "原型·水晶串链",
+            "Role": "allclasses",
             "Identity": "38级水晶项链让魔攻会心在项链位成形；避免只选武器才有输出成长。",
             "Benefit": "法术会心bp +450；法攻 +11；智慧 +14；法力 +72；精神 +14",
             "Tradeoff": "投入集中在法术输出；不提供物攻、命中专精",
             "PowerTier": "highvalue",
+            "SourceArm": "server/migrations/000000_init-25.sql:5664",
+            "SourceDesc": "server/migrations/000000_init-29.sql:1211",
+            "BaseID": 2506,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 3,
+            "LevelRequirement": 38,
+            "ResourceLevel": 6,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 66,
@@ -2424,8 +2519,6 @@
                 "Mode": 0
               }
             ],
-            "Traits": [],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 66,
@@ -2434,38 +2527,52 @@
               }
             ],
             "LocalEnhancements": [],
+            "Traits": [],
+            "ReservedSkills": [],
+            "SkillBonuses": [
+              {
+                "scope": "single",
+                "profession": 0,
+                "branch": "",
+                "school": "",
+                "skillID": 10319,
+                "levels": 2
+              }
+            ],
             "TypedEffects": [
               {
                 "kind": "element_damage_bp",
-                "value": 2000,
-                "element": "holy"
+                "variantID": "",
+                "element": "holy",
+                "value": 2000
               },
               {
                 "kind": "proc",
+                "variantID": "",
+                "element": "",
+                "value": 0,
                 "proc": {
                   "id": "vacant_crystal",
                   "trigger": "on_direct_hit",
-                  "skillId": 10319,
+                  "skillID": 10319,
                   "fixedRank": 10,
                   "chanceBP": 2000,
-                  "icdMs": 8000,
+                  "iCDMS": 8000,
                   "sharedGroup": "vacant_crystal",
                   "payload": "damage",
                   "targetRule": "hit_target",
                   "maxTargets": 1,
                   "scaleBP": 10000,
-                  "pvpScaleBP": 3500,
-                  "requireMagic": true
+                  "pVPScaleBP": 3500,
+                  "hPBelowPct": 0,
+                  "requireMagic": true,
+                  "priority": 0,
+                  "visualKey": ""
                 }
               }
             ],
-            "SkillBonuses": [
-              {
-                "scope": "single",
-                "skillId": 10319,
-                "levels": 2
-              }
-            ]
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -2559,27 +2666,29 @@
           "required_level": 54,
           "catalog_definition": {
             "ID": 2409,
-            "BaseID": 2409,
             "BaseName": "乾坤手套",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 6,
-            "LevelRequirement": 54,
-            "ResourceLevel": 9,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:4564",
-            "SourceDesc": "server/migrations/000000_init-29.sql:113",
             "Name": "翻掌乾坤",
             "Lore": "掌纹里的乾坤图正反相通，沙从一面落下会从另一面升起。装入最后一粒沙后，整只手套突然像有了一点呼吸。",
             "LoreRoot": "原型·乾坤手套聚灵",
+            "Role": "allclasses",
             "Identity": "54级通用吟唱手套提供全技能+1，仍需先学技能；放弃普攻攻速、MF和大额法攻，是跨职业技能搭配核心。",
             "Benefit": "精神 +20；法力 +198；生命 +76；魔防 +31；体质 +16；异常抵抗 +9",
             "Tradeoff": "技能软点占明示预算，不解锁未学技能，不增强新增training硬点协同；既有native_modifier按effective_raw重算且计预算；换装必须移除",
             "PowerTier": "builddefining",
+            "SourceArm": "server/migrations/000000_init-25.sql:4564",
+            "SourceDesc": "server/migrations/000000_init-29.sql:113",
+            "BaseID": 2409,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 6,
+            "LevelRequirement": 54,
+            "ResourceLevel": 9,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 61,
@@ -2612,14 +2721,6 @@
                 "Mode": 0
               }
             ],
-            "Traits": [
-              {
-                "Kind": "swift_cast",
-                "PowerBP": 3000,
-                "ThresholdPct": 0
-              }
-            ],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 61,
@@ -2628,13 +2729,29 @@
               }
             ],
             "LocalEnhancements": [],
-            "TypedEffects": [],
+            "Traits": [
+              {
+                "Kind": "swift_cast",
+                "PowerBP": 3000,
+                "ThresholdPct": 0,
+                "SkillID": 0,
+                "SkillName": ""
+              }
+            ],
+            "ReservedSkills": [],
             "SkillBonuses": [
               {
                 "scope": "all",
+                "profession": 0,
+                "branch": "",
+                "school": "",
+                "skillID": 0,
                 "levels": 1
               }
-            ]
+            ],
+            "TypedEffects": [],
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -2733,27 +2850,29 @@
           "required_level": 48,
           "catalog_definition": {
             "ID": 2558,
-            "BaseID": 2558,
             "BaseName": "红宝石魔力之戒",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 7,
-            "LevelRequirement": 48,
-            "ResourceLevel": 8,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:6254",
-            "SourceDesc": "server/migrations/000000_init-29.sql:1801",
             "Name": "红石晚霞",
             "Lore": "红宝石的光总比日落晚半刻，夜里亮起时能照见空中的浮尘。珠匠以尘记时，发现它慢的是同一个黄昏。",
             "LoreRoot": "原型·红宝石魔力戒",
+            "Role": "allclasses",
             "Identity": "魔法会心戒",
             "Benefit": "法术会心bp +301；法攻 +14；智慧 +12；法力 +60；精神 +12；生命 +60；本件未加工白字法攻 +40–60%",
             "Tradeoff": "单系投资只提升匹配的真实伤害包；敌人不匹配时不是全能增伤/减伤；本件白字局部强化占预算，不放大其它装备、卡、加工、固有六维或额外词条",
             "PowerTier": "highvalue",
+            "SourceArm": "server/migrations/000000_init-25.sql:6254",
+            "SourceDesc": "server/migrations/000000_init-29.sql:1801",
+            "BaseID": 2558,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 7,
+            "LevelRequirement": 48,
+            "ResourceLevel": 8,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 66,
@@ -2786,8 +2905,6 @@
                 "Mode": 0
               }
             ],
-            "Traits": [],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 66,
@@ -2803,19 +2920,25 @@
                 "MaxPercent": 60
               }
             ],
+            "Traits": [],
+            "ReservedSkills": [],
+            "SkillBonuses": [],
             "TypedEffects": [
               {
                 "kind": "element_damage_bp",
-                "value": 2800,
-                "element": "fire"
+                "variantID": "",
+                "element": "fire",
+                "value": 2800
               },
               {
                 "kind": "enemy_element_pierce_bp",
-                "value": 1800,
-                "element": "fire"
+                "variantID": "",
+                "element": "fire",
+                "value": 1800
               }
             ],
-            "SkillBonuses": []
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -3034,29 +3157,29 @@
           "required_level": 48,
           "catalog_definition": {
             "id": 36,
+            "baseName": "",
             "name": "门闩抵天倾",
-            "runes": [
-              1900028001,
-              1900028004,
-              1900028003,
-              1900028009,
-              1900028014
-            ],
-            "order": [
-              "角",
-              "房",
-              "氐",
-              "牛",
-              "壁"
-            ],
+            "lore": "应劫者见阵门下沉，便用门闩撑住横梁。名册在身后一页页自行翻过，直到最后一页出现了尚未入阵者的名字。",
+            "loreRoot": "",
+            "role": "",
+            "identity": "残血撑住重击的守关阵",
+            "benefit": "物理承伤为主；生命、物理平减、体质、防御、魔防、法术平减、异常抵抗提供独立于星篆的完整词条",
+            "tradeoff": "仍降低移动速度；占用同类宿阵名额；技能与战况条件仍按各特性生效",
+            "powerTier": "builddefining",
+            "sourceArm": "",
+            "sourceDesc": "",
+            "baseID": 0,
+            "professions": 0,
+            "sex": 0,
+            "slot": 0,
+            "levelRequirement": 0,
+            "resourceLevel": 0,
             "channel": "守阵",
             "minLevel": 35,
-            "professions": 0,
-            "slots": [
-              2,
-              5,
-              8
-            ],
+            "beginnerAllowed": false,
+            "unrestricted": false,
+            "nativeDropEligible": false,
+            "legacyAffixPoolReady": false,
             "affixes": [
               {
                 "attr": 34,
@@ -3099,25 +3222,44 @@
                 "mode": 0
               }
             ],
-            "lore": "应劫者见阵门下沉，便用门闩撑住横梁。名册在身后一页页自行翻过，直到最后一页出现了尚未入阵者的名字。",
-            "identity": "残血撑住重击的守关阵",
-            "benefit": "物理承伤为主；生命、物理平减、体质、防御、魔防、法术平减、异常抵抗提供独立于星篆的完整词条",
-            "tradeoff": "仍降低移动速度；占用同类宿阵名额；技能与战况条件仍按各特性生效",
-            "powerTier": "builddefining",
-            "traits": [
-              {
-                "kind": "desperate_guard",
-                "powerBP": 3500,
-                "thresholdPct": 35
-              }
-            ],
-            "reservedSkills": [],
             "variableAffixes": [
               {
                 "attr": 69,
                 "min": 34,
                 "max": 37
               }
+            ],
+            "localEnhancements": [],
+            "traits": [
+              {
+                "kind": "desperate_guard",
+                "powerBP": 3500,
+                "thresholdPct": 35,
+                "skillID": 0,
+                "skillName": ""
+              }
+            ],
+            "reservedSkills": [],
+            "skillBonuses": [],
+            "typedEffects": [],
+            "runes": [
+              1900028001,
+              1900028004,
+              1900028003,
+              1900028009,
+              1900028014
+            ],
+            "slots": [
+              2,
+              5,
+              8
+            ],
+            "order": [
+              "角",
+              "房",
+              "氐",
+              "牛",
+              "壁"
             ]
           },
           "max_roll_authored_affixes": [
@@ -3227,27 +3369,29 @@
           "required_level": 56,
           "catalog_definition": {
             "ID": 2108,
-            "BaseID": 2108,
             "BaseName": "天罡之靴",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 9,
-            "LevelRequirement": 56,
-            "ResourceLevel": 8,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:1154",
-            "SourceDesc": "server/migrations/000000_init-28.sql:7367",
             "Name": "漏宿沉履",
             "Lore": "抄星图的人漏掉一处星宿，照图制成的靴每到那方天际便沉如铅。他索性留在观星台，把错处刻给后来人看。",
             "LoreRoot": "原型·天罡靴与三十六星力",
+            "Role": "allclasses",
             "Identity": "健康守势星图靴",
             "Benefit": "魔防 +51；生命 +236；法术平减 +10；精神 +15；异常抵抗 +10",
             "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
             "PowerTier": "transition",
+            "SourceArm": "server/migrations/000000_init-25.sql:1154",
+            "SourceDesc": "server/migrations/000000_init-28.sql:7367",
+            "BaseID": 2108,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 9,
+            "LevelRequirement": 56,
+            "ResourceLevel": 8,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 17,
@@ -3275,18 +3419,22 @@
                 "Mode": 0
               }
             ],
+            "VariableAffixes": [],
+            "LocalEnhancements": [],
             "Traits": [
               {
                 "Kind": "healthy_guard",
                 "PowerBP": 1200,
-                "ThresholdPct": 85
+                "ThresholdPct": 85,
+                "SkillID": 0,
+                "SkillName": ""
               }
             ],
             "ReservedSkills": [],
-            "VariableAffixes": [],
-            "LocalEnhancements": [],
+            "SkillBonuses": [],
             "TypedEffects": [],
-            "SkillBonuses": []
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -3380,27 +3528,29 @@
           "required_level": 36,
           "catalog_definition": {
             "ID": 2602,
-            "BaseID": 2602,
             "BaseName": "恶魔之翼",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 10,
-            "LevelRequirement": 36,
-            "ResourceLevel": 6,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-26.sql:227",
-            "SourceDesc": "server/migrations/000000_init-29.sql:2299",
             "Name": "错生的翼骨",
             "Lore": "魔翼中有一根朝反方向生长的骨，碰到骨尖会闻见烧雨的气味。缝匠拆开皮膜，里面竟没有任何接缝。",
             "LoreRoot": "原型·不明材质魔翼",
+            "Role": "allclasses",
             "Identity": "低血魔法攻击背饰",
             "Benefit": "法攻 +12；智慧 +11；法力 +58；法术会心bp +217；精神 +11；生命 +58",
             "Tradeoff": "单系投资只提升匹配的真实伤害包；敌人不匹配时不是全能增伤/减伤",
             "PowerTier": "highvalue",
+            "SourceArm": "server/migrations/000000_init-26.sql:227",
+            "SourceDesc": "server/migrations/000000_init-29.sql:2299",
+            "BaseID": 2602,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 10,
+            "LevelRequirement": 36,
+            "ResourceLevel": 6,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 15,
@@ -3433,8 +3583,6 @@
                 "Mode": 0
               }
             ],
-            "Traits": [],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 15,
@@ -3443,14 +3591,19 @@
               }
             ],
             "LocalEnhancements": [],
+            "Traits": [],
+            "ReservedSkills": [],
+            "SkillBonuses": [],
             "TypedEffects": [
               {
                 "kind": "element_absorb_bp",
-                "value": 1400,
-                "element": "dark"
+                "variantID": "",
+                "element": "dark",
+                "value": 1400
               }
             ],
-            "SkillBonuses": []
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -3549,27 +3702,29 @@
           "required_level": 54,
           "catalog_definition": {
             "ID": 1310,
-            "BaseID": 1310,
             "BaseName": "神杖·九仪",
-            "Role": "sharedcaster",
-            "Professions": 24,
-            "BeginnerAllowed": false,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 13,
-            "LevelRequirement": 54,
-            "ResourceLevel": 10,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-24.sql:10661",
-            "SourceDesc": "server/migrations/000000_init-27.sql:18975",
             "Name": "无名神席",
             "Lore": "杖上九个座位都没有刻像，第十个影子却总坐在持杖者脚边。九仪旧说解释不了它，只有一行小字：席满，莫请。",
             "LoreRoot": "原型·九仪来历不明的传说",
+            "Role": "sharedcaster",
             "Identity": "无名神席将供火送入一枚火弹，白字、软点、穿抗与火弹瞬念合为单体祭火；省下三成火弹法力，让有限祭炁支撑更长的法事。",
             "Benefit": "法攻 +52；法术会心bp +413；智慧 +18；精神 +18；魔防 +35；法术平减 +13；异常抵抗 +13；生命 -80；回避防御 -20；法力 +460；本件未加工白字法攻 +380–440%",
             "Tradeoff": "生命与回避受损；增伤穿抗只限火系，瞬念和节炁只限火弹；仍逐次消耗法力，不解锁未学技能，不给药师或冰法通用节奏增益。",
             "PowerTier": "godlike",
+            "SourceArm": "server/migrations/000000_init-24.sql:10661",
+            "SourceDesc": "server/migrations/000000_init-27.sql:18975",
+            "BaseID": 1310,
+            "Professions": 24,
+            "Sex": 0,
+            "Slot": 13,
+            "LevelRequirement": 54,
+            "ResourceLevel": 10,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": false,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 15,
@@ -3622,6 +3777,21 @@
                 "Mode": 0
               }
             ],
+            "VariableAffixes": [
+              {
+                "Attr": 66,
+                "Min": 413,
+                "Max": 454
+              }
+            ],
+            "LocalEnhancements": [
+              {
+                "Attr": 15,
+                "Percent": 380,
+                "MinPercent": 380,
+                "MaxPercent": 440
+              }
+            ],
             "Traits": [
               {
                 "Kind": "swift_cast",
@@ -3639,40 +3809,32 @@
               }
             ],
             "ReservedSkills": [],
-            "VariableAffixes": [
+            "SkillBonuses": [
               {
-                "Attr": 66,
-                "Min": 413,
-                "Max": 454
-              }
-            ],
-            "LocalEnhancements": [
-              {
-                "Attr": 15,
-                "Percent": 380,
-                "MinPercent": 380,
-                "MaxPercent": 440
+                "scope": "single",
+                "profession": 0,
+                "branch": "",
+                "school": "",
+                "skillID": 10401,
+                "levels": 5
               }
             ],
             "TypedEffects": [
               {
                 "kind": "element_damage_bp",
-                "value": 4000,
-                "element": "fire"
+                "variantID": "",
+                "element": "fire",
+                "value": 4000
               },
               {
                 "kind": "enemy_element_pierce_bp",
-                "value": 2500,
-                "element": "fire"
+                "variantID": "",
+                "element": "fire",
+                "value": 2500
               }
             ],
-            "SkillBonuses": [
-              {
-                "scope": "single",
-                "levels": 5,
-                "skillId": 10401
-              }
-            ]
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -3887,31 +4049,29 @@
           "required_level": 60,
           "catalog_definition": {
             "id": 35,
+            "baseName": "",
             "name": "空瓢济厄",
-            "runes": [
-              1900028010,
-              1900028011,
-              1900028013,
-              1900028014,
-              1900028028
-            ],
-            "order": [
-              "女",
-              "虚",
-              "室",
-              "壁",
-              "轸"
-            ],
+            "lore": "药瓢已经空了，药师仍背它进入劫阵。同行人伤重时，瓢底忽然响了一声，像有人在很远的地方敲开一扇门。",
+            "loreRoot": "",
+            "role": "",
+            "identity": "危急救援与长战治疗阵",
+            "benefit": "治疗续航为主；精神、法力、魔防、法术平减、生命、异常抵抗、体质提供独立于星篆的完整词条；组队常驻圣抗光环 +20%，240像素，至多六人及出战宠物，同防护类别取最高",
+            "tradeoff": "治疗系+1替换旧低血35%救护增幅；保留原治疗节蓝；占用同类宿阵名额；队友须在240像素内，离队、离范围或脱装失去光环",
+            "powerTier": "builddefining",
+            "sourceArm": "",
+            "sourceDesc": "",
+            "baseID": 0,
+            "professions": 8,
+            "sex": 0,
+            "slot": 0,
+            "levelRequirement": 0,
+            "resourceLevel": 0,
             "channel": "辅阵",
             "minLevel": 60,
-            "professions": 8,
-            "slots": [
-              1,
-              3,
-              6,
-              7,
-              9
-            ],
+            "beginnerAllowed": false,
+            "unrestricted": false,
+            "nativeDropEligible": false,
+            "legacyAffixPoolReady": false,
             "affixes": [
               {
                 "attr": 61,
@@ -3949,24 +4109,6 @@
                 "mode": 0
               }
             ],
-            "lore": "药瓢已经空了，药师仍背它进入劫阵。同行人伤重时，瓢底忽然响了一声，像有人在很远的地方敲开一扇门。",
-            "identity": "危急救援与长战治疗阵",
-            "benefit": "治疗续航为主；精神、法力、魔防、法术平减、生命、异常抵抗、体质提供独立于星篆的完整词条；组队常驻圣抗光环 +20%，240像素，至多六人及出战宠物，同防护类别取最高",
-            "tradeoff": "治疗系+1替换旧低血35%救护增幅；保留原治疗节蓝；占用同类宿阵名额；队友须在240像素内，离队、离范围或脱装失去光环",
-            "powerTier": "builddefining",
-            "traits": [
-              {
-                "kind": "healing_cost",
-                "powerBP": 2200,
-                "thresholdPct": 0
-              },
-              {
-                "kind": "rescue_heal",
-                "powerBP": 6500,
-                "thresholdPct": 30
-              }
-            ],
-            "reservedSkills": [],
             "variableAffixes": [
               {
                 "attr": 17,
@@ -3974,9 +4116,40 @@
                 "max": 55
               }
             ],
+            "localEnhancements": [],
+            "traits": [
+              {
+                "kind": "healing_cost",
+                "powerBP": 2200,
+                "thresholdPct": 0,
+                "skillID": 0,
+                "skillName": ""
+              },
+              {
+                "kind": "rescue_heal",
+                "powerBP": 6500,
+                "thresholdPct": 30,
+                "skillID": 0,
+                "skillName": ""
+              }
+            ],
+            "reservedSkills": [],
+            "skillBonuses": [
+              {
+                "scope": "school",
+                "profession": 0,
+                "branch": "",
+                "school": "healing",
+                "skillID": 0,
+                "levels": 1
+              }
+            ],
             "typedEffects": [
               {
                 "kind": "aura",
+                "variantID": "",
+                "element": "",
+                "value": 0,
                 "aura": {
                   "id": "holy_feather",
                   "fixedRank": 1,
@@ -3984,36 +4157,38 @@
                   "modifier": "element_resist_bp",
                   "element": "holy",
                   "value": 2000,
-                  "radiusPx": 240,
-                  "refreshMs": 500,
-                  "leaseMs": 1000,
+                  "radiusPX": 240,
+                  "refreshMS": 500,
+                  "leaseMS": 1000,
                   "maxPlayers": 6,
                   "includeActivePet": true,
                   "visualKey": "空瓢济厄",
-                  "pvpScaleBP": 5000
+                  "priority": 0,
+                  "pVPScaleBP": 5000
                 }
               }
             ],
-            "skillBonuses": [
-              {
-                "scope": "school",
-                "school": "healing",
-                "levels": 1
-              }
+            "runes": [
+              1900028010,
+              1900028011,
+              1900028013,
+              1900028014,
+              1900028028
             ],
-            "v5BudgetExchange": {
-              "removedTraits": [
-                {
-                  "kind": "rescue_heal",
-                  "powerBP": 3500,
-                  "thresholdPct": 30,
-                  "skillID": 10301,
-                  "skillName": "治愈术"
-                }
-              ],
-              "policy": "replacement_only_no_extra_free_budget",
-              "reason": "治疗系+1替换旧低血35%救护增幅；保留原治疗节蓝"
-            }
+            "slots": [
+              1,
+              3,
+              6,
+              7,
+              9
+            ],
+            "order": [
+              "女",
+              "虚",
+              "室",
+              "壁",
+              "轸"
+            ]
           },
           "max_roll_authored_affixes": [
             {
@@ -4117,27 +4292,29 @@
           "required_level": 59,
           "catalog_definition": {
             "ID": 2056,
-            "BaseID": 2056,
             "BaseName": "神悯冠",
-            "Role": "healer",
-            "Professions": 8,
-            "BeginnerAllowed": false,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 2,
-            "LevelRequirement": 59,
-            "ResourceLevel": 8,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:565",
-            "SourceDesc": "server/migrations/000000_init-28.sql:6778",
             "Name": "闭目神像",
             "Lore": "冠上神像闭着眼，信众争论它是否垂怜。擦像的药师却发现，眼缝里沾着整夜未干的药汁。",
             "LoreRoot": "原创·闭眼冠像",
+            "Role": "healer",
             "Identity": "闭目神像把一次治愈拆成即时护生与一息后续疗；后段守原伤者，不追新伤口，不在满血时储药。",
             "Benefit": "法力 +225；精神 +16；生命 +78；魔防 +32；异常抵抗 +11；法术平减 +11",
             "Tradeoff": "即时只结算原预算七成，一息后最多五成；按最初缺血预算约束，满血不储药，换装或目标死亡取消后段。",
             "PowerTier": "builddefining",
+            "SourceArm": "server/migrations/000000_init-25.sql:565",
+            "SourceDesc": "server/migrations/000000_init-28.sql:6778",
+            "BaseID": 2056,
+            "Professions": 8,
+            "Sex": 0,
+            "Slot": 2,
+            "LevelRequirement": 59,
+            "ResourceLevel": 8,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": false,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 36,
@@ -4170,8 +4347,6 @@
                 "Mode": 0
               }
             ],
-            "Traits": [],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 36,
@@ -4180,19 +4355,28 @@
               }
             ],
             "LocalEnhancements": [],
-            "TypedEffects": [
-              {
-                "kind": "skill_variant",
-                "variantId": "healer_guarded_mend"
-              }
-            ],
+            "Traits": [],
+            "ReservedSkills": [],
             "SkillBonuses": [
               {
                 "scope": "school",
+                "profession": 0,
+                "branch": "",
                 "school": "healing",
+                "skillID": 0,
                 "levels": 2
               }
-            ]
+            ],
+            "TypedEffects": [
+              {
+                "kind": "skill_variant",
+                "variantID": "healer_guarded_mend",
+                "element": "",
+                "value": 0
+              }
+            ],
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -4291,27 +4475,29 @@
           "required_level": 56,
           "catalog_definition": {
             "ID": 2509,
-            "BaseID": 2509,
             "BaseName": "天使泪项链",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 3,
-            "LevelRequirement": 56,
-            "ResourceLevel": 9,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:5699",
-            "SourceDesc": "server/migrations/000000_init-29.sql:1246",
             "Name": "凝泪未干",
             "Lore": "传说中的泪石表面始终干燥，内里却有一滴水在往上流。到顶时水不会落下，只会暂时映出一个苍白的月。",
             "LoreRoot": "原型·天使泪凝宝石传说",
+            "Role": "allclasses",
             "Identity": "56级救急治疗链改为受直接伤害后存活且低于30%生命的自救触发；长冷却换跨职业救急搭配，不能脱战换装自动触发或复活。",
             "Benefit": "精神 +16；法力 +131；生命 +523；魔防 +24；异常抵抗 +8；法术平减 +8",
             "Tradeoff": "触发约占40%总预算；失去原全部Traits及原局部强化，空窗仍过被动底线",
             "PowerTier": "builddefining",
+            "SourceArm": "server/migrations/000000_init-25.sql:5699",
+            "SourceDesc": "server/migrations/000000_init-29.sql:1246",
+            "BaseID": 2509,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 3,
+            "LevelRequirement": 56,
+            "ResourceLevel": 9,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 61,
@@ -4344,8 +4530,6 @@
                 "Mode": 0
               }
             ],
-            "Traits": [],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 61,
@@ -4354,28 +4538,37 @@
               }
             ],
             "LocalEnhancements": [],
+            "Traits": [],
+            "ReservedSkills": [],
+            "SkillBonuses": [],
             "TypedEffects": [
               {
                 "kind": "proc",
+                "variantID": "",
+                "element": "",
+                "value": 0,
                 "proc": {
                   "id": "emergency_heal",
                   "trigger": "on_direct_damage_taken",
-                  "skillId": 10301,
+                  "skillID": 10301,
                   "fixedRank": 5,
                   "chanceBP": 2000,
-                  "icdMs": 15000,
+                  "iCDMS": 15000,
                   "sharedGroup": "emergency_heal",
                   "payload": "heal",
                   "targetRule": "self",
                   "maxTargets": 1,
                   "scaleBP": 10000,
-                  "pvpScaleBP": 3500,
-                  "hpBelowPct": 30,
-                  "priority": 10
+                  "pVPScaleBP": 3500,
+                  "hPBelowPct": 30,
+                  "requireMagic": false,
+                  "priority": 10,
+                  "visualKey": ""
                 }
               }
             ],
-            "SkillBonuses": []
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -4474,27 +4667,29 @@
           "required_level": 54,
           "catalog_definition": {
             "ID": 2409,
-            "BaseID": 2409,
             "BaseName": "乾坤手套",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 6,
-            "LevelRequirement": 54,
-            "ResourceLevel": 9,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:4564",
-            "SourceDesc": "server/migrations/000000_init-29.sql:113",
             "Name": "翻掌乾坤",
             "Lore": "掌纹里的乾坤图正反相通，沙从一面落下会从另一面升起。装入最后一粒沙后，整只手套突然像有了一点呼吸。",
             "LoreRoot": "原型·乾坤手套聚灵",
+            "Role": "allclasses",
             "Identity": "54级通用吟唱手套提供全技能+1，仍需先学技能；放弃普攻攻速、MF和大额法攻，是跨职业技能搭配核心。",
             "Benefit": "精神 +20；法力 +198；生命 +76；魔防 +31；体质 +16；异常抵抗 +9",
             "Tradeoff": "技能软点占明示预算，不解锁未学技能，不增强新增training硬点协同；既有native_modifier按effective_raw重算且计预算；换装必须移除",
             "PowerTier": "builddefining",
+            "SourceArm": "server/migrations/000000_init-25.sql:4564",
+            "SourceDesc": "server/migrations/000000_init-29.sql:113",
+            "BaseID": 2409,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 6,
+            "LevelRequirement": 54,
+            "ResourceLevel": 9,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 61,
@@ -4527,14 +4722,6 @@
                 "Mode": 0
               }
             ],
-            "Traits": [
-              {
-                "Kind": "swift_cast",
-                "PowerBP": 3000,
-                "ThresholdPct": 0
-              }
-            ],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 61,
@@ -4543,13 +4730,29 @@
               }
             ],
             "LocalEnhancements": [],
-            "TypedEffects": [],
+            "Traits": [
+              {
+                "Kind": "swift_cast",
+                "PowerBP": 3000,
+                "ThresholdPct": 0,
+                "SkillID": 0,
+                "SkillName": ""
+              }
+            ],
+            "ReservedSkills": [],
             "SkillBonuses": [
               {
                 "scope": "all",
+                "profession": 0,
+                "branch": "",
+                "school": "",
+                "skillID": 0,
                 "levels": 1
               }
-            ]
+            ],
+            "TypedEffects": [],
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -4648,27 +4851,29 @@
           "required_level": 54,
           "catalog_definition": {
             "ID": 2559,
-            "BaseID": 2559,
             "BaseName": "晶钻魔力之戒",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 7,
-            "LevelRequirement": 54,
-            "ResourceLevel": 9,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:6265",
-            "SourceDesc": "server/migrations/000000_init-29.sql:1812",
             "Name": "结晶的叹息",
             "Lore": "晶钻里有一团白雾，贴近听时像有人缓慢吐气。越珍惜这枚戒的人，白雾反而越难散去。",
             "LoreRoot": "原型·晶钻戒泪意象",
+            "Role": "allclasses",
             "Identity": "救急治疗戒",
             "Benefit": "精神 +24；法力 +144；生命 +83；魔防 +34；异常抵抗 +12；法术平减 +12",
             "Tradeoff": "技能软点占明示预算，不解锁未学技能，不增强新增training硬点协同；既有native_modifier按effective_raw重算且计预算；换装必须移除",
             "PowerTier": "highvalue",
+            "SourceArm": "server/migrations/000000_init-25.sql:6265",
+            "SourceDesc": "server/migrations/000000_init-29.sql:1812",
+            "BaseID": 2559,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 7,
+            "LevelRequirement": 54,
+            "ResourceLevel": 9,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 61,
@@ -4701,14 +4906,6 @@
                 "Mode": 0
               }
             ],
-            "Traits": [
-              {
-                "Kind": "rescue_heal",
-                "PowerBP": 4000,
-                "ThresholdPct": 30
-              }
-            ],
-            "ReservedSkills": [],
             "VariableAffixes": [
               {
                 "Attr": 61,
@@ -4717,14 +4914,29 @@
               }
             ],
             "LocalEnhancements": [],
-            "TypedEffects": [],
+            "Traits": [
+              {
+                "Kind": "rescue_heal",
+                "PowerBP": 4000,
+                "ThresholdPct": 30,
+                "SkillID": 0,
+                "SkillName": ""
+              }
+            ],
+            "ReservedSkills": [],
             "SkillBonuses": [
               {
                 "scope": "single",
-                "skillId": 10301,
+                "profession": 0,
+                "branch": "",
+                "school": "",
+                "skillID": 10301,
                 "levels": 2
               }
-            ]
+            ],
+            "TypedEffects": [],
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -4937,29 +5149,29 @@
           "required_level": 48,
           "catalog_definition": {
             "id": 36,
+            "baseName": "",
             "name": "门闩抵天倾",
-            "runes": [
-              1900028001,
-              1900028004,
-              1900028003,
-              1900028009,
-              1900028014
-            ],
-            "order": [
-              "角",
-              "房",
-              "氐",
-              "牛",
-              "壁"
-            ],
+            "lore": "应劫者见阵门下沉，便用门闩撑住横梁。名册在身后一页页自行翻过，直到最后一页出现了尚未入阵者的名字。",
+            "loreRoot": "",
+            "role": "",
+            "identity": "残血撑住重击的守关阵",
+            "benefit": "物理承伤为主；生命、物理平减、体质、防御、魔防、法术平减、异常抵抗提供独立于星篆的完整词条",
+            "tradeoff": "仍降低移动速度；占用同类宿阵名额；技能与战况条件仍按各特性生效",
+            "powerTier": "builddefining",
+            "sourceArm": "",
+            "sourceDesc": "",
+            "baseID": 0,
+            "professions": 0,
+            "sex": 0,
+            "slot": 0,
+            "levelRequirement": 0,
+            "resourceLevel": 0,
             "channel": "守阵",
             "minLevel": 35,
-            "professions": 0,
-            "slots": [
-              2,
-              5,
-              8
-            ],
+            "beginnerAllowed": false,
+            "unrestricted": false,
+            "nativeDropEligible": false,
+            "legacyAffixPoolReady": false,
             "affixes": [
               {
                 "attr": 34,
@@ -5002,25 +5214,44 @@
                 "mode": 0
               }
             ],
-            "lore": "应劫者见阵门下沉，便用门闩撑住横梁。名册在身后一页页自行翻过，直到最后一页出现了尚未入阵者的名字。",
-            "identity": "残血撑住重击的守关阵",
-            "benefit": "物理承伤为主；生命、物理平减、体质、防御、魔防、法术平减、异常抵抗提供独立于星篆的完整词条",
-            "tradeoff": "仍降低移动速度；占用同类宿阵名额；技能与战况条件仍按各特性生效",
-            "powerTier": "builddefining",
-            "traits": [
-              {
-                "kind": "desperate_guard",
-                "powerBP": 3500,
-                "thresholdPct": 35
-              }
-            ],
-            "reservedSkills": [],
             "variableAffixes": [
               {
                 "attr": 69,
                 "min": 34,
                 "max": 37
               }
+            ],
+            "localEnhancements": [],
+            "traits": [
+              {
+                "kind": "desperate_guard",
+                "powerBP": 3500,
+                "thresholdPct": 35,
+                "skillID": 0,
+                "skillName": ""
+              }
+            ],
+            "reservedSkills": [],
+            "skillBonuses": [],
+            "typedEffects": [],
+            "runes": [
+              1900028001,
+              1900028004,
+              1900028003,
+              1900028009,
+              1900028014
+            ],
+            "slots": [
+              2,
+              5,
+              8
+            ],
+            "order": [
+              "角",
+              "房",
+              "氐",
+              "牛",
+              "壁"
             ]
           },
           "max_roll_authored_affixes": [
@@ -5130,27 +5361,29 @@
           "required_level": 56,
           "catalog_definition": {
             "ID": 2108,
-            "BaseID": 2108,
             "BaseName": "天罡之靴",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 9,
-            "LevelRequirement": 56,
-            "ResourceLevel": 8,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-25.sql:1154",
-            "SourceDesc": "server/migrations/000000_init-28.sql:7367",
             "Name": "漏宿沉履",
             "Lore": "抄星图的人漏掉一处星宿，照图制成的靴每到那方天际便沉如铅。他索性留在观星台，把错处刻给后来人看。",
             "LoreRoot": "原型·天罡靴与三十六星力",
+            "Role": "allclasses",
             "Identity": "健康守势星图靴",
             "Benefit": "魔防 +51；生命 +236；法术平减 +10；精神 +15；异常抵抗 +10",
             "Tradeoff": "固定词条提供基础提升；特性的目标、技能和血线条件仍须满足，同名特性只取最高",
             "PowerTier": "transition",
+            "SourceArm": "server/migrations/000000_init-25.sql:1154",
+            "SourceDesc": "server/migrations/000000_init-28.sql:7367",
+            "BaseID": 2108,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 9,
+            "LevelRequirement": 56,
+            "ResourceLevel": 8,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 17,
@@ -5178,18 +5411,22 @@
                 "Mode": 0
               }
             ],
+            "VariableAffixes": [],
+            "LocalEnhancements": [],
             "Traits": [
               {
                 "Kind": "healthy_guard",
                 "PowerBP": 1200,
-                "ThresholdPct": 85
+                "ThresholdPct": 85,
+                "SkillID": 0,
+                "SkillName": ""
               }
             ],
             "ReservedSkills": [],
-            "VariableAffixes": [],
-            "LocalEnhancements": [],
+            "SkillBonuses": [],
             "TypedEffects": [],
-            "SkillBonuses": []
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -5283,27 +5520,29 @@
           "required_level": 30,
           "catalog_definition": {
             "ID": 2601,
-            "BaseID": 2601,
             "BaseName": "精灵之翼",
-            "Role": "allclasses",
-            "Professions": 31,
-            "BeginnerAllowed": true,
-            "Unrestricted": false,
-            "Sex": 0,
-            "Slot": 10,
-            "LevelRequirement": 30,
-            "ResourceLevel": 5,
-            "NativeDropEligible": true,
-            "LegacyAffixPoolReady": true,
-            "SourceArm": "server/migrations/000000_init-26.sql:216",
-            "SourceDesc": "server/migrations/000000_init-29.sql:2288",
             "Name": "瓶里破茧",
             "Lore": "精灵翼上的光总停在将要闪动的一瞬，触碰后才慢慢散开。养翼人收集了满瓶散光，瓶里却响起破茧的细声。",
             "LoreRoot": "原型·精灵翼微魔力",
+            "Role": "allclasses",
             "Identity": "精神型背翼",
             "Benefit": "精神 +24；法力 +12；魔防 +22；生命 +54；异常抵抗 +8",
             "Tradeoff": "支付0.40U给MF，少7.3%总战斗预算；不承担BOSS速度最优承诺",
             "PowerTier": "transition",
+            "SourceArm": "server/migrations/000000_init-26.sql:216",
+            "SourceDesc": "server/migrations/000000_init-29.sql:2288",
+            "BaseID": 2601,
+            "Professions": 31,
+            "Sex": 0,
+            "Slot": 10,
+            "LevelRequirement": 30,
+            "ResourceLevel": 5,
+            "Channel": 0,
+            "MinLevel": 0,
+            "BeginnerAllowed": true,
+            "Unrestricted": false,
+            "NativeDropEligible": true,
+            "LegacyAffixPoolReady": true,
             "Affixes": [
               {
                 "Attr": 61,
@@ -5331,17 +5570,21 @@
                 "Mode": 0
               }
             ],
-            "Traits": [],
-            "ReservedSkills": [],
             "VariableAffixes": [],
             "LocalEnhancements": [],
+            "Traits": [],
+            "ReservedSkills": [],
+            "SkillBonuses": [],
             "TypedEffects": [
               {
                 "kind": "magic_find_pct",
+                "variantID": "",
+                "element": "",
                 "value": 12
               }
             ],
-            "SkillBonuses": []
+            "Runes": [],
+            "Slots": []
           },
           "max_roll_authored_affixes": [
             {
@@ -5512,28 +5755,29 @@
           "required_level": 60,
           "catalog_definition": {
             "id": 40,
+            "baseName": "",
             "name": "四象让中宫",
-            "runes": [
-              1900028001,
-              1900028008,
-              1900028015,
-              1900028022,
-              1900028028
-            ],
-            "order": [
-              "角",
-              "斗",
-              "奎",
-              "井",
-              "轸"
-            ],
+            "lore": "四象争夺中宫百年，阵师最后在那里放了一把空椅。椅上渐渐压出第五种兽形，谁也说不出它究竟朝向哪一方。",
+            "loreRoot": "",
+            "role": "",
+            "identity": "多伤害路线兼修的中宫阵",
+            "benefit": "物理与法术输出的双向配置为主；物攻、法攻、物理会心、法术会心、生命、法力、精神、魔防提供独立于星篆的完整词条",
+            "tradeoff": "全技能+1替换14%技能增伤；只作用已经学会的战斗技能；占用同类宿阵名额",
+            "powerTier": "highvalue",
+            "sourceArm": "",
+            "sourceDesc": "",
+            "baseID": 0,
+            "professions": 0,
+            "sex": 0,
+            "slot": 0,
+            "levelRequirement": 0,
+            "resourceLevel": 0,
             "channel": "战阵",
             "minLevel": 60,
-            "professions": 0,
-            "slots": [
-              4,
-              13
-            ],
+            "beginnerAllowed": false,
+            "unrestricted": false,
+            "nativeDropEligible": false,
+            "legacyAffixPoolReady": false,
             "affixes": [
               {
                 "attr": 47,
@@ -5576,13 +5820,6 @@
                 "mode": 0
               }
             ],
-            "lore": "四象争夺中宫百年，阵师最后在那里放了一把空椅。椅上渐渐压出第五种兽形，谁也说不出它究竟朝向哪一方。",
-            "identity": "多伤害路线兼修的中宫阵",
-            "benefit": "物理与法术输出的双向配置为主；物攻、法攻、物理会心、法术会心、生命、法力、精神、魔防提供独立于星篆的完整词条",
-            "tradeoff": "全技能+1替换14%技能增伤；只作用已经学会的战斗技能；占用同类宿阵名额",
-            "powerTier": "highvalue",
-            "traits": [],
-            "reservedSkills": [],
             "variableAffixes": [
               {
                 "attr": 47,
@@ -5590,30 +5827,45 @@
                 "max": 239
               }
             ],
-            "typedEffects": [
-              {
-                "kind": "element_damage_bp",
-                "value": 2000,
-                "element": "holy"
-              }
-            ],
+            "localEnhancements": [],
+            "traits": [],
+            "reservedSkills": [],
             "skillBonuses": [
               {
                 "scope": "all",
+                "profession": 0,
+                "branch": "",
+                "school": "",
+                "skillID": 0,
                 "levels": 1
               }
             ],
-            "v5BudgetExchange": {
-              "removedTraits": [
-                {
-                  "kind": "skill_focus",
-                  "powerBP": 1400,
-                  "thresholdPct": 0
-                }
-              ],
-              "policy": "replacement_only_no_extra_free_budget",
-              "reason": "全技能+1替换14%技能增伤；只作用已经学会的战斗技能"
-            }
+            "typedEffects": [
+              {
+                "kind": "element_damage_bp",
+                "variantID": "",
+                "element": "holy",
+                "value": 2000
+              }
+            ],
+            "runes": [
+              1900028001,
+              1900028008,
+              1900028015,
+              1900028022,
+              1900028028
+            ],
+            "slots": [
+              4,
+              13
+            ],
+            "order": [
+              "角",
+              "斗",
+              "奎",
+              "井",
+              "轸"
+            ]
           },
           "max_roll_authored_affixes": [
             {

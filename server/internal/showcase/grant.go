@@ -267,7 +267,7 @@ func verifyDelta(before, after domain.Snapshot, added []ItemAudit) error {
 
 func newItemAudit(slot int, st domain.Stack, def domain.ItemDef) ItemAudit {
 	a := ItemAudit{Slot: slot, Stack: st, DisplayName: def.Name, RequiredLevel: domain.EquipmentRequiredLevel(def, st)}
-	if u, ok := domain.UniqueOf(st); ok {
+	if u, ok := domain.UniqueOf(st,def.EndgameCatalog); ok {
 		a.DisplayName = u.Name
 		a.ResolvedAffixes = domain.UniqueItemBonuses(def, st)
 	} else if r, ok := domain.MatchAstralRecipe(def, st); ok {

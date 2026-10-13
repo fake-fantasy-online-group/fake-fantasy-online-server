@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"fmt"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -13,7 +15,7 @@ func TestOriginalSkillDescriptionAll745RanksRemainVerbatim(t *testing.T) {
 	s := newTestScene(t, nil)
 	s.skills, s.statuses = skills, statuses
 	count := 0
-	for _, id := range domain.V5SkillIDs() {
+	for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
 		for rank := int32(1); rank <= 5; rank++ {
 			original, ok := skills[domain.SkillKey{ID: id, Level: rank}]
 			if !ok {
@@ -62,7 +64,7 @@ func TestOriginalSkillDescriptionHighRanksRetainCompleteProse(t *testing.T) {
 	skills, statuses := realV5SkillFixtures(t)
 	s := newTestScene(t, nil)
 	s.skills, s.statuses = skills, statuses
-	for _, id := range domain.V5SkillIDs() {
+	for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
 		original := skills[domain.SkillKey{ID: id, Level: 5}]
 		if id == 10229 || id == 10230 {
 			original.Description = strings.ReplaceAll(original.Description, "，此技能尚无法作用", "")

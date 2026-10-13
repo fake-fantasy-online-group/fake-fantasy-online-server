@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"encoding/json"
 	"fmt"
@@ -15,13 +17,13 @@ import (
 // presentation fixture, not a claim that all high ranks coexist in a legal build.
 func TestSkillGrowthDisplayV7RuntimeFixtures(t *testing.T) {
 	var packets []string
-	for _, id := range domain.V5SkillIDs() {
+	for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
 		if id == 10212 {
 			continue
 		} // Explicitly unresolved theft remains untouched.
-		identity, _ := domain.V5SkillIdentity(id)
+		identity, _ := domain.V5SkillIdentity(id, catalogfixture.SkillProgressionCatalog())
 		s, p := behaviorAcceptancePlayer(t, identity.Profession)
-		policy, _ := domain.LookupSkillGrowthPolicy(id)
+		policy, _ := domain.LookupSkillGrowthPolicy(id, catalogfixture.SkillProgressionCatalog())
 		rankSet := map[int32]bool{20: true, 100: true}
 		for _, cap := range []int32{policy.AttributeCapRank, policy.EfficiencyCapRank, policy.RangeCapRank, policy.ProtectionCapRank, policy.AttackCapRank} {
 			if cap > 0 {
@@ -127,7 +129,7 @@ func TestSkillGrowthDisplayV7PassiveDamageRemainsOnRecipient(t *testing.T) {
 	} {
 		raw := domain.Learned{tc.source: tc.rank, tc.target: 1}
 		_, native := s.skillSynergyViews(tc.target, raw, raw)
-		want := fmt.Sprintf("已学被动使本技能伤害提升%d%%", domain.SkillGrowthDamageBonusPct(tc.source, tc.rank, tc.target))
+		want := fmt.Sprintf("已学被动使本技能伤害提升%d%%", domain.SkillGrowthDamageBonusPct(tc.source, tc.rank, tc.target, catalogfixture.SkillProgressionCatalog()))
 		if len(native) == 0 || native[0] != want {
 			t.Fatalf("recipient misses actual source growth %d→%d: %v", tc.source, tc.target, native)
 		}

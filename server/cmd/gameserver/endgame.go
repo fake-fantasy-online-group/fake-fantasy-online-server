@@ -1,33 +1,32 @@
 package main
 
 import (
-	"fmt"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 )
 
-// Register new rules in the authoritative runtime table while keeping external
-// artwork in the existing client resource installation. Missing client artwork
-// uses bounded semantic fallbacks there; it must not prevent the server starting.
+// All base items have already come through data.LoadItems. Register only their
+// protocol artwork aliases and gameplay catalogs; never synthesize definitions.
 func registerEndgameItems(w *worldData) error {
 	if len(w.items) == 0 {
 		return nil
 	}
-	if err := domain.ValidateUniqueCatalog(w.items); err != nil {
+	if err := domain.ValidateUniqueCatalog(w.items,w.endgameCatalog); err != nil {
 		return err
 	}
-	if err := domain.ValidateAstralCatalog(); err != nil {
+	if err := domain.ValidateAstralCatalog(w.endgameCatalog); err != nil {
 		return err
 	}
-	defs := domain.AstralRuneItems(0)
-	defs = append(defs, domain.ItemDef{ID: domain.RiftKeyItemID, Name: "洞天符钥", Description: "试炼功成所得，一枚开启一次演劫洞天，可邀同队道友同行。", Weight: 0, Stackable: true, InventoryTab: 1, InventoryTabKnown: true})
-	defs = append(defs, domain.CubeMaterialDefinitions()...)
-	for _, d := range defs {
-		if _, exists := w.items[d.ID]; exists {
-			return fmt.Errorf("endgame item ID collision %d", d.ID)
+	if err := domain.ValidateEndgameItemDefinitions(w.items); err != nil {
+		return err
+	}
+	mapped := make(map[domain.ItemID]bool, len(w.itemIcons))
+	for _, pair := range w.itemIcons {
+		mapped[pair.Item] = true
+	}
+	for _, id := range domain.EndgameBaseItemIDs() {
+		if !mapped[id] {
+			w.itemIcons = append(w.itemIcons, domain.ItemIconMapping{Item: id, Icon: w.items[id].Icon})
 		}
-		d.Icon = endgameItemIcon(d.ID)
-		w.items[d.ID] = d
-		w.itemIcons = append(w.itemIcons, domain.ItemIconMapping{Item: d.ID, Icon: d.Icon})
 	}
 	registerEndgameEquipmentIcons(w)
 	w.itemIconsKnown = true

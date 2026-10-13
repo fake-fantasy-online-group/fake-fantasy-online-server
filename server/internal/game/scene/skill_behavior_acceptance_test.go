@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"bytes"
 	"encoding/json"
@@ -49,8 +51,8 @@ func TestSkillBehaviorAcceptanceAll149IdentityAndNullHold(t *testing.T) {
 	names := map[domain.SkillID]string{10014: "破魔", 10024: "维护", 10118: "风斩", 10218: "解除陷阱", 10229: "陷阱回避", 10306: "净化术", 10307: "祝福术", 10327: "神术：鹰眼", 10316: "清身术", 10318: "解咒术", 10321: "防御术"}
 	for profession := int32(1); profession <= 5; profession++ {
 		s, p := behaviorAcceptancePlayer(t, profession)
-		for _, id := range domain.V5SkillIDs() {
-			ident, _ := domain.V5SkillIdentity(id)
+		for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
+			ident, _ := domain.V5SkillIdentity(id, catalogfixture.SkillProgressionCatalog())
 			if ident.Profession == profession {
 				p.Player.Char.Skills[id] = 1
 				p.Player.Char.SkillPoints--
@@ -81,7 +83,7 @@ func TestSkillBehaviorAcceptanceAll149IdentityAndNullHold(t *testing.T) {
 			}
 			c := r.Contract
 			first := s.skills[domain.SkillKey{ID: r.ID, Level: 1}]
-			ident, _ := domain.V5SkillIdentity(r.ID)
+			ident, _ := domain.V5SkillIdentity(r.ID, catalogfixture.SkillProgressionCatalog())
 			if c == nil || c.Name != first.Name || c.Icon != first.Icon || c.Profession != profession || c.UnlockLevel != ident.UnlockLevel || !reflect.DeepEqual(c.PrerequisiteSkillIDs, append([]domain.SkillID{}, ident.Prerequisites...)) {
 				t.Fatal("authoritative identity mismatch", r.ID, c, first.Name, ident)
 			}
@@ -286,11 +288,11 @@ func TestSkillBehaviorAcceptanceMPAndOneShotMatchAcceptedCast(t *testing.T) {
 func TestSkillBehaviorAcceptanceHighEquippedRanksAndRemoval(t *testing.T) {
 	s, p := behaviorAcceptancePlayer(t, 4)
 	p.Player.Char.Skills = domain.Learned{10301: 20, 10306: 20}
-	u, ok := domain.UniqueForBase(2032)
+	u, ok := domain.UniqueForBase(2032, catalogfixture.EndgameCatalog())
 	if !ok {
 		t.Fatal("equipment fixture missing")
 	}
-	item := domain.ItemDef{ID: 2032, Equip: &domain.EquipDef{Slot: u.Slot, Durable: 100}}
+	item := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 2032, Equip: &domain.EquipDef{Slot: u.Slot, Durable: 100}}
 	s.items = map[domain.ItemID]domain.ItemDef{2032: item}
 	st := domain.NewStack(item, 1)
 	st.UID = 12345
@@ -339,8 +341,8 @@ func TestSkillBehaviorAcceptanceWorstCaseLegalPacketsAndVariantUpperBound(t *tes
 		ch.Base.DEX += 18
 		ch.Appear.Gender = 0
 		ch.EmploymentKnown, ch.Employed = true, true
-		for _, id := range domain.V5SkillIDs() {
-			identity, _ := domain.V5SkillIdentity(id)
+		for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
+			identity, _ := domain.V5SkillIdentity(id, catalogfixture.SkillProgressionCatalog())
 			if identity.Profession == profession {
 				ch.Skills[id] = 1
 			}
@@ -350,7 +352,7 @@ func TestSkillBehaviorAcceptanceWorstCaseLegalPacketsAndVariantUpperBound(t *tes
 		for _, rank := range ch.Skills {
 			ch.SkillPoints -= rank
 		}
-		for _, id := range domain.V5SkillIDs() {
+		for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
 			if ch.Skills[id] == 0 {
 				continue
 			}
@@ -361,7 +363,7 @@ func TestSkillBehaviorAcceptanceWorstCaseLegalPacketsAndVariantUpperBound(t *tes
 				break
 			}
 		}
-		if err := domain.ValidateSkillAllocation(100, profession, ch.Skills, ch.SkillPoints); err != nil {
+		if err := domain.ValidateSkillAllocation(100, profession, ch.Skills, ch.SkillPoints, catalogfixture.SkillProgressionCatalog()); err != nil {
 			t.Fatal(err)
 		}
 		groups := v5PacketGearCandidates(t, s, p)
@@ -382,8 +384,8 @@ func TestSkillBehaviorAcceptanceWorstCaseLegalPacketsAndVariantUpperBound(t *tes
 			// The only production cross-profession grant is one SlotTreasure.
 			// Enumerating every profession ID is a conservative authorization
 			// upper bound, not a claim that 149 such treasure bases are authored.
-			treasure := domain.ItemDef{ID: 1999999999, Equip: &domain.EquipDef{Slot: int32(domain.SlotTreasure), Durable: 100}}
-			for _, grant := range append([]domain.SkillID{0}, domain.V5SkillIDs()...) {
+			treasure := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 1999999999, Equip: &domain.EquipDef{Slot: int32(domain.SlotTreasure), Durable: 100}}
+			for _, grant := range append([]domain.SkillID{0}, domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog())...) {
 				if grant != 0 {
 					treasure.Equip.Skill = &domain.EquipmentSkill{ID: grant}
 					s.items[treasure.ID] = treasure

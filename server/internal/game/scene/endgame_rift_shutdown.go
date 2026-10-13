@@ -48,7 +48,7 @@ func (s *Scene) finishEndgameRunWrites() {
 			}
 			result := <-t.load
 			t.load = nil
-			if d, valid := decodeEndgameRift(result.Run); result.Err == nil && valid {
+			if d, valid := decodeEndgameRift(result.Run, s.riftRules); result.Err == nil && valid {
 				x.data = d
 				x.revision = result.Run.Revision
 				x.savedRevision = d.Run.Revision
@@ -65,7 +65,7 @@ func (s *Scene) finishEndgameRunWrites() {
 			}
 			result := <-x.reload
 			x.reload = nil
-			d, valid := decodeEndgameRift(result.Run)
+			d, valid := decodeEndgameRift(result.Run, s.riftRules)
 			if result.Err == nil && valid {
 				if result.Run.Revision > x.revision {
 					x.data = d

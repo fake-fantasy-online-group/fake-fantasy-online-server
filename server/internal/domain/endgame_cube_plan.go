@@ -6,9 +6,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 type CubeContext struct {
+	Rules        *CubeRuleTable
+	Catalog      *EndgameCatalog
 	Level        int32
 	Bag          *Bag
 	Money        int64
@@ -68,6 +71,13 @@ func PlanCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 }
 func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, error) {
 	p := CubePlan{Money: ctx.Money, Fingerprint: CubeFingerprint(ctx.Bag, ctx.Money, req)}
+	if ctx.Rules == nil {
+		return p, cubeError("configuration", "周天鼎配置尚未载入")
+	}
+	recipe, exists := ctx.Rules.Recipe(req.RecipeID)
+	if !exists {
+		return p, cubeError("not_found", "周天鼎配方不存在")
+	}
 	if ctx.Bag == nil || ctx.Money < 0 {
 		return p, cubeError("requirements", "背包或铜币状态无效")
 	}
@@ -113,13 +123,16 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		return -1, Stack{}, cubeError("not_owner", "物品不在自己的背包中")
 	}
 	runeValid := func(st Stack) bool {
-		_, ok := AstralRune(st.Item)
+		_, ok := AstralRune(st.Item, ctx.Catalog)
 		d, exists := ctx.Items[st.Item]
 		return ok && exists && d.InstanceKind == ItemInstanceSocketCard && st.InstanceKind == ItemInstanceSocketCard && st.UID > 0 && st.Card.Initialized && st.Card.Count <= 8 && st.Count == 1 && !st.Locked && !st.Card.Locked
 	}
-	outputRune, inscribe := cubeRecipeRune(req.RecipeID, CubeInscribeRuneBase)
-	convertedRune, convert := cubeRecipeRune(req.RecipeID, CubeConvertRuneBase)
-	needsTarget := !inscribe && !convert && req.RecipeID != CubeSalvageRune
+	inscribe, convert := recipe.Operation == "rune.inscribe", recipe.Operation == "rune.convert"
+	var outputRune ItemID
+	if inscribe || convert {
+		outputRune = recipe.Outputs[0].ItemID
+	}
+	needsTarget := recipe.TargetRequired
 	slot := -1
 	var target Stack
 	var def ItemDef
@@ -140,20 +153,17 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 	} else if req.TargetUID != "" {
 		return p, cubeError("invalid_request", "此配方无需装备目标")
 	}
-	r, ok := cubeRecipe(req.RecipeID, target, ctx.Items)
-	if !ok {
-		return p, cubeError("not_found", "周天鼎配方不存在")
-	}
+	r := cubeRecipeView(recipe, ctx.Items)
 	p.Recipe = r
 	p.Description = r.Description
 	if req.Socket != 0 || req.Tier != 0 || req.RunID != "" || len(req.ItemUIDs) > 5 {
 		return p, cubeError("invalid_request", "周天鼎参数不适用于该配方")
 	}
-	usesSources := convert || req.RecipeID == CubeReorderRunes || req.RecipeID == CubeInscribeArray
-	if !usesSources && len(req.ItemUIDs) > 0 || req.RecipeID != CubeSalvageRune && req.RuneUID != "" {
+	usesSources := convert || recipe.Operation == "socket.reorder" || recipe.Operation == "socket.array"
+	if !usesSources && len(req.ItemUIDs) > 0 || recipe.Operation != "salvage.rune" && req.RuneUID != "" {
 		return p, cubeError("invalid_request", "额外投料参数无效")
 	}
-	fee, _ := strconv.ParseInt(r.Money, 10, 64)
+	fee := recipe.Money
 	if ctx.Money < fee {
 		return p, cubeError("funds", fmt.Sprintf("铜币不足：需要%d，当前%d", fee, ctx.Money))
 	}
@@ -216,26 +226,26 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		}
 		return nil
 	}
-	_, hasUnique := UniqueOf(target)
+	_, hasUnique := UniqueOf(target, ctx.Catalog)
 	eligible := func() bool {
-		if _, ok := UniqueForBase(target.Item); !ok {
+		if _, ok := UniqueForBase(target.Item, ctx.Catalog); !ok {
 			return false
 		}
 		if ctx.IsUniqueBase != nil {
 			return ctx.IsUniqueBase(target.Item)
 		}
-		_, ok := UniqueForBase(target.Item)
+		_, ok := UniqueForBase(target.Item, ctx.Catalog)
 		return ok
 	}
-	switch req.RecipeID {
-	case CubeSalvageNormal, CubeSalvageUnique:
+	switch recipe.Operation {
+	case "salvage.normal", "salvage.unique":
 		// V5 narrows new unique generation only. Keep the previously supported
 		// ordinary and legacy-unique salvage scope independent of that list.
-		_, salvageEligible := legacyUniqueByBase[target.Item]
+		_, salvageEligible := ctx.Catalog.LegacyUniqueForBase(target.Item)
 		if ctx.IsUniqueBase != nil {
 			salvageEligible = ctx.IsUniqueBase(target.Item)
 		}
-		if !salvageEligible || req.RecipeID == CubeSalvageNormal && (target.Endgame.UniqueID != 0 || hasUnique) || req.RecipeID == CubeSalvageUnique && !hasUnique {
+		if !salvageEligible || recipe.Operation == "salvage.normal" && (target.Endgame.UniqueID != 0 || hasUnique) || recipe.Operation == "salvage.unique" && !hasUnique {
 			return p, cubeError("requirements", "此配方不适用于所选装备")
 		}
 		p.Bag.Set(slot, Stack{})
@@ -243,20 +253,18 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		if err := extract(); err != nil {
 			return p, err
 		}
-		yield := int32(8) + max(int32(0), min(int32(100), def.Equip.LevelReq))/5
-		if hasUnique {
-			yield *= 3
-			p.Description += " 本次获得八仙余韵4。"
-			if err := material(CubeImmortalEcho, 4); err != nil {
+		for _, out := range recipe.Outputs {
+			count, err := out.Quantity(def.Equip.LevelReq)
+			if err != nil {
+				return p, cubeError("configuration", "炼化产物数量无效")
+			}
+			if err := material(out.ItemID, count); err != nil {
 				return p, err
 			}
+			p.Description += fmt.Sprintf(" 本次获得%s%d。", ctx.Items[out.ItemID].Name, count)
 		}
-		if err := material(CubeStarMarrow, yield); err != nil {
-			return p, err
-		}
-		p.Description += fmt.Sprintf(" 本次获得星髓%d。", yield)
 		target = Stack{}
-	case CubeSalvageRune:
+	case "salvage.rune":
 		i, st, err := find(req.RuneUID)
 		if err != nil {
 			return p, err
@@ -266,10 +274,16 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		}
 		p.Bag.Set(i, Stack{})
 		p.ConsumedUIDs = append(p.ConsumedUIDs, st.UID)
-		if err = material(CubeStarMarrow, 4); err != nil {
-			return p, err
+		for _, out := range recipe.Outputs {
+			count, err := out.Quantity(0)
+			if err != nil {
+				return p, cubeError("configuration", "炼化产物数量无效")
+			}
+			if err = material(out.ItemID, count); err != nil {
+				return p, err
+			}
 		}
-	case CubeOpenSocket:
+	case "socket.open":
 		capacity := min(5, EquipmentSocketCapacity(def, target))
 		if target.SocketCount != 0 || capacity < 1 {
 			return p, cubeError("requirements", "随机开窍仅限有剩余属性容量的无孔装备；已有孔不可重开")
@@ -285,7 +299,7 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 			}
 			target.SocketCount = uint8(n + 1)
 		}
-	case CubeExtractRunes:
+	case "socket.extract":
 		p.Description += fmt.Sprintf(" 本次原样取回%d枚孔内卡。", UsedEquipmentSockets(target))
 		if UsedEquipmentSockets(target) == 0 {
 			return p, cubeError("requirements", "没有可取回的孔内卡")
@@ -293,7 +307,7 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		if err := extract(); err != nil {
 			return p, err
 		}
-	case CubeReorderRunes:
+	case "socket.reorder":
 		if reason := AstralBaseIneligibility(def, target); reason != "" {
 			return p, cubeError("requirements", reason)
 		}
@@ -318,7 +332,7 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 			if found < 0 {
 				return p, cubeError("not_owner", "所选星篆未镶在此装备")
 			}
-			if _, ok := AstralRune(original.Sockets[found]); !ok {
+			if _, ok := AstralRune(original.Sockets[found], ctx.Catalog); !ok {
 				return p, cubeError("invalid_rune", "移星换斗只接受星篆")
 			}
 			target.Sockets[i] = original.Sockets[found]
@@ -331,7 +345,7 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		if target.SocketUIDs == original.SocketUIDs {
 			return p, cubeError("requirements", "孔位顺序没有变化")
 		}
-	case CubeInscribeArray:
+	case "socket.array":
 		if reason := AstralBaseIneligibility(def, target); reason != "" {
 			return p, cubeError("requirements", reason)
 		}
@@ -360,8 +374,8 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		if _, ok := MatchAstralRecipe(def, target); !ok {
 			return p, cubeError("requirements", "孔数、顺序与部位未匹配任何宿阵")
 		}
-	case CubeAwakenUnique:
-		if named, ok := UniqueForBase(target.Item); ok {
+	case "unique.awaken":
+		if named, ok := UniqueForBase(target.Item, ctx.Catalog); ok {
 			p.Description += " 本次唤醒：" + named.Name + "。"
 		}
 		if !eligible() || target.Endgame.UniqueID != 0 {
@@ -372,8 +386,8 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 				return p, cubeError("requirements", "无法唤醒此器物")
 			}
 		}
-	case CubeReforgeUnique:
-		d, ok := UniqueOf(target)
+	case "unique.reforge":
+		d, ok := UniqueOf(target, ctx.Catalog)
 		if !ok || !UniqueHasVariableStats(d) {
 			return p, cubeError("requirements", "这件仙遗没有可重铸的浮动属性")
 		}
@@ -396,12 +410,12 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 			}
 			target.Endgame.UniqueRollBP = candidates[n]
 		}
-	case CubeTemperUnique:
-		d, ok := UniqueOf(target)
+	case "unique.temper":
+		d, ok := UniqueOf(target, ctx.Catalog)
 		if !ok || !UniqueHasVariableStats(d) || sameUniqueVariableValues(d, target.Endgame.UniqueRollBP, UniqueRollMaxBP) {
 			return p, cubeError("requirements", "须选择浮动属性尚未满值的仙遗")
 		}
-		next := min(UniqueRollMaxBP, target.Endgame.UniqueRollBP+500)
+		next := min(UniqueRollMaxBP, target.Endgame.UniqueRollBP+recipe.QualityStepBP)
 		for next < UniqueRollMaxBP && sameUniqueVariableValues(d, target.Endgame.UniqueRollBP, next) {
 			next++
 		}
@@ -414,26 +428,26 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 				return p, err
 			}
 		} else if convert {
-			if len(req.ItemUIDs) != 3 {
-				return p, cubeError("requirements", "须选择三枚相同的同象星篆")
+			if len(req.ItemUIDs) != int(recipe.SourceCount) {
+				return p, cubeError("requirements", fmt.Sprintf("须选择%d枚相同的同象星篆", recipe.SourceCount))
 			}
-			out, _ := AstralRune(convertedRune)
+			out, _ := AstralRune(outputRune, ctx.Catalog)
 			var source ItemID
 			for _, raw := range req.ItemUIDs {
 				i, st, err := find(raw)
 				if err != nil {
 					return p, err
 				}
-				r, ok := AstralRune(st.Item)
-				if !runeValid(st) || !ok || r.Quadrant != out.Quadrant || st.Item == convertedRune || source != 0 && st.Item != source {
-					return p, cubeError("invalid_rune", "须用三枚相同且不同于产物的同象星篆")
+				r, ok := AstralRune(st.Item, ctx.Catalog)
+				if !runeValid(st) || !ok || r.Quadrant != out.Quadrant || st.Item == outputRune || source != 0 && st.Item != source {
+					return p, cubeError("invalid_rune", fmt.Sprintf("须用%d枚相同且不同于产物的同象星篆", recipe.SourceCount))
 				}
 				source = st.Item
 				p.Bag.Set(i, Stack{})
 				p.ConsumedUIDs = append(p.ConsumedUIDs, st.UID)
 			}
-			p.Description += " 产物：" + ctx.Items[convertedRune].Name + "×1。"
-			if err := newRune(convertedRune); err != nil {
+			p.Description += " 产物：" + ctx.Items[outputRune].Name + "×1。"
+			if err := newRune(outputRune); err != nil {
 				return p, err
 			}
 		} else {
@@ -441,14 +455,22 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		}
 	}
 	if !target.Empty() {
-		if (req.RecipeID == CubeInscribeArray || req.RecipeID == CubeReorderRunes) && adoptCurrentFormationOnCompletion(def, ctx.Bag.At(slot), &target) {
+		if (recipe.Operation == "socket.array" || recipe.Operation == "socket.reorder") && adoptCurrentFormationOnCompletion(def, ctx.Bag.At(slot), &target) {
 			p.Description += " 重新成阵采用V5宿阵规则，保留原灵性值。"
 		}
-		if execute && req.RecipeID != CubeAwakenUnique {
+		if execute && recipe.Operation != "unique.awaken" {
 			target.Endgame.Revision++
 		}
 		p.Bag.Set(slot, target)
 		p.Target = target
+	}
+	if cubeTextUnits(p.Description) > 8192 {
+		return CubePlan{}, cubeError("configuration", "炼化说明超出协议限制")
+	}
+	quote := EndgameQuoteView{QuoteID: strings.Repeat("x", 32), RecipeID: req.RecipeID, TargetUID: req.TargetUID, Revision: "9223372036854775807", Money: p.Recipe.Money, Materials: p.Materials, ExpiresAt: "9999-12-31T23:59:59.999999999Z", Description: p.Description}
+	wire, err := json.Marshal(EndgameResponse{Kind: "cube.quote", RequestID: strings.Repeat("x", 64), OK: true, Quote: &quote})
+	if err != nil || len(wire) > EndgameMaxJSONBytes {
+		return CubePlan{}, cubeError("configuration", "炼化预览超出协议限制")
 	}
 	return p, nil
 }

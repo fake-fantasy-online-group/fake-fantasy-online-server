@@ -164,7 +164,7 @@ func (s *Scene) onInlayItem(cmd InlayItem) {
 		return
 	}
 	rune := p.Player.Bag.At(int(cmd.RuneBagSlot))
-	if _, astral := domain.AstralRune(rune.Item); astral {
+	if _, astral := domain.AstralRune(rune.Item,s.endgameCatalog); astral {
 		s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: "星篆请在周天鼎的星篆界面镶嵌，确保孔序与安全结算。"})
 		return
 	}

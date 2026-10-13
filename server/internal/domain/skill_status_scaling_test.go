@@ -198,7 +198,7 @@ func TestOriginalLowConstantPeriodicStatusesAdvanceEveryRank(t *testing.T) {
 func TestOnlyAuthorizedSkillsAcquireEfficiencyAfterNativeCap(t *testing.T) {
 	skills := realV5CurveAnchors(t)
 	allowed := map[SkillID]int32{10018: 5, 10227: 5, 10432: 5, 10301: 19, 10305: 11, 10309: 10}
-	for _, id := range V5SkillIDs() {
+	for _, id := range V5SkillIDs(testSkillProgressionCatalog()) {
 		first, fifth := skills[SkillKey{id, 1}], skills[SkillKey{id, 5}]
 		for _, rank := range []int32{6, 10, 11, 12, 19, 20, 21, 50, 100} {
 			got, err := EvaluateV5Skill(first, fifth, rank)

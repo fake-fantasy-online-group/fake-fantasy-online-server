@@ -15,7 +15,7 @@ func copyValues[K comparable, V any](in map[K]V) map[K]V {
 	return copyMap(in, func(v V) V { return v })
 }
 func (m *Memory) transactionCopy() *Memory {
-	out := NewMemory()
+	out := NewMemory(m.endgameCatalog)
 	out.accByID = copyMap(m.accByID, func(v *Account) *Account { cp := *v; return &cp })
 	for name, a := range m.accounts {
 		out.accounts[name] = out.accByID[a.ID]

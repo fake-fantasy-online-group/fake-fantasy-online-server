@@ -103,3 +103,8 @@ python3 docs/daoist-endgame/catalog/audit_icons.py --check --resource-root /path
 本次未取得用户所指鞋的精确 ID，也未读取其安装表的实际内容，因此“旧客户端映射指向小剑”是已验证可修复的故障模式，并非对用户当前安装根因的确认。需更新服务端后重新登录，再以原问题鞋验收；未运行 Unity 或 Player 构建，未改动属性、掉落或外观模型。
 
 映射修复保留原资源优先级：若存在该物品专用 `itemicon/item<ID>.png`，它仍先于表映射；熔合外观的原生 `Avatar` 查找规则也未改变。错误专用 PNG 或外观替换属于另外的诊断路径，不包含在本次旧表映射复现中。1,619 项原描述表的大小图编号逐项相同，补发小图编号不会抹掉其不同的大图别名。
+
+
+## 数据库权威物品配置（2026-10-13）
+
+32 项新增物品的图标编号已随基础定义移入 `server/migrations/000000_init-59.sql` 的 `gamedata.ov_desc.small_map`，经原 `LoadItems` 读取。注册阶段只发送该已加载编号，不再维护 Go 图标数组，也不补造物品。此处的资源与像素审核记录仍是审核证据，不是另一套生产配置。`test_rune_monster_icons.py` 与 `validate_icons.py` 已改为核对数据库迁移的权威编号。部署与现有实例兼容说明见 [DATABASE_ITEM_DEFINITIONS.md](DATABASE_ITEM_DEFINITIONS.md)。

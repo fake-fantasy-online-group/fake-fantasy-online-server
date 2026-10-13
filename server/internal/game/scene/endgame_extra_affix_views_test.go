@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"encoding/hex"
@@ -28,10 +31,10 @@ func TestEndgameCatalogFitsClientStatAndTextBounds(t *testing.T) {
 			}
 		}
 	}
-	for _, d := range domain.UniqueCatalog() {
+	for _, d := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
 		check(d.ID, d.Affixes, d.Name, d.Description(), uniqueTraitDescription(d.Traits))
 	}
-	for _, d := range domain.AstralRecipes() {
+	for _, d := range domain.AstralRecipes(catalogfixture.EndgameCatalog()) {
 		check(d.ID, d.Affixes, d.Name, d.Description())
 	}
 }
@@ -80,7 +83,7 @@ func TestEndgameFormationCatalogEveryPagePreservesAllExtras(t *testing.T) {
 			t.Fatal("formation catalog exceeds wire bound")
 		}
 		for _, item := range r.Formations {
-			definition, ok := domain.AstralRecipeByID(item.ID)
+			definition, ok := domain.AstralRecipeByID(item.ID, catalogfixture.EndgameCatalog())
 			if !ok || seen[item.ID] || len(item.Stats) < domain.MinBeneficialEndgameExtraAffixes ||
 				!reflect.DeepEqual(item.Stats, endgameStats(domain.ResolveVariableAffixes(definition.Affixes, definition.VariableAffixes, 10000))) {
 				t.Fatal("formation extras missing or truncated", item.ID)
@@ -89,7 +92,7 @@ func TestEndgameFormationCatalogEveryPagePreservesAllExtras(t *testing.T) {
 		}
 		cursor = r.NextCursor
 	}
-	if len(seen) != len(domain.AstralRecipes()) || cursor != "" {
+	if len(seen) != len(domain.AstralRecipes(catalogfixture.EndgameCatalog())) || cursor != "" {
 		t.Fatal("formation pagination incomplete", len(seen), cursor)
 	}
 }
@@ -105,8 +108,8 @@ func TestEndgameWorstFullSnapshotFitsExtendedAffixWireBudget(t *testing.T) {
 	maxBytes := 0
 	// Use the longest fully populated owned unique, repeated 32 times, rather
 	// than assuming the first catalog page is also the largest snapshot page.
-	for _, d := range domain.UniqueCatalog() {
-		s.items[d.BaseID] = domain.ItemDef{ID: d.BaseID, Name: d.BaseName, InventoryTab: 2,
+	for _, d := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
+		s.items[d.BaseID] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: d.BaseID, Name: d.BaseName, InventoryTab: 2,
 			InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: d.Slot, Durable: 100,
 				Need: domain.Requirement{Level: d.LevelRequirement, Professions: d.Professions}}}
 		st := domain.Stack{UID: 9223372036854775000, Item: d.BaseID, Count: 1, Durability: 100,
@@ -125,11 +128,11 @@ func TestEndgameWorstFullSnapshotFitsExtendedAffixWireBudget(t *testing.T) {
 			maxBytes, largest = len(raw), st
 		}
 	}
-	for _, r := range domain.AstralRuneItems(0) {
+	for _, r := range astralRuneItemsFixture(0) {
 		s.items[r.ID] = r
 	}
 	for _, id := range []domain.ItemID{domain.RiftKeyItemID, domain.CubeStarMarrow, domain.CubePurifiedDust, domain.CubeImmortalEcho} {
-		s.items[id] = domain.ItemDef{ID: id, Name: "完整材料计数"}
+		s.items[id] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Name: "完整材料计数"}
 	}
 	p.Player.Bag = domain.NewBag(domain.DefaultBagSlots)
 	for i := 0; i < 32; i++ {
@@ -148,7 +151,7 @@ func TestEndgameWorstFullSnapshotFitsExtendedAffixWireBudget(t *testing.T) {
 	for channel := domain.AstralBattle; channel <= domain.AstralSupport; channel++ {
 		var largestFormation domain.EndgameFormationView
 		largestSize := 0
-		for _, f := range domain.AstralRecipes() {
+		for _, f := range domain.AstralRecipes(catalogfixture.EndgameCatalog()) {
 			if f.Channel != channel {
 				continue
 			}

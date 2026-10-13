@@ -10,15 +10,13 @@ import (
 )
 
 // The rune's stored attr38 is a flat HP amount per pulse, never a percentage.
-// Use the existing two-second recovery cadence without inheriting resting's
+// Use the source's configured recovery cadence without inheriting resting's
 // percentage/flat bonus or requiring the player to sit. This clock is transient:
 // equipping, reviving, or entering a new scene starts a full interval, and there
 // are no offline or missed-frame catch-up heals.
-const astralRuneRegenInterval = domain.Tick(2000 / domain.TickMS)
-
 type astralRuneRegenClock struct {
 	owner   *entity.Entity
-	next    domain.Tick
+	next    map[int32]domain.Tick
 	sources []astralRuneRegenSource
 }
 
@@ -31,13 +29,23 @@ type astralRuneRegenSource struct {
 	equipmentUID int64
 	runeUID      int64
 	amount       int64
+	intervalMS   int32
+	rune         domain.ItemID
 }
 
-func astralRuneAffixText(item domain.ItemID, a domain.Affix) string {
-	if item == domain.LastAstralRune && a.Attr == domain.AttrHPRegen && a.Mode == domain.ModeAbsolute && a.Value > 0 {
-		return fmt.Sprintf("有效穿戴时每%d秒恢复%d点生命", astralRuneRegenInterval*domain.TickMS/1000, a.Value)
+// periodicRecoveryAffix admits a numerical affix into the online recovery
+// bucket only when the source's typed rule gives it that meaning. Ordinary
+// attr38 remains a native stat and is never silently promoted to a pulse.
+func periodicRecoveryAffix(r domain.AstralRuneDef, a domain.Affix) bool {
+	return domain.ValidRecoveryIntervalMS(r.RegenerationIntervalMS) &&
+		a.Attr == domain.AttrHPRegen && a.Mode == domain.ModeAbsolute && a.Value > 0
+}
+func (s *Scene) astralRuneAffixText(item domain.ItemID, a domain.Affix) string {
+	rune, known := s.endgameCatalog.Rune(item)
+	if known && periodicRecoveryAffix(rune, a) {
+		return periodicRecoveryText(rune.RegenerationIntervalMS, int64(a.Value))
 	}
-	if item >= domain.FirstAstralRune && item <= domain.LastAstralRune && a.Attr == domain.AttrAtkSpeed && a.Mode == domain.ModePercent {
+	if known && a.Attr == domain.AttrAtkSpeed && a.Mode == domain.ModePercent {
 		// Use the same player-speed sign convention as ordinary equipment;
 		// the durable rune snapshot remains the original negative interval %.
 		line, _ := equipmentAffixLine(a)
@@ -46,17 +54,18 @@ func astralRuneAffixText(item domain.ItemID, a domain.Affix) string {
 	return affixText(a)
 }
 
-func hasEquippedAstralRegenRune(worn *domain.EquipSet) bool {
+func (s *Scene) hasEquippedAstralRegenRune(worn *domain.EquipSet) bool {
 	found := false
 	worn.Each(func(_ domain.EquipSlot, st domain.Stack) {
 		for i := 0; i < int(st.SocketCount) && i < len(st.Sockets); i++ {
-			found = found || st.Sockets[i] == domain.LastAstralRune
+			rune, ok := s.endgameCatalog.Rune(st.Sockets[i])
+			found = found || ok && domain.ValidRecoveryIntervalMS(rune.RegenerationIntervalMS)
 		}
 	})
 	return found
 }
 
-// astralRuneRegenAmount deliberately reads only the durable 轸 rune snapshots.
+// astralRuneRegenAmount aggregates durable, explicitly periodic rune affixes.
 // Ordinary gear/card attr38 remains untouched. Rune effects still work when a
 // formation is absent or suppressed, just like the other standalone rune stats.
 func (s *Scene) astralRuneRegenAmount(p *entity.Entity) int32 {
@@ -80,8 +89,9 @@ func (s *Scene) astralRuneRegenState(p *entity.Entity, active *domain.EquipSet) 
 			if uid > 0 {
 				uids[uid]++
 			}
-			if i < int(st.SocketCount) && st.Sockets[i] == domain.LastAstralRune {
-				hasRune = true
+			if i < int(st.SocketCount) {
+				rune, ok := s.endgameCatalog.Rune(st.Sockets[i])
+				hasRune = hasRune || ok && domain.ValidRecoveryIntervalMS(rune.RegenerationIntervalMS)
 			}
 		}
 	})
@@ -102,14 +112,15 @@ func (s *Scene) astralRuneRegenState(p *entity.Entity, active *domain.EquipSet) 
 		}
 		for i := 0; i < int(st.SocketCount); i++ {
 			card := st.SocketCards[i]
-			if st.Sockets[i] != domain.LastAstralRune || st.SocketUIDs[i] <= 0 || uids[st.SocketUIDs[i]] != 1 ||
+			rune, known := s.endgameCatalog.Rune(st.Sockets[i])
+			if !known || !domain.ValidRecoveryIntervalMS(rune.RegenerationIntervalMS) || st.SocketUIDs[i] <= 0 || uids[st.SocketUIDs[i]] != 1 ||
 				!card.Initialized || card.Count == 0 || int(card.Count) > len(card.Effects) {
 				continue
 			}
 			var amount int64
 			for j := 0; j < int(card.Count); j++ {
 				e := card.Effects[j]
-				if e.Op == 1 && e.Probability == 100 && e.Attr == domain.AttrHPRegen && e.Mode == domain.ModeAbsolute && e.Value > 0 {
+				if e.Op == 1 && e.Probability == 100 && periodicRecoveryAffix(rune, domain.Affix{Attr: e.Attr, Mode: e.Mode, Value: e.Value}) {
 					amount += int64(e.Value)
 				}
 			}
@@ -117,7 +128,7 @@ func (s *Scene) astralRuneRegenState(p *entity.Entity, active *domain.EquipSet) 
 				total += amount
 				sources = append(sources, astralRuneRegenSource{
 					slot: slot, socket: uint8(i), equipment: st.Item,
-					equipmentUID: st.UID, runeUID: st.SocketUIDs[i], amount: amount,
+					equipmentUID: st.UID, runeUID: st.SocketUIDs[i], amount: amount, intervalMS: rune.RegenerationIntervalMS, rune: st.Sockets[i],
 				})
 			}
 		}
@@ -155,7 +166,7 @@ func (s *Scene) stepAstralRuneRegeneration() {
 			delete(s.astralRuneRegen, id)
 			continue
 		}
-		if !hasEquippedAstralRegenRune(p.Player.Worn) {
+		if !s.hasEquippedAstralRegenRune(p.Player.Worn) {
 			delete(s.astralRuneRegen, id)
 			continue
 		}
@@ -171,14 +182,26 @@ func (s *Scene) stepAstralRuneRegeneration() {
 			if s.astralRuneRegen == nil {
 				s.astralRuneRegen = make(map[domain.EntityID]astralRuneRegenClock)
 			}
-			s.astralRuneRegen[id] = astralRuneRegenClock{owner: p, next: s.tick + astralRuneRegenInterval, sources: sources}
+			next := make(map[int32]domain.Tick)
+			for interval := range recoveryBuckets(sources) {
+				next[interval] = s.tick + domain.Tick(interval/int32(domain.TickMS))
+			}
+			s.astralRuneRegen[id] = astralRuneRegenClock{owner: p, next: next, sources: sources}
 			continue
 		}
-		if s.tick < clock.next {
+		var due int64
+		for interval, flat := range recoveryBuckets(sources) {
+			if s.tick >= clock.next[interval] {
+				// At most one pulse per cadence; no offline/missed-frame catch-up.
+				due += flat
+				clock.next[interval] = s.tick + domain.Tick(interval/int32(domain.TickMS))
+			}
+		}
+		s.astralRuneRegen[id] = clock
+		if due <= 0 {
 			continue
 		}
-		// One pulse at most. Long pauses cannot generate a burst or a loop.
-		s.astralRuneRegen[id] = astralRuneRegenClock{owner: p, next: s.tick + astralRuneRegenInterval, sources: sources}
+		amount = domain.SaturateInt32(due)
 		if p.HP >= p.MaxHP {
 			continue
 		}
@@ -188,4 +211,15 @@ func (s *Scene) stepAstralRuneRegeneration() {
 			s.emitAttributesIfPlayer(p)
 		}
 	}
+}
+
+func recoveryBuckets(sources []astralRuneRegenSource) domain.PeriodicRecoveryBuckets {
+	buckets := make(domain.PeriodicRecoveryBuckets)
+	for _, source := range sources {
+		buckets.AddFlatHP(source.intervalMS, source.amount)
+	}
+	return buckets
+}
+func periodicRecoveryText(intervalMS int32, amount int64) string {
+	return fmt.Sprintf("有效穿戴时每%g秒恢复%d点生命", float64(intervalMS)/1000, domain.SaturateInt32(amount))
 }

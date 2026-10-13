@@ -250,30 +250,6 @@ def validate(groups,rows):
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__); mode=parser.add_mutually_exclusive_group(); mode.add_argument('--check',action='store_true'); mode.add_argument('--validate-authored',action='store_true'); args=parser.parse_args()
-    rows,sources=enumerate_eligible(read_tables())
-    # This independently reconstructed list must match the recovered source audit.
-    with (HERE/'eligible.csv').open(encoding='utf-8',newline='') as f: recovered=list(csv.DictReader(f))
-    assert len(rows)==len(recovered), (len(rows),len(recovered))
-    for actual,old in zip(rows,recovered):
-        assert {k:str(v) for k,v in actual.items()}==old, (actual,old)
-    authored=read_authored(sources)
-    if args.validate_authored:
-        print(json.dumps(dict(authored=len(authored),remaining=len(rows)-len(authored),total=len(rows)),ensure_ascii=False)); return
-    groups=generate(rows,sources,authored); validate(groups,rows)
-    outputs={TARGET/'legacy_unique_v4'/f'unique_catalog_{key}.json':(json.dumps(group,ensure_ascii=False,separators=(',',':'))+'\n').encode() for key,group in sorted(groups.items())}
-    # Ordinary type-drop classification remains at the original source scope;
-    # it is never regenerated from the smaller V5 unique whitelist.
-    outputs[TARGET/'native_equipment_drop_bases.json']=(json.dumps([r['base_id'] for r in rows if r['drop_kind']],separators=(',',':'))+'\n').encode()
-    assert all(len(data)<500000 for data in outputs.values())
-    summary=dict(schema=2,total=len(rows),native_drop_kind=885,conversion_only=734,legacy_affix_pool_ready=298,class_counts=EXPECTED,sex_counts=dict(collections.Counter(str(r['sex']) for r in rows)),catalog_sha256={p.name:hashlib.sha256(data).hexdigest() for p,data in outputs.items() if p.name.startswith('unique_catalog_')},source_csv_sha256=hashlib.sha256(encode_csv(rows)).hexdigest(),max_catalog_bytes=max(map(len,outputs.values())),authored_entry_count=len(authored),legacy_template_count=0,power_tier_counts=dict(collections.Counter(i['PowerTier'] for i in authored.values())),trait_count_distribution=dict(collections.Counter(str(len(i['Traits'])) for i in authored.values())),executable_trait_kind_count=len({t['Kind'] for i in authored.values() for t in i['Traits']}),editorial_note='Completeness and structural checks do not certify literary quality or gameplay balance.')
-    outputs[HERE/'coverage_v4.json']=(json.dumps(summary,ensure_ascii=False,indent=2)+'\n').encode()
-    for path,data in outputs.items():
-        if args.check:
-            assert path.exists() and path.read_bytes()==data, f'stale or missing generated file: {path}'
-        else: path.write_bytes(data)
-    print(json.dumps(summary,ensure_ascii=False,indent=2))
-    import subprocess,sys
-    subprocess.run([sys.executable,str(HERE/'compile_v5.py')]+(['--check'] if args.check else []),check=True)
+    raise SystemExit("Retired embedded-catalog writer: production reads database migrations 59-63. See docs/daoist-endgame/catalog/README.md. Historical validation functions remain importable for regression tests.")
 
 if __name__=='__main__': main()

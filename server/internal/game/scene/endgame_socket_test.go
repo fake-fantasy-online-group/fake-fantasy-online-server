@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"errors"
@@ -41,13 +44,13 @@ func astralSceneFixture(t *testing.T) (*Scene, *fakeSink, *astralTestBackend) {
 	t.Helper()
 	s := newTestScene(t, nil)
 	s.items = map[domain.ItemID]domain.ItemDef{}
-	for _, d := range domain.AstralRuneItems(7) {
+	for _, d := range astralRuneItemsFixture(7) {
 		s.items[d.ID] = d
 	}
-	for _, d := range domain.CubeMaterialDefinitions() {
+	for _, d := range cubeMaterialDefinitionsFixture() {
 		s.items[d.ID] = d
 	}
-	s.items[999001] = domain.ItemDef{ID: 999001, Name: "星阵测试剑", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon), LevelReq: 50, Durable: 100}}
+	s.items[999001] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 999001, Name: "星阵测试剑", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon), LevelReq: 50, Durable: 100}}
 	sink := join(t, s, 1, 100, "甲", 100, 100)
 	p := s.players[1]
 	p.Player.Char.Level = 60
@@ -179,7 +182,7 @@ func TestAstralFormationChangesRealCombatStats(t *testing.T) {
 	p.Player.Bag = plan.Bag
 	p.Player.Bag.Set(200, domain.Stack{})
 	p.Player.Worn.Set(domain.SlotWeapon, plan.Target)
-	recipe, ok := domain.AstralRecipeByID(1)
+	recipe, ok := domain.AstralRecipeByID(1, catalogfixture.EndgameCatalog())
 	if !ok || len(recipe.Runes) != int(plan.Target.SocketCount) {
 		t.Fatal("formation fixture missing")
 	}
@@ -221,7 +224,7 @@ func TestAstralFormationChangesRealCombatStats(t *testing.T) {
 }
 func TestAstralDroppedHolesReserveAttributeBudget(t *testing.T) {
 	s, mid := lootScene(t, []domain.DropEntry{{Item: 999002, RatePct: 100, RollAffixes: true}})
-	s.items[999002] = domain.ItemDef{ID: 999002, Name: "空白星剑", InstanceKind: domain.ItemInstanceEquipment, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon), LevelReq: 50, Durable: 100}}
+	s.items[999002] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 999002, Name: "空白星剑", InstanceKind: domain.ItemInstanceEquipment, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon), LevelReq: 50, Durable: 100}}
 	s.equipmentRoll = domain.EquipmentRollTable{Counts: map[domain.ColorProfile][]domain.WeightedAffixCount{1: {{Count: 5, Weight: 1}}}, Options: map[domain.EquipmentRollKey][]domain.EquipmentRollOption{{}: {{Affix: domain.Affix{Attr: domain.AttrSTR, Value: 2}, Weight: 1}, {Affix: domain.Affix{Attr: domain.AttrINT, Value: 2}, Weight: 1}, {Affix: domain.Affix{Attr: domain.AttrVIT, Value: 2}, Weight: 1}, {Affix: domain.Affix{Attr: domain.AttrAGI, Value: 2}, Weight: 1}, {Affix: domain.Affix{Attr: domain.AttrDEX, Value: 2}, Weight: 1}}}}
 	s.entities[mid].Monster.Kind = domain.MonsterBoss
 	for i := 0; i < 100; i++ {

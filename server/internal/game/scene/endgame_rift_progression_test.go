@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"context"
@@ -75,7 +78,7 @@ func TestRiftClaimPersistsFrozenUnlockAndReceiptOnce(t *testing.T) {
 		t.Fatal("unrelated payload overwritten")
 	}
 	saved := b.runs[d.Run.RunID]
-	d, _ = decodeEndgameRift(&saved)
+	d, _ = decodeEndgameRift(&saved, riftRulesTableFixture())
 	s.claimEndgameRift(p, req, d, saved.Revision, false)
 	if b.commits != 1 {
 		t.Fatal("repeated settlement increased unlock")
@@ -128,7 +131,7 @@ func TestRiftOfflineTeamMemberClaimsOwnProgress(t *testing.T) {
 	d.Run.Members[100].Claimed = true
 	d.Run.Phase = domain.RiftClosed
 	record := d.record(10)
-	d, ok := decodeEndgameRift(&record)
+	d, ok := decodeEndgameRift(&record, riftRulesTableFixture())
 	if !ok {
 		t.Fatal("completed record did not survive persistence")
 	}
@@ -205,7 +208,7 @@ func TestRiftDelayedGuardianDeathFreezesAuthoritativeTimeAndOrder(t *testing.T) 
 			if r.Phase != domain.RiftCompleted || r.CompletedMS != completed || r.RemainingSeconds(*now) != tc.want || !r.Members[100].Eligible {
 				t.Fatalf("wrong delayed outcome: phase=%s at=%d remaining=%d eligible=%v", r.Phase, r.CompletedMS, r.RemainingSeconds(*now), r.Members[100].Eligible)
 			}
-			if got, want := r.UnlockedTierFor(100, 1), 20+domain.RiftTierJump(tc.want); got != want {
+			if got, want := r.UnlockedTierFor(100, 1), 20+domain.RiftTierJump(tc.want, riftRulesFixture()); got != want {
 				t.Fatalf("unlocked=%d want=%d", got, want)
 			}
 			if len(x.delayedDeaths) != 0 {
@@ -233,7 +236,7 @@ func TestRiftPriorClaimedCompletionAdmitsAndPersistsProjectedTierAtomically(t *t
 			s, b, now := riftFixture(t)
 			frames := make(chan time.Time)
 			router := NewRouter(func(id domain.SceneID) (*Scene, error) {
-				return New(Config{ID: id, Frames: frames, Trial: s.trial, Dungeons: s.dungeons}), nil
+				return New(Config{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Frames: frames, Trial: s.trial, Dungeons: s.dungeons}), nil
 			}, nil)
 			router.Start(context.Background())
 			defer router.Drain(time.Second)
@@ -246,7 +249,7 @@ func TestRiftPriorClaimedCompletionAdmitsAndPersistsProjectedTierAtomically(t *t
 			if !tc.noKey {
 				p.Player.Bag.AddStack(s.items[domain.RiftKeyItemID], domain.Stack{Item: domain.RiftKeyItemID, Count: 1, Bound: true})
 			}
-			r, err := domain.NewRiftRun("old-claimed-progress", 20, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, *now)
+			r, err := domain.NewRiftRun("old-claimed-progress", 20, 100, []domain.TrialKeyMember{{CharID: 100, Level: 60}}, *now, riftRulesFixture())
 			if err != nil {
 				t.Fatal(err)
 			}

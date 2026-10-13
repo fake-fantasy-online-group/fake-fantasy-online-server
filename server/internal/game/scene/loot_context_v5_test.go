@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"reflect"
@@ -12,7 +15,7 @@ import (
 
 func magicFindGearV5(t *testing.T, s *Scene, p *entity.Entity) (domain.EquipSlot, domain.Stack, int64) {
 	t.Helper()
-	for _, u := range domain.UniqueCatalog() {
+	for _, u := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
 		var mf int64
 		for _, e := range u.TypedEffects {
 			if e.Kind == "magic_find_pct" {
@@ -22,7 +25,7 @@ func magicFindGearV5(t *testing.T, s *Scene, p *entity.Entity) (domain.EquipSlot
 		if mf <= 0 {
 			continue
 		}
-		def := domain.ItemDef{ID: u.BaseID, InstanceKind: domain.ItemInstanceEquipment, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: u.Slot, Durable: 100}}
+		def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: u.BaseID, InstanceKind: domain.ItemInstanceEquipment, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: u.Slot, Durable: 100}}
 		s.items[def.ID] = def
 		st := domain.NewStack(def, 1)
 		if !domain.ApplyUnique(&st, def, func(int) int { return 2000 }) {
@@ -175,7 +178,7 @@ func TestLootContextV5FreezesBeforeKillLevelUp(t *testing.T) {
 	_, gear, mf := magicFindGearV5(t, s, p)
 	s.items[gear.Item].Equip.Need.Level = 2
 	s.levels = domain.NewLevelTable(map[int32]int64{1: 1, 2: 10000, 3: 20000})
-	def := domain.ItemDef{ID: 999002, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon)}}
+	def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 999002, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon)}}
 	s.items[def.ID] = def
 	s.equipmentRoll = magicFindRollTableV5()
 	var expected domain.Stack
@@ -217,9 +220,9 @@ func TestLootV5MFDoesNotChangeItemsSocketsRunesOrBossGuarantee(t *testing.T) {
 			{Item: 掉落树枝.ID, RatePct: 60},
 		})
 		for _, id := range []domain.ItemID{999001, 999002} {
-			s.items[id] = domain.ItemDef{ID: id, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon), LevelReq: 50}}
+			s.items[id] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon), LevelReq: 50}}
 		}
-		for _, rune := range domain.AstralRuneItems(1) {
+		for _, rune := range astralRuneItemsFixture(1) {
 			s.items[rune.ID] = rune
 		}
 		md := 必掉的怪
@@ -296,7 +299,7 @@ func TestLootV5RNGDomainsAndPickupDoNotReroll(t *testing.T) {
 	join(t, s, 1, 100, "killer", 120, 100)
 	p := s.players[1]
 	_, _, _ = magicFindGearV5(t, s, p)
-	s.items[999002] = domain.ItemDef{ID: 999002, InstanceKind: domain.ItemInstanceEquipment, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon)}}
+	s.items[999002] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 999002, InstanceKind: domain.ItemInstanceEquipment, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon)}}
 	s.equipmentRoll = magicFindRollTableV5()
 	quality := s.lootRandomV5(mid, 0, 0x56350001)
 	before := s.lootRandomV5(mid, 0, 0x56350003)

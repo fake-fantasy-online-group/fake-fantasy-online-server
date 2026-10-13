@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"testing"
@@ -10,15 +12,15 @@ func TestV5RiftOrdinaryHighLevelPoolIsNotUniqueWhitelist(t *testing.T) {
 		t.Run(map[bool]string{false: "ordinary_fallback_no_unique", true: "guaranteed_slot_and_ordinary_slot"}[hasUnique], func(t *testing.T) {
 			s, b, now := riftFixture(t)
 			activateTestRift(t, s, b, *now)
-			for _, u := range domain.UniqueCatalog() {
+			for _, u := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
 				delete(s.items, u.BaseID)
 			}
 			//15036 is original66-level火纹金戟, a native-drop base outside259.
 			id := domain.ItemID(15036)
-			if _, ok := domain.UniqueForBase(id); ok {
+			if _, ok := domain.UniqueForBase(id, catalogfixture.EndgameCatalog()); ok {
 				t.Fatal("ordinary test base unexpectedly promoted")
 			}
-			def := domain.ItemDef{ID: id, Name: "火纹金戟", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: 13, LevelReq: 66, ResourceLevel: 11, Type: 1, Durable: 100, Need: domain.Requirement{Level: 66, Professions: 1, ProfessionRestricted: true}}}
+			def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Name: "火纹金戟", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{NativeDropEligible: true, Slot: 13, LevelReq: 66, ResourceLevel: 11, Type: 1, Durable: 100, Need: domain.Requirement{Level: 66, Professions: 1, ProfessionRestricted: true}}}
 			if !domain.NativeEquipmentDropEligible(def) {
 				t.Fatal("original ordinary type pool lost66-level base")
 			}
@@ -74,7 +76,7 @@ func TestV5RiftOrdinaryHighLevelPoolIsNotUniqueWhitelist(t *testing.T) {
 						t.Fatal("ordinary high-level pool clipped or illegally promoted", item)
 					}
 				}
-				if count != int(domain.PlanRiftRewards(10, true).Equipment) {
+				if count != int(domain.PlanRiftRewards(10, true, riftRulesFixture()).Equipment) {
 					t.Fatal("equipment count changed", count)
 				}
 			}

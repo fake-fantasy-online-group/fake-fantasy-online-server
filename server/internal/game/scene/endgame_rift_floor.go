@@ -166,7 +166,7 @@ func (s *Scene) pollEndgameRiftTransition(now int64) {
 		select {
 		case result := <-t.load:
 			t.load = nil
-			d, valid := decodeEndgameRift(result.Run)
+			d, valid := decodeEndgameRift(result.Run, s.riftRules)
 			if result.Err != nil || !valid {
 				t.retryAt = now + 1000
 				return

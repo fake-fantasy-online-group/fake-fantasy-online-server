@@ -32,6 +32,7 @@ func realV5CurveAnchors(t *testing.T) SkillTable {
 		}
 		table[k] = d
 	}
+	AttachSkillProgression(table, testSkillProgressionCatalog())
 	return table
 }
 
@@ -41,7 +42,7 @@ func TestOriginalSkillEveryAuthoredRankExactParity(t *testing.T) {
 	for k, d := range skills {
 		original[k] = d
 	}
-	if err := InstallV5SkillProgression(skills); err != nil {
+	if err := InstallV5SkillProgression(skills, testSkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
 	for k, want := range original {
@@ -58,10 +59,10 @@ func TestOriginalSkillEveryAuthoredRankExactParity(t *testing.T) {
 
 func TestOriginalSkillEveryRankPreservesScopeAndNeverInventsCarriers(t *testing.T) {
 	skills := realV5CurveAnchors(t)
-	if err := InstallV5SkillProgression(skills); err != nil {
+	if err := InstallV5SkillProgression(skills, testSkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
-	for _, id := range V5SkillIDs() {
+	for _, id := range V5SkillIDs(testSkillProgressionCatalog()) {
 		original := skills[SkillKey{ID: id, Level: 5}]
 		for _, rank := range []int32{6, 20, 21, 100, 101, 255, 256, 65535, 65536, 1000000} {
 			got, ok := skills.Get(id, rank)
@@ -74,7 +75,7 @@ func TestOriginalSkillEveryRankPreservesScopeAndNeverInventsCarriers(t *testing.
 			if got.ID != original.ID || got.Kind != original.Kind || got.HurtType != original.HurtType || got.TargetSelf != original.TargetSelf || got.TargetEnemy != original.TargetEnemy || got.TargetTeam != original.TargetTeam || got.RequiresInvisible != original.RequiresInvisible || got.RequiredWeaponType != original.RequiredWeaponType {
 				t.Fatalf("skill%d changed identity", id)
 			}
-			p, _ := LookupSkillGrowthPolicy(id)
+			p, _ := LookupSkillGrowthPolicy(id, testSkillProgressionCatalog())
 			if p.RangeCapRank == 0 && got.Area != original.Area {
 				t.Fatalf("skill%d expanded an unauthorized area", id)
 			}
@@ -135,7 +136,7 @@ func TestOriginalSkillEveryRankPreservesScopeAndNeverInventsCarriers(t *testing.
 
 func TestOriginalSkillMultiplierAndHealContinuation(t *testing.T) {
 	skills := realV5CurveAnchors(t)
-	if err := InstallV5SkillProgression(skills); err != nil {
+	if err := InstallV5SkillProgression(skills, testSkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
 	// Values are independently fixed original data: Firebolt 208+8 per rank,
@@ -177,7 +178,7 @@ func TestOriginalSkillMultiplierAndHealContinuation(t *testing.T) {
 
 func TestOriginalSkillControlsKeepNonordinalRowsAndNoDamage(t *testing.T) {
 	skills := realV5CurveAnchors(t)
-	if err := InstallV5SkillProgression(skills); err != nil {
+	if err := InstallV5SkillProgression(skills, testSkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
 	for _, id := range []SkillID{10029, 10128} {
@@ -219,7 +220,7 @@ func TestOriginalSkillNoAliasingNoMissingRowsNoSilentOverflow(t *testing.T) {
 		}
 	}
 	delete(skills, SkillKey{10401, 3})
-	if err := InstallV5SkillProgression(skills); err == nil {
+	if err := InstallV5SkillProgression(skills, testSkillProgressionCatalog()); err == nil {
 		t.Fatal("accepted missing original rank")
 	}
 	for _, d := range skills {
@@ -228,7 +229,7 @@ func TestOriginalSkillNoAliasingNoMissingRowsNoSilentOverflow(t *testing.T) {
 		}
 	}
 	skills = realV5CurveAnchors(t)
-	if err := InstallV5SkillProgression(skills); err != nil {
+	if err := InstallV5SkillProgression(skills, testSkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
 	for _, rank := range []int32{1, 5, 6, 21} {
@@ -249,7 +250,7 @@ func TestOriginalSkillNoAliasingNoMissingRowsNoSilentOverflow(t *testing.T) {
 
 func TestOriginalSkillChanceAndStealthGrowthUncompressedUntilBounds(t *testing.T) {
 	skills := realV5CurveAnchors(t)
-	if err := InstallV5SkillProgression(skills); err != nil {
+	if err := InstallV5SkillProgression(skills, testSkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
 	// Disarm trap originally grows55/63/71/79/87%; continue to95 then100.
@@ -281,12 +282,12 @@ func TestOriginalSkillChanceAndStealthGrowthUncompressedUntilBounds(t *testing.T
 
 func TestOriginalSkillCostsTimingsAndUtilityEfficiency(t *testing.T) {
 	skills := realV5CurveAnchors(t)
-	if err := InstallV5SkillProgression(skills); err != nil {
+	if err := InstallV5SkillProgression(skills, testSkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
 	changed := map[string]int{}
 	fields := map[string]func(SkillDef) int32{"MPCost": func(d SkillDef) int32 { return d.MPCost }, "PrepareMS": func(d SkillDef) int32 { return d.PrepareMS }, "CooldownMS": func(d SkillDef) int32 { return d.CooldownMS }}
-	for _, id := range V5SkillIDs() {
+	for _, id := range V5SkillIDs(testSkillProgressionCatalog()) {
 		first, fifth := skills[SkillKey{id, 1}], skills[SkillKey{id, 5}]
 		for name, value := range fields {
 			a, b := value(first), value(fifth)
@@ -299,7 +300,7 @@ func TestOriginalSkillCostsTimingsAndUtilityEfficiency(t *testing.T) {
 					t.Fatalf("skill%d rank%d unavailable", id, rank)
 				}
 				want := int64(a) + (int64(b)-int64(a))*int64(rank-1)/4
-				policy, _ := LookupSkillGrowthPolicy(id)
+				policy, _ := LookupSkillGrowthPolicy(id, testSkillProgressionCatalog())
 				if rank > 5 && policy.EfficiencyCapRank > 0 && rank > policy.EfficiencyCapRank && name != "PrepareMS" {
 					want = int64(a) + (int64(b)-int64(a))*int64(policy.EfficiencyCapRank-1)/4
 					if name == "CooldownMS" && want > 0 {

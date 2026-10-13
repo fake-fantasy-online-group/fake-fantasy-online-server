@@ -328,6 +328,7 @@ type PassiveCounterAttack struct {
 
 // SkillDef 是一个技能在某一级上的定义。
 type SkillDef struct {
+	Progression              *SkillProgressionCatalog `json:"-"`
 	ManaCostReductionApplied bool
 	// ManaCostReductionRanks is scoped high-rank mana reduction, applied once after other modifiers.
 	ManaCostReductionRanks int32

@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 // End-to-end combat measurements: commands, admission, MP, cast/windup,
 // cooldowns, strikes, HP loss and death all use the production scene paths.
 // No attribute sum is used as a damage proxy.
@@ -87,7 +89,7 @@ func rebalanceV6Inputs(t *testing.T) rebalanceV6Input {
 	}
 	v5PacketJSON(t, "balance/native_card_inventory.json", &cards)
 	for _, c := range cards.Cards {
-		d := domain.ItemDef{ID: c.ID, Name: c.Name, InstanceKind: domain.ItemInstanceSocketCard}
+		d := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: c.ID, Name: c.Name, InstanceKind: domain.ItemInstanceSocketCard}
 		d.CardDefaults.Initialized = true
 		d.CardDefaults.Count = uint8(len(c.Effects))
 		copy(d.CardDefaults.Effects[:], c.Effects)
@@ -154,7 +156,7 @@ func rebalanceV6Scene(t *testing.T, in rebalanceV6Input, tc rebalanceV6Case, st 
 		if ch.Skills[id] > 0 {
 			return
 		}
-		ident, _ := domain.V5SkillIdentity(id)
+		ident, _ := domain.V5SkillIdentity(id, catalogfixture.SkillProgressionCatalog())
 		for _, pre := range ident.Prerequisites {
 			learn(pre)
 		}
@@ -168,7 +170,7 @@ func rebalanceV6Scene(t *testing.T, in rebalanceV6Input, tc rebalanceV6Case, st 
 	for _, r := range ch.Skills {
 		ch.SkillPoints -= r
 	}
-	if err := domain.ValidateSkillAllocation(54, int32(tc.race)+1, ch.Skills, ch.SkillPoints); err != nil {
+	if err := domain.ValidateSkillAllocation(54, int32(tc.race)+1, ch.Skills, ch.SkillPoints, catalogfixture.SkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
 	p.Player.EndgameGrowthV5, p.Player.EndgameSkillBehavior, p.Player.EndgameSkillVariants = true, true, true
@@ -659,7 +661,7 @@ func TestEquipmentRebalanceV6HealerEffectiveHealingAndMP(t *testing.T) {
 				needSPI := max(int32(0), in.items[2056].Equip.Need.Base.SPI-ch.Base.SPI)
 				ch.Base.SPI += needSPI
 				ch.Base.INT += 59*domain.FreePointsPerLevel - needSPI
-				if err := domain.ValidateSkillAllocation(60, 4, ch.Skills, ch.SkillPoints); err != nil {
+				if err := domain.ValidateSkillAllocation(60, 4, ch.Skills, ch.SkillPoints, catalogfixture.SkillProgressionCatalog()); err != nil {
 					t.Fatal(err)
 				}
 				d := in.items[2056]

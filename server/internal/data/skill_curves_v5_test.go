@@ -1,5 +1,7 @@
 package data
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"bytes"
 	"context"
@@ -65,7 +67,7 @@ func TestV5SkillCurvesActualReadOnlyLoader(t *testing.T) {
 	for r := int32(1); r <= 101; r++ {
 		ranks = append(ranks, r)
 	}
-	for _, id := range domain.V5SkillCurveIDs() {
+	for _, id := range domain.V5SkillCurveIDs(catalogfixture.SkillProgressionCatalog()) {
 		first := table[domain.SkillKey{ID: id, Level: 1}]
 		for _, rank := range ranks {
 			a, ok := table.Get(id, rank)
@@ -108,7 +110,7 @@ func TestV5SkillCurvesActualReadOnlyLoader(t *testing.T) {
 	if dir := os.Getenv("FANTASY_V5_EXPORT_ANCHORS_DIR"); dir != "" {
 		v5ExportReadOnlyAnchors(t, dir, table, statuses)
 	}
-	t.Logf("PASS actual read-only LoadSkills: %d class rows, %d battle skills, %d status definitions; exact original ranks1..5 and extended ranks6..101,255/256,65535/65536,1000000", stats.Loaded, len(domain.V5SkillCurveIDs()), statusStats.Defs)
+	t.Logf("PASS actual read-only LoadSkills: %d class rows, %d battle skills, %d status definitions; exact original ranks1..5 and extended ranks6..101,255/256,65535/65536,1000000", stats.Loaded, len(domain.V5SkillCurveIDs(catalogfixture.SkillProgressionCatalog())), statusStats.Defs)
 }
 
 type v5SingleUserQuerier struct {
@@ -229,14 +231,14 @@ func v5ExportReadOnlyAnchors(t *testing.T, dir string, table domain.SkillTable, 
 		Fifth domain.SkillDef `json:"fifth"`
 	}
 	anchors := []pair{}
-	for _, id := range domain.V5SkillCurveIDs() {
+	for _, id := range domain.V5SkillCurveIDs(catalogfixture.SkillProgressionCatalog()) {
 		a, b := table[domain.SkillKey{ID: id, Level: 1}], table[domain.SkillKey{ID: id, Level: 5}]
 		a.FormulaVersion = 0
 		b.FormulaVersion = 0
 		anchors = append(anchors, pair{id, a, b})
 	}
 	originalRanks := []domain.SkillDef{}
-	for _, id := range domain.V5SkillCurveIDs() {
+	for _, id := range domain.V5SkillCurveIDs(catalogfixture.SkillProgressionCatalog()) {
 		for rank := int32(1); rank <= 5; rank++ {
 			d := table[domain.SkillKey{ID: id, Level: rank}]
 			d.FormulaVersion = 0

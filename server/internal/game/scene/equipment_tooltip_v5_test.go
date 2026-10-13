@@ -36,6 +36,7 @@ func TestV5EquipmentTooltipUsesNativeNamesAndRuntimeConditions(t *testing.T) {
 
 func TestV5TooltipSectionsDoNotDependOnEffectInputOrder(t *testing.T) {
 	s := newTestScene(t, nil)
+	s.skills, s.statuses = realV5SkillFixtures(t)
 	attributes, effects := s.equipmentV5Lines([]domain.EquipmentEffect{
 		{Kind: "proc", Proc: &domain.EquipmentProc{Trigger: "on_attack", SkillID: 10002, FixedRank: 1, ChanceBP: 500, ScaleBP: 10000}},
 		{Kind: "magic_find_pct", Value: 20},

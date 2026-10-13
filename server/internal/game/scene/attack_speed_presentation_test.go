@@ -1,4 +1,7 @@
 package scene
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"fmt"
@@ -11,6 +14,7 @@ import (
 )
 
 func TestAttackSpeedPresentationSignsUnitsAndSources(t *testing.T) {
+	s := newTestScene(t, nil)
 	for _, tc := range []struct {
 		value, mode int32
 		want        string
@@ -35,7 +39,7 @@ func TestAttackSpeedPresentationSignsUnitsAndSources(t *testing.T) {
 				}
 				for source, got := range map[string]string{
 					"equipment": equipment, "generic": affixText(a), "skill/status": skillAffixText(a),
-					"ordinary-card": astralRuneAffixText(999, a), "astral-rune": astralRuneAffixText(domain.FirstAstralRune+19, a),
+					"ordinary-card": s.astralRuneAffixText(999, a), "astral-rune": s.astralRuneAffixText(domain.FirstAstralRune+19, a),
 				} {
 					if got != tc.want {
 						t.Errorf("%s: got %q, want %q", source, got, tc.want)
@@ -93,14 +97,14 @@ func TestAttackSpeedNativeEquipmentAndRolledTooltips(t *testing.T) {
 	// The negotiated native path formerly used affixText for its merged gold
 	// block, whereas the client fallback already inverted the same attr25.
 	checked := 0
-	for _, unique := range domain.UniqueCatalog() {
+	for _, unique := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
 		st := domain.Stack{UID: 42, Item: unique.BaseID, Count: 1, Durability: 100,
 			Endgame: domain.EndgameItemState{UniqueID: unique.ID, UniqueRollBP: 10000, UniqueContentVersion: domain.UniqueContentVersion}}
-		for _, a := range domain.UniqueAffixes(st) {
+		for _, a := range domain.UniqueAffixes(st, catalogfixture.EndgameCatalog()) {
 			if a.Attr != domain.AttrAtkSpeed {
 				continue
 			}
-			def := domain.ItemDef{ID: unique.BaseID, Name: unique.BaseName, InstanceKind: domain.ItemInstanceEquipment, Equip: nativePresentationEquip(unique.Slot)}
+			def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: unique.BaseID, Name: unique.BaseName, InstanceKind: domain.ItemInstanceEquipment, Equip: nativePresentationEquip(unique.Slot)}
 			s.items[def.ID] = def
 			for _, native := range []bool{false, true} {
 				p.Player.EndgameNativeStats = native

@@ -282,10 +282,13 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 	if blow.Origin == domain.DamageProcOrigin {
 		x.DamageBP = 0
 	}
-	rawDamage = domain.ElementOutgoingDamage(rawDamage, x.DamageBP, offense.DamageBP, pvp)
-	if blow.PayloadScaleBP > 0 {
-		rawDamage = max(int32(1), clampI32(int64(rawDamage)*int64(blow.PayloadScaleBP)/10000))
+	buckets := domain.CombatDamageBuckets{
+		DamageIncreaseBP: int64(x.DamageBP), PVPScaledDamageIncreaseBP: int64(offense.DamageBP),
+		ResistanceBP: defense.ResistBP, ResistancePierceBP: offense.PierceBP,
+		ScaledDamageIncreaseNumerator: s.equipmentAuraDamageNumerator(src, element, pvp),
+		PayloadScaleBP:                blow.PayloadScaleBP, PayloadScaleKnown: blow.PayloadScaleKnown, PVP: pvp,
 	}
+	rawDamage = buckets.OutgoingDamage(rawDamage)
 	finalDamage, fullMagicReflect := rawDamage, int32(0)
 	removed := []domain.StatusID(nil)
 	reflectChance := int32(0)
@@ -317,10 +320,11 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 			}
 			flatReduction += int64(s.petProcAmount(dst, kind)) + int64(s.petFlatReduction(dst, magic))
 		}
-		wide := dst.Status.DamageTakenAmount(magic, rawDamage)
-		wide = domain.MitigatePercentDamageV7(wide, defense.ResistBP, offense.PierceBP,
-			domain.SaturateInt32(extraMitigation), dst.Status.DamageReductionPct(magic), halfCount, pvp, flatReduction)
-		finalDamage = max(int32(0), domain.SaturateInt32(wide))
+		buckets.MitigationBP = extraMitigation
+		buckets.DamageTakenIncreasePct = dst.Status.DamageTakenIncreasePct(magic)
+		buckets.DamageReductionPct = dst.Status.DamageReductionPct(magic)
+		buckets.HalfDamageLayers, buckets.FlatReduction = halfCount, flatReduction
+		finalDamage = buckets.IncomingDamage(rawDamage)
 		if dst.Status.Invulnerable() {
 			finalDamage = 0
 		} else {

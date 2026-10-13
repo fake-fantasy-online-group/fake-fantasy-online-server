@@ -28,14 +28,6 @@ func uniqueStrikeContext(src, dst *entity.Entity, blow combat.Blow, ev event.Dam
 		TargetElite: uniqueMonsterElite(dst), Invisible: blow.StartedInvisible || entityInvisible(src), Trap: blow.Trap,
 		Area: blow.Area || blow.Trap, Skill: blow.SkillID != 0, HurtType: blow.HurtType}
 }
-func (s *Scene) uniqueOutgoingDamage(src, dst *entity.Entity, blow combat.Blow, ev event.DamageDealt, amount, beforeHP int32) int32 {
-	x := domain.EvaluateUniqueTraits(s.uniqueTraits(src), uniqueStrikeContext(src, dst, blow, ev, beforeHP))
-	return domain.ApplyUniqueBP(amount, x.DamageBP)
-}
-func (s *Scene) uniqueIncomingDamage(dst *entity.Entity, magic bool, amount, beforeHP int32) int32 {
-	x := domain.EvaluateUniqueTraits(s.uniqueTraits(dst), domain.UniqueContext{HPPercent: uniquePercent(beforeHP, dst.MaxHP), Magic: magic})
-	return max(int32(1), domain.ApplyUniqueBP(amount, -x.MitigationBP))
-}
 func (s *Scene) uniqueHealing(src, dst *entity.Entity, amount int32, def domain.SkillDef) int32 {
 	source, current := s.combatSourceV5(src)
 	x := sourceUniqueEffectsV5(source, current, domain.UniqueContext{SkillID: def.ID, HPPercent: uniquePercent(src.HP, src.MaxHP),

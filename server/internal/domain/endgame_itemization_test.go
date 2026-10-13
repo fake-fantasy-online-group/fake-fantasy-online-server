@@ -99,7 +99,7 @@ func TestUniquePotencyImprovesBenefitsAndDrawbacks(t *testing.T) {
 }
 func TestAstralTraitsUseSameWinnerAndPreserveSnapshots(t *testing.T) {
 	defs, lookup := astralFixture()
-	r, _ := AstralRecipeByID(21)
+	r, _ := AstralRecipeByID(21, testEndgameCatalog())
 	def := defs[999001]
 	w := NewEquipSet()
 	st := astralStack(t, r, def, lookup)
@@ -112,9 +112,9 @@ func TestAstralTraitsUseSameWinnerAndPreserveSnapshots(t *testing.T) {
 	if w.At(SlotWeapon) != before {
 		t.Fatal("derived array mutated socket snapshots")
 	}
-	got := AstralRecipes()
+	got := AstralRecipes(testEndgameCatalog())
 	got[20].Traits[0].PowerBP = 9999
-	if again, _ := AstralRecipeByID(21); again.Traits[0].PowerBP == 9999 {
+	if again, _ := AstralRecipeByID(21, testEndgameCatalog()); again.Traits[0].PowerBP == 9999 {
 		t.Fatal("mutable trait escaped")
 	}
 	ch.Race = Warlock
@@ -189,7 +189,7 @@ func TestSkillScopeEvidenceMatchesRuntimeSemanticAllowlist(t *testing.T) {
 }
 
 func TestRuneCatalogueRecoveryDescriptionUsesActualCadence(t *testing.T) {
-	r, ok := AstralRune(LastAstralRune)
+	r, ok := AstralRune(LastAstralRune, testEndgameCatalog())
 	if !ok || !strings.Contains(r.Description(), "每2秒") || !strings.Contains(r.Description(), "生命恢复数值") {
 		t.Fatal("rune recovery cadence absent")
 	}
@@ -212,16 +212,16 @@ func TestAstralRuneAffixValidationRejectsInactiveModes(t *testing.T) {
 	for _, tc := range cases {
 		original := astralRuneCatalog[tc.index]
 		astralRuneCatalog[tc.index].Affixes = []Affix{tc.affix}
-		err := ValidateAstralCatalog()
+		err := ValidateAstralCatalog(testEndgameCatalog())
 		astralRuneCatalog[tc.index] = original
 		if err == nil {
 			t.Fatalf("inactive rune effect accepted: %d %+v", tc.index, tc.affix)
 		}
 	}
-	if !SupportedAstralRuneAffix(LastAstralRune, Affix{Attr: AttrHPRegen, Value: 5}) {
+	if !SupportedAstralRuneDefinitionAffix(AstralRuneDef{RegenerationIntervalMS: 2000}, Affix{Attr: AttrHPRegen, Value: 5}) {
 		t.Fatal("snapshot-backed rune regeneration rejected")
 	}
-	if err := ValidateAstralCatalog(); err != nil {
+	if err := ValidateAstralCatalog(testEndgameCatalog()); err != nil {
 		t.Fatal(err)
 	}
 }

@@ -27,7 +27,7 @@ func TestEndgameRuneIconsFollowVerifiedMonsterCollectibles(t *testing.T) {
 	}
 	for ordinal, want := range verified {
 		id := domain.FirstAstralRune + domain.ItemID(ordinal-1)
-		if got := endgameItemIcon(id); got != want {
+		if got := endgameItemIconFixture(id); got != want {
 			t.Errorf("rune %d: got sprite %d, want verified collectible %d", id, got, want)
 		}
 	}
@@ -43,7 +43,7 @@ func TestEndgameRuneIconsUseLabelledRelatedCollectibles(t *testing.T) {
 	}
 	for ordinal, want := range related {
 		id := domain.FirstAstralRune + domain.ItemID(ordinal-1)
-		if got := endgameItemIcon(id); got != want {
+		if got := endgameItemIconFixture(id); got != want {
 			t.Errorf("related-collectible rune %d: got sprite %d, want %d", id, got, want)
 		}
 	}

@@ -85,6 +85,8 @@ type RiftGlobe struct {
 	Value int32
 }
 type RiftRun struct {
+	RulesVersion                                         int32
+	Rules                                                *RiftRules
 	RunID                                                string
 	Revision                                             int64
 	Phase                                                RiftPhase
@@ -99,14 +101,17 @@ type RiftRun struct {
 	Globes                                               map[EntityID]RiftGlobe
 }
 
-func NewRiftRun(id string, tier int32, payer CharID, roster []TrialKeyMember, now int64) (*RiftRun, error) {
-	if id == "" || tier < 1 || tier > RiftMaxTier {
+func NewRiftRun(id string, tier int32, payer CharID, roster []TrialKeyMember, now int64, rule *RiftRules) (*RiftRun, error) {
+	if err := rule.Validate(); err != nil {
+		return nil, err
+	}
+	if id == "" || tier < 1 || tier > rule.MaxTier {
 		return nil, errors.New("invalid run")
 	}
 	if _, err := TrialKeyReward(payer, roster); err != nil {
 		return nil, err
 	}
-	r := &RiftRun{RunID: id, Revision: 1, Phase: RiftReserved, Tier: tier, Payer: payer, CreatedMS: now, LastMS: now, Members: map[CharID]*RiftMember{}, Monsters: map[EntityID]*RiftMonster{}, Globes: map[EntityID]RiftGlobe{}}
+	r := &RiftRun{RulesVersion: rule.Version, Rules: cloneRiftRulesPtr(rule), RunID: id, Revision: 1, Phase: RiftReserved, Tier: tier, Payer: payer, CreatedMS: now, LastMS: now, Members: map[CharID]*RiftMember{}, Monsters: map[EntityID]*RiftMonster{}, Globes: map[EntityID]RiftGlobe{}}
 	for _, m := range roster {
 		r.Members[m.CharID] = &RiftMember{CharID: m.CharID, Level: m.Level, LastSeenMS: now}
 	}
@@ -123,6 +128,9 @@ func (r *RiftRun) Terminal() bool {
 }
 func (r *RiftRun) Admitted(id CharID) bool { m := r.Members[id]; return m != nil && !m.Departed }
 func (r *RiftRun) Activate(now int64) bool {
+	if r.Rules == nil {
+		return false
+	}
 	if r.Phase != RiftReserved {
 		return false
 	}
@@ -133,6 +141,9 @@ func (r *RiftRun) Activate(now int64) bool {
 	return true
 }
 func (r *RiftRun) ObserveClock(now int64, present map[CharID]bool) {
+	if r.Rules == nil {
+		return
+	}
 	if r.Terminal() {
 		return
 	}
@@ -149,7 +160,7 @@ func (r *RiftRun) ObserveClock(now int64, present map[CharID]bool) {
 			}
 		}
 	}
-	if r.Phase != RiftReserved && now-r.StartedMS >= RiftHardMS {
+	if r.Phase != RiftReserved && now-r.StartedMS >= r.Rules.HardMS {
 		r.Phase = RiftFailed
 		r.Reason = "timeout"
 		r.Revision++
@@ -166,10 +177,13 @@ func (r *RiftRun) RegisterMonster(id EntityID, class int32) bool {
 // RecordKill returns required orb count. Progress only comes from registered,
 // first authoritative deaths; guardian completion requires the boss phase.
 func (r *RiftRun) RecordKill(id EntityID, now int64) (int, bool) {
+	if r.Rules == nil {
+		return 0, false
+	}
 	if r.Terminal() || r.Phase == RiftReserved {
 		return 0, false
 	}
-	if now-r.StartedMS >= RiftHardMS {
+	if now-r.StartedMS >= r.Rules.HardMS {
 		r.Phase = RiftFailed
 		r.Reason = "timeout"
 		r.Revision++
@@ -189,13 +203,13 @@ func (r *RiftRun) RecordKill(id EntityID, now int64) (int, bool) {
 		}
 		r.Phase = RiftCompleted
 		r.CompletedMS = now
-		r.Timely = now-r.StartedMS+r.PenaltyMS <= RiftTimedMS
+		r.Timely = now-r.StartedMS+r.PenaltyMS <= r.Rules.TimedMS
 		elapsed := now - r.StartedMS
 		if elapsed < 1 {
 			elapsed = 1
 		}
 		for _, p := range r.Members {
-			p.Eligible = !p.Departed && now-p.LastSeenMS <= RiftReconnectMS && p.PresentMS*2 >= elapsed
+			p.Eligible = !p.Departed && now-p.LastSeenMS <= r.Rules.ReconnectMS && p.PresentMS >= (elapsed*int64(r.Rules.PresenceBP)+9999)/10000
 		}
 		return 0, true
 	}
@@ -204,23 +218,29 @@ func (r *RiftRun) RecordKill(id EntityID, now int64) (int, bool) {
 	}
 	switch m.Class {
 	case 0:
-		r.Progress += RiftNormalProgress
+		r.Progress += r.Rules.NormalProgress
 	case 1:
-		return 1, true
+		return int(r.Rules.BlueOrbs), true
 	case 2:
-		return 4, true
+		return int(r.Rules.GoldOrbs), true
 	}
 	r.advance()
 	return 0, true
 }
 func (r *RiftRun) advance() {
-	if r.Progress >= RiftProgressMax {
-		r.Progress = RiftProgressMax
+	if r.Rules == nil {
+		return
+	}
+	if r.Progress >= r.Rules.ProgressMax {
+		r.Progress = r.Rules.ProgressMax
 		r.Phase = RiftBoss
 		r.Globes = map[EntityID]RiftGlobe{}
 	}
 }
 func (r *RiftRun) CollectGlobe(id EntityID, who CharID) bool {
+	if r.Rules == nil {
+		return false
+	}
 	if r.Phase != RiftActive || !r.Admitted(who) {
 		return false
 	}
@@ -235,10 +255,13 @@ func (r *RiftRun) CollectGlobe(id EntityID, who CharID) bool {
 	return true
 }
 func (r *RiftRun) RecordDeath(id CharID) bool {
+	if r.Rules == nil {
+		return false
+	}
 	if !r.Admitted(id) || r.Terminal() || r.Phase == RiftReserved {
 		return false
 	}
-	r.PenaltyMS += RiftDeathPenaltyMS
+	r.PenaltyMS += r.Rules.DeathPenaltyMS
 	r.Revision++
 	return true
 }
@@ -277,38 +300,27 @@ func (r *RiftRun) MarkClaimed(id CharID) bool {
 // (normal, blue elite, yellow elite, guardian); nonpositive bases stay zero.
 // Clamp before subtracting or exponentiating so even extreme inputs cannot
 // overflow intermediates. The final wire-compatible stat saturates at int32.
-func RiftScaledStat(base int32, tier int32, party int, class int32, hp bool) int32 {
+func RiftScaledStat(base int32, tier int32, party int, class int32, hp bool, rule *RiftRules) int32 {
+	if rule == nil {
+		return 0
+	}
 	if base <= 0 {
 		return 0
 	}
-	tier = clampRiftTier(tier)
+	tier = clampRiftTier(tier, rule)
 	party = max(1, min(party, 5))
 	class = max(int32(0), min(class, int32(3)))
 	v := float64(base)
-	rate := 1.04
+	rate := float64(rule.DamageGrowthBP) / 10000
 	if hp {
-		rate = 1.08
-		v *= 1 + 0.6*float64(party-1)
+		rate = float64(rule.HPGrowthBP) / 10000
+		v *= 1 + float64(rule.PartyHPBP)/10000*float64(party-1)
 	}
 	v *= math.Pow(rate, float64(tier-1))
 	if hp {
-		switch class {
-		case 1:
-			v *= 4
-		case 2:
-			v *= 8
-		case 3:
-			v *= 40
-		}
+		v *= float64(rule.Classes[class].HPBP) / 10000
 	} else {
-		switch class {
-		case 1:
-			v *= 1.2
-		case 2:
-			v *= 1.4
-		case 3:
-			v *= 1.5
-		}
+		v *= float64(rule.Classes[class].DamageBP) / 10000
 	}
 	if v > math.MaxInt32 {
 		return math.MaxInt32
@@ -320,20 +332,26 @@ func RiftScaledStat(base int32, tier int32, party int, class int32, hp bool) int
 // RiftRun.UnlockedTierFor for the completion-time tier entitlement.
 type RiftRewardPlan struct{ Equipment, Rune, Dust, UniqueChance int32 }
 
-func PlanRiftRewards(tier int32, timely bool) RiftRewardPlan {
-	tier = clampRiftTier(tier)
-	p := RiftRewardPlan{Equipment: 1, Rune: 1, Dust: 6 + (tier-1)/5, UniqueChance: 20 + 2*tier}
-	if p.UniqueChance > 60 {
-		p.UniqueChance = 60
+func PlanRiftRewards(tier int32, timely bool, rule *RiftRules) RiftRewardPlan {
+	if rule == nil {
+		return RiftRewardPlan{}
+	}
+	tier = clampRiftTier(tier, rule)
+	p := RiftRewardPlan{Equipment: rule.Equipment, Rune: rule.Runes, Dust: rule.DustBase + (tier-1)/rule.DustTierDivisor, UniqueChance: rule.UniqueBaseChance + rule.UniquePerTier*tier}
+	if p.UniqueChance > rule.UniqueCap {
+		p.UniqueChance = rule.UniqueCap
 	}
 	if timely {
-		p.Equipment++
-		p.Rune++
-		p.Dust += 4
+		p.Equipment += rule.TimelyEquipment
+		p.Rune += rule.TimelyRunes
+		p.Dust += rule.TimelyDust
 	}
 	return p
 }
 
-func clampRiftTier(tier int32) int32 {
-	return max(int32(1), min(tier, RiftMaxTier))
+func clampRiftTier(tier int32, rule *RiftRules) int32 {
+	if rule == nil {
+		return 0
+	}
+	return max(int32(1), min(tier, rule.MaxTier))
 }

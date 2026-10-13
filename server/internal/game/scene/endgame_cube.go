@@ -22,7 +22,7 @@ type endgameCubeState struct {
 }
 
 func (s *Scene) catalogCubeRecipeViews() []domain.EndgameRecipeView {
-	return domain.CubeRecipes(s.items)
+	return domain.CubeRecipes(s.cubeRules, s.items)
 }
 func (s *Scene) planEndgameCube(p *entity.Entity, req domain.EndgameRequest, execute bool) (domain.CubePlan, error) {
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil || !p.Alive() {
@@ -32,7 +32,7 @@ func (s *Scene) planEndgameCube(p *entity.Entity, req domain.EndgameRequest, exe
 	if err != nil {
 		return domain.CubePlan{}, &domain.CubeError{Code: "requirements", Message: "铜币状态无效"}
 	}
-	return domain.PlanCube(domain.CubeContext{Level: p.Player.Char.Level, Bag: p.Player.Bag, Money: money, Items: s.items, Intn: s.rng.Intn, NewUID: domain.NewItemInstanceID}, req, execute)
+	return domain.PlanCube(domain.CubeContext{Rules: s.cubeRules, Catalog: s.endgameCatalog, Level: p.Player.Char.Level, Bag: p.Player.Bag, Money: money, Items: s.items, Intn: s.rng.Intn, NewUID: domain.NewItemInstanceID}, req, execute)
 }
 func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil {
@@ -110,12 +110,12 @@ func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 		result := map[string]string{"recipeId": strconv.FormatInt(int64(plan.Recipe.ID), 10)}
 		if !plan.Target.Empty() {
 			result["itemUid"] = strconv.FormatInt(plan.Target.UID, 10)
-			if plan.Recipe.ID == domain.CubeOpenSocket {
+			if plan.Recipe.Operation == "socket.open" {
 				result["socketCount"] = strconv.Itoa(int(plan.Target.SocketCount))
 			}
 		}
 		message := plan.Recipe.Name + "完成。"
-		if plan.Recipe.ID == domain.CubeOpenSocket {
+		if plan.Recipe.Operation == "socket.open" {
 			message = plan.Recipe.Name + "完成：开出" + strconv.Itoa(int(plan.Target.SocketCount)) + "孔。"
 		}
 		s.endgameCommit(p, req, candidate, domain.EndgameResponse{Kind: "cube.result", Message: message, Result: result}, nil, 0, func() { state.cube = nil })

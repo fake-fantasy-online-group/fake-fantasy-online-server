@@ -127,7 +127,7 @@ func validateEndgameRollModel(affixes []Affix, variables []VariableAffix, local 
 }
 
 func UniqueItemBonuses(def ItemDef, st Stack) []Affix {
-	d, ok := UniqueOf(st)
+	d, ok := UniqueOf(st,def.EndgameCatalog)
 	if !ok {
 		return nil
 	}

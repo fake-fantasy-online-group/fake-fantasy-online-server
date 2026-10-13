@@ -1,4 +1,7 @@
 package showcase
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
+
 
 import (
 	"context"
@@ -46,7 +49,7 @@ func (t *checkedTx) SaveSnapshot(ctx context.Context, s domain.Snapshot) error {
 func testStore(t *testing.T) *store.Memory {
 	t.Helper()
 	ctx := context.Background()
-	m := store.NewMemory()
+	m := store.NewMemory(catalogfixture.EndgameCatalog())
 	a, e := m.CreateAccount(ctx, "test001", "synthetic-not-a-secret")
 	if e != nil {
 		t.Fatal(e)

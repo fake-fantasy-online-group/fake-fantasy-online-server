@@ -11,15 +11,16 @@ import (
 // skillSynergyViews reads the same immutable raw/hard snapshots as the cast path.
 // Zero-invested training sources remain visible so the player can plan a build.
 func (s *Scene) skillSynergyViews(target domain.SkillID, hard, raw domain.Learned) ([]domain.SkillTrainingSynergyView, []string) {
+	skillCatalog := s.skills.ProgressionCatalog()
 	training := []domain.SkillTrainingSynergyView{}
 	native := []string{}
 	var nativeDamage int32
 	seenNative := map[domain.SkillID]bool{}
-	for _, edge := range domain.V5SkillSynergies {
+	for _, edge := range skillCatalog.Synergies() {
 		if edge.Target != target {
 			continue
 		}
-		source, _ := domain.V5SkillIdentity(edge.Source)
+		source, _ := domain.V5SkillIdentity(edge.Source, skillCatalog)
 		if edge.RankMode == "hard" {
 			label := map[string]string{
 				"damage": "伤害倍率", "elite_damage": "对精英伤害倍率",
@@ -54,7 +55,7 @@ func (s *Scene) skillSynergyViews(target domain.SkillID, hard, raw domain.Learne
 		if !ok {
 			continue
 		}
-		nativeDamage += domain.SkillGrowthDamageBonusPct(edge.Source, rank, target)
+		nativeDamage += domain.SkillGrowthDamageBonusPct(edge.Source, rank, target, skillCatalog)
 		filtered := domain.SkillDef{Kind: domain.SkillPassive}
 		for _, m := range def.PassiveModifiers {
 			if m.TargetSkill == target {
@@ -87,8 +88,8 @@ func (s *Scene) skillSynergyViews(target domain.SkillID, hard, raw domain.Learne
 		}
 		lines := s.skillEffectLines(filtered)
 		for i := range lines {
-			lines[i] = strings.TrimPrefix(lines[i], skillTargetName(target)+"：")
-			lines[i] = strings.TrimPrefix(lines[i], skillTargetName(target))
+			lines[i] = strings.TrimPrefix(lines[i], skillTargetName(target, skillCatalog)+"：")
+			lines[i] = strings.TrimPrefix(lines[i], skillTargetName(target, skillCatalog))
 		}
 		if len(lines) > 0 {
 			native = append(native, fmt.Sprintf("%s（%d级）：%s", source.Name, rank, strings.Join(lines, "；")))
@@ -107,7 +108,7 @@ func (s *Scene) skillSynergyViews(target domain.SkillID, hard, raw domain.Learne
 // Group equal effects by their exact target membership, then group effects that
 // share a target set. Long weapon mastery target lists appear only once per level.
 // No target is inferred from profession or weapon, and none is discarded.
-func skillPassiveModifierLines(modifiers []domain.PassiveModifier) []string {
+func skillPassiveModifierLines(modifiers []domain.PassiveModifier, catalog *domain.SkillProgressionCatalog) []string {
 	type effectGroup struct {
 		modifier domain.PassiveModifier
 		targets  []domain.SkillID
@@ -155,7 +156,7 @@ func skillPassiveModifierLines(modifiers []domain.PassiveModifier) []string {
 	for _, group := range groups {
 		names := []string{}
 		for _, id := range group.targets {
-			names = append(names, skillTargetName(id))
+			names = append(names, skillTargetName(id, catalog))
 		}
 		if len(names) == 1 {
 			out = append(out, names[0]+"："+strings.Join(group.lines, "；"))

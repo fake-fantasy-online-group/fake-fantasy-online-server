@@ -194,7 +194,7 @@ func (s *Scene) executeEquipmentProc(owner *entity.Entity, c equipmentProcCandid
 				tr = &combat.HitTracker{}
 				s.hits[owner.ID] = tr
 			}
-			blow := combat.Blow{Origin: domain.DamageProcOrigin, ProcDepth: 1, RootID: c.hit.ev.RootID, HurtType: def.HurtType, SkillID: int32(def.ID), SkillPct: effect.DamagePct, FlatDamage: effect.DamageFlat, GuaranteedHit: effect.GuaranteedHit, Magic: def.HurtType != domain.HurtNone && def.HurtType != domain.HurtPhysical, PayloadScaleBP: scale}
+			blow := combat.Blow{Origin: domain.DamageProcOrigin, ProcDepth: 1, RootID: c.hit.ev.RootID, HurtType: def.HurtType, SkillID: int32(def.ID), SkillPct: effect.DamagePct, FlatDamage: effect.DamageFlat, GuaranteedHit: effect.GuaranteedHit, Magic: def.HurtType != domain.HurtNone && def.HurtType != domain.HurtPhysical, PayloadScaleBP: scale, PayloadScaleKnown: true}
 			blow.SkillPctNumerator, blow.SkillPctDenominator = effect.DamagePctNumerator, effect.DamagePctDenominator
 			ev, raw, reflected := s.resolveStrikeStatuses(owner, target, tr, blow)
 			s.emit(ev)
@@ -274,7 +274,7 @@ func (s *Scene) equipmentProcReadiness(p *entity.Entity) []EquipmentProcReadines
 		remaining := max(int64(0), max(cd["effect:"+v.ID], cd["group:"+v.SharedGroup])-now)
 		global := max(int64(0), cd["global"]-now)
 		out = append(out, EquipmentProcReadinessView{EffectID: v.ID, SourceUID: a.SourceUID, Trigger: v.Trigger, SkillID: v.SkillID, FixedRank: v.FixedRank, ChanceBP: v.ChanceBP, ICDMS: v.ICDMS, RemainingMS: remaining, GlobalRemainingMS: global, Ready: p.Alive() && s.equipmentCombatReady(p) && remaining == 0 && global == 0})
-		if len(out) >= 16 {
+		if len(out) >= domain.MaxEquipmentProcReadiness {
 			break
 		}
 	}

@@ -10,7 +10,7 @@ func astralFixture() (map[ItemID]ItemDef, func(ItemID) (ItemDef, bool)) {
 	for _, d := range AstralRuneItems(7) {
 		defs[d.ID] = d
 	}
-	defs[999001] = ItemDef{ID: 999001, InstanceKind: ItemInstanceEquipment, Equip: &EquipDef{Slot: int32(SlotWeapon), LevelReq: 50, Durable: 10}}
+	defs[999001] = ItemDef{EndgameCatalog: testEndgameCatalog(), ID: 999001, InstanceKind: ItemInstanceEquipment, Equip: &EquipDef{Slot: int32(SlotWeapon), LevelReq: 50, Durable: 10}}
 	return defs, func(id ItemID) (ItemDef, bool) { d, ok := defs[id]; return d, ok }
 }
 func astralStack(t *testing.T, r AstralRecipe, def ItemDef, lookup func(ItemID) (ItemDef, bool)) Stack {
@@ -30,10 +30,10 @@ func astralStack(t *testing.T, r AstralRecipe, def ItemDef, lookup func(ItemID) 
 	return st
 }
 func TestAstralCatalogCompleteImmutable(t *testing.T) {
-	if err := ValidateAstralCatalog(); err != nil {
+	if err := ValidateAstralCatalog(testEndgameCatalog()); err != nil {
 		t.Fatal(err)
 	}
-	runes, recipes := AstralRunes(), AstralRecipes()
+	runes, recipes := AstralRunes(testEndgameCatalog()), AstralRecipes(testEndgameCatalog())
 	if len(runes) != 28 || len(recipes) != 40 {
 		t.Fatal("coverage")
 	}
@@ -55,13 +55,13 @@ func TestAstralCatalogCompleteImmutable(t *testing.T) {
 	runes[0].Affixes[0].Value = 9999
 	recipes[0].Runes[0] = 0
 	recipes[0].Affixes[0].Value = 9999
-	if AstralRunes()[0].Affixes[0].Value == 9999 || AstralRecipes()[0].Runes[0] == 0 || AstralRecipes()[0].Affixes[0].Value == 9999 {
+	if AstralRunes(testEndgameCatalog())[0].Affixes[0].Value == 9999 || AstralRecipes(testEndgameCatalog())[0].Runes[0] == 0 || AstralRecipes(testEndgameCatalog())[0].Affixes[0].Value == 9999 {
 		t.Fatal("mutable catalog escaped")
 	}
 }
 func TestAstralEveryRecipeAndInvalidOrders(t *testing.T) {
 	defs, lookup := astralFixture()
-	for _, r := range AstralRecipes() {
+	for _, r := range AstralRecipes(testEndgameCatalog()) {
 		t.Run(r.Name, func(t *testing.T) {
 			def := defs[999001]
 			eq := *def.Equip
@@ -132,8 +132,8 @@ func TestAstralEveryRecipeAndInvalidOrders(t *testing.T) {
 }
 func TestAstralChannelAndProfession(t *testing.T) {
 	defs, lookup := astralFixture()
-	low, _ := AstralRecipeByID(3)
-	high, _ := AstralRecipeByID(36)
+	low, _ := AstralRecipeByID(3, testEndgameCatalog())
+	high, _ := AstralRecipeByID(36, testEndgameCatalog())
 	def := defs[999001]
 	eq := *def.Equip
 	eq.Slot = int32(SlotHead)
@@ -157,7 +157,7 @@ func TestAstralChannelAndProfession(t *testing.T) {
 	if a = ActiveAstralRecipes(worn, lookup, ch); len(a) != 1 || a[0].Recipe.ID != 3 {
 		t.Fatal("fallback failed")
 	}
-	r, _ := AstralRecipeByID(6)
+	r, _ := AstralRecipeByID(6, testEndgameCatalog())
 	eq3 := *def.Equip
 	eq3.Slot = int32(SlotWeapon)
 	def.Equip = &eq3
@@ -251,21 +251,21 @@ func TestAstralSocketDropBudget(t *testing.T) {
 	d := defs[999001]
 	for grade := AstralDropOrdinary; grade <= AstralDropRealm; grade++ {
 		for roll := int64(0); roll < 100; roll++ {
-			if n := RollDroppedSocketCount(d, grade, func(int64) int64 { return roll }); n > 5 {
+			if n := RollDroppedSocketCount(d, grade, func(int64) int64 { return roll }, lootRulesFixture()); n > 5 {
 				t.Fatal(n)
 			}
 		}
 	}
-	if n := RollDroppedSocketCount(d, AstralDropRealm, func(int64) int64 { return 99 }); n != 5 {
+	if n := RollDroppedSocketCount(d, AstralDropRealm, func(int64) int64 { return 99 }, lootRulesFixture()); n != 5 {
 		t.Fatal(n)
 	}
 	d.Equip.Affixes = []Affix{{Attr: AttrSTR}, {Attr: AttrINT}, {Attr: AttrVIT}}
-	if n := RollDroppedSocketCount(d, AstralDropRealm, func(int64) int64 { return 99 }); n != 2 {
+	if n := RollDroppedSocketCount(d, AstralDropRealm, func(int64) int64 { return 99 }, lootRulesFixture()); n != 2 {
 		t.Fatal(n)
 	}
 	d.Equip.Affixes = nil
 	d.Equip.LevelReq = 10
-	if n := RollDroppedSocketCount(d, AstralDropRealm, func(int64) int64 { return 99 }); n != 2 {
+	if n := RollDroppedSocketCount(d, AstralDropRealm, func(int64) int64 { return 99 }, lootRulesFixture()); n != 2 {
 		t.Fatal(n)
 	}
 	table := EquipmentRollTable{Counts: map[ColorProfile][]WeightedAffixCount{1: {{Count: 5, Weight: 1}}}, Options: map[EquipmentRollKey][]EquipmentRollOption{{}: {{Affix: Affix{Attr: AttrSTR, Value: 2}, Weight: 1}, {Affix: Affix{Attr: AttrINT, Value: 2}, Weight: 1}, {Affix: Affix{Attr: AttrVIT, Value: 2}, Weight: 1}, {Affix: Affix{Attr: AttrAGI, Value: 2}, Weight: 1}, {Affix: Affix{Attr: AttrDEX, Value: 2}, Weight: 1}}}}

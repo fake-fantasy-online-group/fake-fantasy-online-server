@@ -1,0 +1,126 @@
+package domain
+
+import (
+	"fmt"
+	"sort"
+)
+
+type LootSocketLevel struct {
+	MinLevel int32
+	Cap      int32
+}
+type LootGradeRule struct {
+	Grade         int32
+	RuneRateBP    int32
+	SocketWeights [6]int64
+}
+type LootRuleSet struct {
+	Version                        int32
+	MinRuneLevel                   int32
+	UniqueBasePPB                  int64
+	UniqueMFBoost, UniqueMFDivisor int64
+	RunePool                       []ItemID
+	SocketLevels                   []LootSocketLevel
+	Grades                         []LootGradeRule
+}
+type LootRuleTable struct {
+	active   int32
+	versions map[int32]LootRuleSet
+}
+
+func cloneLootRuleSet(r LootRuleSet) LootRuleSet {
+	r.RunePool = append([]ItemID(nil), r.RunePool...)
+	r.SocketLevels = append([]LootSocketLevel(nil), r.SocketLevels...)
+	r.Grades = append([]LootGradeRule(nil), r.Grades...)
+	return r
+}
+func NewLootRuleTable(active int32, rows []LootRuleSet, items map[ItemID]ItemDef) (*LootRuleTable, error) {
+	t := &LootRuleTable{active: active, versions: map[int32]LootRuleSet{}}
+	for _, r := range rows {
+		r = cloneLootRuleSet(r)
+		if _, ok := t.versions[r.Version]; ok {
+			return nil, fmt.Errorf("duplicate loot version %d", r.Version)
+		}
+		if r.Version < 1 || r.MinRuneLevel < 1 || r.MinRuneLevel > 1000000 || r.UniqueBasePPB < 0 || r.UniqueBasePPB > LootProbabilityScaleV5 || r.UniqueMFBoost < 0 || r.UniqueMFBoost > 100 || r.UniqueMFDivisor < 1 || r.UniqueMFDivisor > 1000000 || r.UniqueBasePPB*(1+r.UniqueMFBoost) > LootProbabilityScaleV5 {
+			return nil, fmt.Errorf("invalid loot rules version %d", r.Version)
+		}
+		if len(r.RunePool) != 28 || len(r.Grades) != 4 || len(r.SocketLevels) == 0 {
+			return nil, fmt.Errorf("incomplete loot rules version %d", r.Version)
+		}
+		seen := map[ItemID]bool{}
+		for _, id := range r.RunePool {
+			d, ok := items[id]
+			if !ok || seen[id] || id < FirstAstralRune || id > LastAstralRune || d.InstanceKind != ItemInstanceSocketCard || !d.CardDefaults.Initialized {
+				return nil, fmt.Errorf("invalid loot rune %d", id)
+			}
+			seen[id] = true
+		}
+		sort.Slice(r.Grades, func(i, j int) bool { return r.Grades[i].Grade < r.Grades[j].Grade })
+		for i, g := range r.Grades {
+			if g.Grade != int32(i) || g.RuneRateBP < 0 || g.RuneRateBP > 10000 {
+				return nil, fmt.Errorf("invalid loot grade")
+			}
+			sum := int64(0)
+			for _, w := range g.SocketWeights {
+				if w < 0 || w > 100 {
+					return nil, fmt.Errorf("invalid socket weight")
+				}
+				sum += w
+			}
+			if sum != 100 {
+				return nil, fmt.Errorf("socket weights must total 100")
+			}
+		}
+		sort.Slice(r.SocketLevels, func(i, j int) bool { return r.SocketLevels[i].MinLevel < r.SocketLevels[j].MinLevel })
+		for i, l := range r.SocketLevels {
+			if l.MinLevel < 1 || l.Cap < 0 || l.Cap > 5 || i > 0 && (l.MinLevel == r.SocketLevels[i-1].MinLevel || l.Cap < r.SocketLevels[i-1].Cap) {
+				return nil, fmt.Errorf("invalid socket level tier")
+			}
+		}
+		t.versions[r.Version] = cloneLootRuleSet(r)
+	}
+	if _, ok := t.versions[1]; !ok {
+		return nil, fmt.Errorf("missing legacy loot version 1")
+	}
+	if _, ok := t.versions[active]; !ok {
+		return nil, fmt.Errorf("missing active loot version %d", active)
+	}
+	return t, nil
+}
+func (t *LootRuleTable) Version(v int32) (*LootRuleSet, bool) {
+	if t == nil {
+		return nil, false
+	}
+	r, ok := t.versions[v]
+	if !ok {
+		return nil, false
+	}
+	r = cloneLootRuleSet(r)
+	return &r, true
+}
+func (t *LootRuleTable) Active() *LootRuleSet {
+	if t == nil {
+		return nil
+	}
+	r, _ := t.Version(t.active)
+	return r
+}
+func (r *LootRuleSet) RuneDrop(grade AstralDropGrade) DropEntry {
+	if r == nil || int(grade) >= len(r.Grades) {
+		return DropEntry{}
+	}
+	return DropEntry{RatePct: float64(r.Grades[grade].RuneRateBP) / 100, Choices: append([]ItemID(nil), r.RunePool...)}
+}
+func (r *LootRuleSet) SocketCapacity(level int32) int {
+	if r == nil {
+		return 0
+	}
+	cap := 0
+	for _, l := range r.SocketLevels {
+		if level < l.MinLevel {
+			break
+		}
+		cap = int(l.Cap)
+	}
+	return cap
+}

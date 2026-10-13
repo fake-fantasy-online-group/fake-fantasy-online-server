@@ -1,5 +1,7 @@
 package scene
 
+import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
+
 import (
 	"encoding/hex"
 	"encoding/json"
@@ -21,7 +23,7 @@ func TestV5TrainingGraphHasActualAttackChainsAcrossFiveProfessions(t *testing.T)
 	attacks := map[int32]int{}
 	targets := map[domain.SkillID]bool{}
 	training, native := 0, 0
-	for _, e := range domain.V5SkillSynergies {
+	for _, e := range catalogfixture.SkillProgressionCatalog().Synergies() {
 		if e.RankMode != "hard" {
 			native++
 			continue
@@ -45,14 +47,14 @@ func TestV5TrainingGraphHasActualAttackChainsAcrossFiveProfessions(t *testing.T)
 			t.Fatalf("profession%d missing meaningful attack training: %d", prof, attacks[prof])
 		}
 	}
-	if err := domain.ValidateSkillSynergies(domain.V5SkillSynergies); err != nil {
+	if err := domain.ValidateSkillSynergies(catalogfixture.SkillProgressionCatalog().Synergies(), catalogfixture.SkillProgressionCatalog()); err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestV5EveryDamageTrainingEdgeChangesActualTargetHP(t *testing.T) {
 	skills, statuses := realV5SkillFixtures(t)
-	for _, edge := range domain.V5SkillSynergies {
+	for _, edge := range catalogfixture.SkillProgressionCatalog().Synergies() {
 		if edge.RankMode != "hard" || (edge.Effect != "damage" && edge.Effect != "elite_damage") {
 			continue
 		}
@@ -61,7 +63,7 @@ func TestV5EveryDamageTrainingEdgeChangesActualTargetHP(t *testing.T) {
 				s := newTestScene(t, nil)
 				join(t, s, 1, 100, "训练", 100, 100)
 				p := s.players[1]
-				ident, _ := domain.V5SkillIdentity(edge.Target)
+				ident, _ := domain.V5SkillIdentity(edge.Target, catalogfixture.SkillProgressionCatalog())
 				p.Player.Char.Race = domain.Race(ident.Profession - 1)
 				p.Player.Char.Level = 100
 				p.Player.Char.Skills = domain.Learned{edge.Target: 20, edge.Source: hard}
@@ -184,17 +186,17 @@ func TestV5TrainingViewsIgnoreSourceSoftRanksAndKeepNativeDistinct(t *testing.T)
 	if reflect.DeepEqual(na, nb) {
 		t.Fatal("native effective-rank modifier stopped accepting soft levels")
 	}
-	ident, _ := domain.V5SkillIdentity(10401)
+	ident, _ := domain.V5SkillIdentity(10401, catalogfixture.SkillProgressionCatalog())
 	bonus := []domain.SkillRankBonus{{SourceID: "same", Scope: "single", SkillID: 10401, Levels: 3}, {SourceID: "same", Scope: "single", SkillID: 10401, Levels: 3}}
 	if next := firstSkillInvestmentRank("1", ident, bonus); next.String() != "5" {
 		t.Fatal("first hardpoint did not enable eligible equipment exactly once", next)
 	}
 	grants := []domain.SkillGrant{{SourceID: "treasure", SkillID: 10401, Rank: 1, Origin: "treasure_grant", BenefitsFromSkillRanks: false}}
-	before, err := domain.ResolveSkillLoadout(5, domain.Learned{}, bonus, grants)
+	before, err := domain.ResolveSkillLoadout(5, domain.Learned{}, bonus, grants, catalogfixture.SkillProgressionCatalog())
 	if err != nil {
 		t.Fatal(err)
 	}
-	after, err := domain.ResolveSkillLoadout(5, domain.Learned{10401: 1}, bonus, grants)
+	after, err := domain.ResolveSkillLoadout(5, domain.Learned{10401: 1}, bonus, grants, catalogfixture.SkillProgressionCatalog())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -212,7 +214,7 @@ func TestV5TrainingAttackSynergiesThroughAcceptedCasts(t *testing.T) {
 				s := newTestScene(t, nil)
 				join(t, s, 1, 100, "施术", 100, 100)
 				p := s.players[1]
-				ident, _ := domain.V5SkillIdentity(pair[0])
+				ident, _ := domain.V5SkillIdentity(pair[0], catalogfixture.SkillProgressionCatalog())
 				p.Player.Char.Race = domain.Race(ident.Profession - 1)
 				p.Player.Char.Level = 100
 				p.Player.Char.SkillAllocationVersion = 5
@@ -256,8 +258,8 @@ func TestV5All149ReadableSkillViewsFixture(t *testing.T) {
 		ch.Race, ch.Level, ch.SkillAllocationVersion = domain.Race(prof-1), 100, 5
 		ch.Skills = domain.Learned{}
 		ch.SkillPoints = 99
-		for _, id := range domain.V5SkillIDs() {
-			ident, _ := domain.V5SkillIdentity(id)
+		for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
+			ident, _ := domain.V5SkillIdentity(id, catalogfixture.SkillProgressionCatalog())
 			if ident.Profession == prof {
 				ch.Skills[id] = 3
 				ch.SkillPoints -= 3
@@ -268,7 +270,7 @@ func TestV5All149ReadableSkillViewsFixture(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		for _, id := range domain.V5SkillIDs() {
+		for _, id := range domain.V5SkillIDs(catalogfixture.SkillProgressionCatalog()) {
 			if v, ok := views[id]; ok {
 				all = append(all, v)
 			}
@@ -308,7 +310,7 @@ func TestV5PassiveTooltipGroupsExactTargetMembershipWithoutLoss(t *testing.T) {
 		text := strings.Join(lines, "\n")
 		seen := map[domain.SkillID]bool{}
 		for _, m := range def.PassiveModifiers {
-			if !seen[m.TargetSkill] && strings.Count(text, skillTargetName(m.TargetSkill)) != 1 {
+			if !seen[m.TargetSkill] && strings.Count(text, skillTargetName(m.TargetSkill, catalogfixture.SkillProgressionCatalog())) != 1 {
 				t.Fatal("lost or duplicated exact target", id, m.TargetSkill, lines)
 			}
 			seen[m.TargetSkill] = true
@@ -329,7 +331,7 @@ func TestV5EquippedSourceSoftPointDoesNotIncreaseTrainingDamage(t *testing.T) {
 	p.Stats.MinAtk, p.Stats.MaxAtk = 10000, 10000
 	p.Stats.CritRate = 0
 	s.skills, s.statuses = skills, statuses
-	item := domain.ItemDef{ID: 1905, Equip: &domain.EquipDef{Slot: 13, Type: 32, Durable: 100}}
+	item := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 1905, Equip: &domain.EquipDef{Slot: 13, Type: 32, Durable: 100}}
 	s.items = map[domain.ItemID]domain.ItemDef{1905: item}
 	st := domain.NewStack(item, 1)
 	st.UID, st.Durability, st.MaxDurability = 19050001, 100, 100

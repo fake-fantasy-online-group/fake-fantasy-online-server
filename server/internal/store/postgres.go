@@ -17,6 +17,7 @@ import (
 // Postgres 是 Store 的 PostgreSQL 实现(生产存储)。语义与 Memory 一致, 保证上层逻辑
 // 在两种实现下行为相同。连接池由 pgxpool 管理; 事务用真实 DB 事务。
 type Postgres struct {
+ endgameCatalog *domain.EndgameCatalog
 	pool *pgxpool.Pool
 }
 
@@ -61,7 +62,7 @@ type querier interface {
 // ── 账号 ──
 
 func (p *Postgres) AccountByName(ctx context.Context, username string) (*Account, error) {
-	return accountByName(ctx, p.pool, username)
+	return accountByName(ctx, p.catalogQuery(), username)
 }
 func accountByName(ctx context.Context, q querier, username string) (*Account, error) {
 	var a Account
@@ -84,7 +85,7 @@ func accountByName(ctx context.Context, q querier, username string) (*Account, e
 }
 
 func (p *Postgres) SetAccountBanned(ctx context.Context, accountID int64, banned bool) error {
-	return setAccountBanned(ctx, p.pool, accountID, banned)
+	return setAccountBanned(ctx, p.catalogQuery(), accountID, banned)
 }
 
 func setAccountBanned(ctx context.Context, q querier, accountID int64, banned bool) error {
@@ -100,7 +101,7 @@ func setAccountBanned(ctx context.Context, q querier, accountID int64, banned bo
 }
 
 func (p *Postgres) SetAccountBannedUntil(ctx context.Context, accountID int64, until time.Time) error {
-	return setAccountBannedUntil(ctx, p.pool, accountID, until)
+	return setAccountBannedUntil(ctx, p.catalogQuery(), accountID, until)
 }
 
 func setAccountBannedUntil(ctx context.Context, q querier, accountID int64, until time.Time) error {
@@ -116,10 +117,10 @@ func setAccountBannedUntil(ctx context.Context, q querier, accountID int64, unti
 }
 
 func (p *Postgres) CreateAccount(ctx context.Context, username, passHash string) (*Account, error) {
-	return createAccount(ctx, p.pool, username, passHash, "")
+	return createAccount(ctx, p.catalogQuery(), username, passHash, "")
 }
 func (p *Postgres) CreateRegisteredAccount(ctx context.Context, username, passHash, secHash string) (*Account, error) {
-	return createAccount(ctx, p.pool, username, passHash, secHash)
+	return createAccount(ctx, p.catalogQuery(), username, passHash, secHash)
 }
 func createAccount(ctx context.Context, q querier, username, passHash, secHash string) (*Account, error) {
 	var a Account
@@ -137,11 +138,11 @@ func createAccount(ctx context.Context, q querier, username, passHash, secHash s
 }
 
 func (p *Postgres) UpdateAccountPasswordHash(ctx context.Context, accountID int64, passHash string) error {
-	return updateAccountPasswordHash(ctx, p.pool, accountID, passHash)
+	return updateAccountPasswordHash(ctx, p.catalogQuery(), accountID, passHash)
 }
 
 func (p *Postgres) CompareAndSwapAccountCredentials(ctx context.Context, accountID int64, oldPass, oldSec, newPass, newSec string) (bool, error) {
-	return compareAndSwapAccountCredentials(ctx, p.pool, accountID, oldPass, oldSec, newPass, newSec)
+	return compareAndSwapAccountCredentials(ctx, p.catalogQuery(), accountID, oldPass, oldSec, newPass, newSec)
 }
 
 func compareAndSwapAccountCredentials(ctx context.Context, q querier, accountID int64, oldPass, oldSec, newPass, newSec string) (bool, error) {
@@ -162,7 +163,7 @@ func updateAccountPasswordHash(ctx context.Context, q querier, accountID int64, 
 }
 
 func (p *Postgres) UpdateAccountSecurityHash(ctx context.Context, accountID int64, securityHash string) error {
-	return updateAccountSecurityHash(ctx, p.pool, accountID, securityHash)
+	return updateAccountSecurityHash(ctx, p.catalogQuery(), accountID, securityHash)
 }
 
 func updateAccountSecurityHash(ctx context.Context, q querier, accountID int64, securityHash string) error {
@@ -256,7 +257,7 @@ const charCols = `id, account_id, slot, name, race, level, exp, map_id, pos_x, p
 		saved_statuses, exp_bonus_pct, exp_bonus_remaining_ticks, pet_exp_bonus_pct, pet_exp_bonus_remaining_ticks, trial_key_reward, trial_completion_id, equipment_proc_cooldowns, skill_allocation_version`
 
 func (p *Postgres) CharsByAccount(ctx context.Context, accountID int64) ([]*domain.Character, error) {
-	return charsByAccount(ctx, p.pool, accountID)
+	return charsByAccount(ctx, p.catalogQuery(), accountID)
 }
 func charsByAccount(ctx context.Context, q querier, accountID int64) ([]*domain.Character, error) {
 	rows, err := q.Query(ctx,
@@ -277,7 +278,7 @@ func charsByAccount(ctx context.Context, q querier, accountID int64) ([]*domain.
 }
 
 func (p *Postgres) CharByName(ctx context.Context, name string) (*domain.Character, error) {
-	return charByName(ctx, p.pool, name)
+	return charByName(ctx, p.catalogQuery(), name)
 }
 func charByName(ctx context.Context, q querier, name string) (*domain.Character, error) {
 	c, err := scanChar(q.QueryRow(ctx, `SELECT `+charCols+` FROM characters WHERE name=$1`, name))
@@ -297,7 +298,7 @@ func equipViewBytes(c *domain.Character) []byte {
 }
 
 func (p *Postgres) CreateChar(ctx context.Context, c *domain.Character) error {
-	return createChar(ctx, p.pool, c)
+	return createChar(ctx, p.catalogQuery(), c)
 }
 
 // characters.last_login is NOT NULL; UTC epoch is the persisted form of the
@@ -337,7 +338,7 @@ func createChar(ctx context.Context, q querier, c *domain.Character) error {
 }
 
 func (p *Postgres) SaveChar(ctx context.Context, c *domain.Character) error {
-	return saveChar(ctx, p.pool, c)
+	return saveChar(ctx, p.catalogQuery(), c)
 }
 
 func (p *Postgres) RenameCharacter(ctx context.Context, charID int64, newName string) error {
@@ -456,7 +457,7 @@ func (p *Postgres) DeleteChar(ctx context.Context, id int64) error {
 }
 
 func (p *Postgres) LoadSeenTips(ctx context.Context, charID int64) ([]int32, error) {
-	return loadSeenTips(ctx, p.pool, charID)
+	return loadSeenTips(ctx, p.catalogQuery(), charID)
 }
 
 func loadSeenTips(ctx context.Context, q querier, charID int64) ([]int32, error) {
@@ -478,7 +479,7 @@ func loadSeenTips(ctx context.Context, q querier, charID int64) ([]int32, error)
 }
 
 func (p *Postgres) MarkTipSeen(ctx context.Context, charID int64, tipID int32) error {
-	return markTipSeen(ctx, p.pool, charID, tipID)
+	return markTipSeen(ctx, p.catalogQuery(), charID, tipID)
 }
 
 func markTipSeen(ctx context.Context, q querier, charID int64, tipID int32) error {
@@ -490,19 +491,19 @@ func markTipSeen(ctx context.Context, q querier, charID int64, tipID int32) erro
 
 // WithTx 在真实 DB 事务内执行 fn。fn 返回 error 则回滚。
 func (p *Postgres) WithTx(ctx context.Context, fn func(Store) error) error {
-	tx, err := p.pool.Begin(ctx)
+	tx, err := p.begin(ctx)
 	if err != nil {
 		return err
 	}
 	defer tx.Rollback(ctx)
-	if err := fn(&pgTx{tx: tx}); err != nil {
+	if err := fn(&pgTx{tx: tx,endgameCatalog:p.endgameCatalog}); err != nil {
 		return err
 	}
 	return tx.Commit(ctx)
 }
 
 // pgTx 是事务内的 Store 视图, 所有操作走同一个 tx。
-type pgTx struct{ tx pgx.Tx }
+type pgTx struct{ tx pgx.Tx; endgameCatalog *domain.EndgameCatalog }
 
 func (t *pgTx) AccountByName(ctx context.Context, u string) (*Account, error) {
 	return accountByName(ctx, t.tx, u)

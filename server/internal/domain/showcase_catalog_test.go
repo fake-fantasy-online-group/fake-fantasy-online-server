@@ -50,7 +50,7 @@ func TestHistoricalV5ShowcaseThreeCatalogLoadouts(t *testing.T) {
 	if err := json.Unmarshal(raw, &plan); err != nil {
 		t.Fatal(err)
 	}
-	if len(UniqueCatalog()) != 259 || len(AstralRecipes()) != 40 || len(plan.Loadouts) != 3 || plan.GrantCount != 27 {
+	if len(UniqueCatalog(testEndgameCatalog())) != 259 || len(AstralRecipes(testEndgameCatalog())) != 40 || len(plan.Loadouts) != 3 || plan.GrantCount != 27 {
 		t.Fatal("catalog or loadout coverage changed")
 	}
 	bases, _, _ := cardBudgetLoad(t)
@@ -138,7 +138,7 @@ func TestHistoricalV5ShowcaseThreeCatalogLoadouts(t *testing.T) {
 					}
 					// This frozen showcase manifest describes V5 only.
 					st.Endgame.UniqueContentVersion = item.Version
-					d, ok := UniqueOf(st)
+					d, ok := UniqueOf(st, testEndgameCatalog())
 					if !ok || d.Name != item.Name {
 						t.Fatal("unique resolution/name mismatch", id)
 					}
@@ -147,7 +147,7 @@ func TestHistoricalV5ShowcaseThreeCatalogLoadouts(t *testing.T) {
 						t.Fatal("unique illegally formed an array")
 					}
 				case "formation":
-					r, ok := AstralRecipeByID(item.FormationID)
+					r, ok := AstralRecipeByID(item.FormationID, testEndgameCatalog())
 					if ok {
 						r = cloneAstralRecipe(legacyV5AstralRecipeCatalog[item.FormationID-1])
 					}
@@ -255,13 +255,13 @@ func TestHistoricalV5ShowcaseThreeCatalogLoadouts(t *testing.T) {
 			row.FixtureComputedBase, row.FixturePanel = Compute(StatSource{Base: base, Level: 60, Innate: Stats{MoveSpeed: 100},
 				Worn: worn, Defs: lookup, Passive: AstralBonuses(worn, lookup, ch)})
 			hard := Learned{}
-			for _, id := range V5SkillIDs() {
-				d, _ := V5SkillIdentity(id)
+			for _, id := range V5SkillIDs(testSkillProgressionCatalog()) {
+				d, _ := V5SkillIdentity(id, testSkillProgressionCatalog())
 				if d.Profession == int32(set.Race)+1 {
 					hard[id] = 1 // Synthetic rank-resolution probe, not a real character.
 				}
 			}
-			resolved, err := ResolveSkillLoadout(int32(set.Race)+1, hard, bonuses, nil)
+			resolved, err := ResolveSkillLoadout(int32(set.Race)+1, hard, bonuses, nil, testSkillProgressionCatalog())
 			if err != nil {
 				t.Fatal(err)
 			}

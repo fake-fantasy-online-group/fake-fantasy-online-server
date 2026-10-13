@@ -80,7 +80,7 @@ func (s *Scene) rollLootWithContextV5(dead *entity.Entity, context domain.LootCo
 			continue
 		}
 		stack := domain.NewStack(def, 1)
-		stack.SocketCount = domain.RollDroppedSocketCount(def, domain.AstralDropBoss, s.rng.Int63n)
+		stack.SocketCount = domain.RollDroppedSocketCount(def, domain.AstralDropBoss, s.rng.Int63n, s.lootRules.Active())
 		s.rollNaturalEquipmentV5(def, &stack, dead, n, profile, choice.RollAffixes, context)
 		s.spawnGeneratedLoot(def, stack,
 			s.monsterLootPosition(dead.Pos, startSlot+n), killer)
@@ -108,7 +108,7 @@ func (s *Scene) rollLootWithContextV5(dead *entity.Entity, context domain.LootCo
 			continue
 		}
 		stack := domain.NewStack(def, 1)
-		stack.SocketCount = domain.RollDroppedSocketCount(def, s.astralDropGrade(dead), s.rng.Int63n)
+		stack.SocketCount = domain.RollDroppedSocketCount(def, s.astralDropGrade(dead), s.rng.Int63n, s.lootRules.Active())
 		s.rollNaturalEquipmentV5(def, &stack, dead, n, profile, e.RollAffixes, context)
 		s.spawnGeneratedLoot(def, stack, s.monsterLootPosition(dead.Pos, startSlot+n), killer)
 		n++

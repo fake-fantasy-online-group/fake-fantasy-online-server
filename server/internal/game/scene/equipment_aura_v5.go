@@ -25,6 +25,13 @@ type equipmentAuraGrant struct {
 	expires domain.Tick
 }
 
+// One spatial membership refresh clock per complete source rule. Source UID,
+// party and definition changes cannot inherit a previous source's lease/debt.
+type equipmentAuraSchedule struct {
+	next       domain.Tick
+	recipients map[domain.EntityID]equipmentAuraGrant
+}
+
 // EquipmentAuraView is shared by authoritative observations and the status
 // presentation path. Every receiver names its winning source explicitly.
 type EquipmentAuraView = domain.EquipmentAuraView
@@ -58,6 +65,9 @@ func (s *Scene) stepEquipmentAuras() {
 			}
 		}
 	}
+	if len(sources) == 0 && len(rt.auras) == 0 && len(rt.auraSchedules) == 0 {
+		return
+	}
 	changed := !reflect.DeepEqual(sources, rt.auraSources)
 	if !changed && s.tick < rt.nextAuraScan {
 		for id, grants := range rt.auras {
@@ -82,11 +92,12 @@ func (s *Scene) stepEquipmentAuras() {
 		}
 	}()
 	rt.auraSources = sources
-	rt.nextAuraScan = s.tick + domain.Ticks(500)
+	forceRefresh := rt.nextAuraScan == 0
+	rt.nextAuraScan = 0
+	schedules := make(map[equipmentAuraSource]equipmentAuraSchedule, len(sources))
 	next := map[domain.EntityID]map[string]equipmentAuraGrant{}
-	add := func(target *entity.Entity, source equipmentAuraSource) {
+	add := func(target *entity.Entity, source equipmentAuraSource, g equipmentAuraGrant) {
 		a := source.effect
-		g := equipmentAuraGrant{source.owner, source.uid, a, s.tick + domain.Ticks(int(a.LeaseMS))}
 		m := next[target.ID]
 		if m == nil {
 			m = map[string]equipmentAuraGrant{}
@@ -112,36 +123,35 @@ func (s *Scene) stepEquipmentAuras() {
 		m[a.Family] = g
 	}
 	for _, source := range sources {
-		owner := s.players[source.owner]
-		a := source.effect
-		r2 := float64(a.RadiusPX) * float64(a.RadiusPX)
-		candidates := []*entity.Entity{owner}
-		s.aoi.AroundRadius(owner.Pos, float64(a.RadiusPX), func(p *entity.Entity) {
-			if p.ID != owner.ID && p.Player != nil && p.Pos.MapID == owner.Pos.MapID && p.Alive() && !s.entityMapLoading(p) && s.equipmentCombatReady(p) && sameParty(owner, p) && sqDist(owner.Pos, p.Pos) <= r2 {
-				candidates = append(candidates, p)
-			}
-		})
-		sort.Slice(candidates[1:], func(i, j int) bool {
-			x, y := candidates[i+1], candidates[j+1]
-			dx, dy := sqDist(owner.Pos, x.Pos), sqDist(owner.Pos, y.Pos)
-			if dx != dy {
-				return dx < dy
-			}
-			return x.ID < y.ID
-		})
-		if len(candidates) > int(a.MaxPlayers) {
-			candidates = candidates[:a.MaxPlayers]
-		}
-		for _, p := range candidates {
-			add(p, source)
-			if a.IncludeActivePet && p.Player.Pet != 0 {
-				pet := s.pets[p.Player.Pet]
-				if pet != nil && pet.Pos.MapID == owner.Pos.MapID && pet.Alive() && pet.Pet != nil && pet.Pet.Owner == p.ID && sqDist(owner.Pos, pet.Pos) <= r2 {
-					add(pet, source)
+		state, exists := rt.auraSchedules[source]
+		due := forceRefresh || !exists || s.tick >= state.next
+		if !due {
+			for id, grant := range state.recipients {
+				if !s.equipmentAuraGrantValid(s.entities[id], grant) {
+					due = true
+					break
 				}
 			}
 		}
+		if due {
+			state = equipmentAuraSchedule{next: s.tick + domain.Ticks(int(source.effect.RefreshMS)), recipients: map[domain.EntityID]equipmentAuraGrant{}}
+			for _, target := range s.equipmentAuraRecipients(source) {
+				state.recipients[target.ID] = equipmentAuraGrant{source.owner, source.uid, source.effect, s.tick + domain.Ticks(int(source.effect.LeaseMS))}
+			}
+		}
+		schedules[source] = state
+		if rt.nextAuraScan == 0 || state.next < rt.nextAuraScan {
+			rt.nextAuraScan = state.next
+		}
+		for _, id := range sortedEquipmentEntities(state.recipients) {
+			grant := state.recipients[id]
+			if target := s.entities[id]; s.equipmentAuraGrantValid(target, grant) {
+				add(target, source, grant)
+			}
+		}
 	}
+	// Omitted/dead/disconnected sources drop their own timers and grants now.
+	rt.auraSchedules = schedules
 	old := rt.auras
 	rt.auras = next
 	affected := map[domain.EntityID]bool{}
@@ -167,6 +177,42 @@ func (s *Scene) stepEquipmentAuras() {
 		s.pushStatusSnapshots(e)
 	}
 }
+func (s *Scene) equipmentAuraRecipients(source equipmentAuraSource) []*entity.Entity {
+	owner := s.players[source.owner]
+	if owner == nil {
+		return nil
+	}
+	a := source.effect
+	r2 := float64(a.RadiusPX) * float64(a.RadiusPX)
+	candidates := []*entity.Entity{owner}
+	s.aoi.AroundRadius(owner.Pos, float64(a.RadiusPX), func(p *entity.Entity) {
+		if p.ID != owner.ID && p.Player != nil && p.Pos.MapID == owner.Pos.MapID && p.Alive() && !s.entityMapLoading(p) && s.equipmentCombatReady(p) && sameParty(owner, p) && sqDist(owner.Pos, p.Pos) <= r2 {
+			candidates = append(candidates, p)
+		}
+	})
+	sort.Slice(candidates[1:], func(i, j int) bool {
+		x, y := candidates[i+1], candidates[j+1]
+		dx, dy := sqDist(owner.Pos, x.Pos), sqDist(owner.Pos, y.Pos)
+		if dx != dy {
+			return dx < dy
+		}
+		return x.ID < y.ID
+	})
+	if len(candidates) > int(a.MaxPlayers) {
+		candidates = candidates[:a.MaxPlayers]
+	}
+	out := append([]*entity.Entity(nil), candidates...)
+	for _, p := range candidates {
+		if a.IncludeActivePet && p.Player.Pet != 0 {
+			pet := s.pets[p.Player.Pet]
+			if pet != nil && pet.Pos.MapID == owner.Pos.MapID && pet.Alive() && pet.Pet != nil && pet.Pet.Owner == p.ID && sqDist(owner.Pos, pet.Pos) <= r2 {
+				out = append(out, pet)
+			}
+		}
+	}
+	return out
+}
+
 func (s *Scene) auraRecipient(owner, target *entity.Entity) bool {
 	if owner == nil || target == nil {
 		return false
@@ -288,22 +334,26 @@ func (s *Scene) equipmentAuraGrantValid(target *entity.Entity, g equipmentAuraGr
 	return false
 }
 
-// Offensive auras join the existing additive elemental damage bucket. Source
-// validity is live, including for a previously accepted cast, pet hit or trap.
-func (s *Scene) equipmentAuraOffense(src *entity.Entity, out domain.EquipmentCombatStats) domain.EquipmentCombatStats {
-	if src == nil {
-		return out
+// Offensive auras contribute to the existing additive bucket after their own
+// configured PvP scale. Keep fractional BP until all matching contributions are
+// summed; the default 50% case remains identical even for odd-BP equipment.
+func (s *Scene) equipmentAuraDamageNumerator(src *entity.Entity, element int, pvp bool) int64 {
+	if src == nil || element < 0 {
+		return 0
 	}
+	var numerator int64
 	for _, grant := range s.equipmentState().auras[src.ID] {
 		a := grant.effect
-		if a.Modifier != "element_damage_bp" || !s.equipmentAuraGrantValid(src, grant) {
+		if a.Modifier != "element_damage_bp" || domain.ElementIndex(a.Element) != element || !s.equipmentAuraGrantValid(src, grant) {
 			continue
 		}
-		if i := domain.ElementIndex(a.Element); i >= 0 {
-			out.Elements[i].DamageBP = clampI32(int64(out.Elements[i].DamageBP) + int64(a.Value))
+		scale := int32(10000)
+		if pvp {
+			scale = a.PVPScaleBP
 		}
+		numerator += int64(a.Value) * int64(scale)
 	}
-	return out
+	return numerator
 }
 
 // Reuse installed skill artwork for new equipment auras, not their synthetic

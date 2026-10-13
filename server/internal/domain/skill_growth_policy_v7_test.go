@@ -11,12 +11,12 @@ func TestSkillGrowthPolicyCatalogueAndSingleAttribute(t *testing.T) {
 		10314: {AttrINT, 17}, 10415: {AttrINT, 17}, 10416: {AttrINT, 5}, 10329: {AttrINT, 5}, 10420: {AttrINT, 5},
 		10306: {AttrSPI, 5}, 10316: {AttrSPI, 5}, 10318: {AttrSPI, 5}, 10433: {AttrSPI, 5}, 10218: {AttrSPI, 7},
 	}
-	ids := V5SkillIDs()
+	ids := V5SkillIDs(testSkillProgressionCatalog())
 	if len(ids) != 149 {
 		t.Fatal(len(ids))
 	}
 	for _, id := range ids {
-		p, ok := LookupSkillGrowthPolicy(id)
+		p, ok := LookupSkillGrowthPolicy(id, testSkillProgressionCatalog())
 		if !ok {
 			t.Fatal("unclassified catalogue member", id)
 		}
@@ -28,7 +28,7 @@ func TestSkillGrowthPolicyCatalogueAndSingleAttribute(t *testing.T) {
 			continue
 		}
 		for _, rank := range []int32{1, want.cap, want.cap + 1, want.cap + 2, 100} {
-			attr, value := SkillGrowthAttribute(id, rank)
+			attr, value := SkillGrowthAttribute(id, rank, testSkillProgressionCatalog())
 			if rank <= want.cap {
 				if attr != 0 || value != 0 {
 					t.Fatal(id, rank, attr, value)
@@ -38,12 +38,12 @@ func TestSkillGrowthPolicyCatalogueAndSingleAttribute(t *testing.T) {
 			}
 		}
 	}
-	if _, ok := LookupSkillGrowthPolicy(99999); ok {
+	if _, ok := LookupSkillGrowthPolicy(99999, testSkillProgressionCatalog()); ok {
 		t.Fatal("invented outside-catalogue policy")
 	}
-	p, _ := LookupSkillGrowthPolicy(10427)
+	p, _ := LookupSkillGrowthPolicy(10427, testSkillProgressionCatalog())
 	p.AttackTargets[0] = 99999
-	p, _ = LookupSkillGrowthPolicy(10427)
+	p, _ = LookupSkillGrowthPolicy(10427, testSkillProgressionCatalog())
 	if p.AttackTargets[0] != 10409 {
 		t.Fatal("aliased policy target list")
 	}
@@ -51,7 +51,7 @@ func TestSkillGrowthPolicyCatalogueAndSingleAttribute(t *testing.T) {
 
 func TestSkillGrowthDamageEnhancesOnlyOriginalPassiveTargets(t *testing.T) {
 	table := realV5CurveAnchors(t)
-	for id, p := range skillGrowthPolicies {
+	for id, p := range testSkillGrowthPolicies() {
 		if p.AttackCapRank == 0 {
 			continue
 		}
@@ -73,17 +73,17 @@ func TestSkillGrowthDamageEnhancesOnlyOriginalPassiveTargets(t *testing.T) {
 			if !native[target] {
 				t.Fatal("invented attack target", id, target)
 			}
-			if got := SkillGrowthDamageBonusPct(id, p.AttackCapRank, target); got != 0 {
+			if got := SkillGrowthDamageBonusPct(id, p.AttackCapRank, target, testSkillProgressionCatalog()); got != 0 {
 				t.Fatal(id, got)
 			}
-			if got := SkillGrowthDamageBonusPct(id, p.AttackCapRank+1, target); got != 2 {
+			if got := SkillGrowthDamageBonusPct(id, p.AttackCapRank+1, target, testSkillProgressionCatalog()); got != 2 {
 				t.Fatal(id, got)
 			}
-			if got := SkillGrowthDamageBonusPct(id, p.AttackCapRank+2, target); got != 4 {
+			if got := SkillGrowthDamageBonusPct(id, p.AttackCapRank+2, target, testSkillProgressionCatalog()); got != 4 {
 				t.Fatal(id, got)
 			}
 		}
-		if SkillGrowthDamageBonusPct(id, 100, 0) != 0 || SkillGrowthDamageBonusPct(id, 100, 10435) != 0 {
+		if SkillGrowthDamageBonusPct(id, 100, 0, testSkillProgressionCatalog()) != 0 || SkillGrowthDamageBonusPct(id, 100, 10435, testSkillProgressionCatalog()) != 0 {
 			t.Fatal("unrelated damage increased", id)
 		}
 	}
@@ -91,7 +91,7 @@ func TestSkillGrowthDamageEnhancesOnlyOriginalPassiveTargets(t *testing.T) {
 
 func TestSkillGrowthRangeBoundariesAndNoHardPlateau(t *testing.T) {
 	table := realV5CurveAnchors(t)
-	for id, p := range skillGrowthPolicies {
+	for id, p := range testSkillGrowthPolicies() {
 		if p.RangeCapRank == 0 {
 			continue
 		}
@@ -136,7 +136,7 @@ func TestSkillGrowthRangeBoundariesAndNoHardPlateau(t *testing.T) {
 
 func TestSkillGrowthProtectionAndChargeDuration(t *testing.T) {
 	skills, statuses := realV5CurveAnchors(t), originalStatusScalingTable(t)
-	for id, p := range skillGrowthPolicies {
+	for id, p := range testSkillGrowthPolicies() {
 		if p.ProtectionCapRank == 0 {
 			continue
 		}

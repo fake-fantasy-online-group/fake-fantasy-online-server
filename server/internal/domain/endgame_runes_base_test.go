@@ -49,7 +49,7 @@ func TestAstralBaseEligibilityUsesInnateProperties(t *testing.T) {
 			d.Equip.Suit = &EquipmentSuit{Bonuses: []EquipmentSuitBonus{{Pieces: 2, Affix: Affix{Attr: AttrSTR, Value: 1}}}}
 		}, false},
 	}
-	recipe, _ := AstralRecipeByID(6)
+	recipe, _ := AstralRecipeByID(6, testEndgameCatalog())
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			defs, lookup := astralFixture()
@@ -107,7 +107,7 @@ func TestAstralAffixedGearKeepsStandaloneRunesAndExtraction(t *testing.T) {
 	def := defs[999001]
 	def.Equip.Affixes = []Affix{{Attr: AttrSTR, Value: 5}}
 	defs[def.ID] = def
-	recipe, _ := AstralRecipeByID(6) // Rune levels 12/14; formation and standalone sockets share this gate.
+	recipe, _ := AstralRecipeByID(6, testEndgameCatalog()) // Rune levels 12/14; formation and standalone sockets share this gate.
 	st := astralStack(t, recipe, def, lookup)
 	st.InstanceKind = ItemInstanceNone // Persisted legacy equipment is not rewritten.
 	st.RefineLevel, st.WashCount, st.WashQuality = 3, 1, 2
@@ -169,7 +169,7 @@ func TestAstralRandomAffixOpportunityIsNotAnInstanceAffix(t *testing.T) {
 	defs, lookup := astralFixture()
 	def := defs[999001]
 	def.Equip.ResourceLevel, def.Equip.Type = 10, 2
-	recipe, _ := AstralRecipeByID(6)
+	recipe, _ := AstralRecipeByID(6, testEndgameCatalog())
 	st := astralStack(t, recipe, def, lookup)
 	pool := EquipmentRollTable{
 		Counts: map[ColorProfile][]WeightedAffixCount{DefaultColorProfile: {{Count: 0, Weight: 1}, {Count: 1, Weight: 1}}},

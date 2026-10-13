@@ -15,7 +15,7 @@ func TestV6PreservesV5InstancesExceptThreePersonalDefenses(t *testing.T) {
 		for _, roll := range []int32{8000, 10000, 12000} {
 			st := Stack{UID: int64(old.ID), Item: old.BaseID, Count: 1, RefineLevel: 4, WashCount: 3, Endgame: EndgameItemState{UniqueID: old.ID, UniqueRollBP: roll, UniqueContentVersion: 5}}
 			before := st
-			got, ok := UniqueOf(st)
+			got, ok := UniqueOf(st, testEndgameCatalog())
 			if !ok || st != before {
 				t.Fatalf("V5 instance changed %d", old.ID)
 			}
@@ -55,7 +55,7 @@ func TestV6UniqueDiversityAndExclusiveFormationAuras(t *testing.T) {
 	weapons := 0
 	distinctWeapons := map[string]bool{}
 	mechanicalWeapons := map[string]bool{}
-	for _, d := range UniqueCatalog() {
+	for _, d := range UniqueCatalog(testEndgameCatalog()) {
 		tiers[d.PowerTier]++
 		for _, e := range d.TypedEffects {
 			if e.Kind == "aura" {
@@ -85,7 +85,7 @@ func TestV6UniqueDiversityAndExclusiveFormationAuras(t *testing.T) {
 		}
 	}
 	auras := map[string]bool{}
-	for _, r := range AstralRecipes() {
+	for _, r := range AstralRecipes(testEndgameCatalog()) {
 		for _, e := range r.TypedEffects {
 			if e.Aura != nil {
 				a := e.Aura
@@ -158,7 +158,7 @@ func TestV6CompiledCatalogueMatchesReviewedSource(t *testing.T) {
 	}
 	seen := map[ItemID]bool{}
 	for _, want := range rows {
-		got, ok := UniqueForBase(want.BaseID)
+		got, ok := UniqueForBase(want.BaseID, testEndgameCatalog())
 		if !ok || seen[want.BaseID] || !reflect.DeepEqual(got, cloneUnique(want)) {
 			t.Fatalf("stale or duplicate compiled V6 item %d", want.BaseID)
 		}

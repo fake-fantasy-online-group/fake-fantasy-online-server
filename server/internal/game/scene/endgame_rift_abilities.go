@@ -49,35 +49,23 @@ type endgameRiftAbilityCast struct {
 	warned map[domain.EntityID]bool
 }
 
-func (a endgameRiftAbility) name() string {
-	switch a {
-	case riftNova:
-		return "震环冲击"
-	case riftFissure:
-		return "裂地斩"
-	default:
-		return "烈焰爆裂"
+func (a endgameRiftAbility) name(rule *domain.RiftRules) string {
+	if rule == nil || int(a) >= len(rule.Abilities) {
+		return ""
 	}
+	return rule.Abilities[a].Name
 }
-func (a endgameRiftAbility) affix() string {
-	switch a {
-	case riftNova:
-		return "震环"
-	case riftFissure:
-		return "裂地"
-	default:
-		return "烈焰"
+func (a endgameRiftAbility) affix(rule *domain.RiftRules) string {
+	if rule == nil || int(a) >= len(rule.Abilities) {
+		return ""
 	}
+	return rule.Abilities[a].Affix
 }
-func (a endgameRiftAbility) warning() string {
-	switch a {
-	case riftNova:
-		return "震环将至，贴近内圈或退出外圈！"
-	case riftFissure:
-		return "裂地将至，向两侧闪避！"
-	default:
-		return "烈焰将至，离开落点！"
+func (a endgameRiftAbility) warning(rule *domain.RiftRules) string {
+	if rule == nil || int(a) >= len(rule.Abilities) {
+		return ""
 	}
+	return rule.Abilities[a].Warning
 }
 
 func riftAbilitySeed(seed uint64, class int32, spawnIndex int, tier, floor int32) uint64 {
@@ -98,7 +86,7 @@ func (s *Scene) registerEndgameRiftAbilities(m *entity.Entity, class int32, spaw
 	}
 	h := riftAbilitySeed(seed, class, spawnIndex, s.rift.data.Run.Tier, floor)
 	count := int(class)
-	state := &endgameRiftAbilityState{class: class, nextAt: s.riftMS() + 3000 + int64(h>>16)%3000}
+	state := &endgameRiftAbilityState{class: class, nextAt: s.riftMS() + s.currentRiftRules().AbilityStartMS + int64(h>>16)%s.currentRiftRules().AbilityJitterMS}
 	// Gold elites alternate two distinct affixes; guardians cycle through all
 	// three. The seed rotates and reverses this readable, repeating pattern.
 	for i := 0; i < count; i++ {
@@ -118,7 +106,7 @@ func (s *Scene) cancelEndgameRiftAbilities(now int64) {
 	}
 	for _, state := range s.rift.abilities {
 		state.pending = nil
-		state.nextAt = now + 2000
+		state.nextAt = now + s.currentRiftRules().AbilityResetMS
 		state.recoverUntil = 0
 	}
 	s.rift.lastBroadcast = now - 1000
@@ -136,7 +124,7 @@ func (s *Scene) riftMonsterAffixes(id domain.EntityID) []string {
 	}
 	var names []string
 	for _, a := range s.rift.abilities[id].pattern {
-		names = append(names, a.affix())
+		names = append(names, a.affix(s.currentRiftRules()))
 	}
 	return names
 }
@@ -176,7 +164,7 @@ func (s *Scene) stepEndgameRiftAbilities(now int64) {
 		for _, state := range s.rift.abilities {
 			changed = changed || state.pending != nil
 			state.pending = nil
-			state.nextAt = now + 2000
+			state.nextAt = now + s.currentRiftRules().AbilityResetMS
 			state.recoverUntil = 0
 		}
 		if changed {
@@ -204,7 +192,7 @@ func (s *Scene) stepEndgameRiftAbilities(now int64) {
 				state.pending = nil
 				active--
 				changed = true
-				state.nextAt = now + 3000
+				state.nextAt = now + s.currentRiftRules().AbilityUnavailableMS
 			}
 			if m == nil || !m.Alive() {
 				delete(s.rift.abilities, id)
@@ -219,19 +207,19 @@ func (s *Scene) stepEndgameRiftAbilities(now int64) {
 			state.pending = nil
 			active--
 			changed = true
-			state.recoverUntil = now + riftAbilityRecoveryMS
+			state.recoverUntil = now + s.currentRiftRules().AbilityRecoveryMS
 			// Cooldowns start from actual resolution: a delayed scene step cannot
 			// replay missed attacks or immediately start another cast.
-			state.nextAt = now + 11000 - int64(state.class)*2000
+			state.nextAt = now + s.currentRiftRules().AbilityCooldownMS - int64(state.class)*s.currentRiftRules().AbilityClassReductionMS
 			s.resolveEndgameRiftAbility(m, cast)
 			continue
 		}
-		if now < state.nextAt || active >= riftMaxTelegraphs || len(state.pattern) == 0 {
+		if now < state.nextAt || active >= int(s.currentRiftRules().AbilityMaxConcurrent) || len(state.pattern) == 0 {
 			continue
 		}
 		target := s.players[m.Monster.Target]
 		if !s.riftAbilityPlayerReady(target) || entityInvisible(target) ||
-			riftDistance2(m.Pos, target.Pos) > riftAbilityRange*riftAbilityRange || !s.straightPathWalkable(m.Pos, target.Pos) {
+			riftDistance2(m.Pos, target.Pos) > float64(s.currentRiftRules().AbilityRange)*float64(s.currentRiftRules().AbilityRange) || !s.straightPathWalkable(m.Pos, target.Pos) {
 			continue
 		}
 		// Let already accepted native spells finish rather than overlaying an
@@ -244,7 +232,7 @@ func (s *Scene) stepEndgameRiftAbilities(now int64) {
 			continue
 		}
 		state.sequence++
-		cast := newRiftAbilityCast(state.pattern[state.cursor], m.Pos, target.Pos, state.class, now)
+		cast := newRiftAbilityCast(state.pattern[state.cursor], m.Pos, target.Pos, state.class, now, s.currentRiftRules())
 		cast.id = strconv.FormatUint(uint64(id), 10) + ":" + strconv.FormatUint(state.sequence, 10)
 		cast.visual = s.riftAbilityVisual(m)
 		cast.warned = map[domain.EntityID]bool{}
@@ -260,7 +248,7 @@ func (s *Scene) stepEndgameRiftAbilities(now int64) {
 		// Existing client movement / speech and (when available) skill effects
 		// provide feedback; no invented resource IDs or external art are used.
 		s.emit(event.EntityMoved{ID: id, To: m.Pos, Snap: true})
-		s.emit(event.MonsterSpoke{Who: id, Text: cast.ability.warning()})
+		s.emit(event.MonsterSpoke{Who: id, Text: cast.ability.warning(s.currentRiftRules())})
 		if cast.visual.ID != 0 {
 			center := cast.center
 			s.emit(event.SkillCastChanged{Caster: id, Skill: cast.visual.ID, Phase: event.SkillCastChant,
@@ -274,29 +262,30 @@ func (s *Scene) stepEndgameRiftAbilities(now int64) {
 	}
 }
 
-func newRiftAbilityCast(ability endgameRiftAbility, source, target domain.Pos, class int32, now int64) *endgameRiftAbilityCast {
+func newRiftAbilityCast(ability endgameRiftAbility, source, target domain.Pos, class int32, now int64, rule *domain.RiftRules) *endgameRiftAbilityCast {
+	if rule == nil || int(ability) >= len(rule.Abilities) {
+		return nil
+	}
+	def := rule.Abilities[ability]
 	round := func(p domain.Pos) domain.Pos {
 		p.X, p.Y = math.Round(p.X), math.Round(p.Y)
 		return p
 	}
-	c := &endgameRiftAbilityCast{ability: ability, center: round(target), shape: "circle", radius: 105,
-		dueAt: now + 1500, damagePct: 140}
-	switch ability {
-	case riftNova:
-		c.shape, c.center, c.radius, c.innerRadius = "ring", round(source), 220, 85
-		c.dueAt, c.damagePct = now+1800, 160
-	case riftFissure:
-		c.shape, c.center, c.radius = "line", round(source), 38
+	c := &endgameRiftAbilityCast{ability: ability, center: round(target), shape: def.Shape, radius: float64(def.Radius), innerRadius: float64(def.InnerRadius), dueAt: now + def.DelayMS, damagePct: def.DamagePct}
+	if def.Shape == "ring" {
+		c.center = round(source)
+	}
+	if def.Shape == "line" {
+		c.center = round(source)
 		dx, dy := target.X-source.X, target.Y-source.Y
 		length := math.Hypot(dx, dy)
 		if length < 1 {
 			dx, dy, length = 1, 0, 1
 		}
-		c.end = round(domain.Pos{MapID: source.MapID, X: source.X + dx/length*380, Y: source.Y + dy/length*380})
-		c.dueAt, c.damagePct = now+1400, 150
+		c.end = round(domain.Pos{MapID: source.MapID, X: source.X + dx/length*float64(def.Length), Y: source.Y + dy/length*float64(def.Length)})
 	}
 	if class == 3 {
-		c.damagePct += 20
+		c.damagePct += rule.AbilityBossDamagePct
 	}
 	return c
 }
@@ -341,7 +330,7 @@ func (s *Scene) riftAbilityVisual(m *entity.Entity) domain.SkillDef {
 	// Fireball already ships in the native skill table/client. The lookup must
 	// succeed; minimal fixtures and missing catalogs use only geometric tells.
 	if chosen.ID == 0 && s.skills != nil {
-		if def, ok := s.skills.Get(10402, 1); ok && def.HasDamageEffect() {
+		if def, ok := s.skills.Get(s.currentRiftRules().VisualSkill, s.currentRiftRules().VisualSkillLevel); ok && def.HasDamageEffect() {
 			chosen = def
 		}
 	}
@@ -413,7 +402,7 @@ func (s *Scene) riftAbilityTelegraphs(now int64) []domain.EndgameRiftTelegraphVi
 			continue
 		}
 		out = append(out, domain.EndgameRiftTelegraphView{ID: c.id, EntityID: strconv.FormatUint(uint64(id), 10),
-			Ability: c.ability.name(), Shape: c.shape, X: int32(c.center.X), Y: int32(c.center.Y),
+			Ability: c.ability.name(s.currentRiftRules()), Shape: c.shape, X: int32(c.center.X), Y: int32(c.center.Y),
 			EndX: int32(c.end.X), EndY: int32(c.end.Y), Radius: int32(c.radius), InnerRadius: int32(c.innerRadius), RemainingMS: int32(c.dueAt - now)})
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].ID < out[j].ID })
