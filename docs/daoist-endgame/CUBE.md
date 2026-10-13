@@ -1,16 +1,16 @@
 # 周天鼎：可执行配方与事务契约
 
-周天鼎将旧器归元、星篆调整和仙遗成长连成一个实际循环。实现不需要新美术；材料图标由启动流程选用已验证的现有资源。全部结果由服务端生成，客户端仅发送器物 UID、投料顺序和配方编号。
+周天鼎将旧器归元、星篆调整和仙遗成长连成一个实际循环。实现不需要新美术；材料图标由启动流程选用已验证的现有资源。全部结果由服务端生成，客户端和 agent API 仅发送真实器物 UID、材料类型与精确数量、投料顺序，由服务端匹配数据库配方。历史按配方编号寻址的底层协议仅保留兼容。
 
 ## 实际入口和材料
 
-客户端演劫面板的「周天鼎」页支持选择配方、选择自己的背包装备或星篆、问鼎预览及确认炼化。穿戴装备须先卸下至装备背包。每次仅保留一份有效预览，关闭或换目标后客户端应重新问鼎。
+左慈身后原生门进入商会室内（qw0506），与独立周天鼎（原模型903）对话打开12格容器。放入真实背包物品与精确数量后问鼎、确认炼化；不展示操作、配方或成品列表。放入/取回只是客户端选择，取消或断线不会移动物品。穿戴装备须先卸下。每次仅保留一份有效预览，库存变化或选择变化后需重新问鼎。
 
 - 星髓，1900028201：解器归元、仙遗化韵、星篆归尘产生。
 - 净煞尘，1900028202：演劫洞天结算产生。周天鼎不凭空制造此材料。
 - 八仙余韵，1900028203：仙遗化韵产生。
 
-三种材料均为真实的物品页堆叠物。周天鼎产生的材料和新星篆绑定；既有孔内卡提取和调序保留其保存的 UID、属性、绑定状态，和单孔取出接口一致。材料消耗跳过锁定堆叠。
+三种材料均为真实的物品页堆叠物。周天鼎产生的材料和新星篆绑定；既有孔内卡提取和调序保留其保存的 UID、属性、绑定状态；已移除额外单孔取出接口。材料消耗跳过锁定堆叠。
 
 ## 十二种操作，六十六个可执行配方
 
@@ -33,17 +33,15 @@
 
 ## 指令与预览
 
-配方目录由 `domain.CubeRecipes(items)` 生成；服务端目录入口可使用 `(*Scene).catalogCubeRecipeViews()`。
+配方来自开服时 PostgreSQL 装载的不可变 `CubeRuleTable`。上表为维护配置参考，游戏与 agent API 不展示这个配方目录。
 
-`cube.quote`：
+当前 `cube.quote` 带 `expectedRevision`、`npcEntityId`、`cubeInputs`（1–12个 `{uid,count:1}` 或 `{itemId,count}`）；仅重排已安装星篆时另带有序 `itemUids`。`MatchCubeInputs` 检查精确材料数量、物品形态、既有操作条件，从 DB 规则匹配。
 
-- 必须带当前 expectedRevision 和 recipeId。
-- 装备操作使用 targetUid，1003使用 runeUid。
-- 1008使用已安装星篆的有序 itemUids；1009和120xx使用背包星篆的有序 itemUids。
-- 110xx与120xx无需装备 targetUid。
-- 预览包含 quoteId、recipeId、targetUid、revision、铜币、精确耗材和当前可用数量、描述与UTC expiresAt。
+相同投料匹配同操作/同费用的多个变体时，执行阶段等概率选择一个：凝篆为28种既有星篆，转换为同象且不同于来源的有效产物。预览不抽取随机结果，不披露候选配方列表。跨操作或费用歧义直接拒绝。所有66条既有 DB 规则均有输入匹配测试。
 
-`cube.execute`只需 requestId、expectedRevision、quoteId。兼容重复携带相同recipeId/targetUid，但拒绝任何不一致或未被预览覆盖的额外投料参数。
+预览只给出冻结 quoteId、revision、费用、当前投料的结果/风险和到期时间。`cube.execute` 仅需 requestId、expectedRevision、quoteId 与当时的当前NPC entity；服务端重验NPC原始配置脚本/对话/地图/范围。规则或目录快照被替换时，旧预览与已缓存候选一并作废。
+
+历史 recipeId/targetUid 形式的服务端底层兼容路径保留，当前 native UI 与 agent API 不再使用或披露该接口。
 
 预览有效期60秒。指纹覆盖完整背包每格保存的实例字段、铜币和选定配方/UID顺序；原生移动、精炼、锁定、消耗、镶嵌或钱币变化，即使未增加演劫revision，也会使旧预览失效。
 
@@ -61,7 +59,10 @@
 
 ## 代码与已执行验证
 
-- `server/internal/domain/endgame_cube.go`：材料注册、66项配方目录。
+- `server/internal/domain/endgame_cube_rules.go`：不可变 DB 配方快照。
+- `server/internal/domain/endgame_cube_inputs.go`：输入匹配与同类候选池。
+- `server/internal/domain/endgame_cube_presentation.go`：同源材料清单和客户端容量启动边界。
+- `server/migrations/000000_init-75.sql`：原商会室内/双向门修正/原模型周天鼎。
 - `server/internal/domain/endgame_cube_plan.go`：克隆规划、指纹、全部操作和预检。
 - `server/internal/game/scene/endgame_cube.go`：60秒预览与核心事务接入。
 - 对应 `endgame_cube_test.go`：逐一执行66个变体；随机/UID预览隔离；每种失败不得消耗；原实例与卡片保留；完整容量检查；重铸排除当前值；原生改动使报价失效；60秒边界；参数篡改；新报价使旧报价失效；提交失败回滚；成功请求重放不得重复收费。

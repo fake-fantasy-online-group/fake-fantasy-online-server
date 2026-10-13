@@ -109,3 +109,14 @@ FANTASY_SKILL_CONFIG_PG_DATA=/tmp/skill-config-new-check/data \
 go test ./internal/domain ./internal/data ./internal/game/scene ./cmd/gameserver
 python3 tests/original_skill_source_audit.py
 ```
+
+## Equipment-inclusive synergies (migration74)
+
+Migration74 supersedes the old added-training hard-only rule without altering
+native payloads or any1490 base skill/status golden snapshots. The70 reviewed
+training edges now use `effective_training` with300/400/500/600 BP per source
+raw effective rank, based on the beneficiary's native first-rank unlock tier.
+The58 `effective_raw` native edges remain unchanged. Two fixed-healing edges
+become percentage healing. See [the migration74 verification and release
+notes](equipment-synergies-2026-10-13.md) for exact tiers, administrator-edit
+preservation, equipment removal and coordinated client rollout requirements.

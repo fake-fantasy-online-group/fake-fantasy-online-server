@@ -47,10 +47,23 @@ func DecodeEndgame(payload []byte) (v domain.EndgameRequest, ok bool) {
 	if json.Unmarshal([]byte(raw), &keys) != nil {
 		return v, false
 	}
-	allowed := map[string]bool{"skillId": true, "op": true, "requestId": true, "expectedRevision": true, "capabilities": true, "catalog": true, "cursor": true, "targetUid": true, "runeUid": true, "socket": true, "recipeId": true, "quoteId": true, "runId": true, "tier": true, "floorIndex": true, "itemUids": true, "npcEntityId": true}
+	allowed := map[string]bool{"skillId": true, "op": true, "requestId": true, "expectedRevision": true, "capabilities": true, "catalog": true, "cursor": true, "targetUid": true, "runeUid": true, "socket": true, "recipeId": true, "quoteId": true, "runId": true, "tier": true, "floorIndex": true, "itemUids": true, "npcEntityId": true, "cubeInputs": true}
 	for key := range keys {
 		if !allowed[key] {
 			return v, false
+		}
+	}
+	if selected, exists := keys["cubeInputs"]; exists {
+		var rows []map[string]json.RawMessage
+		if json.Unmarshal(selected, &rows) != nil {
+			return v, false
+		}
+		for _, row := range rows {
+			for key := range row {
+				if key != "uid" && key != "itemId" && key != "count" {
+					return v, false
+				}
+			}
 		}
 	}
 	d = json.NewDecoder(bytes.NewBufferString(raw))
@@ -117,7 +130,7 @@ func endgameDecimal(s string, zero bool) bool {
 	return e == nil && (n > 0 || zero && n == 0) && strconv.FormatInt(n, 10) == s
 }
 func validEndgameRequest(v domain.EndgameRequest) bool {
-	if v.NPCEntityID != 0 && v.Op != "rift.start" {
+	if v.NPCEntityID != 0 && v.Op != "rift.start" && v.Op != "cube.quote" && v.Op != "cube.execute" {
 		return false
 	}
 	switch v.Op {
@@ -145,6 +158,14 @@ func validEndgameRequest(v domain.EndgameRequest) bool {
 	}
 	if v.RuneUID != "" && !endgameDecimal(v.RuneUID, false) {
 		return false
+	}
+	if len(v.CubeInputs) > 12 || len(v.CubeInputs) > 0 && (v.Op != "cube.quote" || v.RecipeID != 0 || v.TargetUID != "" || v.RuneUID != "") {
+		return false
+	}
+	for _, input := range v.CubeInputs {
+		if input.Count <= 0 || input.UID == "" && input.ItemID <= 0 || input.UID != "" && (!endgameDecimal(input.UID, false) || input.ItemID != 0 || input.Count != 1) {
+			return false
+		}
 	}
 	if len(v.ItemUIDs) > 10 || len(v.Capabilities) > 8 {
 		return false

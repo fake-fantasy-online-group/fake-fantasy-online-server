@@ -55,7 +55,8 @@ func CubeFingerprint(bag *Bag, money int64, req EndgameRequest) string {
 		Recipe       int32
 		Target, Rune string
 		Sources      []string
-	}{slots, money, req.RecipeID, req.TargetUID, req.RuneUID, req.ItemUIDs})
+		Inputs       []CubeInput
+	}{slots, money, req.RecipeID, req.TargetUID, req.RuneUID, req.ItemUIDs, req.CubeInputs})
 	h := sha256.Sum256(b)
 	return hex.EncodeToString(h[:])
 }

@@ -19,20 +19,44 @@ type endgameCubeState struct {
 	// Never expose a random candidate until its atomic commit succeeds. Retain it
 	// across definite storage failures so retrying this quote cannot reroll.
 	candidate *domain.CubePlan
+	choices   []domain.EndgameRequest
+	rules     *domain.CubeRuleTable
+	catalog   *domain.EndgameCatalog
 }
 
 func (s *Scene) catalogCubeRecipeViews() []domain.EndgameRecipeView {
 	return domain.CubeRecipes(s.cubeRules, s.items)
 }
-func (s *Scene) planEndgameCube(p *entity.Entity, req domain.EndgameRequest, execute bool) (domain.CubePlan, error) {
+func (s *Scene) endgameCubeContext(p *entity.Entity) (domain.CubeContext, error) {
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil || !p.Alive() {
-		return domain.CubePlan{}, &domain.CubeError{Code: "requirements", Message: "角色当前不能使用周天鼎"}
+		return domain.CubeContext{}, &domain.CubeError{Code: "requirements", Message: "角色当前不能使用周天鼎"}
 	}
 	money, err := inventoryMoney(p.Player.Char.Money)
 	if err != nil {
-		return domain.CubePlan{}, &domain.CubeError{Code: "requirements", Message: "铜币状态无效"}
+		return domain.CubeContext{}, &domain.CubeError{Code: "requirements", Message: "铜币状态无效"}
 	}
-	return domain.PlanCube(domain.CubeContext{Rules: s.cubeRules, Catalog: s.endgameCatalog, Level: p.Player.Char.Level, Bag: p.Player.Bag, Money: money, Items: s.items, Intn: s.rng.Intn, NewUID: domain.NewItemInstanceID}, req, execute)
+	return domain.CubeContext{Rules: s.cubeRules, Catalog: s.endgameCatalog, Level: p.Player.Char.Level, Bag: p.Player.Bag, Money: money, Items: s.items, Intn: s.rng.Intn, NewUID: domain.NewItemInstanceID}, nil
+}
+func (s *Scene) planEndgameCube(p *entity.Entity, req domain.EndgameRequest, execute bool) (domain.CubePlan, error) {
+	ctx, err := s.endgameCubeContext(p)
+	if err != nil {
+		return domain.CubePlan{}, err
+	}
+	return domain.PlanCube(ctx, req, execute)
+}
+
+// Workbench authority comes from the live database NPC placement, dialogue and
+// range. A stale dialogue, copied display name or different map cannot craft.
+func (s *Scene) canUseCubeWorkbench(p *entity.Entity, id domain.EntityID) bool {
+	if p == nil || p.Player == nil || !p.Alive() || id == 0 || s.id.Instance != 0 {
+		return false
+	}
+	npc := s.entities[id]
+	if npc == nil || npc.Kind != domain.KindNPC || npc.NPC == nil || npc.NPC.ConfigID <= 0 || npc.NPC.Script != "Nzhoutianding" || p.Player.QuestNPC != npc.Name || npc.Pos.MapID != s.id.MapID || p.Pos.MapID != s.id.MapID {
+		return false
+	}
+	dx, dy := int64(npc.Pos.X)-int64(p.Pos.X), int64(npc.Pos.Y)-int64(p.Pos.Y)
+	return dx*dx+dy*dy <= 480*480
 }
 func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil {
@@ -55,7 +79,30 @@ func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 			s.endgameError(p, req, "stale_revision", "物品状态已改变，请刷新后再试")
 			return
 		}
-		plan, err := s.planEndgameCube(p, req, false)
+		var plan domain.CubePlan
+		var choices []domain.EndgameRequest
+		if len(req.CubeInputs) > 0 {
+			if !s.canUseCubeWorkbench(p, req.NPCEntityID) {
+				s.endgameError(p, req, "npc_required", "请在周天鼎旁与它对话后炼化")
+				return
+			}
+			ctx, contextErr := s.endgameCubeContext(p)
+			if contextErr != nil {
+				s.endgameError(p, req, domain.CubeErrorCode(contextErr), contextErr.Error())
+				return
+			}
+			var plans []domain.CubePlan
+			choices, plans, err = domain.MatchCubeInputs(ctx, req)
+			if err == nil {
+				plan = plans[0]
+				plan.Fingerprint = domain.CubeFingerprint(ctx.Bag, ctx.Money, req)
+				if len(choices) > 1 {
+					plan.Description = "鼎中投料将随机炼成一枚星篆。"
+				}
+			}
+		} else {
+			plan, err = s.planEndgameCube(p, req, false)
+		}
 		if err != nil {
 			s.endgameError(p, req, domain.CubeErrorCode(err), err.Error())
 			return
@@ -68,7 +115,8 @@ func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 		id := hex.EncodeToString(nonce[:])
 		expires := s.now().Add(60 * time.Second)
 		req.ItemUIDs = append([]string(nil), req.ItemUIDs...)
-		state.cube = &endgameCubeState{quoteID: id, request: req, revision: state.state.Revision, fingerprint: plan.Fingerprint, expires: expires}
+		req.CubeInputs = append([]domain.CubeInput(nil), req.CubeInputs...)
+		state.cube = &endgameCubeState{quoteID: id, request: req, revision: state.state.Revision, fingerprint: plan.Fingerprint, expires: expires, choices: choices, rules: s.cubeRules, catalog: s.endgameCatalog}
 		quote := domain.EndgameQuoteView{QuoteID: id, RecipeID: req.RecipeID, TargetUID: req.TargetUID, Revision: strconv.FormatInt(state.state.Revision, 10), Money: plan.Recipe.Money, Materials: plan.Materials, ExpiresAt: expires.UTC().Format(time.RFC3339), Description: plan.Description}
 		s.endgameReply(p, domain.EndgameResponse{Kind: "cube.quote", RequestID: req.RequestID, OK: true, Quote: &quote})
 	case "cube.execute":
@@ -77,11 +125,23 @@ func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 			s.endgameError(p, req, "quote_expired", "炼化预览已过期，请重新问鼎")
 			return
 		}
+		// Rules and catalog are immutable startup snapshots whose accessors
+		// return deep copies. A replacement must invalidate quotes, including
+		// an already-rolled cached candidate; fees/results cannot change under it.
+		if q.rules != s.cubeRules || q.catalog != s.endgameCatalog {
+			state.cube = nil
+			s.endgameError(p, req, "quote_expired", "炼化配置已变化，请重新问鼎")
+			return
+		}
+		if len(q.choices) > 0 && (req.NPCEntityID != q.request.NPCEntityID || !s.canUseCubeWorkbench(p, req.NPCEntityID)) {
+			s.endgameError(p, req, "npc_required", "已离开周天鼎，请重新对话")
+			return
+		}
 		if req.ExpectedRevision != strconv.FormatInt(q.revision, 10) || state.state.Revision != q.revision {
 			s.endgameError(p, req, "stale_revision", "修行记录已变化，请重新问鼎")
 			return
 		}
-		if req.RecipeID != 0 && req.RecipeID != q.request.RecipeID || req.TargetUID != "" && req.TargetUID != q.request.TargetUID || req.RuneUID != "" || len(req.ItemUIDs) > 0 || req.Socket != 0 || req.Tier != 0 || req.RunID != "" {
+		if req.RecipeID != 0 && req.RecipeID != q.request.RecipeID || req.TargetUID != "" && req.TargetUID != q.request.TargetUID || req.RuneUID != "" || len(req.ItemUIDs) > 0 || len(req.CubeInputs) > 0 || req.Socket != 0 || req.Tier != 0 || req.RunID != "" {
 			s.endgameError(p, req, "invalid_request", "执行参数与炼化预览不一致")
 			return
 		}
@@ -91,12 +151,40 @@ func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 			return
 		}
 		// A cached candidate does not waive live character/recipe preconditions.
-		if _, err := s.planEndgameCube(p, q.request, false); err != nil {
+		execution := q.request
+		if len(q.choices) > 0 {
+			ctx, contextErr := s.endgameCubeContext(p)
+			if contextErr != nil {
+				s.endgameError(p, req, domain.CubeErrorCode(contextErr), contextErr.Error())
+				return
+			}
+			choices, _, matchErr := domain.MatchCubeInputs(ctx, q.request)
+			if matchErr != nil {
+				s.endgameError(p, req, domain.CubeErrorCode(matchErr), matchErr.Error())
+				return
+			}
+			if len(choices) != len(q.choices) {
+				s.endgameError(p, req, "stale_revision", "投料状态已变化，请重新问鼎")
+				return
+			}
+			for i, choice := range choices {
+				if choice.RecipeID != q.choices[i].RecipeID {
+					s.endgameError(p, req, "stale_revision", "投料状态已变化，请重新问鼎")
+					return
+				}
+			}
+			if q.candidate == nil {
+				execution = choices[0]
+				if len(choices) > 1 {
+					execution = choices[s.rng.Intn(len(choices))]
+				}
+			}
+		} else if _, err := s.planEndgameCube(p, q.request, false); err != nil {
 			s.endgameError(p, req, domain.CubeErrorCode(err), err.Error())
 			return
 		}
 		if q.candidate == nil {
-			plan, err := s.planEndgameCube(p, q.request, true)
+			plan, err := s.planEndgameCube(p, execution, true)
 			if err != nil {
 				s.endgameError(p, req, domain.CubeErrorCode(err), err.Error())
 				return

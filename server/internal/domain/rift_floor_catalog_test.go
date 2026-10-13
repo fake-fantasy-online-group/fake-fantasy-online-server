@@ -22,19 +22,24 @@ func TestRiftFloorStaticCatalogDensity(t *testing.T) {
 	if err := json.Unmarshal(encoded, &templates); err != nil || len(templates) == 0 {
 		t.Fatal("invalid static catalog export", err)
 	}
-	min, max, total, plans := RiftFloorMaxPopulation, 0, 0, 0
+	min, max, total, plans := RiftFloorMaxConfiguredPopulation, 0, 0, 0
 	for _, layout := range templates {
 		verified := map[Pos]bool{}
-		for _, p := range layout.Population {
+		for _, p := range append(append([]SpawnPoint(nil), layout.Population...), layout.ExtraPopulation...) {
 			verified[p.Pos] = true
 		}
-		for floor := int32(1); floor <= 100; floor++ {
-			plan, err := PlanRiftFloor("static-density-audit", floor, []RiftFloorTemplate{layout}, 0)
+		for floor := int32(1); floor <= 150; floor++ {
+			base, err := PlanRiftFloor("static-density-audit", floor, []RiftFloorTemplate{layout}, 0, 1)
+			if err != nil {
+				t.Fatal(err)
+			}
+			plan, err := PlanRiftFloor("static-density-audit", floor, []RiftFloorTemplate{layout}, 0, 2)
 			if err != nil || !plan.Valid() {
 				t.Fatalf("map %d floor %d invalid: %v", layout.MapID, floor, err)
 			}
+			assertDoubledRiftFloor(t, base, plan)
 			count := len(plan.Spawns)
-			if count < RiftFloorMinPopulation || count > RiftFloorMaxPopulation {
+			if count < 2*RiftFloorMinPopulation || count > RiftFloorMaxConfiguredPopulation {
 				t.Fatalf("map %d floor %d density outside target: %d", layout.MapID, floor, count)
 			}
 			seen := map[Pos]bool{}
@@ -42,6 +47,11 @@ func TestRiftFloorStaticCatalogDensity(t *testing.T) {
 				p := monster.Point.Pos
 				if !verified[p] || seen[p] || riftFloorDistance(p, plan.Entry) < RiftFloorSafeRadius*RiftFloorSafeRadius || riftFloorDistance(p, plan.Exit) < 80*80 {
 					t.Fatalf("map %d floor %d unsafe, unverified or duplicate spawn: %+v", layout.MapID, floor, p)
+				}
+				for other := range seen {
+					if riftFloorDistance(p, other) < 32*32 {
+						t.Fatalf("map %d floor %d spacing below32px", layout.MapID, floor)
+					}
 				}
 				seen[p] = true
 			}

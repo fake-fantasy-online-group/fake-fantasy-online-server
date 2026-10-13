@@ -1,7 +1,6 @@
 package scene
+
 import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
-
 
 import (
 	"reflect"
@@ -138,6 +137,32 @@ func TestRiftNativePortalPreservesOnlyGeometry(t *testing.T) {
 	s.initEndgameRift(d)
 	if len(s.rift.portals) != 1 {
 		t.Fatal("reinitialization lost gate geometry")
+	}
+}
+
+func TestRiftNativePortalGeometryWithoutPublicDestination(t *testing.T) {
+	s, _, _ := seededRiftFloorFixture(t)
+	area := nativeRiftTestPortal(s).Area
+	d := s.rift.data.clone()
+	s.rift = nil
+	s.portals = nil // ordinary LoadTeleports rejected this gate's public target
+	s.riftPortalAreas = []domain.Polygon{area}
+	if !s.initEndgameRift(d) || len(s.rift.portals) != 1 || len(s.portals) != 0 {
+		t.Fatal("private-only source geometry was not retained")
+	}
+	if s.rift.portals[0].To.MapID != 0 || s.rift.portals[0].Dungeon || s.rift.portals[0].ClientOwned {
+		t.Fatal("geometry acquired public transfer semantics")
+	}
+	p := s.players[1]
+	p.Pos = d.Floor.Entry
+	s.rift.ready[100] = true
+	s.rift.floorLoading = false
+	if !s.canAdvanceEndgameRift(p) {
+		t.Fatal("opener cannot advance at valid geometry with missing public target")
+	}
+	s.initEndgameRift(d)
+	if len(s.rift.portals) != 1 {
+		t.Fatal("rift reload lost independent native geometry")
 	}
 }
 

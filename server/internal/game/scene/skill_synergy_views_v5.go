@@ -21,7 +21,7 @@ func (s *Scene) skillSynergyViews(target domain.SkillID, hard, raw domain.Learne
 			continue
 		}
 		source, _ := domain.V5SkillIdentity(edge.Source, skillCatalog)
-		if edge.RankMode == "hard" {
+		if edge.IsTraining() {
 			label := map[string]string{
 				"damage": "伤害倍率", "elite_damage": "对精英伤害倍率",
 				"heal_power": "治疗效果", "heal_flat": "固定治疗",
@@ -33,11 +33,16 @@ func (s *Scene) skillSynergyViews(target domain.SkillID, hard, raw domain.Learne
 				value, unit = value/100, "flat"
 			}
 			h := hard.LevelOf(edge.Source)
+			rank := edge.SourceRank(hard, raw)
+			var sourceEffectiveRank string
+			if edge.RankMode == "effective_training" {
+				sourceEffectiveRank = fmt.Sprint(rank)
+			}
 			training = append(training, domain.SkillTrainingSynergyView{
 				SourceID: edge.Source, SourceName: source.Name,
 				Effect: edge.Effect, EffectLabel: label, PerPointValue: value,
-				Unit: unit, InvestedHardPoints: h, ContributionValue: value * h,
-				EquipmentApplies: false,
+				Unit: unit, InvestedHardPoints: h, ContributionValue: int64(value) * int64(rank), SourceEffectiveRank: sourceEffectiveRank,
+				EquipmentApplies: edge.RankMode == "effective_training",
 			})
 			continue
 		}

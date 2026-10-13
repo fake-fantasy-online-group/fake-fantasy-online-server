@@ -73,6 +73,13 @@ func (s *Scene) rawSkillLevelsResolved(p *entity.Entity, resolution *equipmentRe
 			break
 		}
 	}
+	// Preserve the cheap legacy/unlearned path, but do not drop an explicit
+	// equipment grant merely because this actor has no allocated class skill.
+	if !hasV5 {
+		if grant := s.equippedTreasureSkill(p); grant != nil {
+			hasV5 = s.skills.V5Enabled(grant.ID)
+		}
+	}
 	if !hasV5 {
 		return out
 	}
@@ -114,44 +121,56 @@ func (s *Scene) applyTrainingSynergies(p *entity.Entity, def *domain.SkillDef) {
 	if p == nil || p.Player == nil {
 		return
 	}
-	s.applyTrainingSynergiesWithHard(p, def, p.Player.Char.Skills)
+	s.applyTrainingSynergiesWithLevels(p, def, p.Player.Char.Skills, s.rawSkillLevels(p))
 }
 func (s *Scene) applyTrainingSynergiesWithHard(p *entity.Entity, def *domain.SkillDef, hard domain.Learned) {
+	s.applyTrainingSynergiesWithLevels(p, def, hard, s.rawSkillLevels(p))
+}
+
+// Consume only the supplied raw rank snapshot. In particular, persistent effects
+// pass the lesser cast/current snapshot so changing equipment cannot improve an old cast.
+func (s *Scene) applyTrainingSynergiesWithLevels(p *entity.Entity, def *domain.SkillDef, hard, raw domain.Learned) {
 	if def == nil || def.FormulaVersion != domain.SkillFormulaVersion || p == nil || p.Player == nil {
 		return
 	}
-	var damageBP, healBP, healFlat, manaBP, radiusBP, widthBP, delayBP, durationBP int32
+	var damage, elite, heal, flat, mana, radius, width, delay, duration int64
 	for _, e := range s.skills.ProgressionCatalog().Synergies() {
-		if e.Target != def.ID || e.RankMode != "hard" {
+		if e.Target != def.ID || !e.IsTraining() {
 			continue
 		}
-		h := hard.LevelOf(e.Source)
+		h := e.SourceRank(hard, raw)
 		if h <= 0 {
 			continue
 		}
-		v := e.PerPointBP * h
+		v := int64(e.PerPointBP) * int64(h)
 		switch e.Effect {
 		case "damage":
-			damageBP += v
+			damage += v
 		case "elite_damage":
-			def.TrainingEliteDamageBP += v
+			elite += v
 		case "heal_power":
-			healBP += v
+			heal += v
 		case "heal_flat":
-			healFlat += v / 100
+			flat += v / 100
 		case "mana_economy":
-			manaBP += v
+			mana += v
 		case "radius":
-			radiusBP += v
+			radius += v
 		case "width":
-			widthBP += v
+			width += v
 		case "arm_delay_economy":
-			delayBP += v
+			delay += v
 		case "freeze_duration":
-			durationBP += v
+			duration += v
 		}
 	}
-	def.TrainingDamageBP = damageBP
+	// Rank/coefficient multiplication is exact in int64; narrow only at the
+	// existing engine payload boundary, never while selecting source ranks.
+	healBP, healFlat := domain.SaturateInt32(heal), domain.SaturateInt32(flat)
+	manaBP, delayBP := domain.SaturateInt32(mana), domain.SaturateInt32(delay)
+	radiusBP, widthBP, durationBP := domain.SaturateInt32(radius), domain.SaturateInt32(width), domain.SaturateInt32(duration)
+	def.TrainingDamageBP = domain.SaturateInt32(damage)
+	def.TrainingEliteDamageBP = domain.SaturateInt32(elite)
 	def.MPCost = domain.ApplyUniqueBP(def.MPCost, -min(manaBP, 8000))
 	def.PrepareMS = domain.ApplyUniqueBP(def.PrepareMS, -min(delayBP, 8000))
 	def.Radius = domain.ApplyUniqueBP(def.Radius, radiusBP)
@@ -173,12 +192,7 @@ func (s *Scene) applyTrainingSynergiesWithHard(p *entity.Entity, def *domain.Ski
 			e.HealFlat += healFlat
 			e.HealFlatNumerator += int64(healFlat) * max(int64(1), e.HealFlatDenominator)
 			if healBP != 0 {
-				e.HealFlat = domain.ApplyUniqueBP(e.HealFlat, healBP)
-				e.HealPctOfMax = domain.ApplyUniqueBP(e.HealPctOfMax, healBP)
-				e.HealFlatNumerator *= int64(10000 + healBP)
-				e.HealFlatDenominator = max(int64(1), e.HealFlatDenominator) * 10000
-				e.HealPctNumerator *= int64(10000 + healBP)
-				e.HealPctDenominator = max(int64(1), e.HealPctDenominator) * 10000
+				domain.ApplySkillHealingBP(e, healBP)
 			}
 		}
 		e.TrapRadius = domain.ApplyUniqueBP(e.TrapRadius, radiusBP)

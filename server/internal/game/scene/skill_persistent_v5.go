@@ -38,7 +38,7 @@ func (s *Scene) lesserPersistentSkill(source *entity.Entity, def domain.SkillDef
 	if !ok {
 		return domain.SkillDef{}, false
 	}
-	s.applyTrainingSynergiesWithHard(source, &next, hard)
+	s.applyTrainingSynergiesWithLevels(source, &next, hard, raw)
 	s.applyPassiveSkillModifiersWithLevels(source, &next, raw)
 	s.applyUniqueSkillModifiers(source, &next)
 	// Geometric bonuses survive while equipped but cannot exceed the cast snapshot.

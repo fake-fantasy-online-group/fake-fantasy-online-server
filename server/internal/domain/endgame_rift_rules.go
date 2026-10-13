@@ -17,6 +17,8 @@ type RiftAbilityRule struct {
 	DamagePct                   int32
 }
 type RiftRules struct {
+	// Zero is the legacy serialized value and means one times population.
+	FloorPopulationMultiplier                                                                                                            int32 `json:",omitempty"`
 	Version, LootVersion                                                                                                                 int32
 	MaxTier, ProgressMax, NormalProgress, GlobeProgress, BlueOrbs, GoldOrbs                                                              int32
 	TimedMS, HardMS, ReconnectMS, DeathPenaltyMS                                                                                         int64
@@ -79,7 +81,7 @@ func (t *RiftRuleTable) Active() *RiftRules {
 	return r
 }
 func (r *RiftRules) Validate() error {
-	if r == nil || r.Version < 1 || r.Loot == nil || r.LootVersion != r.Loot.Version || r.MaxTier < 1 || r.MaxTier > 150 || r.ProgressMax < 1 || r.ProgressMax > 100000000 || r.NormalProgress < 1 || r.NormalProgress > r.ProgressMax || r.GlobeProgress < 1 || r.GlobeProgress > r.ProgressMax || r.BlueOrbs < 1 || r.BlueOrbs > 32 || r.GoldOrbs < 1 || r.GoldOrbs > 32 {
+	if r == nil || r.FloorPopulationMultiplier < 0 || r.FloorPopulationMultiplier > 2 || r.Version < 1 || r.Loot == nil || r.LootVersion != r.Loot.Version || r.MaxTier < 1 || r.MaxTier > 150 || r.ProgressMax < 1 || r.ProgressMax > 100000000 || r.NormalProgress < 1 || r.NormalProgress > r.ProgressMax || r.GlobeProgress < 1 || r.GlobeProgress > r.ProgressMax || r.BlueOrbs < 1 || r.BlueOrbs > 32 || r.GoldOrbs < 1 || r.GoldOrbs > 32 {
 		return fmt.Errorf("invalid rift identity/progress rules")
 	}
 	if r.TimedMS < 1000 || r.HardMS < r.TimedMS || r.HardMS > 86400000 || r.ReconnectMS < 0 || r.ReconnectMS > r.HardMS || r.DeathPenaltyMS < 0 || r.DeathPenaltyMS > r.HardMS || r.PresenceBP < 1 || r.PresenceBP > 10000 || r.TierJumpSeconds < 1 {

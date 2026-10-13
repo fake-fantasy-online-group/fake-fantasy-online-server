@@ -11,7 +11,7 @@ import (
 
 // Validate the actual client wire contract, including the encoded snapshot size.
 // These are transport bounds, not balance defaults. The conservative envelope
-// bounds legacy/v2 floors by 18 blue, 8 gold and 160 ordinary/elite actors,
+// bounds legacy/v2/v3 floors by 24 blue, 8 gold and 320 ordinary/elite actors,
 // plus one guardian. Counts deliberately over-approximate simultaneous state.
 func (r *RiftRules) validateWire() error {
 	fits := func(s string, max int) bool { return utf8.ValidString(s) && len(utf16.Encode([]rune(s))) <= max }
@@ -39,18 +39,18 @@ func (r *RiftRules) validateWire() error {
 		}
 	}
 	id := strings.Repeat("9", 20)
-	v := &EndgameRiftView{Name: r.Name, BossName: r.BossName, RunID: strings.Repeat("f", 32), Revision: id, Seed: id, GeneratorVersion: math.MaxInt32, FloorIndex: math.MaxInt32, MapName: strings.Repeat("<", 256), ExitX: math.MinInt32, ExitY: math.MinInt32, MaxTier: r.MaxTier, UnlockedTier: r.MaxTier, KeyCount: math.MaxInt32, KeyItemID: math.MaxInt32, Phase: "reward_pending", Tier: r.MaxTier, Progress: r.ProgressMax, ProgressMax: r.ProgressMax, RemainingSeconds: math.MaxInt32, CanAdvance: true, Transitioning: true}
+	v := &EndgameRiftView{Name: r.Name, BossName: r.BossName, RunID: strings.Repeat("f", 32), Revision: id, Seed: id, GeneratorVersion: math.MaxInt32, FloorIndex: math.MaxInt32, MapName: strings.Repeat("<", 256), ExitX: math.MinInt32, ExitY: math.MinInt32, MaxTier: r.MaxTier, UnlockedTier: r.MaxTier, KeyCount: math.MaxInt32, KeyItemID: math.MaxInt32, Phase: "reward_pending", Tier: r.MaxTier, Progress: r.ProgressMax, ProgressMax: r.ProgressMax, RemainingSeconds: math.MaxInt32, TotalSeconds: math.MaxInt32, CanAdvance: true, Transitioning: true}
 	for i := 0; i < 5; i++ {
 		v.Members = append(v.Members, EndgameRiftMemberView{CharID: id, Name: strings.Repeat("<", maxNameBytes), Level: math.MaxInt32})
 	}
-	for i := 0; i < RiftFloorMaxPopulation+1; i++ {
+	for i := 0; i < RiftFloorMaxConfiguredPopulation+1; i++ {
 		aura := EndgameRiftAuraView{EntityID: id, Class: 3}
-		if i < 27 {
+		if i < 33 {
 			aura.Affixes = affixes
 		}
 		v.Auras = append(v.Auras, aura)
 	}
-	maxGlobes := int(18*r.BlueOrbs + 8*r.GoldOrbs)
+	maxGlobes := int(24*r.BlueOrbs + 8*r.GoldOrbs)
 	if maxGlobes > 1024 {
 		return fmt.Errorf("rift globe count exceeds client limit")
 	}

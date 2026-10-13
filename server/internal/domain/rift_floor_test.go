@@ -40,7 +40,7 @@ func TestRiftFloorDeterministicCanonicalPlan(t *testing.T) {
 	if !reflect.DeepEqual(a, b) {
 		t.Fatal("input iteration order changed seeded plan")
 	}
-	if a.MapID == 7 || !a.Valid() || a.GeneratorVersion != RiftFloorGeneratorVersion || a.FloorIndex != 3 {
+	if a.MapID == 7 || !a.Valid() || a.GeneratorVersion != riftFloorBaseGeneratorVersion || a.FloorIndex != 3 {
 		t.Fatalf("invalid plan %+v", a)
 	}
 	data, err := json.Marshal(a)
@@ -206,7 +206,7 @@ func TestRiftFloorInvalidInputsFailClosed(t *testing.T) {
 	if err != nil || p.MapID != 7 {
 		t.Fatal("single validated map must still be usable")
 	}
-	p.GeneratorVersion++
+	p.GeneratorVersion = RiftFloorGeneratorVersion + 1
 	if p.Valid() {
 		t.Fatal("accepted unknown generation version")
 	}

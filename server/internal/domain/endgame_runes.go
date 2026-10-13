@@ -325,7 +325,7 @@ func (r AstralRuneDef) Description() string {
 	if r.RegenerationIntervalMS > 0 {
 		return fmt.Sprintf("有效穿戴时，每%g秒按生命恢复数值恢复生命。也可按孔位顺序组成宿阵。", float64(r.RegenerationIntervalMS)/1000)
 	}
-	return "按镶孔顺序与其他星篆组成宿阵。"
+	return "单枚镶嵌即可提供自身属性，使用等级以装备与已镶星篆的最高要求为准。孔位填满且底材、孔数、排列符合配方时，额外组成宿阵。"
 }
 
 // adoptCurrentFormationOnCompletion only runs as part of an explicit socket

@@ -45,6 +45,14 @@ func TestBalanceActualPostgresLoader(t *testing.T) {
 		t.Fatal(err)
 	}
 	expectedRift.Loot = &expectedLoot
+	legacy, ok := rift.Version(1)
+	if !ok || !reflect.DeepEqual(legacy, &expectedRift) {
+		t.Fatal("legacy rule snapshot changed")
+	}
+	if rift.Active().Version == 2 {
+		expectedRift.Version = 2
+		expectedRift.FloorPopulationMultiplier = 2
+	}
 	if !reflect.DeepEqual(loot.Active(), &expectedLoot) || !reflect.DeepEqual(rift.Active(), &expectedRift) {
 		t.Fatal("actual SQL configuration differs from seed")
 	}

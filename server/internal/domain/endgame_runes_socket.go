@@ -151,11 +151,10 @@ func PlanAstralInsert(bag *Bag, worn *EquipSet, defs func(ItemID) (ItemDef, bool
 	p.Target.Sockets[hole] = rune.Item
 	p.Target.SocketUIDs[hole] = rune.UID
 	p.Target.SocketCards[hole] = card
-	// Completing a formation must also meet its tier requirement. Bag gear can
-	// be prepared before its base-equipment level, but worn gear cannot be made unusable.
-	if recipe, matched := MatchAstralRecipe(t.def, p.Target); matched && ch.Level < recipe.MinLevel {
-		return AstralSocketPlan{}, AstralSocketError("formation_level")
-	}
+	// Every rune is an independent card. Formation eligibility only controls
+	// the additional array bonus; it never blocks an otherwise valid insertion.
+	// Bag gear may be prepared in advance, but worn gear must remain usable under
+	// the existing max(base requirement, installed rune requirements) rule.
 	if t.worn && ch.Level < EquipmentRequiredLevel(t.def, p.Target) {
 		return AstralSocketPlan{}, AstralSocketError("rune_level")
 	}

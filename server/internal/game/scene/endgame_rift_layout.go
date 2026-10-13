@@ -9,7 +9,11 @@ import (
 )
 
 func (s *Scene) planEndgameRiftFloor(runID string, floor, previousMap int32) (domain.RiftFloorPlan, error) {
-	return domain.PlanRiftFloor(runID, floor, s.riftLayouts, previousMap)
+	rules := s.currentRiftRules()
+	if rules == nil {
+		return domain.RiftFloorPlan{}, errors.New("missing rift population rules")
+	}
+	return domain.PlanRiftFloor(runID, floor, s.riftLayouts, previousMap, rules.FloorPopulationMultiplier)
 }
 
 func (s *Scene) validateEndgameRiftFloor(plan domain.RiftFloorPlan) error {

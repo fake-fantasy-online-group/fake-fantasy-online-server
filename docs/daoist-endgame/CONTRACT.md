@@ -6,7 +6,7 @@ C2S `0x10d0`, S2C `0x80d0`: little-endian U16 schema=1, then existing U16 byte-l
 
 After entering the world and completing the map-load barrier, send `{"op":"hello","capabilities":["endgame.v1"]}`. Only negotiated sessions receive extension events. Capability resets on leaving the world. Gameplay requests still use session-owned entity IDs, never client-provided character IDs.
 
-UIDs and revisions are canonical decimal strings (positive signed int64 UIDs; revisions permit zero). Run IDs are opaque bounded ASCII, not numeric. Mutation request IDs are 16–64 printable ASCII bytes. Supported operations: hello, snapshot, catalog, socket.insert, socket.remove, cube.quote, cube.execute, rift.start, rift.state, rift.claim, rift.leave. No product-only native craft overload.
+UIDs and revisions are canonical decimal strings (positive signed int64 UIDs; revisions permit zero). Run IDs are opaque bounded ASCII, not numeric. Mutation request IDs are 16–64 printable ASCII bytes. Supported operations: hello, snapshot, catalog, socket.insert, cube.quote, cube.execute, rift.start, rift.state, rift.claim, rift.leave. No product-only native craft overload.
 
 Cursor absent/empty starts paging; empty nextCursor is terminal. Snapshot chunks/cursors are actor-owned. Client selection binds durable UID and expected character revision, not an old bag index. Item tab is native 0–3 with page-local slot. Result maps contain strings to avoid 64-bit number loss.
 
@@ -29,3 +29,7 @@ Fresh schema adds migration50. Existing DBs use the separately reviewed additive
 Memory.WithTx now restores all persistent maps/account wallets on error or panic, matching PostgreSQL rollback semantics. Focused tests cover codec limits/duplicates, capability gating, each transactional failure boundary, CAS/replay/digest conflicts, lost ACKs, clone isolation, invalid metadata, and coalesced writeback acknowledgements.
 
 This rebuild has not executed a live or disposable PostgreSQL migration. PostgreSQL validation from the lost workspace is historical evidence only and is not claimed as verification of this rebuilt source.
+
+## Original inlay furnace
+
+Astral runes use the existing native furnace preview/inlay packets. The server binds slot-based requests to the last equipment preview and commits the rune, gear, aggregate revision, and receipt atomically. Native socket/notice packets report the result; an endgame handshake or standalone rune workbench is not required. The retired `socket.remove` request remains decodable for old clients/receipt replay but cannot execute a new extraction. See [native inlay behavior and tests](NATIVE-INLAY.md).

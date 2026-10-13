@@ -276,8 +276,9 @@ func run() int {
 			CombatTiming:    world.combatTiming,
 			MonsterDialogs:  world.monsterDialogs,
 			Portals:         remapPortals(world.portals[dataMapID], dataMapID, id.MapID), Transports: world.transports, Shops: world.shops, Levels: world.levels, Defs: world.monsters,
-			Walkable: walkable,
-			Items:    world.items, Loot: world.loot, ItemIcons: world.itemIcons,
+			RiftPortalAreas: remapRiftPortalAreas(world.riftPortals[dataMapID], id.MapID),
+			Walkable:        walkable,
+			Items:           world.items, Loot: world.loot, ItemIcons: world.itemIcons,
 			EquipmentRoll: world.equipmentRoll, BossFixedDrops: world.bossFixedDrops,
 			ItemIconsKnown: world.itemIconsKnown,
 			Skills:         world.skills, Statuses: world.statuses,
@@ -503,6 +504,18 @@ func remapPortals(list []domain.Portal, dataMapID, mapID int32) []domain.Portal 
 	return out
 }
 
+func remapRiftPortalAreas(areas []domain.Polygon, mapID int32) []domain.Polygon {
+	out := make([]domain.Polygon, 0, len(areas))
+	for _, area := range areas {
+		copy := append(domain.Polygon(nil), area...)
+		for i := range copy {
+			copy[i].MapID = mapID
+		}
+		out = append(out, copy)
+	}
+	return out
+}
+
 // maskDSN 隐去 DSN 里的密码用于日志。
 func maskDSN(dsn string) string {
 	if i := strings.Index(dsn, "@"); i > 0 {
@@ -678,6 +691,7 @@ type worldData struct {
 	monsterDialogs *domain.MonsterDialogs
 	spawns         data.SpawnTable
 	portals        data.TeleportTable
+	riftPortals    data.RiftPortalAreas
 	levels         *domain.LevelTable
 	progressionErr error
 	skillErr       error
@@ -787,6 +801,9 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 		}
 	}
 	var ts data.TeleportStats
+	if w.riftPortals, err = data.LoadRiftPortalAreas(ctx, q); err != nil {
+		log.Warn("加载洞天传送门区域失败", "err", err)
+	}
 	if w.portals, ts, err = data.LoadTeleports(ctx, q, w.dungeons); err != nil {
 		log.Warn("加载传送门失败", "err", err)
 	} else {

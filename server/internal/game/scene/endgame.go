@@ -12,6 +12,7 @@ import (
 )
 
 type endgamePlayerState struct {
+	nativeSocket     *nativeSocketSelection
 	cube             *endgameCubeState
 	state            domain.EndgameState
 	loaded           bool
@@ -44,6 +45,7 @@ func (s *Scene) endgameReply(p *entity.Entity, r domain.EndgameResponse) {
 	if r.Revision == "" {
 		r.Revision = strconv.FormatInt(s.endgamePlayer(p).state.Revision, 10)
 	}
+	s.replyNativeAstralInlay(p, r)
 	s.emitTo(p.ID, event.EndgameMessage{Who: p.ID, Message: r})
 }
 func (s *Scene) endgameError(p *entity.Entity, r domain.EndgameRequest, code, message string) {
@@ -174,6 +176,14 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 			for _, cap := range r.Capabilities {
 				if cap == domain.EndgameRiftPortalsV1 {
 					p.Player.EndgameRiftPortals = true
+					caps = append(caps, cap)
+					break
+				}
+			}
+		}
+		if baseNegotiated {
+			for _, cap := range r.Capabilities {
+				if cap == domain.EndgameCubeInputsV1 {
 					caps = append(caps, cap)
 					break
 				}

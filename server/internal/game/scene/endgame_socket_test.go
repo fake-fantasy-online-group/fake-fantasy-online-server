@@ -1,7 +1,6 @@
 package scene
+
 import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
-
 
 import (
 	"errors"
@@ -118,50 +117,22 @@ func TestAstralSocketCommitReplayAndStorageFailure(t *testing.T) {
 		})
 	}
 }
-func TestAstralRemoveUsesFreedMaterialSlot(t *testing.T) {
-	s, _, b := astralSceneFixture(t)
+func TestAstralStandaloneRemovalIsUnavailable(t *testing.T) {
+	s, sink, b := astralSceneFixture(t)
 	p := s.players[1]
 	plan, err := domain.PlanAstralInsert(p.Player.Bag, p.Player.Worn, s.itemDef, 42, 51, 0, p.Player.Char)
 	if err != nil {
 		t.Fatal(err)
 	}
 	p.Player.Bag = plan.Bag
-	for i := 100; i < 200; i++ {
-		if p.Player.Bag.At(i).Empty() {
-			p.Player.Bag.Set(i, domain.Stack{Item: 998001, Count: 1})
-		}
-	}
-	before := p.Player.Bag.Clone()
-	money, _ := inventoryMoney(p.Player.Char.Money)
+	before := s.snapshotOf(p).Clone()
 	s.onEndgameSocket(p, domain.EndgameRequest{Op: "socket.remove", RequestID: "astral-remove-00001", ExpectedRevision: "0", TargetUID: "42", Socket: 0})
-	if b.commits != 1 || !reflect.DeepEqual(before, p.Player.Bag) {
-		t.Fatal("non-atomic remove")
+	if b.commits != 0 || !reflect.DeepEqual(before.Bag, p.Player.Bag) || before.Char.Money != p.Player.Char.Money {
+		t.Fatal("removed feature changed items or charged materials")
 	}
-	after, _ := inventoryMoney(b.plan.Snapshot.Char.Money)
-	if after != money-2500 || b.plan.Snapshot.Bag.CountOf(domain.CubeStarMarrow) != 0 || b.plan.Snapshot.Bag.CountOf(domain.CubePurifiedDust) != 0 || b.plan.Snapshot.Bag.At(200).Sockets[0] != 0 {
-		t.Fatal("wrong economics")
-	}
-	n := 0
-	b.plan.Snapshot.Bag.Each(func(_ int, st domain.Stack) {
-		if st.UID == 51 {
-			n++
-		}
-	})
-	if n != 1 {
-		t.Fatal("wrong UID count", n)
-	}
-}
-func TestAstralNativeInlayRejectsRandomPath(t *testing.T) {
-	s, sink, b := astralSceneFixture(t)
-	p := s.players[1]
-	s.sockets = domain.SocketTable{}
-	before := p.Player.Bag.Clone()
-	s.onInlayItem(InlayItem{ID: p.ID, TargetKind: 0, Tab: 2, BagSlot: 200, Hole: 0, RuneTab: 1, RuneBagSlot: 100})
-	if !reflect.DeepEqual(before, p.Player.Bag) || b.commits != 0 {
-		t.Fatal("legacy route mutated rune")
-	}
-	if _, ok := firstOf[event.ServerNotice](astralTake(s, sink)); !ok {
-		t.Fatal("missing guidance")
+	m, ok := firstOf[event.EndgameMessage](astralTake(s, sink))
+	if !ok || m.Message.Error != "unsupported_operation" {
+		t.Fatal("removed extraction endpoint is still enabled")
 	}
 }
 func TestAstralFormationChangesRealCombatStats(t *testing.T) {

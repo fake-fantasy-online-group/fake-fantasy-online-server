@@ -98,7 +98,8 @@ func (s *Scene) sendEndgameSnapshot(p *entity.Entity) {
 		items = append(items, v)
 	})
 	materials := []domain.EndgameMaterialView{}
-	for _, id := range append([]domain.ItemID{domain.RiftKeyItemID, domain.CubeStarMarrow, domain.CubePurifiedDust, domain.CubeImmortalEcho}, s.astralItemIDs()...) {
+	// Validated at startup against the same bounded client material contract.
+	for _, id := range domain.CubeSnapshotMaterialIDs(s.cubeRules, s.endgameCatalog) {
 		if d, ok := s.itemDef(id); ok {
 			materials = append(materials, domain.EndgameMaterialView{ItemID: int32(id), Name: d.Name, Count: p.Player.Bag.CountOf(id)})
 		}

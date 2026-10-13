@@ -77,10 +77,11 @@ def largest_component(raw, points, with_geometry=False):
     if not with_geometry:
         return connected
     if not connected:
-        return [], 0, []
+        return [], 0, [], []
     component = get_label((connected[0][3] // ch) * width + connected[0][2] // cw)
     cell_count = int(np.sum(labels == component)) if np is not None else labels.count(component)
     population = set()
+    extra_population = set()
     for point in connected:
         px, py = point[2:4]
         for gy in range((py - 160) // 64, (py + 160) // 64 + 1):
@@ -90,7 +91,17 @@ def largest_component(raw, points, with_geometry=False):
                     continue
                 if (x-px)**2 + (y-py)**2 <= 160**2 and get_label((y // ch)*width + x // cw) == component:
                     population.add((x, y))
-    return connected, cell_count*cw*ch, sorted(population, key=lambda p: (p[1], p[0]))
+    if len(population) < 384:
+        for point in connected:
+            px, py = point[2:4]
+            for gy in range((py - 160) // 32, (py + 160) // 32 + 1):
+                for gx in range((px - 160) // 32, (px + 160) // 32 + 1):
+                    x, y = gx * 32 + 32, gy * 32 + 32
+                    if x < 0 or y < 0 or x // cw >= width or y // ch >= height:
+                        continue
+                    if (x-px)**2 + (y-py)**2 <= 160**2 and get_label((y // ch)*width + x // cw) == component and (x,y) not in population:
+                        extra_population.add((x,y))
+    return connected, cell_count*cw*ch, sorted(population, key=lambda p: (p[1], p[0])), sorted(extra_population, key=lambda p: (p[1], p[0]))
 
 
 def separated_safe_points(points):
@@ -144,13 +155,13 @@ def audit(fixtures, templates=None):
         points = [point for point in spawns[resource] if point[1] in combat]
         if len(points) < 18:
             continue
-        points, area, population = largest_component(gzip.decompress(bytes.fromhex(masks[resource])), points, with_geometry=True)
+        points, area, population, extra = largest_component(gzip.decompress(bytes.fromhex(masks[resource])), points, with_geometry=True)
         if not separated_safe_points(points) or not any(combat[point[1]] != "BOSS" for point in points):
             continue
         target = max(96, min(160, area / (448*448)))
         eligible.append({"mapId": identity, "mapName": name, "connectedAnchors": len(points),
-                         "connectedWalkableArea": area, "verifiedPopulationPositions": len(population),
-                         "targetPopulationMin": max(96, int(target*.9)), "targetPopulationMax": min(160, int(target*1.1)),
+                         "connectedWalkableArea": area, "verifiedPopulationPositions": len(population), "extraVerifiedPopulationPositions": len(extra),
+                         "targetPopulationMin": 2*max(96, int(target*.9)), "targetPopulationMax": 2*min(160, int(target*1.1)),
                          "monsterIds": sorted({point[1] for point in points})})
         if templates is not None:
             monsters = sorted({p[1] for p in points if combat[p[1]] != "BOSS"})
@@ -159,14 +170,16 @@ def audit(fixtures, templates=None):
                 return {"ID": point[0], "Monster": point[1], "Pos": {"MapID": identity, "X": point[2], "Y": point[3]}, "Dir": point[4]}
             templates.append({"MapID": identity, "MapName": name, "WalkableArea": area,
                               "Anchors": [spawn(p) for p in points], "Monsters": monsters, "Guardians": guardians,
-                              "Population": [spawn((-i-1, 0, p[0], p[1], 67)) for i, p in enumerate(population)]})
-    return {"generatorVersion": 2, "auditKind": "static SQL fixtures and native collision masks",
+                              "Population": [spawn((-i-1, 0, p[0], p[1], 67)) for i, p in enumerate(population)],
+                              "ExtraPopulation": [spawn((-len(population)-i-1, 0, p[0], p[1], 67)) for i, p in enumerate(extra)]})
+    return {"generatorVersion": 3, "auditKind": "static SQL fixtures and native collision masks",
             "runtimeCaveat": "The live loader separately verifies its loaded monster definitions, sprites, attack eligibility and non-city map catalog. This audit does not establish live PostgreSQL or client runtime behavior.",
             "criteria": ["Non-city native map; island aliases excluded", "Existing hostile positive-HP positive-sprite attack-capable definitions",
                          "At least 18 unique walkable anchors in one native 4-neighbor component", "At least 1024 pixels anchor diameter",
                          "Entry and exit separated by at least 512 pixels; at least 8 safe population anchors",
                          "64px population lattice within 160px of native hostile anchors, on the same verified component",
-                         "Population target: connected walkable area / 448^2, seeded 90–110% variation, 96–160 bounds, limited by safe positions"],
+                         "Population target: exactly twice v2 composition; 192–320 normal/elite actors and one unchanged guardian",
+                         "Compact maps supplement the original 64px lattice with verified aligned 32px positions; no silent population clamp"],
             "sourceMaps": len(maps), "sourceMasks": len(masks), "eligibleMaps": len(eligible),
             "sourceSHA256": {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in sources.values()},
             "maps": eligible}

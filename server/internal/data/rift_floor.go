@@ -169,39 +169,21 @@ func BuildRiftFloorTemplate(mapID int32, name string, spawns []domain.SpawnPoint
 	// A globally aligned lattice gives distinct, spaced positions around native
 	// hostile regions. Every point must be in this exact flood-filled component;
 	// no unchecked jitter, blocked cell or disconnected island is eligible.
-	spacing, radius := domain.RiftFloorPopulationSpacing, domain.RiftFloorPopulationRadius
-	seenCells := map[[2]int]bool{}
-	for _, anchor := range out.Anchors {
-		for y := (int(anchor.Pos.Y) - radius) / spacing; y <= (int(anchor.Pos.Y)+radius)/spacing; y++ {
-			for x := (int(anchor.Pos.X) - radius) / spacing; x <= (int(anchor.Pos.X)+radius)/spacing; x++ {
-				key := [2]int{x, y}
-				if seenCells[key] {
-					continue
-				}
-				pos := domain.Pos{MapID: mapID, X: float64(x*spacing + spacing/2), Y: float64(y*spacing + spacing/2)}
-				dx, dy := pos.X-anchor.Pos.X, pos.Y-anchor.Pos.Y
-				if dx*dx+dy*dy > float64(radius*radius) || !mask.Walkable(pos) {
-					continue
-				}
-				cell := int(uint32(pos.Y)/mask.cellHeight)*width + int(uint32(pos.X)/mask.cellWidth)
-				if labels[cell] != selectedLabel {
-					continue
-				}
-				seenCells[key] = true
-				out.Population = append(out.Population, domain.SpawnPoint{Pos: pos, Dir: anchor.Dir})
+	out.Population = riftPopulationCandidates(mapID, out.Anchors, mask, labels, selectedLabel, domain.RiftFloorPopulationSpacing, domain.RiftFloorPopulationSpacing/2)
+	// Only compact maps need a supplementary 32px lattice. It is aligned with
+	// the original lattice, retaining at least 32px separation and the exact v2
+	// population/seed. 64 spare positions conservatively cover both safe circles.
+	if len(out.Population) < domain.RiftFloorMaxConfiguredPopulation+64 {
+		seen := make(map[domain.Pos]bool, len(out.Population))
+		for _, p := range out.Population {
+			seen[p.Pos] = true
+		}
+		for _, p := range riftPopulationCandidates(mapID, out.Anchors, mask, labels, selectedLabel, domain.RiftFloorPopulationSpacing/2, domain.RiftFloorPopulationSpacing/2) {
+			if !seen[p.Pos] {
+				p.ID = -int32(len(out.Population) + len(out.ExtraPopulation) + 1)
+				out.ExtraPopulation = append(out.ExtraPopulation, p)
 			}
 		}
-	}
-	sort.Slice(out.Population, func(i, j int) bool {
-		if out.Population[i].Pos.Y != out.Population[j].Pos.Y {
-			return out.Population[i].Pos.Y < out.Population[j].Pos.Y
-		}
-		return out.Population[i].Pos.X < out.Population[j].Pos.X
-	})
-	for i := range out.Population {
-		// Negative IDs distinguish catalog-only positions from native spawns.
-		// Encounter entity IDs are allocated independently by the scene.
-		out.Population[i].ID = -int32(i + 1)
 	}
 	monsters, bosses := map[domain.MonsterID]bool{}, map[domain.MonsterID]bool{}
 	for _, p := range out.Anchors {
@@ -231,4 +213,45 @@ func BuildRiftFloorTemplate(mapID int32, name string, spawns []domain.SpawnPoint
 	}
 	_, err := domain.PlanRiftFloor("catalog-validation", 1, []domain.RiftFloorTemplate{out}, 0)
 	return out, err == nil
+}
+
+// riftPopulationCandidates returns only distinct points on the verified component.
+func riftPopulationCandidates(mapID int32, anchors []domain.SpawnPoint, mask *CollisionMask, labels []int32, component int32, spacing, offset int) []domain.SpawnPoint {
+	radius := domain.RiftFloorPopulationRadius
+	width := int(mask.width)
+	var population []domain.SpawnPoint
+	seenCells := map[[2]int]bool{}
+	for _, anchor := range anchors {
+		for y := (int(anchor.Pos.Y) - radius) / spacing; y <= (int(anchor.Pos.Y)+radius)/spacing; y++ {
+			for x := (int(anchor.Pos.X) - radius) / spacing; x <= (int(anchor.Pos.X)+radius)/spacing; x++ {
+				key := [2]int{x, y}
+				if seenCells[key] {
+					continue
+				}
+				pos := domain.Pos{MapID: mapID, X: float64(x*spacing + offset), Y: float64(y*spacing + offset)}
+				dx, dy := pos.X-anchor.Pos.X, pos.Y-anchor.Pos.Y
+				if dx*dx+dy*dy > float64(radius*radius) || !mask.Walkable(pos) {
+					continue
+				}
+				cell := int(uint32(pos.Y)/mask.cellHeight)*width + int(uint32(pos.X)/mask.cellWidth)
+				if labels[cell] != component {
+					continue
+				}
+				seenCells[key] = true
+				population = append(population, domain.SpawnPoint{Pos: pos, Dir: anchor.Dir})
+			}
+		}
+	}
+	sort.Slice(population, func(i, j int) bool {
+		if population[i].Pos.Y != population[j].Pos.Y {
+			return population[i].Pos.Y < population[j].Pos.Y
+		}
+		return population[i].Pos.X < population[j].Pos.X
+	})
+	for i := range population {
+		// Negative IDs distinguish catalog-only positions from native spawns.
+		// Encounter entity IDs are allocated independently by the scene.
+		population[i].ID = -int32(i + 1)
+	}
+	return population
 }

@@ -20,7 +20,7 @@ import (
 func TestSkillConfigurationDatabaseGolden(t *testing.T) {
 	path := os.Getenv("FANTASY_SKILL_CONFIG_PG_DATA")
 	if path == "" {
-		t.Skip("explicit isolated migration73 cluster required")
+		t.Skip("explicit isolated migration74 cluster required")
 	}
 	q := &v5SingleUserQuerier{bin: os.Getenv("PG_BIN"), path: path, database: "postgres"}
 	table, _, err := LoadSkills(context.Background(), q)
@@ -36,7 +36,31 @@ func TestSkillConfigurationDatabaseGolden(t *testing.T) {
 		t.Fatal("catalog not attached")
 	}
 	expected := catalogfixture.SkillProgressionCatalog()
-	if !reflect.DeepEqual(c.IDs(), expected.IDs()) || !reflect.DeepEqual(c.Synergies(), expected.Synergies()) {
+	expectedEdges := expected.Synergies()
+	// Migration74 is a reviewed synergy-only delta. The frozen1490 skill/status
+	// goldens and original catalog remain unchanged and independently checked.
+	for i, e := range expectedEdges {
+		if e.RankMode != "hard" {
+			continue
+		}
+		target, _ := expected.Identity(e.Target)
+		e.RankMode = "effective_training"
+		if e.Effect == "heal_flat" {
+			e.Effect = "heal_power"
+		}
+		e.PerPointBP = 300
+		if target.UnlockLevel >= 30 {
+			e.PerPointBP = 400
+		}
+		if target.UnlockLevel >= 50 {
+			e.PerPointBP = 500
+		}
+		if target.UnlockLevel >= 70 {
+			e.PerPointBP = 600
+		}
+		expectedEdges[i] = e
+	}
+	if !reflect.DeepEqual(c.IDs(), expected.IDs()) || !reflect.DeepEqual(c.Synergies(), expectedEdges) {
 		t.Fatal("membership/synergy differs from pre-refactor snapshot")
 	}
 	for _, id := range c.IDs() {
@@ -112,7 +136,7 @@ func (q skillConfigurationQueryEdit) Query(ctx context.Context, sql string, args
 func TestSkillConfigurationDatabaseRejectsMissingAndUsesConfiguredPolicy(t *testing.T) {
 	path := os.Getenv("FANTASY_SKILL_CONFIG_PG_DATA")
 	if path == "" {
-		t.Skip("explicit isolated migration73 cluster required")
+		t.Skip("explicit isolated migration74 cluster required")
 	}
 	q := &v5SingleUserQuerier{bin: os.Getenv("PG_BIN"), path: path, database: "postgres"}
 	table, _, err := LoadSkills(context.Background(), q)

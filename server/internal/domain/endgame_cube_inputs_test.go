@@ -1,0 +1,186 @@
+package domain
+
+import (
+	"reflect"
+	"strconv"
+	"testing"
+)
+
+func inputSelection(ctx CubeContext, legacy EndgameRequest) EndgameRequest {
+	r := EndgameRequest{Op: "cube.quote", ExpectedRevision: "0"}
+	recipe, _ := ctx.Rules.Recipe(legacy.RecipeID)
+	for _, m := range recipe.Materials {
+		r.CubeInputs = append(r.CubeInputs, CubeInput{ItemID: m.ItemID, Count: m.Count})
+	}
+	if legacy.TargetUID != "" {
+		r.CubeInputs = append(r.CubeInputs, CubeInput{UID: legacy.TargetUID, Count: 1})
+	}
+	if legacy.RuneUID != "" {
+		r.CubeInputs = append(r.CubeInputs, CubeInput{UID: legacy.RuneUID, Count: 1})
+	}
+	if recipe.Operation == "socket.reorder" {
+		r.ItemUIDs = append([]string(nil), legacy.ItemUIDs...)
+	} else {
+		for _, uid := range legacy.ItemUIDs {
+			r.CubeInputs = append(r.CubeInputs, CubeInput{UID: uid, Count: 1})
+		}
+	}
+	return r
+}
+func TestCubeInputsAllDatabaseRecipesMatchWithoutDisclosureOrMutation(t *testing.T) {
+	for _, r := range cubeFixture().Rules.Recipes() {
+		t.Run(strconv.Itoa(int(r.ID)), func(t *testing.T) {
+			ctx, legacy := cubeInputs(r.ID)
+			selection := inputSelection(ctx, legacy)
+			before := ctx.Bag.Clone()
+			money := ctx.Money
+			ctx.Intn = func(int) int { t.Fatal("preview rolled RNG"); return 0 }
+			ctx.NewUID = func() int64 { t.Fatal("preview allocated UID"); return 0 }
+			matches, plans, err := MatchCubeInputs(ctx, selection)
+			if err != nil {
+				t.Fatal(err)
+			}
+			found := false
+			for i, req := range matches {
+				if req.RecipeID == r.ID {
+					found = true
+				}
+				if plans[i].Recipe.Operation != r.Operation {
+					t.Fatal("cross-operation match")
+				}
+			}
+			if !found {
+				t.Fatalf("lost existing recipe %d", r.ID)
+			}
+			want := 1
+			if r.Operation == "rune.inscribe" {
+				want = 28
+			}
+			if r.Operation == "rune.convert" {
+				want = 6
+			}
+			if len(matches) != want {
+				t.Fatalf("got %d candidates want %d", len(matches), want)
+			}
+			if !reflect.DeepEqual(ctx.Bag, before) || ctx.Money != money {
+				t.Fatal("selection moved or consumed items")
+			}
+		})
+	}
+}
+func TestCubeInputsRejectInvalidSelectionsWithoutConsumption(t *testing.T) {
+	cases := map[string]func(*CubeContext, *EndgameRequest){
+		"empty": func(c *CubeContext, r *EndgameRequest) { r.CubeInputs = nil },
+		"duplicate instance": func(c *CubeContext, r *EndgameRequest) {
+			r.CubeInputs = append(r.CubeInputs, CubeInput{UID: "42", Count: 1})
+		},
+		"duplicate material": func(c *CubeContext, r *EndgameRequest) { r.CubeInputs = append(r.CubeInputs, r.CubeInputs[0]) },
+		"wrong quantity":     func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[0].Count++ },
+		"extra material": func(c *CubeContext, r *EndgameRequest) {
+			r.CubeInputs = append(r.CubeInputs, CubeInput{ItemID: CubeImmortalEcho, Count: 1})
+		},
+		"negative":             func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[0].Count = -1 },
+		"not owned":            func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[2].UID = "43" },
+		"quantity unavailable": func(c *CubeContext, r *EndgameRequest) { c.Bag.Set(100, Stack{}) },
+		"locked":               func(c *CubeContext, r *EndgameRequest) { st := c.Bag.At(200); st.Locked = true; c.Bag.Set(200, st) },
+		"mixed identity":       func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[2].ItemID = 1001 },
+		"recipe override":      func(c *CubeContext, r *EndgameRequest) { r.RecipeID = CubeAwakenUnique },
+		"target override":      func(c *CubeContext, r *EndgameRequest) { r.TargetUID = "42" },
+	}
+	for name, alter := range cases {
+		t.Run(name, func(t *testing.T) {
+			ctx, legacy := cubeInputs(CubeAwakenUnique)
+			r := inputSelection(ctx, legacy)
+			alter(&ctx, &r)
+			before := ctx.Bag.Clone()
+			if _, _, err := MatchCubeInputs(ctx, r); err == nil {
+				t.Fatal("accepted invalid input")
+			}
+			if !reflect.DeepEqual(before, ctx.Bag) {
+				t.Fatal("invalid input consumed bag")
+			}
+		})
+	}
+}
+func TestCubeInputsHonorDatabaseCostsAndRejectCrossOperationAmbiguity(t *testing.T) {
+	ctx, legacy := cubeInputs(CubeOpenSocket)
+	r := inputSelection(ctx, legacy)
+	defs := ctx.Rules.Recipes()
+	for i := range defs {
+		if defs[i].ID == CubeOpenSocket {
+			defs[i].Materials[0].Count = 9
+		}
+	}
+	rules, err := NewCubeRuleTable(defs, ctx.Items)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ctx.Rules = rules
+	if _, _, err = MatchCubeInputs(ctx, r); err == nil {
+		t.Fatal("hardcoded old count accepted")
+	}
+	r.CubeInputs[0].Count = 9
+	if _, _, err = MatchCubeInputs(ctx, r); err != nil {
+		t.Fatal(err)
+	}
+	for i := range defs {
+		if defs[i].ID == CubeAwakenUnique {
+			defs[i].Materials = []CubeMaterialDef{{CubeStarMarrow, 9}}
+		}
+	}
+	rules, err = NewCubeRuleTable(defs, ctx.Items)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ctx.Rules = rules
+	if _, _, err = MatchCubeInputs(ctx, r); CubeErrorCode(err) != "configuration" {
+		t.Fatalf("ambiguous operations did not fail closed: %v", err)
+	}
+}
+func TestCubeInputsBagFullAndDuplicateBagIdentityRemainAtomic(t *testing.T) {
+	ctx, legacy := cubeInputs(CubeInscribeRuneBase + 1)
+	r := inputSelection(ctx, legacy)
+	for slot := 100; slot < 200; slot++ {
+		if ctx.Bag.At(slot).Empty() {
+			ctx.Bag.Set(slot, cubeRune(ctx, FirstAstralRune, int64(1000+slot)))
+		}
+	}
+	before := ctx.Bag.Clone()
+	if _, _, err := MatchCubeInputs(ctx, r); CubeErrorCode(err) != "bag_full" {
+		t.Fatalf("full bag accepted: %v", err)
+	}
+	if !reflect.DeepEqual(before, ctx.Bag) {
+		t.Fatal("full bag changed")
+	}
+	ctx, legacy = cubeInputs(CubeOpenSocket)
+	r = inputSelection(ctx, legacy)
+	ctx.Bag.Set(201, ctx.Bag.At(200))
+	if _, _, err := MatchCubeInputs(ctx, r); err == nil {
+		t.Fatal("duplicate bag UID accepted")
+	}
+}
+
+func TestCubeSnapshotMaterialBoundsFailAtStartup(t *testing.T) {
+	ctx := cubeFixture()
+	// Cube-only fixtures do not have the native rift key definition.
+	ctx.Items[RiftKeyItemID] = ItemDef{ID: RiftKeyItemID, Name: "符钥"}
+	if err := ValidateCubeSnapshotMaterials(ctx.Items, ctx.Catalog, ctx.Rules); err != nil {
+		t.Fatal(err)
+	}
+	defs := ctx.Rules.Recipes()
+	for i := 0; i < 33; i++ {
+		id := ItemID(1999990000 + i)
+		ctx.Items[id] = ItemDef{ID: id, Name: "额外材料", InventoryTab: 1, InventoryTabKnown: true, Stackable: true}
+		defs[0].Materials = append(defs[0].Materials, CubeMaterialDef{ItemID: id, Count: 1})
+	}
+	rules, err := NewCubeRuleTable(defs, ctx.Items)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(CubeSnapshotMaterialIDs(rules, ctx.Catalog)) != 65 {
+		t.Fatal("fixture did not exceed wire bound")
+	}
+	if err := ValidateCubeSnapshotMaterials(ctx.Items, ctx.Catalog, rules); err == nil {
+		t.Fatal("65 material entries reached runtime instead of failing startup")
+	}
+}

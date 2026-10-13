@@ -119,3 +119,43 @@ func TestRiftFloorTemplateRejectsUnverifiedAssets(t *testing.T) {
 		t.Fatal("accepted missing model")
 	}
 }
+
+func TestRiftFloorCompactMapGetsAlignedVerifiedExpansion(t *testing.T) {
+	mask, defs, _ := riftGeometryFixture()
+	for y := 0; y < int(mask.height); y++ {
+		for x := 20; x < int(mask.width); x++ {
+			mask.cells[y*int(mask.width)+x] = maskBlockedBit
+		}
+	}
+	var anchors []domain.SpawnPoint
+	for i := 0; i < 18; i++ {
+		anchors = append(anchors, domain.SpawnPoint{ID: int32(i + 1), Monster: 1, Pos: domain.Pos{MapID: 7, X: 80 + float64(i%2)*160, Y: 100 + float64(i/2)*144}})
+	}
+	layout, ok := BuildRiftFloorTemplate(7, "narrow", anchors, defs, mask)
+	if !ok || len(layout.ExtraPopulation) == 0 {
+		t.Fatal("compact map was excluded instead of safely expanded")
+	}
+	verified := map[domain.Pos]bool{}
+	for _, p := range append(append([]domain.SpawnPoint(nil), layout.Population...), layout.ExtraPopulation...) {
+		if !mask.Walkable(p.Pos) || p.Pos.X >= 320 || int(p.Pos.X)%32 != 0 || int(p.Pos.Y)%32 != 0 || verified[p.Pos] {
+			t.Fatal("extra candidate not aligned, distinct or walkable")
+		}
+		verified[p.Pos] = true
+	}
+	for floor := int32(1); floor <= 150; floor++ {
+		base, err := domain.PlanRiftFloor("compact", floor, []domain.RiftFloorTemplate{layout}, 0, 1)
+		if err != nil {
+			t.Fatal(err)
+		}
+		doubled, err := domain.PlanRiftFloor("compact", floor, []domain.RiftFloorTemplate{layout}, 0, 2)
+		if err != nil || !doubled.Valid() || len(doubled.Spawns) != 2*len(base.Spawns) || doubled.Guardian != base.Guardian {
+			t.Fatal("compact map failed exact double", floor, err)
+		}
+		for _, p := range doubled.Spawns {
+			if !verified[p.Point.Pos] {
+				t.Fatal("invented doubled coordinate")
+			}
+		}
+	}
+	t.Logf("compact geometry: original %d candidates + %d supplementary candidates", len(layout.Population), len(layout.ExtraPopulation))
+}

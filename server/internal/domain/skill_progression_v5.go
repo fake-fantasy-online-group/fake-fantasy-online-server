@@ -45,15 +45,16 @@ type SkillGrant struct {
 // Percentage values use basis points; flat values use whole resource points.
 // These are contribution coefficients, never recursively evaluated skill output.
 type SkillTrainingSynergyView struct {
-	SourceID           SkillID `json:"sourceId"`
-	SourceName         string  `json:"sourceName"`
-	Effect             string  `json:"effect"`
-	EffectLabel        string  `json:"effectLabel"`
-	PerPointValue      int32   `json:"perPointValue"`
-	Unit               string  `json:"unit"`
-	InvestedHardPoints int32   `json:"investedHardPoints"`
-	ContributionValue  int32   `json:"contributionValue"`
-	EquipmentApplies   bool    `json:"equipmentApplies"`
+	SourceID            SkillID `json:"sourceId"`
+	SourceName          string  `json:"sourceName"`
+	Effect              string  `json:"effect"`
+	EffectLabel         string  `json:"effectLabel"`
+	PerPointValue       int32   `json:"perPointValue"`
+	Unit                string  `json:"unit"`
+	InvestedHardPoints  int32   `json:"investedHardPoints"`
+	ContributionValue   int64   `json:"contributionValue"`
+	SourceEffectiveRank string  `json:"sourceEffectiveRank,omitempty"`
+	EquipmentApplies    bool    `json:"equipmentApplies"`
 }
 
 type SkillRankView struct {
@@ -290,6 +291,18 @@ type SkillSynergy struct {
 	PerPointBP       int32
 }
 
+// IsTraining distinguishes authored percentage synergies from native passive payloads.
+// Legacy hard rows remain valid for reviewed administrator configuration.
+func (e SkillSynergy) IsTraining() bool {
+	return e.RankMode == "hard" || e.RankMode == "effective_training"
+}
+func (e SkillSynergy) SourceRank(hard, raw Learned) int32 {
+	if e.RankMode == "effective_training" {
+		return max(int32(0), raw.LevelOf(e.Source))
+	}
+	return max(int32(0), hard.LevelOf(e.Source))
+}
+
 func ValidateSkillSynergies(edges []SkillSynergy, c *SkillProgressionCatalog) error {
 	if c == nil {
 		return fmt.Errorf("skill progression catalog missing")
@@ -302,10 +315,10 @@ func ValidateSkillSynergies(edges []SkillSynergy, c *SkillProgressionCatalog) er
 		if !tok || !sok || t.Profession != s.Profession || e.Target == e.Source {
 			return fmt.Errorf("invalid synergy %d -> %d", e.Source, e.Target)
 		}
-		if e.RankMode != "hard" && e.RankMode != "effective_raw" {
+		if e.RankMode != "hard" && e.RankMode != "effective_raw" && e.RankMode != "effective_training" {
 			return fmt.Errorf("invalid synergy rank mode")
 		}
-		if e.RankMode == "hard" {
+		if e.IsTraining() {
 			switch e.Effect {
 			case "damage", "elite_damage", "heal_power", "heal_flat", "mana_economy", "radius", "width", "freeze_duration":
 			default:
@@ -313,6 +326,9 @@ func ValidateSkillSynergies(edges []SkillSynergy, c *SkillProgressionCatalog) er
 			}
 			if e.PerPointBP <= 0 || e.PerPointBP > 10000 || (e.Effect == "heal_flat" && e.PerPointBP%100 != 0) {
 				return fmt.Errorf("invalid training coefficient: %+v", e)
+			}
+			if e.RankMode == "effective_training" && (e.PerPointBP < 300 || e.PerPointBP > 600 || e.Effect == "heal_flat") {
+				return fmt.Errorf("invalid equipment training coefficient: %+v", e)
 			}
 		} else {
 			switch e.Effect {

@@ -172,6 +172,8 @@ func (s *Scene) riftView(p *entity.Entity, d endgameRiftPersisted, durable, live
 		}
 	}
 	v.RemainingSeconds = r.RemainingSeconds(s.riftMS())
+	// A reconnect or floor change retains the original run rules, never a client default.
+	v.TotalSeconds = int32(r.Rules.TimedMS / 1000)
 	for id, m := range r.Members {
 		v.Members = append(v.Members, domain.EndgameRiftMemberView{CharID: strconv.FormatInt(int64(id), 10), Name: d.Names[id], Level: m.Level, Eligible: m.Eligible, Claimed: m.Claimed})
 		if p != nil && int64(id) == p.Player.Char.ID && m.Eligible && !m.Claimed && durable && (r.Phase == domain.RiftCompleted || r.Phase == domain.RiftClosed) {

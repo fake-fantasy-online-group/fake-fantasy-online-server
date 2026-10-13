@@ -4,21 +4,24 @@ import (
 	"crypto/sha256"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"math"
 	"sort"
 )
 
 const (
 	// Changes to the PRNG, ordering or population rules require a new version.
-	RiftFloorGeneratorVersion  int32 = 2
-	RiftFloorMinAnchors              = 18
-	RiftFloorSafeRadius              = 160
-	RiftFloorMinPopulation           = 96
-	RiftFloorMaxPopulation           = 160
-	RiftFloorPopulationSpacing       = 64
-	RiftFloorPopulationRadius        = 160
-	RiftFloorPackRadius              = 192
-	RiftFloorAreaPerMonster          = 448 * 448
+	RiftFloorGeneratorVersion        int32 = 3
+	riftFloorBaseGeneratorVersion    int32 = 2
+	RiftFloorMinAnchors                    = 18
+	RiftFloorSafeRadius                    = 160
+	RiftFloorMinPopulation                 = 96
+	RiftFloorMaxPopulation                 = 160
+	RiftFloorMaxConfiguredPopulation       = 2 * RiftFloorMaxPopulation
+	RiftFloorPopulationSpacing             = 64
+	RiftFloorPopulationRadius              = 160
+	RiftFloorPackRadius                    = 192
+	RiftFloorAreaPerMonster                = 448 * 448
 )
 
 // RiftFloorTemplate contains only anchors on the same verified walkable map
@@ -32,8 +35,11 @@ type RiftFloorTemplate struct {
 	Guardians []MonsterID
 	// Population is a collision-verified lattice near native hostile anchors.
 	// Entry/exit still use Anchors. Empty Population supports anchor-only catalogs.
-	Population   []SpawnPoint
-	WalkableArea float64
+	Population []SpawnPoint
+	// ExtraPopulation adds collision-verified positions only for density expansion.
+	// Keeping it separate preserves the exact v2 base seed, composition and guardian.
+	ExtraPopulation []SpawnPoint
+	WalkableArea    float64
 }
 
 type RiftFloorSpawn struct {
@@ -54,13 +60,14 @@ type RiftFloorPlan struct {
 	Guardian         RiftFloorSpawn
 }
 
-// RiftFloorSeed uses an explicitly versioned, platform-independent byte format.
+// RiftFloorSeed retains the v2 platform-independent base stream. Version 3
+// expands that frozen base population without changing its seed or guardian.
 // It has no dependency on wall time, map iteration or the combat RNG stream.
 func RiftFloorSeed(runID string, floor int32) uint64 {
 	h := sha256.New()
 	h.Write([]byte("fantasy-rift-floor\x00"))
 	var b [8]byte
-	binary.LittleEndian.PutUint32(b[:4], uint32(RiftFloorGeneratorVersion))
+	binary.LittleEndian.PutUint32(b[:4], uint32(riftFloorBaseGeneratorVersion))
 	binary.LittleEndian.PutUint32(b[4:], uint32(floor))
 	h.Write(b[:])
 	h.Write([]byte(runID))
@@ -88,7 +95,7 @@ func (t RiftFloorTemplate) Valid() bool {
 	if t.MapID <= 0 || len(t.Anchors) < RiftFloorMinAnchors || len(t.Monsters) == 0 || len(t.Guardians) == 0 {
 		return false
 	}
-	for _, points := range [][]SpawnPoint{t.Anchors, t.Population} {
+	for _, points := range [][]SpawnPoint{t.Anchors, t.Population, t.ExtraPopulation} {
 		for _, p := range points {
 			if !riftFloorPointValid(p.Pos, t.MapID) {
 				return false
@@ -111,7 +118,44 @@ func (t RiftFloorTemplate) Valid() bool {
 // PlanRiftFloor chooses an existing map and creates a bounded randomized native
 // population. Difficulty/tier is deliberately absent: floors are traversal, not
 // difficulty. Adjacent floors avoid repeating a map whenever another exists.
-func PlanRiftFloor(runID string, floor int32, templates []RiftFloorTemplate, previousMap int32) (RiftFloorPlan, error) {
+func PlanRiftFloor(runID string, floor int32, templates []RiftFloorTemplate, previousMap int32, density ...int32) (RiftFloorPlan, error) {
+	multiplier := int32(1)
+	if len(density) > 1 || (len(density) == 1 && (density[0] < 0 || density[0] > 2)) {
+		return RiftFloorPlan{}, errors.New("invalid rift population multiplier")
+	}
+	if len(density) == 1 && density[0] > 0 {
+		multiplier = density[0]
+	}
+	pool := append([]RiftFloorTemplate(nil), templates...)
+	for {
+		plan, err := planRiftFloorBase(runID, floor, pool, previousMap)
+		if err != nil || multiplier == 1 {
+			return plan, err
+		}
+		for _, layout := range pool {
+			if layout.MapID == plan.MapID {
+				if err = doubleRiftFloorPopulation(&plan, layout); err == nil {
+					return plan, nil
+				}
+				break
+			}
+		}
+		// Try another verified map deterministically before admission or floor
+		// transfer commits. Never charge a key for a partial/clamped population.
+		remaining := pool[:0]
+		for _, layout := range pool {
+			if layout.MapID != plan.MapID {
+				remaining = append(remaining, layout)
+			}
+		}
+		pool = remaining
+		if len(pool) == 0 {
+			return RiftFloorPlan{}, fmt.Errorf("no rift map supports doubled population: %w", err)
+		}
+	}
+}
+
+func planRiftFloorBase(runID string, floor int32, templates []RiftFloorTemplate, previousMap int32) (RiftFloorPlan, error) {
 	var plan RiftFloorPlan
 	if runID == "" || floor < 1 {
 		return plan, errors.New("invalid rift floor identity")
@@ -179,7 +223,7 @@ func PlanRiftFloor(runID string, floor int32, templates []RiftFloorTemplate, pre
 	guardians := append([]MonsterID(nil), t.Guardians...)
 	sort.Slice(monsters, func(i, j int) bool { return monsters[i] < monsters[j] })
 	sort.Slice(guardians, func(i, j int) bool { return guardians[i] < guardians[j] })
-	plan = RiftFloorPlan{GeneratorVersion: RiftFloorGeneratorVersion, Seed: seed, FloorIndex: floor, MapID: t.MapID, MapName: t.MapName, Entry: entry.Pos, Exit: exit.Pos}
+	plan = RiftFloorPlan{GeneratorVersion: riftFloorBaseGeneratorVersion, Seed: seed, FloorIndex: floor, MapID: t.MapID, MapName: t.MapName, Entry: entry.Pos, Exit: exit.Pos}
 	// Scale the target with the verified connected walkable area, with seeded
 	// 90–110% variation. Small maps never force overlapping or blocked spawns.
 	target := t.WalkableArea / RiftFloorAreaPerMonster
@@ -227,6 +271,47 @@ func PlanRiftFloor(runID string, floor int32, templates []RiftFloorTemplate, pre
 	exit.Monster = guardians[rng.index(len(guardians))]
 	plan.Guardian = RiftFloorSpawn{Point: exit, Class: 3}
 	return plan, nil
+}
+
+// Append one counterpart for each base actor. Composition, progress per kill,
+// appearance, original positions, map, seed, entry/exit and guardian stay exact.
+func doubleRiftFloorPopulation(plan *RiftFloorPlan, layout RiftFloorTemplate) error {
+	seen := make(map[Pos]bool, len(plan.Spawns)*2)
+	for _, spawn := range plan.Spawns {
+		seen[spawn.Point.Pos] = true
+	}
+	var candidates []SpawnPoint
+	population := layout.Population
+	if len(population) == 0 {
+		population = layout.Anchors
+	}
+	for _, source := range [][]SpawnPoint{population, layout.ExtraPopulation} {
+		for _, p := range source {
+			if seen[p.Pos] || riftFloorDistance(p.Pos, plan.Entry) < RiftFloorSafeRadius*RiftFloorSafeRadius || riftFloorDistance(p.Pos, plan.Exit) < 80*80 {
+				continue
+			}
+			seen[p.Pos] = true
+			candidates = append(candidates, p)
+		}
+	}
+	if len(candidates) < len(plan.Spawns) {
+		return fmt.Errorf("map %d has %d extra safe positions; need %d", plan.MapID, len(candidates), len(plan.Spawns))
+	}
+	// A separate stream cannot perturb the v2 base stream, even as extra
+	// candidates change in a future catalog. Saved plans never regenerate.
+	rng := riftFloorRandom(plan.Seed ^ 0x726966742d327800)
+	candidates = shuffledRiftFloorPoints(candidates, &rng)
+	candidates = riftFloorPackPoints(candidates, len(plan.Spawns), &rng)
+	base := plan.Spawns
+	plan.Spawns = make([]RiftFloorSpawn, 0, 2*len(base))
+	plan.Spawns = append(plan.Spawns, base...)
+	for i, original := range base {
+		p := candidates[i]
+		p.Monster = original.Point.Monster
+		plan.Spawns = append(plan.Spawns, RiftFloorSpawn{Point: p, Class: original.Class})
+	}
+	plan.GeneratorVersion = RiftFloorGeneratorVersion
+	return nil
 }
 
 func shuffledRiftFloorPoints(source []SpawnPoint, rng *riftFloorRandom) []SpawnPoint {
@@ -284,7 +369,9 @@ func (p RiftFloorPlan) Valid() bool {
 	if p.GeneratorVersion == 1 {
 		// Already-admitted plans remain authoritative and are never regenerated.
 		maxPopulation = 64
-	} else if p.GeneratorVersion != RiftFloorGeneratorVersion {
+	} else if p.GeneratorVersion == RiftFloorGeneratorVersion {
+		maxPopulation = RiftFloorMaxConfiguredPopulation
+	} else if p.GeneratorVersion != riftFloorBaseGeneratorVersion {
 		return false
 	}
 	if p.FloorIndex < 1 || p.MapID <= 0 || len(p.Spawns) < 8 || len(p.Spawns) > maxPopulation || !riftFloorPointValid(p.Entry, p.MapID) || !riftFloorPointValid(p.Exit, p.MapID) || riftFloorDistance(p.Entry, p.Exit) < 512*512 {

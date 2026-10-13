@@ -8,12 +8,19 @@ import (
 // applyResolvedSkillModifiers is shared by actual casting and typed/UI views.
 // It never consumes a status or mutates the immutable source SkillTable row.
 func (s *Scene) applyResolvedSkillModifiers(p *entity.Entity, def *domain.SkillDef, hard, raw domain.Learned) {
-	s.applyTrainingSynergiesWithHard(p, def, hard)
+	positiveManaCost := def.MPCost > 0
+	s.applyTrainingSynergiesWithLevels(p, def, hard, raw)
 	s.applyPassiveSkillModifiersWithLevels(p, def, raw)
 	def.UniqueInvisibleStart = entityInvisible(p)
 	s.applyEquipmentSkillVariant(p, def, hard)
 	s.applyUniqueSkillModifiers(p, def)
 	finalizeEquipmentSkillVariant(def)
+	// Layered percentage reductions can truncate a positive native cost to zero.
+	// Keep the existing one-MP floor at the shared cast/preview boundary; skills
+	// authored with zero cost remain free.
+	if positiveManaCost && def.MPCost < 1 {
+		def.MPCost = 1
+	}
 	domain.FinalizeSkillManaCost(def)
 	previewGrowthRounding(p, def)
 }

@@ -6,6 +6,7 @@ const EndgameNativeStatsV1 = "endgame.native-stats.v1"
 const EndgameGrowthV5 = "endgame.growth.v5"
 const EndgameRiftPortalsV1 = "endgame.rift-portals.v1"
 const EndgameRiftEntranceV1 = "endgame.rift-entrance.v1"
+const EndgameCubeInputsV1 = "endgame.cube-inputs.v1"
 const EndgameSchema = 1
 const EndgameMaxJSONBytes = 60 * 1024
 
@@ -23,23 +24,24 @@ type EndgameItemState struct {
 }
 
 type EndgameRequest struct {
-	SkillID          int32    `json:"skillId,omitempty"`
-	Op               string   `json:"op"`
-	RequestID        string   `json:"requestId,omitempty"`
-	ExpectedRevision string   `json:"expectedRevision,omitempty"`
-	Capabilities     []string `json:"capabilities,omitempty"`
-	Catalog          string   `json:"catalog,omitempty"`
-	Cursor           string   `json:"cursor,omitempty"`
-	TargetUID        string   `json:"targetUid,omitempty"`
-	RuneUID          string   `json:"runeUid,omitempty"`
-	Socket           int32    `json:"socket,omitempty"`
-	RecipeID         int32    `json:"recipeId,omitempty"`
-	QuoteID          string   `json:"quoteId,omitempty"`
-	RunID            string   `json:"runId,omitempty"`
-	Tier             int32    `json:"tier,omitempty"`
-	NPCEntityID      EntityID `json:"npcEntityId,omitempty"`
-	FloorIndex       int32    `json:"floorIndex,omitempty"`
-	ItemUIDs         []string `json:"itemUids,omitempty"`
+	SkillID          int32       `json:"skillId,omitempty"`
+	Op               string      `json:"op"`
+	RequestID        string      `json:"requestId,omitempty"`
+	ExpectedRevision string      `json:"expectedRevision,omitempty"`
+	Capabilities     []string    `json:"capabilities,omitempty"`
+	Catalog          string      `json:"catalog,omitempty"`
+	Cursor           string      `json:"cursor,omitempty"`
+	TargetUID        string      `json:"targetUid,omitempty"`
+	RuneUID          string      `json:"runeUid,omitempty"`
+	Socket           int32       `json:"socket,omitempty"`
+	RecipeID         int32       `json:"recipeId,omitempty"`
+	QuoteID          string      `json:"quoteId,omitempty"`
+	RunID            string      `json:"runId,omitempty"`
+	Tier             int32       `json:"tier,omitempty"`
+	NPCEntityID      EntityID    `json:"npcEntityId,omitempty"`
+	FloorIndex       int32       `json:"floorIndex,omitempty"`
+	ItemUIDs         []string    `json:"itemUids,omitempty"`
+	CubeInputs       []CubeInput `json:"cubeInputs,omitempty"`
 }
 
 func (r EndgameRequest) Mutates() bool {
@@ -188,6 +190,7 @@ type EndgameRiftView struct {
 	Progress         int32                   `json:"progress"`
 	ProgressMax      int32                   `json:"progressMax"`
 	RemainingSeconds int32                   `json:"remainingSeconds"`
+	TotalSeconds     int32                   `json:"totalSeconds,omitempty"`
 	BossName         string                  `json:"bossName,omitempty"`
 	Members          []EndgameRiftMemberView `json:"members,omitempty"`
 	Claimable        bool                    `json:"claimable"`

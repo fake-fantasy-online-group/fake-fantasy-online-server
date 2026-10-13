@@ -59,6 +59,12 @@ func (s *Scene) initEndgameRift(d endgameRiftPersisted) bool {
 	// Keep only the native gate geometry for authoritative floor admission. Its
 	// original destination and script must never execute in this private run.
 	portals := s.portals
+	if s.riftPortalAreas != nil {
+		portals = make([]domain.Portal, 0, len(s.riftPortalAreas))
+		for _, area := range s.riftPortalAreas {
+			portals = append(portals, domain.NewPortal(domain.Teleport{Area: area}))
+		}
+	}
 	if s.rift != nil {
 		portals = s.rift.portals
 	}

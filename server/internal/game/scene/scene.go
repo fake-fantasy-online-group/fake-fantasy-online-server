@@ -78,6 +78,9 @@ type Config struct {
 
 	// Portals 是本图的传送门。踩上去就走人。
 	Portals []domain.Portal
+	// RiftPortalAreas includes native gate geometry even when the scenery's
+	// public destination is unavailable. Only private rift admission reads it.
+	RiftPortalAreas []domain.Polygon
 	// Transports 是 NPC TransList 对应的权威目的地配置。
 	Transports domain.TransportTable
 	// Shops 是 NPC SellList 对应的权威库存配置。
@@ -267,8 +270,9 @@ type Scene struct {
 	spawner              *spawn.Spawner                         // nil = 这张图不刷怪
 	walkable             func(domain.Pos) bool                  // 怪物游荡和局部追击寻路的 MASK 判定
 	portals              []domain.Portal                        // 本图的传送门
-	transports           domain.TransportTable                  // NPC 传送菜单
-	shops                domain.ShopTable                       // NPC 商店库存
+	riftPortalAreas      []domain.Polygon
+	transports           domain.TransportTable // NPC 传送菜单
+	shops                domain.ShopTable      // NPC 商店库存
 	// portalBlocked 记录“刚被服务端传送到门区内”的玩家。只要仍处于任意
 	// 门区，后续移动包都不能再次触门；完全离开后才重新武装边沿触发。
 	portalBlocked map[domain.EntityID]struct{}
@@ -430,6 +434,7 @@ func New(cfg Config) *Scene {
 		trial:                cfg.Trial, dungeonParty: cfg.DungeonParty, dungeonNotify: cfg.DungeonNotify,
 		walkable:          cfg.Walkable,
 		portals:           cfg.Portals,
+		riftPortalAreas:   cfg.RiftPortalAreas,
 		transports:        cfg.Transports,
 		shops:             cfg.Shops,
 		portalBlocked:     map[domain.EntityID]struct{}{},
