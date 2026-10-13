@@ -95,11 +95,12 @@ func TestGangqiKnockbackPostgres(t *testing.T) {
 			}
 		}
 	})
-	t.Run("backstab-duration-remains-uninvented", func(t *testing.T) {
+	t.Run("backstab-unchanged-by-gangqi-migration", func(t *testing.T) {
 		for _, rank := range ranks {
 			def, _ := skills.Get(10201, rank)
-			if len(def.PassiveTriggers) != 0 {
-				t.Fatal("unconfirmed backstab stun activated", rank, def.PassiveTriggers)
+			old, _ := before.Get(10201, rank)
+			if !reflect.DeepEqual(def, old) {
+				t.Fatal("Gangqi migration changed Backstab", rank)
 			}
 		}
 	})

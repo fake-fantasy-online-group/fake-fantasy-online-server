@@ -20,7 +20,7 @@ import (
 func TestSkillConfigurationDatabaseGolden(t *testing.T) {
 	path := os.Getenv("FANTASY_SKILL_CONFIG_PG_DATA")
 	if path == "" {
-		t.Skip("explicit isolated migration72 cluster required")
+		t.Skip("explicit isolated migration73 cluster required")
 	}
 	q := &v5SingleUserQuerier{bin: os.Getenv("PG_BIN"), path: path, database: "postgres"}
 	table, _, err := LoadSkills(context.Background(), q)
@@ -112,7 +112,7 @@ func (q skillConfigurationQueryEdit) Query(ctx context.Context, sql string, args
 func TestSkillConfigurationDatabaseRejectsMissingAndUsesConfiguredPolicy(t *testing.T) {
 	path := os.Getenv("FANTASY_SKILL_CONFIG_PG_DATA")
 	if path == "" {
-		t.Skip("explicit isolated migration72 cluster required")
+		t.Skip("explicit isolated migration73 cluster required")
 	}
 	q := &v5SingleUserQuerier{bin: os.Getenv("PG_BIN"), path: path, database: "postgres"}
 	table, _, err := LoadSkills(context.Background(), q)

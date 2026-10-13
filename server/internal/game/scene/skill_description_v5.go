@@ -346,7 +346,13 @@ func (s *Scene) skillDescriptionValues(d domain.SkillDef) ([]string, bool) {
 	case 10129:
 		return []string{duration(0), statusField(0, func(x domain.StatusDef) string { return skillNumber(x.AttackCap) })}, true
 	case 10201:
-		return []string{passive(domain.PassivePreserveInvisibleChance), triggerChance(0)}, true
+		values := []string{passive(domain.PassivePreserveInvisibleChance), triggerChance(0)}
+		// Migration73 adds the approved stun duration in the original sentence.
+		// Keep two-slot historical templates compatible until their data is updated.
+		if len(d.PassiveTriggers) > 0 && len(skillDescriptionNumber.FindAllStringIndex(d.Description, -1)) == 3 {
+			values = append(values, triggerDuration(0))
+		}
+		return values, true
 	case 10203:
 		if d.PassiveCounter != nil {
 			return []string{skillBasisPoints(d.PassiveCounter.ChanceBP)}, true

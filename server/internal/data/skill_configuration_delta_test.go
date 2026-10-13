@@ -40,12 +40,15 @@ func loadSkillConfigurationGolden(t *testing.T) []skillConfigurationGoldenRow {
 	}
 	// Each version is anchored to the preceding reviewed snapshot. In particular,
 	// 10313 appears in both deltas, so v9 must use its v8 hash, not its v7 hash.
+	// Migration73's v10 delta is restricted to Advanced Backstab (10201) at
+	// exactly the same ten existing ranks; all earlier anchors remain intact.
 	for _, delta := range []struct {
 		file string
 		ids  []domain.SkillID
 	}{
 		{"testdata/skill-config-golden-v8-delta.json", []domain.SkillID{10028, 10127, 10313, 10317, 10326}},
 		{"testdata/skill-config-golden-v9-delta.json", []domain.SkillID{10102, 10212, 10312, 10313}},
+		{"testdata/skill-config-golden-v10-delta.json", []domain.SkillID{10201}},
 	} {
 		var changes []struct {
 			ID             domain.SkillID
