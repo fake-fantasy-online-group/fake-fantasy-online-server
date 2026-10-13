@@ -143,7 +143,9 @@ func nativeStatsHello(native bool) []byte {
 func (r *nativeStatsRig) hello(native bool) [][]byte {
 	r.s.OnPacket(protocol.OpEndgame, nativeStatsHello(native))
 	r.sync()
-	return r.take()
+	packets := r.take()
+	assertHelloAdmissionPending(r.t, nativeStatsResponses(r.t, packets))
+	return packets
 }
 func nativeStatsResponses(t *testing.T, packets [][]byte) []domain.EndgameResponse {
 	t.Helper()
@@ -174,6 +176,9 @@ func hasNativeStats(response domain.EndgameResponse) bool {
 func assertNativeStatsHandshake(t *testing.T, packets [][]byte, native, refresh bool) {
 	t.Helper()
 	responses := nativeStatsResponses(t, packets)
+	if len(responses) > 0 && responses[0].Error == "pending" {
+		responses = assertHelloAdmissionPending(t, responses)
+	}
 	if len(responses) != 2 || responses[0].Kind != "hello" || !responses[0].OK || responses[1].Kind != "snapshot" || !responses[1].OK || hasNativeStats(responses[0]) != native {
 		t.Fatalf("expected exactly one authoritative hello then snapshot (native=%v): %+v", native, responses)
 	}
@@ -184,9 +189,10 @@ func assertNativeStatsHandshake(t *testing.T, packets [][]byte, native, refresh 
 			inventory = i
 		}
 		if op == protocol.SCEndgame {
-			if hello < 0 {
+			response := nativeStatsResponses(t, [][]byte{packet})[0]
+			if response.Kind == "hello" && response.OK {
 				hello = i
-			} else {
+			} else if response.Kind == "snapshot" {
 				snapshot = i
 			}
 		}
@@ -218,6 +224,14 @@ func assertNativeStatsHandshake(t *testing.T, packets [][]byte, native, refresh 
 	}
 }
 
+func assertHelloAdmissionPending(t *testing.T, responses []domain.EndgameResponse) []domain.EndgameResponse {
+	t.Helper()
+	if len(responses) == 0 || responses[0].Kind != "hello" || responses[0].OK || responses[0].Error != "pending" || len(responses[0].Capabilities) != 0 || len(responses[0].Result) != 0 {
+		t.Fatalf("missing initial transport-only hello admission: %+v", responses)
+	}
+	return responses[1:]
+}
+
 func TestEndgameNativeStatsThroughSessionWire(t *testing.T) {
 	t.Run("first-native-hello", func(t *testing.T) {
 		r := newNativeStatsRig(t, domain.EndgameLoadResult{})
@@ -242,7 +256,7 @@ func TestEndgameNativeStatsSessionRetriesLoadAndRefreshFailures(t *testing.T) {
 				r.inspect(func(sc *scene.Scene) { sc.EntityAt(1).Player.Bag.Set(201, domain.Stack{Item: 987654, Count: 1}) })
 			}
 			packets := r.hello(true)
-			responses := nativeStatsResponses(t, packets)
+			responses := assertHelloAdmissionPending(t, nativeStatsResponses(t, packets))
 			if len(responses) != 1 || responses[0].Kind != "hello" || responses[0].OK || responses[0].Error != failure || len(responses[0].Capabilities) != 0 {
 				t.Fatalf("failed hello must reach the client without capability confirmation: %+v", responses)
 			}
@@ -261,10 +275,10 @@ func TestEndgameNativeStatsSessionRetriesLoadAndRefreshFailures(t *testing.T) {
 }
 func TestEndgameNativeStatsSessionPendingHelloDoesNotConfirmEarly(t *testing.T) {
 	r := newNativeStatsRig(t)
-	if packets := nativeStatsResponses(t, r.hello(true)); len(packets) != 0 {
+	if packets := assertHelloAdmissionPending(t, nativeStatsResponses(t, r.hello(true))); len(packets) != 0 {
 		t.Fatalf("hello confirmed before storage finished: %+v", packets)
 	}
-	responses := nativeStatsResponses(t, r.hello(true))
+	responses := assertHelloAdmissionPending(t, nativeStatsResponses(t, r.hello(true)))
 	if len(responses) != 1 || responses[0].Error != "pending" || responses[0].OK || len(responses[0].Capabilities) != 0 {
 		t.Fatalf("pending response was hidden or advertised success: %+v", responses)
 	}
@@ -277,7 +291,7 @@ func TestEndgameNativeStatsSessionFailedRehelloRetainsRenderer(t *testing.T) {
 	r := newNativeStatsRig(t, domain.EndgameLoadResult{})
 	assertNativeStatsHandshake(t, r.hello(true), true, true)
 	r.inspect(func(sc *scene.Scene) { sc.EntityAt(1).Player.Bag.Set(201, domain.Stack{Item: 987654, Count: 1}) })
-	responses := nativeStatsResponses(t, r.hello(true))
+	responses := assertHelloAdmissionPending(t, nativeStatsResponses(t, r.hello(true)))
 	if len(responses) != 1 || responses[0].OK || responses[0].Error != "busy" {
 		t.Fatalf("unexpected failed rehello: %+v", responses)
 	}

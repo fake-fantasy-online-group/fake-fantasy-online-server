@@ -49,3 +49,21 @@ func (s *eventSink) CurrentSceneReady(id domain.EntityID, sc domain.SceneID, epo
 	return owner.stage == StageInGame && owner.entity == id && owner.scene == sc &&
 		!owner.awaitMapAck && owner.mapEpoch == epoch
 }
+
+// ConfirmClientGateReady commits a same-map native gate only while the exact
+// settled receipt binding still owns it. This is the already-built equivalent
+// of BeginMapLoad + CompleteMapLoad, atomically fenced against teardown/rebind.
+func (s *eventSink) ConfirmClientGateReady(id domain.EntityID, sc domain.SceneID, epoch uint64) bool {
+	if s.sess == nil {
+		return false
+	}
+	owner := s.sess
+	owner.mu.Lock()
+	defer owner.mu.Unlock()
+	if owner.stage != StageInGame || owner.entity != id || owner.scene != sc || owner.awaitMapAck || owner.mapEpoch != epoch {
+		return false
+	}
+	owner.clientMapReady = nil
+	owner.mapEpoch++
+	return true
+}

@@ -819,12 +819,16 @@ func (ChooseTransport) CmdName() string { return "ChooseTransport" }
 // 由场景自己在踩到传送门时投, 也可以由复活流程/GM 直接投。
 // 目标场景不存在会被懒加载建出来。
 type Teleport struct {
-	RiftRunID      string // internal ownership guard; never supplied by a client packet
-	ID             domain.EntityID
-	To             domain.SceneID
-	At             domain.Pos
-	Dir            uint8
-	ClientMapReady bool
+	// ClientGateReady is an internally verified, already-built same-map native
+	// gate. Its receipt epoch must still own the scene at the movement commit.
+	ClientGateReady bool
+	ClientGateEpoch uint64
+	RiftRunID       string // internal ownership guard; never supplied by a client packet
+	ID              domain.EntityID
+	To              domain.SceneID
+	At              domain.Pos
+	Dir             uint8
+	ClientMapReady  bool
 	// Server-only receipt binds a native preloaded ready to its source owner.
 	// Zero keeps non-session callers on their existing authorized path.
 	ClientReadyReceipt uint64

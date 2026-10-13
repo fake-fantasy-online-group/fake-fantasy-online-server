@@ -15,6 +15,12 @@ type Teleport struct {
 
 	// To 是目标地图 id 与落点。
 	To Pos
+	// ClientOwned routes retain source-scene ownership on movement hits. The
+	// original client's entered=1 report completes their map transition. This
+	// explicit database policy comes from audited import provenance, not a proc
+	// number heuristic or a claim about the client's currently mounted assets.
+	// The zero value keeps unknown/server-added routes server-driven.
+	ClientOwned bool
 	// Dungeon 表示这扇门进入队伍专属副本实例。当前唯一闭合来源是
 	// 通天塔 qw0507.link 的 map_script=Trap20502。
 	Dungeon bool

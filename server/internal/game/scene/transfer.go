@@ -130,7 +130,12 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 		// flush，本人跨格后反而不在旧格视野里，会漏掉收工事件。传送本来就是
 		// 生命周期边界，先把此前事件按旧坐标冲刷完，再下发权威落点。
 		s.flush()
-		if !s.beginMapLoad(e, cmd.ClientMapReady) {
+		if cmd.ClientGateReady {
+			owner, ok := e.Player.Sink.(clientGateReadySink)
+			if !ok || !owner.ConfirmClientGateReady(e.ID, s.id, cmd.ClientGateEpoch) {
+				return true // Superseded/closed during the old-world flush.
+			}
+		} else if !s.beginMapLoad(e, cmd.ClientMapReady) {
 			return true
 		}
 		if s.mapLoads[e.ID] != nil {
@@ -139,12 +144,18 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 		}
 		// 只有落点真的处于门区才上锁；落在普通位置不能吞掉下一次正常入门。
 		s.blockPortalLanding(e.ID, cmd.At)
-		// 本人也必须收到权威落点；普通 EntityMoved 刻意排除了本人，只改服务端
-		// 会让同图门后的客户端仍停在旧坐标。0x803a 对同图同样是精确定义的传送事件。
-		s.emitTo(e.ID, event.Teleported{Who: e.ID, Scene: s.id, To: cmd.At})
+		// A server-initiated move still needs its native teleport. A client-owned
+		// same-map gate has already rebuilt at this exact configured landing.
+		if !cmd.ClientGateReady {
+			s.emitTo(e.ID, event.Teleported{Who: e.ID, Scene: s.id, To: cmd.At})
+		}
 		// 不再次检查传送门；否则落点仍在门区时会同步递归。force=true 让眩晕
 		// 只限制主动移动，不阻止服务端传送。
 		s.move(MoveTo{ID: cmd.ID, To: cmd.At, Dir: cmd.Dir, Stop: true}, false, true)
+		if cmd.ClientGateReady {
+			s.syncWorldAfterLoad(e)
+			s.flush()
+		}
 		return true
 	}
 	if s.router == nil {
@@ -176,6 +187,13 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	s.removeOwnerTraps(e.ID)
 	// 传送命令携带的是目标落地方向；不能让运行态快照里的旧朝向把它覆盖掉。
 	runtime.Dir = cmd.Dir
+
+	// Native ground/NPC packets have no map guard. The client may have built
+	// its target while ready was still upstream, so source rows arriving in
+	// that interval must be removed before any destination snapshot. Player,
+	// monster and pet packets already carry their own map guard; do not clear
+	// those unrelated registries or the local player here.
+	s.clearSourceMaplessEntities(e.ID)
 
 	// 1~2. 让周围的人看到他走了
 	s.emitExcept(event.EntityDespawned{ID: e.ID, Kind: e.Kind, Reason: event.DespawnTimeout}, e.ID)
@@ -288,6 +306,13 @@ func (s *Scene) checkPortals(e *domain.Pos, id domain.EntityID) bool {
 		return false
 	}
 	p := &s.portals[portal]
+	if p.ClientOwned {
+		// The native client owns the polygon edge and builds locally. Movement
+		// alone is not a transfer request: it may be a rounded boundary point,
+		// spawn-inside suppression, or a build that fails. Keep source ownership
+		// until its existing entered=1 arrives; never race that ready with 803a.
+		return false
+	}
 	if s.dungeon != nil {
 		if target, ok := s.dungeons[p.To.MapID]; ok && target.ID == s.dungeon.ID {
 			if s.enterDungeonFloor(id, p.To, uint8(p.ToDir)) {
@@ -415,5 +440,21 @@ func (s *Scene) attachRouter(r *Router) {
 	s.router = r
 	if s.alloc == nil { // Config 里显式给过就不覆盖
 		s.alloc = r.Alloc()
+	}
+}
+
+// Only the old source's live network IDs are retired. Initial static scenery is
+// never an entity here, and skipNPC uses the same publication rule as snapshots.
+// A source row already removed earlier has its native removal before this FIFO
+// boundary. Same-scene native gates do not call this: their rows remain valid.
+func (s *Scene) clearSourceMaplessEntities(to domain.EntityID) {
+	for _, o := range s.entities {
+		if o.Kind != domain.KindDrop && o.Kind != domain.KindNPC {
+			continue
+		}
+		if o.Kind == domain.KindNPC && s.skipNPC && !s.isEndgameRiftExitNPC(o) {
+			continue
+		}
+		s.emitTo(to, event.EntityDespawned{ID: o.ID, Kind: o.Kind, Reason: event.DespawnTimeout})
 	}
 }

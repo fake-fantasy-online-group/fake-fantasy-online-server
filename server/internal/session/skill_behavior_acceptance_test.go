@@ -24,6 +24,9 @@ func TestSkillBehaviorAcceptanceSessionWireRequiresBothCapabilities(t *testing.T
 			r.s.OnPacket(protocol.OpEndgame, growthPacket(domain.EndgameRequest{Op: "hello", Capabilities: tc.caps}))
 			r.sync()
 			responses := nativeStatsResponses(t, r.take())
+			if tc.accepted {
+				responses = assertHelloAdmissionPending(t, responses)
+			}
 			found := false
 			for _, response := range responses {
 				if response.Kind != "hello" {

@@ -84,8 +84,10 @@
 
 现有的 `TestStaleMoveAfterCrossMapIsDropped`、`TestClientReadyTransferWaitsForTargetOwnershipThenAllowsMovement`、`TestTransferFailurePreservesMapConfirmationState` 也必须继续通过。客户端实际画面和用户现场时序仍需要对应运行环境验证。
 
-## 明确保留的边界
+## 后续修复与剩余边界
 
-这两项确定修复不证明所有客户端画面重复加载都已解决。若普通门移动已让服务端发出权威 `0x803a`，但客户端本地建图完成后的首 ready 还在发送队列或上行途中，原始客户端可能在淡出阶段收到该传送并再次建图。这是双向合法交叉，不是 TCP 乱序，也不能由服务端提前知道尚未到达的 ready。
+以上为 `27291d0` 的首 ready 归属修复。随后普通门的另一方向交叉已用现有协议解决：原始导入门持久化为 client-owned，Move 只更新源位置，等原客户端建好后的 entered=1 才交接。因此不再抢先发出可与该 ready 交叉的 `0x803a`，也不要求导出完整客户端 JSON 才能实施。
 
-因此本批没有取消所有普通门的 `0x803a`。是否应将某扇门完全交给原客户端本地触发，需要可核对的客户端 `teleport_links` 以及出生门内、命令门、同图门和服务端独有门等例外证据。未知门仍按原服务端语义运行；不能把未完成的全量资源一致性核验当作通过。
+详见 [原生门 ready 驱动流程](native-portal-ready.md) 与 [数据库来源分类](daoist-endgame/MAP_TRANSITION_OWNERSHIP.md)。同图门仅在当前完整场景/epoch与配置落点精确匹配时使用专用内部路径；普通同图重建仍只同步。源图迟到的无 map guard NPC/ground 会在交接前用原生移除包清除。
+
+独立服务端强制传送与旧本地 ready 交叉到同一地图但不同落点时，目标 actor 还会验证现有 ready 的原生整数落点，防止提前释放首快照。若两个独立操作的地图与 wire 落点完全相同，原协议不提供操作身份，仍不能据此区分两个请求。实际原始协程到终态证明：晚到的真实GM传送触发第二次建图，其正常ready2再走同图完整同步，全部实体恢复；这是两个独立请求的两次建图及短暂可见性变化，不是普通门冗余加载或永久缺实体。

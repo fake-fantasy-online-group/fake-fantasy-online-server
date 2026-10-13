@@ -23,11 +23,11 @@ func TestEndgameNegotiationRequiresWorld(t *testing.T) {
 		t.Fatal("native capability changed")
 	}
 	s.OnPacket(protocol.OpEndgame, endgameHello())
-	if !s.endgameEnabled() || len(out.pkts) != 1 {
+	if !s.endgameEnabled() || len(out.pkts) != 2 {
 		t.Fatal("hello transport not enabled")
 	}
 	responses := nativeStatsResponses(t, out.pkts)
-	if len(responses) != 1 || responses[0].OK || responses[0].Error != "busy" || len(responses[0].Capabilities) != 0 {
+	if len(responses) != 2 || responses[0].OK || responses[0].Error != "pending" || len(responses[0].Capabilities) != 0 || len(responses[0].Result) != 0 || responses[1].OK || responses[1].Error != "busy" || len(responses[1].Capabilities) != 0 {
 		t.Fatal("missing scene router must not fabricate a successful hello", responses)
 	}
 	s.leaveWorld("test", StageAuthed)
@@ -52,7 +52,7 @@ func TestEndgameMapBarrierAndEventGate(t *testing.T) {
 	s.awaitMapAck = false
 	s.OnPacket(protocol.OpEndgame, endgameHello())
 	sink.Emit(event.EndgameMessage{Who: 1, Message: domain.EndgameResponse{Kind: "snapshot", OK: true}})
-	if len(out.pkts) != 2 {
+	if len(out.pkts) != 3 {
 		t.Fatal("negotiated event missing")
 	}
 }

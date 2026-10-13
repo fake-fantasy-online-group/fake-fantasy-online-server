@@ -656,10 +656,11 @@ func LoadTeleports(ctx context.Context, q Querier, dungeons domain.DungeonTable)
 	rows, err := q.Query(ctx, `
 		SELECT src.id, t.proc_id, t.map_to, t.to_x, t.to_y, t.to_dir,
 		       t.back_x, t.back_y, t.back_dir, t.poly, t.script,
-		       dst.id IS NOT NULL
+		       dst.id IS NOT NULL, t.transition_owner
 		  FROM map_teleports t
 		  LEFT JOIN map_defs src ON src.file = t.map_file
-		  LEFT JOIN map_defs dst ON dst.id   = t.map_to`)
+		  LEFT JOIN map_defs dst ON dst.id   = t.map_to
+		 ORDER BY src.id, t.proc_id`)
 	if err != nil {
 		return nil, TeleportStats{}, fmt.Errorf("data: 查 map_teleports: %w", err)
 	}
@@ -677,9 +678,10 @@ func LoadTeleports(ctx context.Context, q Querier, dungeons domain.DungeonTable)
 			poly   []int32
 			script string
 			destOK bool
+			owner  string
 		)
 		if err := rows.Scan(&srcID, &tp.ProcID, &mapTo, &tx, &ty, &tp.ToDir,
-			&bx, &by, &tp.BackDir, &poly, &script, &destOK); err != nil {
+			&bx, &by, &tp.BackDir, &poly, &script, &destOK, &owner); err != nil {
 			return nil, st, fmt.Errorf("data: 读传送门行: %w", err)
 		}
 		st.Total++
@@ -707,6 +709,10 @@ func LoadTeleports(ctx context.Context, q Querier, dungeons domain.DungeonTable)
 			st.NoArea++
 			continue
 		}
+		// Script-admitted gates always retain their server-side admission path,
+		// even if an administrator accidentally marks one client-owned. Unknown
+		// policy values are conservative too; the schema accepts only these two.
+		tp.ClientOwned = owner == "client" && script == "" && !tp.Dungeon
 		tp.To = domain.Pos{MapID: mapTo, X: float64(tx), Y: float64(ty)}
 		tp.Back = domain.Pos{MapID: *srcID, X: float64(bx), Y: float64(by)}
 		tp.Area = make(domain.Polygon, 0, len(poly)/2)

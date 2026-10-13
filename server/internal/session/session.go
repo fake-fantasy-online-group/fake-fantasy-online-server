@@ -1615,7 +1615,7 @@ func (s *Session) onMove(req protocol.Request) {
 		s.mu.Unlock()
 		if confirmed {
 			// Keep the barrier closed until the scene consumes this lifecycle command.
-			if s.deps.Router == nil || !s.deps.Router.PostLifecycle(sc, scene.MapReady{ID: id, Scene: sc, Epoch: epoch}) {
+			if s.deps.Router == nil || !s.deps.Router.PostLifecycle(sc, scene.MapReady{ID: id, Scene: sc, Epoch: epoch, At: domain.Pos{MapID: req.MapID, X: float64(req.X), Y: float64(req.Y)}}) {
 				s.log.Error("地图确认无法投递到目标场景", "entity", id, "scene", sc, "epoch", epoch)
 				s.sink.Close()
 			}
@@ -1629,9 +1629,11 @@ func (s *Session) onMove(req protocol.Request) {
 		epoch := s.mapEpoch
 		s.mu.Unlock()
 		// The client has rebuilt this scene even though its map ID did not change.
-		// Coordinates are not a movement command at this lifecycle boundary.
+		// Scene validates an exact configured native gate landing; otherwise
+		// these coordinates do not move the player at this lifecycle boundary.
 		if s.deps.Router == nil || !s.deps.Router.PostLifecycle(sc, scene.ClientSceneReady{
 			ID: id, Scene: sc, Epoch: epoch,
+			At: domain.Pos{MapID: req.MapID, X: float64(req.X), Y: float64(req.Y)},
 		}) {
 			s.log.Error("同图重建确认无法投递到场景", "entity", id, "scene", sc, "epoch", epoch)
 			s.sink.Close()
@@ -1639,9 +1641,9 @@ func (s *Session) onMove(req protocol.Request) {
 		return
 	}
 	// 幻想小岛的村庄选择等旧客户端功能会先在本地切图，再用 0x100a 把新地图和
-	// 落点报上来；它们不会先发 OpenTeleport/Teleport。切图开始时先报 entered=0，
-	// 地图和 CombatWorld 真正建好后才报 entered=1。若在第一包就交接，下发的 NPC、
-	// 怪物会被客户端随后完成的建图清空。因此只把 entered=1 当作客户端发起的传送，
+	// 落点报上来；它们不会先发 OpenTeleport/Teleport。普通门也没有提前通知目标图，
+	// 周期 entered=0 仍报告当时的当前图；地图和 CombatWorld 真正建好后才报 entered=1。
+	// 只把 entered=1 当作客户端发起的传送，
 	// 此时再让现有场景交接链路追上客户端并下发目标图实体。
 	clientTeleport := inGame && req.Kind == protocol.ReqSavePos &&
 		req.Flag == 1 && req.MapID > 0 && req.MapID != sc.MapID

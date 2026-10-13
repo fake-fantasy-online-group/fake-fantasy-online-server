@@ -37,6 +37,11 @@ func (s *Session) onEndgame(payload []byte) {
 			s.sink.Send(protocol.EncodeEndgame(domain.EndgameResponse{Kind: "hello", RequestID: req.RequestID, Error: "unsupported_capability"}))
 			return
 		}
+		// A queued hello may wait behind a busy actor before storage even starts.
+		// Acknowledge supported transport synchronously, without confirming any
+		// capability or scene ownership. Send before Post so the actor cannot
+		// publish success followed by a late admission-pending response.
+		s.sink.Send(protocol.EncodeEndgame(domain.EndgameResponse{Kind: "hello", RequestID: req.RequestID, Error: "pending", Message: "请求处理中，请稍候"}))
 		if s.deps.Router == nil || !s.deps.Router.Post(sc, scene.EndgameRequest{ID: id, Request: req}) {
 			s.sink.Send(protocol.EncodeEndgame(domain.EndgameResponse{Kind: "hello", RequestID: req.RequestID, Error: "busy", Message: "演劫系统暂时无法响应，请重试"}))
 		}
