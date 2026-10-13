@@ -18,7 +18,9 @@ import (
 // The frozen digests were captured through actual PostgreSQL loaders before
 // moving any identity/policy/restoration code into migration 62. Chance omitted
 // versus explicitly certain is normalized; all numerical and resolved payloads
-// (including original ranks 1..5) must remain exactly equal.
+// (including original ranks 1..5) must remain exactly equal, except the reviewed
+// 10223 knockback loader fix: its 10 snapshots now carry the configured 10000
+// ChanceBP instead of the omitted zero. Damage, distance and text are unchanged.
 func TestSkillConfigurationDatabaseGolden(t *testing.T) {
 	path := os.Getenv("FANTASY_SKILL_CONFIG_PG_DATA")
 	if path == "" {
@@ -97,7 +99,7 @@ func TestSkillConfigurationDatabaseGolden(t *testing.T) {
 			t.Fatalf("effective skill/status changed %d/%d", row.ID, row.Rank)
 		}
 	}
-	t.Logf("149 identities/policies,128 synergies,1490 effective skill+status snapshots match pre-refactor; %d actual SQL reads", q.queries)
+	t.Logf("149 identities/policies,128 synergies,1490 effective skill+status snapshots match the reviewed golden; %d actual SQL reads", q.queries)
 }
 
 // Deliberately altered SELECT results exercise fail-closed loading without ever

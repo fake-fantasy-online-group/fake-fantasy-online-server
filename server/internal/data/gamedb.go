@@ -2953,7 +2953,7 @@ func loadStructuredSkillEffects(ctx context.Context, q Querier) (map[domain.Skil
 				effect.Target != domain.EffectTargetResolved || lossRefundPct != 0 {
 				return nil, fmt.Errorf("data: 技能 %d/%d 第 %d 个 knockback 效果参数非法", key.ID, key.Level, order)
 			}
-			effect.Kind, effect.KnockbackDistance = domain.EffectKnockback, flat
+			effect.Kind, effect.KnockbackDistance, effect.ChanceBP = domain.EffectKnockback, flat, chanceBP
 		case "clear_harmful":
 			if powerPct != 0 || resourcePct != 0 || flat != 0 || guaranteedHit || chanceBP != 10000 || lossRefundPct != 0 {
 				return nil, fmt.Errorf("data: 技能 %d/%d 第 %d 个 clear_harmful 效果参数非法", key.ID, key.Level, order)
