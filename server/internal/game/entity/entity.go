@@ -46,6 +46,7 @@ type Entity struct {
 
 // NPCInfo 是 NPC 的展示数据。
 type NPCInfo struct {
+	ConfigID int32 // Original map_npcs.npc_id; scoped by the entity's map.
 	Sprite   string
 	Script   string
 	Portrait string

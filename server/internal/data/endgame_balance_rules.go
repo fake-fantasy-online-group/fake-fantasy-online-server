@@ -77,5 +77,10 @@ func LoadRiftRules(ctx context.Context, q Querier, loot *domain.LootRuleTable, i
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-	return domain.NewRiftRuleTable(active, all, loot, items)
+	rows.Close()
+	entrances, err := loadRiftEntrances(ctx, q)
+	if err != nil {
+		return nil, err
+	}
+	return domain.NewRiftRuleTable(active, all, loot, items, entrances...)
 }

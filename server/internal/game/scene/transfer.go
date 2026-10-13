@@ -11,6 +11,14 @@ type transferSink interface {
 	TransferScene(id domain.EntityID, from, to domain.SceneID, handoff func() bool) bool
 }
 
+// Optional production seam, leaving non-network scene consumers unchanged.
+type clientReadyTransferSink interface {
+	TransferSceneWithClientReady(domain.EntityID, domain.SceneID, domain.SceneID,
+		domain.Pos, bool, uint64, bool, func(bool) bool) bool
+	ClientMapReadyCurrent(domain.EntityID, domain.SceneID, uint64) bool
+	RetireClientMapReady(uint64)
+}
+
 // 跨场景传送 —— Actor 模型里最容易写错的一段。
 //
 // 铁律: **实体的所有权随消息转移, 同一时刻只有一个场景持有它。**
@@ -35,6 +43,13 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	e, ok := s.players[cmd.ID]
 	if !ok {
 		return false
+	}
+	if cmd.ClientReadyReceipt != 0 {
+		owner, ok := e.Player.Sink.(clientReadyTransferSink)
+		if !ok || !owner.ClientMapReadyCurrent(e.ID, s.id, cmd.ClientReadyReceipt) {
+			return true // The source generation was replaced; never replay its request.
+		}
+		defer owner.RetireClientMapReady(cmd.ClientReadyReceipt)
 	}
 	if s.rift != nil && cmd.To != s.id && !s.rift.data.Run.Terminal() && s.rift.data.Run.Admitted(domain.CharID(e.Player.Char.ID)) && !(s.rift.retired && s.rift.transition != nil && cmd.To == s.rift.transition.target) {
 		s.trialNotice(e, "请通过演劫洞天面板离开；离开会放弃本次奖励资格。")
@@ -200,14 +215,14 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	partyID := e.Player.Party
 	id := e.ID // 实体 id 跟着人走 —— 是同一个实体换了地方, 不是新生成一个
 
-	handoff := func() bool {
+	handoff := func(inheritedReady bool) bool {
 		enter := Enter{
 			ID: id, Char: char, Runtime: &runtime, Bag: bag, Worn: worn, Warehouse: warehouse,
 			ChangeSet: changeSet,
 			Wardrobe:  wardrobe,
 			Stall:     stall,
 			Party:     partyID, DungeonElapsed: s.transferDungeonElapsed(cmd.To),
-			Sink: sink, ClientMapReady: cmd.ClientMapReady,
+			Sink: sink, ClientMapReady: cmd.ClientMapReady && cmd.ClientReadyReceipt == 0 || inheritedReady,
 			FinalSaver: finalSaver,
 		}
 		if cmd.RiftRunID != "" {
@@ -216,10 +231,13 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 		return s.router.PostHandoff(cmd.To, enter)
 	}
 	handedOff := false
-	if owner, ok := sink.(transferSink); ok {
-		handedOff = owner.TransferScene(id, s.id, cmd.To, handoff)
+	if owner, ok := sink.(clientReadyTransferSink); ok {
+		handedOff = owner.TransferSceneWithClientReady(id, s.id, cmd.To, cmd.At,
+			cmd.PortalTransfer, cmd.ClientReadyReceipt, cmd.ClientMapReady, handoff)
+	} else if owner, ok := sink.(transferSink); ok {
+		handedOff = owner.TransferScene(id, s.id, cmd.To, func() bool { return handoff(false) })
 	} else {
-		handedOff = handoff()
+		handedOff = handoff(false)
 	}
 	if !handedOff {
 		// 目标场景建不出来/满了。人已经从这边摘掉了, 不能装作没事 ——
@@ -288,7 +306,7 @@ func (s *Scene) checkPortals(e *domain.Pos, id domain.EntityID) bool {
 		return false
 	}
 	dst := domain.SceneID{MapID: p.To.MapID}
-	if !s.onTeleport(Teleport{ID: id, To: dst, At: p.To, Dir: uint8(p.ToDir)}) {
+	if !s.onTeleport(Teleport{ID: id, To: dst, At: p.To, Dir: uint8(p.ToDir), PortalTransfer: true}) {
 		s.log.Warn("传送门触发未执行, 玩家留在原场景", "id", id,
 			"proc", p.ProcID, "to", dst)
 		return false

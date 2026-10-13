@@ -1,7 +1,6 @@
 package scene
+
 import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
-
 
 import (
 	"context"
@@ -242,10 +241,10 @@ func TestRiftPriorClaimedCompletionAdmitsAndPersistsProjectedTierAtomically(t *t
 			defer router.Drain(time.Second)
 			s.router = router
 			s.riftLayouts = riftFloorTemplatesForTest()[:1]
-			s.trial.Entrances = []domain.TrialEntrance{{EntryMap: 7, EntryNPC: "妖魔结界守卫"}}
-			s.entities[77] = &entity.Entity{ID: 77, Kind: domain.KindNPC, Name: "妖魔结界守卫"}
+			// The configured rift entrance is independent from native trial guards.
+			s.entities[77] = &entity.Entity{ID: 77, Kind: domain.KindNPC, Name: "八仙使者", Pos: domain.Pos{MapID: 7, X: 100, Y: 100}, NPC: &entity.NPCInfo{ConfigID: 83, Script: "Nbaxian"}}
 			p := s.players[1]
-			p.Player.QuestNPC = "妖魔结界守卫"
+			p.Player.QuestNPC = "八仙使者"
 			if !tc.noKey {
 				p.Player.Bag.AddStack(s.items[domain.RiftKeyItemID], domain.Stack{Item: domain.RiftKeyItemID, Count: 1, Bound: true})
 			}
@@ -266,7 +265,7 @@ func TestRiftPriorClaimedCompletionAdmitsAndPersistsProjectedTierAtomically(t *t
 			d := endgameRiftPersisted{Version: 2, Run: r, GrantsReady: true}
 			b.runs[r.RunID] = d.record(1)
 			s.endgamePlayer(p).state.Payload = withRiftProfile("{}", endgameRiftProfile{RunID: r.RunID, UnlockedTier: tc.prior})
-			s.onEndgameRift(p, domain.EndgameRequest{Op: "rift.start", RequestID: "start-tier-upgrade-01", ExpectedRevision: "0", Tier: tc.tier})
+			s.onEndgameRift(p, domain.EndgameRequest{Op: "rift.start", NPCEntityID: 77, RequestID: "start-tier-upgrade-01", ExpectedRevision: "0", Tier: tc.tier})
 			s.stepEndgameRiftRequests()
 			if got := riftProfile(s.endgamePlayer(p).state.Payload).UnlockedTier; got != tc.prior {
 				t.Fatalf("read/start mutated profile early: %d", got)

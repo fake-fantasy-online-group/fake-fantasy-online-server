@@ -273,7 +273,7 @@ func TestRiftPreviousRewardCannotBeHidden(t *testing.T) {
 	b.runs[r.RunID] = d.record(1)
 	p := s.players[1]
 	s.endgamePlayer(p).state.Payload = withRiftProfile("{}", endgameRiftProfile{RunID: r.RunID, UnlockedTier: 1})
-	s.onEndgameRift(p, domain.EndgameRequest{Op: "rift.start", RequestID: "start-another-01", Tier: 1})
+	s.onEndgameRift(p, domain.EndgameRequest{Op: "rift.start", NPCEntityID: 77, RequestID: "start-another-01", Tier: 1})
 	s.stepEndgameRiftRequests()
 	if b.commits != 0 {
 		t.Fatal("overwrote entitlement")
@@ -412,12 +412,12 @@ func TestRiftStartOneKeyAndDefiniteFailureReservation(t *testing.T) {
 				anchors = append(anchors, domain.SpawnPoint{ID: int32(i + 1), Monster: 1, Pos: domain.Pos{MapID: 7, X: float64(100 + i*100), Y: 100}})
 			}
 			s.riftLayouts = []domain.RiftFloorTemplate{{MapID: 7, MapName: "测试洞天", Anchors: anchors, Monsters: []domain.MonsterID{1}, Guardians: []domain.MonsterID{2}}}
-			s.trial.Entrances = []domain.TrialEntrance{{EntryMap: 7, EntryNPC: "妖魔结界守卫"}}
-			s.entities[77] = &entity.Entity{ID: 77, Kind: domain.KindNPC, Name: "妖魔结界守卫"}
+			// The configured rift entrance is independent from native trial guards.
+			s.entities[77] = &entity.Entity{ID: 77, Kind: domain.KindNPC, Name: "八仙使者", Pos: domain.Pos{MapID: 7, X: 100, Y: 100}, NPC: &entity.NPCInfo{ConfigID: 83, Script: "Nbaxian"}}
 			p := s.players[1]
-			p.Player.QuestNPC = "妖魔结界守卫"
+			p.Player.QuestNPC = "八仙使者"
 			p.Player.Bag.AddStack(s.items[domain.RiftKeyItemID], domain.Stack{Item: domain.RiftKeyItemID, Count: 3, Bound: true})
-			req := domain.EndgameRequest{Op: "rift.start", RequestID: "start-one-key-0001", ExpectedRevision: "0", Tier: 1}
+			req := domain.EndgameRequest{Op: "rift.start", NPCEntityID: 77, RequestID: "start-one-key-0001", ExpectedRevision: "0", Tier: 1}
 			s.startEndgameRift(p, req)
 			if b.commits != 1 || p.Player.Bag.CountOf(domain.RiftKeyItemID) != 3 || b.plan.Snapshot.Bag.CountOf(domain.RiftKeyItemID) != 2 {
 				t.Fatal("key changed outside atomic candidate")

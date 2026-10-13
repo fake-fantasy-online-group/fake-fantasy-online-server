@@ -38,8 +38,17 @@ type RiftRules struct {
 	Loot                                                                                                                                 *LootRuleSet
 }
 type RiftRuleTable struct {
-	active   int32
-	versions map[int32]RiftRules
+	active    int32
+	versions  map[int32]RiftRules
+	entrances []EndgameRiftEntranceView
+}
+
+// Entrances are world-service bindings, independent of frozen run balance rules.
+func (t *RiftRuleTable) Entrances() []EndgameRiftEntranceView {
+	if t == nil {
+		return nil
+	}
+	return append([]EndgameRiftEntranceView(nil), t.entrances...)
 }
 
 func cloneRiftRules(r RiftRules) RiftRules {
@@ -97,8 +106,20 @@ func (r *RiftRules) Validate() error {
 	}
 	return r.validateWire()
 }
-func NewRiftRuleTable(active int32, rows []RiftRules, loot *LootRuleTable, items map[ItemID]ItemDef) (*RiftRuleTable, error) {
+func NewRiftRuleTable(active int32, rows []RiftRules, loot *LootRuleTable, items map[ItemID]ItemDef, entrances ...EndgameRiftEntranceView) (*RiftRuleTable, error) {
 	t := &RiftRuleTable{active: active, versions: map[int32]RiftRules{}}
+	if len(entrances) > 32 {
+		return nil, fmt.Errorf("too many rift entrances")
+	}
+	seen := map[[2]int32]bool{}
+	for _, e := range entrances {
+		key := [2]int32{e.MapID, e.NPCID}
+		if e.MapID < 1 || e.NPCID < 1 || e.NPC == "" || e.Script == "" || len(e.NPC) > 128 || len(e.Script) > 128 || seen[key] {
+			return nil, fmt.Errorf("invalid or duplicate rift entrance")
+		}
+		seen[key] = true
+		t.entrances = append(t.entrances, e)
+	}
 	for _, r := range rows {
 		if _, ok := t.versions[r.Version]; ok {
 			return nil, fmt.Errorf("duplicate rift version")

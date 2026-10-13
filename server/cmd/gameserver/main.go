@@ -447,7 +447,8 @@ func npcSpawns(list []data.NPCPlacement, mapID int32) []domain.NPCSpawn {
 			greeting = domain.DefaultNPCGreeting(role)
 		}
 		out = append(out, domain.NPCSpawn{
-			Name: n.Name, Sprite: n.Sprite, Pos: pos, Dir: n.Dir, Portrait: n.Portrait,
+			NPCID: n.NPCID,
+			Name:  n.Name, Sprite: n.Sprite, Pos: pos, Dir: n.Dir, Portrait: n.Portrait,
 			Script: n.Script,
 			Sell:   n.Sell, Trans: n.Trans, Role: role, Greeting: greeting})
 	}

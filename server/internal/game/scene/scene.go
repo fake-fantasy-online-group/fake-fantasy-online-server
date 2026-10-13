@@ -223,10 +223,13 @@ type Scene struct {
 	pickupRange int32
 	id          domain.SceneID
 	mailbox     chan Command
-	quit        chan struct{}
-	done        chan struct{} // Run 已退出；与 quit 分开，ctx 取消也会关闭它
-	log         *slog.Logger
-	saver       Saver
+	// Actor-owned command already dequeued while a preceding handoff is prepared.
+	// Retained across an unrelated handoff panic; never replayed after execution begins.
+	pendingMailbox Command
+	quit           chan struct{}
+	done           chan struct{} // Run 已退出；与 quit 分开，ctx 取消也会关闭它
+	log            *slog.Logger
+	saver          Saver
 	// postMu 把“确认仍接客 + 入 mailbox”与 Stop 的封门做成同一个顺序点。
 	// 锁只覆盖内存状态与非阻塞 send，绝不跨 IO。
 	postMu  sync.RWMutex
@@ -508,7 +511,6 @@ func (s *Scene) placeNPCs(list []domain.NPCSpawn) {
 		return
 	}
 	for _, n := range list {
-		n = s.endgameRiftEntranceAppearance(n)
 		e := &entity.Entity{
 			ID: s.alloc.NPC(), Kind: domain.KindNPC, Name: n.Name,
 			Pos: n.Pos, Dir: uint8(n.Dir),
@@ -516,6 +518,7 @@ func (s *Scene) placeNPCs(list []domain.NPCSpawn) {
 			// sprite 的资源名是 "npc" + 模型号(见 data.NpcEntry.Index 的注释)。
 			// 立绘使用数据库中核实过的资源名；未配置时保持为空。
 			NPC: &entity.NPCInfo{
+				ConfigID: n.NPCID,
 				Sprite:   fmt.Sprintf("npc%d", n.Sprite),
 				Portrait: n.Portrait,
 				Script:   n.Script,
@@ -780,19 +783,23 @@ func (s *Scene) drainForShutdown() {
 		s.execTracked(enter)
 	}
 	for {
-		select {
-		case c := <-s.mailbox:
-			// 关服时不再发起新的跨场景所有权交接。Router 已封门，
-			// 若执行 onTeleport，玩家会先从源场景删除，再因目标
-			// Post 失败而两边都不保存。保留在源场景才能被最终快照。
-			if cmd, ok := c.(Teleport); ok && cmd.To != s.id {
-				s.log.Debug("关服时保留玩家在原场景", "id", cmd.ID, "to", cmd.To)
-				continue
+		c := s.pendingMailbox
+		if c == nil {
+			select {
+			case c = <-s.mailbox:
+			default:
+				return
 			}
-			s.execTracked(c)
-		default:
-			return
 		}
+		s.pendingMailbox = nil
+		// 关服时不再发起新的跨场景所有权交接。Router 已封门，
+		// 若执行 onTeleport，玩家会先从源场景删除，再因目标
+		// Post 失败而两边都不保存。保留在源场景才能被最终快照。
+		if cmd, ok := c.(Teleport); ok && cmd.To != s.id {
+			s.log.Debug("关服时保留玩家在原场景", "id", cmd.ID, "to", cmd.To)
+			continue
+		}
+		s.execTracked(c)
 	}
 }
 
@@ -832,20 +839,38 @@ func (s *Scene) frame() (ok bool) {
 // 到达顺序无关(除了显式排序的部分), 这是"可复现"的前提。
 // 循环有上界, 否则一个疯狂刷包的客户端能让这里永远出不去。
 func (s *Scene) drain() {
-	for {
+	s.drainHandoffs()
+	for i := 0; i < cap(s.mailbox); i++ {
+		if s.pendingMailbox == nil {
+			select {
+			case s.pendingMailbox = <-s.mailbox:
+			default:
+				return
+			}
+		}
+		// A source actor can hand off while this actor is already inside its
+		// mailbox loop. Session rebinding precedes MapReady/Leave enqueueing,
+		// so after dequeue their Enter is guaranteed to be available here.
+		// Keep the dequeued command if an unrelated Enter panics during preparation.
+		s.drainHandoffs()
+		c := s.pendingMailbox
+		s.pendingMailbox = nil // Once its own execution begins, preserve existing panic semantics.
+		s.execTracked(c)
+	}
+}
+
+func (s *Scene) drainHandoffs() {
+	// Only the accepted prefix present at this boundary precedes the dequeued
+	// command. Continuous incoming transfers must not starve that mailbox command.
+	s.postMu.RLock()
+	count := len(s.handoffs)
+	s.postMu.RUnlock()
+	for i := 0; i < count; i++ {
 		enter, ok := s.popHandoff()
 		if !ok {
-			break
-		}
-		s.execTracked(enter)
-	}
-	for i := 0; i < cap(s.mailbox); i++ {
-		select {
-		case c := <-s.mailbox:
-			s.execTracked(c)
-		default:
 			return
 		}
+		s.execTracked(enter)
 	}
 }
 
@@ -883,6 +908,10 @@ func (s *Scene) execTracked(c Command) {
 // finalizePendingEnters 仅用于场景因连续 panic 放弃恢复之后。此时执行普通命令可能
 // 继续破坏状态；未入场 Enter 的加载快照却仍是完整所有权，可以安全直接写回。
 func (s *Scene) finalizePendingEnters() {
+	if enter, ok := s.pendingMailbox.(Enter); ok {
+		s.finalizeUnentered(enter)
+	}
+	s.pendingMailbox = nil
 	for {
 		enter, ok := s.popHandoff()
 		if !ok {

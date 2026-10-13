@@ -140,8 +140,10 @@ type Session struct {
 	//
 	// 只有目标地图的 entered=1 才投递 MapReady；场景完成快照后释放闸门。
 	// 普通 entered=0 存点不能作为建图完成，实际耗时不受固定秒数限制。
-	awaitMapAck bool
-	mapEpoch    uint64
+	awaitMapAck          bool
+	mapEpoch             uint64
+	clientMapReadySerial uint64
+	clientMapReady       *clientMapReadyReceipt
 	// mutedUntil 是 GM 对本次在线会话施加的禁言截止时间；不落盘，断线即清。
 	mutedUntil time.Time
 	// seenTips 是本次在线期间已经展示或由客户端确认展示过的固定新手提示。
@@ -991,6 +993,7 @@ func (s *Session) leaveWorld(reason string, target Stage) bool {
 	s.endgameV1 = false
 	s.growthV5 = false
 	s.awaitMapAck = false
+	s.clientMapReady = nil
 	s.mapEpoch++
 	s.entity = 0
 	s.scene = domain.SceneID{}
@@ -1645,17 +1648,16 @@ func (s *Session) onMove(req protocol.Request) {
 	// 0x1017 不带图号(decMoveXY 留 0, 而没有任何一张图的 id 是 0), 0x100a 带。
 	// 服务端已经发起跨图时，图号不符的仍是旧图滞后包；没有图号的移动也继续关在闸外。
 	drop := inGame && req.MapID != 0 && req.MapID != sc.MapID
+	var readyReceipt uint64
+	if clientTeleport {
+		readyReceipt = s.registerClientMapReadyLocked(id, sc, req.MapID, req.X, req.Y)
+	}
 	s.mu.Unlock()
 	if !inGame {
 		return
 	}
 	if clientTeleport {
-		s.deps.Router.Post(sc, scene.Teleport{
-			ID:             id,
-			To:             domain.SceneID{MapID: req.MapID},
-			At:             domain.Pos{MapID: req.MapID, X: float64(req.X), Y: float64(req.Y)},
-			ClientMapReady: true,
-		})
+		s.postClientMapReady(id, sc, req, readyReceipt)
 		return
 	}
 	if drop {
@@ -1691,6 +1693,9 @@ func (s *Session) rebind(id domain.EntityID, sc domain.SceneID) {
 	changed := s.entity != id || s.scene != sc
 	// 只有真的换了图才拉闸: 同图改绑(初次入场、实体号变化)没有滞后上报问题,
 	// 拉闸反而会把正常移动挡在外面。
+	if changed {
+		s.clientMapReady = nil
+	}
 	if from.MapID != sc.MapID {
 		s.mapEpoch++
 		s.awaitMapAck = true
@@ -1729,6 +1734,15 @@ func (s *Session) rebind(id domain.EntityID, sc domain.SceneID) {
 // “源实体已删、目标 Enter 已排队、会话/在线索引仍指向源场景”的危险窗口。
 func (s *Session) transferScene(id domain.EntityID, from, to domain.SceneID,
 	handoff func() bool) bool {
+	return s.transferSceneWithClientReady(id, from, to, domain.Pos{}, false, 0, false,
+		func(bool) bool { return handoff() })
+}
+
+// transferSceneWithClientReady preserves the same ownership lock as transferScene.
+// Only a real ordinary portal may adopt an already received ready for this exact
+// source generation and landing; no protocol identity or time window is inferred.
+func (s *Session) transferSceneWithClientReady(id domain.EntityID, from, to domain.SceneID,
+	at domain.Pos, portal bool, receipt uint64, directReady bool, handoff func(bool) bool) bool {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.stage != StageInGame || s.entity != id || s.scene != from {
@@ -1736,7 +1750,21 @@ func (s *Session) transferScene(id domain.EntityID, from, to domain.SceneID,
 			"scene", s.scene, "wantEntity", id, "from", from, "to", to)
 		return false
 	}
-	if !handoff() {
+	ready := portal && s.matchesClientMapReadyLocked(id, from, to, at)
+	if receipt != 0 {
+		// The actor may have validated this command before a newer network ready
+		// arrived. Recheck at the ownership commit, never authorize from that
+		// earlier observation. A rejected handoff takes the existing safe close path.
+		if !s.clientMapReadyCurrentLocked(id, from, receipt) {
+			s.clientMapReady = nil
+			return false
+		}
+		ready = directReady
+	}
+	// Whether matched, corrected, rejected or failed, this source generation's
+	// receipt cannot acknowledge another transfer later.
+	s.clientMapReady = nil
+	if !handoff(ready) {
 		return false
 	}
 	s.scene = to

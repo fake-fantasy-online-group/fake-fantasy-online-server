@@ -1,7 +1,6 @@
 package scene
+
 import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
-
 
 import (
 	"strconv"
@@ -180,16 +179,6 @@ func TestRiftExitDialogueAndNativeModelScope(t *testing.T) {
 	p.Player.QuestNPC = "别的NPC"
 	if s.canUseEndgameRiftExit(p) {
 		t.Fatal("wrong NPC accepted")
-	}
-	s.trial.Entrances = []domain.TrialEntrance{{EntryMap: s.id.MapID, EntryNPC: "妖魔结界守卫"}}
-	source := domain.NPCSpawn{Name: "妖魔结界守卫", Sprite: 700, Script: "native-guard", Sell: 10}
-	got := s.endgameRiftEntranceAppearance(source)
-	if got.Sprite != 630 || got.Script != source.Script || got.Name != source.Name || got.Sell != 10 {
-		t.Fatal(got)
-	}
-	source.Name = "普通卫兵"
-	if s.endgameRiftEntranceAppearance(source) != source {
-		t.Fatal("unrelated NPC changed")
 	}
 }
 

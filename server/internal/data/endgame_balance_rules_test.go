@@ -48,6 +48,22 @@ func TestBalanceActualPostgresLoader(t *testing.T) {
 	if !reflect.DeepEqual(loot.Active(), &expectedLoot) || !reflect.DeepEqual(rift.Active(), &expectedRift) {
 		t.Fatal("actual SQL configuration differs from seed")
 	}
+	if want := []domain.EndgameRiftEntranceView{{MapID: 7, NPCID: 83, NPC: "八仙使者", Script: "Nbaxian"}}; !reflect.DeepEqual(rift.Entrances(), want) {
+		t.Fatalf("actual native rift entrance mismatch: %+v", rift.Entrances())
+	}
+	npcs, _, err := LoadNPCs(context.Background(), q)
+	if err != nil {
+		t.Fatal(err)
+	}
+	found := false
+	for _, npc := range npcs[7] {
+		if npc.NPCID == 83 {
+			found = npc.Name == "八仙使者" && npc.Sprite == 630 && npc.Script == "Nbaxian" && npc.Pos.X == 9917 && npc.Pos.Y == 4734
+		}
+	}
+	if !found {
+		t.Fatal("configured entrance did not survive actual native NPC loader")
+	}
 	// Compare original frozen 885-ID oracle to authoritative loaded ov_arm flags.
 	raw, err := os.ReadFile("../domain/native_equipment_drop_bases.json")
 	if err != nil {

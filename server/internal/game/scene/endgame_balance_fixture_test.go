@@ -50,7 +50,7 @@ func loadRiftRulesFixture() *domain.RiftRuleTable {
 	if err := testfixture.LoadRiftRules(&row); err != nil {
 		panic(err)
 	}
-	t, err := domain.NewRiftRuleTable(1, []domain.RiftRules{row}, lootRulesTableFixture(), balanceItemsFixture())
+	t, err := domain.NewRiftRuleTable(1, []domain.RiftRules{row}, lootRulesTableFixture(), balanceItemsFixture(), domain.EndgameRiftEntranceView{MapID: 7, NPCID: 83, NPC: "八仙使者", Script: "Nbaxian"})
 	if err != nil {
 		panic(err)
 	}

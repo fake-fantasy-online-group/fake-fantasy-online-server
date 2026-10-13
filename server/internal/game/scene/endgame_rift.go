@@ -152,8 +152,8 @@ func (s *Scene) startEndgameRiftWithProfile(p *entity.Entity, req domain.Endgame
 		s.endgameError(p, req, "configuration", "洞天规则尚未载入")
 		return
 	}
-	if s.router == nil || s.trial == nil || !p.Alive() || !s.trialEntryNPC(p) {
-		s.endgameError(p, req, "entrance", "请与妖魔结界守卫交谈后开启洞天")
+	if s.router == nil || s.trial == nil || !p.Alive() || !s.canUseEndgameRiftEntrance(p, req.NPCEntityID) {
+		s.endgameError(p, req, "entrance", "请与洞天入口使者交谈后开启洞天")
 		return
 	}
 	if req.Tier < 1 || req.Tier > profile.UnlockedTier || req.Tier > rules.MaxTier {

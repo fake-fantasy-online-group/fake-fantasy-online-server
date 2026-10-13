@@ -825,6 +825,11 @@ type Teleport struct {
 	At             domain.Pos
 	Dir            uint8
 	ClientMapReady bool
+	// Server-only receipt binds a native preloaded ready to its source owner.
+	// Zero keeps non-session callers on their existing authorized path.
+	ClientReadyReceipt uint64
+	// Only the ordinary source-map portal path can inherit an early client ready.
+	PortalTransfer bool
 }
 
 func (Teleport) CmdName() string { return "Teleport" }

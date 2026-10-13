@@ -179,7 +179,17 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 				}
 			}
 		}
-		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: caps, CatalogVersion: domain.UniqueCatalogVersion})
+		var entrances []domain.EndgameRiftEntranceView
+		if baseNegotiated {
+			for _, cap := range r.Capabilities {
+				if cap == domain.EndgameRiftEntranceV1 {
+					caps = append(caps, cap)
+					entrances = s.riftRules.Entrances()
+					break
+				}
+			}
+		}
+		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: caps, CatalogVersion: domain.UniqueCatalogVersion, RiftEntrances: entrances})
 		s.sendRiftSceneContext(p)
 		s.sendEndgameSnapshot(p)
 		if growth {

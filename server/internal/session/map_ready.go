@@ -15,6 +15,7 @@ func (s *eventSink) BeginMapLoad(id domain.EntityID, sc domain.SceneID) (uint64,
 		return 0, false
 	}
 	if !owner.awaitMapAck {
+		owner.clientMapReady = nil
 		owner.mapEpoch++
 		owner.awaitMapAck = true
 	}

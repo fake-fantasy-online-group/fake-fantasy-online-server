@@ -46,24 +46,6 @@ func (s *Scene) cachedEndgameRiftCompletionLayout() *endgameRiftRewardLayout {
 	return x.rewardLayout
 }
 
-// Only the configured rift/trial entrances change appearance. Their established
-// names/scripts/services stay intact, and the real 八仙使者 remains untouched.
-func (s *Scene) endgameRiftEntranceAppearance(n domain.NPCSpawn) domain.NPCSpawn {
-	if s.trial == nil {
-		return n
-	}
-	for _, entrance := range s.trial.Entrances {
-		if entrance.EntryMap == s.id.MapID && entrance.EntryNPC == n.Name {
-			if rule := s.currentRiftRules(); rule != nil {
-				n.Sprite = rule.NPCModel
-				n.Portrait = rule.ExitPortrait
-			}
-			break
-		}
-	}
-	return n
-}
-
 func (s *Scene) isEndgameRiftExitNPC(e *entity.Entity) bool {
 	return s.rift != nil && e != nil && e.ID == s.rift.exitNPC && e.NPC != nil && e.NPC.Script == endgameRiftExitScript
 }

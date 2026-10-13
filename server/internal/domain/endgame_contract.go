@@ -5,6 +5,7 @@ const EndgameV1 = "endgame.v1"
 const EndgameNativeStatsV1 = "endgame.native-stats.v1"
 const EndgameGrowthV5 = "endgame.growth.v5"
 const EndgameRiftPortalsV1 = "endgame.rift-portals.v1"
+const EndgameRiftEntranceV1 = "endgame.rift-entrance.v1"
 const EndgameSchema = 1
 const EndgameMaxJSONBytes = 60 * 1024
 
@@ -36,6 +37,7 @@ type EndgameRequest struct {
 	QuoteID          string   `json:"quoteId,omitempty"`
 	RunID            string   `json:"runId,omitempty"`
 	Tier             int32    `json:"tier,omitempty"`
+	NPCEntityID      EntityID `json:"npcEntityId,omitempty"`
 	FloorIndex       int32    `json:"floorIndex,omitempty"`
 	ItemUIDs         []string `json:"itemUids,omitempty"`
 }
@@ -190,28 +192,39 @@ type EndgameRiftView struct {
 	Members          []EndgameRiftMemberView `json:"members,omitempty"`
 	Claimable        bool                    `json:"claimable"`
 }
+
+// EndgameRiftEntranceView identifies a configured native NPC, not a renamed clone.
+// NPCID is map_npcs.npc_id; the client submits the clicked live entity ID separately.
+type EndgameRiftEntranceView struct {
+	MapID  int32  `json:"mapId"`
+	NPCID  int32  `json:"npcId"`
+	NPC    string `json:"npc"`
+	Script string `json:"script"`
+}
+
 type EndgameResponse struct {
-	CombatStats    *EndgameCombatStatsV5  `json:"combatStats,omitempty"`
-	SkillRanks     []SkillRankView        `json:"skillRanks,omitempty"`
-	Kind           string                 `json:"kind"`
-	RequestID      string                 `json:"requestId,omitempty"`
-	OK             bool                   `json:"ok"`
-	Error          string                 `json:"error,omitempty"`
-	Message        string                 `json:"message,omitempty"`
-	Revision       string                 `json:"revision,omitempty"`
-	CatalogVersion string                 `json:"catalogVersion,omitempty"`
-	Capabilities   []string               `json:"capabilities,omitempty"`
-	Cursor         string                 `json:"cursor,omitempty"`
-	NextCursor     string                 `json:"nextCursor,omitempty"`
-	SnapshotID     string                 `json:"snapshotId,omitempty"`
-	Chunk          int32                  `json:"chunk,omitempty"`
-	Chunks         int32                  `json:"chunks,omitempty"`
-	Items          []EndgameItemView      `json:"items,omitempty"`
-	Runes          []EndgameRuneView      `json:"runes,omitempty"`
-	Formations     []EndgameFormationView `json:"formations,omitempty"`
-	Recipes        []EndgameRecipeView    `json:"recipes,omitempty"`
-	Materials      []EndgameMaterialView  `json:"materials,omitempty"`
-	Quote          *EndgameQuoteView      `json:"quote,omitempty"`
-	Rift           *EndgameRiftView       `json:"rift,omitempty"`
-	Result         map[string]string      `json:"result,omitempty"`
+	RiftEntrances  []EndgameRiftEntranceView `json:"riftEntrances,omitempty"`
+	CombatStats    *EndgameCombatStatsV5     `json:"combatStats,omitempty"`
+	SkillRanks     []SkillRankView           `json:"skillRanks,omitempty"`
+	Kind           string                    `json:"kind"`
+	RequestID      string                    `json:"requestId,omitempty"`
+	OK             bool                      `json:"ok"`
+	Error          string                    `json:"error,omitempty"`
+	Message        string                    `json:"message,omitempty"`
+	Revision       string                    `json:"revision,omitempty"`
+	CatalogVersion string                    `json:"catalogVersion,omitempty"`
+	Capabilities   []string                  `json:"capabilities,omitempty"`
+	Cursor         string                    `json:"cursor,omitempty"`
+	NextCursor     string                    `json:"nextCursor,omitempty"`
+	SnapshotID     string                    `json:"snapshotId,omitempty"`
+	Chunk          int32                     `json:"chunk,omitempty"`
+	Chunks         int32                     `json:"chunks,omitempty"`
+	Items          []EndgameItemView         `json:"items,omitempty"`
+	Runes          []EndgameRuneView         `json:"runes,omitempty"`
+	Formations     []EndgameFormationView    `json:"formations,omitempty"`
+	Recipes        []EndgameRecipeView       `json:"recipes,omitempty"`
+	Materials      []EndgameMaterialView     `json:"materials,omitempty"`
+	Quote          *EndgameQuoteView         `json:"quote,omitempty"`
+	Rift           *EndgameRiftView          `json:"rift,omitempty"`
+	Result         map[string]string         `json:"result,omitempty"`
 }

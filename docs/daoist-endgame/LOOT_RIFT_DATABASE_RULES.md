@@ -6,7 +6,7 @@
 
 - `game_loot_rule_versions`、`game_loot_rule_active`：符文掉落等级门槛、自然暗金概率及 MF 曲线参数、发布版本与当前版本。
 - `game_loot_rune_pool`、`game_loot_socket_levels`、`game_loot_grades`：28 项等概率选择池、装备等级孔数上限、普通/精英/BOSS/秘境掉孔权重及补充符文概率。
-- `game_rift_rule_versions`、`game_rift_rule_active`：进度、时间、成长、参与资格、奖励、经验、NPC 外观及技能调度参数，每个版本引用固定掉落版本。
+- `game_rift_rule_versions`、`game_rift_rule_active`：进度、时间、成长、参与资格、奖励、经验、结算出口 NPC 外观及技能调度参数，每个版本引用固定掉落版本。
 - `game_rift_class_rules`、`game_rift_ability_rules`：四类怪物生命/伤害倍率，以及三种既有技能的名称、词缀、警告、几何参数、延迟和伤害倍率。
 
 `LoadItems → LoadLootRules → LoadRiftRules` 在开服时加载、验证和冻结，经 world/Scene.Config 注入；所有规则参数必填，nil 只表示配置缺失并关闭对应功能，不会回退到 Go 种子。加载错误令开服失败。真实自然掉落路径在 `scene/loot.go`、`loot_context_v5.go`、`endgame_rune_loot.go` 消费规则，秘境战斗/经验/奖励/NPC/技能路径消费该 run 的规则快照。
@@ -32,3 +32,7 @@
 只读 loader 测试入口：设置 `FANTASY_BALANCE_PG_DATA`、可选 `FANTASY_BALANCE_PG_DATABASE` 及受信 `PG_BIN` 后执行 `go test ./internal/data -run '^TestBalanceActualPostgresLoader$' -count=1 -v`。集群必须为独立且空闲的测试集群，使用 single-user 只读查询，不连接应用数据库。
 
 本批明确不改变楼层生成器版本/密度/出生点/安全半径/编队数量及已保存 FloorPlan；这些参数仍是后续规范项。试炼符钥奖励计算及试炼参与判定也未迁入 63。随机算法、碰撞/落点、实体身份、归属/容量、事务与回执机制保留 Go。固定技能枚举对应执行内核，数据库不能增加任意脚本技能。
+
+## 原生大秘境入口（SQL64）
+
+`game_rift_entrances` 以地图与 `map_npcs` 复合主键引用现存 NPC。当前绑定龙城（地图 7）的八仙使者（qw0007/83）；不修改原 NPC 数据，不再把普通试炼守卫换成八仙外观。入口是世界服务配置，独立于已冻结的秘境平衡版本和历史 run 快照。loader 校验实体存在且可见，再随已协商的 `endgame.rift-entrance.v1` hello 下发地图、配置号、姓名和脚本。开境时按客户端点击的原生实体 ID 反查数据库配置号、场景与对话上下文，不接受只凭同名 NPC 或同模型冒充入口。

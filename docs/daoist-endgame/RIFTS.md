@@ -40,7 +40,8 @@ Completion persistence:
 
 ## Entry and admission
 
-- Speak to the actual 妖魔结界守卫 on an existing trial entrance map. Configured entrance guards now reuse the verified 八仙使者 appearance (model/sprite 630, portrait `N630`), while retaining their original names, scripts and services. The original 八仙使者 NPC is unchanged.
+- Speak to the actual 龙城八仙使者 (map 7, `map_npcs` row `qw0007/83`, model 630, native script `Nbaxian`, position 9917/4734). SQL64 binds this existing NPC through `game_rift_entrances`; its original appearance, greeting and services stay intact. Ordinary 妖魔结界守卫 retain model 700 and their native trial service.
+- Clients negotiate `endgame.rift-entrance.v1` to receive `hello.riftEntrances` (`mapId`, `npcId`, `npc`, `script`). The menu uses this server-owned binding and supplies the clicked live `npcEntityId` with `rift.start`. Admission validates that entity against its original database placement, scene, name, script and current native dialogue target. Old clients receive no new hello field and require an update for the new entrance.
 - Solo is supported. A party's opener must be its leader.
 - One opener spends exactly one unlocked, usable key to sponsor the entire run. Guests spend no keys.
 - Freeze alive, nearby (500-pixel radius), same-scene party members in the trial's configured level range. Maximum five; no mid-run substitutions.
@@ -54,7 +55,7 @@ Before starting or joining another run, the server checks the prior profile run.
 
 ## Combat and progression
 
-The live instance creates 104 real native monsters at existing trial spawn anchors:
+Current seeded floors use generator v2, targeting 96–160 monsters according to verified walkable capacity and saved floor plans; see `SEEDED-RIFTS.md`. A small map can have fewer safe placements. The older trial-anchor fallback uses the following 104-monster population; these fixed counts are not the current seeded-floor density:
 
 | Kind | Count | Death result |
 |---|---:|---|
