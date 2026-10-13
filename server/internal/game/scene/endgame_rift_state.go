@@ -14,6 +14,9 @@ type endgameRiftProfile struct {
 	UnlockedTier int32  `json:"unlockedTier"`
 }
 type endgameRiftGrant struct {
+	ExperienceLevel    int32 `json:",omitempty"`
+	ExperienceBase     int64 `json:",omitempty"`
+	MagicFind          int64 `json:",omitempty"`
 	ExperienceClaimed  bool
 	Collected          map[int]bool
 	Items              []domain.Stack

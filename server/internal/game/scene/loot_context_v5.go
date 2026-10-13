@@ -127,10 +127,16 @@ func (s *Scene) rollNaturalEquipmentV5(def domain.ItemDef, stack *domain.Stack, 
 	values := s.lootRandomV5(dead.ID, ordinal, 0x56350002)
 	unique := s.lootRandomV5(dead.ID, ordinal, 0x56350003)
 	variables := s.lootRandomV5(dead.ID, ordinal, 0x56350004)
+	s.rollNaturalEquipmentQualityV5(def, stack, profile, rollAffixes, context.MagicFind, s.lootRules.Active(), &quality, &values, &unique, &variables)
+}
+
+// Shared by natural world drops and explicitly configured normal-boss completion
+// slots. Callers own deterministic streams and the appropriate frozen loot rules.
+func (s *Scene) rollNaturalEquipmentQualityV5(def domain.ItemDef, stack *domain.Stack, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique, variables *lootRandomV5) {
 	if rollAffixes {
-		rolled := s.equipmentRoll.RollWithMagicFindV5(def, profile, stack.SocketCount, context.MagicFind, quality.Int63n, values.Int63n)
+		rolled := s.equipmentRoll.RollWithMagicFindV5(def, profile, stack.SocketCount, magicFind, quality.Int63n, values.Int63n)
 		stack.RolledAffixCount = uint8(len(rolled))
 		copy(stack.RolledAffixes[:], rolled)
 	}
-	domain.RollNaturalUniqueWithMagicFindV5(stack, def, context.MagicFind, unique.Int63n, variables.Intn, s.lootRules.Active())
+	domain.RollNaturalUniqueWithMagicFindV5(stack, def, magicFind, unique.Int63n, variables.Intn, rule)
 }

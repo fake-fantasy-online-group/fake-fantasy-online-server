@@ -17,6 +17,12 @@ type RiftAbilityRule struct {
 	DamagePct                   int32
 }
 type RiftRules struct {
+	// New runs freeze reward level at guardian death; old runs keep admission level.
+	CompletionLevelExperience bool `json:",omitempty"`
+	// Zero preserves historical snapshots: tier one is the unscaled anchor.
+	StatAnchorTier int32 `json:",omitempty"`
+	// Additional fixed-count equipment uses natural boss quality, separate from special slots.
+	NormalBossEquipment int32 `json:",omitempty"`
 	// Zero is the legacy serialized value and means one times population.
 	FloorPopulationMultiplier                                                                                                            int32 `json:",omitempty"`
 	Version, LootVersion                                                                                                                 int32
@@ -87,7 +93,7 @@ func (r *RiftRules) Validate() error {
 	if r.TimedMS < 1000 || r.HardMS < r.TimedMS || r.HardMS > 86400000 || r.ReconnectMS < 0 || r.ReconnectMS > r.HardMS || r.DeathPenaltyMS < 0 || r.DeathPenaltyMS > r.HardMS || r.PresenceBP < 1 || r.PresenceBP > 10000 || r.TierJumpSeconds < 1 {
 		return fmt.Errorf("invalid rift time rules")
 	}
-	if r.HPGrowthBP < 10000 || r.HPGrowthBP > 100000 || r.DamageGrowthBP < 10000 || r.DamageGrowthBP > 100000 || r.PartyHPBP < 0 || r.PartyHPBP > 100000 || len(r.Classes) != 4 {
+	if r.StatAnchorTier < 0 || r.StatAnchorTier > r.MaxTier || r.HPGrowthBP < 10000 || r.HPGrowthBP > 100000 || r.DamageGrowthBP < 10000 || r.DamageGrowthBP > 100000 || r.PartyHPBP < 0 || r.PartyHPBP > 100000 || len(r.Classes) != 4 {
 		return fmt.Errorf("invalid rift scaling")
 	}
 	for i, c := range r.Classes {
@@ -95,10 +101,10 @@ func (r *RiftRules) Validate() error {
 			return fmt.Errorf("invalid rift class")
 		}
 	}
-	if r.Equipment < 0 || r.Equipment > 20 || r.Runes < 0 || r.Runes > 28 || r.TimelyEquipment < 0 || r.TimelyEquipment > 20 || r.TimelyRunes < 0 || r.TimelyRunes > 28 || r.DustBase < 0 || r.DustBase > 1000000 || r.TimelyDust < 0 || r.TimelyDust > 1000000 || r.DustTierDivisor < 1 || r.UniqueBaseChance < 0 || r.UniqueBaseChance > 100 || r.UniquePerTier < 0 || r.UniquePerTier > 100 || r.UniqueCap < 0 || r.UniqueCap > 100 || r.GuaranteedUniqueTier < 1 || r.GuaranteedUniqueTier > r.MaxTier || r.ExperienceDivisor < 1 || r.ExperienceDivisor > 1000000 {
+	if r.NormalBossEquipment < 0 || r.NormalBossEquipment > 20 || r.Equipment < 0 || r.Equipment > 20 || r.Runes < 0 || r.Runes > 28 || r.TimelyEquipment < 0 || r.TimelyEquipment > 20 || r.TimelyRunes < 0 || r.TimelyRunes > 28 || r.DustBase < 0 || r.DustBase > 1000000 || r.TimelyDust < 0 || r.TimelyDust > 1000000 || r.DustTierDivisor < 1 || r.UniqueBaseChance < 0 || r.UniqueBaseChance > 100 || r.UniquePerTier < 0 || r.UniquePerTier > 100 || r.UniqueCap < 0 || r.UniqueCap > 100 || r.GuaranteedUniqueTier < 1 || r.GuaranteedUniqueTier > r.MaxTier || r.ExperienceDivisor < 1 || r.ExperienceDivisor > 1000000 {
 		return fmt.Errorf("invalid rift rewards")
 	}
-	if r.Name == "" || r.BossName == "" || r.ExitName == "" || r.NPCModel < 1 || r.ExitSprite == "" || r.ExitPortrait == "" || r.AbilityMaxConcurrent < 1 || r.AbilityMaxConcurrent > 4 || r.AbilityRange < 1 || r.AbilityRange > 10000 || r.AbilityRecoveryMS < 0 || r.AbilityJitterMS < 1 || r.AbilityJitterMS > 86400000 || r.AbilityStartMS < 1 || r.AbilityResetMS < 1 || r.AbilityUnavailableMS < 1 || r.AbilityClassReductionMS < 0 || r.AbilityRecoveryMS > 86400000 || r.AbilityStartMS > 86400000 || r.AbilityResetMS > 86400000 || r.AbilityUnavailableMS > 86400000 || r.AbilityCooldownMS > 86400000 || r.AbilityClassReductionMS > 86400000 || r.AbilityCooldownMS <= 3*r.AbilityClassReductionMS || r.AbilityBossDamagePct < 0 || r.AbilityBossDamagePct > 10000 || len(r.Abilities) != 3 {
+	if r.Name == "" || r.BossName == "" || r.ExitName == "" || r.NPCModel < 1 || r.ExitSprite == "" || r.AbilityMaxConcurrent < 1 || r.AbilityMaxConcurrent > 4 || r.AbilityRange < 1 || r.AbilityRange > 10000 || r.AbilityRecoveryMS < 0 || r.AbilityJitterMS < 1 || r.AbilityJitterMS > 86400000 || r.AbilityStartMS < 1 || r.AbilityResetMS < 1 || r.AbilityUnavailableMS < 1 || r.AbilityClassReductionMS < 0 || r.AbilityRecoveryMS > 86400000 || r.AbilityStartMS > 86400000 || r.AbilityResetMS > 86400000 || r.AbilityUnavailableMS > 86400000 || r.AbilityCooldownMS > 86400000 || r.AbilityClassReductionMS > 86400000 || r.AbilityCooldownMS <= 3*r.AbilityClassReductionMS || r.AbilityBossDamagePct < 0 || r.AbilityBossDamagePct > 10000 || len(r.Abilities) != 3 {
 		return fmt.Errorf("invalid rift presentation/abilities")
 	}
 	for i, a := range r.Abilities {

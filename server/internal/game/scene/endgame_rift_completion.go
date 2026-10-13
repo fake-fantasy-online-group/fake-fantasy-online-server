@@ -11,13 +11,7 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
 
-const (
-	// Verified native source: init-0.sql, qw0007 row 83 (龙城 八仙使者),
-	// sprite 630 / Nbaxian, script alias Nbaxian_ffo, portrait N630.
-	endgameRiftImmortalModel int32 = 630
-	endgameRiftExitName            = "归元道使"
-	endgameRiftExitScript          = "endgame_rift_exit"
-)
+const endgameRiftExitScript = "endgame_rift_exit"
 
 type endgameRiftGroundReward struct {
 	Char  domain.CharID

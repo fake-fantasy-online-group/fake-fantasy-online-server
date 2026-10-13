@@ -8,14 +8,15 @@ import (
 // A floor change owns the run write until its result (including lost-ACK
 // reconciliation) is known. No key, inventory or reward mutation is involved.
 type endgameRiftTransition struct {
-	target    domain.SceneID
-	next      endgameRiftPersisted
-	revision  int64
-	save      <-chan domain.EndgameRunSaveResult
-	load      <-chan domain.EndgameRunLoadResult
-	retryAt   int64
-	requester domain.EntityID
-	request   domain.EndgameRequest
+	rewardContexts map[domain.CharID]endgameRiftRewardContext
+	target         domain.SceneID
+	next           endgameRiftPersisted
+	revision       int64
+	save           <-chan domain.EndgameRunSaveResult
+	load           <-chan domain.EndgameRunLoadResult
+	retryAt        int64
+	requester      domain.EntityID
+	request        domain.EndgameRequest
 }
 
 func (s *Scene) riftCombatReady() bool {
@@ -108,6 +109,11 @@ func (s *Scene) advanceEndgameRift(p *entity.Entity, req domain.EndgameRequest) 
 		s.endgameError(p, req, "layout", "暂无可用下一层，请稍后重试")
 		return
 	}
+	if x.data.Run.Rules.CompletionLevelExperience || x.data.Run.Rules.NormalBossEquipment > 0 {
+		for char, context := range s.freezeEndgameRiftRewardContexts() {
+			s.cacheEndgameRiftRewardContext(char, context)
+		}
+	}
 	next := x.data.clone()
 	next.Floor = &plan
 	next.MapID = plan.MapID
@@ -171,8 +177,9 @@ func (s *Scene) pollEndgameRiftTransition(now int64) {
 				t.retryAt = now + 1000
 				return
 			}
-			if result.Run.Revision == t.revision && d.Floor != nil && d.Floor.FloorIndex == t.next.Floor.FloorIndex && d.Floor.Seed == t.next.Floor.Seed {
+			if result.Run.Revision > x.revision && result.Run.Revision <= t.revision && d.Floor != nil && d.Floor.FloorIndex == t.next.Floor.FloorIndex && d.Floor.Seed == t.next.Floor.Seed {
 				t.next = d
+				t.revision = result.Run.Revision
 				s.completeEndgameRiftTransition()
 				return
 			}
@@ -194,6 +201,19 @@ func (s *Scene) pollEndgameRiftTransition(now int64) {
 func (s *Scene) completeEndgameRiftTransition() {
 	x := s.rift
 	t := x.transition
+	changed := false
+	for char, context := range t.rewardContexts {
+		changed = cacheRiftRewardContext(&t.next, char, context) || changed
+	}
+	if changed {
+		// The floor may already be committed, but its offline recipient observations
+		// were newer than that write. Persist one more CAS before transferring ownership.
+		previous := t.revision
+		t.revision++
+		t.next.StorageRevision = t.revision
+		t.save = s.endgameBackend.(domain.EndgameRunBackend).SaveRun(t.next.record(t.revision), previous)
+		return
+	}
 	if !s.router.publishEndgameRiftFloor(s.id, t.target, t.next) {
 		// The prepared actor may have stopped while storage was in flight.
 		// Recreate only the same committed plan, never regenerate or charge a key.

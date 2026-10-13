@@ -53,9 +53,13 @@ func (s *Scene) onTrialAction(cmd TrialAction) {
 	case "trialleave":
 		if s.rift != nil {
 			if !s.canUseEndgameRiftExit(p) {
-				s.trialNotice(p, "请在镇境劫影消散后，与附近的归元道使交谈。")
+				s.trialNotice(p, "请在镇境劫影消散后，与附近的"+s.rift.data.Run.Rules.ExitName+"交谈。")
 				return
 			}
+			// Consume the dialogue intent before queueing the native leave. A late
+			// second click must not commit again between save and next-tick travel.
+			// A failed save can be retried by opening the nearby NPC again.
+			p.Player.QuestNPC = ""
 			s.onEndgame(EndgameRequest{ID: p.ID, Request: domain.EndgameRequest{Op: "rift.leave", RequestID: "native-leave-" + riftNonce(), ExpectedRevision: strconv.FormatInt(s.endgamePlayer(p).state.Revision, 10)}})
 			return
 		}

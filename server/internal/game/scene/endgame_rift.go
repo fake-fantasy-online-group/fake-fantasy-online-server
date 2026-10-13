@@ -182,7 +182,7 @@ func (s *Scene) startEndgameRiftWithProfile(p *entity.Entity, req domain.Endgame
 		char := domain.CharID(ch.ID)
 		roster = append(roster, domain.TrialKeyMember{CharID: char, Level: ch.Level, Cycle: ch.Trial.Cycle})
 		names[char] = ch.Name
-		profiles[char] = endgameRiftIdentity{Race: ch.Race, Gender: ch.Appear.Gender, Employed: ch.HasProfession()}
+		profiles[char] = endgameRiftIdentity{Race: ch.Race, Gender: ch.Appear.Gender, Employed: ch.HasProfession(), MagicFind: s.magicFindV5(peer), RewardLevel: ch.Level}
 		peers = append(peers, peer.ID)
 	}
 	sort.Slice(roster, func(i, j int) bool { return roster[i].CharID < roster[j].CharID })

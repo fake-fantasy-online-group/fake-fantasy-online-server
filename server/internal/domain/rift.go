@@ -316,7 +316,7 @@ func RiftScaledStat(base int32, tier int32, party int, class int32, hp bool, rul
 		rate = float64(rule.HPGrowthBP) / 10000
 		v *= 1 + float64(rule.PartyHPBP)/10000*float64(party-1)
 	}
-	v *= math.Pow(rate, float64(tier-1))
+	v *= math.Pow(rate, float64(tier-max(int32(1), rule.StatAnchorTier)))
 	if hp {
 		v *= float64(rule.Classes[class].HPBP) / 10000
 	} else {
@@ -330,14 +330,14 @@ func RiftScaledStat(base int32, tier int32, party int, class int32, hp bool, rul
 
 // Loot timing bonuses are separate from difficulty progression; use
 // RiftRun.UnlockedTierFor for the completion-time tier entitlement.
-type RiftRewardPlan struct{ Equipment, Rune, Dust, UniqueChance int32 }
+type RiftRewardPlan struct{ Equipment, NormalBossEquipment, Rune, Dust, UniqueChance int32 }
 
 func PlanRiftRewards(tier int32, timely bool, rule *RiftRules) RiftRewardPlan {
 	if rule == nil {
 		return RiftRewardPlan{}
 	}
 	tier = clampRiftTier(tier, rule)
-	p := RiftRewardPlan{Equipment: rule.Equipment, Rune: rule.Runes, Dust: rule.DustBase + (tier-1)/rule.DustTierDivisor, UniqueChance: rule.UniqueBaseChance + rule.UniquePerTier*tier}
+	p := RiftRewardPlan{Equipment: rule.Equipment, NormalBossEquipment: rule.NormalBossEquipment, Rune: rule.Runes, Dust: rule.DustBase + (tier-1)/rule.DustTierDivisor, UniqueChance: rule.UniqueBaseChance + rule.UniquePerTier*tier}
 	if p.UniqueChance > rule.UniqueCap {
 		p.UniqueChance = rule.UniqueCap
 	}

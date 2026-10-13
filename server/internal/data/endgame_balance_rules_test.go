@@ -68,6 +68,16 @@ func TestBalanceActualPostgresLoader(t *testing.T) {
 		expectedRift.Version, expectedRift.LootVersion = 3, 2
 		expectedRift.Loot = &expectedLoot
 	}
+	if rift.Active().Version >= 4 {
+		historical, ok := rift.Version(3)
+		if !ok || !reflect.DeepEqual(historical, &expectedRift) {
+			t.Fatal("already-admitted weighted-rune rift changed")
+		}
+		expectedRift.CompletionLevelExperience = true
+		expectedRift.Version, expectedRift.StatAnchorTier, expectedRift.NormalBossEquipment = 4, 30, 10
+		expectedRift.ExitName, expectedRift.ExitSprite, expectedRift.ExitPortrait, expectedRift.NPCModel = "洞天残魂", "npc362", "", 362
+		expectedRift.ExitGreeting = "好久没见到别的人了……这里的风，总算静下来了。来吧，我这就送你回去。"
+	}
 	if !reflect.DeepEqual(loot.Active(), &expectedLoot) || !reflect.DeepEqual(rift.Active(), &expectedRift) {
 		t.Fatal("actual SQL configuration differs from seed")
 	}

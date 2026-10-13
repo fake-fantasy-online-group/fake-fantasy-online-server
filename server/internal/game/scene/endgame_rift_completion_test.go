@@ -1,7 +1,5 @@
 package scene
 
-import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
 import (
 	"strconv"
 	"testing"
@@ -134,7 +132,7 @@ func TestRiftGroundOwnershipDistanceBagAndRecovery(t *testing.T) {
 	p.Pos = drop.Pos
 	original := p.Player.Bag
 	p.Player.Bag = domain.NewBag(1)
-	p.Player.Bag.Add(domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 987654, Stackable: true}, domain.MaxStack)
+	p.Player.Bag.Add(s.items[1900028202], domain.MaxStack)
 	s.onPickUp(PickUp{ID: p.ID, Target: drop.ID})
 	if b.commits != count || s.ground[drop.ID] == nil {
 		t.Fatal("full bag consumed reward")
@@ -163,14 +161,22 @@ func TestRiftExitDialogueAndNativeModelScope(t *testing.T) {
 	finishRiftRewardCommit(t, s, b)
 	p := s.players[1]
 	npc := s.entities[s.rift.exitNPC]
-	if npc.Look.ModelID != 630 || npc.NPC.Portrait != "N630" {
-		t.Fatal("unverified model")
+	if npc.Look.ModelID != s.rift.data.Run.Rules.NPCModel || npc.NPC.Sprite != s.rift.data.Run.Rules.ExitSprite || npc.NPC.Portrait != s.rift.data.Run.Rules.ExitPortrait {
+		t.Fatal("exit did not use frozen rule resources")
 	}
-	p.Player.QuestNPC = endgameRiftExitName
+	p.Player.QuestNPC = s.rift.data.Run.Rules.ExitName
 	p.Pos = npc.Pos
 	if !s.canUseEndgameRiftExit(p) {
 		t.Fatal("valid exit rejected")
 	}
+	phase := s.rift.data.Run.Phase
+	for _, blocked := range []domain.RiftPhase{domain.RiftReserved, domain.RiftActive, domain.RiftBoss, domain.RiftFailed, domain.RiftAborted} {
+		s.rift.data.Run.Phase = blocked
+		if s.canUseEndgameRiftExit(p) {
+			t.Fatalf("unfinished run admitted NPC exit: %v", blocked)
+		}
+	}
+	s.rift.data.Run.Phase = phase
 	p.Pos.X += 201
 	if s.canUseEndgameRiftExit(p) {
 		t.Fatal("distant exit accepted")
@@ -237,6 +243,8 @@ func TestRiftRewardRejoinPublishesSilentOwnerAndNPC(t *testing.T) {
 	s, b, _ := completedRiftRewards(t)
 	finishRiftRewardCommit(t, s, b)
 	p := s.players[1]
+	p.Player.QuestNPC = s.rift.data.Run.Rules.ExitName
+	p.Pos = s.entities[s.rift.exitNPC].Pos
 	snapshot := s.snapshotOf(p).Clone()
 	priorCount := len(s.ground)
 	s.flush()
@@ -244,6 +252,15 @@ func TestRiftRewardRejoinPublishesSilentOwnerAndNPC(t *testing.T) {
 	s.exec(Leave{ID: p.ID, Reason: "temporary disconnect"})
 	sink := &fakeSink{}
 	p = reconnectRiftPlayer(t, s, snapshot, 900001, 0, nil, sink)
+	if p.Player.QuestNPC != "" || s.canUseEndgameRiftExit(p) {
+		t.Fatal("reconnect retained a previous session's NPC dialogue authority")
+	}
+	before := b.commits
+	s.exec(TrialAction{ID: p.ID, Action: "trialleave"})
+	s.finishEndgame(false)
+	if b.commits != before {
+		t.Fatal("reconnect command exited without reopening the NPC")
+	}
 	s.flush()
 	seenNPC, seenDrops := false, 0
 	for _, ev := range sink.take() {
@@ -298,7 +315,7 @@ func TestRiftNativeExitDialogueCommandFlow(t *testing.T) {
 	if b.commits != before {
 		t.Fatal("exit without dialogue")
 	}
-	s.exec(NpcTasks{ID: p.ID, NPC: endgameRiftExitName})
+	s.exec(NpcTasks{ID: p.ID, NPC: s.rift.data.Run.Rules.ExitName})
 	p.Pos = npc.Pos
 	p.HP = 0
 	s.exec(TrialAction{ID: p.ID, Action: "trialleave"})
@@ -319,7 +336,7 @@ func TestRiftNativeExitDialogueCommandFlow(t *testing.T) {
 	s.entities[npc.ID] = npc
 	// Full inventory is irrelevant to leaving; unpicked entitlement stays durable.
 	p.Player.Bag = domain.NewBag(1)
-	p.Player.Bag.Add(domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 987654, Stackable: true}, domain.MaxStack)
+	p.Player.Bag.Add(s.items[1900028202], domain.MaxStack)
 	s.exec(TrialAction{ID: p.ID, Action: "trialleave"})
 	s.finishEndgame(false)
 	if b.commits != before+1 || !s.rift.economicPending {
@@ -331,6 +348,11 @@ func TestRiftNativeExitDialogueCommandFlow(t *testing.T) {
 		t.Fatal("repeated exit duplicated pending commit")
 	}
 	finishRiftRewardCommit(t, s, b)
+	s.exec(TrialAction{ID: p.ID, Action: "trialleave"})
+	s.finishEndgame(false)
+	if b.commits != before+1 {
+		t.Fatal("late repeated exit duplicated a completed commit")
+	}
 	durable, ok := decodeEndgameRift(b.plan.Run, riftRulesTableFixture())
 	if !ok || durable.Run.Members[100].Claimed || !durable.Grants[100].ExperienceClaimed || len(durable.Grants[100].Items) == 0 {
 		t.Fatal("exit lost unpicked entitlement")
@@ -493,5 +515,107 @@ func TestRiftCompletionLayoutIsCachedAcrossSettlementTicks(t *testing.T) {
 	}
 	if calls != sampled {
 		t.Fatal("completed map rescanned on every tick", sampled, calls)
+	}
+}
+
+// These are the visually inspected cloud-native spirit resources. The renderer
+// resolves npc362 to avatar/npc/npc36201.gsn; this model has no N362 portrait.
+func TestRiftSpiritExitProjectionUsesNativeResources(t *testing.T) {
+	s, b, _ := completedRiftRewards(t)
+	finishRiftRewardCommit(t, s, b)
+	old := s.entities[s.rift.exitNPC]
+	s.aoi.Leave(old)
+	delete(s.entities, old.ID)
+	s.rift.exitNPC = 0
+	rules := *s.rift.data.Run.Rules
+	rules.NPCModel, rules.ExitSprite, rules.ExitPortrait = 362, "npc362", ""
+	rules.ExitName = "洞天残魂"
+	rules.ExitGreeting = "好久没见到别的人了……这里的风，总算静下来了。来吧，我这就送你回去。"
+	s.rift.data.Run.Rules = &rules
+	s.syncEndgameRiftCompletion()
+	npc := s.entities[s.rift.exitNPC]
+	if npc == nil || npc.Kind != domain.KindNPC || npc.Look.ModelID != 362 || npc.Name != rules.ExitName || npc.NPC.Sprite != "npc362" || npc.NPC.Portrait != "" || npc.NPC.Greeting != rules.ExitGreeting || npc.NPC.Script != endgameRiftExitScript {
+		t.Fatal("spirit projection lost native model, dialogue or script")
+	}
+	first := npc.ID
+	s.syncEndgameRiftCompletion()
+	if s.rift.exitNPC != first {
+		t.Fatal("repeat synchronization duplicated the exit NPC")
+	}
+	p := s.players[1]
+	p.Pos, p.Player.QuestNPC = npc.Pos, npc.Name
+	if !s.canUseEndgameRiftExit(p) {
+		t.Fatal("spirit's original NPC interaction cannot exit")
+	}
+}
+
+func TestRiftNativeExitStorageFailureCanReopen(t *testing.T) {
+	s, b, now := completedRiftRewards(t)
+	finishRiftRewardCommit(t, s, b)
+	s.quests = domain.QuestTable{}
+	p := s.players[1]
+	npc := s.entities[s.rift.exitNPC]
+	p.Pos = npc.Pos
+	s.exec(NpcTasks{ID: p.ID, NPC: npc.Name})
+	before, timers := b.commits, s.timer.pending()
+	s.exec(TrialAction{ID: p.ID, Action: "trialleave"})
+	s.finishEndgame(false)
+	if b.commits != before+1 || p.Player.QuestNPC != "" {
+		t.Fatal("native leave did not consume only its current dialogue intent")
+	}
+	b.finish(false)
+	s.finishEndgame(false)
+	s.pollEndgameRiftReload(*now)
+	if s.rift.economicPending || s.players[p.ID] != p || s.timer.pending() != timers {
+		t.Fatal("failed leave moved player or did not reconcile")
+	}
+	s.exec(TrialAction{ID: p.ID, Action: "trialleave"})
+	s.finishEndgame(false)
+	if b.commits != before+1 {
+		t.Fatal("failed action replayed without reopening the NPC")
+	}
+	s.exec(NpcTasks{ID: p.ID, NPC: npc.Name})
+	if !s.canUseEndgameRiftExit(p) {
+		t.Fatal("failed exit could not regain authority from the real NPC")
+	}
+	s.exec(TrialAction{ID: p.ID, Action: "trialleave"})
+	s.finishEndgame(false)
+	if b.commits != before+2 {
+		t.Fatal("reopened NPC did not retry failed save")
+	}
+	finishRiftRewardCommit(t, s, b)
+	if s.timer.pending() != timers+1 {
+		t.Fatal("successful retry did not schedule exactly one exit")
+	}
+}
+
+func TestRiftNativeExitDisconnectDuringCommit(t *testing.T) {
+	s, b, _ := completedRiftRewards(t)
+	finishRiftRewardCommit(t, s, b)
+	s.quests = domain.QuestTable{}
+	p := s.players[1]
+	npc := s.entities[s.rift.exitNPC]
+	p.Pos = npc.Pos
+	s.exec(NpcTasks{ID: p.ID, NPC: npc.Name})
+	before := b.commits
+	s.exec(TrialAction{ID: p.ID, Action: "trialleave"})
+	s.finishEndgame(false)
+	s.exec(Leave{ID: p.ID, Reason: "disconnect during native exit"})
+	if s.players[p.ID] == nil {
+		t.Fatal("disconnect escaped pending leave commit")
+	}
+	finishRiftRewardCommit(t, s, b)
+	if s.players[p.ID] != nil {
+		t.Fatal("completed leave did not release disconnected player")
+	}
+	s.timer.advance(s.tick + 1)
+	s.exec(TrialAction{ID: p.ID, Action: "trialleave"})
+	s.finishEndgame(false)
+	if b.commits != before+1 {
+		t.Fatal("disconnected completion duplicated exit")
+	}
+	durable, ok := decodeEndgameRift(b.plan.Run, riftRulesTableFixture())
+	if !ok || len(durable.Grants[100].Items) == 0 || !durable.Grants[100].ExperienceClaimed {
+		t.Fatal("disconnected completion lost frozen rewards")
 	}
 }

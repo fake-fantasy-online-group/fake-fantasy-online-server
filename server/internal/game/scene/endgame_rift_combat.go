@@ -25,13 +25,16 @@ func (d endgameRiftDefs) Def(id domain.MonsterID) (domain.MonsterDef, bool) {
 }
 
 // Delayed economic writes must preserve authoritative event time and ordering.
-// CharID identifies a player death; otherwise ID/Pos identify a monster death.
+// CharID identifies a player death (or an offline personal-context update);
+// otherwise ID/Pos identify a monster death. Replay preserves their event order.
 type endgameRiftDeath struct {
-	ID      domain.EntityID
-	Pos     domain.Pos
-	MS      int64
-	CharID  domain.CharID
-	Present map[domain.CharID]bool
+	ObservedContext *endgameRiftRewardContext
+	RewardContexts  map[domain.CharID]endgameRiftRewardContext
+	ID              domain.EntityID
+	Pos             domain.Pos
+	MS              int64
+	CharID          domain.CharID
+	Present         map[domain.CharID]bool
 }
 
 func (s *Scene) prepareEndgameRift(cmd Enter) bool {
@@ -107,9 +110,48 @@ func (s *Scene) syncEndgameRift(p *entity.Entity) {
 }
 func (s *Scene) disconnectEndgameRift(p *entity.Entity) {
 	if s.rift != nil && p != nil && p.Player != nil {
-		delete(s.rift.ready, domain.CharID(p.Player.Char.ID))
+		char := domain.CharID(p.Player.Char.ID)
+		if !s.rift.data.GrantsReady && (s.rift.data.Run.Rules.NormalBossEquipment > 0 || s.rift.data.Run.Rules.CompletionLevelExperience) && s.rift.data.Run.Admitted(char) {
+			context := endgameRiftRewardContext{Level: p.Player.Char.Level, MagicFind: s.magicFindV5(p)}
+			s.cacheEndgameRiftRewardContext(char, context)
+			if transition := s.rift.transition; transition != nil && !s.rift.retired {
+				if transition.rewardContexts == nil {
+					transition.rewardContexts = map[domain.CharID]endgameRiftRewardContext{}
+				}
+				transition.rewardContexts[char] = context
+			}
+			if s.rift.economicPending {
+				// Another member's pending aggregate can replace data with its earlier
+				// clone, including after a lost ACK. Replay this observation before any
+				// subsequently queued guardian death; the immediate cache also makes
+				// that death's own event-time snapshot correct.
+				s.rift.delayedDeaths = append(s.rift.delayedDeaths, endgameRiftDeath{CharID: char, ObservedContext: &context})
+			}
+		}
+		delete(s.rift.ready, char)
 	}
 }
+func (s *Scene) cacheEndgameRiftRewardContext(char domain.CharID, context endgameRiftRewardContext) {
+	cacheRiftRewardContext(&s.rift.data, char, context)
+}
+
+func cacheRiftRewardContext(data *endgameRiftPersisted, char domain.CharID, context endgameRiftRewardContext) bool {
+	if data.GrantsReady {
+		return false
+	}
+	if data.Profiles == nil {
+		data.Profiles = map[domain.CharID]endgameRiftIdentity{}
+	}
+	profile := data.Profiles[char]
+	if profile.RewardLevel == context.Level && profile.MagicFind == context.MagicFind {
+		return false
+	}
+	profile.RewardLevel, profile.MagicFind = context.Level, context.MagicFind
+	data.Profiles[char] = profile
+	data.Run.Revision++
+	return true
+}
+
 func (s *Scene) clearRiftMonsters() {
 	s.clearEndgameRiftAbilities()
 	for id, m := range s.monsters {
@@ -222,6 +264,9 @@ func (s *Scene) onEndgameRiftMonsterDeath(m, killer *entity.Entity) bool {
 		}
 	}
 	death := endgameRiftDeath{ID: m.ID, Pos: m.Pos, MS: s.riftMS(), Present: present}
+	if registered := x.data.Run.Monsters[m.ID]; registered != nil && registered.Class == 3 {
+		death.RewardContexts = s.freezeEndgameRiftRewardContexts()
+	}
 	if x.economicPending {
 		x.delayedDeaths = append(x.delayedDeaths, death)
 		return true
@@ -231,6 +276,10 @@ func (s *Scene) onEndgameRiftMonsterDeath(m, killer *entity.Entity) bool {
 
 func (s *Scene) applyEndgameRiftDeath(death endgameRiftDeath) bool {
 	x := s.rift
+	if death.ObservedContext != nil {
+		s.cacheEndgameRiftRewardContext(death.CharID, *death.ObservedContext)
+		return true
+	}
 	if death.CharID != 0 {
 		x.data.Run.RecordDeath(death.CharID)
 		return true
@@ -244,7 +293,7 @@ func (s *Scene) applyEndgameRiftDeath(death endgameRiftDeath) bool {
 	if x.data.Run.Phase == domain.RiftCompleted && !x.data.GrantsReady {
 		x.data.RewardPos = death.Pos
 		x.rewardFresh = true
-		s.generateEndgameRiftGrants()
+		s.generateEndgameRiftGrantsWithContexts(death.RewardContexts)
 		x.data.Run.Revision++
 	}
 	for i := 0; i < orbs; i++ {

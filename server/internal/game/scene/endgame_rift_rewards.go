@@ -15,11 +15,49 @@ type endgameRiftIdentity struct {
 	Race     domain.Race
 	Gender   uint8
 	Employed bool
+	// Latest authoritative personal MF, retained for eligible disconnected members.
+	MagicFind   int64 `json:",omitempty"`
+	RewardLevel int32 `json:",omitempty"`
 }
 
 // Completion constructs exact instance identities once; retries never reroll.
+type endgameRiftRewardContext struct {
+	Level     int32
+	MagicFind int64
+}
+
+func (s *Scene) freezeEndgameRiftRewardContexts() map[domain.CharID]endgameRiftRewardContext {
+	contexts := map[domain.CharID]endgameRiftRewardContext{}
+	for char, member := range s.rift.data.Run.Members {
+		profile := s.rift.data.Profiles[char]
+		context := endgameRiftRewardContext{Level: profile.RewardLevel, MagicFind: profile.MagicFind}
+		if context.Level == 0 {
+			context.Level = member.Level
+		}
+		// A commit callback can replace the aggregate before the next tick drains
+		// observations. A guardian event in that interval still sees the last value.
+		for _, observation := range s.rift.delayedDeaths {
+			if observation.CharID == char && observation.ObservedContext != nil {
+				context = *observation.ObservedContext
+			}
+		}
+		if owner := s.endgameRewardPlayer(char); owner != nil {
+			context.Level, context.MagicFind = owner.Player.Char.Level, s.magicFindV5(owner)
+		}
+		contexts[char] = context
+	}
+	return contexts
+}
+
 func (s *Scene) generateEndgameRiftGrants() {
+	s.generateEndgameRiftGrantsWithContexts(s.freezeEndgameRiftRewardContexts())
+}
+
+func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID]endgameRiftRewardContext) {
 	d := &s.rift.data
+	if d.GrantsReady {
+		return
+	}
 	r := d.Run
 	plan := domain.PlanRiftRewards(r.Tier, r.Timely, r.Rules)
 	chars := make([]domain.CharID, 0, len(r.Members))
@@ -116,7 +154,24 @@ func (s *Scene) generateEndgameRiftGrants() {
 			stack.Bound = true
 			grant.Items = append(grant.Items, stack)
 		}
-		grant.Exp = domain.RiftBossExperience(s.trial.BaseExperience(m.Level, s.levels), r.Tier, r.Rules)
+		// Fixed boss quantities do not take the level-gap occurrence penalty. Use
+		// the same wearer-legal, level-appropriate native pool as ordinary slots,
+		// but independent streams leave all historical special/rune/dust rolls intact.
+		if plan.NormalBossEquipment > 0 {
+			grant.MagicFind = contexts[char].MagicFind
+			for i := int32(0); i < plan.NormalBossEquipment && len(equipment) > 0; i++ {
+				grant.Items = append(grant.Items, s.rollEndgameRiftNormalBossEquipment(char, i, equipment, grant.MagicFind))
+			}
+		}
+		level := m.Level
+		if r.Rules.CompletionLevelExperience {
+			if context, ok := contexts[char]; ok {
+				level = context.Level
+			}
+			grant.ExperienceLevel = level
+			grant.ExperienceBase = s.trial.BaseExperience(level, s.levels)
+		}
+		grant.Exp = domain.RiftBossExperience(s.trial.BaseExperience(level, s.levels), r.Tier, r.Rules)
 		if d.Version >= 2 {
 			grant.ProgressionVersion = domain.ProgressionVersion
 			grant.RewardVersion = domain.TrialRewardVersion
@@ -138,4 +193,23 @@ func (s *Scene) publishEndgameRewardExperience(p *entity.Entity, previousLevel i
 		s.emitTo(p.ID, s.skillSnapshot(p))
 		s.refreshChangeSetTooltips(p)
 	}
+}
+
+// Each item/purpose is keyed to the durable run and recipient, not scene tick,
+// killer, live loot version or another reward slot's RNG consumption.
+func (s *Scene) rollEndgameRiftNormalBossEquipment(char domain.CharID, ordinal int32, pool []domain.ItemID, magicFind int64) domain.Stack {
+	r := s.rift.data.Run
+	stream := func(purpose string) lootRandomV5 {
+		hash := sha256.Sum256([]byte(fmt.Sprintf("%s/rift-normal-boss/%d/%d/%d/%s", r.RunID, r.RulesVersion, char, ordinal, purpose)))
+		return lootRandomV5{binary.BigEndian.Uint64(hash[:8])}
+	}
+	item, sockets := stream("item"), stream("sockets")
+	quality, values := stream("quality"), stream("values")
+	unique, variables := stream("unique"), stream("variables")
+	def := s.items[pool[item.Intn(len(pool))]]
+	stack := domain.NewStack(def, 1)
+	stack.Bound = true
+	stack.SocketCount = domain.RollDroppedSocketCount(def, domain.AstralDropBoss, sockets.Int63n, r.Rules.Loot)
+	s.rollNaturalEquipmentQualityV5(def, &stack, domain.DefaultColorProfile, true, magicFind, r.Rules.Loot, &quality, &values, &unique, &variables)
+	return stack
 }
