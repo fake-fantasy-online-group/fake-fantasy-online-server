@@ -2750,7 +2750,7 @@ func loadStructuredSkillStatuses(ctx context.Context, q Querier) (map[domain.Ski
 	rows, err := q.Query(ctx, `
 		SELECT s.skill_id, s.skill_level, s.status_order,
 		       s.status_id, s.status_level, s.chance_bp, s.duration_sec, s.description_override,
-		       s.instant_death_immune,
+		       s.instant_death_immune, COALESCE(to_jsonb(s)->>'target_type','any'),
 		       EXISTS (
 		           SELECT 1
 		             FROM gamedata.ov_exceptdetail d
@@ -2774,19 +2774,30 @@ func loadStructuredSkillStatuses(ctx context.Context, q Querier) (map[domain.Ski
 	out := make(map[domain.SkillKey][]domain.StatusApplication)
 	for rows.Next() {
 		var (
-			key      domain.SkillKey
-			order    int32
-			app      domain.StatusApplication
-			statusOK bool
+			key        domain.SkillKey
+			order      int32
+			app        domain.StatusApplication
+			targetType string
+			statusOK   bool
 		)
 		if err := rows.Scan(&key.ID, &key.Level, &order,
 			&app.ID, &app.Level, &app.ChanceBP, &app.DurationSec, &app.Description,
-			&app.InstantDeathImmune, &statusOK); err != nil {
+			&app.InstantDeathImmune, &targetType, &statusOK); err != nil {
 			return nil, fmt.Errorf("data: 读结构化技能状态: %w", err)
 		}
 		if !statusOK {
 			return nil, fmt.Errorf("data: 技能 %d/%d 第 %d 个状态引用不存在的定义 %d/%d",
 				key.ID, key.Level, order, app.ID, app.Level)
+		}
+		switch targetType {
+		case "any":
+			app.TargetType = domain.SkillStatusTargetAny
+		case "player":
+			app.TargetType = domain.SkillStatusTargetPlayer
+		case "non_player":
+			app.TargetType = domain.SkillStatusTargetNonPlayer
+		default:
+			return nil, fmt.Errorf("data: 技能 %d/%d 第 %d 个状态目标类型 %q 未实现", key.ID, key.Level, order, targetType)
 		}
 		app.ChanceExplicit = true
 		app.SourceSkill = key.ID
@@ -4047,6 +4058,10 @@ func LoadStatuses(ctx context.Context, q Querier) (domain.StatusTable, StatusSta
 		return nil, st, err
 	}
 
+	if err := loadStatusOverlayStrengths(ctx, q, out); err != nil {
+		return nil, st, err
+	}
+
 	seen := map[domain.StatusID]bool{}
 	for k := range out {
 		seen[k.ID] = true
@@ -4064,8 +4079,9 @@ func loadCustomStatuses(ctx context.Context, q Querier, out domain.StatusTable) 
 		       physical_damage_reduction_pct, magic_damage_reduction_pct,
 		       physical_damage_taken_pct, magic_damage_taken_pct,
 		       damage_shield, attack_cap, prevent_invisible, replace_native, block_move, immobile,
-               attack_speed_is_frequency, icon, icon_known, hidden
-		  FROM game_custom_statuses
+               attack_speed_is_frequency, icon, icon_known, hidden,
+               COALESCE((to_jsonb(c)->>'legacy_overlay_level_bp')::bigint,0)
+		  FROM game_custom_statuses c
 		 ORDER BY status_id, status_level`)
 	if err != nil {
 		return fmt.Errorf("data: 查自定义状态: %w", err)
@@ -4084,11 +4100,14 @@ func loadCustomStatuses(ctx context.Context, q Querier, out domain.StatusTable) 
 			&d.DurationSec, &d.IntervalSec, &hpValue, &hpMode,
 			&d.PhysicalDamageReductionPct, &d.MagicDamageReductionPct,
 			&d.PhysicalDamageTakenPct, &d.MagicDamageTakenPct,
-			&d.DamageShield, &attackCap, &d.PreventInvisible, &replaceNative, &d.BlockMove, &d.Immobile, &d.AttackSpeedIsFrequency, &d.Icon, &d.IconKnown, &d.Hidden); err != nil {
+			&d.DamageShield, &attackCap, &d.PreventInvisible, &replaceNative, &d.BlockMove, &d.Immobile, &d.AttackSpeedIsFrequency, &d.Icon, &d.IconKnown, &d.Hidden, &d.LegacyOverlayLevelBP); err != nil {
 			return fmt.Errorf("data: 读自定义状态: %w", err)
 		}
 		if statusType < int16(domain.StatusGood) || statusType > int16(domain.StatusGoodNew) {
 			return fmt.Errorf("data: 自定义状态 %d/%d 的 status_type=%d 越界", d.ID, d.Level, statusType)
+		}
+		if d.LegacyOverlayLevelBP < 0 {
+			return fmt.Errorf("data: 自定义状态 %d/%d 逻辑覆盖等级不能为负", d.ID, d.Level)
 		}
 		d.Type, d.TypeKnown = domain.StatusType(statusType), true
 		if hpValue != 0 {

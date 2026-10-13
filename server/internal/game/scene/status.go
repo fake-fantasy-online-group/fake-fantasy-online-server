@@ -780,6 +780,7 @@ func (s *Scene) statusDefByID(id domain.StatusID) (domain.StatusDef, bool) {
 // 上限取百分比；此前把“每两秒减少生命上限6%”错算成固定 6 点。
 func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 	var hpDelta, mpDelta int64
+	hpDelta -= int64(a.PeriodicDamageTickExtra)
 	for _, af := range a.Def.Affixes {
 		if af.Attr == domain.AttrHPRegen {
 			hpDelta += int64(resourceDelta(af.Value, af.Mode, e.MaxHP))

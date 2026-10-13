@@ -17,8 +17,8 @@ import (
 // Postgres 是 Store 的 PostgreSQL 实现(生产存储)。语义与 Memory 一致, 保证上层逻辑
 // 在两种实现下行为相同。连接池由 pgxpool 管理; 事务用真实 DB 事务。
 type Postgres struct {
- endgameCatalog *domain.EndgameCatalog
-	pool *pgxpool.Pool
+	endgameCatalog *domain.EndgameCatalog
+	pool           *pgxpool.Pool
 }
 
 // Open 建立连接池。dsn 例: postgres://fantasy:fantasy_dev@localhost:5433/fantasy
@@ -191,6 +191,7 @@ func scanChar(row pgx.Row) (*domain.Character, error) {
 	var hotbarKinds []byte
 	var savedStatuses []byte
 	var equipmentProcCooldowns []byte
+	var skillRoundingCredits []byte
 	err := row.Scan(&c.ID, &c.AccountID, &c.Slot, &c.Name, &race, &c.Level, &c.Exp,
 		&c.Pos.MapID, &c.Pos.X, &c.Pos.Y, &gender, &hair, &face,
 		&equipView, &c.CreatedAt, &c.LastLogin,
@@ -204,7 +205,7 @@ func scanChar(row pgx.Row) (*domain.Character, error) {
 		&glowMode, &c.Appear.GlowUnlocked, &c.Appear.EquipFXHideMask,
 		&c.SmartCast, &c.PetViewMask, &hotbarIDs, &hotbarKinds, &c.HotbarExpanded,
 		&c.Employed, &pkMode, &c.Caiyu, &sceneInstance, &c.OwnedTitles, &c.Trial.Day, &c.Trial.DailyCompleted, &c.Trial.Cycle, &c.Trial.MonsterLevel,
-		&savedStatuses, &c.ExpBonusPct, &c.ExpBonusRemainingTicks, &c.PetExpBonusPct, &c.PetExpBonusRemainingTicks, &c.Trial.KeyReward, &c.Trial.CompletionID, &equipmentProcCooldowns, &c.SkillAllocationVersion)
+		&savedStatuses, &c.ExpBonusPct, &c.ExpBonusRemainingTicks, &c.PetExpBonusPct, &c.PetExpBonusRemainingTicks, &c.Trial.KeyReward, &c.Trial.CompletionID, &equipmentProcCooldowns, &c.SkillAllocationVersion, &skillRoundingCredits)
 	if err != nil {
 		return nil, err
 	}
@@ -216,6 +217,9 @@ func scanChar(row pgx.Row) (*domain.Character, error) {
 	}
 	if err := json.Unmarshal(equipmentProcCooldowns, &c.EquipmentProcCooldowns); err != nil {
 		return nil, fmt.Errorf("store: 角色 %d 装备触发冷却快照无效: %w", c.ID, err)
+	}
+	if err := decodeSkillRoundingCredits(skillRoundingCredits, &c); err != nil {
+		return nil, err
 	}
 	if sceneInstance < 0 || sceneInstance > int64(^uint32(0)) {
 		return nil, fmt.Errorf("store: 角色 %d 的副本实例号非法: %d", c.ID, sceneInstance)
@@ -254,7 +258,7 @@ const charCols = `id, account_id, slot, name, race, level, exp, map_id, pos_x, p
 	employed, pk_mode, (SELECT a.caiyu FROM accounts a WHERE a.id=characters.account_id),
 	scene_instance,
 		ARRAY(SELECT ct.title FROM character_titles ct WHERE ct.char_id=characters.id ORDER BY ct.title), trial_day, trial_daily_completed, trial_cycle, trial_monster_level,
-		saved_statuses, exp_bonus_pct, exp_bonus_remaining_ticks, pet_exp_bonus_pct, pet_exp_bonus_remaining_ticks, trial_key_reward, trial_completion_id, equipment_proc_cooldowns, skill_allocation_version`
+		saved_statuses, exp_bonus_pct, exp_bonus_remaining_ticks, pet_exp_bonus_pct, pet_exp_bonus_remaining_ticks, trial_key_reward, trial_completion_id, equipment_proc_cooldowns, skill_allocation_version, skill_rounding_credits`
 
 func (p *Postgres) CharsByAccount(ctx context.Context, accountID int64) ([]*domain.Character, error) {
 	return charsByAccount(ctx, p.catalogQuery(), accountID)
@@ -404,6 +408,10 @@ func saveChar(ctx context.Context, q querier, c *domain.Character) error {
 	if err != nil {
 		return fmt.Errorf("store: 编码角色 %d 装备触发冷却: %w", c.ID, err)
 	}
+	roundingJSON, err := encodeSkillRoundingCredits(c)
+	if err != nil {
+		return err
+	}
 	ct, err := q.Exec(ctx,
 		`UPDATE characters SET level=$2, exp=$3, map_id=$4, pos_x=$5, pos_y=$6,
 			gender=$7, hair=$8, face=$9, equip_view=$10, last_login=$11,
@@ -420,7 +428,7 @@ func saveChar(ctx context.Context, q querier, c *domain.Character) error {
 			pk_mode=$44, employed=$45, scene_instance=$46,
 			trial_day=$47, trial_daily_completed=$48, trial_cycle=$49, trial_monster_level=$50,
 			saved_statuses=$51::jsonb, exp_bonus_pct=$52, exp_bonus_remaining_ticks=$53,
-			pet_exp_bonus_pct=$54, pet_exp_bonus_remaining_ticks=$55, trial_key_reward=$56, trial_completion_id=$57, equipment_proc_cooldowns=$58::jsonb, skill_allocation_version=$59
+			pet_exp_bonus_pct=$54, pet_exp_bonus_remaining_ticks=$55, trial_key_reward=$56, trial_completion_id=$57, equipment_proc_cooldowns=$58::jsonb, skill_allocation_version=$59, skill_rounding_credits=$60::jsonb
 		 WHERE id=$1`,
 		c.ID, c.Level, c.Exp, c.Pos.MapID, c.Pos.X, c.Pos.Y,
 		int16(c.Appear.Gender), int16(c.Appear.Hair), int16(c.Appear.Head),
@@ -435,7 +443,7 @@ func saveChar(ctx context.Context, q querier, c *domain.Character) error {
 		int16(c.Appear.GlowMode), c.Appear.GlowUnlocked, c.Appear.EquipFXHideMask,
 		c.SmartCast, c.PetViewMask, hotbarIDsOf(c), hotbarKindsOf(c), c.HotbarExpanded,
 		int16(c.PKMode), c.Employed, int64(c.SceneInstance), c.Trial.Day, c.Trial.DailyCompleted, c.Trial.Cycle, c.Trial.MonsterLevel,
-		string(statusJSON), c.ExpBonusPct, c.ExpBonusRemainingTicks, c.PetExpBonusPct, c.PetExpBonusRemainingTicks, c.Trial.KeyReward, c.Trial.CompletionID, string(procJSON), c.SkillAllocationVersion)
+		string(statusJSON), c.ExpBonusPct, c.ExpBonusRemainingTicks, c.PetExpBonusPct, c.PetExpBonusRemainingTicks, c.Trial.KeyReward, c.Trial.CompletionID, string(procJSON), c.SkillAllocationVersion, string(roundingJSON))
 	if err != nil {
 		return err
 	}
@@ -496,14 +504,17 @@ func (p *Postgres) WithTx(ctx context.Context, fn func(Store) error) error {
 		return err
 	}
 	defer tx.Rollback(ctx)
-	if err := fn(&pgTx{tx: tx,endgameCatalog:p.endgameCatalog}); err != nil {
+	if err := fn(&pgTx{tx: tx, endgameCatalog: p.endgameCatalog}); err != nil {
 		return err
 	}
 	return tx.Commit(ctx)
 }
 
 // pgTx 是事务内的 Store 视图, 所有操作走同一个 tx。
-type pgTx struct{ tx pgx.Tx; endgameCatalog *domain.EndgameCatalog }
+type pgTx struct {
+	tx             pgx.Tx
+	endgameCatalog *domain.EndgameCatalog
+}
 
 func (t *pgTx) AccountByName(ctx context.Context, u string) (*Account, error) {
 	return accountByName(ctx, t.tx, u)

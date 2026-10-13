@@ -83,6 +83,7 @@ func (e *v5Evaluator) applyGrowthPolicy(a, b SkillDef, out *SkillDef) {
 		baseCD := max(int32(0), anchor.blend(a.CooldownMS, b.CooldownMS))
 		if baseCD > 0 {
 			n, d := int64(baseCD)*50, 50+int64(out.ManaCostReductionRanks)
+			out.CooldownFractionNumeratorMS, out.CooldownFractionDenominator = n, d
 			out.CooldownMS = int32((n + d - 1) / d)
 		}
 		if anchor.err != nil {

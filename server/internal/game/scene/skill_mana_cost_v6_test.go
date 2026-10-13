@@ -36,10 +36,14 @@ func TestSkillManaCostMatchesEveryActualDebitV6(t *testing.T) {
 		for i := 0; i < 100; i++ {
 			s.casts = nil
 			s.tick += 1000000
+			// Preview the next accepted debit; post-cap rounding credit belongs to
+			// the character and advances only after a successful cast.
+			expected, _ := s.skills.Get(10301, rank)
+			s.applyResolvedSkillModifiers(p, &expected, p.Player.Char.Skills, s.rawSkillLevels(p))
 			before := p.MP
 			s.onUseSkill(UseSkill{ID: p.ID, Skill: 10301, Target: p.ID})
-			if len(s.casts) != 1 || before-p.MP != d.MPCost {
-				t.Fatalf("rank%d cast%d debit%d expected%d queue%d", rank, i, before-p.MP, d.MPCost, len(s.casts))
+			if len(s.casts) != 1 || before-p.MP != expected.MPCost {
+				t.Fatalf("rank%d cast%d debit%d expected%d queue%d", rank, i, before-p.MP, expected.MPCost, len(s.casts))
 			}
 		}
 		payloads = append(payloads, map[string]any{"id": d.ID, "name": d.Name, "rank": rank, "payload": view, "lines": lines})

@@ -332,6 +332,14 @@ type SkillDef struct {
 	ManaCostReductionApplied bool
 	// ManaCostReductionRanks is scoped high-rank mana reduction, applied once after other modifiers.
 	ManaCostReductionRanks int32
+	// Exact post-cap rates are server-only; previews do not consume character credit.
+	ManaCostFractionNumerator int64 `json:"-"`
+	ManaCostFractionDenominator int64 `json:"-"`
+	CooldownFractionNumeratorMS int64 `json:"-"`
+	CooldownFractionDenominator int64 `json:"-"`
+	RoundingPreviewReady bool `json:"-"`
+	CooldownRoundingApplied bool `json:"-"`
+	RoundingPreviewNext SkillRoundingState `json:"-"`
 
 	EquipmentVariant *EquipmentSkillVariant // immutable accepted cast snapshot
 

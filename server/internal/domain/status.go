@@ -93,6 +93,12 @@ const (
 
 // StatusDef 是一个状态在某一级上的定义。
 type StatusDef struct {
+	// OverlayStrength is current database metadata, never persisted or sent on wire.
+	OverlayStrength *StatusOverlayStrength `json:"-"`
+	// LegacyOverlayLevelBP aliases storage identity only for cross-ID comparisons.
+	LegacyOverlayLevelBP int64 `json:"-"`
+	// Hundredths of original absolute tick damage, consumed by each Active instance.
+	PeriodicDamageFraction100 int64 `json:",omitempty"`
 	ProgressionAttackFlat int32
 	// Skill snapshots pin persistent effects to the lesser of cast and current sources.
 	SkillSnapshotID   SkillID
@@ -231,6 +237,8 @@ const (
 
 // StatusApplication 是效果脚本里一条已经闭合的“施加某级状态”。
 type StatusApplication struct {
+	// TargetType selects the actual target class without widening skill admission.
+	TargetType SkillStatusTarget `json:",omitempty"`
 	Progression            *SkillProgressionCatalog `json:"-"`
 	PeriodicDamageBonusPct int32
 	SourceSkill            SkillID
@@ -344,6 +352,9 @@ func (m StatusOverlay) Rule(existing, incoming StatusID) (OverlayRule, bool) {
 // Active 是一个实体身上正在生效的一个状态。
 type Active struct {
 	Def StatusDef
+	PeriodicDamageRemainder100 int64 `json:",omitempty"`
+	// Tick-only whole damage emitted by DueTicks; never shared between instances.
+	PeriodicDamageTickExtra int32 `json:"-"`
 	// ExpireAt 到期帧。
 	ExpireAt Tick
 	// NextTickAt 下次周期触发的帧。非周期状态为 0。
@@ -358,6 +369,7 @@ type Active struct {
 // 减益保存 UTC 到期时间；RemainingTicks=-1 表示永久状态。
 // Source 是场景实体号，重登后不能沿用，故不进入存档。
 type SavedStatus struct {
+	PeriodicDamageRemainder100 int64 `json:",omitempty"`
 	Def             StatusDef
 	RemainingTicks  int64
 	ExpiresAtUnixMS int64
@@ -390,12 +402,15 @@ func (s *StatusSet) Apply(def StatusDef, now Tick, src EntityID) {
 	if s == nil {
 		return
 	}
+	if _, valid := def.OverlayPriority(); !valid {
+		return
+	}
 	if s.act == nil {
 		s.act = map[StatusID][]Active{}
 	}
 	a := newActive(def, now, src)
 	old := s.act[def.ID]
-	if len(old) > 0 && old[0].Def.Level > def.Level {
+	if len(old) > 0 && overlayReplacementBlocked(old[0].Def, def) {
 		// 低等级盖不掉高等级的效果, 但可以续时长
 		a.Def = old[0].Def
 		if old[0].ExpireAt > a.ExpireAt {
@@ -426,8 +441,11 @@ type StatusApplyResult struct {
 }
 
 // BlockedByOverlay 只做预检，不修改状态集。
-// REPLACE 比较等级；MUSTREPLACE 不比较。
+// REPLACE 比较同ID显式强度或原逻辑等级；MUSTREPLACE 不比较。
 func (s *StatusSet) BlockedByOverlay(def StatusDef, overlay StatusOverlay) bool {
+	if _, valid := def.OverlayPriority(); !valid {
+		return true
+	}
 	if s == nil || len(s.act) == 0 || len(overlay) == 0 {
 		return false
 	}
@@ -441,7 +459,7 @@ func (s *StatusSet) BlockedByOverlay(def StatusDef, overlay StatusOverlay) bool 
 		}
 		if rule == OverlayReplace {
 			for _, old := range list {
-				if old.Def.Level > def.Level {
+				if overlayReplacementBlocked(old.Def, def) {
 					return true
 				}
 			}
@@ -453,6 +471,9 @@ func (s *StatusSet) BlockedByOverlay(def StatusDef, overlay StatusOverlay) bool 
 // ApplyWithOverlay 按矩阵一次性解算所有已有状态与新状态的关系。
 func (s *StatusSet) ApplyWithOverlay(def StatusDef, now Tick, src EntityID, overlay StatusOverlay) StatusApplyResult {
 	if s == nil {
+		return StatusApplyResult{Blocked: true}
+	}
+	if _, valid := def.OverlayPriority(); !valid {
 		return StatusApplyResult{Blocked: true}
 	}
 	// 没注入矩阵的是旧测试/手工场景，保持 Apply 的单实例、高等级优先语义。
@@ -963,7 +984,7 @@ func (s *StatusSet) SaveForLogout(now Tick, wall time.Time, owner EntityID) []Sa
 			if a.ExpireAt != 0 && a.ExpireAt <= now {
 				continue
 			}
-			record := SavedStatus{Def: a.Def, ShieldLeft: a.ShieldLeft, SourceSelf: owner != 0 && a.Source == owner}
+			record := SavedStatus{Def: a.Def, ShieldLeft: a.ShieldLeft, SourceSelf: owner != 0 && a.Source == owner, PeriodicDamageRemainder100: a.PeriodicDamageRemainder100}
 			if a.ExpireAt == 0 {
 				record.RemainingTicks = -1
 			} else {
@@ -993,7 +1014,8 @@ func RestoreSavedStatuses(saved []SavedStatus, now Tick, wall time.Time, owner E
 		if record.Def.ID <= 0 || record.RemainingTicks == 0 || record.RemainingTicks < -1 {
 			continue
 		}
-		a := Active{Def: record.Def, ShieldLeft: record.ShieldLeft}
+		a := Active{Def: record.Def, ShieldLeft: record.ShieldLeft, PeriodicDamageRemainder100: record.PeriodicDamageRemainder100}
+		if a.PeriodicDamageRemainder100 < 0 || a.PeriodicDamageRemainder100 >= 100 { continue }
 		if record.SourceSelf {
 			a.Source = owner
 		}
@@ -1076,7 +1098,14 @@ func (s *StatusSet) DueTicks(now Tick) []Active {
 			if a.NextTickAt == 0 || now < a.NextTickAt {
 				continue
 			}
+			// Update the owned instance before returning its value-copy tick receipt.
+			if a.Def.PeriodicDamageFraction100 > 0 {
+				total := a.PeriodicDamageRemainder100 + a.Def.PeriodicDamageFraction100
+				a.PeriodicDamageTickExtra = SaturateInt32(total / 100)
+				a.PeriodicDamageRemainder100 = total % 100
+			}
 			due = append(due, a)
+			a.PeriodicDamageTickExtra = 0
 			a.NextTickAt = now + Ticks(int(a.Def.IntervalSec)*1000)
 			list[i] = a
 		}

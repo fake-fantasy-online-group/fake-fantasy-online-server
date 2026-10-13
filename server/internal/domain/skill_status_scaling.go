@@ -175,11 +175,13 @@ func applyPeriodicSkillDamageBonus(d StatusDef, bonus int32) (StatusDef, bool) {
 	d.Affixes = append([]Affix(nil), d.Affixes...)
 	d.HPChanges = append([]ResourceChange(nil), d.HPChanges...)
 	valid := true
-	boost := func(v int32) int32 {
+	boost := func(v int32, mode int32) int32 {
 		if v >= 0 {
 			return v
 		}
-		n := int64(v) * (100 + int64(bonus)) / 100
+		wide := int64(v) * (100 + int64(bonus))
+		n := wide / 100
+		if mode == ModeAbsolute { d.PeriodicDamageFraction100 += (-wide) % 100 }
 		if n < math.MinInt32 {
 			valid = false
 			return 0
@@ -188,11 +190,11 @@ func applyPeriodicSkillDamageBonus(d StatusDef, bonus int32) (StatusDef, bool) {
 	}
 	for i := range d.Affixes {
 		if d.Affixes[i].Attr == AttrHPRegen {
-			d.Affixes[i].Value = boost(d.Affixes[i].Value)
+			d.Affixes[i].Value = boost(d.Affixes[i].Value, d.Affixes[i].Mode)
 		}
 	}
 	for i := range d.HPChanges {
-		d.HPChanges[i].Value = boost(d.HPChanges[i].Value)
+		d.HPChanges[i].Value = boost(d.HPChanges[i].Value, d.HPChanges[i].Mode)
 	}
 	return d, valid
 }

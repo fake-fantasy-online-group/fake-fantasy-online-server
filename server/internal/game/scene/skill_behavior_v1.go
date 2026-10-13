@@ -15,6 +15,7 @@ func (s *Scene) applyResolvedSkillModifiers(p *entity.Entity, def *domain.SkillD
 	s.applyUniqueSkillModifiers(p, def)
 	finalizeEquipmentSkillVariant(def)
 	domain.FinalizeSkillManaCost(def)
+	previewGrowthRounding(p, def)
 }
 
 func (s *Scene) skillBehaviorIdentity(id domain.SkillID) *domain.SkillBehaviorContract {

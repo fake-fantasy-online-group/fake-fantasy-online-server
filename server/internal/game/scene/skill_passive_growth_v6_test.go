@@ -291,7 +291,7 @@ func TestPersistentGrowthRebuildKeepsEffectHitSnapshotV7(t *testing.T) {
 		old.Icon, old.SourceSkillID = 99, int32(id)
 		p.Stats.EffectHitBP = 5000
 		p.Player.Char.Skills[id] = 19
-		next, keep, changed := s.resolvePersistentStatus(p, old)
+		next, keep, changed := s.resolvePersistentStatus(p, p, old)
 		if !keep || !changed || next.SkillSnapshotRank != 19 || next.SourceEffectHitBP != 700 || !next.SourceEffectHitKnown || next.Icon != 99 {
 			t.Fatalf("carrier snapshot changed: %+v", next)
 		}
@@ -299,12 +299,12 @@ func TestPersistentGrowthRebuildKeepsEffectHitSnapshotV7(t *testing.T) {
 			t.Fatal("decreased skill upgraded carrier payload")
 		}
 		p.Player.Char.Skills[id] = 20
-		unchanged, keep, changed := s.resolvePersistentStatus(p, next)
+		unchanged, keep, changed := s.resolvePersistentStatus(p, p, next)
 		if !keep || changed || unchanged.SkillSnapshotRank != 19 {
 			t.Fatal("releveling upgraded old snapshot")
 		}
 		p.Player.Char.Skills = domain.Learned{}
-		if _, keep, _ := s.resolvePersistentStatus(p, next); keep {
+		if _, keep, _ := s.resolvePersistentStatus(p, p, next); keep {
 			t.Fatal("unlearned source retained carrier")
 		}
 	}

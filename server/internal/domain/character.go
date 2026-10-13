@@ -88,6 +88,8 @@ type Look struct {
 type Character struct {
 	// EquipmentProcCooldowns stores UTC millisecond expiries, surviving re-equip and reconnect.
 	EquipmentProcCooldowns map[string]int64
+	// Per-skill already-paid fractions survive re-equipping, transfer and login.
+	SkillRoundingCredits map[SkillID]SkillRoundingState
 
 	ID        int64  // 全局唯一角色 ID(存储分配)
 	AccountID int64  // 所属账号
@@ -338,6 +340,10 @@ func (c *Character) Clone() *Character {
 		for key, expiry := range c.EquipmentProcCooldowns {
 			cp.EquipmentProcCooldowns[key] = expiry
 		}
+	}
+	if c.SkillRoundingCredits != nil {
+		cp.SkillRoundingCredits = make(map[SkillID]SkillRoundingState, len(c.SkillRoundingCredits))
+		for id, credit := range c.SkillRoundingCredits { cp.SkillRoundingCredits[id] = credit }
 	}
 	cp.Quests = c.Quests.Clone()
 	cp.Pets = ClonePets(c.Pets)

@@ -156,6 +156,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 	// 扣法力后再排队。放在这里而不是结算时, 是因为同一帧连发两个技能
 	// 应该被第二次的法力检查拦住 —— 扣在结算时就会两个都放出去。
 	caster.Player.StopResting()
+	commitGrowthRounding(caster, def)
 	caster.MP -= def.MPCost
 	if durabilityCost.amount > 0 {
 		s.consumeSkillWeaponDurability(caster, durabilityCost, def.ID)
@@ -193,6 +194,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		cast.windup = &castWindup{}
 	}
 	s.casts = append(s.casts, cast)
+	s.refreshGrowthRoundingPreview(caster, def)
 	s.requestNewbieTip(caster.ID, 8)
 }
 
@@ -1257,6 +1259,9 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		return false
 	}
 	for _, app := range def.Statuses {
+		if !app.TargetType.Matches(dst.Kind) {
+			continue
+		}
 		statusDef, ok := s.resolveSkillStatusDef(def, app, statusDurationPct)
 		if ok {
 			s.applyStatusDef(dst, statusDef, src.ID)

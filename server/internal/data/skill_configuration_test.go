@@ -15,16 +15,13 @@ import (
 	"testing"
 )
 
-// The frozen digests were captured through actual PostgreSQL loaders before
-// moving any identity/policy/restoration code into migration 62. Chance omitted
-// versus explicitly certain is normalized; all numerical and resolved payloads
-// (including original ranks 1..5) must remain exactly equal, except the reviewed
-// 10223 knockback loader fix: its 10 snapshots now carry the configured 10000
-// ChanceBP instead of the omitted zero. Damage, distance and text are unchanged.
+// The reviewed v7 baseline remains intact. Migration66/68 changes are an
+// explicit 50-row delta: two new scoped status mechanics and three restored
+// radii, each at ten reviewed ranks. Every other snapshot remains unchanged.
 func TestSkillConfigurationDatabaseGolden(t *testing.T) {
 	path := os.Getenv("FANTASY_SKILL_CONFIG_PG_DATA")
 	if path == "" {
-		t.Skip("explicit isolated migration62 cluster required")
+		t.Skip("explicit isolated migration68 cluster required")
 	}
 	q := &v5SingleUserQuerier{bin: os.Getenv("PG_BIN"), path: path, database: "postgres"}
 	table, _, err := LoadSkills(context.Background(), q)
@@ -52,21 +49,7 @@ func TestSkillConfigurationDatabaseGolden(t *testing.T) {
 			t.Fatalf("identity/policy changed %d: %+v %+v", id, a, p)
 		}
 	}
-	var golden []struct {
-		ID     domain.SkillID
-		Rank   int32
-		SHA256 string
-	}
-	raw, err := os.ReadFile("testdata/skill-config-golden-v7.json")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err = json.Unmarshal(raw, &golden); err != nil {
-		t.Fatal(err)
-	}
-	if len(golden) != 1490 {
-		t.Fatal("golden coverage", len(golden))
-	}
+	golden := loadSkillConfigurationGolden(t)
 	for _, row := range golden {
 		d, ok := table.Get(row.ID, row.Rank)
 		if !ok {
@@ -116,7 +99,7 @@ func (q skillConfigurationQueryEdit) Query(ctx context.Context, sql string, args
 func TestSkillConfigurationDatabaseRejectsMissingAndUsesConfiguredPolicy(t *testing.T) {
 	path := os.Getenv("FANTASY_SKILL_CONFIG_PG_DATA")
 	if path == "" {
-		t.Skip("explicit isolated migration62 cluster required")
+		t.Skip("explicit isolated migration68 cluster required")
 	}
 	q := &v5SingleUserQuerier{bin: os.Getenv("PG_BIN"), path: path, database: "postgres"}
 	table, _, err := LoadSkills(context.Background(), q)

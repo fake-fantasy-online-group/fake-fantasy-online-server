@@ -187,6 +187,10 @@ func (e *v5Evaluator) continueOriginal(a, b SkillDef) SkillDef {
 	// acquire efficiency, and only after their native mechanic reaches its cap.
 	out.ManaCostReductionRanks = 0
 	out.ManaCostReductionApplied = false
+	out.ManaCostFractionNumerator, out.ManaCostFractionDenominator = 0, 0
+	out.CooldownFractionNumeratorMS, out.CooldownFractionDenominator = 0, 0
+	out.RoundingPreviewReady, out.RoundingPreviewNext = false, SkillRoundingState{}
+	out.CooldownRoundingApplied = false
 	out.PrepareMS = max(int32(0), e.blend(a.PrepareMS, b.PrepareMS))
 	out.CooldownMS = max(int32(0), e.blend(a.CooldownMS, b.CooldownMS))
 	out.MPCost = max(int32(0), e.blend(a.MPCost, b.MPCost))
@@ -213,7 +217,7 @@ func (e *v5Evaluator) continueOriginal(a, b SkillDef) SkillDef {
 	out.Statuses = make([]StatusApplication, len(a.Statuses))
 	for i, x := range a.Statuses {
 		y := b.Statuses[i]
-		if x.ID != y.ID {
+		if x.ID != y.ID || x.TargetType != y.TargetType {
 			e.fail("status identity mismatch")
 		}
 		z := y

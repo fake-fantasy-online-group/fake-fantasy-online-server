@@ -69,7 +69,7 @@ func (s *Scene) refreshSkillPersistentEffects(source *entity.Entity) {
 			continue
 		}
 		removed, changed := target.Status.ReconcileSkillSource(source.ID, func(old domain.StatusDef) (domain.StatusDef, bool, bool) {
-			return s.resolvePersistentStatus(source, old)
+			return s.resolvePersistentStatus(source, target, old)
 		})
 		if len(removed) > 0 {
 			s.statusesRemoved(target, removed)
@@ -99,7 +99,7 @@ func (s *Scene) revokeDepartingSkillSource(source *entity.Entity) {
 	}
 }
 
-func (s *Scene) resolvePersistentStatus(source *entity.Entity, old domain.StatusDef) (domain.StatusDef, bool, bool) {
+func (s *Scene) resolvePersistentStatus(source, holder *entity.Entity, old domain.StatusDef) (domain.StatusDef, bool, bool) {
 	current := s.rawSkillLevels(source)
 	decreased := current[old.SkillSnapshotID] < old.SkillSnapshotRank
 	for id, rank := range old.SkillSnapshotRaw {
@@ -123,7 +123,7 @@ func (s *Scene) resolvePersistentStatus(source *entity.Entity, old domain.Status
 		return next, next.DamageShield > 0, true
 	}
 	for _, app := range def.Statuses {
-		if app.ID != old.ID {
+		if app.ID != old.ID || holder == nil || !app.TargetType.Matches(holder.Kind) {
 			continue
 		}
 		base, ok := s.resolveSkillStatusDef(def, app, 0)
@@ -146,5 +146,6 @@ func (s *Scene) reconcileEnteringSkillStatuses(p *entity.Entity) {
 	if p == nil || p.Status == nil {
 		return
 	}
-	p.Status.ReconcileSkillSource(p.ID, func(old domain.StatusDef) (domain.StatusDef, bool, bool) { return s.resolvePersistentStatus(p, old) })
+	p.Status.RefreshOverlayStrengths(s.statuses)
+	p.Status.ReconcileSkillSource(p.ID, func(old domain.StatusDef) (domain.StatusDef, bool, bool) { return s.resolvePersistentStatus(p, p, old) })
 }

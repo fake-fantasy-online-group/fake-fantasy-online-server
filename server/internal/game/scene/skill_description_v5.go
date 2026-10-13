@@ -26,6 +26,9 @@ func (s *Scene) skillOriginalEffectLines(def domain.SkillDef) []string {
 		return s.skillEffectLines(def)
 	}
 	lines := []string{description}
+	if scoped := s.skillScopedStatusDescription(def); scoped != "" {
+		lines = append(lines, scoped)
+	}
 	var effectHitLines []string
 	if def.Level > 5 {
 		seen := map[string]bool{}

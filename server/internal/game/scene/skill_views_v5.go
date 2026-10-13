@@ -379,7 +379,7 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 	return ranks, nil
 }
 
-// Hooked to stat/loadout refresh, not each attack. A digest suppresses unchanged
+// Hooked to stat/loadout refresh and changed post-cap cost previews. A digest suppresses unchanged
 // snapshots from status refreshes and keeps sidecar authority current on breakage.
 func (s *Scene) maybeSendSkillRanks(p *entity.Entity) {
 	if p == nil || p.Player == nil || !p.Player.EndgameGrowthV5 {
@@ -396,6 +396,7 @@ func (s *Scene) maybeSendSkillRanks(p *entity.Entity) {
 		_, _, castReduction, _ = p.Status.Clone().ConsumeAttackModifiers(true, false, false, true)
 	}
 	payload, _ := json.Marshal(struct {
+		RoundingCredits map[domain.SkillID]domain.SkillRoundingState
 		TypedBehavior       bool
 		CastReduction       int32
 		Ranks               domain.SkillResolutionSnapshot
@@ -404,7 +405,7 @@ func (s *Scene) maybeSendSkillRanks(p *entity.Entity) {
 		Level, Points       int32
 		Alive, CanAct, Busy bool
 		Revision            int64
-	}{p.Player.EndgameSkillBehavior, castReduction, ranks, p.Player.Char.Skills, worn, p.Player.Char.Level, p.Player.Char.SkillPoints, p.Alive(), canAct(p), endgameEconomicBusy(p), s.endgamePlayer(p).state.Revision})
+	}{p.Player.Char.SkillRoundingCredits, p.Player.EndgameSkillBehavior, castReduction, ranks, p.Player.Char.Skills, worn, p.Player.Char.Level, p.Player.Char.SkillPoints, p.Alive(), canAct(p), endgameEconomicBusy(p), s.endgamePlayer(p).state.Revision})
 	digest := sha256.Sum256(payload)
 	if s.skillViewDigests == nil {
 		s.skillViewDigests = map[domain.EntityID][32]byte{}
