@@ -14,11 +14,14 @@ type CombatDamageBuckets struct {
 	ResistanceBP, ResistancePierceBP           int32
 	MitigationBP                               int64
 	DamageTakenIncreasePct, DamageReductionPct int32
-	FlatReduction                              int64
-	HalfDamageLayers                           int
-	PayloadScaleBP                             int32
-	PayloadScaleKnown                          bool
-	PVP                                        bool
+	// DamageReductionCapPct explicitly raises the combined cap, default 75%.
+	// Source caps take the maximum; they never add or create another layer.
+	DamageReductionCapPct int32
+	FlatReduction         int64
+	HalfDamageLayers      int
+	PayloadScaleBP        int32
+	PayloadScaleKnown     bool
+	PVP                   bool
 }
 
 // Additive bonuses share the existing +100% ceiling. This ceiling is retained
@@ -39,12 +42,12 @@ func (b CombatDamageBuckets) OutgoingDamage(amount int32) int32 {
 }
 
 // IncomingDamage retains the existing ordered multiplicative layers and the
-// post-native-defense 75% combined reduction cap. True shield pools and
+// post-native-defense combined reduction cap (75% unless explicitly raised). True shield pools and
 // immunity can still prevent all damage and are deliberately not this bucket.
 func (b CombatDamageBuckets) IncomingDamage(amount int32) int32 {
 	taken := max(int32(0), b.DamageTakenIncreasePct)
 	wide := int64(amount) + int64(amount)*int64(taken)/100
-	wide = MitigatePercentDamageV7(wide, b.ResistanceBP, b.ResistancePierceBP,
-		SaturateInt32(b.MitigationBP), b.DamageReductionPct, b.HalfDamageLayers, b.PVP, b.FlatReduction)
+	wide = MitigatePercentDamageV7WithCap(wide, b.ResistanceBP, b.ResistancePierceBP,
+		SaturateInt32(b.MitigationBP), b.DamageReductionPct, b.HalfDamageLayers, b.PVP, b.DamageReductionCapPct, b.FlatReduction)
 	return max(int32(0), SaturateInt32(wide))
 }

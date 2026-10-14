@@ -257,6 +257,7 @@ func (s *Scene) joinEndgameRift(p *entity.Entity, req domain.EndgameRequest, d e
 }
 func (s *Scene) replyLiveRift(p *entity.Entity, req domain.EndgameRequest) {
 	s.endgameReply(p, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Rift: s.riftView(p, s.rift.data, s.rift.savedRevision >= s.rift.data.Run.Revision, true)})
+	s.armRiftHazards(p, s.riftMS())
 }
 func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d endgameRiftPersisted, revision int64, live bool) {
 	if live && (d.Run.Phase == domain.RiftCompleted || d.Run.Phase == domain.RiftClosed) {

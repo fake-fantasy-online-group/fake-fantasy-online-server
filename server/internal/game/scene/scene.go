@@ -201,6 +201,7 @@ func (r ReviveAt) Enabled() bool { return r.Scene.MapID != 0 }
 //
 // 除 mailbox / quit / log 外的所有字段, **只有场景 goroutine 能碰**。
 type Scene struct {
+	temporaryWalls  map[string]temporaryWall
 	lootRules       *domain.LootRuleTable
 	riftRules       *domain.RiftRuleTable
 	endgameCatalog  *domain.EndgameCatalog

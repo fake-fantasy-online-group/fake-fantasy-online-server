@@ -9,7 +9,35 @@ type RiftClassRule struct {
 	Class          int32
 	HPBP, DamageBP int32
 }
+
+// RiftEliteRules is present only in the new, opt-in rules version. Historical
+// snapshots omit it and retain their exact three-ability implementation.
+type RiftEliteRules struct {
+	HazardMaxConcurrent int32
+	Guardians           []RiftGuardianRule
+}
+type RiftGuardianRule struct {
+	MonsterID MonsterID
+	Abilities []int32
+}
 type RiftAbilityRule struct {
+	Mechanism          string `json:",omitempty"`
+	Trigger            string `json:",omitempty"`
+	CooldownMS         int64  `json:",omitempty"`
+	DurationMS         int64  `json:",omitempty"`
+	PulseMS            int64  `json:",omitempty"`
+	FirstPulseMS       int64  `json:",omitempty"`
+	PropagationMS      int64  `json:",omitempty"`
+	Width              int32  `json:",omitempty"`
+	Count              int32  `json:",omitempty"`
+	HPPct              int32  `json:",omitempty"`
+	StepDamagePct      int32  `json:",omitempty"`
+	MaxDamagePct       int32  `json:",omitempty"`
+	FreezeMS           int64  `json:",omitempty"`
+	MoveSpeedPct       int32  `json:",omitempty"`
+	DamageReductionPct int32  `json:",omitempty"`
+	Gap                int32  `json:",omitempty"`
+
 	ID                          int32
 	Name, Affix, Warning, Shape string
 	Radius, InnerRadius, Length int32
@@ -17,6 +45,7 @@ type RiftAbilityRule struct {
 	DamagePct                   int32
 }
 type RiftRules struct {
+	Elite *RiftEliteRules `json:",omitempty"`
 	// Zero keeps historical immediate guardians; v5 freezes a five-second arrival.
 	GuardianArrivalMS int64 `json:",omitempty"`
 	// New runs freeze reward level at guardian death; old runs keep admission level.
@@ -62,6 +91,14 @@ func (t *RiftRuleTable) Entrances() []EndgameRiftEntranceView {
 }
 
 func cloneRiftRules(r RiftRules) RiftRules {
+	if r.Elite != nil {
+		e := *r.Elite
+		e.Guardians = append([]RiftGuardianRule(nil), e.Guardians...)
+		for i := range e.Guardians {
+			e.Guardians[i].Abilities = append([]int32(nil), e.Guardians[i].Abilities...)
+		}
+		r.Elite = &e
+	}
 	r.Classes = append([]RiftClassRule(nil), r.Classes...)
 	r.Abilities = append([]RiftAbilityRule(nil), r.Abilities...)
 	if r.Loot != nil {
@@ -106,12 +143,18 @@ func (r *RiftRules) Validate() error {
 	if r.NormalBossEquipment < 0 || r.NormalBossEquipment > 20 || r.Equipment < 0 || r.Equipment > 20 || r.Runes < 0 || r.Runes > 28 || r.TimelyEquipment < 0 || r.TimelyEquipment > 20 || r.TimelyRunes < 0 || r.TimelyRunes > 28 || r.DustBase < 0 || r.DustBase > 1000000 || r.TimelyDust < 0 || r.TimelyDust > 1000000 || r.DustTierDivisor < 1 || r.UniqueBaseChance < 0 || r.UniqueBaseChance > 100 || r.UniquePerTier < 0 || r.UniquePerTier > 100 || r.UniqueCap < 0 || r.UniqueCap > 100 || r.GuaranteedUniqueTier < 1 || r.GuaranteedUniqueTier > r.MaxTier || r.ExperienceDivisor < 1 || r.ExperienceDivisor > 1000000 {
 		return fmt.Errorf("invalid rift rewards")
 	}
-	if r.Name == "" || r.BossName == "" || r.ExitName == "" || r.NPCModel < 1 || r.ExitSprite == "" || r.AbilityMaxConcurrent < 1 || r.AbilityMaxConcurrent > 4 || r.AbilityRange < 1 || r.AbilityRange > 10000 || r.AbilityRecoveryMS < 0 || r.AbilityJitterMS < 1 || r.AbilityJitterMS > 86400000 || r.AbilityStartMS < 1 || r.AbilityResetMS < 1 || r.AbilityUnavailableMS < 1 || r.AbilityClassReductionMS < 0 || r.AbilityRecoveryMS > 86400000 || r.AbilityStartMS > 86400000 || r.AbilityResetMS > 86400000 || r.AbilityUnavailableMS > 86400000 || r.AbilityCooldownMS > 86400000 || r.AbilityClassReductionMS > 86400000 || r.AbilityCooldownMS <= 3*r.AbilityClassReductionMS || r.AbilityBossDamagePct < 0 || r.AbilityBossDamagePct > 10000 || len(r.Abilities) != 3 {
+	if r.Name == "" || r.BossName == "" || r.ExitName == "" || r.NPCModel < 1 || r.ExitSprite == "" || r.AbilityMaxConcurrent < 1 || r.AbilityMaxConcurrent > 4 || r.AbilityRange < 1 || r.AbilityRange > 10000 || r.AbilityRecoveryMS < 0 || r.AbilityJitterMS < 1 || r.AbilityJitterMS > 86400000 || r.AbilityStartMS < 1 || r.AbilityResetMS < 1 || r.AbilityUnavailableMS < 1 || r.AbilityClassReductionMS < 0 || r.AbilityRecoveryMS > 86400000 || r.AbilityStartMS > 86400000 || r.AbilityResetMS > 86400000 || r.AbilityUnavailableMS > 86400000 || r.AbilityCooldownMS > 86400000 || r.AbilityClassReductionMS > 86400000 || r.AbilityCooldownMS <= 3*r.AbilityClassReductionMS || r.AbilityBossDamagePct < 0 || r.AbilityBossDamagePct > 10000 || (r.Elite == nil && len(r.Abilities) != 3) {
 		return fmt.Errorf("invalid rift presentation/abilities")
 	}
-	for i, a := range r.Abilities {
-		if a.ID != int32(i) || a.Name == "" || a.Affix == "" || a.Warning == "" || (a.Shape != "circle" && a.Shape != "ring" && a.Shape != "line") || a.Radius < 1 || a.Radius > 10000 || a.InnerRadius < 0 || a.InnerRadius >= a.Radius || a.Length < 0 || (a.Shape == "line" && a.Length == 0) || a.Length > 10000 || a.DelayMS < 1 || a.DelayMS > 60000 || a.DamagePct < 1 || a.DamagePct > 10000 {
-			return fmt.Errorf("invalid rift ability %d", a.ID)
+	if r.Elite != nil {
+		if err := r.validateEliteAbilities(); err != nil {
+			return err
+		}
+	} else {
+		for i, a := range r.Abilities {
+			if a.ID != int32(i) || a.Name == "" || a.Affix == "" || a.Warning == "" || (a.Shape != "circle" && a.Shape != "ring" && a.Shape != "line") || a.Radius < 1 || a.Radius > 10000 || a.InnerRadius < 0 || a.InnerRadius >= a.Radius || a.Length < 0 || (a.Shape == "line" && a.Length == 0) || a.Length > 10000 || a.DelayMS < 1 || a.DelayMS > 60000 || a.DamagePct < 1 || a.DamagePct > 10000 {
+				return fmt.Errorf("invalid rift ability %d", a.ID)
+			}
 		}
 	}
 	return r.validateWire()
@@ -189,5 +232,76 @@ func (r *RiftRun) BindRules(t *RiftRuleTable) error {
 	}
 	r.RulesVersion = rules.Version
 	r.Rules = rules
+	return nil
+}
+
+func (r *RiftRules) validateEliteAbilities() error {
+	if r.Version < 6 || r.Elite.HazardMaxConcurrent < 1 || r.Elite.HazardMaxConcurrent > 24 || len(r.Abilities) != 8 || len(r.Elite.Guardians) != 8 {
+		return fmt.Errorf("invalid elite catalog")
+	}
+	expected := []string{"golden_body", "clones", "death_lava", "lightning_orb", "ice_orb", "agility", "poison_pool", "walls"}
+	for i, a := range r.Abilities {
+		trigger := "active"
+		if i == 2 {
+			trigger = "death"
+		}
+		if i == 5 {
+			trigger = "passive"
+		}
+		if a.ID != int32(i) || a.Mechanism != expected[i] || a.Trigger != trigger || a.Name == "" || a.Affix == "" || a.Warning == "" || a.CooldownMS < 0 || a.CooldownMS > 60000 || a.DurationMS < 0 || a.DurationMS > 60000 || a.DelayMS < 0 || a.DelayMS > 60000 || a.DamagePct < 0 || a.DamagePct > 10000 || a.Radius < 0 || a.Radius > 10000 {
+			return fmt.Errorf("invalid elite ability %d", i)
+		}
+		if trigger == "active" && a.CooldownMS <= 0 || trigger != "active" && a.CooldownMS != 0 {
+			return fmt.Errorf("invalid elite cooldown %d", i)
+		}
+		switch a.Mechanism {
+		case "golden_body":
+			if a.DurationMS != 5000 || a.DamageReductionPct != 95 || a.CooldownMS != 30000 {
+				return fmt.Errorf("invalid golden body")
+			}
+		case "clones":
+			if a.Count != 3 || a.HPPct != 10 || a.DurationMS <= 0 || a.CooldownMS != 30000 {
+				return fmt.Errorf("invalid clones")
+			}
+		case "death_lava", "ice_orb":
+			if a.DelayMS != 3000 || a.DurationMS != a.DelayMS || a.Radius <= 0 || a.DamagePct <= 0 || a.Shape != "circle" {
+				return fmt.Errorf("invalid orb")
+			}
+			if i == 4 && (a.FreezeMS < 1 || a.FreezeMS > 10000 || a.FreezeMS%1000 != 0 || a.CooldownMS != 20000) {
+				return fmt.Errorf("invalid ice freeze")
+			}
+		case "lightning_orb":
+			if a.DurationMS != 10000 || a.CooldownMS != 20000 || a.FirstPulseMS < 1 || a.PulseMS < 1 || a.PropagationMS < 1 || a.PropagationMS > a.PulseMS || a.FirstPulseMS+a.PropagationMS > a.DurationMS || a.Width < 1 || a.Width > a.Radius || a.Radius < 1 || a.DamagePct <= 0 || a.Shape != "ring" {
+				return fmt.Errorf("invalid lightning")
+			}
+		case "agility":
+			if a.MoveSpeedPct != 100 || a.DurationMS != 0 {
+				return fmt.Errorf("invalid agility")
+			}
+		case "poison_pool":
+			if a.DurationMS != 20000 || a.CooldownMS != 30000 || a.PulseMS != 1000 || a.DamagePct <= 0 || a.StepDamagePct < 1 || a.MaxDamagePct < a.DamagePct || a.MaxDamagePct > 10000 || a.Radius <= 0 || a.Shape != "circle" {
+				return fmt.Errorf("invalid poison pool")
+			}
+		case "walls":
+			if a.Count != 3 || a.DurationMS != 15000 || a.CooldownMS != 30000 || a.Length < 1 || a.Length > 1000 || a.Width < 1 || a.Width > 200 || a.Gap < 80 || a.Gap > 1000 || a.Shape != "line" {
+				return fmt.Errorf("invalid walls")
+			}
+		}
+	}
+	seen := map[MonsterID]bool{}
+	allowed := map[MonsterID]bool{1011: true, 1092: true, 1060: true, 1073: true, 1085: true, 1136: true, 3067: true, 3044: true}
+	for _, g := range r.Elite.Guardians {
+		if !allowed[g.MonsterID] || seen[g.MonsterID] || len(g.Abilities) != 3 {
+			return fmt.Errorf("invalid guardian catalog")
+		}
+		seen[g.MonsterID] = true
+		chosen := map[int32]bool{}
+		for _, id := range g.Abilities {
+			if id < 0 || int(id) >= len(r.Abilities) || chosen[id] || r.Abilities[id].Trigger == "death" {
+				return fmt.Errorf("invalid guardian affixes")
+			}
+			chosen[id] = true
+		}
+	}
 	return nil
 }

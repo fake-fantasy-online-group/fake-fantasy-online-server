@@ -40,7 +40,7 @@ func triggeredStatusIcon(statuses *domain.StatusSet, id domain.StatusID) (icon, 
 		return
 	}
 	var strongest int32
-	statuses.Each(func(a domain.Active) {
+	statuses.EachEffective(func(a domain.Active) {
 		var chance int32
 		switch id {
 		case domain.StatusPoison:
@@ -61,6 +61,7 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	if target == nil || !target.Alive() {
 		return false
 	}
+	s.expireHarmfulSuppression(target)
 	if def.Invisible && target.Status != nil && target.Status.PreventsInvisible() {
 		return false
 	}
@@ -103,7 +104,9 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	}
 	s.emitRemovedEntityStatusEffects(target, result.Removed)
 	if !result.Applied {
-		if len(result.Removed) > 0 {
+		// Counteraction can remove an effective layer while retaining a
+		// suppressed sibling with the same ID. Its cached stats still change.
+		if result.Counteracted || len(result.Removed) > 0 {
 			s.updatePlayerVisibility(target, wasInvisible)
 			s.refreshEntityStats(target)
 			s.emitAttributesIfPlayer(target)
@@ -175,7 +178,7 @@ func (s *Scene) prepareBasicAttackStatuses(e *entity.Entity, blow *combat.Blow) 
 	if bonus > 0 {
 		blow.SkillPct = boostedDamagePct(blow.SkillPct, bonus)
 	}
-	removed = append(removed, e.Status.RemoveWhere(func(d domain.StatusDef) bool {
+	removed = append(removed, e.Status.RemoveEffectiveWhere(func(d domain.StatusDef) bool {
 		return d.BreakOnAttack
 	})...)
 	s.statusesRemoved(e, removed)
@@ -229,7 +232,7 @@ func (s *Scene) prepareSkillStatuses(e *entity.Entity, def *domain.SkillDef) int
 		}
 		preserveInvisible = chance >= 10000 || int32(s.rng.Intn(10000)) < chance
 	}
-	removed = append(removed, e.Status.RemoveWhere(func(d domain.StatusDef) bool {
+	removed = append(removed, e.Status.RemoveEffectiveWhere(func(d domain.StatusDef) bool {
 		return d.BreakOnAttack && !(preserveInvisible && d.Invisible)
 	})...)
 	s.statusesRemoved(e, removed)
@@ -245,6 +248,8 @@ func boostedDamagePct(base, bonus int32) int32 {
 
 // resolveStrikeStatuses 把普通战斗公式的结果再经过状态减伤/护盾。
 func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTracker, blow combat.Blow) (event.DamageDealt, int32, int32) {
+	s.expireHarmfulSuppression(src)
+	s.expireHarmfulSuppression(dst)
 	if !s.equipmentCombatReady(src) || !s.equipmentCombatReady(dst) {
 		return event.DamageDealt{Src: src.ID, Dst: dst.ID, DstHP: dst.HP, SkillID: blow.SkillID, Flag: event.DamageMiss}, 0, 0
 	}
@@ -323,6 +328,7 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		buckets.MitigationBP = extraMitigation
 		buckets.DamageTakenIncreasePct = dst.Status.DamageTakenIncreasePct(magic)
 		buckets.DamageReductionPct = dst.Status.DamageReductionPct(magic)
+		buckets.DamageReductionCapPct = dst.Status.DamageReductionCapPct()
 		buckets.HalfDamageLayers, buckets.FlatReduction = halfCount, flatReduction
 		finalDamage = buckets.IncomingDamage(rawDamage)
 		if dst.Status.Invulnerable() {
@@ -411,7 +417,7 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 	}
 
 	if ev.Amount > 0 && dst.Status != nil {
-		s.statusesRemoved(dst, dst.Status.RemoveWhere(func(d domain.StatusDef) bool {
+		s.statusesRemoved(dst, dst.Status.RemoveEffectiveWhere(func(d domain.StatusDef) bool {
 			return d.BreakOnDamage
 		}))
 	}
@@ -458,6 +464,11 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 	if reflector == nil || attacker == nil || amount <= 0 || !attacker.Alive() || gmGodEnabled(attacker) {
 		return
 	}
+	s.expireHarmfulSuppression(attacker)
+	amount = s.mitigateSecondaryStatusDamage(attacker, magic, amount)
+	if amount <= 0 {
+		return
+	}
 	attacker.HP -= amount
 	reflectEvent := event.DamageDealt{Origin: domain.DamageReflectionOrigin, Src: reflector.ID, Dst: attacker.ID, Amount: amount, DstHP: attacker.HP}
 	if magic {
@@ -471,7 +482,7 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 	s.emit(reflectEvent)
 	s.afterCastDamage(reflectEvent, false)
 	if reflectEvent.Amount > 0 && attacker.Status != nil {
-		s.statusesRemoved(attacker, attacker.Status.RemoveWhere(func(d domain.StatusDef) bool {
+		s.statusesRemoved(attacker, attacker.Status.RemoveEffectiveWhere(func(d domain.StatusDef) bool {
 			return d.BreakOnDamage
 		}))
 	}
@@ -479,6 +490,19 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 	if reflectEvent.Flag.Has(event.DamageFatal) {
 		s.onDeath(attacker, reflector.ID)
 	}
+}
+
+// mitigateSecondaryStatusDamage preserves legacy reflection/resource tick
+// settlement unless a source explicitly opts into an expanded mitigation
+// budget. Such a source uses the same status adapter and common formula as
+// direct hits; no ability, monster or scene identity enters the calculation.
+func (s *Scene) mitigateSecondaryStatusDamage(e *entity.Entity, magic bool, amount int32) int32 {
+	if e == nil || e.Status.DamageReductionCapPct() <= domain.DefaultDamageReductionCapPct {
+		return amount
+	}
+	amount, removed := e.Status.MitigateDamage(magic, amount)
+	s.statusesRemoved(e, removed)
+	return amount
 }
 
 func (s *Scene) statusesRemoved(e *entity.Entity, ids []domain.StatusID) {
@@ -508,6 +532,15 @@ func isHarmful(d domain.StatusDef) bool {
 	return d.Harmful()
 }
 
+// expireHarmfulSuppression synchronizes effective stats at the simulation
+// boundary, including callers running before the usual status stage.
+func (s *Scene) expireHarmfulSuppression(e *entity.Entity) {
+	if e == nil || e.Status == nil {
+		return
+	}
+	s.statusesRemoved(e, e.Status.ExpireHarmfulSuppression(s.tick))
+}
+
 // stepStatus 推进所有实体身上的状态。
 func (s *Scene) stepStatus() {
 	for _, e := range s.entities {
@@ -518,6 +551,7 @@ func (s *Scene) stepStatus() {
 		if e.Status == nil || e.Status.Count() == 0 {
 			continue
 		}
+		s.expireHarmfulSuppression(e)
 		// 周期触发(中毒那类)
 		due := e.Status.DueTicks(s.tick)
 		if len(due) > 0 && e.Player != nil {
@@ -655,8 +689,12 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 		}
 		beneficial := !isHarmful(a.Def)
 		immobile := a.Def.Immobile
+		suppressed := a.Def.Harmful() && e.Status.SuppressesHarmful()
 		if immobile == 0 && (a.Def.Control == domain.ControlStun || a.Def.BlockMove) {
 			immobile = 1
+		}
+		if suppressed {
+			immobile = 0
 		}
 		icon := event.StatusIconView{
 			Status: int32(a.Def.ID), Icon: a.Def.Icon,
@@ -679,7 +717,7 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 				SkillID: skillID, Icon: a.Def.Icon,
 				RemainSec: int32((int64(remainMS) + 999) / 1000),
 				Name:      a.Def.Name, Desc: a.Def.Desc, Beneficial: beneficial,
-				PositionMode: positionMode, Invisible: a.Def.Invisible, Immobile: immobile,
+				PositionMode: positionMode, Invisible: a.Def.Invisible && !suppressed, Immobile: immobile,
 			},
 		})
 	})
@@ -779,6 +817,10 @@ func (s *Scene) statusDefByID(id domain.StatusID) (domain.StatusDef, bool) {
 // attr38 与 attr446 修改当前生命，attr447 修改当前法力。Mode=1 按对应
 // 上限取百分比；此前把“每两秒减少生命上限6%”错算成固定 6 点。
 func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
+	s.expireHarmfulSuppression(e)
+	if e == nil || a.Def.Harmful() && e.Status.SuppressesHarmfulAt(s.tick) {
+		return
+	}
 	var hpDelta, mpDelta int64
 	hpDelta -= int64(a.PeriodicDamageTickExtra)
 	for _, af := range a.Def.Affixes {
@@ -811,7 +853,7 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 		if gmGodEnabled(e) {
 			hpDelta = 0
 		} else {
-			dmg := clampI32(-hpDelta)
+			dmg := s.mitigateSecondaryStatusDamage(e, false, clampI32(-hpDelta))
 			e.HP -= dmg
 			ev := event.DamageDealt{Origin: domain.DamageDOTOrigin, Src: a.Source, Dst: e.ID, Amount: dmg, DstHP: e.HP}
 			if e.HP <= 0 {
@@ -825,7 +867,7 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 				s.beginEndgameTrial()
 			}
 			if ev.Amount > 0 && e.Status != nil {
-				s.statusesRemoved(e, e.Status.RemoveWhere(func(d domain.StatusDef) bool {
+				s.statusesRemoved(e, e.Status.RemoveEffectiveWhere(func(d domain.StatusDef) bool {
 					return d.BreakOnDamage
 				}))
 			}

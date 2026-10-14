@@ -319,7 +319,7 @@ func (s *Scene) resolveSkillTargets(caster *entity.Entity, def domain.SkillDef, 
 		if def.Dist > 0 && sqDist(caster.Pos, to) > float64(def.Dist)*float64(def.Dist) {
 			return nil, nil
 		}
-		if s.walkable != nil && !s.walkable(to) {
+		if !s.spawnPositionWalkable(to) {
 			return nil, nil
 		}
 		return []domain.EntityID{caster.ID}, &to
@@ -336,6 +336,9 @@ func (s *Scene) resolveSkillTargets(caster *entity.Entity, def domain.SkillDef, 
 			return nil, nil
 		}
 		to := anchor.Pos
+		if !s.temporaryPositionWalkable(to) {
+			return nil, nil
+		}
 		// 目标实体的当前位置就是场景权威落点。静态碰撞图在旧地图边界会把
 		// 合法刷怪坐标误判成不可走，不能因此让“跳到目标旁”稳定失败。
 		return []domain.EntityID{anchor.ID}, &to
@@ -1067,7 +1070,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 	s.casts = waiting
 	for _, teleport := range teleports {
 		player := s.players[teleport.who]
-		if player == nil || !player.Alive() || s.walkable != nil && !s.walkable(teleport.to) {
+		if player == nil || !player.Alive() || !s.spawnPositionWalkable(teleport.to) {
 			continue
 		}
 		s.onTeleport(Teleport{ID: player.ID, To: s.id, At: teleport.to, Dir: player.Dir})
@@ -1306,6 +1309,10 @@ func (s *Scene) knockbackMonster(src, target *entity.Entity, distance int32) boo
 	if src == nil || target == nil || target.Monster == nil || !target.Alive() || distance <= 0 {
 		return false
 	}
+	// Resolve queued displacement against immunity at impact, not at cast admission.
+	if target.Status != nil && target.Status.SuppressesHarmfulAt(s.tick) {
+		return false
+	}
 	dx, dy := target.Pos.X-src.Pos.X, target.Pos.Y-src.Pos.Y
 	length := math.Hypot(dx, dy)
 	if length == 0 {
@@ -1322,7 +1329,7 @@ func (s *Scene) knockbackMonster(src, target *entity.Entity, distance int32) boo
 			X:     from.X + ux*pushed,
 			Y:     from.Y + uy*pushed,
 		}
-		if s.walkable != nil && !s.walkable(candidate) {
+		if !s.straightPathWalkable(to, candidate) {
 			break
 		}
 		to = candidate
@@ -1426,8 +1433,11 @@ func (s *Scene) summonMonsters(caster *entity.Entity, extra domain.MonsterSkillE
 		pos := caster.Pos
 		pos.X += offset.x
 		pos.Y += offset.y
-		if s.walkable != nil && !s.walkable(pos) {
+		if !s.spawnPositionWalkable(pos) {
 			pos = caster.Pos
+		}
+		if !s.temporaryPositionWalkable(pos) {
+			continue
 		}
 		monster := spawn.Summon(s.alloc.Monster(), pos, def, caster.ID)
 		monster.Monster.Target = caster.Monster.Target

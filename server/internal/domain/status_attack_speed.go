@@ -7,7 +7,7 @@ func ApplyMonsterStatusStats(baseline Stats, statuses *StatusSet) Stats {
 	var affixes []Affix
 	var frequencyLoss int64
 	if statuses != nil {
-		statuses.Each(func(a Active) {
+		statuses.EachEffective(func(a Active) {
 			for _, affix := range a.Def.Affixes {
 				if a.Def.AttackSpeedIsFrequency && affix.Attr == AttrAtkSpeed &&
 					affix.Mode == ModePercent && affix.Value > 0 {

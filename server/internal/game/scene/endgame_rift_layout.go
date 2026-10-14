@@ -13,7 +13,21 @@ func (s *Scene) planEndgameRiftFloor(runID string, floor, previousMap int32) (do
 	if rules == nil {
 		return domain.RiftFloorPlan{}, errors.New("missing rift population rules")
 	}
-	return domain.PlanRiftFloor(runID, floor, s.riftLayouts, previousMap, rules.FloorPopulationMultiplier)
+	plan, err := domain.PlanRiftFloor(runID, floor, s.riftLayouts, previousMap, rules.FloorPopulationMultiplier)
+	if err != nil || rules.Elite == nil {
+		return plan, err
+	}
+	// Guardian identity is independent of this map's ordinary fallback pool.
+	// Check the approved whole catalog before admitting a paid run.
+	for _, g := range rules.Elite.Guardians {
+		d, ok := s.riftNativeDefinition(g.MonsterID)
+		if !ok || d.Kind != domain.MonsterBoss || d.NoAttack || d.Sprite <= 0 || len(d.Skills) == 0 {
+			return domain.RiftFloorPlan{}, errors.New("invalid approved guardian")
+		}
+	}
+	selected := rules.Elite.Guardians[int(plan.Seed%uint64(len(rules.Elite.Guardians)))]
+	plan.Guardian.Point.Monster = selected.MonsterID
+	return plan, nil
 }
 
 func (s *Scene) validateEndgameRiftFloor(plan domain.RiftFloorPlan) error {
@@ -93,6 +107,23 @@ func (s *Scene) populateSeededEndgameRift(boss bool) {
 	// template cannot leave a partially playable, unwinnable paid instance.
 	for i, p := range points {
 		def, ok := s.defs.Def(p.Point.Monster)
+		if boss && x.data.Run.Rules.Elite != nil {
+			approved := false
+			for _, g := range x.data.Run.Rules.Elite.Guardians {
+				if g.MonsterID == p.Point.Monster {
+					approved = true
+				}
+			}
+			if !approved {
+				fail()
+				return
+			}
+			def, ok = s.riftNativeDefinition(p.Point.Monster)
+			if !ok || def.Kind != domain.MonsterBoss || len(def.Skills) == 0 {
+				fail()
+				return
+			}
+		}
 		if !ok || def.Sprite <= 0 || !def.Kind.Hostile() || def.NoAttack {
 			fail()
 			return
@@ -100,16 +131,23 @@ func (s *Scene) populateSeededEndgameRift(boss bool) {
 		base := bases[int((plan.Seed+uint64(i))%uint64(len(bases)))]
 		def.Level = base.Level
 		def.HP = base.HP
-		def.Stats = base.Stats
-		def.AI = base.AI
-		def.ViewDist, def.TraceDist = base.ViewDist, base.TraceDist
-		def.Skills, def.ImmuneSkills = base.Skills, base.ImmuneSkills
-		def.Aggressive, def.NoAttack, def.NoBasicAttack = true, false, base.NoBasicAttack
-		def.CallHelp = base.CallHelp
+		if boss && x.data.Run.Rules.Elite != nil {
+			// Scale level/HP/attack separately; retain native defenses, movement,
+			// original AI, spell choices, cast restrictions and immunity definitions.
+			def.Stats.MaxHP = base.HP
+			def.Stats.MinAtk, def.Stats.MaxAtk, def.Stats.MAtk = base.Stats.MinAtk, base.Stats.MaxAtk, base.Stats.MAtk
+		} else {
+			def.Stats = base.Stats
+			def.AI = base.AI
+			def.ViewDist, def.TraceDist = base.ViewDist, base.TraceDist
+			def.Skills, def.ImmuneSkills = base.Skills, base.ImmuneSkills
+			def.Aggressive, def.NoAttack, def.NoBasicAttack = true, false, base.NoBasicAttack
+			def.CallHelp = base.CallHelp
+		}
 		def.EliteID = 0
 		lookup[def.ID] = def
 		if boss {
-			if x.data.Run.Rules.GuardianArrivalMS == 0 {
+			if x.data.Run.Rules.Elite == nil && x.data.Run.Rules.GuardianArrivalMS == 0 {
 				def.Name = x.data.Run.Rules.BossName
 			}
 			def.Kind = domain.MonsterBoss
@@ -139,4 +177,20 @@ func (s *Scene) populateSeededEndgameRift(boss bool) {
 		x.data.Run.RegisterMonster(m.ID, p.point.Class)
 		s.emit(s.spawnEvent(m))
 	}
+}
+
+// Ignore prior instance-local scaling overrides when resolving the native boss.
+func (s *Scene) riftNativeDefinition(id domain.MonsterID) (domain.MonsterDef, bool) {
+	defs := s.defs
+	for {
+		overlay, ok := defs.(endgameRiftDefs)
+		if !ok {
+			break
+		}
+		defs = overlay.base
+	}
+	if defs == nil {
+		return domain.MonsterDef{}, false
+	}
+	return defs.Def(id)
 }

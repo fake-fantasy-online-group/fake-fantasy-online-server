@@ -49,7 +49,7 @@ func (s *StatusSet) ProgressionAttackBonus(skill, hasDamage, hasCast bool) int32
 		return 0
 	}
 	var total int64
-	s.Each(func(a Active) {
+	s.EachEffective(func(a Active) {
 		d := a.Def
 		if d.ProgressionAttackFlat <= 0 {
 			return

@@ -1,10 +1,23 @@
 package domain
 
+// DefaultDamageReductionCapPct preserves the ordinary post-defense mitigation budget.
+const DefaultDamageReductionCapPct int32 = 75
+
 // MitigatePercentDamageV7 starts after the ordinary attack-vs-defense formula.
 // It preserves multiplicative percentage layers but limits their combined
 // reduction to 75%. Flat reductions share the same final budget; shield pools, reflection,
 // and immunity are deliberately separate. Wide intermediates avoid amplification overflow.
 func MitigatePercentDamageV7(amount int64, rawResist, pierce, equipmentBP, statusPct int32, halfCount int, pvp bool, flatReduction ...int64) int64 {
+	return MitigatePercentDamageV7WithCap(amount, rawResist, pierce, equipmentBP, statusPct, halfCount, pvp, DefaultDamageReductionCapPct, flatReduction...)
+}
+
+// MitigatePercentDamageV7WithCap uses the same formula with an explicit raised
+// combined cap. Zero/ordinary values preserve 75%; multiple sources must resolve
+// their cap in the adapter, never by applying another damage multiplier.
+func MitigatePercentDamageV7WithCap(amount int64, rawResist, pierce, equipmentBP, statusPct int32, halfCount int, pvp bool, capPct int32, flatReduction ...int64) int64 {
+	if amount <= 0 {
+		return 0
+	}
 	pierceCap := int32(3000)
 	if pvp {
 		pierce /= 2
@@ -31,7 +44,11 @@ func MitigatePercentDamageV7(amount int64, rawResist, pierce, equipmentBP, statu
 	for _, flat := range flatReduction {
 		amount -= max(int64(0), flat)
 	}
-	return max(amount, (baseline+3)/4)
+	capPct = min(int32(100), max(DefaultDamageReductionCapPct, capPct))
+	retainedPct := int64(100 - capPct)
+	// Ceil without overflowing baseline*retainedPct (or baseline+99).
+	floor := (baseline/100)*retainedPct + ((baseline%100)*retainedPct+99)/100
+	return max(amount, floor)
 }
 
 // Splitting the quotient before multiplying keeps even large amplified damage

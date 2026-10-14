@@ -27,6 +27,7 @@ const (
 )
 
 type endgameRiftAbilityState struct {
+	eliteKey             string
 	class                int32
 	pattern              []endgameRiftAbility
 	cursor               int
@@ -84,6 +85,10 @@ func (s *Scene) registerEndgameRiftAbilities(m *entity.Entity, class int32, spaw
 	if s.rift.abilities == nil {
 		s.rift.abilities = map[domain.EntityID]*endgameRiftAbilityState{}
 	}
+	if s.eliteRift() {
+		s.registerRiftElite(m, class, spawnIndex, seed, floor)
+		return
+	}
 	h := riftAbilitySeed(seed, class, spawnIndex, s.rift.data.Run.Tier, floor)
 	count := int(class)
 	state := &endgameRiftAbilityState{class: class, nextAt: s.riftMS() + s.currentRiftRules().AbilityStartMS + int64(h>>16)%s.currentRiftRules().AbilityJitterMS}
@@ -134,6 +139,10 @@ func (s *Scene) riftMonsterAbilityBusy(id domain.EntityID) bool {
 		return false
 	}
 	a := s.rift.abilities[id]
+	if s.eliteRift() {
+		c := s.eliteSnapshot().Casters[a.eliteKey]
+		return c != nil && s.riftMS() < c.RecoverUntil
+	}
 	return a.pending != nil || s.riftMS() < a.recoverUntil
 }
 
@@ -156,6 +165,10 @@ func (s *Scene) riftAbilitySourceReady(m *entity.Entity) bool {
 }
 
 func (s *Scene) stepEndgameRiftAbilities(now int64) {
+	if s.eliteRift() {
+		s.stepRiftElite(now)
+		return
+	}
 	if s.rift == nil || len(s.rift.abilities) == 0 {
 		return
 	}
@@ -219,7 +232,7 @@ func (s *Scene) stepEndgameRiftAbilities(now int64) {
 		}
 		target := s.players[m.Monster.Target]
 		if !s.riftAbilityPlayerReady(target) || entityInvisible(target) ||
-			riftDistance2(m.Pos, target.Pos) > float64(s.currentRiftRules().AbilityRange)*float64(s.currentRiftRules().AbilityRange) || !s.straightPathWalkable(m.Pos, target.Pos) {
+			riftDistance2(m.Pos, target.Pos) > float64(s.currentRiftRules().AbilityRange)*float64(s.currentRiftRules().AbilityRange) || !s.staticPathWalkable(m.Pos, target.Pos) {
 			continue
 		}
 		// Let already accepted native spells finish rather than overlaying an
@@ -358,7 +371,7 @@ func (s *Scene) resolveEndgameRiftAbility(m *entity.Entity, cast *endgameRiftAbi
 			break
 		}
 		p := s.players[id]
-		if id == m.ID || !s.riftAbilityPlayerReady(p) || !cast.contains(p.Pos) || !s.straightPathWalkable(cast.center, p.Pos) {
+		if id == m.ID || !s.riftAbilityPlayerReady(p) || !cast.contains(p.Pos) || !s.staticPathWalkable(cast.center, p.Pos) {
 			continue
 		}
 		tr := s.hits[m.ID]

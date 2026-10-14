@@ -123,6 +123,7 @@ func (s *Scene) advanceEndgameRift(p *entity.Entity, req domain.EndgameRequest) 
 	}
 	// Retired floors cannot be revisited. Drop all source floor IDs and globes;
 	// cumulative progress, deaths, membership, timer and tier are unchanged.
+	next.Elite = nil
 	next.Run.Monsters = map[domain.EntityID]*domain.RiftMonster{}
 	next.Run.Globes = map[domain.EntityID]domain.RiftGlobe{}
 	next.Run.Revision++
@@ -224,6 +225,7 @@ func (s *Scene) completeEndgameRiftTransition() {
 		t.retryAt = s.riftMS() + 1000
 		return
 	}
+	s.clearRiftElite()
 	x.retired = true
 	x.data = t.next.clone()
 	x.revision = t.revision

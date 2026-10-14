@@ -722,6 +722,12 @@ func (s *Scene) randomRoamPoint(from domain.Pos) (domain.Pos, bool) {
 // straightPathWalkable 验证怪物正在尝试的直线路段。游荡只用一段；追击先走
 // 直线，遇到障碍后由局部寻路拆成若干同样经过这里验证的拐点段。
 func (s *Scene) straightPathWalkable(from, to domain.Pos) bool {
+	return s.temporaryPathWalkable(from, to) && s.staticPathWalkable(from, to)
+}
+
+// staticPathWalkable keeps the original map line-of-sight check independent of
+// temporary movement-only obstacles such as elite walls.
+func (s *Scene) staticPathWalkable(from, to domain.Pos) bool {
 	if s.walkable == nil {
 		return true // 无客户端资源的纯内存测试保持原行为
 	}
@@ -810,7 +816,7 @@ var monsterPathNeighbours = [...]monsterPathCell{
 // localMonsterPath 在以 from 为圆心的固定半径内做 A*。搜索节点和展开数都有
 // 硬上限；找不到就返回 false，调用方会让怪物放弃，而不是继续扩大到全图。
 func (s *Scene) localMonsterPath(from, target domain.Pos, radius float64) ([]domain.Pos, bool) {
-	if s.walkable == nil || !s.walkable(from) || !s.walkable(target) || radius <= 0 {
+	if !s.spawnPositionWalkable(from) || !s.spawnPositionWalkable(target) || radius <= 0 {
 		return nil, false
 	}
 	start := monsterPathCell{}
@@ -1045,7 +1051,7 @@ func (s *Scene) dropMonsterAggroForPlayer(player domain.EntityID) {
 //
 // 怪与宠物共用它: 这段代码从头到尾没碰过 m.Monster, 本来就是通用的。
 func (s *Scene) moveEntity(m *entity.Entity, to domain.Pos) {
-	if to == m.Pos || !canMove(m) {
+	if to == m.Pos || !canMove(m) || !s.temporaryPathWalkable(m.Pos, to) {
 		return
 	}
 	s.aoi.Move(m, to)
@@ -1097,6 +1103,9 @@ func (s *Scene) aggro(victim *entity.Entity, attacker domain.EntityID) {
 // 0，高等级嘲讽可覆盖低等级嘲讽，反向则不能抢走目标。
 func (s *Scene) taunt(victim *entity.Entity, attacker domain.EntityID, power int32) bool {
 	if victim == nil || victim.Monster == nil || victim.Monster.NoAttack || attacker == 0 || power <= 0 {
+		return false
+	}
+	if victim.Status != nil && victim.Status.SuppressesHarmfulAt(s.tick) {
 		return false
 	}
 	a, ok := s.entities[attacker]

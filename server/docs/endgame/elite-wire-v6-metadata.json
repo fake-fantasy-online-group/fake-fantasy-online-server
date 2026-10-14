@@ -1,0 +1,180 @@
+{
+  "kind": "rift.state",
+  "ok": true,
+  "rift": {
+    "impacts": [
+      {
+        "id": "test-rift/1/e1",
+        "mechanism": "death_lava",
+        "x": 1100,
+        "y": 1000,
+        "radius": 140,
+        "atMS": 1003000,
+        "expiresMS": 1003700
+      },
+      {
+        "id": "test-rift/1/e3",
+        "mechanism": "ice_orb",
+        "x": 1100,
+        "y": 1000,
+        "radius": 120,
+        "atMS": 1003000,
+        "expiresMS": 1003700
+      }
+    ],
+    "mapId": 7,
+    "serverNowMS": 1003000,
+    "hazards": [
+      {
+        "id": "test-rift/1/e2",
+        "sourceId": "134217833",
+        "abilityId": 3,
+        "mechanism": "lightning_orb",
+        "x": 1100,
+        "y": 1000,
+        "radius": 220,
+        "width": 40,
+        "bornMS": 1000000,
+        "expiresMS": 1010000,
+        "remainingMS": 7000,
+        "firstPulseMS": 1000,
+        "pulseMS": 2000,
+        "propagationMS": 1000
+      },
+      {
+        "id": "test-rift/1/e4",
+        "sourceId": "134217833",
+        "abilityId": 6,
+        "mechanism": "poison_pool",
+        "x": 1100,
+        "y": 1000,
+        "radius": 120,
+        "bornMS": 1000000,
+        "expiresMS": 1020000,
+        "remainingMS": 17000,
+        "pulseMS": 1000
+      },
+      {
+        "id": "test-rift/1/e5",
+        "sourceId": "134217833",
+        "abilityId": 7,
+        "mechanism": "walls",
+        "x": 1100,
+        "y": 1000,
+        "radius": 0,
+        "width": 20,
+        "bornMS": 1000000,
+        "expiresMS": 1015000,
+        "remainingMS": 12000,
+        "walls": [
+          {
+            "id": "test-rift/1/e5/w0",
+            "x": 1320,
+            "y": 960,
+            "x2": 1320,
+            "y2": 1040,
+            "width": 20
+          },
+          {
+            "id": "test-rift/1/e5/w1",
+            "x": 1140,
+            "y": 1220,
+            "x2": 1060,
+            "y2": 1220,
+            "width": 20
+          },
+          {
+            "id": "test-rift/1/e5/w2",
+            "x": 880,
+            "y": 1040,
+            "x2": 880,
+            "y2": 960,
+            "width": 20
+          }
+        ]
+      },
+      {
+        "id": "test-rift/1/e6",
+        "sourceId": "134217833",
+        "abilityId": 2,
+        "mechanism": "death_lava",
+        "x": 1100,
+        "y": 1000,
+        "radius": 140,
+        "bornMS": 1003000,
+        "expiresMS": 1006000,
+        "remainingMS": 3000
+      },
+      {
+        "id": "test-rift/1/e7",
+        "sourceId": "134217833",
+        "abilityId": 4,
+        "mechanism": "ice_orb",
+        "x": 1100,
+        "y": 1000,
+        "radius": 120,
+        "bornMS": 1003000,
+        "expiresMS": 1006000,
+        "remainingMS": 3000
+      }
+    ],
+    "seed": "11027422278209105751",
+    "generatorVersion": 2,
+    "floorIndex": 1,
+    "mapName": "原生森林",
+    "exitX": 2500,
+    "exitY": 2500,
+    "maxTier": 150,
+    "unlockedTier": 1,
+    "name": "演劫洞天",
+    "keyCount": 0,
+    "keyItemId": 1900028101,
+    "auras": [
+      {
+        "goldenUntilMS": 1005000,
+        "abilityIds": [
+          0
+        ],
+        "entityId": "134217833",
+        "class": 1,
+        "affixes": [
+          "金身"
+        ]
+      },
+      {
+        "cloneOf": "134217833",
+        "entityId": "134217834",
+        "class": 0
+      },
+      {
+        "cloneOf": "134217833",
+        "entityId": "134217835",
+        "class": 0
+      },
+      {
+        "cloneOf": "134217833",
+        "entityId": "134217836",
+        "class": 0
+      }
+    ],
+    "runId": "test-rift",
+    "revision": "12",
+    "phase": "active",
+    "tier": 1,
+    "progress": 0,
+    "progressMax": 10000,
+    "remainingSeconds": 897,
+    "totalSeconds": 900,
+    "bossName": "镇境劫影",
+    "members": [
+      {
+        "name": "甲",
+        "charId": "100",
+        "level": 60,
+        "eligible": false,
+        "claimed": false
+      }
+    ],
+    "claimable": false
+  }
+}

@@ -99,7 +99,7 @@ type StatusDef struct {
 	LegacyOverlayLevelBP int64 `json:"-"`
 	// Hundredths of original absolute tick damage, consumed by each Active instance.
 	PeriodicDamageFraction100 int64 `json:",omitempty"`
-	ProgressionAttackFlat int32
+	ProgressionAttackFlat     int32
 	// Skill snapshots pin persistent effects to the lesser of cast and current sources.
 	SkillSnapshotID   SkillID
 	SkillSnapshotRank int32
@@ -164,6 +164,9 @@ type StatusDef struct {
 	// 与状态逐级闭合的技能描述；百分比使用整数百分数。
 	PhysicalDamageReductionPct int32
 	MagicDamageReductionPct    int32
+	// DamageReductionCapPct raises the shared mitigation ceiling. Zero keeps
+	// the ordinary 75%; effective sources combine by maximum, not addition.
+	DamageReductionCapPct int32 `json:",omitempty"`
 	// DamageTakenPct 是目标承受伤害的增幅，先于减伤结算。破甲同时增加
 	// 物理/魔法伤害；冰封强化只增加物理伤害，不能伪装成负减伤。
 	PhysicalDamageTakenPct int32
@@ -181,6 +184,10 @@ type StatusDef struct {
 	// DamageShield 是可消耗的固定伤害池，例如光盾术 700/900/... 点。
 	DamageShield int32
 
+	// SuppressHarmful suspends existing harmful effects without deleting them
+	// or pausing their lifetime. It does not change BlockHarmful's admission-only
+	// semantics: a source wanting both behaviors must set both fields.
+	SuppressHarmful bool `json:",omitempty"`
 	BlockHarmful    bool
 	BlockBeneficial bool
 	BreakOnDamage   bool
@@ -243,7 +250,7 @@ type StatusApplication struct {
 	RandomGroup  int32 `json:",omitempty"`
 	RandomWeight int32 `json:",omitempty"`
 	// TargetType selects the actual target class without widening skill admission.
-	TargetType SkillStatusTarget `json:",omitempty"`
+	TargetType             SkillStatusTarget        `json:",omitempty"`
 	Progression            *SkillProgressionCatalog `json:"-"`
 	PeriodicDamageBonusPct int32
 	SourceSkill            SkillID
@@ -356,7 +363,7 @@ func (m StatusOverlay) Rule(existing, incoming StatusID) (OverlayRule, bool) {
 
 // Active 是一个实体身上正在生效的一个状态。
 type Active struct {
-	Def StatusDef
+	Def                        StatusDef
 	PeriodicDamageRemainder100 int64 `json:",omitempty"`
 	// Tick-only whole damage emitted by DueTicks; never shared between instances.
 	PeriodicDamageTickExtra int32 `json:"-"`
@@ -375,12 +382,12 @@ type Active struct {
 // Source 是场景实体号，重登后不能沿用，故不进入存档。
 type SavedStatus struct {
 	PeriodicDamageRemainder100 int64 `json:",omitempty"`
-	Def             StatusDef
-	RemainingTicks  int64
-	ExpiresAtUnixMS int64
-	NextTickIn      uint64
-	ShieldLeft      int32
-	SourceSelf      bool
+	Def                        StatusDef
+	RemainingTicks             int64
+	ExpiresAtUnixMS            int64
+	NextTickIn                 uint64
+	ShieldLeft                 int32
+	SourceSelf                 bool
 }
 
 func CloneSavedStatuses(src []SavedStatus) []SavedStatus {
@@ -454,19 +461,18 @@ func (s *StatusSet) BlockedByOverlay(def StatusDef, overlay StatusOverlay) bool 
 	if s == nil || len(s.act) == 0 || len(overlay) == 0 {
 		return false
 	}
+	suppress := s.SuppressesHarmful() || def.SuppressHarmful
 	for id, list := range s.act {
 		rule, ok := overlay.Rule(id, def.ID)
 		if !ok {
 			continue
 		}
-		if rule == OverlayBlock {
-			return true
-		}
-		if rule == OverlayReplace {
-			for _, old := range list {
-				if overlayReplacementBlocked(old.Def, def) {
-					return true
-				}
+		for _, old := range list {
+			if suppress && old.Def.Harmful() {
+				continue
+			}
+			if rule == OverlayBlock || rule == OverlayReplace && overlayReplacementBlocked(old.Def, def) {
+				return true
 			}
 		}
 	}
@@ -495,6 +501,7 @@ func (s *StatusSet) ApplyWithOverlay(def StatusDef, now Tick, src EntityID, over
 	}
 
 	var counteract, replace []StatusID
+	suppress := s.SuppressesHarmful() || def.SuppressHarmful
 	ids := make([]int, 0, len(s.act))
 	for id := range s.act {
 		ids = append(ids, int(id))
@@ -502,6 +509,15 @@ func (s *StatusSet) ApplyWithOverlay(def StatusDef, now Tick, src EntityID, over
 	sort.Ints(ids)
 	for _, raw := range ids {
 		id := StatusID(raw)
+		if suppress {
+			hasEffective := false
+			for _, old := range s.act[id] {
+				hasEffective = hasEffective || !old.Def.Harmful()
+			}
+			if !hasEffective {
+				continue
+			}
+		}
 		rule, ok := overlay.Rule(id, def.ID)
 		if !ok {
 			// 矩阵没覆盖的新版状态：异 id 共存，同 id 用旧的高级优先。
@@ -519,16 +535,34 @@ func (s *StatusSet) ApplyWithOverlay(def StatusDef, now Tick, src EntityID, over
 		}
 	}
 	if len(counteract) > 0 {
-		for _, id := range counteract {
-			delete(s.act, id)
-		}
-		return StatusApplyResult{Counteracted: true, Removed: counteract}
+		return StatusApplyResult{Counteracted: true, Removed: s.removeOverlayInstances(counteract, suppress)}
 	}
-	for _, id := range replace {
-		delete(s.act, id)
-	}
+	removed := s.removeOverlayInstances(replace, suppress)
 	s.act[def.ID] = append(s.act[def.ID], newActive(def, now, src))
-	return StatusApplyResult{Applied: true, Removed: replace}
+	return StatusApplyResult{Applied: true, Removed: removed}
+}
+
+// removeOverlayInstances applies a resolved matrix rule only to effective
+// instances. Same-ID layers may have different official good/bad categories;
+// an affected positive layer must not erase its suspended harmful sibling.
+func (s *StatusSet) removeOverlayInstances(ids []StatusID, suppress bool) []StatusID {
+	var removed []StatusID
+	for _, id := range ids {
+		list := s.act[id]
+		kept := list[:0]
+		for _, a := range list {
+			if suppress && a.Def.Harmful() {
+				kept = append(kept, a)
+			}
+		}
+		if len(kept) == 0 {
+			delete(s.act, id)
+			removed = append(removed, id)
+		} else {
+			s.act[id] = kept
+		}
+	}
+	return removed
 }
 
 // Remove 驱散一个状态。
@@ -573,7 +607,10 @@ func (s *StatusSet) BlocksStatus(def StatusDef) bool {
 	}
 	harmful := def.Harmful()
 	blocked := false
-	s.Each(func(a Active) {
+	s.EachEffective(func(a Active) {
+		if def.SuppressHarmful && a.Def.Harmful() {
+			return
+		}
 		if harmful && a.Def.BlockHarmful || !harmful && a.Def.BlockBeneficial {
 			blocked = true
 		}
@@ -587,7 +624,7 @@ func (s *StatusSet) InstantDeathImmune() bool {
 		return false
 	}
 	immune := false
-	s.Each(func(a Active) {
+	s.EachEffective(func(a Active) {
 		immune = immune || a.Def.InstantDeathImmune || a.Def.Invulnerable
 	})
 	return immune
@@ -603,7 +640,7 @@ func (s *StatusSet) MitigateDamage(magic bool, damage int32) (int32, []StatusID)
 		return 0, nil
 	}
 	buckets := CombatDamageBuckets{DamageTakenIncreasePct: s.DamageTakenIncreasePct(magic),
-		DamageReductionPct: s.DamageReductionPct(magic), FlatReduction: s.DamageReductionFlat(magic)}
+		DamageReductionPct: s.DamageReductionPct(magic), DamageReductionCapPct: s.DamageReductionCapPct(), FlatReduction: s.DamageReductionFlat(magic)}
 	damage = buckets.IncomingDamage(damage)
 	return s.AbsorbDamage(damage)
 }
@@ -612,7 +649,7 @@ func (s *StatusSet) MitigateDamage(magic bool, damage int32) (int32, []StatusID)
 func (s *StatusSet) Invulnerable() bool {
 	immune := false
 	if s != nil {
-		s.Each(func(a Active) { immune = immune || a.Def.Invulnerable })
+		s.EachEffective(func(a Active) { immune = immune || a.Def.Invulnerable })
 	}
 	return immune
 }
@@ -629,7 +666,7 @@ func (s *StatusSet) DamageTakenAmount(magic bool, damage int32) int64 {
 func (s *StatusSet) DamageTakenIncreasePct(magic bool) int32 {
 	var pct int64
 	if s != nil {
-		s.Each(func(a Active) {
+		s.EachEffective(func(a Active) {
 			if magic {
 				pct += int64(a.Def.MagicDamageTakenPct)
 			} else {
@@ -643,7 +680,7 @@ func (s *StatusSet) DamageTakenIncreasePct(magic bool) int32 {
 func (s *StatusSet) DamageReductionPct(magic bool) int32 {
 	var pct int64
 	if s != nil {
-		s.Each(func(a Active) {
+		s.EachEffective(func(a Active) {
 			if magic {
 				pct += int64(a.Def.MagicDamageReductionPct)
 			} else {
@@ -657,7 +694,7 @@ func (s *StatusSet) DamageReductionPct(magic bool) int32 {
 func (s *StatusSet) DamageReductionFlat(magic bool) int64 {
 	var flat int64
 	if s != nil && magic {
-		s.Each(func(a Active) { flat += int64(a.Def.MagicDamageReductionFlat) })
+		s.EachEffective(func(a Active) { flat += int64(a.Def.MagicDamageReductionFlat) })
 	}
 	return flat
 }
@@ -670,10 +707,15 @@ func (s *StatusSet) AbsorbDamage(damage int32) (int32, []StatusID) {
 	}
 
 	var removed []StatusID
+	suppress := s.SuppressesHarmful()
 	for _, id := range s.sortedIDs() {
 		list := s.act[id]
 		kept := list[:0]
 		for _, a := range list {
+			if suppress && a.Def.Harmful() {
+				kept = append(kept, a)
+				continue
+			}
 			if damage > 0 && a.ShieldLeft > 0 {
 				absorbed := damage
 				if absorbed > a.ShieldLeft {
@@ -705,7 +747,7 @@ func (s *StatusSet) CannotDealDamage() bool {
 		return false
 	}
 	blocked := false
-	s.Each(func(a Active) { blocked = blocked || a.Def.CannotAttack })
+	s.EachEffective(func(a Active) { blocked = blocked || a.Def.CannotAttack })
 	return blocked
 }
 
@@ -715,7 +757,7 @@ func (s *StatusSet) OutgoingDamageFlat(magic bool) int32 {
 		return 0
 	}
 	var out int32
-	s.Each(func(a Active) { out += a.Def.OutgoingMagicDamageFlat })
+	s.EachEffective(func(a Active) { out += a.Def.OutgoingMagicDamageFlat })
 	return out
 }
 
@@ -724,7 +766,7 @@ func (s *StatusSet) MinimumMaxHP() int32 {
 		return 0
 	}
 	var floor int32
-	s.Each(func(a Active) {
+	s.EachEffective(func(a Active) {
 		if a.Def.MaxHPFloor > floor {
 			floor = a.Def.MaxHPFloor
 		}
@@ -740,7 +782,7 @@ func (s *StatusSet) MaximumAttack() (int32, bool) {
 	}
 	var cap int32
 	known := false
-	s.Each(func(a Active) {
+	s.EachEffective(func(a Active) {
 		if !a.Def.AttackCapKnown {
 			return
 		}
@@ -757,7 +799,7 @@ func (s *StatusSet) ExpBonusPct() int32 {
 		return 0
 	}
 	var pct int32
-	s.Each(func(a Active) { pct += a.Def.ExperienceBonusPct })
+	s.EachEffective(func(a Active) { pct += a.Def.ExperienceBonusPct })
 	return pct
 }
 
@@ -767,7 +809,7 @@ func (s *StatusSet) ReflectPct(magic bool) int32 {
 		return 0
 	}
 	var pct int32
-	s.Each(func(a Active) {
+	s.EachEffective(func(a Active) {
 		if magic {
 			pct += a.Def.MagicReflectPct
 		} else {
@@ -787,7 +829,7 @@ func (s *StatusSet) MagicFullReflectChance() int32 {
 		return 0
 	}
 	var chance int32
-	s.Each(func(a Active) { chance += a.Def.MagicFullReflectChancePct })
+	s.EachEffective(func(a Active) { chance += a.Def.MagicFullReflectChancePct })
 	if chance > 100 {
 		return 100
 	}
@@ -800,7 +842,7 @@ func (s *StatusSet) ReflectFlat(magic bool) (amount int32, asMagic bool) {
 	if s == nil {
 		return 0, false
 	}
-	s.Each(func(a Active) {
+	s.EachEffective(func(a Active) {
 		if magic {
 			amount += a.Def.MagicReflectFlat
 		} else {
@@ -818,7 +860,7 @@ func (s *StatusSet) CombatTriggers() (poisonChance, poisonLevel, freezeChance, l
 	if s == nil {
 		return
 	}
-	s.Each(func(a Active) {
+	s.EachEffective(func(a Active) {
 		if a.Def.PoisonOnHitChance > poisonChance {
 			poisonChance, poisonLevel = a.Def.PoisonOnHitChance, a.Def.PoisonOnHitLevel
 		}
@@ -851,7 +893,7 @@ func (s *StatusSet) StealthDamageBonus() int32 {
 		return 0
 	}
 	var bonus int32
-	s.Each(func(a Active) {
+	s.EachEffective(func(a Active) {
 		if a.Def.Invisible && a.Def.StealthDamagePct > 0 {
 			bonus += a.Def.StealthDamagePct
 		}
@@ -866,10 +908,14 @@ func (s *StatusSet) ConsumeAttackModifiers(skill, hasDamage, hasDuration, hasCas
 		return
 	}
 	ids := s.sortedIDs()
+	suppress := s.SuppressesHarmful()
 	for _, id := range ids {
 		list := s.act[id]
 		consume := false
 		for _, a := range list {
+			if suppress && a.Def.Harmful() {
+				continue
+			}
 			if skill {
 				if hasDamage && a.Def.NextSkillDamagePct > 0 {
 					damagePct += a.Def.NextSkillDamagePct
@@ -889,8 +935,18 @@ func (s *StatusSet) ConsumeAttackModifiers(skill, hasDamage, hasDuration, hasCas
 			}
 		}
 		if consume {
-			delete(s.act, id)
-			removed = append(removed, id)
+			kept := list[:0]
+			for _, a := range list {
+				if suppress && a.Def.Harmful() {
+					kept = append(kept, a)
+				}
+			}
+			if len(kept) == 0 {
+				delete(s.act, id)
+				removed = append(removed, id)
+			} else {
+				s.act[id] = kept
+			}
 		}
 	}
 	return
@@ -923,32 +979,16 @@ func (s *StatusSet) Has(id StatusID) bool {
 // Invisible 报告状态集合中是否存在真正的隐身实例。不能只认固定状态号：
 // 客户端数据还存在其他隐身来源，领域语义应跟随定义字段。
 func (s *StatusSet) Invisible() bool {
-	if s == nil {
-		return false
-	}
-	for _, list := range s.act {
-		for _, active := range list {
-			if active.Def.Invisible {
-				return true
-			}
-		}
-	}
-	return false
+	invisible := false
+	s.EachEffective(func(a Active) { invisible = invisible || a.Def.Invisible })
+	return invisible
 }
 
-// PreventsInvisible 报告当前是否有状态禁止再次隐身。
+// PreventsInvisible reports only effective suppression of invisibility.
 func (s *StatusSet) PreventsInvisible() bool {
-	if s == nil {
-		return false
-	}
-	for _, list := range s.act {
-		for _, active := range list {
-			if active.Def.PreventInvisible {
-				return true
-			}
-		}
-	}
-	return false
+	blocked := false
+	s.EachEffective(func(a Active) { blocked = blocked || a.Def.PreventInvisible })
+	return blocked
 }
 
 // Count 返回身上有几个状态。
@@ -963,7 +1003,8 @@ func (s *StatusSet) Count() int {
 	return n
 }
 
-// Each 遍历生效中的状态。
+// Each visits every stored instance, including suppressed harmful states.
+// Use EachEffective for combat; persistence, expiry and presentation need raw data.
 func (s *StatusSet) Each(fn func(Active)) {
 	if s == nil {
 		return
@@ -1020,7 +1061,9 @@ func RestoreSavedStatuses(saved []SavedStatus, now Tick, wall time.Time, owner E
 			continue
 		}
 		a := Active{Def: record.Def, ShieldLeft: record.ShieldLeft, PeriodicDamageRemainder100: record.PeriodicDamageRemainder100}
-		if a.PeriodicDamageRemainder100 < 0 || a.PeriodicDamageRemainder100 >= 100 { continue }
+		if a.PeriodicDamageRemainder100 < 0 || a.PeriodicDamageRemainder100 >= 100 {
+			continue
+		}
 		if record.SourceSelf {
 			a.Source = owner
 		}
@@ -1069,6 +1112,7 @@ func (s *StatusSet) Expire(now Tick) []StatusID {
 	if s == nil || len(s.act) == 0 {
 		return nil
 	}
+	s.discardSuppressedTicks(now)
 	var gone []StatusID
 	for id, list := range s.act {
 		kept := list[:0]
@@ -1097,6 +1141,7 @@ func (s *StatusSet) DueTicks(now Tick) []Active {
 	if s == nil || len(s.act) == 0 {
 		return nil
 	}
+	s.discardSuppressedTicks(now)
 	var due []Active
 	for id, list := range s.act {
 		for i, a := range list {
@@ -1123,51 +1168,26 @@ func (s *StatusSet) DueTicks(now Tick) []Active {
 //
 // 昏迷压过封印 —— 昏迷本来就包含"不能放技能"。
 func (s *StatusSet) Controlled() Control {
-	if s == nil {
-		return ControlNone
-	}
 	out := ControlNone
-	for _, list := range s.act {
-		for _, a := range list {
-			if a.Def.Control == ControlStun {
-				return ControlStun
-			}
-			if a.Def.Control != ControlNone {
-				out = a.Def.Control
-			}
+	s.EachEffective(func(a Active) {
+		if a.Def.Control == ControlStun || out == ControlNone {
+			out = a.Def.Control
 		}
-	}
+	})
 	return out
 }
 
-// BlocksMovement includes full incapacitation and source-specific movement
-// locks. Reading active states rather than caching a flag makes expiration,
-// dispels and source reconciliation release the restriction immediately.
+// BlocksMovement applies only effective control and voluntary-movement locks.
 func (s *StatusSet) BlocksMovement() bool {
-	if s == nil {
-		return false
-	}
-	for _, list := range s.act {
-		for _, a := range list {
-			if a.Def.BlockMove || a.Def.Control == ControlStun {
-				return true
-			}
-		}
-	}
-	return false
+	blocked := false
+	s.EachEffective(func(a Active) { blocked = blocked || a.Def.BlockMove || a.Def.Control == ControlStun })
+	return blocked
 }
 
-// Affixes 把身上所有状态的属性影响摊平，交给属性管线。
+// Affixes flattens effective status contributions into the shared stat pipeline.
 func (s *StatusSet) Affixes() []Affix {
-	if s == nil || len(s.act) == 0 {
-		return nil
-	}
 	var out []Affix
-	for _, list := range s.act {
-		for _, a := range list {
-			out = append(out, a.Def.Affixes...)
-		}
-	}
+	s.EachEffective(func(a Active) { out = append(out, a.Def.Affixes...) })
 	return out
 }
 

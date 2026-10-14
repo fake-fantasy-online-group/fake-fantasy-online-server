@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"sort"
 	"strings"
 	"unicode/utf16"
 	"unicode/utf8"
@@ -38,6 +39,17 @@ func (r *RiftRules) validateWire() error {
 			longestAbility = a.Name
 		}
 	}
+	// A monster carries at most three selected affixes, never the entire catalog.
+	if r.Elite != nil {
+		sort.Slice(affixes, func(i, j int) bool {
+			a, _ := json.Marshal(affixes[i])
+			b, _ := json.Marshal(affixes[j])
+			return len(a) > len(b)
+		})
+		if len(affixes) > 3 {
+			affixes = affixes[:3]
+		}
+	}
 	id := strings.Repeat("9", 20)
 	v := &EndgameRiftView{Name: r.Name, BossName: r.BossName, RunID: strings.Repeat("f", 32), Revision: id, Seed: id, GeneratorVersion: math.MaxInt32, FloorIndex: math.MaxInt32, MapName: strings.Repeat("<", 256), ExitX: math.MinInt32, ExitY: math.MinInt32, MaxTier: r.MaxTier, UnlockedTier: r.MaxTier, KeyCount: math.MaxInt32, KeyItemID: math.MaxInt32, Phase: "reward_pending", Tier: r.MaxTier, Progress: r.ProgressMax, ProgressMax: r.ProgressMax, RemainingSeconds: math.MaxInt32, TotalSeconds: math.MaxInt32, CanAdvance: true, Transitioning: true}
 	v.PendingLoot = 69 // Maximum configured personal reward slots, conservatively bounded.
@@ -46,7 +58,7 @@ func (r *RiftRules) validateWire() error {
 		v.Members = append(v.Members, EndgameRiftMemberView{CharID: id, Name: strings.Repeat("<", maxNameBytes), Level: math.MaxInt32})
 	}
 	for i := 0; i < RiftFloorMaxConfiguredPopulation+1; i++ {
-		aura := EndgameRiftAuraView{EntityID: id, Class: 3}
+		aura := EndgameRiftAuraView{EntityID: "4294967295", Class: 3}
 		if i < 33 {
 			aura.Affixes = affixes
 			aura.OriginalName = strings.Repeat("<", 128)
@@ -58,10 +70,34 @@ func (r *RiftRules) validateWire() error {
 		return fmt.Errorf("rift globe count exceeds client limit")
 	}
 	for i := 0; i < maxGlobes; i++ {
-		v.Globes = append(v.Globes, EndgameRiftGlobeView{EntityID: id, X: math.MinInt32, Y: math.MinInt32, Value: r.GlobeProgress})
+		v.Globes = append(v.Globes, EndgameRiftGlobeView{EntityID: "4294967295", X: math.MinInt32, Y: math.MinInt32, Value: r.GlobeProgress})
 	}
-	for i := int32(0); i < r.AbilityMaxConcurrent; i++ {
+	for i := int32(0); r.Elite == nil && i < r.AbilityMaxConcurrent; i++ {
 		v.Telegraphs = append(v.Telegraphs, EndgameRiftTelegraphView{ID: id + ":" + id, EntityID: id, Ability: longestAbility, Shape: "circle", X: math.MinInt32, Y: math.MinInt32, EndX: math.MinInt32, EndY: math.MinInt32, Radius: 10000, InnerRadius: 10000, RemainingMS: 60000})
+	}
+	if r.Elite != nil {
+		v.MapID = math.MaxInt32
+		v.ServerNowMS = math.MaxInt64
+		for i := 0; i < 33; i++ {
+			v.Auras[i].AbilityIDs = []int32{0, 1, 2}
+			v.Auras[i].GoldenUntilMS = math.MaxInt64
+		}
+		// Every elite may own three clones; one guardian cannot coexist with
+		// the cleared trash wave. IDs are native uint32 rather than 64-bit.
+		for i := 0; i < 96; i++ {
+			v.Auras = append(v.Auras, EndgameRiftAuraView{EntityID: "4294967295", Class: 0, CloneOf: "4294967295"})
+		}
+		// Worst live envelope: active budget may all be walls. Death lava replaces
+		// an elite aura; its bounded payload is smaller than the removed maximum
+		// original-name/three-affix aura, so 32 simultaneous deaths cannot grow it.
+		for i := int32(0); i < r.Elite.HazardMaxConcurrent; i++ {
+			h := EndgameRiftHazardView{ID: strings.Repeat("f", 32) + "/2147483647/e" + id, SourceID: "4294967295", AbilityID: 7, Mechanism: "lightning_orb", X: math.MinInt32, Y: math.MinInt32, Radius: 10000, Width: 200, BornMS: math.MaxInt64, ExpiresMS: math.MaxInt64, RemainingMS: 60000, FirstPulseMS: 60000, PulseMS: 60000, PropagationMS: 60000}
+			for j := 0; j < 3; j++ {
+				h.Walls = append(h.Walls, EndgameRiftWallView{ID: h.ID + "/w2", X: -9999999.999999998, Y: -9999999.999999998, X2: -9999999.999999998, Y2: -9999999.999999998, Width: 200})
+			}
+			v.Hazards = append(v.Hazards, h)
+			v.Impacts = append(v.Impacts, EndgameRiftImpactView{ID: h.ID, Mechanism: "death_lava", X: math.MinInt32, Y: math.MinInt32, Radius: 10000, AtMS: math.MaxInt64, ExpiresMS: math.MaxInt64})
+		}
 	}
 	raw, err := json.Marshal(EndgameResponse{Kind: "rift.advance", RequestID: strings.Repeat("x", 64), OK: true, Message: "进入下一层，进度与计时保留", Rift: v})
 	if err != nil || len(raw) > EndgameMaxJSONBytes {

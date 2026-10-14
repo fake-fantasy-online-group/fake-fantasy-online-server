@@ -108,7 +108,7 @@ func (s *Scene) applyCombatTriggeredStatus(holder, target *entity.Entity, id dom
 	var carrier domain.StatusDef
 	var chance, level int32
 	var totalFreezeChance int64
-	holder.Status.Each(func(active domain.Active) {
+	holder.Status.EachEffective(func(active domain.Active) {
 		candidate := active.Def
 		if id == domain.StatusPoison {
 			if candidate.PoisonOnHitChance > chance || candidate.PoisonOnHitChance == chance && candidate.PoisonOnHitProgressionRanks > carrier.PoisonOnHitProgressionRanks {

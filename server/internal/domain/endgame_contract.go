@@ -142,10 +142,13 @@ type EndgameRiftMemberView struct {
 	Claimed  bool   `json:"claimed"`
 }
 type EndgameRiftAuraView struct {
-	OriginalName string   `json:"originalName,omitempty"`
-	EntityID     string   `json:"entityId"`
-	Class        int32    `json:"class"`
-	Affixes      []string `json:"affixes,omitempty"`
+	GoldenUntilMS int64    `json:"goldenUntilMS,omitempty"`
+	CloneOf       string   `json:"cloneOf,omitempty"`
+	AbilityIDs    []int32  `json:"abilityIds,omitempty"`
+	OriginalName  string   `json:"originalName,omitempty"`
+	EntityID      string   `json:"entityId"`
+	Class         int32    `json:"class"`
+	Affixes       []string `json:"affixes,omitempty"`
 }
 type EndgameRiftGlobeView struct {
 	EntityID string `json:"entityId"`
@@ -177,7 +180,49 @@ type EndgameRiftGuardianArrivalView struct {
 	DurationMS   int32  `json:"durationMS"`
 	RemainingMS  int32  `json:"remainingMS"`
 }
+
+// Optional JSON-only v6 extension. No native binary packet layout changes.
+type EndgameRiftHazardView struct {
+	ID            string                `json:"id"`
+	SourceID      string                `json:"sourceId"`
+	AbilityID     int32                 `json:"abilityId"`
+	Mechanism     string                `json:"mechanism"`
+	X             int32                 `json:"x"`
+	Y             int32                 `json:"y"`
+	Radius        int32                 `json:"radius"`
+	Width         int32                 `json:"width,omitempty"`
+	BornMS        int64                 `json:"bornMS"`
+	ExpiresMS     int64                 `json:"expiresMS"`
+	RemainingMS   int32                 `json:"remainingMS"`
+	FirstPulseMS  int64                 `json:"firstPulseMS,omitempty"`
+	PulseMS       int64                 `json:"pulseMS,omitempty"`
+	PropagationMS int64                 `json:"propagationMS,omitempty"`
+	Walls         []EndgameRiftWallView `json:"walls,omitempty"`
+}
+type EndgameRiftWallView struct {
+	ID    string  `json:"id"`
+	X     float64 `json:"x"`
+	Y     float64 `json:"y"`
+	X2    float64 `json:"x2"`
+	Y2    float64 `json:"y2"`
+	Width float64 `json:"width"`
+}
+type EndgameRiftImpactView struct {
+	ID        string `json:"id"`
+	Mechanism string `json:"mechanism"`
+	X         int32  `json:"x"`
+	Y         int32  `json:"y"`
+	Radius    int32  `json:"radius"`
+	AtMS      int64  `json:"atMS"`
+	ExpiresMS int64  `json:"expiresMS"`
+}
 type EndgameRiftView struct {
+	Impacts []EndgameRiftImpactView `json:"impacts,omitempty"`
+
+	MapID       int32                   `json:"mapId,omitempty"`
+	ServerNowMS int64                   `json:"serverNowMS,omitempty"`
+	Hazards     []EndgameRiftHazardView `json:"hazards,omitempty"`
+
 	GuardianArrival  *EndgameRiftGuardianArrivalView `json:"guardianArrival,omitempty"`
 	PendingLoot      int32                           `json:"pendingLoot,omitempty"`
 	Seed             string                          `json:"seed,omitempty"`

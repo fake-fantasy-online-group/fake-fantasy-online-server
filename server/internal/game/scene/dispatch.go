@@ -866,6 +866,11 @@ func (s *Scene) move(cmd MoveTo, checkPortal, force bool) {
 		return // 昏迷/移动锁中不能动；强制传送仍沿用服务端的独立放行路径。
 	}
 	positionChanged := e.Pos.X != cmd.To.X || e.Pos.Y != cmd.To.Y || e.Pos.MapID != cmd.To.MapID
+	if !force && positionChanged && !s.temporaryPathWalkable(e.Pos, cmd.To) {
+		// Correct local prediction before portal evaluation or spending movement credit.
+		s.emitTo(e.ID, event.EntityMoved{ID: e.ID, To: e.Pos, Dir: e.Dir, Snap: true})
+		return
+	}
 	if !force && positionChanged && e.Player != nil {
 		if ok, distance, allowed := s.allowPlayerMove(e, cmd); !ok {
 			// 本人在客户端已经预走，单纯丢包会让画面与权威位置永久分叉。
