@@ -141,6 +141,7 @@ func (s *Scene) completeTrial(p *entity.Entity) {
 		return
 	}
 	p.Player.Bag = planned
+	progress.CompletedOnce = true
 	progress.DailyCompleted++
 	progress.Cycle = (progress.Cycle + 1) % int32(len(r.Multipliers))
 	progress.MonsterLevel = 0
@@ -256,6 +257,9 @@ func (s *Scene) updateTrialClear() {
 			q.State = domain.QuestDeliver
 			ch.Quests[s.trial.Quest] = q
 			ch.Trial.MonsterLevel = s.trialLevel
+			if s.endgameBackend == nil {
+				ch.Trial.CompletedOnce = true
+			}
 			if s.endgameBackend != nil {
 				ch.Trial.KeyReward = 1
 				if s.trialRun != nil {

@@ -45,21 +45,17 @@ func (s *Scene) planEndgameCube(p *entity.Entity, req domain.EndgameRequest, exe
 	return domain.PlanCube(ctx, req, execute)
 }
 
-// Workbench authority comes from the live database NPC placement, dialogue and
-// range. A stale dialogue, copied display name or different map cannot craft.
+// Portable authority is the database-configured bound tool in the live bag.
+// Non-zero NPC context is obsolete and must never authorize this operation.
 func (s *Scene) canUseCubeWorkbench(p *entity.Entity, id domain.EntityID) bool {
-	if p == nil || p.Player == nil || !p.Alive() || id == 0 || s.id.Instance != 0 {
-		return false
-	}
-	npc := s.entities[id]
-	if npc == nil || npc.Kind != domain.KindNPC || npc.NPC == nil || npc.NPC.ConfigID <= 0 || npc.NPC.Script != "Nzhoutianding" || p.Player.QuestNPC != npc.Name || npc.Pos.MapID != s.id.MapID || p.Pos.MapID != s.id.MapID {
-		return false
-	}
-	dx, dy := int64(npc.Pos.X)-int64(p.Pos.X), int64(npc.Pos.Y)-int64(p.Pos.Y)
-	return dx*dx+dy*dy <= 480*480
+	return id == 0 && s.hasCubeTool(p)
 }
 func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil {
+		return
+	}
+	if !s.canUseCubeWorkbench(p, req.NPCEntityID) {
+		s.endgameError(p, req, "tool_required", "请将绑定的周天鼎带在背包中再问鼎")
 		return
 	}
 	state := s.endgamePlayer(p)
@@ -83,7 +79,7 @@ func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 		var choices []domain.EndgameRequest
 		if len(req.CubeInputs) > 0 {
 			if !s.canUseCubeWorkbench(p, req.NPCEntityID) {
-				s.endgameError(p, req, "npc_required", "请在周天鼎旁与它对话后炼化")
+				s.endgameError(p, req, "tool_required", "请将周天鼎带在背包中再问鼎")
 				return
 			}
 			ctx, contextErr := s.endgameCubeContext(p)
@@ -134,7 +130,7 @@ func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 			return
 		}
 		if len(q.choices) > 0 && (req.NPCEntityID != q.request.NPCEntityID || !s.canUseCubeWorkbench(p, req.NPCEntityID)) {
-			s.endgameError(p, req, "npc_required", "已离开周天鼎，请重新对话")
+			s.endgameError(p, req, "tool_required", "请将周天鼎带在背包中再问鼎")
 			return
 		}
 		if req.ExpectedRevision != strconv.FormatInt(q.revision, 10) || state.state.Revision != q.revision {

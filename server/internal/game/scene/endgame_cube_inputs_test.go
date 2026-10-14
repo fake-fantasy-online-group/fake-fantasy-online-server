@@ -20,7 +20,7 @@ func inputCubeNPC(s *Scene) {
 	p.Player.QuestNPC = npc.Name
 }
 func inputCubeQuoteRequest() domain.EndgameRequest {
-	return domain.EndgameRequest{Op: "cube.quote", RequestID: "match-input-0001", ExpectedRevision: "0", NPCEntityID: 77, CubeInputs: []domain.CubeInput{{ItemID: domain.CubeStarMarrow, Count: 30}, {ItemID: domain.CubePurifiedDust, Count: 10}}}
+	return domain.EndgameRequest{Op: "cube.quote", RequestID: "match-input-0001", ExpectedRevision: "0", CubeInputs: []domain.CubeInput{{ItemID: domain.CubeStarMarrow, Count: 30}, {ItemID: domain.CubePurifiedDust, Count: 10}}}
 }
 func inputCubeQuote(t *testing.T, s *Scene, sink *fakeSink) domain.EndgameQuoteView {
 	t.Helper()
@@ -48,7 +48,7 @@ func TestEndgameCubeInputsRandomPoolAtomicRetryAndReconnectReplay(t *testing.T) 
 	}
 	chosen := s.endgamePlayer(p).cube.choices[wantRng.Intn(28)].RecipeID
 	req := cubeExecute(q)
-	req.NPCEntityID = 77
+	req.NPCEntityID = 0
 	s.onEndgame(EndgameRequest{ID: p.ID, Request: req})
 	s.finishEndgame(false)
 	if b.commits != 1 || !reflect.DeepEqual(before, p.Player.Bag) || p.Player.Char.Money != money {
@@ -92,12 +92,18 @@ func TestEndgameCubeInputsRandomPoolAtomicRetryAndReconnectReplay(t *testing.T) 
 }
 func TestEndgameCubeInputsWorkbenchBindingAndNoMatch(t *testing.T) {
 	cases := map[string]func(*Scene){
-		"no NPC":                 func(s *Scene) { delete(s.entities, 77) },
-		"copied name":            func(s *Scene) { s.entities[77].NPC.Script = "N611FY" },
-		"not database placement": func(s *Scene) { s.entities[77].NPC.ConfigID = 0 },
-		"other dialogue":         func(s *Scene) { s.players[1].Player.QuestNPC = "巧匠左慈" },
-		"out of range":           func(s *Scene) { s.players[1].Pos.X += 481 },
-		"other map":              func(s *Scene) { s.players[1].Pos.MapID++ },
+		"no tool": func(s *Scene) { s.players[1].Player.Bag.Set(98, domain.Stack{}) },
+		"unbound tool": func(s *Scene) {
+			st := s.players[1].Player.Bag.At(98)
+			st.Bound = false
+			s.players[1].Player.Bag.Set(98, st)
+		},
+		"unfinished quest": func(s *Scene) { delete(s.players[1].Player.Char.Quests, portableCubeTestQuest) },
+		"locked tool": func(s *Scene) {
+			st := s.players[1].Player.Bag.At(98)
+			st.Locked = true
+			s.players[1].Player.Bag.Set(98, st)
+		},
 	}
 	for name, alter := range cases {
 		t.Run(name, func(t *testing.T) {
@@ -106,7 +112,7 @@ func TestEndgameCubeInputsWorkbenchBindingAndNoMatch(t *testing.T) {
 			alter(s)
 			s.onEndgameCube(s.players[1], inputCubeQuoteRequest())
 			ev, _ := firstOf[event.EndgameMessage](cubeTake(s, sink))
-			if ev.Message.Error != "npc_required" || b.commits != 0 {
+			if ev.Message.Error != "tool_required" || b.commits != 0 {
 				t.Fatalf("unauthorized match accepted: %+v", ev.Message)
 			}
 		})
@@ -114,15 +120,16 @@ func TestEndgameCubeInputsWorkbenchBindingAndNoMatch(t *testing.T) {
 	s, sink, b := cubeSceneFixture(t)
 	inputCubeNPC(s)
 	q := inputCubeQuote(t, s, sink)
-	s.players[1].Pos.X += 481
+	tool := s.players[1].Player.Bag.At(98)
+	s.players[1].Player.Bag.Set(98, domain.Stack{})
 	req := cubeExecute(q)
-	req.NPCEntityID = 77
+	req.NPCEntityID = 0
 	s.onEndgameCube(s.players[1], req)
 	ev, _ := firstOf[event.EndgameMessage](cubeTake(s, sink))
-	if ev.Message.Error != "npc_required" || b.commits != 0 {
-		t.Fatal("stale NPC quote executed")
+	if ev.Message.Error != "tool_required" || b.commits != 0 {
+		t.Fatal("quote executed after tool left the bag")
 	}
-	s.players[1].Pos.X -= 481
+	s.players[1].Player.Bag.Set(98, tool)
 	before := s.players[1].Player.Bag.Clone()
 	r := inputCubeQuoteRequest()
 	r.CubeInputs[0].Count++
@@ -142,7 +149,7 @@ func TestEndgameCubeQuoteBindsImmutableRulesAcrossCachedRetry(t *testing.T) {
 			before := p.Player.Bag.Clone()
 			q := inputCubeQuote(t, s, sink)
 			req := cubeExecute(q)
-			req.NPCEntityID = 77
+			req.NPCEntityID = 0
 			if cached {
 				s.onEndgameCube(p, req)
 				b.result <- domain.EndgameCommitResult{Err: errors.New("rollback")}

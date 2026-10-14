@@ -10,17 +10,19 @@ import (
 // LoadCubeRules reads normalized configuration exactly once at world startup.
 // Missing configuration, unknown operations or dangling references fail closed.
 func LoadCubeRules(ctx context.Context, q Querier, items map[domain.ItemID]domain.ItemDef) (*domain.CubeRuleTable, error) {
-	rows, err := q.Query(ctx, `SELECT id,name,operation,description,target_required,money,source_count,quality_step_bp,material_count,output_count FROM game_cube_recipes ORDER BY id`)
+	rows, err := q.Query(ctx, `SELECT id,name,operation,description,target_required,money,source_count,quality_step_bp,material_count,output_count,enabled FROM game_cube_recipes ORDER BY id`)
 	if err != nil {
 		return nil, fmt.Errorf("load cube recipes: %w", err)
 	}
 	var defs []domain.CubeRecipeDef
 	positions := map[int32]int{}
+	enabled := map[int32]bool{}
 	expectedChildren := map[int32][2]int32{}
 	for rows.Next() {
 		var d domain.CubeRecipeDef
 		var materials, outputs int32
-		if err = rows.Scan(&d.ID, &d.Name, &d.Operation, &d.Description, &d.TargetRequired, &d.Money, &d.SourceCount, &d.QualityStepBP, &materials, &outputs); err != nil {
+		var active bool
+		if err = rows.Scan(&d.ID, &d.Name, &d.Operation, &d.Description, &d.TargetRequired, &d.Money, &d.SourceCount, &d.QualityStepBP, &materials, &outputs, &active); err != nil {
 			rows.Close()
 			return nil, err
 		}
@@ -28,6 +30,7 @@ func LoadCubeRules(ctx context.Context, q Querier, items map[domain.ItemID]domai
 			rows.Close()
 			return nil, fmt.Errorf("duplicate cube recipe %d", d.ID)
 		}
+		enabled[d.ID] = active
 		expectedChildren[d.ID] = [2]int32{materials, outputs}
 		positions[d.ID] = len(defs)
 		defs = append(defs, d)
@@ -105,5 +108,13 @@ func LoadCubeRules(ctx context.Context, q Querier, items map[domain.ItemID]domai
 			}
 		}
 	}
-	return table, nil
+	// Validate every historical row above, then expose only enabled recipes.
+	// Both input matching and legacy recipeId execution use this same snapshot.
+	active := make([]domain.CubeRecipeDef, 0, len(defs))
+	for _, d := range defs {
+		if enabled[d.ID] {
+			active = append(active, d)
+		}
+	}
+	return domain.NewCubeRuleTable(active, items)
 }

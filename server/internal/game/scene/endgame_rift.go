@@ -94,6 +94,9 @@ func (s *Scene) stepEndgameRiftRequests() {
 				s.endgameError(p, x.req, "not_owner", "不在本次洞天名册")
 				continue
 			}
+			if validEndgameRiftQuestRecord(result.Run, d) {
+				s.recordEndgameRiftQuestCompletion(p, d)
+			}
 			_, live := s.router.riftScene(d.Run.RunID)
 			if x.prior {
 				owed := (m.Eligible && !m.Claimed && (d.Run.Phase == domain.RiftCompleted || d.Run.Phase == domain.RiftClosed)) || riftNeedsCompensation(d.Run, live, char)

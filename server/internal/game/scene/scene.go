@@ -211,18 +211,19 @@ type Scene struct {
 	equipment     *equipmentRuntime
 	equipmentSeed uint64
 
-	riftLayouts     []domain.RiftFloorTemplate
-	endgameBackend  domain.EndgameBackend
-	endgamePlayers  map[domain.EntityID]*endgamePlayerState
-	astralRuneRegen map[domain.EntityID]astralRuneRegenClock
-	rift            *endgameRiftState
-	riftRequests    map[domain.EntityID]*endgameRiftRequestState
-	trialRun        *endgameTrialState
-	trial           *domain.TrialRules
-	trialLevel      int32
-	trialCleared    bool
-	dungeonParty    func(domain.CharID) domain.DungeonParty
-	dungeonNotify   func(string, string)
+	riftLayouts         []domain.RiftFloorTemplate
+	endgameBackend      domain.EndgameBackend
+	endgamePlayers      map[domain.EntityID]*endgamePlayerState
+	astralRuneRegen     map[domain.EntityID]astralRuneRegenClock
+	rift                *endgameRiftState
+	riftRequests        map[domain.EntityID]*endgameRiftRequestState
+	riftQuestRecoveries map[domain.EntityID]*endgameRiftQuestRecovery
+	trialRun            *endgameTrialState
+	trial               *domain.TrialRules
+	trialLevel          int32
+	trialCleared        bool
+	dungeonParty        func(domain.CharID) domain.DungeonParty
+	dungeonNotify       func(string, string)
 
 	pickupRange int32
 	id          domain.SceneID

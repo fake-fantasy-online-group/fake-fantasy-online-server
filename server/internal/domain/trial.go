@@ -4,6 +4,7 @@ const TrialRewardVersion = "trial-v5-need-per-anchor-unit"
 
 // TrialProgress is saved with the character, experience and inventory in one transaction.
 type TrialProgress struct {
+	CompletedOnce              bool
 	Day, DailyCompleted, Cycle int32
 	MonsterLevel               int32
 	KeyReward                  int32
@@ -89,4 +90,11 @@ type DungeonParty struct {
 	Leader   CharID
 	MaxLevel int32
 	Members  []string
+}
+
+// HasCompletedTrial accepts only permanent completion or legacy proof of a
+// settled trial. Daily/cycle counters are compatibility evidence, never the
+// durable prerequisite itself; the store promotes them to CompletedOnce.
+func (c *Character) HasCompletedTrial() bool {
+	return c != nil && (c.Trial.CompletedOnce || c.Trial.DailyCompleted > 0 || c.Trial.Cycle > 0)
 }

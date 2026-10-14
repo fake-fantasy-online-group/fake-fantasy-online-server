@@ -5,6 +5,7 @@ import (
 )
 
 func (s *Scene) stepEndgameRift() {
+	s.stepEndgameRiftQuestRecoveries()
 	s.stepEndgameRiftRequests()
 	s.stepEndgameTrial()
 	if s.rift == nil {

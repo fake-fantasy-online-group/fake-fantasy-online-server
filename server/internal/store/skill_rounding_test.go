@@ -29,15 +29,17 @@ func (q *roundingSaveQuery) Exec(_ context.Context, sql string, args ...any) (pg
 type roundingCharRow struct{ raw []byte }
 
 func (r roundingCharRow) Scan(dest ...any) error {
-	// The existing independently encoded status/cooldown columns precede the
-	// appended credit column. All other scalar fields are their zero defaults.
+	// Cooldown/rounding are the final two byte-encoded columns; later scalar
+	// columns must not shift this fixture into writing through the wrong type.
+	var encoded []*[]byte
 	for _, v := range dest {
 		if b, ok := v.(*[]byte); ok {
 			*b = []byte("[]")
+			encoded = append(encoded, b)
 		}
 	}
-	*dest[len(dest)-3].(*[]byte) = []byte("{}")
-	*dest[len(dest)-1].(*[]byte) = r.raw
+	*encoded[len(encoded)-2] = []byte("{}")
+	*encoded[len(encoded)-1] = r.raw
 	return nil
 }
 
@@ -52,10 +54,10 @@ func TestSkillRoundingCharacterSaveLoad(t *testing.T) {
 	if err := saveChar(context.Background(), q, c); err != nil {
 		t.Fatal(err)
 	}
-	if q.calls != 1 || len(q.args) != 60 || !strings.Contains(q.sql, "skill_rounding_credits=$60::jsonb") {
+	if q.calls != 1 || len(q.args) != 61 || !strings.Contains(q.sql, "skill_rounding_credits=$60::jsonb") {
 		t.Fatalf("credit was not persisted atomically with character: calls=%d args=%d", q.calls, len(q.args))
 	}
-	if !strings.HasSuffix(strings.TrimSpace(charCols), "skill_rounding_credits") {
+	if !strings.HasSuffix(strings.TrimSpace(charCols), "skill_rounding_credits, trial_completed_once") {
 		t.Fatal("SELECT order mismatch")
 	}
 	raw := []byte(q.args[59].(string))

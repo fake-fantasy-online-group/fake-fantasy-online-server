@@ -116,7 +116,7 @@ func (s *Scene) stepEndgameTrial() {
 			select {
 			case result := <-x.Saving:
 				x.Saving = nil
-				if result.Err == nil {
+				if result.Err == nil && result.Run != nil && result.Run.RunID == "trial-"+x.Nonce && result.Run.State == "trial.completed" {
 					x.Saved = true
 				} else {
 					x.RetryAfter = now + 1000
@@ -132,6 +132,12 @@ func (s *Scene) stepEndgameTrial() {
 			}
 		}
 	}
+	for _, p := range s.players {
+		nonce := p.Player.Char.Trial.CompletionID
+		if c, ok := x.Completions[nonce]; ok && (nonce != x.Nonce || x.Saved) {
+			s.assignEndgameTrial(p, c)
+		}
+	}
 	for id, recovery := range x.Recoveries {
 		select {
 		case result := <-recovery.load:
@@ -145,7 +151,7 @@ func (s *Scene) stepEndgameTrial() {
 				continue
 			}
 			var c endgameTrialCompletion
-			if json.Unmarshal([]byte(result.Run.Payload), &c) == nil && (c.Version == 1 || c.Version == 2) && c.Kind == "trial" && c.Nonce == recovery.nonce {
+			if result.Run.State == "trial.completed" && json.Unmarshal([]byte(result.Run.Payload), &c) == nil && (c.Version == 1 || c.Version == 2) && c.Kind == "trial" && c.Nonce == recovery.nonce {
 				c.StorageRevision = result.Run.Revision
 				x.Completions[c.Nonce] = c
 				x.RecoveryChecked[id] = recovery.nonce
@@ -212,22 +218,33 @@ func (s *Scene) finishEndgameTrialKeys() {
 	s.stepEndgameTrial()
 }
 func (s *Scene) assignEndgameTrial(p *entity.Entity, c endgameTrialCompletion) {
-	if s.trial == nil {
+	if s.trial == nil || endgameEconomicBusy(p) {
 		return
 	}
 	ch := p.Player.Char
-	q := ch.Quests[s.trial.Quest]
+	q, accepted := ch.Quests[s.trial.Quest]
 	n, ok := c.Keys[domain.CharID(ch.ID)]
-	if !ok || q.State != domain.QuestActive || ch.Trial.CompletionID != c.Nonce {
+	_, granted := c.Grants[domain.CharID(ch.ID)]
+	if !ok || n <= 0 || (c.Version >= 2 && !granted) || ch.Trial.CompletionID != c.Nonce {
 		return
 	}
-	q.State = domain.QuestDeliver
-	ch.Quests[s.trial.Quest] = q
-	ch.Trial.MonsterLevel = c.MonsterLevel
-	ch.Trial.KeyReward = n
-	p.Player.MarkDirty()
-	s.pushQuestLog(p)
-	s.trialNotice(p, "试炼完成奖励已恢复，请回试炼小仙领取。")
+	changed := !ch.Trial.CompletedOnce
+	ch.Trial.CompletedOnce = true
+	if accepted && q.State == domain.QuestActive {
+		q.State = domain.QuestDeliver
+		ch.Quests[s.trial.Quest] = q
+		ch.Trial.MonsterLevel = c.MonsterLevel
+		ch.Trial.KeyReward = n
+		changed = true
+		s.pushQuestLog(p)
+		s.trialNotice(p, "试炼完成奖励已恢复，请回试炼小仙领取。")
+	}
+	if changed {
+		p.Player.MarkDirty()
+		if s.saver != nil {
+			s.saver.Save(s.snapshotOf(p).Clone())
+		}
+	}
 }
 func (s *Scene) recoverEndgameTrial(p *entity.Entity) {
 	if s.endgameBackend == nil || s.trial == nil {
@@ -239,6 +256,9 @@ func (s *Scene) recoverEndgameTrial(p *entity.Entity) {
 	}
 	x := s.trialState()
 	if c, ok := x.Completions[ch.Trial.CompletionID]; ok {
+		if x.Nonce == c.Nonce && !x.Saved {
+			return
+		}
 		s.assignEndgameTrial(p, c)
 		return
 	}

@@ -130,11 +130,11 @@ func endgameDecimal(s string, zero bool) bool {
 	return e == nil && (n > 0 || zero && n == 0) && strconv.FormatInt(n, 10) == s
 }
 func validEndgameRequest(v domain.EndgameRequest) bool {
-	if v.NPCEntityID != 0 && v.Op != "rift.start" && v.Op != "cube.quote" && v.Op != "cube.execute" {
+	if v.NPCEntityID != 0 && v.Op != "rift.start" && v.Op != "cube.quote" && v.Op != "cube.execute" && v.Op != "cube.recover" {
 		return false
 	}
 	switch v.Op {
-	case "skill.ranks", "skill.upgrade", "hello", "snapshot", "catalog", "socket.insert", "socket.remove", "cube.quote", "cube.execute", "rift.start", "rift.state", "rift.claim", "rift.leave", "rift.advance":
+	case "skill.ranks", "skill.upgrade", "hello", "snapshot", "catalog", "socket.insert", "socket.remove", "cube.quote", "cube.execute", "cube.recover", "rift.start", "rift.state", "rift.claim", "rift.leave", "rift.advance":
 	default:
 		return false
 	}

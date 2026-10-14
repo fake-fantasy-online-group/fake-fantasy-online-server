@@ -66,7 +66,7 @@ func TestEndgameCubeFullGridAtomicRetryAndReceiptReplay(t *testing.T) {
 		t.Fatal("full grid preview consumed inputs or lost random pool")
 	}
 	req := cubeExecute(q)
-	req.NPCEntityID = 77
+	req.NPCEntityID = 0
 	s.onEndgame(EndgameRequest{ID: p.ID, Request: req})
 	s.finishEndgame(false)
 	if b.commits != 1 || !reflect.DeepEqual(before, p.Player.Bag) || p.Player.Char.Money != money {
@@ -135,7 +135,7 @@ func TestEndgameCubeFullGridInvalidatesMovedOrChangedInputs(t *testing.T) {
 			}
 			before, money := p.Player.Bag.Clone(), p.Player.Char.Money
 			req := cubeExecute(q)
-			req.NPCEntityID = 77
+			req.NPCEntityID = 0
 			s.onEndgameCube(p, req)
 			ev, _ := firstOf[event.EndgameMessage](cubeTake(s, sink))
 			if ev.Message.Error != "stale_revision" || b.commits != 0 || !reflect.DeepEqual(before, p.Player.Bag) || p.Player.Char.Money != money {

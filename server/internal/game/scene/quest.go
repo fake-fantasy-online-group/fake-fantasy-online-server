@@ -83,6 +83,10 @@ func (s *Scene) onAcceptQuest(cmd AcceptQuest) {
 	if ch.Quests == nil {
 		ch.Quests = domain.QuestLog{}
 	}
+	if def.RequireTrialCompletion && !ch.HasCompletedTrial() {
+		reject(event.RejectQuestNotDone)
+		return
+	}
 	if why := ch.Quests.CanAccept(def, ch.Level, npc); why != domain.AcceptOK {
 		reject(acceptReject(why))
 		return
@@ -96,7 +100,7 @@ func (s *Scene) onAcceptQuest(cmd AcceptQuest) {
 		reject(event.RejectBagFull)
 		return
 	}
-	ch.Quests.Accept(def)
+	ch.Quests.AcceptAt(def, s.now().UnixMilli())
 	if changed {
 		p.Player.Bag = planned
 		s.pushInventory(p)
@@ -163,6 +167,10 @@ func (s *Scene) onCompleteQuest(cmd CompleteQuest) {
 	}
 	if !ch.AllowsCareerQuest(def.ID) {
 		reject(event.RejectWrongProf)
+		return
+	}
+	if def.RecoveryItem != 0 {
+		s.completeCubeToolQuest(p, def, reject)
 		return
 	}
 	if def.Exchange != nil {

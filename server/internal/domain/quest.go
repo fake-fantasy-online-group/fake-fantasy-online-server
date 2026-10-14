@@ -163,14 +163,15 @@ type QuestEquipmentReward struct {
 type QuestStepKind string
 
 const (
-	QuestStepUnknown   QuestStepKind = "unknown"
-	QuestStepObjective QuestStepKind = "objective"
-	QuestStepTalk      QuestStepKind = "talk"
-	QuestStepKill      QuestStepKind = "kill"
-	QuestStepCollect   QuestStepKind = "collect"
-	QuestStepDeliver   QuestStepKind = "deliver"
-	QuestStepExchange  QuestStepKind = "exchange"
-	QuestStepTurnIn    QuestStepKind = "turnin"
+	QuestStepUnknown      QuestStepKind = "unknown"
+	QuestStepObjective    QuestStepKind = "objective"
+	QuestStepTalk         QuestStepKind = "talk"
+	QuestStepKill         QuestStepKind = "kill"
+	QuestStepCollect      QuestStepKind = "collect"
+	QuestStepDeliver      QuestStepKind = "deliver"
+	QuestStepExchange     QuestStepKind = "exchange"
+	QuestStepTurnIn       QuestStepKind = "turnin"
+	QuestStepRiftComplete QuestStepKind = "rift_complete"
 )
 
 // QuestItemGoal 是一步里要检查、扣除或给予的物品。
@@ -244,7 +245,7 @@ func (s QuestStep) DropRule(monster MonsterID) (QuestDropRule, bool) {
 func (s QuestStep) Known() bool {
 	switch s.Kind {
 	case QuestStepObjective, QuestStepTalk, QuestStepKill, QuestStepCollect,
-		QuestStepDeliver, QuestStepExchange, QuestStepTurnIn:
+		QuestStepDeliver, QuestStepExchange, QuestStepTurnIn, QuestStepRiftComplete:
 		return true
 	default:
 		return false
@@ -283,6 +284,11 @@ type QuestDef struct {
 	AcceptGive []QuestItemGoal
 	Steps      []QuestStep
 
+	// RequireTrialCompletion gates acceptance on a permanent, verified trial clear.
+	RequireTrialCompletion bool
+	RecoveryItem           ItemID
+	RecoveryLore           string
+
 	Repeatable bool
 	Reward     QuestReward
 	// 使用 Character.Race（建角路线），不使用就职前统一为初行者的 ClientRace。
@@ -315,7 +321,11 @@ func (t QuestTable) ByNPC(npc string) []QuestDef {
 
 // QuestEntry 是一个任务在角色身上的进度。
 type QuestEntry struct {
-	State QuestState
+	// AcceptedAtMS is the server acceptance time; zero cannot earn event credit.
+	AcceptedAtMS int64
+	// RiftCompletionRunID identifies one durable eligible completion after acceptance.
+	RiftCompletionRunID string
+	State               QuestState
 	// Progress 是当前步骤下标。旧实现从未推进这个字段，已有存档均为 0，
 	// 因此可以无损升级为步骤游标。
 	Progress int32
@@ -393,7 +403,41 @@ func (l QuestLog) CanAccept(d QuestDef, level int32, npc string) AcceptReject {
 
 // Accept 把任务记进任务本。调用方先用 CanAccept 校验。
 func (l QuestLog) Accept(d QuestDef) {
-	l[d.ID] = QuestEntry{State: QuestActive, Kills: map[MonsterID]int32{}}
+	l.AcceptAt(d, 0)
+}
+
+// AcceptAt freezes the server-side acceptance boundary. Reaccepting an abandoned
+// quest clears the earlier completion, so an old run cannot satisfy a new quest.
+func (l QuestLog) AcceptAt(d QuestDef, acceptedAtMS int64) {
+	l[d.ID] = QuestEntry{State: QuestActive, Kills: map[MonsterID]int32{}, AcceptedAtMS: acceptedAtMS}
+}
+
+// RecordRiftCompletion consumes only an already verified durable eligible grant.
+// The caller owns run persistence and recipient checks; this method owns the
+// quest acceptance boundary and never advances a quest's NPC turn-in step.
+func (l QuestLog) RecordRiftCompletion(all QuestTable, runID string, completedAtMS int64) []QuestID {
+	if runID == "" || completedAtMS <= 0 {
+		return nil
+	}
+	var changed []QuestID
+	for id, entry := range l {
+		if entry.State == QuestFinished || entry.AcceptedAtMS <= 0 || completedAtMS <= entry.AcceptedAtMS || entry.RiftCompletionRunID != "" {
+			continue
+		}
+		def, ok := all[id]
+		if !ok {
+			continue
+		}
+		step, ok := l.CurrentStep(def)
+		if !ok || step.Kind != QuestStepRiftComplete {
+			continue
+		}
+		entry.RiftCompletionRunID = runID
+		l[id] = entry
+		changed = append(changed, id)
+	}
+	sort.Slice(changed, func(i, j int) bool { return changed[i] < changed[j] })
+	return changed
 }
 
 // Deliverable 报告这个任务现在能不能交。
@@ -464,6 +508,8 @@ func (l QuestLog) DeliverableAt(d QuestDef, npc string, itemCount func(ItemID) i
 	// kill/collect/objective 没有任何可判定目标通常意味着数据残缺；不能降级成
 	// “对话即完成”。talk/deliver/turnin 则允许没有数值目标。
 	switch step.Kind {
+	case QuestStepRiftComplete:
+		return e.RiftCompletionRunID != ""
 	case QuestStepKill:
 		return len(step.Kill) > 0
 	case QuestStepCollect:
@@ -622,8 +668,22 @@ func OffersOf(all QuestTable, npc string, ch *Character, bagCount func(ItemID) i
 			if ch.Quests.DeliverableAt(d, npc, bagCount) {
 				st = OfferReady
 			}
-			out = append(out, offerOf(d, st))
-		case d.NPC == npc && ch.AllowsCareerQuest(d.ID) && ch.Quests.CanAccept(d, ch.Level, npc) == AcceptOK:
+			offer := offerOf(d, st)
+			// Persistent-tool quests carry authored handover dialogue in the
+			// existing step record. Do not repeat the publisher's introduction
+			// when the player reaches the recipient.
+			if d.RecoveryItem != 0 {
+				if step, ok := ch.Quests.CurrentStep(d); ok {
+					if step.Text != "" {
+						offer.Desc = step.Text
+					}
+					if st == OfferReady && step.Say != "" {
+						offer.Desc = step.Say
+					}
+				}
+			}
+			out = append(out, offer)
+		case d.NPC == npc && (!d.RequireTrialCompletion || ch.HasCompletedTrial()) && ch.AllowsCareerQuest(d.ID) && ch.Quests.CanAccept(d, ch.Level, npc) == AcceptOK:
 			out = append(out, offerOf(d, OfferAvailable))
 		}
 	}
@@ -715,6 +775,14 @@ func activeQuestOf(d QuestDef, e QuestEntry, log QuestLog, itemCount func(ItemID
 				countOf(itemCount, item.Item)))
 		}
 		q.Progress = strings.Join(progress, "\n")
+		return q
+	}
+	if step.Kind == QuestStepRiftComplete {
+		have := 0
+		if e.RiftCompletionRunID != "" {
+			have = 1
+		}
+		q.Progress = fmt.Sprintf("完整通关演劫洞天 %d/1次", have)
 		return q
 	}
 	progress := make([]string, 0, len(step.RequiredItems())+len(step.Kill))

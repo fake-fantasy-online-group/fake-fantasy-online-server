@@ -46,7 +46,7 @@ type EndgameRequest struct {
 
 func (r EndgameRequest) Mutates() bool {
 	switch r.Op {
-	case "skill.upgrade", "socket.insert", "socket.remove", "cube.execute", "rift.start", "rift.claim", "rift.leave", "rift.advance":
+	case "skill.upgrade", "socket.insert", "socket.remove", "cube.execute", "cube.recover", "rift.start", "rift.claim", "rift.leave", "rift.advance":
 		return true
 	}
 	return false

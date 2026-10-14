@@ -792,7 +792,7 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 		       COALESCE(c.self_use, 0), COALESCE(c.other_use, 0), COALESCE(c.use_waste, 0),
 		       COALESCE(c.weight, 0), COALESCE(c.can_mail,0), COALESCE(c.can_deal,0),
 		       COALESCE(d.desc_, ''), COALESCE(d.small_map, 0),
-		       COALESCE(cd.cool_time, 0), COALESCE(cd.item_type, 0)
+		       COALESCE(cd.cool_time, 0), COALESCE(cd.item_type, 0), i.use_action
 		  FROM game_items i
 		  LEFT JOIN gamedata.ov_item c ON c.index = i.id
 		  LEFT JOIN gamedata.ov_itemcool cd ON cd.item_index = i.id
@@ -812,7 +812,7 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 		if err := rows.Scan(&d.ID, &d.Name, &d.Level, &d.Price, &sellEnabled,
 			&d.UseLevel, &pile, &physicalSocketCard, &category,
 			&selfUse, &otherUse, &useWaste, &d.Weight, &canMail, &canTrade, &d.Description, &d.Icon,
-			&cooldownSec, &cooldownGroup); err != nil {
+			&cooldownSec, &cooldownGroup, &d.UseAction); err != nil {
 			rows.Close()
 			return nil, fmt.Errorf("data: 读 game_items 行: %w", err)
 		}
@@ -4491,7 +4491,7 @@ func knownAttr(a int32) bool {
 // 奖励数值根据任务奖励展示文本整理；无法确认的奖励不应猜测填入。
 func LoadQuests(ctx context.Context, q Querier) (domain.QuestTable, error) {
 	rows, err := q.Query(ctx, `
-		SELECT t.id, t.name, t.npc, t.map, t.level_min, t.level_max,
+		SELECT t.id, t.name, t.npc, t.map, t.level_min, t.level_max, t.requires_trial_completion, t.recovery_item, t.recovery_lore,
 		       ARRAY(SELECT p.prerequisite_task_id
 		               FROM game_task_prerequisites p
 		              WHERE p.task_id = t.id
@@ -4524,7 +4524,7 @@ func LoadQuests(ctx context.Context, q Querier) (domain.QuestTable, error) {
 		var d domain.QuestDef
 		var goalItem int32
 		var prerequisites, itemIDs, itemQty, monsterIDs, monsterQty []int32
-		if err := rows.Scan(&d.ID, &d.Name, &d.NPC, &d.Map, &d.LevelMin, &d.LevelMax,
+		if err := rows.Scan(&d.ID, &d.Name, &d.NPC, &d.Map, &d.LevelMin, &d.LevelMax, &d.RequireTrialCompletion, &d.RecoveryItem, &d.RecoveryLore,
 			&prerequisites, &goalItem, &d.GoalQty, &d.Repeatable, &d.Desc, &d.RewardText,
 			&d.Reward.Exp, &d.Reward.Honor,
 			&d.Reward.Money.Gold, &d.Reward.Money.Silver, &d.Reward.Money.Copper,

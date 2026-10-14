@@ -107,7 +107,7 @@ func (p *Postgres) LoadQuests(ctx context.Context, charID int64) (domain.QuestLo
 }
 func loadQuests(ctx context.Context, q querier, charID int64) (domain.QuestLog, error) {
 	rows, err := q.Query(ctx,
-		`SELECT task_id, state, progress FROM character_quests WHERE char_id = $1`, charID)
+		`SELECT task_id, state, progress, accepted_at_ms, rift_completion_run_id FROM character_quests WHERE char_id = $1`, charID)
 	if err != nil {
 		return nil, fmt.Errorf("store: 查任务本: %w", err)
 	}
@@ -116,11 +116,13 @@ func loadQuests(ctx context.Context, q querier, charID int64) (domain.QuestLog, 
 	out := domain.QuestLog{}
 	for rows.Next() {
 		var id, state, progress int32
-		if err := rows.Scan(&id, &state, &progress); err != nil {
+		var acceptedAtMS int64
+		var riftCompletionRunID string
+		if err := rows.Scan(&id, &state, &progress, &acceptedAtMS, &riftCompletionRunID); err != nil {
 			return nil, fmt.Errorf("store: 读任务行: %w", err)
 		}
 		out[domain.QuestID(id)] = domain.QuestEntry{
-			State: domain.QuestState(state), Progress: progress}
+			State: domain.QuestState(state), Progress: progress, AcceptedAtMS: acceptedAtMS, RiftCompletionRunID: riftCompletionRunID}
 	}
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("store: 遍历任务本: %w", err)
@@ -172,13 +174,13 @@ func saveQuests(ctx context.Context, tx pgx.Tx, charID int64, l domain.QuestLog)
 	var rows [][]any
 	for _, id := range ids {
 		e := l[id]
-		rows = append(rows, []any{charID, int32(id), int32(e.State), e.Progress})
+		rows = append(rows, []any{charID, int32(id), int32(e.State), e.Progress, e.AcceptedAtMS, e.RiftCompletionRunID})
 	}
 	if len(rows) == 0 {
 		return nil
 	}
 	_, err := tx.CopyFrom(ctx, pgx.Identifier{"character_quests"},
-		[]string{"char_id", "task_id", "state", "progress"}, pgx.CopyFromRows(rows))
+		[]string{"char_id", "task_id", "state", "progress", "accepted_at_ms", "rift_completion_run_id"}, pgx.CopyFromRows(rows))
 	if err != nil {
 		return fmt.Errorf("store: 写任务本: %w", err)
 	}
@@ -641,7 +643,7 @@ func loadWarehouse(ctx context.Context, q querier, charID int64, rule domain.War
 // 增量更新要跟踪每一格的变化, 那套簿记出一次错就是刷物品漏洞;
 // 一个角色最多几十格, 整包重写的代价完全可以接受。
 func (p *Postgres) SaveSnapshot(ctx context.Context, snap domain.Snapshot) error {
-	if err := validateEndgameSnapshot(snap,p.endgameCatalog); err != nil {
+	if err := validateEndgameSnapshot(snap, p.endgameCatalog); err != nil {
 		return err
 	}
 	if err := validatePetItems(snap); err != nil {
@@ -838,7 +840,7 @@ func saveTitles(ctx context.Context, tx pgx.Tx, charID int64, titles []string) e
 }
 
 func (t *pgTx) SaveSnapshot(ctx context.Context, snap domain.Snapshot) error {
-	if err := validateEndgameSnapshot(snap,t.endgameCatalog); err != nil {
+	if err := validateEndgameSnapshot(snap, t.endgameCatalog); err != nil {
 		return err
 	}
 	if err := validatePetItems(snap); err != nil {

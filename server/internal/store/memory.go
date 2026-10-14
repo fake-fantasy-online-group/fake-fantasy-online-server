@@ -470,6 +470,7 @@ func (m *Memory) saveSnapshotLocked(snap domain.Snapshot) error {
 		return err
 	}
 	cloned := snap.Clone()
+	cloned.Char.Trial.CompletedOnce = snap.Char.HasCompletedTrial() || m.chars[snap.Char.ID].HasCompletedTrial()
 	if a := m.accByID[snap.Char.AccountID]; a != nil {
 		a.Caiyu = snap.Char.Caiyu
 		cloned.Char.Caiyu = 0
@@ -554,6 +555,7 @@ func (m *Memory) SaveChar(_ context.Context, c *domain.Character) error {
 		return domain.ErrCharNotFound
 	}
 	cp := *c
+	cp.Trial.CompletedOnce = c.HasCompletedTrial() || m.chars[c.ID].HasCompletedTrial()
 	m.chars[c.ID] = &cp
 	return nil
 }
@@ -735,6 +737,7 @@ func (t *txView) SaveChar(_ context.Context, c *domain.Character) error {
 		return domain.ErrCharNotFound
 	}
 	cp := *c
+	cp.Trial.CompletedOnce = c.HasCompletedTrial() || t.m.chars[c.ID].HasCompletedTrial()
 	t.m.chars[c.ID] = &cp
 	return nil
 }

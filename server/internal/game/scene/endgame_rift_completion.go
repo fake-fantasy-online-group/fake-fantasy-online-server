@@ -153,6 +153,11 @@ func (s *Scene) syncEndgameRiftCompletion() {
 	if x.data.Run.Phase != domain.RiftCompleted && x.data.Run.Phase != domain.RiftClosed {
 		return
 	}
+	// Quest credit projects the persisted completion, independently of inventory
+	// space, ground pickup, timely bonus or whether rewards were already claimed.
+	for _, p := range s.players {
+		s.recordEndgameRiftQuestCompletion(p, x.data)
+	}
 	layout := s.cachedEndgameRiftCompletionLayout()
 	npcPos, npcOK, positions := layout.NPC, layout.NPCReady, layout.Positions
 	if x.exitNPC == 0 && npcOK {

@@ -280,3 +280,85 @@ func TestCubeSnapshotMaterialBoundsFailAtStartup(t *testing.T) {
 		t.Fatal("65 material entries reached runtime instead of failing startup")
 	}
 }
+
+// Historical mechanics remain testable, but a disabled DB identity is absent
+// from the runtime snapshot shared by both native inputs and agent requests.
+func TestCubeRetiredRecipesRejectInputsAndLegacyIDs(t *testing.T) {
+	retired := map[int32]bool{1007: true, 1008: true, 1009: true, 1012: true}
+	for id := range retired {
+		t.Run(strconv.Itoa(int(id)), func(t *testing.T) {
+			ctx, legacy := cubeInputs(id)
+			inputs := inputSelection(ctx, legacy)
+			var active []CubeRecipeDef
+			for _, r := range ctx.Rules.Recipes() {
+				if !retired[r.ID] {
+					active = append(active, r)
+				}
+			}
+			var err error
+			ctx.Rules, err = NewCubeRuleTable(active, ctx.Items)
+			if err != nil {
+				t.Fatal(err)
+			}
+			before := ctx.Bag.Clone()
+			ctx.Intn = func(int) int { t.Fatal("disabled recipe rolled RNG"); return 0 }
+			ctx.NewUID = func() int64 { t.Fatal("disabled recipe allocated UID"); return 0 }
+			for _, execute := range []bool{false, true} {
+				if _, err = PlanCube(ctx, legacy, execute); CubeErrorCode(err) != "not_found" {
+					t.Fatalf("legacy accepted: %v", err)
+				}
+			}
+			matches, _, err := MatchCubeInputs(ctx, inputs)
+			if err == nil || len(matches) != 0 {
+				t.Fatalf("retired inputs matched: %+v %v", matches, err)
+			}
+			if !reflect.DeepEqual(before, ctx.Bag) {
+				t.Fatal("retired request mutated saved equipment")
+			}
+		})
+	}
+}
+
+func TestCubeRemaining62RecipesStillMatchAndExecute(t *testing.T) {
+	retired := map[int32]bool{1007: true, 1008: true, 1009: true, 1012: true}
+	count := 0
+	for _, recipe := range cubeFixture().Rules.Recipes() {
+		if retired[recipe.ID] {
+			continue
+		}
+		count++
+		t.Run(strconv.Itoa(int(recipe.ID)), func(t *testing.T) {
+			ctx, legacy := cubeInputs(recipe.ID)
+			var active []CubeRecipeDef
+			for _, r := range ctx.Rules.Recipes() {
+				if !retired[r.ID] {
+					active = append(active, r)
+				}
+			}
+			var err error
+			ctx.Rules, err = NewCubeRuleTable(active, ctx.Items)
+			if err != nil {
+				t.Fatal(err)
+			}
+			matches, _, err := MatchCubeInputs(ctx, inputSelection(ctx, legacy))
+			if err != nil {
+				t.Fatal(err)
+			}
+			found := false
+			for _, m := range matches {
+				if m.RecipeID == recipe.ID {
+					found = true
+				}
+			}
+			if !found {
+				t.Fatal("remaining recipe not matched")
+			}
+			if _, err := PlanCube(ctx, legacy, true); err != nil {
+				t.Fatal(err)
+			}
+		})
+	}
+	if count != 62 {
+		t.Fatalf("remaining count=%d", count)
+	}
+}

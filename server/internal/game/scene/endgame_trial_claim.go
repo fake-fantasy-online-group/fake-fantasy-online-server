@@ -86,6 +86,7 @@ func (s *Scene) completeEndgameTrial(p *entity.Entity) {
 		s.trialNotice(p, "请腾出洞天符钥所需的背包空间。")
 		return
 	}
+	progress.CompletedOnce = true
 	progress.DailyCompleted++
 	progress.Cycle = (progress.Cycle + 1) % int32(len(r.Multipliers))
 	progress.MonsterLevel = 0

@@ -84,7 +84,7 @@ func cubeDataFixture(t *testing.T) (*cubeConfigQuery, map[domain.ItemID]domain.I
 	}
 	q := &cubeConfigQuery{head: &cubeConfigRows{}, materials: &cubeConfigRows{}, outputs: &cubeConfigRows{}}
 	for _, d := range defs {
-		q.head.records = append(q.head.records, []any{d.ID, d.Name, d.Operation, d.Description, d.TargetRequired, d.Money, d.SourceCount, d.QualityStepBP, int32(len(d.Materials)), int32(len(d.Outputs))})
+		q.head.records = append(q.head.records, []any{d.ID, d.Name, d.Operation, d.Description, d.TargetRequired, d.Money, d.SourceCount, d.QualityStepBP, int32(len(d.Materials)), int32(len(d.Outputs)), true})
 		for i, m := range d.Materials {
 			q.materials.records = append(q.materials.records, []any{d.ID, int32(i + 1), m.ItemID, m.Count})
 		}
@@ -128,6 +128,10 @@ func TestLoadCubeRulesFailsClosedOnCorruptSQL(t *testing.T) {
 			q.head.records = q.head.records[:len(q.head.records)-1]
 		},
 		"unknown operation": func(q *cubeConfigQuery, _ map[domain.ItemID]domain.ItemDef) { q.head.records[0][2] = "eval" },
+		"disabled corrupt recipe": func(q *cubeConfigQuery, _ map[domain.ItemID]domain.ItemDef) {
+			q.head.records[0][10] = false
+			q.head.records[0][2] = "eval"
+		},
 		"dangling material": func(q *cubeConfigQuery, _ map[domain.ItemID]domain.ItemDef) {
 			q.materials.records[0][2] = domain.ItemID(1999999999)
 		},
@@ -184,7 +188,7 @@ func TestCubeActualPostgresLoader(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(rules.Recipes()) != 66 {
+	if len(rules.Recipes()) != 62 {
 		t.Fatalf("got %d recipes", len(rules.Recipes()))
 	}
 	var seed []domain.CubeRecipeDef
@@ -193,6 +197,12 @@ func TestCubeActualPostgresLoader(t *testing.T) {
 	}
 	for _, want := range seed {
 		got, ok := rules.Recipe(want.ID)
+		if want.ID == 1007 || want.ID == 1008 || want.ID == 1009 || want.ID == 1012 {
+			if ok {
+				t.Fatalf("disabled recipe %d loaded", want.ID)
+			}
+			continue
+		}
 		if len(want.Materials) == 0 {
 			want.Materials = nil
 		}
@@ -203,5 +213,52 @@ func TestCubeActualPostgresLoader(t *testing.T) {
 			t.Fatalf("SQL recipe %d differs from migration", want.ID)
 		}
 	}
-	t.Logf("Actual LoadItems -> LoadCubeRules: %d items, 66 recipes; all definitions exactly match SQL61", len(items))
+	t.Logf("Actual LoadItems -> LoadCubeRules: %d items, 62 active recipes; definitions match SQL61 after SQL83 disable", len(items))
+}
+
+// Disabled configuration stays validated and preserved, but cannot be reached by
+// the legacy recipeId protocol, catalog, or the input-matching agent interface.
+func TestLoadCubeRulesDisabledRecipesCannotExecute(t *testing.T) {
+	q, items, defs := cubeDataFixture(t)
+	disabled := map[int32]bool{1007: true, 1008: true, 1009: true, 1012: true}
+	for _, row := range q.head.records {
+		if disabled[row[0].(int32)] {
+			row[10] = false
+		}
+	}
+	rules, err := LoadCubeRules(context.Background(), q, items)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(rules.Recipes()) != 62 {
+		t.Fatalf("active recipes = %d", len(rules.Recipes()))
+	}
+	operations := map[string]bool{}
+	for _, d := range defs {
+		got, ok := rules.Recipe(d.ID)
+		if disabled[d.ID] {
+			if ok {
+				t.Fatalf("disabled recipe %d exposed", d.ID)
+			}
+			for _, execute := range []bool{false, true} {
+				_, err := domain.PlanCube(domain.CubeContext{Rules: rules}, domain.EndgameRequest{RecipeID: d.ID}, execute)
+				if domain.CubeErrorCode(err) != "not_found" {
+					t.Fatalf("disabled recipe %d executed: %v", d.ID, err)
+				}
+			}
+		} else {
+			if !ok || got.Name != d.Name {
+				t.Fatalf("remaining recipe %d missing", d.ID)
+			}
+			operations[got.Operation] = true
+		}
+	}
+	if len(operations) != 8 {
+		t.Fatalf("operations = %d", len(operations))
+	}
+	for _, v := range domain.CubeRecipes(rules, items) {
+		if disabled[v.ID] {
+			t.Fatal("disabled recipe in catalog")
+		}
+	}
 }

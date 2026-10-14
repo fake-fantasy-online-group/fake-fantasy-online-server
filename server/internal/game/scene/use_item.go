@@ -63,6 +63,12 @@ func (s *Scene) onUseItem(cmd UseItem) {
 		reject(event.RejectInvalid)
 		return
 	}
+	if def.UseAction == "cube" {
+		if !s.hasCubeTool(p) {
+			reject(event.RejectInvalid)
+		}
+		return // client opens the existing panel; a persistent tool is never consumed
+	}
 	if def.PetCarrierSpecies > 0 {
 		s.usePetCarrier(p, stack)
 		return

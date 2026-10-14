@@ -47,6 +47,9 @@ func (s *Scene) endgameReply(p *entity.Entity, r domain.EndgameResponse) {
 	}
 	s.replyNativeAstralInlay(p, r)
 	s.emitTo(p.ID, event.EndgameMessage{Who: p.ID, Message: r})
+	if (r.Kind == "cube.claim" || r.Kind == "cube.recover") && r.Message != "" {
+		s.trialNotice(p, r.Message)
+	}
 }
 func (s *Scene) endgameError(p *entity.Entity, r domain.EndgameRequest, code, message string) {
 	s.endgameReply(p, domain.EndgameResponse{Kind: r.Op, RequestID: r.RequestID, Error: code, Message: message})
@@ -199,7 +202,7 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 				}
 			}
 		}
-		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: caps, CatalogVersion: domain.UniqueCatalogVersion, RiftEntrances: entrances})
+		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: caps, CatalogVersion: domain.UniqueCatalogVersion, RiftEntrances: entrances, Result: s.cubeToolConfiguration()})
 		s.sendRiftSceneContext(p)
 		s.sendEndgameSnapshot(p)
 		if growth {
@@ -215,6 +218,8 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 		s.sendEndgameCatalog(p, r)
 	case r.Op == "socket.insert" || r.Op == "socket.remove":
 		s.onEndgameSocket(p, r)
+	case r.Op == "cube.recover":
+		s.recoverCubeTool(p, r)
 	case strings.HasPrefix(r.Op, "cube."):
 		s.onEndgameCube(p, r)
 	case strings.HasPrefix(r.Op, "rift."):

@@ -1,7 +1,6 @@
 package scene
+
 import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
-
 
 import (
 	"encoding/json"
@@ -61,6 +60,7 @@ func cubeSceneFixture(t *testing.T) (*Scene, *fakeSink, *cubeTestBackend) {
 	sink := join(t, s, 1, 100, "甲", 100, 100)
 	p := s.players[1]
 	p.Player.Bag = domain.NewBag(domain.DefaultBagSlots)
+	configureCubeToolFixture(s, p)
 	p.Player.Char.Money = moneyFromInventory(500000)
 	p.Player.Bag.Set(100, domain.Stack{Item: domain.CubeStarMarrow, Count: 500, Bound: true})
 	p.Player.Bag.Set(101, domain.Stack{Item: domain.CubePurifiedDust, Count: 500, Bound: true})

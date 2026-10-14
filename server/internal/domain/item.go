@@ -167,6 +167,7 @@ type EquipAppearance struct {
 
 // ItemDef 是一种物品的模板。
 type ItemDef struct {
+	UseAction          string          // database-configured persistent tool action
 	EndgameCatalog     *EndgameCatalog `json:"-"` // immutable startup dependency, never instance state
 	PetCarrierSpecies  PetID
 	HornTier, HornSkin uint8 // PostgreSQL game_horn_items
