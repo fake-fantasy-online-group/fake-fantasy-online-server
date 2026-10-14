@@ -1,0 +1,24 @@
+{
+  "engine": "PostgreSQL 18.6 (PGlite 0.5.9) on wasm32-unknown-emscripten, compiled by emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.74 (1092ec30a3fb1d46b1782ff1b4db5094d3d06ae5), 32-bit",
+  "sourceHashes": {
+    "gamedata_ov_arm": "d39e476a525905b838c5fc9331fd4700f9d79e4e6be3c4718d13f0b4a55340f5",
+    "game_equipment": "935f6d6025b454bdcc324ed04a3a2b98b0abbe5645b08b59c3382af7cf7c3f55",
+    "game_monsters": "a1f9568094bc204d4cdb69550e8adb7cb9c86ddbf70b5bb65818606662a42041",
+    "game_monster_drops": "20070a63a0a9bacec701a754a44534d3d02899b27723f89ef6807ed7e4a470ed",
+    "map_monster_spawns": "ec9103fc58297be81bb5915ded83b4249644be93077c2a5607c4ef5e348a8e80"
+  },
+  "migrationSHA256": "afe1ee113370f4866b2d460efcf80a41bac3c3a91d28abd75e25525c3c78a795",
+  "bands": 60,
+  "items": 318,
+  "checks": [
+    "activation7",
+    "history1–6 unchanged",
+    "pool source equality",
+    "idempotent replay",
+    "production loader queries",
+    "immutable guards",
+    "inactive5 rejection",
+    "empty pool failure",
+    "monotonic later selector"
+  ]
+}

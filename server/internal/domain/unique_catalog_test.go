@@ -60,7 +60,7 @@ func TestUniqueApplicationPreservesAllLegacyState(t *testing.T) {
 	d := UniqueCatalog(testEndgameCatalog())[0]
 	def := uniqueFixture(d)
 	st := Stack{UID: 77, Item: d.BaseID, Count: 1, InstanceKind: ItemInstanceEquipment, Durability: 70, MaxDurability: 100, DurabilityWearRaw: 12,
-		RefineLevel: 3, RolledAffixCount: 2, RolledAffixes: [5]InstanceAffix{{Affix: Affix{Attr: AttrAtk, Value: 37, Mode: ModePercent}}, {Affix: Affix{Attr: AttrMaxAtk, Value: 57, Mode: ModeAbsolute}}}, SocketCount: 1, Sockets: [5]ItemID{123}, SocketUIDs: [5]int64{987}, Bound: true, Locked: true, FusedSoul: 5, WashCount: 1}
+		RefineLevel: 3, RolledAffixCount: 2, RolledAffixes: [5]InstanceAffix{{Affix: Affix{Attr: AttrAtk, Value: 37, Mode: ModePercent}}, {Affix: Affix{Attr: AttrMaxAtk, Value: 57, Mode: ModeAbsolute}}}, Bound: true, Locked: true, FusedSoul: 5, WashCount: 1}
 	before := st
 	if !ApplyUnique(&st, def, func(n int) int { return n - 1 }) || st.Endgame.UniqueRollBP != 12000 || st.Endgame.UniqueID != d.ID {
 		t.Fatal(st)

@@ -1,0 +1,29 @@
+{
+  "cases": 40050,
+  "failures": [],
+  "minOrdinary": 3,
+  "minGuaranteedUnique": 3,
+  "wearerLevels": [
+    12,
+    100
+  ],
+  "partyMaxLevels": "wearerLevel through100 inclusive",
+  "jobs": [
+    "warrior",
+    "swordman",
+    "stabber",
+    "druggist",
+    "magician"
+  ],
+  "sexes": [
+    1,
+    2
+  ],
+  "bands": 60,
+  "sourceMonsterLevels": [
+    4,
+    63
+  ],
+  "normalPoolItems": 318,
+  "guaranteedUniqueIntersection": 259
+}

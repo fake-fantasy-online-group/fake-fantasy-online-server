@@ -112,6 +112,8 @@ type EquipDef struct {
 	// 对应的客户端展示名。真正穿戴判定使用 Need.Professions，
 	// 这份文本列表只用于 Item.desc 工具提示。
 	ProfessionNames []string
+	// AscensionOnly preserves original sr_* gates separately from the merged wearer mask.
+	AscensionOnly bool
 
 	// Appearance 是普通装备对 0x800a 基础外观(ap*)的贡献。它来自 ov_desc.avatar，
 	// 不是 0x8006 的 avatar 字段：原服抓包里初行者装/小剑无论在背包还是已穿戴，

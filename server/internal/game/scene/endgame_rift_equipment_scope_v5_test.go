@@ -1,85 +1,55 @@
 package scene
 
-import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+	catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
 	"testing"
 )
 
-func TestV5RiftOrdinaryHighLevelPoolIsNotUniqueWhitelist(t *testing.T) {
-	for _, hasUnique := range []bool{false, true} {
-		t.Run(map[bool]string{false: "ordinary_fallback_no_unique", true: "guaranteed_slot_and_ordinary_slot"}[hasUnique], func(t *testing.T) {
-			s, b, now := riftFixture(t)
-			activateTestRift(t, s, b, *now)
-			for _, u := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
-				delete(s.items, u.BaseID)
+// Old rule snapshots retain their source-selection policy, but newly generated
+// rewards obey the current preascension ceiling and unique socket restriction.
+func TestV5RiftPendingLegacyRunExcludesAscensionAndOver60(t *testing.T) {
+	s, b, now := riftFixture(t)
+	activateTestRift(t, s, b, *now)
+	for id, d := range s.items {
+		if d.Equip != nil {
+			delete(s.items, id)
+		}
+	}
+	add := func(id domain.ItemID, lv int32, ascended bool) {
+		s.items[id] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{NativeDropEligible: true, LevelReq: lv, AscensionOnly: ascended, Need: domain.Requirement{Professions: 1, ProfessionRestricted: true}}}
+	}
+	add(1610, 54, false)
+	add(15036, 66, false)
+	add(15037, 60, true)
+	r := s.rift.data.Run
+	r.Tier = 10
+	r.Timely = true
+	r.Rules.NormalBossEquipment = 10
+	for char, m := range r.Members {
+		m.Level = 100
+		m.Eligible = true
+		r.Members[char] = m
+		s.rift.data.Profiles[char] = endgameRiftIdentity{Race: domain.Warrior, Gender: 1, Employed: true}
+	}
+	s.generateEndgameRiftGrants()
+	for _, grant := range s.rift.data.Grants {
+		count := 0
+		for _, st := range grant.Items {
+			if st.InstanceKind != domain.ItemInstanceEquipment {
+				continue
 			}
-			//15036 is original66-level火纹金戟, a native-drop base outside259.
-			id := domain.ItemID(15036)
-			if _, ok := domain.UniqueForBase(id, catalogfixture.EndgameCatalog()); ok {
-				t.Fatal("ordinary test base unexpectedly promoted")
+			count++
+			if st.Item != 1610 {
+				t.Fatal("pending legacy run emitted prohibited equipment", st.Item)
 			}
-			def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Name: "火纹金戟", InventoryTab: 2, InventoryTabKnown: true, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{NativeDropEligible: true, Slot: 13, LevelReq: 66, ResourceLevel: 11, Type: 1, Durable: 100, Need: domain.Requirement{Level: 66, Professions: 1, ProfessionRestricted: true}}}
-			if !domain.NativeEquipmentDropEligible(def) {
-				t.Fatal("original ordinary type pool lost66-level base")
+			if st.Endgame.UniqueID != 0 && st.SocketCount != 0 {
+				t.Fatal("new unique contains sockets")
 			}
-			s.items[id] = def
-			blocked := def
-			blocked.ID = 15037
-			copyEquip := *def.Equip
-			copyEquip.NoTypeDrop = true
-			copyEquip.LevelReq = 70
-			blocked.Equip = &copyEquip
-			s.items[blocked.ID] = blocked
-			// Ineligible high-level unique candidates must not win either wearer filter.
-			addUnique := func(id domain.ItemID, level int32, professions, sex uint8) {
-				u := def
-				u.ID = id
-				e := *def.Equip
-				e.LevelReq = level
-				e.Need = domain.Requirement{Level: level, Professions: professions, ProfessionRestricted: true, Sex: sex}
-				u.Equip = &e
-				s.items[id] = u
-			}
-			addUnique(2053, 59, 2, 0) // Swordman's head is invalid for this warrior.
-			addUnique(2902, 48, 1, 2) // Female clothing is invalid for this male wearer.
-			if hasUnique {
-				addUnique(1610, 54, 1, 0)
-				addUnique(1609, 48, 1, 0)
-			}
-			s.equipmentRoll = domain.EquipmentRollTable{Counts: map[domain.ColorProfile][]domain.WeightedAffixCount{domain.DefaultColorProfile: {{Count: 1, Weight: 1}}}, Options: map[domain.EquipmentRollKey][]domain.EquipmentRollOption{{Level: 11, Type: 1}: {{CardID: 1, Affix: domain.Affix{Attr: domain.AttrMaxHP, Value: 100}, Weight: 1}}}}
-			s.rift.data.Run.Tier = 10
-			s.rift.data.Run.Timely = true
-			for char, m := range s.rift.data.Run.Members {
-				m.Level = 100
-				m.Eligible = true
-				s.rift.data.Run.Members[char] = m
-				s.rift.data.Profiles[char] = endgameRiftIdentity{Race: domain.Warrior, Gender: 1, Employed: true}
-			}
-			s.generateEndgameRiftGrants()
-			if len(s.rift.data.Grants) != 1 {
-				t.Fatal("missing reward grant")
-			}
-			for _, grant := range s.rift.data.Grants {
-				count := 0
-				for _, item := range grant.Items {
-					if item.InstanceKind != domain.ItemInstanceEquipment {
-						continue
-					}
-					count++
-					if hasUnique && count == 1 {
-						if item.Item != 1610 || item.Endgame.UniqueID != 1610 || item.Endgame.UniqueContentVersion != domain.UniqueContentVersion {
-							t.Fatal("guaranteed slot failed legal259 highest-base selection", item)
-						}
-					} else if item.Item != id || item.Endgame.UniqueID != 0 || item.Endgame.UniqueContentVersion != 0 {
-						t.Fatal("ordinary high-level pool clipped or illegally promoted", item)
-					}
-				}
-				if count != int(domain.PlanRiftRewards(10, true, riftRulesFixture()).Equipment) {
-					t.Fatal("equipment count changed", count)
-				}
-			}
-		})
+		}
+		plan := domain.PlanRiftRewards(r.Tier, r.Timely, r.Rules)
+		if count != int(plan.Equipment+plan.NormalBossEquipment) {
+			t.Fatal("reward count changed", count)
+		}
 	}
 }

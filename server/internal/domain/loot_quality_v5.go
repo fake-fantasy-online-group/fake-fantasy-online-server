@@ -118,6 +118,11 @@ func (t EquipmentRollTable) RollWithMagicFindV5(def ItemDef, profile ColorProfil
 	if budget == 0 {
 		return nil
 	}
+	count := t.rollColorCountV5(profile, magicFind, countRNG)
+	return t.rollAffixOptions(def, uint8(min(int(count), budget)), valueRNG)
+}
+
+func (t EquipmentRollTable) rollColorCountV5(profile ColorProfile, magicFind int64, countRNG func(int64) int64) uint8 {
 	counts := t.CountsFor(profile)
 	var count uint8
 	if magicFind <= 0 {
@@ -125,11 +130,11 @@ func (t EquipmentRollTable) RollWithMagicFindV5(def ItemDef, profile ColorProfil
 	} else {
 		probabilities, err := NaturalAffixProbabilitiesV5(counts, magicFind)
 		if err != nil {
-			return nil // invalid tables are rejected at startup
+			return 0 // invalid tables are rejected at startup
 		}
 		roll := countRNG(LootProbabilityScaleV5)
 		if roll < 0 || roll >= LootProbabilityScaleV5 {
-			return nil
+			return 0
 		}
 		for n, weight := range probabilities {
 			if roll < weight {
@@ -139,5 +144,5 @@ func (t EquipmentRollTable) RollWithMagicFindV5(def ItemDef, profile ColorProfil
 			roll -= weight
 		}
 	}
-	return t.rollAffixOptions(def, uint8(min(int(count), budget)), valueRNG)
+	return count
 }

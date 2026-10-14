@@ -45,7 +45,8 @@ type RiftAbilityRule struct {
 	DamagePct                   int32
 }
 type RiftRules struct {
-	Elite *RiftEliteRules `json:",omitempty"`
+	EquipmentPools []RiftEquipmentPool `json:",omitempty"`
+	Elite          *RiftEliteRules     `json:",omitempty"`
 	// Zero keeps historical immediate guardians; v5 freezes a five-second arrival.
 	GuardianArrivalMS int64 `json:",omitempty"`
 	// New runs freeze reward level at guardian death; old runs keep admission level.
@@ -91,6 +92,13 @@ func (t *RiftRuleTable) Entrances() []EndgameRiftEntranceView {
 }
 
 func cloneRiftRules(r RiftRules) RiftRules {
+	if r.EquipmentPools != nil {
+		r.EquipmentPools = append([]RiftEquipmentPool{}, r.EquipmentPools...)
+		for i := range r.EquipmentPools {
+			r.EquipmentPools[i].Items = append([]ItemID(nil), r.EquipmentPools[i].Items...)
+			r.EquipmentPools[i].SourceMonsters = append([]MonsterID(nil), r.EquipmentPools[i].SourceMonsters...)
+		}
+	}
 	if r.Elite != nil {
 		e := *r.Elite
 		e.Guardians = append([]RiftGuardianRule(nil), e.Guardians...)
@@ -157,6 +165,9 @@ func (r *RiftRules) Validate() error {
 			}
 		}
 	}
+	if err := r.validateEquipmentPools(nil); err != nil {
+		return err
+	}
 	return r.validateWire()
 }
 func NewRiftRuleTable(active int32, rows []RiftRules, loot *LootRuleTable, items map[ItemID]ItemDef, entrances ...EndgameRiftEntranceView) (*RiftRuleTable, error) {
@@ -183,6 +194,9 @@ func NewRiftRuleTable(active int32, rows []RiftRules, loot *LootRuleTable, items
 			return nil, fmt.Errorf("missing loot version %d", r.LootVersion)
 		}
 		if err := r.Validate(); err != nil {
+			return nil, err
+		}
+		if err := r.validateEquipmentPools(items); err != nil {
 			return nil, err
 		}
 		d, ok := items[r.DustItem]

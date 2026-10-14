@@ -971,6 +971,8 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 				magician != 0 || srMagician != 0,
 			),
 		}
+		e.AscensionOnly = newbie == 0 && warrior == 0 && swordman == 0 && stabber == 0 && druggist == 0 && magician == 0 &&
+			(srWarrior != 0 || srSwordman != 0 || srStabber != 0 || srDruggist != 0 || srMagician != 0)
 		e.ProfessionNames = professionNames(newbie, warrior, swordman, stabber, druggist, magician,
 			srWarrior, srSwordman, srStabber, srDruggist, srMagician)
 		d.Level = e.LevelReq

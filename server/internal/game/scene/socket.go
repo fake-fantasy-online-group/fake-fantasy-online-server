@@ -65,6 +65,11 @@ func (s *Scene) socketInfo(p *entity.Entity, ref socketTargetRef) event.SocketIn
 			}
 		}
 	}
+	if st.Endgame.UniqueID != 0 {
+		info.MaxHoles = 0
+		info.Reason = "暗金装备不能打孔"
+		return info
+	}
 	if st.SocketCount >= info.MaxHoles {
 		info.Reason = "已达到最大孔数"
 		return info

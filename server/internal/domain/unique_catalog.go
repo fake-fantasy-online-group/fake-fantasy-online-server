@@ -120,10 +120,15 @@ func ApplyUnique(st *Stack, def ItemDef, intn func(int) int) bool {
 	if _, ok := UniqueForBase(st.Item, def.EndgameCatalog); !ok {
 		return false
 	}
+	// Promotion must never destroy owned socket cards.
+	if !CanPromoteSocketlessUnique(*st) {
+		return false
+	}
 	roll := intn(int(UniqueRollMaxBP - UniqueRollMinBP + 1))
 	if roll < 0 || roll > int(UniqueRollMaxBP-UniqueRollMinBP) {
 		return false
 	}
+	st.SocketCount = 0
 	st.Endgame.UniqueContentVersion = UniqueContentVersion
 	st.Endgame.UniqueID = int32(st.Item)
 	st.Endgame.UniqueRollBP = UniqueRollMinBP + int32(roll)
@@ -220,4 +225,10 @@ func uniqueV5PersonalDefense(d UniqueDefinition) UniqueDefinition {
 		d.Tradeoff = "不再向队友或宠物提供团队光环；旧版其它属性、代价及本件白字范围保持原样。"
 	}
 	return d
+}
+
+// CanPromoteSocketlessUnique rejects all stored socket content, including stale
+// entries outside SocketCount. Empty holes may be removed by explicit promotion.
+func CanPromoteSocketlessUnique(st Stack) bool {
+	return st.Sockets == [5]ItemID{} && st.SocketUIDs == [5]int64{} && st.SocketCards == [5]CardInstanceState{}
 }

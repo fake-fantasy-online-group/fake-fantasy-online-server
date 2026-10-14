@@ -60,6 +60,13 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 	}
 	r := d.Run
 	plan := domain.PlanRiftRewards(r.Tier, r.Timely, r.Rules)
+	// Encounter base level uses the highest frozen admission level, as native rift spawns do.
+	poolLevel := int32(0)
+	for _, member := range r.Members {
+		if member.Level > poolLevel {
+			poolLevel = member.Level
+		}
+	}
 	chars := make([]domain.CharID, 0, len(r.Members))
 	for char := range r.Members {
 		chars = append(chars, char)
@@ -81,7 +88,10 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 		identity := d.Profiles[char]
 		character := &domain.Character{Race: identity.Race, Employed: identity.Employed, EmploymentKnown: true}
 		for id, def := range s.items {
-			if def.Equip == nil || def.Equip.LevelReq > m.Level {
+			if r.Rules.EquipmentPools != nil {
+				break
+			}
+			if def.Equip == nil || def.Equip.LevelReq > m.Level || def.Equip.LevelReq > 60 || def.Equip.AscensionOnly {
 				continue
 			}
 			if !domain.NativeEquipmentDropEligible(def) {
@@ -117,6 +127,24 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 				equipment = append(equipment, id)
 			}
 		}
+		if r.Rules.EquipmentPools != nil {
+			equipment = r.Rules.EquipmentPoolForLevel(poolLevel, func(id domain.ItemID) bool {
+				def, ok := s.items[id]
+				if !ok || def.Equip == nil || def.Equip.LevelReq > m.Level || def.Equip.LevelReq > 60 || def.Equip.AscensionOnly {
+					return false
+				}
+				sex := uint8(2)
+				if identity.Gender == 1 {
+					sex = 1
+				}
+				return def.Equip.Need.AllowsCharacter(character) && (def.Equip.Need.Sex == 0 || def.Equip.Need.Sex == sex)
+			})
+			for _, id := range equipment {
+				if unique, ok := domain.UniqueForBase(id, s.endgameCatalog); ok && unique.NativeDropEligible && domain.NativeEquipmentDropEligible(s.items[id]) {
+					guaranteedUniques = append(guaranteedUniques, id)
+				}
+			}
+		}
 		sort.Slice(equipment, func(i, j int) bool { return equipment[i] < equipment[j] })
 		sort.Slice(guaranteedUniques, func(i, j int) bool { return guaranteedUniques[i] < guaranteedUniques[j] })
 		for i := int32(0); i < plan.Equipment && len(equipment) > 0; i++ {
@@ -129,12 +157,15 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			def := s.items[candidates[rng.Intn(len(candidates))]]
 			stack := domain.NewStack(def, 1)
 			stack.Bound = true
-			stack.SocketCount = domain.RollDroppedSocketCount(def, domain.AstralDropRealm, rng.Int63n, r.Rules.Loot)
-			affixes := s.equipmentRoll.RollWithReservedSockets(def, domain.DefaultColorProfile, stack.SocketCount, rng.Int63n)
-			stack.RolledAffixCount = uint8(len(affixes))
-			copy(stack.RolledAffixes[:], affixes)
-			if (r.Tier >= r.Rules.GuaranteedUniqueTier && i == 0) || rng.Intn(100) < int(plan.UniqueChance) {
-				domain.ApplyUnique(&stack, def, rng.Intn)
+			// Explicit named native equipment keeps its original fixed properties.
+			if domain.NativeEquipmentDropEligible(def) {
+				sockets, affixes := s.equipmentRoll.RollColorFirstEquipment(def, domain.DefaultColorProfile, 0, r.Rules.Loot, rng.Int63n, rng.Int63n, rng.Int63n)
+				stack.SocketCount = sockets
+				stack.RolledAffixCount = uint8(len(affixes))
+				copy(stack.RolledAffixes[:], affixes)
+				if (r.Tier >= r.Rules.GuaranteedUniqueTier && i == 0) || rng.Intn(100) < int(plan.UniqueChance) {
+					domain.ApplyUnique(&stack, def, rng.Intn)
+				}
 			}
 			grant.Items = append(grant.Items, stack)
 		}
@@ -209,7 +240,8 @@ func (s *Scene) rollEndgameRiftNormalBossEquipment(char domain.CharID, ordinal i
 	def := s.items[pool[item.Intn(len(pool))]]
 	stack := domain.NewStack(def, 1)
 	stack.Bound = true
-	stack.SocketCount = domain.RollDroppedSocketCount(def, domain.AstralDropBoss, sockets.Int63n, r.Rules.Loot)
-	s.rollNaturalEquipmentQualityV5(def, &stack, domain.DefaultColorProfile, true, magicFind, r.Rules.Loot, &quality, &values, &unique, &variables)
+	if domain.NativeEquipmentDropEligible(def) {
+		s.rollNaturalEquipmentQualityV5(def, &stack, domain.DefaultColorProfile, true, magicFind, r.Rules.Loot, &quality, &values, &unique, &variables, &sockets)
+	}
 	return stack
 }

@@ -199,6 +199,7 @@ func TestAstralDroppedHolesReserveAttributeBudget(t *testing.T) {
 	s.equipmentRoll = domain.EquipmentRollTable{Counts: map[domain.ColorProfile][]domain.WeightedAffixCount{1: {{Count: 5, Weight: 1}}}, Options: map[domain.EquipmentRollKey][]domain.EquipmentRollOption{{}: {{Affix: domain.Affix{Attr: domain.AttrSTR, Value: 2}, Weight: 1}, {Affix: domain.Affix{Attr: domain.AttrINT, Value: 2}, Weight: 1}, {Affix: domain.Affix{Attr: domain.AttrVIT, Value: 2}, Weight: 1}, {Affix: domain.Affix{Attr: domain.AttrAGI, Value: 2}, Weight: 1}, {Affix: domain.Affix{Attr: domain.AttrDEX, Value: 2}, Weight: 1}}}}
 	s.entities[mid].Monster.Kind = domain.MonsterBoss
 	for i := 0; i < 100; i++ {
+		s.tick = domain.Tick(i) // Distinct death events have independent purpose streams.
 		s.rollLoot(s.entities[mid], 0)
 	}
 	seen := map[int64]bool{}

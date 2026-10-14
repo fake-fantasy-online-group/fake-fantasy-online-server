@@ -143,7 +143,7 @@ func TestMagicFindV5UniqueEligibilityThresholdAndVariableIsolation(t *testing.T)
 			if ok != (draw < threshold) || variableCalls != boolInt(ok) {
 				t.Fatal("chance threshold/variable calls", mf, draw, ok, variableCalls)
 			}
-			if ok && st.Endgame.UniqueRollBP != UniqueRollMinBP+1234 || st.SocketCount != 2 || st.RolledAffixCount != 1 || st.RolledAffixes[0] != newStack().RolledAffixes[0] {
+			if ok && st.Endgame.UniqueRollBP != UniqueRollMinBP+1234 || st.SocketCount != uint8(2*(1-boolInt(ok))) || st.RolledAffixCount != 1 || st.RolledAffixes[0] != newStack().RolledAffixes[0] {
 				t.Fatal("unique mutated its existing natural layer", st)
 			}
 		}

@@ -157,7 +157,7 @@ func TestRiftNormalBossMFIsPersonalFrozenAndQualityOnly(t *testing.T) {
 		t.Fatal("gear swap rerolled grants")
 	}
 	// Deliberately choose one legal native base; MF changes natural quality only,
-	// while boss-grade sockets and item selection are on independent streams.
+	// while item selection stays independent. Socket probabilities depend on rolled color.
 	var base domain.ItemID
 	for id, def := range s.items {
 		if def.Equip != nil && domain.NativeEquipmentDropEligible(def) {
@@ -172,8 +172,11 @@ func TestRiftNormalBossMFIsPersonalFrozenAndQualityOnly(t *testing.T) {
 	for i := int32(0); i < 2000; i++ {
 		a := s.rollEndgameRiftNormalBossEquipment(100, i, []domain.ItemID{base}, 0)
 		z := s.rollEndgameRiftNormalBossEquipment(100, i, []domain.ItemID{base}, 800)
-		if a.Item != z.Item || a.SocketCount != z.SocketCount {
-			t.Fatal("MF changed quantity/base/socket stream")
+		if a.Item != z.Item {
+			t.Fatal("MF changed quantity/base stream")
+		}
+		if (a.Endgame.UniqueID != 0 && a.SocketCount != 0) || (z.Endgame.UniqueID != 0 && z.SocketCount != 0) {
+			t.Fatal("new unique retained sockets")
 		}
 		beforeAffixes += int(a.RolledAffixCount)
 		afterAffixes += int(z.RolledAffixCount)

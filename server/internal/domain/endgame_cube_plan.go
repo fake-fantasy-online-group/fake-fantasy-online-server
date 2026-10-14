@@ -285,6 +285,9 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 			}
 		}
 	case "socket.open":
+		if target.Endgame.UniqueID != 0 {
+			return p, cubeError("requirements", "暗金装备不能打孔")
+		}
 		capacity := min(5, EquipmentSocketCapacity(def, target))
 		if target.SocketCount != 0 || capacity < 1 {
 			return p, cubeError("requirements", "随机开窍仅限有剩余属性容量的无孔装备；已有孔不可重开")
@@ -378,6 +381,9 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 	case "unique.awaken":
 		if named, ok := UniqueForBase(target.Item, ctx.Catalog); ok {
 			p.Description += " 本次唤醒：" + named.Name + "。"
+		}
+		if !CanPromoteSocketlessUnique(target) {
+			return p, cubeError("requirements", "暗金装备不能带孔，请先取回全部孔内卡再唤醒")
 		}
 		if !eligible() || target.Endgame.UniqueID != 0 {
 			return p, cubeError("requirements", "请选择尚未唤醒的可染色装备")

@@ -152,6 +152,12 @@ func TestCubeUniqueMutationPreservesInstance(t *testing.T) {
 		ctx, req := cubeInputs(id)
 		cubeInstall(&ctx, FirstAstralRune, FirstAstralRune+5)
 		before := ctx.Bag.At(200)
+		if id == CubeAwakenUnique {
+			if _, err := PlanCube(ctx, req, true); CubeErrorCode(err) != "requirements" || ctx.Bag.At(200) != before {
+				t.Fatal("promotion must preserve owned cards and fail safely", err)
+			}
+			continue
+		}
 		plan, err := PlanCube(ctx, req, true)
 		if err != nil {
 			t.Fatal(err)

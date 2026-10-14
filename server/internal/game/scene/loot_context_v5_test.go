@@ -1,7 +1,6 @@
 package scene
+
 import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
-
 
 import (
 	"reflect"
@@ -212,7 +211,7 @@ func TestLootContextV5FreezesBeforeKillLevelUp(t *testing.T) {
 	}
 }
 
-func TestLootV5MFDoesNotChangeItemsSocketsRunesOrBossGuarantee(t *testing.T) {
+func TestLootV5MFDoesNotChangeItemsRunesOrBossGuarantee(t *testing.T) {
 	makeScene := func() (*Scene, domain.EntityID) {
 		s, mid := lootScene(t, []domain.DropEntry{
 			{Item: 999001, RatePct: 100, RollAffixes: true},
@@ -246,13 +245,13 @@ func TestLootV5MFDoesNotChangeItemsSocketsRunesOrBossGuarantee(t *testing.T) {
 			t.Fatal("MF changed count or boss guarantee", len(x), len(y))
 		}
 		for j := range x {
-			if x[j].Item != y[j].Item || x[j].Count != y[j].Count || x[j].SocketCount != y[j].SocketCount {
-				t.Fatal("MF changed item/socket/rune stream", i, x[j], y[j])
+			if x[j].Item != y[j].Item || x[j].Count != y[j].Count {
+				t.Fatal("MF changed item/rune stream", i, x[j], y[j])
 			}
 			if x[j].Item >= domain.FirstAstralRune && x[j].Item <= domain.LastAstralRune {
 				sawRune = true
 			}
-			if x[j].RolledAffixCount != y[j].RolledAffixCount {
+			if x[j].RolledAffixCount+x[j].SocketCount != y[j].RolledAffixCount+y[j].SocketCount {
 				changed = true
 			}
 			if j < 2 && x[j].Item == 999002 && (x[j].RolledAffixCount != 0 || y[j].RolledAffixCount != 0) {
@@ -331,5 +330,59 @@ func TestLootV5RNGDomainsAndPickupDoNotReroll(t *testing.T) {
 		if !found {
 			t.Fatal("pickup/gear swap changed the frozen instance")
 		}
+	}
+}
+
+func TestNaturalColorFirstDropsKeepRolledBudgetAndUniqueZeroSockets(t *testing.T) {
+	s, mid := lootScene(t, []domain.DropEntry{{Item: 999002, RatePct: 100, RollAffixes: true}})
+	def := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 999002, InstanceKind: domain.ItemInstanceEquipment, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon), LevelReq: 100}}
+	s.items[def.ID] = def
+	s.equipmentRoll = magicFindRollTableV5()
+	s.equipmentRoll.Counts[1] = []domain.WeightedAffixCount{{Count: 4, Weight: 100}}
+	seen := map[uint8]bool{}
+	for i := 0; i < 400; i++ {
+		s.tick = domain.Tick(i)
+		st := domain.NewStack(def, 1)
+		s.rollNaturalEquipmentV5(def, &st, s.entities[mid], 0, 1, true, domain.LootContextV5{MagicFind: 800})
+		if int(st.SocketCount)+int(st.RolledAffixCount) != 4 {
+			t.Fatal("natural color changed", st)
+		}
+		seen[st.SocketCount] = true
+	}
+	if len(seen) != 5 {
+		t.Fatal("not all split outcomes exercised", seen)
+	}
+	for _, u := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
+		if !u.NativeDropEligible {
+			continue
+		}
+		def.ID = u.BaseID
+		def.Equip.Slot = u.Slot
+		st := domain.NewStack(def, 1)
+		st.SocketCount = 4
+		if !domain.RollNaturalUniqueWithMagicFindV5(&st, def, 800, func(int64) int64 { return 0 }, func(int) int { return 0 }, s.lootRules.Active()) || st.SocketCount != 0 {
+			t.Fatal("natural dark gold has sockets", st)
+		}
+		return
+	}
+	t.Fatal("no natural unique fixture")
+}
+
+func TestUniqueNativeDrillGuardPreservesHistoricalSockets(t *testing.T) {
+	s, _ := lootScene(t, nil)
+	join(t, s, 1, 100, "owner", 100, 100)
+	p := s.players[1]
+	def := domain.ItemDef{ID: 999002, InstanceKind: domain.ItemInstanceEquipment, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon)}}
+	s.items[def.ID] = def
+	st := domain.NewStack(def, 1)
+	st.Endgame.UniqueID = int32(st.Item)
+	st.SocketCount = 1
+	p.Player.Bag.Set(200, st)
+	info := s.socketInfo(p, socketTargetRef{kind: 0, tab: 2, bagSlot: 200})
+	if info.CanDrill || info.MaxHoles != 0 {
+		t.Fatal("unique can be drilled", info)
+	}
+	if p.Player.Bag.At(200) != st {
+		t.Fatal("inspecting existing unique changed player state")
 	}
 }
