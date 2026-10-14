@@ -98,7 +98,7 @@ func main() {
 	log.Printf("下发内容: %s", raw)
 	server := &http.Server{
 		Addr:              *addr,
-		Handler:           requestLog(mux),
+		Handler:           requestLog(mobileDispatchBoundary(mux)),
 		ReadHeaderTimeout: 5 * time.Second,
 		IdleTimeout:       60 * time.Second,
 	}
