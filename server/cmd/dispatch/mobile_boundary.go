@@ -10,7 +10,7 @@ func mobileDispatchBoundary(next http.Handler) http.Handler {
 			next.ServeHTTP(w, r)
 			return
 		}
-		if r.URL.Path == "/dispatch.json" {
+		if r.URL.Path == "/dispatch.json" || r.URL.Path == "/download/" || r.URL.Path == "/download/client.apk" {
 			if r.Method == http.MethodGet || r.Method == http.MethodHead {
 				next.ServeHTTP(w, r)
 				return

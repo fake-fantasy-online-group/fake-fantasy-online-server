@@ -26,12 +26,13 @@ type srv struct {
 }
 
 var (
-	addr = flag.String("addr", ":8088", "监听地址")
-	host = flag.String("game-host", "127.0.0.1", "下发给客户端的游戏服地址")
-	port = flag.Int("game-port", 19000, "下发给客户端的游戏服端口")
-	name = flag.String("name", "怀旧一区", "服务器名")
-	zone = flag.String("zone", "龙城", "分区名")
-	dsn  = flag.String("dsn", defaultDSN(), "幻想数据库使用的 PostgreSQL DSN")
+	apkPath = flag.String("apk", os.Getenv("MOBILE_APK_PATH"), "供 /download/ 下载的单个 APK 文件路径（默认 MOBILE_APK_PATH）")
+	addr    = flag.String("addr", ":8088", "监听地址")
+	host    = flag.String("game-host", "127.0.0.1", "下发给客户端的游戏服地址")
+	port    = flag.Int("game-port", 19000, "下发给客户端的游戏服端口")
+	name    = flag.String("name", "怀旧一区", "服务器名")
+	zone    = flag.String("zone", "龙城", "分区名")
+	dsn     = flag.String("dsn", defaultDSN(), "幻想数据库使用的 PostgreSQL DSN")
 )
 
 func main() {
@@ -72,6 +73,7 @@ func main() {
 	}
 	mux := http.NewServeMux()
 	mux.HandleFunc("/dispatch.json", dispatchHandler)
+	mux.Handle("/download/", mobileDownloadHandler(*apkPath))
 	mux.HandleFunc("/api/catalog/items", catalog.itemsHandler)
 	mux.HandleFunc("/api/catalog/meta", catalog.metaHandler)
 	mux.HandleFunc("/api/catalog/entries", catalog.entriesHandler)
