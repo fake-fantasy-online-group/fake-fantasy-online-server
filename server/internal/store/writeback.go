@@ -52,6 +52,7 @@ type WriteBack struct {
 // 若期间出现更新版本，则 waiter 转移到更新版本，绝不能因合并而丢失。
 type writeBackEntry struct {
 	snap       domain.Snapshot
+	mergeOwned bool // Deep-cloned by coalescing and not yet exposed to a writer.
 	waiters    []chan struct{}
 	mutation   SnapshotMutation
 	mutationCh chan error
@@ -59,11 +60,12 @@ type writeBackEntry struct {
 }
 
 type writeBackPair struct {
-	snaps    [2]domain.Snapshot
-	waiters  [2][]chan struct{}
-	mutation PairSnapshotMutation
-	result   chan error
-	inflight bool
+	snaps      [2]domain.Snapshot
+	mergeOwned [2]bool
+	waiters    [2][]chan struct{}
+	mutation   PairSnapshotMutation
+	result     chan error
+	inflight   bool
 }
 
 // SnapshotMutation 在写回队列的角色顺序线上提交一次“角色快照 + 外部物权”事务。
@@ -141,7 +143,7 @@ func (w *WriteBack) CommitMutation(s domain.Snapshot, mutation SnapshotMutation)
 			close(result)
 			return result
 		}
-		queued.snap = domain.MergeSnapshots(queued.snap, s)
+		queued.snap = mergePendingSnapshot(queued.snap, s, &queued.mergeOwned)
 		queued.mutation = mutation
 		queued.mutationCh = result
 	} else {
@@ -203,6 +205,27 @@ func (w *WriteBack) CommitPairMutation(a, b domain.Snapshot, mutation PairSnapsh
 	return result
 }
 
+// mergePendingSnapshot runs only under w.mu, before the pending snapshot is
+// handed to any callback. The first full+position merge makes a private deep
+// copy. Later position updates can reuse that copy until dispatch, avoiding
+// repeated inventory/quest/pet clones while a slow writer occupies the lane.
+// Incoming snapshots and snapshots previously exposed to writers are never
+// modified. Replacing the aggregate drops its private-ownership proof.
+func mergePendingSnapshot(older, newer domain.Snapshot, owned *bool) domain.Snapshot {
+	if newer.Parts == domain.SnapshotPosition && older.Parts != domain.SnapshotPosition &&
+		older.Char != nil && newer.Char != nil && older.Char.ID == newer.Char.ID {
+		if !*owned {
+			older = domain.MergeSnapshots(older, newer)
+			*owned = true
+		} else {
+			older.Char.Pos, older.Char.SceneInstance = newer.Char.Pos, newer.Char.SceneInstance
+		}
+		return older
+	}
+	*owned = false
+	return newer
+}
+
 func (w *WriteBack) enqueue(s domain.Snapshot, waiter chan struct{}) {
 	if s.Char == nil {
 		return
@@ -212,7 +235,7 @@ func (w *WriteBack) enqueue(s domain.Snapshot, waiter chan struct{}) {
 	if pair := w.pairByChar[id]; pair != nil && !pair.inflight {
 		for i := range pair.snaps {
 			if pair.snaps[i].Char != nil && pair.snaps[i].Char.ID == id {
-				pair.snaps[i] = domain.MergeSnapshots(pair.snaps[i], s)
+				pair.snaps[i] = mergePendingSnapshot(pair.snaps[i], s, &pair.mergeOwned[i])
 				if waiter != nil {
 					pair.waiters[i] = append(pair.waiters[i], waiter)
 				}
@@ -224,7 +247,7 @@ func (w *WriteBack) enqueue(s domain.Snapshot, waiter chan struct{}) {
 	if queued := w.pending[id]; queued != nil {
 		// pending 中的旧版本还没有开始 IO，可以直接由更新快照顶掉；已经挂在
 		// 旧版本上的确认必须保留，因为新快照包含并超越了它所代表的状态。
-		queued.snap = domain.MergeSnapshots(queued.snap, s)
+		queued.snap = mergePendingSnapshot(queued.snap, s, &queued.mergeOwned)
 		if waiter != nil {
 			queued.waiters = append(queued.waiters, waiter)
 		}
@@ -313,6 +336,8 @@ func (w *WriteBack) drain(ctx context.Context) {
 		}
 		delete(w.pending, id)
 		w.inflight[id] = entry
+		// A callback may retain the snapshot even after returning an error.
+		entry.mergeOwned = false
 		go w.writeEntry(ctx, id, entry)
 	}
 	w.mu.Unlock()
@@ -332,7 +357,9 @@ func (w *WriteBack) writeEntry(parent context.Context, id int64, entry *writeBac
 	delete(w.inflight, id)
 	if err != nil && entry.mutation == nil {
 		if newer := w.pending[id]; newer != nil {
-			newer.snap = domain.MergeSnapshots(entry.snap, newer.snap)
+			// The failed snapshot has been exposed to a writer; never mutate it.
+			newer.mergeOwned = false
+			newer.snap = mergePendingSnapshot(entry.snap, newer.snap, &newer.mergeOwned)
 			newer.waiters = append(newer.waiters, entry.waiters...)
 			newer.retryAt = time.Now().Add(min(w.interval, time.Second))
 		} else if pair := w.pairByChar[id]; pair != nil {

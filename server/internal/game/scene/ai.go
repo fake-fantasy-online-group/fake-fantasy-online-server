@@ -1,7 +1,6 @@
 package scene
 
 import (
-	"container/heap"
 	"math"
 	"sort"
 
@@ -69,20 +68,47 @@ type monsterPathQueueItem struct {
 
 type monsterPathQueue []monsterPathQueueItem
 
-func (q monsterPathQueue) Len() int { return len(q) }
-func (q monsterPathQueue) Less(i, j int) bool {
+// Typed heap operations avoid boxing each queued and popped search node.
+// Keep container/heap's comparison and swap order, including f/sequence ties.
+func (q monsterPathQueue) less(i, j int) bool {
 	if q[i].f != q[j].f {
 		return q[i].f < q[j].f
 	}
 	return q[i].seq < q[j].seq
 }
-func (q monsterPathQueue) Swap(i, j int) { q[i], q[j] = q[j], q[i] }
-func (q *monsterPathQueue) Push(v any)   { *q = append(*q, v.(monsterPathQueueItem)) }
-func (q *monsterPathQueue) Pop() any {
-	old := *q
-	n := len(old) - 1
-	v := old[n]
-	*q = old[:n]
+
+func (q *monsterPathQueue) push(v monsterPathQueueItem) {
+	*q = append(*q, v)
+	for j := len(*q) - 1; j > 0; {
+		i := (j - 1) / 2
+		if !(*q).less(j, i) {
+			break
+		}
+		(*q)[i], (*q)[j] = (*q)[j], (*q)[i]
+		j = i
+	}
+}
+
+func (q *monsterPathQueue) pop() monsterPathQueueItem {
+	n := len(*q) - 1
+	(*q)[0], (*q)[n] = (*q)[n], (*q)[0]
+	for i := 0; ; {
+		left := 2*i + 1
+		if left >= n || left < 0 {
+			break
+		}
+		child := left
+		if right := left + 1; right < n && (*q).less(right, left) {
+			child = right
+		}
+		if !(*q).less(child, i) {
+			break
+		}
+		(*q)[i], (*q)[child] = (*q)[child], (*q)[i]
+		i = child
+	}
+	v := (*q)[n]
+	*q = (*q)[:n]
 	return v
 }
 
@@ -828,7 +854,6 @@ func (s *Scene) localMonsterPath(from, target domain.Pos, radius float64) ([]dom
 	heuristic := func(p domain.Pos) float64 { return math.Hypot(target.X-p.X, target.Y-p.Y) }
 
 	open := monsterPathQueue{{cell: start, f: heuristic(from)}}
-	heap.Init(&open)
 	gScore := map[monsterPathCell]float64{start: 0}
 	cameFrom := make(map[monsterPathCell]monsterPathCell)
 	closed := make(map[monsterPathCell]bool)
@@ -837,8 +862,8 @@ func (s *Scene) localMonsterPath(from, target domain.Pos, radius float64) ([]dom
 	var goal monsterPathCell
 	found := false
 
-	for open.Len() > 0 && expanded < monsterPathMaxExpanded {
-		item := heap.Pop(&open).(monsterPathQueueItem)
+	for len(open) > 0 && expanded < monsterPathMaxExpanded {
+		item := open.pop()
 		best, ok := gScore[item.cell]
 		if !ok || item.g != best || closed[item.cell] {
 			continue
@@ -871,7 +896,7 @@ func (s *Scene) localMonsterPath(from, target domain.Pos, radius float64) ([]dom
 			}
 			gScore[next] = candidate
 			cameFrom[next] = item.cell
-			heap.Push(&open, monsterPathQueueItem{
+			open.push(monsterPathQueueItem{
 				cell: next, g: candidate, f: candidate + heuristic(nextAt), seq: sequence,
 			})
 			sequence++

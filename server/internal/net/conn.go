@@ -143,12 +143,13 @@ func (c *Conn) serve(ctx context.Context) {
 		reason = "握手处理失败: " + err.Error()
 		return
 	}
-	c.keys.Store(&keys)
+	c.SetKeys(keys)
 
 	// 2) 写 goroutine
 	go c.writeLoop(ctx)
 
 	// 3) 读循环
+	var opener wire.Opener
 	authDeadline := time.Now().Add(c.opts.AuthWait)
 	for {
 		select {
@@ -185,7 +186,7 @@ func (c *Conn) serve(ctx context.Context) {
 			reason = "无会话密钥"
 			return
 		}
-		plain, err := wire.Open(*k, body)
+		plain, err := opener.OpenInPlace(k, body)
 		if err != nil {
 			// 单帧解密失败不一定要断开(可能密钥切换), 记录并继续; 连续失败由上层策略处理
 			c.log.Warn("解帧失败", "err", err, "len", len(body))
@@ -202,6 +203,7 @@ func (c *Conn) serve(ctx context.Context) {
 
 // writeLoop 从 out 队列取下行内层包, 加密后写出。独占 raw 的写端。
 func (c *Conn) writeLoop(ctx context.Context) {
+	var sealer wire.Sealer
 	for {
 		select {
 		case <-ctx.Done():
@@ -213,9 +215,8 @@ func (c *Conn) writeLoop(ctx context.Context) {
 			if k == nil {
 				continue
 			}
-			inner = wire.EncodeSequenced(c.sendSeq, inner)
+			frame, err := sealer.SealSequenced(k, c.sendSeq, inner)
 			c.sendSeq++
-			frame, err := wire.Seal(*k, inner)
 			if err != nil {
 				c.log.Error("封包失败", "err", err)
 				continue
@@ -231,7 +232,12 @@ func (c *Conn) writeLoop(ctx context.Context) {
 }
 
 // SetKeys 允许上层在握手后更新本连接的会话密钥。
-func (c *Conn) SetKeys(k wire.Keys) { c.keys.Store(&k) }
+func (c *Conn) SetKeys(k wire.Keys) {
+	// Own immutable snapshots: readers and writers cache cryptographic state
+	// independently and may still be using the previous snapshot during rekey.
+	k = wire.Keys{AES: append([]byte(nil), k.AES...), MAC: append([]byte(nil), k.MAC...)}
+	c.keys.Store(&k)
+}
 
 // RemoteIP identifies the actual transport peer; never trust a client supplied address.
 func (c *Conn) RemoteIP() string { return peerIP(c.raw.RemoteAddr()) }

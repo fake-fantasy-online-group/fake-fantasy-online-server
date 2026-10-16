@@ -1497,6 +1497,8 @@ func (s *Scene) flush() {
 		}
 	}
 	// 复用底层数组: 这个切片每帧都要重建, 不复用就是每帧一次分配 × 场景数
+	// Release event references without mutating payloads retained by sinks.
+	clear(s.outbox)
 	s.outbox = s.outbox[:0]
 }
 
