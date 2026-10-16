@@ -61,6 +61,10 @@ func (s *Scene) stepEquipmentAuras() {
 		}
 		for _, e := range s.equipmentEffects(p).effects {
 			if a := e.Effect.Aura; a != nil && e.Effect.Kind == "aura" {
+				// Size a fresh snapshot only after finding a source; no sources must stay nil.
+				if sources == nil && len(rt.auraSources) > 0 {
+					sources = make([]equipmentAuraSource, 0, len(rt.auraSources))
+				}
 				sources = append(sources, equipmentAuraSource{id, e.SourceUID, p.Player.Party, *a})
 			}
 		}
@@ -201,7 +205,11 @@ func (s *Scene) equipmentAuraRecipients(source equipmentAuraSource) []*entity.En
 	if len(candidates) > int(a.MaxPlayers) {
 		candidates = candidates[:a.MaxPlayers]
 	}
-	out := append([]*entity.Entity(nil), candidates...)
+	// candidates is private to this call. Pet appends cannot overwrite its player prefix.
+	out := candidates
+	if len(out) == 0 {
+		out = nil
+	}
 	for _, p := range candidates {
 		if a.IncludeActivePet && p.Player.Pet != 0 {
 			pet := s.pets[p.Player.Pet]
@@ -234,6 +242,9 @@ func (s *Scene) equipmentAuraStatuses(e *entity.Entity) []statusPresentation {
 	var ordered []equipmentAuraGrant
 	for _, g := range grants {
 		if g.expires > s.tick && s.equipmentAuraGrantValid(e, g) {
+			if ordered == nil {
+				ordered = make([]equipmentAuraGrant, 0, len(grants))
+			}
 			ordered = append(ordered, g)
 		}
 	}
@@ -244,6 +255,9 @@ func (s *Scene) equipmentAuraStatuses(e *entity.Entity) []statusPresentation {
 		return ordered[i].effect.ID < ordered[j].effect.ID
 	})
 	var out []statusPresentation
+	if len(ordered) > 0 {
+		out = make([]statusPresentation, 0, len(ordered))
+	}
 	for i, g := range ordered {
 		a := g.effect
 		id := equipmentAuraStatusID(a.ID)

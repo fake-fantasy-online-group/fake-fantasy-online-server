@@ -5,7 +5,7 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
-	"sort"
+	"slices"
 )
 
 type equipmentCached struct {
@@ -226,7 +226,7 @@ func sortedEquipmentEntities[T any](m map[domain.EntityID]T) []domain.EntityID {
 	for id := range m {
 		ids = append(ids, id)
 	}
-	sort.Slice(ids, func(i, j int) bool { return ids[i] < ids[j] })
+	slices.Sort(ids)
 	return ids
 }
 

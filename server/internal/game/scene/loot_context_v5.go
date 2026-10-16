@@ -9,8 +9,17 @@ func (s *Scene) magicFindV5(p *entity.Entity) int64 {
 	if p == nil || p.Player == nil || p.Player.Char == nil {
 		return 0
 	}
+	// MF reads eligibility and typed effects, never fractional durability. The
+	// combat dependency key invalidates this immutable snapshot at break/repair.
+	var worn *domain.EquipSet
+	if state := s.combatAttributeState(p); state != nil {
+		s.prepareCombatAttributes(p, state)
+		worn = state.values.FunctionalWorn
+	} else {
+		worn = s.functionalWorn(p)
+	}
 	var total int64
-	for _, active := range domain.ActiveEquipmentEffects(s.functionalWorn(p), s.itemDef, p.Player.Char) {
+	for _, active := range domain.ActiveEquipmentEffects(worn, s.itemDef, p.Player.Char) {
 		if active.Effect.Kind == "magic_find_pct" {
 			total += int64(active.Effect.Value)
 		}

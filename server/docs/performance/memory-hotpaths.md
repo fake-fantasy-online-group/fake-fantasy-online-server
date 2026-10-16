@@ -85,3 +85,29 @@ Aura source records have comparable scalar fields. Typed slice equality replaces
 Movement and combat packet writers reserve their actual 19-byte payload size; despawns reserve 6–7 bytes. Go allocator size classes therefore fall from 64 to 24 bytes for move/damage and from 64 to 8 for despawn. One fresh independent allocation remains per packet; no pooled buffers or broadcast sharing is introduced. Five isolated 300ms sample medians: movement 30.12 to 24.54 ns, combat 30.96 to 21.99 ns, despawn 24.84 to 13.88 ns.
 
 Broad encode-once broadcast fanout is deliberately excluded: map-load barriers, owner/friendly spawn content, caster cooldowns, healing/riding differences and per-recipient session side effects require more careful separation. No observer behavior or backpressure policy changes in this batch.
+
+## Fourth batch: death-time MF reads and aura allocations
+
+Baseline: remote bdf1d65. A complete in-memory Scene.step profile identified aura allocation pressure; combat death profiling identified redundant equipment snapshot copies in MF evaluation. A proposed scalar status-reader rewrite was rejected because controlled full-frame timing did not establish a stable gain.
+
+### Death-time magic find
+
+Read the already validated FunctionalWorn snapshot from the player's combat-attribute state instead of building another copied nine-slot equipment set. Typed equipment effects still evaluate against the current character and definitions at each call. No persistent MF result cache is introduced. Break/repair, level/equip/unique-definition revisions and preview isolation must remain covered; loot-owner resolution, pre-level-up MF freeze and random domains remain unchanged.
+
+Three alternating baseline/prototype pairs, GOMAXPROCS=1:
+- Complete 10-kill/80-drop batch median: 464236 to 384561 ns (17.2% lower); baseline range 0.450–0.494 ms versus prototype 0.375–0.421 ms.
+- Batch allocated bytes: 374696 to 242616 (35.3% lower); 886 to 736 allocations.
+- Nine-slot MF helper: about 15.35 to 7.85 microseconds; 13208 B/15 allocations to zero.
+
+These are controlled synthetic combat batches, not a verified fix for a particular observed client delay.
+
+### Aura allocation reduction
+
+Pre-size the source slice only on discovering its first valid source, retaining literal nil when no sources exist. Reuse a private newly constructed recipient slice rather than copying it; append pets after the original fixed player prefix. Pre-size valid aura presentation slices and replace reflective numeric ID sorting with typed sorting. No aura lease/cadence, ordering, formulas, invalidation or recipient behavior changes.
+
+Paired full in-memory Scene.step workloads (persistent poison, AI, every player aura-equipped):
+- 10 players/30 monsters: approximately 18310 to 14440 B/frame (21.1% lower), 222.54 to 206.72 allocations.
+- 50 players/300 monsters: approximately 110000 to 94950 B/frame (13.7% lower), 1374 to 1305 allocations.
+- CPU timing remained noisy; no established heavy-scene CPU gain is claimed.
+
+The full-frame fixtures exclude sockets, persistence and deaths. No-aura controls measured much lower allocations (about 4.2 KiB and 41.2 KiB respectively), so aura-population assumptions matter. Tests compare legacy recipient/status output, player caps and pets, expiry, backing-array independence, nil cleanup, numeric ordering and source snapshot ownership.
