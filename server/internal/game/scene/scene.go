@@ -263,6 +263,7 @@ type Scene struct {
 	outbox               []pending
 	mapLoads             map[domain.EntityID]*mapLoad
 	attacks              []pendingAttack                        // 已受理、等待动画命中帧的攻击
+	steppingCasts        bool                                   // stable cast slots owned by stepCastsAt
 	casts                []pendingCast                          // 本帧待结算的技能
 	hits                 map[domain.EntityID]*combat.HitTracker // 每个攻击者的命中步进器
 	rng                  *rand.Rand                             // 场景私有, 单线程用, 可复现

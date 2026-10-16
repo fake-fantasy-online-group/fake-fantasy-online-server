@@ -390,8 +390,11 @@ func (s *Scene) cancelPendingCombat(ids ...domain.EntityID) {
 	s.attacks = attacks
 
 	casts := s.casts[:0]
-	for _, cast := range s.casts {
+	for index, cast := range s.casts {
 		if _, srcGone := cancelled[cast.src]; srcGone {
+			if s.steppingCasts {
+				s.casts[index] = pendingCast{}
+			}
 			continue
 		}
 		targets := cast.targets[:0]
@@ -404,15 +407,24 @@ func (s *Scene) cancelPendingCombat(ids ...domain.EntityID) {
 			cast.targets[i] = 0
 		}
 		if len(targets) == 0 && len(cast.targets) > 0 {
+			if s.steppingCasts {
+				s.casts[index] = pendingCast{}
+			}
 			continue
 		}
 		cast.targets = targets
-		casts = append(casts, cast)
+		if s.steppingCasts {
+			s.casts[index] = cast
+		} else {
+			casts = append(casts, cast)
+		}
 	}
-	for i := len(casts); i < len(s.casts); i++ {
-		s.casts[i] = pendingCast{}
+	// stepCastsAt owns compaction while effects are running. Shrinking or moving
+	// the queue here would invalidate its bounded pass and resurrect waiting work.
+	if !s.steppingCasts {
+		clear(s.casts[len(casts):])
+		s.casts = casts
 	}
-	s.casts = casts
 
 	for attacker, tracker := range s.hits {
 		if _, gone := cancelled[attacker]; gone {

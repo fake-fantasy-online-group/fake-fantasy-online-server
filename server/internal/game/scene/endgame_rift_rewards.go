@@ -159,8 +159,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			stack.Bound = true
 			// Explicit named native equipment keeps its original fixed properties.
 			if domain.NativeEquipmentDropEligible(def) {
-				sockets, affixes := s.equipmentRoll.RollColorFirstEquipment(def, domain.DefaultColorProfile, 0, r.Rules.Loot, rng.Int63n, rng.Int63n, rng.Int63n)
-				stack.SocketCount = sockets
+				_, affixes := s.equipmentRoll.RollColorFirstEquipment(def, domain.DefaultColorProfile, 0, r.Rules.Loot, rng.Int63n, nil, rng.Int63n)
 				stack.RolledAffixCount = uint8(len(affixes))
 				copy(stack.RolledAffixes[:], affixes)
 				if (r.Tier >= r.Rules.GuaranteedUniqueTier && i == 0) || rng.Intn(100) < int(plan.UniqueChance) {
@@ -234,14 +233,14 @@ func (s *Scene) rollEndgameRiftNormalBossEquipment(char domain.CharID, ordinal i
 		hash := sha256.Sum256([]byte(fmt.Sprintf("%s/rift-normal-boss/%d/%d/%d/%s", r.RunID, r.RulesVersion, char, ordinal, purpose)))
 		return lootRandomV5{binary.BigEndian.Uint64(hash[:8])}
 	}
-	item, sockets := stream("item"), stream("sockets")
+	item := stream("item")
 	quality, values := stream("quality"), stream("values")
 	unique, variables := stream("unique"), stream("variables")
 	def := s.items[pool[item.Intn(len(pool))]]
 	stack := domain.NewStack(def, 1)
 	stack.Bound = true
 	if domain.NativeEquipmentDropEligible(def) {
-		s.rollNaturalEquipmentQualityV5(def, &stack, domain.DefaultColorProfile, true, magicFind, r.Rules.Loot, &quality, &values, &unique, &variables, &sockets)
+		s.rollNaturalEquipmentQualityV5(def, &stack, domain.DefaultColorProfile, true, magicFind, r.Rules.Loot, &quality, &values, &unique, &variables)
 	}
 	return stack
 }

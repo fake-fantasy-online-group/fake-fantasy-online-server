@@ -339,18 +339,13 @@ func TestNaturalColorFirstDropsKeepRolledBudgetAndUniqueZeroSockets(t *testing.T
 	s.items[def.ID] = def
 	s.equipmentRoll = magicFindRollTableV5()
 	s.equipmentRoll.Counts[1] = []domain.WeightedAffixCount{{Count: 4, Weight: 100}}
-	seen := map[uint8]bool{}
 	for i := 0; i < 400; i++ {
 		s.tick = domain.Tick(i)
 		st := domain.NewStack(def, 1)
 		s.rollNaturalEquipmentV5(def, &st, s.entities[mid], 0, 1, true, domain.LootContextV5{MagicFind: 800})
-		if int(st.SocketCount)+int(st.RolledAffixCount) != 4 {
+		if st.SocketCount != 0 || st.RolledAffixCount != 4 {
 			t.Fatal("natural color changed", st)
 		}
-		seen[st.SocketCount] = true
-	}
-	if len(seen) != 5 {
-		t.Fatal("not all split outcomes exercised", seen)
 	}
 	for _, u := range domain.UniqueCatalog(catalogfixture.EndgameCatalog()) {
 		if !u.NativeDropEligible {

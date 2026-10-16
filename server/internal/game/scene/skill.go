@@ -934,6 +934,9 @@ func (s *Scene) stepCasts() {
 // stepCastsAt 同时服务 100ms 主帧与主帧之间的精确吟唱结束/命中相位。
 // timedOnly=true 时只处理到期的壁钟时刻，不能顺手提前执行普通瞬发技能。
 func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
+	if s.steppingCasts {
+		return
+	}
 	if s.rift != nil && !s.riftCombatReady() {
 		return
 	}
@@ -941,10 +944,26 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 	if len(s.casts) == 0 {
 		return
 	}
+	// Effects can synchronously cancel combat (for example a lethal rift hit
+	// starts guardian arrival and clears all monsters). Own stable queue slots
+	// until this bounded pass ends: cancellation leaves holes instead of moving
+	// entries. Fetch each slot from the live slice because callbacks may append
+	// and reallocate it. New casts are retained, but cannot run in this pass.
 	originalLen := len(s.casts)
-	waiting := s.casts[:0]
+	s.steppingCasts = true
+	// The scene actor recovers frame panics. Do not leave it permanently unable
+	// to settle skills after an unrelated effect panic. The started cast stays
+	// consumed; untouched slots remain available to the next bounded pass.
+	defer func() { s.steppingCasts = false }()
 	teleports := make([]pendingSkillTeleport, 0)
-	for _, c := range s.casts {
+	for i := 0; i < originalLen; i++ {
+		c := s.casts[i]
+		// The current cast owns its targets during settlement; cancellation must
+		// not compact that target backing array underneath the target loop.
+		s.casts[i] = pendingCast{}
+		if c.src == 0 {
+			continue
+		}
 		if c.windup != nil && c.windup.interrupted {
 			continue
 		}
@@ -954,11 +973,11 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 		}
 		if !c.released {
 			if !c.releaseAtWall.IsZero() && now.Before(c.releaseAtWall) {
-				waiting = append(waiting, c)
+				s.casts[i] = c
 				continue
 			}
 			if timedOnly && c.releaseAtWall.IsZero() {
-				waiting = append(waiting, c)
+				s.casts[i] = c
 				continue
 			}
 		}
@@ -998,7 +1017,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 			releasedNow = true
 		}
 		if !c.resolveAtWall.IsZero() && now.Before(c.resolveAtWall) {
-			waiting = append(waiting, c)
+			s.casts[i] = c
 			continue
 		}
 		if !c.resolveAtWall.IsZero() {
@@ -1006,7 +1025,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 				"targets", len(c.targets))
 		}
 		if timedOnly && !releasedNow && c.resolveAtWall.IsZero() {
-			waiting = append(waiting, c)
+			s.casts[i] = c
 			continue
 		}
 		if effect, ok := specialSkillEffect(c.def); ok {
@@ -1064,10 +1083,17 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 		s.applyMonsterSkillExtras(src, c.def, c.targets, c.extras)
 		finishEquipment()
 	}
-	for i := len(waiting); i < originalLen; i++ {
-		s.casts[i] = pendingCast{}
+	// One compaction owner, after all reentrant mutation. Include newly queued
+	// casts and preserve original ordering of survivors and future work.
+	waiting := s.casts[:0]
+	for _, c := range s.casts {
+		if c.src != 0 {
+			waiting = append(waiting, c)
+		}
 	}
+	clear(s.casts[len(waiting):])
 	s.casts = waiting
+	s.steppingCasts = false
 	for _, teleport := range teleports {
 		player := s.players[teleport.who]
 		if player == nil || !player.Alive() || !s.spawnPositionWalkable(teleport.to) {

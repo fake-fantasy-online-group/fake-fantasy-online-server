@@ -88,7 +88,7 @@ func (s *Scene) periodicDamageOwnerV5(def domain.StatusDef, source domain.Entity
 }
 
 // Each purpose and generated item has its own small, deterministic RNG. Drawing
-// extra affixes or succeeding at unique promotion cannot consume the item, socket,
+// extra affixes or succeeding at unique promotion cannot consume the item,
 // rune, other-item, or unique-variable streams. Version changes need new domains.
 // This deliberately preserves MF=0 distributions, not legacy same-seed sequences.
 type lootRandomV5 struct{ state uint64 }
@@ -136,16 +136,14 @@ func (s *Scene) rollNaturalEquipmentV5(def domain.ItemDef, stack *domain.Stack, 
 	values := s.lootRandomV5(dead.ID, ordinal, 0x56350002)
 	unique := s.lootRandomV5(dead.ID, ordinal, 0x56350003)
 	variables := s.lootRandomV5(dead.ID, ordinal, 0x56350004)
-	sockets := s.lootRandomV5(dead.ID, ordinal, 0x56350005)
-	s.rollNaturalEquipmentQualityV5(def, stack, profile, rollAffixes, context.MagicFind, s.lootRules.Active(), &quality, &values, &unique, &variables, &sockets)
+	s.rollNaturalEquipmentQualityV5(def, stack, profile, rollAffixes, context.MagicFind, s.lootRules.Active(), &quality, &values, &unique, &variables)
 }
 
 // Shared by natural world drops and new normal-boss reward slots. Callers own
 // independent deterministic streams and the appropriate frozen loot rules.
-func (s *Scene) rollNaturalEquipmentQualityV5(def domain.ItemDef, stack *domain.Stack, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique, variables, sockets *lootRandomV5) {
+func (s *Scene) rollNaturalEquipmentQualityV5(def domain.ItemDef, stack *domain.Stack, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique, variables *lootRandomV5) {
 	if rollAffixes {
-		holes, rolled := s.equipmentRoll.RollColorFirstEquipment(def, profile, magicFind, rule, quality.Int63n, sockets.Int63n, values.Int63n)
-		stack.SocketCount = holes
+		_, rolled := s.equipmentRoll.RollColorFirstEquipment(def, profile, magicFind, rule, quality.Int63n, nil, values.Int63n)
 		stack.RolledAffixCount = uint8(len(rolled))
 		copy(stack.RolledAffixes[:], rolled)
 	}

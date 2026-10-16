@@ -83,7 +83,6 @@ func (s *Scene) stealMonsterItem(src, dst *entity.Entity, def domain.SkillDef, e
 	}
 	item := s.items[id]
 	stack := domain.NewStack(item, 1)
-	stack.SocketCount = domain.RollDroppedSocketCount(item, s.astralDropGrade(dst), s.rng.Int63n, s.lootRules.Active())
 	profile := dst.Monster.ColorProfile
 	if profile == 0 {
 		profile = domain.DefaultColorProfile

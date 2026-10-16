@@ -193,7 +193,7 @@ func TestAstralFormationChangesRealCombatStats(t *testing.T) {
 		t.Fatal("restoring order failed to reactivate all formation extras without rerolling")
 	}
 }
-func TestAstralDroppedHolesReserveAttributeBudget(t *testing.T) {
+func TestAstralNaturalDropsKeepFullAffixBudgetWithoutSockets(t *testing.T) {
 	s, mid := lootScene(t, []domain.DropEntry{{Item: 999002, RatePct: 100, RollAffixes: true}})
 	s.items[999002] = domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: 999002, Name: "空白星剑", InstanceKind: domain.ItemInstanceEquipment, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: int32(domain.SlotWeapon), LevelReq: 50, Durable: 100}}
 	s.equipmentRoll = domain.EquipmentRollTable{Counts: map[domain.ColorProfile][]domain.WeightedAffixCount{1: {{Count: 5, Weight: 1}}}, Options: map[domain.EquipmentRollKey][]domain.EquipmentRollOption{{}: {{Affix: domain.Affix{Attr: domain.AttrSTR, Value: 2}, Weight: 1}, {Affix: domain.Affix{Attr: domain.AttrINT, Value: 2}, Weight: 1}, {Affix: domain.Affix{Attr: domain.AttrVIT, Value: 2}, Weight: 1}, {Affix: domain.Affix{Attr: domain.AttrAGI, Value: 2}, Weight: 1}, {Affix: domain.Affix{Attr: domain.AttrDEX, Value: 2}, Weight: 1}}}}
@@ -203,21 +203,24 @@ func TestAstralDroppedHolesReserveAttributeBudget(t *testing.T) {
 		s.rollLoot(s.entities[mid], 0)
 	}
 	seen := map[int64]bool{}
-	holes := 0
 	for _, e := range s.ground {
 		st := e.Drop.Stack
 		if st.Item != 999002 {
 			continue
 		}
-		if st.UID <= 0 || seen[st.UID] || int(st.SocketCount)+int(st.RolledAffixCount) != 5 {
+		if st.UID <= 0 || seen[st.UID] || st.SocketCount != 0 || int(st.RolledAffixCount) != domain.MaxEquipmentAttributes {
 			t.Fatal("bad generated stack", st)
 		}
 		seen[st.UID] = true
-		if st.SocketCount > 0 {
-			holes++
+		attributes := map[int32]bool{}
+		for _, affix := range st.RolledAffixes[:st.RolledAffixCount] {
+			if attributes[affix.Affix.Attr] || affix.Affix.Value != 2 {
+				t.Fatal("missing distinct full-value random affixes", st)
+			}
+			attributes[affix.Affix.Attr] = true
 		}
 	}
-	if len(seen) != 100 || holes == 0 {
-		t.Fatal("no real socket drops")
+	if len(seen) != 100 {
+		t.Fatalf("generated %d equipment instances, want 100", len(seen))
 	}
 }
