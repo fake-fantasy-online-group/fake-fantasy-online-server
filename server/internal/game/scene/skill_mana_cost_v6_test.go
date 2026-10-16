@@ -16,6 +16,8 @@ func TestSkillManaCostMatchesEveryActualDebitV6(t *testing.T) {
 	previous := int32(10000000)
 	for _, rank := range []int32{19, 20, 21, 30, 50, 100, 1000000} {
 		p.Player.Char.Skills = domain.Learned{10301: min(rank, 20)}
+		// Synthetic soft-rank injection must replace both derived caches.
+		s.invalidateCombatAttributes(p)
 		s.skillRawCache = map[domain.EntityID]skillRawCacheEntry{p.ID: {key: skillRawFingerprint(p), levels: domain.Learned{10301: rank}}}
 		d, ok := s.skills.Get(10301, rank)
 		if !ok {
@@ -62,6 +64,8 @@ func TestSkillManaCostMatchesEveryActualDebitV6(t *testing.T) {
 func TestSkillManaCostAdmissionTransferAndCancelV6(t *testing.T) {
 	s, p := behaviorAcceptancePlayer(t, 4)
 	p.Player.Char.Skills = domain.Learned{10306: 20}
+	// Synthetic soft-rank injection must replace both derived caches.
+	s.invalidateCombatAttributes(p)
 	s.skillRawCache = map[domain.EntityID]skillRawCacheEntry{p.ID: {key: skillRawFingerprint(p), levels: domain.Learned{10306: 20}}}
 	d, _ := s.skills.Get(10306, 20)
 	s.applyResolvedSkillModifiers(p, &d, p.Player.Char.Skills, s.rawSkillLevels(p))

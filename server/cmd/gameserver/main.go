@@ -22,6 +22,7 @@ import (
 	"os"
 	"os/signal"
 	"strings"
+	"sync"
 	"syscall"
 	"time"
 
@@ -81,7 +82,14 @@ func run() int {
 		st = store.NewMemory()
 		log.Warn("存储: 内存(重启丢档, 仅自测)。生产请用 -dsn")
 	}
-	defer st.Close()
+	closeStore := true
+	defer func() {
+		// Pool.Close can wait for borrowed connections. A failed shutdown must
+		// exit nonzero within its budget rather than wait again outside it.
+		if closeStore {
+			st.Close()
+		}
+	}()
 
 	// ── 写回队列: 场景与数据库之间的缓冲, 保证场景 goroutine 永不等 IO ──
 	wb := store.NewWriteBack(st, time.Second, log)
@@ -188,7 +196,7 @@ func run() int {
 	}
 	// Even optional seed imports must use the same validated catalog as live saves.
 	seedChars(ctx, st, log)
-	// Router 在写锁内串行调用 Builder，因此这份按静态地图号共享的懒加载缓存
+	// Router 通过独立 buildMu 串行调用 Builder，因此这份按静态地图号共享的懒加载缓存
 	// 不需要额外锁；副本实例也不会重复吃一份 1~2MB 的碰撞网格。
 	// Validate rift topology before starting actors. A failed catalog disables new
 	// seeded runs rather than spending a key on an unverified destination.
@@ -344,6 +352,7 @@ func run() int {
 	unknownOps := protocol.NewUnknownLog()
 	// 账号在线表全服一份：同账号后登录成功后原子顶替并断开旧连接。
 	accountSessions := session.NewAccountSessions()
+	authWork := session.NewAuthWorkLimiter(session.AuthWorkOptions{})
 	// 待处理的好友请求。不落盘 —— 加好友是当面同意的事
 	friendReqs := social.NewRequests()
 	trades := trade.NewRegistry()
@@ -364,6 +373,7 @@ func run() int {
 	factory := func(sink gnet.Sink) gnet.Handler {
 		return session.New(sink, session.Deps{
 			RequireGrowthV5: true,
+			AuthWork:        authWork,
 			Store:           st, Router: router, AccountSessions: accountSessions, CharGate: charGate,
 			Items: world.items, HelpTopics: world.helpTopics, HelpTopicsKnown: world.helpTopicsKnown,
 			WarehouseRule: world.warehouseRule, WardrobeRule: world.wardrobeRule,
@@ -380,7 +390,22 @@ func run() int {
 			Log: log,
 		})
 	}
-	srv := gnet.NewServer(*addr, factory, gnet.Options{Log: log})
+	// One budget includes gateway handlers, scene shutdown and final persistence.
+	var shutdownOnce sync.Once
+	var shutdownCtx context.Context
+	var shutdownCancel context.CancelFunc
+	shutdownContext := func() context.Context {
+		shutdownOnce.Do(func() {
+			shutdownCtx, shutdownCancel = context.WithTimeout(context.Background(), time.Duration(*drainSec)*time.Second)
+		})
+		return shutdownCtx
+	}
+	defer func() {
+		if shutdownCancel != nil {
+			shutdownCancel()
+		}
+	}()
+	srv := gnet.NewServer(*addr, factory, gnet.Options{Log: log, ShutdownContext: shutdownContext})
 
 	log.Info("区服启动", "addr", *addr, "帧长ms", domain.TickMS,
 		"已接入的上行协议", len(protocol.ProvenOps()))
@@ -394,25 +419,45 @@ func run() int {
 	dumpUnknownOps(log, unknownOps)
 
 	// ── 关服: 顺序不能改 ──
-	drain := time.Duration(*drainSec) * time.Second
-	sceneDrainErr := router.Drain(drain) // 1. 场景把在线角色排进写回队列, 然后退出
+	deadline, _ := shutdownContext().Deadline()
+	remaining := func() time.Duration { return max(0, time.Until(deadline)) }
+	sceneDrainErr := router.Drain(remaining()) // 1. 场景把在线角色排进写回队列, 然后退出
 	if sceneDrainErr != nil {
 		log.Error("区服关闭失败: 场景未全部停止", "err", sceneDrainErr)
 	}
 	// 场景超时时仍尝试落下已经交出的快照，但这只是最大限度降低损失；
 	// 因为未停场景仍可能迟到入队，本次关服整体依然必须失败。
-	writeBackErr := wb.Close(drain) // 2. 队列排空, 真正写进数据库
+	writeBackErr := wb.Close(remaining()) // 2. 队列排空, 真正写进数据库
 	if writeBackErr != nil {
 		log.Error("区服关闭失败: 存档未全部落盘", "err", writeBackErr)
 	}
-	if runErr != nil || sceneDrainErr != nil || writeBackErr != nil {
+	var storeCloseErr error
+	if runErr == nil && sceneDrainErr == nil && writeBackErr == nil {
+		closeStore = false
+		storeCloseErr = closeStoreWithin(shutdownContext(), st)
+	}
+	if runErr != nil || sceneDrainErr != nil || writeBackErr != nil || storeCloseErr != nil {
+		closeStore = false
 		// 场景或存档未排空时，关闭过程没有完成。
 		log.Error("区服未正常关闭",
-			"运行错误", runErr, "场景排空错误", sceneDrainErr, "存档排空错误", writeBackErr)
+			"运行错误", runErr, "场景排空错误", sceneDrainErr, "存档排空错误", writeBackErr, "存储关闭错误", storeCloseErr)
 		return 1
 	}
 	log.Info("区服关闭")
 	return 0
+}
+
+// Background social/tip queries may still hold pool connections after the
+// actors drain. Pool closure participates in the same overall shutdown budget.
+func closeStoreWithin(ctx context.Context, st store.Store) error {
+	done := make(chan error, 1)
+	go func() { done <- st.Close() }()
+	select {
+	case err := <-done:
+		return err
+	case <-ctx.Done():
+		return fmt.Errorf("store close: %w", ctx.Err())
+	}
 }
 
 // dumpUnknownOps 把这一局见到的未知上行 opcode 打成一张表。

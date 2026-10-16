@@ -23,6 +23,8 @@ const (
 )
 
 func (s *Session) accountForSecurity() (*store.Account, bool) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	s.mu.Lock()
 	if s.account == nil || (s.stage != StageAuthed && s.stage != StageInGame) {
 		s.mu.Unlock()
@@ -30,7 +32,7 @@ func (s *Session) accountForSecurity() (*store.Account, bool) {
 	}
 	cached := *s.account
 	s.mu.Unlock()
-	current, err := s.deps.Store.AccountByName(context.Background(), cached.Username)
+	current, err := s.deps.Store.AccountByName(ctx, cached.Username)
 	if err != nil {
 		s.log.Error("复核账号凭据失败", "acc", cached.Username, "err", err)
 		return nil, false
@@ -56,6 +58,8 @@ func (s *Session) sendAccountResult(kind, code uint8, message string) {
 }
 
 func (s *Session) onChangePassword(req protocol.Request) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	account, ok := s.accountForSecurity()
 	if !ok {
 		s.sendAccountResult(accountResultPassword, accountResultFailed, "账号尚未登录")
@@ -72,7 +76,7 @@ func (s *Session) onChangePassword(req protocol.Request) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.S2), bcrypt.DefaultCost)
 	updated := false
 	if err == nil {
-		updated, err = s.deps.Store.CompareAndSwapAccountCredentials(context.Background(), account.ID,
+		updated, err = s.deps.Store.CompareAndSwapAccountCredentials(ctx, account.ID,
 			account.PassHash, account.SecHash, string(hash), account.SecHash)
 	}
 	if err != nil {
@@ -94,6 +98,8 @@ func (s *Session) onChangePassword(req protocol.Request) {
 }
 
 func (s *Session) onChangeSecurityCode(req protocol.Request) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	account, ok := s.accountForSecurity()
 	if !ok {
 		s.sendAccountResult(accountResultSecurity, accountResultFailed, "账号尚未登录")
@@ -116,7 +122,7 @@ func (s *Session) onChangeSecurityCode(req protocol.Request) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.S3), bcrypt.DefaultCost)
 	updated := false
 	if err == nil {
-		updated, err = s.deps.Store.CompareAndSwapAccountCredentials(context.Background(), account.ID,
+		updated, err = s.deps.Store.CompareAndSwapAccountCredentials(ctx, account.ID,
 			account.PassHash, account.SecHash, account.PassHash, string(hash))
 	}
 	if err != nil {

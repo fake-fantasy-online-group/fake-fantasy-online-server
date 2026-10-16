@@ -107,6 +107,12 @@ func Open(k Keys, body []byte) ([]byte, error) {
 
 // ReadFrame 从流中读出一个完整帧体(已剥掉长度前缀, 尚未解密)。
 func ReadFrame(r io.Reader) ([]byte, error) {
+	return ReadFrameWithAdmission(r, nil)
+}
+
+// ReadFrameWithAdmission checks a declared length before allocating or reading its body.
+// The callback may reject a peer that exceeds its ingress budget.
+func ReadFrameWithAdmission(r io.Reader, admit func(uint32) error) ([]byte, error) {
 	var hdr [LenPrefix]byte
 	if _, err := io.ReadFull(r, hdr[:]); err != nil {
 		return nil, err
@@ -114,6 +120,11 @@ func ReadFrame(r io.Reader) ([]byte, error) {
 	n := binary.LittleEndian.Uint32(hdr[:])
 	if n > MaxFrame {
 		return nil, ErrTooLarge
+	}
+	if admit != nil {
+		if err := admit(n); err != nil {
+			return nil, err
+		}
 	}
 	body := make([]byte, n)
 	if _, err := io.ReadFull(r, body); err != nil {

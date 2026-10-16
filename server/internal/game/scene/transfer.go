@@ -205,6 +205,7 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	delete(s.players, e.ID)
 	delete(s.skillViewDigests, e.ID)
 	delete(s.skillRawCache, e.ID)
+	delete(s.combatAttributes, e.ID)
 	s.removeEquipmentEntity(e.ID)
 	delete(s.hits, e.ID)
 	delete(s.portalBlocked, e.ID)

@@ -3,6 +3,7 @@ package session
 import (
 	"context"
 	"sort"
+	"time"
 
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/online"
@@ -61,7 +62,10 @@ func (s *Session) onlineFriends(ctx context.Context, me *domain.Character) []onl
 // 攒一堆"他 3 小时前上线过"的消息给他没有意义。
 func (s *Session) notifyFriends(ctx context.Context, me *domain.Character, isOnline bool) {
 	for _, loc := range s.onlineFriends(ctx, me) {
-		s.sendToFriend(loc, me, isOnline)
+		if ctx.Err() != nil {
+			return
+		}
+		s.sendToFriend(ctx, loc, me, isOnline)
 	}
 }
 
@@ -72,13 +76,13 @@ func (s *Session) notifyFriends(ctx context.Context, me *domain.Character, isOnl
 // 所以上下线要表达成"重发一份整表"给对方,而不是发一条增量 ——
 // 那需要在这里能取到接收方的完整好友列表,目前还没接。
 // 当前只记录目标与上线状态，尚未向对方推送好友列表。
-func (s *Session) sendToFriend(loc online.Location, me *domain.Character, isOnline bool) {
+func (s *Session) sendToFriend(ctx context.Context, loc online.Location, me *domain.Character, isOnline bool) {
 	state := "下线"
 	if isOnline {
 		state = "上线"
 	}
 	s.log.Debug("好友状态通知", "通知谁", loc.Name, "谁的状态", me.Name, "状态", state)
-	s.refreshFriendsOf(loc.Char)
+	s.refreshFriendsOfContext(ctx, loc.Char)
 }
 
 // friendPacket 从持久化关系构造客户端 0x8037 快照。好友按角色名排序，让同一份
@@ -97,13 +101,38 @@ func (s *Session) friendPacket(ctx context.Context, charID int64) []byte {
 }
 
 func (s *Session) refreshFriendList() {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	s.refreshFriendListContext(ctx)
+}
+
+func (s *Session) refreshFriendListContext(ctx context.Context) {
 	s.mu.Lock()
 	ch, inGame := s.char, s.stage == StageInGame
 	s.mu.Unlock()
 	if !inGame || ch == nil {
 		return
 	}
-	s.sink.Send(s.friendPacket(context.Background(), ch.ID))
+	packet := s.friendPacket(ctx, ch.ID)
+	if ctx.Err() == nil {
+		s.sink.Send(packet)
+	}
+}
+
+// Lifecycle notifications must carry the same deadline through recipient reads.
+// Legacy controls without a context-aware capability are skipped here: optional
+// notifications cannot reintroduce an unbounded wait during disconnect.
+func (s *Session) refreshFriendsOfContext(ctx context.Context, who domain.CharID) {
+	if ctx.Err() != nil || s.deps.Online == nil {
+		return
+	}
+	_, control, ok := s.controlFor(who)
+	if !ok {
+		return
+	}
+	if delivery, ok := control.(interface{ RefreshFriendsContext(context.Context) }); ok {
+		delivery.RefreshFriendsContext(ctx)
+	}
 }
 
 func (s *Session) refreshFriendsOf(who domain.CharID) {

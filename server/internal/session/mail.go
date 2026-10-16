@@ -2,6 +2,8 @@ package session
 
 import (
 	"context"
+	"crypto/rand"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"strings"
@@ -131,8 +133,12 @@ func (s *Session) refreshMailIndicator() {
 func (s *Session) onSendMail(req protocol.Request) {
 	id, sc, _, inGame := s.mailBinding()
 	ms, ok := s.mailStore()
-	if !inGame || !ok || s.deps.WriteBack == nil {
+	reliable, reliableOK := ms.(store.MailOperationStore)
+	if !inGame || !ok || !reliableOK || s.deps.WriteBack == nil {
 		s.sendGMText("邮件系统暂不可用")
+		return
+	}
+	if !s.mailOperationsReady(reliable) {
 		return
 	}
 	to := strings.TrimSpace(req.S1)
@@ -151,15 +157,19 @@ func (s *Session) onSendMail(req protocol.Request) {
 	for _, ref := range req.MailItems {
 		refs = append(refs, scene.MailItemRef{Tab: ref.Tab, Slot: int32(clientBagSlot(ref.Tab, int(ref.Slot))), Count: ref.Count})
 	}
+	operationID, err := newMailOperationID()
+	if err != nil {
+		s.sendGMText("邮件系统暂不可用")
+		return
+	}
+	cancelReservation := make(chan struct{})
 	reply := make(chan scene.MailReserveResult, 1)
-	if !s.deps.Router.Post(sc, scene.ReserveMailSend{ID: id, Money: req.Money, Items: refs, Reply: reply}) {
+	if !s.deps.Router.Post(sc, scene.ReserveMailSend{OperationID: operationID, Cancel: cancelReservation, ID: id, Money: req.Money, Items: refs, Reply: reply}) {
 		s.sendGMText("邮件发送失败：角色场景不可用")
 		return
 	}
-	var reserved scene.MailReserveResult
-	select {
-	case reserved = <-reply:
-	case <-time.After(3 * time.Second):
+	reserved, received := s.awaitMailReservation(sc, id, reply, cancelReservation)
+	if !received {
 		s.sendGMText("邮件发送超时，请重试")
 		return
 	}
@@ -169,12 +179,7 @@ func (s *Session) onSendMail(req protocol.Request) {
 	}
 	draft := domain.MailDraft{RecipientName: to, Title: title, Body: body,
 		Money: req.Money, Type: req.U8, Attachments: reserved.Attachments}
-	commit := s.deps.WriteBack.CommitMutation(reserved.Snapshot,
-		func(ctx context.Context, _ store.Store, snap domain.Snapshot) error {
-			_, err := ms.SendMail(ctx, snap, draft, s.deps.MailRule)
-			return err
-		})
-	err := <-commit
+	err = s.commitReservedMail(reliable, store.MailOperation{ID: operationID, Kind: "send", Draft: draft, Rule: s.deps.MailRule}, reserved)
 	s.finalizeMailReservation(sc, id, reserved.Reservation, err == nil)
 	if err != nil {
 		s.sendGMText(mailErrorMessage("发送", err))
@@ -207,8 +212,12 @@ func (s *Session) onMailAction(req protocol.Request) {
 			s.sendGMText(mailErrorMessage("读取", err))
 		}
 	case mailActionClaim:
-		if s.deps.WriteBack == nil {
+		reliable, reliableOK := ms.(store.MailOperationStore)
+		if s.deps.WriteBack == nil || !reliableOK {
 			s.sendGMText("邮件领取暂不可用")
+			return
+		}
+		if !s.mailOperationsReady(reliable) {
 			return
 		}
 		mails, err := ms.LoadMails(ctx, ch.ID, s.deps.MailRule)
@@ -227,21 +236,27 @@ func (s *Session) onMailAction(req protocol.Request) {
 			s.sendGMText("邮件不存在")
 			return
 		}
+		operationID, err := newMailOperationID()
+		if err != nil {
+			s.sendGMText("邮件领取暂不可用")
+			return
+		}
+		cancelReservation := make(chan struct{})
 		reply := make(chan scene.MailReserveResult, 1)
-		if !s.deps.Router.Post(sc, scene.ReserveMailClaim{ID: id, Mail: *selected, Reply: reply}) {
+		if !s.deps.Router.Post(sc, scene.ReserveMailClaim{OperationID: operationID, Cancel: cancelReservation, ID: id, Mail: *selected, Reply: reply}) {
 			s.sendGMText("邮件领取失败：角色场景不可用")
 			return
 		}
-		reserved := <-reply
+		reserved, received := s.awaitMailReservation(sc, id, reply, cancelReservation)
+		if !received {
+			s.sendGMText("邮件领取超时，请重试")
+			return
+		}
 		if reserved.Reason != "" {
 			s.sendGMText("邮件领取失败：" + reserved.Reason)
 			return
 		}
-		commit := s.deps.WriteBack.CommitMutation(reserved.Snapshot,
-			func(ctx context.Context, _ store.Store, snap domain.Snapshot) error {
-				return ms.ClaimMail(ctx, snap, req.MailID)
-			})
-		err = <-commit
+		err = s.commitReservedMail(reliable, store.MailOperation{ID: operationID, Kind: "claim", MailID: req.MailID}, reserved)
 		s.finalizeMailReservation(sc, id, reserved.Reservation, err == nil)
 		if err != nil {
 			s.sendGMText(mailErrorMessage("领取", err))
@@ -279,6 +294,15 @@ func (s *Session) onMailAction(req protocol.Request) {
 
 func (s *Session) finalizeMailReservation(sc domain.SceneID, id domain.EntityID,
 	reservation scene.MailReservation, commit bool) {
+	if reservation.Result != nil {
+		reservation.Result <- commit
+		select {
+		case <-reservation.Done:
+		case <-time.After(3 * time.Second):
+			s.log.Warn("邮件场景收尾仍在等待", "operation", reservation.OperationID)
+		}
+		return
+	}
 	done := make(chan struct{})
 	if !s.deps.Router.PostLifecycle(sc, scene.FinalizeMailReservation{
 		ID: id, Reservation: reservation, Commit: commit, Done: done,
@@ -310,4 +334,55 @@ func mailErrorMessage(action string, err error) string {
 	default:
 		return "邮件" + action + "失败，请稍后重试"
 	}
+}
+
+func newMailOperationID() (string, error) {
+	var id [16]byte
+	if _, err := rand.Read(id[:]); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(id[:]), nil
+}
+
+func (s *Session) awaitMailReservation(sc domain.SceneID, id domain.EntityID, reply <-chan scene.MailReserveResult, cancel chan struct{}) (scene.MailReserveResult, bool) {
+	select {
+	case reserved := <-reply:
+		return reserved, true
+	case <-time.After(3 * time.Second):
+		close(cancel)
+		// A timeout is not proof the actor did not reserve. The late result still
+		// has one owner, and no database operation is submitted for this request.
+		go func() {
+			reserved := <-reply
+			if reserved.Reason == "" {
+				s.finalizeMailReservation(sc, id, reserved.Reservation, false)
+			}
+		}()
+		return scene.MailReserveResult{}, false
+	}
+}
+
+func (s *Session) commitReservedMail(st store.MailOperationStore, op store.MailOperation, reserved scene.MailReserveResult) error {
+	var outcome error
+	commit := s.deps.WriteBack.CommitMutation(reserved.Snapshot, func(ctx context.Context, _ store.Store, candidate domain.Snapshot) error {
+		outcome = store.SettleMailOperation(ctx, st, op, reserved.Reservation.Before, candidate)
+		// Both success and proven rollback are now durable. Returning nil preserves
+		// coalesced save acknowledgements; business failure is returned separately.
+		return nil
+	})
+	if err := <-commit; err != nil {
+		return err
+	} // rejected before execution
+	return outcome
+}
+
+func (s *Session) mailOperationsReady(st store.MailOperationStore) bool {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := st.CheckMailOperations(ctx); err != nil {
+		s.log.Error("邮件存储未就绪，未预留物品", "err", err)
+		s.sendGMText("邮件存储尚未就绪，请联系管理员")
+		return false
+	}
+	return true
 }

@@ -463,6 +463,11 @@ func (m *Memory) saveSnapshotLocked(snap domain.Snapshot) error {
 	if _, ok := m.chars[snap.Char.ID]; !ok {
 		return domain.ErrCharNotFound
 	}
+	if snap.Parts == domain.SnapshotPosition {
+		c := m.chars[snap.Char.ID]
+		c.Pos, c.SceneInstance = snap.Char.Pos, snap.Char.SceneInstance
+		return nil
+	}
 	if snap.Char.Caiyu < 0 {
 		return fmt.Errorf("store: 彩玉余额不能为负")
 	}

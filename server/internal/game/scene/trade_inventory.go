@@ -53,9 +53,10 @@ func (s *Scene) finishReadyTrades(wait bool) {
 	}
 }
 
+// Trade and mail share the same inventory fence and deferred server effects.
 func (s *Scene) tradeInventoryBusy(id domain.EntityID) bool {
 	p := s.players[id]
-	return p != nil && p.Player != nil && p.Player.TradeBusy
+	return p != nil && p.Player != nil && (p.Player.TradeBusy || p.Player.MailBusy)
 }
 
 // Only server-owned effects and lifecycle commands are deferred. Client slot
@@ -88,7 +89,7 @@ func (s *Scene) rejectTradeInventoryCommand(c Command) bool {
 	if !ok || !s.tradeInventoryBusy(cmd.inventoryOwner()) {
 		return false
 	}
-	const reason = "交易正在结算，请稍后再操作物品"
+	const reason = "物品正在结算，请稍后再操作物品"
 	id := cmd.inventoryOwner()
 	switch cmd := c.(type) {
 	case GMCommand:

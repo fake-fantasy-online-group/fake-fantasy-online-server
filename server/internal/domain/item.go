@@ -1025,6 +1025,7 @@ func ConsumeDurabilityRaw(st *Stack, def ItemDef, raw int32) (changed, displayCh
 // 角色行与背包必须**一起存** —— 分开存就会出现"经验存了、物品没存"这种
 // 崩溃后的半截状态, 而那正是玩家会拿去申诉的那种。
 type Snapshot struct {
+	Parts     SnapshotParts // Zero preserves legacy full-snapshot persistence.
 	Char      *Character
 	Bag       *Bag
 	Worn      *EquipSet
@@ -1036,7 +1037,7 @@ type Snapshot struct {
 
 // Clone 做一份独立副本, 交给写回队列。
 func (s Snapshot) Clone() Snapshot {
-	out := Snapshot{Char: s.Char.Clone(), Worn: s.Worn.Clone(), Warehouse: s.Warehouse.Clone(),
+	out := Snapshot{Parts: s.Parts, Char: s.Char.Clone(), Worn: s.Worn.Clone(), Warehouse: s.Warehouse.Clone(),
 		ChangeSet: s.ChangeSet.Clone(), Wardrobe: s.Wardrobe.Clone(), Stall: s.Stall.Clone()}
 	if s.Bag != nil {
 		out.Bag = s.Bag.Clone()

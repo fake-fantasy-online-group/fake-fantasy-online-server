@@ -31,15 +31,25 @@ type Router struct {
 	// Drain 开始抓取场景列表后，不会再有 Ensure 向 WaitGroup Add。
 	draining bool
 
-	build Builder
-	alloc *domain.EntityAlloc
-	log   *slog.Logger
+	// Builders may share non-concurrent caches. Serialize them independently of
+	// the directory so cold-map IO never blocks routing to existing scenes.
+	buildMu  sync.Mutex
+	building map[domain.SceneID]*sceneBuild
+	build    Builder
+	alloc    *domain.EntityAlloc
+	log      *slog.Logger
 
 	ctx    context.Context
 	cancel context.CancelFunc
 	wg     sync.WaitGroup
 
 	nextInst atomic.Uint32
+}
+
+type sceneBuild struct {
+	done  chan struct{}
+	scene *Scene
+	err   error
 }
 
 // Builder 按场景 id 造一个场景。由上层注入 —— Router 不该认识地图数据、存档、配置表。
@@ -52,6 +62,7 @@ func NewRouter(build Builder, log *slog.Logger) *Router {
 	}
 	return &Router{
 		scenes:         map[domain.SceneID]*Scene{},
+		building:       map[domain.SceneID]*sceneBuild{},
 		instanceOwners: map[domain.SceneID]domain.DungeonOwner{},
 		trialLevels:    map[domain.SceneID]int32{}, trialCompleted: map[domain.SceneID]bool{}, instanceAdmitted: map[domain.SceneID]bool{},
 		build: build,
@@ -90,20 +101,50 @@ func (r *Router) Ensure(id domain.SceneID) (*Scene, error) {
 	}
 
 	r.mu.Lock()
-	defer r.mu.Unlock()
 	if r.draining {
+		r.mu.Unlock()
 		return nil, fmt.Errorf("scene: Router 正在关服")
 	}
-	if s, ok := r.scenes[id]; ok { // 双检: 拿写锁的路上别人可能已经建好了
+	if s, ok := r.scenes[id]; ok {
+		r.mu.Unlock()
 		return s, nil
 	}
 	if r.ctx == nil {
+		r.mu.Unlock()
 		return nil, fmt.Errorf("scene: Router.Start 还没调用")
 	}
-	s, err := r.build(id)
-	if err != nil {
-		return nil, fmt.Errorf("scene: 建场景 %v 失败: %w", id, err)
+	ctx := r.ctx
+	if pending := r.building[id]; pending != nil {
+		r.mu.Unlock()
+		select {
+		case <-pending.done:
+			return pending.scene, pending.err
+		case <-ctx.Done():
+			return nil, fmt.Errorf("scene: Router 已停止: %w", ctx.Err())
+		}
 	}
+	pending := &sceneBuild{done: make(chan struct{})}
+	r.building[id] = pending
+	r.mu.Unlock()
+
+	// Never hold r.mu while waiting for a builder or doing its IO.
+	s, err := r.buildScene(id, ctx)
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	delete(r.building, id)
+	defer close(pending.done)
+	if r.draining || ctx.Err() != nil {
+		if s != nil {
+			s.Stop() // Not published; no actor or player ownership was started.
+		}
+		pending.err = fmt.Errorf("scene: Router 正在关服")
+		return nil, pending.err
+	}
+	if err != nil {
+		pending.err = fmt.Errorf("scene: 建场景 %v 失败: %w", id, err)
+		return nil, pending.err
+	}
+	pending.scene = s
 	// 回填路由: 场景要靠它把人送去别的图。Router 拥有场景, 所以由它来接线,
 	// 而不是让每个 Builder 自己记得传。
 	s.attachRouter(r)
@@ -125,6 +166,26 @@ func (r *Router) Ensure(id domain.SceneID) (*Scene, error) {
 		r.mu.Unlock()
 	}()
 	return s, nil
+}
+
+// buildScene preserves the Builder's serial-call contract without holding the
+// routing directory lock. A builder panic must also complete its single-flight.
+func (r *Router) buildScene(id domain.SceneID, ctx context.Context) (s *Scene, err error) {
+	r.buildMu.Lock()
+	defer r.buildMu.Unlock()
+	defer func() {
+		if v := recover(); v != nil {
+			err = fmt.Errorf("builder panic: %v", v)
+		}
+	}()
+	if err = ctx.Err(); err != nil {
+		return nil, err
+	}
+	s, err = r.build(id)
+	if s == nil && err == nil {
+		err = fmt.Errorf("builder returned nil scene")
+	}
+	return s, err
 }
 
 // Post 把命令投给某个场景。场景不存在就先建。

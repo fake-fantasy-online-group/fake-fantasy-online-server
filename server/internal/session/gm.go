@@ -567,6 +567,12 @@ func (c gmSessionControl) RefreshFriends() {
 	}
 }
 
+func (c gmSessionControl) RefreshFriendsContext(ctx context.Context) {
+	if c.sess != nil {
+		c.sess.refreshFriendListContext(ctx)
+	}
+}
+
 func (c gmSessionControl) BlocksFrom(from domain.CharID) bool {
 	return c.sess != nil && c.sess.blocksFrom(from)
 }

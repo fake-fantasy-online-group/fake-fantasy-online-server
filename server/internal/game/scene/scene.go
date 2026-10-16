@@ -249,6 +249,7 @@ type Scene struct {
 	entities             map[domain.EntityID]*entity.Entity
 	players              map[domain.EntityID]*entity.Entity // entities 的子集; 广播只遍历它
 	tradeSettlements     []*pendingTradeSettlement
+	mailReservations     []pendingMailReservation
 	tradeDeferred        map[domain.EntityID][]func()
 	tradeLeaves          map[domain.EntityID]Leave
 	tradeTeleports       map[domain.EntityID]Teleport
@@ -287,6 +288,7 @@ type Scene struct {
 	items                      map[domain.ItemID]domain.ItemDef // 物品模板
 	itemIcons                  []domain.ItemIconMapping         // 0x804d 特殊图标覆盖
 	itemIconsKnown             bool
+	combatAttributes           map[domain.EntityID]*combatAttributeDependencies
 	skillRawCache              map[domain.EntityID]skillRawCacheEntry
 	skillViewDigests           map[domain.EntityID][32]byte
 	skillProgressionRefreshing bool
@@ -915,6 +917,7 @@ func (s *Scene) execTracked(c Command) {
 // finalizePendingEnters 仅用于场景因连续 panic 放弃恢复之后。此时执行普通命令可能
 // 继续破坏状态；未入场 Enter 的加载快照却仍是完整所有权，可以安全直接写回。
 func (s *Scene) finalizePendingEnters() {
+	s.rejectUnpreparedMail(s.pendingMailbox)
 	if enter, ok := s.pendingMailbox.(Enter); ok {
 		s.finalizeUnentered(enter)
 	}
@@ -929,6 +932,7 @@ func (s *Scene) finalizePendingEnters() {
 	for {
 		select {
 		case c := <-s.mailbox:
+			s.rejectUnpreparedMail(c)
 			if enter, ok := c.(Enter); ok {
 				s.finalizeUnentered(enter)
 			}
@@ -962,6 +966,7 @@ func (s *Scene) step() {
 	s.finishEndgame(false)
 	s.stepEndgameRift()
 	s.finishReadyTrades(false)
+	s.finishReadyMail(false)
 	s.tick++
 	if s.dungeon == nil && s.spawner != nil && s.tick%spawn.EliteChanceInterval == 0 {
 		s.spawner.RecordMinute()
@@ -1297,7 +1302,7 @@ func (s *Scene) attributeSnapshot(e *entity.Entity) event.StatsChanged {
 	}
 	// Use the same functional-equipment preview as combat, including growth
 	// primary stats. Unusable worn items cannot leak passive/rune stats to the panel.
-	finalBase, _, _ := s.computeSkillGrowthStats(e, s.functionalWorn(e))
+	finalBase, _, _ := s.combatGrowthStats(e)
 	writeKnownClientAttributes(current, finalBase, e.Stats)
 	current[24] = ch.FreePoints
 	current[clientAttrNianli] = ch.EffectiveNianli()
@@ -1503,8 +1508,13 @@ func (s *Scene) saveDirty() {
 	}
 	n := 0
 	for _, e := range s.players {
-		if !e.Player.TradeBusy && e.Player.TakeDirty() {
-			s.saver.Save(s.snapshotOf(e))
+		if !e.Player.TradeBusy && !e.Player.MailBusy && e.Player.Dirty() {
+			parts := e.Player.TakeDirtyParts()
+			if parts == domain.SnapshotPosition {
+				s.saver.Save(s.positionSnapshotOf(e))
+			} else {
+				s.saver.Save(s.snapshotOf(e))
+			}
 			n++
 		}
 	}
@@ -1555,6 +1565,7 @@ func (s *Scene) shutdown(reason string) {
 	s.finishEndgame(true)
 	s.finishEndgameRunWrites()
 	s.finishReadyTrades(true)
+	s.finishReadyMail(true)
 	s.log.Info("场景停止", "reason", reason, "tick", s.tick, "在线", len(s.players))
 	for _, e := range s.players {
 		s.closeStallForExit(e)

@@ -1811,7 +1811,7 @@ func (s *Scene) petTake(e *entity.Entity, owner *entity.Entity, drop *entity.Ent
 	if s.pickUpEndgameRiftReward(owner, drop, petPickupRange) {
 		return
 	}
-	if owner.Player.TradeBusy {
+	if owner.Player.TradeBusy || owner.Player.MailBusy {
 		return // Keep the drop on the ground; the pet retries after settlement.
 	}
 	def, ok := s.itemDef(drop.Drop.Item)

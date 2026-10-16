@@ -1031,6 +1031,10 @@ type ResolveChatShares struct {
 func (ResolveChatShares) CmdName() string { return "ResolveChatShares" }
 
 type MailReservation struct {
+	OperationID string
+	Before      domain.Snapshot
+	Result      chan bool
+	Done        chan struct{}
 	BeforeBag   *domain.Bag
 	BeforeMoney domain.Money
 	BeforeCaiyu int64
@@ -1063,18 +1067,22 @@ type RenderMailAttachments struct {
 func (RenderMailAttachments) CmdName() string { return "RenderMailAttachments" }
 
 type ReserveMailSend struct {
-	ID    domain.EntityID
-	Money int64
-	Items []MailItemRef
-	Reply chan MailReserveResult
+	OperationID string
+	Cancel      <-chan struct{}
+	ID          domain.EntityID
+	Money       int64
+	Items       []MailItemRef
+	Reply       chan MailReserveResult
 }
 
 func (ReserveMailSend) CmdName() string { return "ReserveMailSend" }
 
 type ReserveMailClaim struct {
-	ID    domain.EntityID
-	Mail  domain.Mail
-	Reply chan MailReserveResult
+	OperationID string
+	Cancel      <-chan struct{}
+	ID          domain.EntityID
+	Mail        domain.Mail
+	Reply       chan MailReserveResult
 }
 
 func (ReserveMailClaim) CmdName() string { return "ReserveMailClaim" }

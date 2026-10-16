@@ -35,6 +35,8 @@ func TestSixGrowthEfficiencyCapsPreserveActualCostAndCooldown(t *testing.T) {
 						}
 					}
 					p.Player.Char.Skills = domain.Learned{tc.id: min(rank, 20)}
+					// Synthetic soft-rank injection must replace both derived caches.
+					s.invalidateCombatAttributes(p)
 					s.skillRawCache = map[domain.EntityID]skillRawCacheEntry{p.ID: {key: skillRawFingerprint(p), levels: domain.Learned{tc.id: rank}}}
 					d, ok := s.skills.Get(tc.id, rank)
 					if !ok {

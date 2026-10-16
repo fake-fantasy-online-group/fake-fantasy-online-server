@@ -209,7 +209,16 @@ func (p *Postgres) SendMail(ctx context.Context, sender domain.Snapshot, draft d
 	}
 	var mailID int64
 	err := p.WithTx(ctx, func(raw Store) error {
-		tx := raw.(*pgTx)
+		var err error
+		mailID, err = sendMailTx(ctx, raw.(*pgTx), sender, draft, rule)
+		return err
+	})
+	return mailID, err
+}
+
+func sendMailTx(ctx context.Context, tx *pgTx, sender domain.Snapshot, draft domain.MailDraft, rule domain.MailRule) (int64, error) {
+	var mailID int64
+	err := func() error {
 		recipient, err := tx.CharByName(ctx, draft.RecipientName)
 		if err != nil {
 			return ErrMailRecipientNotFound
@@ -237,7 +246,7 @@ func (p *Postgres) SendMail(ctx context.Context, sender domain.Snapshot, draft d
 			return err
 		}
 		return insertMailAttachments(ctx, tx.tx, mailID, draft.Attachments)
-	})
+	}()
 	return mailID, err
 }
 
@@ -272,28 +281,31 @@ func (p *Postgres) ClaimMail(ctx context.Context, recipient domain.Snapshot, mai
 		return ErrMailNotFound
 	}
 	return p.WithTx(ctx, func(raw Store) error {
-		tx := raw.(*pgTx)
-		var money, caiyu int64
-		if err := tx.tx.QueryRow(ctx, `SELECT money,caiyu FROM character_mails WHERE id=$1 AND recipient_id=$2 FOR UPDATE`,
-			mailID, recipient.Char.ID).Scan(&money, &caiyu); err != nil {
-			return ErrMailNotFound
-		}
-		var n int
-		if err := tx.tx.QueryRow(ctx, `SELECT count(*) FROM character_mail_attachments WHERE mail_id=$1`, mailID).Scan(&n); err != nil {
-			return err
-		}
-		if money == 0 && caiyu == 0 && n == 0 {
-			return ErrMailNothingToClaim
-		}
-		if err := tx.SaveSnapshot(ctx, recipient); err != nil {
-			return err
-		}
-		if _, err := tx.tx.Exec(ctx, `DELETE FROM character_mail_attachments WHERE mail_id=$1`, mailID); err != nil {
-			return err
-		}
-		_, err := tx.tx.Exec(ctx, `UPDATE character_mails SET money=0,caiyu=0,is_read=TRUE WHERE id=$1`, mailID)
-		return err
+		return claimMailTx(ctx, raw.(*pgTx), recipient, mailID)
 	})
+}
+
+func claimMailTx(ctx context.Context, tx *pgTx, recipient domain.Snapshot, mailID int64) error {
+	var money, caiyu int64
+	if err := tx.tx.QueryRow(ctx, `SELECT money,caiyu FROM character_mails WHERE id=$1 AND recipient_id=$2 FOR UPDATE`,
+		mailID, recipient.Char.ID).Scan(&money, &caiyu); err != nil {
+		return ErrMailNotFound
+	}
+	var n int
+	if err := tx.tx.QueryRow(ctx, `SELECT count(*) FROM character_mail_attachments WHERE mail_id=$1`, mailID).Scan(&n); err != nil {
+		return err
+	}
+	if money == 0 && caiyu == 0 && n == 0 {
+		return ErrMailNothingToClaim
+	}
+	if err := tx.SaveSnapshot(ctx, recipient); err != nil {
+		return err
+	}
+	if _, err := tx.tx.Exec(ctx, `DELETE FROM character_mail_attachments WHERE mail_id=$1`, mailID); err != nil {
+		return err
+	}
+	_, err := tx.tx.Exec(ctx, `UPDATE character_mails SET money=0,caiyu=0,is_read=TRUE WHERE id=$1`, mailID)
+	return err
 }
 
 func (p *Postgres) MarkMailRead(ctx context.Context, recipientID, mailID int64) error {

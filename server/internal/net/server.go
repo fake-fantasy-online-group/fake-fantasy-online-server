@@ -2,6 +2,7 @@ package net
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"net"
 	"sync"
@@ -29,15 +30,13 @@ type Server struct {
 }
 
 func NewServer(addr string, factory HandlerFactory, opts Options) *Server {
-	if opts.Log == nil {
-		opts.Log = slog.Default()
-	}
+	opts = normalizeOptions(opts)
 	return &Server{addr: addr, factory: factory, opts: opts, log: opts.Log}
 }
 
 // Run 阻塞监听直到 ctx 取消。返回前会关闭所有已接受的连接，并等待它们的
 // serve（包括 Handler.OnClose）全部结束；调用方因此可以在 Run 返回后安全地
-// 停场景、排空写回队列，最后关闭存储。
+// 停场景、排空写回队列，最后关闭存储。超时返回错误时，清理仍可能在运行。
 func (s *Server) Run(ctx context.Context) error {
 	lc := net.ListenConfig{}
 	ln, err := lc.Listen(ctx, "tcp", s.addr)
@@ -56,8 +55,9 @@ func (s *Server) Run(ctx context.Context) error {
 		mu       sync.Mutex
 		accepted = make(map[*Conn]struct{})
 		serving  sync.WaitGroup
+		perIP    = make(map[string]int)
 	)
-	closeAccepted := func() {
+	closeAccepted := func() error {
 		mu.Lock()
 		all := make([]*Conn, 0, len(accepted))
 		for c := range accepted {
@@ -69,9 +69,24 @@ func (s *Server) Run(ctx context.Context) error {
 			// 必须关连接才能保证 serve 进入 defer 并执行 OnClose。
 			c.Close()
 		}
-		serving.Wait()
+		shutdown, cancel := context.WithTimeout(context.Background(), s.opts.ShutdownWait)
+		defer cancel()
+		if s.opts.ShutdownContext != nil {
+			if shared := s.opts.ShutdownContext(); shared != nil {
+				shutdown = shared
+			}
+		}
+		done := make(chan struct{})
+		go func() { serving.Wait(); close(done) }()
+		select {
+		case <-done:
+			return nil
+		case <-shutdown.Done():
+			return fmt.Errorf("net: handlers did not finish shutdown: %w", shutdown.Err())
+		}
 	}
 
+	handshakeSlots := make(chan struct{}, s.opts.HandshakeConcurrency)
 	watchDone := make(chan struct{})
 	go func() {
 		select {
@@ -86,8 +101,7 @@ func (s *Server) Run(ctx context.Context) error {
 		raw, err := ln.Accept()
 		if err != nil {
 			if ctx.Err() != nil {
-				closeAccepted()
-				return nil // 正常关闭；全部 OnClose 已完成
+				return closeAccepted() // nil only once all OnClose handlers finish
 			}
 			s.log.Warn("accept 出错", "err", err)
 			continue
@@ -96,25 +110,40 @@ func (s *Server) Run(ctx context.Context) error {
 		// 更不能让它阻塞在尚未发送的握手上。
 		if ctx.Err() != nil {
 			_ = raw.Close()
-			closeAccepted()
-			return nil
+			return closeAccepted()
+		}
+		ip := peerIP(raw.RemoteAddr())
+		mu.Lock()
+		allowed := len(accepted) < s.opts.MaxConnections && perIP[ip] < s.opts.MaxConnectionsPerIP
+		if allowed {
+			perIP[ip]++
+		}
+		mu.Unlock()
+		if !allowed {
+			_ = raw.Close()
+			continue
 		}
 		id := s.nextID.Add(1)
 		conn := newConn(id, raw, nil, s.opts)
+		conn.handshakeSlots = handshakeSlots
 		conn.handler = s.factory(conn) // 把 conn 作为 Sink 交给 session
 
 		mu.Lock()
 		accepted[conn] = struct{}{}
 		serving.Add(1)
 		mu.Unlock()
-		go func(c *Conn) {
+		go func(c *Conn, ip string) {
 			defer serving.Done()
 			defer func() {
 				mu.Lock()
 				delete(accepted, c)
+				perIP[ip]--
+				if perIP[ip] == 0 {
+					delete(perIP, ip)
+				}
 				mu.Unlock()
 			}()
 			c.serve(ctx)
-		}(conn)
+		}(conn, ip)
 	}
 }

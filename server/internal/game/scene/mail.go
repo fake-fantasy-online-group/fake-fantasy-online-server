@@ -28,10 +28,17 @@ func (s *Scene) onRenderMailAttachments(cmd RenderMailAttachments) {
 
 func (s *Scene) onReserveMailSend(cmd ReserveMailSend) {
 	result := MailReserveResult{}
-	defer func() { cmd.Reply <- result }()
+	defer func() { s.replyMailReservation(cmd.ID, cmd.Reply, result) }()
+	select {
+	case <-cmd.Cancel:
+		result.Reason = "邮件操作已取消"
+		return
+	default:
+	}
 	p := s.players[cmd.ID]
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil ||
-		p.Player.TradeBusy || p.Player.MailBusy || cmd.Money < 0 {
+		p.Player.TradeBusy || p.Player.MailBusy || p.Player.StallBusy || p.Player.Stall != nil ||
+		p.Player.FamilyBusy || p.Player.RackBusy || cmd.Money < 0 {
 		result.Reason = "附件或邮寄金额无效"
 		return
 	}
@@ -41,6 +48,7 @@ func (s *Scene) onReserveMailSend(cmd ReserveMailSend) {
 		return
 	}
 	result.Reservation = MailReservation{
+		OperationID: cmd.OperationID, Before: s.snapshotOf(p),
 		BeforeBag: p.Player.Bag.Clone(), BeforeMoney: p.Player.Char.Money, BeforeCaiyu: p.Player.Char.Caiyu,
 	}
 	seen := make(map[int32]struct{}, len(cmd.Items))
@@ -79,14 +87,22 @@ func (s *Scene) onReserveMailSend(cmd ReserveMailSend) {
 	p.Player.MailBusy = true
 	p.Player.MarkDirty()
 	result.Snapshot = s.snapshotOf(p)
+	s.trackMailReservation(cmd.ID, &result.Reservation)
 }
 
 func (s *Scene) onReserveMailClaim(cmd ReserveMailClaim) {
 	result := MailReserveResult{}
-	defer func() { cmd.Reply <- result }()
+	defer func() { s.replyMailReservation(cmd.ID, cmd.Reply, result) }()
+	select {
+	case <-cmd.Cancel:
+		result.Reason = "邮件操作已取消"
+		return
+	default:
+	}
 	p := s.players[cmd.ID]
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil ||
-		p.Player.TradeBusy || p.Player.MailBusy || cmd.Mail.Money < 0 || cmd.Mail.Caiyu < 0 ||
+		p.Player.TradeBusy || p.Player.MailBusy || p.Player.StallBusy || p.Player.Stall != nil ||
+		p.Player.FamilyBusy || p.Player.RackBusy || cmd.Mail.Money < 0 || cmd.Mail.Caiyu < 0 ||
 		p.Player.Char.Caiyu > math.MaxInt64-cmd.Mail.Caiyu {
 		result.Reason = "邮件内容暂时无法领取"
 		return
@@ -98,6 +114,7 @@ func (s *Scene) onReserveMailClaim(cmd ReserveMailClaim) {
 		return
 	}
 	result.Reservation = MailReservation{
+		OperationID: cmd.OperationID, Before: s.snapshotOf(p),
 		BeforeBag: p.Player.Bag.Clone(), BeforeMoney: p.Player.Char.Money, BeforeCaiyu: p.Player.Char.Caiyu,
 	}
 	trial := p.Player.Bag.Clone()
@@ -114,23 +131,96 @@ func (s *Scene) onReserveMailClaim(cmd ReserveMailClaim) {
 	p.Player.MailBusy = true
 	p.Player.MarkDirty()
 	result.Snapshot = s.snapshotOf(p)
+	s.trackMailReservation(cmd.ID, &result.Reservation)
+}
+
+// Completion uses a dedicated channel, independent of mailbox capacity. Only
+// a known durable outcome may release the reservation.
+type pendingMailReservation struct {
+	id          domain.EntityID
+	reservation MailReservation
+}
+
+func (s *Scene) trackMailReservation(id domain.EntityID, reservation *MailReservation) {
+	reservation.Result, reservation.Done = make(chan bool, 1), make(chan struct{})
+	s.mailReservations = append(s.mailReservations, pendingMailReservation{id, *reservation})
+}
+
+func (s *Scene) finishReadyMail(wait bool) {
+	for i := 0; i < len(s.mailReservations); {
+		pending := s.mailReservations[i]
+		var commit bool
+		if wait {
+			commit = <-pending.reservation.Result
+		} else {
+			select {
+			case commit = <-pending.reservation.Result:
+			default:
+				i++
+				continue
+			}
+		}
+		s.onFinalizeMailReservation(FinalizeMailReservation{
+			ID: pending.id, Reservation: pending.reservation, Commit: commit,
+		})
+	}
 }
 
 func (s *Scene) onFinalizeMailReservation(cmd FinalizeMailReservation) {
-	defer close(cmd.Done)
+	if cmd.Done != nil && cmd.Done != cmd.Reservation.Done {
+		defer close(cmd.Done)
+	}
+	var reserved *MailReservation
+	for i, pending := range s.mailReservations {
+		if pending.id == cmd.ID && pending.reservation.Done == cmd.Reservation.Done &&
+			pending.reservation.OperationID == cmd.Reservation.OperationID {
+			copy := pending.reservation
+			reserved = &copy
+			s.mailReservations = append(s.mailReservations[:i], s.mailReservations[i+1:]...)
+			break
+		}
+	}
+	if reserved == nil {
+		return
+	}
+	defer close(reserved.Done)
 	p := s.players[cmd.ID]
 	if p == nil || p.Player == nil {
 		return
 	}
-	p.Player.MailBusy = false
 	if !cmd.Commit {
-		p.Player.Bag = cmd.Reservation.BeforeBag
-		p.Player.Char.Money = cmd.Reservation.BeforeMoney
-		p.Player.Char.Caiyu = cmd.Reservation.BeforeCaiyu
-		p.Player.MarkDirty()
-		if s.saver != nil {
-			s.saver.Save(s.snapshotOf(p))
-		}
+		p.Player.Bag = reserved.BeforeBag
+		p.Player.Char.Money = reserved.BeforeMoney
+		p.Player.Char.Caiyu = reserved.BeforeCaiyu
 	}
+	p.Player.MailBusy = false
+	p.Player.MarkDirty()
 	_ = s.pushInventory(p)
+	s.runDeferredTradeMutations(cmd.ID)
+	s.finishTradeLifecycle(cmd.ID)
+}
+
+// Reply channels are buffered by the session. An abandoned or invalid caller
+// must not block the scene, nor leave a reservation without an outcome owner.
+func (s *Scene) replyMailReservation(id domain.EntityID, reply chan MailReserveResult, result MailReserveResult) {
+	select {
+	case reply <- result:
+		return
+	default:
+	}
+	if result.Reservation.Done != nil {
+		s.onFinalizeMailReservation(FinalizeMailReservation{ID: id, Reservation: result.Reservation})
+	}
+}
+
+// Panic shutdown cannot execute queued business commands. Reject accepted but
+// unexecuted prepares so a session waiting for a late reply can finish safely.
+func (s *Scene) rejectUnpreparedMail(c Command) {
+	result := MailReserveResult{Reason: "角色场景已关闭"}
+	switch cmd := c.(type) {
+	case ReserveMailSend:
+		s.replyMailReservation(cmd.ID, cmd.Reply, result)
+	case ReserveMailClaim:
+		s.replyMailReservation(cmd.ID, cmd.Reply, result)
+	}
 }

@@ -62,7 +62,10 @@ type Sink interface {
 
 // Deps 是会话依赖(构造注入, 便于测试)。
 type Deps struct {
-	RequireGrowthV5 bool // production V5 battle requires explicit capability handshake
+	MovementRate    float64          // ordinary position reports/sec, default40 (includes pre-combat flush/stop bursts)
+	MovementBurst   int              // default80; loading receipts use their existing lifecycle path
+	AuthWork        *AuthWorkLimiter // process-wide credential concurrency/attempt budget
+	RequireGrowthV5 bool             // production V5 battle requires explicit capability handshake
 	Announcements   domain.AnnouncementPool
 	Store           store.Store
 	Router          *scene.Router
@@ -114,9 +117,10 @@ type Deps struct {
 // 字段由该连接的读循环串行访问(网关保证 OnPacket 不并发), 故大部分无需锁;
 // 只有 stage/entity 这些要被别的 goroutine 看到的才用锁保护。
 type Session struct {
-	sink Sink
-	deps Deps
-	log  *slog.Logger
+	movementBudget movementIngress // connection reader only
+	sink           Sink
+	deps           Deps
+	log            *slog.Logger
 
 	mu                   sync.Mutex
 	stage                Stage
@@ -313,6 +317,12 @@ func (s *Session) OnPacket(op uint16, payload []byte) {
 		s.noteUnknown(op, payload, req.Kind)
 		return
 	}
+	releaseAuth, admitted := s.beginAuthWork(req)
+	if !admitted {
+		s.rejectAuthWork(req)
+		return
+	}
+	defer releaseAuth()
 	if s.deps.RequireGrowthV5 && (req.Kind == protocol.ReqAttack || req.Kind == protocol.ReqUseSkill || req.Kind == protocol.ReqUpgradeSkill) && !s.growthReady() {
 		s.sink.Send(protocol.EncodeEndgame(domain.EndgameResponse{Kind: "hello", Error: "update_required", Message: "请更新客户端并完成成长系统同步后再战斗。"}))
 		return
@@ -1012,10 +1022,13 @@ func (s *Session) leaveWorld(reason string, target Stage) bool {
 				s.endTradeViews(views, "对方已离开，交易取消")
 			}
 		}
-		// 通知好友我下线了。**必须在摘索引之前** ——
-		// 摘完就查不到自己了, 而 notifyFriends 要读我的好友列表(那个不受影响),
-		// 但顺序反了会让"我自己"也可能被当成在线好友通知一遍
-		s.notifyFriends(context.Background(), ch, false)
+		// Best-effort social reads must run after lifecycle removal is posted.
+		// A slow database must never prevent the final snapshot being enqueued.
+		defer func() {
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+			defer cancel()
+			s.notifyFriends(ctx, ch, false)
+		}()
 		// 摘索引**带上实体 id**: 掉线重连时新会话已经写进去了,
 		// 不比对的话旧会话的 OnClose 会把新会话的条目删掉
 		if s.deps.Online != nil {
@@ -1215,7 +1228,8 @@ func (s *Session) refreshPartyPeers() {
 
 func (s *Session) onLogin(req protocol.Request) {
 	acc := req.S1
-	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	s.mu.Lock()
 	stage := s.stage
 	s.mu.Unlock()
@@ -1283,6 +1297,9 @@ func (s *Session) onLogin(req protocol.Request) {
 		return
 	}
 
+	if transport, ok := s.sink.(interface{ MarkAuthenticated() }); ok {
+		transport.MarkAuthenticated()
+	}
 	s.sink.Send(protocol.LoginResult(0, "欢迎回来,"+acc))
 	s.sink.Send(protocol.CharacterList(toBriefs(chars)))
 	// 0x8065 只种客户端安全码状态。现有资料未给出原服免输入窗口常量，
@@ -1666,6 +1683,10 @@ func (s *Session) onMove(req protocol.Request) {
 		// 这条一定要留: 客户端画面在动而服务端不认位置, 是本项目最难查的故障形态。
 		s.log.Debug("丢弃跨图后的滞后位置上报", "id", id, "包里的图", req.MapID,
 			"当前图", sc.MapID, "x", req.X, "y", req.Y)
+		return
+	}
+	if !s.movementBudget.allow(time.Now(), s.deps.MovementRate, s.deps.MovementBurst) {
+		s.sink.Close()
 		return
 	}
 	// 记录移动请求，便于在调试日志中查看坐标。

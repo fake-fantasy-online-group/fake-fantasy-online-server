@@ -110,7 +110,10 @@ func (r *nativeStatsRig) frame() {
 func (r *nativeStatsRig) inspect(fn func(*scene.Scene)) {
 	r.t.Helper()
 	done := make(chan struct{})
-	if !r.router.Post(r.s.scene, scene.Inspect{Fn: fn, Done: done}) {
+	r.s.mu.Lock()
+	sceneID := r.s.scene
+	r.s.mu.Unlock()
+	if !r.router.Post(sceneID, scene.Inspect{Fn: fn, Done: done}) {
 		r.t.Fatal("inspect not queued")
 	}
 	r.frame()

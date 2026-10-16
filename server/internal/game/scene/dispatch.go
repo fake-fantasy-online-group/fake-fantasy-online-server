@@ -469,6 +469,16 @@ func (s *Scene) onEnter(cmd Enter) {
 			FinalSaver: cmd.FinalSaver,
 		},
 	}
+	// Attribute construction precedes admission validation. A rejected inventory,
+	// wardrobe or transfer-pet restore must not leave a runtime owner behind.
+	defer func() {
+		if s.players[e.ID] != e {
+			if state := s.combatAttributes[e.ID]; state != nil && state.owner == e {
+				s.invalidateCombatAttributes(e)
+				e.Player.CombatAttributes = nil
+			}
+		}
+	}()
 	e.Player.StartNianliRecovery(s.tick, nianliRecoveryEvery)
 	// 六维 + 装备 + 状态 -> 二级属性。这是唯一算属性的地方, 见 equip.go。
 	// 跨图先装上状态值快照供属性管线使用；RestorePlayerRuntime 会在最大值算定后
@@ -506,8 +516,9 @@ func (s *Scene) onEnter(cmd Enter) {
 	// Revalidate self-cast V5 effects against the loaded equipment/hard ranks
 	// before exposing attributes. Detached effects are filtered by restore.
 	s.reconcileEnteringSkillStatuses(e)
+	s.initializeCombatAttributes(e)
 	var growth domain.Stats
-	_, e.Stats, growth = s.computeSkillGrowthStats(e, s.functionalWorn(e))
+	_, e.Stats, growth = s.combatGrowthStats(e)
 	e.Player.SkillGrowthMaxHP, e.Player.SkillGrowthMaxMP = growth.MaxHP, growth.MaxMP
 	e.MaxHP, e.MaxMP = e.Stats.MaxHP, e.Stats.MaxMP
 	e.HP = min(e.HP, e.MaxHP)
@@ -746,6 +757,7 @@ func (s *Scene) onLeave(cmd Leave) {
 	delete(s.players, e.ID)
 	delete(s.skillViewDigests, e.ID)
 	delete(s.skillRawCache, e.ID)
+	delete(s.combatAttributes, e.ID)
 	s.removeEquipmentEntity(e.ID)
 	delete(s.hits, e.ID) // 交战状态跟着人走, 不清会一直占着内存
 	delete(s.portalBlocked, e.ID)
@@ -898,7 +910,7 @@ func (s *Scene) move(cmd MoveTo, checkPortal, force bool) {
 	}
 	e.Dir = cmd.Dir
 	if e.Player != nil {
-		e.Player.MarkDirty()
+		e.Player.MarkPositionDirty()
 		if !force && positionChanged {
 			s.requestNewbieTip(e.ID, 28) // 第一次成功行走
 		}

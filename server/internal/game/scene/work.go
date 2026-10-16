@@ -148,7 +148,7 @@ func (s *Scene) stepWork() {
 		if w == nil {
 			continue
 		}
-		if p.Player.TradeBusy {
+		if p.Player.TradeBusy || p.Player.MailBusy {
 			// Preserve both clocks and pending yield while inventory is reserved.
 			// No stamina is spent on a yield that cannot yet be granted.
 			continue

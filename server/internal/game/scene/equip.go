@@ -149,7 +149,16 @@ func (s *Scene) equipmentRequirementBaseResolved(p *entity.Entity, worn *domain.
 // mutual dependency therefore activates neither item instead of making both appear
 // valid merely because they happen to be persisted in the worn slots.
 func (s *Scene) functionalWorn(p *entity.Entity) *domain.EquipSet {
-	return s.functionalWornResolved(p, newEquipmentRequirementResolution())
+	state := s.combatAttributeState(p)
+	if state == nil {
+		return s.functionalWornResolved(p, newEquipmentRequirementResolution())
+	}
+	s.prepareCombatAttributes(p, state)
+	// The eligibility mask is stable during ordinary wear, but callers must see
+	// current stack durability, including fractional wear and tooltip values.
+	out := domain.NewEquipSet()
+	state.values.FunctionalWorn.Each(func(slot domain.EquipSlot, _ domain.Stack) { out.Set(slot, p.Player.Worn.At(slot)) })
+	return out
 }
 
 func (s *Scene) functionalWornResolved(p *entity.Entity, resolution *equipmentRequirementResolution) *domain.EquipSet {
@@ -301,11 +310,7 @@ func (s *Scene) refreshStats(p *entity.Entity) {
 	oldMaxHP, oldMaxMP := p.MaxHP, p.MaxMP
 
 	worn := s.functionalWorn(p)
-	preview := *p
-	player := *p.Player
-	player.Worn = worn
-	preview.Player = &player
-	_, stats, growth := s.computeSkillGrowthStats(&preview, worn)
+	_, stats, growth := s.combatGrowthStats(p)
 	p.Stats = stats
 	p.MaxHP = stats.MaxHP
 	p.MaxMP = stats.MaxMP

@@ -40,38 +40,45 @@ type Conn struct {
 	closed    atomic.Bool
 	closeCh   chan struct{}
 
-	handshakeLen int
-	inbound      wire.InboundDecoder
-	sendSeq      uint64
+	handshakeLen   int
+	inbound        wire.InboundDecoder
+	sendSeq        uint64
+	opts           Options
+	packets        tokenBucket
+	bytes          tokenBucket
+	authenticated  atomic.Bool
+	handshakeSlots chan struct{}
 }
 
 // Options 连接参数。
 type Options struct {
-	HandshakeLen int           // 握手包字节数, 默认 260
-	OutBuffer    int           // 下行队列容量, 默认 1024。满则判定慢客户端并断开(背压)
-	WriteWait    time.Duration // 单次写超时, 默认 10s
-	Log          *slog.Logger
+	HandshakeLen         int           // 握手包字节数, 默认 260
+	OutBuffer            int           // 下行队列容量, 默认 1024。满则判定慢客户端并断开(背压)
+	WriteWait            time.Duration // 单次写超时, 默认 10s
+	Log                  *slog.Logger
+	HandshakeWait        time.Duration          // default 10s, absolute handshake deadline
+	AuthWait             time.Duration          // default 2m to complete account authentication
+	HandshakeConcurrency int                    // default 16 RSA handshakes at once
+	ReadWait             time.Duration          // default 2m, absolute deadline for each complete frame
+	MaxConnections       int                    // default 4096
+	MaxConnectionsPerIP  int                    // default 128 (allow shared NATs)
+	PacketsPerSecond     float64                // default 100
+	PacketBurst          int                    // default 200
+	BytesPerSecond       float64                // default 2 MiB
+	ByteBurst            int                    // default 4 MiB
+	ShutdownWait         time.Duration          // default 10s
+	ShutdownContext      func() context.Context // optional shared shutdown budget
 }
 
 func newConn(id int64, raw net.Conn, h Handler, o Options) *Conn {
-	if o.HandshakeLen == 0 {
-		o.HandshakeLen = 260
-	}
-	if o.OutBuffer == 0 {
-		o.OutBuffer = 1024
-	}
-	if o.WriteWait == 0 {
-		o.WriteWait = 10 * time.Second
-	}
-	if o.Log == nil {
-		o.Log = slog.Default()
-	}
+	o = normalizeOptions(o)
 	return &Conn{
 		id: id, raw: raw, handler: h,
 		out:          make(chan []byte, o.OutBuffer),
 		closeCh:      make(chan struct{}),
 		log:          o.Log.With("conn", id),
 		handshakeLen: o.HandshakeLen,
+		opts:         o,
 	}
 }
 
@@ -112,12 +119,26 @@ func (c *Conn) serve(ctx context.Context) {
 	}()
 
 	// 1) 握手
+	_ = c.raw.SetReadDeadline(time.Now().Add(c.opts.HandshakeWait))
 	hs := make([]byte, c.handshakeLen)
 	if _, err := io.ReadFull(c.raw, hs); err != nil {
 		reason = "读握手失败: " + err.Error()
 		return
 	}
-	keys, err := c.handler.OnHandshake(hs)
+	if c.handshakeSlots != nil {
+		select {
+		case c.handshakeSlots <- struct{}{}:
+		default:
+			reason = "handshake capacity exhausted"
+			return
+		}
+	}
+	keys, err := func() (wire.Keys, error) {
+		if c.handshakeSlots != nil {
+			defer func() { <-c.handshakeSlots }()
+		}
+		return c.handler.OnHandshake(hs)
+	}()
 	if err != nil {
 		reason = "握手处理失败: " + err.Error()
 		return
@@ -128,6 +149,7 @@ func (c *Conn) serve(ctx context.Context) {
 	go c.writeLoop(ctx)
 
 	// 3) 读循环
+	authDeadline := time.Now().Add(c.opts.AuthWait)
 	for {
 		select {
 		case <-ctx.Done():
@@ -137,7 +159,19 @@ func (c *Conn) serve(ctx context.Context) {
 			return
 		default:
 		}
-		body, err := wire.ReadFrame(c.raw)
+		deadline := time.Now().Add(c.opts.ReadWait)
+		if !c.authenticated.Load() && authDeadline.Before(deadline) {
+			deadline = authDeadline
+		}
+		_ = c.raw.SetReadDeadline(deadline)
+		body, err := wire.ReadFrameWithAdmission(c.raw, func(size uint32) error {
+			now := time.Now()
+			if !c.packets.allow(now, 1, c.opts.PacketsPerSecond, float64(c.opts.PacketBurst)) ||
+				!c.bytes.allow(now, float64(size)+wire.LenPrefix, c.opts.BytesPerSecond, float64(c.opts.ByteBurst)) {
+				return errIngressLimit
+			}
+			return nil
+		})
 		if err != nil {
 			if errors.Is(err, io.EOF) {
 				reason = "客户端断开"
@@ -186,7 +220,7 @@ func (c *Conn) writeLoop(ctx context.Context) {
 				c.log.Error("封包失败", "err", err)
 				continue
 			}
-			_ = c.raw.SetWriteDeadline(time.Now().Add(10 * time.Second))
+			_ = c.raw.SetWriteDeadline(time.Now().Add(c.opts.WriteWait))
 			if _, err := c.raw.Write(frame); err != nil {
 				c.log.Warn("写出失败, 断开", "err", err)
 				c.Close()
@@ -198,3 +232,9 @@ func (c *Conn) writeLoop(ctx context.Context) {
 
 // SetKeys 允许上层在握手后更新本连接的会话密钥。
 func (c *Conn) SetKeys(k wire.Keys) { c.keys.Store(&k) }
+
+// RemoteIP identifies the actual transport peer; never trust a client supplied address.
+func (c *Conn) RemoteIP() string { return peerIP(c.raw.RemoteAddr()) }
+
+// MarkAuthenticated removes only the pre-login lifetime cap; frame deadlines remain.
+func (c *Conn) MarkAuthenticated() { c.authenticated.Store(true) }

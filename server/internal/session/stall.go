@@ -10,7 +10,6 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/scene"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/protocol"
-	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/store"
 )
 
 const stallCommitTimeout = 5 * time.Second
@@ -67,15 +66,7 @@ func (s *Session) onStallDeal(req protocol.Request) {
 		s.sendGMText("摊位成交失败：" + fallbackReason(reserved.Reason))
 		return
 	}
-	commit := s.deps.WriteBack.CommitPairMutation(reserved.Snapshots[0], reserved.Snapshots[1],
-		func(ctx context.Context, raw store.Store, a, b domain.Snapshot) error {
-			return raw.WithTx(ctx, func(tx store.Store) error {
-				if err := tx.SaveSnapshot(ctx, a); err != nil {
-					return err
-				}
-				return tx.SaveSnapshot(ctx, b)
-			})
-		})
+	commit := s.deps.WriteBack.CommitSnapshots(reserved.Snapshots[0], &reserved.Snapshots[1])
 	err := <-commit
 	s.finalizeStall(sc, reserved, err == nil)
 	if err != nil {
@@ -129,10 +120,7 @@ func (s *Session) runSingleStallMutation(raw stallReserveCommand) {
 		s.sendGMText("摆摊操作失败：" + fallbackReason(reserved.Reason))
 		return
 	}
-	commit := s.deps.WriteBack.CommitMutation(reserved.Snapshots[0],
-		func(ctx context.Context, raw store.Store, snap domain.Snapshot) error {
-			return raw.WithTx(ctx, func(tx store.Store) error { return tx.SaveSnapshot(ctx, snap) })
-		})
+	commit := s.deps.WriteBack.CommitSnapshots(reserved.Snapshots[0], nil)
 	err := <-commit
 	s.finalizeStall(sc, reserved, err == nil)
 	if err != nil {

@@ -1,7 +1,6 @@
 package scene
+
 import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
-
 
 import (
 	"math"
@@ -125,6 +124,8 @@ func TestAstralRuneRegenEligibilityAndSnapshotValidation(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			s, p, _, st := astralRuneRegenFixture(t)
 			tc.edit(s, p, &st)
+			// This fixture edits immutable item templates as well as live instances.
+			s.invalidateCombatAttributes(p)
 			p.Player.Worn.Set(domain.SlotWeapon, st)
 			if got := s.astralRuneRegenAmount(p); got != 0 {
 				t.Fatal("invalid source produced recovery", got)

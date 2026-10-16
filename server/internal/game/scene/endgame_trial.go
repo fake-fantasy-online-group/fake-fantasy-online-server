@@ -84,11 +84,27 @@ func (s *Scene) beginEndgameTrial() {
 		ch := p.Player.Char
 		id := domain.CharID(ch.ID)
 		x.Members[id] = &endgameTrialMember{Opening: domain.TrialKeyMember{CharID: id, Level: ch.Level, Cycle: ch.Trial.Cycle}, Progress: ch.Trial, LastSeenMS: x.StartedMS}
-		ch.Trial.CompletionID = x.Nonce
-		ch.Trial.KeyReward = 0
-		p.Player.MarkDirty()
-		if s.saver != nil {
-			s.saver.Save(s.snapshotOf(p).Clone())
+		s.recordEndgameTrialOpening(p, x.Nonce)
+	}
+}
+
+// Membership is frozen immediately, including reserved players. Only the
+// character mutation and full save wait for inventory ownership to be known.
+func (s *Scene) recordEndgameTrialOpening(p *entity.Entity, nonce string) {
+	if s.deferTradeMutation(p.ID, func() { s.recordEndgameTrialOpening(p, nonce) }) {
+		return
+	}
+	p.Player.Char.Trial.CompletionID = nonce
+	p.Player.Char.Trial.KeyReward = 0
+	p.Player.MarkDirty()
+	if s.saver != nil {
+		s.saver.Save(s.snapshotOf(p).Clone())
+	}
+	// The trial may have completed while the mail/ trade outcome was unknown.
+	// Preserve its entitlement before a deferred disconnect removes the player.
+	if x := s.trialRun; x != nil {
+		if completion, ok := x.Completions[nonce]; ok && (nonce != x.Nonce || x.Saved) {
+			s.assignEndgameTrial(p, completion)
 		}
 	}
 }

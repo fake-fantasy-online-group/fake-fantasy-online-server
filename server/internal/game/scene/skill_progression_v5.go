@@ -1,11 +1,11 @@
 package scene
 
 import (
-	"crypto/sha256"
-	"encoding/json"
+	"encoding/binary"
 	"fmt"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
+	"sort"
 )
 
 // Each authored budget entry has an instance-stable source identity. One item can
@@ -52,18 +52,46 @@ func (s *Scene) skillRanksResolved(p *entity.Entity, resolution *equipmentRequir
 	if treasure := s.equippedTreasureSkill(p); treasure != nil {
 		grants = append(grants, domain.SkillGrant{SourceID: "treasure", SkillID: treasure.ID, Rank: 1, Origin: "treasure_grant"})
 	}
-	return domain.ResolveSkillLoadout(int32(ch.Race)+1, ch.Skills, s.skillRankBonusesResolved(p, resolution), grants, s.skills.ProgressionCatalog())
+	bonuses := s.skillRankBonusesResolved(p, resolution)
+	// With no equipment rank sources, every subset has the exact same permanent
+	// loadout. Eligibility still runs above; only the pure catalogue resolution
+	// is shared inside this one immutable actor evaluation.
+	plain := resolution != nil && len(bonuses) == 0 && len(grants) == 0
+	if plain && resolution.plainRanksReady {
+		return resolution.plainRanks, nil
+	}
+	ranks, err := domain.ResolveSkillLoadout(int32(ch.Race)+1, ch.Skills, bonuses, grants, s.skills.ProgressionCatalog())
+	if plain && err == nil {
+		resolution.plainRanks, resolution.plainRanksReady = ranks, true
+	}
+	return ranks, err
 }
 
 // rawSkillLevels is the single raw, nonrecursive snapshot used by every passive consumer.
 // Legacy tables keep exact legacy levels; the returned map never aliases permanent hard points.
 func (s *Scene) rawSkillLevels(p *entity.Entity) domain.Learned {
-	return s.rawSkillLevelsResolved(p, newEquipmentRequirementResolution())
+	state := s.combatAttributeState(p)
+	if state == nil {
+		return s.rawSkillLevelsResolved(p, newEquipmentRequirementResolution())
+	}
+	s.prepareCombatAttributes(p, state)
+	return state.values.RawSkills.Clone()
 }
 
-func (s *Scene) rawSkillLevelsResolved(p *entity.Entity, resolution *equipmentRequirementResolution) domain.Learned {
+func (s *Scene) rawSkillLevelsResolved(p *entity.Entity, resolution *equipmentRequirementResolution) (result domain.Learned) {
 	if p == nil || p.Player == nil || p.Player.Char == nil {
 		return nil
+	}
+	// Every recursive preview in this context has the same actor inputs and
+	// only removes fixed slots. Memoize each subset before the legacy full-stack
+	// fingerprint; the latter otherwise serializes the same gear over and over.
+	if resolution != nil {
+		mask := equipmentRequirementMask(p.Player.Worn)
+		if levels, ok := resolution.raw[mask]; ok {
+			resolution.rawHits++
+			return levels.Clone()
+		}
+		defer func() { resolution.raw[mask] = result.Clone() }()
 	}
 	out := p.Player.Char.Skills.Clone()
 	hasV5 := false
@@ -95,6 +123,11 @@ func (s *Scene) rawSkillLevelsResolved(p *entity.Entity, resolution *equipmentRe
 			}
 		}
 		return out
+	}
+	// An equipment grant can be the first skill of an otherwise unlearned
+	// character; preserve the nil legacy fast path but allocate before grants.
+	if out == nil && len(ranks) > 0 {
+		out = make(domain.Learned)
 	}
 	for id, r := range ranks {
 		if !s.skills.V5Enabled(id) {
@@ -274,23 +307,42 @@ func applyProgressionStatus(app domain.StatusApplication, status *domain.StatusD
 // Equipment eligibility and source composition are part of the key. This caches
 // only immutable raw ranks, never cast-local or synergy-enhanced definitions.
 type skillRawCacheEntry struct {
-	key    [32]byte
+	key    skillRawCacheKey
 	levels domain.Learned
 }
 
-func skillRawFingerprint(p *entity.Entity) [32]byte {
+// Gear snapshots already own a revision and value-only stacks. Use their
+// identity/revision instead of serializing every socket/card/affix for every
+// recursive trial. A cloned preview may miss this scene memo; the evaluation's
+// subset memo handles those repeats. This key never escapes runtime memory.
+type skillRawCacheKey struct {
+	character                 *domain.Character
+	worn                      *domain.EquipSet
+	revision                  uint64
+	charID                    int64
+	profession                domain.Race
+	level                     int32
+	base                      domain.Base
+	hard                      string
+	employed, employmentKnown bool
+	gender                    uint8
+}
+
+func skillRawFingerprint(p *entity.Entity) skillRawCacheKey {
 	ch := p.Player.Char
-	var worn []domain.Stack
-	p.Player.Worn.Each(func(_ domain.EquipSlot, st domain.Stack) { worn = append(worn, st) })
-	b, _ := json.Marshal(struct {
-		CharID                    int64
-		Profession                domain.Race
-		Level                     int32
-		Base                      domain.Base
-		Hard                      domain.Learned
-		Worn                      []domain.Stack
-		Employed, EmploymentKnown bool
-		Gender                    uint8
-	}{ch.ID, ch.Race, ch.Level, ch.EffectiveBase(), ch.Skills, worn, ch.Employed, ch.EmploymentKnown, ch.Appear.Gender})
-	return sha256.Sum256(b)
+	ids := make([]domain.SkillID, 0, len(ch.Skills))
+	for id := range ch.Skills {
+		ids = append(ids, id)
+	}
+	sort.Slice(ids, func(i, j int) bool { return ids[i] < ids[j] })
+	// Exact canonical encoding, not a probabilistic hash. Hard-point maps are
+	// small, and callers can still mutate them in place without an epoch bump.
+	hard := make([]byte, 8*len(ids))
+	for i, id := range ids {
+		binary.LittleEndian.PutUint32(hard[i*8:], uint32(id))
+		binary.LittleEndian.PutUint32(hard[i*8+4:], uint32(ch.Skills[id]))
+	}
+	return skillRawCacheKey{character: ch, worn: p.Player.Worn, revision: p.Player.Worn.EffectsRevision(),
+		charID: ch.ID, profession: ch.Race, level: ch.Level, base: ch.EffectiveBase(), hard: string(hard),
+		employed: ch.Employed, employmentKnown: ch.EmploymentKnown, gender: ch.Appear.Gender}
 }

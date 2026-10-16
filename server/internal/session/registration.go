@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 	"unicode"
 	"unicode/utf8"
 
@@ -24,6 +25,8 @@ const (
 // onRegister 是正式客户端 0x105d 的账号创建入口。注册只落账号，不改变当前
 // Session 的认证阶段；客户端收到 0x8009 成功结果后会返回登录流程。
 func (s *Session) onRegister(req protocol.Request) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	s.mu.Lock()
 	stage := s.stage
 	s.mu.Unlock()
@@ -50,7 +53,7 @@ func (s *Session) onRegister(req protocol.Request) {
 	}
 
 	_, err = s.deps.Store.CreateRegisteredAccount(
-		context.Background(), req.S1, string(passHash), string(secHash),
+		ctx, req.S1, string(passHash), string(secHash),
 	)
 	if errors.Is(err, store.ErrDup) {
 		s.sink.Send(protocol.RegisterResult(1, "账号已存在"))
@@ -82,7 +85,8 @@ func (s *Session) onResetPassword(req protocol.Request) {
 		s.sink.Send(protocol.ResetPasswordResult(1, "账号、安全码或新密码格式无效"))
 		return
 	}
-	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	account, err := s.deps.Store.AccountByName(ctx, req.S1)
 	if err != nil {
 		s.log.Error("重置密码查询账号失败", "acc", req.S1, "err", err)

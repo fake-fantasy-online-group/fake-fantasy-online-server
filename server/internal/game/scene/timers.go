@@ -23,7 +23,14 @@ func (h timerHeap) Len() int           { return len(h) }
 func (h timerHeap) Less(i, j int) bool { return h[i].at < h[j].at }
 func (h timerHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
 func (h *timerHeap) Push(x any)        { *h = append(*h, x.(timer)) }
-func (h *timerHeap) Pop() any          { old := *h; n := len(old); v := old[n-1]; *h = old[:n-1]; return v }
+func (h *timerHeap) Pop() any {
+	old := *h
+	n := len(old)
+	v := old[n-1]
+	old[n-1] = timer{}
+	*h = old[:n-1]
+	return v
+}
 
 // timers 是一个按触发帧排序的最小堆。只在场景 goroutine 内访问。
 type timers struct{ h timerHeap }

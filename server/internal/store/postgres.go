@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"sync/atomic"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -17,8 +18,9 @@ import (
 // Postgres 是 Store 的 PostgreSQL 实现(生产存储)。语义与 Memory 一致, 保证上层逻辑
 // 在两种实现下行为相同。连接池由 pgxpool 管理; 事务用真实 DB 事务。
 type Postgres struct {
-	endgameCatalog *domain.EndgameCatalog
-	pool           *pgxpool.Pool
+	mailOperationsReady atomic.Bool
+	endgameCatalog      *domain.EndgameCatalog
+	pool                *pgxpool.Pool
 }
 
 // Open 建立连接池。dsn 例: postgres://fantasy:fantasy_dev@localhost:5433/fantasy
@@ -507,7 +509,7 @@ func (p *Postgres) WithTx(ctx context.Context, fn func(Store) error) error {
 	if err := fn(&pgTx{tx: tx, endgameCatalog: p.endgameCatalog}); err != nil {
 		return err
 	}
-	return tx.Commit(ctx)
+	return classifyCommitError(tx.Commit(ctx))
 }
 
 // pgTx 是事务内的 Store 视图, 所有操作走同一个 tx。

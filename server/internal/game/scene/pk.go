@@ -27,7 +27,7 @@ func (s *Scene) onSetPKMode(cmd SetPKMode) {
 	// 0x8053 表达的是当前可互伤状态，不是模式偏好。PVP 未开放时无论玩家
 	// 选择哪种模式，旁观者都只收到中性状态 0。
 	s.emitExcept(event.PlayerPKStateChanged{Who: p.ID, State: 0}, p.ID)
-	if s.saver != nil && !p.Player.TradeBusy {
+	if s.saver != nil && !p.Player.TradeBusy && !p.Player.MailBusy {
 		s.saver.Save(s.snapshotOf(p))
 	}
 }

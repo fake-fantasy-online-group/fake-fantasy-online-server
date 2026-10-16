@@ -23,9 +23,10 @@ import (
 //	失败留在队列    写库失败就把它放回去下轮重试(除非期间有更新的版本顶掉它)。
 //	              dirty 标记在场景侧已经清了, 这里再丢就真的丢档了。
 type WriteBack struct {
-	st       Store
-	log      *slog.Logger
-	interval time.Duration
+	st             Store
+	log            *slog.Logger
+	interval       time.Duration
+	attemptTimeout time.Duration
 
 	mu      sync.Mutex
 	pending map[int64]*writeBackEntry
@@ -54,6 +55,7 @@ type writeBackEntry struct {
 	waiters    []chan struct{}
 	mutation   SnapshotMutation
 	mutationCh chan error
+	retryAt    time.Time
 }
 
 type writeBackPair struct {
@@ -65,7 +67,8 @@ type writeBackPair struct {
 }
 
 // SnapshotMutation 在写回队列的角色顺序线上提交一次“角色快照 + 外部物权”事务。
-// 实现必须自己使用 Store.WithTx；返回错误时整笔事务视为没有发生。
+// 实现必须自己使用 Store.WithTx，并在返回前协调不确定的 COMMIT；只有已证明
+// 未提交的错误才能返回给调用方回滚。任意事务不得自动重放。
 type SnapshotMutation func(context.Context, Store, domain.Snapshot) error
 
 // PairSnapshotMutation 在同一数据库事务内提交两个在线角色的最终候选快照。
@@ -81,7 +84,7 @@ func NewWriteBack(st Store, interval time.Duration, log *slog.Logger) *WriteBack
 		log = slog.Default()
 	}
 	return &WriteBack{
-		st: st, log: log, interval: interval,
+		st: st, log: log, interval: interval, attemptTimeout: 10 * time.Second,
 		pending:  map[int64]*writeBackEntry{},
 		inflight: map[int64]*writeBackEntry{},
 		pairs:    map[*writeBackPair]struct{}{}, pairByChar: map[int64]*writeBackPair{},
@@ -125,9 +128,9 @@ func (w *WriteBack) CommitMutation(s domain.Snapshot, mutation SnapshotMutation)
 	}
 	id := s.Char.ID
 	w.mu.Lock()
-	if w.pairByChar[id] != nil {
+	if w.pairByChar[id] != nil || (w.inflight[id] != nil && w.inflight[id].mutation != nil) {
 		w.mu.Unlock()
-		result <- fmt.Errorf("store: 角色 %d 正在提交双角色事务", id)
+		result <- fmt.Errorf("store: 角色 %d 正在提交快照事务", id)
 		close(result)
 		return result
 	}
@@ -138,7 +141,7 @@ func (w *WriteBack) CommitMutation(s domain.Snapshot, mutation SnapshotMutation)
 			close(result)
 			return result
 		}
-		queued.snap = s
+		queued.snap = domain.MergeSnapshots(queued.snap, s)
 		queued.mutation = mutation
 		queued.mutationCh = result
 	} else {
@@ -171,6 +174,12 @@ func (w *WriteBack) CommitPairMutation(a, b domain.Snapshot, mutation PairSnapsh
 		return result
 	}
 	for _, id := range ids {
+		if active := w.inflight[id]; active != nil && active.mutation != nil {
+			w.mu.Unlock()
+			result <- fmt.Errorf("store: 角色 %d 已有快照事务正在提交", id)
+			close(result)
+			return result
+		}
 		if queued := w.pending[id]; queued != nil && queued.mutation != nil {
 			w.mu.Unlock()
 			result <- fmt.Errorf("store: 角色 %d 已有快照事务在排队", id)
@@ -203,7 +212,7 @@ func (w *WriteBack) enqueue(s domain.Snapshot, waiter chan struct{}) {
 	if pair := w.pairByChar[id]; pair != nil && !pair.inflight {
 		for i := range pair.snaps {
 			if pair.snaps[i].Char != nil && pair.snaps[i].Char.ID == id {
-				pair.snaps[i] = s
+				pair.snaps[i] = domain.MergeSnapshots(pair.snaps[i], s)
 				if waiter != nil {
 					pair.waiters[i] = append(pair.waiters[i], waiter)
 				}
@@ -215,7 +224,7 @@ func (w *WriteBack) enqueue(s domain.Snapshot, waiter chan struct{}) {
 	if queued := w.pending[id]; queued != nil {
 		// pending 中的旧版本还没有开始 IO，可以直接由更新快照顶掉；已经挂在
 		// 旧版本上的确认必须保留，因为新快照包含并超越了它所代表的状态。
-		queued.snap = s
+		queued.snap = domain.MergeSnapshots(queued.snap, s)
 		if waiter != nil {
 			queued.waiters = append(queued.waiters, waiter)
 		}
@@ -238,7 +247,7 @@ func (w *WriteBack) enqueue(s domain.Snapshot, waiter chan struct{}) {
 // 退出前会把队列排空 —— 关服时"最后那批存档"就是靠这里。
 func (w *WriteBack) Run(ctx context.Context) {
 	defer close(w.closed)
-	tk := time.NewTicker(w.interval)
+	tk := time.NewTicker(min(w.interval, 100*time.Millisecond))
 	defer tk.Stop()
 
 	for {
@@ -262,124 +271,127 @@ func (w *WriteBack) Run(ctx context.Context) {
 // 没有 pending/inflight；外层 Close 的 timeout 只负责报告停服失败，绝不能关闭
 // w.closed 冒充“已经排空”。生产关服顺序保证调用它之后不会再有场景入队。
 func (w *WriteBack) drainUntilEmpty(ctx context.Context) {
+	tk := time.NewTicker(min(w.interval, 100*time.Millisecond))
+	defer tk.Stop()
 	for {
 		w.drain(ctx)
-		w.mu.Lock()
-		remaining := len(w.pending) + len(w.inflight)
-		w.mu.Unlock()
-		if remaining == 0 {
+		if w.Pending() == 0 {
 			return
 		}
-		time.Sleep(w.interval)
+		select {
+		case <-w.wake:
+		case <-tk.C:
+		}
 	}
 }
 
-// drain 把当前队列全部写库。失败的放回队列, 但**不覆盖更新的版本** ——
-// 重试写回一份旧数据会把玩家的进度回退, 那比丢一次写还糟。
+func (w *WriteBack) signal() {
+	select {
+	case w.wake <- struct{}{}:
+	default:
+	}
+}
+
+// drain schedules independent ownership lanes, never database IO under mu.
+// A lane stays occupied until its callback actually returns, even after its
+// context expires. Uncertain economic commits retain their ownership during
+// reconciliation without blocking unrelated characters.
 func (w *WriteBack) drain(ctx context.Context) {
-	w.drainPairs(ctx)
 	w.mu.Lock()
-	if len(w.pending) == 0 {
-		w.mu.Unlock()
-		return
-	}
-	batch := w.pending
-	w.pending = make(map[int64]*writeBackEntry, len(batch))
-	for id, entry := range batch {
-		w.inflight[id] = entry
-	}
-	w.mu.Unlock()
-
-	for id, entry := range batch {
-		snap := entry.snap
-		var err error
-		if entry.mutation != nil {
-			err = entry.mutation(ctx, w.st, snap)
-		} else {
-			err = w.st.SaveSnapshot(ctx, snap)
-		}
-		// **失败的条目在同一把锁里放回队列**, 与 inflight 减一是原子的 ——
-		// 分成两步的话中间那一瞬它既不在 inflight 也不在 pending, 查出来就是丢了
-		var committed []chan struct{}
-		w.mu.Lock()
-		delete(w.inflight, id)
-		if err != nil && entry.mutation == nil {
-			if newer := w.pending[id]; newer != nil {
-				// 旧版本写失败但已有更新版本时，不能把旧快照塞回去覆盖更新状态；
-				// 同时也不能丢掉旧版本的提交观察者，它们改由更新版本兑现。
-				newer.waiters = append(newer.waiters, entry.waiters...)
-			} else {
-				w.pending[id] = entry
-			}
-		} else if err == nil {
-			committed = entry.waiters
-		} else {
-			// 自定义事务由会话层根据业务错误回滚内存状态；期间合并进来的更新
-			// 仍含“已预留”的物品，不能让它随后单独落库。回滚完成后场景会重新 Save。
-			delete(w.pending, id)
-		}
-		w.mu.Unlock()
-		if entry.mutationCh != nil {
-			entry.mutationCh <- err
-			close(entry.mutationCh)
-		}
-		if err != nil {
-			if entry.mutation == nil {
-				w.log.Error("存档失败, 将重试", "char", snap.Char.Name, "id", snap.Char.ID, "err", err)
-			} else {
-				w.log.Warn("角色快照事务失败，等待业务回滚", "char", snap.Char.Name, "id", snap.Char.ID, "err", err)
-			}
-			continue
-		}
-		for _, waiter := range committed {
-			close(waiter)
-		}
-	}
-}
-
-func (w *WriteBack) drainPairs(ctx context.Context) {
-	w.mu.Lock()
-	if len(w.pairs) == 0 {
-		w.mu.Unlock()
-		return
-	}
-	pairs := make([]*writeBackPair, 0, len(w.pairs))
 	for pair := range w.pairs {
-		// 旧的单角色写入若仍在 IO，留到下一轮；写回循环本身串行，通常不会命中。
-		if w.inflight[pair.snaps[0].Char.ID] != nil || w.inflight[pair.snaps[1].Char.ID] != nil {
+		a, b := pair.snaps[0].Char.ID, pair.snaps[1].Char.ID
+		if w.inflight[a] != nil || w.inflight[b] != nil {
 			continue
 		}
 		delete(w.pairs, pair)
 		pair.inflight = true
-		pairs = append(pairs, pair)
+		go w.writePair(ctx, pair)
 	}
-	w.mu.Unlock()
-	for _, pair := range pairs {
-		err := pair.mutation(ctx, w.st, pair.snaps[0], pair.snaps[1])
-		ids := [2]int64{pair.snaps[0].Char.ID, pair.snaps[1].Char.ID}
-		var committed []chan struct{}
-		w.mu.Lock()
-		for i, id := range ids {
-			delete(w.pairByChar, id)
-			if err != nil {
-				// 保留态即将由场景回滚；期间产生的候选普通快照不能单独落盘。
-				delete(w.pending, id)
-			} else {
-				committed = append(committed, pair.waiters[i]...)
-			}
-		}
-		w.mu.Unlock()
-		pair.result <- err
-		close(pair.result)
-		if err != nil {
-			w.log.Warn("双角色快照事务失败，等待业务回滚",
-				"charA", pair.snaps[0].Char.Name, "charB", pair.snaps[1].Char.Name, "err", err)
+	for id, entry := range w.pending {
+		if w.inflight[id] != nil || w.pairByChar[id] != nil || time.Now().Before(entry.retryAt) {
 			continue
 		}
-		for _, waiter := range committed {
-			close(waiter)
+		delete(w.pending, id)
+		w.inflight[id] = entry
+		go w.writeEntry(ctx, id, entry)
+	}
+	w.mu.Unlock()
+}
+
+func (w *WriteBack) writeEntry(parent context.Context, id int64, entry *writeBackEntry) {
+	ctx, cancel := context.WithTimeout(parent, w.attemptTimeout)
+	defer cancel()
+	var err error
+	if entry.mutation != nil {
+		err = entry.mutation(ctx, w.st, entry.snap)
+	} else {
+		err = w.st.SaveSnapshot(ctx, entry.snap)
+	}
+	var committed []chan struct{}
+	w.mu.Lock()
+	delete(w.inflight, id)
+	if err != nil && entry.mutation == nil {
+		if newer := w.pending[id]; newer != nil {
+			newer.snap = domain.MergeSnapshots(entry.snap, newer.snap)
+			newer.waiters = append(newer.waiters, entry.waiters...)
+			newer.retryAt = time.Now().Add(min(w.interval, time.Second))
+		} else if pair := w.pairByChar[id]; pair != nil {
+			// The pair supersedes an older ordinary save, but not its waiters.
+			for i := range pair.snaps {
+				if pair.snaps[i].Char.ID == id {
+					pair.waiters[i] = append(pair.waiters[i], entry.waiters...)
+				}
+			}
+		} else {
+			entry.retryAt = time.Now().Add(min(w.interval, time.Second))
+			w.pending[id] = entry
+		}
+	} else if err == nil {
+		committed = entry.waiters
+	} else {
+		// Only definitive business failures may reach here. Unknown economic
+		// outcomes reconcile inside the callback while retaining this lane.
+		delete(w.pending, id)
+	}
+	w.mu.Unlock()
+	if entry.mutationCh != nil {
+		entry.mutationCh <- err
+		close(entry.mutationCh)
+	}
+	for _, waiter := range committed {
+		close(waiter)
+	}
+	if err != nil {
+		w.log.Warn("角色写回失败", "id", id, "mutation", entry.mutation != nil, "err", err)
+	}
+	w.signal()
+}
+
+func (w *WriteBack) writePair(parent context.Context, pair *writeBackPair) {
+	ctx, cancel := context.WithTimeout(parent, w.attemptTimeout)
+	defer cancel()
+	err := pair.mutation(ctx, w.st, pair.snaps[0], pair.snaps[1])
+	var committed []chan struct{}
+	w.mu.Lock()
+	for i, snap := range pair.snaps {
+		id := snap.Char.ID
+		delete(w.pairByChar, id)
+		if err != nil {
+			delete(w.pending, id)
+		} else {
+			committed = append(committed, pair.waiters[i]...)
 		}
 	}
+	w.mu.Unlock()
+	pair.result <- err
+	close(pair.result)
+	for _, waiter := range committed {
+		close(waiter)
+	}
+	if err != nil {
+		w.log.Warn("双角色快照事务失败，等待业务回滚", "err", err)
+	}
+	w.signal()
 }
 
 // Close 请求停止并等队列排空。关服第三步(前两步: 网关停止接客、场景存档)。
@@ -410,5 +422,16 @@ func (w *WriteBack) Close(timeout time.Duration) error {
 func (w *WriteBack) Pending() int {
 	w.mu.Lock()
 	defer w.mu.Unlock()
-	return len(w.pending) + len(w.inflight) + len(w.pairByChar)
+	n := len(w.pending)
+	for id := range w.inflight {
+		if w.pending[id] == nil {
+			n++
+		}
+	}
+	for id := range w.pairByChar {
+		if w.pending[id] == nil && w.inflight[id] == nil {
+			n++
+		}
+	}
+	return n
 }

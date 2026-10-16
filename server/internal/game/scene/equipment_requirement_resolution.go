@@ -11,15 +11,19 @@ import "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/i
 // With n worn slots each table has at most 2^n entries (usually only n prefixes),
 // replacing repeated recursive expansion with one evaluation per subset.
 type equipmentRequirementResolution struct {
-	bases              map[uint32]domain.Base
-	worn               map[uint32]*domain.EquipSet
-	baseHits, wornHits int
+	plainRanks                  domain.SkillResolutionSnapshot
+	plainRanksReady             bool
+	bases                       map[uint32]domain.Base
+	worn                        map[uint32]*domain.EquipSet
+	raw                         map[uint32]domain.Learned
+	baseHits, wornHits, rawHits int
 }
 
 func newEquipmentRequirementResolution() *equipmentRequirementResolution {
 	return &equipmentRequirementResolution{
 		bases: make(map[uint32]domain.Base),
 		worn:  make(map[uint32]*domain.EquipSet),
+		raw:   make(map[uint32]domain.Learned),
 	}
 }
 

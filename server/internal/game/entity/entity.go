@@ -459,6 +459,8 @@ func clampCurrent(current, maximum int32) int32 {
 
 // Player 是玩家实体的专有部分。
 type Player struct {
+	// Runtime attribute entity, initialized on admission and rebuilt on input changes.
+	CombatAttributes *CombatAttributes
 	// Dynamic skill-growth contributions are recomputed on entry, never persisted.
 	// Removing them from max-resource deltas prevents soft-rank toggles from healing.
 	SkillGrowthMaxHP, SkillGrowthMaxMP int32
@@ -535,8 +537,9 @@ type Player struct {
 	// 经它提交最后快照，避免 Session 看见“场景已停”时猜测哪次写入才是最终版。
 	FinalSaver SnapshotSaver
 
-	dirty  bool        // 有未落盘的变更
-	nextAt domain.Tick // 下次可攻击的帧
+	dirtyParts domain.SnapshotParts
+	dirty      bool        // 有未落盘的变更
+	nextAt     domain.Tick // 下次可攻击的帧
 	// dungeonEvictAt 只在副本内失去组队资格后有值。恢复组队即清除；
 	// 在线到期由场景传送到出口，中途下线则由存档边界直接落出口。
 	dungeonEvictAt domain.Tick
@@ -762,13 +765,17 @@ func (p *Player) Protect(until domain.Tick) { p.safeUntil = until }
 func (p *Player) Protected(now domain.Tick) bool { return now < p.safeUntil }
 
 // MarkDirty 标记有未落盘变更。移动、升级、掉血都该调它。
-func (p *Player) MarkDirty() { p.dirty = true }
+func (p *Player) MarkDirty() {
+	p.dirty = true
+	p.dirtyParts = 0
+}
 
 // TakeDirty 取出并清除脏标记。只有真的准备写盘时才调 ——
 // 清了标记又没写成功, 这次变更就永远丢了。
 func (p *Player) TakeDirty() bool {
 	d := p.dirty
 	p.dirty = false
+	p.dirtyParts = 0
 	return d
 }
 

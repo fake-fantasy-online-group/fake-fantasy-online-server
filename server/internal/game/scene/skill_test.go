@@ -86,7 +86,7 @@ var 技能怪 = domain.MonsterDef{
 }
 
 // skillScene 建一个能放技能的场景, 一只怪在 (140,100)。
-func skillScene(t *testing.T, monsters ...domain.Pos) (*Scene, []domain.EntityID) {
+func skillScene(t testing.TB, monsters ...domain.Pos) (*Scene, []domain.EntityID) {
 	t.Helper()
 	if len(monsters) == 0 {
 		monsters = []domain.Pos{{MapID: 14, X: 140, Y: 100}}

@@ -42,6 +42,8 @@ func requirementResolutionItem(s *Scene, p *entity.Entity, slot domain.EquipSlot
 	id := domain.ItemID(990000 + slot)
 	d := domain.ItemDef{EndgameCatalog: catalogfixture.EndgameCatalog(), ID: id, Equip: &domain.EquipDef{Slot: int32(slot), Durable: 100,
 		Need: domain.Requirement{Base: domain.Base{STR: need}}, Base: domain.Base{STR: bonus}}}
+	// Tests can replace templates; production scene catalogs are immutable.
+	s.invalidateCombatAttributes(p)
 	s.items[id] = d
 	st := domain.NewStack(d, 1)
 	st.UID = int64(id)
@@ -147,8 +149,8 @@ func TestEquipmentRequirementResolutionSoftRanksRemainSeparate(t *testing.T) {
 	for _, need := range []int32{0, 1000, 0} {
 		d.Equip.Need.Base.STR = need
 		// Definitions are immutable in production; clear the pre-existing unrelated
-		// raw-rank cache because this test deliberately edits the source definition.
-		s.skillRawCache = nil
+		// caches because this test deliberately edits the source definition.
+		s.invalidateCombatAttributes(p)
 		want := s.rawSkillLevelsResolved(p, nil)
 		s.skillRawCache = nil
 		got := s.rawSkillLevels(p)

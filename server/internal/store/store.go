@@ -166,6 +166,8 @@ type Store interface {
 	CreateChar(ctx context.Context, c *domain.Character) error // 成功后 c.ID 被填充
 	SaveChar(ctx context.Context, c *domain.Character) error   // 只存角色行(登录时间之类)
 	// SaveSnapshot 把角色行与背包**在一个事务里**一起存。
+	// Explicit SnapshotPosition saves update coordinates only; zero Parts retains
+	// full aggregate semantics, including empty inventory/pet/stall removals.
 	//
 	// 分开存会出现"经验存了、物品没存"这种崩溃后的半截状态 ——
 	// 那正是玩家会拿去申诉的那一类。

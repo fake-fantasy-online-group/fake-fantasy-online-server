@@ -1,7 +1,6 @@
 package session
 
 import (
-	"context"
 	"time"
 
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -10,7 +9,6 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/social"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/trade"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/protocol"
-	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/store"
 )
 
 const tradeOfferValidationTimeout = 2 * time.Second
@@ -185,15 +183,7 @@ func (s *Session) onTradeConfirm() {
 		s.abortTradeSettlement(domain.CharID(me.ID), entity, "交易确认失败："+reason)
 		return
 	}
-	commit := s.deps.WriteBack.CommitPairMutation(reserved.Snapshots[0], reserved.Snapshots[1],
-		func(ctx context.Context, raw store.Store, a, b domain.Snapshot) error {
-			return raw.WithTx(ctx, func(tx store.Store) error {
-				if err := tx.SaveSnapshot(ctx, a); err != nil {
-					return err
-				}
-				return tx.SaveSnapshot(ctx, b)
-			})
-		})
+	commit := s.deps.WriteBack.CommitSnapshots(reserved.Snapshots[0], &reserved.Snapshots[1])
 	err := <-commit
 	s.finalizeTradeSettlement(sc, reserved.Reservation, err == nil)
 	if err != nil {
