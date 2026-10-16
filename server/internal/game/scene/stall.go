@@ -10,14 +10,64 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
 
-func (s *Scene) stallReply(ch chan<- StallReserveResult, result StallReserveResult) {
-	if ch == nil {
-		return
+// Each prepared stall operation has one outcome owner, independent of mailbox capacity.
+type pendingStallReservation struct {
+	result StallReserveResult
+	cancel <-chan struct{}
+}
+
+func (s *Scene) stallReply(ch chan<- StallReserveResult, result StallReserveResult, cancel <-chan struct{}) {
+	if result.Reason == "" && len(result.Reservation.Players) != 0 {
+		result.Reservation.Result = make(chan bool, 1)
+		result.Reservation.Done = make(chan struct{})
+		s.stallReservations = append(s.stallReservations, pendingStallReservation{result, cancel})
 	}
 	select {
 	case ch <- result:
+		return
 	default:
-		s.log.Warn("摆摊保留结果无人接收", "owner", result.Reservation.Owner)
+	}
+	if result.Reservation.Done != nil {
+		s.onFinalizeStallReservation(FinalizeStallReservation{Reservation: result.Reservation})
+	}
+}
+
+func (s *Scene) finishReadyStalls(wait bool) {
+	for i := 0; i < len(s.stallReservations); {
+		pending := s.stallReservations[i]
+		var commit bool
+		if wait {
+			select {
+			case commit = <-pending.result.Reservation.Result:
+			case <-pending.cancel:
+			}
+		} else {
+			select {
+			case commit = <-pending.result.Reservation.Result:
+			case <-pending.cancel:
+			default:
+				i++
+				continue
+			}
+		}
+		s.onFinalizeStallReservation(FinalizeStallReservation{Reservation: pending.result.Reservation,
+			Commit: commit, ActorMessage: pending.result.ActorMessage, OwnerMessage: pending.result.OwnerMessage})
+	}
+}
+
+func (s *Scene) rejectUnpreparedStall(c Command) {
+	result := StallReserveResult{Reason: "角色场景已关闭"}
+	switch cmd := c.(type) {
+	case CreateStall:
+		s.stallReply(cmd.Reply, result, nil)
+	case ReserveStallAdd:
+		s.stallReply(cmd.Reply, result, nil)
+	case ReserveStallDel:
+		s.stallReply(cmd.Reply, result, nil)
+	case ReserveStallEnd:
+		s.stallReply(cmd.Reply, result, nil)
+	case ReserveStallDeal:
+		s.stallReply(cmd.Reply, result, nil)
 	}
 }
 
@@ -29,7 +79,13 @@ func (s *Scene) stallNotice(p *entity.Entity, text string) {
 
 func (s *Scene) onCreateStall(cmd CreateStall) {
 	result := StallReserveResult{}
-	defer func() { s.stallReply(cmd.Reply, result) }()
+	defer func() { s.stallReply(cmd.Reply, result, cmd.Cancel) }()
+	select {
+	case <-cmd.Cancel:
+		result.Reason = "摆摊操作已取消"
+		return
+	default:
+	}
 	p := s.players[cmd.ID]
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil {
 		result.Reason = "角色背包状态无效"
@@ -80,7 +136,13 @@ func (s *Scene) onCreateStall(cmd CreateStall) {
 
 func (s *Scene) onReserveStallAdd(cmd ReserveStallAdd) {
 	result := StallReserveResult{}
-	defer func() { s.stallReply(cmd.Reply, result) }()
+	defer func() { s.stallReply(cmd.Reply, result, cmd.Cancel) }()
+	select {
+	case <-cmd.Cancel:
+		result.Reason = "摆摊操作已取消"
+		return
+	default:
+	}
 	p := s.players[cmd.ID]
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil ||
 		p.Player.Stall == nil || p.Player.StallBusy {
@@ -138,7 +200,13 @@ func (s *Scene) onReserveStallAdd(cmd ReserveStallAdd) {
 
 func (s *Scene) onReserveStallDel(cmd ReserveStallDel) {
 	result := StallReserveResult{}
-	defer func() { s.stallReply(cmd.Reply, result) }()
+	defer func() { s.stallReply(cmd.Reply, result, cmd.Cancel) }()
+	select {
+	case <-cmd.Cancel:
+		result.Reason = "摆摊操作已取消"
+		return
+	default:
+	}
 	p := s.players[cmd.ID]
 	if p == nil || p.Player == nil || p.Player.Stall == nil || p.Player.StallBusy {
 		result.Reason = "摊位当前不可修改"
@@ -167,7 +235,13 @@ func (s *Scene) onReserveStallDel(cmd ReserveStallDel) {
 
 func (s *Scene) onReserveStallEnd(cmd ReserveStallEnd) {
 	result := StallReserveResult{}
-	defer func() { s.stallReply(cmd.Reply, result) }()
+	defer func() { s.stallReply(cmd.Reply, result, cmd.Cancel) }()
+	select {
+	case <-cmd.Cancel:
+		result.Reason = "摆摊操作已取消"
+		return
+	default:
+	}
 	p := s.players[cmd.ID]
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil || p.Player.StallBusy {
 		result.Reason = "当前没有可结束的摊位"
@@ -179,6 +253,7 @@ func (s *Scene) onReserveStallEnd(cmd ReserveStallEnd) {
 	// 仍保留本地摆摊状态，而服务端权威状态已经没有摊位。此时仍提交一份
 	// stall=nil 的角色快照并发送 0x803e，客户端才能解除移动/操作锁定。
 	if p.Player.Stall == nil {
+		p.Player.StallBusy = true
 		result.Reservation = StallReservation{
 			Players: []StallPlayerReservation{before}, Owner: p.ID, Close: true,
 		}
@@ -219,12 +294,18 @@ func (s *Scene) onBrowseStall(cmd BrowseStall) {
 
 func (s *Scene) onReserveStallDeal(cmd ReserveStallDeal) {
 	result := StallReserveResult{}
-	defer func() { s.stallReply(cmd.Reply, result) }()
+	defer func() { s.stallReply(cmd.Reply, result, cmd.Cancel) }()
+	select {
+	case <-cmd.Cancel:
+		result.Reason = "摆摊操作已取消"
+		return
+	default:
+	}
 	actor, owner := s.players[cmd.ID], s.players[cmd.Owner]
 	if actor == nil || owner == nil || actor.ID == owner.ID || actor.Player == nil ||
 		owner.Player == nil || actor.Player.Bag == nil || owner.Player.Bag == nil ||
 		actor.Player.Stall != nil || actor.Player.StallBusy || owner.Player.Stall == nil ||
-		owner.Player.StallBusy || cmd.Count <= 0 {
+		owner.Player.StallBusy || s.tradeInventoryBusy(owner.ID) || actor.Player.FamilyBusy || actor.Player.RackBusy || owner.Player.FamilyBusy || owner.Player.RackBusy || cmd.Count <= 0 {
 		result.Reason = "摊位成交条件无效"
 		return
 	}
@@ -341,9 +422,22 @@ func (s *Scene) onReserveStallDeal(cmd ReserveStallDeal) {
 }
 
 func (s *Scene) onFinalizeStallReservation(cmd FinalizeStallReservation) {
-	if cmd.Done != nil {
+	if cmd.Done != nil && cmd.Done != cmd.Reservation.Done {
 		defer close(cmd.Done)
 	}
+	found := false
+	for i, pending := range s.stallReservations {
+		if pending.result.Reservation.Done == cmd.Reservation.Done && cmd.Reservation.Done != nil {
+			cmd.Reservation = pending.result.Reservation
+			s.stallReservations = append(s.stallReservations[:i], s.stallReservations[i+1:]...)
+			found = true
+			break
+		}
+	}
+	if !found {
+		return
+	}
+	defer close(cmd.Reservation.Done)
 	for _, saved := range cmd.Reservation.Players {
 		p := s.players[saved.ID]
 		if p == nil || p.Player == nil {
@@ -392,6 +486,12 @@ func (s *Scene) onFinalizeStallReservation(cmd FinalizeStallReservation) {
 				s.saver.Save(s.snapshotOf(p))
 			}
 		}
+	}
+	for _, saved := range cmd.Reservation.Players {
+		s.runDeferredTradeMutations(saved.ID)
+	}
+	for _, saved := range cmd.Reservation.Players {
+		s.finishTradeLifecycle(saved.ID)
 	}
 }
 

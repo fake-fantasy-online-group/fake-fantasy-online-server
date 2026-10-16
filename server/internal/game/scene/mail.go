@@ -202,7 +202,7 @@ func (s *Scene) onFinalizeMailReservation(cmd FinalizeMailReservation) {
 
 // Reply channels are buffered by the session. An abandoned or invalid caller
 // must not block the scene, nor leave a reservation without an outcome owner.
-func (s *Scene) replyMailReservation(id domain.EntityID, reply chan MailReserveResult, result MailReserveResult) {
+func (s *Scene) replyMailReservation(id domain.EntityID, reply chan<- MailReserveResult, result MailReserveResult) {
 	select {
 	case reply <- result:
 		return
@@ -221,6 +221,8 @@ func (s *Scene) rejectUnpreparedMail(c Command) {
 	case ReserveMailSend:
 		s.replyMailReservation(cmd.ID, cmd.Reply, result)
 	case ReserveMailClaim:
+		s.replyMailReservation(cmd.ID, cmd.Reply, result)
+	case ReserveHorn:
 		s.replyMailReservation(cmd.ID, cmd.Reply, result)
 	}
 }

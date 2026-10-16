@@ -5,18 +5,27 @@ import "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/i
 // ReserveHorn consumes one real, unlocked horn on the actor. The session commits
 // this snapshot through the ordered writeback queue before broadcasting text.
 type ReserveHorn struct {
-	ID    domain.EntityID
-	Item  domain.ItemID
-	Skin  uint8
-	Reply chan<- MailReserveResult
+	OperationID string
+	Cancel      <-chan struct{}
+	ID          domain.EntityID
+	Item        domain.ItemID
+	Skin        uint8
+	Reply       chan<- MailReserveResult
 }
 
-func (ReserveHorn) CmdName() string { return "ReserveHorn" }
+func (ReserveHorn) CmdName() string                     { return "ReserveHorn" }
+func (cmd ReserveHorn) inventoryOwner() domain.EntityID { return cmd.ID }
 func (s *Scene) onReserveHorn(cmd ReserveHorn) {
 	result := MailReserveResult{}
-	defer func() { cmd.Reply <- result }()
+	defer func() { s.replyMailReservation(cmd.ID, cmd.Reply, result) }()
+	select {
+	case <-cmd.Cancel:
+		result.Reason = "喇叭操作已取消"
+		return
+	default:
+	}
 	p := s.players[cmd.ID]
-	if p == nil || p.Player == nil || !p.Alive() || p.Player.Stall != nil {
+	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil || !p.Alive() || endgameEconomicBusy(p) {
 		result.Reason = "当前不能使用喇叭"
 		return
 	}
@@ -35,11 +44,13 @@ func (s *Scene) onReserveHorn(cmd ReserveHorn) {
 		result.Reason = "没有可使用的喇叭"
 		return
 	}
-	result.Reservation = MailReservation{BeforeBag: p.Player.Bag.Clone(), BeforeMoney: p.Player.Char.Money, BeforeCaiyu: p.Player.Char.Caiyu}
+	result.Reservation = MailReservation{OperationID: cmd.OperationID, Before: s.snapshotOf(p), BeforeBag: p.Player.Bag.Clone(), BeforeMoney: p.Player.Char.Money, BeforeCaiyu: p.Player.Char.Caiyu}
 	if !p.Player.Bag.RemoveAt(slot, 1) {
 		result.Reason = "喇叭数量不足"
 		return
 	}
+	p.Player.MailBusy = true
 	p.Player.MarkDirty()
 	result.Snapshot = s.snapshotOf(p)
+	s.trackMailReservation(cmd.ID, &result.Reservation)
 }

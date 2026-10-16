@@ -250,6 +250,7 @@ type Scene struct {
 	players              map[domain.EntityID]*entity.Entity // entities 的子集; 广播只遍历它
 	tradeSettlements     []*pendingTradeSettlement
 	mailReservations     []pendingMailReservation
+	stallReservations    []pendingStallReservation
 	tradeDeferred        map[domain.EntityID][]func()
 	tradeLeaves          map[domain.EntityID]Leave
 	tradeTeleports       map[domain.EntityID]Teleport
@@ -918,6 +919,7 @@ func (s *Scene) execTracked(c Command) {
 // 继续破坏状态；未入场 Enter 的加载快照却仍是完整所有权，可以安全直接写回。
 func (s *Scene) finalizePendingEnters() {
 	s.rejectUnpreparedMail(s.pendingMailbox)
+	s.rejectUnpreparedStall(s.pendingMailbox)
 	if enter, ok := s.pendingMailbox.(Enter); ok {
 		s.finalizeUnentered(enter)
 	}
@@ -933,6 +935,7 @@ func (s *Scene) finalizePendingEnters() {
 		select {
 		case c := <-s.mailbox:
 			s.rejectUnpreparedMail(c)
+			s.rejectUnpreparedStall(c)
 			if enter, ok := c.(Enter); ok {
 				s.finalizeUnentered(enter)
 			}
@@ -967,6 +970,7 @@ func (s *Scene) step() {
 	s.stepEndgameRift()
 	s.finishReadyTrades(false)
 	s.finishReadyMail(false)
+	s.finishReadyStalls(false)
 	s.tick++
 	if s.dungeon == nil && s.spawner != nil && s.tick%spawn.EliteChanceInterval == 0 {
 		s.spawner.RecordMinute()
@@ -1508,7 +1512,7 @@ func (s *Scene) saveDirty() {
 	}
 	n := 0
 	for _, e := range s.players {
-		if !e.Player.TradeBusy && !e.Player.MailBusy && e.Player.Dirty() {
+		if !s.tradeInventoryBusy(e.ID) && e.Player.Dirty() {
 			parts := e.Player.TakeDirtyParts()
 			if parts == domain.SnapshotPosition {
 				s.saver.Save(s.positionSnapshotOf(e))
@@ -1566,6 +1570,7 @@ func (s *Scene) shutdown(reason string) {
 	s.finishEndgameRunWrites()
 	s.finishReadyTrades(true)
 	s.finishReadyMail(true)
+	s.finishReadyStalls(true)
 	s.log.Info("场景停止", "reason", reason, "tick", s.tick, "在线", len(s.players))
 	for _, e := range s.players {
 		s.closeStallForExit(e)

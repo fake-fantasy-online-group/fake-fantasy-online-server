@@ -85,37 +85,41 @@ type WardrobeMove struct {
 func (WardrobeMove) CmdName() string { return "WardrobeMove" }
 
 type CreateStall struct {
-	ID    domain.EntityID
-	Type  domain.StallType
-	Name  string
-	Reply chan<- StallReserveResult
+	Cancel <-chan struct{}
+	ID     domain.EntityID
+	Type   domain.StallType
+	Name   string
+	Reply  chan<- StallReserveResult
 }
 
 func (CreateStall) CmdName() string { return "CreateStall" }
 
 type ReserveStallAdd struct {
-	ID    domain.EntityID
-	Tab   uint8
-	Slot  int32
-	Item  domain.ItemID
-	Count int32
-	Price int64
-	Reply chan<- StallReserveResult
+	Cancel <-chan struct{}
+	ID     domain.EntityID
+	Tab    uint8
+	Slot   int32
+	Item   domain.ItemID
+	Count  int32
+	Price  int64
+	Reply  chan<- StallReserveResult
 }
 
 func (ReserveStallAdd) CmdName() string { return "ReserveStallAdd" }
 
 type ReserveStallDel struct {
-	ID    domain.EntityID
-	Index int32
-	Reply chan<- StallReserveResult
+	Cancel <-chan struct{}
+	ID     domain.EntityID
+	Index  int32
+	Reply  chan<- StallReserveResult
 }
 
 func (ReserveStallDel) CmdName() string { return "ReserveStallDel" }
 
 type ReserveStallEnd struct {
-	ID    domain.EntityID
-	Reply chan<- StallReserveResult
+	Cancel <-chan struct{}
+	ID     domain.EntityID
+	Reply  chan<- StallReserveResult
 }
 
 func (ReserveStallEnd) CmdName() string { return "ReserveStallEnd" }
@@ -128,6 +132,7 @@ type BrowseStall struct {
 func (BrowseStall) CmdName() string { return "BrowseStall" }
 
 type ReserveStallDeal struct {
+	Cancel        <-chan struct{}
 	ID            domain.EntityID
 	Owner         domain.EntityID
 	Index         int32
@@ -152,6 +157,8 @@ type StallPlayerReservation struct {
 }
 
 type StallReservation struct {
+	Result  chan bool
+	Done    chan struct{}
 	Players []StallPlayerReservation
 	Owner   domain.EntityID
 	Create  bool

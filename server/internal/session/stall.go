@@ -50,14 +50,15 @@ func (s *Session) onStallDeal(req protocol.Request) {
 		return
 	}
 	reply := make(chan scene.StallReserveResult, 1)
+	cancelReservation := make(chan struct{})
 	cmd := scene.ReserveStallDeal{ID: actor, Owner: domain.EntityID(req.TargetID),
 		Index: req.Index, Count: req.Count, Tab: req.Tab, Slot: int32(clientBagSlot(req.Tab, int(req.Slot))),
-		ExpectedItem: domain.ItemID(req.ID32), ExpectedPrice: req.Price, Reply: reply}
+		ExpectedItem: domain.ItemID(req.ID32), ExpectedPrice: req.Price, Reply: reply, Cancel: cancelReservation}
 	if !s.deps.Router.Post(sc, cmd) {
 		s.sendGMText("摊位成交失败：场景不可用")
 		return
 	}
-	reserved, ok := waitStallReservation(reply)
+	reserved, ok := waitStallReservation(reply, cancelReservation)
 	if !ok {
 		s.sendGMText("摊位成交超时，请重试")
 		return
@@ -91,18 +92,23 @@ func (s *Session) runSingleStallMutation(raw stallReserveCommand) {
 		return
 	}
 	reply := make(chan scene.StallReserveResult, 1)
+	cancelReservation := make(chan struct{})
 	switch cmd := raw.(type) {
 	case scene.CreateStall:
 		cmd.Reply = reply
+		cmd.Cancel = cancelReservation
 		raw = cmd
 	case scene.ReserveStallAdd:
 		cmd.Reply = reply
+		cmd.Cancel = cancelReservation
 		raw = cmd
 	case scene.ReserveStallDel:
 		cmd.Reply = reply
+		cmd.Cancel = cancelReservation
 		raw = cmd
 	case scene.ReserveStallEnd:
 		cmd.Reply = reply
+		cmd.Cancel = cancelReservation
 		raw = cmd
 	default:
 		return
@@ -111,7 +117,7 @@ func (s *Session) runSingleStallMutation(raw stallReserveCommand) {
 		s.sendGMText("摆摊操作失败：场景不可用")
 		return
 	}
-	reserved, ok := waitStallReservation(reply)
+	reserved, ok := waitStallReservation(reply, cancelReservation)
 	if !ok {
 		s.sendGMText("摆摊操作超时，请重试")
 		return
@@ -129,25 +135,25 @@ func (s *Session) runSingleStallMutation(raw stallReserveCommand) {
 	}
 }
 
-func waitStallReservation(reply <-chan scene.StallReserveResult) (scene.StallReserveResult, bool) {
+func waitStallReservation(reply <-chan scene.StallReserveResult, cancel chan struct{}) (scene.StallReserveResult, bool) {
 	select {
 	case result := <-reply:
 		return result, true
 	case <-time.After(stallCommitTimeout):
+		close(cancel)
 		return scene.StallReserveResult{}, false
 	}
 }
 
 func (s *Session) finalizeStall(sc domain.SceneID, reserved scene.StallReserveResult, commit bool) {
-	done := make(chan struct{})
-	if !s.deps.Router.Post(sc, scene.FinalizeStallReservation{Reservation: reserved.Reservation,
-		Commit: commit, ActorMessage: reserved.ActorMessage, OwnerMessage: reserved.OwnerMessage,
-		Done: done}) {
+	if reserved.Reservation.Result == nil {
 		return
 	}
+	reserved.Reservation.Result <- commit
 	select {
-	case <-done:
+	case <-reserved.Reservation.Done:
 	case <-time.After(stallCommitTimeout):
+		s.log.Warn("摆摊场景收尾仍在等待", "scene", sc)
 	}
 }
 
