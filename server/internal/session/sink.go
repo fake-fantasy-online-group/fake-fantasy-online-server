@@ -1,6 +1,7 @@
 package session
 
 import (
+	"context"
 	"log/slog"
 
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -160,8 +161,10 @@ func (s *eventSink) Emit(ev event.Event) {
 	}
 	for _, pkt := range pkts {
 		// 调试日志记录发出的操作码和包长度。
-		s.log.Debug("下行", "op", logHex(uint16(pkt[0])|uint16(pkt[1])<<8),
-			"字节", len(pkt), "event", eventName(ev))
+		if s.log.Enabled(context.Background(), slog.LevelDebug) {
+			s.log.Debug("下行", "op", logHex(uint16(pkt[0])|uint16(pkt[1])<<8),
+				"字节", len(pkt), "event", eventName(ev))
+		}
 		s.out.Send(pkt)
 	}
 	if entered && s.sess != nil {

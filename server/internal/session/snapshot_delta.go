@@ -68,7 +68,7 @@ func inventoryDiff(old, next event.InventorySnapshot) ([]event.InventoryItemView
 	var items []event.InventoryItemView
 	for _, item := range next.Items {
 		key := inventorySlot{tab: item.Tab, slot: item.BagIndex}
-		if previous, exists := oldItems[key]; !exists || !reflect.DeepEqual(previous, item) {
+		if previous, exists := oldItems[key]; !exists || !equalInventoryItem(old.Items[previous], item) {
 			items = append(items, item)
 		}
 	}
@@ -91,7 +91,7 @@ func inventoryDiff(old, next event.InventorySnapshot) ([]event.InventoryItemView
 	}
 	var equipped []event.EquippedItemView
 	for _, item := range next.Equipped {
-		if previous, exists := oldEquipped[item.Slot]; !exists || !reflect.DeepEqual(previous, item) {
+		if previous, exists := oldEquipped[item.Slot]; !exists || old.Equipped[previous] != item {
 			equipped = append(equipped, item)
 		}
 	}
@@ -105,25 +105,25 @@ func inventoryDiff(old, next event.InventorySnapshot) ([]event.InventoryItemView
 	return items, equipped, headerChanged || len(items) != 0 || len(equipped) != 0, true
 }
 
-func indexInventory(items []event.InventoryItemView) (map[inventorySlot]event.InventoryItemView, bool) {
-	out := make(map[inventorySlot]event.InventoryItemView, len(items))
-	for _, item := range items {
+func indexInventory(items []event.InventoryItemView) (map[inventorySlot]int, bool) {
+	out := make(map[inventorySlot]int, len(items))
+	for i, item := range items {
 		key := inventorySlot{tab: item.Tab, slot: item.BagIndex}
 		if _, exists := out[key]; exists {
 			return nil, false
 		}
-		out[key] = item
+		out[key] = i
 	}
 	return out, true
 }
 
-func indexEquipped(items []event.EquippedItemView) (map[domain.EquipSlot]event.EquippedItemView, bool) {
-	out := make(map[domain.EquipSlot]event.EquippedItemView, len(items))
-	for _, item := range items {
+func indexEquipped(items []event.EquippedItemView) (map[domain.EquipSlot]int, bool) {
+	out := make(map[domain.EquipSlot]int, len(items))
+	for i, item := range items {
 		if _, exists := out[item.Slot]; exists {
 			return nil, false
 		}
-		out[item.Slot] = item
+		out[item.Slot] = i
 	}
 	return out, true
 }
@@ -177,7 +177,7 @@ func warehouseDiff(old, next event.WarehouseSnapshot) ([]event.WarehouseItemView
 	var items []event.WarehouseItemView
 	for _, item := range next.Items {
 		key := inventorySlot{tab: item.Tab, slot: item.Slot}
-		if previous, exists := oldItems[key]; !exists || !reflect.DeepEqual(previous, item) {
+		if previous, exists := oldItems[key]; !exists || old.Items[previous] != item {
 			items = append(items, item)
 		}
 	}
@@ -191,14 +191,14 @@ func warehouseDiff(old, next event.WarehouseSnapshot) ([]event.WarehouseItemView
 	return items, headerChanged || len(items) != 0, true
 }
 
-func indexWarehouse(items []event.WarehouseItemView) (map[inventorySlot]event.WarehouseItemView, bool) {
-	out := make(map[inventorySlot]event.WarehouseItemView, len(items))
-	for _, item := range items {
+func indexWarehouse(items []event.WarehouseItemView) (map[inventorySlot]int, bool) {
+	out := make(map[inventorySlot]int, len(items))
+	for i, item := range items {
 		key := inventorySlot{tab: item.Tab, slot: item.Slot}
 		if _, exists := out[key]; exists {
 			return nil, false
 		}
-		out[key] = item
+		out[key] = i
 	}
 	return out, true
 }
@@ -265,4 +265,10 @@ func clonePet(in event.PetSnapshot) event.PetSnapshot {
 		in.Pets[i].Skills = append([]event.PetSkillView(nil), in.Pets[i].Skills...)
 	}
 	return in
+}
+
+func equalInventoryItem(a, b event.InventoryItemView) bool {
+	ap, bp := a.Pet, b.Pet
+	a.Pet, b.Pet = nil, nil
+	return a == b && (ap == bp || reflect.DeepEqual(ap, bp))
 }

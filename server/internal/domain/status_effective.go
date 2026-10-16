@@ -75,6 +75,9 @@ func (s *StatusSet) discardSuppressedTicks(now Tick) {
 		return
 	}
 	until, permanent := s.harmfulSuppressionEnd()
+	if !permanent && until == 0 {
+		return
+	}
 	for id, list := range s.act {
 		for i, a := range list {
 			if a.NextTickAt == 0 || now < a.NextTickAt || !a.Def.Harmful() || !(permanent || a.NextTickAt < until) {
@@ -97,10 +100,13 @@ func (s *StatusSet) ExpireHarmfulSuppression(now Tick) []StatusID {
 	if s == nil {
 		return nil
 	}
+	until, permanent := s.harmfulSuppressionEnd()
+	if !permanent && until == 0 {
+		return nil
+	}
 	s.discardSuppressedTicks(now)
 	// Snapshot before removal: map iteration must not make simultaneous expiry
 	// depend on whether the immunity provider or its suspended state is visited first.
-	until, permanent := s.harmfulSuppressionEnd()
 	hadSuppression := permanent || until > 0
 	var gone []StatusID
 	for id, list := range s.act {

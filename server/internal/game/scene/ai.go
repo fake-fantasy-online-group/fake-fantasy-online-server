@@ -2,7 +2,7 @@ package scene
 
 import (
 	"math"
-	"sort"
+	"slices"
 
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/ai"
@@ -507,38 +507,43 @@ func (s *Scene) resolveMonsterHealTargets(caster *entity.Entity, rule domain.Mon
 		castRange = radius
 	}
 	rangeSq := castRange * castRange
-	candidates := make([]*entity.Entity, 0, 4)
+	// Single heals need one minimum; area heals only need ID ordering.
+	var best *entity.Entity
+	var out []domain.EntityID
 	s.aoi.AroundPos(caster.Pos, func(candidate *entity.Entity) {
 		if candidate == nil || candidate.Monster == nil || !candidate.Alive() ||
 			!candidate.Monster.Kind.Hostile() || candidate.HP >= candidate.MaxHP ||
 			sqDist(caster.Pos, candidate.Pos) > rangeSq {
 			return
 		}
-		candidates = append(candidates, candidate)
+		if area {
+			out = append(out, candidate.ID)
+			return
+		}
+		if best == nil {
+			best = candidate
+			return
+		}
+		left, right := int64(candidate.HP)*int64(best.MaxHP), int64(best.HP)*int64(candidate.MaxHP)
+		if left != right {
+			if left < right {
+				best = candidate
+			}
+			return
+		}
+		cd, bd := sqDist(caster.Pos, candidate.Pos), sqDist(caster.Pos, best.Pos)
+		if cd < bd || cd == bd && candidate.ID < best.ID {
+			best = candidate
+		}
 	})
-	if len(candidates) == 0 {
+	if area {
+		slices.Sort(out)
+		return out
+	}
+	if best == nil {
 		return nil
 	}
-	sort.Slice(candidates, func(i, j int) bool {
-		left := int64(candidates[i].HP) * int64(candidates[j].MaxHP)
-		right := int64(candidates[j].HP) * int64(candidates[i].MaxHP)
-		if left != right {
-			return left < right
-		}
-		leftDist, rightDist := sqDist(caster.Pos, candidates[i].Pos), sqDist(caster.Pos, candidates[j].Pos)
-		if leftDist != rightDist {
-			return leftDist < rightDist
-		}
-		return candidates[i].ID < candidates[j].ID
-	})
-	if !area {
-		return []domain.EntityID{candidates[0].ID}
-	}
-	out := make([]domain.EntityID, 0, len(candidates))
-	for _, candidate := range candidates {
-		out = append(out, candidate.ID)
-	}
-	return sortEntityIDs(out)
+	return []domain.EntityID{best.ID}
 }
 
 // monsterRuleTargetsEnemies 用已闭合的结果裁决作用阵营。kind='self' 表示技能
@@ -985,7 +990,9 @@ func (s *Scene) acquire(m *entity.Entity, p ai.Params) {
 		entity *entity.Entity
 		distSq float64
 	}
-	candidates := make([]candidate, 0, 4)
+	// Most scans have few players; keep those candidates on the stack.
+	var buf [16]candidate
+	candidates := buf[:0]
 	s.aoi.AroundPos(m.Pos, func(o *entity.Entity) {
 		if o.Kind != domain.KindPlayer || !o.Alive() || entityInvisible(o) || s.entityMapLoading(o) || !s.equipmentCombatReady(o) {
 			return
@@ -998,12 +1005,41 @@ func (s *Scene) acquire(m *entity.Entity, p ai.Params) {
 		}
 		candidates = append(candidates, candidate{entity: o, distSq: sqDist(m.Pos, o.Pos)})
 	})
-	sort.Slice(candidates, func(i, j int) bool {
-		if candidates[i].distSq != candidates[j].distSq {
-			return candidates[i].distSq < candidates[j].distSq
+	if len(candidates) == 0 {
+		return
+	}
+	// The common case needs only the nearest player. Preserve the original
+	// distance/ID order for pathfinding retries if that player is unreachable.
+	nearest := 0
+	for i := 1; i < len(candidates); i++ {
+		if candidates[i].distSq < candidates[nearest].distSq || candidates[i].distSq == candidates[nearest].distSq && candidates[i].entity.ID < candidates[nearest].entity.ID {
+			nearest = i
 		}
-		return candidates[i].entity.ID < candidates[j].entity.ID
+	}
+	cand := candidates[nearest]
+	if _, _, ok := s.monsterChaseWaypoint(m, cand.entity.Pos, p.TraceDist); ok {
+		m.Monster.Target = cand.entity.ID
+		m.Monster.Roaming = false
+		s.monsterSpeak(m, domain.MonsterSceneEnemy)
+		return
+	}
+	candidates = append(candidates[:nearest], candidates[nearest+1:]...)
+	slices.SortFunc(candidates, func(a, b candidate) int {
+		if a.distSq < b.distSq {
+			return -1
+		}
+		if a.distSq > b.distSq {
+			return 1
+		}
+		if a.entity.ID < b.entity.ID {
+			return -1
+		}
+		if a.entity.ID > b.entity.ID {
+			return 1
+		}
+		return 0
 	})
+
 	for _, cand := range candidates {
 		if _, _, ok := s.monsterChaseWaypoint(m, cand.entity.Pos, p.TraceDist); !ok {
 			continue
