@@ -140,3 +140,22 @@ Movement events now use a caller-owned one-element packet-list slot around the u
 - Bounded channels retaining 16 movements for each of 100 observers: median 161.777 to 132.807 microseconds (17.9% lower); 76800 to 38400 B; 3200 to 1600 allocations.
 
 Packet tests preserve byte parity across speed/stop/snap modes, independent retained payloads, mixed-event ordering and queue-full behavior. This fanout benchmark excludes actual socket transport and is not an end-to-end latency estimate.
+
+## Seventh batch: combat fanout, proc-owner collection, status visibility
+
+Baseline: remote 5c2d5b8. These changes preserve combat rules and packet contents.
+
+Damage events now use the same independently owned single-packet path as movement. The session keeps its existing side effects, send order, bounded-queue policy and self-hit newbie-tip behavior. Only the outer packet-list allocation is removed.
+- Bounded queues retaining 16 damage events per observer: 1 observer median 2275 to 1430 ns; 100 observers 219968 to 144078 ns (about 35% lower).
+- Allocations and allocated bytes halve: 100 observers, 3200 to 1600 allocations and 76800 to 38400 B. Socket transport is excluded.
+
+Equipment proc settlement gathers all hit endpoints into caller-owned storage, sorts IDs and compacts duplicates instead of constructing a map then sorting its keys. Small roots use a 32-ID stack buffer; larger roots still allocate. All endpoint IDs are retained and players/aliveness are read at their original execution point, including after earlier procs. Hit records and proc-candidate ordering are unchanged.
+- Real settlement stage with 1 target: approximately 175 to 91 ns, 1 to 0 allocations; 10 targets: 938 to 197 ns, 4 to 0 allocations (232 to 0 B).
+- 64 targets: about 8002 to 1259 ns, 10 to 2 allocations; 256 targets: 32637 to 6357 ns, 14 to 4 allocations.
+- Full kill/drop fixture removes 4 allocations and approximately 232 B per root. Its CPU comparison overlapped other activity and is not a reliable whole-path speedup estimate.
+
+Status expiry takes the pre-expiry invisibility snapshot only for entities accepted by updatePlayerVisibility (player kind and non-nil player state). Nonplayer status damage, final ticks, expiry, removal events and stat refresh are unchanged. The skipped query was pure and its result unused for these entities.
+- Mixed status stage, 30 monsters and 5 players: median 17.212 to 13.197 microseconds (23% lower); 300 monsters and 50 players: 168.679 to 132.187 microseconds (22% lower). Both remain zero allocation.
+- Full scene measurements were directionally favorable but noisy; no precise full-frame percentage is claimed.
+
+These are scoped in-memory benchmarks, not whole-server or client-observed latency improvements. Tests cover packet bytes, independent retained payloads, ordering/full queues, self-hit tip persistence, owner ordering/duplicates/buffer growth, live owner lookup, and player/monster/pet final tick and visibility expiry.

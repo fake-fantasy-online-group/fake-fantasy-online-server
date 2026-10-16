@@ -561,7 +561,12 @@ func (s *Scene) stepStatus() {
 			s.tickStatus(e, a)
 		}
 		// 到期清除
-		wasInvisible := entityInvisible(e)
+		// Only players publish visibility edges; avoid scanning nonplayer statuses
+		// for a value updatePlayerVisibility will never consume.
+		wasInvisible := false
+		if e.Kind == domain.KindPlayer && e.Player != nil {
+			wasInvisible = entityInvisible(e)
+		}
 		if gone := e.Status.Expire(s.tick); len(gone) > 0 {
 			for _, id := range gone {
 				s.emit(event.StatusRemoved{Who: e.ID, Status: int32(id)})

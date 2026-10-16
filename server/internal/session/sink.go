@@ -126,6 +126,9 @@ func (s *eventSink) Emit(ev event.Event) {
 	stateEncoded := false
 	var singlePacket [1][]byte
 	switch e := ev.(type) {
+	case event.DamageDealt:
+		singlePacket[0] = protocol.CombatDamage(e)
+		pkts, stateEncoded = singlePacket[:], true
 	case event.EntityMoved:
 		singlePacket[0] = protocol.EntityMove(e)
 		pkts, stateEncoded = singlePacket[:], true

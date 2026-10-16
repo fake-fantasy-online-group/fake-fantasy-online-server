@@ -5,6 +5,7 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
+	"slices"
 	"sort"
 )
 
@@ -21,12 +22,10 @@ func (s *Scene) executeEquipmentRoot(root *equipmentRoot) {
 	if root == nil || len(root.hits) == 0 {
 		return
 	}
-	owners := map[domain.EntityID]bool{}
-	for _, h := range root.hits {
-		owners[h.src] = true
-		owners[h.dst] = true
-	}
-	for _, ownerID := range sortedEquipmentEntities(owners) {
+	// Most roots have few targets. Keep their endpoint list on the stack,
+	// without filtering owners before earlier procs have finished executing.
+	var ownerBuf [32]domain.EntityID
+	for _, ownerID := range equipmentRootOwners(root.hits, ownerBuf[:0]) {
 		owner := s.players[ownerID]
 		if owner == nil || !owner.Alive() {
 			continue
@@ -91,6 +90,18 @@ func (s *Scene) executeEquipmentRoot(root *equipmentRoot) {
 		}
 	}
 }
+
+// equipmentRootOwners returns each endpoint once in the same ascending order as
+// the former map/key sort. It does not change hits or retain the caller's buffer.
+func equipmentRootOwners(hits []equipmentHit, owners []domain.EntityID) []domain.EntityID {
+	owners = owners[:0]
+	for _, h := range hits {
+		owners = append(owners, h.src, h.dst)
+	}
+	slices.Sort(owners)
+	return slices.Compact(owners)
+}
+
 func (s *Scene) reserveEquipmentProc(owner *entity.Entity, p *domain.EquipmentProc, root uint64) bool {
 	now := s.now().UnixMilli()
 	cd := owner.Player.Char.EquipmentProcCooldowns
