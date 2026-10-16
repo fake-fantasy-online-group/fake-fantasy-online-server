@@ -124,7 +124,11 @@ func (s *eventSink) Emit(ev event.Event) {
 		// CancelWork 模式，普通拒绝使用聊天区系统提示，不能再静默丢弃。
 	}
 	stateEncoded := false
+	var singlePacket [1][]byte
 	switch e := ev.(type) {
+	case event.EntityMoved:
+		singlePacket[0] = protocol.EntityMove(e)
+		pkts, stateEncoded = singlePacket[:], true
 	case event.EntitySpawned:
 		if e.Kind == domain.KindDrop && e.Ground != nil && s.sess != nil {
 			s.sess.mu.Lock()

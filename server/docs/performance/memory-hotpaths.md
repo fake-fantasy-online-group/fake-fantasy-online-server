@@ -122,3 +122,21 @@ Two alternating full in-memory frame comparisons using the latest baseline:
 - Normal (10 players/30 monsters): 71.169 to 70.053 microseconds, then 65.137 to 63.314 microseconds; approximately 1.6–2.8% lower. About 14.45 to 13.49 decimal KB/frame and 207 to 177 allocations.
 
 These are bounded dense in-memory workloads without sockets/persistence and not a production capacity estimate. A separate Expire/DueTicks no-op write prototype passed correctness but showed no clear full-frame gain and was not integrated. Equipment hit receipt collection and persistent character attribute slices remain unchanged because their ownership and gameplay consumers require them.
+
+## Sixth batch: timer heap and movement packet envelope
+
+Baseline: remote d3d4e031. A typed timer heap replaces container/heap interface boxing while retaining the exact comparisons, swaps and equal-deadline behavior. The consumed tail slot is cleared before invocation, and callbacks may schedule nested or already-due timers as before. No timer cadence or scene admission/lock changes are introduced.
+
+Isolated schedule-and-expire microbenchmarks:
+- Reused 1024-timer queue: median 142.9 to 27.15 microseconds; two boxing allocations and 32 bytes per timer removed. With sufficient queue capacity the typed case has zero allocations.
+- Fresh 1024-timer queue: median 184.280 to 62.886 microseconds; 92552 to 59760 B; 2061 to 12 allocations. Backing-array growth remains necessary.
+- Fresh 64-timer queue: median 7.399 to 2.307 microseconds; 4232 to 2160 B; 136 to 7 allocations.
+
+Tests compare the frozen original heap over randomized operations/seeds, exact and repeated deadlines, nested callback scheduling, growth, complete draining and closure retention. These are timer-subsystem results, not whole-server speedups.
+
+Movement events now use a caller-owned one-element packet-list slot around the unchanged fresh movement packet. This eliminates only the [][]byte envelope allocation. It does not share payload buffers, bypass session side effects, or alter scene visibility gates and queue policy. Generic events remain on their existing encoding path.
+
+- 100-observer movement delivery: 7.101 to 5.715 microseconds; 4800 to 2400 B; 200 to 100 allocations.
+- Bounded channels retaining 16 movements for each of 100 observers: median 161.777 to 132.807 microseconds (17.9% lower); 76800 to 38400 B; 3200 to 1600 allocations.
+
+Packet tests preserve byte parity across speed/stop/snap modes, independent retained payloads, mixed-event ordering and queue-full behavior. This fanout benchmark excludes actual socket transport and is not an end-to-end latency estimate.

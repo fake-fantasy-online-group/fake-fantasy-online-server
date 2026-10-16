@@ -1,8 +1,6 @@
 package scene
 
 import (
-	"container/heap"
-
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 )
 
@@ -19,16 +17,40 @@ type timer struct {
 
 type timerHeap []timer
 
-func (h timerHeap) Len() int           { return len(h) }
-func (h timerHeap) Less(i, j int) bool { return h[i].at < h[j].at }
-func (h timerHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
-func (h *timerHeap) Push(x any)        { *h = append(*h, x.(timer)) }
-func (h *timerHeap) Pop() any {
-	old := *h
-	n := len(old)
-	v := old[n-1]
-	old[n-1] = timer{}
-	*h = old[:n-1]
+// push and pop mirror container/heap's comparisons and swaps, including ties.
+// Keeping timer values typed avoids boxing allocations at both boundaries.
+func (h *timerHeap) push(v timer) {
+	*h = append(*h, v)
+	for j := len(*h) - 1; j > 0; {
+		i := (j - 1) / 2
+		if !((*h)[j].at < (*h)[i].at) {
+			break
+		}
+		(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
+		j = i
+	}
+}
+
+func (h *timerHeap) pop() timer {
+	n := len(*h) - 1
+	(*h)[0], (*h)[n] = (*h)[n], (*h)[0]
+	for i := 0; ; {
+		j := 2*i + 1
+		if j >= n || j < 0 {
+			break
+		}
+		if right := j + 1; right < n && (*h)[right].at < (*h)[j].at {
+			j = right
+		}
+		if !((*h)[j].at < (*h)[i].at) {
+			break
+		}
+		(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
+		i = j
+	}
+	v := (*h)[n]
+	(*h)[n] = timer{}
+	*h = (*h)[:n]
 	return v
 }
 
@@ -40,7 +62,7 @@ func (t *timers) after(now, d domain.Tick, fn func()) {
 	if d == 0 {
 		d = 1
 	}
-	heap.Push(&t.h, timer{at: now + d, fn: fn})
+	t.h.push(timer{at: now + d, fn: fn})
 }
 
 // advance 触发所有到期的定时器。
@@ -49,7 +71,7 @@ func (t *timers) after(now, d domain.Tick, fn func()) {
 // 所以不会在本帧被再次弹出, 不会死循环。
 func (t *timers) advance(now domain.Tick) {
 	for len(t.h) > 0 && t.h[0].at <= now {
-		e := heap.Pop(&t.h).(timer)
+		e := t.h.pop()
 		e.fn()
 	}
 }
