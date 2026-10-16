@@ -111,3 +111,14 @@ Paired full in-memory Scene.step workloads (persistent poison, AI, every player 
 - CPU timing remained noisy; no established heavy-scene CPU gain is claimed.
 
 The full-frame fixtures exclude sockets, persistence and deaths. No-aura controls measured much lower allocations (about 4.2 KiB and 41.2 KiB respectively), so aura-population assumptions matter. Tests compare legacy recipient/status output, player caps and pets, expiry, backing-array independence, nil cleanup, numeric ordering and source snapshot ownership.
+
+## Fifth batch: caller-owned AI target view
+
+Baseline: remote dcae81bf. Monster target information is a transient view consumed synchronously by AI decisions and target-ID resolution. The two production call sites fill a local ai.Target value instead of allocating a new pointer-backed view on every active-monster tick. The compatibility wrapper remains available; no shared scratch, pooling, or queued pointer reuse is introduced. Rejection/drop-target behavior, map readiness, invisibility, protection and targeting rules are preserved.
+
+Two alternating full in-memory frame comparisons using the latest baseline:
+- Heavy (50 players/300 monsters with aura, poison and AI): 676.899 to 633.498 microseconds, then 607.431 to 562.481 microseconds; approximately 6.4–7.4% lower elapsed frame cost in these samples.
+- Heavy allocated bytes approximately 95.0–95.2 decimal KB to 85.3–85.5 decimal KB; about 1305–1307 to 1004–1006 allocations per frame, roughly one 32-byte object per active monster eliminated.
+- Normal (10 players/30 monsters): 71.169 to 70.053 microseconds, then 65.137 to 63.314 microseconds; approximately 1.6–2.8% lower. About 14.45 to 13.49 decimal KB/frame and 207 to 177 allocations.
+
+These are bounded dense in-memory workloads without sockets/persistence and not a production capacity estimate. A separate Expire/DueTicks no-op write prototype passed correctness but showed no clear full-frame gain and was not integrated. Equipment hit receipt collection and persistent character attribute slices remain unchanged because their ownership and gameplay consumers require them.

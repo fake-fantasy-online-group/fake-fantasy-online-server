@@ -150,7 +150,8 @@ func (s *Scene) stepAI() {
 			s.acquire(m, p)
 		}
 
-		tgt := s.targetInfo(m)
+		var target ai.Target
+		tgt := s.targetInfoInto(m, &target)
 		chaseTo, directPath := domain.Pos{}, true
 		if tgt != nil {
 			var pathOK bool
@@ -660,7 +661,8 @@ func (s *Scene) startMonsterSkill(m *entity.Entity, rule domain.MonsterSkillRule
 		if !canAct(caster) || !canCast(caster) {
 			return
 		}
-		freshTargets := s.resolveMonsterTargets(caster, rule, s.targetInfo(caster))
+		var target ai.Target
+		freshTargets := s.resolveMonsterTargets(caster, rule, s.targetInfoInto(caster, &target))
 		if len(freshTargets) == 0 {
 			return
 		}
@@ -1057,6 +1059,12 @@ func (s *Scene) acquire(m *entity.Entity, p ai.Params) {
 
 // targetInfo 把当前目标翻成决策要的那点信息。目标已经不在场景里就当没有目标。
 func (s *Scene) targetInfo(m *entity.Entity) *ai.Target {
+	return s.targetInfoInto(m, new(ai.Target))
+}
+
+// targetInfoInto fills caller-owned storage for synchronous use only.
+// A nil result leaves out unchanged; callers must use the returned pointer.
+func (s *Scene) targetInfoInto(m *entity.Entity, out *ai.Target) *ai.Target {
 	id := m.Monster.Target
 	if id == 0 {
 		return nil
@@ -1066,7 +1074,8 @@ func (s *Scene) targetInfo(m *entity.Entity) *ai.Target {
 		s.dropTarget(m) // 目标下线/传送离图：原地脱战，不回出生点
 		return nil
 	}
-	return &ai.Target{Pos: t.Pos, Alive: t.Alive()}
+	*out = ai.Target{Pos: t.Pos, Alive: t.Alive()}
+	return out
 }
 
 // dropTarget 脱战。除了清目标, 还要清命中步进器 ——
