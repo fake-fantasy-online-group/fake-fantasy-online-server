@@ -403,9 +403,12 @@ func TestLoadLevels(t *testing.T) {
 				lv, lv+1, tb.Need(lv), tb.Need(lv+1))
 		}
 	}
-	// 不该把飞升后的等级混进来
-	if tb.Need(61) != 0 {
-		t.Errorf("61 级属于飞升后, 不该加载, 实际 %d", tb.Need(61))
+	// 当前成长规则包含 61~100 级，但不得越过配置上限。
+	if tb.Need(61) <= 0 {
+		t.Errorf("当前成长规则应包含 61 级经验需求, 实际 %d", tb.Need(61))
+	}
+	if tb.Need(domain.LevelCap+1) != 0 {
+		t.Errorf("不该加载上限 %d 之外的等级, 实际 %d", domain.LevelCap, tb.Need(domain.LevelCap+1))
 	}
 }
 
@@ -966,8 +969,11 @@ func TestLoadQuests(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(qt) != 366 {
-		t.Fatalf("应加载 366 个任务, 实际 %d", len(qt))
+	if len(qt) != 367 {
+		t.Fatalf("应加载 367 个任务（含周天鼎任务）, 实际 %d", len(qt))
+	}
+	if q, ok := qt[1900030001]; !ok || q.Name != "问鼎周天" || q.NPC != "试炼小仙" || q.RecoveryItem != 1900028301 {
+		t.Fatalf("migration84 周天鼎任务身份或奖励恢复物品不匹配: %+v", q)
 	}
 
 	// 蜗壳笛(24): 小叶发布, 1~10 级, 交蜗牛壳(4161)×20 (SQL 核对过)

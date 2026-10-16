@@ -37,6 +37,10 @@ var (
 	forbiddenSQL  = regexp.MustCompile(`(?is)\b(?:TRUNCATE\b|DROP\s+(?:TABLE|SCHEMA|DATABASE)\b)`)
 	deleteFromSQL = regexp.MustCompile(`(?is)\bDELETE\s+FROM\b`)
 	whereSQL      = regexp.MustCompile(`(?is)\bWHERE\b`)
+	// This migration creates its scratch table in the session-local temporary
+	// schema. Permit only its exact cleanup statement, never arbitrary drops.
+	temp60CreateSQL = regexp.MustCompile(`(?m)^CREATE TEMP TABLE _migration60_existing_endgame_definitions ON COMMIT DROP AS SELECT owner_kind,content_version,definition_id FROM game_endgame_definitions;\r?$`)
+	temp60DropSQL   = regexp.MustCompile(`(?m)^DROP TABLE pg_temp\._migration60_existing_endgame_definitions;\r?$`)
 )
 
 func main() {
@@ -137,7 +141,11 @@ func loadInit(dir string) ([]byte, string, int, error) {
 	if len(bytes.TrimSpace(joined)) == 0 {
 		return nil, "", 0, fmt.Errorf("%s 的初始化分片合并后为空", dir)
 	}
-	if token := forbiddenSQL.Find(joined); token != nil {
+	checked := joined
+	if temp60CreateSQL.Match(joined) {
+		checked = temp60DropSQL.ReplaceAll(joined, nil)
+	}
+	if token := forbiddenSQL.Find(checked); token != nil {
 		return nil, "", 0, fmt.Errorf("%s 的初始化分片含禁止的破坏性语句 %q", dir, string(token))
 	}
 	for _, location := range deleteFromSQL.FindAllIndex(joined, -1) {

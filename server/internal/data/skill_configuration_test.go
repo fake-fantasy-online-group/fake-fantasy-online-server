@@ -35,57 +35,7 @@ func TestSkillConfigurationDatabaseGolden(t *testing.T) {
 	if c == nil {
 		t.Fatal("catalog not attached")
 	}
-	expected := catalogfixture.SkillProgressionCatalog()
-	expectedEdges := expected.Synergies()
-	// Migration74 is a reviewed synergy-only delta. The frozen1490 skill/status
-	// goldens and original catalog remain unchanged and independently checked.
-	for i, e := range expectedEdges {
-		if e.RankMode != "hard" {
-			continue
-		}
-		target, _ := expected.Identity(e.Target)
-		e.RankMode = "effective_training"
-		if e.Effect == "heal_flat" {
-			e.Effect = "heal_power"
-		}
-		e.PerPointBP = 300
-		if target.UnlockLevel >= 30 {
-			e.PerPointBP = 400
-		}
-		if target.UnlockLevel >= 50 {
-			e.PerPointBP = 500
-		}
-		if target.UnlockLevel >= 70 {
-			e.PerPointBP = 600
-		}
-		expectedEdges[i] = e
-	}
-	if !reflect.DeepEqual(c.IDs(), expected.IDs()) || !reflect.DeepEqual(c.Synergies(), expectedEdges) {
-		t.Fatal("membership/synergy differs from pre-refactor snapshot")
-	}
-	for _, id := range c.IDs() {
-		a, _ := c.Identity(id)
-		b, _ := expected.Identity(id)
-		// Migration70 closes the verified theft identity instead of the imported
-		// Youlong damage placeholder. All other identity and policy fields stay pinned.
-		if id == 10212 {
-			if b.Name != "游龙掌" {
-				t.Fatal("theft identity delta lost its historical anchor", b.Name)
-			}
-			b.Name = "偷窃术"
-		}
-		p, _ := c.Policy(id)
-		e, _ := expected.Policy(id)
-		if id == 10212 {
-			if e.EfficiencyCapRank != 0 {
-				t.Fatal("theft growth delta lost its zero-cap anchor", e)
-			}
-			e.EfficiencyCapRank = 10
-		}
-		if !reflect.DeepEqual(a, b) || !reflect.DeepEqual(p, e) {
-			t.Fatalf("identity/policy changed %d: %+v %+v", id, a, p)
-		}
-	}
+	assertCurrentSkillProgressionCatalog(t, c)
 	golden := loadSkillConfigurationGolden(t)
 	for _, row := range golden {
 		d, ok := table.Get(row.ID, row.Rank)
@@ -177,4 +127,79 @@ func TestSkillConfigurationDatabaseRejectsMissingAndUsesConfiguredPolicy(t *test
 		t.Fatal("new loaded snapshot not used by evaluator")
 	}
 	t.Logf("missing manifest/member/policy/synergy/restoration and low cap rejected; independent database policy loaded via %d SQL reads", q.queries)
+}
+
+// Current full-database coverage complements the historical migration74 fixture.
+func TestCurrentSkillProgressionCatalogActualLoader(t *testing.T) {
+	table, _, err := LoadSkills(context.Background(), testPool(t))
+	if err != nil {
+		t.Fatal(err)
+	}
+	assertCurrentSkillProgressionCatalog(t, table.ProgressionCatalog())
+	statuses, _, err := LoadStatuses(context.Background(), testPool(t))
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := &domain.StatusOverlayStrength{Attr: 19, Mode: 1, ValueOrder: -1}
+	if got := statuses[domain.StatusKey{ID: 1008, Level: 11}].OverlayStrength; !reflect.DeepEqual(got, want) {
+		t.Fatalf("current blind-status strength rule: got %+v, want %+v", got, want)
+	}
+}
+
+func assertCurrentSkillProgressionCatalog(t *testing.T, c *domain.SkillProgressionCatalog) {
+	t.Helper()
+	if c == nil {
+		t.Fatal("catalog not attached")
+	}
+	expected := catalogfixture.SkillProgressionCatalog()
+	expectedEdges := expected.Synergies()
+	// Migration74 is a reviewed synergy-only delta. The frozen1490 skill/status
+	// goldens and original catalog remain unchanged and independently checked.
+	for i, e := range expectedEdges {
+		if e.RankMode != "hard" {
+			continue
+		}
+		target, _ := expected.Identity(e.Target)
+		e.RankMode = "effective_training"
+		if e.Effect == "heal_flat" {
+			e.Effect = "heal_power"
+		}
+		e.PerPointBP = 300
+		if target.UnlockLevel >= 30 {
+			e.PerPointBP = 400
+		}
+		if target.UnlockLevel >= 50 {
+			e.PerPointBP = 500
+		}
+		if target.UnlockLevel >= 70 {
+			e.PerPointBP = 600
+		}
+		expectedEdges[i] = e
+	}
+	if !reflect.DeepEqual(c.IDs(), expected.IDs()) || !reflect.DeepEqual(c.Synergies(), expectedEdges) {
+		t.Fatal("membership/synergy differs from pre-refactor snapshot")
+	}
+	for _, id := range c.IDs() {
+		a, _ := c.Identity(id)
+		b, _ := expected.Identity(id)
+		// Migration70 closes the verified theft identity instead of the imported
+		// Youlong damage placeholder. All other identity and policy fields stay pinned.
+		if id == 10212 {
+			if b.Name != "游龙掌" {
+				t.Fatal("theft identity delta lost its historical anchor", b.Name)
+			}
+			b.Name = "偷窃术"
+		}
+		p, _ := c.Policy(id)
+		e, _ := expected.Policy(id)
+		if id == 10212 {
+			if e.EfficiencyCapRank != 0 {
+				t.Fatal("theft growth delta lost its zero-cap anchor", e)
+			}
+			e.EfficiencyCapRank = 10
+		}
+		if !reflect.DeepEqual(a, b) || !reflect.DeepEqual(p, e) {
+			t.Fatalf("identity/policy changed %d: %+v %+v", id, a, p)
+		}
+	}
 }

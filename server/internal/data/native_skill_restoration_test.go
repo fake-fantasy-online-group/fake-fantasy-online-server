@@ -252,12 +252,29 @@ func TestNativeRestorationActualReadOnlyLoader(t *testing.T) {
 	for _, id := range restoredNativeSkillIDs {
 		for rank := int32(1); rank <= 5; rank++ {
 			key := domain.SkillKey{ID: id, Level: rank}
-			if !reflect.DeepEqual(skills[key], fixtureSkills[key]) {
+			// Catalog versions evolve independently of these restored mechanics;
+			// TestCurrentSkillProgressionCatalogActualLoader pins the current catalog.
+			expected := restoredSkillMechanics(fixtureSkills[key])
+			// The historical JSON predates the loader's explicit source/chance
+			// metadata. Pin that contract on expected applications only.
+			// Smoke retains its original unstructured implicit applications.
+			if id != 10224 {
+				for i := range expected.Statuses {
+					expected.Statuses[i].SourceSkill = id
+					expected.Statuses[i].ChanceExplicit = true
+				}
+			}
+			if !reflect.DeepEqual(restoredSkillMechanics(skills[key]), expected) {
 				t.Fatalf("actual restored skill differs from correction fixture %d/%d\ngot%+v\nwant%+v", id, rank, skills[key], fixtureSkills[key])
 			}
 			for _, app := range skills[key].Statuses {
 				sk := domain.StatusKey{ID: app.ID, Level: app.Level}
 				actual, historical := statuses[sk], fixtureStatuses[sk]
+				// Migration66 added the reviewed blind-status strength ordering.
+				// Pin its exact rule instead of dropping gameplay metadata.
+				if sk.ID == 1008 && actual.OverlayStrength != nil && historical.OverlayStrength == nil {
+					historical.OverlayStrength = &domain.StatusOverlayStrength{Attr: 19, Mode: 1, ValueOrder: -1}
+				}
 				// The immutable gameplay fixture predates the recovery of the
 				// original per-level SmallMap. Compare all mechanics unchanged;
 				// native artwork is independently checked against the original
@@ -336,5 +353,40 @@ func TestNativeRestorationExportAcceptanceFixture(t *testing.T) {
 	}
 	if err := os.WriteFile(path, append(b, '\n'), 0644); err != nil {
 		t.Fatal(err)
+	}
+}
+
+// restoredSkillMechanics removes only immutable catalog references, retaining
+// every skill and status-application mechanic for strict fixture comparison.
+func restoredSkillMechanics(d domain.SkillDef) domain.SkillDef {
+	d.Progression = nil
+	if d.Statuses != nil {
+		statuses := make([]domain.StatusApplication, len(d.Statuses))
+		copy(statuses, d.Statuses)
+		d.Statuses = statuses
+		for i := range d.Statuses {
+			d.Statuses[i].Progression = nil
+		}
+	}
+	return d
+}
+
+func TestRestoredSkillMechanicsComparisonRetainsDamage(t *testing.T) {
+	original := domain.SkillDef{Progression: catalogfixture.SkillProgressionCatalog()}
+	original.Effect.DamagePct = 100
+	changed := original
+	changed.Effect.DamagePct = 101
+	if reflect.DeepEqual(restoredSkillMechanics(original), restoredSkillMechanics(changed)) {
+		t.Fatal("mechanical damage change hidden by catalog normalization")
+	}
+	original.Statuses = []domain.StatusApplication{{Progression: original.Progression, DurationSec: 15}}
+	changed = original
+	changed.Statuses = append([]domain.StatusApplication(nil), original.Statuses...)
+	changed.Statuses[0].DurationSec = 16
+	if reflect.DeepEqual(restoredSkillMechanics(original), restoredSkillMechanics(changed)) {
+		t.Fatal("status duration change hidden by catalog normalization")
+	}
+	if original.Statuses[0].Progression == nil {
+		t.Fatal("comparison mutated original catalog attachment")
 	}
 }
