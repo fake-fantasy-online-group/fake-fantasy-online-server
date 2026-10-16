@@ -163,6 +163,10 @@ func (s *Scene) stepAI() {
 		if tgt == nil && m.Monster.Target == 0 && s.stepWander(m, p) {
 			continue
 		}
+		// With no target, Decide can only hold. Keep acquisition and wandering above.
+		if tgt == nil {
+			continue
+		}
 		// 怪物技能和普攻使用独立准入队列。只要选技节拍、技能 GCD 和单技能
 		// 冷却允许，就先尝试技能；不能再等普攻 nextAt 转好才开始选技。
 		// 隔墙时仍先寻路，避免独立选技重新引入穿墙施法。
@@ -993,7 +997,7 @@ func (s *Scene) acquire(m *entity.Entity, p ai.Params) {
 	// Most scans have few players; keep those candidates on the stack.
 	var buf [16]candidate
 	candidates := buf[:0]
-	s.aoi.AroundPos(m.Pos, func(o *entity.Entity) {
+	s.aoi.AroundPlayers(m.Pos, func(o *entity.Entity) {
 		if o.Kind != domain.KindPlayer || !o.Alive() || entityInvisible(o) || s.entityMapLoading(o) || !s.equipmentCombatReady(o) {
 			return
 		}

@@ -859,7 +859,7 @@ func encodeMove(e event.EntityMoved) []byte {
 		// 若改发默认正速度，客户端会把“停止确认”重新解释成一次移动起步。
 		speed = 0
 	}
-	return NewW(SCEntityMove).
+	return newFixedW(SCEntityMove, 19).
 		I32(int32(e.ID)).
 		I32(speed).
 		U8(1). // 路径点数
@@ -883,11 +883,11 @@ const defaultMoveSpeed = 100
 func encodeDespawn(e event.EntityDespawned) []byte {
 	switch e.Kind {
 	case domain.KindDrop:
-		return NewW(SCGroundRemove).I32(int32(e.ID)).Bytes()
+		return newFixedW(SCGroundRemove, 6).I32(int32(e.ID)).Bytes()
 	case domain.KindNPC:
-		return NewW(SCNPCRemove).I32(int32(e.ID)).Bytes()
+		return newFixedW(SCNPCRemove, 6).I32(int32(e.ID)).Bytes()
 	}
-	return NewW(SCEntityDespawn).I32(int32(e.ID)).U8(0).Bytes()
+	return newFixedW(SCEntityDespawn, 7).I32(int32(e.ID)).U8(0).Bytes()
 }
 
 // encodeDamage 生成 0x8011。实测 17 字节:
@@ -905,7 +905,7 @@ func encodeDamage(e event.DamageDealt) []byte {
 	if e.SkillID > 0 || e.Origin == domain.DamageDOTOrigin {
 		flags |= wireHitSkill
 	}
-	return NewW(SCCombat).
+	return newFixedW(SCCombat, 19).
 		I32(int32(e.Src)).
 		I32(int32(e.Dst)).
 		I32(e.Amount).

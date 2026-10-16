@@ -19,6 +19,7 @@ type cell struct{ x, y int32 }
 // AOI 管一张图上实体的空间分布。
 type AOI struct {
 	cellSize float64
+	players  map[cell]map[domain.EntityID]*entity.Entity // Kind is fixed while indexed; use Enter to refresh any kind conversion.
 	cells    map[cell]map[domain.EntityID]*entity.Entity
 	at       map[domain.EntityID]cell // 反查: 实体现在在哪个格
 }
@@ -41,6 +42,9 @@ func (a *AOI) cellOf(p domain.Pos) cell {
 // Enter 把实体放进它坐标所在的格。
 func (a *AOI) Enter(e *entity.Entity) cell {
 	c := a.cellOf(e.Pos)
+	if previous, ok := a.at[e.ID]; ok && previous != c {
+		a.remove(previous, e.ID)
+	}
 	a.add(c, e)
 	return c
 }
@@ -114,6 +118,22 @@ func (a *AOI) add(c cell, e *entity.Entity) {
 		m = map[domain.EntityID]*entity.Entity{}
 		a.cells[c] = m
 	}
+	if e.Kind == domain.KindPlayer {
+		if a.players == nil {
+			a.players = make(map[cell]map[domain.EntityID]*entity.Entity)
+		}
+		pm := a.players[c]
+		if pm == nil {
+			pm = make(map[domain.EntityID]*entity.Entity)
+			a.players[c] = pm
+		}
+		pm[e.ID] = e
+	} else if pm := a.players[c]; pm != nil {
+		delete(pm, e.ID)
+		if len(pm) == 0 {
+			delete(a.players, c)
+		}
+	}
 	m[e.ID] = e
 	a.at[e.ID] = c
 }
@@ -123,8 +143,26 @@ func (a *AOI) remove(c cell, id domain.EntityID) {
 	if m == nil {
 		return
 	}
+	if pm := a.players[c]; pm != nil {
+		delete(pm, id)
+		if len(pm) == 0 {
+			delete(a.players, c)
+		}
+	}
 	delete(m, id)
 	if len(m) == 0 {
 		delete(a.cells, c) // 空格子要删掉, 否则跑图跑久了 map 会一直涨
+	}
+}
+
+// AroundPlayers uses the same cell boundaries as AroundPos.
+func (a *AOI) AroundPlayers(p domain.Pos, fn func(*entity.Entity)) {
+	c := a.cellOf(p)
+	for dx := int32(-1); dx <= 1; dx++ {
+		for dy := int32(-1); dy <= 1; dy++ {
+			for _, e := range a.players[cell{c.x + dx, c.y + dy}] {
+				fn(e)
+			}
+		}
 	}
 }

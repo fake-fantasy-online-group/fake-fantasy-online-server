@@ -5,7 +5,7 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
-	"reflect"
+	"slices"
 	"sort"
 )
 
@@ -68,7 +68,7 @@ func (s *Scene) stepEquipmentAuras() {
 	if len(sources) == 0 && len(rt.auras) == 0 && len(rt.auraSchedules) == 0 {
 		return
 	}
-	changed := !reflect.DeepEqual(sources, rt.auraSources)
+	changed := (sources == nil) != (rt.auraSources == nil) || !slices.Equal(sources, rt.auraSources)
 	if !changed && s.tick < rt.nextAuraScan {
 		for id, grants := range rt.auras {
 			for _, g := range grants {

@@ -160,3 +160,9 @@ func (r *reader) ok() bool { return !r.bad }
 // done 报告载荷是否被精确读完。协议定义已经闭合后，尾随垃圾同样属于坏包；
 // 只检查“不越界”会让写错字段数的客户端包悄悄通过。
 func (r *reader) done() bool { return !r.bad && r.p == len(r.b) }
+
+// newFixedW retains an independently owned buffer sized for a fixed-layout packet.
+func newFixedW(op uint16, size int) *W {
+	w := &W{b: make([]byte, 0, size)}
+	return w.U16(op)
+}

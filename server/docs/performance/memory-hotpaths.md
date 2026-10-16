@@ -57,3 +57,31 @@ Baseline is the first batch above (remote 5e403d4). No protocol, gameplay rule, 
 - Inventory/equipment/warehouse diff maps store slice indices instead of copying entire views. Comparable fields use typed equality; inventory pet payloads retain pointer identity/deep equality handling. Duplicate slots, removals, output ordering, fallback snapshots and cloning remain unchanged. At 128 bag items plus 12 equipped items, a currency-only update fell from 98464 to 10464 B/op and 292 to 12 allocations; audited timing about 85–94 to 29–30 microseconds.
 
 Second-batch audit timings used sequential isolated microbenchmarks (GOMAXPROCS=2, two 150ms samples) except the separately documented status scene cases. They establish local opportunities, not additive overall-server speedups. Production regression tests retain old algorithm references and test unreachable target fallback, chase side effects, duplicate slots, pet equality, payload ownership, suppression endpoints and final ticks.
+
+## Third batch: mixed-scene acquisition and bounded idle work
+
+Baseline: remote 9c4fa158. The following are isolated audit/prototype measurements; deployment-wide throughput is not established.
+
+### Player-only AOI query
+
+Monster acquisition queries a player-only index maintained by the existing AOI enter/move/remove operations. The general entity index remains for other consumers. Re-entering the same ID in another cell now removes its stale old-cell entry, keeping both indexes consistent; normal movement and query ordering are unchanged. Existing 3x3 cell bounds, exact target filters, tie-breaking and scan cadence are retained.
+
+Acquire measurements (players + other entities):
+- 1 + 20: 350 to 166 ns.
+- 8 + 100: 1.156 to 0.330 microseconds.
+- 8 + 1000: 9.719 to 0.309 microseconds.
+- 64 + 2000: 29.18 to 3.32 microseconds.
+
+Deterministic synthetic cycles moving every entity, crossing cells for 10%, and querying for 10% of monsters improved 28–94%, including maintenance. This is intentionally a hot-cell workload. Movement-only small cases cost about 0.27 microseconds extra; single-player cell creation/removal adds allocation churn. Initial index construction adds 384 bytes for 1–8 players and approximately 4.84 KiB for 64 players. A player-only 256-entity case showed a noisy possible 11% slowdown. These tradeoffs must be retained when interpreting the monster-heavy improvement.
+
+### Idle AI and unchanged auras
+
+After normal passive processing, acquisition, target validation and wandering, a missing target always resulted in Hold. Skip only the now-unnecessary combat-range calculation and Hold decision. This benefits stationary actors: moving hostiles often already returned through wandering. In a 1000-stationary-actor fixture, AI stage time fell from 105 to 30 microseconds without skill rules, and from 529 to 34 microseconds with eight rules. This is not a universal idle-monster speedup.
+
+Aura source records have comparable scalar fields. Typed slice equality replaces reflection, explicitly preserving the nil/empty distinction and all existing update cadence, source validation, initialization and cleanup. Audited unchanged-aura stage medians: 32 sources 23.2 to 16.1 microseconds; 128 sources 95.3 to 61.5 microseconds; two fewer allocations per tick.
+
+### Fixed-size packet storage
+
+Movement and combat packet writers reserve their actual 19-byte payload size; despawns reserve 6–7 bytes. Go allocator size classes therefore fall from 64 to 24 bytes for move/damage and from 64 to 8 for despawn. One fresh independent allocation remains per packet; no pooled buffers or broadcast sharing is introduced. Five isolated 300ms sample medians: movement 30.12 to 24.54 ns, combat 30.96 to 21.99 ns, despawn 24.84 to 13.88 ns.
+
+Broad encode-once broadcast fanout is deliberately excluded: map-load barriers, owner/friendly spawn content, caster cooldowns, healing/riding differences and per-recipient session side effects require more careful separation. No observer behavior or backpressure policy changes in this batch.
