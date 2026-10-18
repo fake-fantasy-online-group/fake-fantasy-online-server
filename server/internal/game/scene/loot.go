@@ -87,6 +87,9 @@ func (s *Scene) rollLootWithContextV5(dead *entity.Entity, context domain.LootCo
 	}
 	originalDrops := 0
 	for _, e := range entries {
+		if e.DungeonOnly && s.dungeon == nil {
+			continue
+		}
 		if originalDrops >= maxDropsPerKill {
 			break
 		}

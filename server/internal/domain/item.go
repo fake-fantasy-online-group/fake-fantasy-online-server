@@ -1050,6 +1050,9 @@ func (s Snapshot) Clone() Snapshot {
 // RatePct 是**百分比, 每条独立掷**, 不是瓜分 100%。
 // 实测单怪合计能到 3200%, 也存在 rate=100 的必掉项 —— 按"瓜分"理解会全错。
 type DropEntry struct {
+	// DungeonOnly marks additive dungeon templates; shared monster IDs retain
+	// their native field drops outside registered dungeon instances.
+	DungeonOnly bool
 	// 没有 Choices 时 Item 是固定掉落；有 Choices 时 Item 保存池内一个有效的
 	// 代表 id，真正产出仍从 Choices 随机选。候选池在加载时按区间复用，开服后只读。
 	Item    ItemID

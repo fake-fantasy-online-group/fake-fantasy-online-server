@@ -2518,7 +2518,7 @@ func LoadDrops(ctx context.Context, q Querier, items ItemDefs) (DropTable, DropS
 	}
 
 	rows, err := q.Query(ctx, `
-		SELECT monster_id, item_id, rate, kind_name, lv_min, lv_max
+		SELECT monster_id, item_id, rate, kind_name, lv_min, lv_max, item_src
 		  FROM game_monster_drops
 		 ORDER BY monster_id, seq`)
 	if err != nil {
@@ -2530,9 +2530,9 @@ func LoadDrops(ctx context.Context, q Querier, items ItemDefs) (DropTable, DropS
 	st := DropStats{}
 	for rows.Next() {
 		var mid, iid, minLevel, maxLevel int32
-		var kind string
+		var kind, source string
 		var rate float32
-		if err := rows.Scan(&mid, &iid, &rate, &kind, &minLevel, &maxLevel); err != nil {
+		if err := rows.Scan(&mid, &iid, &rate, &kind, &minLevel, &maxLevel, &source); err != nil {
 			return nil, st, fmt.Errorf("data: 读掉落行: %w", err)
 		}
 		st.Total++
@@ -2548,7 +2548,7 @@ func LoadDrops(ctx context.Context, q Querier, items ItemDefs) (DropTable, DropS
 				continue
 			}
 			out[domain.MonsterID(mid)] = append(out[domain.MonsterID(mid)],
-				domain.DropEntry{Item: pool[0], Choices: pool, RatePct: float64(rate), RollAffixes: true})
+				domain.DropEntry{Item: pool[0], Choices: pool, RatePct: float64(rate), RollAffixes: true, DungeonOnly: strings.HasPrefix(source, "dungeon_template:")})
 			st.KindLoaded++
 			continue
 		}
@@ -2557,7 +2557,7 @@ func LoadDrops(ctx context.Context, q Querier, items ItemDefs) (DropTable, DropS
 			continue
 		}
 		out[domain.MonsterID(mid)] = append(out[domain.MonsterID(mid)],
-			domain.DropEntry{Item: domain.ItemID(iid), RatePct: float64(rate)})
+			domain.DropEntry{Item: domain.ItemID(iid), RatePct: float64(rate), DungeonOnly: strings.HasPrefix(source, "dungeon_template:")})
 		st.Loaded++
 	}
 	if err := rows.Err(); err != nil {

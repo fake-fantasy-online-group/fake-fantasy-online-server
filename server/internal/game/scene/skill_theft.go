@@ -14,6 +14,9 @@ import (
 func (s *Scene) theftEntries(monster domain.MonsterID) []domain.DropEntry {
 	var out []domain.DropEntry
 	for _, entry := range s.lootTable[monster] {
+		if entry.DungeonOnly && s.dungeon == nil {
+			continue
+		}
 		if domain.TheftDropWeight(entry) == 0 {
 			continue
 		}
