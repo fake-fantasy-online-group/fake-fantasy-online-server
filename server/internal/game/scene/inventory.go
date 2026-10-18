@@ -19,6 +19,9 @@ func (s *Scene) inventorySnapshot(p *entity.Entity) (event.InventorySnapshot, er
 		return event.InventorySnapshot{}, fmt.Errorf("inventory snapshot: entity is not a player")
 	}
 
+	// One immutable actor evaluation serves every tooltip and blocked flag.
+	// Discard it before returning; never cache across inventory mutations.
+	resolution := newEquipmentRequirementResolution()
 	ch := p.Player.Char
 	money, err := inventoryMoney(ch.Money)
 	if err != nil {
@@ -62,8 +65,8 @@ func (s *Scene) inventorySnapshot(p *entity.Entity) (event.InventorySnapshot, er
 		}
 		view := event.InventoryItemView{
 			BagIndex: int32(clientSlot), Item: st.Item, Count: st.Count,
-			Tab: def.InventoryTab, Name: itemDisplayName(def, st), Desc: s.ownedItemTooltip(def, st, p),
-			Sell: def.SellPrice, Slot: -1, Bound: st.Bound, Blocked: s.equipmentBlockedFor(p, def, st),
+			Tab: def.InventoryTab, Name: itemDisplayName(def, st), Desc: s.itemTooltipForViewerResolved(def, st, p, p, resolution),
+			Sell: def.SellPrice, Slot: -1, Bound: st.Bound, Blocked: s.equipmentBlockedForResolved(p, def, st, resolution),
 			Locked: st.Locked, Quality: equipmentQuality(def, st), Cosmetic: def.AvatarFusion != nil,
 			FusedDesc: s.fusedDescription(st),
 		}
@@ -135,7 +138,7 @@ func (s *Scene) inventorySnapshot(p *entity.Entity) (event.InventorySnapshot, er
 		}
 		snap.Equipped = append(snap.Equipped, event.EquippedItemView{
 			Slot: item.slot, Item: item.st.Item, Name: itemDisplayName(def, item.st),
-			Desc:              s.ownedItemTooltip(def, item.st, p),
+			Desc:              s.itemTooltipForViewerResolved(def, item.st, p, p, resolution),
 			CurrentDurability: item.st.Durability, MaxDurability: domain.MaxDurabilityOf(item.st, def),
 			Avatar: 0, SoulAvatar: int32(item.st.FusedSoul),
 			Quality: equipmentQuality(def, item.st),
@@ -467,11 +470,15 @@ func equipmentQuality(def domain.ItemDef, stacks ...domain.Stack) uint8 {
 // 这与 locked（玩家手动锁定实例）、bound（永久绑定）不是同一件事。
 // 真正穿戴时 onEquip 会使用同一组规则再做一次权威校验，不信任客户端。
 func (s *Scene) equipmentBlockedFor(p *entity.Entity, def domain.ItemDef, st domain.Stack) bool {
+	return s.equipmentBlockedForResolved(p, def, st, newEquipmentRequirementResolution())
+}
+
+func (s *Scene) equipmentBlockedForResolved(p *entity.Entity, def domain.ItemDef, st domain.Stack, resolution *equipmentRequirementResolution) bool {
 	if def.Equip == nil || p == nil || p.Player == nil || p.Player.Char == nil {
 		return false
 	}
 	ch := p.Player.Char
-	if ch.Level < domain.EquipmentRequiredLevel(def, st) || def.Equip.Need.Meet(ch.Level, s.equipmentRequirementBaseFromWorn(p, s.functionalWorn(p), domain.EquipSlot(def.Equip.Slot)), ch.Appear.Gender) != domain.RejectNone {
+	if ch.Level < domain.EquipmentRequiredLevel(def, st) || def.Equip.Need.Meet(ch.Level, s.equipmentRequirementBaseResolved(p, s.functionalWorn(p), domain.EquipSlot(def.Equip.Slot), resolution), ch.Appear.Gender) != domain.RejectNone {
 		return true
 	}
 	return !def.Equip.Need.AllowsCharacter(ch)
@@ -494,6 +501,10 @@ func (s *Scene) ownedItemTooltip(def domain.ItemDef, st domain.Stack, owner *ent
 
 // Viewer controls renderer negotiation; owner controls requirements/activation.
 func (s *Scene) itemTooltipForViewer(def domain.ItemDef, st domain.Stack, owner, viewer *entity.Entity) string {
+	return s.itemTooltipForViewerResolved(def, st, owner, viewer, newEquipmentRequirementResolution())
+}
+
+func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack, owner, viewer *entity.Entity, resolution *equipmentRequirementResolution) string {
 	var ch *domain.Character
 	if owner != nil && owner.Player != nil {
 		ch = owner.Player.Char
@@ -588,7 +599,7 @@ func (s *Scene) itemTooltipForViewer(def domain.ItemDef, st domain.Stack, owner,
 	if ch != nil {
 		actual = ch.EffectiveBase()
 		if owner != nil && owner.Player != nil {
-			actual = s.equipmentRequirementBaseFromWorn(owner, s.functionalWorn(owner), domain.EquipSlot(e.Slot))
+			actual = s.equipmentRequirementBaseResolved(owner, s.functionalWorn(owner), domain.EquipSlot(e.Slot), resolution)
 		}
 	}
 	requirements := *e

@@ -13,6 +13,7 @@ func (s *Scene) changeSetSnapshot(p *entity.Entity) (event.ChangeSetSnapshot, er
 		return event.ChangeSetSnapshot{}, fmt.Errorf("快速换装状态不可用")
 	}
 	out := event.ChangeSetSnapshot{Who: p.ID, Items: make([]event.ChangeSetItemView, 0, p.Player.ChangeSet.Count())}
+	resolution := newEquipmentRequirementResolution()
 	var buildErr error
 	p.Player.ChangeSet.Each(func(cell domain.EquipSlot, st domain.Stack) {
 		if buildErr != nil {
@@ -24,10 +25,10 @@ func (s *Scene) changeSetSnapshot(p *entity.Entity) (event.ChangeSetSnapshot, er
 			return
 		}
 		out.Items = append(out.Items, event.ChangeSetItemView{
-			Cell: cell, Item: st.Item, Name: itemDisplayName(def, st), Desc: s.ownedItemTooltip(def, st, p),
+			Cell: cell, Item: st.Item, Name: itemDisplayName(def, st), Desc: s.itemTooltipForViewerResolved(def, st, p, p, resolution),
 			CurDur: st.Durability, MaxDur: domain.MaxDurabilityOf(st, def),
 			Refine: st.RefineLevel, Quality: equipmentQuality(def, st),
-			Blocked: s.equipmentBlockedFor(p, def, st),
+			Blocked: s.equipmentBlockedForResolved(p, def, st, resolution),
 		})
 	})
 	if buildErr != nil {
