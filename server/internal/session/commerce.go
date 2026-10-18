@@ -49,12 +49,13 @@ func (s *Session) reserveRack(raw scene.Command) (scene.RackReserveResult, bool)
 		return scene.RackReserveResult{}, false
 	}
 	reply := make(chan scene.RackReserveResult, 1)
+	request := &scene.RackRequest{}
 	switch cmd := raw.(type) {
 	case scene.ReserveRackPurchase:
-		cmd.Reply = reply
+		cmd.Reply, cmd.Request = reply, request
 		raw = cmd
 	case scene.ReserveRackRefund:
-		cmd.Reply = reply
+		cmd.Reply, cmd.Request = reply, request
 		raw = cmd
 	default:
 		return scene.RackReserveResult{}, false
@@ -63,16 +64,32 @@ func (s *Session) reserveRack(raw scene.Command) (scene.RackReserveResult, bool)
 		s.sendGMText("货架操作失败：场景不可用")
 		return scene.RackReserveResult{}, false
 	}
-	select {
-	case result := <-reply:
-		if result.Reason != "" || result.Snapshot.Char == nil {
-			s.sendGMText("货架操作失败：" + fallbackReason(result.Reason))
-			return result, false
-		}
-		return result, true
-	case <-time.After(familyCommitTimeout):
+	result, ok := waitRackReservation(reply, request, time.After(familyCommitTimeout))
+	if !ok {
+		s.log.Warn("货架预留超时，已取消", "char", s.entityID(), "scene", sceneID)
 		s.sendGMText("货架操作超时，请重试")
 		return scene.RackReserveResult{}, false
+	}
+	if result.Reason != "" || result.Snapshot.Char == nil {
+		s.sendGMText("货架操作失败：" + fallbackReason(result.Reason))
+		return result, false
+	}
+	return result, true
+}
+
+// The timeout may race a successfully prepared reply. Only abandon the request
+// if cancellation wins; otherwise drain the guaranteed buffered result and let
+// the normal transaction/finalizer own its currency and inventory.
+func waitRackReservation(reply <-chan scene.RackReserveResult, request *scene.RackRequest,
+	timeout <-chan time.Time) (scene.RackReserveResult, bool) {
+	select {
+	case result := <-reply:
+		return result, true
+	case <-timeout:
+		if request.Cancel() {
+			return scene.RackReserveResult{}, false
+		}
+		return <-reply, true
 	}
 }
 

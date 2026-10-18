@@ -55,20 +55,31 @@ func (s *Scene) onOpenRack(cmd OpenRack) {
 	s.emitTo(cmd.ID, snapshot)
 }
 
-func (s *Scene) rackReply(ch chan<- RackReserveResult, result RackReserveResult) {
-	if ch == nil {
+func (s *Scene) rackReply(ch chan<- RackReserveResult, result RackReserveResult, request *RackRequest) {
+	rollback := func() {
+		if result.Reservation.ID != 0 {
+			s.onFinalizeRackReservation(FinalizeRackReservation{Reservation: result.Reservation})
+		}
+	}
+	if !request.claim() {
+		rollback()
 		return
 	}
 	select {
 	case ch <- result:
 	default:
-		s.log.Warn("货架事务保留结果无人接收", "char", result.Reservation.ID)
+		rollback()
+		s.log.Warn("货架事务保留结果无人接收，已撤销", "char", result.Reservation.ID)
 	}
 }
 
 func (s *Scene) onReserveRackPurchase(cmd ReserveRackPurchase) {
 	result := RackReserveResult{}
-	defer func() { s.rackReply(cmd.Reply, result) }()
+	defer func() { s.rackReply(cmd.Reply, result, cmd.Request) }()
+	if cmd.Request.cancelled() {
+		result.Reason = "货架操作已取消"
+		return
+	}
 	p := s.players[cmd.ID]
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil ||
 		p.Player.RackBusy || !p.Alive() || !p.Player.RackOpen || cmd.Count <= 0 {
@@ -145,7 +156,11 @@ func (s *Scene) reserveRackPetPurchase(p *entity.Entity, good domain.RackGood, s
 
 func (s *Scene) onReserveRackRefund(cmd ReserveRackRefund) {
 	result := RackReserveResult{}
-	defer func() { s.rackReply(cmd.Reply, result) }()
+	defer func() { s.rackReply(cmd.Reply, result, cmd.Request) }()
+	if cmd.Request.cancelled() {
+		result.Reason = "货架操作已取消"
+		return
+	}
 	p := s.players[cmd.ID]
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil ||
 		p.Player.RackBusy || !p.Alive() || cmd.Shares <= 0 || cmd.Credit <= 0 {

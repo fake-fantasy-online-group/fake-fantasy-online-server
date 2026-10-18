@@ -515,21 +515,23 @@ type RackReserveResult struct {
 }
 
 type ReserveRackPurchase struct {
-	ID     domain.EntityID
-	Item   domain.ItemID
-	Source uint8
-	Count  int32
-	Reply  chan<- RackReserveResult
+	Request *RackRequest
+	ID      domain.EntityID
+	Item    domain.ItemID
+	Source  uint8
+	Count   int32
+	Reply   chan<- RackReserveResult
 }
 
 func (ReserveRackPurchase) CmdName() string { return "ReserveRackPurchase" }
 
 type ReserveRackRefund struct {
-	ID     domain.EntityID
-	Offer  domain.RackRefundOffer
-	Shares int32
-	Credit int64
-	Reply  chan<- RackReserveResult
+	Request *RackRequest
+	ID      domain.EntityID
+	Offer   domain.RackRefundOffer
+	Shares  int32
+	Credit  int64
+	Reply   chan<- RackReserveResult
 }
 
 func (ReserveRackRefund) CmdName() string { return "ReserveRackRefund" }
