@@ -74,7 +74,7 @@ func TestPublishedRiftVersionPinsLegacyAndNewRuns(t *testing.T) {
 	if err = restored.BindRules(table); err == nil {
 		t.Fatal("tampered published snapshot accepted")
 	}
-	if got := RiftBossExperience(1000, 10, fresh.Rules); got != 500 {
+	if got := RiftBossExperience(1000, 10, fresh.Rules); got != 1500 {
 		t.Fatal("configured experience divisor ignored", got)
 	}
 	if got := RiftBossExperience(math.MaxInt64, 150, fresh.Rules); got != math.MaxInt64 {

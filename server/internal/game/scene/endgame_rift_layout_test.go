@@ -147,3 +147,34 @@ func TestSeededRiftSavedVersionOnePopulationNotExpanded(t *testing.T) {
 		t.Fatal("saved version one plan was rejected or regenerated")
 	}
 }
+
+// The map pool is geometry/content based. Character level and challenge tier
+// may scale combat, but must not select a different set of native maps.
+func TestRiftMapSelectionUsesFullPoolIndependentOfLevelAndTier(t *testing.T) {
+	s, _ := seededRiftLayoutFixture(t, 1)
+	s.riftLayouts = riftFloorTemplatesForTest()
+	s.riftLayouts = append(s.riftLayouts, domain.RiftFloorTemplate{MapID: 999}) // Invalid maps stay excluded.
+	seen := map[int32]bool{}
+	for floor := int32(1); floor <= 100; floor++ {
+		var expected domain.RiftFloorPlan
+		for _, level := range []int32{12, 60, 100} {
+			for _, tier := range []int32{1, 30, 150} {
+				s.rift.data.Run.Members[100].Level = level
+				s.rift.data.Run.Tier = tier
+				plan, err := s.planEndgameRiftFloor("all-levels-full-pool", floor, 0)
+				if err != nil || !plan.Valid() || (plan.MapID != 7 && plan.MapID != 8) {
+					t.Fatalf("level %d tier %d: invalid plan or map: %+v %v", level, tier, plan, err)
+				}
+				if expected.MapID == 0 {
+					expected = plan
+				} else if !reflect.DeepEqual(plan, expected) {
+					t.Fatal("character level or tier changed seeded map, portals, or population")
+				}
+				seen[plan.MapID] = true
+			}
+		}
+	}
+	if len(seen) != 2 {
+		t.Fatalf("not every viable map was reachable: %v", seen)
+	}
+}

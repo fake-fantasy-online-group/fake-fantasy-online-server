@@ -123,11 +123,11 @@ func TestRiftExperienceRealDatabaseAnchorsAndExactlyOnceSettlement(t *testing.T)
 		base    int64
 		rewards [3]int64
 	}{
-		{12, 52740, [3]int64{5274, 158220, 791100}},
-		{50, 673553, [3]int64{67355, 2020659, 10103295}},
-		{60, 836924, [3]int64{83692, 2510772, 12553860}},
-		{80, 5591720, [3]int64{559172, 16775160, 83875800}},
-		{100, 17641100, [3]int64{1764110, 52923300, 264616500}},
+		{12, 52740, [3]int64{58014, 210960, 843840}},
+		{50, 673553, [3]int64{740908, 2694212, 10776848}},
+		{60, 836924, [3]int64{920616, 3347696, 13390784}},
+		{80, 5591720, [3]int64{6150892, 22366880, 89467520}},
+		{100, 17641100, [3]int64{19405210, 70564400, 282257600}},
 	}
 	for _, anchor := range anchors {
 		for i, tier := range []int32{1, 30, 150} {
@@ -197,7 +197,7 @@ func TestRiftExperiencePersonalLevelIgnoresPartyTimeAndTrialRound(t *testing.T) 
 			if s.rift.data.Run.Timely == late {
 				t.Fatal("wrong completion time fixture")
 			}
-			expected := []int64{791100, 10103295, 12553860, 83875800, 264616500}
+			expected := []int64{843840, 10776848, 13390784, 89467520, 282257600}
 			for i, want := range expected {
 				if got := s.rift.data.Grants[domain.CharID((i+1)*100)].Exp; got != want {
 					t.Fatalf("member%d XP %d != %d", i, got, want)
@@ -237,18 +237,19 @@ func TestRiftExperienceCompletionLevelItemAndLegacySnapshot(t *testing.T) {
 		t.Run(fmt.Sprintf("current%v", current), func(t *testing.T) {
 			s, b, now, boss := riftExperienceAuditScene(t, 150, current, 60)
 			riftExperienceAuditUseLevelItem(t, s)
+			before := riftExperienceAuditTotal(s, s.players[1])
 			riftExperienceAuditKill(t, s, now, boss, 1000)
 			// Historical grants retain their original serialized shape: no new evidence fields.
-			want, base, level := int64(12553860), int64(0), int32(0)
+			want, base, level := int64(13390784), int64(0), int32(0)
 			if current {
-				want, base, level = 25338000, 1689200, 61
+				want, base, level = 27027200, 1689200, 61
 			}
 			grant := s.rift.data.Grants[100]
 			if grant.Exp != want || grant.ExperienceBase != base || grant.ExperienceLevel != level {
 				t.Fatalf("wrong version-specific XP: got exp=%d base=%d level=%d, want %d/%d/%d", grant.Exp, grant.ExperienceBase, grant.ExperienceLevel, want, base, level)
 			}
 			finishRiftRewardCommit(t, s, b)
-			if s.players[1].Player.Char.Exp != want {
+			if riftExperienceAuditTotal(s, s.players[1])-before != want {
 				t.Fatal("wrong actual character settlement")
 			}
 			s.players[1].Player.Char.Level = 80
@@ -275,11 +276,11 @@ func TestRiftExperienceQueuedGuardianFreezesActualDeathLevel(t *testing.T) {
 	s.stepEndgameRift()
 	s.stepEndgameRift()
 	grant := s.rift.data.Grants[100]
-	if grant.ExperienceLevel != 61 || grant.ExperienceBase != 1689200 || grant.Exp != 25338000 {
+	if grant.ExperienceLevel != 61 || grant.ExperienceBase != 1689200 || grant.Exp != 27027200 {
 		t.Fatalf("queued death used later current level: level=%d base=%d XP=%d", grant.ExperienceLevel, grant.ExperienceBase, grant.Exp)
 	}
 	finishRiftRewardCommit(t, s, b)
-	if s.players[1].Player.Char.Exp != 25338000 {
+	if s.players[1].Player.Char.Exp != 27027200 {
 		t.Fatal("queued reward not settled exactly")
 	}
 }
@@ -297,13 +298,13 @@ func TestRiftExperienceCharacterAndPetBonusesAreSeparate(t *testing.T) {
 	owner.Player.StartExperienceBoost(900, 100, s.tick, 10000)
 	riftExperienceAuditKill(t, s, now, boss, 1000)
 	grant := s.rift.data.Grants[100]
-	// Character gets the fixed 83,692; pet gets floor(83,692/2) plus 100%.
-	if grant.Exp != 83692 || grant.Pet.Experience != 83692 || grant.Pet.BonusPct != 100 {
+	// Character gets the fixed 920,616; pet gets floor(920,616/2) plus 100%.
+	if grant.Exp != 920616 || grant.Pet.Experience != 920616 || grant.Pet.BonusPct != 100 {
 		t.Fatalf("mixed character/pet multipliers: characterXP=%d petXP=%d petBonus=%d", grant.Exp, grant.Pet.Experience, grant.Pet.BonusPct)
 	}
 	owner.Player.StartExperienceBoost(1000, 900, s.tick, 10000)
 	finishRiftRewardCommit(t, s, b)
-	if owner.Player.Char.Exp != 83692 || owner.Player.Char.Pets[0].Exp != 83692 {
+	if owner.Player.Char.Exp != 920616 || owner.Player.Char.Pets[0].Exp != 920616 {
 		t.Fatal("pet share deducted, rerolled or character bonus applied")
 	}
 }
@@ -321,18 +322,47 @@ func TestRiftExperienceOfflineUsesLastObservedLevelAndFrozenClaim(t *testing.T) 
 	delete(s.players, other.ID)
 	riftExperienceAuditKill(t, s, now, boss, 1000)
 	grant := s.rift.data.Grants[200]
-	if !s.rift.data.Run.Members[200].Eligible || grant.ExperienceLevel != 61 || grant.ExperienceBase != 1689200 || grant.Exp != 25338000 {
+	if !s.rift.data.Run.Members[200].Eligible || grant.ExperienceLevel != 61 || grant.ExperienceBase != 1689200 || grant.Exp != 27027200 {
 		t.Fatalf("offline level evidence: eligible=%v level=%d base=%d XP=%d", s.rift.data.Run.Members[200].Eligible, grant.ExperienceLevel, grant.ExperienceBase, grant.Exp)
 	}
 	finishRiftRewardCommit(t, s, b) // Settle the online member first.
 	other.Player.Char.Level = 80
 	s.players[other.ID] = other // Reconnected for recovery, without live-run readiness.
 	s.claimEndgameRift(other, domain.EndgameRequest{Op: "rift.claim", RequestID: "offline-xp-audit", ExpectedRevision: "0"}, s.rift.data, s.rift.revision, false)
-	if b.commits != 2 || b.plan.Snapshot.Char.Exp != 25338000 {
+	if b.commits != 2 || b.plan.Snapshot.Char.Exp != 27027200 {
 		t.Fatal("offline claim rerolled at claim level or failed to settle")
 	}
 	finishRiftRewardCommit(t, s, b)
-	if other.Player.Char.Exp != 25338000 {
+	if other.Player.Char.Exp != 27027200 {
 		t.Fatal("offline frozen XP did not persist")
+	}
+}
+
+func TestRiftExperienceAlreadyGeneratedLegacyGrantIsNotRecalculated(t *testing.T) {
+	s, b, _, _ := riftExperienceAuditScene(t, 150, true, 60)
+	d := s.rift.data.clone()
+	d.Run.Phase = domain.RiftCompleted
+	d.Run.Members[100].Eligible = true
+	d.GrantsReady = true
+	// A pre-change level-60, tier-150 completion already owns this exact grant.
+	d.Grants[100] = endgameRiftGrant{Exp: 12553860, ExperienceLevel: 60, ExperienceBase: 836924}
+	record := d.record(2)
+	restored, ok := decodeEndgameRift(&record, s.riftRules)
+	if !ok {
+		t.Fatal("legacy frozen grant failed to reload")
+	}
+	s.rift.data = restored
+	s.generateEndgameRiftGrants()
+	if s.rift.data.Grants[100].Exp != 12553860 {
+		t.Fatal("formula update rewrote an already generated reward")
+	}
+	p := s.players[1]
+	p.Player.Char.Level = 80
+	if !s.settleEndgameRiftExperience(p) || b.plan.Snapshot.Char.Exp != 12553860 {
+		t.Fatal("legacy reward changed at settlement")
+	}
+	finishRiftRewardCommit(t, s, b)
+	if p.Player.Char.Exp != 12553860 || !s.rift.data.Grants[100].ExperienceClaimed {
+		t.Fatal("legacy frozen reward was not settled exactly")
 	}
 }

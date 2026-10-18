@@ -316,7 +316,7 @@ func TestRiftOfflineContextSurvivesAnotherMembersPendingLeave(t *testing.T) {
 				boss.HP = 0
 				s.onDeath(boss, s.players[3].ID)
 				grant, ok := s.rift.data.Grants[200]
-				if !ok || !s.rift.data.Run.Members[200].Eligible || grant.ExperienceLevel != 61 || grant.Exp != 25338000 || grant.MagicFind != mf {
+				if !ok || !s.rift.data.Run.Members[200].Eligible || grant.ExperienceLevel != 61 || grant.Exp != 27027200 || grant.MagicFind != mf {
 					t.Fatalf("wrong offline grant: %+v", grant)
 				}
 				if s.rift.data.Run.PenaltyMS != 0 {
@@ -398,7 +398,7 @@ func TestRiftOfflineContextPersistsBeforeFloorPublication(t *testing.T) {
 				target.rift.data.Run.Phase = domain.RiftCompleted
 				target.generateEndgameRiftGrants()
 				g := target.rift.data.Grants[200]
-				if g.ExperienceLevel != 61 || g.Exp != 25338000 || g.MagicFind != mf {
+				if g.ExperienceLevel != 61 || g.Exp != 27027200 || g.MagicFind != mf {
 					t.Fatal("target offline reward used stale snapshot", g.ExperienceLevel, g.Exp, g.MagicFind)
 				}
 				*now += 1000
