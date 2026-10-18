@@ -29,7 +29,7 @@ func TestGreenFrogFieldKillRewardAudit(t *testing.T) {
 	for _, tc := range []struct {
 		level int32
 		exp   int64
-	}{{19, 131}, {30, 15}, {31, 5}, {32, 0}} {
+	}{{18, 131}, {19, 131}, {30, 15}, {31, 5}, {32, 0}} {
 		t.Run(fmt.Sprint(tc.level), func(t *testing.T) {
 			drops := 0
 			for seed := int64(0); seed < 32; seed++ {
