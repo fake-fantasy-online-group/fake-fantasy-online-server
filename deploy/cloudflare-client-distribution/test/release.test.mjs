@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile,writeFile,rm} from 'node:fs/promises';
+import {readFile,writeFile,mkdir,rm} from 'node:fs/promises';
 import path from 'node:path';
 import {prepareRelease,verifyLocal,verifyRemote,publishRelease,verifyResponse} from '../tools/release.mjs';
 import {parseResourceManifest} from '../tools/resource-manifest.mjs';
@@ -84,4 +84,47 @@ test('prepare rejects a wrongly named platform package even when bytes are local
   f.dispatch.update.clients.android.artifactUrl=next;f.config.files.find(x=>x.key.endsWith('android.apk')).key=f.config.files.find(x=>x.key.endsWith('android.apk')).key.replace('.apk','.exe');
   await writeFile(f.config.dispatchFile,jsonBytes(f.dispatch));await writeFile(f.configFile,jsonBytes(f.config));
   await assert.rejects(prepareRelease(f.configFile,f.stage),/unsupported client package extension/);
+});
+
+
+test('scoped passive overlays match client source and destination boundaries',()=>{
+  const accepted = ['gameassets/respatch/effect/龙霸.eff','gameassets/respatch/magic/magic/magic9990.gso'];
+  const parse = (source,destination,platform='android') => parseResourceManifest(Buffer.from(`FFO-MOBILE-1\n@client\t${platform}\t1.0.0\n${source}\t${destination}\t1\t${hash('x')}\n`),'https://assets.example.invalid/set/m.tsv');
+  for (const platform of ['android','windows','macos']) for (const value of accepted) {
+    const result = parse(value,value,platform);
+    assert.equal(result.entries[0].destination,value);
+    assert.equal(result.entries[0].url,'https://assets.example.invalid/set/'+value.split('/').map(encodeURIComponent).join('/'));
+  }
+  for (const value of ['gameassets/rawmap/world.gso','ReferenceClient/rawmap/world.gso',
+    'gameassets/respatch/other.gso','gameassets/respatch/effect/a.gso','gameassets/respatch/magic/magic/a.eff',
+    'gameassets/respatch/effect/sub/a.eff','gameassets/respatch/magic/magic/sub/a.gso',
+    'gameassets/respatch/effect/a.dll','gameassets/respatch/effect/a.lua','AddOns/a.eff',
+    'gameassets/Respatch/effect/a.eff','ReferenceClient/respatch/effect/a.eff']) {
+    assert.throws(()=>parse(value,accepted[0]),/passive source/);
+    assert.throws(()=>parse(accepted[0],value),/unsupported resource destination/);
+  }
+  assert.throws(()=>parse('a.json','Music/mapmusic.json'),/unsupported resource destination/);
+});
+
+test('overlay release prepares, verifies and publishes complete Unicode resource closure',async t=>{
+  const f = await setup(t), paths = ['gameassets/respatch/effect/龙霸.eff','gameassets/respatch/magic/magic/magic9990.gso'];
+  const payload = Buffer.from('synthetic passive overlay\n');
+  for (const relative of paths) {
+    const local = path.join(f.input,'resources',relative), key = `releases/synthetic-test/resources/${relative}`;
+    await mkdir(path.dirname(local),{recursive:true}); await writeFile(local,payload);
+    f.config.files.push({path:local,key});
+    f.blobs.set('https://assets.example.invalid/'+key.split('/').map(encodeURIComponent).join('/'),payload);
+  }
+  for (const platform of ['android','windows','macos']) {
+    const entry = f.config.files.find(x=>x.key.endsWith(`/${platform}.tsv`));
+    const bytes = Buffer.from(await readFile(entry.path,'utf8')+paths.map(p=>`${p}\t${p}\t${payload.length}\t${hash(payload)}\n`).join(''));
+    await writeFile(entry.path,bytes); f.blobs.set('https://assets.example.invalid/'+entry.key,bytes);
+  }
+  await writeFile(f.configFile,jsonBytes(f.config));
+  const {current,plan} = await prepareRelease(f.configFile,f.stage);
+  assert.equal(plan.files.length,11);
+  await verifyLocal(f.stage); await verifyRemote(current,plan,publicFetcher(f.blobs));
+  const artifacts = new FakeStore(), metadata = new FakeStore();
+  const result = await publishRelease(f.stage,{artifacts,metadata,expectedETag:'absent',confirmPublish:true,fetcher:publicFetcher(f.blobs)});
+  assert.equal(result.files,11); assert.equal(metadata.puts.length,1);
 });

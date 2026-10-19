@@ -6,9 +6,16 @@ export function safePath(path) {
   for (const p of parts) assert(p && p !== '.' && p !== '..' && !/[. ]$/.test(p) && !/\.part$/i.test(p) && !/^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\.|$)/i.test(p), 'unsafe resource path segment');
   return path;
 }
+function passiveOverlay(path) {
+  // Match the client generator/installer's reviewed data-only override paths.
+  // Do not admit raw world trees or generic respatch/plugin extensions.
+  const parts = path.split('/'), ext = path.slice(path.lastIndexOf('.')).toLowerCase();
+  return (parts.length === 4 && path.startsWith('gameassets/respatch/effect/') && ext === '.eff') ||
+    (parts.length === 5 && path.startsWith('gameassets/respatch/magic/magic/') && ext === '.gso');
+}
 function allowedDestination(path) {
   const parts = path.split('/'), ext = path.slice(path.lastIndexOf('.')).toLowerCase();
-  return parts.length >= 2 && ((parts[0] === 'data' && parts.length === 2 && ext === '.pkg') ||
+  return parts.length >= 2 && (passiveOverlay(path) || (parts[0] === 'data' && parts.length === 2 && ext === '.pkg') ||
     (parts[0] === 'Music' && ext === '.ogg') ||
     (['gameassets','ReferenceClient'].includes(parts[0]) && (passive.has(ext) || parts.length >= 3 && parts[1] === 'font' && ['.idx','.wid'].includes(ext))) ||
     (['sndeffect','sndeffect24_pcm'].includes(parts[0]) && ['.wav','.ogg'].includes(ext)));
@@ -38,7 +45,7 @@ export function parseResourceManifest(bytes, manifestURL) {
   const entries = lines.map(line => {
     const parts = line.split('\t'); assert(parts.length === 4, 'invalid resource entry');
     const [source,destination,length,sha256] = parts; safePath(source); safePath(destination);
-    assert(new Set([...passive,'.pkg','.idx','.wid']).has(source.slice(source.lastIndexOf('.')).toLowerCase()), 'only passive source files can be downloaded');
+    assert(passiveOverlay(source) || new Set([...passive,'.pkg','.idx','.wid']).has(source.slice(source.lastIndexOf('.')).toLowerCase()), 'only passive source files can be downloaded');
     assert(allowedDestination(destination), 'executable or unsupported resource destination');
     insertPath(source,sources,sourceSpellings); insertPath(destination,destinations,destinationSpellings);
     assert(/^\d+$/.test(length) && Number.isSafeInteger(Number(length)) && Number(length) > 0, 'invalid resource length');
