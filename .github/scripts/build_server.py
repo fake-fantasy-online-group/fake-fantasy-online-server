@@ -156,7 +156,9 @@ def build(output, go):
                     cwd=source / "server", env=env, check=True,
                 )
                 settings = run(go, "version", "-m", str(binary), env=env)
-                if f"{MODULE}/internal/buildinfo.commit={commit}" not in settings:
+                # Go omits linker flags from build settings with -trimpath.
+                # Check the linked identity bytes too, including cross-built PE.
+                if commit.encode("ascii") not in binary.read_bytes():
                     raise ValueError("binary is missing the full source commit")
                 for value in ("CGO_ENABLED=0", f"GOOS={goos}", "GOARCH=amd64", "GOAMD64=v1"):
                     if value not in settings.split():
