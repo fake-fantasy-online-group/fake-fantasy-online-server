@@ -907,8 +907,12 @@ function itemTooltip(item, equipment, level) {
 }
 
 function primaryStat(item) {
-  if (item.maxAttack || item.minAttack)
-    return `物攻 ${item.minAttack}–${item.maxAttack}`;
+  // publiccatalog.Item omits zero endpoints with Go's json:",omitempty".
+  // stats.attack is the maximum-only filter value, not an attack range.
+  const minAttack = item.minAttack ?? 0;
+  const maxAttack = item.maxAttack ?? 0;
+  if (maxAttack || minAttack)
+    return `物攻 ${minAttack}–${maxAttack}`;
   if (item.magicAttack) return `魔攻 ${formatNumber(item.magicAttack)}`;
   if (item.defense) return `防御 ${formatNumber(item.defense)}`;
   if (item.magicDefense) return `魔防 ${formatNumber(item.magicDefense)}`;

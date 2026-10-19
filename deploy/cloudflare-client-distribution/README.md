@@ -47,6 +47,19 @@ node --test test/*.test.mjs
 node tools/release.mjs --help
 ```
 
+With the Go toolchain and existing server dependencies available, the actual
+exporter-to-renderer attack-range regression can also be checked without editing
+server files:
+
+```sh
+node test/attack-range-integration.mjs
+```
+
+Set `GO_BINARY` to an approved Go executable if it is not named `go` on PATH.
+This isolated synthetic test uses a temporary Go overlay and no database or
+network. Zero-valued optional attack endpoints must display as numeric zero;
+`stats.attack` remains the separate maximum-only filter field.
+
 The tests create tiny synthetic files in the OS temporary directory and never
 contact Cloudflare. Override `TMPDIR` if necessary. Optional real browser tests
 need an installed Chromium and permission to open local sockets:

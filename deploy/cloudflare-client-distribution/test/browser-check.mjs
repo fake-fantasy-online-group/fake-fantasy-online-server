@@ -60,6 +60,8 @@ try {
   failRelease=true;await evaluate('document.getElementById("retry").click()');await until('document.getElementById("status").textContent.includes("读取失败")');assert.equal(await evaluate('document.querySelectorAll(".download-link").length'),0);failRelease=false;
   await navigate(origin+'/fantasy-db/');await until('document.getElementById("result-count").textContent==="2"');
   assert.equal(await evaluate('document.querySelectorAll("#account-panel").length'),0);
+  assert.ok(await evaluate('document.getElementById("item-grid").innerText.includes("物攻 0–10")'));
+  assert.ok(!(await evaluate('document.getElementById("item-grid").innerText.includes("undefined")')));
   await evaluate('document.getElementById("search").value="测试剑";document.getElementById("search").dispatchEvent(new Event("input",{bubbles:true}));');await until('document.getElementById("result-count").textContent==="1"');
   for(let i=0;i<2;i++) {await evaluate('document.querySelector("[data-detail]").click()');await until('document.getElementById("detail-dialog").open');await evaluate('document.querySelector("#detail-dialog [data-close]").click()');await until('!document.getElementById("detail-dialog").open');}
   await evaluate('document.querySelector("[data-section=gm]").click()');await until('!document.getElementById("gm-tools").hidden');
