@@ -349,6 +349,7 @@ func (s *Scene) spawnGeneratedLoot(def domain.ItemDef, stack domain.Stack, at do
 		Name: itemDisplayName(def, stack),
 		Pos:  at,
 		Drop: &entity.Drop{
+			ExpireAt:   s.tick + lootTTLTicks,
 			Item:       stack.Item,
 			Count:      stack.Count,
 			Stack:      stack,
@@ -363,8 +364,8 @@ func (s *Scene) spawnGeneratedLoot(def domain.ItemDef, stack domain.Stack, at do
 
 	// 到期自动消失。不设过期的话, 一张图刷一整天就会堆满没人捡的树枝。
 	s.timer.after(s.tick, lootTTLTicks, func() {
-		if _, ok := s.entities[id]; !ok {
-			return // 已经被捡走了
+		if s.entities[id] != e {
+			return // 已被捡走或ID已被复用
 		}
 		s.removeLoot(id, event.DespawnTimeout)
 	})
@@ -377,7 +378,8 @@ func (s *Scene) spawnPlayerDrop(def domain.ItemDef, st domain.Stack, at domain.P
 	e := &entity.Entity{
 		ID: id, Kind: domain.KindDrop, Name: itemDisplayName(def, st), Pos: at,
 		Drop: &entity.Drop{
-			Item: st.Item, Count: st.Count, Stack: st,
+			ExpireAt: s.tick + lootTTLTicks,
+			Item:     st.Item, Count: st.Count, Stack: st,
 			Owner: owner, OwnerUntil: s.tick + lootOwnerTicks,
 		},
 	}
@@ -386,7 +388,7 @@ func (s *Scene) spawnPlayerDrop(def domain.ItemDef, st domain.Stack, at domain.P
 	s.aoi.Enter(e)
 	s.emit(s.freshGroundSpawnEvent(e))
 	s.timer.after(s.tick, lootTTLTicks, func() {
-		if _, ok := s.entities[id]; ok {
+		if s.entities[id] == e {
 			s.removeLoot(id, event.DespawnTimeout)
 		}
 	})

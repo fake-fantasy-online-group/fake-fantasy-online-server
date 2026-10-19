@@ -1024,6 +1024,7 @@ func nonnegativeSpeed(speed int64) int32 {
 // 与打死不同：**不给经验、不掉落、不排重生**。
 // 排重生的话，抓走一只反而等于凭空多刷一只，刷怪点就成了宠物自动贩卖机。
 func (s *Scene) removeMonsterCaptured(m *entity.Entity) {
+	s.releaseMonsterCarriedLoot(m)
 	s.emit(event.EntityDespawned{ID: m.ID, Kind: m.Kind, Reason: event.DespawnRemoved})
 	s.flush() // 立刻冲刷: 下面就摘掉它了, 留到帧末就发不出去
 	s.aoi.Leave(m)

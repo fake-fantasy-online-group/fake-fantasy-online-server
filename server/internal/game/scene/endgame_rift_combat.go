@@ -158,6 +158,7 @@ func cacheRiftRewardContext(data *endgameRiftPersisted, char domain.CharID, cont
 func (s *Scene) clearRiftMonsters() {
 	s.clearEndgameRiftAbilities()
 	for id, m := range s.monsters {
+		s.releaseMonsterCarriedLoot(m)
 		s.cancelPendingCombat(id)
 		if s.rift != nil {
 			delete(s.rift.baseStats, id)

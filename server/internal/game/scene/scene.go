@@ -297,9 +297,10 @@ type Scene struct {
 	skills                     domain.SkillTable    // 技能定义
 	statuses                   domain.StatusTable   // 状态定义
 	statusOverlay              domain.StatusOverlay // 状态叠加矩阵
-	quests                     domain.QuestTable    // 任务定义
-	dungeons                   domain.DungeonTable  // 副本表
-	works                      domain.WorkTable     // 打工定义
+	monsterPickupQuestItems    map[domain.ItemID]bool
+	quests                     domain.QuestTable   // 任务定义
+	dungeons                   domain.DungeonTable // 副本表
+	works                      domain.WorkTable    // 打工定义
 	nianliCreation             domain.NianliCreationTable
 	requireWorkGather          bool               // 收益是否必须由 0x1025 触发
 	crafts                     domain.CraftTable  // 合成配方
@@ -1191,6 +1192,8 @@ func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
 		return
 	}
 
+	s.releaseMonsterCarriedLoot(dead)
+
 	// 临时召唤物不代表刷怪点产出，不提供经验、任务进度或掉落。
 	if !s.onEndgameRiftMonsterDeath(dead, s.entities[killer]) && (dead.Monster == nil || dead.Monster.Summoner == 0) {
 		// 结算击杀回报：任务专属收集品直入背包；普通掉落仍生成地面实体。
@@ -1588,6 +1591,12 @@ func (s *Scene) shutdown(reason string) {
 	}
 	for _, e := range s.players {
 		e.Player.Sink.Close()
+	}
+	for _, m := range s.monsters {
+		if m.Monster != nil {
+			m.Monster.CarriedLoot = nil
+			m.Monster.PickupTarget = 0
+		}
 	}
 	s.entities = map[domain.EntityID]*entity.Entity{}
 	s.players = map[domain.EntityID]*entity.Entity{}

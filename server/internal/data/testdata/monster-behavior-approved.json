@@ -1,0 +1,898 @@
+[
+  {
+    "id": 1002,
+    "name": "食人花",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1003,
+    "name": "地翼魔",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1005,
+    "name": "蓝鱼怪",
+    "aggressive": false,
+    "call_help": false,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1006,
+    "name": "海龟",
+    "aggressive": false,
+    "call_help": false,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1008,
+    "name": "雪女",
+    "aggressive": false,
+    "call_help": false,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1010,
+    "name": "护卫",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1011,
+    "name": "刑天",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1013,
+    "name": "猫妖",
+    "aggressive": false,
+    "call_help": false,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1014,
+    "name": "山狼",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1015,
+    "name": "碧蛇",
+    "aggressive": true,
+    "call_help": false,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1018,
+    "name": "苍狼皇",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1020,
+    "name": "狐妖",
+    "aggressive": false,
+    "call_help": false,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1022,
+    "name": "人虎",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1028,
+    "name": "小牛魔王",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1031,
+    "name": "小黑狗",
+    "aggressive": false,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1032,
+    "name": "小野猪",
+    "aggressive": false,
+    "call_help": true,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1033,
+    "name": "闪电鼠",
+    "aggressive": false,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1035,
+    "name": "跳跳尸",
+    "aggressive": true,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1041,
+    "name": "绿蛙兵",
+    "aggressive": false,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1042,
+    "name": "小虎怪",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1043,
+    "name": "小猴子",
+    "aggressive": false,
+    "call_help": true,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 1049,
+    "name": "步行鸟",
+    "aggressive": false,
+    "call_help": false,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1060,
+    "name": "兔王",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 1062,
+    "name": "木头人",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1065,
+    "name": "地藏小妖",
+    "aggressive": true,
+    "call_help": true,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1069,
+    "name": "黄鱼怪",
+    "aggressive": false,
+    "call_help": false,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1070,
+    "name": "红鱼怪",
+    "aggressive": false,
+    "call_help": false,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1073,
+    "name": "魔王飞天猪",
+    "aggressive": true,
+    "call_help": false,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1074,
+    "name": "鬼火",
+    "aggressive": false,
+    "call_help": false,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1082,
+    "name": "石身人面怪",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1084,
+    "name": "机关器",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1085,
+    "name": "不动明王",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1087,
+    "name": "孟婆汤怪",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1088,
+    "name": "仙符",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1089,
+    "name": "笔仙",
+    "aggressive": false,
+    "call_help": false,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1090,
+    "name": "牛头",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1091,
+    "name": "马面",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1092,
+    "name": "黑白无常",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1093,
+    "name": "双头鬼侍",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1094,
+    "name": "木制小飞兔",
+    "aggressive": false,
+    "call_help": true,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 1095,
+    "name": "木箱怪",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1096,
+    "name": "齿轮机关人",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1097,
+    "name": "铁钳人",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1098,
+    "name": "轮面怪",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1099,
+    "name": "小钟怪",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1100,
+    "name": "巨钟人",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1113,
+    "name": "大闸蟹",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1114,
+    "name": "人鱼巡逻",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1115,
+    "name": "墨鱼仔",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1116,
+    "name": "人鱼护卫",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1117,
+    "name": "虾护卫",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1118,
+    "name": "美人鱼王",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1119,
+    "name": "三头龙",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1120,
+    "name": "黄蜂",
+    "aggressive": true,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1123,
+    "name": "赤焰毒蛇",
+    "aggressive": true,
+    "call_help": false,
+    "flee": true,
+    "pickup": false
+  },
+  {
+    "id": 1128,
+    "name": "QQ糖",
+    "aggressive": false,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1131,
+    "name": "黑蜂",
+    "aggressive": true,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1133,
+    "name": "牛头面具",
+    "aggressive": false,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1134,
+    "name": "鹿角面具",
+    "aggressive": false,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1135,
+    "name": "鹅翅面具",
+    "aggressive": false,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1136,
+    "name": "守护面具王",
+    "aggressive": true,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1141,
+    "name": "火鸟",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1143,
+    "name": "飞天猪",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1144,
+    "name": "飞天猴子",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 1148,
+    "name": "绒绒兔",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 1149,
+    "name": "白兔",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 1150,
+    "name": "粉粉兔",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 1151,
+    "name": "浪漫粉粉兔",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 1153,
+    "name": "苍狼",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1154,
+    "name": "小虎怪",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1156,
+    "name": "甜蜜粉粉兔",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 1161,
+    "name": "仙人掌小妖",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1162,
+    "name": "灵异小妖",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1163,
+    "name": "沙漠幻蝶",
+    "aggressive": true,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1164,
+    "name": "吸血蚊",
+    "aggressive": true,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1165,
+    "name": "巨型蜗牛怪",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1166,
+    "name": "巨食人花",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1167,
+    "name": "毒蜘蛛",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1168,
+    "name": "沙虫",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1169,
+    "name": "喷射沙虫",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1170,
+    "name": "蚂蚁幼虫",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1171,
+    "name": "工蚁",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1172,
+    "name": "兵蚁",
+    "aggressive": true,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1173,
+    "name": "巡逻蚁",
+    "aggressive": true,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1174,
+    "name": "守卫蚁",
+    "aggressive": true,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1175,
+    "name": "骑兵蚁",
+    "aggressive": true,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1201,
+    "name": "盗墓贼",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 1202,
+    "name": "干尸",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1203,
+    "name": "干尸守卫",
+    "aggressive": true,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1204,
+    "name": "妖魔女仆",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1205,
+    "name": "妖魔仆人",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1206,
+    "name": "亡灵贵族",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1207,
+    "name": "妃子之魂",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1208,
+    "name": "死亡之后",
+    "aggressive": true,
+    "call_help": false,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 1209,
+    "name": "死亡之王",
+    "aggressive": true,
+    "call_help": true,
+    "flee": false,
+    "pickup": false
+  },
+  {
+    "id": 3010,
+    "name": "机关兔",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 3017,
+    "name": "飞天小猴",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 4001,
+    "name": "坚强的粉粉兔",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 4003,
+    "name": "坚强的绒绒兔",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 4010,
+    "name": "坚强的小猴子",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 4016,
+    "name": "坚强的白兔",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 4022,
+    "name": "凶暴的机关兔",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 4041,
+    "name": "凶暴的木制小飞兔",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 4047,
+    "name": "勇猛的飞天小猴",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 4058,
+    "name": "天魔兔王",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 4061,
+    "name": "勇猛的飞天猴子",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 4141,
+    "name": "凶暴的盗墓贼",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 5037,
+    "name": "木制小飞兔",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 5081,
+    "name": "盗墓贼",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 5096,
+    "name": "机关兔",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 5103,
+    "name": "飞天小猴",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  },
+  {
+    "id": 12176,
+    "name": "红毛剑齿猿",
+    "aggressive": false,
+    "call_help": false,
+    "flee": false,
+    "pickup": true
+  }
+]

@@ -1484,6 +1484,7 @@ func (s *Scene) despawnMonster(monster *entity.Entity) {
 	if monster == nil || monster.Monster == nil {
 		return
 	}
+	s.releaseMonsterCarriedLoot(monster)
 	s.emit(event.EntityDespawned{ID: monster.ID, Kind: monster.Kind, Reason: event.DespawnRemoved})
 	s.aoi.Leave(monster)
 	delete(s.entities, monster.ID)

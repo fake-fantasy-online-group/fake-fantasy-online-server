@@ -174,9 +174,10 @@ func LoadMonsters(ctx context.Context, q Querier) (MonsterDefs, error) {
 		SELECT m.id, m.name, m.kind, m.elite_id, m.level, m.hp, m.exp, m.sprite,
 		       m.atk_min, m.atk_max, m.def, m.hit, m.matk, m.mdef, m.crit_rate, m.mcrit_rate,
 		       m.atk_speed, m.move_speed,
-		       m.aggressive, m.can_attack, m.basic_attack_enabled, m.call_help,
+		       m.aggressive, m.can_attack, m.basic_attack_enabled, m.call_help, m.flee, m.pickup,
 		       a.id, a.view_dist, a.trace_dist, a.basic_attack_dist, a.keep_dist,
-		       a.help_radius, a.skill_check_ms, a.global_cooldown_ms
+		       a.help_radius, a.skill_check_ms, a.global_cooldown_ms,
+		       a.flee_hp_percent, a.flee_duration_ms, a.flee_cooldown_ms
 		  FROM game_monsters m
 		  JOIN game_monster_ai_templates a ON a.id = m.ai_template
 		 WHERE m.level > 0 AND m.hp > 0`)
@@ -194,13 +195,15 @@ func LoadMonsters(ctx context.Context, q Querier) (MonsterDefs, error) {
 			critRate, mcritRate                  int32
 			atkSpeed, moveSpeed, expRaw          int32
 			skillCheckMS, globalCooldownMS       int32
+			fleeDurationMS, fleeCooldownMS       int32
 			canAttack, basicAttackEnabled        bool
 		)
 		if err := rows.Scan(&d.ID, &d.Name, &kind, &d.EliteID, &d.Level, &d.HP, &expRaw, &d.Sprite,
 			&atkMin, &atkMax, &def, &hit, &matk, &mdef, &critRate, &mcritRate, &atkSpeed, &moveSpeed,
-			&d.Aggressive, &canAttack, &basicAttackEnabled, &d.CallHelp,
+			&d.Aggressive, &canAttack, &basicAttackEnabled, &d.CallHelp, &d.Flee, &d.Pickup,
 			&d.AI.ID, &d.AI.ViewDist, &d.AI.TraceDist, &d.AI.BasicAttackDist, &d.AI.KeepDist,
-			&d.AI.HelpRadius, &skillCheckMS, &globalCooldownMS); err != nil {
+			&d.AI.HelpRadius, &skillCheckMS, &globalCooldownMS,
+			&d.AI.FleeHPPercent, &fleeDurationMS, &fleeCooldownMS); err != nil {
 			return nil, fmt.Errorf("data: 读 game_monsters 行: %w", err)
 		}
 		d.Kind = domain.ParseMonsterKind(kind)
@@ -213,6 +216,8 @@ func LoadMonsters(ctx context.Context, q Querier) (MonsterDefs, error) {
 		d.ViewDist, d.TraceDist = d.AI.ViewDist, d.AI.TraceDist
 		d.AI.SkillCheckEvery = domain.Ticks(int(skillCheckMS))
 		d.AI.GlobalCooldown = domain.Ticks(int(globalCooldownMS))
+		d.AI.FleeDurationTicks = domain.Ticks(int(fleeDurationMS))
+		d.AI.FleeCooldownTicks = domain.Ticks(int(fleeCooldownMS))
 		out[d.ID] = d
 	}
 	if err := rows.Err(); err != nil {

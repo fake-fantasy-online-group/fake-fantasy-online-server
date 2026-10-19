@@ -152,6 +152,12 @@ func (s *Scene) stepAI() {
 
 		var target ai.Target
 		tgt := s.targetInfoInto(m, &target)
+		if s.stepMonsterFlee(m, tgt, p) {
+			continue
+		}
+		if tgt == nil && m.Monster.Target == 0 && s.tickMonsterPickup(m) {
+			continue
+		}
 		chaseTo, directPath := domain.Pos{}, true
 		if tgt != nil {
 			var pathOK bool
@@ -229,6 +235,9 @@ func (s *Scene) initializeMonster(m *entity.Entity) {
 	m.Monster.SkillCasts = map[domain.SkillID]int32{}
 	m.Monster.NextSkillAt = 0
 	m.Monster.SpokenScenes = 0
+	m.Monster.FleeUntil = 0
+	m.Monster.NextFleeAt = 0
+	m.Monster.HelpReadyAt = 0
 	s.clearMonsterChasePath(m.Monster)
 	m.Monster.ChasePathRetryAt = 0
 	m.Monster.ChasePathRetryTarget = domain.Pos{}
@@ -1088,6 +1097,7 @@ func (s *Scene) dropTarget(m *entity.Entity) {
 	}
 	m.Monster.CombatPathActive = false
 	m.Monster.Target = 0
+	m.Monster.FleeUntil = 0
 	m.Monster.TauntPower = 0
 	m.Monster.Roaming = false
 	s.clearMonsterChasePath(m.Monster)
@@ -1159,11 +1169,21 @@ func (s *Scene) emitEntityMove(m *entity.Entity, to domain.Pos) {
 //
 // 辅助宠物不是战斗单位，不能成为仇恨来源。
 func (s *Scene) aggro(victim *entity.Entity, attacker domain.EntityID) {
-	if victim.Monster == nil || victim.Monster.NoAttack || victim.Monster.Target != 0 || attacker == 0 {
+	if victim == nil || victim.Monster == nil || victim.Monster.NoAttack || attacker == 0 {
 		return
 	}
 	a, ok := s.entities[attacker]
-	if !ok || a.Kind != domain.KindPlayer || entityInvisible(a) || !s.equipmentCombatReady(a) {
+	if !ok || a.Kind != domain.KindPlayer || !a.Alive() || entityInvisible(a) || s.entityMapLoading(a) || !s.equipmentCombatReady(a) {
+		return
+	}
+	// Higher-level monsters retain their previous behavior. Audited monsters may
+	// call companions after acquiring a target, but never steal an existing fight.
+	if victim.Monster.Target != 0 {
+		if s.defs != nil {
+			if d, found := s.defs.Def(victim.Monster.TypeID); found && d.Level <= 60 {
+				s.callMonsterHelp(victim, attacker)
+			}
+		}
 		return
 	}
 	victim.Monster.Target = attacker
@@ -1199,28 +1219,55 @@ func (s *Scene) taunt(victim *entity.Entity, attacker domain.EntityID, power int
 	return true
 }
 
-// callMonsterHelp 只唤醒同模板、在帮助半径内且当前没有目标的同伴。直接赋目标
-// 而不递归调用 aggro，避免一只怪把整张地图连锁唤醒。
+// callMonsterHelp recruits nearby idle hostile combat monsters without recursion.
+// The <=60 audited policy permits different types; higher levels retain same-type help.
 func (s *Scene) callMonsterHelp(victim *entity.Entity, attacker domain.EntityID) {
 	if victim == nil || victim.Monster == nil || s.defs == nil || victim.Monster.AI.HelpRadius <= 0 {
 		return
 	}
 	def, ok := s.defs.Def(victim.Monster.TypeID)
-	if !ok || !def.CallHelp {
+	if !ok || !def.CallHelp || victim.Monster.NoAttack {
 		return
 	}
-	radiusSq := float64(victim.Monster.AI.HelpRadius) * float64(victim.Monster.AI.HelpRadius)
-	s.aoi.AroundPos(victim.Pos, func(other *entity.Entity) {
+	a := s.entities[attacker]
+	if a == nil || a.Kind != domain.KindPlayer || !a.Alive() || entityInvisible(a) || s.entityMapLoading(a) || !s.equipmentCombatReady(a) || a.Player != nil && a.Player.Protected(s.tick) {
+		return
+	}
+	audited := def.Level <= 60
+	if audited {
+		if s.tick < victim.Monster.HelpReadyAt {
+			return
+		}
+		victim.Monster.HelpReadyAt = s.tick + 10
+	}
+	radius := float64(victim.Monster.AI.HelpRadius)
+	visit := func(other *entity.Entity) {
 		if other == nil || other.ID == victim.ID || !other.Alive() || other.Monster == nil ||
-			other.Monster.NoAttack ||
-			other.Monster.TypeID != victim.Monster.TypeID || other.Monster.Target != 0 ||
-			sqDist(victim.Pos, other.Pos) > radiusSq {
+			other.Monster.NoAttack || !other.Monster.Kind.Hostile() || other.Monster.Target != 0 ||
+			sqDist(victim.Pos, other.Pos) > radius*radius {
+			return
+		}
+		if audited {
+			otherDef, found := s.defs.Def(other.Monster.TypeID)
+			if !found || otherDef.Level > 60 {
+				return
+			}
+		}
+		if !audited && other.Monster.TypeID != victim.Monster.TypeID {
+			return
+		}
+		if audited && (!s.straightPathWalkable(victim.Pos, other.Pos) || sqDist(other.Pos, a.Pos) > aiParams(other).TraceDist*aiParams(other).TraceDist) {
 			return
 		}
 		other.Monster.Target = attacker
 		other.Monster.Roaming = false
 		s.monsterSpeak(other, domain.MonsterSceneEnemy)
-	})
+	}
+	if audited {
+		s.aoi.AroundRadius(victim.Pos, radius, visit)
+	} else {
+		s.aoi.AroundPos(victim.Pos, visit)
+	}
 }
 
 func sqDist(a, b domain.Pos) float64 {

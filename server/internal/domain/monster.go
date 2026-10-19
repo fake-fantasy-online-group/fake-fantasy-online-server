@@ -74,10 +74,12 @@ type MonsterDef struct {
 	// 模板，因此拿到的也是精英档。
 	ColorProfile ColorProfile
 
-	Aggressive    bool  // 是否主动攻击。15 级前的普通怪不主动，变成光圈(精英)后会
+	Aggressive    bool  // 是否主动攻击，由怪物行为数据决定
 	NoAttack      bool  // 是否完全不能攻击；仍可被玩家攻击、死亡和掉落
 	NoBasicAttack bool  // 仍会施放技能，但不进行普通攻击
-	CallHelp      bool  // 是否呼叫同伴
+	CallHelp      bool  // 是否受击呼叫附近怪物援战
+	Flee          bool  // 是否低血量逃跑
+	Pickup        bool  // 是否拾取地面物品
 	ViewDist      int32 // 索敌半径
 	TraceDist     int32 // 追击半径。超出只丢目标，怪物留在脱战位置继续活动
 	AI            MonsterAIProfile
@@ -92,11 +94,14 @@ type MonsterDef struct {
 type MonsterAIProfile struct {
 	ID string
 
-	ViewDist        int32
-	TraceDist       int32
-	BasicAttackDist int32
-	KeepDist        int32
-	HelpRadius      int32
+	ViewDist          int32
+	TraceDist         int32
+	BasicAttackDist   int32
+	KeepDist          int32
+	HelpRadius        int32
+	FleeHPPercent     int32
+	FleeDurationTicks Tick
+	FleeCooldownTicks Tick
 
 	SkillCheckEvery Tick
 	GlobalCooldown  Tick

@@ -100,6 +100,8 @@ type Pet struct {
 
 // Drop 是地上一件掉落物的专有部分。
 type Drop struct {
+	// ExpireAt remains unchanged while temporarily carried by a monster.
+	ExpireAt          domain.Tick
 	PresentationToken int64 // Process-unique creation token, preserved across visibility snapshots.
 	Item              domain.ItemID
 	Count             int32
@@ -812,6 +814,11 @@ type Monster struct {
 	SpawnID      int32      // 来自哪个刷怪点, 死后由它负责重生
 	Home         domain.Pos // 出生点记录。怪物脱战后不会据此回位或重置
 
+	// Bounded behavior state belongs to one live spawn, never to its template.
+	FleeUntil   domain.Tick
+	NextFleeAt  domain.Tick
+	HelpReadyAt domain.Tick
+
 	Target     domain.EntityID // 当前仇恨目标, 0 = 无
 	TauntPower int32           // 当前目标由嘲讽建立时的覆盖优先级；普通仇恨为 0
 	nextAt     domain.Tick     // 下次可攻击的帧
@@ -856,6 +863,11 @@ type Monster struct {
 	// Summoner 非零表示它由技能临时召唤，不占刷怪点、不给击杀奖励，也不重生。
 	Summoner domain.EntityID
 	ExpireAt domain.Tick
+
+	// CarriedLoot exclusively owns removed ground entities, preserving exact stacks.
+	CarriedLoot    []*Entity
+	NextPickupScan domain.Tick
+	PickupTarget   domain.EntityID
 }
 
 // ReadyToAttack 报告实体在 now 帧能否出手。
