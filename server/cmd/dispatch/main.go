@@ -4,7 +4,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -31,13 +30,14 @@ type srv struct {
 var (
 	showVersion = flag.Bool("version", false, "输出未发布构建信息并退出，不连接数据库")
 
-	apkPath = flag.String("apk", os.Getenv("MOBILE_APK_PATH"), "供 /download/ 下载的单个 APK 文件路径（默认 MOBILE_APK_PATH）")
-	addr    = flag.String("addr", ":8088", "监听地址")
-	host    = flag.String("game-host", "127.0.0.1", "下发给客户端的游戏服地址")
-	port    = flag.Int("game-port", 19000, "下发给客户端的游戏服端口")
-	name    = flag.String("name", "怀旧一区", "服务器名")
-	zone    = flag.String("zone", "龙城", "分区名")
-	dsn     = flag.String("dsn", defaultDSN(), "幻想数据库使用的 PostgreSQL DSN")
+	apkPath      = flag.String("apk", os.Getenv("MOBILE_APK_PATH"), "供 /download/ 下载的单个 APK 文件路径（默认 MOBILE_APK_PATH）")
+	updateConfig = flag.String("update-config", os.Getenv("DISPATCH_UPDATE_CONFIG"), "更新信息 JSON 配置文件路径（默认 DISPATCH_UPDATE_CONFIG；不可与 DISPATCH_UPDATE_JSON 同用）")
+	addr         = flag.String("addr", ":8088", "监听地址")
+	host         = flag.String("game-host", "127.0.0.1", "下发给客户端的游戏服地址")
+	port         = flag.Int("game-port", 19000, "下发给客户端的游戏服端口")
+	name         = flag.String("name", "怀旧一区", "服务器名")
+	zone         = flag.String("zone", "龙城", "分区名")
+	dsn          = flag.String("dsn", defaultDSN(), "幻想数据库使用的 PostgreSQL DSN")
 )
 
 func main() {
@@ -48,6 +48,14 @@ func main() {
 			os.Exit(1)
 		}
 		return
+	}
+	update, err := loadDispatchUpdate(*updateConfig, os.Getenv("DISPATCH_UPDATE_JSON"))
+	if err != nil {
+		log.Fatalf("更新信息配置无效: %v", err)
+	}
+	dispatchHandler, err := newDispatchHandler([]srv{{Name: *name, Host: *host, Port: *port, Zone: *zone, PvP: false, Busy: 0}}, update)
+	if err != nil {
+		log.Fatalf("无法生成服务器列表: %v", err)
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -67,24 +75,12 @@ func main() {
 		log.Printf("幻想数据库暂不可用: %v", catalogErr)
 	}
 
-	body := map[string]any{
-		"servers": []srv{{Name: *name, Host: *host, Port: *port, Zone: *zone, PvP: false, Busy: 0}},
-	}
-	raw, _ := json.MarshalIndent(body, "", " ")
-
-	dispatchHandler := func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Cache-Control", "no-store")
-		w.Write(raw)
-	}
-
 	webRoot, err := fs.Sub(webFiles, "web")
 	if err != nil {
 		log.Fatal(err)
 	}
 	mux := http.NewServeMux()
-	mux.HandleFunc("/dispatch.json", dispatchHandler)
+	mux.Handle("/dispatch.json", dispatchHandler)
 	mux.Handle("/download/", mobileDownloadHandler(*apkPath))
 	mux.HandleFunc("/api/catalog/items", catalog.itemsHandler)
 	mux.HandleFunc("/api/catalog/meta", catalog.metaHandler)
@@ -101,7 +97,7 @@ func main() {
 			return
 		}
 		if dispatchCompatibilityPath(r.URL.Path) {
-			dispatchHandler(w, r)
+			dispatchHandler.ServeHTTP(w, r)
 			return
 		}
 		http.NotFound(w, r)
@@ -109,7 +105,7 @@ func main() {
 
 	log.Printf("dispatch 服务已监听 %s", *addr)
 	log.Printf("幻想数据库: http://127.0.0.1%s/fantasy-db/", *addr)
-	log.Printf("下发内容: %s", raw)
+	log.Printf("服务器列表已配置；更新信息已配置: %t", update != nil)
 	server := &http.Server{
 		Addr:              *addr,
 		Handler:           requestLog(mobileDispatchBoundary(mux)),

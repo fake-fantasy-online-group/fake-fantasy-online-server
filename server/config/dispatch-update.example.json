@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "resourceManifestUrl": "https://assets.example.test/resources/manifest.json",
+  "resourceManifestSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "resourceManifestSizeBytes": 456,
+  "clients": {
+    "android": {
+      "version": "1.2.3",
+      "minVersion": "1.0.0",
+      "artifactUrl": "https://download.example.test/client.apk",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "sizeBytes": 12345
+    }
+  }
+}

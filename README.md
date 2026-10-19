@@ -151,3 +151,7 @@ go run ./cmd/dispatch -addr :8088 -game-host <电脑的局域网IP> -apk /absolu
 APK 和游戏资源不要提交到 Git。页面不托管资源目录，也不推断 APK 版本、架构或安装兼容性。
 此地址没有登录鉴权，仅用于可信局域网，请勿将 8088 转发到公网。
 局域网仅开放 `/dispatch.json` 和上述两个精确下载地址；数据库工作台、目录及账号管理仍仅供本机访问。
+
+### 统一更新信息（可选）
+
+`/dispatch.json` 可在原 `servers` 数组之外返回 `update`，集中提供资源清单 URL 和各平台客户端安装包版本、大小与 SHA-256。使用 `-update-config` / `DISPATCH_UPDATE_CONFIG` 指定仓库外 JSON 文件，或设置 `DISPATCH_UPDATE_JSON`；不配置时保留旧响应。此功能只下发元数据，不下载、安装或执行更新，不改变游戏协议或公开路由边界。字段、信任边界与非秘密示例见 [dispatch 统一更新入口](docs/dispatch-updates.md)。
