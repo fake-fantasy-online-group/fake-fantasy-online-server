@@ -229,3 +229,59 @@ func TestMonsterBehaviorLoaderColumns(t *testing.T) {
 		t.Fatalf("behavior/profile not loaded: %+v", d)
 	}
 }
+
+// This companion to the DSN test executes the production loader's SQL against
+// the full, disposable PostgreSQL fixture produced by validate_monster_behavior.py.
+// It deliberately makes no claim about pgx transport or concurrent sessions.
+func TestMonsterBehaviorPostgresActualLoader(t *testing.T) {
+	path := os.Getenv("FANTASY_MONSTER_BEHAVIOR_PG_DATA")
+	if path == "" {
+		t.Skip("isolated migration88 PostgreSQL cluster required")
+	}
+	if _, err := os.Stat(filepath.Join(path, "postmaster.pid")); !os.IsNotExist(err) {
+		t.Fatalf("refusing active, stale-postmaster or inaccessible cluster: %v", err)
+	}
+	if os.Getenv("PG_BIN") == "" {
+		t.Fatal("PG_BIN required")
+	}
+	q := &v5SingleUserQuerier{bin: os.Getenv("PG_BIN"), path: path, database: "postgres"}
+	monsters, err := LoadMonsters(context.Background(), q)
+	if err != nil {
+		t.Fatal(err)
+	}
+	approved := map[domain.MonsterID]approvedMonsterBehavior{}
+	for _, row := range readApprovedMonsterBehaviors(t) {
+		approved[domain.MonsterID(row.ID)] = row
+	}
+	counts := [4]int{}
+	matched := 0
+	for id, monster := range monsters {
+		if monster.AI.FleeHPPercent != 20 || monster.AI.FleeDurationTicks != domain.Ticks(3000) || monster.AI.FleeCooldownTicks != domain.Ticks(10000) {
+			t.Fatalf("incorrect loaded AI defaults for %d: %+v", id, monster.AI)
+		}
+		if monster.Level > 60 || !monster.Kind.Hostile() {
+			continue
+		}
+		want, listed := approved[id]
+		if listed {
+			matched++
+			if monster.Name != want.Name {
+				t.Fatalf("identity mismatch %d: %s", id, monster.Name)
+			}
+		}
+		gotFlags := [4]bool{monster.Aggressive, monster.CallHelp, monster.Flee, monster.Pickup}
+		wantFlags := [4]bool{want.Aggressive, want.CallHelp, want.Flee, want.Pickup}
+		if gotFlags != wantFlags {
+			t.Fatalf("monster %d flags %v, want %v", id, gotFlags, wantFlags)
+		}
+		for i, value := range gotFlags {
+			if value {
+				counts[i]++
+			}
+		}
+	}
+	if matched != len(approved) || counts != [4]int{68, 23, 15, 27} {
+		t.Fatalf("loaded approved=%d/%d counts=%v", matched, len(approved), counts)
+	}
+	t.Logf("actual LoadMonsters: %d templates, %d approved identities, flags %v, %d read-only PostgreSQL queries", len(monsters), matched, counts, q.queries)
+}
