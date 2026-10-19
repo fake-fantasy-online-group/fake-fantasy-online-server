@@ -1,0 +1,13 @@
+{
+  "name": "ffo-cloudflare-client-distribution",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "test:browser": "node test/browser-check.mjs",
+    "prepare-release": "node tools/release.mjs prepare",
+    "verify-release": "node tools/release.mjs verify",
+    "publish-release": "node tools/release.mjs publish"
+  },
+  "engines": {"node": ">=22"}
+}

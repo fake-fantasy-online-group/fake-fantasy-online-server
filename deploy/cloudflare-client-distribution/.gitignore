@@ -1,0 +1,15 @@
+node_modules/
+.wrangler/
+.dev.vars*
+wrangler.local.*
+private/
+staging/
+*.plan.json
+current.json
+catalog-*.json
+*.apk
+*.aab
+*.pkg
+*.dmg
+*.exe
+*.zip

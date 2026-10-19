@@ -1,0 +1,16 @@
+{
+  "name": "ffo-client-distribution",
+  "main": "src/worker.mjs",
+  "compatibility_date": "2026-10-19",
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": {
+    "directory": "site",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  }
+  // Add the separately approved EXISTING private metadata bucket only in an
+  // ignored local config. The public artifact bucket must not be bound here.
+  // "r2_buckets": [{"binding":"RELEASES", "bucket_name":"approved-private-metadata"}]
+  // Do not add routes, custom domains or account IDs to this source template.
+}

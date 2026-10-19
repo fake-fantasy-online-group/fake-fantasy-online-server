@@ -1,0 +1,9 @@
+.download-main { max-width: 1120px; margin: 2rem auto; padding: 0 1.2rem; }
+.download-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1rem; margin:1.5rem 0; }
+.download-main .tool-panel { padding:1.4rem; margin-bottom:1rem; }
+.download-main h1 { font-size:clamp(1.8rem,4vw,2.7rem); }
+.download-main p, .download-main dd { overflow-wrap:anywhere; }
+.download-main dt { color:var(--muted); margin-top:.8rem; }
+.download-main dd { margin-left:0; font-family:monospace; }
+.download-link { display:inline-block; padding:.7rem 1rem; border:1px solid #6ee7d5; border-radius:8px; margin:.5rem 0; }
+.site-header { display:flex; justify-content:space-between; }
