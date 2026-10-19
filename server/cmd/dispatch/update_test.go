@@ -190,7 +190,7 @@ func TestDispatchUpdateExampleConfig(t *testing.T) {
 	if err != nil {
 		t.Fatalf("documented configuration must remain valid: %v", err)
 	}
-	if update.SchemaVersion != 1 || len(update.Clients) != 1 {
+	if update.SchemaVersion != 1 || len(update.Clients) != 3 || update.ResourceManifests == nil || len(*update.ResourceManifests) != 3 {
 		t.Fatalf("unexpected example: %#v", update)
 	}
 }

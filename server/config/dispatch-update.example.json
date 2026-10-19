@@ -1,15 +1,49 @@
 {
   "schemaVersion": 1,
-  "resourceManifestUrl": "https://assets.example.test/resources/manifest.json",
-  "resourceManifestSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  "resourceManifestSizeBytes": 456,
+  "resourceManifests": {
+    "android": {
+      "1.2.3": {
+        "manifestUrl": "https://assets.example.test/resources/android/1.2.3/manifest.tsv",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "sizeBytes": 456
+      }
+    },
+    "macos": {
+      "1.2.3": {
+        "manifestUrl": "https://assets.example.test/resources/macos/1.2.3/manifest.tsv",
+        "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "sizeBytes": 457
+      }
+    },
+    "windows": {
+      "1.2.3": {
+        "manifestUrl": "https://assets.example.test/resources/windows/1.2.3/manifest.tsv",
+        "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "sizeBytes": 458
+      }
+    }
+  },
   "clients": {
     "android": {
       "version": "1.2.3",
-      "minVersion": "1.0.0",
-      "artifactUrl": "https://download.example.test/client.apk",
-      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "minVersion": "1.2.3",
+      "artifactUrl": "https://download.example.test/clients/android/1.2.3/client.apk",
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
       "sizeBytes": 12345
+    },
+    "macos": {
+      "version": "1.2.3",
+      "minVersion": "1.2.3",
+      "artifactUrl": "https://download.example.test/clients/macos/1.2.3/client.zip",
+      "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "sizeBytes": 12346
+    },
+    "windows": {
+      "version": "1.2.3",
+      "minVersion": "1.2.3",
+      "artifactUrl": "https://download.example.test/clients/windows/1.2.3/client.zip",
+      "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "sizeBytes": 12347
     }
   }
 }

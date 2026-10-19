@@ -23,12 +23,23 @@ const (
 // These are application update advertisements, not game wire-protocol versions.
 // Dispatch never downloads, verifies, installs or executes the advertised URLs.
 type dispatchUpdate struct {
-	SchemaVersion             int                     `json:"schemaVersion"`
-	ResourceManifestURL       string                  `json:"resourceManifestUrl"`
-	ResourceManifestSHA256    string                  `json:"resourceManifestSha256,omitempty"`
-	ResourceManifestSizeBytes *int64                  `json:"resourceManifestSizeBytes,omitempty"`
-	Clients                   map[string]clientUpdate `json:"clients,omitempty"`
-	HotupdateManifestURL      string                  `json:"hotupdateManifestUrl,omitempty"`
+	SchemaVersion             int                        `json:"schemaVersion"`
+	ResourceManifestURL       string                     `json:"resourceManifestUrl,omitempty"`
+	ResourceManifestSHA256    string                     `json:"resourceManifestSha256,omitempty"`
+	ResourceManifestSizeBytes *int64                     `json:"resourceManifestSizeBytes,omitempty"`
+	ResourceManifests         *resourceManifestPlatforms `json:"resourceManifests,omitempty"`
+	Clients                   map[string]clientUpdate    `json:"clients,omitempty"`
+	HotupdateManifestURL      string                     `json:"hotupdateManifestUrl,omitempty"`
+}
+
+// The pointer preserves an explicitly empty map in the response. Map presence
+// disables legacy fallback for every platform/version, including missing keys.
+type resourceManifestPlatforms map[string]map[string]*resourceManifestUpdate
+
+type resourceManifestUpdate struct {
+	ManifestURL string `json:"manifestUrl"`
+	SHA256      string `json:"sha256"`
+	SizeBytes   int64  `json:"sizeBytes"`
 }
 
 type clientUpdate struct {
@@ -91,6 +102,42 @@ func loadDispatchUpdate(configPath, inlineJSON string) (*dispatchUpdate, error) 
 	if err := decoder.Decode(new(any)); err != io.EOF {
 		return nil, errors.New("update config must contain exactly one JSON object")
 	}
+	// A null pointer decodes like an omitted field in encoding/json. Distinguish
+	// explicit null so it cannot silently re-enable legacy fallback for clients.
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal(data, &fields); err != nil {
+		return nil, errors.New("update config must be a JSON object")
+	}
+	for field := range fields {
+		switch field {
+		case "schemaVersion", "resourceManifestUrl", "resourceManifestSha256", "resourceManifestSizeBytes", "resourceManifests", "clients", "hotupdateManifestUrl":
+		default:
+			return nil, errors.New("update config must use exact known field names")
+		}
+	}
+	if _, present := fields["resourceManifestUrl"]; present && update.ResourceManifestURL == "" {
+		return nil, errors.New("resourceManifestUrl must be a nonempty URL when supplied")
+	}
+	if raw, present := fields["resourceManifests"]; present {
+		if update.ResourceManifests == nil {
+			return nil, errors.New("resourceManifests must be an object, not null")
+		}
+		// encoding/json matches struct fields case-insensitively. Map entries
+		// require exact spelling to match the client and avoid alias overrides.
+		var entries map[string]map[string]map[string]json.RawMessage
+		if err := json.Unmarshal(raw, &entries); err != nil {
+			return nil, errors.New("resourceManifests must contain platform and exact version maps")
+		}
+		for _, versions := range entries {
+			for _, manifest := range versions {
+				for field := range manifest {
+					if field != "manifestUrl" && field != "sha256" && field != "sizeBytes" {
+						return nil, errors.New("resource manifest must use exact known field names")
+					}
+				}
+			}
+		}
+	}
 	if err := validateDispatchUpdate(update); err != nil {
 		return nil, err
 	}
@@ -101,22 +148,50 @@ func validateDispatchUpdate(update *dispatchUpdate) error {
 	if update.SchemaVersion != 1 {
 		return errors.New("schemaVersion must be 1")
 	}
-	if err := validateUpdateURL(update.ResourceManifestURL); err != nil {
-		return fmt.Errorf("resourceManifestUrl: %w", err)
+	if update.ResourceManifests == nil || update.ResourceManifestURL != "" {
+		if err := validateUpdateURL(update.ResourceManifestURL); err != nil {
+			return fmt.Errorf("resourceManifestUrl: %w", err)
+		}
 	}
 	if (update.ResourceManifestSHA256 != "") != (update.ResourceManifestSizeBytes != nil) {
 		return errors.New("resourceManifestSha256 and resourceManifestSizeBytes must be provided together")
 	}
 	if update.ResourceManifestSizeBytes != nil {
+		if update.ResourceManifestURL == "" {
+			return errors.New("legacy resource manifest pins require resourceManifestUrl")
+		}
 		if *update.ResourceManifestSizeBytes <= 0 || *update.ResourceManifestSizeBytes > maxResourceManifestBytes || !validSHA256(update.ResourceManifestSHA256) {
 			return errors.New("resource manifest pin requires a 64-character SHA-256 and sizeBytes between 1 and 8388608")
 		}
 		update.ResourceManifestSHA256 = strings.ToLower(update.ResourceManifestSHA256)
 	}
+	if update.ResourceManifests != nil {
+		for platform, versions := range *update.ResourceManifests {
+			if !supportedUpdatePlatform(platform) {
+				return errors.New("resourceManifests platform must be android, windows, macos or linux")
+			}
+			if versions == nil {
+				return fmt.Errorf("resourceManifests.%s must be a version map, not null", platform)
+			}
+			for version, manifest := range versions {
+				if _, ok := stableVersion(version); !ok {
+					return fmt.Errorf("resourceManifests.%s version keys must be MAJOR.MINOR.PATCH", platform)
+				}
+				if manifest == nil {
+					return fmt.Errorf("resourceManifests.%s.%s must be a manifest object, not null", platform, version)
+				}
+				if err := validateUpdateURL(manifest.ManifestURL); err != nil {
+					return fmt.Errorf("resourceManifests.%s.%s.manifestUrl: %w", platform, version, err)
+				}
+				if !validSHA256(manifest.SHA256) || manifest.SizeBytes <= 0 || manifest.SizeBytes > maxResourceManifestBytes {
+					return fmt.Errorf("resourceManifests.%s.%s requires a 64-character sha256 and sizeBytes between 1 and 8388608", platform, version)
+				}
+				manifest.SHA256 = strings.ToLower(manifest.SHA256)
+			}
+		}
+	}
 	for platform, client := range update.Clients {
-		switch platform {
-		case "android", "windows", "macos", "linux":
-		default:
+		if !supportedUpdatePlatform(platform) {
 			return errors.New("clients platform must be android, windows, macos or linux")
 		}
 		version, ok := stableVersion(client.Version)
@@ -144,6 +219,10 @@ func validateDispatchUpdate(update *dispatchUpdate) error {
 		}
 	}
 	return nil
+}
+
+func supportedUpdatePlatform(platform string) bool {
+	return platform == "android" || platform == "windows" || platform == "macos" || platform == "linux"
 }
 
 func validSHA256(hash string) bool {
@@ -248,7 +327,7 @@ func legacyNumericHost(host string) bool {
 
 // encoding/json accepts duplicate fields by default. Reject them before decoding
 // so this startup validator agrees with strict clients instead of silently
-// selecting a different URL or checksum. The schema needs at most four levels.
+// selecting a different URL or checksum. The schema needs at most five levels.
 func checkUniqueJSONFields(decoder *json.Decoder, depth int) error {
 	if depth > 8 {
 		return errors.New("JSON too deeply nested")

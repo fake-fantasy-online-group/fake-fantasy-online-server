@@ -1,6 +1,6 @@
 # dispatch 统一更新入口（schemaVersion 1）
 
-客户端只配置一个 `/dispatch.json` 地址。dispatch 保留原 `servers` 数组，通过可选的 `update` 对象告知资源清单地址及各平台的应用更新信息。此 HTTP 元数据扩展不改变游戏登录、握手或其他游戏报文协议，也不把应用版本当作报文协议版本。
+客户端只配置一个 `/dispatch.json` 地址。dispatch 保留原 `servers` 数组，通过可选的 `update` 对象告知按平台和确切应用版本选择的资源清单及各平台的应用更新信息。此 HTTP 元数据扩展不改变游戏登录、握手或其他游戏报文协议，也不把应用版本当作报文协议版本。
 
 ## 配置
 
@@ -26,13 +26,33 @@ dispatch 只校验配置格式并返回元数据，不下载任何清单或安�
   ],
   "update": {
     "schemaVersion": 1,
-    "resourceManifestUrl": "https://assets.example.test/resources/manifest.json",
-    "resourceManifestSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    "resourceManifestSizeBytes": 456,
+    "resourceManifests": {
+      "android": {
+        "1.2.3": {
+          "manifestUrl": "https://assets.example.test/resources/android/1.2.3/manifest.tsv",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "sizeBytes": 456
+        }
+      },
+      "macos": {
+        "1.2.3": {
+          "manifestUrl": "https://assets.example.test/resources/macos/1.2.3/manifest.tsv",
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "sizeBytes": 457
+        }
+      },
+      "windows": {
+        "1.2.3": {
+          "manifestUrl": "https://assets.example.test/resources/windows/1.2.3/manifest.tsv",
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "sizeBytes": 458
+        }
+      }
+    },
     "clients": {
       "android": {
         "version": "1.2.3",
-        "minVersion": "1.0.0",
+        "minVersion": "1.2.3",
         "artifactUrl": "https://download.example.test/client.apk",
         "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
         "sizeBytes": 12345
@@ -46,12 +66,22 @@ dispatch 只校验配置格式并返回元数据，不下载任何清单或安�
 
 ## 字段约束
 
-- `update` 可整体省略；存在时，`schemaVersion` 必须为整数 `1`，`resourceManifestUrl` 必填。
+- `update` 可整体省略；存在时，`schemaVersion` 必须为整数 `1`。新发布使用 `resourceManifests[platform][exactAppVersion]`，每个条目都必须有 `manifestUrl`、`sha256`、`sizeBytes`。平台支持 `android`、`windows`、`macos`、`linux`，版本键遵守下方严格应用版本格式。摘要是 64 位十六进制 SHA-256，清单大小为 1–8,388,608 字节，URL 使用同一安全规则。条目中的未知字段、重复字段、null、数组或缺少任一必填字段都会被拒绝。
+- 映射的**存在本身**表示使用精确选择：只能选择当前平台及当前已安装应用版本的键，不选择最新版本、其他平台、通配版本或旧版单地址。空映射 `{}` 或平台空对象允许发布，但仍禁止旧字段回退。映射根、平台或条目为 `null` 会被拒绝；显式空映射会原样保留在响应中。
+- 未提供 `resourceManifests` 时保持旧契约，`resourceManifestUrl` 必填。提供映射时可省略该旧字段；若为老消费者保留旧字段，它仍须是有效 URL，其摘要/大小仍须符合下述规则，但新消费者不会用它补齐缺失映射。映射缺失与映射为空不能互换。
 - `resourceManifestSha256` 与 `resourceManifestSizeBytes` 可同时省略；提供任意一个就必须两个一起提供。摘要是 64 位十六进制 SHA-256，大小范围为 1–8,388,608 字节（8 MiB）。它们描述下载到的资源清单原始字节；消费者应先核对大小和摘要再解析，校验失败不得退回无校验模式。
 - 可选 `clients` 是按平台分组的对象，支持 `android`、`windows`、`macos`、`linux`。缺少某平台表示没有该平台的应用更新声明。每个存在的平台都必须具备 `version`、`artifactUrl`、`sha256`、`sizeBytes`；`minVersion` 可省略。安装包摘要必须为 64 位十六进制，大小必须为正的有符号 64 位整数。只发布版本号或 URL 而没有摘要、大小会被拒绝。
 - `version` 和 `minVersion` 是应用版本，格式严格为 `MAJOR.MINOR.PATCH`，各段是 0–4,294,967,295 的十进制整数，除单独的 `0` 外不允许前导零。不接受 `v` 前缀、候选后缀或构建元数据。`minVersion` 不得大于 `version`；省略时不声明最低版本门槛。
 - `hotupdateManifestUrl` 可省略，是未来热更新清单的地址预留。提供该字段不表示客户端已经支持热更新，也不授权下载、加载或执行代码。当前应用更新信息仅描述完整安装包。
 - SHA-256 输入接受大小写，响应统一使用小写。除上述字段外不接受额外配置字段。
+
+## 选择、兼容与升级顺序
+
+客户端使用当前安装包的应用版本选择资源，例如 Android `1.0.0` 只读取 `resourceManifests.android["1.0.0"]`。`clients.android.version` 是可更新安装包的版本，不能用于为仍运行的 `1.0.0` 选择资源。Android/macOS/Windows 的资源清单必须分别生成，并保留正确的 `@client` 平台和确切应用版本；下载后仍执行清单自身的兼容检查。dispatch 的映射不会绕过该检查。
+
+没有匹配资源时，不得下载其他版本或平台，也不得进入游戏。客户端仍能解析安装包更新声明：先处理 `minVersion` 导致的强制安装包升级，再处理当前版本资源是否可用。因此删除旧版本资源映射不会阻止一个已低于最低版本的客户端取得并校验新安装包。没有强制升级时，缺少匹配资源会明确报不兼容；如有可选安装包仍可供用户升级，不能把缺少资源自动解释为已就绪。
+
+维护发布配置时，保留仍支持的每个应用版本的确切资源映射；若停止支持旧版本，需同时设置已验证可升级的安装包和适当的 `minVersion`。示例模板展示 Android/macOS/Windows 三个平台，并以 `1.2.3` 同时作为示例版本和最低版本。模板并非实际已发布、已签名或已验收的产物。
 
 ## URL 与信任边界
 
@@ -68,4 +98,4 @@ cd server
 go test ./cmd/dispatch
 ```
 
-测试覆盖无配置的精确旧响应、旧服务器列表解码器、有配置的完整响应、配置来源冲突/上限/重复字段、版本和 URL 拒绝规则、GET/HEAD 以及公开路由边界。测试 fixture 的域名和值仅用于解析契约，不触发网络下载。
+测试覆盖无配置的精确旧响应、旧服务器列表解码器、旧单清单回归、三平台及已有 Linux 平台的多版本映射、map-only/旧字段共存、空映射序列化与重读、安装包声明独立保留、配置来源冲突/上限/重复字段、版本和 URL 拒绝规则、GET/HEAD 以及公开路由边界。对应客户端契约测试覆盖确切平台/版本选择、无匹配时禁止回退、强制升级仍可用及长度/hash/URL 拒绝规则。测试 fixture 的域名和值仅用于解析契约，不触发网络下载。
