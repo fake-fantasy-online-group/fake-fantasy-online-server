@@ -26,6 +26,7 @@ const modPrefix = "github.com/fake-fantasy-online-group/fake-fantasy-online-serv
 // 键是 internal/ 下的包路径, 值是它允许 import 的内部包(前缀匹配)。
 // 改这张表之前先改文档 —— 文档是给人看的, 这张表是给 CI 看的, 两者不许分叉。
 var allow = map[string][]string{
+	"buildinfo":           {}, // CLI binary identity; no internal dependencies.
 	"testfixture":         {},
 	"testfixture/catalog": {"domain"},
 	// ── 模型层: 零内部依赖。这是整栋楼的地基, 它不许认识任何人 ──

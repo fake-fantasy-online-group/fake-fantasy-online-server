@@ -1,0 +1,106 @@
+name: Server tests and unpublished builds
+
+on:
+  pull_request:
+    paths:
+      - 'server/**'
+      - '.github/go-version'
+      - '.github/scripts/**'
+      - '.github/workflows/server-build.yml'
+  workflow_dispatch:
+
+# PRs use an unprivileged event, no secrets, no environments, no persisted Git
+# credentials, and no artifact uploads. This workflow never publishes or deploys.
+permissions:
+  contents: read
+
+concurrency:
+  group: server-build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GOTOOLCHAIN: local
+  GOWORK: 'off'
+  GOFLAGS: '-mod=readonly'
+  CGO_ENABLED: '0'
+
+jobs:
+  test:
+    name: Secret-free server tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Read pinned Go toolchain
+        id: toolchain
+        shell: bash
+        run: |
+          version="$(cat .github/go-version)"
+          [[ "$version" =~ ^1\.[0-9]+\.[0-9]+$ ]]
+          printf 'version=%s\n' "$version" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with:
+          go-version: ${{ steps.toolchain.outputs.version }}
+          check-latest: false
+          cache: false
+      - name: Test bundle safety checks
+        run: python3 -B -m unittest discover -s .github/scripts -p 'test_*.py' -v
+      - name: Verify module downloads
+        working-directory: server
+        run: |
+          test "$(go env GOVERSION)" = "go$(cat ../.github/go-version)"
+          go mod download
+          go mod verify
+      - name: Test server without a database
+        working-directory: server
+        # The optional database suites skip; no production connection is supplied.
+        env:
+          DATABASE_URL: ''
+          FANTASY_TEST_DSN: 'postgres://ci@127.0.0.1:1/fantasy_test?sslmode=disable&connect_timeout=1'
+          FANTASY_V5_WORLD_TEST_DSN: ''
+          SHOWCASE_REVIEW_TEST_DSN: ''
+          SHOWCASE_REVIEW_DIAGNOSE_DSN: ''
+          SHOWCASE_REVIEW_RUNTIME_DSN: ''
+        run: |
+          # Actions env keys are case-insensitive, but these legacy Go tests use
+          # both spellings on Linux. Set the second spelling in the shell.
+          export fantasy_TEST_DSN="$FANTASY_TEST_DSN"
+          go test -count=1 ./...
+
+  build:
+    name: Manual binary-only artifacts
+    if: github.event_name == 'workflow_dispatch'
+    needs: test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Read pinned Go toolchain
+        id: toolchain
+        shell: bash
+        run: |
+          version="$(cat .github/go-version)"
+          [[ "$version" =~ ^1\.[0-9]+\.[0-9]+$ ]]
+          printf 'version=%s\n' "$version" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with:
+          go-version: ${{ steps.toolchain.outputs.version }}
+          check-latest: false
+          cache: false
+      - name: Build and verify Linux and Windows amd64 bundles
+        run: python3 -B .github/scripts/build_server.py --output "${{ runner.temp }}/server-artifacts"
+      - name: Retain unpublished build artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: server-1.0.0-unreleased-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/server-artifacts/*.zip
+            ${{ runner.temp }}/server-artifacts/SHA256SUMS
+          if-no-files-found: error
+          include-hidden-files: false
+          compression-level: 0
+          retention-days: 14

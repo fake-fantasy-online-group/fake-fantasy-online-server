@@ -26,6 +26,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/buildinfo"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/data"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/online"
@@ -42,6 +43,8 @@ import (
 )
 
 var (
+	showVersion = flag.Bool("version", false, "输出未发布构建信息并退出，不连接数据库")
+
 	addr     = flag.String("addr", ":19000", "监听地址")
 	privKey  = flag.String("priv", "internal/crypto/keys/server_private.pem", "服务端 RSA 私钥(自解握手)")
 	seedFile = flag.String("seed", "", "可选: 初始角色种子(JSON), 供自测导入角色")
@@ -58,6 +61,13 @@ func main() {
 
 func run() int {
 	flag.Parse()
+	if *showVersion {
+		if err := buildinfo.Write(os.Stdout, "gameserver"); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+		return 0
+	}
 	lvl := slog.LevelInfo
 	if *debugLog {
 		lvl = slog.LevelDebug

@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"flag"
+	"fmt"
 	"io/fs"
 	"log"
 	"net/http"
@@ -14,6 +15,8 @@ import (
 	"path"
 	"strings"
 	"time"
+
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/buildinfo"
 )
 
 type srv struct {
@@ -26,6 +29,8 @@ type srv struct {
 }
 
 var (
+	showVersion = flag.Bool("version", false, "输出未发布构建信息并退出，不连接数据库")
+
 	apkPath = flag.String("apk", os.Getenv("MOBILE_APK_PATH"), "供 /download/ 下载的单个 APK 文件路径（默认 MOBILE_APK_PATH）")
 	addr    = flag.String("addr", ":8088", "监听地址")
 	host    = flag.String("game-host", "127.0.0.1", "下发给客户端的游戏服地址")
@@ -37,6 +42,13 @@ var (
 
 func main() {
 	flag.Parse()
+	if *showVersion {
+		if err := buildinfo.Write(os.Stdout, "dispatch"); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

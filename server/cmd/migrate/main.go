@@ -23,12 +23,15 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/buildinfo"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 var initPartName = regexp.MustCompile(`^000000_init-(0|[1-9][0-9]*)\.sql$`)
 
 var (
+	showVersion = flag.Bool("version", false, "输出未发布构建信息并退出，不连接数据库")
+
 	dsn     = flag.String("dsn", "", "PostgreSQL DSN（必填）")
 	initDir = flag.String("dir", "migrations", "开发期初始化 SQL 分片目录")
 )
@@ -45,6 +48,13 @@ var (
 
 func main() {
 	flag.Parse()
+	if *showVersion {
+		if err := buildinfo.Write(os.Stdout, "migrate"); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	log := slog.New(slog.NewTextHandler(os.Stdout, nil))
 	if *dsn == "" {
 		log.Error("必须提供 -dsn")
