@@ -136,6 +136,9 @@ type StatusDef struct {
 	// 客户端 Buff、目标栏或实体状态列表。
 	Hidden bool
 
+	// Permanent is opt-in for an explicitly permanent runtime passive. It does
+	// not reinterpret zero-duration native records or change their semantics.
+	Permanent bool `json:",omitempty"`
 	// DurationSec 持续秒数（last_time）。
 	DurationSec int32
 	// IntervalSec 周期触发间隔（interval）。0 表示不周期触发。
@@ -437,6 +440,9 @@ func newActive(def StatusDef, now Tick, src EntityID) Active {
 	a := Active{
 		Def: def, ExpireAt: now + Ticks(int(def.DurationSec)*1000), Source: src,
 		ShieldLeft: def.DamageShield,
+	}
+	if def.Permanent {
+		a.ExpireAt = 0
 	}
 	if def.Periodic() {
 		a.NextTickAt = now + Ticks(int(def.IntervalSec)*1000)

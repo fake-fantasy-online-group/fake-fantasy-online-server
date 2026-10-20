@@ -98,7 +98,7 @@ func (s *Scene) applyRiftEliteBuff(m *entity.Entity, a domain.RiftAbilityRule) b
 	case "golden_body":
 		return s.applyStatusDef(m, domain.StatusDef{ID: riftGoldenStatus, Level: 1, Name: a.Name, Type: domain.StatusGood, TypeKnown: true, DurationSec: int32(a.DurationMS / 1000), PhysicalDamageReductionPct: a.DamageReductionPct, MagicDamageReductionPct: a.DamageReductionPct, DamageReductionCapPct: a.DamageReductionPct, BlockHarmful: true, SuppressHarmful: true}, m.ID)
 	case "agility":
-		return s.applyStatusDef(m, domain.StatusDef{ID: riftAgilityStatus, Level: 1, Name: a.Name, Type: domain.StatusGood, TypeKnown: true, Affixes: []domain.Affix{{Attr: domain.AttrMoveSpeed, Mode: domain.ModePercent, Value: a.MoveSpeedPct}}}, m.ID)
+		return s.applyStatusDef(m, domain.StatusDef{ID: riftAgilityStatus, Level: 1, Name: a.Name, Type: domain.StatusGood, TypeKnown: true, Permanent: true, Affixes: []domain.Affix{{Attr: domain.AttrMoveSpeed, Mode: domain.ModePercent, Value: a.MoveSpeedPct}}}, m.ID)
 	}
 	return false
 }
