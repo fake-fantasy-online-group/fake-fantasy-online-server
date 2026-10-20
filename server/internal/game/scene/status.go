@@ -709,11 +709,11 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 		if skillID == 0 {
 			skillID = int32(a.Def.ID)
 		}
-		positionMode := statusPositionMode(a.Def)
+		effectName, buffName, positionMode := statusVisual(a.Def)
 		out = append(out, statusPresentation{
 			name: a.Def.Name, desc: a.Def.Desc, icon: icon,
 			effect: event.EntityStatusEffect{
-				Who: e.ID, Effect: a.Def.Name,
+				Who: e.ID, Effect: effectName,
 				PositionMode: positionMode, DurationMS: remainMS,
 			},
 			buff: event.BuffView{
@@ -721,7 +721,7 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 				// 多个系统状态都以 0 覆盖客户端同一项。
 				SkillID: skillID, Icon: a.Def.Icon,
 				RemainSec: int32((int64(remainMS) + 999) / 1000),
-				Name:      a.Def.Name, Desc: a.Def.Desc, Beneficial: beneficial,
+				Name:      buffName, Desc: a.Def.Desc, Beneficial: beneficial,
 				PositionMode: positionMode, Invisible: a.Def.Invisible && !suppressed, Immobile: immobile,
 			},
 		})
@@ -760,10 +760,8 @@ func (s *Scene) pushStatusSnapshots(e *entity.Entity) {
 	}
 	// 玩家本人由 Buff 快照显示特效；怪物没有本人快照，必须广播世界特效。
 	if e.Kind == domain.KindMonster || e.Kind == domain.KindPet || (e.Kind == domain.KindPlayer && e.Player != nil) {
-		for _, st := range statuses {
-			if st.effect.Effect != "" {
-				s.emitExcept(st.effect, e.ID)
-			}
+		for _, effect := range statusWorldEffects(statuses) {
+			s.emitExcept(effect, e.ID)
 		}
 	}
 }
@@ -774,32 +772,39 @@ func (s *Scene) sendEntityStatusEffects(to domain.EntityID, e *entity.Entity) {
 	if e == nil || (e.Kind != domain.KindMonster && e.Kind != domain.KindPet && (e.Kind != domain.KindPlayer || e.Player == nil)) || to == e.ID {
 		return
 	}
-	for _, st := range s.visibleStatuses(e) {
-		if st.effect.Effect != "" {
-			s.emitTo(to, st.effect)
-		}
+	for _, effect := range statusWorldEffects(s.visibleStatuses(e)) {
+		s.emitTo(to, effect)
 	}
 }
 
 // emitRemovedEntityStatusEffects 负责提前移除。状态集合的删除 API 返回状态号，
-// 所以从数据库加载的静态表里确定性选取最低等级定义，恢复客户端使用的同名特效键。
+// 所以从数据库加载的静态表里确定性选取最低等级定义，恢复客户端使用的视觉键；同素材的其他状态仍在时只能刷新，不能清掉它们。
 func (s *Scene) emitRemovedEntityStatusEffects(e *entity.Entity, ids []domain.StatusID) {
 	if e == nil || (e.Kind != domain.KindMonster && e.Kind != domain.KindPet && (e.Kind != domain.KindPlayer || e.Player == nil)) || len(ids) == 0 {
 		return
 	}
-	seen := make(map[domain.StatusID]struct{}, len(ids))
+	remaining := make(map[string]event.EntityStatusEffect)
+	for _, effect := range statusWorldEffects(s.visibleStatuses(e)) {
+		remaining[effect.Effect] = effect
+	}
+	seen := make(map[string]struct{}, len(ids))
 	for _, id := range ids {
-		if _, ok := seen[id]; ok {
-			continue
-		}
-		seen[id] = struct{}{}
 		def, ok := s.statusDefByID(id)
 		if !ok || def.Hidden || def.Name == "" {
 			continue
 		}
+		name, _, position := statusVisual(def)
+		if _, ok := seen[name]; ok {
+			continue
+		}
+		seen[name] = struct{}{}
+		if effect, ok := remaining[name]; ok {
+			s.emitExcept(effect, e.ID)
+			continue
+		}
 		s.emitExcept(event.EntityStatusEffect{
-			Who: e.ID, Effect: def.Name,
-			PositionMode: statusPositionMode(def), DurationMS: 0,
+			Who: e.ID, Effect: name,
+			PositionMode: position, DurationMS: 0,
 		}, e.ID)
 	}
 }
