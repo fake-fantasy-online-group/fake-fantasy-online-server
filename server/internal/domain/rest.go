@@ -34,3 +34,12 @@ func (r RestRule) HealAmount(maxHP int32) int32 {
 	}
 	return int32(amount)
 }
+
+// ManaAmount 沿用休息规则的百分比恢复法力；HealFlat 是生命专用加成，
+// 不套给法力，避免低等级角色每跳都直接回满。
+func (r RestRule) ManaAmount(maxMP int32) int32 {
+	if !r.Enabled() || maxMP <= 0 {
+		return 0
+	}
+	return SaturateInt32(int64(maxMP) * int64(r.HealMaxHPPct) / 100)
+}

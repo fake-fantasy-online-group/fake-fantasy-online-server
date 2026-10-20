@@ -314,7 +314,7 @@ type RequestNewbieTip struct {
 
 func (RequestNewbieTip) CmdName() string { return "RequestNewbieTip" }
 
-// SetResting 接收客户端已有的坐下/起身动作。客户端只声明动作状态；回血的
+// SetResting 接收客户端已有的坐下/起身动作。客户端只声明动作状态；生命/法力恢复的
 // 时间与数值完全由场景中的数据库规则结算。
 type SetResting struct {
 	ID domain.EntityID

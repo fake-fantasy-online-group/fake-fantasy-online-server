@@ -191,8 +191,8 @@ func TestLevelUpAppliesGrowth(t *testing.T) {
 	}
 }
 
-// 血量按上限增量补, **不是回满** —— 否则升级会变成一次免费治疗。
-func TestLevelUpDoesNotFullHeal(t *testing.T) {
+// 实际升级后按新的最终上限回满生命和法力。
+func TestLevelUpRefillsHealthAndMana(t *testing.T) {
 	s, mid := rewardScene(t, 给经验的树妖)
 	join(t, s, 1, 100, "甲", 100, 100)
 	oneShot(s)
@@ -201,15 +201,13 @@ func TestLevelUpDoesNotFullHeal(t *testing.T) {
 	p := s.entities[1]
 	p.Player.Char.Exp = 29
 	p.HP = 1 // 残血
+	p.MP = 0
 
 	s.exec(Attack{ID: 1, Target: mid})
 	s.step()
 
-	if p.HP == p.MaxHP {
-		t.Fatal("升级不该回满血 —— 那会让升级变成免费治疗")
-	}
-	if p.HP <= 1 {
-		t.Fatalf("上限涨了, 当前血也该跟着涨一点, 实际 %d", p.HP)
+	if p.HP != p.MaxHP || p.MP != p.MaxMP {
+		t.Fatalf("升级应回满生命和法力, 实际 HP=%d/%d MP=%d/%d", p.HP, p.MaxHP, p.MP, p.MaxMP)
 	}
 }
 

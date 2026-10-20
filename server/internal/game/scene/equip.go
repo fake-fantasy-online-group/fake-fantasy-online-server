@@ -297,6 +297,12 @@ func (s *Scene) unequipTo(p *entity.Entity, slot domain.EquipSlot) {
 // 血量按**上限的变化量**跟着走: 换上加血的装备当场补上, 换下来就扣掉。
 // 不这么做的话, 反复穿脱一件加血装备等于无限回血。
 func (s *Scene) refreshStats(p *entity.Entity) {
+	s.refreshStatsWithLevelUp(p, false)
+}
+
+// refreshStatsWithLevelUp 只在实际升级时回满生命/法力，并在完整装备、状态、
+// 技能成长管线重算后、属性快照发出前应用；普通换装等重算仍只补上限差量。
+func (s *Scene) refreshStatsWithLevelUp(p *entity.Entity, leveledUp bool) {
 	if p != nil {
 		delete(s.skillRawCache, p.ID)
 	}
@@ -340,6 +346,10 @@ func (s *Scene) refreshStats(p *entity.Entity) {
 	}
 	if p.MP < 0 {
 		p.MP = 0
+	}
+	// 经验结算不能代替复活流程。尸体仍保持原来的死亡与资源规则。
+	if leveledUp && wasAlive {
+		p.HP, p.MP = p.MaxHP, p.MaxMP
 	}
 	s.invalidateAstralRuneRegen(p, worn)
 	s.emitTo(p.ID, s.attributeSnapshot(p))

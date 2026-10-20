@@ -8,6 +8,13 @@ func (s *Scene) stepEndgameRift() {
 	s.stepEndgameRiftQuestRecoveries()
 	s.stepEndgameRiftRequests()
 	s.stepEndgameTrial()
+	// Trial recovery also runs while leaving/transferring. Only the regular tick
+	// may start a queued claim, before those lifecycle operations take ownership.
+	if s.trialRun != nil {
+		for id := range s.trialRun.Claims {
+			s.resumeEndgameTrialClaim(id)
+		}
+	}
 	if s.rift == nil {
 		if d, ok := s.router.riftAdmission(s.id); ok {
 			if !s.initEndgameRift(d) {

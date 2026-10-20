@@ -359,6 +359,15 @@ func TestRiftLeaveDurableAndNativeExitGuard(t *testing.T) {
 func TestRiftTrialClaimFrozenKeysAtomic(t *testing.T) {
 	s, b, _ := riftFixture(t)
 	p := s.players[1]
+	s.levels = rewardLevels()
+	s.trial.FirstPct = 100
+	p.Player.Char.Level = 12
+	p.Player.Char.Exp = s.levels.Need(12) - 1
+	p.Level = 12
+	s.refreshStats(p)
+	p.HP, p.MP = 1, 0
+	beforeExp := p.Player.Char.Exp
+	s.endgamePlayer(p).loaded = false
 	s.trial.Entrances = []domain.TrialEntrance{{ClaimMap: 7, ClaimNPC: "试炼小仙"}}
 	s.entities[77] = &entity.Entity{ID: 77, Kind: domain.KindNPC, Name: "试炼小仙"}
 	p.Player.QuestNPC = "试炼小仙"
@@ -366,15 +375,25 @@ func TestRiftTrialClaimFrozenKeysAtomic(t *testing.T) {
 	p.Player.Char.Trial = domain.TrialProgress{MonsterLevel: 60, KeyReward: 14, CompletionID: "frozen-opening", Cycle: 5}
 	completeTrialReadyForTest(s, p)
 	if b.commits != 1 || p.Player.Bag.CountOf(domain.RiftKeyItemID) != 0 {
-		t.Fatal("key published before receipt")
+		t.Fatal("one native claim must submit once without publishing before receipt", b.commits, p.Player.Bag.CountOf(domain.RiftKeyItemID))
 	}
 	if b.plan.Snapshot.Bag.CountOf(domain.RiftKeyItemID) != 14 || b.plan.Snapshot.Char.Trial.Cycle != 0 {
 		t.Fatal("round or frozen count changed")
+	}
+	if b.plan.Snapshot.Char.Level <= 12 {
+		t.Fatal("trial reward must exercise a real level-up")
+	}
+	completeTrialReadyForTest(s, p)
+	if b.commits != 1 || p.Player.Char.Level != 12 || p.Player.Char.Exp != beforeExp || p.HP != 1 || p.MP != 0 {
+		t.Fatal("pending duplicate claim changed rewards or resources")
 	}
 	b.finish(false)
 	s.finishEndgame(false)
 	if p.Player.Char.Quests[99].State != domain.QuestDeliver {
 		t.Fatal("failure consumed completion")
+	}
+	if p.Player.Char.Level != 12 || p.Player.Char.Exp != beforeExp || p.HP != 1 || p.MP != 0 {
+		t.Fatal("failed reward committed experience or refilled resources")
 	}
 	completeTrialReadyForTest(s, p)
 	if b.commit == nil {
@@ -386,14 +405,21 @@ func TestRiftTrialClaimFrozenKeysAtomic(t *testing.T) {
 	if p.Player.Bag.CountOf(domain.RiftKeyItemID) != 14 || p.Player.Char.Quests[99].State != domain.QuestFinished {
 		t.Fatal("missing atomic keys")
 	}
+	if p.Player.Char.Level <= 12 || p.HP != p.MaxHP || p.MP != p.MaxMP {
+		t.Fatalf("committed trial level-up must refill HP/MP: level=%d HP=%d/%d MP=%d/%d",
+			p.Player.Char.Level, p.HP, p.MaxHP, p.MP, p.MaxMP)
+	}
 	p.Player.Bag.Each(func(_ int, st domain.Stack) {
 		if st.Item == domain.RiftKeyItemID && !st.Bound {
 			t.Fatal("key not bound")
 		}
 	})
+	level, exp := p.Player.Char.Level, p.Player.Char.Exp
+	p.HP, p.MP = 1, 0
 	completeTrialReadyForTest(s, p)
-	if b.commits != 2 {
-		t.Fatal("double native claim")
+	if b.commits != 2 || p.Player.Bag.CountOf(domain.RiftKeyItemID) != 14 ||
+		p.Player.Char.Level != level || p.Player.Char.Exp != exp || p.HP != 1 || p.MP != 0 {
+		t.Fatal("double native claim rewarded or refilled again")
 	}
 }
 func TestRiftStartOneKeyAndDefiniteFailureReservation(t *testing.T) {
@@ -566,9 +592,9 @@ func TestRiftTrialReentryWaitsForOldEntitlement(t *testing.T) {
 }
 
 func completeTrialReadyForTest(s *Scene, p *entity.Entity) {
-	s.completeTrial(p)
-	if s.trialRun != nil && len(s.trialRun.Recoveries) > 0 {
-		s.stepEndgameTrial()
-		s.completeTrial(p)
+	s.exec(TrialAction{ID: p.ID, Action: "trialclaim"})
+	for i := 0; i < 2; i++ {
+		s.finishEndgame(false)
+		s.stepEndgameRift()
 	}
 }

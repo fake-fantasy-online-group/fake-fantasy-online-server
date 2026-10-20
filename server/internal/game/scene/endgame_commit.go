@@ -54,6 +54,7 @@ func (s *Scene) applyEndgameSnapshot(p *entity.Entity, snap domain.Snapshot) {
 	if snap.Char == nil {
 		return
 	}
+	leveledUp := snap.Char.Level > p.Player.Char.Level
 	*p.Player.Char = *snap.Char
 	p.Player.Bag = snap.Bag
 	p.Player.Worn = snap.Worn
@@ -63,7 +64,8 @@ func (s *Scene) applyEndgameSnapshot(p *entity.Entity, snap domain.Snapshot) {
 	p.Player.Stall = snap.Stall
 	s.syncEndgamePetProjection(p)
 	p.Level = snap.Char.Level
-	s.refreshStats(p)
+	// 试炼/洞天经验在事务成功后才应用；恢复权威快照也只在等级真正增长时回满。
+	s.refreshStatsWithLevelUp(p, leveledUp)
 	s.refreshAppearance(p)
 }
 func (s *Scene) finishEndgameCommit(p *entity.Entity, x *endgamePlayerState, r domain.EndgameCommitResult) {

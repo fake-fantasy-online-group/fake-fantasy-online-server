@@ -134,9 +134,8 @@ func (s *Scene) grantExpWithBonus(p *entity.Entity, exp int64, applyBonus bool) 
 		ch.ApplyLevelUps(res.FromLevel, res.ToLevel)
 		p.Level = ch.Level
 
-		// 升级也走完整装备/套装管线，不能把已激活加成覆盖成裸装属性。
-		// refreshStats 只补上限变化量，保持原有“不因升级回满”的口径。
-		s.refreshStats(p)
+		// 升级也走完整装备/套装管线，然后按新的最终上限回满生命和法力。
+		s.refreshStatsWithLevelUp(p, true)
 	}
 
 	// 真实击杀顺序：先权威状态，再表现包。

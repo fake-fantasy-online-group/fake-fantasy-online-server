@@ -12,22 +12,22 @@ func (s *Scene) onSetResting(cmd SetResting) {
 	}
 	if !cmd.On || !p.Alive() {
 		p.Player.StopResting()
-		s.log.Debug("坐下回血停止", "char", p.Name, "on", cmd.On, "alive", p.Alive())
+		s.log.Debug("坐下恢复停止", "char", p.Name, "on", cmd.On, "alive", p.Alive())
 		return
 	}
 	every := s.rest.IntervalTicks()
 	if every == 0 {
-		s.log.Warn("忽略坐下状态：回血配置未启用", "char", p.Name)
+		s.log.Warn("忽略坐下状态：恢复配置未启用", "char", p.Name)
 		return
 	}
 	p.Player.SetResting(true, s.tick, every)
-	s.log.Debug("坐下回血开始", "char", p.Name, "间隔tick", every,
+	s.log.Debug("坐下恢复开始", "char", p.Name, "间隔tick", every,
 		"百分比", s.rest.HealMaxHPPct, "固定值", s.rest.HealFlat)
 	s.requestNewbieTip(p.ID, 29)
 }
 
-// stepRest 在固定场景帧上结算坐下回血。满血时仍维持周期相位，但不发送
-// 0 治疗飘字；之后受伤会在下一次正常周期点恢复。
+// stepRest 在固定场景帧上分别恢复生命和法力。两者都满时仍维持周期相位，
+// 但不发送 0 治疗飘字；之后消耗资源会在下一次正常周期点恢复。
 func (s *Scene) stepRest() {
 	every := s.rest.IntervalTicks()
 	if every == 0 {
@@ -41,20 +41,22 @@ func (s *Scene) stepRest() {
 			p.Player.StopResting()
 			continue
 		}
-		if !p.Player.RestHealDue(s.tick, every) || p.HP >= p.MaxHP {
+		if !p.Player.RestHealDue(s.tick, every) {
 			continue
 		}
-		amount := s.rest.HealAmount(p.MaxHP)
-		if amount <= 0 {
+		beforeHP, beforeMP := p.HP, p.MP
+		if amount := s.rest.HealAmount(p.MaxHP); amount > 0 && p.HP < p.MaxHP {
+			s.emit(combat.Restore(p, p, amount, 0))
+		}
+		if amount := s.rest.ManaAmount(p.MaxMP); amount > 0 && p.MP < p.MaxMP {
+			p.MP = int32(min(int64(p.MaxMP), int64(p.MP)+int64(amount)))
+		}
+		if p.HP == beforeHP && p.MP == beforeMP {
 			continue
 		}
-		ev := combat.Restore(p, p, amount, 0)
-		if ev.Amount <= 0 {
-			continue
-		}
-		s.emit(ev)
+		p.Player.MarkDirty()
 		s.emitTo(p.ID, s.attributeSnapshot(p))
-		s.log.Debug("坐下回血", "char", p.Name, "恢复", ev.Amount, "当前", ev.DstHP,
-			"上限", p.MaxHP)
+		s.log.Debug("坐下恢复", "char", p.Name, "生命恢复", p.HP-beforeHP,
+			"法力恢复", p.MP-beforeMP, "生命", p.HP, "法力", p.MP)
 	}
 }

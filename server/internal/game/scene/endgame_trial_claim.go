@@ -17,24 +17,85 @@ func (s *Scene) completeEndgameTrial(p *entity.Entity) {
 		return
 	}
 	ch := p.Player.Char
-	r := s.trial
-	if ch.Quests[r.Quest].State != domain.QuestDeliver || ch.Trial.MonsterLevel <= 0 {
-		s.recoverEndgameTrial(p)
-		s.trialNotice(p, "尚未完成试炼，已检查离线完成记录，请稍后重试。")
+	entry := ch.Quests[s.trial.Quest]
+	if (entry.State != domain.QuestActive && entry.State != domain.QuestDeliver) ||
+		(ch.Trial.CompletionID == "" && (entry.State != domain.QuestDeliver || ch.Trial.MonsterLevel <= 0)) {
+		s.trialNotice(p, "尚未完成试炼，请消灭副本内全部怪物。")
+		return
+	}
+	state := s.trialState()
+	if _, pending := state.Claims[p.ID]; pending {
+		return
+	}
+	if ch.Trial.CompletionID == "" {
+		ch.Trial.CompletionID = riftNonce()
+		p.Player.MarkDirty()
+	}
+	// Keep the native click across asynchronous archive and completion reads.
+	// The intent belongs only to this completion, never to a future trial.
+	state.Claims[p.ID] = ch.Trial.CompletionID
+	s.resumeEndgameTrialClaim(p.ID)
+}
+
+func (s *Scene) cancelEndgameTrialClaim(p *entity.Entity, message string) {
+	if s.trialRun != nil {
+		if _, pending := s.trialRun.Claims[p.ID]; pending {
+			delete(s.trialRun.Claims, p.ID)
+			s.trialNotice(p, message)
+		}
+	}
+}
+
+func (s *Scene) resumeEndgameTrialClaim(id domain.EntityID) {
+	state := s.trialState()
+	nonce, pending := state.Claims[id]
+	p := s.players[id]
+	if !pending {
+		return
+	}
+	if p == nil || p.Player == nil || !p.Alive() || s.trial == nil || !s.trialClaimNPC(p) ||
+		s.mapLoads[id] != nil || p.Player.Char.Trial.CompletionID != nonce || !p.Player.Char.Quests.Active(s.trial.Quest) {
+		delete(state.Claims, id)
 		return
 	}
 	x := s.endgamePlayer(p)
-	if !x.loaded {
-		s.onEndgame(EndgameRequest{ID: p.ID, Request: domain.EndgameRequest{Op: "snapshot"}})
-		s.trialNotice(p, "奖励档案读取中，请稍后重试。")
+	if endgameEconomicBusy(p) || x.commit != nil {
+		s.cancelEndgameTrialClaim(p, "其他物品事务尚未结束，请稍后重试领取。")
 		return
 	}
-	nonce := ch.Trial.CompletionID
-	if nonce == "" {
-		nonce = riftNonce()
-		ch.Trial.CompletionID = nonce
-		p.Player.MarkDirty()
+	if x.load != nil || x.receipt != nil {
+		return
 	}
+	if !x.loaded {
+		s.onEndgame(EndgameRequest{ID: id, Request: domain.EndgameRequest{Op: "snapshot"}})
+		return
+	}
+	completion, frozen := state.Completions[nonce]
+	if !frozen && state.RecoveryChecked[id] != nonce {
+		s.recoverEndgameTrial(p)
+		return
+	}
+	if frozen {
+		if state.Nonce == nonce && !state.Saved {
+			return
+		}
+		s.assignEndgameTrial(p, completion)
+	}
+	// Consume before committing. Repeated packets cannot queue a second payout;
+	// storage failures retain the entitlement but require a fresh explicit click.
+	delete(state.Claims, id)
+	s.settleEndgameTrial(p)
+}
+
+func (s *Scene) settleEndgameTrial(p *entity.Entity) {
+	ch := p.Player.Char
+	r := s.trial
+	if ch.Quests[r.Quest].State != domain.QuestDeliver || ch.Trial.MonsterLevel <= 0 {
+		s.trialNotice(p, "尚未完成试炼，请消灭副本内全部怪物。")
+		return
+	}
+	x := s.endgamePlayer(p)
+	nonce := ch.Trial.CompletionID
 	req := domain.EndgameRequest{Op: "trial.claim", RequestID: "trial-claim-" + nonce, ExpectedRevision: strconv.FormatInt(x.state.Revision, 10)}
 	day := domain.DayOf(s.now().In(time.FixedZone("Asia/Shanghai", 8*3600)))
 	progress := ch.Trial
@@ -45,15 +106,6 @@ func (s *Scene) completeEndgameTrial(p *entity.Entity) {
 	reward := s.frozenTrialReward(nonce, ch.Level, ch.Trial.MonsterLevel, progress, day)
 	state := s.trialState()
 	completion, frozen := state.Completions[nonce]
-	if !frozen && state.RecoveryChecked[p.ID] != nonce {
-		s.recoverEndgameTrial(p)
-		s.trialNotice(p, "正在读取完成时奖励，请稍后重试。")
-		return
-	}
-	if frozen && state.Nonce == nonce && !state.Saved {
-		s.trialNotice(p, "完成记录正在保存，请稍后重试。")
-		return
-	}
 	var grant endgameTrialGrant
 	if frozen && completion.Version >= 2 {
 		var ok bool

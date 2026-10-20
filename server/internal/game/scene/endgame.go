@@ -253,6 +253,7 @@ func (s *Scene) finishEndgame(wait bool) {
 			}
 			x.load = nil
 			if r.Err != nil {
+				s.cancelEndgameTrialClaim(p, "暂时无法读取奖励档案，请重试领取。")
 				s.endgameError(p, x.pending, "storage", "暂时无法读取存档，请重试")
 				continue
 			}

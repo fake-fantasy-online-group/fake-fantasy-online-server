@@ -45,6 +45,7 @@ type endgameTrialState struct {
 	RetryAfter        int64
 	Recoveries        map[domain.EntityID]endgameTrialRecovery
 	RecoveryChecked   map[domain.EntityID]string
+	Claims            map[domain.EntityID]string
 }
 
 func (s *Scene) trialState() *endgameTrialState {
@@ -56,6 +57,9 @@ func (s *Scene) trialState() *endgameTrialState {
 	}
 	if s.trialRun.RecoveryChecked == nil {
 		s.trialRun.RecoveryChecked = map[domain.EntityID]string{}
+	}
+	if s.trialRun.Claims == nil {
+		s.trialRun.Claims = map[domain.EntityID]string{}
 	}
 	return s.trialRun
 }
@@ -159,7 +163,11 @@ func (s *Scene) stepEndgameTrial() {
 		case result := <-recovery.load:
 			delete(x.Recoveries, id)
 			p := s.players[id]
-			if p == nil || p.Player.Char.Trial.CompletionID != recovery.nonce || result.Err != nil {
+			if p == nil || p.Player.Char.Trial.CompletionID != recovery.nonce {
+				continue
+			}
+			if result.Err != nil {
+				s.cancelEndgameTrialClaim(p, "暂时无法读取试炼完成记录，请重试领取。")
 				continue
 			}
 			if result.Run == nil {
@@ -172,6 +180,8 @@ func (s *Scene) stepEndgameTrial() {
 				x.Completions[c.Nonce] = c
 				x.RecoveryChecked[id] = recovery.nonce
 				s.assignEndgameTrial(p, c)
+			} else {
+				s.cancelEndgameTrialClaim(p, "试炼完成记录尚未就绪，请稍后重试领取。")
 			}
 		default:
 		}
