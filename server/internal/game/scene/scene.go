@@ -112,6 +112,8 @@ type Config struct {
 	Skills domain.SkillTable
 	// Statuses 是状态表。nil 表示施加不了状态(测试用)。
 	Statuses domain.StatusTable
+	// StatusVisuals is optional database-only presentation metadata.
+	StatusVisuals domain.StatusVisualTable
 	// StatusOverlay 是状态叠加矩阵。nil 时保留旧测试的单实例语义。
 	StatusOverlay domain.StatusOverlay
 	// Quests 是任务表。nil 表示接不了任务(测试用)。
@@ -294,7 +296,8 @@ type Scene struct {
 	skillRawCache              map[domain.EntityID]skillRawCacheEntry
 	skillViewDigests           map[domain.EntityID][32]byte
 	skillProgressionRefreshing bool
-	skills                     domain.SkillTable    // 技能定义
+	skills                     domain.SkillTable // 技能定义
+	statusVisuals              domain.StatusVisualTable
 	statuses                   domain.StatusTable   // 状态定义
 	statusOverlay              domain.StatusOverlay // 状态叠加矩阵
 	monsterPickupQuestItems    map[domain.ItemID]bool
@@ -456,6 +459,7 @@ func New(cfg Config) *Scene {
 		itemIconsKnown:    cfg.ItemIconsKnown,
 		skills:            cfg.Skills,
 		statuses:          cfg.Statuses,
+		statusVisuals:     cfg.StatusVisuals,
 		statusOverlay:     cfg.StatusOverlay,
 		quests:            cfg.Quests,
 		dungeons:          cfg.Dungeons,

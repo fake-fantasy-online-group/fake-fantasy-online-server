@@ -299,7 +299,7 @@ func run() int {
 			Items:           world.items, Loot: world.loot, ItemIcons: world.itemIcons,
 			EquipmentRoll: world.equipmentRoll, BossFixedDrops: world.bossFixedDrops,
 			ItemIconsKnown: world.itemIconsKnown,
-			Skills:         world.skills, Statuses: world.statuses,
+			Skills:         world.skills, Statuses: world.statuses, StatusVisuals: world.statusVisuals,
 			StatusOverlay: world.statusOverlay,
 			Quests:        world.quests, NPCs: npcSpawns(world.npcs[dataMapID], id.MapID),
 			Dungeons: world.dungeons, DungeonEncounters: world.dungeonEncounters,
@@ -761,6 +761,7 @@ type worldData struct {
 	bossFixedDrops    domain.BossFixedDropTable
 	skills            domain.SkillTable
 	statuses          domain.StatusTable
+	statusVisuals     domain.StatusVisualTable
 	statusOverlay     domain.StatusOverlay
 	quests            domain.QuestTable
 	npcs              data.NPCTable
@@ -1157,6 +1158,12 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 	} else {
 		log.Info("状态表就绪", "状态数", stst.Statuses, "定义(状态×等级)", stst.Defs,
 			"过滤掉的效果行", stst.BadRows)
+	}
+	if w.statusVisuals, err = data.LoadStatusVisuals(ctx, q); err != nil {
+		w.skillErr = errors.Join(w.skillErr, err)
+		log.Warn("加载状态视觉映射失败", "err", err)
+	} else {
+		log.Info("状态视觉映射就绪", "配置数", len(w.statusVisuals))
 	}
 	var ovst data.StatusOverlayStats
 	if w.statusOverlay, ovst, err = data.LoadStatusOverlay(ctx, q); err != nil {

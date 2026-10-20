@@ -57,3 +57,68 @@ PostgreSQL test instance was available. Before deployment, run:
 FANTASY_MONSTER_BEHAVIOR_TEST_DSN='<isolated-test-database-DSN>' \
   go test ./internal/data -run TestMonsterBehaviorIncrementalPostgres -count=1 -v
 ```
+
+## 000089_20261020_status_visuals.sql
+
+Creates the optional `game_status_visuals` table and fills 27 source-confirmed
+ID/name mappings: 22 approved missing visuals and five existing, live client
+aliases. `000000_init-89.sql` contains the identical schema and seed body for
+empty-database initialization. No previous migration is changed.
+
+Run the incremental file only, with a separately authorized maintenance process,
+verified backup, and the intended database:
+
+```sh
+psql -v ON_ERROR_STOP=1 -f 000089_20261020_status_visuals.sql
+```
+
+The upgrade owns one transaction, with a 5-second lock timeout and a 60-second
+statement timeout. It does not migrate on server startup, restart a process,
+change a published rift rule, or modify status mechanics or player data. An
+absent/empty visual table leaves the server's legacy presentation unchanged.
+
+Identity preconditions:
+
+- Native sources use the same rank-specific name expression as `LoadStatuses`,
+  and require the exact approved set of positive-duration ranks. A native
+  source replaced by a custom row does not silently pass this check.
+- Custom sources require exact IDs, names and rank sets, positive duration and
+  the same native-replacement relationship required by `LoadStatuses`.
+- Runtime 金身 (1900101) and 敏捷 (1900102) are rank 1 in
+  `applyRiftEliteBuff`. Their names are checked against exactly one matching
+  mechanism, ability ID and trigger in each published rift version 6 and 7.
+- Missing, renamed, added or removed approved ranks abort the transaction.
+  Investigate the source version instead of manufacturing status records or
+  weakening the guards.
+
+Preservation and replay:
+
+- The mapping key is `(status_id, expected_name)`, not a global name alias.
+  Other names at the same ID remain untouched, including 1154/8 金刚罗汉,
+  1178/3–6, and 1036/7–8.
+- Only an absent row or a wholly neutral row (`effect_name=''`,
+  `use_effect_name_for_self=false`, `position_mode=-1`) is filled. The effect,
+  self-title choice and position are written atomically, never merged field by
+  field. Nonempty and partially configured mappings are preserved exactly.
+- Each row has a postcondition: a fill must match the approved mapping, while a
+  previously configured row must remain identical. Source/mapping locks keep
+  those checks stable throughout the transaction.
+- Reapplying without intervening changes fills zero rows: the first run makes
+  each eligible row nonempty, so the next compare-and-set cannot update it.
+  Replay can refill subsequently removed/fully reset mappings; do not use
+  deletion or a neutral row as a persistent opt-out.
+- The five live aliases retain their original self titles and inherit legacy
+  anchors. In particular, 春风 remains on its original orbit anchor. Newly
+  mapped effects use explicit anchors matching their native contributors where
+  available; no global position normalization is introduced.
+
+The blue glyph choice for 破防之枪 is 衰弱, never 防御下降. The approved
+missing mappings use the existing effect key as the legacy self title because
+that protocol field also selects the self aura. Icons, descriptions, real
+status IDs, ranks, mechanics and remaining lifetimes stay independent.
+
+No mapping is seeded for 1032 隐身, 1157 状态抗性 or 1173 伤害反射.
+The 13 obsolete global aliases without an exact runtime status source
+(魔镜术 and the twelve 符 names listed in the SQL) are not assigned invented
+IDs or used to rename native statuses. This upgrade does not create artwork,
+change tint/alpha/looping, or enable missing resistance/reflection mechanics.

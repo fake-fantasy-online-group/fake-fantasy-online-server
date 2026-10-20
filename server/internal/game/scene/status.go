@@ -709,7 +709,7 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 		if skillID == 0 {
 			skillID = int32(a.Def.ID)
 		}
-		effectName, buffName, positionMode := statusVisual(a.Def)
+		effectName, buffName, positionMode := s.statusVisual(a.Def)
 		out = append(out, statusPresentation{
 			name: a.Def.Name, desc: a.Def.Desc, icon: icon,
 			effect: event.EntityStatusEffect{
@@ -750,6 +750,7 @@ func (s *Scene) pushStatusSnapshots(e *entity.Entity) {
 		e.Player.MarkDirty()
 	}
 	statuses := s.visibleStatuses(e)
+	s.reconcileStatusVisuals(e, statuses)
 	icons := make([]event.StatusIconView, 0, len(statuses))
 	for _, st := range statuses {
 		icons = append(icons, st.icon)
@@ -772,8 +773,12 @@ func (s *Scene) sendEntityStatusEffects(to domain.EntityID, e *entity.Entity) {
 	if e == nil || (e.Kind != domain.KindMonster && e.Kind != domain.KindPet && (e.Kind != domain.KindPlayer || e.Player == nil)) || to == e.ID {
 		return
 	}
-	for _, effect := range statusWorldEffects(s.visibleStatuses(e)) {
+	statuses := s.visibleStatuses(e)
+	for _, effect := range statusWorldEffects(statuses) {
 		s.emitTo(to, effect)
+	}
+	if e.PublishedStatusEffects == nil {
+		e.PublishedStatusEffects = statusEffectsByID(statuses)
 	}
 }
 
@@ -789,17 +794,26 @@ func (s *Scene) emitRemovedEntityStatusEffects(e *entity.Entity, ids []domain.St
 	}
 	seen := make(map[string]struct{}, len(ids))
 	for _, id := range ids {
+		if s.hasStatusVisual(id) {
+			// The following full snapshot reconciles only actually published keys.
+			// A guessed zero-duration key would create a brief effect on old clients.
+			continue
+		}
 		def, ok := s.statusDefByID(id)
 		if !ok || def.Hidden || def.Name == "" {
 			continue
 		}
-		name, _, position := statusVisual(def)
+		name, _, position := s.statusVisual(def)
 		if _, ok := seen[name]; ok {
 			continue
 		}
 		seen[name] = struct{}{}
 		if effect, ok := remaining[name]; ok {
 			s.emitExcept(effect, e.ID)
+			continue
+		}
+		if s.configuredStatusKeyWasPublished(e, name) {
+			// The next full snapshot owns this shared key's one final clear.
 			continue
 		}
 		s.emitExcept(event.EntityStatusEffect{

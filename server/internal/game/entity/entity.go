@@ -31,6 +31,9 @@ type Entity struct {
 	Stats domain.Stats
 	// Status 是身上的 buff/debuff。玩家和怪都有。
 	Status *domain.StatusSet
+	// PublishedStatusEffects is transient presentation history. It follows this
+	// entity lifetime and is replaced, never mutated through shared copies.
+	PublishedStatusEffects map[domain.StatusID][]event.EntityStatusEffect `json:"-"`
 
 	// 按 Kind 分支, 其余为 nil。取用前先判 Kind, 不要判 nil ——
 	// 判 Kind 的代码在读的时候意图明确。
