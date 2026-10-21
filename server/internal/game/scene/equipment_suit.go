@@ -8,7 +8,7 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 )
 
-func (s *Scene) appendSuitTooltip(lines *[]string, suit *domain.EquipmentSuit, owner *entity.Entity) {
+func (s *Scene) appendSuitTooltip(lines *[]string, suit *domain.EquipmentSuit, owner *entity.Entity, equipmentTextQuality ...uint8) {
 	if suit == nil {
 		return
 	}
@@ -17,7 +17,11 @@ func (s *Scene) appendSuitTooltip(lines *[]string, suit *domain.EquipmentSuit, o
 		worn = owner.Player.Worn
 	}
 	pieces, members := suit.WornMembers(worn, s.itemDef)
-	*lines = append(*lines, "", qualityColoredLine(2,
+	headerQuality := uint8(0)
+	if len(equipmentTextQuality) != 0 {
+		headerQuality = equipmentTextQuality[0]
+	}
+	*lines = append(*lines, "", qualityColoredLine(headerQuality,
 		fmt.Sprintf("套装: %s (%d/%d)", suit.Name, pieces, len(suit.Groups))))
 	type memberLine struct {
 		name   string
@@ -48,6 +52,7 @@ func (s *Scene) appendSuitTooltip(lines *[]string, suit *domain.EquipmentSuit, o
 		*lines = append(*lines, color+"  "+member.name)
 	}
 	if suit.ID >= 1 && suit.ID <= 5 {
+		*lines = append(*lines, qualityColoredLine(headerQuality, "套装属性"))
 		for _, tier := range []int32{2, 4, 6, 8} {
 			color := "\x02"
 			if s.classSetPieces(owner, suit.ID) >= tier {

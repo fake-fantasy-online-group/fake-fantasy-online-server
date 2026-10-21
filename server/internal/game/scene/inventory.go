@@ -709,7 +709,7 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 		}
 		lines = append(lines, qualityColoredLine(socketQuality, fmt.Sprintf("孔数 %d/%d", usedSockets, st.SocketCount)))
 	}
-	s.appendSuitTooltip(&lines, e.Suit, owner)
+	s.appendSuitTooltip(&lines, e.Suit, owner, textQuality)
 	if e.Skill != nil {
 		lines = append(lines, "法宝技能: "+e.Skill.Name)
 		if text := strings.TrimSpace(e.Skill.Description); text != "" {
