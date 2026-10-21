@@ -99,7 +99,10 @@ type StatusDef struct {
 	LegacyOverlayLevelBP int64 `json:"-"`
 	// Hundredths of original absolute tick damage, consumed by each Active instance.
 	PeriodicDamageFraction100 int64 `json:",omitempty"`
-	ProgressionAttackFlat     int32
+	// Class-set poison adds a snapshotted total over the authored tick count.
+	ClassSetPoison           bool  `json:",omitempty"`
+	ClassSetPoisonBonusTotal int64 `json:",omitempty"`
+	ProgressionAttackFlat    int32
 	// Skill snapshots pin persistent effects to the lesser of cast and current sources.
 	SkillSnapshotID   SkillID
 	SkillSnapshotRank int32
@@ -368,6 +371,7 @@ func (m StatusOverlay) Rule(existing, incoming StatusID) (OverlayRule, bool) {
 type Active struct {
 	Def                        StatusDef
 	PeriodicDamageRemainder100 int64 `json:",omitempty"`
+	ClassSetPoisonRemainder    int64 `json:",omitempty"`
 	// Tick-only whole damage emitted by DueTicks; never shared between instances.
 	PeriodicDamageTickExtra int32 `json:"-"`
 	// ExpireAt 到期帧。
@@ -385,6 +389,7 @@ type Active struct {
 // Source 是场景实体号，重登后不能沿用，故不进入存档。
 type SavedStatus struct {
 	PeriodicDamageRemainder100 int64 `json:",omitempty"`
+	ClassSetPoisonRemainder    int64 `json:",omitempty"`
 	Def                        StatusDef
 	RemainingTicks             int64
 	ExpiresAtUnixMS            int64
@@ -1036,7 +1041,7 @@ func (s *StatusSet) SaveForLogout(now Tick, wall time.Time, owner EntityID) []Sa
 			if a.ExpireAt != 0 && a.ExpireAt <= now {
 				continue
 			}
-			record := SavedStatus{Def: a.Def, ShieldLeft: a.ShieldLeft, SourceSelf: owner != 0 && a.Source == owner, PeriodicDamageRemainder100: a.PeriodicDamageRemainder100}
+			record := SavedStatus{Def: a.Def, ShieldLeft: a.ShieldLeft, SourceSelf: owner != 0 && a.Source == owner, PeriodicDamageRemainder100: a.PeriodicDamageRemainder100, ClassSetPoisonRemainder: a.ClassSetPoisonRemainder}
 			if a.ExpireAt == 0 {
 				record.RemainingTicks = -1
 			} else {
@@ -1066,8 +1071,11 @@ func RestoreSavedStatuses(saved []SavedStatus, now Tick, wall time.Time, owner E
 		if record.Def.ID <= 0 || record.RemainingTicks == 0 || record.RemainingTicks < -1 {
 			continue
 		}
-		a := Active{Def: record.Def, ShieldLeft: record.ShieldLeft, PeriodicDamageRemainder100: record.PeriodicDamageRemainder100}
+		a := Active{Def: record.Def, ShieldLeft: record.ShieldLeft, PeriodicDamageRemainder100: record.PeriodicDamageRemainder100, ClassSetPoisonRemainder: record.ClassSetPoisonRemainder}
 		if a.PeriodicDamageRemainder100 < 0 || a.PeriodicDamageRemainder100 >= 100 {
+			continue
+		}
+		if a.ClassSetPoisonRemainder < 0 || (a.ClassSetPoisonRemainder > 0 && (a.Def.IntervalSec <= 0 || a.Def.DurationSec < a.Def.IntervalSec || a.ClassSetPoisonRemainder >= int64(a.Def.DurationSec/a.Def.IntervalSec))) {
 			continue
 		}
 		if record.SourceSelf {
@@ -1159,6 +1167,14 @@ func (s *StatusSet) DueTicks(now Tick) []Active {
 				total := a.PeriodicDamageRemainder100 + a.Def.PeriodicDamageFraction100
 				a.PeriodicDamageTickExtra = SaturateInt32(total / 100)
 				a.PeriodicDamageRemainder100 = total % 100
+			}
+			if a.Def.ClassSetPoisonBonusTotal > 0 && a.Def.IntervalSec > 0 {
+				ticks := int64(a.Def.DurationSec / a.Def.IntervalSec)
+				if ticks > 0 {
+					total := a.ClassSetPoisonRemainder + a.Def.ClassSetPoisonBonusTotal
+					a.PeriodicDamageTickExtra = SaturateInt32(int64(a.PeriodicDamageTickExtra) + total/ticks)
+					a.ClassSetPoisonRemainder = total % ticks
+				}
 			}
 			due = append(due, a)
 			a.PeriodicDamageTickExtra = 0

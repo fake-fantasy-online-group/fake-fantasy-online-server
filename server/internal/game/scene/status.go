@@ -98,6 +98,7 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	// Periodic damage may outlive a pet/summon/trap entity. Keep its responsible
 	// player's stable source ID now; MF itself is read only at the fatal tick.
 	src = s.periodicDamageOwnerV5(def, src)
+	poisonBurst := s.classSetPoisonBurst(target, def, src)
 	result := target.Status.ApplyWithOverlay(def, s.tick, src, s.statusOverlay)
 	for _, removed := range result.Removed {
 		s.emit(event.StatusRemoved{Who: target.ID, Status: int32(removed)})
@@ -113,6 +114,12 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 			s.pushStatusSnapshots(target)
 		}
 		return false
+	}
+	if poisonBurst > 0 {
+		s.dealClassSetPoisonBurst(target, src, poisonBurst)
+		if !target.Alive() {
+			return true
+		}
 	}
 	s.updatePlayerVisibility(target, wasInvisible)
 	s.refreshEntityStats(target)

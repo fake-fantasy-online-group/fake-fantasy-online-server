@@ -154,5 +154,6 @@ func (s *Scene) applyCombatTriggeredStatus(holder, target *entity.Entity, id dom
 	}
 	def.SourceEffectHitKnown = true
 	applyStatusSource(&def, carrier.Icon, carrier.SourceSkillID)
+	s.prepareClassSetPoison(holder, carrier, &def)
 	return s.applyStatusDef(target, def, holder.ID)
 }
