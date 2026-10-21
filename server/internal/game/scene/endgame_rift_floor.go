@@ -29,7 +29,7 @@ func (s *Scene) canAdvanceEndgameRift(p *entity.Entity) bool {
 		return false
 	}
 	char := domain.CharID(p.Player.Char.ID)
-	return char == x.data.Run.Payer && x.ready[char] && x.data.Run.Admitted(char) && s.atEndgameRiftExit(p.Pos)
+	return x.ready[char] && x.data.Run.Admitted(char) && s.atEndgameRiftExit(p.Pos)
 }
 
 // Both the seeded exit marker and every usable native map gate lead forward.
@@ -85,7 +85,7 @@ func (s *Scene) advanceEndgameRift(p *entity.Entity, req domain.EndgameRequest) 
 		return
 	}
 	if !s.canAdvanceEndgameRift(p) {
-		s.endgameError(p, req, "exit", "请由开启者抵达本层出口或传送门；首领战中不能换层")
+		s.endgameError(p, req, "exit", "请抵达本层出口或传送门；首领战中不能换层")
 		return
 	}
 	if x.saving != nil || x.economicPending {

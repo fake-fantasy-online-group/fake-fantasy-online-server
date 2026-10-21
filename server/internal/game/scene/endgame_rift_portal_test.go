@@ -117,10 +117,10 @@ func TestRiftNativePortalGeometryAdmission(t *testing.T) {
 		t.Fatal("portal bypassed guardian fight")
 	}
 	s.rift.data.Run.Phase = domain.RiftActive
-	s.rift.data.Run.Payer = 200
+	delete(s.rift.data.Run.Members, 100)
 	s.advanceEndgameRift(p, advanceRiftFloorRequest(s))
 	if len(b.writes) != 0 {
-		t.Fatal("non-opener advanced party")
+		t.Fatal("outsider advanced party")
 	}
 }
 

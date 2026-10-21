@@ -291,7 +291,7 @@ func TestRiftFloorTransitionReadFailureKeepsOwnershipQuarantined(t *testing.T) {
 }
 
 func TestRiftFloorAdvanceAdmissionGuards(t *testing.T) {
-	for _, scenario := range []string{"far_from_exit", "dead", "not_ready", "boss", "peer", "departed", "stale", "wrong_run", "pending_save"} {
+	for _, scenario := range []string{"far_from_exit", "dead", "not_ready", "boss", "outsider", "departed", "stale", "wrong_run", "pending_save"} {
 		t.Run(scenario, func(t *testing.T) {
 			s, b, _ := seededRiftFloorFixture(t)
 			prepareRiftFloorTarget(t, s)
@@ -306,8 +306,8 @@ func TestRiftFloorAdvanceAdmissionGuards(t *testing.T) {
 				delete(s.rift.ready, 100)
 			case "boss":
 				s.rift.data.Run.Phase = domain.RiftBoss
-			case "peer":
-				s.rift.data.Run.Payer = 200
+			case "outsider":
+				delete(s.rift.data.Run.Members, 100)
 			case "departed":
 				s.rift.data.Run.Members[100].Departed = true
 			case "stale":
