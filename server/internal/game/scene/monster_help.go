@@ -33,6 +33,12 @@ func (s *Scene) aggroAfterHit(victim *entity.Entity, attacker domain.EntityID, h
 }
 func (s *Scene) monsterAIParams(m *entity.Entity) ai.Params {
 	p := aiParams(m)
+	// Dungeon aggression is scene policy, not shared template data. Dialogue
+	// availability controls speech only. Keep props/non-attacking entities and
+	// native-passive monsters in the open world unchanged.
+	if (s.dungeon != nil || s.challengeMonsterScene()) && m.Monster.Kind.Hostile() && !m.Monster.NoAttack {
+		p.Aggressive = true
+	}
 	if s.tick < m.Monster.HelpChaseUntil && m.Monster.HelpTraceDist > p.TraceDist {
 		p.TraceDist = m.Monster.HelpTraceDist
 	}
