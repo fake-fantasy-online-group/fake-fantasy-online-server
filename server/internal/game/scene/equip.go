@@ -323,14 +323,14 @@ func (s *Scene) refreshStatsWithLevelUp(p *entity.Entity, leveledUp bool) {
 		}
 	}
 	s.pruneCasterSetState(p, worn)
-	if hadCasterBuff && s.classSetPiecesInWorn(p, worn, 3) < 4 {
+	if hadCasterBuff && s.classSetPiecesInWorn(p, worn, 3) < classSetFirstSkillPieces {
 		defer s.pushStatusSnapshots(p)
 	}
 	_, stats, growth := s.combatGrowthStats(p)
 	p.Stats = stats
 	p.MaxHP = stats.MaxHP
 	p.MaxMP = stats.MaxMP
-	dragonApplied := s.classSetPiecesInWorn(p, worn, classSetWarrior) >= 6
+	dragonApplied := s.classSetPiecesInWorn(p, worn, classSetWarrior) >= classSetSecondSkillPieces
 	dragonChanged := dragonApplied != p.Player.ClassSetDragonApplied
 	auraHP := classSetAuraStatKey(s.equipmentState().auras[p.ID])[0]
 	auraHPChanged := auraHP != p.Player.ClassSetAuraHPBP

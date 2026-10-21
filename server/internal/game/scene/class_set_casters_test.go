@@ -69,7 +69,7 @@ func casterSetFixture(t *testing.T, suitID int32, pieces int) (*Scene, *entity.E
 }
 
 func TestCasterSetsMageAlternationExpiresAndDoesNotStack(t *testing.T) {
-	s, p, tid := casterSetFixture(t, 3, 4)
+	s, p, tid := casterSetFixture(t, 3, 2)
 	target := s.entities[tid]
 	target.HP = 100000
 	target.MaxHP = 100000
@@ -103,8 +103,8 @@ func TestCasterSetsMageAlternationExpiresAndDoesNotStack(t *testing.T) {
 	}
 }
 
-func TestCasterSetsMageSixEachHitOnceAndNoRecursiveCastOrCost(t *testing.T) {
-	s, p, tid := casterSetFixture(t, 3, 6)
+func TestCasterSetsMageFourEachHitOnceAndNoRecursiveCastOrCost(t *testing.T) {
+	s, p, tid := casterSetFixture(t, 3, 4)
 	target := s.entities[tid]
 	target.HP = 100000
 	target.MaxHP = 100000
@@ -132,7 +132,7 @@ func TestCasterSetsMageActualCastHitsAllTargets(t *testing.T) {
 	sink := join(t, s, 1, 100, "mage", 100, 100)
 	caster(s, domain.Learned{10401: 1, 10402: 1})
 	p := s.entities[1]
-	casterSetEquip(t, s, p, 3, 6)
+	casterSetEquip(t, s, p, 3, 4)
 	p.Stats.MAtk = 100
 	for _, id := range mons {
 		s.entities[id].HP = 10000
@@ -162,7 +162,7 @@ func TestCasterSetsMageActualCastHitsAllTargets(t *testing.T) {
 }
 
 func TestCasterSetsHealerCopiesNominalHealEvenFullAlly(t *testing.T) {
-	s, p, _ := casterSetFixture(t, 2, 4)
+	s, p, _ := casterSetFixture(t, 2, 2)
 	join(t, s, 2, 101, "ally", 120, 100)
 	ally := s.entities[2]
 	p.Player.Party = 7
@@ -191,7 +191,7 @@ func TestCasterSetsHealerCopiesNominalHealEvenFullAlly(t *testing.T) {
 }
 
 func TestCasterSetsManaEveryThreeSecondsNoOfflineOrRemovalGrant(t *testing.T) {
-	s, p, _ := casterSetFixture(t, 2, 4)
+	s, p, _ := casterSetFixture(t, 2, 2)
 	p.MP = 0
 	s.stepCasterSets()
 	s.tick = 29
@@ -224,7 +224,7 @@ func TestCasterSetsManaEveryThreeSecondsNoOfflineOrRemovalGrant(t *testing.T) {
 	if s.equipmentState().classSetCasters[p.ID] != nil {
 		t.Fatal("removed runtime retained")
 	}
-	casterSetEquip(t, s, p, 2, 4)
+	casterSetEquip(t, s, p, 2, 2)
 	p.HP = 0
 	s.tick = 120
 	s.stepCasterSets()
@@ -234,7 +234,7 @@ func TestCasterSetsManaEveryThreeSecondsNoOfflineOrRemovalGrant(t *testing.T) {
 }
 
 func TestCasterSetsHealerDamageHealsSingleRadiusWithoutRecursiveCopy(t *testing.T) {
-	s, p, tid := casterSetFixture(t, 2, 6)
+	s, p, tid := casterSetFixture(t, 2, 4)
 	join(t, s, 2, 101, "ally", 150, 100)
 	ally := s.entities[2]
 	p.Player.Party = 7
@@ -255,7 +255,7 @@ func TestCasterSetsHealerDamageHealsSingleRadiusWithoutRecursiveCopy(t *testing.
 }
 
 func TestCasterSetsHealerHealingDamagesEnemiesNotAllies(t *testing.T) {
-	s, p, tid := casterSetFixture(t, 2, 6)
+	s, p, tid := casterSetFixture(t, 2, 4)
 	join(t, s, 2, 101, "ally", 150, 100)
 	ally := s.entities[2]
 	p.Player.Party = 7
@@ -276,7 +276,7 @@ func TestCasterSetsHealerHealingDamagesEnemiesNotAllies(t *testing.T) {
 }
 
 func TestCasterSetsHealerAreaUsesOriginalShapeOnce(t *testing.T) {
-	s, p, _ := casterSetFixture(t, 2, 6)
+	s, p, _ := casterSetFixture(t, 2, 4)
 	join(t, s, 2, 101, "inside", 170, 100)
 	join(t, s, 3, 102, "outside", 250, 100)
 	for _, id := range []domain.EntityID{1, 2, 3} {
@@ -296,7 +296,7 @@ func TestCasterSetsHealerAreaUsesOriginalShapeOnce(t *testing.T) {
 }
 
 func TestCasterSetsNewThresholdsAndBrokenPiece(t *testing.T) {
-	for _, pieces := range []int{3, 4, 5, 6, 8} {
+	for _, pieces := range []int{0, 1, 2, 3, 4, 5, 6, 7, 8} {
 		t.Run(string(rune('0'+pieces)), func(t *testing.T) {
 			s, p, tid := casterSetFixture(t, 3, pieces)
 			target := s.entities[tid]
@@ -308,7 +308,7 @@ func TestCasterSetsNewThresholdsAndBrokenPiece(t *testing.T) {
 			before := target.HP
 			s.applySkill(p, target, 火弹术, 0, false)
 			want := int32(208)
-			if pieces >= 4 {
+			if pieces >= 2 {
 				want = 312
 			}
 			if before-target.HP != want {
@@ -317,7 +317,7 @@ func TestCasterSetsNewThresholdsAndBrokenPiece(t *testing.T) {
 			before = target.HP
 			s.finishCasterSetCast(p, pendingCast{def: 火球术}, []domain.EntityID{tid})
 			extra := int32(0)
-			if pieces >= 6 {
+			if pieces >= 4 {
 				extra = 312
 			}
 			if before-target.HP != extra {
@@ -325,7 +325,7 @@ func TestCasterSetsNewThresholdsAndBrokenPiece(t *testing.T) {
 			}
 		})
 	}
-	s, p, tid := casterSetFixture(t, 3, 6)
+	s, p, tid := casterSetFixture(t, 3, 4)
 	target := s.entities[tid]
 	target.HP = 100000
 	target.MaxHP = 100000
@@ -335,12 +335,12 @@ func TestCasterSetsNewThresholdsAndBrokenPiece(t *testing.T) {
 	before := target.HP
 	s.finishCasterSetCast(p, pendingCast{def: 火球术}, []domain.EntityID{tid})
 	if target.HP != before {
-		t.Fatal("broken sixth piece still granted upper tier")
+		t.Fatal("broken fourth piece still granted upper tier")
 	}
 }
 
 func TestCasterSetsHealerActualDamageAndHealCast(t *testing.T) {
-	s, p, tid := casterSetFixture(t, 2, 6)
+	s, p, tid := casterSetFixture(t, 2, 4)
 	join(t, s, 2, 101, "ally", 150, 100)
 	ally := s.entities[2]
 	p.Player.Party = 7
@@ -385,7 +385,7 @@ func TestCasterSetsAllOriginalMageElementDamage(t *testing.T) {
 		}
 		count++
 		t.Run(def.Name, func(t *testing.T) {
-			s, p, tid := casterSetFixture(t, 3, 4)
+			s, p, tid := casterSetFixture(t, 3, 2)
 			target := s.entities[tid]
 			target.HP = 100000
 			target.MaxHP = 100000
@@ -412,7 +412,7 @@ func TestCasterSetsAllOriginalMageElementDamage(t *testing.T) {
 }
 
 func TestCasterSetsPeriodicAllyHealingCopiesNominal(t *testing.T) {
-	s, p, _ := casterSetFixture(t, 2, 4)
+	s, p, _ := casterSetFixture(t, 2, 2)
 	join(t, s, 2, 101, "ally", 120, 100)
 	ally := s.entities[2]
 	p.Player.Party = 7
@@ -428,7 +428,7 @@ func TestCasterSetsPeriodicAllyHealingCopiesNominal(t *testing.T) {
 }
 
 func TestCasterSetsElementBonusIsDamageNotSpellCoefficient(t *testing.T) {
-	s, p, tid := casterSetFixture(t, 3, 4)
+	s, p, tid := casterSetFixture(t, 3, 2)
 	dst := s.entities[tid]
 	dst.HP = 10000
 	dst.MaxHP = 10000
@@ -446,7 +446,7 @@ func TestCasterSetsElementBonusIsDamageNotSpellCoefficient(t *testing.T) {
 }
 
 func TestCasterSetsLogoutAndImmediateUnequipClearRuntime(t *testing.T) {
-	s, p, _ := casterSetFixture(t, 3, 4)
+	s, p, _ := casterSetFixture(t, 3, 2)
 	ice, _ := s.skills.Get(10409, 1)
 	s.startCasterSetCast(p, ice)
 	s.exec(Leave{ID: p.ID, Reason: "set test"})
@@ -455,7 +455,7 @@ func TestCasterSetsLogoutAndImmediateUnequipClearRuntime(t *testing.T) {
 	}
 	join(t, s, 1, 100, "returning", 100, 100)
 	p = s.entities[1]
-	casterSetEquip(t, s, p, 3, 4)
+	casterSetEquip(t, s, p, 3, 2)
 	if s.casterSetOutgoingDamage(p, domain.HurtFire, 100) != 100 {
 		t.Fatal("relogin restored old grant")
 	}
@@ -468,7 +468,7 @@ func TestCasterSetsLogoutAndImmediateUnequipClearRuntime(t *testing.T) {
 }
 
 func TestCasterSetsGroupNominalHealingCopiesEachAllyOnce(t *testing.T) {
-	s, p, _ := casterSetFixture(t, 2, 4)
+	s, p, _ := casterSetFixture(t, 2, 2)
 	join(t, s, 2, 101, "ally1", 120, 100)
 	join(t, s, 3, 102, "ally2", 130, 100)
 	p.Player.Party = 7
@@ -489,7 +489,7 @@ func TestCasterSetsGroupNominalHealingCopiesEachAllyOnce(t *testing.T) {
 }
 
 func TestCasterSetsGeneratedPayloadUsesCurrentLearnedRank(t *testing.T) {
-	s, p, tid := casterSetFixture(t, 3, 6)
+	s, p, tid := casterSetFixture(t, 3, 4)
 	dst := s.entities[tid]
 	dst.HP = 10000
 	dst.MaxHP = 10000
@@ -533,7 +533,7 @@ func TestCasterSetsNativeRejuvenationCastTriggersOneReciprocalBolt(t *testing.T)
 	if rejuvenation.ID == 0 || len(rejuvenation.DirectEffects()) != 0 || len(rejuvenation.Statuses) != 1 {
 		t.Fatalf("native rejuvenation changed: %+v", rejuvenation)
 	}
-	s, p, tid := casterSetFixture(t, 2, 6)
+	s, p, tid := casterSetFixture(t, 2, 4)
 	join(t, s, 2, 101, "ally", 150, 100)
 	ally := s.entities[2]
 	p.Player.Party = 7
@@ -584,7 +584,7 @@ func TestCasterSetsNativeRejuvenationCastTriggersOneReciprocalBolt(t *testing.T)
 }
 
 func TestCasterSetsNonHealingBuffDoesNotTriggerReciprocalBolt(t *testing.T) {
-	s, p, tid := casterSetFixture(t, 2, 6)
+	s, p, tid := casterSetFixture(t, 2, 4)
 	p.Player.Char.Skills[祝福术.ID] = 1
 	s.invalidateCombatAttributes(p)
 	target := s.entities[tid]
@@ -599,7 +599,7 @@ func TestCasterSetsNonHealingBuffDoesNotTriggerReciprocalBolt(t *testing.T) {
 }
 
 func TestCasterSetsFailedHealingStatusDoesNotTriggerBolt(t *testing.T) {
-	s, p, tid := casterSetFixture(t, 2, 6)
+	s, p, tid := casterSetFixture(t, 2, 4)
 	target := s.entities[tid]
 	target.HP = 10000
 	before := target.HP
@@ -615,7 +615,7 @@ func TestCasterSetsFailedHealingStatusDoesNotTriggerBolt(t *testing.T) {
 }
 
 func TestCasterSetsGeneratedSpellDoesNotDoubleStatusDuration(t *testing.T) {
-	s, p, tid := casterSetFixture(t, 3, 6)
+	s, p, tid := casterSetFixture(t, 3, 4)
 	target := s.entities[tid]
 	target.HP = 10000
 	target.MaxHP = 10000

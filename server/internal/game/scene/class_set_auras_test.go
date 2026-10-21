@@ -22,7 +22,7 @@ func partySetMember(t *testing.T, s *Scene, id domain.EntityID, suitID int32) *e
 	p.Player.Party = 1
 	p.Player.Char.Base = domain.Base{STR: 100, VIT: 100, INT: 100, SPI: 100, AGI: 100, DEX: 100}
 	suit := &domain.EquipmentSuit{ID: suitID}
-	slots := []domain.EquipSlot{domain.SlotHead, domain.SlotNeck, domain.SlotWeapon, domain.SlotGlove, domain.SlotRing, domain.SlotBody}
+	slots := []domain.EquipSlot{domain.SlotHead, domain.SlotNeck, domain.SlotWeapon, domain.SlotGlove}
 	if s.items == nil {
 		s.items = map[domain.ItemID]domain.ItemDef{}
 	}
@@ -100,11 +100,11 @@ func TestClassSetPartyAuraLifecycleAndResourceNeutral(t *testing.T) {
 			case "death":
 				p.HP = 0
 			case "unequip":
-				p.Player.Worn.Set(domain.SlotBody, domain.Stack{})
+				p.Player.Worn.Set(domain.SlotGlove, domain.Stack{})
 			case "broken":
-				st := p.Player.Worn.At(domain.SlotBody)
+				st := p.Player.Worn.At(domain.SlotGlove)
 				st.Durability = 0
-				p.Player.Worn.Set(domain.SlotBody, st)
+				p.Player.Worn.Set(domain.SlotGlove, st)
 			}
 			if s.classSetAuraValue(q, "class_set_max_hp_bp") != 0 {
 				t.Fatal("invalid source retained live bonus before rescan")
@@ -190,7 +190,7 @@ func TestClassSetPartyAuraDuplicateWithdrawalAndExpiry(t *testing.T) {
 	if !found {
 		t.Fatal("missing replacement")
 	}
-	b.Player.Worn.Set(domain.SlotBody, domain.Stack{})
+	b.Player.Worn.Set(domain.SlotGlove, domain.Stack{})
 	s.stepEquipmentAuras()
 	if q.MaxHP != 900 || q.HP != 100 {
 		t.Fatal("last source withdrawal failed")
@@ -241,9 +241,9 @@ func TestClassSetPartyAuraSameTickCastSnapshotWithdrawal(t *testing.T) {
 			case "range":
 				s.aoi.Move(source, domain.Pos{MapID: 7, X: 900, Y: 100})
 			case "broken":
-				st := source.Player.Worn.At(domain.SlotBody)
+				st := source.Player.Worn.At(domain.SlotGlove)
 				st.Durability = 0
-				source.Player.Worn.Set(domain.SlotBody, st)
+				source.Player.Worn.Set(domain.SlotGlove, st)
 			}
 			// Deliberately no step/frame between the membership change and acceptance.
 			s.onUseSkill(UseSkill{ID: p.ID, Skill: 连环枪法.ID, Target: target.ID})

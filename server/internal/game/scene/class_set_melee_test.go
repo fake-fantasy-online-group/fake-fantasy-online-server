@@ -36,7 +36,7 @@ func meleeSetFixture(t *testing.T, suitID int32, pieces int) (*Scene, *entity.En
 	return s, p
 }
 func TestClassSetWarriorThresholdStatsAndCache(t *testing.T) {
-	for _, n := range []int{3, 4, 5, 6, 8} {
+	for _, n := range []int{0, 1, 2, 3, 4, 5, 6, 7, 8} {
 		s, p := meleeSetFixture(t, 5, n)
 		stats := p.Stats
 		_, cached, _ := s.combatGrowthStats(p)
@@ -47,30 +47,30 @@ func TestClassSetWarriorThresholdStatsAndCache(t *testing.T) {
 		if p.Stats != stats {
 			t.Fatal("recalculation compounded multipliers")
 		}
-		if s.classSetDragonActive(p) != (n >= 6) {
+		if s.classSetDragonActive(p) != (n >= 4) {
 			t.Fatalf("dragon threshold %d", n)
 		}
 		p.HP = p.MaxHP / 2
 		want := int32(1000)
-		if n >= 4 {
+		if n >= 2 {
 			want = 1500
 		}
 		if got := s.classSetMissingHealthDamage(p, 1000); got != want {
 			t.Fatalf("threshold%d damage%d want%d", n, got, want)
 		}
 	}
-	s, p := meleeSetFixture(t, 5, 6)
+	s, p := meleeSetFixture(t, 5, 4)
 	before := p.Stats
-	st := p.Player.Worn.At(domain.SlotBody)
+	st := p.Player.Worn.At(domain.SlotGlove)
 	st.Durability = 0
-	p.Player.Worn.Set(domain.SlotBody, st)
+	p.Player.Worn.Set(domain.SlotGlove, st)
 	s.refreshStats(p)
 	if before.MaxHP != 2*p.MaxHP || before.MinAtk != p.Stats.MinAtk*160/100 || before.MaxAtk != p.Stats.MaxAtk*160/100 || before.MoveSpeed != p.Stats.MoveSpeed*120/100 {
 		t.Fatalf("transform restore before%+v after%+v", before, p.Stats)
 	}
 }
 func TestClassSetWarriorActualStrikeAndCost(t *testing.T) {
-	s, p := meleeSetFixture(t, 5, 6)
+	s, p := meleeSetFixture(t, 5, 4)
 	p.HP, p.MaxHP = 5000, 10000
 	p.MP = 0
 	p.Stats.MAtk = 1000
@@ -109,7 +109,7 @@ func TestClassSetWarriorActualStrikeAndCost(t *testing.T) {
 	}
 }
 func TestClassSetSwordStacksLifetimeAndWhirlwind(t *testing.T) {
-	s, p := meleeSetFixture(t, 4, 6)
+	s, p := meleeSetFixture(t, 4, 4)
 	taunt := domain.SkillDef{ID: classSetTaunt}
 	for i := 0; i < 15; i++ {
 		s.classSetMeleeCastReleased(p, &taunt)
@@ -136,7 +136,7 @@ func TestClassSetSwordStacksLifetimeAndWhirlwind(t *testing.T) {
 	}
 	p.HP = 100
 	s.classSetMeleeCastReleased(p, &taunt)
-	for _, slot := range []domain.EquipSlot{domain.SlotHead, domain.SlotNeck, domain.SlotBody} {
+	for _, slot := range []domain.EquipSlot{domain.SlotHead, domain.SlotNeck, domain.SlotGlove} {
 		st := p.Player.Worn.At(slot)
 		st.Durability = 0
 		p.Player.Worn.Set(slot, st)
@@ -147,7 +147,7 @@ func TestClassSetSwordStacksLifetimeAndWhirlwind(t *testing.T) {
 	}
 }
 func TestClassSetSwordActualCastSingleStackAndAllTargets(t *testing.T) {
-	s, p := meleeSetFixture(t, 4, 6)
+	s, p := meleeSetFixture(t, 4, 4)
 	p.Stats.MAtk = 1000
 	p.HP = p.MaxHP
 	a := putMonster(s, 900, 100000, domain.Stats{MDef: 100}, 110, 100)
@@ -169,7 +169,7 @@ func TestClassSetSwordActualCastSingleStackAndAllTargets(t *testing.T) {
 }
 
 func TestClassSetMeleeSecondaryDamageAndLifesteal(t *testing.T) {
-	s, p := meleeSetFixture(t, 5, 6)
+	s, p := meleeSetFixture(t, 5, 4)
 	p.HP = 1000
 	p.MaxHP = 2000
 	dot := domain.Active{Def: domain.StatusDef{ID: 1001, Affixes: []domain.Affix{{Attr: domain.AttrHPRegen, Value: -100}}}, Source: 99}
@@ -189,7 +189,7 @@ func TestClassSetMeleeSecondaryDamageAndLifesteal(t *testing.T) {
 	if ev.Amount != 1500 || p.HP != 1300 {
 		t.Fatalf("life steal should restore 20 percent of damage amount%d hp%d", ev.Amount, p.HP)
 	}
-	s, p = meleeSetFixture(t, 4, 6)
+	s, p = meleeSetFixture(t, 4, 4)
 	p.HP = 1000
 	taunt := domain.SkillDef{ID: classSetTaunt}
 	for i := 0; i < 10; i++ {
@@ -208,12 +208,12 @@ func TestClassSetMeleeSecondaryDamageAndLifesteal(t *testing.T) {
 }
 
 func TestClassSetSwordThresholdsAndCanceledCast(t *testing.T) {
-	for _, n := range []int{3, 4, 5, 6, 8} {
+	for _, n := range []int{0, 1, 2, 3, 4, 5, 6, 7, 8} {
 		s, p := meleeSetFixture(t, 4, n)
 		taunt := domain.SkillDef{ID: classSetTaunt}
 		s.classSetMeleeCastReleased(p, &taunt)
 		expected := int32(0)
-		if n >= 4 {
+		if n >= 2 {
 			expected = 1
 		}
 		if s.classSetUnrulyStacks(p) != expected {
@@ -222,14 +222,14 @@ func TestClassSetSwordThresholdsAndCanceledCast(t *testing.T) {
 		def := domain.SkillDef{ID: classSetWhirlwind, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
 		scale := s.classSetMeleeCastReleased(p, &def)
 		want := int32(10000)
-		if n >= 6 {
+		if n >= 4 {
 			want = 20000
 		}
 		if scale != want {
 			t.Fatalf("whirlwind threshold%d", n)
 		}
 	}
-	s, p := meleeSetFixture(t, 4, 6)
+	s, p := meleeSetFixture(t, 4, 4)
 	taunt := domain.SkillDef{ID: classSetTaunt}
 	s.casts = []pendingCast{{src: p.ID, def: taunt, windup: &castWindup{interrupted: true}}}
 	s.stepCastsAt(time.Now(), false)
@@ -239,7 +239,7 @@ func TestClassSetSwordThresholdsAndCanceledCast(t *testing.T) {
 }
 
 func TestClassSetUnrulyBuffProjection(t *testing.T) {
-	s, p := meleeSetFixture(t, 4, 6)
+	s, p := meleeSetFixture(t, 4, 4)
 	s.skills = skillTable(domain.SkillDef{ID: classSetTaunt, Level: 1, Icon: 123})
 	taunt := domain.SkillDef{ID: classSetTaunt}
 	s.classSetMeleeCastReleased(p, &taunt)
@@ -265,17 +265,17 @@ func TestClassSetUnrulyBuffProjection(t *testing.T) {
 
 func TestClassSetDragonToggleNeverGrantsHealth(t *testing.T) {
 	for _, startHP := range []int32{0, 1, 100, 1800} {
-		s, p := meleeSetFixture(t, 5, 6)
-		st := p.Player.Worn.At(domain.SlotBody)
+		s, p := meleeSetFixture(t, 5, 4)
+		st := p.Player.Worn.At(domain.SlotGlove)
 		p.HP = startHP
 		want := min(startHP, int32(900))
 		for i := 0; i < 10; i++ {
-			p.Player.Worn.Set(domain.SlotBody, domain.Stack{})
+			p.Player.Worn.Set(domain.SlotGlove, domain.Stack{})
 			s.refreshStats(p)
 			if p.HP != want || p.MaxHP != 900 || p.Player.ClassSetDragonApplied {
 				t.Fatalf("remove start%d cycle%d got%d/%d flag%v", startHP, i, p.HP, p.MaxHP, p.Player.ClassSetDragonApplied)
 			}
-			p.Player.Worn.Set(domain.SlotBody, st)
+			p.Player.Worn.Set(domain.SlotGlove, st)
 			s.refreshStats(p)
 			if p.HP != want || p.MaxHP != 1800 || !p.Player.ClassSetDragonApplied {
 				t.Fatalf("restore start%d cycle%d got%d/%d flag%v", startHP, i, p.HP, p.MaxHP, p.Player.ClassSetDragonApplied)
@@ -285,7 +285,7 @@ func TestClassSetDragonToggleNeverGrantsHealth(t *testing.T) {
 }
 
 func TestClassSetDragonAdmissionAndFirstRefresh(t *testing.T) {
-	s, p := meleeSetFixture(t, 5, 6)
+	s, p := meleeSetFixture(t, 5, 4)
 	// A freshly created runtime with worn dragon equipment must not be treated
 	// as an ordinary HP equipment delta on its first refresh.
 	p.Player.ClassSetDragonApplied = false

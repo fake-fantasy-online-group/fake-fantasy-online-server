@@ -38,7 +38,7 @@ func classSetAuraID(a domain.EquipmentAura) int32 {
 }
 func (s *Scene) classSetAuraSources(p *entity.Entity) []equipmentAuraSource {
 	for suit := int32(1); suit <= 5; suit++ {
-		if s.classSetPieces(p, suit) >= 6 {
+		if s.classSetPieces(p, suit) >= classSetSecondSkillPieces {
 			a, _ := classSetAura(suit)
 			return []equipmentAuraSource{{owner: p.ID, uid: -int64(930000 + suit), party: p.Player.Party, effect: a}}
 		}

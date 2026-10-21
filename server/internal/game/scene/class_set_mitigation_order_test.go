@@ -10,7 +10,7 @@ import (
 
 func mitigationOrderFixture(t *testing.T, suit int32, expanded bool, shield int32, immune bool) (*Scene, *entity.Entity) {
 	t.Helper()
-	s, p := meleeSetFixture(t, suit, 6)
+	s, p := meleeSetFixture(t, suit, 4)
 	p.Stats.MDef = 0
 	if suit == 4 {
 		taunt := domain.SkillDef{ID: classSetTaunt}

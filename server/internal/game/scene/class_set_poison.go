@@ -13,7 +13,7 @@ func (s *Scene) prepareClassSetPoison(source *entity.Entity, carrier domain.Stat
 	}
 	def.ClassSetPoison = true
 	pieces := s.classSetPieces(source, 1)
-	if pieces < 4 {
+	if pieces < classSetFirstSkillPieces {
 		return
 	}
 	// Physical attack is a cast-time average of the actual panel range. It is
@@ -26,7 +26,7 @@ func (s *Scene) prepareClassSetPoison(source *entity.Entity, carrier domain.Stat
 
 func (s *Scene) classSetPoisonBurst(target *entity.Entity, incoming domain.StatusDef, source domain.EntityID) int32 {
 	owner := s.entities[source]
-	if !incoming.ClassSetPoison || owner == nil || !owner.Alive() || s.classSetPieces(owner, 1) < 6 || target == nil || target.Status == nil {
+	if !incoming.ClassSetPoison || owner == nil || !owner.Alive() || s.classSetPieces(owner, 1) < classSetSecondSkillPieces || target == nil || target.Status == nil {
 		return 0
 	}
 	var remaining int64

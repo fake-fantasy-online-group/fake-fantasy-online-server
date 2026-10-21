@@ -39,8 +39,8 @@ func poisonTicks(s *Scene, n int) {
 		s.stepStatus()
 	}
 }
-func TestClassSetPoisonFourAddsAttackOnceOverLifetime(t *testing.T) {
-	for _, pieces := range []int{3, 4, 5, 6, 8} {
+func TestClassSetPoisonTwoAddsAttackOnceOverLifetime(t *testing.T) {
+	for _, pieces := range []int{0, 1, 2, 3, 4, 5, 6, 7, 8} {
 		t.Run(string(rune('0'+pieces)), func(t *testing.T) {
 			s, p, target := classPoisonScene(t, pieces)
 			before := target.HP
@@ -51,7 +51,7 @@ func TestClassSetPoisonFourAddsAttackOnceOverLifetime(t *testing.T) {
 			p.Player.Worn = domain.NewEquipSet()
 			poisonTicks(s, 30)
 			want := int32(300)
-			if pieces >= 4 {
+			if pieces >= 2 {
 				want += 1000
 			}
 			if got := before - target.HP; got != want {
@@ -63,8 +63,8 @@ func TestClassSetPoisonFourAddsAttackOnceOverLifetime(t *testing.T) {
 		})
 	}
 }
-func TestClassSetPoisonSixBurstsRemainingBeforeRefresh(t *testing.T) {
-	s, p, target := classPoisonScene(t, 6)
+func TestClassSetPoisonFourBurstsRemainingBeforeRefresh(t *testing.T) {
+	s, p, target := classPoisonScene(t, 4)
 	if !s.applyCombatTriggeredStatus(p, target, domain.StatusPoison) {
 		t.Fatal("initial poison")
 	}
@@ -84,7 +84,7 @@ func TestClassSetPoisonSixBurstsRemainingBeforeRefresh(t *testing.T) {
 }
 func TestClassSetPoisonBurstRequiresSuccessAndLiveBalance(t *testing.T) {
 	t.Run("expired", func(t *testing.T) {
-		s, p, target := classPoisonScene(t, 6)
+		s, p, target := classPoisonScene(t, 4)
 		s.applyCombatTriggeredStatus(p, target, domain.StatusPoison)
 		s.tick += domain.Ticks(60000)
 		before := target.HP
@@ -96,7 +96,7 @@ func TestClassSetPoisonBurstRequiresSuccessAndLiveBalance(t *testing.T) {
 		}
 	})
 	t.Run("blocked", func(t *testing.T) {
-		s, p, target := classPoisonScene(t, 6)
+		s, p, target := classPoisonScene(t, 4)
 		s.applyCombatTriggeredStatus(p, target, domain.StatusPoison)
 		s.statusOverlay = domain.StatusOverlay{{Existing: domain.StatusPoison, Incoming: domain.StatusPoison}: domain.OverlayBlock}
 		before := target.HP
@@ -108,7 +108,7 @@ func TestClassSetPoisonBurstRequiresSuccessAndLiveBalance(t *testing.T) {
 		}
 	})
 	t.Run("unrelated poison", func(t *testing.T) {
-		s, p, target := classPoisonScene(t, 6)
+		s, p, target := classPoisonScene(t, 4)
 		target.Status.Apply(中毒, s.tick, 999)
 		before := target.HP
 		s.applyCombatTriggeredStatus(p, target, domain.StatusPoison)
@@ -117,7 +117,7 @@ func TestClassSetPoisonBurstRequiresSuccessAndLiveBalance(t *testing.T) {
 		}
 	})
 	t.Run("removed set", func(t *testing.T) {
-		s, p, target := classPoisonScene(t, 6)
+		s, p, target := classPoisonScene(t, 4)
 		s.applyCombatTriggeredStatus(p, target, domain.StatusPoison)
 		p.Player.Worn = domain.NewEquipSet()
 		before := target.HP
@@ -128,7 +128,7 @@ func TestClassSetPoisonBurstRequiresSuccessAndLiveBalance(t *testing.T) {
 	})
 }
 func TestClassSetPoisonOtherAssassinAndFatalBurst(t *testing.T) {
-	s, p, target := classPoisonScene(t, 6)
+	s, p, target := classPoisonScene(t, 4)
 	poison := s.statuses[domain.StatusKey{ID: domain.StatusPoison, Level: 21}]
 	poison.ClassSetPoison = true
 	target.Status.Apply(poison, s.tick, 999)
@@ -149,18 +149,18 @@ func TestClassSetPoisonOtherAssassinAndFatalBurst(t *testing.T) {
 }
 
 func TestClassSetPoisonBrokenPieceAndMissDoNotBurst(t *testing.T) {
-	s, p, target := classPoisonScene(t, 6)
+	s, p, target := classPoisonScene(t, 4)
 	if !s.applyCombatTriggeredStatus(p, target, domain.StatusPoison) {
 		t.Fatal("initial")
 	}
-	st := p.Player.Worn.At(domain.SlotGlove)
+	st := p.Player.Worn.At(domain.SlotShoe)
 	d := s.items[st.Item]
 	d.Equip.Durable = 10
 	s.items[st.Item] = d
 	st.MaxDurability = 10
 	st.Durability = 0
-	p.Player.Worn.Set(domain.SlotGlove, st)
-	if got := s.classSetPieces(p, 1); got != 5 {
+	p.Player.Worn.Set(domain.SlotShoe, st)
+	if got := s.classSetPieces(p, 1); got != 3 {
 		t.Fatalf("broken count=%d", got)
 	}
 	before := target.HP
@@ -168,7 +168,7 @@ func TestClassSetPoisonBrokenPieceAndMissDoNotBurst(t *testing.T) {
 		t.Fatal("broken can still poison")
 	}
 	if target.HP != before {
-		t.Fatal("broken six-piece burst")
+		t.Fatal("broken four-piece burst")
 	}
 	p.Status.Remove(1018)
 	if s.applyCombatTriggeredStatus(p, target, domain.StatusPoison) {
@@ -180,7 +180,7 @@ func TestClassSetPoisonBrokenPieceAndMissDoNotBurst(t *testing.T) {
 }
 
 func TestClassSetPoisonFractionalAttackAndSourceDeath(t *testing.T) {
-	s, p, target := classPoisonScene(t, 4)
+	s, p, target := classPoisonScene(t, 2)
 	p.Stats.MinAtk, p.Stats.MaxAtk = 100, 103
 	before := target.HP
 	if !s.applyCombatTriggeredStatus(p, target, domain.StatusPoison) {
@@ -195,7 +195,7 @@ func TestClassSetPoisonFractionalAttackAndSourceDeath(t *testing.T) {
 }
 
 func TestClassSetPoisonBasicAttackReachesRuntime(t *testing.T) {
-	s, p, target := classPoisonScene(t, 4)
+	s, p, target := classPoisonScene(t, 2)
 	p.Stats.Hit = 1 << 20
 	p.Pos.MapID = target.Pos.MapID
 	s.exec(Attack{ID: p.ID, Target: target.ID})
@@ -213,7 +213,7 @@ func TestClassSetPoisonBasicAttackReachesRuntime(t *testing.T) {
 // A delayed frame emits only one due tick and schedules from now, not from the
 // old deadline. Reapplication before that frame must not cash out skipped ticks.
 func TestClassSetPoisonDelayedTickBurstDoesNotCatchUp(t *testing.T) {
-	s, p, target := classPoisonScene(t, 6)
+	s, p, target := classPoisonScene(t, 4)
 	if !s.applyCombatTriggeredStatus(p, target, domain.StatusPoison) {
 		t.Fatal("initial")
 	}

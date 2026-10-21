@@ -16,7 +16,7 @@ func TestCasterSetActualCastBuffDisplay(t *testing.T) {
 		{10409, classSetFireViewID, "火系增伤", 701}, {10401, classSetIceViewID, "冰系增伤", 709},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
-			s, p, target := casterSetFixture(t, 3, 4)
+			s, p, target := casterSetFixture(t, 3, 2)
 			fire, _ := s.skills.Get(10401, 1)
 			fire.Icon = 701
 			s.skills[domain.SkillKey{ID: 10401, Level: 1}] = fire
@@ -62,7 +62,7 @@ func TestCasterSetActualCastBuffDisplay(t *testing.T) {
 	}
 }
 func TestCasterSetDisplayBothAndRemoval(t *testing.T) {
-	s, p, _ := casterSetFixture(t, 3, 4)
+	s, p, _ := casterSetFixture(t, 3, 2)
 	fire, _ := s.skills.Get(10401, 1)
 	ice, _ := s.skills.Get(10409, 1)
 	s.startCasterSetCast(p, fire)
@@ -72,7 +72,7 @@ func TestCasterSetDisplayBothAndRemoval(t *testing.T) {
 	if len(v) != 2 || v[0].buff.RemainSec != 3 || v[1].buff.RemainSec != 2 {
 		t.Fatalf("independent timers %+v", v)
 	}
-	p.Player.Worn.Set(domain.SlotGlove, domain.Stack{})
+	p.Player.Worn.Set(domain.SlotNeck, domain.Stack{})
 	s.invalidateCombatAttributes(p)
 	s.stepCasterSets()
 	if len(s.classSetCasterPresentation(p)) != 0 {
@@ -83,7 +83,7 @@ func TestCasterSetDisplayBothAndRemoval(t *testing.T) {
 func TestCasterSetDisplayLifecycleEmitsRemoval(t *testing.T) {
 	for _, mode := range []string{"expiry", "unequip", "broken", "death"} {
 		t.Run(mode, func(t *testing.T) {
-			s, p, _ := casterSetFixture(t, 3, 4)
+			s, p, _ := casterSetFixture(t, 3, 2)
 			sink := p.Player.Sink.(*fakeSink)
 			ice, _ := s.skills.Get(10409, 1)
 			s.startCasterSetCast(p, ice)
@@ -94,12 +94,12 @@ func TestCasterSetDisplayLifecycleEmitsRemoval(t *testing.T) {
 				s.tick += domain.Ticks(3000)
 				s.stepCasterSets()
 			case "unequip":
-				p.Player.Worn.Set(domain.SlotGlove, domain.Stack{})
+				p.Player.Worn.Set(domain.SlotNeck, domain.Stack{})
 				s.refreshStats(p)
 			case "broken":
-				st := p.Player.Worn.At(domain.SlotGlove)
+				st := p.Player.Worn.At(domain.SlotNeck)
 				st.Durability = 0
-				p.Player.Worn.Set(domain.SlotGlove, st)
+				p.Player.Worn.Set(domain.SlotNeck, st)
 				s.refreshStats(p)
 			case "death":
 				p.HP = 0

@@ -357,7 +357,7 @@ func (s *Scene) equipmentAuraGrantValid(target *entity.Entity, g equipmentAuraGr
 		}
 	}
 	if suit := classSetAuraID(g.effect); suit != 0 {
-		return g.uid == -int64(930000+suit) && s.classSetPieces(source, suit) >= 6
+		return g.uid == -int64(930000+suit) && s.classSetPieces(source, suit) >= classSetSecondSkillPieces
 	}
 	for _, a := range s.equipmentEffects(source).effects {
 		if a.SourceUID == g.uid && a.Effect.Aura != nil && *a.Effect.Aura == g.effect {

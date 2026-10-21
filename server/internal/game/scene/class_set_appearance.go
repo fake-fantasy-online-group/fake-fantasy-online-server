@@ -11,7 +11,7 @@ import (
 // authoritative and unmodified, so saving or removing the set cannot persist a
 // transformed body. The client suppresses its separate head for this body ID.
 func (s *Scene) classSetAppearance(p *entity.Entity, base domain.Appearance) domain.Appearance {
-	if s.classSetPieces(p, classSetWarrior) >= 6 {
+	if s.classSetPieces(p, classSetWarrior) >= classSetSecondSkillPieces {
 		base.EquipView = [6]uint16{1371, 0, 0, 0, 0, 0}
 		base.AtkVariant = 0
 	}

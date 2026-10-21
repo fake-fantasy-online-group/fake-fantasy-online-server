@@ -9,7 +9,7 @@ import (
 func TestClassSetRuntimeRealRouterTransfer(t *testing.T) {
 	for _, suit := range []int32{4, 3, 2} {
 		t.Run(map[int32]string{4: "unruly", 3: "elements", 2: "mana"}[suit], func(t *testing.T) {
-			fixture, p := meleeSetFixture(t, suit, 4)
+			fixture, p := meleeSetFixture(t, suit, 2)
 			if suit == 3 {
 				p.Player.Char.Race = domain.Warlock
 			}
@@ -123,7 +123,7 @@ func TestClassSetRuntimeFiltersInvalidGrants(t *testing.T) {
 	for _, suit := range []int32{4, 3, 2} {
 		for _, invalid := range []string{"dead", "broken", "expired"} {
 			t.Run(map[int32]string{4: "sword", 3: "mage", 2: "healer"}[suit]+"/"+invalid, func(t *testing.T) {
-				s, p := meleeSetFixture(t, suit, 4)
+				s, p := meleeSetFixture(t, suit, 2)
 				if suit == 3 {
 					p.Player.Char.Race = domain.Warlock
 				}
@@ -153,7 +153,7 @@ func TestClassSetRuntimeFiltersInvalidGrants(t *testing.T) {
 					t.Error("invalid mana clock captured")
 				}
 				// A normal handoff is not a persisted login: an empty runtime restores no grants.
-				fresh, q := meleeSetFixture(t, suit, 4)
+				fresh, q := meleeSetFixture(t, suit, 2)
 				fresh.restoreClassSetRuntime(q, entity.ClassSetRuntime{})
 				if fresh.classSetUnrulyStacks(q) != 0 {
 					t.Error("login invented stacks")
@@ -165,8 +165,8 @@ func TestClassSetRuntimeFiltersInvalidGrants(t *testing.T) {
 
 func TestClassSetRuntimeRebasesExactDurationsAndDueMana(t *testing.T) {
 	for _, suit := range []int32{4, 3, 2} {
-		src, p := meleeSetFixture(t, suit, 4)
-		dst, q := meleeSetFixture(t, suit, 4)
+		src, p := meleeSetFixture(t, suit, 2)
+		dst, q := meleeSetFixture(t, suit, 2)
 		if suit == 3 {
 			p.Player.Char.Race = domain.Warlock
 			q.Player.Char.Race = domain.Warlock

@@ -24,7 +24,7 @@ type classSetUnruly struct {
 // Apply the transformation to the final derived values, not affix percentages:
 // both the panel and source snapshots consume this same computed bundle.
 func (s *Scene) classSetMeleeStats(p *entity.Entity, worn *domain.EquipSet, stats domain.Stats) domain.Stats {
-	if s.classSetPiecesInWorn(p, worn, classSetWarrior) < 6 {
+	if s.classSetPiecesInWorn(p, worn, classSetWarrior) < classSetSecondSkillPieces {
 		return stats
 	}
 	stats.MaxHP = clampI32(int64(stats.MaxHP) * 2)
@@ -35,7 +35,7 @@ func (s *Scene) classSetMeleeStats(p *entity.Entity, worn *domain.EquipSet, stat
 }
 
 func (s *Scene) classSetDragonActive(p *entity.Entity) bool {
-	return p != nil && p.Alive() && s.classSetPieces(p, classSetWarrior) >= 6
+	return p != nil && p.Alive() && s.classSetPieces(p, classSetWarrior) >= classSetSecondSkillPieces
 }
 
 // Integer HP costs round down, with a minimum of one when affordable. A living
@@ -56,7 +56,7 @@ func (s *Scene) classSetPaySkillCost(p *entity.Entity, def domain.SkillDef) {
 }
 
 func (s *Scene) classSetMissingHealthDamage(p *entity.Entity, damage int32) int32 {
-	if damage <= 0 || p == nil || !p.Alive() || p.MaxHP <= 0 || s.classSetPieces(p, classSetWarrior) < 4 {
+	if damage <= 0 || p == nil || !p.Alive() || p.MaxHP <= 0 || s.classSetPieces(p, classSetWarrior) < classSetFirstSkillPieces {
 		return damage
 	}
 	missing := max(int64(0), int64(p.MaxHP)-int64(p.HP))
@@ -72,7 +72,7 @@ func (s *Scene) classSetUnrulyStacks(p *entity.Entity) int32 {
 	if !ok {
 		return 0
 	}
-	if state.owner != p || !p.Alive() || state.expires <= s.tick || s.classSetPieces(p, classSetSwordsman) < 4 {
+	if state.owner != p || !p.Alive() || state.expires <= s.tick || s.classSetPieces(p, classSetSwordsman) < classSetFirstSkillPieces {
 		delete(rt.unruly, p.ID)
 		return 0
 	}
@@ -87,7 +87,7 @@ func (s *Scene) classSetMeleeCastReleased(p *entity.Entity, def *domain.SkillDef
 		return 10000
 	}
 	stacks := s.classSetUnrulyStacks(p)
-	if def.ID == classSetTaunt && s.classSetPieces(p, classSetSwordsman) >= 4 {
+	if def.ID == classSetTaunt && s.classSetPieces(p, classSetSwordsman) >= classSetFirstSkillPieces {
 		rt := s.equipmentState()
 		if rt.unruly == nil {
 			rt.unruly = make(map[domain.EntityID]classSetUnruly)
@@ -95,7 +95,7 @@ func (s *Scene) classSetMeleeCastReleased(p *entity.Entity, def *domain.SkillDef
 		rt.unruly[p.ID] = classSetUnruly{owner: p, stacks: min(int32(10), stacks+1), expires: s.tick + domain.Ticks(30000)}
 		s.pushStatusSnapshots(p)
 	}
-	if def.ID == classSetWhirlwind && stacks > 0 && s.classSetPieces(p, classSetSwordsman) >= 6 {
+	if def.ID == classSetWhirlwind && stacks > 0 && s.classSetPieces(p, classSetSwordsman) >= classSetSecondSkillPieces {
 		rt := s.equipmentState()
 		state := rt.unruly[p.ID]
 		state.stacks--

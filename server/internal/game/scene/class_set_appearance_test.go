@@ -7,7 +7,7 @@ import (
 )
 
 func TestClassSetDragonAppearanceProjectionNeverPersists(t *testing.T) {
-	s, p := meleeSetFixture(t, 5, 6)
+	s, p := meleeSetFixture(t, 5, 4)
 	base := domain.Appearance{Gender: 1, Head: 7, Hair: 3, EquipView: [6]uint16{31, 32, 33, 34, 35, 36}, AtkVariant: 2, WeaponCType: 4, AtkDist: 75, Title: "title"}
 	p.Player.Char.Appear = base
 	p.Look.Appearance = base
@@ -29,12 +29,12 @@ func TestClassSetDragonAppearanceProjectionNeverPersists(t *testing.T) {
 		t.Fatal("dead dragon lost appearance")
 	}
 	p.HP = 100
-	st := p.Player.Worn.At(domain.SlotBody)
+	st := p.Player.Worn.At(domain.SlotGlove)
 	st.Durability = 0
-	p.Player.Worn.Set(domain.SlotBody, st)
+	p.Player.Worn.Set(domain.SlotGlove, st)
 	s.refreshStats(p)
 	if p.Look.Appearance != base || p.Player.Char.Appear != base {
-		t.Fatal("broken sixth piece did not restore original view")
+		t.Fatal("broken fourth piece did not restore original view")
 	}
 	p.Player.Char.Race = domain.Swordsman
 	if s.classSetAppearance(p, base) != base {
@@ -43,7 +43,7 @@ func TestClassSetDragonAppearanceProjectionNeverPersists(t *testing.T) {
 }
 
 func TestClassSetDragonAppearanceAdmissionSelfAndPublicAgree(t *testing.T) {
-	s, p := meleeSetFixture(t, 5, 6)
+	s, p := meleeSetFixture(t, 5, 4)
 	p.Player.Char.Appear.Head = 7
 	p.Player.Char.Appear.Hair = 3
 	next := newCombatScene(t)

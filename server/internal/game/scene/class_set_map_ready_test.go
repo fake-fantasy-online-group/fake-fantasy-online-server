@@ -10,10 +10,10 @@ func TestClassSetDragonRealTransferReconcilesSelfAppearance(t *testing.T) {
 	for _, broken := range []bool{false, true} {
 		name := "intact"
 		if broken {
-			name = "sixth piece breaks while loading"
+			name = "fourth piece breaks while loading"
 		}
 		t.Run(name, func(t *testing.T) {
-			fixture, p := meleeSetFixture(t, 5, 6)
+			fixture, p := meleeSetFixture(t, 5, 4)
 			r, rig := twoScenes(t)
 			src, _ := r.Ensure(domain.SceneID{MapID: 7})
 			dst, _ := r.Ensure(domain.SceneID{MapID: 14})
@@ -40,9 +40,9 @@ func TestClassSetDragonRealTransferReconcilesSelfAppearance(t *testing.T) {
 					return
 				}
 				if broken {
-					st := q.Player.Worn.At(domain.SlotBody)
+					st := q.Player.Worn.At(domain.SlotGlove)
 					st.Durability = 0
-					q.Player.Worn.Set(domain.SlotBody, st)
+					q.Player.Worn.Set(domain.SlotGlove, st)
 					s.refreshStats(q)
 				}
 				if q.Player.Char.Appear.EquipView[0] == 1371 {

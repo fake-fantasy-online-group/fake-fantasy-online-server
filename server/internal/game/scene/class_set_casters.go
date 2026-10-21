@@ -50,8 +50,8 @@ func (s *Scene) stepCasterSets() {
 		if !p.Alive() {
 			continue
 		}
-		mage := s.classSetPieces(p, 3) >= 4
-		healer := s.classSetPieces(p, 2) >= 4
+		mage := s.classSetPieces(p, 3) >= classSetFirstSkillPieces
+		healer := s.classSetPieces(p, 2) >= classSetFirstSkillPieces
 		st := rt.classSetCasters[p.ID]
 		if !mage && !healer {
 			delete(rt.classSetCasters, p.ID)
@@ -95,7 +95,7 @@ func (s *Scene) stepCasterSets() {
 }
 
 func (s *Scene) startCasterSetCast(src *entity.Entity, def domain.SkillDef) {
-	if s.equipmentState().classSetTriggered != 0 || s.classSetPieces(src, 3) < 4 {
+	if s.equipmentState().classSetTriggered != 0 || s.classSetPieces(src, 3) < classSetFirstSkillPieces {
 		return
 	}
 	st := s.casterSetState(src)
@@ -113,7 +113,7 @@ func (s *Scene) startCasterSetCast(src *entity.Entity, def domain.SkillDef) {
 // Apply after the existing outgoing buckets, not to the spell coefficient:
 // +50% elemental damage must not amplify the target's native magic defense.
 func (s *Scene) casterSetOutgoingDamage(src *entity.Entity, hurtType int32, amount int32) int32 {
-	if amount <= 0 || s.classSetPieces(src, 3) < 4 {
+	if amount <= 0 || s.classSetPieces(src, 3) < classSetFirstSkillPieces {
 		return amount
 	}
 	st := s.equipmentState().classSetCasters[src.ID]
@@ -130,7 +130,7 @@ func (s *Scene) casterSetOutgoingDamage(src *entity.Entity, hurtType int32, amou
 // helper never calls applySkill, so the copy cannot produce another copy.
 func (s *Scene) casterSetCopyHeal(src, dst *entity.Entity, amount int32, skill domain.SkillID) {
 	if src == nil || dst == nil || src == dst || !src.Alive() || !dst.Alive() ||
-		s.equipmentState().classSetTriggered != 0 || s.classSetPieces(src, 2) < 4 || !sameParty(src, dst) || amount <= 0 {
+		s.equipmentState().classSetTriggered != 0 || s.classSetPieces(src, 2) < classSetFirstSkillPieces || !sameParty(src, dst) || amount <= 0 {
 		return
 	}
 	s.emit(combat.Restore(src, src, amount, int32(skill)))
@@ -140,7 +140,7 @@ func (s *Scene) casterSetCopyHeal(src, dst *entity.Entity, amount int32, skill d
 // Snapshot the accepted cast's geometry. The opposite payload must not expand
 // around every AoE victim, nor lose its center when the primary victim dies.
 func (s *Scene) captureCasterSetArea(src *entity.Entity, def domain.SkillDef, target domain.EntityID, at *domain.Pos) *classSetCastArea {
-	if s.classSetPieces(src, 2) < 6 {
+	if s.classSetPieces(src, 2) < classSetSecondSkillPieces {
 		return nil
 	}
 	a := &classSetCastArea{shape: def.Area, center: src.Pos}
@@ -212,7 +212,7 @@ func (s *Scene) finishCasterSetCast(src *entity.Entity, c pendingCast, hits []do
 	if src == nil || !src.Alive() || s.equipmentState().classSetTriggered != 0 {
 		return
 	}
-	if s.classSetPieces(src, 3) >= 6 && c.def.HasDamageEffect() {
+	if s.classSetPieces(src, 3) >= classSetSecondSkillPieces && c.def.HasDamageEffect() {
 		var id domain.SkillID
 		switch c.def.HurtType {
 		case domain.HurtFire:
@@ -235,7 +235,7 @@ func (s *Scene) finishCasterSetCast(src *entity.Entity, c pendingCast, hits []do
 			}
 		}
 	}
-	if s.classSetPieces(src, 2) < 6 || c.classSetArea == nil {
+	if s.classSetPieces(src, 2) < classSetSecondSkillPieces || c.classSetArea == nil {
 		return
 	}
 	damage := c.def.HasDamageEffect()
@@ -283,8 +283,8 @@ func (s *Scene) pruneCasterSetState(p *entity.Entity, worn *domain.EquipSet) {
 	if st == nil {
 		return
 	}
-	mage := s.classSetPiecesInWorn(p, worn, 3) >= 4
-	healer := s.classSetPiecesInWorn(p, worn, 2) >= 4
+	mage := s.classSetPiecesInWorn(p, worn, 3) >= classSetFirstSkillPieces
+	healer := s.classSetPiecesInWorn(p, worn, 2) >= classSetFirstSkillPieces
 	if !mage && !healer {
 		delete(s.equipment.classSetCasters, p.ID)
 		return
@@ -303,7 +303,7 @@ func (s *Scene) pruneCasterSetState(p *entity.Entity, worn *domain.EquipSet) {
 // never call finishCasterSetCast and cannot emit another reciprocal bolt.
 func (s *Scene) recordCasterSetHealingStatus(src, dst *entity.Entity, status domain.StatusDef) {
 	rt := s.equipmentState()
-	if rt.classSetTriggered != 0 || rt.root == nil || rt.root.src != src.ID || !status.Periodic() || status.Harmful() || s.classSetPieces(src, 2) < 6 {
+	if rt.classSetTriggered != 0 || rt.root == nil || rt.root.src != src.ID || !status.Periodic() || status.Harmful() || s.classSetPieces(src, 2) < classSetSecondSkillPieces {
 		return
 	}
 	var hp int64
@@ -328,7 +328,7 @@ const (
 )
 
 func (s *Scene) classSetCasterPresentation(p *entity.Entity) []statusPresentation {
-	if p == nil || !p.Alive() || s.classSetPieces(p, 3) < 4 || s.equipment == nil {
+	if p == nil || !p.Alive() || s.classSetPieces(p, 3) < classSetFirstSkillPieces || s.equipment == nil {
 		return nil
 	}
 	st := s.equipment.classSetCasters[p.ID]

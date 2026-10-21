@@ -522,7 +522,7 @@ func (s *Scene) onEnter(cmd Enter) {
 	var growth domain.Stats
 	_, e.Stats, growth = s.combatGrowthStats(e)
 	e.Player.SkillGrowthMaxHP, e.Player.SkillGrowthMaxMP = growth.MaxHP, growth.MaxMP
-	e.Player.ClassSetDragonApplied = s.classSetPiecesInWorn(e, s.functionalWorn(e), classSetWarrior) >= 6
+	e.Player.ClassSetDragonApplied = s.classSetPiecesInWorn(e, s.functionalWorn(e), classSetWarrior) >= classSetSecondSkillPieces
 	e.Look.Appearance = s.classSetAppearance(e, ch.Appear)
 	e.MaxHP, e.MaxMP = e.Stats.MaxHP, e.Stats.MaxMP
 	e.HP = min(e.HP, e.MaxHP)

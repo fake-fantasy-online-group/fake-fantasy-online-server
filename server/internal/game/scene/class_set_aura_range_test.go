@@ -39,7 +39,7 @@ func TestClassSetAuraApprovedRadiusBoundary(t *testing.T) {
 				}
 			})
 		}
-		text := classSetSkillText(suit, 6)
+		text := classSetSkillText(suit, 4)
 		if !strings.Contains(text, "自身及300范围内队友") || strings.Contains(text, "240范围") {
 			t.Fatalf("stale suit%d tooltip: %s", suit, text)
 		}
