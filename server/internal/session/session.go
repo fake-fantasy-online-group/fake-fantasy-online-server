@@ -1237,6 +1237,7 @@ func (s *Session) onLogin(req protocol.Request) {
 	// 多个账号在线表项之间漂移，旧登录的迟到清理也会失去稳定的身份依据。
 	if stage != StageConnected {
 		s.log.Warn("当前阶段拒绝登录", "stage", stage, "acc", acc)
+		s.sink.Send(protocol.LoginResult(1, "当前连接无法登录，请重新连接"))
 		return
 	}
 
@@ -1275,6 +1276,7 @@ func (s *Session) onLogin(req protocol.Request) {
 	s.mu.Lock()
 	if s.stage != StageConnected {
 		s.mu.Unlock()
+		s.sink.Send(protocol.LoginResult(1, "当前连接无法登录，请重新连接"))
 		return
 	}
 	s.account = account
