@@ -100,7 +100,7 @@ func TestSeededRiftInvalidPopulationFailsAtomically(t *testing.T) {
 			case "asset":
 				s.rift.data.Floor.Spawns[len(s.rift.data.Floor.Spawns)-1].Point.Monster = 999
 			case "version":
-				s.rift.data.Floor.GeneratorVersion = domain.RiftFloorCoverageVersion + 1
+				s.rift.data.Floor.GeneratorVersion = domain.RiftFloorDenseCoverageVersion + 1
 			}
 			s.populateEndgameRift(false)
 			if len(s.monsters) != 0 || s.rift.data.Run.Phase != domain.RiftFailed || s.rift.data.Run.Reason != "spawn_failed" {

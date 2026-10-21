@@ -206,7 +206,7 @@ func TestRiftFloorInvalidInputsFailClosed(t *testing.T) {
 	if err != nil || p.MapID != 7 {
 		t.Fatal("single validated map must still be usable")
 	}
-	p.GeneratorVersion = RiftFloorCoverageVersion + 1
+	p.GeneratorVersion = RiftFloorDenseCoverageVersion + 1
 	if p.Valid() {
 		t.Fatal("accepted unknown generation version")
 	}

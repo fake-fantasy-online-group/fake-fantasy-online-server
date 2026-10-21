@@ -9,10 +9,12 @@ import (
 const (
 	// Version 4 uses bounded connected combat regions, not native spawn circles.
 	// Keep the v1-v3 constants and random streams unchanged for admitted runs.
-	RiftFloorCoverageVersion   int32 = 4
-	RiftCoverageAreaPerMonster       = RiftFloorAreaPerMonster / 2
-	RiftCoverageMaxArea              = RiftCoverageAreaPerMonster * RiftFloorMaxConfiguredPopulation
-	RiftCoverageMinPopulation        = 24
+	RiftFloorCoverageVersion       int32 = 4
+	RiftFloorDenseCoverageVersion  int32 = 5
+	RiftDenseCoverageMaxPopulation       = RiftFloorMaxConfiguredPopulation
+	RiftCoverageAreaPerMonster           = RiftFloorAreaPerMonster / 2
+	RiftCoverageMaxArea                  = RiftCoverageAreaPerMonster * RiftFloorMaxConfiguredPopulation
+	RiftCoverageMinPopulation            = 24
 )
 
 type RiftCombatRegion struct {
@@ -26,6 +28,15 @@ type RiftCombatRegion struct {
 // entire map or silently increasing the wire/AI budget. The exit is in that same
 // region. Other native map areas remain traversable but are not promised mobs.
 func PlanRiftCoverageFloor(runID string, floor int32, templates []RiftFloorTemplate, previousMap int32) (RiftFloorPlan, error) {
+	return planRiftCoverageFloor(runID, floor, templates, previousMap, RiftFloorCoverageVersion)
+}
+
+// PlanRiftDenseCoverageFloor keeps v4 geometry and adds ordinary encounters to
+// min(320, ceil(v4 population * 3/2)), within the existing client aura budget.
+func PlanRiftDenseCoverageFloor(runID string, floor int32, templates []RiftFloorTemplate, previousMap int32) (RiftFloorPlan, error) {
+	return planRiftCoverageFloor(runID, floor, templates, previousMap, RiftFloorDenseCoverageVersion)
+}
+func planRiftCoverageFloor(runID string, floor int32, templates []RiftFloorTemplate, previousMap int32, version int32) (RiftFloorPlan, error) {
 	if runID == "" || floor < 1 {
 		return RiftFloorPlan{}, errors.New("invalid rift floor identity")
 	}
@@ -61,7 +72,7 @@ func PlanRiftCoverageFloor(runID string, floor int32, templates []RiftFloorTempl
 		firstRegion := rng.index(len(t.CombatRegions))
 		for k := 0; k < len(t.CombatRegions); k++ {
 			region := t.CombatRegions[(firstRegion+k)%len(t.CombatRegions)]
-			if plan, ok := planRiftCombatRegion(seed, floor, t, region, &rng); ok {
+			if plan, ok := planRiftCombatRegionVersion(seed, floor, t, region, &rng, version); ok {
 				return plan, nil
 			}
 		}
@@ -70,6 +81,9 @@ func PlanRiftCoverageFloor(runID string, floor int32, templates []RiftFloorTempl
 }
 
 func planRiftCombatRegion(seed uint64, floor int32, t RiftFloorTemplate, region RiftCombatRegion, rng *riftFloorRandom) (RiftFloorPlan, bool) {
+	return planRiftCombatRegionVersion(seed, floor, t, region, rng, RiftFloorCoverageVersion)
+}
+func planRiftCombatRegionVersion(seed uint64, floor int32, t RiftFloorTemplate, region RiftCombatRegion, rng *riftFloorRandom, version int32) (RiftFloorPlan, bool) {
 	var empty RiftFloorPlan
 	if len(region.Population) < 8 || region.CombatArea <= 0 || math.IsNaN(region.CombatArea) || math.IsInf(region.CombatArea, 0) || region.CombatArea > RiftCoverageMaxArea {
 		return empty, false
@@ -111,16 +125,24 @@ func planRiftCombatRegion(seed uint64, floor int32, t RiftFloorTemplate, region 
 	if n > len(points) {
 		n = len(points)
 	}
+	baseN := n
+	if version == RiftFloorDenseCoverageVersion {
+		n = min(RiftDenseCoverageMaxPopulation, (baseN*3+1)/2)
+		// The explicit 320 cap is part of v5; never use an overlapping fallback.
+		if n > RiftDenseCoverageMaxPopulation || n > len(points) {
+			return empty, false
+		}
+	}
 	points = riftCoveragePackPoints(points, n, rng)
 	monsters := append([]MonsterID(nil), t.Monsters...)
 	sort.Slice(monsters, func(i, j int) bool { return monsters[i] < monsters[j] })
 	guardians := append([]MonsterID(nil), t.Guardians...)
 	sort.Slice(guardians, func(i, j int) bool { return guardians[i] < guardians[j] })
-	plan := RiftFloorPlan{GeneratorVersion: RiftFloorCoverageVersion, Seed: seed, FloorIndex: floor, MapID: t.MapID, MapName: t.MapName, Entry: entry.Pos, Exit: exit.Pos}
-	// Scale elites with population, never exceed the existing 24-blue/8-gold
-	// wire envelope. No change to per-kill progress, rewards or difficulty stats.
-	blue, gold := n*3/40, n/40
-	if gold == 0 && n >= 16 {
+	plan := RiftFloorPlan{GeneratorVersion: version, Seed: seed, FloorIndex: floor, MapID: t.MapID, MapName: t.MapName, Entry: entry.Pos, Exit: exit.Pos}
+	// Preserve v4 elite counts (at most 24 blue / 8 gold); v5 adds only ordinary
+	// monsters. Per-kill progress, rewards and difficulty stats are unchanged.
+	blue, gold := baseN*3/40, baseN/40
+	if gold == 0 && baseN >= 16 {
 		gold = 1
 	}
 	classes := make([]int32, n)

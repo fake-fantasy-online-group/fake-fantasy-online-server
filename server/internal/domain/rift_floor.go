@@ -374,6 +374,8 @@ func (p RiftFloorPlan) Valid() bool {
 		maxPopulation = 64
 	} else if p.GeneratorVersion == RiftFloorGeneratorVersion || p.GeneratorVersion == RiftFloorCoverageVersion {
 		maxPopulation = RiftFloorMaxConfiguredPopulation
+	} else if p.GeneratorVersion == RiftFloorDenseCoverageVersion {
+		maxPopulation = RiftDenseCoverageMaxPopulation
 	} else if p.GeneratorVersion != riftFloorBaseGeneratorVersion {
 		return false
 	}
@@ -391,7 +393,7 @@ func (p RiftFloorPlan) Valid() bool {
 		if p.GeneratorVersion >= 2 && (seen[s.Point.Pos] || riftFloorDistance(s.Point.Pos, p.Entry) < RiftFloorSafeRadius*RiftFloorSafeRadius || riftFloorDistance(s.Point.Pos, p.Exit) < 80*80) {
 			return false
 		}
-		if p.GeneratorVersion == RiftFloorCoverageVersion {
+		if p.GeneratorVersion == RiftFloorCoverageVersion || p.GeneratorVersion == RiftFloorDenseCoverageVersion {
 			for other := range seen {
 				if riftFloorDistance(other, s.Point.Pos) < RiftFloorPopulationSpacing*RiftFloorPopulationSpacing {
 					return false

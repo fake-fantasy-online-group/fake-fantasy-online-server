@@ -15,7 +15,9 @@ func (s *Scene) planEndgameRiftFloor(runID string, floor, previousMap int32) (do
 	}
 	var plan domain.RiftFloorPlan
 	var err error
-	if rules.FloorLayoutVersion == domain.RiftFloorCoverageVersion {
+	if rules.FloorLayoutVersion == domain.RiftFloorDenseCoverageVersion {
+		plan, err = domain.PlanRiftDenseCoverageFloor(runID, floor, s.riftLayouts, previousMap)
+	} else if rules.FloorLayoutVersion == domain.RiftFloorCoverageVersion {
 		plan, err = domain.PlanRiftCoverageFloor(runID, floor, s.riftLayouts, previousMap)
 	} else {
 		plan, err = domain.PlanRiftFloor(runID, floor, s.riftLayouts, previousMap, rules.FloorPopulationMultiplier)
