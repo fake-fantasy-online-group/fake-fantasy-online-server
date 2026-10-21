@@ -3,7 +3,7 @@ package domain
 import "testing"
 
 func TestRiftExcludedMapsNeverSelected(t *testing.T) {
-	excluded := []int32{60, 21000, 23800, 23900, 24000, 24100, 24200, 24300, 20100, 28502, 28503, 28504, 28505, 24600, 24700, 24800, 36700, 933, 934, 935, 936, 937}
+	excluded := []int32{48, 60, 21000, 23800, 23900, 24000, 24100, 24200, 24300, 20100, 28502, 28503, 28504, 28505, 24600, 24700, 24800, 36700, 933, 934, 935, 936, 937}
 	var bad []RiftFloorTemplate
 	for _, id := range excluded {
 		if !RiftMapExcluded(id) {

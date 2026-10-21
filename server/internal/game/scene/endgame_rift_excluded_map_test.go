@@ -7,7 +7,7 @@ import (
 )
 
 func TestRiftExcludedSavedFloorRemainsReadableForCompensation(t *testing.T) {
-	for _, mapID := range []int32{23800, 23900, 24000, 24100, 24200, 24300, 20100, 28502, 28503, 28504, 28505, 24600, 24700, 24800, 36700, 933, 934, 935, 936, 937} {
+	for _, mapID := range []int32{48, 23800, 23900, 24000, 24100, 24200, 24300, 20100, 28502, 28503, 28504, 28505, 24600, 24700, 24800, 36700, 933, 934, 935, 936, 937} {
 		s, _, _ := seededRiftFloorFixture(t)
 		d := s.rift.data.clone()
 		d.MapID = mapID

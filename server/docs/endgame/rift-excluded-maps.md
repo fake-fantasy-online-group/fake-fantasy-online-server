@@ -14,8 +14,8 @@ maps is broken.
 Conservatively also exclude 24600–24800 (raw native link/proc contain no ordinary
 gates) and 36700 (native gate records unavailable). These four are unverified,
 NOT proven player-runtime failures. They are removed under the requested
-conservative usable-pool policy. In the current 189-map audit, the 20 new
-exclusions leave 169 candidates; this is not an online playability guarantee.
+conservative usable-pool policy. In the current 189-map audit, the 21 new
+exclusions leave 168 candidates; this is not an online playability guarantee.
 Keep the pre-existing special island/protocol alias exclusions 60 and 21000.
 
 `domain.RiftMapExcluded` is applied both by the startup data loader and by all
@@ -40,3 +40,10 @@ Focused tests cover every removed ID against generator versions 1–5, a mixed
 safe/blocked catalog, an all-blocked catalog, unchanged adjacent IDs, readable
 old floor/progress records and existing exactly-once interruption compensation.
 They do not claim Unity/player-runtime validation.
+
+Current 1.0.1 teleport table inspection additionally excludes map 48 (芳草林西).
+Its first gate to map 49 has all 11,293 interior pixel centers in blocked native
+MASK cells, so the player cannot walk into that trigger polygon. A second gate
+is reachable; this exclusion does not claim both gates are blocked. The raw
+proc contains two polygons under one proc ID; grouping by proc had previously
+hidden this independent unreachable gate.

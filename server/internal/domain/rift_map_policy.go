@@ -6,6 +6,8 @@ package domain
 // Ordinary world access and native portal definitions are not changed.
 func RiftMapExcluded(mapID int32) bool {
 	switch mapID {
+	case 48: // Current 1.0.1 gate to 49 lies entirely in blocked native MASK cells.
+		return true
 	case 60, 21000: // Existing special island/protocol alias exclusions.
 		return true
 	case 23800, 23900, 24000, 24100, 24200, 24300: // All pw23800 Huang Lei Island aliases.
