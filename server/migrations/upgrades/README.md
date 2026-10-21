@@ -134,3 +134,11 @@ additional guaranteed item. Identity/configuration drift aborts atomically;
 replaying unchanged data is a no-op. Apply this explicit upgrade, not the full
 init, to an existing database; deploy/reload the server's cached drop tables
 through the normal release process afterward. This file does not deploy itself.
+
+## 98: dungeon small-drop source correction
+
+Run `000098_20261021_dungeon_drop_source_scope.sql` once for existing databases
+(it is idempotent). Retires small-source mappings without normal field spawns and
+removes only their provenance-tagged granite drops. Other copied items are retained
+for separate review. Do not replay 39; new initialization ends with correction 98.
+See `server/docs/dungeon-drop-source-scope-98.md` for baseline scope and tests.
