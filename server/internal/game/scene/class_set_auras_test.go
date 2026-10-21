@@ -216,7 +216,97 @@ func TestClassSetPartyAuraMitigationBeyondLegacyCap(t *testing.T) {
 	if got := s2.classSetAuraIncomingDamage(healer, false, 1000); got != 1000 {
 		t.Fatalf("magic aura reduced nonmagic %d", got)
 	}
-	if got := s2.mitigateSecondaryStatusDamage(healer, true, 1000); got != 920 {
+	if got := s2.mitigateSecondaryStatusDamageKind(healer, true, 1000, true); got != 920 {
 		t.Fatalf("magic reflection %d", got)
+	}
+}
+
+func TestClassSetPartyAuraSameTickCastSnapshotWithdrawal(t *testing.T) {
+	for _, mode := range []string{"party", "range", "broken"} {
+		t.Run(mode, func(t *testing.T) {
+			s := newCombatScene(t)
+			source := partySetMember(t, s, 1, 1)
+			p := partySetMember(t, s, 2, 5)
+			s.stepEquipmentAuras()
+			if p.Stats.CritRate != 500 {
+				t.Fatal("fixture aura not applied")
+			}
+			target := putMonster(s, 900, 10000, domain.Stats{}, 140, 100)
+			s.skills = skillTable(连环枪法)
+			p.Player.Char.Skills = domain.Learned{连环枪法.ID: 1}
+			p.MP = 10000
+			switch mode {
+			case "party":
+				p.Player.Party = 2
+			case "range":
+				s.aoi.Move(source, domain.Pos{MapID: 7, X: 900, Y: 100})
+			case "broken":
+				st := source.Player.Worn.At(domain.SlotBody)
+				st.Durability = 0
+				source.Player.Worn.Set(domain.SlotBody, st)
+			}
+			// Deliberately no step/frame between the membership change and acceptance.
+			s.onUseSkill(UseSkill{ID: p.ID, Skill: 连环枪法.ID, Target: target.ID})
+			if len(s.casts) != 1 {
+				t.Fatalf("no accepted cast %d", len(s.casts))
+			}
+			if s.casts[0].attackStats.CritRate != 0 || s.casts[0].attackStats.MCritRate != 0 {
+				t.Fatalf("frozen stale aura %+v", s.casts[0].attackStats)
+			}
+		})
+	}
+}
+func TestClassSetPartyAuraSameTickAttackSnapshotWithdrawal(t *testing.T) {
+	s := newCombatScene(t)
+	source := partySetMember(t, s, 1, 1)
+	p := partySetMember(t, s, 2, 5)
+	s.stepEquipmentAuras()
+	target := putMonster(s, 900, 10000, domain.Stats{}, 140, 100)
+	s.aoi.Move(source, domain.Pos{MapID: 7, X: 900, Y: 100})
+	s.onAttack(Attack{ID: p.ID, Target: target.ID})
+	if len(s.attacks) != 1 {
+		t.Fatalf("attack not accepted %d", len(s.attacks))
+	}
+	if s.attacks[0].blow.AttackStats.CritRate != 0 {
+		t.Fatalf("attack froze stale aura %+v", s.attacks[0].blow.AttackStats)
+	}
+}
+
+func TestClassSetPartyAuraUntypedPoisonDoesNotUsePhysicalWard(t *testing.T) {
+	s := newCombatScene(t)
+	p := partySetMember(t, s, 1, 4)
+	s.stepEquipmentAuras()
+	p.HP = 800
+	dot := domain.Active{Def: domain.StatusDef{ID: 1001, Affixes: []domain.Affix{{Attr: domain.AttrHPRegen, Value: -100}}}, Source: 99}
+	s.tickStatus(p, dot)
+	if p.HP != 700 {
+		t.Fatalf("poison reduced as physical hp%d", p.HP)
+	}
+	s.dealClassSetPoisonBurst(p, 99, 100)
+	if p.HP != 600 {
+		t.Fatalf("poison burst reduced as physical hp%d", p.HP)
+	}
+	foe := putMonster(s, 900, 10000, domain.Stats{}, 140, 100)
+	s.emitReflectedDamage(foe, p, 100, false)
+	if p.HP != 508 {
+		t.Fatalf("physical reflected amount hp%d", p.HP)
+	}
+}
+func TestClassSetPartyAuraCommandBoundaryRemovesStaleMaxHP(t *testing.T) {
+	s := newCombatScene(t)
+	source := partySetMember(t, s, 1, 5)
+	p := partySetMember(t, s, 2, 1)
+	s.stepEquipmentAuras()
+	if p.MaxHP != 1035 {
+		t.Fatal("fixture")
+	}
+	source.Player.Party = 2
+	// Even a command without a combat-source snapshot cleans stale maximum HP.
+	pill := domain.ItemDef{ID: 999999, InventoryTab: 1, InventoryTabKnown: true, UseRestore: domain.ItemResourceRestore{HPPct: 10}}
+	s.items[pill.ID] = pill
+	p.Player.Bag.Set(0, domain.Stack{Item: pill.ID, Count: 1})
+	s.exec(UseItem{ID: p.ID, Item: pill.ID, Tab: 1, BagSlot: 0})
+	if p.MaxHP != 900 || p.HP != 190 {
+		t.Fatalf("next command observed stale maxhp %d hp%d", p.MaxHP, p.HP)
 	}
 }

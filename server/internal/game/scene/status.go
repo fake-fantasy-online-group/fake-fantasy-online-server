@@ -480,7 +480,7 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 		return
 	}
 	s.expireHarmfulSuppression(attacker)
-	amount = s.mitigateSecondaryStatusDamage(attacker, magic, amount)
+	amount = s.mitigateSecondaryStatusDamageKind(attacker, magic, amount, true)
 	if amount <= 0 {
 		return
 	}
@@ -512,8 +512,18 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 // budget. Such a source uses the same status adapter and common formula as
 // direct hits; no ability, monster or scene identity enters the calculation.
 func (s *Scene) mitigateSecondaryStatusDamage(e *entity.Entity, magic bool, amount int32) int32 {
+	return s.mitigateSecondaryStatusDamageKind(e, magic, amount, false)
+}
+
+// Resource/poison ticks have no physical-or-magic classification. Only callers
+// with an explicit damage type (reflection) may use typed aura mitigation.
+func (s *Scene) mitigateSecondaryStatusDamageKind(e *entity.Entity, magic bool, amount int32, typed bool) int32 {
 	if e == nil || e.Status.DamageReductionCapPct() <= domain.DefaultDamageReductionCapPct {
-		return s.classSetAuraIncomingDamage(e, magic, s.classSetMeleeIncomingDamage(e, amount))
+		amount = s.classSetMeleeIncomingDamage(e, amount)
+		if typed {
+			amount = s.classSetAuraIncomingDamage(e, magic, amount)
+		}
+		return amount
 	}
 	// Match direct hits: ordinary incoming buckets (including flat reduction),
 	// then independent set multipliers, then immunity and shield consumption.
@@ -524,7 +534,9 @@ func (s *Scene) mitigateSecondaryStatusDamage(e *entity.Entity, magic bool, amou
 		FlatReduction:          e.Status.DamageReductionFlat(magic),
 	}
 	amount = s.classSetMeleeIncomingDamage(e, buckets.IncomingDamage(amount))
-	amount = s.classSetAuraIncomingDamage(e, magic, amount)
+	if typed {
+		amount = s.classSetAuraIncomingDamage(e, magic, amount)
+	}
 	if e.Status.Invulnerable() {
 		return 0
 	}

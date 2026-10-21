@@ -15,6 +15,7 @@ import (
 // 集中在一处才能一眼读完全部入口, 也才好在这里统一加限流/审计/指标。
 // 代价是加命令要改两个地方 —— 这个代价换的是入口不会悄悄增殖。
 func (s *Scene) exec(c Command) {
+	s.syncInvalidClassSetAuraStats()
 	if s.rejectTradeInventoryCommand(c) {
 		return
 	}

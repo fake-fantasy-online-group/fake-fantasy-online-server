@@ -88,3 +88,35 @@ func classSetAuraDescription(a domain.EquipmentAura, source string) string {
 	label := map[string]string{"class_set_max_hp_bp": "最大生命 +15%", "class_set_physical_mitigation_bp": "物理伤害减免8%", "class_set_magic_mitigation_bp": "魔法伤害减免8%（包括无元素魔法）", "class_set_crit_rate_bp": "物理/法术暴击率各 +5个百分点", "class_set_crit_damage_bp": "物理/法术暴击伤害各 +20个百分点"}[a.Modifier]
 	return fmt.Sprintf("%s。来源：%s；范围%d，惠及自身与同队玩家，无额外人数上限。同职业不叠加，不同职业互相叠加；来源死亡、脱装、破损、离线或离开同队范围时移除。", label, source, a.RadiusPX)
 }
+
+// Commands in one mailbox drain can change party, range or worn durability
+// before accepting a cast. Never freeze a stale stat aura into that cast.
+// Newly entering recipients still use the existing spatial-refresh cadence.
+func (s *Scene) syncClassSetAuraStatsForSnapshot(p *entity.Entity) {
+	if p == nil || s.equipment == nil {
+		return
+	}
+	for _, g := range s.equipment.auras[p.ID] {
+		if (g.effect.Modifier == "class_set_max_hp_bp" || g.effect.Modifier == "class_set_crit_rate_bp") && !s.equipmentAuraGrantValid(p, g) {
+			s.stepEquipmentAuras()
+			return
+		}
+	}
+}
+
+// One mailbox drain may contain a party/movement change followed by an item
+// or combat command. Prune invalid stat memberships before the next consumer;
+// do not perform a full source scan when all existing grants are still valid.
+func (s *Scene) syncInvalidClassSetAuraStats() {
+	if s.equipment == nil {
+		return
+	}
+	for id, grants := range s.equipment.auras {
+		for _, g := range grants {
+			if (g.effect.Modifier == "class_set_max_hp_bp" || g.effect.Modifier == "class_set_crit_rate_bp") && !s.equipmentAuraGrantValid(s.entities[id], g) {
+				s.stepEquipmentAuras()
+				return
+			}
+		}
+	}
+}

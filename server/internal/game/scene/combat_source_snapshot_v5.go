@@ -6,6 +6,7 @@ import (
 )
 
 func (s *Scene) captureCombatSourceV5(src *entity.Entity, invisible bool) *domain.CombatSourceSnapshotV5 {
+	s.syncClassSetAuraStatsForSnapshot(src)
 	out := &domain.CombatSourceSnapshotV5{
 		Stats: src.Stats, Equipment: s.equipmentOffense(src),
 		Traits:    append([]domain.UniqueTrait(nil), s.uniqueTraits(src)...),
