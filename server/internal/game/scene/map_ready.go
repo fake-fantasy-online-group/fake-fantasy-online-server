@@ -169,6 +169,9 @@ func (s *Scene) syncWorldAfterLoad(e *entity.Entity) {
 	// BuildWorld resets the local riding flag; restore both the model and speed.
 	s.emitTo(e.ID, s.ridingEvent(e))
 	s.refreshStats(e) // 宠物实体已注册，重算天赋与装备并下发同一份属性。
+	// Appearance deltas can be suppressed by the loading barrier. Reconcile
+	// only the local view after readiness, without replaying the login bootstrap.
+	s.emitTo(e.ID, event.AppearanceChanged{Who: e.ID, Appearance: e.Look.Appearance})
 	s.emitTo(e.ID, s.buffSnapshot(e))
 }
 
