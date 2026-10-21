@@ -46,7 +46,15 @@ func (s *Scene) equipmentAuraViews(p *entity.Entity) []EquipmentAuraView {
 			continue
 		}
 		a := g.effect
-		out = append(out, EquipmentAuraView{AuraID: a.ID, Family: a.Family, SourceEntityID: g.owner, SourceUID: g.uid, Rank: a.FixedRank, AssetKey: a.VisualKey, Modifier: a.Modifier, Element: a.Element, Value: a.Value, LeaseMS: a.LeaseMS})
+		uid := g.uid
+		if classSetAuraID(a) != 0 {
+			// Set auras belong to a character's combined equipment, not one
+			// item. Keep their negative synthetic keys internal: the wire item
+			// identity contract is nonnegative decimal. Zero means no single
+			// source item; AuraID/Family and SourceEntityID retain identity.
+			uid = 0
+		}
+		out = append(out, EquipmentAuraView{AuraID: a.ID, Family: a.Family, SourceEntityID: g.owner, SourceUID: uid, Rank: a.FixedRank, AssetKey: a.VisualKey, Modifier: a.Modifier, Element: a.Element, Value: a.Value, LeaseMS: a.LeaseMS})
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].AuraID < out[j].AuraID })
 	return out
