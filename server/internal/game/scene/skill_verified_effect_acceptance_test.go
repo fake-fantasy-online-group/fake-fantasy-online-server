@@ -4,6 +4,7 @@ import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-
 
 import (
 	"fmt"
+	"math/rand"
 	"testing"
 
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -32,6 +33,9 @@ func verifiedEffectScene(t *testing.T, id domain.SkillID, rank int32) (*Scene, *
 	}
 	def.SnapshotRawRanks = p.Player.Char.Skills.Clone()
 	def.SnapshotHardRanks = p.Player.Char.Skills.Clone()
+	// These cases inspect landed effects, not random opening-hit coverage.
+	// High Hit is not guaranteed: seed 19869 misses even at Hit=1<<20, Def=100.
+	s.rng = rand.New(rand.NewSource(1))
 	return s, p, dst, def
 }
 
