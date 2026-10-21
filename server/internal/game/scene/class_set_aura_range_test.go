@@ -45,3 +45,44 @@ func TestClassSetAuraApprovedRadiusBoundary(t *testing.T) {
 		}
 	}
 }
+
+func TestClassSetAuraDisplayNameKeepsVisualWireKey(t *testing.T) {
+	s, players := partySetFive(t)
+	s.stepEquipmentAuras()
+	names := map[int32]string{1: "夜色拥抱", 2: "信仰之翼", 3: "哲理之石", 4: "胜利王座", 5: "勇气之刃"}
+	keys := map[int32]string{1: "套装光环·刺客", 2: "套装光环·药师", 3: "套装光环·术士", 4: "套装光环·剑客", 5: "套装光环·战士"}
+	for _, p := range players {
+		views := s.equipmentAuraStatuses(p)
+		if len(views) != 5 {
+			t.Fatalf("missing auras %d", len(views))
+		}
+		for suit, name := range names {
+			found := false
+			for _, v := range views {
+				if v.effect.Effect != keys[suit] {
+					continue
+				}
+				found = true
+				if v.name != name || v.buff.Name != name {
+					t.Fatalf("display=%q buff=%q want=%q", v.name, v.buff.Name, name)
+				}
+				if !strings.Contains(v.desc, name+"套装光环") || !strings.Contains(v.desc, "来源：") {
+					t.Fatalf("missing set/source: %s", v.desc)
+				}
+			}
+			if !found {
+				t.Fatalf("visual key changed: %s", keys[suit])
+			}
+		}
+	}
+	// Legacy aura names and wire keys still share their existing original label.
+	old := newCombatScene(t)
+	join(t, old, 1, 100, "原光环", 100, 100)
+	p := old.players[1]
+	cacheTestAura(old, p, 991, 1200)
+	old.stepEquipmentAuras()
+	views := old.equipmentAuraStatuses(p)
+	if len(views) != 1 || views[0].name != "白虎卫身" || views[0].buff.Name != "白虎卫身" || views[0].effect.Effect != "白虎卫身" {
+		t.Fatalf("ordinary aura changed %+v", views)
+	}
+}

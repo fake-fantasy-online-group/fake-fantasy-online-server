@@ -296,12 +296,14 @@ func (s *Scene) equipmentAuraStatuses(e *entity.Entity) []statusPresentation {
 		} else {
 			desc += "\n来源装备有效且处于同队范围内时持续生效，来源脱装、损坏、死亡、离线或自身离队、离开范围时移除。"
 		}
+		name := a.VisualKey
 		if classSetAuraID(a) != 0 {
+			name = classSetAuraDisplayName(a)
 			position = 0
 			desc = classSetAuraDescription(a, sourceName)
 		}
 		remaining := nonnegativeI32((g.expires - s.tick).Millis())
-		out = append(out, statusPresentation{name: a.VisualKey, desc: desc, icon: event.StatusIconView{Status: id, Icon: iconID, Beneficial: true, RemainMS: -1}, effect: event.EntityStatusEffect{Who: e.ID, Effect: a.VisualKey, PositionMode: position, DurationMS: remaining}, buff: event.BuffView{SkillID: id, Icon: iconID, Name: a.VisualKey, Desc: desc, Beneficial: true, RemainSec: equipmentAuraSourceBoundSeconds, PositionMode: position}})
+		out = append(out, statusPresentation{name: name, desc: desc, icon: event.StatusIconView{Status: id, Icon: iconID, Beneficial: true, RemainMS: -1}, effect: event.EntityStatusEffect{Who: e.ID, Effect: a.VisualKey, PositionMode: position, DurationMS: remaining}, buff: event.BuffView{SkillID: id, Icon: iconID, Name: name, Desc: desc, Beneficial: true, RemainSec: equipmentAuraSourceBoundSeconds, PositionMode: position}})
 	}
 	return out
 }

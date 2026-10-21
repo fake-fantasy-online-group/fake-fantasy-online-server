@@ -86,7 +86,7 @@ func (s *Scene) classSetAuraIncomingDamage(p *entity.Entity, magic bool, amount 
 }
 func classSetAuraDescription(a domain.EquipmentAura, source string) string {
 	label := map[string]string{"class_set_max_hp_bp": "最大生命 +15%", "class_set_physical_mitigation_bp": "物理伤害减免8%", "class_set_magic_mitigation_bp": "魔法伤害减免8%（包括无元素魔法）", "class_set_crit_rate_bp": "物理/法术暴击率各 +5个百分点", "class_set_crit_damage_bp": "物理/法术暴击伤害各 +20个百分点"}[a.Modifier]
-	return fmt.Sprintf("%s。来源：%s；范围%d，惠及自身与同队玩家，无额外人数上限。同职业不叠加，不同职业互相叠加；来源死亡、脱装、破损、离线或离开同队范围时移除。", label, source, a.RadiusPX)
+	return fmt.Sprintf("%s套装光环：%s。来源：%s；范围%d，惠及自身与同队玩家，无额外人数上限。同职业不叠加，不同职业互相叠加；来源死亡、脱装、破损、离线或离开同队范围时移除。", classSetAuraDisplayName(a), label, source, a.RadiusPX)
 }
 
 // Commands in one mailbox drain can change party, range or worn durability
@@ -119,4 +119,21 @@ func (s *Scene) syncInvalidClassSetAuraStats() {
 			}
 		}
 	}
+}
+
+// Display labels are separate from the stable effect key consumed by clients.
+func classSetAuraDisplayName(a domain.EquipmentAura) string {
+	switch classSetAuraID(a) {
+	case 1:
+		return "夜色拥抱"
+	case 2:
+		return "信仰之翼"
+	case 3:
+		return "哲理之石"
+	case 4:
+		return "胜利王座"
+	case 5:
+		return "勇气之刃"
+	}
+	return a.VisualKey
 }
