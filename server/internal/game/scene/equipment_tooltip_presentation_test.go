@@ -33,7 +33,7 @@ func TestEquipmentTooltipTextPalettePreservesOrdinaryColors(t *testing.T) {
 	for _, row := range []struct {
 		color uint8
 		want  string
-	}{{0, "攻击 +1"}, {4, "\x034攻击 +1"}, {tooltipLightBlue, "\x05攻击 +1"}, {tooltipDarkGold, "\x035攻击 +1"}} {
+	}{{0, "攻击 +1"}, {4, "\x034攻击 +1"}, {6, "\x036攻击 +1"}, {tooltipLightBlue, "\x05攻击 +1"}, {tooltipDarkGold, "\x035攻击 +1"}} {
 		if got := qualityColoredLine(row.color, "攻击 +1"); got != row.want {
 			t.Fatalf("color %d = %q, want %q", row.color, got, row.want)
 		}

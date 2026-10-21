@@ -439,8 +439,8 @@ func (s *Scene) mergeSortedBagStacks(stacks []domain.Stack) []domain.Stack {
 
 // equipmentQuality 是正式客户端用于装备名与属性行着色的品质枚举。
 // 用户确认的属性条数颜色不是枚举自然顺序：1深蓝、2淡蓝、3紫、4绿、5黄。
-// 客户端枚举为1绿/2深蓝/3紫/4黄。两条属性的淡蓝通过已有0x05文本码
-// 表达，协议品质保留0，不向客户端发送不存在的品质枚举。
+// 客户端枚举为1绿/2深蓝/3紫/4黄/6淡蓝；5保留给暗金。
+// 两条属性的名称统一发送品质6，详情继续使用已有0x05淡蓝文本码。
 func equipmentQuality(def domain.ItemDef, stacks ...domain.Stack) uint8 {
 	if def.Equip == nil {
 		return 0
@@ -459,7 +459,7 @@ func equipmentQuality(def domain.ItemDef, stacks ...domain.Stack) uint8 {
 	return [...]uint8{
 		0, // 0条：白
 		2, // 1条：深蓝
-		0, // 2条：淡蓝暂无已确认枚举
+		6, // 2条：淡蓝
 		3, // 3条：紫
 		1, // 4条：绿
 		4, // 5条及以上：黄
@@ -889,9 +889,10 @@ func appendEquipmentAffixes(lines *[]string, affixes []domain.Affix, quality uin
 
 // Text-only colors are not equipment-quality protocol values. In particular,
 // retain the existing light-blue value; dark gold emits quality marker 5.
+// Its private sentinel must not collide with the light-blue protocol quality 6.
 const (
 	tooltipLightBlue uint8 = 5
-	tooltipDarkGold  uint8 = 6
+	tooltipDarkGold  uint8 = 7
 )
 
 // qualityColoredLine 使用客户端已有的品质前缀或淡蓝文本前缀。
@@ -902,7 +903,7 @@ func qualityColoredLine(quality uint8, line string) string {
 	if quality == tooltipLightBlue && line != "" {
 		return "\x05" + line
 	}
-	if quality == 0 || quality > 4 || line == "" {
+	if quality == 0 || quality > 6 || line == "" {
 		return line
 	}
 	return string([]byte{0x03, '0' + quality}) + line
