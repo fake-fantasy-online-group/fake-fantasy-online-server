@@ -6,7 +6,11 @@ import (
 )
 
 func stampSkillStatusSnapshot(status *domain.StatusDef, def domain.SkillDef) {
-	if status == nil || def.FormulaVersion != domain.SkillFormulaVersion {
+	if status == nil {
+		return
+	}
+	status.SkillApplied = true
+	if def.FormulaVersion != domain.SkillFormulaVersion {
 		return
 	}
 	status.SkillSnapshotID = def.ID
@@ -132,6 +136,7 @@ func (s *Scene) resolvePersistentStatus(source, holder *entity.Entity, old domai
 		}
 		// Reconciliation may lower a carrier's skill payload, never upgrade the
 		// holder's effect-hit snapshot merely because equipment improved later.
+		scaleClassSetTrapStatus(&base, old.SuitTrapDamageBP)
 		base.SourceEffectHitBP = old.SourceEffectHitBP
 		base.SourceEffectHitKnown = old.SourceEffectHitKnown
 		base.Icon = old.Icon

@@ -290,12 +290,24 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		offense = blow.EquipmentOffense.Elements[element]
 		defense = defensive.Elements[element]
 	}
+	suitOffense := sourceSuitBonuses(blow.SourceOffense, blow.CurrentSourceOffense)
+	suitDefense := s.classSetCardCombat(dst)
+	var suitDamage int32
+	if blow.Trap {
+		suitDamage = suitOffense.TrapDamageBP
+	} else if !magic && blow.SkillID != 0 && blow.Origin == domain.DamageNormalOrigin {
+		suitDamage = suitOffense.PhysicalSkillBP
+	}
+	if element >= 0 {
+		offense.DamageBP += suitOffense.DamageBP[element]
+		defense.MitigationBP += suitDefense.MitigationBP[element]
+	}
 	x := sourceUniqueEffectsV5(blow.SourceOffense, blow.CurrentSourceOffense, uniqueStrikeContext(src, dst, blow, ev, beforeHP))
 	if blow.Origin == domain.DamageProcOrigin {
 		x.DamageBP = 0
 	}
 	buckets := domain.CombatDamageBuckets{
-		DamageIncreaseBP: int64(x.DamageBP), PVPScaledDamageIncreaseBP: int64(offense.DamageBP),
+		DamageIncreaseBP: int64(x.DamageBP) + int64(suitDamage), PVPScaledDamageIncreaseBP: int64(offense.DamageBP),
 		ResistanceBP: defense.ResistBP, ResistancePierceBP: offense.PierceBP,
 		ScaledDamageIncreaseNumerator: s.equipmentAuraDamageNumerator(src, element, pvp),
 		PayloadScaleBP:                blow.PayloadScaleBP, PayloadScaleKnown: blow.PayloadScaleKnown, PVP: pvp,
@@ -320,7 +332,7 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		guard := domain.EvaluateUniqueTraits(s.uniqueTraits(dst), domain.UniqueContext{HPPercent: uniquePercent(beforeHP, dst.MaxHP), Magic: magic})
 		extraMitigation := int64(defense.MitigationBP) + int64(guard.MitigationBP)
 		if !magic {
-			extraMitigation += int64(defensive.PhysicalMitigationBP)
+			extraMitigation += int64(defensive.PhysicalMitigationBP) + int64(suitDefense.PhysicalMitigationBP)
 		}
 		halfCount := 0
 		if chance := s.trapHalfDamageChance(dst); blow.Trap && chance > 0 && int32(s.rng.Intn(10000)) < chance {
@@ -911,6 +923,9 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 		src = o
 	}
 	if hpDelta > 0 {
+		if originalSource := s.entities[a.Source]; (a.Def.SkillApplied || a.Def.SkillSnapshotID > 0) && originalSource != nil {
+			hpDelta = int64(s.classSetCardHealing(originalSource, clampI32(hpDelta)))
+		}
 		s.casterSetCopyHeal(src, e, clampI32(hpDelta), domain.SkillID(a.Def.ID))
 		s.emit(combat.Restore(src, e, clampI32(hpDelta), int32(a.Def.ID)))
 	} else if hpDelta < 0 {

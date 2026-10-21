@@ -9,8 +9,9 @@ func (s *Scene) captureCombatSourceV5(src *entity.Entity, invisible bool) *domai
 	s.syncClassSetAuraStatsForSnapshot(src)
 	out := &domain.CombatSourceSnapshotV5{
 		Stats: src.Stats, Equipment: s.equipmentOffense(src),
-		Traits:    append([]domain.UniqueTrait(nil), s.uniqueTraits(src)...),
-		HPPercent: uniquePercent(src.HP, src.MaxHP), MPPercent: uniquePercent(src.MP, src.MaxMP),
+		SuitBonuses: s.classSetCardCombat(src),
+		Traits:      append([]domain.UniqueTrait(nil), s.uniqueTraits(src)...),
+		HPPercent:   uniquePercent(src.HP, src.MaxHP), MPPercent: uniquePercent(src.MP, src.MaxMP),
 		Invisible: invisible,
 	}
 	if src.Status != nil {

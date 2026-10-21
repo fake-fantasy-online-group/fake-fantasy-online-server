@@ -47,16 +47,18 @@ func (s *Scene) appendSuitTooltip(lines *[]string, suit *domain.EquipmentSuit, o
 		}
 		*lines = append(*lines, color+"  "+member.name)
 	}
+	shownSkills := map[int32]bool{}
 	for _, bonus := range suit.Bonuses {
 		text := equipmentSuitBonusText(bonus)
 		color := "\x02"
 		if bonus.DisabledReason != "" {
 			text += "（" + bonus.DisabledReason + "）"
-		} else if pieces >= bonus.Pieces {
+		} else if pieces >= bonus.Pieces && (domain.SuitCombatAffixName(bonus.Affix.Attr) == "" || s.classSetPieces(owner, suit.ID) >= bonus.Pieces) {
 			color = "\x01"
 		}
 		*lines = append(*lines, color+fmt.Sprintf("[%d件] %s", bonus.Pieces, text))
-		if extra := classSetSkillText(suit.ID, bonus.Pieces); extra != "" {
+		if extra := classSetSkillText(suit.ID, bonus.Pieces); extra != "" && !shownSkills[bonus.Pieces] {
+			shownSkills[bonus.Pieces] = true
 			skillColor := "\x02"
 			if s.classSetPieces(owner, suit.ID) >= bonus.Pieces {
 				skillColor = "\x01"
@@ -78,6 +80,13 @@ func suitMemberName(name string) string {
 }
 
 func equipmentSuitBonusText(bonus domain.EquipmentSuitBonus) string {
+	if name := domain.SuitCombatAffixName(bonus.Affix.Attr); name != "" {
+		unit := "%"
+		if bonus.Affix.Attr == domain.AttrSuitPhysicalCritDamageBP {
+			unit = "个百分点"
+		}
+		return fmt.Sprintf("%s +%g%s", name, float64(bonus.Affix.Value)/100, unit)
+	}
 	if text, ok := equipmentAffixLine(bonus.Affix); ok && bonus.Affix.Mode != 4 {
 		return text
 	}

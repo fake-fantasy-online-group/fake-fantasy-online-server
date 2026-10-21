@@ -45,6 +45,9 @@ func SupportsEquipmentSuitAffix(a Affix) bool {
 	if a.Mode != ModeAbsolute && a.Mode != ModePercent {
 		return false
 	}
+	if SuitCombatAffixName(a.Attr) != "" {
+		return a.Mode == ModeAbsolute
+	}
 	switch a.Attr {
 	case AttrSTR, AttrVIT, AttrINT, AttrSPI, AttrAGI, AttrDEX,
 		AttrMaxHP, AttrMaxMP, AttrMinAtk, AttrMaxAtk, AttrAtk, AttrDef,

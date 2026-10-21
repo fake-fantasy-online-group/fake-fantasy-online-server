@@ -177,6 +177,9 @@ func (s *Scene) equipmentBlow(src *entity.Entity, blow combat.Blow) combat.Blow 
 		blow.EquipmentSnapshot = true
 	}
 	blow.CriticalBonusBP = s.classSetAuraValue(src, "class_set_crit_damage_bp")
+	if !blow.Magic {
+		blow.CriticalBonusBP += sourceSuitBonuses(blow.SourceOffense, blow.CurrentSourceOffense).PhysicalCritDamageBP
+	}
 	// Live aura contributions are resolved after the target/PvP context is known.
 	return blow
 }

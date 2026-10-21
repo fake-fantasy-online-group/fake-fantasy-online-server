@@ -1185,6 +1185,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		case domain.EffectHeal:
 			amount := effect.HealAmount(effectTarget.MaxHP)
 			amount = s.uniqueHealing(src, effectTarget, amount, def)
+			amount = s.classSetCardHealing(src, amount)
 			s.casterSetCopyHeal(src, effectTarget, amount, def.ID)
 			amount = s.startVariantMend(src, effectTarget, def, amount)
 			ev := combat.Restore(src, effectTarget, amount, int32(def.ID))
@@ -1204,6 +1205,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		case domain.EffectRestoreHP:
 			amount := clampI32(int64(effect.HealFlat) + int64(s.equipmentAttackStats(src).MaxAtk)*int64(effect.SourceAttackPct)/100)
 			amount = s.uniqueHealing(src, effectTarget, amount, def)
+			amount = s.classSetCardHealing(src, amount)
 			s.casterSetCopyHeal(src, effectTarget, amount, def.ID)
 			amount = s.startVariantMend(src, effectTarget, def, amount)
 			ev := combat.Restore(src, effectTarget, amount, int32(def.ID))
@@ -1316,6 +1318,10 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		}
 		statusDef, ok := s.resolveSkillStatusDef(def, app, statusDurationPct)
 		if ok {
+			if triggeredByTrap {
+				source, current := s.combatSourceV5(src)
+				scaleClassSetTrapStatus(&statusDef, sourceSuitBonuses(source, current).TrapDamageBP)
+			}
 			if s.applyStatusDef(dst, statusDef, src.ID) {
 				s.recordCasterSetHealingStatus(src, dst, statusDef)
 			}

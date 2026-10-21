@@ -98,12 +98,14 @@ type StatusDef struct {
 	// LegacyOverlayLevelBP aliases storage identity only for cross-ID comparisons.
 	LegacyOverlayLevelBP int64 `json:"-"`
 	// Hundredths of original absolute tick damage, consumed by each Active instance.
+	SuitTrapDamageBP          int32 `json:",omitempty"`
 	PeriodicDamageFraction100 int64 `json:",omitempty"`
 	// Class-set poison adds a snapshotted total over the authored tick count.
 	ClassSetPoison           bool  `json:",omitempty"`
 	ClassSetPoisonBonusTotal int64 `json:",omitempty"`
 	ProgressionAttackFlat    int32
 	// Skill snapshots pin persistent effects to the lesser of cast and current sources.
+	SkillApplied      bool `json:",omitempty"`
 	SkillSnapshotID   SkillID
 	SkillSnapshotRank int32
 	SkillSnapshotRaw  Learned
