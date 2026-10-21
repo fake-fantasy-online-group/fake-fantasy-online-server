@@ -45,7 +45,7 @@ func planRiftCoverageFloor(runID string, floor int32, templates []RiftFloorTempl
 	valid := pool[:0]
 	seen := map[int32]bool{}
 	for _, t := range pool {
-		if t.Valid() && len(t.CombatRegions) > 0 && !seen[t.MapID] {
+		if !RiftMapExcluded(t.MapID) && t.Valid() && len(t.CombatRegions) > 0 && !seen[t.MapID] {
 			valid = append(valid, t)
 			seen[t.MapID] = true
 		}

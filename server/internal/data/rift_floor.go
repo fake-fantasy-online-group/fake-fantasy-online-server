@@ -41,9 +41,9 @@ func LoadRiftFloorTemplates(ctx context.Context, q Querier, catalog *MapCatalog,
 	}
 	var out []domain.RiftFloorTemplate
 	for _, id := range ids {
-		// The island uses a protocol alias and special client behavior. It is not
-		// an ordinary reusable floor even when the raw resource contains mobs.
-		if id == 60 || id == 21000 || len(spawns[id]) < domain.RiftFloorMinAnchors {
+		// Exclude special islands and user-rejected scenery before loading masks.
+		// Generators apply the same policy to older/injected template catalogs.
+		if domain.RiftMapExcluded(id) || len(spawns[id]) < domain.RiftFloorMinAnchors {
 			continue
 		}
 		m, ok := catalog.ByID(id)

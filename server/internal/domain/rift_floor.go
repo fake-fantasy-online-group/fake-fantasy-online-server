@@ -168,7 +168,7 @@ func planRiftFloorBase(runID string, floor int32, templates []RiftFloorTemplate,
 	valid := pool[:0]
 	seen := map[int32]bool{}
 	for _, t := range pool {
-		if t.Valid() && !seen[t.MapID] {
+		if !RiftMapExcluded(t.MapID) && t.Valid() && !seen[t.MapID] {
 			valid = append(valid, t)
 			seen[t.MapID] = true
 		}
