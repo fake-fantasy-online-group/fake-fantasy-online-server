@@ -6,10 +6,10 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 )
 
-// Match the existing equipment-aura radius and refresh/lease cadence. Zero
+// Use the approved V1 set-aura radius, retaining the equipment-aura cadence. Zero
 // MaxPlayers means all eligible party members, not a new five-person limit.
 func classSetAura(suit int32) (domain.EquipmentAura, bool) {
-	a := domain.EquipmentAura{FixedRank: 1, RadiusPX: 240, RefreshMS: 500, LeaseMS: 1000, MaxPlayers: 0, PVPScaleBP: 10000}
+	a := domain.EquipmentAura{FixedRank: 1, RadiusPX: 300, RefreshMS: 500, LeaseMS: 1000, MaxPlayers: 0, PVPScaleBP: 10000}
 	switch suit {
 	case 1:
 		a.ID, a.Modifier, a.Value, a.VisualKey = "class_set_1", "class_set_crit_rate_bp", 500, "套装光环·刺客"
