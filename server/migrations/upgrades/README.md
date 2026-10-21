@@ -122,3 +122,15 @@ The 13 obsolete global aliases without an exact runtime status source
 (魔镜术 and the twelve 符 names listed in the SQL) are not assigned invented
 IDs or used to rename native statuses. This upgrade does not create artwork,
 change tint/alpha/looping, or enable missing resistance/reflection mechanics.
+
+## 000096_20261021_alternate_set_weapon_drops.sql
+
+Adds 8051 (swordsman alternate) to Pure Yang Tower boss 3060 and 8451
+(assassin alternate) to boss 3062. It copies each matching main weapon's two
+named drop rows and map-20600 fixed-pool probability/weight. Existing rows,
+minimum-one-equipment guarantees, and `no_type_drop` remain unchanged.
+The added candidates share the existing guarantee selection; this is not an
+additional guaranteed item. Identity/configuration drift aborts atomically;
+replaying unchanged data is a no-op. Apply this explicit upgrade, not the full
+init, to an existing database; deploy/reload the server's cached drop tables
+through the normal release process afterward. This file does not deploy itself.
