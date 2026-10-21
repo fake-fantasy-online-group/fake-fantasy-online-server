@@ -27,7 +27,7 @@ func meleeSetFixture(t *testing.T, suitID int32, pieces int) (*Scene, *entity.En
 	for i, slot := range slots {
 		id := domain.ItemID(800001 + i)
 		suit.Groups = append(suit.Groups, []domain.ItemID{id})
-		s.items[id] = domain.ItemDef{ID: id, Equip: &domain.EquipDef{Slot: int32(slot), Durable: 100, Suit: suit}}
+		s.items[id] = domain.ItemDef{ID: id, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Slot: int32(slot), Durable: 100, Suit: suit}}
 		if i < pieces {
 			p.Player.Worn.Set(slot, domain.Stack{Item: id, Count: 1, Durability: 100, MaxDurability: 100})
 		}
@@ -259,6 +259,63 @@ func TestClassSetUnrulyBuffProjection(t *testing.T) {
 	for _, b := range s.buffSnapshot(p).Buffs {
 		if b.SkillID == classSetUnrulyViewID {
 			t.Fatal("expired projection")
+		}
+	}
+}
+
+func TestClassSetDragonToggleNeverGrantsHealth(t *testing.T) {
+	for _, startHP := range []int32{0, 1, 100, 1800} {
+		s, p := meleeSetFixture(t, 5, 6)
+		st := p.Player.Worn.At(domain.SlotBody)
+		p.HP = startHP
+		want := min(startHP, int32(900))
+		for i := 0; i < 10; i++ {
+			p.Player.Worn.Set(domain.SlotBody, domain.Stack{})
+			s.refreshStats(p)
+			if p.HP != want || p.MaxHP != 900 || p.Player.ClassSetDragonApplied {
+				t.Fatalf("remove start%d cycle%d got%d/%d flag%v", startHP, i, p.HP, p.MaxHP, p.Player.ClassSetDragonApplied)
+			}
+			p.Player.Worn.Set(domain.SlotBody, st)
+			s.refreshStats(p)
+			if p.HP != want || p.MaxHP != 1800 || !p.Player.ClassSetDragonApplied {
+				t.Fatalf("restore start%d cycle%d got%d/%d flag%v", startHP, i, p.HP, p.MaxHP, p.Player.ClassSetDragonApplied)
+			}
+		}
+	}
+}
+
+func TestClassSetDragonAdmissionAndFirstRefresh(t *testing.T) {
+	s, p := meleeSetFixture(t, 5, 6)
+	// A freshly created runtime with worn dragon equipment must not be treated
+	// as an ordinary HP equipment delta on its first refresh.
+	p.Player.ClassSetDragonApplied = false
+	p.HP = 100
+	p.MaxHP = 900
+	s.refreshStats(p)
+	if p.HP != 100 || p.MaxHP != 1800 || !p.Player.ClassSetDragonApplied {
+		t.Fatalf("first refresh %d/%d", p.HP, p.MaxHP)
+	}
+	for _, transfer := range []bool{false, true} {
+		next := newCombatScene(t)
+		next.items = s.items
+		ch := *p.Player.Char
+		ch.ID = 200
+		ch.Name = "readmitted"
+		ch.Pos = domain.Pos{MapID: 7, X: 100, Y: 100}
+		cmd := Enter{ID: 2, Char: &ch, Worn: p.Player.Worn.Clone(), Sink: &fakeSink{}}
+		if transfer {
+			runtime := p.CapturePlayerRuntime(s.tick)
+			cmd.Runtime = &runtime
+		}
+		next.onEnter(cmd)
+		q := next.players[2]
+		if q == nil || !q.Player.ClassSetDragonApplied {
+			t.Fatalf("admission flag missing transfer%v", transfer)
+		}
+		before := q.HP
+		next.refreshStats(q)
+		if q.HP != before || q.MaxHP != 1800 {
+			t.Fatalf("admission refresh changed HP transfer%v before%d after%d/%d", transfer, before, q.HP, q.MaxHP)
 		}
 	}
 }

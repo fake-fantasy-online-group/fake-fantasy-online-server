@@ -321,10 +321,15 @@ func (s *Scene) refreshStatsWithLevelUp(p *entity.Entity, leveledUp bool) {
 	p.Stats = stats
 	p.MaxHP = stats.MaxHP
 	p.MaxMP = stats.MaxMP
+	dragonApplied := s.classSetPiecesInWorn(p, worn, classSetWarrior) >= 6
+	dragonChanged := dragonApplied != p.Player.ClassSetDragonApplied
+	p.Player.ClassSetDragonApplied = dragonApplied
 
 	// Preserve existing level/equipment resource deltas, excluding the new
 	// skill-growth maxima. Growing a skill expands capacity but grants no resources.
-	if d := int64(p.MaxHP) - int64(oldMaxHP) - int64(growth.MaxHP) + int64(p.Player.SkillGrowthMaxHP); d != 0 {
+	// Dragon form transitions never grant or subtract current HP: only the clamp
+	// below applies. Otherwise the one-HP floor plus re-equipping grants free healing.
+	if d := int64(p.MaxHP) - int64(oldMaxHP) - int64(growth.MaxHP) + int64(p.Player.SkillGrowthMaxHP); d != 0 && !dragonChanged {
 		p.HP = domain.SaturateInt32(int64(p.HP) + d)
 	}
 	if d := int64(p.MaxMP) - int64(oldMaxMP) - int64(growth.MaxMP) + int64(p.Player.SkillGrowthMaxMP); d != 0 {
