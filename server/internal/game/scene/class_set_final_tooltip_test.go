@@ -64,7 +64,13 @@ func TestClassSetHeaderUsesEquipmentAttributeColor(t *testing.T) {
 		var lines []string
 		s.appendSuitTooltip(&lines, suit, p, quality)
 		joined := strings.Join(lines, "\n")
-		if !strings.Contains(joined, qualityColoredLine(quality, "套装: 勇气之刃 (8/8)")) || !strings.Contains(joined, qualityColoredLine(quality, "套装属性")) {
+		header := func(text string) string {
+			if quality == 0 {
+				return "\x030" + text
+			}
+			return qualityColoredLine(quality, text)
+		}
+		if !strings.Contains(joined, header("套装: 勇气之刃 (8/8)")) || !strings.Contains(joined, header("套装属性")) {
 			t.Fatalf("headers not equipment color %d: %q", quality, joined)
 		}
 		if !strings.Contains(joined, "\x05"+classSetSkillText(5, 2)) {

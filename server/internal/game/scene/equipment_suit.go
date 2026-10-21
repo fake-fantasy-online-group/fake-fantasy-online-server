@@ -21,7 +21,13 @@ func (s *Scene) appendSuitTooltip(lines *[]string, suit *domain.EquipmentSuit, o
 	if len(equipmentTextQuality) != 0 {
 		headerQuality = equipmentTextQuality[0]
 	}
-	*lines = append(*lines, "", qualityColoredLine(headerQuality,
+	headerLine := func(text string) string {
+		if headerQuality == 0 {
+			return "\x030" + text
+		}
+		return qualityColoredLine(headerQuality, text)
+	}
+	*lines = append(*lines, "", headerLine(
 		fmt.Sprintf("套装: %s (%d/%d)", suit.Name, pieces, len(suit.Groups))))
 	type memberLine struct {
 		name   string
@@ -52,7 +58,7 @@ func (s *Scene) appendSuitTooltip(lines *[]string, suit *domain.EquipmentSuit, o
 		*lines = append(*lines, color+"  "+member.name)
 	}
 	if suit.ID >= 1 && suit.ID <= 5 {
-		*lines = append(*lines, qualityColoredLine(headerQuality, "套装属性"))
+		*lines = append(*lines, headerLine("套装属性"))
 		for _, tier := range []int32{2, 4, 6, 8} {
 			color := "\x02"
 			if s.classSetPieces(owner, suit.ID) >= tier {
