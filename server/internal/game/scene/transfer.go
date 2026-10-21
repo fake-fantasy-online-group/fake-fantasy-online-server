@@ -181,6 +181,7 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 
 	s.revokeDepartingSkillSource(e)
 	runtime := e.CapturePlayerRuntime(s.tick)
+	runtime.ClassSets = s.captureClassSetRuntime(e)
 	// 0.5 宠物跟着主人做无损运行态交接。源场景只摘除旧实体，
 	// 不走 recallPet，因为召回会清当前技能、结束骑乘并改变客户端宠物栏。
 	runtime.Pet = s.detachPetForTransfer(e)

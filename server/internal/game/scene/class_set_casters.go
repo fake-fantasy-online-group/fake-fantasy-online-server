@@ -10,8 +10,8 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
 
-// These clocks are scene-local. Removing a set, dying, or leaving a scene clears
-// its grants; logging back in cannot accumulate offline mana regeneration.
+// These clocks are scene-local and rebased through ClassSetRuntime on map transfer.
+// Removing a set, dying, or logging out clears grants; no offline mana accumulates.
 type classSetCasterState struct {
 	fireUntil, iceUntil domain.Tick
 	nextMana            domain.Tick

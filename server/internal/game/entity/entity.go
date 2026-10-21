@@ -190,12 +190,22 @@ type SnapshotSaver interface {
 	Save(domain.Snapshot)
 }
 
+// ClassSetRuntime carries only online map-handoff state, never saved character data.
+// Durations are remaining ticks, not source-scene absolute deadlines.
+type ClassSetRuntime struct {
+	UnrulyStacks               int32
+	UnrulyFor, FireFor, IceFor domain.Tick
+	ManaScheduled              bool
+	ManaReadyIn                domain.Tick
+}
+
 // PlayerRuntime 是玩家跨场景时必须随所有权一起交接的非持久化运行态。
 //
 // 状态里的 deadline 仍属于 FromTick 所在场景的时间轴；恢复时必须重基准。
 // 攻击冷却与复活保护则直接保存剩余帧，避免目标场景 Tick 不同导致绕过冷却
 // 或丢掉保护期。打工在跨图前停止；出战宠物则把完整运行态一起交接。
 type PlayerRuntime struct {
+	ClassSets               ClassSetRuntime
 	V5StatusOwner           domain.EntityID
 	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
 	EndgameRiftPortals      bool // negotiated server-owned rift gate context

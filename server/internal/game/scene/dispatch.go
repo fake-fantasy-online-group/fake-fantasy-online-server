@@ -508,6 +508,7 @@ func (s *Scene) onEnter(cmd Enter) {
 	e.MaxHP, e.MaxMP = e.Stats.MaxHP, e.Stats.MaxMP
 	if cmd.Runtime != nil {
 		e.RestorePlayerRuntime(*cmd.Runtime, s.tick)
+		s.restoreClassSetRuntime(e, cmd.Runtime.ClassSets)
 	} else {
 		e.HP, e.MP = e.MaxHP, e.MaxMP // 只有新的在线生命周期才补满
 	}
