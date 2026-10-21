@@ -316,7 +316,16 @@ func (s *Scene) refreshStatsWithLevelUp(p *entity.Entity, leveledUp bool) {
 	oldMaxHP, oldMaxMP := p.MaxHP, p.MaxMP
 
 	worn := s.functionalWorn(p)
+	hadCasterBuff := false
+	if s.equipment != nil {
+		if st := s.equipment.classSetCasters[p.ID]; st != nil {
+			hadCasterBuff = st.fireUntil > s.tick || st.iceUntil > s.tick
+		}
+	}
 	s.pruneCasterSetState(p, worn)
+	if hadCasterBuff && s.classSetPiecesInWorn(p, worn, 3) < 4 {
+		defer s.pushStatusSnapshots(p)
+	}
 	_, stats, growth := s.combatGrowthStats(p)
 	p.Stats = stats
 	p.MaxHP = stats.MaxHP

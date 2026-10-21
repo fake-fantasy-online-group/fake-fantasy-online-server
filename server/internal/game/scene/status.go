@@ -728,6 +728,7 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 	}
 	out := s.equipmentAuraStatuses(e)
 	out = append(out, s.classSetUnrulyPresentation(e)...)
+	out = append(out, s.classSetCasterPresentation(e)...)
 	if e.Status == nil {
 		return out
 	}

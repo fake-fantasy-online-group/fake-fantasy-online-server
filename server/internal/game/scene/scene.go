@@ -1138,7 +1138,11 @@ func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
 	lootContext := s.freezeLootContextV5(killer)
 	delete(s.astralRuneRegen, dead.ID)
 	if s.equipment != nil {
+		hadCasterBuff := s.equipment.classSetCasters[dead.ID] != nil
 		delete(s.equipment.classSetCasters, dead.ID)
+		if hadCasterBuff {
+			s.pushStatusSnapshots(dead)
+		}
 	}
 	if s.equipment != nil {
 		s.equipment.nextAuraScan = 0

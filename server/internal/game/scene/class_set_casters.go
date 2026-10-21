@@ -41,6 +41,9 @@ func (s *Scene) stepCasterSets() {
 		p := s.players[id]
 		if p == nil || !p.Alive() {
 			delete(rt.classSetCasters, id)
+			if p != nil {
+				s.pushStatusSnapshots(p)
+			}
 		}
 	}
 	for _, p := range s.players {
@@ -52,13 +55,23 @@ func (s *Scene) stepCasterSets() {
 		st := rt.classSetCasters[p.ID]
 		if !mage && !healer {
 			delete(rt.classSetCasters, p.ID)
+			if st != nil {
+				s.pushStatusSnapshots(p)
+			}
 			continue
 		}
 		if st == nil {
 			st = s.casterSetState(p)
 		}
-		if !mage {
-			st.fireUntil, st.iceUntil = 0, 0
+		oldFire, oldIce := st.fireUntil, st.iceUntil
+		if !mage || st.fireUntil <= s.tick {
+			st.fireUntil = 0
+		}
+		if !mage || st.iceUntil <= s.tick {
+			st.iceUntil = 0
+		}
+		if oldFire != st.fireUntil || oldIce != st.iceUntil {
+			s.pushStatusSnapshots(p)
 		}
 		if !healer {
 			st.nextMana = 0
@@ -91,7 +104,10 @@ func (s *Scene) startCasterSetCast(src *entity.Entity, def domain.SkillDef) {
 		st.iceUntil = s.tick + domain.Ticks(3000)
 	case domain.HurtIce:
 		st.fireUntil = s.tick + domain.Ticks(3000)
+	default:
+		return
 	}
+	s.pushStatusSnapshots(src)
 }
 
 // Apply after the existing outgoing buckets, not to the spell coefficient:
@@ -302,4 +318,44 @@ func (s *Scene) recordCasterSetHealingStatus(src, dst *entity.Entity, status dom
 	if hp > 0 {
 		rt.root.classSetHealingStatus = true
 	}
+}
+
+// Dedicated server-owned UI IDs reuse the original fireball/ice-arrow icons.
+// They have no world effect: this projects the existing damage clocks only.
+const (
+	classSetFireViewID int32 = 2103004
+	classSetIceViewID  int32 = 2103005
+)
+
+func (s *Scene) classSetCasterPresentation(p *entity.Entity) []statusPresentation {
+	if p == nil || !p.Alive() || s.classSetPieces(p, 3) < 4 || s.equipment == nil {
+		return nil
+	}
+	st := s.equipment.classSetCasters[p.ID]
+	if st == nil {
+		return nil
+	}
+	var out []statusPresentation
+	for _, v := range []struct {
+		id         int32
+		skill      domain.SkillID
+		until      domain.Tick
+		name, desc string
+	}{
+		{classSetFireViewID, 10401, st.fireUntil, "火系增伤", "火系伤害提高50%。"},
+		{classSetIceViewID, 10409, st.iceUntil, "冰系增伤", "冰系伤害提高50%。"},
+	} {
+		if v.until <= s.tick {
+			continue
+		}
+		remain := nonnegativeI32((v.until - s.tick).Millis())
+		icon := int32(0)
+		if def, ok := s.skills.Get(v.skill, 1); ok {
+			icon = def.Icon
+		}
+		out = append(out, statusPresentation{name: v.name, desc: v.desc,
+			icon: event.StatusIconView{Status: v.id, Icon: icon, Beneficial: true, RemainMS: remain},
+			buff: event.BuffView{SkillID: v.id, Icon: icon, Name: v.name, Desc: v.desc, Beneficial: true, RemainSec: (remain + 999) / 1000}})
+	}
+	return out
 }

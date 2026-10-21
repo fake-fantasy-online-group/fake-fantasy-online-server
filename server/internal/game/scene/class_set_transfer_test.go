@@ -73,6 +73,10 @@ func TestClassSetRuntimeRealRouterTransfer(t *testing.T) {
 					case 3:
 						check("fire", initial.FireFor, got.FireFor)
 						check("ice", initial.IceFor, got.IceFor)
+						views := s.classSetCasterPresentation(q)
+						if len(views) != 2 || views[0].icon.RemainMS != int32(got.FireFor.Millis()) || views[1].icon.RemainMS != int32(got.IceFor.Millis()) {
+							t.Errorf("transferred display timer %+v", views)
+						}
 					case 2:
 						if !got.ManaScheduled || q.MP != 0 {
 							t.Errorf("transfer regenerated mana: scheduled=%v MP=%d", got.ManaScheduled, q.MP)
