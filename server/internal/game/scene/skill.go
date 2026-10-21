@@ -183,6 +183,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 	})
 	cast := pendingCast{
 		src: caster.ID, def: def, targets: targets, statusDurationPct: statusDurationPct,
+		classSetArea:     s.captureCasterSetArea(caster, def, cmd.Target, cmd.At),
 		sourceOffense:    sourceOffense,
 		equipmentOffense: sourceOffense.Equipment, equipmentSnapshot: true,
 		attackStats: sourceOffense.Stats, attackStatsSnapshot: true,
@@ -900,6 +901,7 @@ func (s *Scene) validTarget(caster, t *entity.Entity, def domain.SkillDef) bool 
 
 // pendingCast 是本帧收到、等着结算的一次技能释放。
 type pendingCast struct {
+	classSetArea        *classSetCastArea
 	sourceOffense       *domain.CombatSourceSnapshotV5
 	attackStats         domain.Stats
 	attackStatsSnapshot bool
@@ -1011,6 +1013,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 				c.windup.finished = true
 			}
 			s.emit(release)
+			s.startCasterSetCast(src, c.def)
 			c.released = true
 			c.releaseAtWall = time.Time{}
 			c.resolveAtWall = s.skillImpactAt(src, c.def, releaseTarget, releaseAim, now)
@@ -1062,6 +1065,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 		s.equipment.root.source = c.sourceOffense
 		s.equipment.root.attackStats = c.attackStats
 		s.equipment.root.attackSnapshot = c.attackStatsSnapshot
+		var classSetHits []domain.EntityID
 		for targetIndex, tid := range c.targets {
 			dst, ok := s.entities[tid]
 			if !ok || !dst.Alive() && !c.def.HasResurrectEffect() || dst.Kind == domain.KindPet {
@@ -1070,6 +1074,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 			impactPosition := dst.Pos
 			landed := s.applySkill(src, dst, variantTargetDef(c.def, targetIndex), c.statusDurationPct, false)
 			if landed {
+				classSetHits = append(classSetHits, tid)
 				s.detonateVariantBomb(src, dst, c.def, impactPosition)
 			}
 			if landed && c.def.HitEffect != "" &&
@@ -1080,6 +1085,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 		if c.def.HasDamageEffect() {
 			s.consumeAttackDurability(src)
 		}
+		s.finishCasterSetCast(src, c, classSetHits)
 		s.applyMonsterSkillExtras(src, c.def, c.targets, c.extras)
 		finishEquipment()
 	}
@@ -1176,6 +1182,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		case domain.EffectHeal:
 			amount := effect.HealAmount(effectTarget.MaxHP)
 			amount = s.uniqueHealing(src, effectTarget, amount, def)
+			s.casterSetCopyHeal(src, effectTarget, amount, def.ID)
 			amount = s.startVariantMend(src, effectTarget, def, amount)
 			ev := combat.Restore(src, effectTarget, amount, int32(def.ID))
 			s.emit(ev)
@@ -1194,6 +1201,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		case domain.EffectRestoreHP:
 			amount := clampI32(int64(effect.HealFlat) + int64(s.equipmentAttackStats(src).MaxAtk)*int64(effect.SourceAttackPct)/100)
 			amount = s.uniqueHealing(src, effectTarget, amount, def)
+			s.casterSetCopyHeal(src, effectTarget, amount, def.ID)
 			amount = s.startVariantMend(src, effectTarget, def, amount)
 			ev := combat.Restore(src, effectTarget, amount, int32(def.ID))
 			s.emit(ev)

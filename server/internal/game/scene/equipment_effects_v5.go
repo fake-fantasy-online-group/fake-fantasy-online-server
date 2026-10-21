@@ -37,17 +37,19 @@ type equipmentRoot struct {
 	hits                  []equipmentHit
 }
 type equipmentRuntime struct {
-	variantMends    map[domain.EntityID]variantMend
-	observations    map[domain.EntityID][32]byte
-	cache           map[domain.EntityID]equipmentCached
-	absorption      map[domain.EntityID][]equipmentAbsorbHeal
-	root            *equipmentRoot
-	sequence        uint64
-	auraSources     []equipmentAuraSource
-	auraSchedules   map[equipmentAuraSource]equipmentAuraSchedule
-	auras           map[domain.EntityID]map[string]equipmentAuraGrant
-	nextAuraScan    domain.Tick
-	suppressedProcs uint64
+	classSetCasters   map[domain.EntityID]*classSetCasterState
+	classSetTriggered int
+	variantMends      map[domain.EntityID]variantMend
+	observations      map[domain.EntityID][32]byte
+	cache             map[domain.EntityID]equipmentCached
+	absorption        map[domain.EntityID][]equipmentAbsorbHeal
+	root              *equipmentRoot
+	sequence          uint64
+	auraSources       []equipmentAuraSource
+	auraSchedules     map[equipmentAuraSource]equipmentAuraSchedule
+	auras             map[domain.EntityID]map[string]equipmentAuraGrant
+	nextAuraScan      domain.Tick
+	suppressedProcs   uint64
 }
 
 func (s *Scene) equipmentState() *equipmentRuntime {

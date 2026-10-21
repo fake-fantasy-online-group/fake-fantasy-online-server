@@ -301,6 +301,7 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		PayloadScaleBP:                blow.PayloadScaleBP, PayloadScaleKnown: blow.PayloadScaleKnown, PVP: pvp,
 	}
 	rawDamage = buckets.OutgoingDamage(rawDamage)
+	rawDamage = s.casterSetOutgoingDamage(src, blow.HurtType, rawDamage)
 	finalDamage, fullMagicReflect := rawDamage, int32(0)
 	removed := []domain.StatusID(nil)
 	reflectChance := int32(0)
@@ -877,6 +878,7 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 		src = o
 	}
 	if hpDelta > 0 {
+		s.casterSetCopyHeal(src, e, clampI32(hpDelta), domain.SkillID(a.Def.ID))
 		s.emit(combat.Restore(src, e, clampI32(hpDelta), int32(a.Def.ID)))
 	} else if hpDelta < 0 {
 		// 掉血。走一条独立的路径而不是 combat.Strike ——

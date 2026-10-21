@@ -986,7 +986,8 @@ func (s *Scene) step() {
 		s.stepStatus()
 	} // 2. 状态: 周期触发与到期。**必须在任何人行动之前**
 	s.stepEquipmentAuras()
-	s.stepRest()                   // 3. 坐下休息: 周期恢复生命和法力
+	s.stepRest() // 3. 坐下休息: 周期恢复生命和法力
+	s.stepCasterSets()
 	s.stepAstralRuneRegeneration() // Standalone 轸 rune: flat, online-only recovery.
 	s.stepWork()                   // 4. 打工: 结算与扣耐力
 	s.stepNianli()                 // 5. 念力: 只累计在线时间
