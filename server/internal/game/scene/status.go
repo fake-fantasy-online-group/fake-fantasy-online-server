@@ -511,11 +511,22 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 // budget. Such a source uses the same status adapter and common formula as
 // direct hits; no ability, monster or scene identity enters the calculation.
 func (s *Scene) mitigateSecondaryStatusDamage(e *entity.Entity, magic bool, amount int32) int32 {
-	amount = s.classSetMeleeIncomingDamage(e, amount)
 	if e == nil || e.Status.DamageReductionCapPct() <= domain.DefaultDamageReductionCapPct {
-		return amount
+		return s.classSetMeleeIncomingDamage(e, amount)
 	}
-	amount, removed := e.Status.MitigateDamage(magic, amount)
+	// Match direct hits: ordinary incoming buckets (including flat reduction),
+	// then independent set multipliers, then immunity and shield consumption.
+	buckets := domain.CombatDamageBuckets{
+		DamageTakenIncreasePct: e.Status.DamageTakenIncreasePct(magic),
+		DamageReductionPct:     e.Status.DamageReductionPct(magic),
+		DamageReductionCapPct:  e.Status.DamageReductionCapPct(),
+		FlatReduction:          e.Status.DamageReductionFlat(magic),
+	}
+	amount = s.classSetMeleeIncomingDamage(e, buckets.IncomingDamage(amount))
+	if e.Status.Invulnerable() {
+		return 0
+	}
+	amount, removed := e.Status.AbsorbDamage(amount)
 	s.statusesRemoved(e, removed)
 	return amount
 }
