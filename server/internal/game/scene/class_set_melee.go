@@ -140,7 +140,7 @@ func (s *Scene) clearClassSetMelee(id domain.EntityID) {
 
 // The stable identifier is server-owned; the image, when present, is the
 // existing learned taunt skill's icon, never an invented resource identifier.
-const classSetUnrulyViewID int32 = 1980004
+const classSetUnrulyViewID int32 = 2104004
 
 func (s *Scene) classSetUnrulyPresentation(p *entity.Entity) []statusPresentation {
 	stacks := s.classSetUnrulyStacks(p)
