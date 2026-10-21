@@ -324,6 +324,9 @@ func (s *Scene) refreshStatsWithLevelUp(p *entity.Entity, leveledUp bool) {
 	dragonApplied := s.classSetPiecesInWorn(p, worn, classSetWarrior) >= 6
 	dragonChanged := dragonApplied != p.Player.ClassSetDragonApplied
 	p.Player.ClassSetDragonApplied = dragonApplied
+	if dragonChanged {
+		s.refreshClassSetAppearance(p)
+	}
 
 	// Preserve existing level/equipment resource deltas, excluding the new
 	// skill-growth maxima. Growing a skill expands capacity but grants no resources.
@@ -434,8 +437,8 @@ func (s *Scene) refreshAppearance(p *entity.Entity) {
 	next := domain.AppearanceFromEquipmentAndWardrobe(ch.Appear, s.functionalWorn(p), p.Player.Wardrobe,
 		s.itemDef, s.wardrobes, ch.Appear.Gender)
 	ch.Appear = next
-	p.Look.Appearance = next
-	s.emit(event.AppearanceChanged{Who: p.ID, Appearance: next})
+	p.Look.Appearance = s.classSetAppearance(p, next)
+	s.emit(event.AppearanceChanged{Who: p.ID, Appearance: p.Look.Appearance})
 	_ = s.pushWardrobe(p)
 }
 

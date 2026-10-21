@@ -521,6 +521,7 @@ func (s *Scene) onEnter(cmd Enter) {
 	_, e.Stats, growth = s.combatGrowthStats(e)
 	e.Player.SkillGrowthMaxHP, e.Player.SkillGrowthMaxMP = growth.MaxHP, growth.MaxMP
 	e.Player.ClassSetDragonApplied = s.classSetPiecesInWorn(e, s.functionalWorn(e), classSetWarrior) >= 6
+	e.Look.Appearance = s.classSetAppearance(e, ch.Appear)
 	e.MaxHP, e.MaxMP = e.Stats.MaxHP, e.Stats.MaxMP
 	e.HP = min(e.HP, e.MaxHP)
 	e.MP = min(e.MP, e.MaxMP)
@@ -625,7 +626,9 @@ func (s *Scene) onEnter(cmd Enter) {
 	if cmd.Runtime != nil && !cmd.ClientMapReady {
 		s.emitTo(e.ID, event.Teleported{Who: e.ID, To: e.Pos, Scene: s.id})
 	} else if cmd.Runtime == nil {
-		s.emitTo(e.ID, event.SelfEntered{ID: e.ID, Char: ch, Scene: s.id})
+		visibleChar := ch.Clone()
+		visibleChar.Appear = e.Look.Appearance
+		s.emitTo(e.ID, event.SelfEntered{ID: e.ID, Char: visibleChar, Scene: s.id})
 		if s.itemIconsKnown {
 			s.emitTo(e.ID, event.ItemIconMap{Who: e.ID, Pairs: s.itemIcons})
 		}

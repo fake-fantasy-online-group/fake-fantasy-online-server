@@ -303,7 +303,7 @@ func (s *Scene) onWardrobeRemove(cmd WardrobeRemove) {
 			p.Player.Char.Appear, p.Player.Worn, p.Player.Wardrobe,
 			s.itemDef, s.wardrobes, p.Player.Char.Appear.Gender)
 		p.Player.Char.Appear = next
-		p.Look.Appearance = next
+		p.Look.Appearance = s.classSetAppearance(p, next)
 	}
 	p.Player.MarkDirty()
 	if s.saver != nil {
@@ -313,7 +313,7 @@ func (s *Scene) onWardrobeRemove(cmd WardrobeRemove) {
 	s.pushQuestLog(p)
 	if wasWorn {
 		s.emit(event.AppearanceChanged{
-			Who: p.ID, Appearance: p.Player.Char.Appear,
+			Who: p.ID, Appearance: p.Look.Appearance,
 		})
 	}
 	s.emitTo(p.ID, wardrobeSnap)

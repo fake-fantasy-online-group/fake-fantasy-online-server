@@ -32,7 +32,7 @@ func (s *Scene) onChangeHair(cmd ChangeHair) {
 		label = "发型"
 	}
 	if current == cmd.Target {
-		s.emit(event.HairChanged{Who: p.ID, Appearance: ch.Appear})
+		s.emit(event.HairChanged{Who: p.ID, Appearance: s.classSetAppearance(p, ch.Appear)})
 		notice(label + "已经是当前选择")
 		return
 	}
@@ -66,11 +66,11 @@ func (s *Scene) onChangeHair(cmd ChangeHair) {
 	} else {
 		ch.Appear.Hair = cmd.Target
 	}
-	p.Look.Appearance = ch.Appear
+	p.Look.Appearance = s.classSetAppearance(p, ch.Appear)
 	inventory, err := s.inventorySnapshot(p)
 	if err != nil {
 		p.Player.Bag, ch.Money, ch.Appear = beforeBag, beforeMoney, beforeAppearance
-		p.Look.Appearance = beforeAppearance
+		p.Look.Appearance = s.classSetAppearance(p, beforeAppearance)
 		notice("改变" + label + "失败：服务器无法生成完整状态")
 		return
 	}
@@ -80,6 +80,6 @@ func (s *Scene) onChangeHair(cmd ChangeHair) {
 	}
 	s.emitTo(p.ID, inventory)
 	s.pushQuestLog(p)
-	s.emit(event.HairChanged{Who: p.ID, Appearance: ch.Appear})
+	s.emit(event.HairChanged{Who: p.ID, Appearance: s.classSetAppearance(p, ch.Appear)})
 	notice(fmt.Sprintf("%s已更换为%d号", label, cmd.Target))
 }

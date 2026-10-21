@@ -20,7 +20,7 @@ func (s *Scene) onInspectPlayer(cmd InspectPlayer) {
 		Who: cmd.ID, Target: target.ID, Name: ch.Name, Level: ch.Level,
 		Race: target.Look.Race, Gender: ch.Appear.Gender, Head: ch.Appear.Head,
 		Hair: ch.Appear.Hair, Title: ch.Appear.Title, Honor: ch.Honor,
-		Appearance: ch.Appear, Attrs: attrs,
+		Appearance: s.classSetAppearance(target, ch.Appear), Attrs: attrs,
 		MaxAtk: target.Stats.MaxAtk, MinAtk: target.Stats.MinAtk, Def: target.Stats.Def,
 		MAtk: target.Stats.MAtk, MDef: target.Stats.MDef, Hit: target.Stats.Hit,
 	}
