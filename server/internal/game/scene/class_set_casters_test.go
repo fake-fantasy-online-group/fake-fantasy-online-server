@@ -443,3 +443,46 @@ func TestCasterSetsElementBonusIsDamageNotSpellCoefficient(t *testing.T) {
 		t.Fatalf("post-defense base=%d buffed=%d", base, got)
 	}
 }
+
+func TestCasterSetsLogoutAndImmediateUnequipClearRuntime(t *testing.T) {
+	s, p, _ := casterSetFixture(t, 3, 4)
+	ice, _ := s.skills.Get(10409, 1)
+	s.startCasterSetCast(p, ice)
+	s.exec(Leave{ID: p.ID, Reason: "set test"})
+	if s.equipmentState().classSetCasters[p.ID] != nil {
+		t.Fatal("logout retained elemental grant")
+	}
+	join(t, s, 1, 100, "returning", 100, 100)
+	p = s.entities[1]
+	casterSetEquip(t, s, p, 3, 4)
+	if s.casterSetOutgoingDamage(p, domain.HurtFire, 100) != 100 {
+		t.Fatal("relogin restored old grant")
+	}
+	s.startCasterSetCast(p, ice)
+	p.Player.Worn = domain.NewEquipSet()
+	s.refreshStats(p)
+	if s.equipmentState().classSetCasters[p.ID] != nil {
+		t.Fatal("unequip did not clear grant immediately")
+	}
+}
+
+func TestCasterSetsGroupNominalHealingCopiesEachAllyOnce(t *testing.T) {
+	s, p, _ := casterSetFixture(t, 2, 4)
+	join(t, s, 2, 101, "ally1", 120, 100)
+	join(t, s, 3, 102, "ally2", 130, 100)
+	p.Player.Party = 7
+	p.HP = 100
+	p.MaxHP = 2000
+	heal := 治愈术
+	heal.Effect = domain.SkillEffect{Kind: domain.EffectHeal, HealPctOfMax: 10}
+	for _, id := range []domain.EntityID{2, 3} {
+		q := s.entities[id]
+		q.Player.Party = 7
+		q.MaxHP = 1000
+		q.HP = 1000
+		s.applySkill(p, q, heal, 100, false)
+	}
+	if p.HP != 300 {
+		t.Fatalf("each full ally should grant nominal100 once: %d", p.HP)
+	}
+}

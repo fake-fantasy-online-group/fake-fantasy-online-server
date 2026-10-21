@@ -255,3 +255,25 @@ func (s *Scene) finishCasterSetCast(src *entity.Entity, c pendingCast, hits []do
 		}
 	}
 }
+
+func (s *Scene) pruneCasterSetState(p *entity.Entity, worn *domain.EquipSet) {
+	if s.equipment == nil || p == nil {
+		return
+	}
+	st := s.equipment.classSetCasters[p.ID]
+	if st == nil {
+		return
+	}
+	mage := s.classSetPiecesInWorn(p, worn, 3) >= 4
+	healer := s.classSetPiecesInWorn(p, worn, 2) >= 4
+	if !mage && !healer {
+		delete(s.equipment.classSetCasters, p.ID)
+		return
+	}
+	if !mage {
+		st.fireUntil, st.iceUntil = 0, 0
+	}
+	if !healer {
+		st.nextMana = 0
+	}
+}

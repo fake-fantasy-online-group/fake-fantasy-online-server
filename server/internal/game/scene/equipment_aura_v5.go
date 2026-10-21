@@ -322,6 +322,7 @@ func (s *Scene) removeEquipmentEntity(id domain.EntityID) {
 	}
 	delete(s.equipment.cache, id)
 	delete(s.equipment.observations, id)
+	delete(s.equipment.classSetCasters, id)
 	delete(s.equipment.absorption, id)
 	s.equipment.nextAuraScan = 0
 	s.stepEquipmentAuras()

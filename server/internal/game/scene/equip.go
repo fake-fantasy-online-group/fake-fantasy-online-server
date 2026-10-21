@@ -316,6 +316,7 @@ func (s *Scene) refreshStatsWithLevelUp(p *entity.Entity, leveledUp bool) {
 	oldMaxHP, oldMaxMP := p.MaxHP, p.MaxMP
 
 	worn := s.functionalWorn(p)
+	s.pruneCasterSetState(p, worn)
 	_, stats, growth := s.combatGrowthStats(p)
 	p.Stats = stats
 	p.MaxHP = stats.MaxHP
