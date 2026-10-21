@@ -1,4 +1,4 @@
--- Restore the approved V1 additions: 2-piece additions x10 and former
+-- Restore the approved V1 additions: 2-piece flat additions x10; percentage additions retain V1 values and former
 -- 4-piece combat bonuses at the new 8-piece tier. Run after 93, not instead.
 -- Shared cards are never changed; the five 8-piece rows get private clones.
 DO $class_set_v1$
@@ -29,15 +29,15 @@ BEGIN
  (1,2,2,9,0,180),
  (2,2,1,3,0,160),
  (2,2,2,5,0,120),
- (2,2,3,36,1,100),
+ (2,2,3,36,1,10),
  (3,2,1,3,0,180),
  (3,2,2,61,0,120),
  (4,2,1,1,0,240),
  (4,2,2,5,0,240),
- (4,2,3,19,1,100),
+ (4,2,3,19,1,10),
  (5,2,1,1,0,300),
  (5,2,2,5,0,180),
- (5,2,3,25,1,-80),
+ (5,2,3,25,1,-8),
  (1,8,1,1000101,0,1800),
  (1,8,2,1000102,0,1800),
  (1,8,3,1000104,0,1500),
