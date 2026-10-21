@@ -323,6 +323,9 @@ func (s *Scene) refreshStatsWithLevelUp(p *entity.Entity, leveledUp bool) {
 	p.MaxMP = stats.MaxMP
 	dragonApplied := s.classSetPiecesInWorn(p, worn, classSetWarrior) >= 6
 	dragonChanged := dragonApplied != p.Player.ClassSetDragonApplied
+	auraHP := classSetAuraStatKey(s.equipmentState().auras[p.ID])[0]
+	auraHPChanged := auraHP != p.Player.ClassSetAuraHPBP
+	p.Player.ClassSetAuraHPBP = auraHP
 	p.Player.ClassSetDragonApplied = dragonApplied
 	if dragonChanged {
 		s.refreshClassSetAppearance(p)
@@ -332,7 +335,7 @@ func (s *Scene) refreshStatsWithLevelUp(p *entity.Entity, leveledUp bool) {
 	// skill-growth maxima. Growing a skill expands capacity but grants no resources.
 	// Dragon form transitions never grant or subtract current HP: only the clamp
 	// below applies. Otherwise the one-HP floor plus re-equipping grants free healing.
-	if d := int64(p.MaxHP) - int64(oldMaxHP) - int64(growth.MaxHP) + int64(p.Player.SkillGrowthMaxHP); d != 0 && !dragonChanged {
+	if d := int64(p.MaxHP) - int64(oldMaxHP) - int64(growth.MaxHP) + int64(p.Player.SkillGrowthMaxHP); d != 0 && !dragonChanged && !auraHPChanged {
 		p.HP = domain.SaturateInt32(int64(p.HP) + d)
 	}
 	if d := int64(p.MaxMP) - int64(oldMaxMP) - int64(growth.MaxMP) + int64(p.Player.SkillGrowthMaxMP); d != 0 {

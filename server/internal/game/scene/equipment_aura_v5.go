@@ -59,6 +59,7 @@ func (s *Scene) stepEquipmentAuras() {
 		if p == nil || !p.Alive() || s.entityMapLoading(p) || !s.equipmentCombatReady(p) {
 			continue
 		}
+		sources = append(sources, s.classSetAuraSources(p)...)
 		for _, e := range s.equipmentEffects(p).effects {
 			if a := e.Effect.Aura; a != nil && e.Effect.Kind == "aura" {
 				// Size a fresh snapshot only after finding a source; no sources must stay nil.
@@ -176,6 +177,11 @@ func (s *Scene) stepEquipmentAuras() {
 				s.emitEquipmentAuraRemoval(e, g)
 			}
 		}
+		if classSetAuraStatKey(old[id]) != classSetAuraStatKey(next[id]) && e.Player != nil {
+			s.invalidateCombatAttributes(e)
+			s.refreshStats(e)
+			s.emitAttributesIfPlayer(e)
+		}
 		// Lease renewal extends the existing keyed effect, never creates another
 		// emitter. Numeric membership stays server-authoritative if visuals are hidden.
 		s.pushStatusSnapshots(e)
@@ -202,7 +208,7 @@ func (s *Scene) equipmentAuraRecipients(source equipmentAuraSource) []*entity.En
 		}
 		return x.ID < y.ID
 	})
-	if len(candidates) > int(a.MaxPlayers) {
+	if a.MaxPlayers > 0 && len(candidates) > int(a.MaxPlayers) {
 		candidates = candidates[:a.MaxPlayers]
 	}
 	// candidates is private to this call. Pet appends cannot overwrite its player prefix.
@@ -288,6 +294,10 @@ func (s *Scene) equipmentAuraStatuses(e *entity.Entity) []statusPresentation {
 		} else {
 			desc += "\n来源装备有效且处于同队范围内时持续生效，来源脱装、损坏、死亡、离线或自身离队、离开范围时移除。"
 		}
+		if classSetAuraID(a) != 0 {
+			position = 0
+			desc = classSetAuraDescription(a, sourceName)
+		}
 		remaining := nonnegativeI32((g.expires - s.tick).Millis())
 		out = append(out, statusPresentation{name: a.VisualKey, desc: desc, icon: event.StatusIconView{Status: id, Icon: iconID, Beneficial: true, RemainMS: -1}, effect: event.EntityStatusEffect{Who: e.ID, Effect: a.VisualKey, PositionMode: position, DurationMS: remaining}, buff: event.BuffView{SkillID: id, Icon: iconID, Name: a.VisualKey, Desc: desc, Beneficial: true, RemainSec: equipmentAuraSourceBoundSeconds, PositionMode: position}})
 	}
@@ -341,6 +351,9 @@ func (s *Scene) equipmentAuraGrantValid(target *entity.Entity, g equipmentAuraGr
 		if player == nil || !player.Alive() || s.entityMapLoading(player) || !s.equipmentCombatReady(player) || player.Pos.MapID != source.Pos.MapID || sqDist(source.Pos, player.Pos) > float64(g.effect.RadiusPX)*float64(g.effect.RadiusPX) {
 			return false
 		}
+	}
+	if suit := classSetAuraID(g.effect); suit != 0 {
+		return g.uid == -int64(930000+suit) && s.classSetPieces(source, suit) >= 6
 	}
 	for _, a := range s.equipmentEffects(source).effects {
 		if a.SourceUID == g.uid && a.Effect.Aura != nil && *a.Effect.Aura == g.effect {

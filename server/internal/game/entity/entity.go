@@ -471,6 +471,7 @@ type Player struct {
 	SkillGrowthMaxHP, SkillGrowthMaxMP int32
 	// Runtime-only marker for resource-neutral dragon form transitions.
 	ClassSetDragonApplied   bool
+	ClassSetAuraHPBP        int32
 	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
 	EndgameRiftPortals      bool // negotiated server-owned rift gate context
 	EndgameSkillVariants    bool // negotiated equipment skill variants

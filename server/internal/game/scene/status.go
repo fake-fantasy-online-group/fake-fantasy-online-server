@@ -344,6 +344,7 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		buckets.HalfDamageLayers, buckets.FlatReduction = halfCount, flatReduction
 		finalDamage = buckets.IncomingDamage(rawDamage)
 		finalDamage = s.classSetMeleeIncomingDamage(dst, finalDamage)
+		finalDamage = s.classSetAuraIncomingDamage(dst, magic, finalDamage)
 		if dst.Status.Invulnerable() {
 			finalDamage = 0
 		} else {
@@ -512,7 +513,7 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 // direct hits; no ability, monster or scene identity enters the calculation.
 func (s *Scene) mitigateSecondaryStatusDamage(e *entity.Entity, magic bool, amount int32) int32 {
 	if e == nil || e.Status.DamageReductionCapPct() <= domain.DefaultDamageReductionCapPct {
-		return s.classSetMeleeIncomingDamage(e, amount)
+		return s.classSetAuraIncomingDamage(e, magic, s.classSetMeleeIncomingDamage(e, amount))
 	}
 	// Match direct hits: ordinary incoming buckets (including flat reduction),
 	// then independent set multipliers, then immunity and shield consumption.
@@ -523,6 +524,7 @@ func (s *Scene) mitigateSecondaryStatusDamage(e *entity.Entity, magic bool, amou
 		FlatReduction:          e.Status.DamageReductionFlat(magic),
 	}
 	amount = s.classSetMeleeIncomingDamage(e, buckets.IncomingDamage(amount))
+	amount = s.classSetAuraIncomingDamage(e, magic, amount)
 	if e.Status.Invulnerable() {
 		return 0
 	}

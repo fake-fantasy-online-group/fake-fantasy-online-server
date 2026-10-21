@@ -8,6 +8,8 @@ import (
 
 // Blow 描述一次出手是怎么打的。零值 = 普通物理平砍。
 type Blow struct {
+	// Additive critical multiplier BP: 2000 means 200% -> 220%.
+	CriticalBonusBP                        int32
 	SourceOffense, CurrentSourceOffense    *domain.CombatSourceSnapshotV5
 	AttackStats                            domain.Stats
 	AttackStatsSnapshot                    bool
@@ -94,7 +96,7 @@ func CalculateStrike(a, d *entity.Entity, tr *HitTracker, b Blow, rng Rand) even
 	}
 
 	if crit {
-		dmg = boundedDamage(int64(dmg) * CritMultiplier)
+		dmg = boundedDamage(int64(dmg) * (CritMultiplier*10000 + int64(b.CriticalBonusBP)) / 10000)
 	}
 
 	// 扣血。伤害可以大于剩余血(溢出斩杀), 抓包实测最后一击伤害 7 > 剩余 4。
