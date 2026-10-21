@@ -486,3 +486,29 @@ func TestCasterSetsGroupNominalHealingCopiesEachAllyOnce(t *testing.T) {
 		t.Fatalf("each full ally should grant nominal100 once: %d", p.HP)
 	}
 }
+
+func TestCasterSetsGeneratedPayloadUsesCurrentLearnedRank(t *testing.T) {
+	s, p, tid := casterSetFixture(t, 3, 6)
+	dst := s.entities[tid]
+	dst.HP = 10000
+	dst.MaxHP = 10000
+	dst.Stats.MDef = 0
+	fire := 火弹术
+	fire.Level = 2
+	fire.Effect.DamagePct = 300
+	s.skills[domain.SkillKey{ID: 10401, Level: 2}] = fire
+	p.Player.Char.Skills[10401] = 2
+	s.invalidateCombatAttributes(p)
+	before := dst.HP
+	s.finishCasterSetCast(p, pendingCast{def: 火球术}, []domain.EntityID{tid})
+	if before-dst.HP != 300 {
+		t.Fatalf("did not use learned rank2: %d", before-dst.HP)
+	}
+	delete(p.Player.Char.Skills, 10401)
+	s.invalidateCombatAttributes(p)
+	before = dst.HP
+	s.finishCasterSetCast(p, pendingCast{def: 火球术}, []domain.EntityID{tid})
+	if dst.HP != before {
+		t.Fatal("unlearned firebolt silently invented")
+	}
+}
