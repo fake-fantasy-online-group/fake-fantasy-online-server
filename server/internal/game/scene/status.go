@@ -302,6 +302,10 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 	}
 	rawDamage = buckets.OutgoingDamage(rawDamage)
 	rawDamage = s.casterSetOutgoingDamage(src, blow.HurtType, rawDamage)
+	rawDamage = s.classSetMissingHealthDamage(src, rawDamage)
+	if root := s.equipmentState().root; root != nil && root.src == src.ID && root.classSetDamageScaleBP > 0 && blow.SkillID == int32(classSetWhirlwind) {
+		rawDamage = clampI32(int64(rawDamage) * int64(root.classSetDamageScaleBP) / 10000)
+	}
 	finalDamage, fullMagicReflect := rawDamage, int32(0)
 	removed := []domain.StatusID(nil)
 	reflectChance := int32(0)
@@ -339,6 +343,7 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		buckets.DamageReductionCapPct = dst.Status.DamageReductionCapPct()
 		buckets.HalfDamageLayers, buckets.FlatReduction = halfCount, flatReduction
 		finalDamage = buckets.IncomingDamage(rawDamage)
+		finalDamage = s.classSetMeleeIncomingDamage(dst, finalDamage)
 		if dst.Status.Invulnerable() {
 			finalDamage = 0
 		} else {
@@ -434,6 +439,7 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 		return
 	}
 
+	s.classSetDragonSteal(src, ev)
 	magic := ev.Flag.Has(event.DamageMagic)
 	if !magic && ev.SkillID == 0 && src.Status != nil && dst.Alive() {
 		s.applyCombatTriggeredStatus(src, dst, domain.StatusPoison)
@@ -505,6 +511,7 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 // budget. Such a source uses the same status adapter and common formula as
 // direct hits; no ability, monster or scene identity enters the calculation.
 func (s *Scene) mitigateSecondaryStatusDamage(e *entity.Entity, magic bool, amount int32) int32 {
+	amount = s.classSetMeleeIncomingDamage(e, amount)
 	if e == nil || e.Status.DamageReductionCapPct() <= domain.DefaultDamageReductionCapPct {
 		return amount
 	}
@@ -683,6 +690,7 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 		return nil
 	}
 	out := s.equipmentAuraStatuses(e)
+	out = append(out, s.classSetUnrulyPresentation(e)...)
 	if e.Status == nil {
 		return out
 	}

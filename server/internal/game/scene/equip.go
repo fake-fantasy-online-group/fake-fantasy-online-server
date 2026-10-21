@@ -352,6 +352,11 @@ func (s *Scene) refreshStatsWithLevelUp(p *entity.Entity, leveledUp bool) {
 	if leveledUp && wasAlive {
 		p.HP, p.MP = p.MaxHP, p.MaxMP
 	}
+	if s.equipment != nil {
+		if _, had := s.equipment.unruly[p.ID]; had && s.classSetUnrulyStacks(p) == 0 {
+			s.pushStatusSnapshots(p)
+		}
+	}
 	s.invalidateAstralRuneRegen(p, worn)
 	s.emitTo(p.ID, s.attributeSnapshot(p))
 	s.refreshWarehouseBlocked(p)

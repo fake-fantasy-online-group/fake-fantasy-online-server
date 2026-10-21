@@ -28,6 +28,7 @@ type equipmentHit struct {
 	ev       event.DamageDealt
 }
 type equipmentRoot struct {
+	classSetDamageScaleBP int32
 	source, currentSource *domain.CombatSourceSnapshotV5
 	attackStats           domain.Stats
 	attackSnapshot        bool
@@ -37,6 +38,7 @@ type equipmentRoot struct {
 	hits                  []equipmentHit
 }
 type equipmentRuntime struct {
+	unruly            map[domain.EntityID]classSetUnruly
 	classSetCasters   map[domain.EntityID]*classSetCasterState
 	classSetTriggered int
 	variantMends      map[domain.EntityID]variantMend

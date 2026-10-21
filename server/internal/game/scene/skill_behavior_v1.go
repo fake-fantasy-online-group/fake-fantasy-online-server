@@ -23,6 +23,12 @@ func (s *Scene) applyResolvedSkillModifiers(p *entity.Entity, def *domain.SkillD
 	}
 	domain.FinalizeSkillManaCost(def)
 	previewGrowthRounding(p, def)
+	if s.classSetDragonActive(p) {
+		def.MPCost = 0
+		if p.Player != nil && p.Player.Char != nil {
+			def.RoundingPreviewNext.Mana = p.Player.Char.SkillRoundingCredits[def.ID].Mana
+		}
+	}
 }
 
 func (s *Scene) skillBehaviorIdentity(id domain.SkillID) *domain.SkillBehaviorContract {

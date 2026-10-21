@@ -317,6 +317,7 @@ func equipmentAuraStatusID(id string) int32 {
 	return 1902000 + int32(h%100000)
 }
 func (s *Scene) removeEquipmentEntity(id domain.EntityID) {
+	s.clearClassSetMelee(id)
 	if s.equipment == nil {
 		return
 	}

@@ -36,6 +36,8 @@ func (s *Scene) computeSkillGrowthStatsResolved(p *entity.Entity, worn *domain.E
 		src.Passive = withoutGrowth
 		_, without = domain.Compute(src)
 	}
+	stats = s.classSetMeleeStats(p, worn, stats)
+	without = s.classSetMeleeStats(p, worn, without)
 	return base, stats, domain.Stats{
 		MaxHP: domain.SaturateInt32(int64(stats.MaxHP) - int64(without.MaxHP)),
 		MaxMP: domain.SaturateInt32(int64(stats.MaxMP) - int64(without.MaxMP)),

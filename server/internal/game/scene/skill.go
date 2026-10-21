@@ -85,7 +85,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		reject(event.RejectRequiresInvisible)
 		return
 	}
-	if caster.MP < def.MPCost {
+	if !s.classSetDragonActive(caster) && caster.MP < def.MPCost {
 		reject(event.RejectNotEnoughMP)
 		return
 	}
@@ -157,7 +157,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 	// 应该被第二次的法力检查拦住 —— 扣在结算时就会两个都放出去。
 	caster.Player.StopResting()
 	commitGrowthRounding(caster, def)
-	caster.MP -= def.MPCost
+	s.classSetPaySkillCost(caster, def)
 	if durabilityCost.amount > 0 {
 		s.consumeSkillWeaponDurability(caster, durabilityCost, def.ID)
 	}
@@ -901,25 +901,26 @@ func (s *Scene) validTarget(caster, t *entity.Entity, def domain.SkillDef) bool 
 
 // pendingCast 是本帧收到、等着结算的一次技能释放。
 type pendingCast struct {
-	classSetArea        *classSetCastArea
-	sourceOffense       *domain.CombatSourceSnapshotV5
-	attackStats         domain.Stats
-	attackStatsSnapshot bool
-	equipmentOffense    domain.EquipmentCombatStats
-	equipmentSnapshot   bool
-	src                 domain.EntityID
-	def                 domain.SkillDef
-	targets             []domain.EntityID
-	statusDurationPct   int32
-	cooldownMS          int32
-	movementAt          *domain.Pos
-	visualTarget        domain.EntityID
-	visualAim           *domain.Pos
-	releaseAtWall       time.Time
-	resolveAtWall       time.Time
-	released            bool
-	windup              *castWindup
-	extras              []domain.MonsterSkillExtra
+	classSetDamageScaleBP int32
+	classSetArea          *classSetCastArea
+	sourceOffense         *domain.CombatSourceSnapshotV5
+	attackStats           domain.Stats
+	attackStatsSnapshot   bool
+	equipmentOffense      domain.EquipmentCombatStats
+	equipmentSnapshot     bool
+	src                   domain.EntityID
+	def                   domain.SkillDef
+	targets               []domain.EntityID
+	statusDurationPct     int32
+	cooldownMS            int32
+	movementAt            *domain.Pos
+	visualTarget          domain.EntityID
+	visualAim             *domain.Pos
+	releaseAtWall         time.Time
+	resolveAtWall         time.Time
+	released              bool
+	windup                *castWindup
+	extras                []domain.MonsterSkillExtra
 }
 
 type pendingSkillTeleport struct {
@@ -1012,6 +1013,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 			if c.windup != nil {
 				c.windup.finished = true
 			}
+			c.classSetDamageScaleBP = s.classSetMeleeCastReleased(src, &c.def)
 			s.emit(release)
 			s.startCasterSetCast(src, c.def)
 			c.released = true
@@ -1062,6 +1064,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 		if v := c.def.EquipmentVariant; v != nil {
 			s.log.Debug("equipment skill variant settlement", "skill", c.def.ID, "variant", v.ID, "sourceUID", v.SourceUID, "item", v.Item, "equipmentRevision", v.EquipmentRevision, "root", s.equipment.root.id)
 		}
+		s.equipment.root.classSetDamageScaleBP = c.classSetDamageScaleBP
 		s.equipment.root.source = c.sourceOffense
 		s.equipment.root.attackStats = c.attackStats
 		s.equipment.root.attackSnapshot = c.attackStatsSnapshot

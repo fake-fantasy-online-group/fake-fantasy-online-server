@@ -1133,6 +1133,7 @@ func (s *Scene) passiveCounterPending(defender, attacker *entity.Entity) (pendin
 // 死亡与「从视野里消失」是两件事: 死亡是**战斗结果**(要结算经验/掉落/仇恨),
 // 消失是**视野事件**(只影响渲染)。所以先发 EntityDied, 尸体停留若干帧后才移除。
 func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
+	s.clearClassSetMelee(dead.ID)
 	// Freeze before kill XP, durability/lifecycle updates or rewards can change MF.
 	lootContext := s.freezeLootContextV5(killer)
 	delete(s.astralRuneRegen, dead.ID)
