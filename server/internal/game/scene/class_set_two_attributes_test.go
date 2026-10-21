@@ -8,7 +8,8 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 )
 
-// Values are the approved V1 two-piece additions multiplied by ten. These are
+// Fixed V1 two-piece additions are multiplied by ten; percentage additions retain
+// their original V1 values per the latest user correction. These are
 // ordinary native card affixes, not hard-coded production bonuses.
 func TestClassSetTwoApprovedAttributesReachPanel(t *testing.T) {
 	cases := []struct {
@@ -18,11 +19,11 @@ func TestClassSetTwoApprovedAttributesReachPanel(t *testing.T) {
 		secondary domain.Affix
 		text      []string
 	}{
-		{5, domain.Warrior, domain.Base{STR: 300, VIT: 180}, domain.Affix{Attr: domain.AttrAtkSpeed, Mode: domain.ModePercent, Value: -80}, []string{"力量 +300", "体质 +180", "攻击速度 +80%"}},
-		{4, domain.Swordsman, domain.Base{STR: 240, VIT: 240}, domain.Affix{Attr: domain.AttrHit, Mode: domain.ModePercent, Value: 100}, []string{"力量 +240", "体质 +240", "命中 +100%"}},
+		{5, domain.Warrior, domain.Base{STR: 300, VIT: 180}, domain.Affix{Attr: domain.AttrAtkSpeed, Mode: domain.ModePercent, Value: -8}, []string{"力量 +300", "体质 +180", "攻击速度 +8%"}},
+		{4, domain.Swordsman, domain.Base{STR: 240, VIT: 240}, domain.Affix{Attr: domain.AttrHit, Mode: domain.ModePercent, Value: 10}, []string{"力量 +240", "体质 +240", "命中 +10%"}},
 		{1, domain.Assassin, domain.Base{STR: 300, DEX: 180}, domain.Affix{}, []string{"力量 +300", "灵巧 +180"}},
 		{3, domain.Warlock, domain.Base{INT: 180, SPI: 120}, domain.Affix{}, []string{"智慧 +180", "精神 +120"}},
-		{2, domain.Healer, domain.Base{INT: 160, VIT: 120}, domain.Affix{Attr: domain.AttrMaxMP, Mode: domain.ModePercent, Value: 100}, []string{"智慧 +160", "体质 +120", "最大法力 +100%"}},
+		{2, domain.Healer, domain.Base{INT: 160, VIT: 120}, domain.Affix{Attr: domain.AttrMaxMP, Mode: domain.ModePercent, Value: 10}, []string{"智慧 +160", "体质 +120", "最大法力 +10%"}},
 	}
 	for _, tc := range cases {
 		t.Run(fmt.Sprint(tc.id), func(t *testing.T) {
@@ -68,23 +69,23 @@ func TestClassSetTwoApprovedAttributesReachPanel(t *testing.T) {
 				expected.MaxMP += 2500
 			}
 			if tc.id == 2 {
-				expected.MaxMP *= 2
+				expected.MaxMP += expected.MaxMP / 10
 			}
 			if tc.id == 4 {
-				expected.Hit *= 2
+				expected.Hit += expected.Hit / 10
 			}
 			if p.MaxHP != expected.MaxHP || p.MaxMP != expected.MaxMP || p.Stats.Hit != expected.Hit {
 				t.Fatalf("resources/hit got%d/%d/%d want%d/%d/%d", p.MaxHP, p.MaxMP, p.Stats.Hit, expected.MaxHP, expected.MaxMP, expected.Hit)
 			}
 			if tc.id == 5 {
-				if attrs[33] != 180 {
-					t.Fatalf("panel speed=%d want180", attrs[33])
+				if attrs[33] != 108 {
+					t.Fatalf("panel speed=%d want108", attrs[33])
 				}
 				p.Look.AtkDist = 75
 				p.Look.WeaponCType = 0
 				p.DidBasicAttack(0)
-				if p.ReadyToAttack(4) || !p.ReadyToAttack(5) {
-					t.Fatal("+80% speed must produce 1000/1.8ms rounded to five ticks, not 80% shorter interval")
+				if p.ReadyToAttack(8) || !p.ReadyToAttack(9) {
+					t.Fatal("+8% speed must produce 1000/1.08ms rounded to nine ticks")
 				}
 			}
 			var lines []string
