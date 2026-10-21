@@ -47,6 +47,29 @@ func (s *Scene) appendSuitTooltip(lines *[]string, suit *domain.EquipmentSuit, o
 		}
 		*lines = append(*lines, color+"  "+member.name)
 	}
+	if suit.ID >= 1 && suit.ID <= 5 {
+		for _, tier := range []int32{2, 4, 6, 8} {
+			color := "\x02"
+			if s.classSetPieces(owner, suit.ID) >= tier {
+				color = "\x05"
+			}
+			if extra := classSetSkillText(suit.ID, tier); extra != "" {
+				*lines = append(*lines, color+extra)
+			}
+			for _, bonus := range suit.Bonuses {
+				if bonus.Pieces != tier {
+					continue
+				}
+				text, lineColor := equipmentSuitBonusText(bonus), color
+				if bonus.DisabledReason != "" {
+					text += "（" + bonus.DisabledReason + "）"
+					lineColor = "\x02"
+				}
+				*lines = append(*lines, lineColor+text)
+			}
+		}
+		return
+	}
 	shownSkills := map[int32]bool{}
 	for _, bonus := range suit.Bonuses {
 		text := equipmentSuitBonusText(bonus)

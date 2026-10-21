@@ -11,7 +11,7 @@ import (
 // Fixed V1 two-piece additions are multiplied by ten; percentage additions retain
 // their original V1 values per the latest user correction. These are
 // ordinary native card affixes, not hard-coded production bonuses.
-func TestClassSetTwoApprovedAttributesReachPanel(t *testing.T) {
+func TestClassSetSixApprovedAttributesReachPanel(t *testing.T) {
 	cases := []struct {
 		id        int32
 		race      domain.Race
@@ -27,7 +27,7 @@ func TestClassSetTwoApprovedAttributesReachPanel(t *testing.T) {
 	}
 	for _, tc := range cases {
 		t.Run(fmt.Sprint(tc.id), func(t *testing.T) {
-			s, p := meleeSetFixture(t, tc.id, 2)
+			s, p := meleeSetFixture(t, tc.id, 6)
 			p.Player.Char.Race = tc.race
 			def := s.items[p.Player.Worn.At(domain.SlotHead).Item]
 			suit := def.Equip.Suit
@@ -48,7 +48,7 @@ func TestClassSetTwoApprovedAttributesReachPanel(t *testing.T) {
 				if !domain.SupportsEquipmentSuitAffix(a) {
 					t.Fatalf("unsupported %+v", a)
 				}
-				suit.Bonuses = append(suit.Bonuses, domain.EquipmentSuitBonus{Pieces: 2, Affix: a, Probability: 100})
+				suit.Bonuses = append(suit.Bonuses, domain.EquipmentSuitBonus{Pieces: 6, Affix: a, Probability: 100})
 			}
 			s.invalidateCombatAttributes(p)
 			s.refreshStats(p)
@@ -74,6 +74,9 @@ func TestClassSetTwoApprovedAttributesReachPanel(t *testing.T) {
 			if tc.id == 4 {
 				expected.Hit += expected.Hit / 10
 			}
+			if tc.id == 5 {
+				expected.MaxHP *= 2
+			}
 			if p.MaxHP != expected.MaxHP || p.MaxMP != expected.MaxMP || p.Stats.Hit != expected.Hit {
 				t.Fatalf("resources/hit got%d/%d/%d want%d/%d/%d", p.MaxHP, p.MaxMP, p.Stats.Hit, expected.MaxHP, expected.MaxMP, expected.Hit)
 			}
@@ -96,15 +99,18 @@ func TestClassSetTwoApprovedAttributesReachPanel(t *testing.T) {
 					t.Fatalf("missing %q in %q", text, tooltip)
 				}
 			}
-			// One broken item crosses 2 -> 1 and removes every new affix, including %.
+			// One broken item crosses 6 -> 5 and removes every new affix, including %.
 			st := p.Player.Worn.At(domain.SlotNeck)
 			st.Durability = 0
 			p.Player.Worn.Set(domain.SlotNeck, st)
 			s.invalidateCombatAttributes(p)
 			s.refreshStats(p)
 			baseline := domain.DeriveFromBase(p.Player.Char.EffectiveBase())
+			if tc.id == 5 {
+				baseline.MaxHP *= 2
+			}
 			if p.MaxHP != baseline.MaxHP || p.MaxMP != baseline.MaxMP || p.Stats.Hit != baseline.Hit || p.Stats.PlayerAttackSpeedPercent() != 100 {
-				t.Fatal("broken 2-piece retained an attribute")
+				t.Fatal("broken 6-piece retained an attribute")
 			}
 		})
 	}

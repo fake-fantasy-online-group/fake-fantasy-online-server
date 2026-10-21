@@ -113,7 +113,7 @@ func TestClassSetCardTooltipFunctionalActivation(t *testing.T) {
 	suit := s.items[p.Player.Worn.At(domain.SlotHead).Item].Equip.Suit
 	var lines []string
 	s.appendSuitTooltip(&lines, suit, p)
-	if !strings.Contains(strings.Join(lines, "\n"), "\x01[8件] 物理技能伤害 +18%") {
+	if !strings.Contains(strings.Join(lines, "\n"), "\x05物理技能伤害 +18%") {
 		t.Fatal("missing active custom text")
 	}
 	def := s.items[p.Player.Worn.At(domain.SlotHead).Item]
@@ -121,7 +121,7 @@ func TestClassSetCardTooltipFunctionalActivation(t *testing.T) {
 	s.invalidateCombatAttributes(p)
 	lines = nil
 	s.appendSuitTooltip(&lines, suit, p)
-	if !strings.Contains(strings.Join(lines, "\n"), "\x02[8件] 物理技能伤害 +18%") || s.classSetCardCombat(p).PhysicalSkillBP != 0 {
+	if !strings.Contains(strings.Join(lines, "\n"), "\x02物理技能伤害 +18%") || s.classSetCardCombat(p).PhysicalSkillBP != 0 {
 		t.Fatal("invalid requirement remained active")
 	}
 }
