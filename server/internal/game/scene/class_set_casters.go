@@ -189,7 +189,7 @@ func (s *Scene) emitCasterSetPayload(src, dst *entity.Entity, def domain.SkillDe
 	rt.classSetTriggered++
 	defer func() { rt.classSetTriggered-- }()
 	s.emit(event.SkillCastChanged{Caster: src.ID, Skill: def.ID, Phase: event.SkillCastRelease, Target: dst.ID})
-	s.applySkill(src, dst, def, 100, false)
+	s.applySkill(src, dst, def, 0, false)
 }
 
 func (s *Scene) finishCasterSetCast(src *entity.Entity, c pendingCast, hits []domain.EntityID) {

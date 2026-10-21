@@ -77,27 +77,27 @@ func TestCasterSetsMageAlternationExpiresAndDoesNotStack(t *testing.T) {
 	ice, _ := s.skills.Get(10409, 1)
 	s.startCasterSetCast(p, ice)
 	before := target.HP
-	s.applySkill(p, target, 火弹术, 100, false)
+	s.applySkill(p, target, 火弹术, 0, false)
 	if got := before - target.HP; got != 312 {
 		t.Fatalf("fire +50%% got %d", got)
 	}
 	s.startCasterSetCast(p, ice)
 	s.startCasterSetCast(p, ice)
 	before = target.HP
-	s.applySkill(p, target, 火弹术, 100, false)
+	s.applySkill(p, target, 火弹术, 0, false)
 	if got := before - target.HP; got != 312 {
 		t.Fatalf("refresh stacked: %d", got)
 	}
 	s.tick = domain.Ticks(3000)
 	before = target.HP
-	s.applySkill(p, target, 火弹术, 100, false)
+	s.applySkill(p, target, 火弹术, 0, false)
 	if got := before - target.HP; got != 208 {
 		t.Fatalf("expired damage %d", got)
 	}
 	s.startCasterSetCast(p, ice)
 	p.Player.Worn = domain.NewEquipSet()
 	before = target.HP
-	s.applySkill(p, target, 火弹术, 100, false)
+	s.applySkill(p, target, 火弹术, 0, false)
 	if got := before - target.HP; got != 208 {
 		t.Fatalf("unequipped damage %d", got)
 	}
@@ -173,18 +173,18 @@ func TestCasterSetsHealerCopiesNominalHealEvenFullAlly(t *testing.T) {
 	ally.HP = 1000
 	heal := 治愈术
 	heal.Effect = domain.SkillEffect{Kind: domain.EffectHeal, HealFlat: 1000}
-	s.applySkill(p, ally, heal, 100, false)
+	s.applySkill(p, ally, heal, 0, false)
 	if p.HP != 1100 || ally.HP != 1000 {
 		t.Fatalf("nominal copy self=%d ally=%d", p.HP, ally.HP)
 	}
 	p.HP = 100
-	s.applySkill(p, p, heal, 100, false)
+	s.applySkill(p, p, heal, 0, false)
 	if p.HP != 1100 {
 		t.Fatalf("self heal duplicated %d", p.HP)
 	}
 	p.HP = 100
 	ally.HP = 0
-	s.applySkill(p, ally, heal, 100, false)
+	s.applySkill(p, ally, heal, 0, false)
 	if p.HP != 100 || ally.HP != 0 {
 		t.Fatal("dead ally caused copy or resurrection")
 	}
@@ -306,7 +306,7 @@ func TestCasterSetsNewThresholdsAndBrokenPiece(t *testing.T) {
 			ice, _ := s.skills.Get(10409, 1)
 			s.startCasterSetCast(p, ice)
 			before := target.HP
-			s.applySkill(p, target, 火弹术, 100, false)
+			s.applySkill(p, target, 火弹术, 0, false)
 			want := int32(208)
 			if pieces >= 4 {
 				want = 312
@@ -391,7 +391,7 @@ func TestCasterSetsAllOriginalMageElementDamage(t *testing.T) {
 			target.MaxHP = 100000
 			target.Stats.MDef = 0
 			before := target.HP
-			s.applySkill(p, target, def, 100, false)
+			s.applySkill(p, target, def, 0, false)
 			base := before - target.HP
 			opposite := domain.SkillDef{HurtType: domain.HurtFire}
 			if def.HurtType == domain.HurtFire {
@@ -399,7 +399,7 @@ func TestCasterSetsAllOriginalMageElementDamage(t *testing.T) {
 			}
 			s.startCasterSetCast(p, opposite)
 			before = target.HP
-			s.applySkill(p, target, def, 100, false)
+			s.applySkill(p, target, def, 0, false)
 			boost := before - target.HP
 			if base <= 0 || boost != base*3/2 {
 				t.Fatalf("base=%d buffed=%d", base, boost)
@@ -434,12 +434,12 @@ func TestCasterSetsElementBonusIsDamageNotSpellCoefficient(t *testing.T) {
 	dst.MaxHP = 10000
 	dst.Stats.MDef = 60
 	before := dst.HP
-	s.applySkill(p, dst, 火弹术, 100, false)
+	s.applySkill(p, dst, 火弹术, 0, false)
 	base := before - dst.HP
 	ice, _ := s.skills.Get(10409, 1)
 	s.startCasterSetCast(p, ice)
 	before = dst.HP
-	s.applySkill(p, dst, 火弹术, 100, false)
+	s.applySkill(p, dst, 火弹术, 0, false)
 	if got := before - dst.HP; got != base*3/2 {
 		t.Fatalf("post-defense base=%d buffed=%d", base, got)
 	}
@@ -481,7 +481,7 @@ func TestCasterSetsGroupNominalHealingCopiesEachAllyOnce(t *testing.T) {
 		q.Player.Party = 7
 		q.MaxHP = 1000
 		q.HP = 1000
-		s.applySkill(p, q, heal, 100, false)
+		s.applySkill(p, q, heal, 0, false)
 	}
 	if p.HP != 300 {
 		t.Fatalf("each full ally should grant nominal100 once: %d", p.HP)
@@ -606,10 +606,30 @@ func TestCasterSetsFailedHealingStatusDoesNotTriggerBolt(t *testing.T) {
 	def := domain.SkillDef{ID: 10303, Level: 1, Kind: domain.SkillSingle, TargetSelf: true, Statuses: []domain.StatusApplication{{ID: 10303, Level: 1, ChanceExplicit: true, ChanceBP: 0}}}
 	s.statuses[domain.StatusKey{ID: 10303, Level: 1}] = domain.StatusDef{ID: 10303, Level: 1, TypeKnown: true, Type: domain.StatusGood, DurationSec: 120, IntervalSec: 1, HPChanges: []domain.ResourceChange{{Value: 14, Mode: domain.ModeAbsolute}}}
 	finish := s.beginEquipmentRoot(p.ID, p.ID, s.equipmentOffense(p))
-	s.applySkill(p, p, def, 100, false)
+	s.applySkill(p, p, def, 0, false)
 	s.finishCasterSetCast(p, pendingCast{def: def, classSetArea: s.captureCasterSetArea(p, def, p.ID, nil)}, []domain.EntityID{p.ID})
 	finish()
 	if target.HP != before {
 		t.Fatal("failed periodic heal status caused reciprocal bolt")
+	}
+}
+
+func TestCasterSetsGeneratedSpellDoesNotDoubleStatusDuration(t *testing.T) {
+	s, p, tid := casterSetFixture(t, 3, 6)
+	target := s.entities[tid]
+	target.HP = 10000
+	target.MaxHP = 10000
+	ice, _ := s.skills.Get(10409, 1)
+	ice.Statuses = []domain.StatusApplication{{ID: 1004, Level: 1, ChanceBP: 10000, DurationSec: 10}}
+	s.statuses[domain.StatusKey{ID: 1004, Level: 1}] = domain.StatusDef{ID: 1004, Level: 1, TypeKnown: true, Type: domain.StatusBad, DurationSec: 10}
+	s.emitCasterSetPayload(p, target, ice)
+	var expiry domain.Tick
+	target.Status.EachEffective(func(a domain.Active) {
+		if a.Def.ID == 1004 {
+			expiry = a.ExpireAt
+		}
+	})
+	if expiry-s.tick != domain.Ticks(10000) {
+		t.Fatalf("generated status duration=%d ticks", expiry-s.tick)
 	}
 }
