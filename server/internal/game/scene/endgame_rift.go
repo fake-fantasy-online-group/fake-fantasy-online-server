@@ -199,9 +199,16 @@ func (s *Scene) startEndgameRiftWithProfile(p *entity.Entity, req domain.Endgame
 		s.endgameError(p, req, "layout", "洞天地形暂不可用，请稍后重试")
 		return
 	}
+	var guardianID domain.MonsterID
+	if rules.GuardianRecentWindow == 3 {
+		guardianID = selectRiftGuardian(rules, plan.Seed, profile.RecentGuardians)
+		plan.Guardian.Point.Monster = guardianID
+		// This candidate profile is committed atomically with the key and run.
+		profile.RecentGuardians = appendRiftGuardianHistory(profile.RecentGuardians, guardianID)
+	}
 	mapID := plan.MapID
 	floor := &plan
-	d := endgameRiftPersisted{Version: 2, Floor: floor, Run: run, MapID: mapID, Return: p.Pos, Names: names, Profiles: profiles, Grants: map[domain.CharID]endgameRiftGrant{}}
+	d := endgameRiftPersisted{GuardianID: guardianID, Version: 2, Floor: floor, Run: run, MapID: mapID, Return: p.Pos, Names: names, Profiles: profiles, Grants: map[domain.CharID]endgameRiftGrant{}}
 	candidate := s.snapshotOf(p).Clone()
 	if !candidate.Bag.Remove(domain.RiftKeyItemID, 1) {
 		s.endgameError(p, req, "key", "需要一枚洞天符钥")

@@ -34,7 +34,7 @@ func LoadMonsterDialogs(ctx context.Context, q Querier) (*domain.MonsterDialogs,
 				rowNo, monster, scene, group, knownMonster, text == "")
 		}
 		entries = append(entries, domain.MonsterDialog{
-			Monster: domain.MonsterID(monster), Scene: uint8(scene), Group: uint8(group), Text: text,
+			RowNo: rowNo, Monster: domain.MonsterID(monster), Scene: uint8(scene), Group: uint8(group), Text: text,
 		})
 	}
 	if err := rows.Err(); err != nil {

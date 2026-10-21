@@ -16,6 +16,7 @@ const (
 // MonsterDialog 是 ov_dialog 的一条原始怪物台词。Scene 对应客户端
 // RES_SCENE_*，Group 保留原表组号，不推断原作的选组概率。
 type MonsterDialog struct {
+	RowNo   int32 // Original ov_dialog identity, used by explicit behavior bindings.
 	Monster MonsterID
 	Scene   uint8
 	Group   uint8
@@ -38,6 +39,7 @@ type monsterDialogSceneKey struct {
 type MonsterDialogs struct {
 	lines    map[monsterDialogKey][]string
 	byScene  map[monsterDialogSceneKey][]string
+	byRow    map[int32]MonsterDialog
 	rows     int
 	monsters int
 }
@@ -45,10 +47,12 @@ type MonsterDialogs struct {
 func NewMonsterDialogs(entries []MonsterDialog) *MonsterDialogs {
 	result := &MonsterDialogs{
 		lines:   make(map[monsterDialogKey][]string),
+		byRow:   make(map[int32]MonsterDialog),
 		byScene: make(map[monsterDialogSceneKey][]string),
 	}
 	seen := make(map[MonsterID]struct{})
 	for _, entry := range entries {
+		result.byRow[entry.RowNo] = entry
 		key := monsterDialogKey{entry.Monster, entry.Scene, entry.Group}
 		result.lines[key] = append(result.lines[key], entry.Text)
 		sceneKey := monsterDialogSceneKey{entry.Monster, entry.Scene}
@@ -89,4 +93,16 @@ func (d *MonsterDialogs) MonsterCount() int {
 		return 0
 	}
 	return d.monsters
+}
+
+// RowLine resolves an audited original row only for its owning monster.
+func (d *MonsterDialogs) RowLine(monster MonsterID, row int32) string {
+	if d == nil {
+		return ""
+	}
+	entry, ok := d.byRow[row]
+	if !ok || entry.Monster != monster {
+		return ""
+	}
+	return entry.Text
 }

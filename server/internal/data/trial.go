@@ -100,9 +100,7 @@ func LoadTrial(ctx context.Context, q Querier, defs MonsterDefs, dungeons domain
 		}
 		ai.SkillCheckEvery = domain.Ticks(int(skillMS))
 		ai.GlobalCooldown = domain.Ticks(int(cooldownMS))
-		d.AI = ai
-		d.ViewDist = ai.ViewDist
-		d.TraceDist = ai.TraceDist
+		// Retain this monster's native AI and skill restrictions.
 		d.Level = level
 		d.HP = hp
 		d.Exp = 0
@@ -120,7 +118,7 @@ func LoadTrial(ctx context.Context, q Querier, defs MonsterDefs, dungeons domain
 		if r.Monsters[level] == nil {
 			r.Monsters[level] = map[domain.MonsterID]domain.MonsterDef{}
 		}
-		r.Monsters[level][id] = d
+		r.Monsters[level][id] = domain.ChallengeMonsterBehavior(d)
 	}
 	err = rows.Err()
 	rows.Close()

@@ -140,7 +140,7 @@ func (s *Scene) stepAI() {
 		if m.Monster.CastingSkill != 0 && s.tick < m.Monster.CastingUntil {
 			continue
 		}
-		p := aiParams(m)
+		p := s.monsterAIParams(m)
 		if m.Monster.NoAttack && m.Monster.Target != 0 {
 			s.dropTarget(m)
 		}
@@ -152,6 +152,10 @@ func (s *Scene) stepAI() {
 
 		var target ai.Target
 		tgt := s.targetInfoInto(m, &target)
+		if s.challengeMonsterScene() && tgt != nil && (!tgt.Alive || sqDist(m.Pos, tgt.Pos) > p.TraceDist*p.TraceDist) {
+			s.dropTarget(m)
+			continue
+		}
 		if s.stepMonsterFlee(m, tgt, p) {
 			continue
 		}
@@ -163,10 +167,15 @@ func (s *Scene) stepAI() {
 			var pathOK bool
 			chaseTo, directPath, pathOK = s.monsterChaseWaypoint(m, tgt.Pos, p.TraceDist)
 			if !pathOK {
+				if s.waitChallengeMonsterPath(m, tgt.Pos, p.TraceDist) {
+					continue
+				}
 				s.dropTarget(m)
 				continue
 			}
 		}
+		// A successful route starts a fresh bounded grace for a later obstruction.
+		m.Monster.ChallengePathWaitUntil = 0
 		if tgt == nil && m.Monster.Target == 0 && s.stepWander(m, p) {
 			continue
 		}
@@ -238,6 +247,10 @@ func (s *Scene) initializeMonster(m *entity.Entity) {
 	m.Monster.FleeUntil = 0
 	m.Monster.NextFleeAt = 0
 	m.Monster.HelpReadyAt = 0
+	m.Monster.HelpChaseUntil = 0
+	m.Monster.HelpTraceDist = 0
+	m.Monster.ChallengePathWaitUntil = 0
+	m.Monster.HelpSpeechUntil = 0
 	s.clearMonsterChasePath(m.Monster)
 	m.Monster.ChasePathRetryAt = 0
 	m.Monster.ChasePathRetryTarget = domain.Pos{}
@@ -1097,6 +1110,9 @@ func (s *Scene) dropTarget(m *entity.Entity) {
 	}
 	m.Monster.CombatPathActive = false
 	m.Monster.Target = 0
+	m.Monster.HelpChaseUntil = 0
+	m.Monster.HelpTraceDist = 0
+	m.Monster.ChallengePathWaitUntil = 0
 	m.Monster.FleeUntil = 0
 	m.Monster.TauntPower = 0
 	m.Monster.Roaming = false
@@ -1169,27 +1185,29 @@ func (s *Scene) emitEntityMove(m *entity.Entity, to domain.Pos) {
 //
 // 辅助宠物不是战斗单位，不能成为仇恨来源。
 func (s *Scene) aggro(victim *entity.Entity, attacker domain.EntityID) {
-	if victim == nil || victim.Monster == nil || victim.Monster.NoAttack || attacker == 0 {
+	s.aggroWithHelp(victim, attacker, true)
+}
+
+func (s *Scene) aggroWithHelp(victim *entity.Entity, attacker domain.EntityID, help bool) {
+	if victim == nil || !victim.Alive() || victim.Monster == nil || victim.Monster.NoAttack || attacker == 0 {
 		return
 	}
 	a, ok := s.entities[attacker]
 	if !ok || a.Kind != domain.KindPlayer || !a.Alive() || entityInvisible(a) || s.entityMapLoading(a) || !s.equipmentCombatReady(a) {
 		return
 	}
-	// Higher-level monsters retain their previous behavior. Audited monsters may
-	// call companions after acquiring a target, but never steal an existing fight.
 	if victim.Monster.Target != 0 {
-		if s.defs != nil {
-			if d, found := s.defs.Def(victim.Monster.TypeID); found && d.Level <= 60 {
-				s.callMonsterHelp(victim, attacker)
-			}
+		if help {
+			s.callMonsterHelp(victim, attacker)
 		}
 		return
 	}
 	victim.Monster.Target = attacker
 	victim.Monster.Roaming = false
 	s.monsterSpeak(victim, domain.MonsterSceneEnemy)
-	s.callMonsterHelp(victim, attacker)
+	if help {
+		s.callMonsterHelp(victim, attacker)
+	}
 }
 
 // taunt 强制怪物把施法者设为当前目标。客户端资料没有保存旧服的绝对仇恨值，
@@ -1217,57 +1235,6 @@ func (s *Scene) taunt(victim *entity.Entity, attacker domain.EntityID, power int
 	victim.Monster.TauntPower = power
 	victim.Monster.Roaming = false
 	return true
-}
-
-// callMonsterHelp recruits nearby idle hostile combat monsters without recursion.
-// The <=60 audited policy permits different types; higher levels retain same-type help.
-func (s *Scene) callMonsterHelp(victim *entity.Entity, attacker domain.EntityID) {
-	if victim == nil || victim.Monster == nil || s.defs == nil || victim.Monster.AI.HelpRadius <= 0 {
-		return
-	}
-	def, ok := s.defs.Def(victim.Monster.TypeID)
-	if !ok || !def.CallHelp || victim.Monster.NoAttack {
-		return
-	}
-	a := s.entities[attacker]
-	if a == nil || a.Kind != domain.KindPlayer || !a.Alive() || entityInvisible(a) || s.entityMapLoading(a) || !s.equipmentCombatReady(a) || a.Player != nil && a.Player.Protected(s.tick) {
-		return
-	}
-	audited := def.Level <= 60
-	if audited {
-		if s.tick < victim.Monster.HelpReadyAt {
-			return
-		}
-		victim.Monster.HelpReadyAt = s.tick + 10
-	}
-	radius := float64(victim.Monster.AI.HelpRadius)
-	visit := func(other *entity.Entity) {
-		if other == nil || other.ID == victim.ID || !other.Alive() || other.Monster == nil ||
-			other.Monster.NoAttack || !other.Monster.Kind.Hostile() || other.Monster.Target != 0 ||
-			sqDist(victim.Pos, other.Pos) > radius*radius {
-			return
-		}
-		if audited {
-			otherDef, found := s.defs.Def(other.Monster.TypeID)
-			if !found || otherDef.Level > 60 {
-				return
-			}
-		}
-		if !audited && other.Monster.TypeID != victim.Monster.TypeID {
-			return
-		}
-		if audited && (!s.straightPathWalkable(victim.Pos, other.Pos) || sqDist(other.Pos, a.Pos) > aiParams(other).TraceDist*aiParams(other).TraceDist) {
-			return
-		}
-		other.Monster.Target = attacker
-		other.Monster.Roaming = false
-		s.monsterSpeak(other, domain.MonsterSceneEnemy)
-	}
-	if audited {
-		s.aoi.AroundRadius(victim.Pos, radius, visit)
-	} else {
-		s.aoi.AroundPos(victim.Pos, visit)
-	}
 }
 
 func sqDist(a, b domain.Pos) float64 {

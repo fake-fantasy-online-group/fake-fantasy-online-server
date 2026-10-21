@@ -946,6 +946,9 @@ func (s *Scene) refreshEntityStats(e *entity.Entity) {
 		return
 	}
 	// 从模板重新起算；固定 buff 与百分比 buff 分桶后一次性相加，禁止复利。
+	if s.challengeMonsterScene() {
+		def = domain.ChallengeMonsterBehavior(def)
+	}
 	base := def.Stats
 	if s.rift != nil {
 		if scaled, exists := s.rift.baseStats[e.ID]; exists {
@@ -953,6 +956,9 @@ func (s *Scene) refreshEntityStats(e *entity.Entity) {
 		}
 	}
 	e.Stats = domain.ApplyMonsterStatusStats(base, e.Status)
+	if s.challengeMonsterScene() && base.MoveSpeed <= 0 {
+		e.Stats.MoveSpeed = 0 // Native immobility is not removed by speed buffs.
+	}
 	applyStatusAttackCap(e)
 }
 

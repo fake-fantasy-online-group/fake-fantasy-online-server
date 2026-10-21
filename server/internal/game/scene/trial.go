@@ -214,14 +214,16 @@ func (s *Scene) prepareTrial(cmd Enter) {
 			if d.Kind == domain.MonsterBoss {
 				d = s.trial.Monsters[level+s.trial.BossOffset][id]
 			}
-			defs[id] = d
+			defs[id] = domain.ChallengeMonsterBehavior(d)
 			p.Point.Monster = id
 			pts = append(pts, p.Point)
 		}
 	}
 	choose(normal, s.trial.NormalCount)
 	choose(boss, s.trial.BossCount)
-	s.defs = defs
+	// Preserve the native fallback catalog for original skills that summon
+	// monsters outside the selected encounter roster.
+	s.defs = endgameRiftDefs{base: s.defs, trial: defs, scaled: true}
 	s.spawner, _ = spawn.New(pts, defs, s.alloc)
 	s.populate()
 }

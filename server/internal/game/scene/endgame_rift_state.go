@@ -10,8 +10,9 @@ import (
 )
 
 type endgameRiftProfile struct {
-	RunID        string `json:"runId"`
-	UnlockedTier int32  `json:"unlockedTier"`
+	RecentGuardians []domain.MonsterID `json:"recentGuardians,omitempty"`
+	RunID           string             `json:"runId"`
+	UnlockedTier    int32              `json:"unlockedTier"`
 }
 type endgameRiftGrant struct {
 	ExperienceLevel    int32 `json:",omitempty"`
@@ -26,6 +27,7 @@ type endgameRiftGrant struct {
 	Pet                endgamePetGrant
 }
 type endgameRiftPersisted struct {
+	GuardianID      domain.MonsterID            `json:",omitempty"`
 	Elite           *endgameRiftEliteSnapshot   `json:",omitempty"`
 	GuardianArrival *endgameRiftGuardianArrival `json:",omitempty"`
 	RewardPos       domain.Pos
@@ -58,7 +60,7 @@ func decodeEndgameRift(record *domain.EndgameRunRecord, table *domain.RiftRuleTa
 	if record == nil || json.Unmarshal([]byte(record.Payload), &d) != nil || (d.Version != 1 && d.Version != 2) || d.Run == nil || d.Run.RunID != record.RunID {
 		return d, false
 	}
-	if d.Run.BindRules(table) != nil || !validRiftGuardianArrival(d) || !validRiftEliteSnapshot(d) {
+	if d.Run.BindRules(table) != nil || !validRiftGuardianArrival(d) || !validRiftEliteSnapshot(d) || !validRiftGuardianSelection(d) {
 		return d, false
 	}
 	return d, true
@@ -81,6 +83,7 @@ func riftProfile(payload string) endgameRiftProfile {
 	if p.UnlockedTier < 1 {
 		p.UnlockedTier = 1
 	}
+	p.RecentGuardians = boundedRiftGuardianHistory(p.RecentGuardians)
 	return p
 }
 func withRiftProfile(payload string, p endgameRiftProfile) string {
@@ -89,6 +92,7 @@ func withRiftProfile(payload string, p endgameRiftProfile) string {
 	if all == nil {
 		all = map[string]json.RawMessage{}
 	}
+	p.RecentGuardians = boundedRiftGuardianHistory(p.RecentGuardians)
 	b, _ := json.Marshal(p)
 	all["rift"] = b
 	b, _ = json.Marshal(all)

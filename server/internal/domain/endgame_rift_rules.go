@@ -45,8 +45,11 @@ type RiftAbilityRule struct {
 	DamagePct                   int32
 }
 type RiftRules struct {
-	EquipmentPools []RiftEquipmentPool `json:",omitempty"`
-	Elite          *RiftEliteRules     `json:",omitempty"`
+	// Zero preserves historical floor generation and guardian selection.
+	FloorLayoutVersion   int32               `json:",omitempty"`
+	GuardianRecentWindow int32               `json:",omitempty"`
+	EquipmentPools       []RiftEquipmentPool `json:",omitempty"`
+	Elite                *RiftEliteRules     `json:",omitempty"`
 	// Zero keeps historical immediate guardians; v5 freezes a five-second arrival.
 	GuardianArrivalMS int64 `json:",omitempty"`
 	// New runs freeze reward level at guardian death; old runs keep admission level.
@@ -134,6 +137,9 @@ func (t *RiftRuleTable) Active() *RiftRules {
 	return r
 }
 func (r *RiftRules) Validate() error {
+	if r != nil && ((r.FloorLayoutVersion != 0 && r.FloorLayoutVersion != RiftFloorCoverageVersion) || (r.GuardianRecentWindow != 0 && r.GuardianRecentWindow != 3) || ((r.FloorLayoutVersion != 0 || r.GuardianRecentWindow != 0) && (r.Version < 8 || r.Elite == nil))) {
+		return fmt.Errorf("invalid versioned rift layout/guardian policy")
+	}
 	if r == nil || r.FloorPopulationMultiplier < 0 || r.FloorPopulationMultiplier > 2 || r.Version < 1 || r.Loot == nil || r.LootVersion != r.Loot.Version || r.MaxTier < 1 || r.MaxTier > 150 || r.ProgressMax < 1 || r.ProgressMax > 100000000 || r.NormalProgress < 1 || r.NormalProgress > r.ProgressMax || r.GlobeProgress < 1 || r.GlobeProgress > r.ProgressMax || r.BlueOrbs < 1 || r.BlueOrbs > 32 || r.GoldOrbs < 1 || r.GoldOrbs > 32 {
 		return fmt.Errorf("invalid rift identity/progress rules")
 	}

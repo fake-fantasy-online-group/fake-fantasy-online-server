@@ -13,6 +13,9 @@ func (s *Scene) monsterSpeak(m *entity.Entity, scene uint8) {
 	if m == nil || m.Monster == nil || s.monsterDialogs == nil || scene >= 8 || len(s.players) == 0 {
 		return
 	}
+	if s.tick < m.Monster.HelpSpeechUntil {
+		return
+	}
 	bit := uint8(1) << scene
 	if m.Monster.SpokenScenes&bit != 0 {
 		return
@@ -36,7 +39,7 @@ func (s *Scene) sendIdleMonsterGreetingTo(player *entity.Entity) {
 	var nearest *entity.Entity
 	var nearestDist float64
 	for _, m := range s.monsters {
-		if m == nil || m.Monster == nil || !m.Alive() || m.Monster.Target != 0 {
+		if m == nil || m.Monster == nil || !m.Alive() || m.Monster.Target != 0 || s.tick < m.Monster.HelpSpeechUntil {
 			continue
 		}
 		dist := sqDist(m.Pos, player.Pos)

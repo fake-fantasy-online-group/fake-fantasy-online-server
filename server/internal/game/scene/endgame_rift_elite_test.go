@@ -293,7 +293,7 @@ func TestRiftEliteNativeGuardianPreservedAndWhitelistEnforced(t *testing.T) {
 	}
 	for id, m := range s.monsters {
 		d, _ := s.defs.Def(m.Monster.TypeID)
-		if m.Name != native.Name || m.Look.ModelID != native.Sprite || m.Monster.AI.ID != native.AI.ID || !reflect.DeepEqual(d.Skills, native.Skills) || !reflect.DeepEqual(d.ImmuneSkills, native.ImmuneSkills) || m.Stats.Def != 333 || m.Stats.MoveSpeed != 77 {
+		if m.Name != native.Name || m.Look.ModelID != native.Sprite || m.Monster.AI.ID != native.AI.ID || !reflect.DeepEqual(d.Skills, native.Skills) || !reflect.DeepEqual(d.ImmuneSkills, native.ImmuneSkills) || m.Stats.Def != 333 || m.Stats.MoveSpeed != 115 {
 			t.Fatal("native guardian changed", m, d)
 		}
 		if !reflect.DeepEqual(s.riftMonsterAbilityIDs(id), []int32{0, 3, 6}) {

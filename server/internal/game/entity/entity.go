@@ -818,9 +818,12 @@ type Monster struct {
 	Home         domain.Pos // 出生点记录。怪物脱战后不会据此回位或重置
 
 	// Bounded behavior state belongs to one live spawn, never to its template.
-	FleeUntil   domain.Tick
-	NextFleeAt  domain.Tick
-	HelpReadyAt domain.Tick
+	FleeUntil       domain.Tick
+	NextFleeAt      domain.Tick
+	HelpReadyAt     domain.Tick
+	HelpChaseUntil  domain.Tick
+	HelpTraceDist   float64
+	HelpSpeechUntil domain.Tick
 
 	Target     domain.EntityID // 当前仇恨目标, 0 = 无
 	TauntPower int32           // 当前目标由嘲讽建立时的覆盖优先级；普通仇恨为 0
@@ -835,8 +838,9 @@ type Monster struct {
 	ChasePathTarget domain.Pos
 	// ChasePathRetryAt 缓存一次局部寻路失败，避免一群怪隔着大片水面时每 500ms
 	// 重复铺满搜索圆。目标明显移动后可立即重试，否则最多等 2 秒。
-	ChasePathRetryAt     domain.Tick
-	ChasePathRetryTarget domain.Pos
+	ChallengePathWaitUntil domain.Tick // bounded instance-only unreachable-target grace
+	ChasePathRetryAt       domain.Tick
+	ChasePathRetryTarget   domain.Pos
 
 	// RoamTo/NextRoamAt 是无目标时的游荡状态。每轮都从当前位置选短途目的地；
 	// 追到传送门附近的怪会从那里继续活动，不会回出生点重置。

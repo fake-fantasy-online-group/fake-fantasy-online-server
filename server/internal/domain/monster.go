@@ -59,16 +59,17 @@ func (k MonsterKind) Hostile() bool {
 // MonsterDef 是一种怪的模板 —— **"哪种怪"，不是"哪一只"**。
 // 对应 game_monsters 的一行；运行时的每一只由 EntityID 标识。
 type MonsterDef struct {
-	Family  MonsterFamily `json:",omitempty"`
-	ID      MonsterID
-	Name    string
-	Kind    MonsterKind
-	EliteID MonsterID // 普通怪对应的光圈精英模板；0 表示没有精英版本
-	Level   int32
-	HP      int32
-	Exp     int64
-	Sprite  int32 // 模型号，出场包直接用（→ ov_cmon.map_id）
-	Stats   Stats
+	HelpGroup string        `json:",omitempty"` // Explicit species alliance; empty means exact template ID only.
+	Family    MonsterFamily `json:",omitempty"`
+	ID        MonsterID
+	Name      string
+	Kind      MonsterKind
+	EliteID   MonsterID // 普通怪对应的光圈精英模板；0 表示没有精英版本
+	Level     int32
+	HP        int32
+	Exp       int64
+	Sprite    int32 // 模型号，出场包直接用（→ ov_cmon.map_id）
+	Stats     Stats
 	// ColorProfile 是这只怪掉出的随机装备使用的“染色”（属性条数）档位，
 	// 由 kind 经 game_monster_color_profiles 查得。运行时光圈怪用的是精英
 	// 模板，因此拿到的也是精英档。
@@ -87,6 +88,8 @@ type MonsterDef struct {
 	// ImmuneSkills 来自 game_monster_skills.kind='immune'。怪物免疫的是明确的
 	// 技能号，不是按伤害类型做模糊推断。
 	ImmuneSkills map[SkillID]struct{}
+
+	challengeBehaviorApplied bool // instance templates only; never multiply a clone twice
 }
 
 // MonsterAIProfile 是数据库驱动的一套怪物行为模板。模板负责“什么时候以及

@@ -13,7 +13,13 @@ func (s *Scene) planEndgameRiftFloor(runID string, floor, previousMap int32) (do
 	if rules == nil {
 		return domain.RiftFloorPlan{}, errors.New("missing rift population rules")
 	}
-	plan, err := domain.PlanRiftFloor(runID, floor, s.riftLayouts, previousMap, rules.FloorPopulationMultiplier)
+	var plan domain.RiftFloorPlan
+	var err error
+	if rules.FloorLayoutVersion == domain.RiftFloorCoverageVersion {
+		plan, err = domain.PlanRiftCoverageFloor(runID, floor, s.riftLayouts, previousMap)
+	} else {
+		plan, err = domain.PlanRiftFloor(runID, floor, s.riftLayouts, previousMap, rules.FloorPopulationMultiplier)
+	}
 	if err != nil || rules.Elite == nil {
 		return plan, err
 	}
@@ -27,6 +33,10 @@ func (s *Scene) planEndgameRiftFloor(runID string, floor, previousMap int32) (do
 	}
 	selected := rules.Elite.Guardians[int(plan.Seed%uint64(len(rules.Elite.Guardians)))]
 	plan.Guardian.Point.Monster = selected.MonsterID
+	if rules.GuardianRecentWindow == 3 && s.rift != nil && s.rift.data.Run.RunID == runID {
+		// A run owns one guardian, including after floor travel or reconnect.
+		plan.Guardian.Point.Monster = s.rift.data.GuardianID
+	}
 	return plan, nil
 }
 
@@ -106,7 +116,7 @@ func (s *Scene) populateSeededEndgameRift(boss bool) {
 	// Validate the entire population before adding a single entity. An invalid
 	// template cannot leave a partially playable, unwinnable paid instance.
 	for i, p := range points {
-		def, ok := s.defs.Def(p.Point.Monster)
+		def, ok := s.riftNativeDefinition(p.Point.Monster)
 		if boss && x.data.Run.Rules.Elite != nil {
 			approved := false
 			for _, g := range x.data.Run.Rules.Elite.Guardians {
@@ -137,13 +147,12 @@ func (s *Scene) populateSeededEndgameRift(boss bool) {
 			def.Stats.MaxHP = base.HP
 			def.Stats.MinAtk, def.Stats.MaxAtk, def.Stats.MAtk = base.Stats.MinAtk, base.Stats.MaxAtk, base.Stats.MAtk
 		} else {
+			nativeSpeed := def.Stats.MoveSpeed
 			def.Stats = base.Stats
-			def.AI = base.AI
-			def.ViewDist, def.TraceDist = base.ViewDist, base.TraceDist
-			def.Skills, def.ImmuneSkills = base.Skills, base.ImmuneSkills
-			def.Aggressive, def.NoAttack, def.NoBasicAttack = true, false, base.NoBasicAttack
-			def.CallHelp = base.CallHelp
+			def.Stats.MoveSpeed = nativeSpeed
+			def.Aggressive, def.NoAttack = true, false
 		}
+		def = domain.ChallengeMonsterBehavior(def)
 		def.EliteID = 0
 		lookup[def.ID] = def
 		if boss {
@@ -163,7 +172,7 @@ func (s *Scene) populateSeededEndgameRift(boss bool) {
 		def.Stats.MAtk = domain.RiftScaledStat(def.Stats.MAtk, x.data.Run.Tier, len(x.data.Run.Members), p.Class, false, x.data.Run.Rules)
 		population = append(population, prepared{p, def})
 	}
-	s.defs = endgameRiftDefs{base: s.defs, trial: lookup}
+	s.defs = endgameRiftDefs{base: s.defs, trial: lookup, scaled: true}
 	for i, p := range population {
 		m := spawn.Encounter(s.alloc.Monster(), p.point.Point.Pos, uint8(p.point.Point.Dir), p.def)
 		x.originalNames[m.ID] = lookup[p.def.ID].Name
@@ -179,13 +188,20 @@ func (s *Scene) populateSeededEndgameRift(boss bool) {
 	}
 }
 
-// Ignore prior instance-local scaling overrides when resolving the native boss.
+// Resolve the native catalog entry, skipping generated encounter overrides.
+// A catalog may itself be layered (or have no base), so the wrapper type alone
+// cannot tell us whether its entries are original or instance-local scaled data.
 func (s *Scene) riftNativeDefinition(id domain.MonsterID) (domain.MonsterDef, bool) {
 	defs := s.defs
 	for {
 		overlay, ok := defs.(endgameRiftDefs)
 		if !ok {
 			break
+		}
+		if !overlay.scaled {
+			if def, exists := overlay.trial[id]; exists {
+				return def, true
+			}
 		}
 		defs = overlay.base
 	}

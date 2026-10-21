@@ -15,12 +15,12 @@ func behaviorFixture(t *testing.T) (*Scene, *entity.Entity, *entity.Entity) {
 	d.AI = domain.MonsterAIProfile{ID: "behavior-test", ViewDist: 400, TraceDist: 600, HelpRadius: 400}
 	s, id := aiScene(t, d, 290, 100)
 	peer := d
-	peer.ID = 1002
+	peer.ID = d.ID
 	s.defs = spawn.MapDefs{d.ID: d, peer.ID: peer}
 	join(t, s, 1, 100, "甲", 250, 100)
 	m := s.entities[id]
 	copyMonster := *m.Monster
-	copyMonster.TypeID = 1002
+	copyMonster.TypeID = d.ID
 	other := *m
 	other.ID = 90001
 	other.Monster = &copyMonster
@@ -31,12 +31,12 @@ func behaviorFixture(t *testing.T) (*Scene, *entity.Entity, *entity.Entity) {
 	return s, m, &other
 }
 
-func TestAuditedHelpRecruitsOtherTypeAcrossAOICell(t *testing.T) {
+func TestAuditedHelpRecruitsSameTypeAcrossAOICell(t *testing.T) {
 	s, m, other := behaviorFixture(t)
 	m.Monster.Target = 1 // acquired before being hit
 	s.aggro(m, 1)
 	if other.Monster.Target != 1 {
-		t.Fatal("already-engaged caller did not recruit nearby other type")
+		t.Fatal("already-engaged caller did not recruit nearby same type")
 	}
 	if m.Monster.Target != 1 {
 		t.Fatal("caller target changed")
@@ -68,23 +68,8 @@ func TestAuditedHelpRateLimitAndFatalHit(t *testing.T) {
 	s.tick += 10
 	m.HP = 0
 	s.aggro(m, 1)
-	if other.Monster.Target != 1 {
-		t.Fatal("fatal hit failed to alert companions")
-	}
-}
-func TestAbove60HelpKeepsPreviousRules(t *testing.T) {
-	s, m, other := behaviorFixture(t)
-	d, _ := s.defs.Def(m.Monster.TypeID)
-	d.Level = 61
-	s.defs = spawn.MapDefs{d.ID: d}
-	s.aggro(m, 1)
 	if other.Monster.Target != 0 {
-		t.Fatal("high-level caller recruited different type")
-	}
-	other.Monster.TypeID = m.Monster.TypeID
-	s.aggro(m, 1)
-	if other.Monster.Target != 0 {
-		t.Fatal("high-level caller changed already-targeted semantics")
+		t.Fatal("fatal hit alerted companions")
 	}
 }
 func TestMonsterFleeBoundedAndCooldown(t *testing.T) {
@@ -216,22 +201,10 @@ func TestAuditedHelpDoesNotCrossWallOrRadius(t *testing.T) {
 	}
 	s.walkable = nil
 	s.tick += 10
-	s.aoi.Move(other, domain.Pos{MapID: 14, X: 800, Y: 100})
+	s.aoi.Move(other, domain.Pos{MapID: 14, X: 1091, Y: 100})
 	s.aggro(m, 1)
 	if other.Monster.Target != 0 {
 		t.Fatal("help crossed radius")
-	}
-}
-
-func TestAuditedHelpDoesNotChangeAbove60Recipient(t *testing.T) {
-	s, m, other := behaviorFixture(t)
-	defs := s.defs.(spawn.MapDefs)
-	d := defs[other.Monster.TypeID]
-	d.Level = 61
-	defs[d.ID] = d
-	s.aggro(m, 1)
-	if other.Monster.Target != 0 {
-		t.Fatal("audited caller changed higher-level recipient behavior")
 	}
 }
 

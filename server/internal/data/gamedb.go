@@ -177,7 +177,8 @@ func LoadMonsters(ctx context.Context, q Querier) (MonsterDefs, error) {
 		       m.aggressive, m.can_attack, m.basic_attack_enabled, m.call_help, m.flee, m.pickup,
 		       a.id, a.view_dist, a.trace_dist, a.basic_attack_dist, a.keep_dist,
 		       a.help_radius, a.skill_check_ms, a.global_cooldown_ms,
-		       a.flee_hp_percent, a.flee_duration_ms, a.flee_cooldown_ms
+		       a.flee_hp_percent, a.flee_duration_ms, a.flee_cooldown_ms,
+               COALESCE(to_jsonb(m)->>'help_group', '')
 		  FROM game_monsters m
 		  JOIN game_monster_ai_templates a ON a.id = m.ai_template
 		 WHERE m.level > 0 AND m.hp > 0`)
@@ -203,7 +204,7 @@ func LoadMonsters(ctx context.Context, q Querier) (MonsterDefs, error) {
 			&d.Aggressive, &canAttack, &basicAttackEnabled, &d.CallHelp, &d.Flee, &d.Pickup,
 			&d.AI.ID, &d.AI.ViewDist, &d.AI.TraceDist, &d.AI.BasicAttackDist, &d.AI.KeepDist,
 			&d.AI.HelpRadius, &skillCheckMS, &globalCooldownMS,
-			&d.AI.FleeHPPercent, &fleeDurationMS, &fleeCooldownMS); err != nil {
+			&d.AI.FleeHPPercent, &fleeDurationMS, &fleeCooldownMS, &d.HelpGroup); err != nil {
 			return nil, fmt.Errorf("data: 读 game_monsters 行: %w", err)
 		}
 		d.Kind = domain.ParseMonsterKind(kind)

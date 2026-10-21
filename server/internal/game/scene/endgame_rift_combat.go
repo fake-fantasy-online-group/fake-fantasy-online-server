@@ -10,8 +10,11 @@ import (
 // Per-instance lookup preserves native trial skill/immune definitions without
 // modifying shared global templates. Per-entity scaling lives separately.
 type endgameRiftDefs struct {
-	base  spawn.Defs
-	trial map[domain.MonsterID]domain.MonsterDef
+	// scaled distinguishes generated encounter overrides from native catalog
+	// layers. Native resolution must skip only generated values, not catalogs.
+	scaled bool
+	base   spawn.Defs
+	trial  map[domain.MonsterID]domain.MonsterDef
 }
 
 func (d endgameRiftDefs) Def(id domain.MonsterID) (domain.MonsterDef, bool) {
@@ -200,16 +203,16 @@ func (s *Scene) populateEndgameRift(boss bool) {
 	}
 	lookup := map[domain.MonsterID]domain.MonsterDef{}
 	for id, def := range s.trial.Monsters[level] {
-		lookup[id] = def
+		lookup[id] = domain.ChallengeMonsterBehavior(def)
 	}
 	if boss {
 		for id, def := range s.trial.Monsters[level+s.trial.BossOffset] {
 			if def.Kind == domain.MonsterBoss {
-				lookup[id] = def
+				lookup[id] = domain.ChallengeMonsterBehavior(def)
 			}
 		}
 	}
-	s.defs = endgameRiftDefs{base: s.defs, trial: lookup}
+	s.defs = endgameRiftDefs{base: s.defs, trial: lookup, scaled: true}
 	var points []domain.TrialSpawn
 	for _, p := range s.trial.Maps[s.id.MapID] {
 		if len(p.Candidates) == 0 {

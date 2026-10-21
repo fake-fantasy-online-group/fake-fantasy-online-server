@@ -211,7 +211,7 @@ func (s *Scene) executeEquipmentProc(owner *entity.Entity, c equipmentProcCandid
 			s.emit(ev)
 			s.afterStrikeStatuses(owner, target, ev, raw, reflected)
 			s.emitAttributesIfPlayer(target)
-			s.aggro(target, owner.ID)
+			s.aggroAfterHit(target, owner.ID, ev)
 			if ev.Flag.Has(event.DamageFatal) {
 				s.onDeath(target, owner.ID)
 			}

@@ -40,6 +40,9 @@ type RiftFloorTemplate struct {
 	// Keeping it separate preserves the exact v2 base seed, composition and guardian.
 	ExtraPopulation []SpawnPoint
 	WalkableArea    float64
+	// CombatRegions are independently connected, bounded playable areas for v4.
+	// Legacy population and seed streams are deliberately left untouched.
+	CombatRegions []RiftCombatRegion
 }
 
 type RiftFloorSpawn struct {
@@ -369,7 +372,7 @@ func (p RiftFloorPlan) Valid() bool {
 	if p.GeneratorVersion == 1 {
 		// Already-admitted plans remain authoritative and are never regenerated.
 		maxPopulation = 64
-	} else if p.GeneratorVersion == RiftFloorGeneratorVersion {
+	} else if p.GeneratorVersion == RiftFloorGeneratorVersion || p.GeneratorVersion == RiftFloorCoverageVersion {
 		maxPopulation = RiftFloorMaxConfiguredPopulation
 	} else if p.GeneratorVersion != riftFloorBaseGeneratorVersion {
 		return false
@@ -387,6 +390,13 @@ func (p RiftFloorPlan) Valid() bool {
 		}
 		if p.GeneratorVersion >= 2 && (seen[s.Point.Pos] || riftFloorDistance(s.Point.Pos, p.Entry) < RiftFloorSafeRadius*RiftFloorSafeRadius || riftFloorDistance(s.Point.Pos, p.Exit) < 80*80) {
 			return false
+		}
+		if p.GeneratorVersion == RiftFloorCoverageVersion {
+			for other := range seen {
+				if riftFloorDistance(other, s.Point.Pos) < RiftFloorPopulationSpacing*RiftFloorPopulationSpacing {
+					return false
+				}
+			}
 		}
 		seen[s.Point.Pos] = true
 	}

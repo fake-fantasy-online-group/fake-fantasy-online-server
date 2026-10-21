@@ -196,7 +196,12 @@ func (s *Scene) onUseItem(cmd UseItem) {
 	}
 	if len(def.UseStatuses) == 0 || s.statuses == nil {
 		if def.UseDisabledReason != "" {
-			s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: def.UseDisabledReason})
+			text := def.UseDisabledReason
+			// 普通蟠桃尚无恢复的效果，玩家无需看到内部脚本缺失说明。
+			if def.ID == 3634 {
+				text = "该物品暂不可使用"
+			}
+			s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: text})
 			s.log.Debug("拒绝未开放物品效果", "char", p.Name, "item", def.ID,
 				"reason", def.UseDisabledReason)
 			return

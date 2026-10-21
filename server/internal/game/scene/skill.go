@@ -1283,7 +1283,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			s.afterStrikeStatuses(src, dst, ev, rawDamage, fullMagicReflect)
 			s.consumeHitDurability(dst, ev)
 			s.emitAttributesIfPlayer(dst)
-			s.aggro(dst, src.ID)
+			s.aggroAfterHit(dst, src.ID, ev)
 			effectLanded = !ev.Flag.Has(event.DamageMiss)
 			if ev.Flag.Has(event.DamageFatal) {
 				s.onDeath(dst, src.ID)
@@ -1437,6 +1437,9 @@ func (s *Scene) summonMonsters(caster *entity.Entity, extra domain.MonsterSkillE
 	if !ok || !def.Kind.Hostile() {
 		return
 	}
+	if s.challengeMonsterScene() {
+		def = domain.ChallengeMonsterBehavior(def)
+	}
 	owned, temporary := 0, 0
 	for _, monster := range s.monsters {
 		if monster.Monster == nil || monster.Monster.Summoner == 0 {
@@ -1467,6 +1470,9 @@ func (s *Scene) summonMonsters(caster *entity.Entity, extra domain.MonsterSkillE
 		}
 		monster := spawn.Summon(s.alloc.Monster(), pos, def, caster.ID)
 		monster.Monster.Target = caster.Monster.Target
+		if s.rift != nil {
+			s.rift.baseStats[monster.ID] = def.Stats
+		}
 		if extra.Lifetime > 0 {
 			monster.Monster.ExpireAt = s.tick + extra.Lifetime
 		}
@@ -1489,6 +1495,9 @@ func (s *Scene) despawnMonster(monster *entity.Entity) {
 	s.aoi.Leave(monster)
 	delete(s.entities, monster.ID)
 	delete(s.monsters, monster.ID)
+	if s.rift != nil {
+		delete(s.rift.baseStats, monster.ID)
+	}
 	delete(s.hits, monster.ID)
 	s.scheduleRespawn(monster, false)
 }

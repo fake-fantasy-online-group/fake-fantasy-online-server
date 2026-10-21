@@ -1078,7 +1078,7 @@ func (s *Scene) stepCombatAt(now time.Time, timedOnly bool) {
 		s.consumeHitDurability(dst, ev)
 		s.emitAttributesIfPlayer(dst)
 		// 挨打就还手: 不主动的怪靠这条上仇恨, 它们不会主动找人但一定回击
-		s.aggro(dst, src.ID)
+		s.aggroAfterHit(dst, src.ID, ev)
 		if ev.Flag.Has(event.DamageFatal) {
 			s.onDeath(dst, src.ID)
 		}
@@ -1222,6 +1222,9 @@ func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
 		delete(s.entities, id)
 		delete(s.players, id)
 		delete(s.monsters, id)
+		if s.rift != nil {
+			delete(s.rift.baseStats, id)
+		}
 		delete(s.hits, id)
 		s.scheduleRespawn(e, true)
 	})

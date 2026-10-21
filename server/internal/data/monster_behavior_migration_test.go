@@ -201,12 +201,12 @@ func (behaviorLoaderQuery) Query(_ context.Context, query string, _ ...any) (pgx
 	case strings.Contains(query, "FROM game_monster_color_profiles"):
 		values = [][]any{{"", 1}}
 	case strings.Contains(query, "FROM game_monsters m"):
-		for _, col := range []string{"m.flee", "m.pickup", "a.flee_hp_percent", "a.flee_duration_ms", "a.flee_cooldown_ms"} {
+		for _, col := range []string{"m.flee", "m.pickup", "a.flee_hp_percent", "a.flee_duration_ms", "a.flee_cooldown_ms", "help_group"} {
 			if !strings.Contains(query, col) {
 				return nil, fmt.Errorf("missing column %s", col)
 			}
 		}
-		values = [][]any{{1005, "test", "普通", 0, 20, 100, 1, 1, 10, 20, 1, 1, 1, 1, 0, 0, 2000, 100, true, true, true, true, true, true, "melee", 400, 600, 80, 0, 250, 500, 500, 20, 3000, 10000}}
+		values = [][]any{{1005, "test", "普通", 0, 20, 100, 1, 1, 10, 20, 1, 1, 1, 1, 0, 0, 2000, 100, true, true, true, true, true, true, "melee", 400, 600, 80, 0, 250, 500, 500, 20, 3000, 10000, "reviewed-test-group"}}
 	}
 	out := &v5SingleUserRows{at: -1}
 	for _, row := range values {
@@ -225,7 +225,7 @@ func TestMonsterBehaviorLoaderColumns(t *testing.T) {
 		t.Fatal(err)
 	}
 	d := defs[1005]
-	if !d.Flee || !d.Pickup || !d.CallHelp || !d.Aggressive || d.AI.FleeHPPercent != 20 || d.AI.FleeDurationTicks != domain.Ticks(3000) || d.AI.FleeCooldownTicks != domain.Ticks(10000) {
+	if d.HelpGroup != "reviewed-test-group" || !d.Flee || !d.Pickup || !d.CallHelp || !d.Aggressive || d.AI.FleeHPPercent != 20 || d.AI.FleeDurationTicks != domain.Ticks(3000) || d.AI.FleeCooldownTicks != domain.Ticks(10000) {
 		t.Fatalf("behavior/profile not loaded: %+v", d)
 	}
 }
