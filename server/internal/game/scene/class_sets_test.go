@@ -3,6 +3,7 @@ package scene
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
+	"strings"
 	"testing"
 )
 
@@ -48,5 +49,34 @@ func TestClassSetPiecesNilInputs(t *testing.T) {
 	}
 	if got := s.classSetPiecesInWorn(s.entities[1], nil, 1); got != 0 {
 		t.Fatalf("nil worn=%d", got)
+	}
+}
+
+func TestClassSetTooltipsExposeOnlyNewFourSixSkillThresholds(t *testing.T) {
+	for suitID := int32(1); suitID <= 5; suitID++ {
+		for _, pieces := range []int32{2, 3, 4, 5, 6, 7, 8} {
+			text := classSetSkillText(suitID, pieces)
+			if (text != "") != (pieces == 4 || pieces == 6) {
+				t.Fatalf("suit %d pieces %d text=%q", suitID, pieces, text)
+			}
+		}
+	}
+	s, _ := equipScene(t)
+	suit := &domain.EquipmentSuit{ID: 1, Name: "夜色拥抱", Groups: [][]domain.ItemID{{90001}}, Bonuses: []domain.EquipmentSuitBonus{
+		{Pieces: 2, Affix: domain.Affix{Attr: domain.AttrMaxHP, Value: 2500}},
+		{Pieces: 4, Affix: domain.Affix{Attr: domain.AttrMaxAtk, Value: 240}},
+		{Pieces: 6, Affix: domain.Affix{Attr: domain.AttrCrit, Value: 500}},
+		{Pieces: 8, Affix: domain.Affix{Attr: domain.AttrHit, Value: 34}},
+	}}
+	var lines []string
+	s.appendSuitTooltip(&lines, suit, nil)
+	text := strings.Join(lines, "\n")
+	for _, want := range []string{"2500", "240", "[4件] 淬毒术总伤害额外增加物理攻击均值的1000%", "[6件] 再次施加淬毒时，额外造成原淬毒剩余伤害的20%"} {
+		if !strings.Contains(text, want) {
+			t.Fatalf("tooltip missing %q: %s", want, text)
+		}
+	}
+	if strings.Contains(text, "[8件] 再次") || strings.Contains(text, "[6件] 淬毒术总") {
+		t.Fatal("old thresholds leaked")
 	}
 }

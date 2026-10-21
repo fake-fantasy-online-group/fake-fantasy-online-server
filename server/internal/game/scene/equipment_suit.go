@@ -56,6 +56,9 @@ func (s *Scene) appendSuitTooltip(lines *[]string, suit *domain.EquipmentSuit, o
 			color = "\x01"
 		}
 		*lines = append(*lines, color+fmt.Sprintf("[%d件] %s", bonus.Pieces, text))
+		if extra := classSetSkillText(suit.ID, bonus.Pieces); extra != "" {
+			*lines = append(*lines, color+fmt.Sprintf("[%d件] %s", bonus.Pieces, extra))
+		}
 	}
 }
 

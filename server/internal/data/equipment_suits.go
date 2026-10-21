@@ -69,7 +69,7 @@ func loadEquipmentSuits(ctx context.Context, q Querier, items ItemDefs) error {
 		LEFT JOIN gamedata.ov_card c ON c.index=x.ref_id
 		LEFT JOIN gamedata.ov_card_entry e ON e.row_no=c.row_no
 		LEFT JOIN gamedata.ov_exceptdesc d ON d.type=e.attr_id AND e.mode=4
-		ORDER BY s.row_no,x.idx,e.idx`)
+		ORDER BY s.row_no,x.seq,x.idx,e.idx`)
 	if err != nil {
 		return fmt.Errorf("data: 查套装效果: %w", err)
 	}
