@@ -80,3 +80,28 @@ func TestClassSetTooltipsExposeOnlyNewFourSixSkillThresholds(t *testing.T) {
 		t.Fatal("old thresholds leaked")
 	}
 }
+
+func TestClassSetTooltipSkillActivationMatchesFunctionalWorn(t *testing.T) {
+	s, p, _ := classPoisonScene(t, 4)
+	def := s.items[p.Player.Worn.At(domain.SlotHead).Item]
+	suit := def.Equip.Suit
+	suit.Bonuses = []domain.EquipmentSuitBonus{{Pieces: 4, Affix: domain.Affix{Attr: domain.AttrMaxAtk, Value: 240}}}
+	render := func() string {
+		var lines []string
+		s.appendSuitTooltip(&lines, suit, p)
+		return strings.Join(lines, "\n")
+	}
+	if !strings.Contains(render(), "\x01[4件] 淬毒术") {
+		t.Fatal("functional set should be active")
+	}
+	p.Player.Char.Race = domain.Warrior
+	if !strings.Contains(render(), "\x02[4件] 淬毒术") {
+		t.Fatal("wrong profession must not show active skill")
+	}
+	p.Player.Char.Race = domain.Assassin
+	def.Equip.Need.Level = 999
+	s.invalidateCombatAttributes(p)
+	if !strings.Contains(render(), "\x02[4件] 淬毒术") {
+		t.Fatal("unusable piece must not show active skill")
+	}
+}
