@@ -208,7 +208,9 @@ func (s *Scene) equipmentAuraRecipients(source equipmentAuraSource) []*entity.En
 		}
 		return x.ID < y.ID
 	})
-	if a.MaxPlayers > 0 && len(candidates) > int(a.MaxPlayers) {
+	// Only the new class-set auras use zero as unlimited; preserve the
+	// existing catalog/allocator contract where zero grants no recipients.
+	if (a.MaxPlayers > 0 || classSetAuraID(a) == 0) && len(candidates) > int(a.MaxPlayers) {
 		candidates = candidates[:a.MaxPlayers]
 	}
 	// candidates is private to this call. Pet appends cannot overwrite its player prefix.
