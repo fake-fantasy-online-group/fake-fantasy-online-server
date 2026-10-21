@@ -29,6 +29,7 @@ type equipmentHit struct {
 }
 type equipmentRoot struct {
 	classSetDamageScaleBP int32
+	classSetHealingStatus bool
 	source, currentSource *domain.CombatSourceSnapshotV5
 	attackStats           domain.Stats
 	attackSnapshot        bool

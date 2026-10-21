@@ -7,6 +7,7 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 	"os"
 	"testing"
+	"time"
 )
 
 func casterSetEquip(t *testing.T, s *Scene, p *entity.Entity, suitID int32, pieces int) {
@@ -510,5 +511,105 @@ func TestCasterSetsGeneratedPayloadUsesCurrentLearnedRank(t *testing.T) {
 	s.finishCasterSetCast(p, pendingCast{def: 火球术}, []domain.EntityID{tid})
 	if dst.HP != before {
 		t.Fatal("unlearned firebolt silently invented")
+	}
+}
+
+func TestCasterSetsNativeRejuvenationCastTriggersOneReciprocalBolt(t *testing.T) {
+	b, err := os.ReadFile("../../../../docs/daoist-endgame/v5/skill-original-ranks.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var defs []domain.SkillDef
+	if err = json.Unmarshal(b, &defs); err != nil {
+		t.Fatal(err)
+	}
+	var rejuvenation domain.SkillDef
+	for _, d := range defs {
+		if d.ID == 10303 && d.Level == 1 {
+			rejuvenation = d
+			break
+		}
+	}
+	if rejuvenation.ID == 0 || len(rejuvenation.DirectEffects()) != 0 || len(rejuvenation.Statuses) != 1 {
+		t.Fatalf("native rejuvenation changed: %+v", rejuvenation)
+	}
+	s, p, tid := casterSetFixture(t, 2, 6)
+	join(t, s, 2, 101, "ally", 150, 100)
+	ally := s.entities[2]
+	p.Player.Party = 7
+	ally.Player.Party = 7
+	p.HP = 100
+	p.MaxHP = 1000
+	ally.HP = 100
+	ally.MaxHP = 1000
+	// Original 回春术 status: 120 seconds, one 14-HP restoration every second.
+	hot := domain.StatusDef{ID: 10303, Level: 1, Name: "回春", TypeKnown: true, Type: domain.StatusGood, DurationSec: 120, IntervalSec: 1, HPChanges: []domain.ResourceChange{{Value: 14, Mode: domain.ModeAbsolute}}}
+	s.statuses[domain.StatusKey{ID: hot.ID, Level: 1}] = hot
+	s.skills[domain.SkillKey{ID: 10303, Level: 1}] = rejuvenation
+	p.Player.Char.Skills[10303] = 1
+	s.invalidateCombatAttributes(p)
+	target := s.entities[tid]
+	target.HP = 10000
+	target.MaxHP = 10000
+	target.Stats.MDef = 0
+	before := target.HP
+	s.exec(UseSkill{ID: p.ID, Skill: 10303, Target: ally.ID})
+	s.stepCastsAt(s.now().Add(2*time.Second), false)
+	// The original 450ms impact delay starts on release, not on admission.
+	s.stepCastsAt(s.now().Add(3*time.Second), false)
+	if before-target.HP != 100 {
+		t.Fatalf("native HoT cast missing exactly one bolt: %d", before-target.HP)
+	}
+	var active domain.Active
+	ally.Status.EachEffective(func(a domain.Active) {
+		if a.Def.ID == 10303 {
+			active = a
+		}
+	})
+	if active.Def.ID == 0 {
+		t.Fatal("native HoT was not applied")
+	}
+	before = target.HP
+	// Status installation recalculates the fixture character stats. Reset only
+	// test HP headroom before checking subsequent tick payloads.
+	ally.MaxHP, ally.HP = 1000, 100
+	s.tickStatus(ally, active)
+	s.tickStatus(ally, active)
+	if target.HP != before {
+		t.Fatal("HoT ticks recursively fired bolts")
+	}
+	if p.HP != 128 || ally.HP != 128 {
+		t.Fatalf("periodic heal/copy expected28: %d/%d", p.HP, ally.HP)
+	}
+}
+
+func TestCasterSetsNonHealingBuffDoesNotTriggerReciprocalBolt(t *testing.T) {
+	s, p, tid := casterSetFixture(t, 2, 6)
+	p.Player.Char.Skills[祝福术.ID] = 1
+	s.invalidateCombatAttributes(p)
+	target := s.entities[tid]
+	target.HP = 10000
+	target.MaxHP = 10000
+	before := target.HP
+	s.exec(UseSkill{ID: p.ID, Skill: 祝福术.ID, Target: p.ID})
+	s.stepCasts()
+	if target.HP != before {
+		t.Fatal("ordinary stat buff triggered light bolt")
+	}
+}
+
+func TestCasterSetsFailedHealingStatusDoesNotTriggerBolt(t *testing.T) {
+	s, p, tid := casterSetFixture(t, 2, 6)
+	target := s.entities[tid]
+	target.HP = 10000
+	before := target.HP
+	def := domain.SkillDef{ID: 10303, Level: 1, Kind: domain.SkillSingle, TargetSelf: true, Statuses: []domain.StatusApplication{{ID: 10303, Level: 1, ChanceExplicit: true, ChanceBP: 0}}}
+	s.statuses[domain.StatusKey{ID: 10303, Level: 1}] = domain.StatusDef{ID: 10303, Level: 1, TypeKnown: true, Type: domain.StatusGood, DurationSec: 120, IntervalSec: 1, HPChanges: []domain.ResourceChange{{Value: 14, Mode: domain.ModeAbsolute}}}
+	finish := s.beginEquipmentRoot(p.ID, p.ID, s.equipmentOffense(p))
+	s.applySkill(p, p, def, 100, false)
+	s.finishCasterSetCast(p, pendingCast{def: def, classSetArea: s.captureCasterSetArea(p, def, p.ID, nil)}, []domain.EntityID{p.ID})
+	finish()
+	if target.HP != before {
+		t.Fatal("failed periodic heal status caused reciprocal bolt")
 	}
 }

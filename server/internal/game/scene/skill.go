@@ -1316,7 +1316,9 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		}
 		statusDef, ok := s.resolveSkillStatusDef(def, app, statusDurationPct)
 		if ok {
-			s.applyStatusDef(dst, statusDef, src.ID)
+			if s.applyStatusDef(dst, statusDef, src.ID) {
+				s.recordCasterSetHealingStatus(src, dst, statusDef)
+			}
 		}
 	}
 	s.applySkillProgressionShield(src, dst, def)

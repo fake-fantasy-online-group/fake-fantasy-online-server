@@ -224,6 +224,9 @@ func (s *Scene) finishCasterSetCast(src *entity.Entity, c pendingCast, hits []do
 	}
 	damage := c.def.HasDamageEffect()
 	heal := false
+	if root := s.equipmentState().root; root != nil && root.src == src.ID {
+		heal = root.classSetHealingStatus
+	}
 	for _, e := range c.def.DirectEffects() {
 		if e.Kind == domain.EffectHeal || e.Kind == domain.EffectRestoreHP {
 			heal = true
@@ -275,5 +278,28 @@ func (s *Scene) pruneCasterSetState(p *entity.Entity, worn *domain.EquipSet) {
 	}
 	if !healer {
 		st.nextMana = 0
+	}
+}
+
+// Classification follows a successful, source-owned application rather than a
+// spell ID or its description. A pure stat buff and a resisted/blocked HoT do
+// not become healing casts. Only the original cast root is marked; status ticks
+// never call finishCasterSetCast and cannot emit another reciprocal bolt.
+func (s *Scene) recordCasterSetHealingStatus(src, dst *entity.Entity, status domain.StatusDef) {
+	rt := s.equipmentState()
+	if rt.classSetTriggered != 0 || rt.root == nil || rt.root.src != src.ID || !status.Periodic() || status.Harmful() || s.classSetPieces(src, 2) < 6 {
+		return
+	}
+	var hp int64
+	for _, a := range status.Affixes {
+		if a.Attr == domain.AttrHPRegen {
+			hp += int64(resourceDelta(a.Value, a.Mode, dst.MaxHP))
+		}
+	}
+	for _, a := range status.HPChanges {
+		hp += int64(resourceDelta(a.Value, a.Mode, dst.MaxHP))
+	}
+	if hp > 0 {
+		rt.root.classSetHealingStatus = true
 	}
 }
