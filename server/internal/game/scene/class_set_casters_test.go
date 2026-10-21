@@ -102,7 +102,7 @@ func TestCasterSetsMageAlternationExpiresAndDoesNotStack(t *testing.T) {
 	}
 }
 
-func TestCasterSetsMageEightEachHitOnceAndNoRecursiveCastOrCost(t *testing.T) {
+func TestCasterSetsMageSixEachHitOnceAndNoRecursiveCastOrCost(t *testing.T) {
 	s, p, tid := casterSetFixture(t, 3, 6)
 	target := s.entities[tid]
 	target.HP = 100000
