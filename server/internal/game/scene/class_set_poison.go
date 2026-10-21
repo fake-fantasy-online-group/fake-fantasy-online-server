@@ -50,7 +50,10 @@ func classSetPoisonRemaining(a domain.Active, now domain.Tick, maxHP int32) int6
 	if interval == 0 {
 		return 0
 	}
-	ticks := int64((a.ExpireAt-a.NextTickAt)/interval) + 1
+	// DueTicks does not catch up missed deadlines: it emits one tick now,
+	// then schedules now+interval. Only that future schedule is cashable.
+	next := max(a.NextTickAt, now)
+	ticks := int64((a.ExpireAt-next)/interval) + 1
 	var perTick int64
 	for _, af := range a.Def.Affixes {
 		if af.Attr == domain.AttrHPRegen {

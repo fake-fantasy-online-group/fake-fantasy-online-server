@@ -209,3 +209,32 @@ func TestClassSetPoisonBasicAttackReachesRuntime(t *testing.T) {
 		t.Fatalf("basic-attack DOT total=%d", got)
 	}
 }
+
+// A delayed frame emits only one due tick and schedules from now, not from the
+// old deadline. Reapplication before that frame must not cash out skipped ticks.
+func TestClassSetPoisonDelayedTickBurstDoesNotCatchUp(t *testing.T) {
+	s, p, target := classPoisonScene(t, 6)
+	if !s.applyCombatTriggeredStatus(p, target, domain.StatusPoison) {
+		t.Fatal("initial")
+	}
+	s.tick += domain.Ticks(15000)
+	var old domain.Active
+	target.Status.Each(func(a domain.Active) {
+		if a.Def.ID == domain.StatusPoison {
+			old = a
+		}
+	})
+	// The same stored status, if allowed to run from this delayed frame, has ticks
+	// at 15,17,...,59 seconds: 23 fixed ticks plus the same rational bonus carry.
+	wantRemaining := int64(23*10 + 1000*23/30)
+	if got := classSetPoisonRemaining(old, s.tick, target.MaxHP); got != wantRemaining {
+		t.Fatalf("delayed balance=%d want %d", got, wantRemaining)
+	}
+	before := target.HP
+	if !s.applyCombatTriggeredStatus(p, target, domain.StatusPoison) {
+		t.Fatal("reapply")
+	}
+	if got := before - target.HP; got != int32(wantRemaining/5) {
+		t.Fatalf("delayed burst=%d want %d", got, wantRemaining/5)
+	}
+}
