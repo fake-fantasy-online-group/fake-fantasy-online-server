@@ -129,6 +129,9 @@ func (s *Scene) riftMonsterAffixes(id domain.EntityID) []string {
 	}
 	var names []string
 	for _, a := range s.rift.abilities[id].pattern {
+		if s.disabledRiftAbility(a) {
+			continue
+		}
 		names = append(names, a.affix(s.currentRiftRules()))
 	}
 	return names

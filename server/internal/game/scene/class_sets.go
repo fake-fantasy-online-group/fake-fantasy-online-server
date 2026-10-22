@@ -50,7 +50,7 @@ func (s *Scene) classSetPiecesInWorn(p *entity.Entity, worn *domain.EquipSet, su
 			return
 		}
 		def, ok := s.itemDef(stack.Item)
-		if ok && def.Equip != nil && def.Equip.Suit != nil && def.Equip.Suit.ID == suitID && domain.EquipmentFunctional(stack, def) {
+		if ok && def.Equip != nil && def.Equip.Suit != nil && def.Equip.Suit.EnhancedClass == suitID && domain.EquipmentFunctional(stack, def) {
 			suit = def.Equip.Suit
 		}
 	})

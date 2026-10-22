@@ -43,6 +43,9 @@ type RiftFloorTemplate struct {
 	// CombatRegions are independently connected, bounded playable areas for v4.
 	// Legacy population and seed streams are deliberately left untouched.
 	CombatRegions []RiftCombatRegion
+	// FullCombatRegions retain every safe tile in the selected native component.
+	// They are independent of the frozen v4/v5 bounded partitions.
+	FullCombatRegions []RiftCombatRegion
 }
 
 type RiftFloorSpawn struct {
@@ -368,6 +371,9 @@ func riftFloorPackPoints(points []SpawnPoint, n int, rng *riftFloorRandom) []Spa
 // Valid checks persisted plan shape. Runtime separately verifies referenced
 // templates and every coordinate against its own collision mask before spawning.
 func (p RiftFloorPlan) Valid() bool {
+	if p.GeneratorVersion == RiftFloorFullCoverageVersion {
+		return p.validRiftFullCoverage()
+	}
 	maxPopulation := RiftFloorMaxPopulation
 	if p.GeneratorVersion == 1 {
 		// Already-admitted plans remain authoritative and are never regenerated.

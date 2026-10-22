@@ -22,7 +22,7 @@ func casterSetEquip(t *testing.T, s *Scene, p *entity.Entity, suitID int32, piec
 	if s.items == nil {
 		s.items = map[domain.ItemID]domain.ItemDef{}
 	}
-	suit := &domain.EquipmentSuit{ID: suitID}
+	suit := &domain.EquipmentSuit{EnhancedClass: suitID, ID: suitID}
 	slots := []domain.EquipSlot{domain.SlotHead, domain.SlotNeck, domain.SlotWeapon, domain.SlotGlove, domain.SlotRing, domain.SlotBody, domain.SlotShoe, domain.SlotBag}
 	for i, slot := range slots {
 		id := domain.ItemID(980000 + int(suitID)*100 + i)

@@ -344,7 +344,12 @@ type SkillDef struct {
 	CooldownRoundingApplied     bool               `json:"-"`
 	RoundingPreviewNext         SkillRoundingState `json:"-"`
 
-	EquipmentVariant *EquipmentSkillVariant // immutable accepted cast snapshot
+	EquipmentVariant             *EquipmentSkillVariant // immutable accepted cast snapshot
+	SpecialWeaponStatusPowerPct  int32                  `json:"-"`
+	SpecialWeaponFreezeExpiresAt uint64                 `json:"-"`
+	SpecialWeaponConsumeFreeze   EntityID               `json:"-"`
+	SpecialWeaponBaseID          ItemID                 `json:"-"`
+	SpecialWeaponTargetLimit     int32                  `json:"-"`
 
 	FormulaVersion         uint32
 	SnapshotRawRanks       Learned

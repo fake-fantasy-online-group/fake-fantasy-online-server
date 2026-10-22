@@ -101,6 +101,7 @@ func (s *Scene) resolveSkillStatusDef(skill domain.SkillDef, app domain.StatusAp
 		def.Invisible = true
 	}
 	applyStatusSource(&def, skill.Icon, int32(skill.ID))
+	specialWeaponStatus(skill, &def)
 	return def, true
 }
 

@@ -1590,6 +1590,10 @@ func (s *Session) resolveLoginScene(ctx context.Context, char *domain.Character,
 	if char == nil {
 		return domain.SceneID{}, fmt.Errorf("角色为空")
 	}
+	if _, _, safeReturn, _, ok := s.deps.Router.PagedRiftReconnect(domain.CharID(char.ID)); ok {
+		char.Pos, char.SceneInstance = safeReturn, 0
+		return domain.SceneID{MapID: safeReturn.MapID}, nil
+	}
 	if id, entry, ok := s.deps.Router.ActiveRiftDestination(domain.CharID(char.ID)); ok {
 		if entry.MapID != 0 {
 			char.Pos = entry

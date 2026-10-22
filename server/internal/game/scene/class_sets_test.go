@@ -12,7 +12,7 @@ func TestClassSetPiecesUsesFunctionalGroupedEquipment(t *testing.T) {
 	p := s.entities[1]
 	p.Player.Char.Race = domain.Assassin
 	p.Player.Char.Level = 40
-	suit := &domain.EquipmentSuit{ID: 1, Groups: [][]domain.ItemID{{90001, 90002}, {90003}, {90004}}}
+	suit := &domain.EquipmentSuit{EnhancedClass: 1, ID: 1, Groups: [][]domain.ItemID{{90001, 90002}, {90003}, {90004}}}
 	for i, slot := range []domain.EquipSlot{domain.SlotWeapon, domain.SlotHead, domain.SlotBody, domain.SlotShoe} {
 		id := domain.ItemID(90001 + i)
 		need := domain.Requirement{}
@@ -62,7 +62,7 @@ func TestClassSetTooltipsExposeOnlyTwoFourSkillThresholds(t *testing.T) {
 		}
 	}
 	s, _ := equipScene(t)
-	suit := &domain.EquipmentSuit{ID: 1, Name: "夜色拥抱", Groups: [][]domain.ItemID{{90001}}, Bonuses: []domain.EquipmentSuitBonus{
+	suit := &domain.EquipmentSuit{EnhancedClass: 1, ID: 1, Name: "夜色拥抱", Groups: [][]domain.ItemID{{90001}}, Bonuses: []domain.EquipmentSuitBonus{
 		{Pieces: 4, Affix: domain.Affix{Attr: domain.AttrCrit, Value: 500}},
 		{Pieces: 6, Affix: domain.Affix{Attr: domain.AttrMaxHP, Value: 2500}},
 		{Pieces: 8, Affix: domain.Affix{Attr: domain.AttrMaxAtk, Value: 240}},

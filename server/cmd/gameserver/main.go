@@ -887,8 +887,13 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 	if w.itemIcons, err = data.LoadItemIconMappings(ctx, q); err != nil {
 		log.Warn("加载特殊物品图标失败，804d 停用", "err", err)
 	} else {
-		w.itemIconsKnown = true
-		log.Info("特殊物品图标就绪", "映射", len(w.itemIcons))
+		if extended, iconErr := domain.DungeonEquipmentIconMappings(w.itemIcons, w.items); iconErr != nil {
+			log.Error("困难副本装备图标未就绪，804d 停用", "err", iconErr)
+		} else {
+			w.itemIcons = extended
+			w.itemIconsKnown = true
+			log.Info("特殊物品图标就绪", "映射", len(w.itemIcons))
+		}
 	}
 	if w.hairRules, err = data.LoadHairRules(ctx, q, w.items); err != nil {
 		log.Warn("加载发型发色规则失败，理发店停用", "err", err)

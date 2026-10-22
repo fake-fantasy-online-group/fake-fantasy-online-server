@@ -324,6 +324,9 @@ func (s *Scene) checkPortals(e *domain.Pos, id domain.EntityID) bool {
 			return false
 		}
 	}
+	if p.Dungeon && s.id.MapID == 507 && p.To.MapID == 20502 {
+		return false
+	}
 	if p.Dungeon {
 		if s.onEnterDungeon(EnterDungeon{ID: id, MapID: p.To.MapID}) {
 			return true

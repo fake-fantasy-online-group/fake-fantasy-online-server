@@ -165,7 +165,8 @@ type Config struct {
 	// DungeonEncounters 是副本首领死亡后的阶段生成链。
 	DungeonEncounters domain.DungeonEncounterTable
 	// Dungeon 非 nil 表示**这个场景本身就是一个副本实例**, 会限时、会自己关。
-	Dungeon *domain.DungeonDef
+	Dungeon           *domain.DungeonDef
+	DungeonDifficulty domain.DungeonDifficulty
 	// NPCs 是本图的 NPC 落位。建场景时铺进去, 与刷怪同理。
 	NPCs []domain.NPCSpawn
 
@@ -203,6 +204,7 @@ func (r ReviveAt) Enabled() bool { return r.Scene.MapID != 0 }
 //
 // 除 mailbox / quit / log 外的所有字段, **只有场景 goroutine 能碰**。
 type Scene struct {
+	specialWeapons  *specialWeaponRuntime
 	temporaryWalls  map[string]temporaryWall
 	lootRules       *domain.LootRuleTable
 	riftRules       *domain.RiftRuleTable
@@ -332,9 +334,10 @@ type Scene struct {
 	death                      domain.DeathRule    // 玩家死亡损失规则
 	penalty                    domain.LevelPenalty // 跨级打怪的等级差惩罚
 	now                        func() time.Time    // 取当前时间(耐力每日回满用)
-	dungeon                    *domain.DungeonDef  // 非 nil = 本场景是副本实例
-	dungeonElapsedBase         domain.Tick         // 本层创建前副本已消耗的帧数
-	everOccupied               bool                // 已有玩家真正进入过；单层副本人数归零后立即销毁
+	dungeonDifficulty          domain.DungeonDifficulty
+	dungeon                    *domain.DungeonDef // 非 nil = 本场景是副本实例
+	dungeonElapsedBase         domain.Tick        // 本层创建前副本已消耗的帧数
+	everOccupied               bool               // 已有玩家真正进入过；单层副本人数归零后立即销毁
 	dungeonEncounters          domain.DungeonEncounterTable
 	encounterDone              map[domain.MonsterID]bool
 
@@ -466,6 +469,7 @@ func New(cfg Config) *Scene {
 		dungeonEncounters: cfg.DungeonEncounters,
 		encounterDone:     make(map[domain.MonsterID]bool),
 		dungeon:           cfg.Dungeon,
+		dungeonDifficulty: cfg.DungeonDifficulty,
 		works:             cfg.Works,
 		nianliCreation:    cfg.NianliCreation,
 		requireWorkGather: cfg.RequireWorkGather,
@@ -1121,7 +1125,7 @@ func (s *Scene) passiveCounterPending(defender, attacker *entity.Entity) (pendin
 		}
 		return pendingAttack{
 			src: defender.ID, dst: attacker.ID,
-			blow:      combat.Blow{SkillPct: rule.DamagePct},
+			blow:      combat.Blow{SkillPct: s.specialWeaponCounterDamage(defender, rule.DamagePct)},
 			resolveAt: s.tick + 1, reserved: true, counter: true,
 		}, true
 	}
@@ -1134,6 +1138,9 @@ func (s *Scene) passiveCounterPending(defender, attacker *entity.Entity) (pendin
 // 消失是**视野事件**(只影响渲染)。所以先发 EntityDied, 尸体停留若干帧后才移除。
 func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
 	s.clearClassSetMelee(dead.ID)
+	if s.specialWeapons != nil {
+		delete(s.specialWeapons.players, dead.ID)
+	}
 	// Freeze before kill XP, durability/lifecycle updates or rewards can change MF.
 	lootContext := s.freezeLootContextV5(killer)
 	delete(s.astralRuneRegen, dead.ID)

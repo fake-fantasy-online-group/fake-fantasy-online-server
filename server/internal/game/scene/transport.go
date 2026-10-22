@@ -26,6 +26,7 @@ func (s *Scene) onOpenTransport(cmd OpenTransport) {
 		reject(event.RejectNoTarget)
 		return
 	}
+	list = domain.WithDungeonDifficultyChoices(list)
 	for _, dest := range list.Destinations {
 		if dest.RequireClear && !s.dungeonFloorCleared() {
 			reject(event.RejectDungeonNotClear)
@@ -60,6 +61,7 @@ func (s *Scene) onChooseTransport(cmd ChooseTransport) {
 		reject(event.RejectNoTarget)
 		return
 	}
+	list = domain.WithDungeonDifficultyChoices(list)
 	var dest *domain.TransportDestination
 	for i := range list.Destinations {
 		if list.Destinations[i].Index == cmd.Index {
@@ -90,7 +92,7 @@ func (s *Scene) onChooseTransport(cmd ChooseTransport) {
 				return
 			}
 		}
-		s.onEnterDungeon(EnterDungeon{ID: p.ID, MapID: dest.Pos.MapID})
+		s.onEnterDungeon(EnterDungeon{ID: p.ID, MapID: dest.Pos.MapID, Difficulty: dest.Difficulty, ExplicitDifficulty: dest.ExplicitDifficulty})
 		s.log.Debug("选择副本入口", "char", charName, "list", cmd.List,
 			"index", cmd.Index, "map", dest.Pos.MapID, "name", dungeonName)
 		return

@@ -1,0 +1,6021 @@
+{
+  "weapons": [
+    {
+      "base_id": 1019,
+      "hard_id": 0,
+      "name": "利器·江湖行",
+      "affixes": [
+        {
+          "Attr": 29,
+          "Mode": 0,
+          "Value": 10
+        },
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 30
+        }
+      ],
+      "effect": "无技能特效。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": false,
+      "beginner_allowed_override": true
+    },
+    {
+      "base_id": 1020,
+      "hard_id": 0,
+      "name": "利器·狼牙",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 200
+        },
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": 10
+        }
+      ],
+      "effect": "无技能特效。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": false,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1021,
+      "hard_id": 0,
+      "name": "利器·火精",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 200
+        },
+        {
+          "Attr": 1,
+          "Mode": 0,
+          "Value": 40
+        }
+      ],
+      "effect": "罡气剑不再击退敌人，伤害提高30%，适合贴身连续进攻。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1022,
+      "hard_id": 1800001022,
+      "name": "利器·飞鸟斩",
+      "affixes": [
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 60
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 30
+        }
+      ],
+      "effect": "幻影剑改为攻击自身周围100范围内最多3名敌人，每个目标受到原伤害的80%；降低命中的效果保留，持续时间缩短50%。",
+      "sources": [
+        [
+          20701,
+          3049
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1023,
+      "hard_id": 1800001023,
+      "name": "名器·愚者笑",
+      "affixes": [
+        {
+          "Attr": 1,
+          "Mode": 0,
+          "Value": 20
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 20
+        },
+        {
+          "Attr": 5,
+          "Mode": 0,
+          "Value": 20
+        }
+      ],
+      "effect": "饮血剑的生命恢复量提高60%，伤害降低10%，更适合以战养战。",
+      "sources": [
+        [
+          20701,
+          3049
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1024,
+      "hard_id": 1800001024,
+      "name": "名器·却邪",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 100
+        }
+      ],
+      "effect": "金缚剑冷却缩短60%，定身时间缩短50%，可以更频繁地截停敌人。",
+      "sources": [
+        [
+          20600,
+          3055
+        ],
+        [
+          20600,
+          3056
+        ],
+        [
+          20600,
+          3057
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1025,
+      "hard_id": 1800001025,
+      "name": "名器·灭魂",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 160
+        },
+        {
+          "Attr": 19,
+          "Mode": 0,
+          "Value": 5
+        },
+        {
+          "Attr": 34,
+          "Mode": 0,
+          "Value": 600
+        }
+      ],
+      "effect": "封法剑冷却缩短70%，封印持续时间缩短70%，伤害不变，改为频繁打断施法的短封印。",
+      "sources": [
+        [
+          200,
+          1041
+        ],
+        [
+          200,
+          1069
+        ],
+        [
+          20100,
+          3045
+        ],
+        [
+          20300,
+          3047
+        ],
+        [
+          20300,
+          3048
+        ],
+        [
+          20502,
+          3000
+        ],
+        [
+          20502,
+          3005
+        ],
+        [
+          20502,
+          3006
+        ],
+        [
+          20600,
+          3054
+        ],
+        [
+          20600,
+          3055
+        ],
+        [
+          20600,
+          3057
+        ],
+        [
+          20600,
+          3058
+        ],
+        [
+          20701,
+          3049
+        ],
+        [
+          20701,
+          3050
+        ],
+        [
+          20801,
+          3064
+        ],
+        [
+          20801,
+          3065
+        ],
+        [
+          20801,
+          3066
+        ],
+        [
+          20802,
+          3068
+        ],
+        [
+          20802,
+          3069
+        ],
+        [
+          20802,
+          3070
+        ],
+        [
+          20803,
+          3072
+        ],
+        [
+          20803,
+          3073
+        ],
+        [
+          20803,
+          3074
+        ],
+        [
+          20901,
+          3111
+        ],
+        [
+          20901,
+          3112
+        ],
+        [
+          20901,
+          3113
+        ],
+        [
+          20901,
+          3114
+        ],
+        [
+          20902,
+          3111
+        ],
+        [
+          20902,
+          3112
+        ],
+        [
+          20902,
+          3113
+        ],
+        [
+          21002,
+          3133
+        ],
+        [
+          21004,
+          3134
+        ],
+        [
+          21601,
+          3182
+        ],
+        [
+          21602,
+          3133
+        ],
+        [
+          21603,
+          3132
+        ],
+        [
+          21603,
+          3182
+        ],
+        [
+          21604,
+          3134
+        ],
+        [
+          23800,
+          5206
+        ],
+        [
+          23800,
+          5207
+        ],
+        [
+          23800,
+          5209
+        ],
+        [
+          23800,
+          5210
+        ],
+        [
+          23800,
+          5211
+        ],
+        [
+          23800,
+          5212
+        ],
+        [
+          24400,
+          5219
+        ],
+        [
+          24500,
+          5220
+        ],
+        [
+          24800,
+          30084
+        ],
+        [
+          24800,
+          30085
+        ],
+        [
+          24800,
+          30086
+        ],
+        [
+          24800,
+          30087
+        ],
+        [
+          24800,
+          30088
+        ],
+        [
+          24800,
+          30124
+        ],
+        [
+          24800,
+          30147
+        ],
+        [
+          26800,
+          5221
+        ],
+        [
+          26900,
+          5218
+        ],
+        [
+          30600,
+          31466
+        ],
+        [
+          30600,
+          31467
+        ],
+        [
+          34700,
+          3045
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1026,
+      "hard_id": 1800001026,
+      "name": "名器·七星",
+      "affixes": [
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 120
+        },
+        {
+          "Attr": 17,
+          "Mode": 0,
+          "Value": 150
+        }
+      ],
+      "effect": "铁城神盾持续时间缩短为原来的20%，减伤强度提高50%，冷却缩短40%。提高后的减伤最高80%；若原强度已经超过80%，保留原强度。",
+      "sources": [
+        [
+          20803,
+          3072
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1027,
+      "hard_id": 1800001027,
+      "name": "古器·紫影",
+      "affixes": [
+        {
+          "Attr": 19,
+          "Mode": 0,
+          "Value": 20
+        },
+        {
+          "Attr": 61,
+          "Mode": 0,
+          "Value": 50
+        },
+        {
+          "Attr": 69,
+          "Mode": 0,
+          "Value": 50
+        },
+        {
+          "Attr": 70,
+          "Mode": 0,
+          "Value": 50
+        }
+      ],
+      "effect": "混沌剑命中时，额外驱散目标身上的一个可驱散防御增益，并保留原有的禁止获得有益状态效果。",
+      "sources": [
+        [
+          20901,
+          3111
+        ],
+        [
+          20901,
+          3112
+        ],
+        [
+          20901,
+          3113
+        ],
+        [
+          20901,
+          3114
+        ],
+        [
+          20902,
+          3111
+        ],
+        [
+          20902,
+          3112
+        ],
+        [
+          20902,
+          3113
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1028,
+      "hard_id": 1800001028,
+      "name": "古器·青霜",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 150
+        },
+        {
+          "Attr": 25,
+          "Mode": 1,
+          "Value": -50
+        },
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 210
+        }
+      ],
+      "effect": "狮心剑攻击生命低于50%的敌人时，伤害提高45%，适合稳定收割残血目标。",
+      "sources": [
+        [
+          20901,
+          3111
+        ],
+        [
+          20901,
+          3112
+        ],
+        [
+          20901,
+          3113
+        ],
+        [
+          20901,
+          3114
+        ],
+        [
+          20902,
+          3111
+        ],
+        [
+          20902,
+          3112
+        ],
+        [
+          20902,
+          3113
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1518,
+      "hard_id": 0,
+      "name": "利器·破甲剑",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 100
+        },
+        {
+          "Attr": 29,
+          "Mode": 0,
+          "Value": 30
+        }
+      ],
+      "effect": "无技能特效。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": false,
+      "beginner_allowed_override": true
+    },
+    {
+      "base_id": 1519,
+      "hard_id": 0,
+      "name": "利器·折铁剑",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 120
+        },
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 60
+        }
+      ],
+      "effect": "无技能特效。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": false,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1520,
+      "hard_id": 0,
+      "name": "利器·真武剑",
+      "affixes": [],
+      "effect": "真空剑攻击距离提高40%，伤害提高15%，可以在更远处持续出剑。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1521,
+      "hard_id": 1800001521,
+      "name": "利器·大旋风",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 160
+        },
+        {
+          "Attr": 27,
+          "Mode": 1,
+          "Value": 100
+        }
+      ],
+      "effect": "金缚剑同时攻击目标及其附近最多2名敌人，每个目标受到原伤害的65%；定身时间缩短50%，冷却缩短50%。",
+      "sources": [
+        [
+          20701,
+          3049
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1522,
+      "hard_id": 1800001522,
+      "name": "名器·千古",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 180
+        },
+        {
+          "Attr": 5,
+          "Mode": 0,
+          "Value": 60
+        },
+        {
+          "Attr": 19,
+          "Mode": 0,
+          "Value": 5
+        }
+      ],
+      "effect": "噬魂剑恢复法力后，超出自身缺失法力的部分转为持续5秒的护盾，转化比例为50%。",
+      "sources": [
+        [
+          20701,
+          3050
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1523,
+      "hard_id": 1800001523,
+      "name": "名器·转魄",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 200
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 60
+        },
+        {
+          "Attr": 7,
+          "Mode": 0,
+          "Value": 60
+        }
+      ],
+      "effect": "噬魂剑伤害提高35%，恢复法力的效果降低50%，从续航技能改为更强的输出技能。",
+      "sources": [
+        [
+          20600,
+          3055
+        ],
+        [
+          20600,
+          3056
+        ],
+        [
+          20600,
+          3057
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1524,
+      "hard_id": 1800001524,
+      "name": "名器·真刚",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 220
+        },
+        {
+          "Attr": 13,
+          "Mode": 0,
+          "Value": 150
+        }
+      ],
+      "effect": "旋风剑作用半径扩大35%，伤害降低10%，更适合站进怪群持续清场。",
+      "sources": [
+        [
+          20600,
+          3058
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1525,
+      "hard_id": 1800001525,
+      "name": "名器·修罗道",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 740
+        },
+        {
+          "Attr": 38,
+          "Mode": 0,
+          "Value": -1
+        }
+      ],
+      "effect": "混沌剑额外使目标防御降低15%，持续5秒，可以先破防再接其他剑技。",
+      "sources": [
+        [
+          20803,
+          3074
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1526,
+      "hard_id": 1800001526,
+      "name": "古器·百兽王",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 260
+        },
+        {
+          "Attr": 29,
+          "Mode": 0,
+          "Value": 50
+        },
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 240
+        },
+        {
+          "Attr": 1,
+          "Mode": 0,
+          "Value": 100
+        }
+      ],
+      "effect": "挑衅作用半径扩大60%；一次影响至少3名敌人时，自身移动速度提高20%，持续5秒，方便聚怪和调整位置。",
+      "sources": [
+        [
+          20901,
+          3111
+        ],
+        [
+          20901,
+          3112
+        ],
+        [
+          20901,
+          3113
+        ],
+        [
+          20901,
+          3114
+        ],
+        [
+          20902,
+          3111
+        ],
+        [
+          20902,
+          3112
+        ],
+        [
+          20902,
+          3113
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1527,
+      "hard_id": 1800001527,
+      "name": "古器·破山剑",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 280
+        },
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": 20
+        },
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 390
+        }
+      ],
+      "effect": "陨星剑取消即死判定，改为对生命低于30%的敌人伤害提高80%，从碰运气斩杀改为稳定终结技。",
+      "sources": [
+        [
+          20901,
+          3111
+        ],
+        [
+          20901,
+          3112
+        ],
+        [
+          20901,
+          3113
+        ],
+        [
+          20901,
+          3114
+        ],
+        [
+          20902,
+          3111
+        ],
+        [
+          20902,
+          3112
+        ],
+        [
+          20902,
+          3113
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1618,
+      "hard_id": 0,
+      "name": "利器·寒铁枪",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 100
+        },
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": 10
+        }
+      ],
+      "effect": "无技能特效。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": false,
+      "beginner_allowed_override": true
+    },
+    {
+      "base_id": 1619,
+      "hard_id": 0,
+      "name": "利器·无铭",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 120
+        },
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": 12
+        }
+      ],
+      "effect": "无技能特效。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": false,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1620,
+      "hard_id": 0,
+      "name": "利器·朔风枪",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 140
+        },
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": 14
+        }
+      ],
+      "effect": "穿刺之枪的攻击宽度扩大60%，伤害提高10%，更容易同时刺中并排敌人。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1621,
+      "hard_id": 1800001621,
+      "name": "利器·逐鹿枪",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 160
+        },
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": 16
+        }
+      ],
+      "effect": "飞翔之枪攻击距离提高40%，伤害提高15%，适合远距离拉扯。",
+      "sources": [
+        [
+          20701,
+          3050
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1622,
+      "hard_id": 1800001622,
+      "name": "名器·飞龙枪",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 180
+        },
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": 18
+        },
+        {
+          "Attr": 1,
+          "Mode": 0,
+          "Value": 60
+        }
+      ],
+      "effect": "破法之枪将实际削掉的敌方法力的50%转为自身护盾，持续4秒。新护盾替换旧护盾，不累加。",
+      "sources": [
+        [
+          20701,
+          3050
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1623,
+      "hard_id": 1800001623,
+      "name": "名器·无双戟",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 200
+        },
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": 20
+        },
+        {
+          "Attr": 25,
+          "Mode": 1,
+          "Value": -100
+        }
+      ],
+      "effect": "震地之枪的扇形角度扩大为原来的1.5倍，伤害不变，更适合面对扇面展开的怪群。",
+      "sources": [
+        [
+          20600,
+          3055
+        ],
+        [
+          20600,
+          3056
+        ],
+        [
+          20600,
+          3057
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1624,
+      "hard_id": 1800001624,
+      "name": "名器·龙鄂闪",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 220
+        },
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": 22
+        },
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 300
+        }
+      ],
+      "effect": "战吼后3秒内，将自身实际损失生命的20%积蓄下来；下一次枪系攻击时转为持续5秒的护盾，最高为自身最大生命的10%。重复战吼刷新窗口，不累积多个窗口。",
+      "sources": [
+        [
+          20600,
+          3058
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1625,
+      "hard_id": 1800001625,
+      "name": "名器·霸王枪",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 240
+        },
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": 24
+        },
+        {
+          "Attr": 1,
+          "Mode": 0,
+          "Value": 80
+        }
+      ],
+      "effect": "流虹之枪的攻击宽度翻倍，长度缩短20%，从狭长穿阵改为近中距离横扫。",
+      "sources": [
+        [
+          20803,
+          3073
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1626,
+      "hard_id": 1800001626,
+      "name": "古器·破军蛇矛",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 260
+        },
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": 26
+        },
+        {
+          "Attr": 19,
+          "Mode": 0,
+          "Value": 10
+        },
+        {
+          "Attr": 5,
+          "Mode": 0,
+          "Value": 80
+        }
+      ],
+      "effect": "重击冷却缩短65%，眩晕时间缩短50%；命中后5秒内，下一次破防之枪伤害提高40%。",
+      "sources": [
+        [
+          200,
+          1041
+        ],
+        [
+          200,
+          1069
+        ],
+        [
+          20100,
+          3045
+        ],
+        [
+          20300,
+          3047
+        ],
+        [
+          20300,
+          3048
+        ],
+        [
+          20502,
+          3000
+        ],
+        [
+          20502,
+          3005
+        ],
+        [
+          20502,
+          3006
+        ],
+        [
+          20600,
+          3054
+        ],
+        [
+          20600,
+          3055
+        ],
+        [
+          20600,
+          3057
+        ],
+        [
+          20600,
+          3058
+        ],
+        [
+          20701,
+          3049
+        ],
+        [
+          20701,
+          3050
+        ],
+        [
+          20801,
+          3064
+        ],
+        [
+          20801,
+          3065
+        ],
+        [
+          20801,
+          3066
+        ],
+        [
+          20802,
+          3068
+        ],
+        [
+          20802,
+          3069
+        ],
+        [
+          20802,
+          3070
+        ],
+        [
+          20803,
+          3072
+        ],
+        [
+          20803,
+          3073
+        ],
+        [
+          20803,
+          3074
+        ],
+        [
+          20901,
+          3111
+        ],
+        [
+          20901,
+          3112
+        ],
+        [
+          20901,
+          3113
+        ],
+        [
+          20901,
+          3114
+        ],
+        [
+          20902,
+          3111
+        ],
+        [
+          20902,
+          3112
+        ],
+        [
+          20902,
+          3113
+        ],
+        [
+          21002,
+          3133
+        ],
+        [
+          21004,
+          3134
+        ],
+        [
+          21601,
+          3182
+        ],
+        [
+          21602,
+          3133
+        ],
+        [
+          21603,
+          3132
+        ],
+        [
+          21603,
+          3182
+        ],
+        [
+          21604,
+          3134
+        ],
+        [
+          23800,
+          5206
+        ],
+        [
+          23800,
+          5207
+        ],
+        [
+          23800,
+          5209
+        ],
+        [
+          23800,
+          5210
+        ],
+        [
+          23800,
+          5211
+        ],
+        [
+          23800,
+          5212
+        ],
+        [
+          24400,
+          5219
+        ],
+        [
+          24500,
+          5220
+        ],
+        [
+          24800,
+          30084
+        ],
+        [
+          24800,
+          30085
+        ],
+        [
+          24800,
+          30086
+        ],
+        [
+          24800,
+          30087
+        ],
+        [
+          24800,
+          30088
+        ],
+        [
+          24800,
+          30124
+        ],
+        [
+          24800,
+          30147
+        ],
+        [
+          26800,
+          5221
+        ],
+        [
+          26900,
+          5218
+        ],
+        [
+          30600,
+          31466
+        ],
+        [
+          30600,
+          31467
+        ],
+        [
+          34700,
+          3045
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1627,
+      "hard_id": 1800001627,
+      "name": "古器·豪龙胆",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 280
+        },
+        {
+          "Attr": 19,
+          "Mode": 1,
+          "Value": 28
+        },
+        {
+          "Attr": 34,
+          "Mode": 0,
+          "Value": 800
+        },
+        {
+          "Attr": 69,
+          "Mode": 0,
+          "Value": 100
+        }
+      ],
+      "effect": "野战八荒伤害提高35%，作用半径缩小20%，适合贴身集中处理精英和首领。",
+      "sources": [
+        [
+          20901,
+          3111
+        ],
+        [
+          20901,
+          3112
+        ],
+        [
+          20901,
+          3113
+        ],
+        [
+          20901,
+          3114
+        ],
+        [
+          20902,
+          3111
+        ],
+        [
+          20902,
+          3112
+        ],
+        [
+          20902,
+          3113
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1818,
+      "hard_id": 0,
+      "name": "利器·迅弧刃",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 100
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 10
+        }
+      ],
+      "effect": "无技能特效。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": false,
+      "beginner_allowed_override": true
+    },
+    {
+      "base_id": 1819,
+      "hard_id": 0,
+      "name": "利器·叠影",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 120
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 20
+        }
+      ],
+      "effect": "无技能特效。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": false,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1820,
+      "hard_id": 0,
+      "name": "利器·弦月",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 140
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 30
+        }
+      ],
+      "effect": "击晕冷却缩短75%，眩晕时间缩短80%，伤害降低30%，改为可以更频繁使用的短打断。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1821,
+      "hard_id": 1800001821,
+      "name": "利器·暗杀刃",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 160
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 40
+        }
+      ],
+      "effect": "反击术的反击伤害提高50%，普通攻击伤害降低10%，鼓励依靠回避与反击作战。",
+      "sources": [
+        [
+          20701,
+          3050
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1822,
+      "hard_id": 1800001822,
+      "name": "名器·两极星",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 180
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 50
+        },
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 90
+        }
+      ],
+      "effect": "爆弹陷阱放置距离提高20%，放置后立即爆炸。",
+      "sources": [
+        [
+          20701,
+          3050
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1823,
+      "hard_id": 1800001823,
+      "name": "名器·虎牙断",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 200
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 60
+        },
+        {
+          "Attr": 1,
+          "Mode": 0,
+          "Value": 50
+        }
+      ],
+      "effect": "隐身术持续时间缩短50%；进入隐身后的第一次普通攻击伤害提高60%，适合短潜行后主动抢攻。",
+      "sources": [
+        [
+          20600,
+          3055
+        ],
+        [
+          20600,
+          3056
+        ],
+        [
+          20600,
+          3057
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1824,
+      "hard_id": 1800001824,
+      "name": "名器·魔斩牙",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 220
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 70
+        },
+        {
+          "Attr": 17,
+          "Mode": 0,
+          "Value": 300
+        }
+      ],
+      "effect": "背刺击杀敌人后，隐身术的剩余冷却缩短50%，适合连续寻找脆弱目标发动暗杀。",
+      "sources": [
+        [
+          20600,
+          3058
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1825,
+      "hard_id": 1800001825,
+      "name": "名器·纷飞燕",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 490
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 80
+        }
+      ],
+      "effect": "装备后，双刃也可使用已经学会的烟雾弹。烟雾弹改为在自身周围120范围形成持续6秒的烟幕，最多影响5名敌人，原减益强度减半；施放时自身获得一次2秒隐身，可接背刺或脱离包围。冷却增加50%。",
+      "sources": [
+        [
+          20803,
+          3072
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1826,
+      "hard_id": 1800001826,
+      "name": "古器·仆虎斗狼",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 260
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 90
+        },
+        {
+          "Attr": 29,
+          "Mode": 0,
+          "Value": 50
+        },
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 120
+        }
+      ],
+      "effect": "背刺不再要求处于隐身状态，伤害变为原来的65%，可以作为正面近战的常用技能。",
+      "sources": [
+        [
+          200,
+          1041
+        ],
+        [
+          200,
+          1069
+        ],
+        [
+          20100,
+          3045
+        ],
+        [
+          20300,
+          3047
+        ],
+        [
+          20300,
+          3048
+        ],
+        [
+          20502,
+          3000
+        ],
+        [
+          20502,
+          3005
+        ],
+        [
+          20502,
+          3006
+        ],
+        [
+          20600,
+          3054
+        ],
+        [
+          20600,
+          3055
+        ],
+        [
+          20600,
+          3057
+        ],
+        [
+          20600,
+          3058
+        ],
+        [
+          20701,
+          3049
+        ],
+        [
+          20701,
+          3050
+        ],
+        [
+          20801,
+          3064
+        ],
+        [
+          20801,
+          3065
+        ],
+        [
+          20801,
+          3066
+        ],
+        [
+          20802,
+          3068
+        ],
+        [
+          20802,
+          3069
+        ],
+        [
+          20802,
+          3070
+        ],
+        [
+          20803,
+          3072
+        ],
+        [
+          20803,
+          3073
+        ],
+        [
+          20803,
+          3074
+        ],
+        [
+          20901,
+          3111
+        ],
+        [
+          20901,
+          3112
+        ],
+        [
+          20901,
+          3113
+        ],
+        [
+          20901,
+          3114
+        ],
+        [
+          20902,
+          3111
+        ],
+        [
+          20902,
+          3112
+        ],
+        [
+          20902,
+          3113
+        ],
+        [
+          21002,
+          3133
+        ],
+        [
+          21004,
+          3134
+        ],
+        [
+          21601,
+          3182
+        ],
+        [
+          21602,
+          3133
+        ],
+        [
+          21603,
+          3132
+        ],
+        [
+          21603,
+          3182
+        ],
+        [
+          21604,
+          3134
+        ],
+        [
+          23800,
+          5206
+        ],
+        [
+          23800,
+          5207
+        ],
+        [
+          23800,
+          5209
+        ],
+        [
+          23800,
+          5210
+        ],
+        [
+          23800,
+          5211
+        ],
+        [
+          23800,
+          5212
+        ],
+        [
+          24400,
+          5219
+        ],
+        [
+          24500,
+          5220
+        ],
+        [
+          24800,
+          30084
+        ],
+        [
+          24800,
+          30085
+        ],
+        [
+          24800,
+          30086
+        ],
+        [
+          24800,
+          30087
+        ],
+        [
+          24800,
+          30088
+        ],
+        [
+          24800,
+          30124
+        ],
+        [
+          24800,
+          30147
+        ],
+        [
+          26800,
+          5221
+        ],
+        [
+          26900,
+          5218
+        ],
+        [
+          30600,
+          31466
+        ],
+        [
+          30600,
+          31467
+        ],
+        [
+          34700,
+          3045
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1827,
+      "hard_id": 1800001827,
+      "name": "古器·干将莫邪",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 280
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 100
+        },
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 180
+        },
+        {
+          "Attr": 34,
+          "Mode": 0,
+          "Value": 760
+        }
+      ],
+      "effect": "背刺伤害提高35%，冷却增加20%，保留隐身要求，强化一次出手的爆发。",
+      "sources": [
+        [
+          20901,
+          3111
+        ],
+        [
+          20901,
+          3112
+        ],
+        [
+          20901,
+          3113
+        ],
+        [
+          20901,
+          3114
+        ],
+        [
+          20902,
+          3111
+        ],
+        [
+          20902,
+          3112
+        ],
+        [
+          20902,
+          3113
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1920,
+      "hard_id": 0,
+      "name": "利器·飞鸟",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 100
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 10
+        }
+      ],
+      "effect": "无技能特效。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": false,
+      "beginner_allowed_override": true
+    },
+    {
+      "base_id": 1921,
+      "hard_id": 0,
+      "name": "利器·暗影",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 120
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 20
+        }
+      ],
+      "effect": "无技能特效。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": false,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1922,
+      "hard_id": 0,
+      "name": "利器·流星",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 140
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 30
+        }
+      ],
+      "effect": "狙击冷却缩短75%，定身时间缩短70%，伤害降低30%，适合反复拦住追兵、边退边打。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1923,
+      "hard_id": 1800001923,
+      "name": "利器·孔雀翎",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 160
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 40
+        }
+      ],
+      "effect": "连续投掷伤害提高30%，法力消耗提高20%，强化远程主攻能力。",
+      "sources": [
+        [
+          20701,
+          3050
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1924,
+      "hard_id": 1800001924,
+      "name": "名器·五瓣兰",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 180
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 50
+        },
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 90
+        }
+      ],
+      "effect": "爆弹陷阱放置距离提高50%，爆炸范围提高20%，伤害不变，适合更远、更宽的区域布雷。",
+      "sources": [
+        [
+          20701,
+          3050
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1925,
+      "hard_id": 1800001925,
+      "name": "名器·业火",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 200
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 60
+        },
+        {
+          "Attr": 17,
+          "Mode": 0,
+          "Value": 300
+        }
+      ],
+      "effect": "雷火弹不再击退敌人，伤害提高30%，并使目标移动速度降低30%，持续3秒，更容易将敌人留在陷阱附近。",
+      "sources": [
+        [
+          20600,
+          3055
+        ],
+        [
+          20600,
+          3056
+        ],
+        [
+          20600,
+          3057
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1926,
+      "hard_id": 1800001926,
+      "name": "名器·破术牙",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 220
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 70
+        },
+        {
+          "Attr": 1,
+          "Mode": 0,
+          "Value": 50
+        }
+      ],
+      "effect": "多重投掷从前方扇形改为自身周围一整圈，半径为原来的80%，伤害比原技能提高20%，可以应对四面包围。",
+      "sources": [
+        [
+          20600,
+          3058
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1927,
+      "hard_id": 1800001927,
+      "name": "名器·夜妖光",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 490
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 80
+        }
+      ],
+      "effect": "烟雾弹作用于目标周围150范围内最多5名敌人，原有降低命中与魔攻的强度不变，持续时间为原来的一半，冷却增加50%。",
+      "sources": [
+        [
+          20803,
+          3074
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1928,
+      "hard_id": 1800001928,
+      "name": "古器·苍月",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 260
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 90
+        },
+        {
+          "Attr": 29,
+          "Mode": 0,
+          "Value": 50
+        },
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 120
+        }
+      ],
+      "effect": "冻气陷阱不再冻结，改为使敌人移动速度降低70%，持续6秒；爆炸伤害提高40%，冷却缩短30%。",
+      "sources": [
+        [
+          200,
+          1041
+        ],
+        [
+          200,
+          1069
+        ],
+        [
+          20100,
+          3045
+        ],
+        [
+          20300,
+          3047
+        ],
+        [
+          20300,
+          3048
+        ],
+        [
+          20502,
+          3000
+        ],
+        [
+          20502,
+          3005
+        ],
+        [
+          20502,
+          3006
+        ],
+        [
+          20600,
+          3054
+        ],
+        [
+          20600,
+          3055
+        ],
+        [
+          20600,
+          3057
+        ],
+        [
+          20600,
+          3058
+        ],
+        [
+          20701,
+          3049
+        ],
+        [
+          20701,
+          3050
+        ],
+        [
+          20801,
+          3064
+        ],
+        [
+          20801,
+          3065
+        ],
+        [
+          20801,
+          3066
+        ],
+        [
+          20802,
+          3068
+        ],
+        [
+          20802,
+          3069
+        ],
+        [
+          20802,
+          3070
+        ],
+        [
+          20803,
+          3072
+        ],
+        [
+          20803,
+          3073
+        ],
+        [
+          20803,
+          3074
+        ],
+        [
+          20901,
+          3111
+        ],
+        [
+          20901,
+          3112
+        ],
+        [
+          20901,
+          3113
+        ],
+        [
+          20901,
+          3114
+        ],
+        [
+          20902,
+          3111
+        ],
+        [
+          20902,
+          3112
+        ],
+        [
+          20902,
+          3113
+        ],
+        [
+          21002,
+          3133
+        ],
+        [
+          21004,
+          3134
+        ],
+        [
+          21601,
+          3182
+        ],
+        [
+          21602,
+          3133
+        ],
+        [
+          21603,
+          3132
+        ],
+        [
+          21603,
+          3182
+        ],
+        [
+          21604,
+          3134
+        ],
+        [
+          23800,
+          5206
+        ],
+        [
+          23800,
+          5207
+        ],
+        [
+          23800,
+          5209
+        ],
+        [
+          23800,
+          5210
+        ],
+        [
+          23800,
+          5211
+        ],
+        [
+          23800,
+          5212
+        ],
+        [
+          24400,
+          5219
+        ],
+        [
+          24500,
+          5220
+        ],
+        [
+          24800,
+          30084
+        ],
+        [
+          24800,
+          30085
+        ],
+        [
+          24800,
+          30086
+        ],
+        [
+          24800,
+          30087
+        ],
+        [
+          24800,
+          30088
+        ],
+        [
+          24800,
+          30124
+        ],
+        [
+          24800,
+          30147
+        ],
+        [
+          26800,
+          5221
+        ],
+        [
+          26900,
+          5218
+        ],
+        [
+          30600,
+          31466
+        ],
+        [
+          30600,
+          31467
+        ],
+        [
+          34700,
+          3045
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1929,
+      "hard_id": 1800001929,
+      "name": "古器·麒麟牙",
+      "affixes": [
+        {
+          "Attr": 47,
+          "Mode": 1,
+          "Value": 280
+        },
+        {
+          "Attr": 9,
+          "Mode": 0,
+          "Value": 100
+        },
+        {
+          "Attr": 31,
+          "Mode": 0,
+          "Value": 180
+        },
+        {
+          "Attr": 34,
+          "Mode": 0,
+          "Value": 760
+        }
+      ],
+      "effect": "环形爆发冷却缩短25%，法力消耗降低20%，适合更频繁地冲进怪群清场。",
+      "sources": [
+        [
+          20901,
+          3111
+        ],
+        [
+          20901,
+          3112
+        ],
+        [
+          20901,
+          3113
+        ],
+        [
+          20901,
+          3114
+        ],
+        [
+          20902,
+          3111
+        ],
+        [
+          20902,
+          3112
+        ],
+        [
+          20902,
+          3113
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1318,
+      "hard_id": 0,
+      "name": "利器·白玉杖",
+      "affixes": [
+        {
+          "Attr": 3,
+          "Mode": 0,
+          "Value": 20
+        },
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": 100
+        }
+      ],
+      "effect": "无技能特效。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": false,
+      "beginner_allowed_override": true
+    },
+    {
+      "base_id": 1319,
+      "hard_id": 0,
+      "name": "利器·八卦杖",
+      "affixes": [
+        {
+          "Attr": 3,
+          "Mode": 0,
+          "Value": 30
+        },
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": 120
+        }
+      ],
+      "effect": "无技能特效。",
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": false,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1320,
+      "hard_id": 0,
+      "name": "利器·镇妖杖",
+      "affixes": [
+        {
+          "Attr": 3,
+          "Mode": 0,
+          "Value": 40
+        },
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": 140
+        }
+      ],
+      "effect": {
+        "药师": "治愈术治疗量提高30%，法力消耗提高10%，强化单体急救。",
+        "术士": "冰箭术伤害提高30%，命中必定施加2秒的20%减速；已有更强或更久的减速保持不变。"
+      },
+      "sources": [],
+      "task_original": true,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1321,
+      "hard_id": 1800001321,
+      "name": "利器·祈风杖",
+      "affixes": [
+        {
+          "Attr": 3,
+          "Mode": 0,
+          "Value": 50
+        },
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": 160
+        }
+      ],
+      "effect": {
+        "药师": "净化术同时作用于目标及其附近最多2名队友，法力消耗翻倍，冷却增加50%，适合集合解除异常状态。",
+        "术士": "冰爆术作用半径扩大40%，伤害降低10%，更容易处理贴近自身的敌人。"
+      },
+      "sources": [
+        [
+          20701,
+          3049
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1322,
+      "hard_id": 1800001322,
+      "name": "名器·南仙杖",
+      "affixes": [
+        {
+          "Attr": 3,
+          "Mode": 0,
+          "Value": 60
+        },
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": 180
+        }
+      ],
+      "effect": {
+        "药师": "复法术先恢复目标法力，超过目标缺失法力的部分，有50%转为持续8秒的护盾；护盾不累加。",
+        "术士": "火弹术命中自己施加了燃烧的目标时，立即结算剩余燃烧伤害的60%，并结束这次燃烧，牺牲后续持续伤害换取提前爆发。"
+      },
+      "sources": [
+        [
+          20701,
+          3049
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1323,
+      "hard_id": 1800001323,
+      "name": "名器·九玲珑",
+      "affixes": [
+        {
+          "Attr": 3,
+          "Mode": 0,
+          "Value": 70
+        },
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": 200
+        },
+        {
+          "Attr": 36,
+          "Mode": 0,
+          "Value": 600
+        }
+      ],
+      "effect": {
+        "药师": "对仍有自己光盾的队友再次施放光盾术时，消耗剩余护盾，将剩余额度的60%转为治疗，由该队友和其周围150范围内最缺血的另一名队友平分；没有另一名受伤队友时，全部治疗给原目标。这次不再生成新盾。",
+        "术士": "对被自己主动冰封的目标使用冰爆术时，爆炸中心改为该目标，伤害为原来的80%；随后解除这次冰封，这次冰爆不再附加冻结。"
+      },
+      "sources": [
+        [
+          20600,
+          3055
+        ],
+        [
+          20600,
+          3056
+        ],
+        [
+          20600,
+          3057
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1324,
+      "hard_id": 1800001324,
+      "name": "名器·龙息",
+      "affixes": [
+        {
+          "Attr": 3,
+          "Mode": 0,
+          "Value": 80
+        },
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": 220
+        }
+      ],
+      "effect": {
+        "药师": "群疗术可以选择300距离内的队友作为治疗中心，范围与治疗量不变，不必再贴近队伍中心施放。",
+        "术士": "秘术：消除改为将敌人身上可移除的防御魔法夺取为自身状态，其余原技能规则不变。"
+      },
+      "sources": [
+        [
+          20600,
+          3058
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1325,
+      "hard_id": 1800001325,
+      "name": "名器·太极",
+      "affixes": [
+        {
+          "Attr": 3,
+          "Mode": 0,
+          "Value": 90
+        },
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": 240
+        },
+        {
+          "Attr": 61,
+          "Mode": 0,
+          "Value": 80
+        }
+      ],
+      "effect": {
+        "药师": "清身术每成功移除一种异常状态，就为目标恢复3%最大生命，每次最多恢复9%，解除减益的同时救急。",
+        "术士": "风焰术命中带有自己燃烧效果的敌人时，立即结算其剩余燃烧伤害；原燃烧效果继续存在，持续时间不缩短。"
+      },
+      "sources": [
+        [
+          20803,
+          3073
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1326,
+      "hard_id": 1800001326,
+      "name": "古器·幻仙",
+      "affixes": [
+        {
+          "Attr": 3,
+          "Mode": 0,
+          "Value": 100
+        },
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": 260
+        },
+        {
+          "Attr": 17,
+          "Mode": 0,
+          "Value": 300
+        }
+      ],
+      "effect": {
+        "药师": "神术：集中保留原有延长下一次状态时间的效果，并使这次增益状态的效果额外提高25%。",
+        "术士": "暴雪术伤害提高25%，作用半径扩大20%，冷却保持原值。"
+      },
+      "sources": [
+        [
+          200,
+          1041
+        ],
+        [
+          200,
+          1069
+        ],
+        [
+          20100,
+          3045
+        ],
+        [
+          20300,
+          3047
+        ],
+        [
+          20300,
+          3048
+        ],
+        [
+          20502,
+          3000
+        ],
+        [
+          20502,
+          3005
+        ],
+        [
+          20502,
+          3006
+        ],
+        [
+          20600,
+          3054
+        ],
+        [
+          20600,
+          3055
+        ],
+        [
+          20600,
+          3057
+        ],
+        [
+          20600,
+          3058
+        ],
+        [
+          20701,
+          3049
+        ],
+        [
+          20701,
+          3050
+        ],
+        [
+          20801,
+          3064
+        ],
+        [
+          20801,
+          3065
+        ],
+        [
+          20801,
+          3066
+        ],
+        [
+          20802,
+          3068
+        ],
+        [
+          20802,
+          3069
+        ],
+        [
+          20802,
+          3070
+        ],
+        [
+          20803,
+          3072
+        ],
+        [
+          20803,
+          3073
+        ],
+        [
+          20803,
+          3074
+        ],
+        [
+          20901,
+          3111
+        ],
+        [
+          20901,
+          3112
+        ],
+        [
+          20901,
+          3113
+        ],
+        [
+          20901,
+          3114
+        ],
+        [
+          20902,
+          3111
+        ],
+        [
+          20902,
+          3112
+        ],
+        [
+          20902,
+          3113
+        ],
+        [
+          21002,
+          3133
+        ],
+        [
+          21004,
+          3134
+        ],
+        [
+          21601,
+          3182
+        ],
+        [
+          21602,
+          3133
+        ],
+        [
+          21603,
+          3132
+        ],
+        [
+          21603,
+          3182
+        ],
+        [
+          21604,
+          3134
+        ],
+        [
+          23800,
+          5206
+        ],
+        [
+          23800,
+          5207
+        ],
+        [
+          23800,
+          5209
+        ],
+        [
+          23800,
+          5210
+        ],
+        [
+          23800,
+          5211
+        ],
+        [
+          23800,
+          5212
+        ],
+        [
+          24400,
+          5219
+        ],
+        [
+          24500,
+          5220
+        ],
+        [
+          24800,
+          30084
+        ],
+        [
+          24800,
+          30085
+        ],
+        [
+          24800,
+          30086
+        ],
+        [
+          24800,
+          30087
+        ],
+        [
+          24800,
+          30088
+        ],
+        [
+          24800,
+          30124
+        ],
+        [
+          24800,
+          30147
+        ],
+        [
+          26800,
+          5221
+        ],
+        [
+          26900,
+          5218
+        ],
+        [
+          30600,
+          31466
+        ],
+        [
+          30600,
+          31467
+        ],
+        [
+          34700,
+          3045
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    },
+    {
+      "base_id": 1327,
+      "hard_id": 1800001327,
+      "name": "古器·轰雷神",
+      "affixes": [
+        {
+          "Attr": 3,
+          "Mode": 0,
+          "Value": 110
+        },
+        {
+          "Attr": 15,
+          "Mode": 1,
+          "Value": 280
+        }
+      ],
+      "effect": {
+        "药师": "回春术无冷却，原有总治疗量、持续时间和法力消耗不变。",
+        "术士": "秘术：幻影无冷却，瞬移成功率为100%，法力消耗提高30%。"
+      },
+      "sources": [
+        [
+          20901,
+          3111
+        ],
+        [
+          20901,
+          3112
+        ],
+        [
+          20901,
+          3113
+        ],
+        [
+          20901,
+          3114
+        ],
+        [
+          20902,
+          3111
+        ],
+        [
+          20902,
+          3112
+        ],
+        [
+          20902,
+          3113
+        ]
+      ],
+      "task_original": false,
+      "mechanism_enabled": true,
+      "beginner_allowed_override": false
+    }
+  ],
+  "sets": [
+    {
+      "base_id": 1,
+      "hard_id": 1800000001,
+      "members": [
+        8401,
+        8451,
+        9026,
+        2126,
+        2426,
+        2526,
+        2624,
+        2576,
+        9511,
+        9512
+      ],
+      "normal_bonuses": [
+        {
+          "Pieces": 2,
+          "Affix": {
+            "Attr": 34,
+            "Mode": 0,
+            "Value": 250
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 4,
+          "Affix": {
+            "Attr": 19,
+            "Mode": 0,
+            "Value": 34
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 6,
+          "Affix": {
+            "Attr": 31,
+            "Mode": 0,
+            "Value": 24
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 8,
+          "Affix": {
+            "Attr": 23,
+            "Mode": 0,
+            "Value": 500
+          },
+          "Probability": 100
+        }
+      ]
+    },
+    {
+      "base_id": 2,
+      "hard_id": 1800000002,
+      "members": [
+        8101,
+        9029,
+        2127,
+        2427,
+        2527,
+        2625,
+        2577,
+        9811,
+        9812
+      ],
+      "normal_bonuses": [
+        {
+          "Pieces": 2,
+          "Affix": {
+            "Attr": 36,
+            "Mode": 0,
+            "Value": 250
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 4,
+          "Affix": {
+            "Attr": 17,
+            "Mode": 0,
+            "Value": 25
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 6,
+          "Affix": {
+            "Attr": 15,
+            "Mode": 0,
+            "Value": 20
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 8,
+          "Affix": {
+            "Attr": 66,
+            "Mode": 0,
+            "Value": 500
+          },
+          "Probability": 100
+        }
+      ]
+    },
+    {
+      "base_id": 3,
+      "hard_id": 1800000003,
+      "members": [
+        8201,
+        9027,
+        2128,
+        2428,
+        2528,
+        2626,
+        2578,
+        9611,
+        9612
+      ],
+      "normal_bonuses": [
+        {
+          "Pieces": 2,
+          "Affix": {
+            "Attr": 36,
+            "Mode": 0,
+            "Value": 250
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 4,
+          "Affix": {
+            "Attr": 17,
+            "Mode": 0,
+            "Value": 15
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 6,
+          "Affix": {
+            "Attr": 15,
+            "Mode": 0,
+            "Value": 25
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 8,
+          "Affix": {
+            "Attr": 66,
+            "Mode": 0,
+            "Value": 500
+          },
+          "Probability": 100
+        }
+      ]
+    },
+    {
+      "base_id": 4,
+      "hard_id": 1800000004,
+      "members": [
+        8005,
+        8051,
+        9028,
+        2129,
+        2429,
+        2529,
+        2627,
+        2579,
+        9711,
+        9712
+      ],
+      "normal_bonuses": [
+        {
+          "Pieces": 2,
+          "Affix": {
+            "Attr": 34,
+            "Mode": 0,
+            "Value": 250
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 4,
+          "Affix": {
+            "Attr": 19,
+            "Mode": 0,
+            "Value": 20
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 6,
+          "Affix": {
+            "Attr": 31,
+            "Mode": 0,
+            "Value": 48
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 8,
+          "Affix": {
+            "Attr": 23,
+            "Mode": 0,
+            "Value": 500
+          },
+          "Probability": 100
+        }
+      ]
+    },
+    {
+      "base_id": 5,
+      "hard_id": 1800000005,
+      "members": [
+        8302,
+        9030,
+        2130,
+        2430,
+        2530,
+        2628,
+        2580,
+        9911,
+        9912
+      ],
+      "normal_bonuses": [
+        {
+          "Pieces": 2,
+          "Affix": {
+            "Attr": 34,
+            "Mode": 0,
+            "Value": 250
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 4,
+          "Affix": {
+            "Attr": 19,
+            "Mode": 0,
+            "Value": 16
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 6,
+          "Affix": {
+            "Attr": 31,
+            "Mode": 0,
+            "Value": 54
+          },
+          "Probability": 100
+        },
+        {
+          "Pieces": 8,
+          "Affix": {
+            "Attr": 23,
+            "Mode": 0,
+            "Value": 500
+          },
+          "Probability": 100
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "base_id": 1321,
+      "map_id": 20701,
+      "monster_id": 3049
+    },
+    {
+      "base_id": 1322,
+      "map_id": 20701,
+      "monster_id": 3049
+    },
+    {
+      "base_id": 1323,
+      "map_id": 20600,
+      "monster_id": 3055
+    },
+    {
+      "base_id": 1323,
+      "map_id": 20600,
+      "monster_id": 3056
+    },
+    {
+      "base_id": 1323,
+      "map_id": 20600,
+      "monster_id": 3057
+    },
+    {
+      "base_id": 1324,
+      "map_id": 20600,
+      "monster_id": 3058
+    },
+    {
+      "base_id": 1325,
+      "map_id": 20803,
+      "monster_id": 3073
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20100,
+      "monster_id": 3045
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20300,
+      "monster_id": 3047
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20300,
+      "monster_id": 3048
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20502,
+      "monster_id": 3000
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20502,
+      "monster_id": 3005
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20502,
+      "monster_id": 3006
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20600,
+      "monster_id": 3054
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20600,
+      "monster_id": 3055
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20600,
+      "monster_id": 3057
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20600,
+      "monster_id": 3058
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20701,
+      "monster_id": 3049
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20701,
+      "monster_id": 3050
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20801,
+      "monster_id": 3064
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20801,
+      "monster_id": 3065
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20801,
+      "monster_id": 3066
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20802,
+      "monster_id": 3068
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20802,
+      "monster_id": 3069
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20802,
+      "monster_id": 3070
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20803,
+      "monster_id": 3072
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20803,
+      "monster_id": 3073
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20803,
+      "monster_id": 3074
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20901,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20901,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20901,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20901,
+      "monster_id": 3114
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20902,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20902,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1326,
+      "map_id": 20902,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1326,
+      "map_id": 21601,
+      "monster_id": 3182
+    },
+    {
+      "base_id": 1326,
+      "map_id": 21602,
+      "monster_id": 3133
+    },
+    {
+      "base_id": 1326,
+      "map_id": 21603,
+      "monster_id": 3132
+    },
+    {
+      "base_id": 1326,
+      "map_id": 21603,
+      "monster_id": 3182
+    },
+    {
+      "base_id": 1326,
+      "map_id": 21604,
+      "monster_id": 3134
+    },
+    {
+      "base_id": 1326,
+      "map_id": 23800,
+      "monster_id": 5206
+    },
+    {
+      "base_id": 1326,
+      "map_id": 23800,
+      "monster_id": 5207
+    },
+    {
+      "base_id": 1326,
+      "map_id": 23800,
+      "monster_id": 5209
+    },
+    {
+      "base_id": 1326,
+      "map_id": 23800,
+      "monster_id": 5210
+    },
+    {
+      "base_id": 1326,
+      "map_id": 23800,
+      "monster_id": 5211
+    },
+    {
+      "base_id": 1326,
+      "map_id": 23800,
+      "monster_id": 5212
+    },
+    {
+      "base_id": 1326,
+      "map_id": 24400,
+      "monster_id": 5219
+    },
+    {
+      "base_id": 1326,
+      "map_id": 24500,
+      "monster_id": 5220
+    },
+    {
+      "base_id": 1326,
+      "map_id": 24800,
+      "monster_id": 30084
+    },
+    {
+      "base_id": 1326,
+      "map_id": 24800,
+      "monster_id": 30085
+    },
+    {
+      "base_id": 1326,
+      "map_id": 24800,
+      "monster_id": 30086
+    },
+    {
+      "base_id": 1326,
+      "map_id": 24800,
+      "monster_id": 30087
+    },
+    {
+      "base_id": 1326,
+      "map_id": 24800,
+      "monster_id": 30088
+    },
+    {
+      "base_id": 1326,
+      "map_id": 24800,
+      "monster_id": 30124
+    },
+    {
+      "base_id": 1326,
+      "map_id": 24800,
+      "monster_id": 30147
+    },
+    {
+      "base_id": 1326,
+      "map_id": 26800,
+      "monster_id": 5221
+    },
+    {
+      "base_id": 1326,
+      "map_id": 26900,
+      "monster_id": 5218
+    },
+    {
+      "base_id": 1326,
+      "map_id": 30600,
+      "monster_id": 31466
+    },
+    {
+      "base_id": 1326,
+      "map_id": 30600,
+      "monster_id": 31467
+    },
+    {
+      "base_id": 1521,
+      "map_id": 20701,
+      "monster_id": 3049
+    },
+    {
+      "base_id": 1522,
+      "map_id": 20701,
+      "monster_id": 3050
+    },
+    {
+      "base_id": 1523,
+      "map_id": 20600,
+      "monster_id": 3055
+    },
+    {
+      "base_id": 1523,
+      "map_id": 20600,
+      "monster_id": 3056
+    },
+    {
+      "base_id": 1523,
+      "map_id": 20600,
+      "monster_id": 3057
+    },
+    {
+      "base_id": 1524,
+      "map_id": 20600,
+      "monster_id": 3058
+    },
+    {
+      "base_id": 1525,
+      "map_id": 20803,
+      "monster_id": 3074
+    },
+    {
+      "base_id": 1621,
+      "map_id": 20701,
+      "monster_id": 3050
+    },
+    {
+      "base_id": 1022,
+      "map_id": 20701,
+      "monster_id": 3049
+    },
+    {
+      "base_id": 1622,
+      "map_id": 20701,
+      "monster_id": 3050
+    },
+    {
+      "base_id": 1623,
+      "map_id": 20600,
+      "monster_id": 3055
+    },
+    {
+      "base_id": 1623,
+      "map_id": 20600,
+      "monster_id": 3056
+    },
+    {
+      "base_id": 1623,
+      "map_id": 20600,
+      "monster_id": 3057
+    },
+    {
+      "base_id": 1624,
+      "map_id": 20600,
+      "monster_id": 3058
+    },
+    {
+      "base_id": 1625,
+      "map_id": 20803,
+      "monster_id": 3073
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20100,
+      "monster_id": 3045
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20300,
+      "monster_id": 3047
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20300,
+      "monster_id": 3048
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20502,
+      "monster_id": 3000
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20502,
+      "monster_id": 3005
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20502,
+      "monster_id": 3006
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20600,
+      "monster_id": 3054
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20600,
+      "monster_id": 3055
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20600,
+      "monster_id": 3057
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20600,
+      "monster_id": 3058
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20701,
+      "monster_id": 3049
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20701,
+      "monster_id": 3050
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20801,
+      "monster_id": 3064
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20801,
+      "monster_id": 3065
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20801,
+      "monster_id": 3066
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20802,
+      "monster_id": 3068
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20802,
+      "monster_id": 3069
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20802,
+      "monster_id": 3070
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20803,
+      "monster_id": 3072
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20803,
+      "monster_id": 3073
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20803,
+      "monster_id": 3074
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20901,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20901,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20901,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20901,
+      "monster_id": 3114
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20902,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20902,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1626,
+      "map_id": 20902,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1626,
+      "map_id": 21601,
+      "monster_id": 3182
+    },
+    {
+      "base_id": 1626,
+      "map_id": 21602,
+      "monster_id": 3133
+    },
+    {
+      "base_id": 1626,
+      "map_id": 21603,
+      "monster_id": 3132
+    },
+    {
+      "base_id": 1626,
+      "map_id": 21603,
+      "monster_id": 3182
+    },
+    {
+      "base_id": 1626,
+      "map_id": 21604,
+      "monster_id": 3134
+    },
+    {
+      "base_id": 1626,
+      "map_id": 23800,
+      "monster_id": 5206
+    },
+    {
+      "base_id": 1626,
+      "map_id": 23800,
+      "monster_id": 5207
+    },
+    {
+      "base_id": 1626,
+      "map_id": 23800,
+      "monster_id": 5209
+    },
+    {
+      "base_id": 1626,
+      "map_id": 23800,
+      "monster_id": 5210
+    },
+    {
+      "base_id": 1626,
+      "map_id": 23800,
+      "monster_id": 5211
+    },
+    {
+      "base_id": 1626,
+      "map_id": 23800,
+      "monster_id": 5212
+    },
+    {
+      "base_id": 1626,
+      "map_id": 24400,
+      "monster_id": 5219
+    },
+    {
+      "base_id": 1626,
+      "map_id": 24500,
+      "monster_id": 5220
+    },
+    {
+      "base_id": 1626,
+      "map_id": 24800,
+      "monster_id": 30084
+    },
+    {
+      "base_id": 1626,
+      "map_id": 24800,
+      "monster_id": 30085
+    },
+    {
+      "base_id": 1626,
+      "map_id": 24800,
+      "monster_id": 30086
+    },
+    {
+      "base_id": 1626,
+      "map_id": 24800,
+      "monster_id": 30087
+    },
+    {
+      "base_id": 1626,
+      "map_id": 24800,
+      "monster_id": 30088
+    },
+    {
+      "base_id": 1626,
+      "map_id": 24800,
+      "monster_id": 30124
+    },
+    {
+      "base_id": 1626,
+      "map_id": 24800,
+      "monster_id": 30147
+    },
+    {
+      "base_id": 1626,
+      "map_id": 26800,
+      "monster_id": 5221
+    },
+    {
+      "base_id": 1626,
+      "map_id": 26900,
+      "monster_id": 5218
+    },
+    {
+      "base_id": 1626,
+      "map_id": 30600,
+      "monster_id": 31466
+    },
+    {
+      "base_id": 1626,
+      "map_id": 30600,
+      "monster_id": 31467
+    },
+    {
+      "base_id": 1023,
+      "map_id": 20701,
+      "monster_id": 3049
+    },
+    {
+      "base_id": 1821,
+      "map_id": 20701,
+      "monster_id": 3050
+    },
+    {
+      "base_id": 1024,
+      "map_id": 20600,
+      "monster_id": 3055
+    },
+    {
+      "base_id": 1024,
+      "map_id": 20600,
+      "monster_id": 3056
+    },
+    {
+      "base_id": 1024,
+      "map_id": 20600,
+      "monster_id": 3057
+    },
+    {
+      "base_id": 1822,
+      "map_id": 20701,
+      "monster_id": 3050
+    },
+    {
+      "base_id": 1823,
+      "map_id": 20600,
+      "monster_id": 3055
+    },
+    {
+      "base_id": 1823,
+      "map_id": 20600,
+      "monster_id": 3056
+    },
+    {
+      "base_id": 1823,
+      "map_id": 20600,
+      "monster_id": 3057
+    },
+    {
+      "base_id": 1824,
+      "map_id": 20600,
+      "monster_id": 3058
+    },
+    {
+      "base_id": 1825,
+      "map_id": 20803,
+      "monster_id": 3072
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20100,
+      "monster_id": 3045
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20300,
+      "monster_id": 3047
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20300,
+      "monster_id": 3048
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20502,
+      "monster_id": 3000
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20502,
+      "monster_id": 3005
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20502,
+      "monster_id": 3006
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20600,
+      "monster_id": 3054
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20600,
+      "monster_id": 3055
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20600,
+      "monster_id": 3057
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20600,
+      "monster_id": 3058
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20701,
+      "monster_id": 3049
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20701,
+      "monster_id": 3050
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20801,
+      "monster_id": 3064
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20801,
+      "monster_id": 3065
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20801,
+      "monster_id": 3066
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20802,
+      "monster_id": 3068
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20802,
+      "monster_id": 3069
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20802,
+      "monster_id": 3070
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20803,
+      "monster_id": 3072
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20803,
+      "monster_id": 3073
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20803,
+      "monster_id": 3074
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20901,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20901,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20901,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20901,
+      "monster_id": 3114
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20902,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20902,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1826,
+      "map_id": 20902,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1826,
+      "map_id": 21601,
+      "monster_id": 3182
+    },
+    {
+      "base_id": 1826,
+      "map_id": 21602,
+      "monster_id": 3133
+    },
+    {
+      "base_id": 1826,
+      "map_id": 21603,
+      "monster_id": 3132
+    },
+    {
+      "base_id": 1826,
+      "map_id": 21603,
+      "monster_id": 3182
+    },
+    {
+      "base_id": 1826,
+      "map_id": 21604,
+      "monster_id": 3134
+    },
+    {
+      "base_id": 1826,
+      "map_id": 23800,
+      "monster_id": 5206
+    },
+    {
+      "base_id": 1826,
+      "map_id": 23800,
+      "monster_id": 5207
+    },
+    {
+      "base_id": 1826,
+      "map_id": 23800,
+      "monster_id": 5209
+    },
+    {
+      "base_id": 1826,
+      "map_id": 23800,
+      "monster_id": 5210
+    },
+    {
+      "base_id": 1826,
+      "map_id": 23800,
+      "monster_id": 5211
+    },
+    {
+      "base_id": 1826,
+      "map_id": 23800,
+      "monster_id": 5212
+    },
+    {
+      "base_id": 1826,
+      "map_id": 24400,
+      "monster_id": 5219
+    },
+    {
+      "base_id": 1826,
+      "map_id": 24500,
+      "monster_id": 5220
+    },
+    {
+      "base_id": 1826,
+      "map_id": 24800,
+      "monster_id": 30084
+    },
+    {
+      "base_id": 1826,
+      "map_id": 24800,
+      "monster_id": 30085
+    },
+    {
+      "base_id": 1826,
+      "map_id": 24800,
+      "monster_id": 30086
+    },
+    {
+      "base_id": 1826,
+      "map_id": 24800,
+      "monster_id": 30087
+    },
+    {
+      "base_id": 1826,
+      "map_id": 24800,
+      "monster_id": 30088
+    },
+    {
+      "base_id": 1826,
+      "map_id": 24800,
+      "monster_id": 30124
+    },
+    {
+      "base_id": 1826,
+      "map_id": 24800,
+      "monster_id": 30147
+    },
+    {
+      "base_id": 1826,
+      "map_id": 26800,
+      "monster_id": 5221
+    },
+    {
+      "base_id": 1826,
+      "map_id": 26900,
+      "monster_id": 5218
+    },
+    {
+      "base_id": 1826,
+      "map_id": 30600,
+      "monster_id": 31466
+    },
+    {
+      "base_id": 1826,
+      "map_id": 30600,
+      "monster_id": 31467
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20100,
+      "monster_id": 3045
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20300,
+      "monster_id": 3047
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20300,
+      "monster_id": 3048
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20502,
+      "monster_id": 3000
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20502,
+      "monster_id": 3005
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20502,
+      "monster_id": 3006
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20600,
+      "monster_id": 3054
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20600,
+      "monster_id": 3055
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20600,
+      "monster_id": 3057
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20600,
+      "monster_id": 3058
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20701,
+      "monster_id": 3049
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20701,
+      "monster_id": 3050
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20801,
+      "monster_id": 3064
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20801,
+      "monster_id": 3065
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20801,
+      "monster_id": 3066
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20802,
+      "monster_id": 3068
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20802,
+      "monster_id": 3069
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20802,
+      "monster_id": 3070
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20803,
+      "monster_id": 3072
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20803,
+      "monster_id": 3073
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20803,
+      "monster_id": 3074
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20901,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20901,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20901,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20901,
+      "monster_id": 3114
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20902,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20902,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1025,
+      "map_id": 20902,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1025,
+      "map_id": 21601,
+      "monster_id": 3182
+    },
+    {
+      "base_id": 1025,
+      "map_id": 21602,
+      "monster_id": 3133
+    },
+    {
+      "base_id": 1025,
+      "map_id": 21603,
+      "monster_id": 3132
+    },
+    {
+      "base_id": 1025,
+      "map_id": 21603,
+      "monster_id": 3182
+    },
+    {
+      "base_id": 1025,
+      "map_id": 21604,
+      "monster_id": 3134
+    },
+    {
+      "base_id": 1025,
+      "map_id": 23800,
+      "monster_id": 5206
+    },
+    {
+      "base_id": 1025,
+      "map_id": 23800,
+      "monster_id": 5207
+    },
+    {
+      "base_id": 1025,
+      "map_id": 23800,
+      "monster_id": 5209
+    },
+    {
+      "base_id": 1025,
+      "map_id": 23800,
+      "monster_id": 5210
+    },
+    {
+      "base_id": 1025,
+      "map_id": 23800,
+      "monster_id": 5211
+    },
+    {
+      "base_id": 1025,
+      "map_id": 23800,
+      "monster_id": 5212
+    },
+    {
+      "base_id": 1025,
+      "map_id": 24400,
+      "monster_id": 5219
+    },
+    {
+      "base_id": 1025,
+      "map_id": 24500,
+      "monster_id": 5220
+    },
+    {
+      "base_id": 1025,
+      "map_id": 24800,
+      "monster_id": 30084
+    },
+    {
+      "base_id": 1025,
+      "map_id": 24800,
+      "monster_id": 30085
+    },
+    {
+      "base_id": 1025,
+      "map_id": 24800,
+      "monster_id": 30086
+    },
+    {
+      "base_id": 1025,
+      "map_id": 24800,
+      "monster_id": 30087
+    },
+    {
+      "base_id": 1025,
+      "map_id": 24800,
+      "monster_id": 30088
+    },
+    {
+      "base_id": 1025,
+      "map_id": 24800,
+      "monster_id": 30124
+    },
+    {
+      "base_id": 1025,
+      "map_id": 24800,
+      "monster_id": 30147
+    },
+    {
+      "base_id": 1025,
+      "map_id": 26800,
+      "monster_id": 5221
+    },
+    {
+      "base_id": 1025,
+      "map_id": 26900,
+      "monster_id": 5218
+    },
+    {
+      "base_id": 1025,
+      "map_id": 30600,
+      "monster_id": 31466
+    },
+    {
+      "base_id": 1025,
+      "map_id": 30600,
+      "monster_id": 31467
+    },
+    {
+      "base_id": 1026,
+      "map_id": 20803,
+      "monster_id": 3072
+    },
+    {
+      "base_id": 1923,
+      "map_id": 20701,
+      "monster_id": 3050
+    },
+    {
+      "base_id": 1924,
+      "map_id": 20701,
+      "monster_id": 3050
+    },
+    {
+      "base_id": 1925,
+      "map_id": 20600,
+      "monster_id": 3055
+    },
+    {
+      "base_id": 1925,
+      "map_id": 20600,
+      "monster_id": 3056
+    },
+    {
+      "base_id": 1925,
+      "map_id": 20600,
+      "monster_id": 3057
+    },
+    {
+      "base_id": 1926,
+      "map_id": 20600,
+      "monster_id": 3058
+    },
+    {
+      "base_id": 1927,
+      "map_id": 20803,
+      "monster_id": 3074
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20100,
+      "monster_id": 3045
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20300,
+      "monster_id": 3047
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20300,
+      "monster_id": 3048
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20502,
+      "monster_id": 3000
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20502,
+      "monster_id": 3005
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20502,
+      "monster_id": 3006
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20600,
+      "monster_id": 3054
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20600,
+      "monster_id": 3055
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20600,
+      "monster_id": 3057
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20600,
+      "monster_id": 3058
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20701,
+      "monster_id": 3049
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20701,
+      "monster_id": 3050
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20801,
+      "monster_id": 3064
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20801,
+      "monster_id": 3065
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20801,
+      "monster_id": 3066
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20802,
+      "monster_id": 3068
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20802,
+      "monster_id": 3069
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20802,
+      "monster_id": 3070
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20803,
+      "monster_id": 3072
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20803,
+      "monster_id": 3073
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20803,
+      "monster_id": 3074
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20901,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20901,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20901,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20901,
+      "monster_id": 3114
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20902,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20902,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1928,
+      "map_id": 20902,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1928,
+      "map_id": 21601,
+      "monster_id": 3182
+    },
+    {
+      "base_id": 1928,
+      "map_id": 21602,
+      "monster_id": 3133
+    },
+    {
+      "base_id": 1928,
+      "map_id": 21603,
+      "monster_id": 3132
+    },
+    {
+      "base_id": 1928,
+      "map_id": 21603,
+      "monster_id": 3182
+    },
+    {
+      "base_id": 1928,
+      "map_id": 21604,
+      "monster_id": 3134
+    },
+    {
+      "base_id": 1928,
+      "map_id": 23800,
+      "monster_id": 5206
+    },
+    {
+      "base_id": 1928,
+      "map_id": 23800,
+      "monster_id": 5207
+    },
+    {
+      "base_id": 1928,
+      "map_id": 23800,
+      "monster_id": 5209
+    },
+    {
+      "base_id": 1928,
+      "map_id": 23800,
+      "monster_id": 5210
+    },
+    {
+      "base_id": 1928,
+      "map_id": 23800,
+      "monster_id": 5211
+    },
+    {
+      "base_id": 1928,
+      "map_id": 23800,
+      "monster_id": 5212
+    },
+    {
+      "base_id": 1928,
+      "map_id": 24400,
+      "monster_id": 5219
+    },
+    {
+      "base_id": 1928,
+      "map_id": 24500,
+      "monster_id": 5220
+    },
+    {
+      "base_id": 1928,
+      "map_id": 24800,
+      "monster_id": 30084
+    },
+    {
+      "base_id": 1928,
+      "map_id": 24800,
+      "monster_id": 30085
+    },
+    {
+      "base_id": 1928,
+      "map_id": 24800,
+      "monster_id": 30086
+    },
+    {
+      "base_id": 1928,
+      "map_id": 24800,
+      "monster_id": 30087
+    },
+    {
+      "base_id": 1928,
+      "map_id": 24800,
+      "monster_id": 30088
+    },
+    {
+      "base_id": 1928,
+      "map_id": 24800,
+      "monster_id": 30124
+    },
+    {
+      "base_id": 1928,
+      "map_id": 24800,
+      "monster_id": 30147
+    },
+    {
+      "base_id": 1928,
+      "map_id": 26800,
+      "monster_id": 5221
+    },
+    {
+      "base_id": 1928,
+      "map_id": 26900,
+      "monster_id": 5218
+    },
+    {
+      "base_id": 1928,
+      "map_id": 30600,
+      "monster_id": 31466
+    },
+    {
+      "base_id": 1928,
+      "map_id": 30600,
+      "monster_id": 31467
+    },
+    {
+      "base_id": 8401,
+      "map_id": 20600,
+      "monster_id": 3062
+    },
+    {
+      "base_id": 8451,
+      "map_id": 20600,
+      "monster_id": 3062
+    },
+    {
+      "base_id": 9026,
+      "map_id": 20801,
+      "monster_id": 3064
+    },
+    {
+      "base_id": 9026,
+      "map_id": 23800,
+      "monster_id": 6073
+    },
+    {
+      "base_id": 9026,
+      "map_id": 23800,
+      "monster_id": 6075
+    },
+    {
+      "base_id": 2126,
+      "map_id": 20600,
+      "monster_id": 3063
+    },
+    {
+      "base_id": 2126,
+      "map_id": 23800,
+      "monster_id": 6073
+    },
+    {
+      "base_id": 2426,
+      "map_id": 20600,
+      "monster_id": 3059
+    },
+    {
+      "base_id": 2426,
+      "map_id": 23800,
+      "monster_id": 5209
+    },
+    {
+      "base_id": 2526,
+      "map_id": 20801,
+      "monster_id": 3064
+    },
+    {
+      "base_id": 2526,
+      "map_id": 23800,
+      "monster_id": 6074
+    },
+    {
+      "base_id": 2624,
+      "map_id": 20801,
+      "monster_id": 3067
+    },
+    {
+      "base_id": 2624,
+      "map_id": 20802,
+      "monster_id": 3071
+    },
+    {
+      "base_id": 2624,
+      "map_id": 20803,
+      "monster_id": 3075
+    },
+    {
+      "base_id": 2624,
+      "map_id": 23800,
+      "monster_id": 6074
+    },
+    {
+      "base_id": 2576,
+      "map_id": 20701,
+      "monster_id": 3081
+    },
+    {
+      "base_id": 2576,
+      "map_id": 23800,
+      "monster_id": 6074
+    },
+    {
+      "base_id": 9511,
+      "map_id": 20701,
+      "monster_id": 3080
+    },
+    {
+      "base_id": 9511,
+      "map_id": 20701,
+      "monster_id": 3082
+    },
+    {
+      "base_id": 9511,
+      "map_id": 23800,
+      "monster_id": 5206
+    },
+    {
+      "base_id": 9512,
+      "map_id": 20701,
+      "monster_id": 3080
+    },
+    {
+      "base_id": 9512,
+      "map_id": 20701,
+      "monster_id": 3082
+    },
+    {
+      "base_id": 9512,
+      "map_id": 23800,
+      "monster_id": 5206
+    },
+    {
+      "base_id": 8101,
+      "map_id": 20600,
+      "monster_id": 3060
+    },
+    {
+      "base_id": 8101,
+      "map_id": 20600,
+      "monster_id": 3061
+    },
+    {
+      "base_id": 8101,
+      "map_id": 20600,
+      "monster_id": 3062
+    },
+    {
+      "base_id": 9029,
+      "map_id": 20802,
+      "monster_id": 3070
+    },
+    {
+      "base_id": 2127,
+      "map_id": 20600,
+      "monster_id": 3063
+    },
+    {
+      "base_id": 2127,
+      "map_id": 23800,
+      "monster_id": 5207
+    },
+    {
+      "base_id": 2427,
+      "map_id": 20600,
+      "monster_id": 3059
+    },
+    {
+      "base_id": 2427,
+      "map_id": 23800,
+      "monster_id": 5207
+    },
+    {
+      "base_id": 2427,
+      "map_id": 23800,
+      "monster_id": 6074
+    },
+    {
+      "base_id": 2527,
+      "map_id": 20802,
+      "monster_id": 3069
+    },
+    {
+      "base_id": 2527,
+      "map_id": 23800,
+      "monster_id": 6076
+    },
+    {
+      "base_id": 2625,
+      "map_id": 20801,
+      "monster_id": 3067
+    },
+    {
+      "base_id": 2625,
+      "map_id": 20802,
+      "monster_id": 3071
+    },
+    {
+      "base_id": 2625,
+      "map_id": 20803,
+      "monster_id": 3075
+    },
+    {
+      "base_id": 2625,
+      "map_id": 23800,
+      "monster_id": 6076
+    },
+    {
+      "base_id": 2577,
+      "map_id": 20701,
+      "monster_id": 3081
+    },
+    {
+      "base_id": 2577,
+      "map_id": 23800,
+      "monster_id": 6076
+    },
+    {
+      "base_id": 9811,
+      "map_id": 20701,
+      "monster_id": 3080
+    },
+    {
+      "base_id": 9811,
+      "map_id": 20701,
+      "monster_id": 3082
+    },
+    {
+      "base_id": 9811,
+      "map_id": 23800,
+      "monster_id": 6077
+    },
+    {
+      "base_id": 9812,
+      "map_id": 20701,
+      "monster_id": 3080
+    },
+    {
+      "base_id": 9812,
+      "map_id": 20701,
+      "monster_id": 3082
+    },
+    {
+      "base_id": 9812,
+      "map_id": 23800,
+      "monster_id": 6077
+    },
+    {
+      "base_id": 8201,
+      "map_id": 20600,
+      "monster_id": 3061
+    },
+    {
+      "base_id": 9027,
+      "map_id": 20802,
+      "monster_id": 3069
+    },
+    {
+      "base_id": 2128,
+      "map_id": 20600,
+      "monster_id": 3063
+    },
+    {
+      "base_id": 2128,
+      "map_id": 23800,
+      "monster_id": 5207
+    },
+    {
+      "base_id": 2428,
+      "map_id": 20600,
+      "monster_id": 3059
+    },
+    {
+      "base_id": 2428,
+      "map_id": 23800,
+      "monster_id": 5206
+    },
+    {
+      "base_id": 2528,
+      "map_id": 20802,
+      "monster_id": 3070
+    },
+    {
+      "base_id": 2528,
+      "map_id": 23800,
+      "monster_id": 5209
+    },
+    {
+      "base_id": 2626,
+      "map_id": 20801,
+      "monster_id": 3067
+    },
+    {
+      "base_id": 2626,
+      "map_id": 20802,
+      "monster_id": 3071
+    },
+    {
+      "base_id": 2626,
+      "map_id": 20803,
+      "monster_id": 3075
+    },
+    {
+      "base_id": 2626,
+      "map_id": 23800,
+      "monster_id": 5208
+    },
+    {
+      "base_id": 2578,
+      "map_id": 20701,
+      "monster_id": 3081
+    },
+    {
+      "base_id": 2578,
+      "map_id": 23800,
+      "monster_id": 5208
+    },
+    {
+      "base_id": 2578,
+      "map_id": 23800,
+      "monster_id": 6075
+    },
+    {
+      "base_id": 9611,
+      "map_id": 20701,
+      "monster_id": 3080
+    },
+    {
+      "base_id": 9611,
+      "map_id": 20701,
+      "monster_id": 3082
+    },
+    {
+      "base_id": 9611,
+      "map_id": 23800,
+      "monster_id": 5206
+    },
+    {
+      "base_id": 9612,
+      "map_id": 20701,
+      "monster_id": 3080
+    },
+    {
+      "base_id": 9612,
+      "map_id": 20701,
+      "monster_id": 3082
+    },
+    {
+      "base_id": 9612,
+      "map_id": 23800,
+      "monster_id": 5208
+    },
+    {
+      "base_id": 8005,
+      "map_id": 20600,
+      "monster_id": 3060
+    },
+    {
+      "base_id": 8051,
+      "map_id": 20600,
+      "monster_id": 3060
+    },
+    {
+      "base_id": 9028,
+      "map_id": 20801,
+      "monster_id": 3065
+    },
+    {
+      "base_id": 9028,
+      "map_id": 23800,
+      "monster_id": 5209
+    },
+    {
+      "base_id": 9028,
+      "map_id": 23800,
+      "monster_id": 5212
+    },
+    {
+      "base_id": 2129,
+      "map_id": 20600,
+      "monster_id": 3063
+    },
+    {
+      "base_id": 2129,
+      "map_id": 23800,
+      "monster_id": 5209
+    },
+    {
+      "base_id": 2429,
+      "map_id": 20600,
+      "monster_id": 3059
+    },
+    {
+      "base_id": 2429,
+      "map_id": 23800,
+      "monster_id": 5210
+    },
+    {
+      "base_id": 2529,
+      "map_id": 20801,
+      "monster_id": 3065
+    },
+    {
+      "base_id": 2529,
+      "map_id": 23800,
+      "monster_id": 5210
+    },
+    {
+      "base_id": 2627,
+      "map_id": 20801,
+      "monster_id": 3067
+    },
+    {
+      "base_id": 2627,
+      "map_id": 20802,
+      "monster_id": 3071
+    },
+    {
+      "base_id": 2627,
+      "map_id": 20803,
+      "monster_id": 3075
+    },
+    {
+      "base_id": 2627,
+      "map_id": 23800,
+      "monster_id": 5211
+    },
+    {
+      "base_id": 2579,
+      "map_id": 20701,
+      "monster_id": 3081
+    },
+    {
+      "base_id": 2579,
+      "map_id": 23800,
+      "monster_id": 5211
+    },
+    {
+      "base_id": 9711,
+      "map_id": 20701,
+      "monster_id": 3080
+    },
+    {
+      "base_id": 9711,
+      "map_id": 20701,
+      "monster_id": 3082
+    },
+    {
+      "base_id": 9711,
+      "map_id": 23800,
+      "monster_id": 5211
+    },
+    {
+      "base_id": 9712,
+      "map_id": 20701,
+      "monster_id": 3080
+    },
+    {
+      "base_id": 9712,
+      "map_id": 20701,
+      "monster_id": 3082
+    },
+    {
+      "base_id": 9712,
+      "map_id": 23800,
+      "monster_id": 5212
+    },
+    {
+      "base_id": 8302,
+      "map_id": 20600,
+      "monster_id": 3061
+    },
+    {
+      "base_id": 9030,
+      "map_id": 20801,
+      "monster_id": 3066
+    },
+    {
+      "base_id": 2130,
+      "map_id": 20600,
+      "monster_id": 3063
+    },
+    {
+      "base_id": 2130,
+      "map_id": 23800,
+      "monster_id": 5212
+    },
+    {
+      "base_id": 2430,
+      "map_id": 20600,
+      "monster_id": 3059
+    },
+    {
+      "base_id": 2430,
+      "map_id": 23800,
+      "monster_id": 5212
+    },
+    {
+      "base_id": 2530,
+      "map_id": 20801,
+      "monster_id": 3066
+    },
+    {
+      "base_id": 2530,
+      "map_id": 23800,
+      "monster_id": 5211
+    },
+    {
+      "base_id": 2628,
+      "map_id": 20801,
+      "monster_id": 3067
+    },
+    {
+      "base_id": 2628,
+      "map_id": 20802,
+      "monster_id": 3071
+    },
+    {
+      "base_id": 2628,
+      "map_id": 20803,
+      "monster_id": 3075
+    },
+    {
+      "base_id": 2628,
+      "map_id": 23800,
+      "monster_id": 6077
+    },
+    {
+      "base_id": 2580,
+      "map_id": 20701,
+      "monster_id": 3081
+    },
+    {
+      "base_id": 2580,
+      "map_id": 23800,
+      "monster_id": 6077
+    },
+    {
+      "base_id": 9911,
+      "map_id": 20701,
+      "monster_id": 3080
+    },
+    {
+      "base_id": 9911,
+      "map_id": 20701,
+      "monster_id": 3082
+    },
+    {
+      "base_id": 9911,
+      "map_id": 23800,
+      "monster_id": 6076
+    },
+    {
+      "base_id": 9912,
+      "map_id": 20701,
+      "monster_id": 3080
+    },
+    {
+      "base_id": 9912,
+      "map_id": 20701,
+      "monster_id": 3082
+    },
+    {
+      "base_id": 9912,
+      "map_id": 23800,
+      "monster_id": 5210
+    },
+    {
+      "base_id": 1027,
+      "map_id": 20901,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1027,
+      "map_id": 20901,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1027,
+      "map_id": 20901,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1027,
+      "map_id": 20901,
+      "monster_id": 3114
+    },
+    {
+      "base_id": 1027,
+      "map_id": 20902,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1027,
+      "map_id": 20902,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1027,
+      "map_id": 20902,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20901,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20901,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20901,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20901,
+      "monster_id": 3114
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20902,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20902,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20902,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20901,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20901,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20901,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20901,
+      "monster_id": 3114
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20902,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20902,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20902,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20901,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20901,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20901,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20901,
+      "monster_id": 3114
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20902,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20902,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20902,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20901,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20901,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20901,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20901,
+      "monster_id": 3114
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20902,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20902,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20902,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20901,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20901,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20901,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20901,
+      "monster_id": 3114
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20902,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20902,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20902,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20901,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20901,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20901,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20901,
+      "monster_id": 3114
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20902,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20902,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20902,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20901,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20901,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20901,
+      "monster_id": 3113
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20901,
+      "monster_id": 3114
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20902,
+      "monster_id": 3111
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20902,
+      "monster_id": 3112
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20902,
+      "monster_id": 3113
+    }
+  ],
+  "added_drops": [
+    {
+      "base_id": 1027,
+      "map_id": 20901,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1027,
+      "map_id": 20901,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1027,
+      "map_id": 20901,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1027,
+      "map_id": 20901,
+      "monster_id": 3114,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1027,
+      "map_id": 20902,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1027,
+      "map_id": 20902,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1027,
+      "map_id": 20902,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20901,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20901,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20901,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20901,
+      "monster_id": 3114,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20902,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20902,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1028,
+      "map_id": 20902,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20901,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20901,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20901,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20901,
+      "monster_id": 3114,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20902,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20902,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1327,
+      "map_id": 20902,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20901,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20901,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20901,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20901,
+      "monster_id": 3114,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20902,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20902,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1526,
+      "map_id": 20902,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20901,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20901,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20901,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20901,
+      "monster_id": 3114,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20902,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20902,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1527,
+      "map_id": 20902,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20901,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20901,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20901,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20901,
+      "monster_id": 3114,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20902,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20902,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1627,
+      "map_id": 20902,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20901,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20901,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20901,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20901,
+      "monster_id": 3114,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20902,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20902,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1827,
+      "map_id": 20902,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20901,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20901,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20901,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20901,
+      "monster_id": 3114,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20902,
+      "monster_id": 3111,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20902,
+      "monster_id": 3112,
+      "rate_pct": 0.12
+    },
+    {
+      "base_id": 1929,
+      "map_id": 20902,
+      "monster_id": 3113,
+      "rate_pct": 0.12
+    }
+  ]
+}

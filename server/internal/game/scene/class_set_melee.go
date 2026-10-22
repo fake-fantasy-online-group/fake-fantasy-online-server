@@ -49,7 +49,9 @@ func classSetBloodCost(hp int32) int32 {
 
 func (s *Scene) classSetPaySkillCost(p *entity.Entity, def domain.SkillDef) {
 	if s.classSetDragonActive(p) {
-		p.HP -= classSetBloodCost(p.HP)
+		cost := classSetBloodCost(p.HP)
+		p.HP -= cost
+		s.specialWeaponLostHP(p, cost)
 	} else {
 		p.MP -= def.MPCost
 	}

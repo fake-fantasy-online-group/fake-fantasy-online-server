@@ -209,6 +209,7 @@ type PlayerRuntime struct {
 	V5StatusOwner           domain.EntityID
 	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
 	EndgameRiftPortals      bool // negotiated server-owned rift gate context
+	EndgameRiftPages        bool // connection-scoped atomic byte-paged rift snapshots
 	EndgameSkillVariants    bool // negotiated equipment skill variants
 	EndgameSkillBehavior    bool // negotiated typed skill behavior; connection-scoped
 	EndgameGrowthV5         bool // negotiated V5 growth rules; connection-scoped
@@ -283,6 +284,7 @@ func (e *Entity) CapturePlayerRuntime(now domain.Tick) PlayerRuntime {
 		r.EndgameGrowthV5 = e.Player.EndgameGrowthV5
 		r.EndgameSkillVariants = e.Player.EndgameSkillVariants
 		r.EndgameRiftPortals = e.Player.EndgameRiftPortals
+		r.EndgameRiftPages = e.Player.EndgameRiftPages
 		r.EndgameSkillBehavior = e.Player.EndgameSkillBehavior
 		r.EquipmentAbsorbRestores = append([]domain.EquipmentAbsorbRestore(nil), e.Player.EquipmentAbsorbRestores...)
 		r.GMGod = e.Player.GMGod
@@ -326,6 +328,7 @@ func (e *Entity) RestorePlayerRuntime(r PlayerRuntime, now domain.Tick) {
 		e.Player.EndgameGrowthV5 = r.EndgameGrowthV5
 		e.Player.EndgameSkillVariants = r.EndgameSkillVariants
 		e.Player.EndgameRiftPortals = r.EndgameRiftPortals
+		e.Player.EndgameRiftPages = r.EndgameRiftPages
 		e.Player.EndgameSkillBehavior = r.EndgameSkillBehavior
 		e.Player.EquipmentAbsorbRestores = append([]domain.EquipmentAbsorbRestore(nil), r.EquipmentAbsorbRestores...)
 		e.Player.GMGod = r.GMGod
@@ -484,6 +487,7 @@ type Player struct {
 	ClassSetAuraHPBP        int32
 	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
 	EndgameRiftPortals      bool // negotiated server-owned rift gate context
+	EndgameRiftPages        bool // reset on fresh login, preserved on map handoff
 	EndgameSkillVariants    bool // negotiated equipment skill variants
 	EndgameSkillBehavior    bool // negotiated typed skill behavior; connection-scoped
 	EndgameGrowthV5         bool // negotiated V5 growth rules; connection-scoped
@@ -982,4 +986,12 @@ func (p *Player) StartRefineCooldown(now, span domain.Tick) {
 	if p != nil && span > 0 {
 		p.refineReadyAt = now + span
 	}
+}
+
+// ScaleRemainingSkillCooldown changes only an existing future deadline.
+func (p *Player) ScaleRemainingSkillCooldown(id domain.SkillID, now domain.Tick, pct uint64) {
+	if p == nil || p.skillReady[id] <= now {
+		return
+	}
+	p.skillReady[id] = now + (p.skillReady[id]-now)*domain.Tick(pct)/100
 }

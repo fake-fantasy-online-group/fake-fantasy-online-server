@@ -263,22 +263,29 @@ func (s *Scene) completeQuestStep(p *entity.Entity, def domain.QuestDef, reject 
 		return
 	}
 	if final && len(def.ProfessionRewards) > 0 {
-		reward, found := def.ProfessionRewards[ch.Race]
-		item, known := s.itemDef(reward.Item)
-		if !found || !known || item.Equip == nil {
+		rewards := def.ProfessionRewards[ch.Race]
+		if len(rewards) == 0 {
 			reject(event.RejectWrongProf)
 			return
 		}
-		instance := domain.NewStack(item, 1)
-		instance.RefineLevel = reward.RefineLevel
-		if planned.AddStack(item, instance) != 0 {
-			reject(event.RejectBagFull)
-			return
+		// All same-route weapons are planned atomically. No selection protocol is
+		// available: sword/blade alternatives are both granted, never another race.
+		def.Reward.Items = append([]domain.RewardItem(nil), def.Reward.Items...)
+		for _, reward := range rewards {
+			item, known := s.itemDef(reward.Item)
+			if !known || item.Equip == nil {
+				reject(event.RejectWrongProf)
+				return
+			}
+			instance := domain.NewStack(item, 1)
+			instance.RefineLevel = reward.RefineLevel
+			if planned.AddStack(item, instance) != 0 {
+				reject(event.RejectBagFull)
+				return
+			}
+			def.Reward.Items = append(def.Reward.Items, domain.RewardItem{Item: reward.Item, Qty: 1})
 		}
 		bagChanged = true
-		// 只为本次完成回执追加，不能改写共享任务模板或重复发放物品。
-		def.Reward.Items = append(append([]domain.RewardItem(nil), def.Reward.Items...),
-			domain.RewardItem{Item: reward.Item, Qty: 1})
 	}
 	if bagChanged {
 		p.Player.Bag = planned

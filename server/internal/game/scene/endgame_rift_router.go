@@ -202,5 +202,8 @@ func (r *Router) postExistingRiftHandoff(id domain.SceneID, runID string, c Ente
 	defer r.mu.RUnlock()
 	a := r.riftAdmissions[id]
 	s := r.scenes[id]
+	if a != nil && a.Data.Run != nil && riftNeedsPages(a.Data.Run.Rules) && (c.Runtime == nil || !c.Runtime.EndgameRiftPages) {
+		return false
+	}
 	return a != nil && a.Paid && !a.Retired && a.Data.Run.RunID == runID && a.Allowed[domain.CharID(c.Char.ID)] && s != nil && s.PostHandoff(c)
 }

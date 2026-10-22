@@ -679,9 +679,12 @@ func (StopWork) CmdName() string { return "StopWork" }
 // MapID 是副本那张图的 id; NPC 非空时服务端会确认玩家确实站在那个 NPC 面前。
 // 实例由服务端挑或新开, 客户端指定不了 —— 否则它能把自己塞进别人的实例。
 type EnterDungeon struct {
-	ID    domain.EntityID
-	MapID int32
-	NPC   string
+	Difficulty         domain.DungeonDifficulty
+	ExplicitDifficulty bool
+	NativeMenu         bool
+	ID                 domain.EntityID
+	MapID              int32
+	NPC                string
 }
 
 func (EnterDungeon) CmdName() string { return "EnterDungeon" }

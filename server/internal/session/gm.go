@@ -96,18 +96,16 @@ func (s *Session) onGMCommand(raw string) {
 		s.log.Warn("GM/菜单命令长度非法", "bytes", len(raw))
 		return
 	}
-	// These exact native menu commands have no implemented difficulty rules.
-	// A normal server-text notice is not dungeon admission or a GM operation;
-	// never route the ordinary "taoyu" command here or open a second instance.
-	switch raw {
-	case "taoyu hard", "dungeonhard 20100", "dungeonhard 20300",
-		"dungeonhard 20600", "dungeonhard 20701", "dungeonhard 20801", "dungeonhard 20901":
+	if mapID, difficulty, npc, ok := domain.NativeDungeonCommand(raw); ok {
 		s.mu.Lock()
-		inWorld := s.stage == StageInGame && s.account != nil && s.char != nil &&
-			s.char.ID > 0 && s.entity != 0 && s.scene.MapID > 0 && !s.awaitMapAck
+		inWorld := s.stage == StageInGame && s.account != nil && s.char != nil && s.char.ID > 0 && s.entity != 0 && s.scene.MapID > 0 && !s.awaitMapAck
 		s.mu.Unlock()
 		if inWorld {
-			s.sendGMText("困难模式暂不可用")
+			if _, configured := s.deps.Dungeons[mapID]; !configured {
+				s.sendGMText("困难模式暂不可用")
+			} else {
+				s.postToScene(scene.EnterDungeon{ID: s.entityID(), MapID: mapID, NPC: npc, Difficulty: difficulty, ExplicitDifficulty: true, NativeMenu: true})
+			}
 		}
 		return
 	}

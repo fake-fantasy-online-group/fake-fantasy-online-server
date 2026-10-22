@@ -12,6 +12,9 @@ type TransportDestination struct {
 	// 入口仍复用客户端已有 TransportUI/0x1071/0x1072；这个标志只来自
 	// PostgreSQL，客户端回传的索引不能把普通航线升级成副本入口。
 	Dungeon bool
+	// Difficulty is server-only menu admission metadata, never serialized.
+	Difficulty         DungeonDifficulty
+	ExplicitDifficulty bool
 	// RequireClear 表示当前副本楼层全部可战斗怪物死亡后才开放。
 	// 客户端只提交列表与索引，不能自行绕过这条服务端条件。
 	RequireClear bool

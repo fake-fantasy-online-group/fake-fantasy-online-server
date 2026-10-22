@@ -209,6 +209,7 @@ func BuildRiftFloorTemplate(mapID int32, name string, spawns []domain.SpawnPoint
 	sort.Slice(out.Monsters, func(i, j int) bool { return out.Monsters[i] < out.Monsters[j] })
 	sort.Slice(out.Guardians, func(i, j int) bool { return out.Guardians[i] < out.Guardians[j] })
 	out.CombatRegions = buildRiftCombatRegions(mapID, mask, labels, selectedLabel)
+	out.FullCombatRegions = buildRiftFullCombatRegions(mapID, mask, labels, selectedLabel)
 	if !out.Valid() {
 		return out, false
 	}

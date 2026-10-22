@@ -15,6 +15,7 @@ func (s *Scene) applyResolvedSkillModifiers(p *entity.Entity, def *domain.SkillD
 	s.applyEquipmentSkillVariant(p, def, hard)
 	s.applyUniqueSkillModifiers(p, def)
 	finalizeEquipmentSkillVariant(def)
+	s.applySpecialWeaponModifiers(p, def, hard)
 	// Layered percentage reductions can truncate a positive native cost to zero.
 	// Keep the existing one-MP floor at the shared cast/preview boundary; skills
 	// authored with zero cost remain free.

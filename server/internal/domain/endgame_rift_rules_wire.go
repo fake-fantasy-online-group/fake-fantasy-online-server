@@ -15,6 +15,21 @@ import (
 // bounds legacy/v2/v3 floors by 24 blue, 8 gold and 320 ordinary/elite actors,
 // plus one guardian. Counts deliberately over-approximate simultaneous state.
 func (r *RiftRules) validateWire() error {
+	return r.validateWirePopulation(RiftFloorMaxConfiguredPopulation)
+}
+
+// ValidateFloorWire checks the chosen complete floor before any key charge or
+// transition. The same conservative elite/effect envelope is retained; only
+// the ordinary population varies with actual legal map area.
+func (r *RiftRules) ValidateFloorWire(plan RiftFloorPlan) error {
+	if plan.GeneratorVersion != RiftFloorFullCoverageVersion {
+		return nil
+	}
+	return r.validateWirePopulation(len(plan.Spawns))
+}
+
+func (r *RiftRules) validateWirePopulation(population int) error {
+	population = max(population, 33) // conservative elite/guardian envelope, not spawn count
 	fits := func(s string, max int) bool { return utf8.ValidString(s) && len(utf16.Encode([]rune(s))) <= max }
 	for _, s := range []string{r.Name, r.BossName, r.ExitName, r.ExitGreeting} {
 		if !fits(s, 8192) {
@@ -57,7 +72,7 @@ func (r *RiftRules) validateWire() error {
 	for i := 0; i < 5; i++ {
 		v.Members = append(v.Members, EndgameRiftMemberView{CharID: id, Name: strings.Repeat("<", maxNameBytes), Level: math.MaxInt32})
 	}
-	for i := 0; i < RiftFloorMaxConfiguredPopulation+1; i++ {
+	for i := 0; i < population+1; i++ {
 		aura := EndgameRiftAuraView{EntityID: "4294967295", Class: 3}
 		if i < 33 {
 			aura.Affixes = affixes
@@ -100,8 +115,33 @@ func (r *RiftRules) validateWire() error {
 		}
 	}
 	raw, err := json.Marshal(EndgameResponse{Kind: "rift.advance", RequestID: strings.Repeat("x", 64), OK: true, Message: "进入下一层，进度与计时保留", Rift: v})
-	if err != nil || len(raw) > EndgameMaxJSONBytes {
+	budget := EndgameMaxJSONBytes
+	if r.FloorLayoutVersion == RiftFloorFullCoverageVersion {
+		budget = EndgameRiftSnapshotBytes
+	}
+	if err != nil || len(raw) > budget {
 		return fmt.Errorf("rift snapshot exceeds client byte budget: %d", len(raw))
 	}
+	if r.FloorLayoutVersion == RiftFloorFullCoverageVersion {
+		var value any
+		if json.Unmarshal(raw, &value) != nil || riftJSONNodes(value) > 65536 {
+			return fmt.Errorf("rift snapshot exceeds bounded JSON node budget")
+		}
+	}
 	return nil
+}
+
+func riftJSONNodes(value any) int {
+	n := 1
+	switch v := value.(type) {
+	case map[string]any:
+		for _, child := range v {
+			n += riftJSONNodes(child)
+		}
+	case []any:
+		for _, child := range v {
+			n += riftJSONNodes(child)
+		}
+	}
+	return n
 }

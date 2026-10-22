@@ -167,6 +167,9 @@ type EquipAppearance struct {
 
 // ItemDef 是一种物品的模板。
 type ItemDef struct {
+	// HardDungeonOnly is a source allowlist tag, independent of generic pool flags.
+	HardDungeonOnly    bool
+	DungeonBaseID      ItemID
 	UseAction          string          // database-configured persistent tool action
 	EndgameCatalog     *EndgameCatalog `json:"-"` // immutable startup dependency, never instance state
 	PetCarrierSpecies  PetID

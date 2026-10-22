@@ -140,5 +140,36 @@ through the normal release process afterward. This file does not deploy itself.
 Run `000098_20261021_dungeon_drop_source_scope.sql` once for existing databases
 (it is idempotent). Retires small-source mappings without normal field spawns and
 removes only their provenance-tagged granite drops. Other copied items are retained
-for separate review. Do not replay 39; new initialization ends with correction 98.
+for separate review. Do not replay 39; fresh initialization includes correction 98 before later changes.
 See `server/docs/dungeon-drop-source-scope-98.md` for baseline scope and tests.
+
+## 99–101: integrated rift, quest and pet changes
+
+Apply the standalone upgrades in numeric order to a database already current
+through 98, using a separately authorized maintenance process and verified
+backup. Never run the full init against an existing database. Fresh empty-database
+initialization includes all three matching bodies in the contiguous init-99,
+init-100 and init-101 fragments, with no manual post-init step.
+
+- `000099_20261022_rift_full_coverage.sql` publishes immutable rift rule 10 /
+  generator 6, but never updates `game_rift_rule_active`. Deploy the matching
+  paging-capable client before any separately authorized activation. Existing
+  paid runs retain frozen versions.
+- `000100_20261022_quest_special_weapons.sql` extends profession rewards to
+  multiple items per route and adds the approved level 3/8/14 quest weapons.
+  Deploy with the new list-capable loader. No completed-quest backfill or player
+  item conversion is included.
+- `000101_20261022_pet_merchant_supplies.sql` appends native 3020–3031 to pet shop
+  1003 (seven city aliases inherit it) and beginner shops 1101/1201, without
+  widening shared grocery stock 1001. Capture tools, stock/order, prices and
+  effects are preserved; identity/source/slot drift aborts atomically.
+
+The upgrade files own their transactions and can be reapplied. Fresh-init bodies
+have no transaction control, so the initializer retains one all-or-nothing
+transaction. Neither path deploys/restarts a server, activates rift 10, or converts
+existing player items. The class-set player-data decision remains a release gate;
+merging these files is not authorization to execute them.
+
+See `server/docs/quest-special-weapons-100.md` and
+`server/docs/pet-merchant-supplies-101.md` for scope and test details. Actual
+PostgreSQL execution/replay has not yet been validated in this cloud environment.

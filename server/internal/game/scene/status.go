@@ -61,6 +61,10 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	if target == nil || !target.Alive() {
 		return false
 	}
+	if s.riftMonster(target) && disabledRiftMonsterStatus(def) {
+		return false
+	}
+	s.clearDisabledRiftMonsterStatuses(target)
 	s.expireHarmfulSuppression(target)
 	if def.Invisible && target.Status != nil && target.Status.PreventsInvisible() {
 		return false
@@ -99,6 +103,10 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	// player's stable source ID now; MF itself is read only at the fatal tick.
 	src = s.periodicDamageOwnerV5(def, src)
 	poisonBurst := s.classSetPoisonBurst(target, def, src)
+	def.DungeonDamageScaleBP = 0
+	if scale := s.dungeonMonsterDamage(s.entities[src], target, 10000); scale != 10000 {
+		def.DungeonDamageScaleBP = scale
+	}
 	result := target.Status.ApplyWithOverlay(def, s.tick, src, s.statusOverlay)
 	for _, removed := range result.Removed {
 		s.emit(event.StatusRemoved{Who: target.ID, Status: int32(removed)})
@@ -170,6 +178,7 @@ func (s *Scene) passiveStatusResistPct(target *entity.Entity, status domain.Stat
 // prepareBasicAttackStatuses 在一次已受理的普通攻击起手时消耗“下一击”状态，
 // 并处理隐身的“任何攻击行为都会现形”。
 func (s *Scene) prepareBasicAttackStatuses(e *entity.Entity, blow *combat.Blow) {
+	s.specialWeaponBasicAttack(e, blow)
 	if e == nil || blow == nil {
 		return
 	}
@@ -194,7 +203,11 @@ func (s *Scene) prepareBasicAttackStatuses(e *entity.Entity, blow *combat.Blow) 
 // prepareSkillStatuses 消耗本次技能真正用得到的释能/集中/瞬发，并返回
 // 集中提供的状态时长增幅。范围技能只在整次施法上消费一次。
 func (s *Scene) prepareSkillStatuses(e *entity.Entity, def *domain.SkillDef) int32 {
-	if e == nil || e.Status == nil || def == nil {
+	if e == nil || def == nil {
+		return 0
+	}
+	s.specialWeaponPrepareCast(e, def)
+	if e.Status == nil {
 		return 0
 	}
 	flat := e.Status.ProgressionAttackBonus(true, def.HasDamageEffect(), def.PrepareMS > 0)
@@ -255,6 +268,8 @@ func boostedDamagePct(base, bonus int32) int32 {
 
 // resolveStrikeStatuses 把普通战斗公式的结果再经过状态减伤/护盾。
 func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTracker, blow combat.Blow) (event.DamageDealt, int32, int32) {
+	s.clearDisabledRiftMonsterStatuses(src)
+	s.clearDisabledRiftMonsterStatuses(dst)
 	s.expireHarmfulSuppression(src)
 	s.expireHarmfulSuppression(dst)
 	if !s.equipmentCombatReady(src) || !s.equipmentCombatReady(dst) {
@@ -357,6 +372,7 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		finalDamage = buckets.IncomingDamage(rawDamage)
 		finalDamage = s.classSetMeleeIncomingDamage(dst, finalDamage)
 		finalDamage = s.classSetAuraIncomingDamage(dst, magic, finalDamage)
+		finalDamage = s.dungeonMonsterDamage(src, dst, finalDamage)
 		if dst.Status.Invulnerable() {
 			finalDamage = 0
 		} else {
@@ -430,6 +446,7 @@ func (s *Scene) passiveGlobalChanceBP(target *entity.Entity, kind domain.Passive
 // afterStrikeStatuses 处理命中后的反射、吸血、使毒、冰盾反冻与冰冻碎裂。
 // 反射伤害不再触发反射，避免两个反射状态无限递归。
 func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDealt, rawDamage, fullMagicReflect int32) {
+	s.specialWeaponLostHP(dst, ev.Amount)
 	s.afterCastDamage(ev, true)
 	if ev.AbsorbHeal > 0 && dst != nil {
 		s.emit(event.HealDone{Src: dst.ID, Dst: dst.ID, Amount: ev.AbsorbHeal, DstHP: dst.HP, DstKind: dst.Kind})
@@ -488,7 +505,7 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 }
 
 func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount int32, magic bool) {
-	if reflector == nil || attacker == nil || amount <= 0 || !attacker.Alive() || gmGodEnabled(attacker) {
+	if s.riftMonster(reflector) || reflector == nil || attacker == nil || amount <= 0 || !attacker.Alive() || gmGodEnabled(attacker) {
 		return
 	}
 	s.expireHarmfulSuppression(attacker)
@@ -530,12 +547,17 @@ func (s *Scene) mitigateSecondaryStatusDamage(e *entity.Entity, magic bool, amou
 // Resource/poison ticks have no physical-or-magic classification. Only callers
 // with an explicit damage type (reflection) may use typed aura mitigation.
 func (s *Scene) mitigateSecondaryStatusDamageKind(e *entity.Entity, magic bool, amount int32, typed bool) int32 {
+	return s.mitigateSecondaryStatusDamageScaled(e, magic, amount, typed, 10000)
+}
+
+func (s *Scene) mitigateSecondaryStatusDamageScaled(e *entity.Entity, magic bool, amount int32, typed bool, scaleBP int32) int32 {
+	s.clearDisabledRiftMonsterStatuses(e)
 	if e == nil || e.Status.DamageReductionCapPct() <= domain.DefaultDamageReductionCapPct {
 		amount = s.classSetMeleeIncomingDamage(e, amount)
 		if typed {
 			amount = s.classSetAuraIncomingDamage(e, magic, amount)
 		}
-		return amount
+		return clampI32(int64(amount) * int64(scaleBP) / 10000)
 	}
 	// Match direct hits: ordinary incoming buckets (including flat reduction),
 	// then independent set multipliers, then immunity and shield consumption.
@@ -549,6 +571,7 @@ func (s *Scene) mitigateSecondaryStatusDamageKind(e *entity.Entity, magic bool, 
 	if typed {
 		amount = s.classSetAuraIncomingDamage(e, magic, amount)
 	}
+	amount = clampI32(int64(amount) * int64(scaleBP) / 10000)
 	if e.Status.Invulnerable() {
 		return 0
 	}
@@ -596,6 +619,7 @@ func (s *Scene) expireHarmfulSuppression(e *entity.Entity) {
 // stepStatus 推进所有实体身上的状态。
 func (s *Scene) stepStatus() {
 	for _, e := range s.entities {
+		s.clearDisabledRiftMonsterStatuses(e)
 		if e.Player != nil && e.Player.ExpireExperienceBoost(s.tick) {
 			e.Player.MarkDirty()
 			s.emitTo(e.ID, s.buffSnapshot(e))
@@ -895,6 +919,10 @@ func (s *Scene) statusDefByID(id domain.StatusID) (domain.StatusDef, bool) {
 // attr38 与 attr446 修改当前生命，attr447 修改当前法力。Mode=1 按对应
 // 上限取百分比；此前把“每两秒减少生命上限6%”错算成固定 6 点。
 func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
+	if e != nil {
+		beforeHP := e.HP
+		defer func() { s.specialWeaponLostHP(e, max(int32(0), beforeHP-e.HP)) }()
+	}
 	s.expireHarmfulSuppression(e)
 	if e == nil || a.Def.Harmful() && e.Status.SuppressesHarmfulAt(s.tick) {
 		return
@@ -935,7 +963,11 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 		if gmGodEnabled(e) {
 			hpDelta = 0
 		} else {
-			dmg := s.mitigateSecondaryStatusDamage(e, false, clampI32(-hpDelta))
+			scaleBP := a.Def.DungeonDamageScaleBP
+			if scaleBP <= 0 {
+				scaleBP = s.dungeonMonsterDamage(src, e, 10000)
+			}
+			dmg := s.mitigateSecondaryStatusDamageScaled(e, false, clampI32(-hpDelta), false, scaleBP)
 			e.HP -= dmg
 			ev := event.DamageDealt{Origin: domain.DamageDOTOrigin, Src: a.Source, Dst: e.ID, Amount: dmg, DstHP: e.HP}
 			if e.HP <= 0 {

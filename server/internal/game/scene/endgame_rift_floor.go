@@ -79,6 +79,15 @@ func (s *Scene) advanceEndgameRift(p *entity.Entity, req domain.EndgameRequest) 
 		s.endgameError(p, req, "legacy_run", "旧洞天请完成或离开后再开启新洞天")
 		return
 	}
+	if !s.requireRiftPages(p, req, x.data.Run.Rules) {
+		return
+	}
+	for _, peer := range s.players {
+		if !s.requireRiftPages(peer, req, x.data.Run.Rules) {
+			s.endgameError(p, req, "update_required", "队员客户端需要更新，当前地图与进度保留。")
+			return
+		}
+	}
 	if req.RunID != x.data.Run.RunID || req.FloorIndex != x.data.Floor.FloorIndex {
 		s.endgameError(p, req, "stale_floor", "当前地图层已变化，请刷新")
 		s.replyLiveRift(p, domain.EndgameRequest{Op: "rift.state"})

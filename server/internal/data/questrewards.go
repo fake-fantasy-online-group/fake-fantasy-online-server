@@ -10,7 +10,7 @@ import (
 func loadQuestProfessionRewards(ctx context.Context, q Querier, quests domain.QuestTable) error {
 	rows, err := q.Query(ctx, `SELECT r.task_id,r.race,r.item_id,r.refine_level,
 		e.id IS NOT NULL FROM game_task_profession_rewards r
-		LEFT JOIN game_equipment e ON e.id=r.item_id ORDER BY r.task_id,r.race`)
+		LEFT JOIN game_equipment e ON e.id=r.item_id ORDER BY r.task_id,r.race,r.item_id`)
 	if err != nil {
 		return fmt.Errorf("data: 查职业任务奖励: %w", err)
 	}
@@ -27,13 +27,15 @@ func loadQuestProfessionRewards(ctx context.Context, q Querier, quests domain.Qu
 			return fmt.Errorf("data: 职业任务奖励无效 task=%d race=%d item=%d refine=%d", task, race, item, refine)
 		}
 		if def.ProfessionRewards == nil {
-			def.ProfessionRewards = make(map[domain.Race]domain.QuestEquipmentReward)
+			def.ProfessionRewards = make(map[domain.Race][]domain.QuestEquipmentReward)
 		}
 		key := domain.Race(race)
-		if _, duplicate := def.ProfessionRewards[key]; duplicate {
-			return fmt.Errorf("data: 职业任务奖励重复 task=%d race=%d", task, race)
+		for _, old := range def.ProfessionRewards[key] {
+			if old.Item == domain.ItemID(item) {
+				return fmt.Errorf("data: 职业任务奖励重复 task=%d race=%d item=%d", task, race, item)
+			}
 		}
-		def.ProfessionRewards[key] = domain.QuestEquipmentReward{Item: domain.ItemID(item), RefineLevel: refine}
+		def.ProfessionRewards[key] = append(def.ProfessionRewards[key], domain.QuestEquipmentReward{Item: domain.ItemID(item), RefineLevel: refine})
 		quests[id] = def
 	}
 	if err := rows.Err(); err != nil {

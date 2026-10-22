@@ -240,6 +240,7 @@ func (s *Scene) initializeMonster(m *entity.Entity) {
 	if m == nil || m.Monster == nil {
 		return
 	}
+	s.scaleDungeonMonster(m)
 	m.Monster.SkillReady = map[domain.SkillID]domain.Tick{}
 	m.Monster.SkillCasts = map[domain.SkillID]int32{}
 	m.Monster.NextSkillAt = 0
@@ -401,7 +402,7 @@ func (s *Scene) tryMonsterSkill(m *entity.Entity, target *ai.Target) bool {
 		if !checkDue && !damageOnReady {
 			continue
 		}
-		if !rule.Usable() || !monsterRuleInHPRange(rule, hpPct) ||
+		if s.disabledRiftMonsterSkill(m, rule) || !rule.Usable() || !monsterRuleInHPRange(rule, hpPct) ||
 			s.tick < m.Monster.SkillReady[rule.Skill.ID] ||
 			(rule.MaxCastsPerLife > 0 && m.Monster.SkillCasts[rule.Skill.ID] >= rule.MaxCastsPerLife) {
 			continue
@@ -629,6 +630,9 @@ func (s *Scene) validMonsterTarget(target *entity.Entity) bool {
 }
 
 func (s *Scene) startMonsterSkill(m *entity.Entity, rule domain.MonsterSkillRule, targets []domain.EntityID) {
+	if s.disabledRiftMonsterSkill(m, rule) {
+		return
+	}
 	if s.monsterRuleTargetsEnemies(rule) {
 		s.monsterSpeak(m, domain.MonsterSceneAttack)
 	}

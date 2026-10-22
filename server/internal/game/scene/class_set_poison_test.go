@@ -11,7 +11,7 @@ func classPoisonScene(t *testing.T, pieces int) (*Scene, *entity.Entity, *entity
 	s, mid, _ := statusScene(t)
 	p := beefUp(s)
 	p.Player.Char.Race = domain.Assassin
-	suit := &domain.EquipmentSuit{ID: 1}
+	suit := &domain.EquipmentSuit{EnhancedClass: 1, ID: 1}
 	slots := []domain.EquipSlot{domain.SlotHead, domain.SlotBody, domain.SlotWeapon, domain.SlotShoe, domain.SlotGlove, domain.SlotNeck, domain.SlotRing, domain.SlotBag}
 	for i, slot := range slots {
 		id := domain.ItemID(95000 + i)

@@ -139,7 +139,7 @@ func TestNativeHardDungeonUnavailableRequiresWorldContext(t *testing.T) {
 
 func TestNativeHardDungeonUnavailableKeepsExactWhitelist(t *testing.T) {
 	for _, raw := range []string{
-		"taoyu", "taoyu normal", "taoyu Hard", "Taoyu hard", "taoyu hard extra", "taoyu  hard", "taoyu\thard",
+		"taoyu normal", "taoyu Hard", "Taoyu hard", "taoyu hard extra", "taoyu  hard", "taoyu\thard",
 		" taoyu hard", "taoyu hard ", "/taoyu hard", "gm taoyu hard", "/gm taoyu hard", "taoyu hard\x00",
 		"dungeonhard", "dungeonhard 0", "dungeonhard -1", "dungeonhard 7", "dungeonhard 20502", "dungeonhard 20802",
 		"dungeonhard +20100", "dungeonhard 020100", "dungeonhard 20100.0", "dungeonhard 20100 extra",

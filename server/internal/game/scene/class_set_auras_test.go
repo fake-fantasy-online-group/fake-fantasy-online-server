@@ -21,7 +21,7 @@ func partySetMember(t *testing.T, s *Scene, id domain.EntityID, suitID int32) *e
 	p.Player.Char.Employed = true
 	p.Player.Party = 1
 	p.Player.Char.Base = domain.Base{STR: 100, VIT: 100, INT: 100, SPI: 100, AGI: 100, DEX: 100}
-	suit := &domain.EquipmentSuit{ID: suitID}
+	suit := &domain.EquipmentSuit{EnhancedClass: suitID, ID: suitID}
 	slots := []domain.EquipSlot{domain.SlotHead, domain.SlotNeck, domain.SlotWeapon, domain.SlotGlove}
 	if s.items == nil {
 		s.items = map[domain.ItemID]domain.ItemDef{}

@@ -93,6 +93,8 @@ const (
 
 // StatusDef 是一个状态在某一级上的定义。
 type StatusDef struct {
+	// Snapshot at application; applied once per tick even after source despawns.
+	DungeonDamageScaleBP int32 `json:",omitempty"`
 	// OverlayStrength is current database metadata, never persisted or sent on wire.
 	OverlayStrength *StatusOverlayStrength `json:"-"`
 	// LegacyOverlayLevelBP aliases storage identity only for cross-ID comparisons.
@@ -214,10 +216,14 @@ type StatusDef struct {
 	FreezeAttackerChance        int32
 	FreezeAttackerEffectHitBP   int32
 
-	NextBasicAttackPct       int32
-	NextSkillDamagePct       int32
-	NextStatusDurationPct    int32
-	NextCastTimeReductionPct int32
+	SpecialWeaponNextBasicPct   int32  `json:",omitempty"`
+	SpecialWeaponSourceBase     ItemID `json:",omitempty"`
+	SpecialWeaponStatusPowerPct int32  `json:",omitempty"`
+	SpecialWeaponBuffBonusPct   int32  `json:",omitempty"`
+	NextBasicAttackPct          int32
+	NextSkillDamagePct          int32
+	NextStatusDurationPct       int32
+	NextCastTimeReductionPct    int32
 
 	LifeStealPct    int32
 	LifeStealChance int32
@@ -1263,4 +1269,78 @@ func (s *StatusSet) Clone() *StatusSet {
 // fractional chances. Resistance itself has no gameplay cap.
 func ResistChance(statusResist int32) int32 {
 	return int32((1 - EffectSuccessProbability(10000, 0, int64(statusResist)*100)) * 100)
+}
+
+// RemoveSourceWhere removes only the matching caster's instances, leaving other
+// casters' DOTs, shields and freezes untouched.
+func (s *StatusSet) RemoveSourceWhere(source EntityID, match func(StatusDef) bool) []StatusID {
+	if match == nil {
+		return nil
+	}
+	return s.RemoveSourceActiveWhere(source, func(a Active) bool { return match(a.Def) })
+}
+
+// RemoveSourceActiveWhere can consume one snapshotted status without consuming its replacement.
+func (s *StatusSet) RemoveSourceActiveWhere(source EntityID, match func(Active) bool) []StatusID {
+	if s == nil || match == nil {
+		return nil
+	}
+	var removed []StatusID
+	for _, id := range s.sortedIDs() {
+		list := s.act[id]
+		kept := list[:0]
+		for _, a := range list {
+			if a.Source != source || !match(a) {
+				kept = append(kept, a)
+			}
+		}
+		if len(kept) == 0 {
+			if len(list) > 0 {
+				removed = append(removed, id)
+			}
+			delete(s.act, id)
+		} else {
+			s.act[id] = kept
+		}
+	}
+	return removed
+}
+
+// ConsumeSpecialWeaponBasicBonus is independent of the stealth skill's own
+// damage bonus. The weapon is a multiplier on that bonus, not another addend.
+func (s *StatusSet) ConsumeSpecialWeaponBasicBonus() int32 {
+	if s == nil {
+		return 0
+	}
+	var bonus int32
+	for id, list := range s.act {
+		for i := range list {
+			if list[i].Def.SpecialWeaponNextBasicPct > 0 {
+				bonus = max(bonus, list[i].Def.SpecialWeaponNextBasicPct)
+				list[i].Def.SpecialWeaponNextBasicPct = 0
+			}
+		}
+		s.act[id] = list
+	}
+	return bonus
+}
+
+// RestoreTransferredStatusBalance preserves the stolen instance's remaining
+// clock, shield and fractional periodic balance after normal overlay admission.
+// It does not re-roll, refill or restart the enemy's original spell.
+func (s *StatusSet) RestoreTransferredStatusBalance(source EntityID, snapshot Active) {
+	if s == nil {
+		return
+	}
+	list := s.act[snapshot.Def.ID]
+	for i := range list {
+		if list[i].Source == source && list[i].Def.Level == snapshot.Def.Level {
+			list[i].ExpireAt = snapshot.ExpireAt
+			list[i].NextTickAt = snapshot.NextTickAt
+			list[i].ShieldLeft = snapshot.ShieldLeft
+			list[i].PeriodicDamageRemainder100 = snapshot.PeriodicDamageRemainder100
+			list[i].ClassSetPoisonRemainder = snapshot.ClassSetPoisonRemainder
+		}
+	}
+	s.act[snapshot.Def.ID] = list
 }

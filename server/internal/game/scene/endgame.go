@@ -46,7 +46,22 @@ func (s *Scene) endgameReply(p *entity.Entity, r domain.EndgameResponse) {
 		r.Revision = strconv.FormatInt(s.endgamePlayer(p).state.Revision, 10)
 	}
 	s.replyNativeAstralInlay(p, r)
-	s.emitTo(p.ID, event.EndgameMessage{Who: p.ID, Message: r})
+	if r.Rift != nil && r.Rift.GeneratorVersion >= domain.RiftFloorFullCoverageVersion && !p.Player.EndgameRiftPages {
+		r = domain.EndgameResponse{Kind: r.Kind, RequestID: r.RequestID, Revision: r.Revision,
+			Error: "update_required", Message: "此洞天需要新版客户端，请更新后重返；入场资格与进度保留。"}
+	}
+	frames := []domain.EndgameResponse{r}
+	if r.Rift != nil && p.Player.EndgameRiftPages {
+		var err error
+		frames, err = domain.PageEndgameRift(r, riftNonce())
+		if err != nil {
+			frames = []domain.EndgameResponse{{Kind: r.Kind, RequestID: r.RequestID, Revision: r.Revision,
+				Error: "snapshot_too_large", Message: "洞天数据超出安全传输预算，请刷新或离开；未截断怪物数据。"}}
+		}
+	}
+	for _, frame := range frames {
+		s.emitTo(p.ID, event.EndgameMessage{Who: p.ID, Message: frame})
+	}
 	if (r.Kind == "cube.claim" || r.Kind == "cube.recover") && r.Message != "" {
 		s.trialNotice(p, r.Message)
 	}
@@ -108,11 +123,28 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 			return
 		}
 	}
-	if r.Op != "hello" && r.Op != "snapshot" && endgameEconomicBusy(p) {
+	if r.Op != "hello" && r.Op != "capabilities" && r.Op != "snapshot" && endgameEconomicBusy(p) {
 		s.endgameError(p, r, "busy", "当前正在处理其他物品事务")
 		return
 	}
 	switch {
+	case r.Op == "capabilities":
+		base, pages := false, false
+		for _, cap := range r.Capabilities {
+			base = base || cap == domain.EndgameV1
+			pages = pages || cap == domain.EndgameRiftPagesV1
+		}
+		if !base || !pages {
+			s.endgameError(p, r, "unsupported_capability", "未支持的洞天数据协议")
+			return
+		}
+		first := !p.Player.EndgameRiftPages
+		p.Player.EndgameRiftPages = true
+		s.endgameReply(p, domain.EndgameResponse{Kind: r.Op, RequestID: r.RequestID, OK: true,
+			Capabilities: []string{domain.EndgameV1, domain.EndgameRiftPagesV1}})
+		if first {
+			s.resumePagedRift(p)
+		}
 	case r.Op == "hello":
 		caps := []string{domain.EndgameV1}
 		growth := false
@@ -202,7 +234,12 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 				}
 			}
 		}
-		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: caps, CatalogVersion: domain.UniqueCatalogVersion, RiftEntrances: entrances, Result: s.cubeToolConfiguration()})
+		configuration := s.cubeToolConfiguration()
+		if configuration == nil {
+			configuration = map[string]string{}
+		}
+		configuration["riftPages"] = "1"
+		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: caps, CatalogVersion: domain.UniqueCatalogVersion, RiftEntrances: entrances, Result: configuration})
 		s.sendRiftSceneContext(p)
 		s.sendEndgameSnapshot(p)
 		if growth {

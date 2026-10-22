@@ -91,7 +91,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			if r.Rules.EquipmentPools != nil {
 				break
 			}
-			if def.Equip == nil || def.Equip.LevelReq > m.Level || def.Equip.LevelReq > 60 || def.Equip.AscensionOnly {
+			if def.HardDungeonOnly || def.Equip == nil || def.Equip.LevelReq > m.Level || def.Equip.LevelReq > 60 || def.Equip.AscensionOnly {
 				continue
 			}
 			if !domain.NativeEquipmentDropEligible(def) {
@@ -130,7 +130,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 		if r.Rules.EquipmentPools != nil {
 			equipment = r.Rules.EquipmentPoolForLevel(poolLevel, func(id domain.ItemID) bool {
 				def, ok := s.items[id]
-				if !ok || def.Equip == nil || def.Equip.LevelReq > m.Level || def.Equip.LevelReq > 60 || def.Equip.AscensionOnly {
+				if !ok || def.HardDungeonOnly || def.Equip == nil || def.Equip.LevelReq > m.Level || def.Equip.LevelReq > 60 || def.Equip.AscensionOnly {
 					return false
 				}
 				sex := uint8(2)
@@ -190,7 +190,9 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 		if plan.NormalBossEquipment > 0 {
 			grant.MagicFind = contexts[char].MagicFind
 			for i := int32(0); i < plan.NormalBossEquipment && len(equipment) > 0; i++ {
-				grant.Items = append(grant.Items, s.rollEndgameRiftNormalBossEquipment(char, i, equipment, grant.MagicFind))
+				if stack := s.rollEndgameRiftNormalBossEquipment(char, i, equipment, grant.MagicFind); !stack.Empty() {
+					grant.Items = append(grant.Items, stack)
+				}
 			}
 		}
 		level := m.Level
@@ -207,6 +209,16 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			grant.RewardVersion = domain.TrialRewardVersion
 			grant.Pet = s.freezeEndgamePetGrant(s.endgameRewardPlayer(char), grant.Exp, r.RunID, char)
 		}
+		// Final source boundary also covers any future rune/dust/chest reward path
+		// which obtains an item from configuration instead of the equipment pool.
+		allowedItems := grant.Items[:0]
+		for _, stack := range grant.Items {
+			if def, ok := s.itemDef(stack.Item); ok && def.HardDungeonOnly {
+				continue
+			}
+			allowedItems = append(allowedItems, stack)
+		}
+		grant.Items = allowedItems
 		d.Grants[char] = grant
 	}
 	d.GrantsReady = true
@@ -228,6 +240,18 @@ func (s *Scene) publishEndgameRewardExperience(p *entity.Entity, previousLevel i
 // Each item/purpose is keyed to the durable run and recipient, not scene tick,
 // killer, live loot version or another reward slot's RNG consumption.
 func (s *Scene) rollEndgameRiftNormalBossEquipment(char domain.CharID, ordinal int32, pool []domain.ItemID, magicFind int64) domain.Stack {
+	// Refilter even explicit/cached pools. A stale database pool is not permission
+	// to award hard-dungeon equipment in a Rift.
+	allowed := make([]domain.ItemID, 0, len(pool))
+	for _, id := range pool {
+		if def, ok := s.items[id]; ok && !def.HardDungeonOnly && def.Equip != nil {
+			allowed = append(allowed, id)
+		}
+	}
+	pool = allowed
+	if len(pool) == 0 {
+		return domain.Stack{}
+	}
 	r := s.rift.data.Run
 	stream := func(purpose string) lootRandomV5 {
 		hash := sha256.Sum256([]byte(fmt.Sprintf("%s/rift-normal-boss/%d/%d/%d/%s", r.RunID, r.RulesVersion, char, ordinal, purpose)))

@@ -1114,6 +1114,9 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 	if err := loadItemUseAudit(ctx, q, out); err != nil {
 		return nil, err
 	}
+	if err := domain.RegisterDungeonEquipment(out); err != nil {
+		return nil, err
+	}
 	return out, nil
 }
 

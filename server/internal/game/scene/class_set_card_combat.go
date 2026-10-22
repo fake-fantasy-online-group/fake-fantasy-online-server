@@ -22,7 +22,7 @@ func (s *Scene) classSetCardCombat(p *entity.Entity) (out domain.SuitCombatBonus
 			return
 		}
 		seen[suit.ID] = true
-		pieces := s.classSetPiecesInWorn(p, worn, suit.ID)
+		pieces := s.classSetPiecesInWorn(p, worn, suit.EnhancedClass)
 		for _, b := range suit.Bonuses {
 			if b.Pieces > pieces || b.DisabledReason != "" || b.Probability != 100 || b.Affix.Mode != domain.ModeAbsolute {
 				continue

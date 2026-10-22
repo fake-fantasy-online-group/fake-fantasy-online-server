@@ -17,13 +17,14 @@ import (
 // router.Post(id, cmd) —— 拿不到 *Scene 就不可能绕过 mailbox 直接碰实体,
 // 这条约束是靠"只有 Router 有那张表"来保证的, 不是靠自觉。
 type Router struct {
-	riftAdmissions   map[domain.SceneID]*endgameRiftAdmission
-	mu               sync.RWMutex
-	scenes           map[domain.SceneID]*Scene
-	instanceOwners   map[domain.SceneID]domain.DungeonOwner
-	trialLevels      map[domain.SceneID]int32
-	trialCompleted   map[domain.SceneID]bool
-	instanceAdmitted map[domain.SceneID]bool
+	riftAdmissions      map[domain.SceneID]*endgameRiftAdmission
+	mu                  sync.RWMutex
+	scenes              map[domain.SceneID]*Scene
+	instanceOwners      map[domain.SceneID]domain.DungeonOwner
+	dungeonDifficulties map[domain.SceneID]domain.DungeonDifficulty
+	trialLevels         map[domain.SceneID]int32
+	trialCompleted      map[domain.SceneID]bool
+	instanceAdmitted    map[domain.SceneID]bool
 	// instanceMu 串行化“复用现有实例或创建新实例”的完整决策，避免两个队伍
 	// 同时越过数量上限，或同一队伍在并发进入时各开一张图。
 	instanceMu sync.Mutex
@@ -61,10 +62,11 @@ func NewRouter(build Builder, log *slog.Logger) *Router {
 		log = slog.Default()
 	}
 	return &Router{
-		scenes:         map[domain.SceneID]*Scene{},
-		building:       map[domain.SceneID]*sceneBuild{},
-		instanceOwners: map[domain.SceneID]domain.DungeonOwner{},
-		trialLevels:    map[domain.SceneID]int32{}, trialCompleted: map[domain.SceneID]bool{}, instanceAdmitted: map[domain.SceneID]bool{},
+		scenes:              map[domain.SceneID]*Scene{},
+		building:            map[domain.SceneID]*sceneBuild{},
+		instanceOwners:      map[domain.SceneID]domain.DungeonOwner{},
+		dungeonDifficulties: map[domain.SceneID]domain.DungeonDifficulty{},
+		trialLevels:         map[domain.SceneID]int32{}, trialCompleted: map[domain.SceneID]bool{}, instanceAdmitted: map[domain.SceneID]bool{},
 		build: build,
 		alloc: domain.NewEntityAlloc(),
 		log:   log,
@@ -137,12 +139,18 @@ func (r *Router) Ensure(id domain.SceneID) (*Scene, error) {
 		if s != nil {
 			s.Stop() // Not published; no actor or player ownership was started.
 		}
+		delete(r.dungeonDifficulties, id)
 		pending.err = fmt.Errorf("scene: Router 正在关服")
 		return nil, pending.err
 	}
 	if err != nil {
+		delete(r.dungeonDifficulties, id)
 		pending.err = fmt.Errorf("scene: 建场景 %v 失败: %w", id, err)
 		return nil, pending.err
+	}
+	s.dungeonDifficulty = r.dungeonDifficulties[id]
+	for _, monster := range s.monsters {
+		s.scaleDungeonMonster(monster)
 	}
 	pending.scene = s
 	// 回填路由: 场景要靠它把人送去别的图。Router 拥有场景, 所以由它来接线,
@@ -158,6 +166,7 @@ func (r *Router) Ensure(id domain.SceneID) (*Scene, error) {
 		if cur := r.scenes[id]; cur == s {
 			delete(r.scenes, id)
 			delete(r.instanceOwners, id)
+			delete(r.dungeonDifficulties, id)
 			delete(r.trialLevels, id)
 			delete(r.trialCompleted, id)
 			delete(r.instanceAdmitted, id)
@@ -258,6 +267,13 @@ func (r *Router) OpenDungeonInstance(def domain.DungeonDef, owner domain.Dungeon
 	return r.openDungeonAccess(def, owner, true, nil, 0)
 }
 func (r *Router) openDungeonAccess(def domain.DungeonDef, owner domain.DungeonOwner, canCreate bool, group map[int32][]domain.TrialSpawn, level int32) (domain.SceneID, error) {
+	return r.openDungeonAccessDifficulty(def, owner, canCreate, group, level, domain.DungeonNormal, false)
+}
+
+func (r *Router) openDungeonAccessDifficulty(def domain.DungeonDef, owner domain.DungeonOwner, canCreate bool, group map[int32][]domain.TrialSpawn, level int32, difficulty domain.DungeonDifficulty, explicit bool) (domain.SceneID, error) {
+	if !difficulty.Valid() {
+		return domain.SceneID{}, fmt.Errorf("无效副本难度")
+	}
 	if !owner.Valid() || def.Solo != (owner.Character > 0) {
 		return domain.SceneID{}, fmt.Errorf("scene: 副本 %s 的所有权与单人/组队模式不一致", def.Name)
 	}
@@ -292,9 +308,13 @@ func (r *Router) openDungeonAccess(def domain.DungeonDef, owner domain.DungeonOw
 		default:
 		}
 		r.mu.RLock()
+		existingDifficulty := r.dungeonDifficulties[s.ID()]
 		done := r.trialCompleted[s.ID()]
 		admitted := r.instanceAdmitted[s.ID()]
 		r.mu.RUnlock()
+		if explicit && difficulty != existingDifficulty {
+			return domain.SceneID{}, fmt.Errorf("队伍已有不同难度的副本，请等待本次副本结束后重新选择")
+		}
 		if !canCreate && !admitted {
 			return domain.SceneID{}, fmt.Errorf("队长正在进入副本，请稍候")
 		}
@@ -312,8 +332,14 @@ func (r *Router) openDungeonAccess(def domain.DungeonDef, owner domain.DungeonOw
 			"scene: 副本 %s 的实例已达上限 %d", def.Name, def.InstanceCap())
 	}
 	id := r.NewInstance(def.Enter.MapID)
+	r.mu.Lock()
+	r.dungeonDifficulties[id] = difficulty
+	r.mu.Unlock()
 	s, err := r.Ensure(id)
 	if err != nil {
+		r.mu.Lock()
+		delete(r.dungeonDifficulties, id)
+		r.mu.Unlock()
 		return domain.SceneID{}, err
 	}
 	r.mu.Lock()
@@ -353,9 +379,11 @@ func (r *Router) EnsureDungeonFloor(id domain.SceneID, owner domain.DungeonOwner
 		return nil
 	}
 	authorized := false
+	difficulty := domain.DungeonNormal
 	for sceneID, existingOwner := range r.instanceOwners {
 		if sceneID.Instance == id.Instance && existingOwner == owner {
 			authorized = true
+			difficulty = r.dungeonDifficulties[sceneID]
 			break
 		}
 	}
@@ -364,8 +392,14 @@ func (r *Router) EnsureDungeonFloor(id domain.SceneID, owner domain.DungeonOwner
 		return fmt.Errorf("scene: 所有者 %+v 不拥有副本实例 %d", owner, id.Instance)
 	}
 
+	r.mu.Lock()
+	r.dungeonDifficulties[id] = difficulty
+	r.mu.Unlock()
 	s, err := r.Ensure(id)
 	if err != nil {
+		r.mu.Lock()
+		delete(r.dungeonDifficulties, id)
+		r.mu.Unlock()
 		return err
 	}
 	r.mu.Lock()

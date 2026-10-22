@@ -52,6 +52,9 @@ func (s *Scene) prepareEndgameRift(cmd Enter) bool {
 	if !s.router.ActiveRiftForCharacter(s.id, domain.CharID(cmd.Char.ID)) {
 		return false
 	}
+	if riftNeedsPages(d.Run.Rules) && (cmd.Runtime == nil || !cmd.Runtime.EndgameRiftPages) {
+		return false
+	}
 	if s.rift == nil {
 		if !s.initEndgameRift(d) {
 			return false

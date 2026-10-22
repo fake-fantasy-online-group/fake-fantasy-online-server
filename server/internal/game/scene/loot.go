@@ -57,7 +57,7 @@ func (s *Scene) rollLootWithContextV5(dead *entity.Entity, context domain.LootCo
 		return
 	}
 	killer := context.Owner
-	entries := s.lootTable[dead.Monster.TypeID]
+	entries := s.withLostTempleAncientDrops(s.lootTable[dead.Monster.TypeID], dead.Monster.TypeID)
 	fixed := s.rollBossFixedEquipment(dead)
 	if len(entries) == 0 && len(fixed) == 0 {
 		s.rollAstralRuneLoot(dead, killer, 0)
@@ -75,7 +75,7 @@ func (s *Scene) rollLootWithContextV5(dead *entity.Entity, context domain.LootCo
 	}
 	n := 0
 	for _, choice := range fixed {
-		def, ok := s.items[choice.Item]
+		def, ok := s.dungeonLootItem(choice.Item, dead.Monster.TypeID)
 		if !ok || def.Equip == nil {
 			continue
 		}
@@ -105,7 +105,7 @@ func (s *Scene) rollLootWithContextV5(dead *entity.Entity, context domain.LootCo
 		if len(e.Choices) > 0 {
 			itemID = e.Choices[s.rng.Intn(len(e.Choices))]
 		}
-		def, ok := s.items[itemID]
+		def, ok := s.dungeonLootItem(itemID, dead.Monster.TypeID)
 		if !ok {
 			continue
 		}
@@ -336,6 +336,11 @@ func (s *Scene) spawnLoot(def domain.ItemDef, at domain.Pos, owner domain.Entity
 // spawnGeneratedLoot 把已经创建好的实例放到地上。随机词条与 UID 在此之前
 // 已经确定，拾取、丢弃和再次拾取都只移动这份 Stack，不会重新抽取。
 func (s *Scene) spawnGeneratedLoot(def domain.ItemDef, stack domain.Stack, at domain.Pos, owner domain.EntityID) {
+	// Defense in depth: inherited drops, theft, rewards and generic helpers must
+	// never leak hard-dungeon equipment into Rift or public/normal scenes.
+	if def.HardDungeonOnly && (!s.nativeDifficultyDungeon() || s.dungeonDifficulty != domain.DungeonHard) {
+		return
+	}
 	if s.alloc == nil {
 		return // 没接分配器(测试场景), 不产出实体
 	}

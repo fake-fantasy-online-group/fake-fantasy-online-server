@@ -69,13 +69,18 @@ func (s *Scene) registerRiftElite(m *entity.Entity, class int32, index int, seed
 		for _, g := range rule.Elite.Guardians {
 			if g.MonsterID == m.Monster.TypeID {
 				for _, id := range g.Abilities {
-					state.pattern = append(state.pattern, endgameRiftAbility(id))
+					if !s.disabledRiftAbility(endgameRiftAbility(id)) {
+						state.pattern = append(state.pattern, endgameRiftAbility(id))
+					}
 				}
 			}
 		}
 	} else {
 		for i := 0; i < int(class); i++ {
-			state.pattern = append(state.pattern, endgameRiftAbility((int(h%8)+i*(1+2*int((h>>8)%4)))%8))
+			a := endgameRiftAbility((int(h%8) + i*(1+2*int((h>>8)%4))) % 8)
+			if !s.disabledRiftAbility(a) {
+				state.pattern = append(state.pattern, a)
+			}
 		}
 	}
 	s.rift.abilities[m.ID] = state
@@ -162,7 +167,7 @@ func (s *Scene) stepRiftElite(now int64) {
 		for offset := 0; offset < len(state.pattern); offset++ {
 			at := (state.cursor + offset) % len(state.pattern)
 			a := s.currentRiftRules().Abilities[state.pattern[at]]
-			if a.Trigger != "active" || now < c.Ready[a.ID] {
+			if s.disabledRiftAbility(state.pattern[at]) || a.Trigger != "active" || now < c.Ready[a.ID] {
 				continue
 			}
 			target := s.players[m.Monster.Target]
@@ -274,23 +279,13 @@ func (s *Scene) riftMonsterAbilityIDs(id domain.EntityID) []int32 {
 	}
 	var out []int32
 	for _, a := range s.rift.abilities[id].pattern {
+		if s.disabledRiftAbility(a) {
+			continue
+		}
 		out = append(out, int32(a))
 	}
 	return out
 }
 
-func (s *Scene) riftGoldenUntil(id domain.EntityID, now int64) int64 {
-	if !s.eliteRift() {
-		return 0
-	}
-	state := s.rift.abilities[id]
-	m := s.monsters[id]
-	if state == nil || m == nil || !m.Alive() || !m.Status.Has(riftGoldenStatus) {
-		return 0
-	}
-	c := s.eliteSnapshot().Casters[state.eliteKey]
-	if c == nil || c.GoldenUntilMS <= now {
-		return 0
-	}
-	return c.GoldenUntilMS
-}
+// Retained for the existing wire contract; golden body is disabled in rifts.
+func (s *Scene) riftGoldenUntil(id domain.EntityID, now int64) int64 { return 0 }

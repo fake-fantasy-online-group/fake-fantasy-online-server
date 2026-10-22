@@ -208,7 +208,7 @@ func (s *Scene) syncEndgameRiftCompletion() {
 				continue
 			}
 			def, ok := s.itemDef(stack.Item)
-			if !ok {
+			if !ok || def.HardDungeonOnly {
 				continue
 			} // preserve durable recovery if configuration is unavailable
 			pos, placed := positions[ref]
@@ -324,7 +324,7 @@ func (s *Scene) pickUpEndgameRiftReward(p, drop *entity.Entity, pickupRange int3
 	}
 	stack := grant.Items[ref.Index]
 	def, ok := s.itemDef(stack.Item)
-	if !ok {
+	if !ok || def.HardDungeonOnly {
 		return true
 	}
 	candidate := s.snapshotOf(p).Clone()

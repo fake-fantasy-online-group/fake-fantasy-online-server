@@ -291,8 +291,8 @@ type QuestDef struct {
 
 	Repeatable bool
 	Reward     QuestReward
-	// 使用 Character.Race（建角路线），不使用就职前统一为初行者的 ClientRace。
-	ProfessionRewards map[Race]QuestEquipmentReward
+	// 使用 Character.Race（建角路线），不依赖是否已就职；每条路线可有多件奖励。
+	ProfessionRewards map[Race][]QuestEquipmentReward
 	// Exchange 非 nil 时，本任务按当前持有数量兑换，不使用固定 GoalQty/Reward 结算。
 	Exchange *QuestExchangeRule
 

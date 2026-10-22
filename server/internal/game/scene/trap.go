@@ -36,6 +36,7 @@ func (s *Scene) placeTrap(owner *entity.Entity, def domain.SkillDef, at domain.P
 // stepTraps 在怪物本帧移动之后检查触发。放置发生在更后的 stepCasts，因而新放
 // 的陷阱至少稳定存在一帧，不会在同一次施法结算中“先出现又消失”。
 func (s *Scene) stepTraps() {
+	s.stepSpecialWeaponSmoke()
 	if len(s.traps) == 0 {
 		return
 	}

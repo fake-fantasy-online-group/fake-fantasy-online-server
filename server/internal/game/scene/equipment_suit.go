@@ -57,14 +57,14 @@ func (s *Scene) appendSuitTooltip(lines *[]string, suit *domain.EquipmentSuit, o
 		}
 		*lines = append(*lines, color+"  "+member.name)
 	}
-	if suit.ID >= 1 && suit.ID <= 5 {
+	if suit.EnhancedClass >= 1 && suit.EnhancedClass <= 5 {
 		*lines = append(*lines, headerLine("套装属性"))
 		for _, tier := range []int32{2, 4, 6, 8} {
 			color := "\x02"
-			if s.classSetPieces(owner, suit.ID) >= tier {
+			if s.classSetPieces(owner, suit.EnhancedClass) >= tier {
 				color = "\x05"
 			}
-			if extra := classSetSkillText(suit.ID, tier); extra != "" {
+			if extra := classSetSkillText(suit.EnhancedClass, tier); extra != "" {
 				*lines = append(*lines, color+extra)
 			}
 			for _, bonus := range suit.Bonuses {
@@ -87,14 +87,14 @@ func (s *Scene) appendSuitTooltip(lines *[]string, suit *domain.EquipmentSuit, o
 		color := "\x02"
 		if bonus.DisabledReason != "" {
 			text += "（" + bonus.DisabledReason + "）"
-		} else if pieces >= bonus.Pieces && (domain.SuitCombatAffixName(bonus.Affix.Attr) == "" || s.classSetPieces(owner, suit.ID) >= bonus.Pieces) {
+		} else if pieces >= bonus.Pieces && (domain.SuitCombatAffixName(bonus.Affix.Attr) == "" || s.classSetPieces(owner, suit.EnhancedClass) >= bonus.Pieces) {
 			color = "\x01"
 		}
 		*lines = append(*lines, color+fmt.Sprintf("[%d件] %s", bonus.Pieces, text))
-		if extra := classSetSkillText(suit.ID, bonus.Pieces); extra != "" && !shownSkills[bonus.Pieces] {
+		if extra := classSetSkillText(suit.EnhancedClass, bonus.Pieces); extra != "" && !shownSkills[bonus.Pieces] {
 			shownSkills[bonus.Pieces] = true
 			skillColor := "\x02"
-			if s.classSetPieces(owner, suit.ID) >= bonus.Pieces {
+			if s.classSetPieces(owner, suit.EnhancedClass) >= bonus.Pieces {
 				skillColor = "\x01"
 			}
 			*lines = append(*lines, skillColor+fmt.Sprintf("[%d件] %s", bonus.Pieces, extra))

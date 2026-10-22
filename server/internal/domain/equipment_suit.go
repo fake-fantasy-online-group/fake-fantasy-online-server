@@ -2,10 +2,11 @@ package domain
 
 // EquipmentSuit 的部件按可替代部位分组，效果保持原始档位及词条顺序。
 type EquipmentSuit struct {
-	ID      int32
-	Name    string
-	Groups  [][]ItemID
-	Bonuses []EquipmentSuitBonus
+	EnhancedClass int32 // 1..5 only on the hard-mode class set; zero on ordinary sets.
+	ID            int32
+	Name          string
+	Groups        [][]ItemID
+	Bonuses       []EquipmentSuitBonus
 }
 
 type EquipmentSuitBonus struct {

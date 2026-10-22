@@ -5,6 +5,7 @@ const EndgameV1 = "endgame.v1"
 const EndgameNativeStatsV1 = "endgame.native-stats.v1"
 const EndgameGrowthV5 = "endgame.growth.v5"
 const EndgameRiftPortalsV1 = "endgame.rift-portals.v1"
+const EndgameRiftPagesV1 = "endgame.rift-pages.v1"
 const EndgameRiftEntranceV1 = "endgame.rift-entrance.v1"
 const EndgameCubeInputsV1 = "endgame.cube-inputs.v1"
 const EndgameSchema = 1
@@ -281,6 +282,8 @@ type EndgameResponse struct {
 	SnapshotID     string                    `json:"snapshotId,omitempty"`
 	Chunk          int32                     `json:"chunk,omitempty"`
 	Chunks         int32                     `json:"chunks,omitempty"`
+	TotalBytes     int32                     `json:"totalBytes,omitempty"`
+	Data           string                    `json:"data,omitempty"`
 	Items          []EndgameItemView         `json:"items,omitempty"`
 	Runes          []EndgameRuneView         `json:"runes,omitempty"`
 	Formations     []EndgameFormationView    `json:"formations,omitempty"`

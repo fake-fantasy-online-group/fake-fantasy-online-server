@@ -50,7 +50,18 @@ func (s *Scene) onEnterDungeon(cmd EnterDungeon) bool {
 		return false
 	}
 
-	inst, err := s.openPlayerDungeon(p, def)
+	if !cmd.Difficulty.Valid() {
+		reject(event.RejectInvalid)
+		return false
+	}
+	if cmd.NativeMenu && cmd.MapID == 20502 {
+		portal := s.portalAt(p.Pos)
+		if s.id.MapID != 507 || portal < 0 || !s.portals[portal].Dungeon || s.portals[portal].To.MapID != 20502 {
+			reject(event.RejectNoTarget)
+			return false
+		}
+	}
+	inst, err := s.openPlayerDungeonDifficulty(p, def, cmd.Difficulty, cmd.ExplicitDifficulty)
 	if err != nil {
 		s.trialNotice(p, err.Error())
 		s.log.Warn("开副本实例失败", "副本", def.Name, "err", err)
@@ -275,6 +286,7 @@ func (s *Scene) advanceDungeonEncounter(dead *entity.Entity) {
 	}
 	s.encounterDone[trigger] = true
 	next := spawn.Encounter(s.alloc.Monster(), dead.Pos, dead.Dir, def)
+	s.initializeMonster(next)
 	s.entities[next.ID] = next
 	s.monsters[next.ID] = next
 	s.aoi.Enter(next)
@@ -303,6 +315,10 @@ func (s *Scene) evictAll(_ event.DespawnReason) {
 
 // All entry paths share this gate. Solo dungeons retain character ownership.
 func (s *Scene) openPlayerDungeon(p *entity.Entity, def domain.DungeonDef) (domain.SceneID, error) {
+	return s.openPlayerDungeonDifficulty(p, def, domain.DungeonNormal, false)
+}
+
+func (s *Scene) openPlayerDungeonDifficulty(p *entity.Entity, def domain.DungeonDef, difficulty domain.DungeonDifficulty, explicit bool) (domain.SceneID, error) {
 	ch := p.Player.Char
 	owner := def.Owner(domain.CharID(ch.ID), p.Player.Party)
 	canCreate := def.Solo || s.dungeonParty == nil
@@ -344,7 +360,7 @@ func (s *Scene) openPlayerDungeon(p *entity.Entity, def domain.DungeonDef) (doma
 		ids := s.trialMapIDs()
 		def = s.dungeons[ids[s.rng.Intn(len(ids))]]
 	}
-	id, err := s.router.openDungeonAccess(def, owner, canCreate, group, level)
+	id, err := s.router.openDungeonAccessDifficulty(def, owner, canCreate, group, level, difficulty, explicit)
 	if err == nil && level > 0 {
 		ch.Trial.MonsterLevel = s.router.trialLevelOf(id)
 		p.Player.MarkDirty()

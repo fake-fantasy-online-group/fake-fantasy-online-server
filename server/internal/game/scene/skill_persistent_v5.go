@@ -45,6 +45,10 @@ func (s *Scene) lesserPersistentSkill(source *entity.Entity, def domain.SkillDef
 	s.applyTrainingSynergiesWithLevels(source, &next, hard, raw)
 	s.applyPassiveSkillModifiersWithLevels(source, &next, raw)
 	s.applyUniqueSkillModifiers(source, &next)
+	if def.SpecialWeaponBaseID != 0 && s.specialWeapon(source) == def.SpecialWeaponBaseID {
+		applySpecialWeaponDefinition(def.SpecialWeaponBaseID, &next)
+	}
+	next.SpecialWeaponStatusPowerPct = def.SpecialWeaponStatusPowerPct
 	// Geometric bonuses survive while equipped but cannot exceed the cast snapshot.
 	if def.Radius > 0 {
 		next.Radius = min(next.Radius, def.Radius)
@@ -115,7 +119,7 @@ func (s *Scene) resolvePersistentStatus(source, holder *entity.Entity, old domai
 	if !decreased {
 		return old, true, false
 	}
-	template := domain.SkillDef{ID: old.SkillSnapshotID, Level: old.SkillSnapshotRank, FormulaVersion: domain.SkillFormulaVersion, SnapshotRawRanks: old.SkillSnapshotRaw, SnapshotHardRanks: old.SkillSnapshotHard}
+	template := domain.SkillDef{SpecialWeaponBaseID: old.SpecialWeaponSourceBase, SpecialWeaponStatusPowerPct: old.SpecialWeaponStatusPowerPct, ID: old.SkillSnapshotID, Level: old.SkillSnapshotRank, FormulaVersion: domain.SkillFormulaVersion, SnapshotRawRanks: old.SkillSnapshotRaw, SnapshotHardRanks: old.SkillSnapshotHard}
 	def, ok := s.lesserPersistentSkill(source, template)
 	if !ok {
 		return domain.StatusDef{}, false, true
@@ -141,6 +145,7 @@ func (s *Scene) resolvePersistentStatus(source, holder *entity.Entity, old domai
 		base.SourceEffectHitKnown = old.SourceEffectHitKnown
 		base.Icon = old.Icon
 		base.SourceSkillID = old.SourceSkillID
+		base.SpecialWeaponNextBasicPct = min(base.SpecialWeaponNextBasicPct, old.SpecialWeaponNextBasicPct)
 		stampSkillStatusSnapshot(&base, def)
 		return base, true, true
 	}

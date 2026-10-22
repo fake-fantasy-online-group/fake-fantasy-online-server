@@ -168,8 +168,9 @@ const (
 
 // EquipSet 是身上穿着的一整套。按槽位索引, 空槽的 Item 为 0。
 type EquipSet struct {
-	worn            map[EquipSlot]Stack
-	effectsRevision uint64
+	worn                  map[EquipSlot]Stack
+	effectsRevision       uint64
+	weaponEffectsRevision uint64
 }
 
 // NewEquipSet 建一套空的。
@@ -190,6 +191,9 @@ func (e *EquipSet) Set(s EquipSlot, st Stack) {
 	}
 	if equipmentEffectIdentity(e.worn[s]) != equipmentEffectIdentity(st) {
 		e.effectsRevision++
+		if s == SlotWeapon || s == SlotTwoHand {
+			e.weaponEffectsRevision++
+		}
 	}
 	if st.Empty() {
 		delete(e.worn, s)
@@ -251,6 +255,7 @@ func (e *EquipSet) Clone() *EquipSet {
 	}
 	out := NewEquipSet()
 	out.effectsRevision = e.effectsRevision
+	out.weaponEffectsRevision = e.weaponEffectsRevision
 	for s, st := range e.worn {
 		out.worn[s] = st
 	}
@@ -789,4 +794,12 @@ func subStats(a, b Stats) Stats {
 		StatusResist: a.StatusResist - b.StatusResist,
 		MaxWeight:    a.MaxWeight - b.MaxWeight,
 	}
+}
+
+// WeaponEffectsRevision ignores armor changes and ordinary durability wear.
+func (e *EquipSet) WeaponEffectsRevision() uint64 {
+	if e == nil {
+		return 0
+	}
+	return e.weaponEffectsRevision
 }

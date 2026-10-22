@@ -11,7 +11,16 @@ func (s *Scene) onEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
 		s.endgameError(p, req, "unavailable", "洞天暂不可用")
 		return
 	}
+	if !p.Player.EndgameRiftPages && req.Op == "rift.state" {
+		if _, _, _, _, waiting := s.router.PagedRiftReconnect(domain.CharID(p.Player.Char.ID)); waiting {
+			s.endgameError(p, req, "update_required", "请更新客户端后自动重返洞天；原入场资格与进度保留。")
+			return
+		}
+	}
 	if s.rift != nil {
+		if !s.requireRiftPages(p, req, s.rift.data.Run.Rules) {
+			return
+		}
 		if req.RunID != "" && req.RunID != s.rift.data.Run.RunID {
 			s.endgameError(p, req, "busy", "请先离开当前洞天")
 			return
@@ -94,6 +103,9 @@ func (s *Scene) stepEndgameRiftRequests() {
 				s.endgameError(p, x.req, "not_owner", "不在本次洞天名册")
 				continue
 			}
+			if !s.requireRiftPages(p, x.req, d.Run.Rules) {
+				continue
+			}
 			if validEndgameRiftQuestRecord(result.Run, d) {
 				s.recordEndgameRiftQuestCompletion(p, d)
 			}
@@ -155,6 +167,9 @@ func (s *Scene) startEndgameRiftWithProfile(p *entity.Entity, req domain.Endgame
 		s.endgameError(p, req, "configuration", "洞天规则尚未载入")
 		return
 	}
+	if !s.requireRiftPages(p, req, rules) {
+		return
+	}
 	if s.router == nil || s.trial == nil || !p.Alive() || !s.canUseEndgameRiftEntrance(p, req.NPCEntityID) {
 		s.endgameError(p, req, "entrance", "请与洞天入口使者交谈后开启洞天")
 		return
@@ -181,6 +196,10 @@ func (s *Scene) startEndgameRiftWithProfile(p *entity.Entity, req domain.Endgame
 		ch := peer.Player.Char
 		if ch.Level < s.trial.MinLevel || ch.Level > s.trial.MaxLevel {
 			continue
+		}
+		if riftNeedsPages(rules) && !peer.Player.EndgameRiftPages {
+			s.endgameError(p, req, "update_required", "队伍中有成员需要更新客户端，未扣除洞天符钥。")
+			return
 		}
 		char := domain.CharID(ch.ID)
 		roster = append(roster, domain.TrialKeyMember{CharID: char, Level: ch.Level, Cycle: ch.Trial.Cycle})
@@ -244,6 +263,9 @@ func (s *Scene) startEndgameRiftWithProfile(p *entity.Entity, req domain.Endgame
 	}
 }
 func (s *Scene) joinEndgameRift(p *entity.Entity, req domain.EndgameRequest, d endgameRiftPersisted) {
+	if !s.requireRiftPages(p, req, d.Run.Rules) {
+		return
+	}
 	if !p.Alive() {
 		s.endgameError(p, req, "dead", "请复活后进入洞天")
 		return
@@ -305,6 +327,10 @@ func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d 
 				continue
 			}
 			def, ok := s.itemDef(stack.Item)
+			if ok && def.HardDungeonOnly {
+				s.endgameError(p, req, "invalid_reward_source", "奖励来源无效，请联系管理员")
+				return
+			}
 			if !ok || candidate.Bag.AddStack(def, stack) != 0 {
 				s.endgameError(p, req, "bag_full", "背包空间不足，奖励将保留")
 				return

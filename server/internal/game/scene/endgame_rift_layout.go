@@ -15,7 +15,9 @@ func (s *Scene) planEndgameRiftFloor(runID string, floor, previousMap int32) (do
 	}
 	var plan domain.RiftFloorPlan
 	var err error
-	if rules.FloorLayoutVersion == domain.RiftFloorDenseCoverageVersion {
+	if rules.FloorLayoutVersion == domain.RiftFloorFullCoverageVersion {
+		plan, err = domain.PlanRiftFullCoverageFloor(runID, floor, s.riftLayouts, previousMap)
+	} else if rules.FloorLayoutVersion == domain.RiftFloorDenseCoverageVersion {
 		plan, err = domain.PlanRiftDenseCoverageFloor(runID, floor, s.riftLayouts, previousMap)
 	} else if rules.FloorLayoutVersion == domain.RiftFloorCoverageVersion {
 		plan, err = domain.PlanRiftCoverageFloor(runID, floor, s.riftLayouts, previousMap)
@@ -38,6 +40,9 @@ func (s *Scene) planEndgameRiftFloor(runID string, floor, previousMap int32) (do
 	if rules.GuardianRecentWindow == 3 && s.rift != nil && s.rift.data.Run.RunID == runID {
 		// A run owns one guardian, including after floor travel or reconnect.
 		plan.Guardian.Point.Monster = s.rift.data.GuardianID
+	}
+	if err := rules.ValidateFloorWire(plan); err != nil {
+		return domain.RiftFloorPlan{}, err
 	}
 	return plan, nil
 }

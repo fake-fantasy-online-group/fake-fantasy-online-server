@@ -22,7 +22,7 @@ func meleeSetFixture(t *testing.T, suitID int32, pieces int) (*Scene, *entity.En
 	p.Player.Char.Level = 60
 	p.Player.Char.Base = domain.Base{STR: 100, VIT: 100, INT: 100, SPI: 100, AGI: 100, DEX: 100}
 	slots := []domain.EquipSlot{domain.SlotHead, domain.SlotNeck, domain.SlotWeapon, domain.SlotGlove, domain.SlotRing, domain.SlotBody, domain.SlotShoe, domain.SlotBag}
-	suit := &domain.EquipmentSuit{ID: suitID}
+	suit := &domain.EquipmentSuit{EnhancedClass: suitID, ID: suitID}
 	s.items = map[domain.ItemID]domain.ItemDef{}
 	for i, slot := range slots {
 		id := domain.ItemID(800001 + i)

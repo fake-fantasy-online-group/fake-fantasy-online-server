@@ -137,7 +137,7 @@ func (t *RiftRuleTable) Active() *RiftRules {
 	return r
 }
 func (r *RiftRules) Validate() error {
-	if r != nil && ((r.FloorLayoutVersion == RiftFloorDenseCoverageVersion && r.Version < 9) || (r.FloorLayoutVersion != 0 && r.FloorLayoutVersion != RiftFloorCoverageVersion && r.FloorLayoutVersion != RiftFloorDenseCoverageVersion) || (r.GuardianRecentWindow != 0 && r.GuardianRecentWindow != 3) || ((r.FloorLayoutVersion != 0 || r.GuardianRecentWindow != 0) && (r.Version < 8 || r.Elite == nil))) {
+	if r != nil && ((r.FloorLayoutVersion == RiftFloorFullCoverageVersion && r.Version < 10) || (r.FloorLayoutVersion == RiftFloorDenseCoverageVersion && r.Version < 9) || (r.FloorLayoutVersion != 0 && r.FloorLayoutVersion != RiftFloorCoverageVersion && r.FloorLayoutVersion != RiftFloorDenseCoverageVersion && r.FloorLayoutVersion != RiftFloorFullCoverageVersion) || (r.GuardianRecentWindow != 0 && r.GuardianRecentWindow != 3) || ((r.FloorLayoutVersion != 0 || r.GuardianRecentWindow != 0) && (r.Version < 8 || r.Elite == nil))) {
 		return fmt.Errorf("invalid versioned rift layout/guardian policy")
 	}
 	if r == nil || r.FloorPopulationMultiplier < 0 || r.FloorPopulationMultiplier > 2 || r.Version < 1 || r.Loot == nil || r.LootVersion != r.Loot.Version || r.MaxTier < 1 || r.MaxTier > 150 || r.ProgressMax < 1 || r.ProgressMax > 100000000 || r.NormalProgress < 1 || r.NormalProgress > r.ProgressMax || r.GlobeProgress < 1 || r.GlobeProgress > r.ProgressMax || r.BlueOrbs < 1 || r.BlueOrbs > 32 || r.GoldOrbs < 1 || r.GoldOrbs > 32 {

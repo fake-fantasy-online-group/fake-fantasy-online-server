@@ -41,7 +41,7 @@ func (r *RiftRules) validateEquipmentPools(items map[ItemID]ItemDef) error {
 			seen[id] = true
 			if items != nil {
 				d, ok := items[id]
-				if !ok || d.Equip == nil || d.Equip.LevelReq > 60 || d.Equip.AscensionOnly {
+				if !ok || d.HardDungeonOnly || d.Equip == nil || d.Equip.LevelReq > 60 || d.Equip.AscensionOnly {
 					return fmt.Errorf("invalid rift equipment %d", id)
 				}
 			}

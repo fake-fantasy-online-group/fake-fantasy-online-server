@@ -77,6 +77,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		return
 	}
 	s.applyResolvedSkillModifiers(caster, &def, ch.Skills, s.rawSkillLevels(caster))
+	s.specialWeaponAim(caster, &def, cmd.Target)
 	if def.FormulaVersion == domain.SkillFormulaVersion {
 		def.SnapshotRawRanks = s.rawSkillLevels(caster)
 		def.SnapshotHardRanks = ch.Skills.Clone()
@@ -139,6 +140,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 	}
 	targets, movementAt := s.resolveSkillTargets(caster, def, cmd.Target, cmd.At)
 	targets = s.limitVariantTargets(caster, def, targets, cmd.Target)
+	targets = s.limitSpecialWeaponTargets(caster, def, targets, cmd.Target)
 	if len(targets) == 0 && !(def.Kind == domain.SkillArea && def.Area.Valid()) {
 		reject(event.RejectNoTarget)
 		return
@@ -1016,6 +1018,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 			c.classSetDamageScaleBP = s.classSetMeleeCastReleased(src, &c.def)
 			s.emit(release)
 			s.startCasterSetCast(src, c.def)
+			s.specialWeaponCastReleased(src, c.def)
 			c.released = true
 			c.releaseAtWall = time.Time{}
 			c.resolveAtWall = s.skillImpactAt(src, c.def, releaseTarget, releaseAim, now)
@@ -1042,7 +1045,9 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 				}
 			case domain.EffectPlaceTrap:
 				if c.movementAt != nil {
-					s.placeTrap(src, c.def, *c.movementAt, effect.TrapRadius, c.statusDurationPct, c.sourceOffense)
+					if !s.specialWeaponImmediateTrap(src, c.def, *c.movementAt, effect.TrapRadius, c.statusDurationPct, c.sourceOffense) {
+						s.placeTrap(src, c.def, *c.movementAt, effect.TrapRadius, c.statusDurationPct, c.sourceOffense)
+					}
 				}
 			case domain.EffectDetectTrap:
 				s.detectTraps(src, c.def.Radius, effect.ChanceBP)
@@ -1088,6 +1093,8 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 		if c.def.HasDamageEffect() {
 			s.consumeAttackDurability(src)
 		}
+		s.specialWeaponConsumeFreeze(src, c.def)
+		s.specialWeaponCastFinished(src, c.def, classSetHits)
 		s.finishCasterSetCast(src, c, classSetHits)
 		s.applyMonsterSkillExtras(src, c.def, c.targets, c.extras)
 		finishEquipment()
@@ -1133,6 +1140,10 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			}
 		}
 	}
+	s.specialWeaponBeforeHit(src, dst, &def)
+	if s.specialWeaponConvertShield(src, dst, def) {
+		return true
+	}
 	landed := len(def.DirectEffects()) == 0
 	previousLanded := true
 	targetDied := false
@@ -1163,14 +1174,17 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 				int32(s.rng.Intn(10000)) < effect.DispelChanceBP
 			if dispelLanded {
 				if effectTarget.Status != nil {
-					s.statusesRemoved(effectTarget, effectTarget.Status.RemoveWhere(func(existing domain.StatusDef) bool {
+					stolen := s.specialWeaponDispel(src, effectTarget, def, effect.RemoveStatusIDs)
+					removed := effectTarget.Status.RemoveWhere(func(existing domain.StatusDef) bool {
 						for _, id := range effect.RemoveStatusIDs {
 							if existing.ID == id {
 								return true
 							}
 						}
 						return false
-					}))
+					})
+					s.statusesRemoved(effectTarget, removed)
+					s.specialWeaponAfterDispel(src, effectTarget, def, removed, stolen)
 				}
 				effectLanded = true
 			}
@@ -1195,6 +1209,14 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 
 		case domain.EffectRestoreMP:
 			amount := clampI32(int64(effect.RestoreMPFlat) + int64(s.equipmentAttackStats(src).MaxAtk)*int64(effect.SourceAttackPct)/100)
+			if def.SpecialWeaponBaseID == 1522 || def.SpecialWeaponBaseID == 1322 && def.ID == 10302 {
+				overflow := max(int32(0), amount-max(int32(0), effectTarget.MaxMP-effectTarget.MP))
+				seconds := int32(5)
+				if def.ID == 10302 {
+					seconds = 8
+				}
+				s.specialWeaponShield(effectTarget, def.SpecialWeaponBaseID, overflow/2, seconds, src.ID)
+			}
 			effectTarget.MP = clampI32(int64(effectTarget.MP) + int64(amount))
 			if effectTarget.MP > effectTarget.MaxMP {
 				effectTarget.MP = effectTarget.MaxMP
@@ -1215,6 +1237,9 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 
 		case domain.EffectDamageMP:
 			amount := clampI32(int64(effect.DamageFlat) + int64(s.equipmentAttackStats(src).MaxAtk)*int64(effect.SourceAttackPct)/100)
+			if def.SpecialWeaponBaseID == 1622 && def.ID == 10013 {
+				s.specialWeaponShield(src, 1622, min(amount, effectTarget.MP)/2, 4, src.ID)
+			}
 			effectTarget.MP -= amount
 			if effectTarget.MP < 0 {
 				effectTarget.MP = 0
@@ -1306,6 +1331,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		previousLanded = effectLanded
 		landed = landed || effectLanded
 	}
+	s.specialWeaponAfterHit(src, dst, def, landed, targetDied || !dst.Alive())
 	if targetDied || !dst.Alive() {
 		return landed
 	}
