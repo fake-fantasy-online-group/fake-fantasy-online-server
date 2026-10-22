@@ -1,0 +1,4943 @@
+[
+  {
+    "map_id": 2,
+    "map_file": "qw0002",
+    "proc_id": 2,
+    "map_to": 37,
+    "to_x": 4313,
+    "to_y": 4408,
+    "to_dir": 151,
+    "back_x": 8940,
+    "back_y": 1577,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      8946,
+      1439,
+      9068,
+      1492,
+      9116,
+      1425,
+      9007,
+      1363
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 0
+    },
+    "nativePRCSha256": "10c990c4dc1073b03cd272965fd964e1b217476638b24b264c2f01ff80bcf7d1",
+    "nativeLINKSha256": "1e023dff35150c8fac0634f0224ce977b327600a7d589bc7c52a9d973873f44f",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11392.0,
+      "overlap_cells": 143,
+      "walkable_overlap_cells": 96,
+      "selected_component_overlap_cells": 96,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          904,
+          138
+        ],
+        "cell_bounds": [
+          9040,
+          1380,
+          9050,
+          1390
+        ],
+        "clipped_polygon": [
+          [
+            9040.0,
+            1390
+          ],
+          [
+            9050.0,
+            1390
+          ],
+          [
+            9050,
+            1387.4587155963302
+          ],
+          [
+            9040,
+            1381.7706422018348
+          ]
+        ],
+        "intersection_area": 53.85321100987494
+      },
+      "bounds": [
+        8946,
+        1363,
+        9116,
+        1492
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 2,
+    "map_file": "qw0002",
+    "proc_id": 3,
+    "map_to": 41,
+    "to_x": 5748,
+    "to_y": 2363,
+    "to_dir": 19,
+    "back_x": 10889,
+    "back_y": 4689,
+    "back_dir": 111,
+    "script": "",
+    "verifiedPoly": [
+      10959,
+      4856,
+      11030,
+      4943,
+      11124,
+      4886,
+      11067,
+      4805
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 1
+    },
+    "nativePRCSha256": "10c990c4dc1073b03cd272965fd964e1b217476638b24b264c2f01ff80bcf7d1",
+    "nativeLINKSha256": "1e023dff35150c8fac0634f0224ce977b327600a7d589bc7c52a9d973873f44f",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11940.0,
+      "overlap_cells": 151,
+      "walkable_overlap_cells": 95,
+      "selected_component_overlap_cells": 95,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1105,
+          480
+        ],
+        "cell_bounds": [
+          11050,
+          4800,
+          11060,
+          4810
+        ],
+        "clipped_polygon": [
+          [
+            11060.0,
+            4810
+          ],
+          [
+            11060,
+            4808.305555555556
+          ],
+          [
+            11056.411764705883,
+            4810
+          ]
+        ],
+        "intersection_area": 3.0400326773524284
+      },
+      "bounds": [
+        10959,
+        4805,
+        11124,
+        4943
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 2,
+    "map_file": "qw0002",
+    "proc_id": 4,
+    "map_to": 40,
+    "to_x": 10229,
+    "to_y": 4098,
+    "to_dir": 67,
+    "back_x": 5219,
+    "back_y": 1762,
+    "back_dir": 15,
+    "script": "",
+    "verifiedPoly": [
+      5033,
+      1551,
+      5086,
+      1628,
+      5197,
+      1574,
+      5127,
+      1495
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 4,
+      "record_index": 2
+    },
+    "nativePRCSha256": "10c990c4dc1073b03cd272965fd964e1b217476638b24b264c2f01ff80bcf7d1",
+    "nativeLINKSha256": "1e023dff35150c8fac0634f0224ce977b327600a7d589bc7c52a9d973873f44f",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11377.5,
+      "overlap_cells": 145,
+      "walkable_overlap_cells": 97,
+      "selected_component_overlap_cells": 97,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          508,
+          152
+        ],
+        "cell_bounds": [
+          5080,
+          1520,
+          5090,
+          1530
+        ],
+        "clipped_polygon": [
+          [
+            5090.0,
+            1530
+          ],
+          [
+            5090.0,
+            1520
+          ],
+          [
+            5085.035714285715,
+            1520
+          ],
+          [
+            5080,
+            1523.0
+          ],
+          [
+            5080.0,
+            1530
+          ]
+        ],
+        "intersection_area": 92.44642857136205
+      },
+      "bounds": [
+        5033,
+        1495,
+        5197,
+        1628
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 2,
+    "map_file": "qw0002",
+    "proc_id": 5,
+    "map_to": 42,
+    "to_x": 9567,
+    "to_y": 1655,
+    "to_dir": 67,
+    "back_x": 4981,
+    "back_y": 5392,
+    "back_dir": 155,
+    "script": "",
+    "verifiedPoly": [
+      4758,
+      5537,
+      4865,
+      5593,
+      4921,
+      5519,
+      4816,
+      5466
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 5,
+      "record_index": 3
+    },
+    "nativePRCSha256": "10c990c4dc1073b03cd272965fd964e1b217476638b24b264c2f01ff80bcf7d1",
+    "nativeLINKSha256": "1e023dff35150c8fac0634f0224ce977b327600a7d589bc7c52a9d973873f44f",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 10791.5,
+      "overlap_cells": 138,
+      "walkable_overlap_cells": 97,
+      "selected_component_overlap_cells": 97,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          481,
+          546
+        ],
+        "cell_bounds": [
+          4810,
+          5460,
+          4820,
+          5470
+        ],
+        "clipped_polygon": [
+          [
+            4812.732394366197,
+            5470
+          ],
+          [
+            4820.0,
+            5470
+          ],
+          [
+            4820,
+            5468.019047619047
+          ],
+          [
+            4816,
+            5466
+          ]
+        ],
+        "intersection_area": 18.497116029262543
+      },
+      "bounds": [
+        4758,
+        5466,
+        4921,
+        5593
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 3,
+    "map_file": "qw0003",
+    "proc_id": 2,
+    "map_to": 7,
+    "to_x": 13198,
+    "to_y": 3523,
+    "to_dir": 112,
+    "back_x": 4365,
+    "back_y": 4865,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      4018,
+      4890,
+      4116,
+      4962,
+      4198,
+      4890,
+      4093,
+      4831
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 1
+    },
+    "nativePRCSha256": "635c176cb30ab7bee26c936a53706f3303cff6696d5f3c5148dd53009c1e000b",
+    "nativeLINKSha256": "e015cbdf87ece0bad847b487b7a62fcb61c979c372f7488bd3409b96ca49cfe8",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11790.0,
+      "overlap_cells": 150,
+      "walkable_overlap_cells": 114,
+      "selected_component_overlap_cells": 114,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          408,
+          483
+        ],
+        "cell_bounds": [
+          4080,
+          4830,
+          4090,
+          4840
+        ],
+        "clipped_polygon": [
+          [
+            4090.0,
+            4840
+          ],
+          [
+            4090,
+            4833.36
+          ],
+          [
+            4081.559322033898,
+            4840
+          ]
+        ],
+        "intersection_area": 28.023050846531987
+      },
+      "bounds": [
+        4018,
+        4831,
+        4198,
+        4962
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 3,
+    "map_file": "qw0003",
+    "proc_id": 3,
+    "map_to": 42,
+    "to_x": 11634,
+    "to_y": 5191,
+    "to_dir": 111,
+    "back_x": 4162,
+    "back_y": 1953,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      3973,
+      1782,
+      4029,
+      1850,
+      4141,
+      1796,
+      4062,
+      1730
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 2
+    },
+    "nativePRCSha256": "635c176cb30ab7bee26c936a53706f3303cff6696d5f3c5148dd53009c1e000b",
+    "nativeLINKSha256": "e015cbdf87ece0bad847b487b7a62fcb61c979c372f7488bd3409b96ca49cfe8",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 10311.0,
+      "overlap_cells": 132,
+      "walkable_overlap_cells": 93,
+      "selected_component_overlap_cells": 93,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          403,
+          175
+        ],
+        "cell_bounds": [
+          4030,
+          1750,
+          4040,
+          1760
+        ],
+        "clipped_polygon": [
+          [
+            4040.0,
+            1760
+          ],
+          [
+            4040.0,
+            1750
+          ],
+          [
+            4030.0,
+            1750
+          ],
+          [
+            4030.0,
+            1760
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        3973,
+        1730,
+        4141,
+        1850
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 3,
+    "map_file": "qw0003",
+    "proc_id": 4,
+    "map_to": 41,
+    "to_x": 5694,
+    "to_y": 6648,
+    "to_dir": 155,
+    "back_x": 8531,
+    "back_y": 1749,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      8567,
+      1579,
+      8686,
+      1653,
+      8778,
+      1575,
+      8643,
+      1521
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 4,
+      "record_index": 3
+    },
+    "nativePRCSha256": "635c176cb30ab7bee26c936a53706f3303cff6696d5f3c5148dd53009c1e000b",
+    "nativeLINKSha256": "e015cbdf87ece0bad847b487b7a62fcb61c979c372f7488bd3409b96ca49cfe8",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 14012.0,
+      "overlap_cells": 176,
+      "walkable_overlap_cells": 81,
+      "selected_component_overlap_cells": 81,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          859,
+          155
+        ],
+        "cell_bounds": [
+          8590,
+          1550,
+          8600,
+          1560
+        ],
+        "clipped_polygon": [
+          [
+            8600.0,
+            1560
+          ],
+          [
+            8600,
+            1553.8157894736844
+          ],
+          [
+            8591.896551724138,
+            1560
+          ]
+        ],
+        "intersection_area": 25.05671506281942
+      },
+      "bounds": [
+        8567,
+        1521,
+        8778,
+        1653
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 4,
+    "map_file": "qw0004",
+    "proc_id": 2,
+    "map_to": 43,
+    "to_x": 11248,
+    "to_y": 6342,
+    "to_dir": 107,
+    "back_x": 6466,
+    "back_y": 1167,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      6267,
+      942,
+      6314,
+      1041,
+      6438,
+      980,
+      6371,
+      898
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 1
+    },
+    "nativePRCSha256": "92e246a08a1285a088a0cc2acb1e1a89917bc917264970e949a18e019c3dbd3b",
+    "nativeLINKSha256": "789b6f42cae1ab3a0575f666a540982c0d2b3cbd56b9bc52637be670c2841666",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 13309.5,
+      "overlap_cells": 165,
+      "walkable_overlap_cells": 116,
+      "selected_component_overlap_cells": 116,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          632,
+          92
+        ],
+        "cell_bounds": [
+          6320,
+          920,
+          6330,
+          930
+        ],
+        "clipped_polygon": [
+          [
+            6330.0,
+            930
+          ],
+          [
+            6330.0,
+            920
+          ],
+          [
+            6320.0,
+            920
+          ],
+          [
+            6320.0,
+            930
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        6267,
+        898,
+        6438,
+        1041
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 4,
+    "map_file": "qw0004",
+    "proc_id": 3,
+    "map_to": 28,
+    "to_x": 2569,
+    "to_y": 4243,
+    "to_dir": 155,
+    "back_x": 10952,
+    "back_y": 2355,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      11033,
+      2209,
+      11126,
+      2282,
+      11219,
+      2213,
+      11130,
+      2157
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 2
+    },
+    "nativePRCSha256": "92e246a08a1285a088a0cc2acb1e1a89917bc917264970e949a18e019c3dbd3b",
+    "nativeLINKSha256": "789b6f42cae1ab3a0575f666a540982c0d2b3cbd56b9bc52637be670c2841666",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11633.0,
+      "overlap_cells": 149,
+      "walkable_overlap_cells": 149,
+      "selected_component_overlap_cells": 149,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1112,
+          215
+        ],
+        "cell_bounds": [
+          11120,
+          2150,
+          11130,
+          2160
+        ],
+        "clipped_polygon": [
+          [
+            11124.403846153846,
+            2160
+          ],
+          [
+            11130.0,
+            2160
+          ],
+          [
+            11130,
+            2157.0
+          ],
+          [
+            11130,
+            2157
+          ]
+        ],
+        "intersection_area": 8.394230768084526
+      },
+      "bounds": [
+        11033,
+        2157,
+        11219,
+        2282
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 6,
+    "map_file": "qw0006",
+    "proc_id": 2,
+    "map_to": 13,
+    "to_x": 9094,
+    "to_y": 1957,
+    "to_dir": 67,
+    "back_x": 3124,
+    "back_y": 4521,
+    "back_dir": 155,
+    "script": "",
+    "verifiedPoly": [
+      2859,
+      4649,
+      2965,
+      4706,
+      3035,
+      4619,
+      2917,
+      4569
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 1
+    },
+    "nativePRCSha256": "738eddcbeb1b37bc13045553375c845188cbc7719dcc071cef255db058c2077d",
+    "nativeLINKSha256": "c54d7cdafcba7adbdcdc0af7d117d5fe18d4fdc82bd6d14eaaed10793ad38f0c",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 12776.0,
+      "overlap_cells": 161,
+      "walkable_overlap_cells": 134,
+      "selected_component_overlap_cells": 134,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          291,
+          456
+        ],
+        "cell_bounds": [
+          2910,
+          4560,
+          2920,
+          4570
+        ],
+        "clipped_polygon": [
+          [
+            2916.275,
+            4570
+          ],
+          [
+            2919.359999999999,
+            4570
+          ],
+          [
+            2917,
+            4569
+          ]
+        ],
+        "intersection_area": 1.5424999995157123
+      },
+      "bounds": [
+        2859,
+        4569,
+        3035,
+        4706
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 6,
+    "map_file": "qw0006",
+    "proc_id": 3,
+    "map_to": 7,
+    "to_x": 5349,
+    "to_y": 3555,
+    "to_dir": 112,
+    "back_x": 10624,
+    "back_y": 4844,
+    "back_dir": 111,
+    "script": "",
+    "verifiedPoly": [
+      10740,
+      4949,
+      10828,
+      5041,
+      10916,
+      4979,
+      10861,
+      4901
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 2
+    },
+    "nativePRCSha256": "738eddcbeb1b37bc13045553375c845188cbc7719dcc071cef255db058c2077d",
+    "nativeLINKSha256": "c54d7cdafcba7adbdcdc0af7d117d5fe18d4fdc82bd6d14eaaed10793ad38f0c",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 12815.0,
+      "overlap_cells": 161,
+      "walkable_overlap_cells": 123,
+      "selected_component_overlap_cells": 123,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1083,
+          490
+        ],
+        "cell_bounds": [
+          10830,
+          4900,
+          10840,
+          4910
+        ],
+        "clipped_polygon": [
+          [
+            10840.0,
+            4910
+          ],
+          [
+            10840,
+            4909.330578512397
+          ],
+          [
+            10838.3125,
+            4910
+          ]
+        ],
+        "intersection_area": 0.5648243799805641
+      },
+      "bounds": [
+        10740,
+        4901,
+        10916,
+        5041
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 6,
+    "map_file": "qw0006",
+    "proc_id": 4,
+    "map_to": 44,
+    "to_x": 12849,
+    "to_y": 6471,
+    "to_dir": 111,
+    "back_x": 4725,
+    "back_y": 1846,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      4509,
+      1727,
+      4599,
+      1773,
+      4702,
+      1713,
+      4611,
+      1649
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 4,
+      "record_index": 3
+    },
+    "nativePRCSha256": "738eddcbeb1b37bc13045553375c845188cbc7719dcc071cef255db058c2077d",
+    "nativeLINKSha256": "c54d7cdafcba7adbdcdc0af7d117d5fe18d4fdc82bd6d14eaaed10793ad38f0c",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11882.0,
+      "overlap_cells": 152,
+      "walkable_overlap_cells": 152,
+      "selected_component_overlap_cells": 152,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          460,
+          164
+        ],
+        "cell_bounds": [
+          4600,
+          1640,
+          4610,
+          1650
+        ],
+        "clipped_polygon": [
+          [
+            4610.0,
+            1650
+          ],
+          [
+            4610,
+            1649.764705882353
+          ],
+          [
+            4609.692307692308,
+            1650
+          ]
+        ],
+        "intersection_area": 0.036199094727635384
+      },
+      "bounds": [
+        4509,
+        1649,
+        4702,
+        1773
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 8,
+    "map_file": "qw0008",
+    "proc_id": 1,
+    "map_to": 7,
+    "to_x": 13059,
+    "to_y": 7389,
+    "to_dir": 112,
+    "back_x": 4774,
+    "back_y": 1936,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      4658,
+      1741,
+      4675,
+      1786,
+      4689,
+      1799,
+      4723,
+      1798,
+      4743,
+      1790,
+      4755,
+      1783,
+      4762,
+      1775,
+      4769,
+      1760,
+      4767,
+      1738,
+      4722,
+      1726,
+      4680,
+      1718
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 1,
+      "record_index": 0
+    },
+    "nativePRCSha256": "5b77d97d58c76c9e805331531cdb472e7b4fde64cb8fb1c70e91fbb3379aac96",
+    "nativeLINKSha256": "6c1ffcd21ae7a9be8b26ecee05404d3bc2c6dd56fa96891c19a87328971aa3fd",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 6556.0,
+      "overlap_cells": 85,
+      "walkable_overlap_cells": 71,
+      "selected_component_overlap_cells": 71,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          468,
+          172
+        ],
+        "cell_bounds": [
+          4680,
+          1720,
+          4690,
+          1730
+        ],
+        "clipped_polygon": [
+          [
+            4680.0,
+            1720
+          ],
+          [
+            4680.0,
+            1730
+          ],
+          [
+            4690.0,
+            1730
+          ],
+          [
+            4690.0,
+            1720
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        4658,
+        1718,
+        4769,
+        1799
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 9,
+    "map_file": "qw0009",
+    "proc_id": 2,
+    "map_to": 906,
+    "to_x": 2735,
+    "to_y": 3208,
+    "to_dir": 112,
+    "back_x": 11172,
+    "back_y": 3161,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      11409,
+      2925,
+      11534,
+      2990,
+      11577,
+      2925,
+      11480,
+      2875
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 1
+    },
+    "nativePRCSha256": "6619cdba5aeebdaaff3cb43457c53b0e588e42b542ee1bd6edb5fa242b58c85b",
+    "nativeLINKSha256": "2f48fbf554200c89c3fab82411487a759a745dbee08207ff8fc5c869181bab8d",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 9660.0,
+      "overlap_cells": 125,
+      "walkable_overlap_cells": 110,
+      "selected_component_overlap_cells": 110,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1148,
+          288
+        ],
+        "cell_bounds": [
+          11480,
+          2880,
+          11490,
+          2890
+        ],
+        "clipped_polygon": [
+          [
+            11480.0,
+            2880
+          ],
+          [
+            11480.0,
+            2890
+          ],
+          [
+            11490.0,
+            2890
+          ],
+          [
+            11490,
+            2880.1546391752577
+          ],
+          [
+            11489.7,
+            2880
+          ]
+        ],
+        "intersection_area": 99.97680412232876
+      },
+      "bounds": [
+        11409,
+        2875,
+        11577,
+        2990
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 9,
+    "map_file": "qw0009",
+    "proc_id": 3,
+    "map_to": 15,
+    "to_x": 10248,
+    "to_y": 2126,
+    "to_dir": 112,
+    "back_x": 3708,
+    "back_y": 4785,
+    "back_dir": 155,
+    "script": "",
+    "verifiedPoly": [
+      3438,
+      4939,
+      3555,
+      4994,
+      3620,
+      4925,
+      3507,
+      4866
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 2
+    },
+    "nativePRCSha256": "6619cdba5aeebdaaff3cb43457c53b0e588e42b542ee1bd6edb5fa242b58c85b",
+    "nativeLINKSha256": "2f48fbf554200c89c3fab82411487a759a745dbee08207ff8fc5c869181bab8d",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11984.0,
+      "overlap_cells": 151,
+      "walkable_overlap_cells": 111,
+      "selected_component_overlap_cells": 111,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          350,
+          486
+        ],
+        "cell_bounds": [
+          3500,
+          4860,
+          3510,
+          4870
+        ],
+        "clipped_polygon": [
+          [
+            3503.219178082192,
+            4870
+          ],
+          [
+            3510.0,
+            4870
+          ],
+          [
+            3510,
+            4867.566371681416
+          ],
+          [
+            3507,
+            4866
+          ]
+        ],
+        "intersection_area": 17.21208631247282
+      },
+      "bounds": [
+        3438,
+        4866,
+        3620,
+        4994
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 12,
+    "map_file": "qw0012",
+    "proc_id": 2,
+    "map_to": 75,
+    "to_x": 13293,
+    "to_y": 2469,
+    "to_dir": 67,
+    "back_x": 3723,
+    "back_y": 5128,
+    "back_dir": 155,
+    "script": "",
+    "verifiedPoly": [
+      3449,
+      5221,
+      3545,
+      5290,
+      3630,
+      5229,
+      3539,
+      5169
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 4
+    },
+    "nativePRCSha256": "46e0c1c377fe333794d020d90f6e3a60b80d8f32f1ffbd3887477cbd06738e29",
+    "nativeLINKSha256": "fa033a14a9d652a5f028e912546678d8996c8440e0cda4611357c40b916073ea",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 10926.5,
+      "overlap_cells": 141,
+      "walkable_overlap_cells": 116,
+      "selected_component_overlap_cells": 116,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          353,
+          516
+        ],
+        "cell_bounds": [
+          3530,
+          5160,
+          3540,
+          5170
+        ],
+        "clipped_polygon": [
+          [
+            3537.2692307692305,
+            5170
+          ],
+          [
+            3540.0,
+            5170
+          ],
+          [
+            3540,
+            5169.659340659341
+          ],
+          [
+            3539,
+            5169
+          ]
+        ],
+        "intersection_area": 1.5357142873108387
+      },
+      "bounds": [
+        3449,
+        5169,
+        3630,
+        5290
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 12,
+    "map_file": "qw0012",
+    "proc_id": 3,
+    "map_to": 73,
+    "to_x": 4929,
+    "to_y": 2463,
+    "to_dir": 19,
+    "back_x": 10266,
+    "back_y": 5338,
+    "back_dir": 111,
+    "script": "",
+    "verifiedPoly": [
+      10311,
+      5445,
+      10387,
+      5523,
+      10508,
+      5461,
+      10433,
+      5389
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 5
+    },
+    "nativePRCSha256": "46e0c1c377fe333794d020d90f6e3a60b80d8f32f1ffbd3887477cbd06738e29",
+    "nativeLINKSha256": "fa033a14a9d652a5f028e912546678d8996c8440e0cda4611357c40b916073ea",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 13567.0,
+      "overlap_cells": 171,
+      "walkable_overlap_cells": 111,
+      "selected_component_overlap_cells": 111,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1043,
+          538
+        ],
+        "cell_bounds": [
+          10430,
+          5380,
+          10440,
+          5390
+        ],
+        "clipped_polygon": [
+          [
+            10430.82142857143,
+            5390
+          ],
+          [
+            10434.041666666666,
+            5390
+          ],
+          [
+            10433,
+            5389
+          ]
+        ],
+        "intersection_area": 1.6101190447807312
+      },
+      "bounds": [
+        10311,
+        5389,
+        10508,
+        5523
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 12,
+    "map_file": "qw0012",
+    "proc_id": 4,
+    "map_to": 74,
+    "to_x": 4586,
+    "to_y": 6520,
+    "to_dir": 155,
+    "back_x": 9234,
+    "back_y": 1435,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      9288,
+      1320,
+      9404,
+      1395,
+      9478,
+      1320,
+      9383,
+      1268
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 4,
+      "record_index": 6
+    },
+    "nativePRCSha256": "46e0c1c377fe333794d020d90f6e3a60b80d8f32f1ffbd3887477cbd06738e29",
+    "nativeLINKSha256": "fa033a14a9d652a5f028e912546678d8996c8440e0cda4611357c40b916073ea",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 12065.0,
+      "overlap_cells": 152,
+      "walkable_overlap_cells": 152,
+      "selected_component_overlap_cells": 152,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          937,
+          126
+        ],
+        "cell_bounds": [
+          9370,
+          1260,
+          9380,
+          1270
+        ],
+        "clipped_polygon": [
+          [
+            9380.0,
+            1270
+          ],
+          [
+            9380,
+            1269.6421052631579
+          ],
+          [
+            9379.346153846154,
+            1270
+          ]
+        ],
+        "intersection_area": 0.11700404901057482
+      },
+      "bounds": [
+        9288,
+        1268,
+        9478,
+        1395
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 12,
+    "map_file": "qw0012",
+    "proc_id": 5,
+    "map_to": 33,
+    "to_x": 13557,
+    "to_y": 3609,
+    "to_dir": 111,
+    "back_x": 6964,
+    "back_y": 584,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      6705,
+      472,
+      6785,
+      535,
+      6906,
+      460,
+      6832,
+      398,
+      6712,
+      467
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 5,
+      "record_index": 7
+    },
+    "nativePRCSha256": "46e0c1c377fe333794d020d90f6e3a60b80d8f32f1ffbd3887477cbd06738e29",
+    "nativeLINKSha256": "fa033a14a9d652a5f028e912546678d8996c8440e0cda4611357c40b916073ea",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 13545.0,
+      "overlap_cells": 171,
+      "walkable_overlap_cells": 170,
+      "selected_component_overlap_cells": 170,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          682,
+          39
+        ],
+        "cell_bounds": [
+          6820,
+          390,
+          6830,
+          400
+        ],
+        "clipped_polygon": [
+          [
+            6830.0,
+            400
+          ],
+          [
+            6830,
+            399.15
+          ],
+          [
+            6828.521739130435,
+            400
+          ]
+        ],
+        "intersection_area": 0.6282608695328236
+      },
+      "bounds": [
+        6705,
+        398,
+        6906,
+        535
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 13,
+    "map_file": "qw0013",
+    "proc_id": 2,
+    "map_to": 6,
+    "to_x": 3124,
+    "to_y": 4521,
+    "to_dir": 155,
+    "back_x": 9094,
+    "back_y": 1957,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      9116,
+      1808,
+      9251,
+      1860,
+      9304,
+      1783,
+      9171,
+      1732
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 2
+    },
+    "nativePRCSha256": "23f25c01bdaf34c082cb2d9b01d1cd009562344f915f562f1aafcd7774da4ffd",
+    "nativeLINKSha256": "f29f87e13e00e8681c3e1c4cd02b374be3d32f4b8c46cf69ee096f5aa7a358b3",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 13032.0,
+      "overlap_cells": 162,
+      "walkable_overlap_cells": 114,
+      "selected_component_overlap_cells": 114,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          920,
+          175
+        ],
+        "cell_bounds": [
+          9200,
+          1750,
+          9210,
+          1760
+        ],
+        "clipped_polygon": [
+          [
+            9200.0,
+            1750
+          ],
+          [
+            9200.0,
+            1760
+          ],
+          [
+            9210.0,
+            1760
+          ],
+          [
+            9210.0,
+            1750
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        9116,
+        1732,
+        9304,
+        1860
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 13,
+    "map_file": "qw0013",
+    "proc_id": 3,
+    "map_to": 21,
+    "to_x": 11819,
+    "to_y": 2944,
+    "to_dir": 67,
+    "back_x": 1994,
+    "back_y": 2891,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      1717,
+      2896,
+      1850,
+      2915,
+      1861,
+      2839,
+      1761,
+      2825
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 3
+    },
+    "nativePRCSha256": "23f25c01bdaf34c082cb2d9b01d1cd009562344f915f562f1aafcd7774da4ffd",
+    "nativeLINKSha256": "f29f87e13e00e8681c3e1c4cd02b374be3d32f4b8c46cf69ee096f5aa7a358b3",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 9016.5,
+      "overlap_cells": 116,
+      "walkable_overlap_cells": 67,
+      "selected_component_overlap_cells": 67,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          177,
+          284
+        ],
+        "cell_bounds": [
+          1770,
+          2840,
+          1780,
+          2850
+        ],
+        "clipped_polygon": [
+          [
+            1770.0,
+            2840
+          ],
+          [
+            1770.0,
+            2850
+          ],
+          [
+            1780.0,
+            2850
+          ],
+          [
+            1780.0,
+            2840
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        1717,
+        2825,
+        1861,
+        2915
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 13,
+    "map_file": "qw0013",
+    "proc_id": 4,
+    "map_to": 46,
+    "to_x": 12419,
+    "to_y": 8383,
+    "to_dir": 107,
+    "back_x": 6197,
+    "back_y": 1271,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      6009,
+      1120,
+      6085,
+      1190,
+      6183,
+      1136,
+      6107,
+      1060
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 4,
+      "record_index": 4
+    },
+    "nativePRCSha256": "23f25c01bdaf34c082cb2d9b01d1cd009562344f915f562f1aafcd7774da4ffd",
+    "nativeLINKSha256": "f29f87e13e00e8681c3e1c4cd02b374be3d32f4b8c46cf69ee096f5aa7a358b3",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11486.0,
+      "overlap_cells": 143,
+      "walkable_overlap_cells": 143,
+      "selected_component_overlap_cells": 143,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          609,
+          106
+        ],
+        "cell_bounds": [
+          6090,
+          1060,
+          6100,
+          1070
+        ],
+        "clipped_polygon": [
+          [
+            6100.0,
+            1070
+          ],
+          [
+            6100,
+            1064.2857142857142
+          ],
+          [
+            6090.666666666667,
+            1070
+          ]
+        ],
+        "intersection_area": 26.666666666511446
+      },
+      "bounds": [
+        6009,
+        1060,
+        6183,
+        1190
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 14,
+    "map_file": "qw0014",
+    "proc_id": 2,
+    "map_to": 7,
+    "to_x": 5361,
+    "to_y": 7452,
+    "to_dir": 112,
+    "back_x": 9768,
+    "back_y": 1982,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      9814,
+      1841,
+      9924,
+      1902,
+      9991,
+      1832,
+      9889,
+      1773
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 1
+    },
+    "nativePRCSha256": "a850571112667123406ad1e423c4a227fecd257e7a935aec305c2bf0ee6ceda4",
+    "nativeLINKSha256": "487be6e2520dcf44f0af8d59d6af684e01abf072bf0c958ccc37baca2846deeb",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11574.0,
+      "overlap_cells": 148,
+      "walkable_overlap_cells": 39,
+      "selected_component_overlap_cells": 39,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          981,
+          183
+        ],
+        "cell_bounds": [
+          9810,
+          1830,
+          9820,
+          1840
+        ],
+        "clipped_polygon": [
+          [
+            9820.0,
+            1840
+          ],
+          [
+            9820,
+            1835.56
+          ],
+          [
+            9815.10294117647,
+            1840
+          ]
+        ],
+        "intersection_area": 10.871470589190722
+      },
+      "bounds": [
+        9814,
+        1773,
+        9991,
+        1902
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 14,
+    "map_file": "qw0014",
+    "proc_id": 3,
+    "map_to": 27,
+    "to_x": 3842,
+    "to_y": 1995,
+    "to_dir": 19,
+    "back_x": 10080,
+    "back_y": 5043,
+    "back_dir": 111,
+    "script": "",
+    "verifiedPoly": [
+      10290,
+      5141,
+      10391,
+      5197,
+      10463,
+      5139,
+      10389,
+      5064
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 2
+    },
+    "nativePRCSha256": "a850571112667123406ad1e423c4a227fecd257e7a935aec305c2bf0ee6ceda4",
+    "nativeLINKSha256": "487be6e2520dcf44f0af8d59d6af684e01abf072bf0c958ccc37baca2846deeb",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11506.5,
+      "overlap_cells": 146,
+      "walkable_overlap_cells": 94,
+      "selected_component_overlap_cells": 94,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1038,
+          506
+        ],
+        "cell_bounds": [
+          10380,
+          5060,
+          10390,
+          5070
+        ],
+        "clipped_polygon": [
+          [
+            10381.285714285714,
+            5070
+          ],
+          [
+            10390.0,
+            5070
+          ],
+          [
+            10390,
+            5065.013513513513
+          ],
+          [
+            10389,
+            5064
+          ]
+        ],
+        "intersection_area": 28.63610038906336
+      },
+      "bounds": [
+        10290,
+        5064,
+        10463,
+        5197
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 14,
+    "map_file": "qw0014",
+    "proc_id": 4,
+    "map_to": 22,
+    "to_x": 7856,
+    "to_y": 1073,
+    "to_dir": 67,
+    "back_x": 3173,
+    "back_y": 4475,
+    "back_dir": 155,
+    "script": "",
+    "verifiedPoly": [
+      2881,
+      4597,
+      2983,
+      4661,
+      3058,
+      4596,
+      2970,
+      4536
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 4,
+      "record_index": 3
+    },
+    "nativePRCSha256": "a850571112667123406ad1e423c4a227fecd257e7a935aec305c2bf0ee6ceda4",
+    "nativeLINKSha256": "487be6e2520dcf44f0af8d59d6af684e01abf072bf0c958ccc37baca2846deeb",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11069.0,
+      "overlap_cells": 141,
+      "walkable_overlap_cells": 92,
+      "selected_component_overlap_cells": 92,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          296,
+          453
+        ],
+        "cell_bounds": [
+          2960,
+          4530,
+          2970,
+          4540
+        ],
+        "clipped_polygon": [
+          [
+            2964.1639344262294,
+            4540
+          ],
+          [
+            2970.0,
+            4540
+          ],
+          [
+            2970,
+            4536.0
+          ],
+          [
+            2970,
+            4536
+          ]
+        ],
+        "intersection_area": 11.672131147235632
+      },
+      "bounds": [
+        2881,
+        4536,
+        3058,
+        4661
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 15,
+    "map_file": "qw0015",
+    "proc_id": 2,
+    "map_to": 9,
+    "to_x": 3708,
+    "to_y": 4785,
+    "to_dir": 155,
+    "back_x": 10248,
+    "back_y": 2126,
+    "back_dir": 112,
+    "script": "",
+    "verifiedPoly": [
+      10257,
+      2036,
+      10357,
+      2094,
+      10417,
+      2028,
+      10312,
+      1979
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 1
+    },
+    "nativePRCSha256": "1bd94838afda14a3330b6d1954aa187901b5b3a279579a398e4ca7c8217bc7f4",
+    "nativeLINKSha256": "dfe6fdbdc88368842bd7e94e62fe3696ab2f46bb09442e9d2ac5437548dc46a7",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 9380.0,
+      "overlap_cells": 118,
+      "walkable_overlap_cells": 85,
+      "selected_component_overlap_cells": 85,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1033,
+          200
+        ],
+        "cell_bounds": [
+          10330,
+          2000,
+          10340,
+          2010
+        ],
+        "clipped_polygon": [
+          [
+            10330.0,
+            2000
+          ],
+          [
+            10330.0,
+            2010
+          ],
+          [
+            10340.0,
+            2010
+          ],
+          [
+            10340.0,
+            2000
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        10257,
+        1979,
+        10417,
+        2094
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 15,
+    "map_file": "qw0015",
+    "proc_id": 3,
+    "map_to": 16,
+    "to_x": 3867,
+    "to_y": 2357,
+    "to_dir": 19,
+    "back_x": 11264,
+    "back_y": 4504,
+    "back_dir": 107,
+    "script": "",
+    "verifiedPoly": [
+      11258,
+      4711,
+      11345,
+      4777,
+      11434,
+      4725,
+      11366,
+      4647
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 2
+    },
+    "nativePRCSha256": "1bd94838afda14a3330b6d1954aa187901b5b3a279579a398e4ca7c8217bc7f4",
+    "nativeLINKSha256": "dfe6fdbdc88368842bd7e94e62fe3696ab2f46bb09442e9d2ac5437548dc46a7",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11587.0,
+      "overlap_cells": 148,
+      "walkable_overlap_cells": 103,
+      "selected_component_overlap_cells": 103,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1136,
+          464
+        ],
+        "cell_bounds": [
+          11360,
+          4640,
+          11370,
+          4650
+        ],
+        "clipped_polygon": [
+          [
+            11360.9375,
+            4650
+          ],
+          [
+            11368.615384615385,
+            4650
+          ],
+          [
+            11366,
+            4647
+          ]
+        ],
+        "intersection_area": 11.516826920211315
+      },
+      "bounds": [
+        11258,
+        4647,
+        11434,
+        4777
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 15,
+    "map_file": "qw0015",
+    "proc_id": 4,
+    "map_to": 70,
+    "to_x": 15294,
+    "to_y": 3270,
+    "to_dir": 67,
+    "back_x": 4110,
+    "back_y": 3959,
+    "back_dir": 151,
+    "script": "",
+    "verifiedPoly": [
+      3718,
+      4116,
+      3840,
+      4182,
+      3916,
+      4114,
+      3795,
+      4050
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 4,
+      "record_index": 3
+    },
+    "nativePRCSha256": "1bd94838afda14a3330b6d1954aa187901b5b3a279579a398e4ca7c8217bc7f4",
+    "nativeLINKSha256": "dfe6fdbdc88368842bd7e94e62fe3696ab2f46bb09442e9d2ac5437548dc46a7",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 13113.0,
+      "overlap_cells": 164,
+      "walkable_overlap_cells": 164,
+      "selected_component_overlap_cells": 164,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          378,
+          405
+        ],
+        "cell_bounds": [
+          3780,
+          4050,
+          3790,
+          4060
+        ],
+        "clipped_polygon": [
+          [
+            3790.0,
+            4060
+          ],
+          [
+            3790,
+            4054.285714285714
+          ],
+          [
+            3783.333333333333,
+            4060
+          ]
+        ],
+        "intersection_area": 19.0476190475747
+      },
+      "bounds": [
+        3718,
+        4050,
+        3916,
+        4182
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 15,
+    "map_file": "qw0015",
+    "proc_id": 5,
+    "map_to": 69,
+    "to_x": 12919,
+    "to_y": 8098,
+    "to_dir": 111,
+    "back_x": 5391,
+    "back_y": 1369,
+    "back_dir": 15,
+    "script": "",
+    "verifiedPoly": [
+      5268,
+      1134,
+      5341,
+      1220,
+      5435,
+      1148,
+      5349,
+      1079
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 5,
+      "record_index": 4
+    },
+    "nativePRCSha256": "1bd94838afda14a3330b6d1954aa187901b5b3a279579a398e4ca7c8217bc7f4",
+    "nativeLINKSha256": "dfe6fdbdc88368842bd7e94e62fe3696ab2f46bb09442e9d2ac5437548dc46a7",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11829.5,
+      "overlap_cells": 151,
+      "walkable_overlap_cells": 151,
+      "selected_component_overlap_cells": 151,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          534,
+          107
+        ],
+        "cell_bounds": [
+          5340,
+          1070,
+          5350,
+          1080
+        ],
+        "clipped_polygon": [
+          [
+            5347.527272727273,
+            1080
+          ],
+          [
+            5350.0,
+            1080
+          ],
+          [
+            5350,
+            1079.8023255813953
+          ],
+          [
+            5349,
+            1079
+          ]
+        ],
+        "intersection_area": 1.3352008457295597
+      },
+      "bounds": [
+        5268,
+        1079,
+        5435,
+        1220
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 18,
+    "map_file": "qw0018",
+    "proc_id": 2,
+    "map_to": 17,
+    "to_x": 7177,
+    "to_y": 6404,
+    "to_dir": 111,
+    "back_x": 5084,
+    "back_y": 1561,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      4921,
+      1294,
+      4930,
+      1388,
+      5070,
+      1387,
+      5070,
+      1291
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 2
+    },
+    "nativePRCSha256": "e82ad131099cf9d86fce0c2ed7a4a5a26912fbc5da6dd9b162665719ad75d627",
+    "nativeLINKSha256": "c7d9cec8c88da982f4df8d92e5214896762dab33003895504e1c79302a2bbff8",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 13736.5,
+      "overlap_cells": 150,
+      "walkable_overlap_cells": 140,
+      "selected_component_overlap_cells": 140,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          494,
+          129
+        ],
+        "cell_bounds": [
+          4940,
+          1290,
+          4950,
+          1300
+        ],
+        "clipped_polygon": [
+          [
+            4950.0,
+            1300
+          ],
+          [
+            4950,
+            1293.4161073825503
+          ],
+          [
+            4940,
+            1293.6174496644296
+          ],
+          [
+            4940.0,
+            1300
+          ]
+        ],
+        "intersection_area": 64.83221476478502
+      },
+      "bounds": [
+        4921,
+        1291,
+        5070,
+        1388
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 18,
+    "map_file": "qw0018",
+    "proc_id": 3,
+    "map_to": 10,
+    "to_x": 1931,
+    "to_y": 3628,
+    "to_dir": 155,
+    "back_x": 10054,
+    "back_y": 2393,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      10141,
+      2245,
+      10245,
+      2315,
+      10325,
+      2245,
+      10231,
+      2170
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 3
+    },
+    "nativePRCSha256": "e82ad131099cf9d86fce0c2ed7a4a5a26912fbc5da6dd9b162665719ad75d627",
+    "nativeLINKSha256": "c7d9cec8c88da982f4df8d92e5214896762dab33003895504e1c79302a2bbff8",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 13340.0,
+      "overlap_cells": 167,
+      "walkable_overlap_cells": 111,
+      "selected_component_overlap_cells": 111,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1022,
+          219
+        ],
+        "cell_bounds": [
+          10220,
+          2190,
+          10230,
+          2200
+        ],
+        "clipped_polygon": [
+          [
+            10230.0,
+            2200
+          ],
+          [
+            10230.0,
+            2190
+          ],
+          [
+            10220.0,
+            2190
+          ],
+          [
+            10220.0,
+            2200
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        10141,
+        2170,
+        10325,
+        2315
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 21,
+    "map_file": "qw0021",
+    "proc_id": 2,
+    "map_to": 20,
+    "to_x": 10583,
+    "to_y": 3963,
+    "to_dir": 111,
+    "back_x": 5366,
+    "back_y": 1687,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      5187,
+      1481,
+      5250,
+      1560,
+      5362,
+      1493,
+      5306,
+      1424
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 2
+    },
+    "nativePRCSha256": "290474797bdf2959074f13006d7e7b0d22661166c9241b623d5647dfd886319c",
+    "nativeLINKSha256": "63a99f813efccebeb6fb88e4debacb958afec6c29dade2e46d58f287aa776f06",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 12236.0,
+      "overlap_cells": 154,
+      "walkable_overlap_cells": 115,
+      "selected_component_overlap_cells": 115,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          527,
+          143
+        ],
+        "cell_bounds": [
+          5270,
+          1430,
+          5280,
+          1440
+        ],
+        "clipped_polygon": [
+          [
+            5280.0,
+            1440
+          ],
+          [
+            5280,
+            1436.453781512605
+          ],
+          [
+            5272.596491228071,
+            1440
+          ]
+        ],
+        "intersection_area": 13.127229839097708
+      },
+      "bounds": [
+        5187,
+        1424,
+        5362,
+        1560
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 21,
+    "map_file": "qw0021",
+    "proc_id": 3,
+    "map_to": 13,
+    "to_x": 1994,
+    "to_y": 2891,
+    "to_dir": 19,
+    "back_x": 11819,
+    "back_y": 2944,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      11834,
+      2790,
+      11956,
+      2861,
+      12003,
+      2774,
+      11917,
+      2726
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 3
+    },
+    "nativePRCSha256": "290474797bdf2959074f13006d7e7b0d22661166c9241b623d5647dfd886319c",
+    "nativeLINKSha256": "63a99f813efccebeb6fb88e4debacb958afec6c29dade2e46d58f287aa776f06",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11719.5,
+      "overlap_cells": 149,
+      "walkable_overlap_cells": 88,
+      "selected_component_overlap_cells": 88,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1191,
+          276
+        ],
+        "cell_bounds": [
+          11910,
+          2760,
+          11920,
+          2770
+        ],
+        "clipped_polygon": [
+          [
+            11910.0,
+            2760
+          ],
+          [
+            11910.0,
+            2770
+          ],
+          [
+            11920.0,
+            2770
+          ],
+          [
+            11920.0,
+            2760
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        11834,
+        2726,
+        12003,
+        2861
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 22,
+    "map_file": "qw0022",
+    "proc_id": 2,
+    "map_to": 14,
+    "to_x": 3173,
+    "to_y": 4475,
+    "to_dir": 155,
+    "back_x": 7856,
+    "back_y": 1073,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      7899,
+      919,
+      7999,
+      972,
+      8075,
+      889,
+      7960,
+      838
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 2
+    },
+    "nativePRCSha256": "a7bd7ea5afd3db8516aca91cbea6a68a9b0099d3b35155b2e21ff862f42c67bc",
+    "nativeLINKSha256": "c385969ceb184083e5318c89cfe68cb050e2d72de02824f0ff444a08cca2a7f3",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 12377.0,
+      "overlap_cells": 156,
+      "walkable_overlap_cells": 88,
+      "selected_component_overlap_cells": 88,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          795,
+          87
+        ],
+        "cell_bounds": [
+          7950,
+          870,
+          7960,
+          880
+        ],
+        "clipped_polygon": [
+          [
+            7950.0,
+            870
+          ],
+          [
+            7950.0,
+            880
+          ],
+          [
+            7960.0,
+            880
+          ],
+          [
+            7960.0,
+            870
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        7899,
+        838,
+        8075,
+        972
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 22,
+    "map_file": "qw0022",
+    "proc_id": 3,
+    "map_to": 31,
+    "to_x": 4752,
+    "to_y": 1961,
+    "to_dir": 19,
+    "back_x": 8889,
+    "back_y": 4994,
+    "back_dir": 63,
+    "script": "",
+    "verifiedPoly": [
+      9022,
+      4924,
+      9037,
+      5031,
+      9149,
+      5024,
+      9188,
+      4950
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 3
+    },
+    "nativePRCSha256": "a7bd7ea5afd3db8516aca91cbea6a68a9b0099d3b35155b2e21ff862f42c67bc",
+    "nativeLINKSha256": "c385969ceb184083e5318c89cfe68cb050e2d72de02824f0ff444a08cca2a7f3",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 12693.5,
+      "overlap_cells": 156,
+      "walkable_overlap_cells": 156,
+      "selected_component_overlap_cells": 156,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          902,
+          492
+        ],
+        "cell_bounds": [
+          9020,
+          4920,
+          9030,
+          4930
+        ],
+        "clipped_polygon": [
+          [
+            9030.0,
+            4930
+          ],
+          [
+            9030,
+            4925.253012048192
+          ],
+          [
+            9022,
+            4924
+          ],
+          [
+            9022.841121495327,
+            4930
+          ]
+        ],
+        "intersection_area": 40.464587323367596
+      },
+      "bounds": [
+        9022,
+        4924,
+        9188,
+        5031
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 23,
+    "map_file": "qw0023",
+    "proc_id": 2,
+    "map_to": 16,
+    "to_x": 5429,
+    "to_y": 5546,
+    "to_dir": 107,
+    "back_x": 9371,
+    "back_y": 2073,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      9478,
+      1942,
+      9594,
+      2009,
+      9637,
+      1933,
+      9550,
+      1886
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 3
+    },
+    "nativePRCSha256": "10a1789144d7001205b02fe42ecc0909d60ec8ab0e69eadf52ebe0ee020d8763",
+    "nativeLINKSha256": "9846c9b18209041c79cdf6b7cc14cc44d907105ac1c4e7f7cb50023389ac6988",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 9976.5,
+      "overlap_cells": 129,
+      "walkable_overlap_cells": 99,
+      "selected_component_overlap_cells": 99,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          953,
+          189
+        ],
+        "cell_bounds": [
+          9530,
+          1890,
+          9540,
+          1900
+        ],
+        "clipped_polygon": [
+          [
+            9540.0,
+            1900
+          ],
+          [
+            9540,
+            1893.7777777777778
+          ],
+          [
+            9532.0,
+            1900
+          ]
+        ],
+        "intersection_area": 24.88888888992369
+      },
+      "bounds": [
+        9478,
+        1886,
+        9637,
+        2009
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 23,
+    "map_file": "qw0023",
+    "proc_id": 3,
+    "map_to": 71,
+    "to_x": 17002,
+    "to_y": 3778,
+    "to_dir": 67,
+    "back_x": 4887,
+    "back_y": 4739,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      4637,
+      4838,
+      4751,
+      4907,
+      4828,
+      4840,
+      4728,
+      4783
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 4
+    },
+    "nativePRCSha256": "10a1789144d7001205b02fe42ecc0909d60ec8ab0e69eadf52ebe0ee020d8763",
+    "nativeLINKSha256": "9846c9b18209041c79cdf6b7cc14cc44d907105ac1c4e7f7cb50023389ac6988",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11819.0,
+      "overlap_cells": 152,
+      "walkable_overlap_cells": 152,
+      "selected_component_overlap_cells": 152,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          471,
+          478
+        ],
+        "cell_bounds": [
+          4710,
+          4780,
+          4720,
+          4790
+        ],
+        "clipped_polygon": [
+          [
+            4720.0,
+            4790
+          ],
+          [
+            4720,
+            4787.8351648351645
+          ],
+          [
+            4716.418181818181,
+            4790
+          ]
+        ],
+        "intersection_area": 3.8770229779183865
+      },
+      "bounds": [
+        4637,
+        4783,
+        4828,
+        4907
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 24,
+    "map_file": "qw0024",
+    "proc_id": 2,
+    "map_to": 17,
+    "to_x": 4700,
+    "to_y": 5230,
+    "to_dir": 155,
+    "back_x": 11421,
+    "back_y": 3090,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      11480,
+      2898,
+      11613,
+      2961,
+      11662,
+      2879,
+      11550,
+      2809
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 2
+    },
+    "nativePRCSha256": "bf73e1722e91863a1ca66aedfa590bdbbc60973ed9010331b807c1f7c7656763",
+    "nativeLINKSha256": "2720d80d43ea16d416d0ed64d92f2b3c66b3f1ab7df887811c7fb28bf5e6f5b8",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 14430.5,
+      "overlap_cells": 180,
+      "walkable_overlap_cells": 120,
+      "selected_component_overlap_cells": 120,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1156,
+          284
+        ],
+        "cell_bounds": [
+          11560,
+          2840,
+          11570,
+          2850
+        ],
+        "clipped_polygon": [
+          [
+            11560.0,
+            2840
+          ],
+          [
+            11560.0,
+            2850
+          ],
+          [
+            11570.0,
+            2850
+          ],
+          [
+            11570.0,
+            2840
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        11480,
+        2809,
+        11662,
+        2961
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 27,
+    "map_file": "qw0027",
+    "proc_id": 2,
+    "map_to": 14,
+    "to_x": 10080,
+    "to_y": 5043,
+    "to_dir": 111,
+    "back_x": 3842,
+    "back_y": 1995,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      3631,
+      2129,
+      3714,
+      2205,
+      3823,
+      2146,
+      3744,
+      2076
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 1
+    },
+    "nativePRCSha256": "0d1c428442421947e2e6db0a53599a5876c18e85956c6dabba2804fff6592fea",
+    "nativeLINKSha256": "97117f0058e842eab95ac35f0dd2340ed5f69a9c0358a41914e8fbf8df48919c",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 12639.0,
+      "overlap_cells": 159,
+      "walkable_overlap_cells": 159,
+      "selected_component_overlap_cells": 159,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          373,
+          207
+        ],
+        "cell_bounds": [
+          3730,
+          2070,
+          3740,
+          2080
+        ],
+        "clipped_polygon": [
+          [
+            3740.0,
+            2080
+          ],
+          [
+            3740,
+            2077.8761061946902
+          ],
+          [
+            3735.471698113208,
+            2080
+          ]
+        ],
+        "intersection_area": 4.8088161633349955
+      },
+      "bounds": [
+        3631,
+        2076,
+        3823,
+        2205
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 27,
+    "map_file": "qw0027",
+    "proc_id": 3,
+    "map_to": 31,
+    "to_x": 9648,
+    "to_y": 1920,
+    "to_dir": 67,
+    "back_x": 5460,
+    "back_y": 5566,
+    "back_dir": 155,
+    "script": "",
+    "verifiedPoly": [
+      5191,
+      5758,
+      5309,
+      5832,
+      5381,
+      5746,
+      5255,
+      5677
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 2
+    },
+    "nativePRCSha256": "0d1c428442421947e2e6db0a53599a5876c18e85956c6dabba2804fff6592fea",
+    "nativeLINKSha256": "97117f0058e842eab95ac35f0dd2340ed5f69a9c0358a41914e8fbf8df48919c",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 15049.0,
+      "overlap_cells": 187,
+      "walkable_overlap_cells": 138,
+      "selected_component_overlap_cells": 138,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          525,
+          567
+        ],
+        "cell_bounds": [
+          5250,
+          5670,
+          5260,
+          5680
+        ],
+        "clipped_polygon": [
+          [
+            5252.62962962963,
+            5680
+          ],
+          [
+            5260.0,
+            5680
+          ],
+          [
+            5260,
+            5679.738095238095
+          ],
+          [
+            5255,
+            5677
+          ]
+        ],
+        "intersection_area": 11.710317460820079
+      },
+      "bounds": [
+        5191,
+        5677,
+        5381,
+        5832
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 29,
+    "map_file": "qw0029",
+    "proc_id": 2,
+    "map_to": 28,
+    "to_x": 11826,
+    "to_y": 4287,
+    "to_dir": 111,
+    "back_x": 4144,
+    "back_y": 2556,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      3819,
+      2601,
+      3924,
+      2643,
+      3989,
+      2544,
+      3872,
+      2511
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 2
+    },
+    "nativePRCSha256": "c2f115785e2023e674d1396525781f27548762b2d557d02a61eb0053fc12fe2e",
+    "nativeLINKSha256": "9b4a05b65763869d0341ec2f965071a1c048387401ca2572efddbc5050751e66",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 12702.0,
+      "overlap_cells": 157,
+      "walkable_overlap_cells": 157,
+      "selected_component_overlap_cells": 157,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          386,
+          251
+        ],
+        "cell_bounds": [
+          3860,
+          2510,
+          3870,
+          2520
+        ],
+        "clipped_polygon": [
+          [
+            3870.0,
+            2520
+          ],
+          [
+            3870,
+            2514.396226415094
+          ],
+          [
+            3866.7,
+            2520
+          ]
+        ],
+        "intersection_area": 9.246226415038109
+      },
+      "bounds": [
+        3819,
+        2511,
+        3989,
+        2643
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 29,
+    "map_file": "qw0029",
+    "proc_id": 3,
+    "map_to": 901,
+    "to_x": 1138,
+    "to_y": 2846,
+    "to_dir": 112,
+    "back_x": 11649,
+    "back_y": 2944,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      11724,
+      2787,
+      11827,
+      2855,
+      11905,
+      2785,
+      11811,
+      2729
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 3
+    },
+    "nativePRCSha256": "c2f115785e2023e674d1396525781f27548762b2d557d02a61eb0053fc12fe2e",
+    "nativeLINKSha256": "9b4a05b65763869d0341ec2f965071a1c048387401ca2572efddbc5050751e66",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11419.0,
+      "overlap_cells": 147,
+      "walkable_overlap_cells": 113,
+      "selected_component_overlap_cells": 113,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1182,
+          273
+        ],
+        "cell_bounds": [
+          11820,
+          2730,
+          11830,
+          2740
+        ],
+        "clipped_polygon": [
+          [
+            11820.0,
+            2740
+          ],
+          [
+            11829.464285714286,
+            2740
+          ],
+          [
+            11820,
+            2734.3617021276596
+          ]
+        ],
+        "intersection_area": 26.681231003254652
+      },
+      "bounds": [
+        11724,
+        2729,
+        11905,
+        2855
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 31,
+    "map_file": "qw0031",
+    "proc_id": 3,
+    "map_to": 22,
+    "to_x": 8889,
+    "to_y": 4994,
+    "to_dir": 63,
+    "back_x": 4752,
+    "back_y": 1961,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      4531,
+      1815,
+      4601,
+      1878,
+      4705,
+      1820,
+      4617,
+      1747
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 1
+    },
+    "nativePRCSha256": "84219b61653ed529dfdb55d01c20041139bb31f88188003d72e18b14268f1dc9",
+    "nativeLINKSha256": "af3ae2ea7c9c29edb05b281efc361395a5cd2bdc7f4ebc3b9d3c86ddcb2d906a",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11437.0,
+      "overlap_cells": 147,
+      "walkable_overlap_cells": 117,
+      "selected_component_overlap_cells": 117,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          460,
+          176
+        ],
+        "cell_bounds": [
+          4600,
+          1760,
+          4610,
+          1770
+        ],
+        "clipped_polygon": [
+          [
+            4610.0,
+            1770
+          ],
+          [
+            4610.0,
+            1760
+          ],
+          [
+            4600.558823529412,
+            1760
+          ],
+          [
+            4600,
+            1760.4418604651162
+          ],
+          [
+            4600.0,
+            1770
+          ]
+        ],
+        "intersection_area": 99.87653898773715
+      },
+      "bounds": [
+        4531,
+        1747,
+        4705,
+        1878
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 31,
+    "map_file": "qw0031",
+    "proc_id": 4,
+    "map_to": 30,
+    "to_x": 1868,
+    "to_y": 3340,
+    "to_dir": 19,
+    "back_x": 12140,
+    "back_y": 4133,
+    "back_dir": 111,
+    "script": "",
+    "verifiedPoly": [
+      12254,
+      4232,
+      12337,
+      4288,
+      12421,
+      4228,
+      12340,
+      4165
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 4,
+      "record_index": 2
+    },
+    "nativePRCSha256": "84219b61653ed529dfdb55d01c20041139bb31f88188003d72e18b14268f1dc9",
+    "nativeLINKSha256": "af3ae2ea7c9c29edb05b281efc361395a5cd2bdc7f4ebc3b9d3c86ddcb2d906a",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 10264.5,
+      "overlap_cells": 132,
+      "walkable_overlap_cells": 102,
+      "selected_component_overlap_cells": 102,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1233,
+          416
+        ],
+        "cell_bounds": [
+          12330,
+          4160,
+          12340,
+          4170
+        ],
+        "clipped_polygon": [
+          [
+            12333.58208955224,
+            4170
+          ],
+          [
+            12340.0,
+            4170
+          ],
+          [
+            12340,
+            4165.0
+          ],
+          [
+            12340,
+            4165
+          ]
+        ],
+        "intersection_area": 16.044776119291782
+      },
+      "bounds": [
+        12254,
+        4165,
+        12421,
+        4288
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 31,
+    "map_file": "qw0031",
+    "proc_id": 5,
+    "map_to": 27,
+    "to_x": 5460,
+    "to_y": 5566,
+    "to_dir": 155,
+    "back_x": 9648,
+    "back_y": 1920,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      9682,
+      1768,
+      9805,
+      1826,
+      9862,
+      1748,
+      9755,
+      1701
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 5,
+      "record_index": 3
+    },
+    "nativePRCSha256": "84219b61653ed529dfdb55d01c20041139bb31f88188003d72e18b14268f1dc9",
+    "nativeLINKSha256": "af3ae2ea7c9c29edb05b281efc361395a5cd2bdc7f4ebc3b9d3c86ddcb2d906a",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11750.0,
+      "overlap_cells": 148,
+      "walkable_overlap_cells": 95,
+      "selected_component_overlap_cells": 95,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          977,
+          172
+        ],
+        "cell_bounds": [
+          9770,
+          1720,
+          9780,
+          1730
+        ],
+        "clipped_polygon": [
+          [
+            9770.0,
+            1720
+          ],
+          [
+            9770.0,
+            1730
+          ],
+          [
+            9780.0,
+            1730
+          ],
+          [
+            9780.0,
+            1720
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        9682,
+        1701,
+        9862,
+        1826
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 33,
+    "map_file": "qw0033",
+    "proc_id": 2,
+    "map_to": 12,
+    "to_x": 6964,
+    "to_y": 584,
+    "to_dir": 19,
+    "back_x": 13557,
+    "back_y": 3609,
+    "back_dir": 111,
+    "script": "",
+    "verifiedPoly": [
+      13743,
+      3706,
+      13802,
+      3818,
+      13940,
+      3739,
+      13864,
+      3647
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 1
+    },
+    "nativePRCSha256": "d63a981e8ba69fc145fdcc316934afcbf91dbd3563549a0fe1879e59f07db299",
+    "nativeLINKSha256": "822e8367c89c4f00a4300aa488ae6e878c1e3e72e949ec0d8a51fdc389c9ad45",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 17866.5,
+      "overlap_cells": 216,
+      "walkable_overlap_cells": 88,
+      "selected_component_overlap_cells": 88,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1385,
+          364
+        ],
+        "cell_bounds": [
+          13850,
+          3640,
+          13860,
+          3650
+        ],
+        "clipped_polygon": [
+          [
+            13860.0,
+            3650
+          ],
+          [
+            13860,
+            3648.9504132231405
+          ],
+          [
+            13857.847457627118,
+            3650
+          ]
+        ],
+        "intersection_area": 1.1296400055289268
+      },
+      "bounds": [
+        13743,
+        3647,
+        13940,
+        3818
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 33,
+    "map_file": "qw0033",
+    "proc_id": 3,
+    "map_to": 35,
+    "to_x": 7226,
+    "to_y": 249,
+    "to_dir": 112,
+    "back_x": 1815,
+    "back_y": 4174,
+    "back_dir": 155,
+    "script": "",
+    "verifiedPoly": [
+      1495,
+      4295,
+      1619,
+      4380,
+      1746,
+      4300,
+      1610,
+      4211
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 2
+    },
+    "nativePRCSha256": "d63a981e8ba69fc145fdcc316934afcbf91dbd3563549a0fe1879e59f07db299",
+    "nativeLINKSha256": "822e8367c89c4f00a4300aa488ae6e878c1e3e72e949ec0d8a51fdc389c9ad45",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 21187.0,
+      "overlap_cells": 254,
+      "walkable_overlap_cells": 58,
+      "selected_component_overlap_cells": 58,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          159,
+          421
+        ],
+        "cell_bounds": [
+          1590,
+          4210,
+          1600,
+          4220
+        ],
+        "clipped_polygon": [
+          [
+            1600.0,
+            4220
+          ],
+          [
+            1600,
+            4218.304347826087
+          ],
+          [
+            1597.6785714285716,
+            4220
+          ]
+        ],
+        "intersection_area": 1.9681677017360926
+      },
+      "bounds": [
+        1495,
+        4211,
+        1746,
+        4380
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 33,
+    "map_file": "qw0033",
+    "proc_id": 4,
+    "map_to": 76,
+    "to_x": 13402,
+    "to_y": 6607,
+    "to_dir": 111,
+    "back_x": 3749,
+    "back_y": 2022,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      3542,
+      1900,
+      3621,
+      1979,
+      3733,
+      1915,
+      3666,
+      1832
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 4,
+      "record_index": 3
+    },
+    "nativePRCSha256": "d63a981e8ba69fc145fdcc316934afcbf91dbd3563549a0fe1879e59f07db299",
+    "nativeLINKSha256": "822e8367c89c4f00a4300aa488ae6e878c1e3e72e949ec0d8a51fdc389c9ad45",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 14376.0,
+      "overlap_cells": 175,
+      "walkable_overlap_cells": 175,
+      "selected_component_overlap_cells": 175,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          365,
+          183
+        ],
+        "cell_bounds": [
+          3650,
+          1830,
+          3660,
+          1840
+        ],
+        "clipped_polygon": [
+          [
+            3660.0,
+            1840
+          ],
+          [
+            3660,
+            1835.2903225806451
+          ],
+          [
+            3651.4117647058824,
+            1840
+          ]
+        ],
+        "intersection_area": 20.223908918444067
+      },
+      "bounds": [
+        3542,
+        1832,
+        3733,
+        1979
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 33,
+    "map_file": "qw0033",
+    "proc_id": 5,
+    "map_to": 82,
+    "to_x": 7006,
+    "to_y": 8090,
+    "to_dir": 155,
+    "back_x": 10029,
+    "back_y": 1676,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      10097,
+      1554,
+      10222,
+      1624,
+      10282,
+      1549,
+      10169,
+      1493
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 5,
+      "record_index": 4
+    },
+    "nativePRCSha256": "d63a981e8ba69fc145fdcc316934afcbf91dbd3563549a0fe1879e59f07db299",
+    "nativeLINKSha256": "822e8367c89c4f00a4300aa488ae6e878c1e3e72e949ec0d8a51fdc389c9ad45",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 12250.0,
+      "overlap_cells": 157,
+      "walkable_overlap_cells": 121,
+      "selected_component_overlap_cells": 121,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1013,
+          151
+        ],
+        "cell_bounds": [
+          10130,
+          1510,
+          10140,
+          1520
+        ],
+        "clipped_polygon": [
+          [
+            10140.0,
+            1520
+          ],
+          [
+            10140,
+            1517.5694444444446
+          ],
+          [
+            10137.131147540984,
+            1520
+          ]
+        ],
+        "intersection_area": 3.486452640965581
+      },
+      "bounds": [
+        10097,
+        1493,
+        10282,
+        1624
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 36,
+    "map_file": "qw0036",
+    "proc_id": 2,
+    "map_to": 77,
+    "to_x": 14761,
+    "to_y": 7363,
+    "to_dir": 67,
+    "back_x": 3502,
+    "back_y": 2230,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      3234,
+      2092,
+      3323,
+      2169,
+      3419,
+      2102,
+      3346,
+      2030
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 1
+    },
+    "nativePRCSha256": "13504da3c6b447ae6ae1952497efca9523c52dec3c41a286eb81f9e9a633436f",
+    "nativeLINKSha256": "a4b7e745f32102533de481edb86329223fecc457171a0eb96edcee4755b9f389",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 12972.5,
+      "overlap_cells": 161,
+      "walkable_overlap_cells": 161,
+      "selected_component_overlap_cells": 161,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          332,
+          203
+        ],
+        "cell_bounds": [
+          3320,
+          2030,
+          3330,
+          2040
+        ],
+        "clipped_polygon": [
+          [
+            3330.0,
+            2040
+          ],
+          [
+            3330,
+            2038.857142857143
+          ],
+          [
+            3327.935483870968,
+            2040
+          ]
+        ],
+        "intersection_area": 1.179723502136767
+      },
+      "bounds": [
+        3234,
+        2030,
+        3419,
+        2169
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 36,
+    "map_file": "qw0036",
+    "proc_id": 3,
+    "map_to": 35,
+    "to_x": 5919,
+    "to_y": 6302,
+    "to_dir": 112,
+    "back_x": 11343,
+    "back_y": 2345,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      11420,
+      2223,
+      11518,
+      2288,
+      11600,
+      2219,
+      11502,
+      2163
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 2
+    },
+    "nativePRCSha256": "13504da3c6b447ae6ae1952497efca9523c52dec3c41a286eb81f9e9a633436f",
+    "nativeLINKSha256": "a4b7e745f32102533de481edb86329223fecc457171a0eb96edcee4755b9f389",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11282.0,
+      "overlap_cells": 141,
+      "walkable_overlap_cells": 42,
+      "selected_component_overlap_cells": 42,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1152,
+          219
+        ],
+        "cell_bounds": [
+          11520,
+          2190,
+          11530,
+          2200
+        ],
+        "clipped_polygon": [
+          [
+            11520.0,
+            2190
+          ],
+          [
+            11520.0,
+            2200
+          ],
+          [
+            11530.0,
+            2200
+          ],
+          [
+            11530.0,
+            2190
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        11420,
+        2163,
+        11600,
+        2288
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 36,
+    "map_file": "qw0036",
+    "proc_id": 4,
+    "map_to": 78,
+    "to_x": 5685,
+    "to_y": 2137,
+    "to_dir": 19,
+    "back_x": 8849,
+    "back_y": 6078,
+    "back_dir": 111,
+    "script": "",
+    "verifiedPoly": [
+      8967,
+      6208,
+      9057,
+      6281,
+      9173,
+      6211,
+      9105,
+      6144
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 4,
+      "record_index": 3
+    },
+    "nativePRCSha256": "13504da3c6b447ae6ae1952497efca9523c52dec3c41a286eb81f9e9a633436f",
+    "nativeLINKSha256": "a4b7e745f32102533de481edb86329223fecc457171a0eb96edcee4755b9f389",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 14183.0,
+      "overlap_cells": 180,
+      "walkable_overlap_cells": 179,
+      "selected_component_overlap_cells": 179,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          909,
+          614
+        ],
+        "cell_bounds": [
+          9090,
+          6140,
+          9100,
+          6150
+        ],
+        "clipped_polygon": [
+          [
+            9100.0,
+            6150
+          ],
+          [
+            9100,
+            6146.31884057971
+          ],
+          [
+            9092.0625,
+            6150
+          ]
+        ],
+        "intersection_area": 14.609601449221373
+      },
+      "bounds": [
+        8967,
+        6144,
+        9173,
+        6281
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 43,
+    "map_file": "qw0043",
+    "proc_id": 2,
+    "map_to": 4,
+    "to_x": 6466,
+    "to_y": 1167,
+    "to_dir": 19,
+    "back_x": 11248,
+    "back_y": 6342,
+    "back_dir": 107,
+    "script": "",
+    "verifiedPoly": [
+      11371,
+      6386,
+      11445,
+      6457,
+      11544,
+      6409,
+      11458,
+      6334
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 5
+    },
+    "nativePRCSha256": "37b92caa9fa669fba26e212ca04c900252a019c2d2a6938c98eaf2891af249d4",
+    "nativeLINKSha256": "3f98a0197622477cd1b9b1ce84e0bda81b4c4e11950d70dcb8ef55fd8ba94053",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 10789.0,
+      "overlap_cells": 140,
+      "walkable_overlap_cells": 140,
+      "selected_component_overlap_cells": 140,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1144,
+          633
+        ],
+        "cell_bounds": [
+          11440,
+          6330,
+          11450,
+          6340
+        ],
+        "clipped_polygon": [
+          [
+            11450.0,
+            6340
+          ],
+          [
+            11450,
+            6338.781609195402
+          ],
+          [
+            11447.961538461537,
+            6340
+          ]
+        ],
+        "intersection_area": 1.241821400821209
+      },
+      "bounds": [
+        11371,
+        6334,
+        11544,
+        6457
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 43,
+    "map_file": "qw0043",
+    "proc_id": 3,
+    "map_to": 8,
+    "to_x": 7700,
+    "to_y": 984,
+    "to_dir": 67,
+    "back_x": 5111,
+    "back_y": 6238,
+    "back_dir": 155,
+    "script": "",
+    "verifiedPoly": [
+      4816,
+      6384,
+      4968,
+      6484,
+      5048,
+      6374,
+      4916,
+      6313
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 6
+    },
+    "nativePRCSha256": "37b92caa9fa669fba26e212ca04c900252a019c2d2a6938c98eaf2891af249d4",
+    "nativeLINKSha256": "3f98a0197622477cd1b9b1ce84e0bda81b4c4e11950d70dcb8ef55fd8ba94053",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 20096.0,
+      "overlap_cells": 240,
+      "walkable_overlap_cells": 222,
+      "selected_component_overlap_cells": 222,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          490,
+          631
+        ],
+        "cell_bounds": [
+          4900,
+          6310,
+          4910,
+          6320
+        ],
+        "clipped_polygon": [
+          [
+            4910.0,
+            6320
+          ],
+          [
+            4910,
+            6317.26
+          ],
+          [
+            4906.140845070423,
+            6320
+          ]
+        ],
+        "intersection_area": 5.2870422545820475
+      },
+      "bounds": [
+        4816,
+        6313,
+        5048,
+        6484
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 49,
+    "map_file": "qw0049",
+    "proc_id": 3,
+    "map_to": 37,
+    "to_x": 8087,
+    "to_y": 1572,
+    "to_dir": 67,
+    "back_x": 4335,
+    "back_y": 5979,
+    "back_dir": 155,
+    "script": "",
+    "verifiedPoly": [
+      4074,
+      6099,
+      4178,
+      6159,
+      4245,
+      6095,
+      4148,
+      6044
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 0
+    },
+    "nativePRCSha256": "91467013e8488dba0e7f1a94f5bf4e14f331e2eba2c78c0914329636d98d195a",
+    "nativeLINKSha256": "7f15ee4158711b55ddd898a5d1aeb53db49e3955c675b7950aebd04725fc89eb",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 9892.5,
+      "overlap_cells": 125,
+      "walkable_overlap_cells": 105,
+      "selected_component_overlap_cells": 105,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          413,
+          604
+        ],
+        "cell_bounds": [
+          4130,
+          6040,
+          4140,
+          6050
+        ],
+        "clipped_polygon": [
+          [
+            4140.0,
+            6050
+          ],
+          [
+            4140,
+            6049.945945945946
+          ],
+          [
+            4139.927272727273,
+            6050
+          ]
+        ],
+        "intersection_area": 0.001965602859854698
+      },
+      "bounds": [
+        4074,
+        6044,
+        4245,
+        6159
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 49,
+    "map_file": "qw0049",
+    "proc_id": 1,
+    "map_to": 48,
+    "to_x": 12653,
+    "to_y": 6522,
+    "to_dir": 111,
+    "back_x": 5281,
+    "back_y": 2610,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      5022,
+      2475,
+      5090,
+      2540,
+      5185,
+      2479,
+      5129,
+      2416
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 1,
+      "record_index": 1
+    },
+    "nativePRCSha256": "91467013e8488dba0e7f1a94f5bf4e14f331e2eba2c78c0914329636d98d195a",
+    "nativeLINKSha256": "7f15ee4158711b55ddd898a5d1aeb53db49e3955c675b7950aebd04725fc89eb",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 10184.0,
+      "overlap_cells": 133,
+      "walkable_overlap_cells": 97,
+      "selected_component_overlap_cells": 97,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          511,
+          244
+        ],
+        "cell_bounds": [
+          5110,
+          2440,
+          5120,
+          2450
+        ],
+        "clipped_polygon": [
+          [
+            5120.0,
+            2450
+          ],
+          [
+            5120.0,
+            2440
+          ],
+          [
+            5110.0,
+            2440
+          ],
+          [
+            5110.0,
+            2450
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        5022,
+        2416,
+        5185,
+        2540
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 49,
+    "map_file": "qw0049",
+    "proc_id": 2,
+    "map_to": 63,
+    "to_x": 8127,
+    "to_y": 2252,
+    "to_dir": 15,
+    "back_x": 13039,
+    "back_y": 6321,
+    "back_dir": 111,
+    "script": "",
+    "verifiedPoly": [
+      13179,
+      6395,
+      13263,
+      6464,
+      13355,
+      6410,
+      13296,
+      6337
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 2
+    },
+    "nativePRCSha256": "91467013e8488dba0e7f1a94f5bf4e14f331e2eba2c78c0914329636d98d195a",
+    "nativeLINKSha256": "7f15ee4158711b55ddd898a5d1aeb53db49e3955c675b7950aebd04725fc89eb",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 11423.5,
+      "overlap_cells": 149,
+      "walkable_overlap_cells": 131,
+      "selected_component_overlap_cells": 131,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          1328,
+          633
+        ],
+        "cell_bounds": [
+          13280,
+          6330,
+          13290,
+          6340
+        ],
+        "clipped_polygon": [
+          [
+            13290.0,
+            6340
+          ],
+          [
+            13290,
+            6339.974358974359
+          ],
+          [
+            13289.948275862069,
+            6340
+          ]
+        ],
+        "intersection_area": 0.0006631389260292053
+      },
+      "bounds": [
+        13179,
+        6337,
+        13355,
+        6464
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 66,
+    "map_file": "qw0066",
+    "proc_id": 2,
+    "map_to": 65,
+    "to_x": 11211,
+    "to_y": 7149,
+    "to_dir": 107,
+    "back_x": 5618,
+    "back_y": 2465,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      5361,
+      2309,
+      5425,
+      2372,
+      5522,
+      2312,
+      5458,
+      2254
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 0
+    },
+    "nativePRCSha256": "b686b1fedcf2f2b4d3f26f429d93a43027a84ee691780063e4b81a19964e82d4",
+    "nativeLINKSha256": "cbca707944526d400856d2ec7785558af6459b54e7c29d0b7d05be135b2c46a9",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 9548.5,
+      "overlap_cells": 122,
+      "walkable_overlap_cells": 81,
+      "selected_component_overlap_cells": 81,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          544,
+          228
+        ],
+        "cell_bounds": [
+          5440,
+          2280,
+          5450,
+          2290
+        ],
+        "clipped_polygon": [
+          [
+            5450.0,
+            2290
+          ],
+          [
+            5450.0,
+            2280
+          ],
+          [
+            5440.0,
+            2280
+          ],
+          [
+            5440.0,
+            2290
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        5361,
+        2254,
+        5522,
+        2372
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 73,
+    "map_file": "qw0073",
+    "proc_id": 2,
+    "map_to": 12,
+    "to_x": 10266,
+    "to_y": 5338,
+    "to_dir": 111,
+    "back_x": 4929,
+    "back_y": 2463,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      4673,
+      2347,
+      4728,
+      2415,
+      4736,
+      2419,
+      4860,
+      2345,
+      4775,
+      2288
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 3
+    },
+    "nativePRCSha256": "c3373a6cc1480acf74704d38c8aec5173ef6dee51b0540bde62fcb44a9800ba8",
+    "nativeLINKSha256": "55d531a69eb6c11de4a4fb370ada2d9cf2fdd77793bc23d2e4d61438763116b9",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 12371.5,
+      "overlap_cells": 156,
+      "walkable_overlap_cells": 96,
+      "selected_component_overlap_cells": 96,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          473,
+          231
+        ],
+        "cell_bounds": [
+          4730,
+          2310,
+          4740,
+          2320
+        ],
+        "clipped_polygon": [
+          [
+            4740.0,
+            2320
+          ],
+          [
+            4740.0,
+            2310
+          ],
+          [
+            4736.966101694915,
+            2310
+          ],
+          [
+            4730,
+            2314.029411764706
+          ],
+          [
+            4730.0,
+            2320
+          ]
+        ],
+        "intersection_area": 85.96535393875092
+      },
+      "bounds": [
+        4673,
+        2288,
+        4860,
+        2419
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 74,
+    "map_file": "qw0074",
+    "proc_id": 2,
+    "map_to": 12,
+    "to_x": 9234,
+    "to_y": 1435,
+    "to_dir": 67,
+    "back_x": 4586,
+    "back_y": 6520,
+    "back_dir": 155,
+    "script": "",
+    "verifiedPoly": [
+      4195,
+      6646,
+      4320,
+      6727,
+      4446,
+      6620,
+      4301,
+      6553
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 2
+    },
+    "nativePRCSha256": "b692937b9961f1b09f58d954ea4dcfd2c4c40bfb2b847b44493a9c7b38bb0746",
+    "nativeLINKSha256": "0b1dcd37cb553fd538d3c3259afc5576452225dd13ec79dcc208978a3e771ee1",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 22084.0,
+      "overlap_cells": 264,
+      "walkable_overlap_cells": 88,
+      "selected_component_overlap_cells": 88,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          429,
+          655
+        ],
+        "cell_bounds": [
+          4290,
+          6550,
+          4300,
+          6560
+        ],
+        "clipped_polygon": [
+          [
+            4300.0,
+            6560
+          ],
+          [
+            4300,
+            6553.877358490566
+          ],
+          [
+            4293.021505376344,
+            6560
+          ]
+        ],
+        "intersection_area": 21.36341042816639
+      },
+      "bounds": [
+        4195,
+        6553,
+        4446,
+        6727
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 111,
+    "map_file": "qw0111",
+    "proc_id": 2,
+    "map_to": 110,
+    "to_x": 14149,
+    "to_y": 3694,
+    "to_dir": 67,
+    "back_x": 1794,
+    "back_y": 3803,
+    "back_dir": 19,
+    "script": "",
+    "verifiedPoly": [
+      1530,
+      3677,
+      1589,
+      3732,
+      1696,
+      3672,
+      1635,
+      3607
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 0
+    },
+    "nativePRCSha256": "e5aeee16ead21e91f109c2cddac9060334e015d41c1eef5d7fdd536e7361b65c",
+    "nativeLINKSha256": "2318f264647b39cd1bef208bf90f0e545e22a799363307e319d03f72e14548f3",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 10260.0,
+      "overlap_cells": 131,
+      "walkable_overlap_cells": 119,
+      "selected_component_overlap_cells": 119,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          160,
+          362
+        ],
+        "cell_bounds": [
+          1600,
+          3620,
+          1610,
+          3630
+        ],
+        "clipped_polygon": [
+          [
+            1610.0,
+            3630
+          ],
+          [
+            1610,
+            3623.666666666667
+          ],
+          [
+            1600.5000000000002,
+            3630
+          ]
+        ],
+        "intersection_area": 30.083333333022892
+      },
+      "bounds": [
+        1530,
+        3607,
+        1696,
+        3732
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 111,
+    "map_file": "qw0111",
+    "proc_id": 3,
+    "map_to": 112,
+    "to_x": 14114,
+    "to_y": 3696,
+    "to_dir": 67,
+    "back_x": 7978,
+    "back_y": 7007,
+    "back_dir": 155,
+    "script": "",
+    "verifiedPoly": [
+      7686,
+      7074,
+      7780,
+      7134,
+      7863,
+      7081,
+      7775,
+      7012
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 1
+    },
+    "nativePRCSha256": "e5aeee16ead21e91f109c2cddac9060334e015d41c1eef5d7fdd536e7361b65c",
+    "nativeLINKSha256": "2318f264647b39cd1bef208bf90f0e545e22a799363307e319d03f72e14548f3",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 10779.5,
+      "overlap_cells": 138,
+      "walkable_overlap_cells": 138,
+      "selected_component_overlap_cells": 138,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          776,
+          701
+        ],
+        "cell_bounds": [
+          7760,
+          7010,
+          7770,
+          7020
+        ],
+        "clipped_polygon": [
+          [
+            7770.0,
+            7020
+          ],
+          [
+            7770,
+            7015.483146067416
+          ],
+          [
+            7763.5161290322585,
+            7020
+          ]
+        ],
+        "intersection_area": 14.643349040299654
+      },
+      "bounds": [
+        7686,
+        7012,
+        7863,
+        7134
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 902,
+    "map_file": "qw0902",
+    "proc_id": 3,
+    "map_to": 901,
+    "to_x": 5879,
+    "to_y": 3103,
+    "to_dir": 112,
+    "back_x": 6023,
+    "back_y": 3057,
+    "back_dir": 112,
+    "script": "",
+    "verifiedPoly": [
+      6146,
+      3022,
+      6190,
+      3039,
+      6238,
+      3025,
+      6294,
+      2985,
+      6293,
+      2933,
+      6246,
+      2903,
+      6149,
+      2970
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 3,
+      "record_index": 0
+    },
+    "nativePRCSha256": "8e5a8edc3db2391fa39ac64a772ed7f0898dc662a11d4293c5f4c9fe547fc97d",
+    "nativeLINKSha256": "abd033f229e82c701911c101bdcb2fb14dde6c83f2a9a02d0870e2b7a4270912",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 13224.5,
+      "overlap_cells": 163,
+      "walkable_overlap_cells": 42,
+      "selected_component_overlap_cells": 42,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          622,
+          291
+        ],
+        "cell_bounds": [
+          6220,
+          2910,
+          6230,
+          2920
+        ],
+        "clipped_polygon": [
+          [
+            6230.0,
+            2920
+          ],
+          [
+            6230,
+            2914.0515463917527
+          ],
+          [
+            6221.388059701492,
+            2920
+          ]
+        ],
+        "intersection_area": 25.613863671198487
+      },
+      "bounds": [
+        6146,
+        2903,
+        6294,
+        3039
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 902,
+    "map_file": "qw0902",
+    "proc_id": 1,
+    "map_to": 903,
+    "to_x": 5887,
+    "to_y": 5629,
+    "to_dir": 112,
+    "back_x": 6564,
+    "back_y": 5465,
+    "back_dir": 112,
+    "script": "",
+    "verifiedPoly": [
+      6598,
+      5353,
+      6724,
+      5435,
+      6737,
+      5397,
+      6723,
+      5291,
+      6682,
+      5269
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 1,
+      "record_index": 2
+    },
+    "nativePRCSha256": "8e5a8edc3db2391fa39ac64a772ed7f0898dc662a11d4293c5f4c9fe547fc97d",
+    "nativeLINKSha256": "abd033f229e82c701911c101bdcb2fb14dde6c83f2a9a02d0870e2b7a4270912",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 12632.0,
+      "overlap_cells": 155,
+      "walkable_overlap_cells": 70,
+      "selected_component_overlap_cells": 70,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          671,
+          533
+        ],
+        "cell_bounds": [
+          6710,
+          5330,
+          6720,
+          5340
+        ],
+        "clipped_polygon": [
+          [
+            6710.0,
+            5330
+          ],
+          [
+            6710.0,
+            5340
+          ],
+          [
+            6720.0,
+            5340
+          ],
+          [
+            6720.0,
+            5330
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        6598,
+        5269,
+        6737,
+        5435
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 916,
+    "map_file": "qw0916",
+    "proc_id": 2,
+    "map_to": 915,
+    "to_x": 1787,
+    "to_y": 2524,
+    "to_dir": 112,
+    "back_x": 1347,
+    "back_y": 2433,
+    "back_dir": 112,
+    "script": "",
+    "verifiedPoly": [
+      983,
+      2323,
+      1021,
+      2352,
+      1190,
+      2396,
+      1295,
+      2338,
+      1266,
+      2310,
+      985,
+      2297
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 2,
+      "record_index": 0
+    },
+    "nativePRCSha256": "869087704addb295df45608647ac78cbb1de0e99f1cc53ec7a037451462aa7a6",
+    "nativeLINKSha256": "6c6e561d0e96b2929973baf39a10fd00ecb7921755aec631685b9c651bab4443",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 19266.5,
+      "overlap_cells": 236,
+      "walkable_overlap_cells": 117,
+      "selected_component_overlap_cells": 117,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          101,
+          231
+        ],
+        "cell_bounds": [
+          1010,
+          2310,
+          1020,
+          2320
+        ],
+        "clipped_polygon": [
+          [
+            1010.0,
+            2310
+          ],
+          [
+            1010.0,
+            2320
+          ],
+          [
+            1020.0,
+            2320
+          ],
+          [
+            1020.0,
+            2310
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        983,
+        2297,
+        1295,
+        2396
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 916,
+    "map_file": "qw0916",
+    "proc_id": 1,
+    "map_to": 917,
+    "to_x": 1211,
+    "to_y": 2545,
+    "to_dir": 112,
+    "back_x": 5101,
+    "back_y": 1004,
+    "back_dir": 112,
+    "script": "",
+    "verifiedPoly": [
+      5214,
+      941,
+      5232,
+      980,
+      5344,
+      994,
+      5417,
+      972,
+      5435,
+      918,
+      5361,
+      906,
+      5220,
+      920
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 1,
+      "record_index": 1
+    },
+    "nativePRCSha256": "869087704addb295df45608647ac78cbb1de0e99f1cc53ec7a037451462aa7a6",
+    "nativeLINKSha256": "6c6e561d0e96b2929973baf39a10fd00ecb7921755aec631685b9c651bab4443",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 14798.0,
+      "overlap_cells": 182,
+      "walkable_overlap_cells": 80,
+      "selected_component_overlap_cells": 80,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          533,
+          93
+        ],
+        "cell_bounds": [
+          5330,
+          930,
+          5340,
+          940
+        ],
+        "clipped_polygon": [
+          [
+            5330.0,
+            930
+          ],
+          [
+            5330.0,
+            940
+          ],
+          [
+            5340.0,
+            940
+          ],
+          [
+            5340.0,
+            930
+          ]
+        ],
+        "intersection_area": 100.0
+      },
+      "bounds": [
+        5214,
+        906,
+        5435,
+        994
+      ],
+      "reachable": true
+    }
+  },
+  {
+    "map_id": 30600,
+    "map_file": "pw30600",
+    "proc_id": 1,
+    "map_to": 7,
+    "to_x": 8280,
+    "to_y": 3920,
+    "to_dir": 67,
+    "back_x": 3050,
+    "back_y": 2222,
+    "back_dir": 67,
+    "script": "",
+    "verifiedPoly": [
+      3248,
+      2153,
+      3339,
+      2228,
+      3439,
+      2178,
+      3334,
+      2101
+    ],
+    "nativePRCIdentity": {
+      "proc_id": 1,
+      "record_index": 0
+    },
+    "nativePRCSha256": "932a612470f32492d1e0a2f09c59737018d32a53d1d064dfc0d0cca51bdd740b",
+    "nativeLINKSha256": "8b5360e0ab9e962085ad03b91241513e4d40c378046dc0d9ed1b8457afd1bacc",
+    "maskEvidence": {
+      "valid": true,
+      "polygon_area": 12066.0,
+      "overlap_cells": 153,
+      "walkable_overlap_cells": 153,
+      "selected_component_overlap_cells": 153,
+      "other_walkable_components": {},
+      "selected_component_sample": {
+        "cell": [
+          331,
+          210
+        ],
+        "cell_bounds": [
+          3310,
+          2100,
+          3320,
+          2110
+        ],
+        "clipped_polygon": [
+          [
+            3320.0,
+            2110
+          ],
+          [
+            3320,
+            2109.4651162790697
+          ],
+          [
+            3319.1153846153843,
+            2110
+          ]
+        ],
+        "intersection_area": 0.2365831844508648
+      },
+      "bounds": [
+        3248,
+        2101,
+        3439,
+        2228
+      ],
+      "reachable": true
+    }
+  }
+]

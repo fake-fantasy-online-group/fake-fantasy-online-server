@@ -47,6 +47,10 @@ jobs:
           cache: false
       - name: Test bundle safety checks
         run: python3 -B -m unittest discover -s .github/scripts -p 'test_*.py' -v
+      - name: Verify native portal geometry and upgrade contract
+        run: |
+          python3 -B server/tests/test_native_portal_geometry_103.py
+          python3 -B -S server/tests/native_portal_geometry/verify_offline.py --output "${{ runner.temp }}/native-portals-proof.json"
       - name: Verify module downloads
         working-directory: server
         run: |
