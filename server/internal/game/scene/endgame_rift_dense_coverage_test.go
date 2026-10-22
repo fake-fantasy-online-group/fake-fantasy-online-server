@@ -96,13 +96,8 @@ func TestRiftDenseCoverageScenePopulationKeepsLegacyClientBudget(t *testing.T) {
 					if m.MaxHP != domain.RiftScaledStat(100, tier, 1, class, true, s.rift.data.Run.Rules) || m.Stats.MinAtk != domain.RiftScaledStat(30, tier, 1, class, false, s.rift.data.Run.Rules) {
 						t.Fatal("density changed per-monster combat scaling")
 					}
-					if class > 0 && (s.rift.abilities[id] == nil || (len(s.rift.abilities[id].pattern) < int(class)-1 || len(s.rift.abilities[id].pattern) > int(class))) {
-						t.Fatal("elite lost more than the removed golden affix")
-					}
-					for _, a := range s.riftMonsterAbilityIDs(id) {
-						if a == 0 {
-							t.Fatal("golden affix generated")
-						}
+					if class > 0 && (s.rift.abilities[id] == nil || len(s.rift.abilities[id].pattern) != int(class)) {
+						t.Fatal("elite affix allocation changed")
 					}
 				}
 				view := s.riftView(s.players[1], s.rift.data, true, true)

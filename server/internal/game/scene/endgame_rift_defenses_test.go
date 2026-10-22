@@ -14,7 +14,6 @@ func TestRiftMonsterDisabledDefensesScopedAndRestored(t *testing.T) {
 		{Invulnerable: true}, {PhysicalDamageReductionPct: 100}, {MagicDamageReductionPct: 100},
 		{PhysicalReflectPct: 100}, {MagicReflectPct: 100}, {PhysicalReflectFlat: 999},
 		{MagicReflectFlat: 999, ReflectFlatAsMagic: true}, {MagicFullReflectChancePct: 100},
-		{ID: riftGoldenStatus, PhysicalDamageReductionPct: 95, MagicDamageReductionPct: 95, DamageReductionCapPct: 95},
 	}
 	for i, def := range defenses {
 		t.Run(string(rune('a'+i)), func(t *testing.T) {
@@ -57,27 +56,36 @@ func TestRiftMonsterDisabledDefensesScopedAndRestored(t *testing.T) {
 func TestRiftGoldenGenerationAndSavedRulesCompatibility(t *testing.T) {
 	s, m, _, now := riftEliteFixture(t, 0)
 	original, _ := json.Marshal(s.currentRiftRules())
+	seenGolden := false
 	for class := int32(1); class <= 3; class++ {
 		if class == 3 {
 			m.Monster.TypeID = 1011
 		}
 		for seed := uint64(0); seed < 256; seed++ {
 			s.registerEndgameRiftAbilities(m, class, 0, seed, 1)
-			for _, a := range s.rift.abilities[m.ID].pattern {
-				if s.disabledRiftAbility(a) {
-					t.Fatal("golden generated", class, seed)
+			ids := s.riftMonsterAbilityIDs(m.ID)
+			if len(ids) != int(class) {
+				t.Fatal("elite ability allocation changed", class, seed, ids)
+			}
+			unique := map[int32]bool{}
+			for _, id := range ids {
+				if unique[id] {
+					t.Fatal("duplicate ability", ids)
 				}
+				unique[id] = true
+				seenGolden = seenGolden || id == 0
 			}
 		}
 	}
-	if !reflect.DeepEqual(s.riftMonsterAbilityIDs(m.ID), []int32{3, 6}) {
-		t.Fatal("guardian abilities not filtered")
+	if !seenGolden || !reflect.DeepEqual(s.riftMonsterAbilityIDs(m.ID), []int32{0, 3, 6}) {
+		t.Fatal("golden/guardian abilities not restored")
 	}
 	s.rift.abilities[m.ID].pattern = []endgameRiftAbility{0, 3}
+	s.eliteSnapshot().Casters[s.rift.abilities[m.ID].eliteKey].Ready[0] = *now
 	s.stepRiftElite(*now)
-	if m.Status.Has(riftGoldenStatus) || s.riftGoldenUntil(m.ID, *now) != 0 ||
-		!reflect.DeepEqual(s.riftMonsterAbilityIDs(m.ID), []int32{3}) || len(s.riftMonsterAffixes(m.ID)) != 1 {
-		t.Fatal("legacy golden pattern remains active")
+	if !m.Status.Has(riftGoldenStatus) || s.riftGoldenUntil(m.ID, *now) != *now+5000 ||
+		!reflect.DeepEqual(s.riftMonsterAbilityIDs(m.ID), []int32{0, 3}) || len(s.riftMonsterAffixes(m.ID)) != 2 {
+		t.Fatal("saved golden pattern or metadata not restored")
 	}
 	after, _ := json.Marshal(s.currentRiftRules())
 	if string(original) != string(after) {

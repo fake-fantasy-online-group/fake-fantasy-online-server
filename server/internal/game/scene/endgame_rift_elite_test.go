@@ -85,7 +85,7 @@ func TestRiftEliteSuccessfulIndependentCooldowns(t *testing.T) {
 func TestRiftEliteGoldenAndAgilityUseGenericBuckets(t *testing.T) {
 	s, m, _, now := riftEliteFixture(t, 0)
 	s.stepEndgameRiftAbilities(*now)
-	if m.Status.Has(riftGoldenStatus) || m.Status.SuppressesHarmful() {
+	if m.Status.DamageReductionPct(false) != 95 || m.Status.DamageReductionCapPct() != 95 || !m.Status.SuppressesHarmful() {
 		t.Fatal("golden status semantics")
 	}
 	a := s.currentRiftRules().Abilities[5]
@@ -296,7 +296,7 @@ func TestRiftEliteNativeGuardianPreservedAndWhitelistEnforced(t *testing.T) {
 		if m.Name != native.Name || m.Look.ModelID != native.Sprite || m.Monster.AI.ID != native.AI.ID || !reflect.DeepEqual(d.Skills, native.Skills) || !reflect.DeepEqual(d.ImmuneSkills, native.ImmuneSkills) || m.Stats.Def != 333 || m.Stats.MoveSpeed != 115 {
 			t.Fatal("native guardian changed", m, d)
 		}
-		if !reflect.DeepEqual(s.riftMonsterAbilityIDs(id), []int32{3, 6}) {
+		if !reflect.DeepEqual(s.riftMonsterAbilityIDs(id), []int32{0, 3, 6}) {
 			t.Fatal("guardian affixes changed")
 		}
 	}
@@ -437,8 +437,8 @@ func TestRiftElitePoisonStaggeredOverlapSharesOneCadence(t *testing.T) {
 func TestRiftEliteConfirmedImpactsAndActiveAuraMetadata(t *testing.T) {
 	s, m, p, now := riftEliteFixture(t, 0)
 	s.stepRiftElite(*now)
-	if s.riftGoldenUntil(m.ID, *now) != 0 {
-		t.Fatal("disabled golden deadline leaked")
+	if s.riftGoldenUntil(m.ID, *now) != *now+5000 {
+		t.Fatal("missing golden deadline")
 	}
 	if !s.spawnRiftClones(m, s.currentRiftRules().Abilities[1], *now) {
 		t.Fatal("clones")

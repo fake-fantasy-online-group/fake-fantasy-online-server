@@ -218,7 +218,18 @@ func (s *Scene) riftView(p *entity.Entity, d endgameRiftPersisted, durable, live
 	if live {
 		for id, m := range r.Monsters {
 			if !m.Dead {
-				v.Auras = append(v.Auras, domain.EndgameRiftAuraView{EntityID: strconv.FormatUint(uint64(id), 10), Class: m.Class, OriginalName: s.riftMonsterOriginalName(id), Affixes: s.riftMonsterAffixes(id), AbilityIDs: s.riftMonsterAbilityIDs(id), GoldenUntilMS: s.riftGoldenUntil(id, now)})
+				abilities := s.riftMonsterAbilityIDs(id)
+				goldenUntil := s.riftGoldenUntil(id, now)
+				// Existing actors created while golden body was incorrectly filtered
+				// can retain fewer abilities than their elite class. Legacy clients
+				// accept this optional field absent, but reject a short nonempty list
+				// and discard the entire progress/identity snapshot. Do not invent an
+				// ability, change the elite class, or mutate a live encounter to fix UI.
+				if len(abilities) < int(m.Class) {
+					abilities = nil
+					goldenUntil = 0 // A golden deadline requires its explicit ability ID.
+				}
+				v.Auras = append(v.Auras, domain.EndgameRiftAuraView{EntityID: strconv.FormatUint(uint64(id), 10), Class: m.Class, OriginalName: s.riftMonsterOriginalName(id), Affixes: s.riftMonsterAffixes(id), AbilityIDs: abilities, GoldenUntilMS: goldenUntil})
 			}
 		}
 		if s.eliteRift() && s.rift.data.Elite != nil {

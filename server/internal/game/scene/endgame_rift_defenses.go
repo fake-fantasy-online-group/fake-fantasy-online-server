@@ -12,7 +12,7 @@ func (s *Scene) riftMonster(e *entity.Entity) bool {
 }
 
 func disabledRiftMonsterStatus(d domain.StatusDef) bool {
-	return d.ID == riftGoldenStatus || d.Invulnerable ||
+	return d.Invulnerable ||
 		d.PhysicalDamageReductionPct >= 100 || d.MagicDamageReductionPct >= 100 ||
 		d.PhysicalReflectPct > 0 || d.MagicReflectPct > 0 ||
 		d.PhysicalReflectFlat > 0 || d.MagicReflectFlat > 0 || d.MagicFullReflectChancePct > 0
@@ -22,11 +22,6 @@ func (s *Scene) clearDisabledRiftMonsterStatuses(e *entity.Entity) {
 	if s.riftMonster(e) && e.Status != nil {
 		s.statusesRemoved(e, e.Status.RemoveWhere(disabledRiftMonsterStatus))
 	}
-}
-
-func (s *Scene) disabledRiftAbility(a endgameRiftAbility) bool {
-	r := s.currentRiftRules()
-	return s.rift != nil && r != nil && int(a) < len(r.Abilities) && r.Abilities[a].Mechanism == "golden_body"
 }
 
 // Do not spend an AI action on a native self-buff whose only effect is disabled.

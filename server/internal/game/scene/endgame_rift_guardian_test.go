@@ -235,13 +235,7 @@ func TestRiftGuardianAllEightNativeAffinitiesPreserved(t *testing.T) {
 			if m.Name != native.Name || m.Look.ModelID != native.Sprite || m.Monster.AI.ID != native.AI.ID || !reflect.DeepEqual(d.Skills, native.Skills) || !reflect.DeepEqual(d.ImmuneSkills, native.ImmuneSkills) || m.Stats.Def != 333 || d.Stats.MoveSpeed != 115 {
 				t.Fatal("native guardian changed", m, d)
 			}
-			var allowed []int32
-			for _, a := range guardian.Abilities {
-				if a != 0 {
-					allowed = append(allowed, a)
-				}
-			}
-			if !reflect.DeepEqual(s.riftMonsterAbilityIDs(id), allowed) {
+			if !reflect.DeepEqual(s.riftMonsterAbilityIDs(id), guardian.Abilities) {
 				t.Fatal("guardian affixes changed")
 			}
 		}
