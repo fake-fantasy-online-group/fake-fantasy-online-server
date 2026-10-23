@@ -54,7 +54,7 @@ func (s *Scene) endgameItem(st domain.Stack, loc string, slot int32) domain.Endg
 	}
 	if power, ok := domain.LegendaryPower(st.Legendary.PowerID); ok {
 		v.Legendary = &domain.LegendaryItemView{PowerID: power.ID, Name: power.Name, Description: power.Effect}
-		v.Name, v.Description = power.Name, power.Effect
+		v.Name, v.Description = domain.LegendaryDisplayName(d.Name, power), power.Effect
 		v.Stats = nil
 		for i, a := range st.Legendary.Affixes {
 			b := st.Legendary.Bounds[i]
