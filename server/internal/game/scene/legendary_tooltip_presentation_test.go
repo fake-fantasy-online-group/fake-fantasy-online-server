@@ -60,6 +60,10 @@ func TestLegendaryTooltipUsesExistingAttributeAndEffectBlocks(t *testing.T) {
 						attrs = append(attrs, affixText(a.Affix))
 					}
 					assertNativeEquipmentPresentation(t, tip, attrs, []string{power.Name + "：" + power.Effect})
+					view := s.endgameItem(st, "bag", 0)
+					if view.Description != "" || view.Legendary == nil || !strings.HasSuffix(tip, "\x06"+view.Legendary.Description) {
+						t.Fatal("legacy client requires identical native and sidecar effect text", view)
+					}
 					for _, forbidden := range []string{"传奇·", "基底：", "力量 +999", domain.LegendaryDisplayName(def.Name, power) + "："} {
 						if strings.Contains(tip, forbidden) {
 							t.Fatalf("extra heading, equipment-name prefix, or template affix leaked: %q", forbidden)
@@ -87,8 +91,8 @@ func TestLegendaryTooltipSnapshotPreservesSixTypedRolls(t *testing.T) {
 	s, def, st := legendaryTooltipFixture(t, true)
 	power, _ := domain.LegendaryPower(st.Legendary.PowerID)
 	view := s.endgameItem(st, "bag", 0)
-	if view.Name != itemDisplayName(def, st) || view.Description != "" || view.Legendary == nil || view.Legendary.Description != power.Effect || view.Legendary.Name != power.Name {
-		t.Fatal("power name and effect must remain separate sidecar fields, not be copied into item lore", view)
+	if view.Name != itemDisplayName(def, st) || view.Description != "" || view.Legendary == nil || view.Legendary.Description != power.Name+"："+power.Effect || view.Legendary.Name != power.Name {
+		t.Fatal("named effect must match the native row without being copied into item lore", view)
 	}
 	wire := protocol.EncodeEndgame(domain.EndgameResponse{Kind: "snapshot", OK: true, SnapshotID: "legendary-tooltip", Chunks: 1, Items: []domain.EndgameItemView{view}})
 	if len(wire) < 6 {
