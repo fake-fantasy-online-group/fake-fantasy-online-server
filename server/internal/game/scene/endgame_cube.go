@@ -35,7 +35,7 @@ func (s *Scene) endgameCubeContext(p *entity.Entity) (domain.CubeContext, error)
 	if err != nil {
 		return domain.CubeContext{}, &domain.CubeError{Code: "requirements", Message: "铜币状态无效"}
 	}
-	return domain.CubeContext{Rules: s.cubeRules, Catalog: s.endgameCatalog, Level: p.Player.Char.Level, Bag: p.Player.Bag, Money: money, Items: s.items, Intn: s.rng.Intn, NewUID: domain.NewItemInstanceID}, nil
+	return domain.CubeContext{EquipmentRoll: s.equipmentRoll, Rules: s.cubeRules, Catalog: s.endgameCatalog, Level: p.Player.Char.Level, Bag: p.Player.Bag, Money: money, Items: s.items, Intn: s.rng.Intn, NewUID: domain.NewItemInstanceID}, nil
 }
 func (s *Scene) planEndgameCube(p *entity.Entity, req domain.EndgameRequest, execute bool) (domain.CubePlan, error) {
 	ctx, err := s.endgameCubeContext(p)

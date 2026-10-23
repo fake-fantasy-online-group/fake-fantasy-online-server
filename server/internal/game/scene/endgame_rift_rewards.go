@@ -110,7 +110,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			}
 			// A guaranteed unique slot has its own wearer-legal259-base pool.
 			// All other slots retain the complete ordinary native pool above.
-			if unique, ok := domain.UniqueForBase(id, s.endgameCatalog); ok && unique.NativeDropEligible && def.Equip.LevelReq <= 60 {
+			if s.riftLegendaryBaseEligible(def) {
 				if def.Equip.LevelReq > bestUnique {
 					bestUnique = def.Equip.LevelReq
 					guaranteedUniques = nil
@@ -140,7 +140,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 				return def.Equip.Need.AllowsCharacter(character) && (def.Equip.Need.Sex == 0 || def.Equip.Need.Sex == sex)
 			})
 			for _, id := range equipment {
-				if unique, ok := domain.UniqueForBase(id, s.endgameCatalog); ok && unique.NativeDropEligible && domain.NativeEquipmentDropEligible(s.items[id]) {
+				if s.riftLegendaryBaseEligible(s.items[id]) {
 					guaranteedUniques = append(guaranteedUniques, id)
 				}
 			}
@@ -163,7 +163,11 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 				stack.RolledAffixCount = uint8(len(affixes))
 				copy(stack.RolledAffixes[:], affixes)
 				if (r.Tier >= r.Rules.GuaranteedUniqueTier && i == 0) || rng.Intn(100) < int(plan.UniqueChance) {
-					domain.ApplyUnique(&stack, def, rng.Intn)
+					if def.LegendaryEnabled {
+						s.equipmentRoll.ApplyLegendary(&stack, def, rng.Intn)
+					} else {
+						domain.ApplyUnique(&stack, def, rng.Intn)
+					}
 				}
 			}
 			grant.Items = append(grant.Items, stack)
@@ -267,4 +271,16 @@ func (s *Scene) rollEndgameRiftNormalBossEquipment(char domain.CharID, ordinal i
 		s.rollNaturalEquipmentQualityV5(def, &stack, domain.DefaultColorProfile, true, magicFind, r.Rules.Loot, &quality, &values, &unique, &variables)
 	}
 	return stack
+}
+
+// Promotion never expands the existing reward base pool or admits true hard-dungeon bases.
+func (s *Scene) riftLegendaryBaseEligible(def domain.ItemDef) bool {
+	if def.HardDungeonOnly || def.Equip == nil || def.Equip.LevelReq > 60 || !domain.NativeEquipmentDropEligible(def) {
+		return false
+	}
+	if def.LegendaryEnabled {
+		return s.equipmentRoll.LegendaryReady(def) && len(domain.LegendaryCandidates(def)) > 0
+	}
+	u, ok := domain.UniqueForBase(def.ID, s.endgameCatalog)
+	return ok && u.NativeDropEligible
 }

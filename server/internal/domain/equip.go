@@ -502,7 +502,12 @@ func Compute(in StatSource) (Base, Stats) {
 		// 步骤 1: 装备直接给的六维
 		base = base.Add(equipBase)
 
-		for _, a := range def.Equip.Affixes {
+		if st.Legendary.PowerID == "" {
+			for _, a := range def.Equip.Affixes {
+				applyAffix(a, &base, &basePct, &flat, &pct)
+			}
+		}
+		for _, a := range LegendaryItemBonuses(def, st) {
 			applyAffix(a, &base, &basePct, &flat, &pct)
 		}
 		for _, a := range UniqueItemBonuses(def, st) {

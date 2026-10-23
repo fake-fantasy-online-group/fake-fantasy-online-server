@@ -167,6 +167,7 @@ type EquipAppearance struct {
 
 // ItemDef 是一种物品的模板。
 type ItemDef struct {
+	LegendaryEnabled bool // enabled only after native pool and executable powers are ready
 	// HardDungeonOnly is a source allowlist tag, independent of generic pool flags.
 	HardDungeonOnly    bool
 	DungeonBaseID      ItemID
@@ -523,6 +524,7 @@ type Stack struct {
 	// 属性池来源，Affix 是已经抽定、此后不再重掷的实际数值。
 	RolledAffixCount uint8
 	RolledAffixes    [5]InstanceAffix
+	Legendary        LegendaryInstance
 	WashQuality      uint8
 	WashCount        uint8
 	WashAffixes      [4]Affix

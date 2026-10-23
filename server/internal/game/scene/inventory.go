@@ -449,7 +449,7 @@ func equipmentQuality(def domain.ItemDef, stacks ...domain.Stack) uint8 {
 	if len(stacks) != 0 {
 		st = stacks[0]
 	}
-	if _, ok := domain.UniqueOf(st,def.EndgameCatalog); ok {
+	if _, ok := domain.UniqueOf(st, def.EndgameCatalog); ok {
 		return 4
 	}
 	n := domain.EquipmentAttributeCount(def, st)
@@ -511,7 +511,7 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 	}
 	if def.Equip == nil {
 		lines := make([]string, 0, 2)
-		if rune, ok := domain.AstralRune(st.Item,s.endgameCatalog); ok {
+		if rune, ok := domain.AstralRune(st.Item, s.endgameCatalog); ok {
 			level := fmt.Sprintf("需要等级: %d", rune.MinLevel)
 			if ch != nil && ch.Level < rune.MinLevel {
 				level = "\x02" + level
@@ -539,7 +539,7 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 	e := def.Equip
 	quality := equipmentQuality(def, st)
 	textQuality := quality
-	_, unique := domain.UniqueOf(st,s.endgameCatalog)
+	_, unique := domain.UniqueOf(st, s.endgameCatalog)
 	_, formed := domain.MatchAstralRecipe(def, st)
 	nativeStats := s.nativeEndgameStats(viewer) && (unique || formed)
 	if nativeStats {
@@ -549,10 +549,10 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 	}
 	var specialEffects []string
 	lines := []string{"\x07(" + equipmentKindName(e) + ")", ""}
-	if d, ok := domain.UniqueOf(st,s.endgameCatalog); ok {
+	if d, ok := domain.UniqueOf(st, s.endgameCatalog); ok {
 		lines = append(lines, qualityColoredLine(textQuality, "仙遗·"+d.Name), "基底："+def.Name)
 		if !nativeStats {
-			for _, a := range domain.UniqueAffixes(st,s.endgameCatalog) {
+			for _, a := range domain.UniqueAffixes(st, s.endgameCatalog) {
 				lines = append(lines, qualityColoredLine(4, affixText(a)))
 			}
 			for _, line := range localEnhancementLines(def, d.LocalEnhancements, st.Endgame.UniqueRollBP) {
@@ -608,7 +608,7 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 	lines = append(lines, "")
 	var local []domain.ItemLocalEnhancement
 	roll := st.Endgame.UniqueRollBP
-	if d, ok := domain.UniqueOf(st,s.endgameCatalog); ok {
+	if d, ok := domain.UniqueOf(st, s.endgameCatalog); ok {
 		local = d.LocalEnhancements
 	}
 	formation, includeFormation := s.tooltipFormation(def, st, owner)
@@ -623,7 +623,15 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 		lines = append(lines, fmt.Sprintf("重量 %d", def.Weight))
 	}
 	lines = append(lines, "")
-	appendEquipmentAffixes(&lines, e.Affixes, textQuality)
+	if st.Legendary.PowerID == "" {
+		appendEquipmentAffixes(&lines, e.Affixes, textQuality)
+	}
+	if power, ok := domain.LegendaryPower(st.Legendary.PowerID); ok {
+		lines = append(lines, qualityColoredLine(4, "传奇·"+power.Name), "基底："+def.Name, power.Effect)
+		for _, a := range st.Legendary.Affixes {
+			lines = append(lines, qualityColoredLine(4, affixText(a.Affix)))
+		}
+	}
 	if st.RefineLevel > 0 {
 		if refine, ok := e.RefineEffectAt(st.RefineLevel); !ok {
 			text := "精炼属性未配置"
@@ -662,12 +670,14 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 		if includeFormation {
 			formationAffixes = domain.ResolveVariableAffixes(formation.Affixes, formation.VariableAffixes, st.Endgame.FormationRollBP)
 		}
-		for _, a := range mergedEndgameAffixes(domain.UniqueAffixes(st,s.endgameCatalog), socketAffixes, formationAffixes) {
+		for _, a := range mergedEndgameAffixes(domain.UniqueAffixes(st, s.endgameCatalog), socketAffixes, formationAffixes) {
 			lines = append(lines, qualityColoredLine(tooltipDarkGold, affixText(a)))
 		}
 		// Different execution scopes never merge just because they share attr38.
 		intervals := make([]int, 0, len(periodic))
-		for interval := range periodic { intervals = append(intervals, int(interval)) }
+		for interval := range periodic {
+			intervals = append(intervals, int(interval))
+		}
 		sort.Ints(intervals)
 		for _, interval := range intervals {
 			lines = append(lines, qualityColoredLine(tooltipDarkGold, periodicRecoveryText(int32(interval), periodic[int32(interval)])))
@@ -679,7 +689,7 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 			}
 			specialEffects = append(specialEffects, special...)
 		}
-		if u, ok := domain.UniqueOf(st,s.endgameCatalog); ok {
+		if u, ok := domain.UniqueOf(st, s.endgameCatalog); ok {
 			appendV5(u.TypedEffects, u.SkillBonuses)
 		}
 		if includeFormation {
@@ -793,7 +803,10 @@ func equipmentKindName(e *domain.EquipDef) string {
 
 func itemDisplayName(def domain.ItemDef, st domain.Stack) string {
 	name := def.Name
-	uniqueName, unique := domain.UniqueName(st,def.EndgameCatalog)
+	if power, ok := domain.LegendaryPower(st.Legendary.PowerID); ok {
+		name = power.Name
+	}
+	uniqueName, unique := domain.UniqueName(st, def.EndgameCatalog)
 	if unique {
 		name = uniqueName
 	}

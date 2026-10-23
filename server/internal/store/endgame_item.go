@@ -7,6 +7,9 @@ import (
 )
 
 func validateEndgameItem(st domain.Stack, catalog *domain.EndgameCatalog) error {
+	if err := validateLegendaryItem(st); err != nil {
+		return err
+	}
 	v := st.Endgame
 	// A revision belongs to every mutated equipment instance, not only uniques.
 	// Legacy ordinary items without metadata need no overlay row.

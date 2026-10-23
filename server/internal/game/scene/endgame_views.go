@@ -52,6 +52,16 @@ func (s *Scene) endgameItem(st domain.Stack, loc string, slot int32) domain.Endg
 		}
 		v.Trait = strings.Join(ts, "；")
 	}
+	if power, ok := domain.LegendaryPower(st.Legendary.PowerID); ok {
+		v.Legendary = &domain.LegendaryItemView{PowerID: power.ID, Name: power.Name, Description: power.Effect}
+		v.Name, v.Description = power.Name, power.Effect
+		v.Stats = nil
+		for i, a := range st.Legendary.Affixes {
+			b := st.Legendary.Bounds[i]
+			v.Legendary.Affixes = append(v.Legendary.Affixes, domain.LegendaryAffixView{Attr: a.Affix.Attr, Value: a.Affix.Value, Mode: a.Affix.Mode, Min: b.Min, Max: b.Max})
+			v.Stats = append(v.Stats, domain.EndgameStatView{Attr: a.Affix.Attr, Value: a.Affix.Value, Mode: a.Affix.Mode})
+		}
+	}
 	if f, ok := domain.MatchAstralRecipe(d, st); ok {
 		v.FormationID = f.ID
 		// Reuse the existing owned-item effect field; older closed-schema clients
@@ -79,6 +89,9 @@ func (s *Scene) sendEndgameSnapshot(p *entity.Entity) {
 	functional := s.functionalWorn(p)
 	for _, a := range domain.ActiveAstralRecipes(functional, s.itemDef, p.Player.Char) {
 		active[a.UID] = true
+	}
+	for _, a := range domain.ActiveLegendaryPowers(functional, s.itemDef, p.Player.Char) {
+		active[a.SourceUID] = true
 	}
 	p.Player.Bag.Each(func(slot int, st domain.Stack) {
 		if st.UID != 0 {

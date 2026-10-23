@@ -8,6 +8,9 @@ func NaturalAttributeCount(def ItemDef, st Stack) int {
 	if def.Equip == nil {
 		return 0
 	}
+	if st.Legendary.PowerID != "" {
+		return LegendaryAffixCount
+	}
 	return len(def.Equip.Affixes) + min(int(st.RolledAffixCount), len(st.RolledAffixes))
 }
 

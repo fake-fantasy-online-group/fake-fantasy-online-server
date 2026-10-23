@@ -1089,6 +1089,12 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 		if w.equipmentRoll, err = data.LoadEquipmentRollTable(ctx, q); err != nil {
 			log.Error("加载装备随机属性矩阵失败，启动将中止", "err", err)
 		} else {
+			for id, def := range w.items {
+				if def.Equip != nil && def.Equip.NativeDropEligible && !def.Equip.NoTypeDrop && w.equipmentRoll.LegendaryReady(def) {
+					def.LegendaryEnabled = true
+					w.items[id] = def
+				}
+			}
 			var options int
 			for _, pool := range w.equipmentRoll.Options {
 				options += len(pool)

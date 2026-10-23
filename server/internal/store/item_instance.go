@@ -33,7 +33,7 @@ func saveItemInstances(ctx context.Context, q querier, source string, stacks ...
 		if st.Empty() {
 			continue
 		}
-		if err := validateEndgameItem(st,catalogOfQuerier(q)); err != nil {
+		if err := validateEndgameItem(st, catalogOfQuerier(q)); err != nil {
 			return err
 		}
 		kind := st.InstanceKind
@@ -71,6 +71,9 @@ func saveItemInstances(ctx context.Context, q querier, source string, stacks ...
 		}
 		if kind != domain.ItemInstanceEquipment {
 			continue
+		}
+		if err := saveLegendaryItem(ctx, q, st); err != nil {
+			return err
 		}
 		if err := saveEndgameItem(ctx, q, st); err != nil {
 			return err
@@ -204,6 +207,9 @@ func loadItemInstances(ctx context.Context, q querier, uids []int64) (map[int64]
 	}
 	rows.Close()
 	if err := loadEndgameItems(ctx, q, out); err != nil {
+		return nil, err
+	}
+	if err := loadLegendaryItems(ctx, q, out); err != nil {
 		return nil, err
 	}
 	if err := loadCardInstances(ctx, q, out); err != nil {

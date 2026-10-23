@@ -64,7 +64,21 @@ type EndgameSocketView struct {
 	ItemID int32  `json:"itemId"`
 	UID    string `json:"uid,omitempty"`
 }
+type LegendaryAffixView struct {
+	Attr  int32 `json:"attr"`
+	Value int32 `json:"value"`
+	Mode  int32 `json:"mode"`
+	Min   int32 `json:"min"`
+	Max   int32 `json:"max"`
+}
+type LegendaryItemView struct {
+	PowerID     string               `json:"powerId"`
+	Name        string               `json:"name"`
+	Description string               `json:"description"`
+	Affixes     []LegendaryAffixView `json:"affixes"`
+}
 type EndgameItemView struct {
+	Legendary      *LegendaryItemView  `json:"legendary,omitempty"`
 	Tab            int32               `json:"tab"`
 	Level          int32               `json:"level,omitempty"`
 	Profession     int32               `json:"profession,omitempty"`

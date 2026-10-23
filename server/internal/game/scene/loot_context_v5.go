@@ -147,5 +147,11 @@ func (s *Scene) rollNaturalEquipmentQualityV5(def domain.ItemDef, stack *domain.
 		stack.RolledAffixCount = uint8(len(rolled))
 		copy(stack.RolledAffixes[:], rolled)
 	}
+	if def.LegendaryEnabled {
+		if !def.Equip.NoTypeDrop && def.Equip.NativeDropEligible && unique.Int63n(domain.LootProbabilityScaleV5) < domain.UniqueProbabilityV5(magicFind, rule) {
+			s.equipmentRoll.ApplyLegendary(stack, def, variables.Intn)
+		}
+		return
+	}
 	domain.RollNaturalUniqueWithMagicFindV5(stack, def, magicFind, unique.Int63n, variables.Intn, rule)
 }

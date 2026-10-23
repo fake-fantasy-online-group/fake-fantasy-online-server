@@ -10,15 +10,16 @@ import (
 )
 
 type CubeContext struct {
-	Rules        *CubeRuleTable
-	Catalog      *EndgameCatalog
-	Level        int32
-	Bag          *Bag
-	Money        int64
-	Items        map[ItemID]ItemDef
-	IsUniqueBase func(ItemID) bool
-	Intn         func(int) int
-	NewUID       func() int64
+	EquipmentRoll EquipmentRollTable
+	Rules         *CubeRuleTable
+	Catalog       *EndgameCatalog
+	Level         int32
+	Bag           *Bag
+	Money         int64
+	Items         map[ItemID]ItemDef
+	IsUniqueBase  func(ItemID) bool
+	Intn          func(int) int
+	NewUID        func() int64
 }
 type CubePlan struct {
 	Bag                      *Bag
@@ -157,6 +158,17 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 	r := cubeRecipeView(recipe, ctx.Items)
 	p.Recipe = r
 	p.Description = r.Description
+	if def.LegendaryEnabled || target.Legendary.PowerID != "" {
+		switch recipe.Operation {
+		case "unique.awaken":
+			p.Description = "从符合此底材部位、职业和最低等级的已实现特效中随机获得一种传奇特效，并按底材原始等级属性池生成六条属性；不随人物等级成长。"
+		case "unique.reforge":
+			p.Description = "保留传奇特效和底材，重新抽取六条属性的已保存数值范围；数值可能降低。"
+		case "unique.temper":
+			p.Description = "保留传奇特效和底材，提升尚未满值的六条属性；不会改变已保存范围。"
+		}
+		p.Recipe.Description = p.Description
+	}
 	if req.Socket != 0 || req.Tier != 0 || req.RunID != "" || len(req.ItemUIDs) > 5 {
 		return p, cubeError("invalid_request", "周天鼎参数不适用于该配方")
 	}
@@ -228,7 +240,11 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		return nil
 	}
 	_, hasUnique := UniqueOf(target, ctx.Catalog)
+	hasUnique = hasUnique || target.Legendary.PowerID != ""
 	eligible := func() bool {
+		if def.LegendaryEnabled {
+			return ctx.EquipmentRoll.LegendaryReady(def) && len(LegendaryCandidates(def)) > 0
+		}
 		if _, ok := UniqueForBase(target.Item, ctx.Catalog); !ok {
 			return false
 		}
@@ -246,6 +262,7 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		if ctx.IsUniqueBase != nil {
 			salvageEligible = ctx.IsUniqueBase(target.Item)
 		}
+		salvageEligible = salvageEligible || target.Legendary.PowerID != "" || def.LegendaryEnabled
 		if !salvageEligible || recipe.Operation == "salvage.normal" && (target.Endgame.UniqueID != 0 || hasUnique) || recipe.Operation == "salvage.unique" && !hasUnique {
 			return p, cubeError("requirements", "此配方不适用于所选装备")
 		}
@@ -379,21 +396,33 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 			return p, cubeError("requirements", "孔数、顺序与部位未匹配任何宿阵")
 		}
 	case "unique.awaken":
-		if named, ok := UniqueForBase(target.Item, ctx.Catalog); ok {
+		if named, ok := UniqueForBase(target.Item, ctx.Catalog); ok && !def.LegendaryEnabled {
 			p.Description += " 本次唤醒：" + named.Name + "。"
 		}
 		if !CanPromoteSocketlessUnique(target) {
 			return p, cubeError("requirements", "暗金装备不能带孔，请先取回全部孔内卡再唤醒")
 		}
-		if !eligible() || target.Endgame.UniqueID != 0 {
+		if !eligible() || target.Endgame.UniqueID != 0 || target.Legendary.PowerID != "" {
 			return p, cubeError("requirements", "请选择尚未唤醒的可染色装备")
 		}
 		if execute {
-			if ctx.Intn == nil || !ApplyUnique(&target, def, ctx.Intn) {
+			applied := false
+			if def.LegendaryEnabled {
+				applied = ctx.EquipmentRoll.ApplyLegendary(&target, def, ctx.Intn)
+			} else {
+				applied = ApplyUnique(&target, def, ctx.Intn)
+			}
+			if !applied {
 				return p, cubeError("requirements", "无法唤醒此器物")
 			}
 		}
 	case "unique.reforge":
+		if target.Legendary.PowerID != "" {
+			if target.Legendary.Validate() != nil || execute && !target.Legendary.Reforge(ctx.Intn) {
+				return p, cubeError("requirements", "无法重铸传奇属性")
+			}
+			break
+		}
 		d, ok := UniqueOf(target, ctx.Catalog)
 		if !ok || !UniqueHasVariableStats(d) {
 			return p, cubeError("requirements", "这件仙遗没有可重铸的浮动属性")
@@ -418,6 +447,29 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 			target.Endgame.UniqueRollBP = candidates[n]
 		}
 	case "unique.temper":
+		if target.Legendary.PowerID != "" {
+			changed := false
+			for i, b := range target.Legendary.Bounds {
+				a := &target.Legendary.Affixes[i].Affix
+				best := b.Max
+				if a.Attr == AttrAtkSpeed {
+					best = b.Min
+				}
+				if a.Value != best {
+					changed = true
+					step := max(int32(1), int32(int64(b.Max-b.Min)*int64(recipe.QualityStepBP)/int64(UniqueRollMaxBP-UniqueRollMinBP)))
+					if best > a.Value {
+						a.Value = min(best, a.Value+step)
+					} else {
+						a.Value = max(best, a.Value-step)
+					}
+				}
+			}
+			if !changed {
+				return p, cubeError("requirements", "传奇属性已经满值")
+			}
+			break
+		}
 		d, ok := UniqueOf(target, ctx.Catalog)
 		if !ok || !UniqueHasVariableStats(d) || sameUniqueVariableValues(d, target.Endgame.UniqueRollBP, UniqueRollMaxBP) {
 			return p, cubeError("requirements", "须选择浮动属性尚未满值的仙遗")
