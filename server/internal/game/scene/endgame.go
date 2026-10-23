@@ -129,19 +129,28 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 	}
 	switch {
 	case r.Op == "capabilities":
-		base, pages := false, false
+		base, pages, ground := false, false, false
 		for _, cap := range r.Capabilities {
 			base = base || cap == domain.EndgameV1
 			pages = pages || cap == domain.EndgameRiftPagesV1
+			ground = ground || cap == domain.EndgameGroundFXV1
 		}
-		if !base || !pages {
+		if !base || (!pages && !ground) {
 			s.endgameError(p, r, "unsupported_capability", "未支持的洞天数据协议")
 			return
 		}
-		first := !p.Player.EndgameRiftPages
-		p.Player.EndgameRiftPages = true
+		first := pages && !p.Player.EndgameRiftPages
+		caps := []string{domain.EndgameV1}
+		if pages {
+			p.Player.EndgameRiftPages = true
+			caps = append(caps, domain.EndgameRiftPagesV1)
+		}
+		if ground {
+			p.Player.EndgameGroundFX = true
+			caps = append(caps, domain.EndgameGroundFXV1)
+		}
 		s.endgameReply(p, domain.EndgameResponse{Kind: r.Op, RequestID: r.RequestID, OK: true,
-			Capabilities: []string{domain.EndgameV1, domain.EndgameRiftPagesV1}})
+			Capabilities: caps})
 		if first {
 			s.resumePagedRift(p)
 		}

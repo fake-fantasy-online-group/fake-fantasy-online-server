@@ -1,6 +1,7 @@
 package protocol
 
 import (
+	"math"
 	"sort"
 	"strconv"
 	"strings"
@@ -23,6 +24,7 @@ const (
 	SCServerText     = 0x8008 // 服务端文本动作
 	SCCombatNumber   = 0x800c // 精确参数飘字
 	SCSkillCast      = 0x800e // 技能吟唱/释放表现
+	SCGroundEffect   = 0x80F1 // optional endgame.ground-fx.v1
 	SCSkillHitFX     = 0x8045 // 技能命中目标的一次性实体特效
 	SCInventory      = 0x8006 // 自身背包、穿戴与货币完整快照
 	SCInventoryDelta = 0x8069 // 1.5.8 背包、穿戴与货币增量补丁
@@ -301,6 +303,11 @@ func Encode(observer domain.EntityID, ev event.Event) [][]byte {
 		return nil
 	case event.SkillCastChanged:
 		return packets(encodeSkillCast(observer, e))
+	case event.GroundEffect:
+		if e.Owner == 0 || e.MapID <= 0 || math.IsNaN(e.Pos.X) || math.IsNaN(e.Pos.Y) || math.Abs(e.Pos.X) > math.MaxInt32 || math.Abs(e.Pos.Y) > math.MaxInt32 || e.Key == "" || !wireString(e.Key) || len(e.Key) > 128 || e.Mode > 2 || e.DurationMS < 0 || (!wireString(e.Effect) || (e.Mode != 2 && e.Effect == "")) {
+			return nil
+		}
+		return packets(NewW(SCGroundEffect).I32(int32(e.Owner)).I32(e.MapID).I32(int32(e.Pos.X)).I32(int32(e.Pos.Y)).Str(e.Key).Str(e.Effect).I32(e.DurationMS).U8(e.Mode).Bytes())
 	case event.SkillHitEffect:
 		if e.Target == 0 || !wireString(e.Effect) {
 			return nil

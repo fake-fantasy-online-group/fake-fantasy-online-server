@@ -307,3 +307,5 @@ type EndgameResponse struct {
 	Rift           *EndgameRiftView          `json:"rift,omitempty"`
 	Result         map[string]string         `json:"result,omitempty"`
 }
+
+const EndgameGroundFXV1 = "endgame.ground-fx.v1"

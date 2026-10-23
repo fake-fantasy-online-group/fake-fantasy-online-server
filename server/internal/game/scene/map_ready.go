@@ -212,6 +212,11 @@ func worldEntityEvent(ev event.Event) bool {
 }
 
 func (s *Scene) canDeliverWorldEvent(to domain.EntityID, ev event.Event) bool {
+	if g, ok := ev.(event.GroundEffect); ok {
+		p := s.players[to]
+		return p != nil && p.Player != nil && p.Player.EndgameGroundFX && s.mapLoads[to] == nil && g.MapID == s.id.MapID
+	}
+
 	if _, despawn := ev.(event.EntityDespawned); despawn {
 		return s.mapLoads[to] == nil
 	}
