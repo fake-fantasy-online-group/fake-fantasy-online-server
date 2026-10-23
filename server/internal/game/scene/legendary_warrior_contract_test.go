@@ -119,8 +119,9 @@ func TestLegendaryWarriorChainAndBasicCoefficient(t *testing.T) {
 }
 func TestLegendaryWarriorQuakeOverlapAndLifetime(t *testing.T) {
 	s, p, m := legendaryMeleeFixture(t, "ZS-A14")
-	c := legendaryContext{Scene: s, Owner: p, SourceUID: 991, Power: domain.LegendaryPowerDefinition{ID: "ZS-A14"}, Skill: 10006, Center: p.Pos, Def: domain.SkillDef{ID: 10006, Area: domain.SkillAreaTargeting{Radius: 100}, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}}
+	c := legendaryContext{Scene: s, Owner: p, SourceUID: 991, Power: domain.LegendaryPowerDefinition{ID: "ZS-A14"}, RootID: 1, Skill: 10006, Center: p.Pos, Def: domain.SkillDef{ID: 10006, Area: domain.SkillAreaTargeting{Radius: 100}, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}}
 	warriorQuakeZone(&c)
+	c.RootID = 2
 	warriorQuakeZone(&c)
 	before := m.HP
 	for _, ms := range []int64{1000, 2000, 3000, 4000} {

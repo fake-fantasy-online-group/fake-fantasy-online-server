@@ -132,11 +132,7 @@ func warriorDirectIncoming(c *legendaryContext) bool {
 }
 
 // The contract and synergy suites exercise these complete replacement powers.
-// A14 is deliberately excluded until its full native pre-defense snapshot is
-// verified; retaining its callback does not advertise it as natural loot.
 func registerWarriorPower(id string, h legendaryHandler) {
 	registerLegendarySynergyHandler(id, h)
-	if id != "ZS-A14" {
-		certifyLegendaryPower(id)
-	}
+	certifyLegendaryPower(id)
 }

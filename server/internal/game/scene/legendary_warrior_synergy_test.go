@@ -307,3 +307,88 @@ func TestLegendaryWarriorIncomingMitigationAddsAcrossGear(t *testing.T) {
 		t.Fatalf("expected85%% additive mitigation, got%d", ev.Amount)
 	}
 }
+func TestLegendaryWarriorQuakeExactReleaseSnapshotAndDefenses(t *testing.T) {
+	s, p, m := legendaryMeleeFixture(t, "ZS-A14")
+	p.Stats.MinAtk = 100
+	p.Stats.MaxAtk = 200
+	p.Stats.CritRate = 10000
+	other := putMonster(s, 901, 10000, domain.Stats{PhysResist: 20}, 150, 100)
+	d := domain.SkillDef{ID: 10006, Level: 1, Prof: 1, Kind: domain.SkillArea, TargetEnemy: true, Area: domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterCaster, Radius: 100}, HurtType: domain.HurtPhysical, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
+	s.skills = skillTable(d)
+	before, otherBefore := m.HP, other.HP
+	s.onUseSkill(UseSkill{ID: p.ID, Skill: 10006, Target: m.ID})
+	if len(s.casts) == 0 {
+		t.Fatal("quake rejected")
+	}
+	s.stepCasts()
+	damage := before - m.HP
+	if damage < 200 || damage > 400 || otherBefore-other.HP != damage-20 {
+		t.Fatalf("not shared exact crit roll primary%d other%d", damage, otherBefore-other.HP)
+	}
+	s.tick = domain.Tick(1000 / domain.TickMS)
+	before, otherBefore = m.HP, other.HP
+	s.stepLegendaryPowers()
+	if before-m.HP != damage*35/100 || otherBefore-other.HP != max(int32(1), damage*35/100-20) {
+		t.Fatalf("field did not share source snapshot, initial%d pulse%d other%d", damage, before-m.HP, otherBefore-other.HP)
+	}
+	if len(s.legendaryState().nativeDamageSnapshots) != 0 {
+		t.Fatal("settled cast snapshot leaked")
+	}
+}
+func TestLegendaryWarriorEmptyQuakeSnapshotsOnce(t *testing.T) {
+	s, p, m := legendaryMeleeFixture(t, "ZS-A14")
+	s.aoi.Move(m, domain.Pos{MapID: 7, X: 500, Y: 100})
+	p.Stats.MinAtk = 80
+	p.Stats.MaxAtk = 120
+	p.Stats.CritRate = 10000
+	d := domain.SkillDef{ID: 10006, Level: 1, Prof: 1, Kind: domain.SkillArea, TargetEnemy: true, Area: domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterCaster, Radius: 100}, HurtType: domain.HurtPhysical, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
+	s.skills = skillTable(d)
+	s.onUseSkill(UseSkill{ID: p.ID, Skill: 10006})
+	if len(s.casts) == 0 {
+		t.Fatal("empty quake rejected")
+	}
+	s.stepCasts()
+	var pulse int64
+	s.forEachLegendary(p, func(c *legendaryContext) {
+		if c.Power.ID == "ZS-A14" {
+			pulse = c.State(0, "quake-1").Value
+		}
+	})
+	if pulse < 56 || pulse > 84 {
+		t.Fatalf("empty field did not roll source crit %d", pulse)
+	}
+	s.aoi.Move(m, domain.Pos{MapID: 7, X: 130, Y: 100})
+	p.Stats.MinAtk = 9000
+	p.Stats.MaxAtk = 9000
+	before := m.HP
+	s.tick = domain.Tick(1000 / domain.TickMS)
+	s.stepLegendaryPowers()
+	if int64(before-m.HP) != pulse {
+		t.Fatal("empty field rerolled on entrant")
+	}
+}
+
+func TestLegendaryWarriorQuakeUsesAcceptedAttackSnapshot(t *testing.T) {
+	s, p, m := legendaryMeleeFixture(t, "ZS-A14")
+	p.Stats.MinAtk = 100
+	p.Stats.MaxAtk = 100
+	d := domain.SkillDef{ID: 10006, Level: 1, Prof: 1, Kind: domain.SkillArea, TargetEnemy: true, Area: domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterCaster, Radius: 100}, HurtType: domain.HurtPhysical, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100, GuaranteedCrit: true}}
+	s.skills = skillTable(d)
+	s.onUseSkill(UseSkill{ID: p.ID, Skill: 10006, Target: m.ID})
+	if len(s.casts) == 0 {
+		t.Fatal("cast rejected")
+	}
+	p.Stats.MinAtk = 9000
+	p.Stats.MaxAtk = 9000
+	before := m.HP
+	s.stepCasts()
+	if before-m.HP != 200 {
+		t.Fatalf("accepted source overwritten: %d", before-m.HP)
+	}
+	before = m.HP
+	s.tick = domain.Tick(1000 / domain.TickMS)
+	s.stepLegendaryPowers()
+	if before-m.HP != 70 {
+		t.Fatalf("snapshot pulse %d", before-m.HP)
+	}
+}

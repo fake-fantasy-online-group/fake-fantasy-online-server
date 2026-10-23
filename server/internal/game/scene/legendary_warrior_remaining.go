@@ -61,18 +61,9 @@ func warriorQuakeZone(c *legendaryContext) {
 	st.Position = c.Center
 	st.ExpiresMS = c.NowMS + 3000
 	st.NextMS = c.NowMS + 1000
-	st.Value = 0
+	st.Value = int64(c.SnapshotNativeDamage()) * 35 / 100
 	st.Stacks = max(c.Def.Area.Radius, c.Def.Radius)
-	for _, e := range c.Def.DirectEffects() {
-		if e.Kind != domain.EffectDamage {
-			continue
-		}
-		num, den := e.DamagePctNumerator, e.DamagePctDenominator
-		if den <= 0 {
-			num, den = int64(e.DamagePct), 1
-		}
-		st.Value += (int64(c.Attack(false))*num/(100*den) + int64(e.BaseDamageFlat) + int64(e.DamageFlat)) * 35 / 100
-	}
+
 	st.Name = c.Power.Name
 	st.Description = c.Power.Effect
 	st.IconID = legendaryMeleeIcon(c)
@@ -89,6 +80,9 @@ func warriorQuakeTick(c *legendaryContext) {
 			at := st.NextMS
 			st.NextMS += 1000
 			for _, t := range c.Enemies(st.Position, float64(st.Stacks), 256) {
+				if !c.Scene.validTarget(c.Owner, t, domain.SkillDef{ID: 10006, TargetEnemy: true, Effect: domain.SkillEffect{Kind: domain.EffectDamage}}) {
+					continue
+				}
 				last := c.State(t.ID, "quake-last")
 				if last.Value != 0 && at-last.Value < 1000 {
 					continue
