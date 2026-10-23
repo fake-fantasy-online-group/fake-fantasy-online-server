@@ -426,3 +426,19 @@ func TestLegendaryUniversalPeriodicDefenseOutlivesEnemySource(t *testing.T) {
 		t.Fatal("self periodic abuse")
 	}
 }
+
+// Metadata must agree with the live additive equipment-cost bucket even while
+// the owner is dead/loading; preview does not authorize combat execution.
+func TestLegendaryUniversalDeadPreviewEquipmentCost(t *testing.T) {
+	s, p, tr := uniqueTestGear(t, "skill_economy")
+	warriorEquip(t, s, p, "TY-A24", domain.SlotRing)
+	warriorEquip(t, s, p, "TY-U03", domain.SlotNeck)
+	p.HP = 0
+	d := domain.SkillDef{ID: 10002, Kind: domain.SkillSingle, MPCost: 100, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100}}}
+	s.applyUniqueSkillModifiers(p, &d)
+	s.legendaryPreviewSkill(p, &d)
+	reduction := tr.PowerBP + 3000
+	if d.MPCost != 100-reduction/100 || d.LegendaryModifiers.AppliedDamageBP != reduction*2 {
+		t.Fatalf("dead preview native%d cost%d damage%d", tr.PowerBP, d.MPCost, d.LegendaryModifiers.AppliedDamageBP)
+	}
+}

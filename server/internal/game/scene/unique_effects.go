@@ -47,7 +47,16 @@ func (s *Scene) applyUniqueSkillModifiers(p *entity.Entity, def *domain.SkillDef
 	x := domain.EvaluateUniqueTraits(s.uniqueTraits(p), c)
 	// Existing legacy gear keeps its native path unless a current legendary
 	// participates. Composed equipment discounts share one additive bucket.
-	if len(s.legendaryContextsFor(p, nil, combat.Blow{SkillID: int32(def.ID)}, event.DamageDealt{}, true)) > 0 {
+	composedEquipment := false
+	if p.Player != nil && p.Player.Char != nil {
+		for _, power := range domain.ActiveLegendaryPowers(s.functionalWorn(p), s.itemDef, p.Player.Char) {
+			if legendaryHandlerCurrent(power.Power.ID) {
+				composedEquipment = true
+				break
+			}
+		}
+	}
+	if composedEquipment {
 		def.LegendaryModifiers.ManaReductionBP += x.ManaCostReductionBP
 	} else {
 		def.LegendaryModifiers.NativeManaReductionBP = x.ManaCostReductionBP
