@@ -11,8 +11,7 @@ function passiveOverlay(path) {
   // Do not admit raw world trees or generic respatch/plugin extensions.
   const parts = path.split('/'), ext = path.slice(path.lastIndexOf('.')).toLowerCase();
   return (parts.length === 4 && path.startsWith('gameassets/respatch/effect/') && ext === '.eff') ||
-    (parts.length === 5 && path.startsWith('gameassets/respatch/magic/magic/') && ext === '.gso') ||
-    (parts.length === 5 && path.startsWith('gameassets/respatch/item/item/') && ext === '.gso');
+    (parts.length === 5 && path.startsWith('gameassets/respatch/magic/magic/') && ext === '.gso');
 }
 function allowedDestination(path) {
   const parts = path.split('/'), ext = path.slice(path.lastIndexOf('.')).toLowerCase();
