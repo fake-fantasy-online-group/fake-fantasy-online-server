@@ -45,7 +45,14 @@ func (s *Scene) applyUniqueSkillModifiers(p *entity.Entity, def *domain.SkillDef
 		c.Trap = c.Trap || e.Kind == domain.EffectPlaceTrap
 	}
 	x := domain.EvaluateUniqueTraits(s.uniqueTraits(p), c)
-	def.MPCost = domain.ApplyUniqueBP(def.MPCost, -x.ManaCostReductionBP)
+	// Existing legacy gear keeps its native path unless a current legendary
+	// participates. Composed equipment discounts share one additive bucket.
+	if len(s.legendaryContextsFor(p, nil, combat.Blow{SkillID: int32(def.ID)}, event.DamageDealt{}, true)) > 0 {
+		def.LegendaryModifiers.ManaReductionBP += x.ManaCostReductionBP
+	} else {
+		def.LegendaryModifiers.NativeManaReductionBP = x.ManaCostReductionBP
+		def.MPCost = domain.ApplyUniqueBP(def.MPCost, -x.ManaCostReductionBP)
+	}
 	def.PrepareMS = domain.ApplyUniqueBP(def.PrepareMS, -x.CastReductionBP)
 	def.Radius = domain.ApplyUniqueBP(def.Radius, x.AreaExpansionBP)
 	def.Area.Radius = domain.ApplyUniqueBP(def.Area.Radius, x.AreaExpansionBP)
