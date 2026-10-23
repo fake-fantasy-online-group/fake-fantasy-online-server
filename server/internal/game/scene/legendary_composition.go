@@ -11,6 +11,7 @@ import (
 type legendaryChildOptions struct {
 	TargetOnly, SuppressGeneration bool
 	PreserveControl                bool
+	SuppressVisual                 bool // synthetic payload supplies an explicit producer visual instead
 	BaseDamage, ScaleBP            int32
 	ApplyStatuses                  bool
 }
@@ -139,6 +140,15 @@ func (c *legendaryContext) ChildSkill(target domain.EntityID, def domain.SkillDe
 	if len(targets) == 0 {
 		targets = []domain.EntityID{target}
 	}
+	// One art-only native release per admitted child. It does not create another
+	// gameplay cast, change the actor animation, or schedule delayed damage.
+	center := dst.Pos
+	if skillCenteredOnCaster(def) || def.Area.Center == domain.SkillAreaCenterCaster {
+		center = c.Owner.Pos
+	}
+	if !opt.SuppressVisual {
+		s.emit(event.ChildSkillReleased{Caster: c.Owner.ID, Skill: def.ID, Target: target, Origin: c.Owner.Pos, Center: center})
+	}
 	landed := false
 	seen := map[domain.EntityID]bool{}
 	for _, id := range targets {
@@ -165,7 +175,15 @@ func (c *legendaryContext) ChildSkill(target domain.EntityID, def domain.SkillDe
 				h(&cc, &local)
 			}
 		}
-		landed = s.applySkill(c.Owner, victim, local, 0, false) || landed
+		hit := s.applySkill(c.Owner, victim, local, 0, false)
+		if hit && !opt.SuppressVisual {
+			if local.HitEffect != "" {
+				s.emit(event.SkillHitEffect{Target: victim.ID, Effect: local.HitEffect})
+			} else {
+				c.NativeImpact(local.ID, victim)
+			}
+		}
+		landed = hit || landed
 	}
 	return landed
 }
@@ -373,4 +391,14 @@ func legendaryTargetUniqueDamage(source, current *domain.CombatSourceSnapshotV5,
 		return 0
 	}
 	return sourceUniqueEffectsV5(filter(source), filter(current), ctx).DamageBP
+}
+
+// NativeImpact reuses the client's native skill hit phases without inventing an
+// effect identifier. Call only after an authoritative successful settlement.
+func (c *legendaryContext) NativeImpact(skill domain.SkillID, target *entity.Entity) bool {
+	if c.Preview || c.Owner == nil || target == nil || skill <= 0 {
+		return false
+	}
+	c.Scene.emit(event.ChildSkillReleased{Caster: c.Owner.ID, Skill: skill, Target: target.ID, Origin: c.Owner.Pos, Center: target.Pos, Mode: 1})
+	return true
 }

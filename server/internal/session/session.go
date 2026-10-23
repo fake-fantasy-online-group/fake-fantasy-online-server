@@ -128,6 +128,7 @@ type Session struct {
 	growthV5             bool
 	groundPresentationV1 bool
 	nativeAttackRangeV1  bool
+	childSkillVisualV1   bool
 	account              *store.Account
 	clientAuthTag        []byte
 	char                 *domain.Character
@@ -276,6 +277,7 @@ func (s *Session) OnPacket(op uint16, payload []byte) {
 		s.groundPresentationV1 = req.ClientCaps&protocol.ClientCapGroundPresentationV1 != 0
 		if s.stage == StageConnected || s.stage == StageAuthed {
 			s.nativeAttackRangeV1 = req.ClientCaps&protocol.ClientCapNativeAttackRangeV1 != 0
+			s.childSkillVisualV1 = req.ClientCaps&protocol.ClientCapChildSkillVisualV1 != 0
 		}
 		s.mu.Unlock()
 		return

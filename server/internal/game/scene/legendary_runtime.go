@@ -83,6 +83,7 @@ func registerLegendaryHandler(id string, h legendaryHandler) {
 }
 
 type legendaryContext struct {
+	PresentationStage                       string // Optional impact art, emitted only after actual payload resolution.
 	Preview                                 bool
 	IsBasic, IsChild                        bool
 	SourceSnapshot                          *domain.CombatSourceSnapshotV5
@@ -114,6 +115,7 @@ type legendaryStateKey struct {
 	Phase  string
 }
 type legendaryPowerState struct {
+	GroundEffectKey   string // Explicit current-state presentation; never transferred across maps.
 	VisualStage       string
 	ValueIsTimestamp  bool
 	NextMS            int64
@@ -182,7 +184,9 @@ func (c *legendaryContext) DeleteState(target domain.EntityID, phase string) {
 	if c.Preview {
 		return
 	}
-	delete(c.Scene.legendaryState().states, c.key(target, phase))
+	key := c.key(target, phase)
+	c.Scene.legendaryStopStateGroundEffect(key, c.Scene.legendaryState().states[key])
+	delete(c.Scene.legendaryState().states, key)
 }
 func (c *legendaryContext) Ready(cooldownMS int64) bool {
 	if c.Preview {
@@ -529,6 +533,7 @@ func (s *Scene) stepLegendaryPowers() {
 		base.Target = 0
 		base.Phase = ""
 		if !valid[base] || st.ExpiresMS > 0 && st.ExpiresMS <= now {
+			s.legendaryStopStateGroundEffect(k, st)
 			delete(rt.states, k)
 		}
 	}
@@ -553,6 +558,7 @@ func (s *Scene) clearLegendaryOwner(id domain.EntityID) {
 	}
 	for k := range s.equipment.legendary.states {
 		if k.Owner == id || k.Target == id {
+			s.legendaryStopStateGroundEffect(k, s.equipment.legendary.states[k])
 			delete(s.equipment.legendary.states, k)
 		}
 	}
@@ -573,7 +579,7 @@ func (c *legendaryContext) Enemies(center domain.Pos, radius float64, limit int)
 	}
 	var out []*entity.Entity
 	for _, e := range c.Scene.entities {
-		if e.Pos.MapID == center.MapID && c.Scene.equipmentProcEnemyTarget(c.Owner, e) && sqDist(center, e.Pos) <= radius*radius {
+		if e.Alive() && e.Pos.MapID == center.MapID && c.Scene.equipmentProcEnemyTarget(c.Owner, e) && sqDist(center, e.Pos) <= radius*radius {
 			out = append(out, e)
 		}
 	}
@@ -648,6 +654,9 @@ func (c *legendaryContext) Damage(target *entity.Entity, amount int32, magic, se
 	s.emitAttributesIfPlayer(target)
 	s.aggroAfterHit(target, c.Owner.ID, ev)
 	s.legendaryCasterDamageResolved(c, target, ev)
+	if c.PresentationStage != "" && !ev.Flag.Has(event.DamageMiss) {
+		c.Visual(c.PresentationStage, target)
+	}
 	if ev.Flag.Has(event.DamageFatal) {
 		s.onDeath(target, c.Owner.ID)
 	}
@@ -831,6 +840,7 @@ func (s *Scene) pruneLegendaryOwner(owner *entity.Entity) {
 	}
 	for k := range s.equipment.legendary.states {
 		if k.Owner == owner.ID && valid[k.Power] != k.UID {
+			s.legendaryStopStateGroundEffect(k, s.equipment.legendary.states[k])
 			delete(s.equipment.legendary.states, k)
 		}
 	}

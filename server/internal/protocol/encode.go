@@ -301,6 +301,11 @@ func Encode(observer domain.EntityID, ev event.Event) [][]byte {
 			return packets(pkt)
 		}
 		return nil
+	case event.ChildSkillReleased:
+		if e.Mode > 1 {
+			return nil
+		}
+		return packets(NewW(SCChildSkillRelease).I32(int32(e.Caster)).I32(int32(e.Skill)).I32(int32(e.Target)).I32(e.Origin.MapID).I32(int32(e.Origin.X)).I32(int32(e.Origin.Y)).I32(int32(e.Center.X)).I32(int32(e.Center.Y)).U8(e.Mode).Bytes())
 	case event.SkillCastChanged:
 		return packets(encodeSkillCast(observer, e))
 	case event.GroundEffect:

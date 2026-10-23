@@ -35,6 +35,17 @@ type eventSink struct {
 }
 
 func (s *eventSink) Emit(ev event.Event) {
+	if _, child := ev.(event.ChildSkillReleased); child {
+		if s.sess == nil {
+			return
+		}
+		s.sess.mu.Lock()
+		enabled := s.sess.childSkillVisualV1
+		s.sess.mu.Unlock()
+		if !enabled {
+			return
+		}
+	}
 	if _, ok := ev.(event.EndgameMessage); ok && (s.sess == nil || !s.sess.endgameEnabled()) {
 		return
 	}
