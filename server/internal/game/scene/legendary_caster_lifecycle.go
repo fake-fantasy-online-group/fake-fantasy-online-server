@@ -1,0 +1,136 @@
+package scene
+
+import (
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
+	"sort"
+)
+
+func (s *Scene) legendaryCasterHealed(src, dst *entity.Entity, def domain.SkillDef, beforeHP, effective int32) {
+	if effective <= 0 || s.equipmentState().classSetTriggered != 0 {
+		return
+	}
+	for _, c := range s.legendaryContexts(src, dst, combat.Blow{SkillID: int32(def.ID)}, event.DamageDealt{}) {
+		c.Def = def
+		if h := legendaryHandlers[c.Power.ID].Healed; h != nil {
+			h(&c, beforeHP, effective)
+		}
+	}
+}
+func (s *Scene) legendaryCasterManaRestored(src, dst *entity.Entity, def domain.SkillDef, effective, overflow int32) {
+	if s.equipmentState().classSetTriggered != 0 {
+		return
+	}
+	for _, c := range s.legendaryContexts(src, dst, combat.Blow{SkillID: int32(def.ID)}, event.DamageDealt{}) {
+		c.Def = def
+		if h := legendaryHandlers[c.Power.ID].ManaRestored; h != nil {
+			h(&c, effective, overflow)
+		}
+	}
+}
+func (s *Scene) legendaryCasterDispelled(src, dst *entity.Entity, def domain.SkillDef, removed []domain.Active) {
+	if s.equipmentState().classSetTriggered != 0 {
+		return
+	}
+	for _, c := range s.legendaryContexts(src, dst, combat.Blow{SkillID: int32(def.ID)}, event.DamageDealt{}) {
+		c.Def = def
+		if h := legendaryHandlers[c.Power.ID].Dispelled; h != nil {
+			h(&c, removed)
+		}
+	}
+}
+func (s *Scene) legendaryCasterStatusApplying(source domain.EntityID, target *entity.Entity, def *domain.StatusDef) bool {
+	s.legendaryAssassinControlDuration(target, def)
+	skill := def.SkillSnapshotID
+	if skill == 0 {
+		skill = domain.SkillID(def.SourceSkillID)
+	}
+	for _, c := range s.legendaryContextsFor(s.entities[source], target, combat.Blow{SkillID: int32(skill)}, event.DamageDealt{}, s.legendaryState().child != nil) {
+		if child := s.legendaryState().child; child != nil {
+			c.IsChild = true
+			c.Def = child.Def
+		}
+		if h := legendaryHandlers[c.Power.ID].StatusApplied; h != nil {
+			h(&c, def)
+		}
+	}
+
+	return true
+}
+func legendaryCasterSlow(d domain.StatusDef) bool {
+	if d.ID == domain.StatusSlow {
+		return true
+	}
+	for _, a := range d.Affixes {
+		if a.Attr == domain.AttrMoveSpeed && a.Value < 0 {
+			return true
+		}
+	}
+	return false
+}
+func legendaryCasterRestoreMP(c *legendaryContext, target *entity.Entity, n int32) {
+	if target == nil || !target.Alive() || n <= 0 {
+		return
+	}
+	target.MP = min(target.MaxMP, clampI32(int64(target.MP)+int64(n)))
+	c.Scene.emitAttributesIfPlayer(target)
+}
+
+func init() {
+
+	registerLegendarySynergyHandler("YS-U03", legendaryHandler{ManaRestored: func(c *legendaryContext, n, overflow int32) {
+		if c.Skill != 10302 || overflow <= 0 {
+			return
+		}
+		var allies []*entity.Entity
+		for _, p := range c.Scene.players {
+			if p != c.Target && p.Alive() && p.MaxMP > 0 && sameParty(c.Target, p) && sqDist(p.Pos, c.Target.Pos) <= 350*350 {
+				allies = append(allies, p)
+			}
+		}
+		sort.Slice(allies, func(i, j int) bool {
+			a, b := int64(allies[i].MP)*int64(allies[j].MaxMP), int64(allies[j].MP)*int64(allies[i].MaxMP)
+			if a != b {
+				return a < b
+			}
+			return allies[i].ID < allies[j].ID
+		})
+		for i, p := range allies {
+			if i == 2 || overflow <= 0 {
+				break
+			}
+			amount := min(overflow, specialScale(p.MaxMP, 20), max(int32(0), p.MaxMP-p.MP))
+			legendaryCasterRestoreMP(c, p, amount)
+			overflow -= amount
+		}
+	}})
+
+}
+
+func legendaryCasterSteal(c *legendaryContext, removed []domain.Active) {
+	if c.Skill != 10433 {
+		return
+	}
+	for _, a := range removed {
+		if !specialDefensiveStatus(a.Def.ID) {
+			continue
+		}
+		left := a.ExpireAt - c.Scene.tick
+		if left <= 0 {
+			continue
+		}
+		a.ExpireAt = c.Scene.tick + left*3/2
+		a.Def.DurationSec = int32((a.ExpireAt-c.Scene.tick).Millis()+999) / 1000
+		if c.Scene.applyStatusDef(c.Owner, a.Def, c.Owner.ID) {
+			c.Owner.Status.RestoreTransferredStatusBalance(c.Owner.ID, a)
+			c.Scene.pushStatusSnapshots(c.Owner)
+		}
+	}
+}
+func legendaryCasterRegen(c *legendaryContext, d *domain.StatusDef) {
+	if c.Skill == 10303 {
+		d.LegendaryModifiers.HealingTickBP += 5000
+	}
+}

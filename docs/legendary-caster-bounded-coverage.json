@@ -1,0 +1,959 @@
+{
+  "scope": "SS50 + YS50 new synergy implementation",
+  "as_of_utc": "2026-10-23T09:59:00Z",
+  "registered_handlers": 100,
+  "latest_command": "go test ./internal/game/scene -run '^TestLegendaryCaster' -count=1",
+  "latest_result": "PASS 1.474s",
+  "test_groups": 58,
+  "claim_boundary": "All100 IDs have named bounded positive and key negative tests using native casts and/or real runtime hooks. This is not exhaustive all-combination coverage. No Unity rendering or expanded PvP displacement validation. Typed metadata uses existing verified entity/point input routes and is tested through real skillRanksForDisplay, equip/unequip, repeated non-consuming previews.",
+  "powers": [
+    {
+      "id": "SS-A01",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline",
+        "TestLegendaryCasterSecondFireballInheritsAmplifierOnce"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A02",
+      "implementation_file": "server/internal/game/scene/legendary_caster.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration",
+        "TestLegendaryCasterBurnSettlementKillReward",
+        "TestLegendaryCasterNativeCastEchoAndBurn"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A03",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingGeometryAndCost",
+        "TestLegendaryCasterSorcererRemainingSplashNativeCast",
+        "TestLegendaryCasterTypedMetadataEquippedAndRemoved"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A04",
+      "implementation_file": "server/internal/game/scene/legendary_caster_areas.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterBurnSettlementKillReward",
+        "TestLegendaryCasterSecondFireballInheritsAmplifierOnce"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A05",
+      "implementation_file": "server/internal/game/scene/legendary_caster_areas.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterFocusedFireballCountStableWithinRoot",
+        "TestLegendaryCasterSorcererRemainingFocusedFireball"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A06",
+      "implementation_file": "server/internal/game/scene/legendary_caster_definitions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingGeometryAndCost",
+        "TestLegendaryCasterSorcererRemainingTargetBonuses"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A07",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingBurnSpread"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A08",
+      "implementation_file": "server/internal/game/scene/legendary_caster.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingTargetBonuses"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A09",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingFrozenBonuses"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A10",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingIcePenetration"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A11",
+      "implementation_file": "server/internal/game/scene/legendary_caster.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A12",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterDamageBonusesAddBeforeChildSettlement",
+        "TestLegendaryCasterOptionalEntityCenterMetadata",
+        "TestLegendaryCasterSynergyFreezeImmediateAndRemoteBurst"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A13",
+      "implementation_file": "server/internal/game/scene/legendary_caster_definitions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterDamageBonusesAddBeforeChildSettlement"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A14",
+      "implementation_file": "server/internal/game/scene/legendary_caster_shields.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingIcePull",
+        "TestLegendaryCasterSorcererRemainingTargetBonuses"
+      ],
+      "known_limits": [
+        "Native ordinary-monster displacement covered; no expansion of PvP displacement."
+      ]
+    },
+    {
+      "id": "SS-A15",
+      "implementation_file": "server/internal/game/scene/legendary_caster.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterDamageBonusesAddBeforeChildSettlement",
+        "TestLegendaryCasterSynergyFreezeImmediateAndRemoteBurst"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A16",
+      "implementation_file": "server/internal/game/scene/legendary_caster.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration",
+        "TestLegendaryCasterSynergyFireNativeBurnBeforeSettlement"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A17",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSynergyFireNativeBurnBeforeSettlement"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A18",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A19",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingBurnOpening"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A20",
+      "implementation_file": "server/internal/game/scene/legendary_caster_definitions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterDefinitionModifiers"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A21",
+      "implementation_file": "server/internal/game/scene/legendary_caster_definitions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingTargetBonuses"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A22",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingFrozenBonuses"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A23",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterExpandedFreezeAppliesRealNativeControls",
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A24",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterControlImmuneStillTakesTransformedDamage",
+        "TestLegendaryCasterExpandedFreezeAppliesRealNativeControls",
+        "TestLegendaryCasterSynergyFreezeImmediateAndRemoteBurst"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A25",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingElementPassive"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A26",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterNativeBurnKillAndMirrorReflection"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A27",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingTeleportExplosion"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A28",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSynergyDispelAttackStealDefense"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A29",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingNativeRelationNegatives",
+        "TestLegendaryCasterSorcererRemainingSecretStateBonuses"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-A30",
+      "implementation_file": "server/internal/game/scene/legendary_caster_resources.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterInstantConsumesNativeAndEchoSingleTarget"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-D01",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingIncoming"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-D02",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingIncoming"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-D03",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSynergyDispelAttackStealDefense"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-D04",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingPassives"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-D05",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingIncoming"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-D06",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterExpandedFreezeAppliesRealNativeControls"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-D07",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterDualNativeShieldsAndNoTimer"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-D08",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingGeometryAndCost",
+        "TestLegendaryCasterSorcererRemainingPassives"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-D09",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSynergyFireNativeBurnBeforeSettlement"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-D10",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingIncoming",
+        "TestLegendaryCasterSorcererRemainingSecretStateBonuses"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-U01",
+      "implementation_file": "server/internal/game/scene/legendary_caster_definitions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterDefinitionModifiers"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-U02",
+      "implementation_file": "server/internal/game/scene/legendary_caster_definitions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRegenAndDispelStealRemaining",
+        "TestLegendaryCasterSynergyDispelAttackStealDefense"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-U03",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingGeometryAndCost",
+        "TestLegendaryCasterSorcererRemainingNativeRelationNegatives",
+        "TestLegendaryCasterSorcererRemainingSecretStateBonuses"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-U04",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingPassives"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-U05",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterBurnSettlementKillReward",
+        "TestLegendaryCasterNativeBurnKillAndMirrorReflection"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-U06",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingEmptyRefund"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-U07",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingGeometryAndCost"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-U08",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterMirrorSlowImmunityAlsoGuardsChildStatus",
+        "TestLegendaryCasterSorcererRemainingMirrorSlow"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-U09",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "SS-U10",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingGeometryAndCost",
+        "TestLegendaryCasterSorcererRemainingNativeRelationNegatives"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A01",
+      "implementation_file": "server/internal/game/scene/legendary_caster.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSplitRetainsSixtyPercentWithAmplifier",
+        "TestLegendaryCasterSynergyHealFullHPStillSplits"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A02",
+      "implementation_file": "server/internal/game/scene/legendary_caster.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterNativeCastEchoAndBurn",
+        "TestLegendaryCasterSecondLightImmediateNoTransfer"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A03",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterDispelHOTIsImmediateAndBounded",
+        "TestLegendaryCasterReplacementModifiersThroughPipeline",
+        "TestLegendaryCasterSplitRetainsSixtyPercentWithAmplifier"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A04",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerTargetBranches"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A05",
+      "implementation_file": "server/internal/game/scene/legendary_caster_admission.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterOptionalEntityCenterMetadata",
+        "TestLegendaryCasterRemainingHealerFriendlyCenters"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A06",
+      "implementation_file": "server/internal/game/scene/legendary_caster_definitions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerCenterAndDamageLedger"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A07",
+      "implementation_file": "server/internal/game/scene/legendary_caster_areas.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerLightFieldBoundaries"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A08",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A09",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterExorcismDispelNativeBenefitsNotPermanent",
+        "TestLegendaryCasterSynergyExorcismWeaknessPull"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A10",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A11",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A12",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A13",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerTargetBranches"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A14",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A15",
+      "implementation_file": "server/internal/game/scene/legendary_caster.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerCenterAndDamageLedger"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A16",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A17",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterControlImmuneStillTakesTransformedDamage",
+        "TestLegendaryCasterSynergyExorcismWeaknessPull"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A18",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A19",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterControlImmuneStillTakesTransformedDamage",
+        "TestLegendaryCasterSynergyExorcismWeaknessPull"
+      ],
+      "known_limits": [
+        "Native ordinary-monster displacement covered; no expansion of PvP displacement."
+      ]
+    },
+    {
+      "id": "YS-A20",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerNativeStatusBranches"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A21",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSynergyFocusedGroupShieldBurst"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A22",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterNewSupportWavesUseNativeRoots"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A23",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSplitRetainsSixtyPercentWithAmplifier",
+        "TestLegendaryCasterSynergyHealFullHPStillSplits"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A24",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterNewSupportWavesUseNativeRoots"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A25",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A26",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterDefenseGrantWorksWithoutRecipientGear",
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A27",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerNativeStatusBranches"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A28",
+      "implementation_file": "server/internal/game/scene/legendary_caster_replacements.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterNewSupportWavesUseNativeRoots",
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A29",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerReleaseAndInstant"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-A30",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerReleaseAndInstant"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-D01",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-D02",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterGroupCleanseNativeTargets",
+        "TestLegendaryCasterTypedMetadataEquippedAndRemoved"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-D03",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSynergyFocusedGroupShieldBurst"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-D04",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterDefenseGrantWorksWithoutRecipientGear"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-D05",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerDefenses"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-D06",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterNativeWindupDefenseEndsWithCast"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-D07",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterGroupCleanseNativeTargets"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-D08",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterNativeWindupDefenseEndsWithCast"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-D09",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerDefenses"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-D10",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerDefenses"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-U01",
+      "implementation_file": "server/internal/game/scene/legendary_caster_definitions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterDefinitionModifiers",
+        "TestLegendaryCasterRegenAndDispelStealRemaining"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-U02",
+      "implementation_file": "server/internal/game/scene/legendary_caster_definitions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterDefinitionModifiers",
+        "TestLegendaryCasterSynergyFocusedGroupShieldBurst"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-U03",
+      "implementation_file": "server/internal/game/scene/legendary_caster_lifecycle.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerManaTransfers"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-U04",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterSplitRetainsSixtyPercentWithAmplifier",
+        "TestLegendaryCasterSynergyHealFullHPStillSplits"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-U05",
+      "implementation_file": "server/internal/game/scene/legendary_caster_admission.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterOptionalEntityCenterMetadata",
+        "TestLegendaryCasterRemainingHealerFriendlyCenters"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-U06",
+      "implementation_file": "server/internal/game/scene/legendary_caster_synergy.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterDefenseGrantWorksWithoutRecipientGear"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-U07",
+      "implementation_file": "server/internal/game/scene/legendary_caster_resources.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemainingHealerCleanseRefund"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-U08",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterRemoteRevealAdmission",
+        "TestLegendaryCasterTypedMetadataEquippedAndRemoved"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-U09",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "known_limits": []
+    },
+    {
+      "id": "YS-U10",
+      "implementation_file": "server/internal/game/scene/legendary_caster_directions.go",
+      "status": "implemented_not_drop_certified",
+      "named_bounded_tests": [
+        "TestLegendaryCasterGroupCleanseNativeTargets"
+      ],
+      "known_limits": []
+    }
+  ],
+  "named_bounded_test_ids": 100,
+  "certification_owner": "Central runtime owner; not duplicated in caster handlers"
+}

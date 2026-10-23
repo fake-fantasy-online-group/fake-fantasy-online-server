@@ -91,6 +91,18 @@ func (s *Scene) skillBehaviorPayload(p *entity.Entity, def domain.SkillDef) *dom
 		case domain.EffectRevealInvisible:
 			out.InputMode, out.SelfFallback = "self", true
 			out.Area = domain.SkillBehaviorArea{Shape: "circle", Center: "caster", Radius: effect.RevealRadius}
+			if def.LegendaryRevealPoint {
+				out.InputMode, out.SelfFallback, out.PointRequired = "point", false, true
+				out.Area.Center = "point"
+			}
+		}
+		return out
+	}
+	if def.LegendaryEntityCenter {
+		out.InputMode, out.SelfFallback, out.PointRequired = "entity", true, false
+		out.TargetSelf = true
+		if def.LegendaryFriendlyCenter {
+			out.TargetTeam = true
 		}
 		return out
 	}

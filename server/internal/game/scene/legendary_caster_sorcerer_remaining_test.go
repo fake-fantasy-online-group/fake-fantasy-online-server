@@ -436,11 +436,11 @@ func TestLegendaryCasterSorcererRemainingMirrorSlow(t *testing.T) {
 	if c.Owner.Status.HasEffective(domain.StatusSlow) {
 		t.Fatal("mirror did not cleanse")
 	}
-	if s.legendaryCasterStatusApplying(c.Target.ID, c.Owner, &slow) {
+	if s.legendaryStatusReceiving(c.Owner, c.Target, &slow) {
 		t.Fatal("mirror did not prevent new slow")
 	}
 	c.Owner.Status.Remove(10417)
-	if !s.legendaryCasterStatusApplying(c.Target.ID, c.Owner, &slow) {
+	if !s.legendaryStatusReceiving(c.Owner, c.Target, &slow) {
 		t.Fatal("slow immunity outlived mirror")
 	}
 }

@@ -23,6 +23,7 @@ func (s *Scene) updatePlayerVisibility(e *entity.Entity, wasInvisible bool) {
 	if nowInvisible == wasInvisible {
 		return
 	}
+	s.legendaryAssassinVisibility(e, wasInvisible, nowInvisible)
 	if nowInvisible {
 		// 隐身生效的瞬间就清掉所有怪物对该玩家的仇恨，不等各怪物
 		// 下一次 AI 帧再被动发现。已排入结算队列的攻击不撤回，所以仍可
@@ -46,13 +47,20 @@ func (s *Scene) removedStatusesIncludedInvisible(ids []domain.StatusID) bool {
 // revealInvisible 执行鹰眼的场景语义。PVP 尚未开放，因此这里唯一可证明的
 // “敌方玩家”边界是非本人、非队友；不会把友方刺客从隐身中误拉出来。
 func (s *Scene) revealInvisible(caster *entity.Entity, def domain.SkillDef, radius int32, statusDurationPct int32) {
+	s.revealInvisibleAt(caster, def, radius, statusDurationPct, nil)
+}
+func (s *Scene) revealInvisibleAt(caster *entity.Entity, def domain.SkillDef, radius int32, statusDurationPct int32, at *domain.Pos) {
 	if caster == nil || radius <= 0 {
 		return
+	}
+	center := caster.Pos
+	if def.LegendaryRevealPoint && at != nil {
+		center = *at
 	}
 	radiusSq := float64(radius) * float64(radius)
 	for _, target := range s.players {
 		if target.ID == caster.ID || sameParty(caster, target) || !target.Alive() ||
-			!entityInvisible(target) || sqDist(caster.Pos, target.Pos) > radiusSq {
+			!entityInvisible(target) || sqDist(center, target.Pos) > radiusSq {
 			continue
 		}
 		removed := target.Status.RemoveWhere(func(existing domain.StatusDef) bool {

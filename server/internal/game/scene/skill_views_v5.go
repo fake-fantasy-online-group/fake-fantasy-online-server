@@ -307,6 +307,7 @@ func (s *Scene) skillRanksForDisplay(p *entity.Entity) (domain.SkillResolutionSn
 				previewHard[id] = 1
 			}
 			s.applyResolvedSkillModifiers(p, &def, previewHard, raw)
+			s.legendaryPreviewSkill(p, &def)
 			var behavior *domain.SkillBehaviorPayload
 			if p.Player.EndgameSkillBehavior {
 				behavior = s.skillBehaviorPayload(p, def)
