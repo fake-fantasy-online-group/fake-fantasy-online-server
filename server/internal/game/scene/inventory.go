@@ -449,6 +449,9 @@ func equipmentQuality(def domain.ItemDef, stacks ...domain.Stack) uint8 {
 	if len(stacks) != 0 {
 		st = stacks[0]
 	}
+	if _, ok := domain.LegendaryPower(st.Legendary.PowerID); ok {
+		return 5
+	}
 	if _, ok := domain.UniqueOf(st, def.EndgameCatalog); ok {
 		return 4
 	}
@@ -540,9 +543,10 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 	quality := equipmentQuality(def, st)
 	textQuality := quality
 	_, unique := domain.UniqueOf(st, s.endgameCatalog)
+	_, legendary := domain.LegendaryPower(st.Legendary.PowerID)
 	_, formed := domain.MatchAstralRecipe(def, st)
 	nativeStats := s.nativeEndgameStats(viewer) && (unique || formed)
-	if nativeStats {
+	if nativeStats || legendary {
 		textQuality = tooltipDarkGold
 	} else if !unique && domain.EquipmentAttributeCount(def, st) == 2 {
 		textQuality = tooltipLightBlue
@@ -618,7 +622,7 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 	}
 	equipBase, equipStats := domain.EnhancedIntrinsic(e, st.RefineLevel, local, roll)
 	_, refinedStats := e.RefinedIntrinsic(st.RefineLevel)
-	appendIntrinsicEquipmentStats(&lines, equipStats, equipBase, refinedStats, nativeStats)
+	appendIntrinsicEquipmentStats(&lines, equipStats, equipBase, refinedStats, nativeStats || legendary)
 	if def.Weight != 0 {
 		lines = append(lines, fmt.Sprintf("重量 %d", def.Weight))
 	}
@@ -627,10 +631,10 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 		appendEquipmentAffixes(&lines, e.Affixes, textQuality)
 	}
 	if power, ok := domain.LegendaryPower(st.Legendary.PowerID); ok {
-		lines = append(lines, qualityColoredLine(4, "传奇·"+power.Name), "基底："+def.Name, power.Effect)
 		for _, a := range st.Legendary.Affixes {
-			lines = append(lines, qualityColoredLine(4, affixText(a.Affix)))
+			lines = append(lines, qualityColoredLine(tooltipDarkGold, affixText(a.Affix)))
 		}
+		specialEffects = append(specialEffects, power.Name+"："+power.Effect)
 	}
 	if st.RefineLevel > 0 {
 		if refine, ok := e.RefineEffectAt(st.RefineLevel); !ok {
@@ -804,7 +808,7 @@ func equipmentKindName(e *domain.EquipDef) string {
 func itemDisplayName(def domain.ItemDef, st domain.Stack) string {
 	name := def.Name
 	if power, ok := domain.LegendaryPower(st.Legendary.PowerID); ok {
-		name = power.Name
+		name = domain.LegendaryDisplayName(def.Name, power)
 	}
 	uniqueName, unique := domain.UniqueName(st, def.EndgameCatalog)
 	if unique {
