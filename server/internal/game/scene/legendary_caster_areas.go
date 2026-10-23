@@ -3,6 +3,7 @@ package scene
 import (
 	"fmt"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
 
 func legendaryCasterArea(c *legendaryContext, key string, center domain.Pos, radius int32, damage int32, seconds int32) {
@@ -40,10 +41,11 @@ func init() {
 		if c.Skill != legendaryFireball {
 			return
 		}
+		c.VisualAt("stage-01", c.Center, 0)
 		radius := max(c.Def.Radius, c.Def.Area.Radius)
 		for _, t := range c.Enemies(c.Center, float64(radius), 256) {
 			if d, ok := legendaryCasterSkill(c, c.Skill); ok {
-				c.ChildSkill(t.ID, d, legendaryChildOptions{ScaleBP: 7000, TargetOnly: true, SuppressGeneration: true})
+				c.ChildSkill(t.ID, d, legendaryChildOptions{ScaleBP: 7000, TargetOnly: true, SuppressGeneration: true, SuppressVisual: true})
 			}
 		}
 	}})
@@ -92,7 +94,14 @@ func init() {
 			if b.ExpiresMS < a.ExpiresMS {
 				key = "light-field-1"
 			}
+			c.Scene.legendaryStopStateGroundEffect(c.key(0, key), c.State(0, key))
 			legendaryCasterArea(c, key, c.Center, 180, specialScale(legendaryCasterBase(c, c.Skill), 30), 4)
+			// Slot identity replaces the old visual when the two-zone pool wraps.
+			if fx, _, ok := legendaryVisualEffect(c.Power.ID, "stage-01"); ok && !c.Preview {
+				groundKey := fmt.Sprintf("%s/%d/%s", c.Power.ID, c.SourceUID, key)
+				c.State(0, key).GroundEffectKey = groundKey
+				c.Scene.emit(event.GroundEffect{Owner: c.Owner.ID, MapID: c.Center.MapID, Pos: c.Center, Key: groundKey, Effect: fx, DurationMS: 4000, Mode: 1})
+			}
 		},
 		Tick: func(c *legendaryContext) {
 			// Both zones share a per-victim one-second maximum, rather than stacking.
@@ -103,6 +112,7 @@ func init() {
 				if st.Stacks <= 0 || timer.Value > c.NowMS {
 					continue
 				}
+				c.VisualAt("stage-01", st.Position, 0)
 				for _, t := range c.Enemies(st.Position, 180, 256) {
 					hit := c.State(t.ID, "light-field-tick")
 					if hit.ExpiresMS > c.NowMS {

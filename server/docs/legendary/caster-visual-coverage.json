@@ -1,0 +1,811 @@
+{
+  "scope": "Current synergy-v1 sorcerer 50 + healer 50, cloud server event wiring only",
+  "counts": {
+    "native_fx_reused": 61,
+    "custom_wired": 16,
+    "no_world_fx_by_design": 23
+  },
+  "validation_boundary": "Server event assertions only. No Unity rendering, scale, blend, occlusion or in-game visual acceptance claimed. Historical asset directory remains for compatibility but obsolete stages are never invoked. Native impact-only protocol invokes client SkillEffectDB; actual 10319 native asset presence/rendering remains client asset acceptance, not established by server tests.",
+  "items": [
+    {
+      "id": "SS-A01",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A02",
+      "classification": "custom_wired",
+      "event_contract": "Actual remaining-burn settlement hit; one impact per resolved payload.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A03",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A04",
+      "classification": "custom_wired",
+      "event_contract": "One immediate explosion at root impact center; synthetic per-victim native casts suppressed.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A05",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A06",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A07",
+      "classification": "custom_wired",
+      "event_contract": "Actual burn-transfer receiver hit; no timer or persistent receiving mark.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A08",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A09",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A10",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A11",
+      "classification": "custom_wired",
+      "event_contract": "Actual ice burn-settlement hit.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A12",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A13",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A14",
+      "classification": "custom_wired",
+      "event_contract": "One short inward swirl at root center only when at least one target actually moved.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A15",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A16",
+      "classification": "custom_wired",
+      "event_contract": "Actual remaining-burn settlement hit; one per root and target.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A17",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A18",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A19",
+      "classification": "custom_wired",
+      "event_contract": "Immediate burn-opening settlement hit; no wait for expiration.",
+      "obsolete_stages": "Old burn-duration/end trigger removed; approved impact art reused immediately.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A20",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A21",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A22",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "Both five-second snow-field stages removed from gameplay; no world field emitted.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A23",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A24",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast. Shared ChildSkill runtime owns one native release and each actual target impact.",
+      "obsolete_stages": "Old freeze-duration/end settlement stage removed; immediate native ice-arrow child reused.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A25",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A26",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A27",
+      "classification": "custom_wired",
+      "event_contract": "One immediate explosion at successful teleport departure; no per-victim teleport casts.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A28",
+      "classification": "custom_wired",
+      "event_contract": "Actual dispel-derived damage hit, independent of dispel success.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A29",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-A30",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast. Shared ChildSkill runtime owns one native release and each actual target impact.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-D01",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-D02",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-D03",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-D04",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "Six-second shield stage removed; passive health and native teleport damage only.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-D05",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-D06",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-D07",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "Independent bonus shield stage removed; existing fire/ice shield statuses reused.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-D08",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "Eight-second rescue shield stage removed; passive health/mana modifiers only.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-D09",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-D10",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-U01",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-U02",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-U03",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-U04",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-U05",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-U06",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-U07",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-U08",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-U09",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "Eight-second snow boundary removed; only native cooldown/mana modifiers.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "SS-U10",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A01",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A02",
+      "classification": "custom_wired",
+      "event_contract": "Actual same-target second-light settlement; no transferred hit on dead targets.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A03",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A04",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A05",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A06",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A07",
+      "classification": "custom_wired",
+      "event_contract": "Live two-slot 4-second light fields, stable replacement identity; one visual pulse per real zone tick, cleanup on state removal.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A08",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A09",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A10",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A11",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "Ten-second cooperation seal and delayed detonation stages removed; native exorcism modifiers only.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A12",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A13",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A14",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A15",
+      "classification": "custom_wired",
+      "event_contract": "Actual pooled extra damage on original primary target only.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A16",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "1.5-second old-position detonation removed; native divine skill modifiers only.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A17",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A18",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A19",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "Paired-link mark and transfer stages removed; native shackles area/damage/pull only.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A20",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "Extra needle pulse producer removed; native attack modification only.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A21",
+      "classification": "custom_wired",
+      "event_contract": "One instantaneous blast at each actual shield recipient; original strongest-per-enemy damage rule unchanged.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A22",
+      "classification": "custom_wired",
+      "event_contract": "One approved warm impact per actual support-wave victim, no repeated cleanse cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A23",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast. Shared ChildSkill runtime owns one native release and each actual target impact.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A24",
+      "classification": "custom_wired",
+      "event_contract": "One approved star impact per actual support-wave victim, no repeated heal cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A25",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A26",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A27",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A28",
+      "classification": "native_fx_reused",
+      "event_contract": "Synthetic mana-restoration damage wave explicitly emits native light-bolt impact-only (80F2 Mode 1) once per actual victim; no support cast, projectile or actor animation replay.",
+      "obsolete_stages": "Stored fifteen-second ember and delayed spend removed; new immediate wave uses native holy-bolt impact.",
+      "unmatched_issue": "Native 10319 SkillEffectDB hit asset contents are not present in this server checkout; impact-only event is tested, actual art must be verified against client resources.",
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A29",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-A30",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-D01",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "Bonus shield stage removed; native heal increase only.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-D02",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-D03",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "Broken-shield remnant removed; only native shield skill remains.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-D04",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-D05",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-D06",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-D07",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-D08",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "Bonus caster shield stage removed; reduction only during actual resurrection windup.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-D09",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-D10",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-U01",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-U02",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-U03",
+      "classification": "custom_wired",
+      "event_contract": "One mana-particle effect per actual positive overflow recipient, at most two.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-U04",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-U05",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-U06",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-U07",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Pure modifier/passive or existing native status; no invented equipment-owned world effect.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-U08",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-U09",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    },
+    {
+      "id": "YS-U10",
+      "classification": "native_fx_reused",
+      "event_contract": "Original native skill/status feedback retained; no duplicate custom modifier impact or extra cast.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved generic icon retained; native buff lifetime unchanged."
+    }
+  ]
+}

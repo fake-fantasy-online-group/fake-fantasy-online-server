@@ -37,8 +37,14 @@ func init() {
 			if len(enemies) > 5 {
 				enemies = enemies[:5]
 			}
+			moved := false
 			for _, t := range enemies {
+				before := t.Pos
 				legendaryCasterPull(c, t, c.Center, 90)
+				moved = moved || before != t.Pos
+			}
+			if moved {
+				c.VisualAt("stage-01", c.Center, 0)
 			}
 		},
 	})

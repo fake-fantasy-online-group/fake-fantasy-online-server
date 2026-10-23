@@ -340,6 +340,7 @@ func init() {
 			if shield <= 0 {
 				continue
 			}
+			c.VisualAt("stage-01", ally.Pos, 0)
 			for _, t := range c.Enemies(ally.Pos, 220, 256) {
 				strongest[t.ID] = max(strongest[t.ID], specialScale(shield, 80))
 			}
@@ -441,8 +442,9 @@ func init() {
 			return
 		}
 		d := domain.SkillDef{ID: 10432, Level: 1, Prof: 5, Kind: domain.SkillSingle, HurtType: domain.HurtFire, TargetEnemy: true, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
+		c.VisualAt("stage-01", from, 0)
 		for _, t := range c.Enemies(from, 180, 256) {
-			c.ChildSkill(t.ID, d, legendaryChildOptions{BaseDamage: amount, TargetOnly: true, SuppressGeneration: true})
+			c.ChildSkill(t.ID, d, legendaryChildOptions{BaseDamage: amount, TargetOnly: true, SuppressGeneration: true, SuppressVisual: true})
 		}
 	}})
 
@@ -620,7 +622,18 @@ func legendaryCasterBurnApplicationTotal(c *legendaryContext, d domain.SkillDef,
 // Burn settlements already contain the remaining native burn amount. Only these
 // explicit producers share the native burn kill reward; other fire damage does not.
 func (s *Scene) legendaryCasterDamageResolved(source *legendaryContext, target *entity.Entity, hit event.DamageDealt) {
-	if source == nil || target == nil || target.Alive() || !hit.Flag.Has(event.DamageFatal) {
+	if source == nil || target == nil {
+		return
+	}
+	// Emit only after the authoritative payload resolves, including queued
+	// settlements. No effect for rejected, invulnerable or zero-damage payloads.
+	if hit.Amount > 0 && !hit.Flag.Has(event.DamageMiss) {
+		switch source.Power.ID {
+		case "SS-A02", "SS-A07", "SS-A11", "SS-A16", "SS-A19", "SS-A28", "YS-A02", "YS-A15":
+			source.Visual("stage-01", target)
+		}
+	}
+	if target.Alive() || !hit.Flag.Has(event.DamageFatal) {
 		return
 	}
 	switch source.Power.ID {

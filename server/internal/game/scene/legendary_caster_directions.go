@@ -140,7 +140,15 @@ func legendaryCasterSupportWave(skill domain.SkillID, radius float64, pct int32)
 		}
 		d := domain.SkillDef{ID: skill, Level: c.Def.Level, Kind: domain.SkillSingle, TargetEnemy: true, HurtType: domain.HurtHoly, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
 		for _, target := range c.Enemies(center, radius, 256) {
-			c.ChildSkill(target.ID, d, legendaryChildOptions{BaseDamage: specialScale(c.Attack(true), pct), TargetOnly: true, SuppressGeneration: true})
+			if c.ChildSkill(target.ID, d, legendaryChildOptions{BaseDamage: specialScale(c.Attack(true), pct), TargetOnly: true, SuppressGeneration: true, SuppressVisual: true}) {
+				if c.Power.ID == "YS-A28" {
+					// The new mana-restoration wave has no custom asset. Reuse
+					// only the native holy bolt impact, never a support cast on enemies.
+					c.NativeImpact(legendaryLightBolt, target)
+				} else {
+					c.Visual("stage-01", target)
+				}
+			}
 		}
 	}}
 }

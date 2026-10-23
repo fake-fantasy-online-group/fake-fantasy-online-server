@@ -103,6 +103,9 @@ func init() {
 			}
 			amount := min(overflow, specialScale(p.MaxMP, 20), max(int32(0), p.MaxMP-p.MP))
 			legendaryCasterRestoreMP(c, p, amount)
+			if amount > 0 {
+				c.Visual("stage-01", p)
+			}
 			overflow -= amount
 		}
 	}})
