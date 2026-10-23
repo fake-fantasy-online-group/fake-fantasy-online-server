@@ -1,0 +1,916 @@
+{
+  "scope": "Current warrior50 + swordsman50 synergy designs; server event wiring only",
+  "counts": {
+    "native_fx_reused": 24,
+    "approved_custom_wired": 34,
+    "obsolete_old_stage_removed": 13,
+    "no_world_fx_by_design": 29
+  },
+  "validation_boundary": "Server cast/hit/payload/ground lifecycle assertions, not Unity rendering acceptance. No assets committed, no new art selection, no gameplay coefficient/timer changes. Historical stage lookup entries remain compatibility data, not live event wiring.",
+  "unresolved_presentation_limits": [
+    "No Unity/client proof of directional trail orientation, footprint scaling to modified geometry, blending or occlusion. ZS-A04/A16 caster-anchored stages carry no custom direction/scale parameters in SkillHitEffect.",
+    "The 13 obsolete-role entries below intentionally receive no replacement custom art; native/status presentation remains, and new art selection was not authorized."
+  ],
+  "items": [
+    {
+      "id": "ZS-A01",
+      "name": "三叠穿心",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A02",
+      "name": "横扫枪花",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 per landed native 10002 target; stage-02 omitted because there is no separate additional damage event.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A03",
+      "name": "收势",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A04",
+      "name": "阔刃",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 on caster at accepted 10005 release; no victim-attached trail.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A05",
+      "name": "枪尖",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 per landed 10005 target.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A06",
+      "name": "破阵",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 after actual selected-target echo settlement, never merely when queued.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A07",
+      "name": "开隙",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A08",
+      "name": "裂甲传染",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A09",
+      "name": "碎障",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A10",
+      "name": "噤声余响",
+      "classification": "obsolete_old_stage_removed",
+      "event_contract": "Old 4-second echo marker and delayed/expiry settlement removed; current integrated mana-derived native damage remains.",
+      "obsolete_stages": "Old 4-second echo marker and delayed/expiry settlement removed; current integrated mana-derived native damage remains.",
+      "unmatched_issue": "Old 4-second echo marker and delayed/expiry settlement removed; current integrated mana-derived native damage remains.",
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A11",
+      "name": "追猎",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A12",
+      "name": "钉枪",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-02 only, once at primary landing position after native 10017 landed; instantaneous ground explosion, no mark or delayed trigger.",
+      "obsolete_stages": "Old stage-01 gunmark/cue and future-trigger timing removed; stage-02 explosion is current immediate landing only.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A13",
+      "name": "镇岳",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 per landed 10006 target.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A14",
+      "name": "余震",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 fixed cast center, 3000ms; stage-02 once per authoritative 1000ms pulse (3 total), including empty field. Two fields maximum; exact-key stop on replacement, expiry, prune, unequip or owner/map cleanup.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A15",
+      "name": "环锋",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 instantaneous ground cue at accepted 10006 cast center.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A16",
+      "name": "裂阵",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 caster sweep at 10003 release; stage-02 primary native hit only.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A17",
+      "name": "铸魂",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A18",
+      "name": "尾锋",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 after actual farthest landed-target echo for 10021 or 10015.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A19",
+      "name": "独虹",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A20",
+      "name": "猎首",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A21",
+      "name": "校准",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A22",
+      "name": "远阵",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 actual 10022 target impacts, including remote target-centered casts.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A23",
+      "name": "独战",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 actual selected-target extra settlement.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A24",
+      "name": "百兵归一",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A25",
+      "name": "封疆",
+      "classification": "obsolete_old_stage_removed",
+      "event_contract": "Old fixed flag and boundary stages removed; current native damage/armor synergy has no zone.",
+      "obsolete_stages": "Old fixed flag and boundary stages removed; current native damage/armor synergy has no zone.",
+      "unmatched_issue": "Old fixed flag and boundary stages removed; current native damage/armor synergy has no zone.",
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A26",
+      "name": "碎岩",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A27",
+      "name": "崩枪",
+      "classification": "obsolete_old_stage_removed",
+      "event_contract": "Old additional splash-settlement stage has no matching current event; native transformed attack retained.",
+      "obsolete_stages": "Old additional splash-settlement stage has no matching current event; native transformed attack retained.",
+      "unmatched_issue": "Old additional splash-settlement stage has no matching current event; native transformed attack retained.",
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A28",
+      "name": "宣战",
+      "classification": "obsolete_old_stage_removed",
+      "event_contract": "Old unique-target marker removed; current warcry/pull/native damage only.",
+      "obsolete_stages": "Old unique-target marker removed; current warcry/pull/native damage only.",
+      "unmatched_issue": "Old unique-target marker removed; current warcry/pull/native damage only.",
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A29",
+      "name": "三式破局",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-A30",
+      "name": "合锋",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-D01",
+      "name": "回垒",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 only after successful permanent shield application on 10028 release.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-D02",
+      "name": "拒近",
+      "classification": "obsolete_old_stage_removed",
+      "event_contract": "Old actual-shield stage has no current shield; current armor amplification and damage reduction only.",
+      "obsolete_stages": "Old actual-shield stage has no current shield; current armor amplification and damage reduction only.",
+      "unmatched_issue": "Old actual-shield stage has no current shield; current armor amplification and damage reduction only.",
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-D03",
+      "name": "卸力",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-D04",
+      "name": "隔绝",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-D05",
+      "name": "缓冲",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-D06",
+      "name": "拒袭",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-D07",
+      "name": "守步",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-D08",
+      "name": "人墙",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-D09",
+      "name": "留守",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 only after successful permanent shield application on 10016 release.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-D10",
+      "name": "整阵",
+      "classification": "obsolete_old_stage_removed",
+      "event_contract": "Old actual-shield stage has no current shield; current slow immunity and damage reduction only.",
+      "obsolete_stages": "Old actual-shield stage has no current shield; current slow immunity and damage reduction only.",
+      "unmatched_issue": "Old actual-shield stage has no current shield; current slow immunity and damage reduction only.",
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-U01",
+      "name": "回气",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-U02",
+      "name": "节流",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-U03",
+      "name": "探路",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-U04",
+      "name": "行军",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 warcry release cue; deterministic single cue when these powers coexist, no team-speed buff.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-U05",
+      "name": "止步",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-U06",
+      "name": "换息",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-U07",
+      "name": "收枪",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-U08",
+      "name": "号令",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 warcry release cue; deterministic single cue when these powers coexist, no team-speed buff.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-U09",
+      "name": "续行",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "ZS-U10",
+      "name": "军令",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 warcry release cue; deterministic single cue when these powers coexist, no team-speed buff.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A01",
+      "name": "藏锋出鞘",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A02",
+      "name": "近身空鸣",
+      "classification": "approved_custom_wired",
+      "event_contract": "Existing stage-01 actual near-caster 10117 target hits retained.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A03",
+      "name": "罡锋递进",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A04",
+      "name": "远锋留刃",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 per resolved far-blade immediate area payload.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A05",
+      "name": "金缚剑阵",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A06",
+      "name": "缚敌成阵",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-02 only after actual immediate damage following successful native root commit; no stage-01 marker.",
+      "obsolete_stages": "Old 10-second marker and next-skill release removed; stage-02 impact reused immediately.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A07",
+      "name": "幻影三叠",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 per actual extra strike (up to two); dead/discarded payload emits nothing.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A08",
+      "name": "无影独剑",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 per actual immediate splash payload; no flash on alone branch.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A09",
+      "name": "血魂回锋",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A10",
+      "name": "饮血止生",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A11",
+      "name": "血魂共鸣",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A12",
+      "name": "魂钉",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-02 only after actual immediate damage derived from effective native mana restoration; no stage-01 marker.",
+      "obsolete_stages": "Old 8-second marker and movement/expiry trigger removed; stage-02 impact reused immediately.",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A13",
+      "name": "封法断流",
+      "classification": "obsolete_old_stage_removed",
+      "event_contract": "Old 15-second silence watcher/expiry impact removed; current native area silence only.",
+      "obsolete_stages": "Old 15-second silence watcher/expiry impact removed; current native area silence only.",
+      "unmatched_issue": "Old 15-second silence watcher/expiry impact removed; current native area silence only.",
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A14",
+      "name": "封法断垒",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 on actual shield reduction; stage-02 only when shields genuinely exhausted.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A15",
+      "name": "旋风合刃",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A16",
+      "name": "旋风收阵",
+      "classification": "obsolete_old_stage_removed",
+      "event_contract": "Old 4-second ring and periodic pulse stages removed; current pull and native spin only.",
+      "obsolete_stages": "Old 4-second ring and periodic pulse stages removed; current pull and native spin only.",
+      "unmatched_issue": "Old 4-second ring and periodic pulse stages removed; current pull and native spin only.",
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A17",
+      "name": "旋风逐客",
+      "classification": "obsolete_old_stage_removed",
+      "event_contract": "Old exile marker and leave-area/expiry settlement removed; current native radius modifier only.",
+      "obsolete_stages": "Old exile marker and leave-area/expiry settlement removed; current native radius modifier only.",
+      "unmatched_issue": "Old exile marker and leave-area/expiry settlement removed; current native radius modifier only.",
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A18",
+      "name": "混沌裂甲",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A19",
+      "name": "混沌换式",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 on added secondary 10102 native hit; no next-skill record.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A20",
+      "name": "狮心震列",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 per actual immediate nearby splash payload.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A21",
+      "name": "狮心决斗",
+      "classification": "obsolete_old_stage_removed",
+      "event_contract": "Old unique-target marker removed; current immediate extra strike has no compatible selected mark.",
+      "obsolete_stages": "Old unique-target marker removed; current immediate extra strike has no compatible selected mark.",
+      "unmatched_issue": "Old unique-target marker removed; current immediate extra strike has no compatible selected mark.",
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A22",
+      "name": "陨星迟落",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 first splash and stage-02 second immediate meteor settlement, no new delay.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A23",
+      "name": "陨星余烬",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 per actual conditional sword-explosion damage payload.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A24",
+      "name": "强击破阵",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A25",
+      "name": "挑衅应战",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 actual immediate damage after native taunt success.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A26",
+      "name": "双路剑谱",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A27",
+      "name": "剑路交织",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 per actual current-single-cast array settlement; no two-skill sequence.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A28",
+      "name": "血魂相济",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 actual immediate dual-skill additional damage.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A29",
+      "name": "返锋定势",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-A30",
+      "name": "百战收锋",
+      "classification": "native_fx_reused",
+      "event_contract": "Native skill/impact/control feedback retained, without duplicate custom art.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-D01",
+      "name": "罡气护脉",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 only after successful permanent shield application.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-D02",
+      "name": "饮血余温",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-D03",
+      "name": "血魂护心",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-D04",
+      "name": "挑衅先手",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-D05",
+      "name": "旋风铁围",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-D06",
+      "name": "缚敌守势",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-D07",
+      "name": "封法残障",
+      "classification": "obsolete_old_stage_removed",
+      "event_contract": "Old shield stage has no current shield; current silence-conditioned reduction only.",
+      "obsolete_stages": "Old shield stage has no current shield; current silence-conditioned reduction only.",
+      "unmatched_issue": "Old shield stage has no current shield; current silence-conditioned reduction only.",
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-D08",
+      "name": "狮心护阵",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 per successful self/allied permanent shield recipient.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-D09",
+      "name": "剑鞘藏命",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-D10",
+      "name": "退守一寸",
+      "classification": "obsolete_old_stage_removed",
+      "event_contract": "Old shield stage has no current shield; current range-conditioned reduction only.",
+      "obsolete_stages": "Old shield stage has no current shield; current range-conditioned reduction only.",
+      "unmatched_issue": "Old shield stage has no current shield; current range-conditioned reduction only.",
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-U01",
+      "name": "真空牵步",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-U02",
+      "name": "饮血清创",
+      "classification": "approved_custom_wired",
+      "event_contract": "stage-01 only when current cleanse actually removes eligible statuses.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-U03",
+      "name": "噬魂回环",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-U04",
+      "name": "挑衅集结",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-U05",
+      "name": "幻影洗尘",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-U06",
+      "name": "金缚留客",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-U07",
+      "name": "换式调息",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-U08",
+      "name": "旋风定足",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-U09",
+      "name": "收招归息",
+      "classification": "no_world_fx_by_design",
+      "event_contract": "Current status name, description and approved icon retained; parameter-only/passive effects do not manufacture a new timed aura.",
+      "obsolete_stages": "",
+      "unmatched_issue": null,
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    },
+    {
+      "id": "JK-U10",
+      "name": "封法追索",
+      "classification": "obsolete_old_stage_removed",
+      "event_contract": "Old pursuit/target visual has no current event; current range modifier only.",
+      "obsolete_stages": "Old pursuit/target visual has no current event; current range modifier only.",
+      "unmatched_issue": "Old pursuit/target visual has no current event; current range modifier only.",
+      "ui": "Current catalog name/description and approved icon; no mandatory world aura."
+    }
+  ]
+}

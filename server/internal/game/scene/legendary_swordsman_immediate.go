@@ -18,7 +18,7 @@ func init() {
 			return
 		}
 		for _, e := range legendaryMeleeNearbyOthers(c, 150, 5) {
-			c.Damage(e, legendaryMeleeScale(c.Attack(false), 160), false, false)
+			c.damageVisual("stage-01", e, legendaryMeleeScale(c.Attack(false), 160), false, false)
 		}
 	}})
 	registerLegendarySynergyHandler("JK-U03", legendaryHandler{RootFinished: func(c *legendaryContext) {
@@ -55,7 +55,7 @@ func swordCleanse(c *legendaryContext, poison bool) {
 	if c.Owner.Status == nil {
 		return
 	}
-	c.Scene.statusesRemoved(c.Owner, c.Owner.Status.RemoveWhere(func(d domain.StatusDef) bool {
+	removed := c.Owner.Status.RemoveWhere(func(d domain.StatusDef) bool {
 		if d.BlockMove || d.Control != domain.ControlNone || d.ID == domain.StatusFreeze || d.ID == domain.StatusPetrify {
 			return false
 		}
@@ -71,5 +71,9 @@ func swordCleanse(c *legendaryContext, poison bool) {
 			}
 		}
 		return false
-	}))
+	})
+	c.Scene.statusesRemoved(c.Owner, removed)
+	if len(removed) > 0 {
+		c.Visual("stage-01", c.Owner)
+	}
 }

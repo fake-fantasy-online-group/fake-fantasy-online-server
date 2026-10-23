@@ -37,7 +37,7 @@ func warriorEcho(c *legendaryContext, pct int64, farthest bool) {
 		}
 	}
 	if best != nil && (farthest || c.Primary == 0 || best.dst == c.Primary) {
-		c.Damage(c.Scene.entities[best.dst], legendaryMeleeScale(best.ev.Amount, pct), best.blow.Magic, true)
+		c.damageVisual("stage-01", c.Scene.entities[best.dst], legendaryMeleeScale(best.ev.Amount, pct), best.blow.Magic, true)
 	}
 }
 func init() {
@@ -124,7 +124,7 @@ func init() {
 			return
 		}
 		if chosen != 0 {
-			c.Damage(c.Scene.entities[chosen], legendaryMeleeScale(c.Attack(false), 160), false, false)
+			c.damageVisual("stage-01", c.Scene.entities[chosen], legendaryMeleeScale(c.Attack(false), 160), false, false)
 		}
 	}})
 	registerWarriorPower("ZS-A24", legendaryHandler{SelectTargets: warriorPreservePrimary, PrepareSkill: warriorSkill(10023, 85, 0, 0, 0).PrepareSkill, TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {

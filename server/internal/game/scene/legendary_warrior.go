@@ -133,6 +133,20 @@ func warriorDirectIncoming(c *legendaryContext) bool {
 
 // The contract and synergy suites exercise these complete replacement powers.
 func registerWarriorPower(id string, h legendaryHandler) {
+	// Presentation decorates the authoritative event without changing mechanics.
+	hit, cast := h.AfterHit, h.CastReleased
+	h.AfterHit = func(c *legendaryContext) {
+		if hit != nil {
+			hit(c)
+		}
+		legendaryWarriorImpactVisual(c)
+	}
+	h.CastReleased = func(c *legendaryContext) {
+		if cast != nil {
+			cast(c)
+		}
+		legendaryWarriorCastVisual(c)
+	}
 	registerLegendarySynergyHandler(id, h)
 	certifyLegendaryPower(id)
 }

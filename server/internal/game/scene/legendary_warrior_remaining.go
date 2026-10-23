@@ -1,6 +1,9 @@
 package scene
 
-import "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+import (
+	"fmt"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+)
 
 func init() {
 	registerWarriorPower("ZS-A03", legendaryHandler{BaseSkill: func(c *legendaryContext, d *domain.SkillDef) {
@@ -58,9 +61,14 @@ func warriorQuakeZone(c *legendaryContext) {
 		phase = "quake-2"
 	}
 	st := c.State(0, phase)
+	// Replacing one of the two fields stops only its old presentation.
+	c.Scene.legendaryStopStateGroundEffect(c.key(0, phase), st)
+	st.RootID = c.RootID
 	st.Position = c.Center
 	st.ExpiresMS = c.NowMS + 3000
 	st.NextMS = c.NowMS + 1000
+	st.GroundEffectKey = fmt.Sprintf("%s/%d/stage-01", c.Power.ID, c.RootID)
+	c.VisualAt("stage-01", st.Position, 3000)
 	st.Value = int64(c.SnapshotNativeDamage()) * 35 / 100
 	st.Stacks = max(c.Def.Area.Radius, c.Def.Radius)
 
@@ -79,6 +87,9 @@ func warriorQuakeTick(c *legendaryContext) {
 		for st.NextMS > 0 && st.NextMS <= c.NowMS && st.NextMS <= st.ExpiresMS {
 			at := st.NextMS
 			st.NextMS += 1000
+			visual := *c
+			visual.RootID = st.RootID
+			visual.VisualAt("stage-02", st.Position, 0)
 			for _, t := range c.Enemies(st.Position, float64(st.Stacks), 256) {
 				if !c.Scene.validTarget(c.Owner, t, domain.SkillDef{ID: 10006, TargetEnemy: true, Effect: domain.SkillEffect{Kind: domain.EffectDamage}}) {
 					continue

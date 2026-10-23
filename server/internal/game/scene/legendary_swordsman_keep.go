@@ -26,9 +26,13 @@ func init() {
 			return
 		}
 		amount := min(domain.SaturateInt32((int64(c.LostHP)+int64(c.Absorbed))*120/100), legendaryMeleeScale(c.Attack(false), 400))
+		c.Visual("stage-01", c.Target)
 		_, removed := c.Target.Status.AbsorbDamage(amount)
 		c.Scene.statusesRemoved(c.Target, removed)
 		c.Scene.pushStatusSnapshots(c.Target)
+		if !swordHasShield(c.Target) {
+			c.Visual("stage-02", c.Target)
+		}
 	}})
 }
 func swordHasShield(target *entity.Entity) bool {

@@ -15,12 +15,12 @@ func init() {
 	registerLegendarySynergyHandler("JK-A03", legendaryHandler{AfterHit: swordImmediatePrimary(10102, 160)})
 	registerLegendarySynergyHandler("JK-A06", legendaryHandler{StatusCommitted: func(c *legendaryContext, d *domain.StatusDef) {
 		if c.Def.ID == 10111 && d.BlockMove && d.Control != domain.ControlStun && swordRooted(c.Target, c.Owner.ID) && swordNativeOnce(c, c.Target.ID) {
-			c.Damage(c.Target, legendaryMeleeScale(c.Attack(false), 200), false, false)
+			c.damageVisual("stage-02", c.Target, legendaryMeleeScale(c.Attack(false), 200), false, false)
 		}
 	}})
 	registerLegendarySynergyHandler("JK-A12", legendaryHandler{NativeRestoreResolved: func(c *legendaryContext, effective, overflow int32) {
 		if c.Skill == 10119 && effective > 0 {
-			c.Damage(c.Scene.entities[c.Primary], legendaryMeleeScale(effective, 280), false, false)
+			c.damageVisual("stage-02", c.Scene.entities[c.Primary], legendaryMeleeScale(effective, 280), false, false)
 		}
 	}})
 	registerLegendarySynergyHandler("JK-A17", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
@@ -31,7 +31,11 @@ func init() {
 			}
 		}
 	}})
-	registerLegendarySynergyHandler("JK-A19", legendaryHandler{BeforeDamage: func(c *legendaryContext, n int32) int32 {
+	registerLegendarySynergyHandler("JK-A19", legendaryHandler{AfterHit: func(c *legendaryContext) {
+		if legendaryMeleeLanded(c) && c.Skill == 10102 && !legendaryMeleePrimary(c) {
+			c.Visual("stage-01", c.Target)
+		}
+	}, BeforeDamage: func(c *legendaryContext, n int32) int32 {
 		if !legendaryMeleeDirect(c) {
 			return n
 		}
@@ -54,7 +58,7 @@ func init() {
 	registerLegendarySynergyHandler("JK-A21", legendaryHandler{AfterHit: swordImmediatePrimary(10116, 320)})
 	registerLegendarySynergyHandler("JK-A25", legendaryHandler{SkillResolved: func(c *legendaryContext) {
 		if c.Skill == 10127 && c.Target != nil && c.Target.Monster != nil && c.Target.Monster.Target == c.Owner.ID && c.Target.Monster.TauntPower > 0 && swordNativeOnce(c, c.Target.ID) {
-			c.Damage(c.Target, legendaryMeleeScale(c.Attack(false), 160), false, false)
+			c.damageVisual("stage-01", c.Target, legendaryMeleeScale(c.Attack(false), 160), false, false)
 		}
 	}})
 	registerLegendarySynergyHandler("JK-A26", legendaryHandler{BeforeDamage: func(c *legendaryContext, n int32) int32 {
@@ -179,7 +183,11 @@ func swordNativeOnce(c *legendaryContext, target domain.EntityID) bool {
 func swordImmediatePrimary(skill domain.SkillID, pct int64) func(*legendaryContext) {
 	return func(c *legendaryContext) {
 		if legendaryMeleeLanded(c) && legendaryMeleePrimary(c) && c.Skill == skill && swordNativeOnce(c, c.Target.ID) {
-			c.Damage(c.Target, legendaryMeleeScale(c.Attack(false), pct), false, false)
+			if c.Power.ID == "JK-A28" {
+				c.damageVisual("stage-01", c.Target, legendaryMeleeScale(c.Attack(false), pct), false, false)
+			} else {
+				c.Damage(c.Target, legendaryMeleeScale(c.Attack(false), pct), false, false)
+			}
 		}
 	}
 }
@@ -201,7 +209,7 @@ func swordSingleCastArray(c *legendaryContext) {
 		return
 	}
 	for _, e := range c.Enemies(center.Pos, 150, 8) {
-		c.Damage(e, legendaryMeleeScale(c.Attack(false), 320), false, false)
+		c.damageVisual("stage-01", e, legendaryMeleeScale(c.Attack(false), 320), false, false)
 	}
 }
 func swordSilencedBy(e *entity.Entity, source domain.EntityID) bool {
@@ -229,7 +237,9 @@ func swordPermanentShield(c *legendaryContext, target *entity.Entity, amount int
 		})
 		c.Scene.statusesRemoved(target, target.Status.RemoveWhere(func(d domain.StatusDef) bool { return d.ID == id }))
 	}
-	c.Scene.applyStatusDef(target, domain.StatusDef{ID: id, Level: 1, Name: c.Power.Name, Desc: c.Power.Effect, LegendaryPowerID: c.Power.ID, LegendarySourceUID: c.SourceUID, TypeKnown: true, Type: domain.StatusGood, Permanent: true, DamageShield: amount, Icon: legendaryMeleeIcon(c), IconKnown: true}, c.Owner.ID)
+	if c.Scene.applyStatusDef(target, domain.StatusDef{ID: id, Level: 1, Name: c.Power.Name, Desc: c.Power.Effect, LegendaryPowerID: c.Power.ID, LegendarySourceUID: c.SourceUID, TypeKnown: true, Type: domain.StatusGood, Permanent: true, DamageShield: amount, Icon: legendaryMeleeIcon(c), IconKnown: true}, c.Owner.ID) {
+		c.Visual("stage-01", target)
+	}
 }
 func swordLionShields(c *legendaryContext) {
 	if !legendaryMeleeLanded(c) || !legendaryMeleePrimary(c) || c.Skill != 10116 || !swordNativeOnce(c, 0) {

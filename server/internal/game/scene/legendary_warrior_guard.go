@@ -35,7 +35,9 @@ func warriorShield(c *legendaryContext) {
 	if p.Status != nil {
 		c.Scene.statusesRemoved(p, p.Status.RemoveWhere(func(d domain.StatusDef) bool { return d.ID == id }))
 	}
-	c.Scene.applyStatusDef(p, domain.StatusDef{ID: id, Level: 1, Permanent: true, DamageShield: legendaryMeleeScale(p.MaxHP, 25), LegendaryPowerID: c.Power.ID, LegendarySourceUID: c.SourceUID, Name: c.Power.Name, Desc: c.Power.Effect, Icon: legendaryMeleeIcon(c), IconKnown: true, TypeKnown: true, Type: domain.StatusGood}, p.ID)
+	if c.Scene.applyStatusDef(p, domain.StatusDef{ID: id, Level: 1, Permanent: true, DamageShield: legendaryMeleeScale(p.MaxHP, 25), LegendaryPowerID: c.Power.ID, LegendarySourceUID: c.SourceUID, Name: c.Power.Name, Desc: c.Power.Effect, Icon: legendaryMeleeIcon(c), IconKnown: true, TypeKnown: true, Type: domain.StatusGood}, p.ID) {
+		c.Visual("stage-01", p)
+	}
 }
 func warriorPull(c *legendaryContext, t *entity.Entity) {
 	if t == nil || t.Monster == nil || !t.Alive() || c.Scene.legendaryMeleeDisplacementImmune(t) {
