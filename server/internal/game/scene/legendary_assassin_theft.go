@@ -27,5 +27,8 @@ func legendaryAssassinTheftPalm(c *legendaryContext) {
 		return
 	}
 	d := domain.SkillDef{ID: 10212, Name: "妙手震掌", Kind: domain.SkillArea, TargetEnemy: true, HurtType: domain.HurtPhysical, Radius: 180, Area: domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterCaster, Radius: 180}, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 240}}
-	c.ChildSkill(c.Target.ID, d, legendaryChildOptions{ScaleBP: 10000})
+	center := c.Owner.Pos
+	if c.ChildSkill(c.Target.ID, d, legendaryChildOptions{ScaleBP: 10000, SuppressVisual: true}) {
+		c.VisualAt("stage-01", center, 0) // Immediate palm, not the retired delayed ground mark.
+	}
 }

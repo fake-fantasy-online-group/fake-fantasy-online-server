@@ -55,7 +55,11 @@ func legendaryAssassinPull(c *legendaryContext) {
 		if c.Power.ID == "CK-A30" {
 			maximum = math.MaxFloat64
 		}
+		before := target.Pos
 		c.Scene.legendaryAssassinPullTarget(c.Owner, target, maximum)
+		if c.Power.ID == "CK-A28" && target.Pos != before {
+			c.Visual("stage-01", target)
+		}
 	}
 }
 func (s *Scene) legendaryAssassinPullTarget(owner, target *entity.Entity, maximum float64) {

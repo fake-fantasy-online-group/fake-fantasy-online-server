@@ -1,0 +1,2177 @@
+{
+  "scope": "Current synergy-v1 CK 50 + TY 80 presentation reconciliation",
+  "validation_boundary": "Server event emission only; no Unity playback, geometry scaling, attachment or visual-readability claim. Native reuse is a routing/design classification, not certification of every client asset. Historical art labels do not authorize obsolete mechanics.",
+  "counts": {
+    "native_reuse": 73,
+    "custom_wired": 4,
+    "no_fx_by_design": 53
+  },
+  "powers": [
+    {
+      "id": "CK-A01",
+      "name": "屏息准星",
+      "current_effect": "狙击直接改为贯穿目标方向的直线范围攻击；所有命中目标完整承受强化后的原生伤害，原定身仍按免疫规则结算。保留原提案基础冷却降低30%，删除站定蓄力与准星。不是新增飞弹实体。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A02",
+      "name": "狙击校准",
+      "current_effect": "狙击术原生命中必定命中且必定暴击，沿用现有暴击伤害规则，不生成额外攻击。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "标记",
+          "approved_asset": "magic0068",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A03",
+      "name": "贴身暗钉",
+      "current_effect": "狙击原生直接伤害固定提高80%，不再按距离追加第二段；贯穿改形后的每个合法目标共用这一增幅。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "追加命中",
+          "approved_asset": "magic0005",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A04",
+      "name": "尾针",
+      "current_effect": "连续投掷原生伤害固定强化；删除逐敌次数和保存10秒的计数，不创造第二份尾针伤害。数值随A05改形组合实测。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A05",
+      "name": "点名飞刃",
+      "current_effect": "连续投掷除主目标外同时攻击其附近最多3名敌人，每名完整结算原技能伤害；主目标必定保留。只是一次施法多目标结算，不假设飞刀弹道、弹跳或实体弹药。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "12秒点名标记",
+          "approved_asset": "magic0100",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "狙击或普攻兑现",
+          "approved_asset": "magic1063",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A06",
+      "name": "八方暗雨",
+      "current_effect": "保留八方暗雨的全圆、范围提高20%、伤害提高50%；作为近身暗器毒雨的技能形态底座。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "全圆攻击",
+          "approved_asset": "magic0402",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A07",
+      "name": "孤星聚刃",
+      "current_effect": "多重投掷始终强化主选目标的原生伤害，不检查命中人数；单体增幅和A06范围改形作用于同一次技能。主目标选择需要实现时保留明确合法选中目标。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "集中追加",
+          "approved_asset": "magic0172",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A08",
+      "name": "遗毒",
+      "current_effect": "死亡传播仅保留为毒系备选：死亡时把已有淬毒原生中毒传给附近最多5敌，传播毒不可再传播；删除每秒节流，改为每个原始中毒实例仅传播一次的事件约束，绝不复制强化倍率两遍。",
+      "classification": "custom_wired",
+      "reason": "One target flash after each successful native poison copy; no visual on rejected/expired copy or recursive propagation.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_poison.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "传播短闪",
+          "approved_asset": "magic4084",
+          "disposition": "wired_current_immediate_event",
+          "reason": "One target flash after each successful native poison copy; no visual on rejected/expired copy or recursive propagation."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A09",
+      "name": "行毒",
+      "current_effect": "行毒改为蚀骨淬毒：淬毒术原生中毒的每跳伤害直接提高100%；不加移动距离触发，不增加额外跳数、额外状态或额外定时器。由普攻或改造后的暗器技能施加，均强化同一份原生毒。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_poison.go",
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "毒伤命中",
+          "approved_asset": "magic1032",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A10",
+      "name": "交刃试毒",
+      "current_effect": "交刃试毒改为暗器淬毒：淬毒术生效期间，连续投掷和多重投掷的原生命中直接施加淬毒术原生中毒；不再等待两种攻击，不生成独立240%毒伤。原普攻淬毒完整保留，技能附毒为明确新增机制。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A11",
+      "name": "触地惊雷",
+      "current_effect": "保留爆弹落地即炸、投放距离与范围伤害强化，定位为投弹流形态；不再把它塞进需要预布雷的遥爆流。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go",
+        "server/internal/game/scene/legendary_assassin_traps.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "爆炸",
+          "approved_asset": "magic0145",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A12",
+      "name": "回响爆点",
+      "current_effect": "回响爆点改为重装爆芯：直接把每枚爆弹的原生爆炸伤害提高90%、爆炸范围提高30%；删除独立回响爆炸。同一次爆炸吃所有爆弹强化，避免追加伤害不能吃其他威能。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "回响爆炸",
+          "approved_asset": "magic4058",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A13",
+      "name": "串联引信",
+      "current_effect": "串联引信改为并列布雷：一次施放陷阱：爆弹时，在选定落点及其两侧同时布置共3枚同规格爆弹；全部承接爆弹技能的伤害、范围与投放即炸改形，因此装A11时三枚落地即结算，无需二次手动引爆。每枚完整保留原技能伤害，落点可重叠覆盖；额外布置不再触发额外布置，本次只支付一次原技能法力。沿用既有布置合法性，不新增引信或链式扫描。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "串联爆炸",
+          "approved_asset": "magic5055",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A14",
+      "name": "毒雾追印",
+      "current_effect": "毒雾追印改为毒雾投放即触发并扩大原生作用范围；完整保留一次伤害和原生中毒，不生成跟随目标移动的第二块毒区。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go",
+        "server/internal/game/scene/legendary_assassin_traps.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "余雾主体",
+          "approved_asset": "magic4147",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A15",
+      "name": "浸骨毒雾",
+      "current_effect": "浸骨毒雾直接强化陷阱：毒雾施加的原生中毒伤害；不增加停留计时或第二块伤害区域。与A14同次触发的原生中毒配合，不与淬毒术混称为同一技能来源。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_utility.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "浸毒主体",
+          "approved_asset": "magic4084",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "区域边界",
+          "approved_asset": "magic5247",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A16",
+      "name": "封口余震",
+      "current_effect": "封印陷阱范围扩大，原生伤害直接强化；删除4秒记录与延后返还伤害。封印控制不重复施加。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A17",
+      "name": "碎霜刃",
+      "current_effect": "冻气陷阱与背刺的原生伤害获得固定强化，冻气自身作用范围扩大；删除8秒霜痕和消费印记的独立伤害。它只作为冻结近战的备选，不声称已形成完整第四套build。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "霜痕",
+          "approved_asset": "magic1034",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "碎霜兑现",
+          "approved_asset": "magic0452",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A18",
+      "name": "寒阱淬毒",
+      "current_effect": "寒冰陷阱保留原生冻结，并施加已学淬毒术的原生中毒；同一施法者的该原生毒不会打破本次冻结，其他来源伤害照常打破。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_poison.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "外圈边界",
+          "approved_asset": "magic0352",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "命中碎霜",
+          "approved_asset": "magic0452",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A19",
+      "name": "出影横刃",
+      "current_effect": "出影横刃改为横刃背刺：背刺除原目标外同时命中前方扇形范围最多4名其他敌人，均用同一次背刺的完整伤害。保留原目标及原技能命中规则，不复制即死等其他技能效果；不依赖破隐8秒状态。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A20",
+      "name": "明刃背刺",
+      "current_effect": "保留明刃背刺：取消隐身施放门槛、完整原伤害和命中规则、伤害额外提高25%，隐身与进阶背刺原加成仍保留。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A21",
+      "name": "孤猎",
+      "current_effect": "孤猎改为背刺原选中目标伤害固定提高75%；不检查周围敌人数，A19横刃只扩大范围而不挤掉主目标收益。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A22",
+      "name": "断步伤",
+      "current_effect": "断步伤改为汲血背刺：背刺原生直接伤害的一定比例即时回复自己生命；多目标背刺按本次原生总有效伤害计算，受实际缺失生命约束。删除移动累计、伤口状态及3秒结算。吸血比例暂定15%，需按群体伤害和PvP实测。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A23",
+      "name": "破稳击",
+      "current_effect": "保留击晕伤害强化、基础冷却缩短与对免晕目标补偿的方向；后续把追加伤害并入原生伤害系数，命中时一次判断，不加时窗。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "追加命中",
+          "approved_asset": "magic1068",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A24",
+      "name": "借势藏锋",
+      "current_effect": "反击术原生反击伤害直接强化，并允许继承本角色适用于原生近战命中的吸血类装备效果；不储存藏锋，不等待下一次击晕或普攻。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A25",
+      "name": "逆刃旁落",
+      "current_effect": "反击术改为攻击者周围的范围反击，其他目标用原反击伤害系数；只响应原生成功反击事件，不从范围命中再次反击，删除每秒节流。原生反击概率不擅改成必定成功。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_counter.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "旁落斩击",
+          "approved_asset": "magic3002",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A26",
+      "name": "妙手震掌",
+      "current_effect": "主动对合法非免疫目标施放偷窃术，保留原目标与偷窃结果，同时以自身为中心180范围施放一次240%物攻掌击。偷窃未中奖不影响掌击；非法或免疫目标不发动，掌击不再次偷窃，不附加位移。",
+      "classification": "custom_wired",
+      "reason": "One immediate stage-01 GroundEffect at caster position after admitted synthetic palm; Mode=0, DurationMS=0. Suppress native theft art on this synthetic child.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_theft.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "掌击结算底层",
+          "approved_asset": "magic1046",
+          "disposition": "wired_current_immediate_event",
+          "reason": "One immediate stage-01 GroundEffect at caster position after admitted synthetic palm; Mode=0, DurationMS=0. Suppress native theft art on this synthetic child."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A27",
+      "name": "暗器延展",
+      "current_effect": "连续投掷与多重投掷施法距离及既有作用范围增加50%，作用于最终技能形态，不创建弹体。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "传毒",
+          "approved_asset": "magic2017",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A28",
+      "name": "收网环击",
+      "current_effect": "保留环形爆发增伤及命中时即时聚怪，服务近身暗器玩法；不新增延时场地。原位移免疫仍有效。",
+      "classification": "custom_wired",
+      "reason": "One target flash only after actual authoritative movement; no flash for immune/blocked/near targets. A30 supersedes this hook when combined.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_displacement.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "收束动势",
+          "approved_asset": "magic0349",
+          "disposition": "wired_current_immediate_event",
+          "reason": "One target flash only after actual authoritative movement; no flash for immune/blocked/near targets. A30 supersedes this hook when combined."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A29",
+      "name": "迟发暗杀",
+      "current_effect": "迟发暗杀改为暗杀术原生直接伤害提高80%，只保留一次原有即死判定；删除额外后段，不能借增幅重复即死。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "暗杀后段",
+          "approved_asset": "magic1063",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-A30",
+      "name": "收网聚势",
+      "current_effect": "学会爆发冲击后，排斥原范围扩大50%，取消先击退再拉近，改为直接收拢至自身40合法距离；保留原伤害和位移免疫。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_displacement.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "环印",
+          "approved_asset": "magic0455",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "引爆",
+          "approved_asset": "magic0402",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-D01",
+      "name": "出影护幕",
+      "current_effect": "隐身术原生状态存在时获得固定减伤，破隐后不再额外创建8秒护幕与6秒冷却。用于保留隐身的玩法，不强行塞进明刃常态背刺。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_defense.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-D02",
+      "name": "烟幕掩体",
+      "current_effect": "烟雾弹原减命中效果扩大为目标周围范围；受自己烟雾弹原生减命中影响的敌人对自己伤害降低，直接复用原状态，不建地面掩体或离场3秒余效。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_defense.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "烟幕主体",
+          "approved_asset": "magic8076",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-D03",
+      "name": "回刃护手",
+      "current_effect": "反击术成功反击时按本次原生反击伤害即时回复生命，删除护盾持续与内置冷却；不可从回血或范围威能反向触发反击。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_defense.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "持续底罩",
+          "approved_asset": "magic0321",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-D04",
+      "name": "毒敌迟手",
+      "current_effect": "受自己淬毒术原生中毒影响的敌人，对自己直接伤害降低；删除逐敌4秒间隔。作为毒雨第三件的生存替代，可替换A09，不能三槽外再加第四件。减伤数值待整体平衡。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_defense.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-D05",
+      "name": "霜陷护心",
+      "current_effect": "固定降低自身受到的眩晕、冻结、定身持续时间，装备即生效；删除命中后8秒、2次额度与6秒触发间隔，不解除已生效控制。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_defense.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-D06",
+      "name": "布雷退守",
+      "current_effect": "陷阱：爆弹的实际法力消耗直接降低，角色获得固定远程减伤；删除离开布置点、8秒窗口及定时护盾。作为投弹流生存替换件，不在三件伤害组合外追加第四槽。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_defense.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "持续底罩",
+          "approved_asset": "magic8354",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-D07",
+      "name": "截腕卸力",
+      "current_effect": "击晕原生控制影响的敌人对自己伤害降低，并保留击晕基础冷却缩短；删除独立10秒卸力及2次消费。免控怪由A23提供伤害补偿，不假造控制生效。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_defense.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-D08",
+      "name": "以毒清毒",
+      "current_effect": "主动施放淬毒术时即时移除最多2个可净化中毒，自身受到的中毒伤害固定降低；删除命中时净化、持续6秒与6秒内置冷却。",
+      "classification": "custom_wired",
+      "reason": "One self flash only when poison removal succeeded, regardless of removed count.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_defense.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "净化短闪",
+          "approved_asset": "magic4082",
+          "disposition": "wired_current_immediate_event",
+          "reason": "One self flash only when poison removal succeeded, regardless of removed count."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-D09",
+      "name": "濒危藏身",
+      "current_effect": "改为隐身术法力消耗降低与自身固定生命强化；删除低血自动隐身、护盾期限及30秒内部冷却，避免自动保命时序。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_defense.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "持续底罩",
+          "approved_asset": "magic4092",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-D10",
+      "name": "避阱余裕",
+      "current_effect": "学习陷阱回避后固定降低所受陷阱伤害，原生概率减半仍保留；删除受伤回血与后续6秒状态。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_defense.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-U01",
+      "name": "静步换息",
+      "current_effect": "隐身术法力消耗直接降低，并在主动施放时一次性恢复固定比例法力；恢复不超过实际消耗，删除逐秒恢复与10秒额度。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_utility.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-U02",
+      "name": "烟幕归路",
+      "current_effect": "烟雾弹施放距离和原生作用范围直接扩大，删除离开施放点60距离与移动加速窗口；与D02共享同一烟雾弹原生状态。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_utility.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-U03",
+      "name": "拆阱回馈",
+      "current_effect": "解除陷阱改为一次处理指定区域内的可见敌方陷阱，保留原成功判定并提高成功率；该技能自身法力消耗直接取消，取消成功奖励额度、15秒期限及3秒内置冷却。只改敌方拆阱功能，绝不把爆弹改回手动引爆。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_utility.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-U04",
+      "name": "探路静行",
+      "current_effect": "侦测陷阱范围直接扩大，并固定提高移动速度；删除发现奖励的6/10秒速度状态和5秒内部冷却。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_utility.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-U05",
+      "name": "回收余粮",
+      "current_effect": "暗器回收原耐久减耗保留；学习后狙击、连续投掷、多重投掷法力消耗直接降低45%，删除两次施法累计与返蓝账本。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-U06",
+      "name": "伏击余裕",
+      "current_effect": "保留背刺命中/直接击杀即时缩短隐身剩余冷却，使用既有技能冷却；不新建计时器，是隐身背刺路线备选而不是常态横刃的必需件。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-U07",
+      "name": "布阵轻装",
+      "current_effect": "所有陷阱技能法力消耗直接降低，删除12秒优惠和不同技能条件；作为投弹流武器槽的续航替换，不能在已有三槽之外追加。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_utility.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-U08",
+      "name": "隐中布置",
+      "current_effect": "保留本次主动隐身内的两次布陷不破隐，绑定已有隐身实例、不单独开时限；保留原提案隐身时长加成。与U03同槽，不写进同一三件套。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_utility.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-U09",
+      "name": "失手整备",
+      "current_effect": "狙击和击晕直接降低法力消耗与基础冷却，删除失手奖励和2秒节流，保留长冷却技能的主动使用价值；冷却减幅与A01/A23采用同一统一上限避免无冷却循环。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_utility.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "CK-U10",
+      "name": "轻装潜行",
+      "current_effect": "隐身术原生状态存在期间额外提高40%移动速度，保留原有正向速度加成，不创建独立限时状态。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_assassin_displacement.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A01",
+      "name": "普攻横扫",
+      "current_effect": "普通攻击改为同一次出手、原普攻距离内120度扇形打击：原主目标保留100%伤害，最近的最多4名其他敌人各承受70%普攻系数。侧目标继承适用的原生淬毒、吸血与普通攻击修饰；同次出手共享根攻击身份，资源恢复只结算一次，不再次生成横扫或额外普攻。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_combat.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "第二击追加",
+          "approved_asset": "magic2028",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A02",
+      "name": "长锋",
+      "current_effect": "最终矩形技能长度+60%，宽度不变",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "8秒留账印",
+          "approved_asset": "magic0100",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "另一施法换目标满足条件时兑现",
+          "approved_asset": "magic1063",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A03",
+      "name": "展翼",
+      "current_effect": "最终扇形技能半径+50%，角度不变",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A04",
+      "name": "广域",
+      "current_effect": "在职业形态改造后，最终圆形技能半径提高40%，最终扇形技能角度提高40%且最多360度。其他形状不改变，不新增伤害波次。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A05",
+      "name": "汇击",
+      "current_effect": "最终单体直接伤害技能改为主目标中心半径120圆形，最多5敌人；原系数/状态保留，不再享受单体专精",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A06",
+      "name": "贯线",
+      "current_effect": "在职业形态改造后，最终矩形技能宽度提高60%，长度不变；不新增攻击或目标记账。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "回响结算",
+          "approved_asset": "magic1068",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A07",
+      "name": "远投",
+      "current_effect": "原生飞行技能弹速+100%、施法距离+40%；无弹道技能不变",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "分压标记",
+          "approved_asset": "magic4109",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "溅射结算",
+          "approved_asset": "magic1065",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A08",
+      "name": "独锋",
+      "current_effect": "最终形态为无范围效果的单一敌方目标伤害技能时，原伤害系数提高60%；依据技能结构判定，不检查附近敌人数量。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "4秒区域",
+          "approved_asset": "magic7648",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A09",
+      "name": "必中手",
+      "current_effect": "普通攻击原生伤害段必中；暴击与原生附带效果保留",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A10",
+      "name": "迅击",
+      "current_effect": "普通攻击原生出手间隔降低20%，不额外生成攻击",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "脚下震荡",
+          "approved_asset": "magic0347",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A11",
+      "name": "锐势",
+      "current_effect": "原生直接伤害的暴击率增加20个百分点，仍受原生暴击规则约束",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A12",
+      "name": "破抗",
+      "current_effect": "本次直接伤害只忽略目标30%的原生固定物理/魔法抗性，不改动目标面板",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "旧点锚记",
+          "approved_asset": "magic4126",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "延迟爆发",
+          "approved_asset": "magic4025",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A13",
+      "name": "深制",
+      "current_effect": "技能原生可延长的敌方硬控制/定身持续时间+40%，不新建控制",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "夹击追加",
+          "approved_asset": "magic3017",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A14",
+      "name": "寒行",
+      "current_effect": "技能原生敌方移速削减幅度+50%，最多削减至原生允许下限",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "火种标记",
+          "approved_asset": "magic0430",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "接力转移",
+          "approved_asset": "magic5038",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A15",
+      "name": "精确施术",
+      "current_effect": "本人原生敌对技能状态效果命中+30个百分点，仍服从原生免疫",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "援护集火",
+          "approved_asset": "magic4104",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A16",
+      "name": "碎盾",
+      "current_effect": "直接伤害对敌方吸收护盾的削减效率提高100%。每1点原伤害可消耗2点护盾；护盾耗尽后未用于破盾的原伤害正常作用于生命，不把破盾增幅复制到生命伤害。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_combat.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "破盾余震",
+          "approved_asset": "magic0402",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A17",
+      "name": "汲命",
+      "current_effect": "已有原生吸血数值+60%，不赋予无吸血技能新的吸血",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A18",
+      "name": "毒性深化",
+      "current_effect": "本人技能原生中毒的每跳伤害提高100%；保留原状态、来源、持续时间和跳数，不额外生成毒层或定时任务。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go",
+        "server/internal/game/scene/legendary_universal_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A19",
+      "name": "蚀魔",
+      "current_effect": "已有原生法力伤害的攻击系数和最大法力比例+80%，不新增扣蓝段",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "伤痕",
+          "approved_asset": "magic9017",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "兑现补击",
+          "approved_asset": "magic2907",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A20",
+      "name": "落点牵引",
+      "current_effect": "原生位移技能完成后，将落点200范围内最多6敌人向落点牵引最多100距离；无伤害/新技能/资源事件",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_native_boundaries.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "催裂标记",
+          "approved_asset": "magic9017",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "死亡爆发",
+          "approved_asset": "magic7747",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A21",
+      "name": "伏场",
+      "current_effect": "原生陷阱触发/效果半径+50%，不复制陷阱",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "余温结算",
+          "approved_asset": "magic4058",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A22",
+      "name": "余毒余焰",
+      "current_effect": "原生毒/燃烧持续时间+50%，沿用同一状态/跳动计划",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A23",
+      "name": "稳定淬毒",
+      "current_effect": "已有原生淬毒载体的中毒触发率+40个百分点，上限100%；无载体不授予中毒",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A24",
+      "name": "节流增幅",
+      "current_effect": "装备提供的每1个百分点法力消耗降低比例，同时为主动伤害技能提供2%伤害加成。同组装备减耗相加后只读取一次；不提高原消耗，不要求蓝量或耗蓝阈值，不把此威能的增伤重复计入。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A25",
+      "name": "铁铸锋",
+      "current_effect": "物理主动技能在原生基础伤害中加入装备物理攻击贡献的50%，再统一受技能系数影响",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A26",
+      "name": "灵铸锋",
+      "current_effect": "魔法主动技能在原生基础伤害中加入装备魔攻贡献的50%，再统一受技能系数影响",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "带盾出手短闪",
+          "approved_asset": "magic3017",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A27",
+      "name": "燃烧深化",
+      "current_effect": "本人技能原生燃烧的每跳伤害提高100%；沿用原状态及原持续时间和跳数，不生成额外装备持续伤害。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go",
+        "server/internal/game/scene/legendary_universal_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A28",
+      "name": "毒锋暴击",
+      "current_effect": "原生中毒每跳允许按施加时原生物理暴击率/倍率暴击，不触发额外攻击或资源",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "刃印转破绽",
+          "approved_asset": "magic4104",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A29",
+      "name": "焰锋暴击",
+      "current_effect": "原生燃烧每跳允许按施加时原生魔法暴击率/倍率暴击，不触发额外攻击或资源",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "旧点锚记",
+          "approved_asset": "magic7648",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "减速施加短闪",
+          "approved_asset": "magic9233",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A30",
+      "name": "制敌",
+      "current_effect": "对当前受原生硬控制/定身的敌人，本次直接伤害+50%，不延长控制",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A31",
+      "name": "毒蚀破绽",
+      "current_effect": "对本人原生中毒中的目标，本次直接伤害+40%，不复制毒",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "3秒烙印",
+          "approved_asset": "magic0100",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "到期按原位距离条件兑现",
+          "approved_asset": "magic1063",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A32",
+      "name": "灼热破绽",
+      "current_effect": "对本人原生燃烧中的目标，本次直接伤害+40%，不复制燃烧",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "6秒撤步印",
+          "approved_asset": "magic0100",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "距离增加达标时兑现",
+          "approved_asset": "magic1063",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A33",
+      "name": "会心重击",
+      "current_effect": "原生直接伤害暴击倍率额外增加50个百分点，不改变非暴击",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A34",
+      "name": "主锋",
+      "current_effect": "最终范围伤害技能存在明确主目标时，原主目标的本次伤害系数提高80%，其他目标维持原系数；与其他同组系数加成相加，不按命中人数触发。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A35",
+      "name": "伸锋",
+      "current_effect": "普通攻击原生攻击距离+50%，不增加攻击数",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_appearance.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A36",
+      "name": "扫群",
+      "current_effect": "有明确主目标的原生范围伤害中，侧目标系数+40%；主目标不变",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A37",
+      "name": "稳刃",
+      "current_effect": "普通攻击原伤害系数提高75%，保留正常暴击、命中与原生附带效果；不新增计数或下一击储备。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_combat.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A38",
+      "name": "灵池武装",
+      "current_effect": "主动伤害技能原生基础伤害增加最大法力的4%，不扣蓝、不检查当前蓝量",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "8秒截援印",
+          "approved_asset": "magic0100",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        },
+        {
+          "stage": "stage-02",
+          "old_label": "首次有效治疗触发后按原伤害时程兑现",
+          "approved_asset": "magic1063",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A39",
+      "name": "铠锋",
+      "current_effect": "普通攻击原生基础伤害增加装备物理防御贡献的20%",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "追加命中",
+          "approved_asset": "magic1064",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-A40",
+      "name": "护阵施术",
+      "current_effect": "自身有原生吸收护盾时，主动直接伤害系数+40%；不消耗/刷新护盾",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D01",
+      "name": "坚甲",
+      "current_effect": "来自已生效装备的物理防御贡献提高40%；不放大角色本身或临时状态的防御贡献，不生成护盾。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_combat.go",
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D02",
+      "name": "灵甲",
+      "current_effect": "装备魔法防御贡献+40%",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "持续底罩",
+          "approved_asset": "magic8354",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D03",
+      "name": "厚生",
+      "current_effect": "装备最大生命贡献+30%",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "环绕护持",
+          "approved_asset": "magic5088",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D04",
+      "name": "灵容",
+      "current_effect": "装备最大法力贡献+40%",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "持续底罩",
+          "approved_asset": "magic7677",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D05",
+      "name": "范围卸力",
+      "current_effect": "受到有权威范围标记的敌方范围直接伤害降低25%；不延后伤害，不因现场实际只命中一人而失效。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go",
+        "server/internal/game/scene/legendary_universal_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D06",
+      "name": "卸招",
+      "current_effect": "受到普通攻击原生伤害降低25%，不影响主动技能",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D07",
+      "name": "铁壁",
+      "current_effect": "受到直接物理伤害降低20%",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D08",
+      "name": "法壁",
+      "current_effect": "受到直接魔法伤害降低20%",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "持续底罩",
+          "approved_asset": "magic0321",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D09",
+      "name": "定神",
+      "current_effect": "敌方施加且可缩短的眩晕、沉默、定身原持续时间缩短30%，按现有状态最小时长规则取整；不提供免疫或结束后的保护状态。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go",
+        "server/internal/game/scene/legendary_universal_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D10",
+      "name": "抗暴",
+      "current_effect": "受到的原生暴击伤害降低30%，普通命中不变",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "持续底罩",
+          "approved_asset": "magic0424",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D11",
+      "name": "法力承伤",
+      "current_effect": "受到敌人伤害时，30%伤害优先以1点法力抵扣1点伤害，法力不足部分回到生命伤害。此消耗不被当作施法成本，不触发返蓝或回复循环。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go",
+        "server/internal/game/scene/legendary_universal_status.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "持续底罩",
+          "approved_asset": "magic7677",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D12",
+      "name": "受疗",
+      "current_effect": "受到的原生直接/持续治疗+40%，不放大装备递归治疗",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "持续底罩",
+          "approved_asset": "magic0424",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D13",
+      "name": "承盾",
+      "current_effect": "他人为自身创建的原生吸收护盾初始量+40%，与施法者盾强度同组相加",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D14",
+      "name": "稳甲",
+      "current_effect": "敌方原生物防/魔防削减幅度降低40%，不缩短状态",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "持续底罩",
+          "approved_asset": "magic0424",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D15",
+      "name": "稳手",
+      "current_effect": "敌方原生攻速削减幅度降低40%，不改变持续时间",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "环绕护持",
+          "approved_asset": "magic5088",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D16",
+      "name": "厚盾",
+      "current_effect": "本人技能创建的吸收护盾初始强度提高60%，保留原护盾来源、寿命、覆盖与归属规则；名称含盾但不具有吸收护盾效果的技能不受影响。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go",
+        "server/internal/game/scene/legendary_universal_status.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "持续底罩",
+          "approved_asset": "magic8354",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D17",
+      "name": "定心",
+      "current_effect": "自身受原生硬控制/定身期间受到直接伤害降低25%，不生成结束保护",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D18",
+      "name": "长护",
+      "current_effect": "本人技能原生吸收护盾持续时间+40%，不增加护盾数量/额外计时器",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "持续底罩",
+          "approved_asset": "magic4092",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D19",
+      "name": "缓蚀",
+      "current_effect": "受到敌方持续伤害常驻降低25%，不等待首次受伤，不新增保护窗口。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go",
+        "server/internal/game/scene/legendary_universal_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-D20",
+      "name": "净毒",
+      "current_effect": "敌方原生毒/燃烧作用于自身的持续时间降低40%，不改变每跳",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "持续底罩",
+          "approved_asset": "magic0321",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U01",
+      "name": "速咏",
+      "current_effect": "技能原生吟唱时间降低30%，瞬发仍瞬发",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U02",
+      "name": "普攻汲能",
+      "current_effect": "玩家普通攻击成功命中时恢复10点法力。同一次出手无论侧目标、多段或子攻击多少，只恢复一次；未命中不恢复。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U03",
+      "name": "轻耗",
+      "current_effect": "主动技能法力消耗降低30%，与同组装备减耗相加后一次结算，沿用现有正消耗最低1点与精确取整规则；不先扣再返。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U04",
+      "name": "济耗",
+      "current_effect": "原生含治疗段的主动技能耗蓝降低30%，同组相加",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U05",
+      "name": "凝疗",
+      "current_effect": "本人技能原生持续治疗的每跳治疗量提高60%，不增加原持续时间、跳数或新回复状态。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go",
+        "server/internal/game/scene/legendary_universal_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U06",
+      "name": "引灵",
+      "current_effect": "已有原生直接回蓝量+50%，不复制回复事件",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U07",
+      "name": "远跃",
+      "current_effect": "原生主动位移距离/合法目标范围+40%，不加次数",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U08",
+      "name": "轻足",
+      "current_effect": "敌方施加的减速对自身移动速度的削减幅度降低40%，不改变持续时间，不缩短定身或眩晕。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go",
+        "server/internal/game/scene/legendary_universal_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U09",
+      "name": "轻行",
+      "current_effect": "自身原生基础移动速度+20%，装备贡献仍独立由U20放大",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_combat.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U10",
+      "name": "广疗",
+      "current_effect": "具有圆形或扇形范围治疗结构的原技能覆盖半径提高40%，与同组范围修饰相加；不新增治疗波次。",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "施加短闪",
+          "approved_asset": "magic9233",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U11",
+      "name": "长佑",
+      "current_effect": "本人原生非护盾/非持续治疗的有益状态持续时间+50%，不新建状态",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_status.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U12",
+      "name": "御制节用",
+      "current_effect": "会施加原生控制/定身的技能耗蓝降低30%，同组相加",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U13",
+      "name": "盾耗优化",
+      "current_effect": "会创建吸收护盾的主动技能法力消耗降低20%，与通用装备减耗同组相加，沿用现有正消耗最低1点规则，不新增全局减耗上限。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U14",
+      "name": "蚀耗",
+      "current_effect": "会施加原生中毒/燃烧的技能耗蓝降低30%，同组相加",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U15",
+      "name": "疾式",
+      "current_effect": "主动技能原生冷却缩短20%，直接修改本技能冷却参数并沿用现有取整规则；不返还其他技能的剩余冷却。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U16",
+      "name": "强疗",
+      "current_effect": "原生直接治疗系数/固定值+60%，不改变HoT跳动",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U17",
+      "name": "复苏",
+      "current_effect": "原生复活技能恢复生命比例+50%，最高恢复满血；不自动复活",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [
+        {
+          "stage": "stage-01",
+          "old_label": "索引",
+          "approved_asset": "magic4104",
+          "disposition": "obsolete_or_native_replaced_not_emitted",
+          "reason": "Not a separate current gameplay event. Preserve native presentation, without historical custom overlay or retired timing/mark/area."
+        }
+      ],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U18",
+      "name": "净明",
+      "current_effect": "原生驱散成功率+40个百分点，最高100%；不新增驱散目标或状态白名单",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U19",
+      "name": "洞察",
+      "current_effect": "原生破隐/侦测范围+100%，不添加无侦测技能的侦测",
+      "classification": "native_reuse",
+      "reason": "Existing native skill/status/position event, without duplicate historical custom stage.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_extended_skill.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    },
+    {
+      "id": "TY-U20",
+      "name": "护行",
+      "current_effect": "来自已生效装备的移动速度收益提高40%，不放大角色本身或临时状态的移动速度，不以获得护盾触发。",
+      "classification": "no_fx_by_design",
+      "reason": "Passive, numerical, resource or cooldown change has no independent world effect. Existing feedback and equipment UI suffice; buff icon/name/description remain mandatory.",
+      "implementation_sources": [
+        "server/internal/game/scene/legendary_universal_combat.go"
+      ],
+      "custom_stages": [],
+      "genuine_unresolved": []
+    }
+  ]
+}

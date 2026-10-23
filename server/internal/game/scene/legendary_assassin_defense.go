@@ -128,4 +128,7 @@ func legendaryAssassinCleanPoison(c *legendaryContext) {
 		return true
 	})
 	c.Scene.statusesRemoved(c.Owner, removed)
+	if len(removed) > 0 {
+		c.Visual("stage-01", c.Owner)
+	}
 }

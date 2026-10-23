@@ -102,6 +102,7 @@ func legendaryAssassinCopyPoison(c *legendaryContext, target *entity.Entity, poi
 	if c.Scene.applyStatusDef(target, incoming.Def, c.Owner.ID) {
 		target.Status.RestoreTransferredStatusBalance(c.Owner.ID, incoming)
 		c.Scene.pushStatusSnapshots(target)
+		c.Visual("stage-01", target) // One flash only after the copy committed.
 	}
 }
 
