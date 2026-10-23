@@ -145,12 +145,16 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 			p.Player.EndgameRiftPages = true
 			caps = append(caps, domain.EndgameRiftPagesV1)
 		}
+		firstGround := ground && !p.Player.EndgameGroundFX
 		if ground {
 			p.Player.EndgameGroundFX = true
 			caps = append(caps, domain.EndgameGroundFXV1)
 		}
 		s.endgameReply(p, domain.EndgameResponse{Kind: r.Op, RequestID: r.RequestID, OK: true,
 			Capabilities: caps})
+		if firstGround {
+			s.replayGroundEffects(p.ID)
+		}
 		if first {
 			s.resumePagedRift(p)
 		}

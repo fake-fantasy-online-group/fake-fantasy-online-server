@@ -30,8 +30,12 @@ world teardown. The map ID must match the current world. Coordinates convert wit
 
 The event uses the existing bounded `WorldSkillHitEffect` queue with an explicit
 `IsGround` discriminator; no gateway interface is added. This is presentation
-only and creates no gameplay timer or damage. It does not synchronize already
-running visuals to a late joiner. Asset selection/binding remains per-power and
+only and creates no gameplay timer or damage. Sustained effects are retained in
+the owning scene and replayed at the existing full-map entity visibility snapshot
+and first capability acknowledgement. Replay preserves fixed coordinates and sends
+only the remaining lifetime; one-shots and expired/stopped effects are not replayed.
+The existing scene timer wheel removes deadlines without a new polling service.
+Owner transfer/logout removes its effects and emits stops. Asset selection/binding remains per-power and
 must not reuse obsolete timed-stage artwork for a different gameplay stage.
 
 Validation: `python3 Tests/Endgame/run-ground-effect-contract.py` compiles the
