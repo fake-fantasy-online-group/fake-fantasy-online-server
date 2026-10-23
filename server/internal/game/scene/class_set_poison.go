@@ -8,6 +8,7 @@ import (
 // prepareClassSetPoison applies only to the assassin's native poison-on-hit
 // carrier, never monster poison, traps, or an arbitrary status sharing its ID.
 func (s *Scene) prepareClassSetPoison(source *entity.Entity, carrier domain.StatusDef, def *domain.StatusDef) {
+	defer func() { s.legendaryAssassinPreparePoison(source, def) }()
 	if source == nil || !source.Alive() || carrier.ID != 1018 || def == nil || def.ID != domain.StatusPoison || def.IntervalSec <= 0 || def.DurationSec < def.IntervalSec {
 		return
 	}

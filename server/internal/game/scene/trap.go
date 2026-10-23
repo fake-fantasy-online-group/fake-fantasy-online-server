@@ -12,6 +12,10 @@ func (s *Scene) placeTrap(owner *entity.Entity, def domain.SkillDef, at domain.P
 	if owner == nil || (owner.Player == nil && owner.Monster == nil) || s.alloc == nil || radius <= 0 {
 		return
 	}
+	s.placeAssassinTrap(owner, def, at, radius, statusDurationPct, true, accepted...)
+}
+
+func (s *Scene) placeAssassinTrap(owner *entity.Entity, def domain.SkillDef, at domain.Pos, radius, statusDurationPct int32, generate bool, accepted ...*domain.CombatSourceSnapshotV5) {
 	source := s.captureCombatSourceV5(owner, def.UniqueInvisibleStart || entityInvisible(owner))
 	if len(accepted) > 0 && accepted[0] != nil {
 		source = accepted[0]
@@ -26,11 +30,16 @@ func (s *Scene) placeTrap(owner *entity.Entity, def domain.SkillDef, at domain.P
 			VisibleTo: map[domain.EntityID]struct{}{owner.ID: {}},
 		},
 	}
+	if root := s.equipmentState().root; root != nil && root.src == owner.ID {
+		trap.Trap.LegendaryParentRootID = root.id
+	}
+	trap.Trap.LegendaryChildPlacement = !generate
 	s.entities[trap.ID] = trap
 	s.traps[trap.ID] = trap
 	s.aoi.Enter(trap)
 	// 敌方默认看不见；主人立即走正式 0x800f/SpawnTrap 分支看到落点。
 	s.emitTo(owner.ID, s.spawnEvent(trap))
+	s.legendaryAssassinTrapPlaced(owner, trap, generate)
 }
 
 // stepTraps 在怪物本帧移动之后检查触发。放置发生在更后的 stepCasts，因而新放
@@ -73,31 +82,7 @@ func (s *Scene) stepTraps() {
 		if len(targets) == 0 {
 			continue
 		}
-		payload := trapPayload(trap.Trap.Def)
-		offense := trap.Trap.EquipmentOffense
-		currentOffense := s.equipmentOffense(owner)
-		for i := range offense.Elements {
-			offense.Elements[i].DamageBP = min(offense.Elements[i].DamageBP, currentOffense.Elements[i].DamageBP)
-			offense.Elements[i].PierceBP = min(offense.Elements[i].PierceBP, currentOffense.Elements[i].PierceBP)
-		}
-		finishEquipment := s.beginEquipmentRoot(owner.ID, targets[0], offense)
-		s.equipment.root.source = trap.Trap.SourceOffense
-		if trap.Trap.SourceOffense != nil {
-			s.equipment.root.currentSource = s.captureCombatSourceV5(owner, entityInvisible(owner))
-		}
-		if trap.Trap.AttackStatsSnapshot {
-			s.equipment.root.attackStats = lesserTrapAttackStats(trap.Trap.AttackStats, owner.Stats)
-			s.equipment.root.attackSnapshot = true
-		}
-		for _, targetID := range targets {
-			target := s.entities[targetID]
-			if target == nil || !target.Alive() {
-				continue
-			}
-			_ = s.applySkill(owner, target, payload, trap.Trap.StatusDurationPct, true)
-		}
-		finishEquipment()
-		s.removeTrap(id)
+		s.triggerAssassinTrap(trap, false)
 	}
 }
 
@@ -155,18 +140,40 @@ func (s *Scene) detectTraps(detector *entity.Entity, radius, chanceBP int32) {
 	r2 := float64(radius) * float64(radius)
 	for _, trap := range s.traps {
 		if trap == nil || trap.Trap == nil || trap.Trap.Owner == detector.ID ||
-			trap.Trap.VisibleToPlayer(detector.ID) || sqDist(detector.Pos, trap.Pos) > r2 {
+			sqDist(detector.Pos, trap.Pos) > r2 {
 			continue
 		}
 		if chanceBP < 10000 && int32(s.rng.Intn(10000)) >= chanceBP {
 			continue
 		}
-		trap.Trap.VisibleTo[detector.ID] = struct{}{}
-		s.emitTo(detector.ID, s.spawnEvent(trap))
+		if !trap.Trap.VisibleToPlayer(detector.ID) {
+			trap.Trap.VisibleTo[detector.ID] = struct{}{}
+			s.emitTo(detector.ID, s.spawnEvent(trap))
+		}
 	}
 }
 
 func (s *Scene) disarmTrap(detector *entity.Entity, trapID domain.EntityID, chanceBP int32) {
+	if detector != nil && legendaryAssassinHas(s, detector, "CK-U03") {
+		center := s.traps[trapID]
+		if center == nil || center.Trap == nil || center.Trap.Owner == detector.ID || !center.Trap.VisibleToPlayer(detector.ID) {
+			return
+		}
+		ids := []domain.EntityID{}
+		for id, t := range s.traps {
+			if t.Trap != nil && t.Trap.Owner != detector.ID && t.Trap.VisibleToPlayer(detector.ID) && sqDist(center.Pos, t.Pos) <= 150*150 {
+				ids = append(ids, id)
+			}
+		}
+		sort.Slice(ids, func(i, j int) bool { return ids[i] < ids[j] })
+		for _, id := range ids {
+			s.disarmSingleTrap(detector, id, min(int32(10000), chanceBP+2500))
+		}
+		return
+	}
+	s.disarmSingleTrap(detector, trapID, chanceBP)
+}
+func (s *Scene) disarmSingleTrap(detector *entity.Entity, trapID domain.EntityID, chanceBP int32) {
 	trap := s.traps[trapID]
 	if detector == nil || trap == nil || trap.Trap == nil ||
 		!trap.Trap.VisibleToPlayer(detector.ID) || chanceBP <= 0 {
