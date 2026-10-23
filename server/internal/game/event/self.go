@@ -9,9 +9,10 @@ import "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/i
 // SelfEntered 你自己进入了一个场景。必须在任何其他实体的出场事件之前送达 ——
 // 客户端要先有"我", 才能把别人摆到我周围。
 type SelfEntered struct {
-	ID    domain.EntityID
-	Char  *domain.Character // 本人角色数据; 只读, 不得由协议层修改
-	Scene domain.SceneID
+	NativeAtkDist uint16 // native weapon classification, separate from effective reach
+	ID            domain.EntityID
+	Char          *domain.Character // 本人角色数据; 只读, 不得由协议层修改
+	Scene         domain.SceneID
 }
 
 func (e SelfEntered) Subject() domain.EntityID { return e.ID }

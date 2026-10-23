@@ -26,9 +26,10 @@ func (e MonsterSpoke) Subject() domain.EntityID { return e.Who }
 // 它同时表达"我刚进图看到了它"和"它走进了我的视野"两种情形 —— 对观察者而言
 // 这两件事没有区别, 都是"这个实体现在看得见了"。
 type EntitySpawned struct {
-	Stall *StallOwnerChanged
-	ID    domain.EntityID
-	Kind  domain.EntityKind
+	NativeAtkDist uint16 // optional presentation tail; native weapon range
+	Stall         *StallOwnerChanged
+	ID            domain.EntityID
+	Kind          domain.EntityKind
 	// Owner 仅对宠物等从属实体有意义；0 表示没有主人。
 	Owner domain.EntityID
 	Name  string
@@ -218,8 +219,9 @@ func (e PlayerRenamed) Subject() domain.EntityID { return e.Who }
 // 它对本人和 AOI 内其他玩家都可见：本人用它刷新自己的 PlayerAvatar，旁观者用它
 // 刷新 RemotePlayer。所有可公开特效都来自 Appearance，协议层不再覆盖领域值。
 type AppearanceChanged struct {
-	Who        domain.EntityID
-	Appearance domain.Appearance
+	NativeAtkDist uint16 // native weapon classification, never legendary reach
+	Who           domain.EntityID
+	Appearance    domain.Appearance
 }
 
 func (e AppearanceChanged) Subject() domain.EntityID { return e.Who }

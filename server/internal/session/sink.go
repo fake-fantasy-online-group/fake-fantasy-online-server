@@ -151,6 +151,16 @@ func (s *eventSink) Emit(ev event.Event) {
 	if pkts == nil && !stateEncoded {
 		pkts = protocol.Encode(s.observer, ev)
 	}
+	if s.sess != nil {
+		s.sess.mu.Lock()
+		native := s.sess.nativeAttackRangeV1
+		s.sess.mu.Unlock()
+		if native {
+			for i, p := range pkts {
+				pkts[i] = protocol.WithNativeAttackRange(p, ev)
+			}
+		}
+	}
 	if refreshParty && s.sess != nil {
 		if pkt := s.sess.partyPacketIfJoined(); pkt != nil {
 			pkts = append(pkts, pkt)
