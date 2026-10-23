@@ -47,30 +47,29 @@ func warriorArmor(c *legendaryContext, n int32) int32 {
 	}
 	return n
 }
-func warriorArmorStrength(pct int32) func(*legendaryContext, *domain.StatusDef) {
-	return func(c *legendaryContext, d *domain.StatusDef) {
-		if c.Skill != 10009 && c.Skill != 10005 {
+func warriorArmorStrength(c *legendaryContext, d *domain.StatusDef) {
+	if c.Skill != 10009 && c.Skill != 10005 {
+		return
+	}
+	pct := int32(0)
+	if warriorHas(c, "ZS-A08") {
+		pct += 50
+		if c.Power.ID != "ZS-A08" {
 			return
 		}
-		pct = 0
-		if warriorHas(c, "ZS-A08") {
-			pct += 50
-			if c.Power.ID != "ZS-A08" {
-				return
-			}
-		}
-		if warriorHas(c, "ZS-D02") {
-			pct += 25
-		}
-		d.PhysicalDamageTakenPct = specialScale(d.PhysicalDamageTakenPct, 100+pct)
-		d.Affixes = append([]domain.Affix(nil), d.Affixes...)
-		for i := range d.Affixes {
-			if d.Affixes[i].Attr == domain.AttrDef && d.Affixes[i].Value < 0 {
-				d.Affixes[i].Value = specialScale(d.Affixes[i].Value, 100+pct)
-			}
+	}
+	if warriorHas(c, "ZS-D02") {
+		pct += 25
+	}
+	d.PhysicalDamageTakenPct = specialScale(d.PhysicalDamageTakenPct, 100+pct)
+	d.Affixes = append([]domain.Affix(nil), d.Affixes...)
+	for i := range d.Affixes {
+		if d.Affixes[i].Attr == domain.AttrDef && d.Affixes[i].Value < 0 {
+			d.Affixes[i].Value = specialScale(d.Affixes[i].Value, 100+pct)
 		}
 	}
 }
+
 func init() {
 	h := warriorDamageSkills(50, 10005, 10009)
 	h.BeforeDamage = func(c *legendaryContext, n int32) int32 {
@@ -89,7 +88,7 @@ func init() {
 				d.LegendaryModifiers.GeometryInherited = true
 			}
 		}
-	}, StatusApplied: warriorArmorStrength(50)})
+	}, StatusApplied: warriorArmorStrength})
 	registerWarriorPower("ZS-A09", legendaryHandler{PrepareSkill: warriorSkill(10013, 25, 0, 0, 0).PrepareSkill, TargetDefinition: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10013 && legendaryMeleeShieldRemaining(c) > 0 {
 			legendaryAddTargetDamage(d, 9500)
@@ -158,7 +157,7 @@ func init() {
 	}
 	registerWarriorPower("ZS-A25", h)
 	h = warriorIncoming(16)
-	h.StatusApplied = warriorArmorStrength(25)
+	h.StatusApplied = warriorArmorStrength
 	registerWarriorPower("ZS-D02", h)
 	registerWarriorPower("ZS-D04", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) { warriorDrain(c, d) }, ModifyIncoming: func(c *legendaryContext, n int32) int32 {
 		if warriorDirectIncoming(c) && c.Blow.Magic {

@@ -85,6 +85,15 @@ func TestLegendaryWarriorShieldRefillsAndSlowImmunity(t *testing.T) {
 			if shield != legendaryMeleeScale(p.MaxHP, 25) {
 				t.Fatalf("shield%d", shield)
 			}
+			p.Player.Worn = &domain.EquipSet{}
+			s.refreshStats(p)
+			if p.Status != nil {
+				p.Status.EachEffective(func(a domain.Active) {
+					if a.Def.LegendaryPowerID == id {
+						t.Fatal("shield survived removing source gear")
+					}
+				})
+			}
 		})
 	}
 	s, p, m := legendaryMeleeFixture(t, "ZS-D10")
