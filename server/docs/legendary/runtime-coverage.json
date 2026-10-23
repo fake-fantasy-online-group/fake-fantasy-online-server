@@ -1,0 +1,3502 @@
+[
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "CK-A06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "ownerPoisonDeath"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "CK-A11",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A12",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A13",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "trapPlaced"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A14",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A15",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A16",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A17",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A18",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusCommitted",
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A19",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "CK-A20",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A21",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A22",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "CK-A23",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A24",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A25",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "selectTargets"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A26",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "theftAttempt"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A27",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "CK-A28",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill",
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A29",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-A30",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill",
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-D01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill",
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-D02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill",
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-D03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-D04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill",
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-D05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusReceiving"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-D06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill",
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-D07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill",
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-D08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "castReleased"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-D09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-D10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill",
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-U01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats",
+      "transformSkill",
+      "prepareSkill",
+      "castReleased"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-U02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats",
+      "transformSkill",
+      "prepareSkill",
+      "castReleased"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-U03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats",
+      "transformSkill",
+      "prepareSkill",
+      "castReleased"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-U04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats",
+      "transformSkill",
+      "prepareSkill",
+      "castReleased"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-U05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "CK-U06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-U07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats",
+      "transformSkill",
+      "prepareSkill",
+      "castReleased"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "CK-U08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "castAccepted",
+      "statusApplied",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-U09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats",
+      "transformSkill",
+      "prepareSkill",
+      "castReleased"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "CK-U10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeDamage"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "selectTargets",
+      "beforeDamage",
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "impactTargets",
+      "prepareSkill",
+      "beforeDamage"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusCommitted"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeDamage",
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeDamage",
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "impactTargets",
+      "beforeDamage"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A11",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "nativeRestoreAmount"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A12",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "nativeRestoreResolved"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A13",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "impactTargets",
+      "prepareSkill",
+      "beforeDamage"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A14",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeDamage",
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A15",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeDamage",
+      "afterHit",
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A16",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "impactTargets",
+      "selectTargets",
+      "beforeDamage"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A17",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A18",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A19",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "impactTargets",
+      "beforeDamage"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A20",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A21",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A22",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeDamage",
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A23",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeDamage",
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A24",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "impactTargets",
+      "targetDefinition",
+      "prepareSkill",
+      "beforeDamage"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A25",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "skillResolved"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A26",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeDamage"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A27",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A28",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A29",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-A30",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeDamage"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-D01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-D02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-D03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "nativeRestoreResolved"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-D04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-D05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-D06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-D07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-D08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-D09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-D10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-U01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-U02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "castReleased"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-U03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-U04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-U05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "castReleased"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-U06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusCommitted",
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-U07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-U08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "displacementImmune"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-U09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "JK-U10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-A02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "skillResolved"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-A04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-A05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-A06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-A08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyBlow"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-A11",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "skillResolved"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A12",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-A13",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-A14",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition",
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-A15",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-A16",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "skillResolved"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A17",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A18",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A19",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusCommitted"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-A20",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-A21",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A22",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A23",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "baseSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A24",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "skillResolved",
+      "transformSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A25",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A26",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "magicResisted"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A27",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "teleported"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A28",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-A29",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-A30",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill",
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-D01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-D02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-D03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied",
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-D04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats",
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-D05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-D06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-D07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-D08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-D09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-D10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill",
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-U01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "SS-U02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "dispelled",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-U03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-U04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-U05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "periodicResolved"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-U06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-U07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-U08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusReceiving",
+      "skillResolved"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-U09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "SS-U10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A11",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyBlow"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A12",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyBlow"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A13",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A14",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A15",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusAccuracy"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A16",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "shieldDamageBP"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A17",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A18",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A19",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A20",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "teleported"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A21",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A22",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A23",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A24",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A25",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "baseSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A26",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "baseSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A27",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A28",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A29",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A30",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A31",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A32",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A33",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyBlow"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A34",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A35",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyAppearance"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A36",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A37",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A38",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "baseSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A39",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "baseSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-A40",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusReceiving"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D11",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "absorbIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D12",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "incomingHeal"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D13",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusReceiving"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D14",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusReceiving"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D15",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusReceiving"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D16",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D17",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D18",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D19",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-D20",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusReceiving"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit",
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusReceiving"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U11",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U12",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U13",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U14",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U15",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U16",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U17",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U18",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U19",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "TY-U20",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "YS-A01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "YS-A02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "skillResolved",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "YS-A05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "selectTargets",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "YS-A06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "YS-A07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition",
+      "rootFinished",
+      "tick"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "skillResolved",
+      "transformSkill",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "baseSkill",
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A11",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A12",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "skillResolved",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A13",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A14",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "YS-A15",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit",
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A16",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A17",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "targetDefinition"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A18",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A19",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "skillResolved",
+      "transformSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A20",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A21",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusCommitted",
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A22",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A23",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "healResolved"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A24",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A25",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A26",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "selectTargets",
+      "statusApplied",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A27",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A28",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill",
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A29",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-A30",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-D01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-D02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-D03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "selectTargets",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-D04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-D05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-D06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-D07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-D08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-D09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied",
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-D10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "beforeIncoming"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "YS-U01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "statusApplied",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "YS-U02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "YS-U03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "manaRestored"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-U04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "selectTargets",
+      "healed"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "YS-U05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "selectTargets",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-U06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "skillResolved"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "YS-U07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "dispelled",
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-U08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-U09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "resurrected",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "YS-U10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "ZS-A02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "baseSkill",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "ZS-A04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill",
+      "beforeDamage"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "ZS-A09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "targetDefinition",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "baseSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A11",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A12",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "ZS-A13",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A14",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "castReleased",
+      "tick"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A15",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "ZS-A16",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "ZS-A17",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A18",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A19",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A20",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "baseSkill",
+      "selectTargets"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A21",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "retained",
+    "currentRevision": true,
+    "id": "ZS-A22",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A23",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill",
+      "rootFinished"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A24",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A25",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill",
+      "beforeDamage"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A26",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A27",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "selectTargets",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A28",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill",
+      "castReleased"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A29",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "baseSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-A30",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-D01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "castReleased"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-D02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming",
+      "statusApplied"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-D03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-D04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming",
+      "transformSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-D05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-D06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-D07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-D08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "modifyIncoming",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-D09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill",
+      "castReleased"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-D10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "equipmentChanged",
+      "modifyIncoming",
+      "statusReceiving"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-U01",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-U02",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "transformSkill",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-U03",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-U04",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "passiveStats",
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-U05",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-U06",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-U07",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "afterHit"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-U08",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-U09",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  },
+  {
+    "designStatus": "specified",
+    "currentRevision": true,
+    "id": "ZS-U10",
+    "registered": true,
+    "dropCertified": true,
+    "hooks": [
+      "prepareSkill"
+    ]
+  }
+]

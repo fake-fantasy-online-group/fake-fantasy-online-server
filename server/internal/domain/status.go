@@ -93,6 +93,18 @@ const (
 
 // StatusDef 是一个状态在某一级上的定义。
 type StatusDef struct {
+	LegendarySources            []LegendarySourceRef `json:",omitempty"`
+	HealingReceivedReductionPct int32
+	LegendaryModifiers          LegendaryStatusModifiers `json:",omitempty"`
+	LegendaryFreezePoisonOwner  EntityID                 `json:",omitempty"`
+	LegendaryStealthTrapCharges int32                    `json:",omitempty"`
+	LegendaryPoisonAmplified    bool                     `json:",omitempty"`
+	LegendaryVisualStage        string
+	// LegendaryDurationMS preserves fractional seconds for an exact authored reduction.
+	LegendaryDurationMS int32 `json:",omitempty"`
+	// Legendary grants cannot recursively trigger powers and retain source identity.
+	LegendaryPowerID   string
+	LegendarySourceUID int64
 	// Snapshot at application; applied once per tick even after source despawns.
 	DungeonDamageScaleBP int32 `json:",omitempty"`
 	// OverlayStrength is current database metadata, never persisted or sent on wire.
@@ -103,6 +115,8 @@ type StatusDef struct {
 	SuitTrapDamageBP          int32 `json:",omitempty"`
 	PeriodicDamageFraction100 int64 `json:",omitempty"`
 	// Class-set poison adds a snapshotted total over the authored tick count.
+	LegendaryPoisonCopy      bool  `json:",omitempty"`
+	LegendaryPoisonSpread    bool  `json:",omitempty"`
 	ClassSetPoison           bool  `json:",omitempty"`
 	ClassSetPoisonBonusTotal int64 `json:",omitempty"`
 	ProgressionAttackFlat    int32
@@ -172,6 +186,7 @@ type StatusDef struct {
 
 	// 以下字段是不能塞进 Stats 的战斗状态语义。数值均来自状态效果表或
 	// 与状态逐级闭合的技能描述；百分比使用整数百分数。
+	HolyActiveDamageBonusBP    int32 `json:",omitempty"`
 	PhysicalDamageReductionPct int32
 	MagicDamageReductionPct    int32
 	// DamageReductionCapPct raises the shared mitigation ceiling. Zero keeps
@@ -453,6 +468,9 @@ func newActive(def StatusDef, now Tick, src EntityID) Active {
 	a := Active{
 		Def: def, ExpireAt: now + Ticks(int(def.DurationSec)*1000), Source: src,
 		ShieldLeft: def.DamageShield,
+	}
+	if def.LegendaryDurationMS > 0 {
+		a.ExpireAt = now + Ticks(int(def.LegendaryDurationMS))
 	}
 	if def.Permanent {
 		a.ExpireAt = 0

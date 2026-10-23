@@ -3,6 +3,8 @@ package domain
 // CombatSourceSnapshotV5 is an immutable, accepted-action source snapshot.
 // Target conditions and per-hit random rolls are deliberately not captured.
 type CombatSourceSnapshotV5 struct {
+	Position                Pos
+	LegendaryPowers         []ActiveLegendaryPower
 	SuitBonuses             SuitCombatBonuses
 	Stats                   Stats
 	Equipment               EquipmentCombatStats

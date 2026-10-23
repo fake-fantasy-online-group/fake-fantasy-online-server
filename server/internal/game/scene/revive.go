@@ -123,6 +123,9 @@ func (s *Scene) reviveItem(p *entity.Entity) (int, domain.ItemDef, bool) {
 func (s *Scene) doRevive(e *entity.Entity, respawn bool) {
 	id := e.ID
 	delete(s.astralRuneRegen, id)
+	if !e.Alive() {
+		e.LegendaryLifeSequence++
+	}
 	e.HP = e.MaxHP
 	e.MP = e.MaxMP
 	// 主动回城/原地复活不会返还死亡损失；尸体的可返还记录至此失效。

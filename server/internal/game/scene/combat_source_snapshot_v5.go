@@ -8,7 +8,7 @@ import (
 func (s *Scene) captureCombatSourceV5(src *entity.Entity, invisible bool) *domain.CombatSourceSnapshotV5 {
 	s.syncClassSetAuraStatsForSnapshot(src)
 	out := &domain.CombatSourceSnapshotV5{
-		Stats: src.Stats, Equipment: s.equipmentOffense(src),
+		Position: src.Pos, Stats: src.Stats, Equipment: s.equipmentOffense(src),
 		SuitBonuses: s.classSetCardCombat(src),
 		Traits:      append([]domain.UniqueTrait(nil), s.uniqueTraits(src)...),
 		HPPercent:   uniquePercent(src.HP, src.MaxHP), MPPercent: uniquePercent(src.MP, src.MaxMP),
@@ -22,6 +22,7 @@ func (s *Scene) captureCombatSourceV5(src *entity.Entity, invisible bool) *domai
 	if src.Player == nil {
 		return out
 	}
+	out.LegendaryPowers = domain.ActiveLegendaryPowers(s.functionalWorn(src), s.itemDef, src.Player.Char)
 	pet := s.entities[src.Player.Pet]
 	if pet == nil || pet.Pet == nil || pet.Pet.Inst == nil || !pet.Alive() {
 		return out

@@ -98,6 +98,7 @@ func (s *Scene) reviveBySkill(src, dst *entity.Entity, def domain.SkillDef, effe
 		hp = int64(dst.MaxHP)
 	}
 	delete(s.astralRuneRegen, dst.ID)
+	dst.LegendaryLifeSequence++
 	dst.HP = int32(hp)
 	dst.Player.Protect(s.tick + reviveGraceTicks)
 	refund := s.refundPlayerDeathLoss(dst, effect.LossRefundPct)

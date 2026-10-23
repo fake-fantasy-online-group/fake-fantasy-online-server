@@ -77,6 +77,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		return
 	}
 	s.applyResolvedSkillModifiers(caster, &def, ch.Skills, s.rawSkillLevels(caster))
+	s.legendaryPrepareSkill(caster, &def, cmd.Target)
 	s.specialWeaponAim(caster, &def, cmd.Target)
 	if def.FormulaVersion == domain.SkillFormulaVersion {
 		def.SnapshotRawRanks = s.rawSkillLevels(caster)
@@ -86,6 +87,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		reject(event.RejectRequiresInvisible)
 		return
 	}
+	s.legendaryCasterManaAttempt(caster, def.MPCost)
 	if !s.classSetDragonActive(caster) && caster.MP < def.MPCost {
 		reject(event.RejectNotEnoughMP)
 		return
@@ -104,7 +106,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 	}
 	// 客户端 RequestSkill 独立于普攻节拍；技能只检查自己的冷却和施法准备态。
 	// 不能用上一刀的 nextAt 拒绝客户端已经正常发出的技能请求。
-	if !caster.Player.SkillReadyAt(cmd.Skill, s.tick) {
+	if !caster.Player.SkillReadyAt(cmd.Skill, s.tick) && !s.legendaryCasterCooldownPermit(caster, def) {
 		reject(event.RejectOnCooldown)
 		return
 	}
@@ -139,6 +141,8 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		}
 	}
 	targets, movementAt := s.resolveSkillTargets(caster, def, cmd.Target, cmd.At)
+	legendaryOriginalTargets := append([]domain.EntityID(nil), targets...)
+	targets = s.legendarySelectTargets(caster, def, cmd.Target, targets)
 	targets = s.limitVariantTargets(caster, def, targets, cmd.Target)
 	targets = s.limitSpecialWeaponTargets(caster, def, targets, cmd.Target)
 	if len(targets) == 0 && !(def.Kind == domain.SkillArea && def.Area.Valid()) {
@@ -159,7 +163,10 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 	// 应该被第二次的法力检查拦住 —— 扣在结算时就会两个都放出去。
 	caster.Player.StopResting()
 	commitGrowthRounding(caster, def)
+	legendaryMPBefore := caster.MP
 	s.classSetPaySkillCost(caster, def)
+	legendaryPaidMP := max(int32(0), legendaryMPBefore-caster.MP)
+	s.legendaryCasterAccepted(caster, def, cmd.Target, targets, legendaryPaidMP)
 	if durabilityCost.amount > 0 {
 		s.consumeSkillWeaponDurability(caster, durabilityCost, def.ID)
 	}
@@ -184,12 +191,13 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		Target: prepareTarget, Aim: prepareAim,
 	})
 	cast := pendingCast{
-		src: caster.ID, def: def, targets: targets, statusDurationPct: statusDurationPct,
+		legendaryOriginalTargets: legendaryOriginalTargets,
+		src:                      caster.ID, def: def, targets: targets, statusDurationPct: statusDurationPct,
 		classSetArea:     s.captureCasterSetArea(caster, def, cmd.Target, cmd.At),
 		sourceOffense:    sourceOffense,
 		equipmentOffense: sourceOffense.Equipment, equipmentSnapshot: true,
 		attackStats: sourceOffense.Stats, attackStatsSnapshot: true,
-		cooldownMS: def.CooldownMS, movementAt: movementAt,
+		cooldownMS: def.CooldownMS, movementAt: movementAt, legendaryPaidMP: legendaryPaidMP,
 		visualTarget: visualTarget, visualAim: visualAim,
 		releaseAtWall: releaseAtWall,
 	}
@@ -368,6 +376,22 @@ func (s *Scene) resolveSkillTargets(caster *entity.Entity, def domain.SkillDef, 
 		}
 		return []domain.EntityID{trap.ID}, nil
 	case domain.EffectRevealInvisible:
+		if def.LegendaryRevealPoint {
+			to := caster.Pos
+			if at != nil {
+				to = domain.Pos{MapID: s.id.MapID, X: at.X, Y: at.Y}
+			} else if target != 0 && target != caster.ID {
+				anchor := s.entities[target]
+				if anchor == nil || !anchor.Alive() || anchor.Pos.MapID != caster.Pos.MapID {
+					return nil, nil
+				}
+				to = anchor.Pos
+			}
+			if math.IsNaN(to.X) || math.IsNaN(to.Y) || math.IsInf(to.X, 0) || math.IsInf(to.Y, 0) || sqDist(caster.Pos, to) > float64(def.Dist)*float64(def.Dist) {
+				return nil, nil
+			}
+			return []domain.EntityID{caster.ID}, &to
+		}
 		return []domain.EntityID{caster.ID}, nil
 	default:
 		return nil, nil
@@ -903,31 +927,36 @@ func (s *Scene) validTarget(caster, t *entity.Entity, def domain.SkillDef) bool 
 
 // pendingCast 是本帧收到、等着结算的一次技能释放。
 type pendingCast struct {
-	classSetDamageScaleBP int32
-	classSetArea          *classSetCastArea
-	sourceOffense         *domain.CombatSourceSnapshotV5
-	attackStats           domain.Stats
-	attackStatsSnapshot   bool
-	equipmentOffense      domain.EquipmentCombatStats
-	equipmentSnapshot     bool
-	src                   domain.EntityID
-	def                   domain.SkillDef
-	targets               []domain.EntityID
-	statusDurationPct     int32
-	cooldownMS            int32
-	movementAt            *domain.Pos
-	visualTarget          domain.EntityID
-	visualAim             *domain.Pos
-	releaseAtWall         time.Time
-	resolveAtWall         time.Time
-	released              bool
-	windup                *castWindup
-	extras                []domain.MonsterSkillExtra
+	legendaryCenter          domain.Pos
+	legendaryOriginalTargets []domain.EntityID
+	legendaryRootID          uint64
+	legendaryPaidMP          int32
+	classSetDamageScaleBP    int32
+	classSetArea             *classSetCastArea
+	sourceOffense            *domain.CombatSourceSnapshotV5
+	attackStats              domain.Stats
+	attackStatsSnapshot      bool
+	equipmentOffense         domain.EquipmentCombatStats
+	equipmentSnapshot        bool
+	src                      domain.EntityID
+	def                      domain.SkillDef
+	targets                  []domain.EntityID
+	statusDurationPct        int32
+	cooldownMS               int32
+	movementAt               *domain.Pos
+	visualTarget             domain.EntityID
+	visualAim                *domain.Pos
+	releaseAtWall            time.Time
+	resolveAtWall            time.Time
+	released                 bool
+	windup                   *castWindup
+	extras                   []domain.MonsterSkillExtra
 }
 
 type pendingSkillTeleport struct {
-	who domain.EntityID
-	to  domain.Pos
+	skill domain.SkillID
+	who   domain.EntityID
+	to    domain.Pos
 }
 
 // stepCasts 结算本帧到期的技能。技能和普攻分别排队，主帧内仍固定先结算
@@ -1019,6 +1048,17 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 			s.emit(release)
 			s.startCasterSetCast(src, c.def)
 			s.specialWeaponCastReleased(src, c.def)
+			c.legendaryCenter = src.Pos
+			if c.def.Area.Center != domain.SkillAreaCenterCaster {
+				if t := s.entities[c.visualTarget]; t != nil {
+					c.legendaryCenter = t.Pos
+				}
+				if c.visualAim != nil {
+					c.legendaryCenter = *c.visualAim
+				}
+			}
+			c.legendaryRootID = s.legendaryCastReleasedAt(src, c.def, c.visualTarget, c.targets, c.legendaryPaidMP, c.legendaryCenter, c.sourceOffense)
+			s.legendaryMeleeEnemyCast(src)
 			c.released = true
 			c.releaseAtWall = time.Time{}
 			c.resolveAtWall = s.skillImpactAt(src, c.def, releaseTarget, releaseAim, now)
@@ -1040,7 +1080,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 			switch effect.Kind {
 			case domain.EffectTeleportPoint, domain.EffectTeleportTarget:
 				if c.movementAt != nil && (effect.ChanceBP >= 10000 || int32(s.rng.Intn(10000)) < effect.ChanceBP) {
-					teleports = append(teleports, pendingSkillTeleport{who: src.ID, to: *c.movementAt})
+					teleports = append(teleports, pendingSkillTeleport{who: src.ID, to: *c.movementAt, skill: c.def.ID})
 					s.applySkillProgressionShield(src, src, c.def)
 				}
 			case domain.EffectPlaceTrap:
@@ -1056,7 +1096,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 				s.disarmTrap(src, c.targets[0], effect.ChanceBP)
 				s.applySkillProgressionShield(src, src, c.def)
 			case domain.EffectRevealInvisible:
-				s.revealInvisible(src, c.def, effect.RevealRadius, c.statusDurationPct)
+				s.revealInvisibleAt(src, c.def, effect.RevealRadius, c.statusDurationPct, c.movementAt)
 				s.applySkillProgressionShield(src, src, c.def)
 			}
 			continue
@@ -1066,13 +1106,23 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 			offense = s.equipmentOffense(src)
 		}
 		finishEquipment := s.beginEquipmentRoot(src.ID, c.visualTarget, offense)
+		if c.legendaryRootID != 0 {
+			s.equipment.root.id = c.legendaryRootID
+		}
 		if v := c.def.EquipmentVariant; v != nil {
 			s.log.Debug("equipment skill variant settlement", "skill", c.def.ID, "variant", v.ID, "sourceUID", v.SourceUID, "item", v.Item, "equipmentRevision", v.EquipmentRevision, "root", s.equipment.root.id)
 		}
 		s.equipment.root.classSetDamageScaleBP = c.classSetDamageScaleBP
+		s.equipment.root.originalTargets = c.legendaryOriginalTargets
+		s.equipment.root.paidMP = c.legendaryPaidMP
+		s.equipment.root.def = c.def
+		s.equipment.root.targets = append([]domain.EntityID(nil), c.targets...)
+		s.equipment.root.center = c.legendaryCenter
 		s.equipment.root.source = c.sourceOffense
 		s.equipment.root.attackStats = c.attackStats
 		s.equipment.root.attackSnapshot = c.attackStatsSnapshot
+		c.targets = s.legendaryImpactTargets(src, c.def, c.visualTarget, c.targets)
+		s.equipment.root.targets = append([]domain.EntityID(nil), c.targets...)
 		var classSetHits []domain.EntityID
 		for targetIndex, tid := range c.targets {
 			dst, ok := s.entities[tid]
@@ -1080,7 +1130,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 				continue // 这半帧里已经死了
 			}
 			impactPosition := dst.Pos
-			landed := s.applySkill(src, dst, variantTargetDef(c.def, targetIndex), c.statusDurationPct, false)
+			landed := s.applySkill(src, dst, s.legendaryTargetDefinition(src, variantTargetDef(c.def, targetIndex), dst, c.visualTarget, c.targets), c.statusDurationPct, false)
 			if landed {
 				classSetHits = append(classSetHits, tid)
 				s.detonateVariantBomb(src, dst, c.def, impactPosition)
@@ -1097,6 +1147,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 		s.specialWeaponCastFinished(src, c.def, classSetHits)
 		s.finishCasterSetCast(src, c, classSetHits)
 		s.applyMonsterSkillExtras(src, c.def, c.targets, c.extras)
+		s.flushLegendarySwordRestore()
 		finishEquipment()
 	}
 	// One compaction owner, after all reentrant mutation. Include newly queued
@@ -1115,12 +1166,30 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 		if player == nil || !player.Alive() || !s.spawnPositionWalkable(teleport.to) {
 			continue
 		}
-		s.onTeleport(Teleport{ID: player.ID, To: s.id, At: teleport.to, Dir: player.Dir})
+		legendaryFrom := player.Pos
+		if s.onTeleport(Teleport{ID: player.ID, To: s.id, At: teleport.to, Dir: player.Dir}) {
+			s.legendaryCasterTeleported(player, legendaryFrom, teleport.skill)
+		}
 	}
 }
 
 // applySkill 把一个技能的效果落到一个目标身上。
 func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusDurationPct int32, triggeredByTrap bool) bool {
+	if def.LegendaryRequiresPrimaryLanded {
+		if root := s.equipmentState().root; root != nil && root.src == src.ID && dst.ID != root.primary {
+			landed := false
+			for _, hit := range root.hits {
+				if hit.dst == root.primary && !hit.ev.Flag.Has(event.DamageMiss) {
+					landed = true
+					break
+				}
+			}
+			if !landed {
+				return false
+			}
+		}
+	}
+
 	if !s.equipmentCombatReady(src) || !s.equipmentCombatReady(dst) {
 		return false
 	}
@@ -1130,13 +1199,24 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 	if dst.Monster != nil && s.defs != nil {
 		if monsterDef, ok := s.defs.Def(dst.Monster.TypeID); ok {
 			if _, immune := monsterDef.ImmuneSkills[def.ID]; immune {
-				if def.HasDamageEffect() {
-					s.emit(event.DamageDealt{
-						Src: src.ID, Dst: dst.ID, DstHP: dst.HP,
-						SkillID: int32(def.ID), Flag: event.DamageMiss,
-					})
+				if def.LegendaryDamageThroughControlImmunity {
+					def.Statuses = nil
+					var damageOnly []domain.SkillEffect
+					for _, effect := range def.DirectEffects() {
+						if effect.Kind == domain.EffectDamage {
+							damageOnly = append(damageOnly, effect)
+						}
+					}
+					def.Effects = damageOnly
+				} else {
+					if def.HasDamageEffect() {
+						s.emit(event.DamageDealt{
+							Src: src.ID, Dst: dst.ID, DstHP: dst.HP,
+							SkillID: int32(def.ID), Flag: event.DamageMiss,
+						})
+					}
+					return false
 				}
-				return false
 			}
 		}
 	}
@@ -1175,6 +1255,15 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			if dispelLanded {
 				if effectTarget.Status != nil {
 					stolen := s.specialWeaponDispel(src, effectTarget, def, effect.RemoveStatusIDs)
+					var legendaryRemoved []domain.Active
+					effectTarget.Status.EachEffective(func(a domain.Active) {
+						for _, id := range effect.RemoveStatusIDs {
+							if a.Def.ID == id {
+								legendaryRemoved = append(legendaryRemoved, a)
+								break
+							}
+						}
+					})
 					removed := effectTarget.Status.RemoveWhere(func(existing domain.StatusDef) bool {
 						for _, id := range effect.RemoveStatusIDs {
 							if existing.ID == id {
@@ -1185,6 +1274,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 					})
 					s.statusesRemoved(effectTarget, removed)
 					s.specialWeaponAfterDispel(src, effectTarget, def, removed, stolen)
+					s.legendaryCasterDispelled(src, effectTarget, def, legendaryRemoved)
 				}
 				effectLanded = true
 			}
@@ -1202,13 +1292,24 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			amount = s.classSetCardHealing(src, amount)
 			s.casterSetCopyHeal(src, effectTarget, amount, def.ID)
 			amount = s.startVariantMend(src, effectTarget, def, amount)
+			amount = s.legendaryCasterModifyHeal(effectTarget, amount)
+			beforeHealHP := effectTarget.HP
 			ev := combat.Restore(src, effectTarget, amount, int32(def.ID))
+			s.legendaryCasterHealed(src, effectTarget, def, beforeHealHP, ev.Amount)
+			s.legendaryHealResolved(src, effectTarget, def, amount, ev.Amount, max(int32(0), effectTarget.Status.HealingReceivedAmount(amount)-ev.Amount))
+			if s.legendaryState().depth == 0 && s.equipmentState().classSetTriggered == 0 {
+				s.legendaryMeleeHealResolved(src, effectTarget, def, ev.Amount, max(int32(0), effectTarget.Status.HealingReceivedAmount(amount)-ev.Amount))
+			}
 			s.emit(ev)
 			s.emitAttributesIfPlayer(effectTarget)
 			effectLanded = true
 
 		case domain.EffectRestoreMP:
 			amount := clampI32(int64(effect.RestoreMPFlat) + int64(s.equipmentAttackStats(src).MaxAtk)*int64(effect.SourceAttackPct)/100)
+			if s.queueLegendarySwordRestore(src, effectTarget, def, amount, true) {
+				effectLanded = true
+				break
+			}
 			if def.SpecialWeaponBaseID == 1522 || def.SpecialWeaponBaseID == 1322 && def.ID == 10302 {
 				overflow := max(int32(0), amount-max(int32(0), effectTarget.MaxMP-effectTarget.MP))
 				seconds := int32(5)
@@ -1217,26 +1318,40 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 				}
 				s.specialWeaponShield(effectTarget, def.SpecialWeaponBaseID, overflow/2, seconds, src.ID)
 			}
+			beforeRestoreMP := effectTarget.MP
 			effectTarget.MP = clampI32(int64(effectTarget.MP) + int64(amount))
 			if effectTarget.MP > effectTarget.MaxMP {
 				effectTarget.MP = effectTarget.MaxMP
 			}
+			s.legendaryCasterManaRestored(src, effectTarget, def, effectTarget.MP-beforeRestoreMP, max(int32(0), amount-(effectTarget.MP-beforeRestoreMP)))
 			s.emitAttributesIfPlayer(effectTarget)
 			effectLanded = true
 
 		case domain.EffectRestoreHP:
 			amount := clampI32(int64(effect.HealFlat) + int64(s.equipmentAttackStats(src).MaxAtk)*int64(effect.SourceAttackPct)/100)
+			if s.queueLegendarySwordRestore(src, effectTarget, def, amount, false) {
+				effectLanded = true
+				break
+			}
 			amount = s.uniqueHealing(src, effectTarget, amount, def)
 			amount = s.classSetCardHealing(src, amount)
 			s.casterSetCopyHeal(src, effectTarget, amount, def.ID)
 			amount = s.startVariantMend(src, effectTarget, def, amount)
+			amount = s.legendaryCasterModifyHeal(effectTarget, amount)
+			beforeHealHP := effectTarget.HP
 			ev := combat.Restore(src, effectTarget, amount, int32(def.ID))
+			s.legendaryCasterHealed(src, effectTarget, def, beforeHealHP, ev.Amount)
+			s.legendaryHealResolved(src, effectTarget, def, amount, ev.Amount, max(int32(0), effectTarget.Status.HealingReceivedAmount(amount)-ev.Amount))
+			if s.legendaryState().depth == 0 && s.equipmentState().classSetTriggered == 0 {
+				s.legendaryMeleeHealResolved(src, effectTarget, def, ev.Amount, max(int32(0), effectTarget.Status.HealingReceivedAmount(amount)-ev.Amount))
+			}
 			s.emit(ev)
 			s.emitAttributesIfPlayer(effectTarget)
 			effectLanded = true
 
 		case domain.EffectDamageMP:
 			amount := clampI32(int64(effect.DamageFlat) + int64(s.equipmentAttackStats(src).MaxAtk)*int64(effect.SourceAttackPct)/100)
+			amount = clampI32(int64(amount) * (10000 + int64(def.LegendaryModifiers.ManaDrainBP)) / 10000)
 			if def.SpecialWeaponBaseID == 1622 && def.ID == 10013 {
 				s.specialWeaponShield(src, 1622, min(amount, effectTarget.MP)/2, 4, src.ID)
 			}
@@ -1249,6 +1364,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 
 		case domain.EffectDamageMPMax:
 			amount := clampI32(int64(effectTarget.MaxMP) * int64(effect.MaxResourcePct) / 100)
+			amount = clampI32(int64(amount) * max(int64(0), 10000+int64(def.LegendaryModifiers.ManaDrainBP)) / 10000)
 			effectTarget.MP -= amount
 			if effectTarget.MP < 0 {
 				effectTarget.MP = 0
@@ -1261,9 +1377,14 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 
 		case domain.EffectResurrect:
 			effectLanded = s.reviveBySkill(src, effectTarget, def, effect)
+			if effectLanded {
+				s.legendaryCasterResurrected(src, effectTarget, def)
+			}
 
 		case domain.EffectStealItem:
+			eligible := s.theftTargetEligible(src, effectTarget, def, effect)
 			effectLanded = s.stealMonsterItem(src, effectTarget, def, effect)
+			s.legendaryAssassinTheftAttempt(src, effectTarget, def, eligible)
 
 		case domain.EffectKnockback:
 			if effect.ChanceBP >= 10000 || int32(s.rng.Intn(10000)) < effect.ChanceBP {
@@ -1304,9 +1425,10 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 				SkillID:           int32(def.ID),
 				SkillPct:          effect.DamagePct,
 				FlatDamage:        effect.DamageFlat,
+				BaseDamageFlat:    effect.BaseDamageFlat,
 				SkillPctNumerator: effect.DamagePctNumerator, SkillPctDenominator: effect.DamagePctDenominator,
 				Trap:          triggeredByTrap,
-				GuaranteedHit: effect.GuaranteedHit,
+				GuaranteedHit: effect.GuaranteedHit, GuaranteedCrit: effect.GuaranteedCrit,
 				// 法系技能 100% 命中(docs/战斗公式.md 第一节)。
 				// 物理系技能照常判命中 —— 「法杖平砍算物理, 照样 miss」。
 				Magic: def.HurtType != domain.HurtPhysical && def.HurtType != domain.HurtNone,
@@ -1354,6 +1476,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		}
 	}
 	s.applySkillProgressionShield(src, dst, def)
+	s.legendarySkillResolved(src, dst, def, true)
 	return true
 }
 
@@ -1377,6 +1500,9 @@ func overrideStatusAffixes(base, overrides []domain.Affix) []domain.Affix {
 // knockbackMonster 沿施法者到目标的方向推动活着的敌怪。逐段检查 MASK，不能
 // 为了找到一个可走终点就穿过中间障碍；距离不足时落在最后一个合法采样点。
 func (s *Scene) knockbackMonster(src, target *entity.Entity, distance int32) bool {
+	if s.legendaryMeleeDisplacementImmune(target) {
+		return false
+	}
 	if src == nil || target == nil || target.Monster == nil || !target.Alive() || distance <= 0 {
 		return false
 	}
@@ -1409,6 +1535,7 @@ func (s *Scene) knockbackMonster(src, target *entity.Entity, distance int32) boo
 		return false
 	}
 	s.aoi.Move(target, to)
+	s.legendaryMeleeMoved(target, from, to, true)
 	// 击退必须立即覆盖怪物此前的追击路径；普通追击的 500ms 节流不能吞掉它。
 	s.emit(event.EntityMoved{ID: target.ID, To: to, Dir: target.Dir, Snap: true})
 	target.Monster.CombatPathActive = false

@@ -102,6 +102,7 @@ func (s *Scene) resolveSkillStatusDef(skill domain.SkillDef, app domain.StatusAp
 	}
 	applyStatusSource(&def, skill.Icon, int32(skill.ID))
 	specialWeaponStatus(skill, &def)
+	s.legendaryInheritStatusModifiers(skill,&def)
 	return def, true
 }
 

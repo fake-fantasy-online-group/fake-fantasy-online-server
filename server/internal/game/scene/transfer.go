@@ -180,12 +180,15 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	s.cancelPendingCombat(combatants...)
 
 	s.revokeDepartingSkillSource(e)
+	s.revokeLegendaryForeignShields(e)
 	runtime := e.CapturePlayerRuntime(s.tick)
 	runtime.ClassSets = s.captureClassSetRuntime(e)
+	runtime.Legendary = s.captureLegendaryRuntime(e)
 	// 0.5 宠物跟着主人做无损运行态交接。源场景只摘除旧实体，
 	// 不走 recallPet，因为召回会清当前技能、结束骑乘并改变客户端宠物栏。
 	runtime.Pet = s.detachPetForTransfer(e)
 	s.removeOwnerTraps(e.ID)
+	s.removeOwnerGroundEffects(e.ID)
 	// 传送命令携带的是目标落地方向；不能让运行态快照里的旧朝向把它覆盖掉。
 	runtime.Dir = cmd.Dir
 

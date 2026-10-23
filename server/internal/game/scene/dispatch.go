@@ -509,6 +509,7 @@ func (s *Scene) onEnter(cmd Enter) {
 	if cmd.Runtime != nil {
 		e.RestorePlayerRuntime(*cmd.Runtime, s.tick)
 		s.restoreClassSetRuntime(e, cmd.Runtime.ClassSets)
+		s.restoreLegendaryRuntime(e, cmd.Runtime.Legendary)
 	} else {
 		e.HP, e.MP = e.MaxHP, e.MaxMP // 只有新的在线生命周期才补满
 	}
@@ -742,6 +743,7 @@ func (s *Scene) onLeave(cmd Leave) {
 		}
 		return
 	}
+	s.revokeLegendaryForeignShields(e)
 	s.disconnectEndgameRift(e)
 	s.stepEndgameTrial()
 	s.clearCastWindup(e.ID)
@@ -752,6 +754,7 @@ func (s *Scene) onLeave(cmd Leave) {
 		s.closeStallForExit(e)
 		s.detachPetForLogout(e)
 		s.removeOwnerTraps(e.ID)
+		s.removeOwnerGroundEffects(e.ID)
 	}
 	// 先广播消失(这时他还在 AOI 里, 广播范围才算得对), 再摘除。
 	s.emitExcept(event.EntityDespawned{ID: e.ID, Kind: e.Kind, Reason: event.DespawnLogout}, e.ID)
@@ -910,7 +913,10 @@ func (s *Scene) move(cmd MoveTo, checkPortal, force bool) {
 	if !force && positionChanged && e.Player != nil {
 		e.Player.StopResting()
 	}
+	legendaryFrom := e.Pos
 	s.aoi.Move(e, cmd.To)
+	s.legendaryCasterMoved(e, legendaryFrom, cmd.To, !force, force)
+	s.legendaryMeleeMoved(e, legendaryFrom, cmd.To, force)
 	if force && e.Player != nil {
 		delete(s.moveWindows, e.ID)
 	}
@@ -1032,6 +1038,7 @@ func projectileTravelDuration(from, to domain.Pos, speedPXPerSec int32) time.Dur
 // sendAllEntities 把同一张地图的公开实体一次性发给某个玩家。只跳过玩家本人；
 // NPC 的排障开关仍然生效。
 func (s *Scene) sendAllEntities(to domain.EntityID) {
+	s.replayGroundEffects(to)
 	n := 0
 	for _, o := range s.entities {
 		if s.entityMapLoading(o) {

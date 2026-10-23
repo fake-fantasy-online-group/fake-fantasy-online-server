@@ -39,7 +39,7 @@ func (s *Scene) afterCastDamage(dealt event.DamageDealt, directHit bool) {
 			continue
 		}
 		remaining := cast.releaseAtWall.Sub(now)
-		if directHit && dealt.Amount > 0 {
+		if directHit && dealt.Amount > 0 && !s.legendaryCasterSteadyCast(caster,cast.def.ID) {
 			chance := s.castInterruptChanceBP(caster)
 			roll := int32(s.rng.Intn(10000))
 			interrupted := roll < chance

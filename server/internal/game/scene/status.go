@@ -64,6 +64,9 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	if s.riftMonster(target) && disabledRiftMonsterStatus(def) {
 		return false
 	}
+	if !s.legendaryStatusReceiving(target, s.entities[src], &def) {
+		return false
+	}
 	s.clearDisabledRiftMonsterStatuses(target)
 	s.expireHarmfulSuppression(target)
 	if def.Invisible && target.Status != nil && target.Status.PreventsInvisible() {
@@ -78,14 +81,17 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	}
 	// 先做确定性的矩阵预检。被已有状态挡住不是“抗性命中”，不能发抵抗提示，
 	// 也不该白白消耗本场景的随机数流。
-	if target.Status != nil && target.Status.BlockedByOverlay(def, s.statusOverlay) {
+	overlay := s.legendaryCasterOverlay(target, def, s.statusOverlay)
+	if target.Status != nil && target.Status.BlockedByOverlay(def, overlay) {
 		return false
 	}
 	// Base chance and resistance share exactly one final draw. Buffs only use
 	// their authored chance; immunity/overlay failures above never consume RNG.
+	s.legendaryStatusAccuracy(s.entities[src], target, &def)
 	if !s.statusEffectLands(target, def, src) {
 		return false
 	}
+	s.legendaryMeleeAdjustStatus(target, &def)
 	if (def.PoisonOnHitChance > 0 || def.FreezeAttackerChance > 0) && !def.SourceEffectHitKnown {
 		def.SourceEffectHitBP = s.sourceEffectHitBP(target)
 		def.SourceEffectHitKnown = true
@@ -102,12 +108,17 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	// Periodic damage may outlive a pet/summon/trap entity. Keep its responsible
 	// player's stable source ID now; MF itself is read only at the fatal tick.
 	src = s.periodicDamageOwnerV5(def, src)
+	if def.LegendaryPowerID == "" && !s.legendaryCasterStatusApplying(src, target, &def) {
+		return false
+	}
+	s.legendaryFinalizeStatus(&def)
 	poisonBurst := s.classSetPoisonBurst(target, def, src)
 	def.DungeonDamageScaleBP = 0
 	if scale := s.dungeonMonsterDamage(s.entities[src], target, 10000); scale != 10000 {
 		def.DungeonDamageScaleBP = scale
 	}
-	result := target.Status.ApplyWithOverlay(def, s.tick, src, s.statusOverlay)
+
+	result := target.Status.ApplyWithOverlay(def, s.tick, src, overlay)
 	for _, removed := range result.Removed {
 		s.emit(event.StatusRemoved{Who: target.ID, Status: int32(removed)})
 	}
@@ -123,6 +134,7 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 		}
 		return false
 	}
+	s.legendaryStatusCommitted(s.entities[src], target, &def)
 	if poisonBurst > 0 {
 		s.dealClassSetPoisonBurst(target, src, poisonBurst)
 		if !target.Alive() {
@@ -133,9 +145,13 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	s.refreshEntityStats(target)
 	s.emitAttributesIfPlayer(target)
 	s.pushStatusSnapshots(target)
+	durationMS := int64(def.DurationSec) * 1000
+	if def.LegendaryDurationMS > 0 {
+		durationMS = int64(def.LegendaryDurationMS)
+	}
 	s.emit(event.StatusApplied{
 		Who: target.ID, Status: int32(def.ID), Level: def.Level,
-		DurationMS: int64(def.DurationSec) * 1000,
+		DurationMS: durationMS,
 	})
 	if target.Kind == domain.KindPlayer && isHarmful(def) {
 		s.tryPetCleanse(target, def.ID)
@@ -221,6 +237,7 @@ func (s *Scene) prepareSkillStatuses(e *entity.Entity, def *domain.SkillDef) int
 		bonus += e.Status.StealthDamageBonus()
 	}
 	if bonus > 0 {
+		bonus += def.LegendaryNextDamageBonusPct
 		if len(def.Effects) > 0 {
 			for i := range def.Effects {
 				if def.Effects[i].Kind == domain.EffectDamage {
@@ -244,6 +261,9 @@ func (s *Scene) prepareSkillStatuses(e *entity.Entity, def *domain.SkillDef) int
 		}
 	}
 	def.PrepareMS = skillPrepareAfterReduction(def.PrepareMS, castReduction)
+	if def.LegendaryInstantCast {
+		def.PrepareMS = 0
+	}
 	preserveInvisible := false
 	if def.PreserveInvisibleChanceBP > 0 && e.Status.Invisible() {
 		chance := def.PreserveInvisibleChanceBP
@@ -276,14 +296,25 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		return event.DamageDealt{Src: src.ID, Dst: dst.ID, DstHP: dst.HP, SkillID: blow.SkillID, Flag: event.DamageMiss}, 0, 0
 	}
 	beforeHP := dst.HP
+	if child := s.legendaryState().child; child != nil {
+		blow.LegendaryChild = true
+		blow.Origin = domain.DamageProcOrigin
+		blow.ProcDepth = 1
+		blow.RootID = child.RootID
+		blow.SourceOffense = child.Source
+	}
 	blow = s.equipmentBlow(src, blow)
+	s.legendaryModifyBlow(src, dst, &blow)
+	if root := s.equipmentState().root; root != nil && root.src == src.ID && !blow.LegendaryChild && blow.Origin == domain.DamageNormalOrigin && blow.SkillID == int32(root.def.ID) {
+		blow.NativeDamageSnapshot = s.legendaryState().nativeDamageSnapshots[root.id]
+	}
 	ev := combat.CalculateStrike(src, dst, tr, blow, s.rng)
 	rawDamage := ev.Amount
 	if ev.Flag.Has(event.DamageMiss) || rawDamage <= 0 && blow.FlatDamage <= 0 {
 		s.collectEquipmentHit(src, dst, blow, ev)
 		return ev, rawDamage, 0
 	}
-	if blow.FlatDamage > 0 {
+	if blow.FlatDamage > 0 && blow.NativeDamageSnapshot == nil {
 		rawDamage = clampI32(int64(rawDamage) + int64(blow.FlatDamage))
 	}
 	if gmGodEnabled(dst) {
@@ -293,9 +324,11 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		return ev, 0, 0
 	}
 	magic := ev.Flag.Has(event.DamageMagic)
-	rawDamage = clampI32(int64(rawDamage) + int64(s.sourcePetExtraV5(blow.SourceOffense, blow.CurrentSourceOffense, magic)))
-	if blow.SourceOffense.StatusPresent || blow.CurrentSourceOffense != nil && blow.CurrentSourceOffense.StatusPresent {
-		rawDamage = max(int32(1), clampI32(int64(rawDamage)+int64(sourceStatusFlatV5(blow.SourceOffense, blow.CurrentSourceOffense, magic))))
+	if !blow.LegendaryPayload && blow.NativeDamageSnapshot == nil {
+		rawDamage = clampI32(int64(rawDamage) + int64(s.sourcePetExtraV5(blow.SourceOffense, blow.CurrentSourceOffense, magic)))
+		if blow.SourceOffense.StatusPresent || blow.CurrentSourceOffense != nil && blow.CurrentSourceOffense.StatusPresent {
+			rawDamage = max(int32(1), clampI32(int64(rawDamage)+int64(sourceStatusFlatV5(blow.SourceOffense, blow.CurrentSourceOffense, magic))))
+		}
 	}
 	pvp := s.equipmentPVP(src, dst)
 	element := domain.HurtElementIndex(blow.HurtType)
@@ -316,6 +349,13 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 	if element >= 0 {
 		offense.DamageBP += suitOffense.DamageBP[element]
 		defense.MitigationBP += suitDefense.MitigationBP[element]
+		bp := min(int32(10000), max(int32(0), blow.ElementReductionPenetrationBP))
+		if bp > 0 && defense.ResistBP > 0 {
+			defense.ResistBP = int32(int64(defense.ResistBP) * int64(10000-bp) / 10000)
+		}
+		if bp > 0 && defense.MitigationBP > 0 {
+			defense.MitigationBP = int32(int64(defense.MitigationBP) * int64(10000-bp) / 10000)
+		}
 	}
 	x := sourceUniqueEffectsV5(blow.SourceOffense, blow.CurrentSourceOffense, uniqueStrikeContext(src, dst, blow, ev, beforeHP))
 	if blow.Origin == domain.DamageProcOrigin {
@@ -327,12 +367,24 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		ScaledDamageIncreaseNumerator: s.equipmentAuraDamageNumerator(src, element, pvp),
 		PayloadScaleBP:                blow.PayloadScaleBP, PayloadScaleKnown: blow.PayloadScaleKnown, PVP: pvp,
 	}
-	rawDamage = buckets.OutgoingDamage(rawDamage)
-	rawDamage = s.casterSetOutgoingDamage(src, blow.HurtType, rawDamage)
-	rawDamage = s.classSetMissingHealthDamage(src, rawDamage)
-	if root := s.equipmentState().root; root != nil && root.src == src.ID && root.classSetDamageScaleBP > 0 && blow.SkillID == int32(classSetWhirlwind) {
-		rawDamage = clampI32(int64(rawDamage) * int64(root.classSetDamageScaleBP) / 10000)
+	if !blow.LegendaryPayload && blow.NativeDamageSnapshot == nil {
+		rawDamage = buckets.OutgoingDamage(rawDamage)
+		rawDamage = s.casterSetOutgoingDamage(src, blow.HurtType, rawDamage)
+		rawDamage = s.classSetMissingHealthDamage(src, rawDamage)
+		if root := s.equipmentState().root; root != nil && root.src == src.ID && root.classSetDamageScaleBP > 0 && blow.SkillID == int32(classSetWhirlwind) {
+			rawDamage = clampI32(int64(rawDamage) * int64(root.classSetDamageScaleBP) / 10000)
+		}
 	}
+	if blow.NativeDamageSnapshot != nil {
+		targetOnly := legendaryTargetUniqueDamage(blow.SourceOffense, blow.CurrentSourceOffense, uniqueStrikeContext(src, dst, blow, ev, beforeHP))
+		baseBP := min(int64(10000), max(int64(0), int64(blow.NativeDamageSnapshot.SourceDamageIncreaseBP)))
+		combinedBP := min(int64(10000), max(int64(0), baseBP+int64(targetOnly)))
+		rawDamage = clampI32(int64(rawDamage) * (10000 + combinedBP) / (10000 + baseBP))
+	}
+	rawDamage = s.legendaryBeforeDamage(src, dst, blow, ev, rawDamage, false)
+	shieldAbsorbed := int32(0)
+	rawBeforeShield := int32(0)
+	var shieldsBefore []domain.Active
 	finalDamage, fullMagicReflect := rawDamage, int32(0)
 	removed := []domain.StatusID(nil)
 	reflectChance := int32(0)
@@ -343,6 +395,7 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		finalDamage = beforeHP
 	} else if magic && reflectChance > 0 && int32(s.rng.Intn(100)) < reflectChance {
 		finalDamage, fullMagicReflect = 0, rawDamage
+		fullMagicReflect = s.legendaryMagicResisted(dst, src, blow, rawDamage)
 	} else {
 		guard := domain.EvaluateUniqueTraits(s.uniqueTraits(dst), domain.UniqueContext{HPPercent: uniquePercent(beforeHP, dst.MaxHP), Magic: magic})
 		extraMitigation := int64(defense.MitigationBP) + int64(guard.MitigationBP)
@@ -373,10 +426,22 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		finalDamage = s.classSetMeleeIncomingDamage(dst, finalDamage)
 		finalDamage = s.classSetAuraIncomingDamage(dst, magic, finalDamage)
 		finalDamage = s.dungeonMonsterDamage(src, dst, finalDamage)
+		if !dst.Status.Invulnerable() {
+			finalDamage = s.legendaryBeforeDamage(src, dst, blow, ev, finalDamage, true)
+		}
 		if dst.Status.Invulnerable() {
 			finalDamage = 0
 		} else {
-			finalDamage, removed = dst.Status.AbsorbDamage(finalDamage)
+			beforeShield := finalDamage
+			rawBeforeShield = beforeShield
+			dst.Status.Each(func(a domain.Active) {
+				if a.ShieldLeft > 0 {
+					shieldsBefore = append(shieldsBefore, a)
+				}
+			})
+			finalDamage, removed = s.legendaryAbsorbDamage(src, dst, blow, finalDamage)
+			shieldAbsorbed = beforeShield - finalDamage
+
 		}
 		if dst.Status != nil && dst.Player != nil {
 			dst.Player.MarkDirty()
@@ -401,6 +466,9 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		ev.Flag &^= event.DamageFatal
 	}
 	ev.Amount, ev.DstHP, ev.AbsorbHeal = finalDamage, dst.HP-absorbedHeal, absorbedHeal
+	if len(shieldsBefore) > 0 && blow.ProcDepth == 0 && blow.Origin != domain.DamageProcOrigin {
+		s.legendaryCasterShieldResolved(dst, src, shieldsBefore)
+	}
 	if finalDamage > 0 {
 		s.beginEndgameTrial()
 	}
@@ -409,6 +477,7 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		s.afterUniqueStrike(src, dst, ev)
 	}
 	s.collectEquipmentHit(src, dst, blow, ev)
+	s.legendaryAfterHit(src, dst, blow, ev, beforeHP, rawBeforeShield, shieldAbsorbed)
 	return ev, rawDamage, fullMagicReflect
 }
 
@@ -461,6 +530,9 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 
 	if ev.Amount > 0 && dst.Status != nil {
 		s.statusesRemoved(dst, dst.Status.RemoveEffectiveWhere(func(d domain.StatusDef) bool {
+			if child := s.legendaryState().child; child != nil && child.PreserveControlSkill != 0 && (d.SkillSnapshotID == child.PreserveControlSkill || d.SourceSkillID == int32(child.PreserveControlSkill)) {
+				return false
+			}
 			return d.BreakOnDamage
 		}))
 	}
@@ -478,12 +550,12 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 		s.applyCombatTriggeredStatus(dst, src, domain.StatusFreeze)
 	}
 
-	if src.Status != nil && src.Alive() && ev.Amount > 0 {
+	if src.Status != nil && src.Alive() && ev.Amount > 0 && !s.deferLegendaryBasicLeech(src, ev) {
 		_, _, _, lifePct, lifeChance, manaPct, manaChance := src.Status.CombatTriggers()
 		if lifePct > 0 && int32(s.rng.Intn(100)) < lifeChance {
 			amount := clampI32(int64(ev.Amount) * int64(lifePct) / 100)
 			if amount > 0 {
-				s.emit(combat.Restore(src, src, amount, ev.SkillID))
+				s.emit(combat.Restore(src, src, s.legendaryIncomingHeal(src, amount), ev.SkillID))
 			}
 		}
 		if manaPct > 0 && int32(s.rng.Intn(100)) < manaChance {
@@ -551,33 +623,38 @@ func (s *Scene) mitigateSecondaryStatusDamageKind(e *entity.Entity, magic bool, 
 }
 
 func (s *Scene) mitigateSecondaryStatusDamageScaled(e *entity.Entity, magic bool, amount int32, typed bool, scaleBP int32) int32 {
-	s.clearDisabledRiftMonsterStatuses(e)
-	if e == nil || e.Status.DamageReductionCapPct() <= domain.DefaultDamageReductionCapPct {
-		amount = s.classSetMeleeIncomingDamage(e, amount)
-		if typed {
-			amount = s.classSetAuraIncomingDamage(e, magic, amount)
-		}
-		return clampI32(int64(amount) * int64(scaleBP) / 10000)
+	legacy := e == nil || e.Status.DamageReductionCapPct() <= domain.DefaultDamageReductionCapPct && !s.legendaryMitigationNeeded(e)
+	amount, shield := s.secondaryDamageBeforeShield(e, magic, amount, typed, scaleBP)
+	// The compatibility helper retains legacy reflection semantics. Native DOT
+	// settlement calls the staged boundary directly and settles shields there.
+	if legacy || !shield {
+		return amount
 	}
-	// Match direct hits: ordinary incoming buckets (including flat reduction),
-	// then independent set multipliers, then immunity and shield consumption.
-	buckets := domain.CombatDamageBuckets{
-		DamageTakenIncreasePct: e.Status.DamageTakenIncreasePct(magic),
-		DamageReductionPct:     e.Status.DamageReductionPct(magic),
-		DamageReductionCapPct:  e.Status.DamageReductionCapPct(),
-		FlatReduction:          e.Status.DamageReductionFlat(magic),
-	}
-	amount = s.classSetMeleeIncomingDamage(e, buckets.IncomingDamage(amount))
-	if typed {
-		amount = s.classSetAuraIncomingDamage(e, magic, amount)
-	}
-	amount = clampI32(int64(amount) * int64(scaleBP) / 10000)
 	if e.Status.Invulnerable() {
 		return 0
 	}
 	amount, removed := e.Status.AbsorbDamage(amount)
 	s.statusesRemoved(e, removed)
 	return amount
+}
+
+// Direct and periodic incoming power predicates share the same post-mitigation,
+// pre-shield boundary. Legacy actors without this channel keep their old rules.
+func (s *Scene) secondaryDamageBeforeShield(e *entity.Entity, magic bool, amount int32, typed bool, scaleBP int32) (int32, bool) {
+	s.clearDisabledRiftMonsterStatuses(e)
+	if e == nil || e.Status.DamageReductionCapPct() <= domain.DefaultDamageReductionCapPct && !s.legendaryMitigationNeeded(e) {
+		amount = s.classSetMeleeIncomingDamage(e, amount)
+		if typed {
+			amount = s.classSetAuraIncomingDamage(e, magic, amount)
+		}
+		return clampI32(int64(amount) * int64(scaleBP) / 10000), e != nil && (e.Status.Invulnerable() || universalShieldValue(e) > 0)
+	}
+	buckets := domain.CombatDamageBuckets{DamageTakenIncreasePct: e.Status.DamageTakenIncreasePct(magic), DamageReductionPct: e.Status.DamageReductionPct(magic), DamageReductionCapPct: e.Status.DamageReductionCapPct(), FlatReduction: e.Status.DamageReductionFlat(magic)}
+	amount = s.classSetMeleeIncomingDamage(e, buckets.IncomingDamage(amount))
+	if typed {
+		amount = s.classSetAuraIncomingDamage(e, magic, amount)
+	}
+	return clampI32(int64(amount) * int64(scaleBP) / 10000), true
 }
 
 func (s *Scene) statusesRemoved(e *entity.Entity, ids []domain.StatusID) {
@@ -753,6 +830,7 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 	out := s.equipmentAuraStatuses(e)
 	out = append(out, s.classSetUnrulyPresentation(e)...)
 	out = append(out, s.classSetCasterPresentation(e)...)
+	out = append(out, s.legendaryStatusPresentation(e)...)
 	if e.Status == nil {
 		return out
 	}
@@ -788,6 +866,12 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 			skillID = int32(a.Def.ID)
 		}
 		effectName, buffName, positionMode := s.statusVisual(a.Def)
+		if a.Def.LegendaryVisualStage != "" {
+			if fx, mode, ok := legendaryVisualEffect(a.Def.LegendaryPowerID, a.Def.LegendaryVisualStage); ok {
+				effectName = fx
+				positionMode = uint8(mode)
+			}
+		}
 		out = append(out, statusPresentation{
 			name: a.Def.Name, desc: a.Def.Desc, icon: icon,
 			effect: event.EntityStatusEffect{
@@ -944,6 +1028,7 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 		mpDelta--
 		hpDelta += int64(a.Def.ManaToHealthRate)
 	}
+	hpDelta, periodicCrit := s.legendaryPeriodicAmountResult(a, hpDelta)
 	if (hpDelta == 0 && mpDelta == 0) || !e.Alive() {
 		return
 	}
@@ -956,7 +1041,19 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 			hpDelta = int64(s.classSetCardHealing(originalSource, clampI32(hpDelta)))
 		}
 		s.casterSetCopyHeal(src, e, clampI32(hpDelta), domain.SkillID(a.Def.ID))
-		s.emit(combat.Restore(src, e, clampI32(hpDelta), int32(a.Def.ID)))
+		beforeHeal := e.HP
+		if a.Def.LegendaryPowerID == "" {
+			hpDelta = int64(s.legendaryCasterModifyHeal(e, clampI32(hpDelta)))
+		}
+		heal := combat.Restore(src, e, clampI32(hpDelta), int32(a.Def.ID))
+		s.emit(heal)
+		if a.Def.LegendaryPowerID == "" && s.legendaryState().depth == 0 {
+			skillID := a.Def.SkillSnapshotID
+			if skillID == 0 {
+				skillID = domain.SkillID(a.Def.SourceSkillID)
+			}
+			s.legendaryCasterHealed(src, e, domain.SkillDef{ID: skillID}, beforeHeal, heal.Amount)
+		}
 	} else if hpDelta < 0 {
 		// 掉血。走一条独立的路径而不是 combat.Strike ——
 		// 周期伤害不判命中、不吃暴击、不触发“挨打还手”。
@@ -967,22 +1064,46 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 			if scaleBP <= 0 {
 				scaleBP = s.dungeonMonsterDamage(src, e, 10000)
 			}
-			dmg := s.mitigateSecondaryStatusDamageScaled(e, false, clampI32(-hpDelta), false, scaleBP)
+			incoming := clampI32(-hpDelta)
+			if a.Def.ID == domain.StatusPoison {
+				incoming = s.legendaryAssassinPoisonIncoming(e, incoming)
+			}
+			incoming = s.legendaryMeleeDotDamage(e, incoming)
+			dmg, usesShield := s.secondaryDamageBeforeShield(e, false, incoming, false, scaleBP)
+			if e.Status.Invulnerable() && usesShield {
+				dmg = 0
+			} else if a.Def.LegendaryPowerID == "" {
+				dmg = s.universalPeriodicIncoming(s.entities[a.Source], e, dmg, a.Source)
+			}
+			if usesShield {
+				var removed []domain.StatusID
+				dmg, removed = e.Status.AbsorbDamage(dmg)
+				s.statusesRemoved(e, removed)
+			}
 			e.HP -= dmg
 			ev := event.DamageDealt{Origin: domain.DamageDOTOrigin, Src: a.Source, Dst: e.ID, Amount: dmg, DstHP: e.HP}
+			if periodicCrit {
+				ev.Flag |= event.DamageCrit
+			}
+			if a.Def.LegendaryPowerID != "" {
+				ev.Origin = domain.DamageProcOrigin
+				ev.ProcDepth = 1
+			}
 			if e.HP <= 0 {
 				e.HP = 0
 				ev.DstHP = 0
 				ev.Flag |= event.DamageFatal
 			}
 			s.emit(ev)
+			s.legendaryAssassinPeriodicDamage(src, e, ev)
+			s.legendaryPeriodicResolved(src, e, a, ev)
 			s.afterCastDamage(ev, false)
 			if ev.Amount > 0 {
 				s.beginEndgameTrial()
 			}
 			if ev.Amount > 0 && e.Status != nil {
 				s.statusesRemoved(e, e.Status.RemoveEffectiveWhere(func(d domain.StatusDef) bool {
-					return d.BreakOnDamage
+					return d.BreakOnDamage && !(d.LegendaryFreezePoisonOwner != 0 && d.LegendaryFreezePoisonOwner == a.Source && a.Def.ID == domain.StatusPoison && a.Def.ClassSetPoison)
 				}))
 			}
 			if ev.Flag.Has(event.DamageFatal) {

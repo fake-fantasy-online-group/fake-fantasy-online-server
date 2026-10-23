@@ -25,6 +25,7 @@ func BoostSkillDamage(e *SkillEffect, bonusPct int32) {
 	if e == nil || bonusPct == 0 {
 		return
 	}
+	e.BaseDamageFlat = SaturateInt32(int64(e.BaseDamageFlat) * (100 + int64(bonusPct)) / 100)
 	n, d := e.DamagePctNumerator, e.DamagePctDenominator
 	if d <= 0 {
 		n, d = int64(e.DamagePct), 1
@@ -45,6 +46,9 @@ func BoostSkillDamage(e *SkillEffect, bonusPct int32) {
 }
 
 func ScaleSkillDamageFraction(e *SkillEffect, numerator, denominator int64) {
+	if e != nil && denominator > 0 {
+		e.BaseDamageFlat = SaturateInt32(int64(e.BaseDamageFlat) * numerator / denominator)
+	}
 	if e == nil || denominator <= 0 {
 		return
 	}

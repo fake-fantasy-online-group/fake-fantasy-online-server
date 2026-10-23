@@ -1158,7 +1158,10 @@ func (s *Scene) moveEntity(m *entity.Entity, to domain.Pos) {
 	if to == m.Pos || !canMove(m) || !s.temporaryPathWalkable(m.Pos, to) {
 		return
 	}
+	legendaryFrom := m.Pos
 	s.aoi.Move(m, to)
+	s.legendaryCasterMoved(m, legendaryFrom, to, true, false)
+ s.legendaryMeleeMoved(m,legendaryFrom,to,false)
 	if m.Kind == domain.KindMonster && m.Monster != nil && m.Monster.Roaming {
 		if (uint64(s.tick)+uint64(m.ID))%uint64(monsterMoveBroadcastEvery) != 0 {
 			return // 游荡直线已在起步前经 MASK 校验，500ms 同步足够

@@ -28,6 +28,15 @@ type equipmentHit struct {
 	ev       event.DamageDealt
 }
 type equipmentRoot struct {
+	legendaryBasicLeech   int64
+	swordTriggers         map[legendaryStateKey]bool
+	swordRestore          *legendarySwordRestorePayload
+	originalTargets       []domain.EntityID
+	legendaryDamage       []legendaryDamagePayload
+	paidMP                int32
+	def                   domain.SkillDef
+	targets               []domain.EntityID
+	center                domain.Pos
 	classSetDamageScaleBP int32
 	classSetHealingStatus bool
 	source, currentSource *domain.CombatSourceSnapshotV5
@@ -39,6 +48,7 @@ type equipmentRoot struct {
 	hits                  []equipmentHit
 }
 type equipmentRuntime struct {
+	legendary         *legendaryRuntime
 	unruly            map[domain.EntityID]classSetUnruly
 	classSetCasters   map[domain.EntityID]*classSetCasterState
 	classSetTriggered int
@@ -141,7 +151,7 @@ func (s *Scene) beginEquipmentRoot(src, primary domain.EntityID, offense domain.
 	rt.sequence++
 	root := &equipmentRoot{id: rt.sequence, src: src, primary: primary, offense: offense}
 	rt.root = root
-	return func() { rt.root = prev; s.executeEquipmentRoot(root) }
+	return func() { rt.root = prev; s.legendaryRootFinished(root); s.executeEquipmentRoot(root) }
 }
 
 // equipmentAttackStats preserves the accepted source stats for every direct
@@ -220,6 +230,11 @@ func (s *Scene) equipmentAbsorb(dst *entity.Entity, damage, absorbBP int32, pvp 
 		cap = int64(dst.MaxHP) / 100
 	}
 	result := domain.ResolveElementAbsorb(dst.HP, dst.MaxHP, damage, absorbBP, clampI32(max(int64(0), cap-used)), pvp)
+	if result.Heal > 0 {
+		before := result.Heal
+		result.Heal = dst.Status.HealingReceivedAmount(result.Heal)
+		result.HP -= before - result.Heal
+	}
 	if result.Heal > 0 {
 		kept = append(kept, equipmentAbsorbHeal{AtMS: now, Amount: result.Heal})
 	}

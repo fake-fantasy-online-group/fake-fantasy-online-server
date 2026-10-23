@@ -322,11 +322,14 @@ func (s *Scene) refreshStatsWithLevelUp(p *entity.Entity, leveledUp bool) {
 			hadCasterBuff = st.fireUntil > s.tick || st.iceUntil > s.tick
 		}
 	}
+	s.legendaryEquipmentChanged(p)
+	s.pruneLegendaryOwner(p)
 	s.pruneCasterSetState(p, worn)
 	if hadCasterBuff && s.classSetPiecesInWorn(p, worn, 3) < classSetFirstSkillPieces {
 		defer s.pushStatusSnapshots(p)
 	}
 	_, stats, growth := s.combatGrowthStats(p)
+	s.legendaryPassiveStats(p,&stats)
 	p.Stats = stats
 	p.MaxHP = stats.MaxHP
 	p.MaxMP = stats.MaxMP

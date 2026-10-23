@@ -120,7 +120,7 @@ func (a SkillAreaTargeting) Valid() bool {
 	case SkillAreaCircle:
 		return a.Radius > 0 && a.Angle >= 0 && a.Length == 0 && a.Width == 0
 	case SkillAreaCone:
-		return a.Center == SkillAreaCenterCaster && a.Radius > 0 && a.Angle > 0 && a.Angle < 360 &&
+		return a.Center == SkillAreaCenterCaster && a.Radius > 0 && a.Angle > 0 && a.Angle <= 360 &&
 			a.Length == 0 && a.Width == 0
 	default:
 		return false
@@ -174,6 +174,8 @@ const (
 
 // SkillEffect 是从 desc_ 解出来的效果。
 type SkillEffect struct {
+	// BaseDamageFlat joins the native base before defense, critical and modifiers.
+	BaseDamageFlat    int32 `json:",omitempty"`
 	TheftMaxSuccesses int32 `json:",omitempty"`
 	Kind              EffectKind
 	// Target 默认为客户端/场景解析出的目标；Caster 用于饮血剑、噬魂剑这类
@@ -220,7 +222,8 @@ type SkillEffect struct {
 	DispelChanceBP  int32
 	// GuaranteedHit 是技能结果明确声明的必中语义。它与装备词条的“无视防御”
 	// 不是一回事：前者属于技能配置，不能借后者的字段冒充。
-	GuaranteedHit bool
+	GuaranteedHit  bool
+	GuaranteedCrit bool
 	// TauntPower 是战吼/挑衅的仇恨覆盖优先级。客户端只保留“升级后效果
 	// 更佳”而没有旧服绝对仇恨值，因此以技能等级作为可比较强度；普通受击
 	// 仇恨为 0，高等级嘲讽可以从低等级嘲讽手里接管目标。
@@ -330,9 +333,20 @@ type PassiveCounterAttack struct {
 
 // SkillDef 是一个技能在某一级上的定义。
 type SkillDef struct {
-	TargetFamilies           []MonsterFamily          `json:",omitempty"`
-	Progression              *SkillProgressionCatalog `json:"-"`
-	ManaCostReductionApplied bool
+	LegendaryNextDamageBonusPct           int32                    `json:"-"`
+	LegendarySources                      []LegendarySourceRef     `json:",omitempty"`
+	LegendaryRequiresPrimaryLanded        bool                     `json:"-"`
+	LegendaryNativeInstant                bool                     `json:"-"`
+	LegendaryEntityCenter                 bool                     `json:"-"`
+	LegendaryFriendlyCenter               bool                     `json:"-"`
+	LegendaryRevealPoint                  bool                     `json:"-"`
+	LegendaryInstantCast                  bool                     `json:"-"`
+	LegendaryDamageThroughControlImmunity bool                     `json:"-"`
+	LegendaryModifiers                    LegendarySkillModifiers  `json:"-"`
+	LegendaryBasic                        bool                     `json:"-"`
+	TargetFamilies                        []MonsterFamily          `json:",omitempty"`
+	Progression                           *SkillProgressionCatalog `json:"-"`
+	ManaCostReductionApplied              bool
 	// ManaCostReductionRanks is scoped high-rank mana reduction, applied once after other modifiers.
 	ManaCostReductionRanks int32
 	// Exact post-cap rates are server-only; previews do not consume character credit.

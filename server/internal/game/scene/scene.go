@@ -204,6 +204,7 @@ func (r ReviveAt) Enabled() bool { return r.Scene.MapID != 0 }
 //
 // 除 mailbox / quit / log 外的所有字段, **只有场景 goroutine 能碰**。
 type Scene struct {
+	groundEffects   map[groundEffectKey]*activeGroundEffect
 	specialWeapons  *specialWeaponRuntime
 	temporaryWalls  map[string]temporaryWall
 	lootRules       *domain.LootRuleTable
@@ -982,6 +983,7 @@ func (s *Scene) step() {
 	s.finishReadyMail(false)
 	s.finishReadyStalls(false)
 	s.tick++
+	s.stepLegendaryPowers()
 	if s.dungeon == nil && s.spawner != nil && s.tick%spawn.EliteChanceInterval == 0 {
 		s.spawner.RecordMinute()
 	}
@@ -1066,6 +1068,10 @@ func (s *Scene) stepCombatAt(now time.Time, timedOnly bool) {
 		if at.counter {
 			at.blow.Origin = domain.DamageCounterOrigin
 		}
+		if !at.counter && s.legendaryBasicAttack(src, dst, tr, at.blow) {
+			finishEquipment()
+			continue
+		}
 		ev, rawDamage, fullMagicReflect := s.resolveStrikeStatuses(src, dst, tr, at.blow)
 		// 伤害数值是**平衡性问题的唯一入口**: 打不死怪时, 光看"有没有伤害包"
 		// 分不出是没打中还是每下只有三十点(实测 63 级角色因为六维是空的,
@@ -1079,6 +1085,9 @@ func (s *Scene) stepCombatAt(now time.Time, timedOnly bool) {
 			}
 		}
 		s.afterStrikeStatuses(src, dst, ev, rawDamage, fullMagicReflect)
+		if at.counter {
+			s.legendaryAssassinCounterArea(src, dst, at.blow)
+		}
 		s.consumeAttackDurability(src)
 		s.consumeHitDurability(dst, ev)
 		s.emitAttributesIfPlayer(dst)
@@ -1123,9 +1132,12 @@ func (s *Scene) passiveCounterPending(defender, attacker *entity.Entity) (pendin
 		if int32(s.rng.Intn(10000)) >= rule.ChanceBP {
 			continue
 		}
+		counterDef := domain.SkillDef{ID: passive.ID, TargetEnemy: true, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: s.specialWeaponCounterDamage(defender, rule.DamagePct)}}
+		s.legendaryPrepareSkill(defender, &counterDef, attacker.ID)
+		fx := counterDef.DirectEffects()[0]
 		return pendingAttack{
 			src: defender.ID, dst: attacker.ID,
-			blow:      combat.Blow{SkillPct: s.specialWeaponCounterDamage(defender, rule.DamagePct)},
+			blow:      combat.Blow{SkillID: int32(passive.ID), SkillPct: fx.DamagePct, SkillPctNumerator: fx.DamagePctNumerator, SkillPctDenominator: fx.DamagePctDenominator},
 			resolveAt: s.tick + 1, reserved: true, counter: true,
 		}, true
 	}
@@ -1137,7 +1149,9 @@ func (s *Scene) passiveCounterPending(defender, attacker *entity.Entity) (pendin
 // 死亡与「从视野里消失」是两件事: 死亡是**战斗结果**(要结算经验/掉落/仇恨),
 // 消失是**视野事件**(只影响渲染)。所以先发 EntityDied, 尸体停留若干帧后才移除。
 func (s *Scene) onDeath(dead *entity.Entity, killer domain.EntityID) {
+	s.legendaryAssassinDeath(dead)
 	s.clearClassSetMelee(dead.ID)
+	s.clearLegendaryOwner(dead.ID)
 	if s.specialWeapons != nil {
 		delete(s.specialWeapons.players, dead.ID)
 	}
@@ -1463,6 +1477,9 @@ func nonnegativeI32(v int64) int32 {
 // emit 把事件广播给同地图所有玩家(含主体本人)。客户端实体生命周期以整张地图
 // 为边界；AOI 只保留为服务端索敌、技能范围等空间查询索引。
 func (s *Scene) emit(ev event.Event) {
+	if ground, ok := ev.(event.GroundEffect); ok {
+		s.trackGroundEffect(ground)
+	}
 	// 致死伤害的气泡先于客户端死亡表现入队；尸体虽仍短暂停在场上，
 	// 若在 PlayDie 后才下发台词，客户端可能已隐藏其头顶节点。
 	if hit, ok := ev.(event.DamageDealt); ok && hit.Flag.Has(event.DamageFatal) {
@@ -1495,10 +1512,12 @@ func (s *Scene) emitExcept(ev event.Event, except domain.EntityID) { s.push(ev, 
 
 // emitTo 只发给一个玩家。经验、属性变化、拒绝回执走这条。
 func (s *Scene) emitTo(to domain.EntityID, ev event.Event) {
+	ev = s.withNativeAttackRange(ev)
 	s.outbox = append(s.outbox, pending{ev: ev, to: to})
 }
 
 func (s *Scene) push(ev event.Event, to, except domain.EntityID) {
+	ev = s.withNativeAttackRange(ev)
 	s.outbox = append(s.outbox, pending{ev: ev, to: to, except: except})
 }
 

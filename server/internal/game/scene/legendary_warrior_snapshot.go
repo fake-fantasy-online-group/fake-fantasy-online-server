@@ -11,6 +11,9 @@ import (
 // empty cast. Initial quake impacts and its field share this source-only value;
 // every actual target subsequently supplies its own defenses and hit result.
 func (c *legendaryContext) SnapshotNativeDamage() int32 {
+	if c.Preview {
+		return 0
+	}
 	s := c.Scene
 	rt := s.legendaryState()
 	if snap := rt.nativeDamageSnapshots[c.RootID]; snap != nil {
@@ -69,7 +72,7 @@ func (c *legendaryContext) SnapshotNativeDamage() int32 {
 	if rt.nativeDamageSnapshots == nil {
 		rt.nativeDamageSnapshots = map[uint64]*combat.NativeDamageSnapshot{}
 	}
-	rt.nativeDamageSnapshots[c.RootID] = &combat.NativeDamageSnapshot{Amount: n, Critical: ev.Flag.Has(event.DamageCrit), SourceDamageIncreaseBP: int64(x.DamageBP) + int64(suitDamage) + int64(offense.DamageBP) + buckets.ScaledDamageIncreaseNumerator/10000}
+	rt.nativeDamageSnapshots[c.RootID] = &combat.NativeDamageSnapshot{Owner: c.Owner.ID, Amount: n, Critical: ev.Flag.Has(event.DamageCrit), SourceDamageIncreaseBP: int64(x.DamageBP) + int64(suitDamage) + int64(offense.DamageBP) + buckets.ScaledDamageIncreaseNumerator/10000}
 	return n
 }
 func warriorSourceOnlyTraits(source *domain.CombatSourceSnapshotV5) *domain.CombatSourceSnapshotV5 {

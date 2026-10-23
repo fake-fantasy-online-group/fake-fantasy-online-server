@@ -15,12 +15,14 @@ import (
 // 用一个结构体带可选分支, 而不是接口 —— 四种实体的共有部分(位置/血量/外观)占了九成,
 // 且每帧都要遍历全部实体, 接口派发在这里只有开销没有收益。
 type Entity struct {
-	ID    domain.EntityID
-	Kind  domain.EntityKind
-	Name  string
-	Level int32
-	HP    int32
-	MaxHP int32
+	// LegendaryLifeSequence distinguishes revived lives without changing on duplicate death callbacks.
+	LegendaryLifeSequence uint64
+	ID                    domain.EntityID
+	Kind                  domain.EntityKind
+	Name                  string
+	Level                 int32
+	HP                    int32
+	MaxHP                 int32
 	// MP 当前法力。与 HP 一样**不落盘** —— 新在线生命周期补满，跨场景保留。
 	// 存盘意义不大(下线回满是常规做法), 存了反而要处理"上限变小了怎么办"。
 	MP    int32
@@ -123,15 +125,17 @@ type Drop struct {
 // 等级。VisibleTo 是服务端的发现事实：主人天然可见，其他玩家只有侦测成功后
 // 才会收到 0x800f/SpawnTrap。
 type Trap struct {
-	SourceOffense       *domain.CombatSourceSnapshotV5
-	AttackStats         domain.Stats
-	AttackStatsSnapshot bool
-	EquipmentOffense    domain.EquipmentCombatStats
-	Owner               domain.EntityID
-	Def                 domain.SkillDef
-	Radius              int32
-	StatusDurationPct   int32
-	VisibleTo           map[domain.EntityID]struct{}
+	LegendaryParentRootID   uint64
+	LegendaryChildPlacement bool
+	SourceOffense           *domain.CombatSourceSnapshotV5
+	AttackStats             domain.Stats
+	AttackStatsSnapshot     bool
+	EquipmentOffense        domain.EquipmentCombatStats
+	Owner                   domain.EntityID
+	Def                     domain.SkillDef
+	Radius                  int32
+	StatusDurationPct       int32
+	VisibleTo               map[domain.EntityID]struct{}
 }
 
 func (t *Trap) VisibleToPlayer(player domain.EntityID) bool {
@@ -205,10 +209,12 @@ type ClassSetRuntime struct {
 // 攻击冷却与复活保护则直接保存剩余帧，避免目标场景 Tick 不同导致绕过冷却
 // 或丢掉保护期。打工在跨图前停止；出战宠物则把完整运行态一起交接。
 type PlayerRuntime struct {
+	Legendary               domain.LegendaryRuntimeTransfer
 	ClassSets               ClassSetRuntime
 	V5StatusOwner           domain.EntityID
 	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
 	EndgameRiftPortals      bool // negotiated server-owned rift gate context
+	EndgameGroundFX         bool // connection-scoped optional fixed ground effects
 	EndgameRiftPages        bool // connection-scoped atomic byte-paged rift snapshots
 	EndgameSkillVariants    bool // negotiated equipment skill variants
 	EndgameSkillBehavior    bool // negotiated typed skill behavior; connection-scoped
@@ -285,6 +291,7 @@ func (e *Entity) CapturePlayerRuntime(now domain.Tick) PlayerRuntime {
 		r.EndgameSkillVariants = e.Player.EndgameSkillVariants
 		r.EndgameRiftPortals = e.Player.EndgameRiftPortals
 		r.EndgameRiftPages = e.Player.EndgameRiftPages
+		r.EndgameGroundFX = e.Player.EndgameGroundFX
 		r.EndgameSkillBehavior = e.Player.EndgameSkillBehavior
 		r.EquipmentAbsorbRestores = append([]domain.EquipmentAbsorbRestore(nil), e.Player.EquipmentAbsorbRestores...)
 		r.GMGod = e.Player.GMGod
@@ -329,6 +336,7 @@ func (e *Entity) RestorePlayerRuntime(r PlayerRuntime, now domain.Tick) {
 		e.Player.EndgameSkillVariants = r.EndgameSkillVariants
 		e.Player.EndgameRiftPortals = r.EndgameRiftPortals
 		e.Player.EndgameRiftPages = r.EndgameRiftPages
+		e.Player.EndgameGroundFX = r.EndgameGroundFX
 		e.Player.EndgameSkillBehavior = r.EndgameSkillBehavior
 		e.Player.EquipmentAbsorbRestores = append([]domain.EquipmentAbsorbRestore(nil), r.EquipmentAbsorbRestores...)
 		e.Player.GMGod = r.GMGod
@@ -487,6 +495,7 @@ type Player struct {
 	ClassSetAuraHPBP        int32
 	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
 	EndgameRiftPortals      bool // negotiated server-owned rift gate context
+	EndgameGroundFX         bool // connection-scoped optional fixed ground effects
 	EndgameRiftPages        bool // reset on fresh login, preserved on map handoff
 	EndgameSkillVariants    bool // negotiated equipment skill variants
 	EndgameSkillBehavior    bool // negotiated typed skill behavior; connection-scoped
@@ -924,7 +933,16 @@ const (
 
 // UsesRangedWeapon 与正式客户端 RemotePlayer.get_IsRangedWeapon 使用同一门槛。
 func (e *Entity) UsesRangedWeapon() bool {
-	return e != nil && e.Kind == domain.KindPlayer && e.Look.AtkDist > playerRangedAtkDist
+	if e == nil || e.Kind != domain.KindPlayer {
+		return false
+	}
+	// Effective reach may be extended by equipment; weapon family and cadence
+	// remain based on the native weapon metadata, not that reach bonus.
+	distance := e.Look.AtkDist
+	if e.Player != nil && e.Player.Char != nil && e.Player.Char.Appear.AtkDist > 0 {
+		distance = e.Player.Char.Appear.AtkDist
+	}
+	return distance > playerRangedAtkDist
 }
 
 // DidBasicAttack 记录普通攻击。玩家采用略短于动画的准入间隔，避免准时到达的
@@ -994,4 +1012,13 @@ func (p *Player) ScaleRemainingSkillCooldown(id domain.SkillID, now domain.Tick,
 		return
 	}
 	p.skillReady[id] = now + (p.skillReady[id]-now)*domain.Tick(pct)/100
+}
+
+// ReduceRemainingSkillCooldown subtracts an absolute refund from an existing
+// future deadline; it cannot create cooldown debt or extend a ready skill.
+func (p *Player) ReduceRemainingSkillCooldown(id domain.SkillID, now, delta domain.Tick) {
+	if p == nil || p.skillReady[id] <= now {
+		return
+	}
+	p.skillReady[id] -= min(delta, p.skillReady[id]-now)
 }

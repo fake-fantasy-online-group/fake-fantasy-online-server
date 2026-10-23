@@ -10,6 +10,7 @@ func stampSkillStatusSnapshot(status *domain.StatusDef, def domain.SkillDef) {
 		return
 	}
 	status.SkillApplied = true
+	status.LegendarySources = append([]domain.LegendarySourceRef(nil), def.LegendarySources...)
 	if def.FormulaVersion != domain.SkillFormulaVersion {
 		return
 	}
@@ -49,6 +50,7 @@ func (s *Scene) lesserPersistentSkill(source *entity.Entity, def domain.SkillDef
 		applySpecialWeaponDefinition(def.SpecialWeaponBaseID, &next)
 	}
 	next.SpecialWeaponStatusPowerPct = def.SpecialWeaponStatusPowerPct
+	s.legendaryPrepareSkillSources(source, &next, def.LegendarySources, true)
 	// Geometric bonuses survive while equipped but cannot exceed the cast snapshot.
 	if def.Radius > 0 {
 		next.Radius = min(next.Radius, def.Radius)
@@ -119,7 +121,7 @@ func (s *Scene) resolvePersistentStatus(source, holder *entity.Entity, old domai
 	if !decreased {
 		return old, true, false
 	}
-	template := domain.SkillDef{SpecialWeaponBaseID: old.SpecialWeaponSourceBase, SpecialWeaponStatusPowerPct: old.SpecialWeaponStatusPowerPct, ID: old.SkillSnapshotID, Level: old.SkillSnapshotRank, FormulaVersion: domain.SkillFormulaVersion, SnapshotRawRanks: old.SkillSnapshotRaw, SnapshotHardRanks: old.SkillSnapshotHard}
+	template := domain.SkillDef{LegendarySources: old.LegendarySources, SpecialWeaponBaseID: old.SpecialWeaponSourceBase, SpecialWeaponStatusPowerPct: old.SpecialWeaponStatusPowerPct, ID: old.SkillSnapshotID, Level: old.SkillSnapshotRank, FormulaVersion: domain.SkillFormulaVersion, SnapshotRawRanks: old.SkillSnapshotRaw, SnapshotHardRanks: old.SkillSnapshotHard}
 	def, ok := s.lesserPersistentSkill(source, template)
 	if !ok {
 		return domain.StatusDef{}, false, true
@@ -141,6 +143,16 @@ func (s *Scene) resolvePersistentStatus(source, holder *entity.Entity, old domai
 		// Reconciliation may lower a carrier's skill payload, never upgrade the
 		// holder's effect-hit snapshot merely because equipment improved later.
 		scaleClassSetTrapStatus(&base, old.SuitTrapDamageBP)
+		// Preserve accepted instance identity and consumed charges during rank
+		// downgrade. Recompute the smaller native base, not a fresh grant.
+		base.LegendaryModifiers = old.LegendaryModifiers
+		base.LegendaryModifiers.Applied = false
+		base.LegendaryPoisonAmplified = old.LegendaryPoisonAmplified
+		base.LegendaryPoisonCopy = old.LegendaryPoisonCopy
+		base.LegendaryPoisonSpread = old.LegendaryPoisonSpread
+		base.LegendaryFreezePoisonOwner = old.LegendaryFreezePoisonOwner
+		base.LegendaryStealthTrapCharges = old.LegendaryStealthTrapCharges
+		s.legendaryFinalizeStatus(&base)
 		base.SourceEffectHitBP = old.SourceEffectHitBP
 		base.SourceEffectHitKnown = old.SourceEffectHitKnown
 		base.Icon = old.Icon

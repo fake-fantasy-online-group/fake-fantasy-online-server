@@ -85,7 +85,6 @@ func (s *Scene) executeEquipmentRoot(root *equipmentRoot) {
 			if s.reserveEquipmentProc(owner, p, root.id) {
 				s.executeEquipmentProc(owner, c)
 				s.publishEquipmentCombatStats(owner)
-				break
 			}
 		}
 	}
@@ -105,7 +104,7 @@ func equipmentRootOwners(hits []equipmentHit, owners []domain.EntityID) []domain
 func (s *Scene) reserveEquipmentProc(owner *entity.Entity, p *domain.EquipmentProc, root uint64) bool {
 	now := s.now().UnixMilli()
 	cd := owner.Player.Char.EquipmentProcCooldowns
-	if cd["global"] > now || cd["group:"+p.SharedGroup] > now || cd["effect:"+p.ID] > now {
+	if cd["group:"+p.SharedGroup] > now || cd["effect:"+p.ID] > now {
 		return false
 	}
 	if p.ChanceBP <= 0 || p.ChanceBP < 10000 && s.equipmentProcRoll(owner.ID, p.ID, root) >= uint64(p.ChanceBP) {
@@ -120,7 +119,6 @@ func (s *Scene) reserveEquipmentProc(owner *entity.Entity, p *domain.EquipmentPr
 			delete(cd, key)
 		}
 	}
-	cd["global"] = now + 1000
 	cd["group:"+p.SharedGroup] = now + int64(p.ICDMS)
 	cd["effect:"+p.ID] = now + int64(p.ICDMS)
 	owner.Player.MarkDirty()
@@ -283,7 +281,7 @@ func (s *Scene) equipmentProcReadiness(p *entity.Entity) []EquipmentProcReadines
 		}
 		seen[v.ID] = true
 		remaining := max(int64(0), max(cd["effect:"+v.ID], cd["group:"+v.SharedGroup])-now)
-		global := max(int64(0), cd["global"]-now)
+		global := int64(0) // Legacy global cooldown is intentionally no longer active.
 		out = append(out, EquipmentProcReadinessView{EffectID: v.ID, SourceUID: a.SourceUID, Trigger: v.Trigger, SkillID: v.SkillID, FixedRank: v.FixedRank, ChanceBP: v.ChanceBP, ICDMS: v.ICDMS, RemainingMS: remaining, GlobalRemainingMS: global, Ready: p.Alive() && s.equipmentCombatReady(p) && remaining == 0 && global == 0})
 		if len(out) >= domain.MaxEquipmentProcReadiness {
 			break

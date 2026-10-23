@@ -1091,7 +1091,7 @@ func loadWorldData(ctx context.Context, st store.Store, log *slog.Logger) worldD
 		} else {
 			for id, def := range w.items {
 				if def.Equip != nil && def.Equip.NativeDropEligible && !def.Equip.NoTypeDrop && w.equipmentRoll.LegendaryReady(def) {
-					def.LegendaryEnabled = true
+					def.LegendaryEnabled = domain.LegendaryCatalogComplete()
 					w.items[id] = def
 				}
 			}

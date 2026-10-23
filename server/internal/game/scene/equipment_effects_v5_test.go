@@ -1,7 +1,6 @@
 package scene
+
 import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
-
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -401,8 +400,8 @@ func TestEquipmentProcV5RandomIndependentAndCooldownBounds(t *testing.T) {
 	if !a.reserveEquipmentProc(p, full, 1) {
 		t.Fatal("100percent failed")
 	}
-	if a.reserveEquipmentProc(p, &domain.EquipmentProc{ID: "other", SharedGroup: "other", ICDMS: 4000, ChanceBP: 10000}, 1) {
-		t.Fatal("global window bypass")
+	if !a.reserveEquipmentProc(p, &domain.EquipmentProc{ID: "other", SharedGroup: "other", ICDMS: 4000, ChanceBP: 10000}, 1) {
+		t.Fatal("independent proc blocked by obsolete global window")
 	}
 }
 

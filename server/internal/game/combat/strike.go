@@ -7,7 +7,23 @@ import (
 )
 
 // Blow 描述一次出手是怎么打的。零值 = 普通物理平砍。
+type NativeDamageSnapshot struct {
+	Owner                  domain.EntityID
+	SourceDamageIncreaseBP int64
+	Amount                 int32
+	Critical               bool
+}
+
 type Blow struct {
+	NativeDamageSnapshot          *NativeDamageSnapshot
+	CritChanceBonusBP             int32
+	FixedDefensePenetrationBP     int32
+	ElementReductionPenetrationBP int32
+	BaseDamageFlat                int32
+	EffectiveSkillID              int32
+	LegendaryChild                bool
+	// LegendaryPayload carries a fixed non-critical approved power payload.
+	LegendaryPayload bool
 	// Additive critical multiplier BP: 2000 means 200% -> 220%.
 	CriticalBonusBP                        int32
 	SourceOffense, CurrentSourceOffense    *domain.CombatSourceSnapshotV5
@@ -42,7 +58,8 @@ type Blow struct {
 	// 这条恰好是「防御=闪避」最硬的一条反证。
 	IgnoreDefense bool
 	// GuaranteedHit 是技能自身的必中结果，不消耗命中步进器。
-	GuaranteedHit bool
+	GuaranteedHit  bool
+	GuaranteedCrit bool
 }
 
 // CalculateStrike evaluates the legacy hit/crit/native-defense formula without
@@ -55,6 +72,17 @@ func CalculateStrike(a, d *entity.Entity, tr *HitTracker, b Blow, rng Rand) even
 		snapshot.Stats = b.AttackStats
 		a = &snapshot
 	}
+	if b.FixedDefensePenetrationBP > 0 {
+		local := *d
+		bp := min(int32(10000), b.FixedDefensePenetrationBP)
+		if d.Stats.PhysResist > 0 {
+			local.Stats.PhysResist = int32(int64(d.Stats.PhysResist) * int64(10000-bp) / 10000)
+		}
+		if d.Stats.MagicResist > 0 {
+			local.Stats.MagicResist = int32(int64(d.Stats.MagicResist) * int64(10000-bp) / 10000)
+		}
+		d = &local
+	}
 	ev := event.DamageDealt{Src: a.ID, Dst: d.ID, SkillID: b.SkillID, Origin: b.Origin, RootID: b.RootID, ProcDepth: b.ProcDepth}
 
 	if tr.Engage(d.ID, a.Stats.Hit+d.Stats.Def, rng) {
@@ -66,18 +94,39 @@ func CalculateStrike(a, d *entity.Entity, tr *HitTracker, b Blow, rng Rand) even
 	if b.Magic {
 		critRate = a.Stats.MCritRate
 	}
-	crit := Crit(critRate, rng)
+	critRate = domain.SaturateInt32(int64(critRate) + int64(b.CritChanceBonusBP))
+	crit := false
+	if b.NativeDamageSnapshot != nil {
+		crit = b.NativeDamageSnapshot.Critical
+	} else {
+		crit = !b.LegendaryPayload && (b.GuaranteedCrit || Crit(critRate, rng))
+	}
 	if crit {
 		ev.Flag |= event.DamageCrit
 	}
 
 	var dmg int32
 	switch {
+	case b.NativeDamageSnapshot != nil:
+		if b.Magic {
+			ev.Flag |= event.DamageMagic
+		} else if !crit && !b.IgnoreDefense && !b.GuaranteedHit && !tr.Roll(a.Stats.Hit, d.Stats.Def) {
+			ev.Flag |= event.DamageMiss
+			ev.DstHP = d.HP
+			return ev
+		}
+		resist := d.Stats.PhysResist
+		if b.Magic {
+			resist = domain.SaturateInt32(int64(d.Stats.MagicResist) + int64(d.Stats.MDef)*63/100)
+		}
+		dmg = boundedDamage(int64(b.NativeDamageSnapshot.Amount) - int64(resist))
 	case b.Magic:
 		// 法系不判命中。
 		ev.Flag |= event.DamageMagic
-		dmg = RollMagicFixedDefense(a.Stats.MAtk, b.SkillPct, d.Stats.MDef, d.Stats.MagicResist)
-		if b.SkillPctDenominator > 0 {
+		if b.BaseDamageFlat == 0 {
+			dmg = RollMagicFixedDefense(a.Stats.MAtk, b.SkillPct, d.Stats.MDef, d.Stats.MagicResist)
+		}
+		if b.SkillPctDenominator > 0 && b.BaseDamageFlat == 0 {
 			dmg = RollMagicFixedDefenseFraction(a.Stats.MAtk, b.SkillPctNumerator, b.SkillPctDenominator, d.Stats.MDef, d.Stats.MagicResist)
 		}
 	default:
@@ -88,14 +137,20 @@ func CalculateStrike(a, d *entity.Entity, tr *HitTracker, b Blow, rng Rand) even
 			ev.DstHP = d.HP
 			return ev
 		}
-		if b.SkillPctDenominator > 0 {
+		if b.BaseDamageFlat != 0 {
+			dmg = 0 // evaluated once below
+		} else if b.SkillPctDenominator > 0 {
 			dmg = RollPhysicalSkillFraction(a.Stats.MinAtk, a.Stats.MaxAtk, d.Stats.PhysResist, b.SkillPctNumerator, b.SkillPctDenominator, rng)
 		} else {
 			dmg = RollPhysicalSkill(a.Stats.MinAtk, a.Stats.MaxAtk, d.Stats.PhysResist, b.SkillPct, rng)
 		}
 	}
 
-	if crit {
+	if b.BaseDamageFlat != 0 && b.NativeDamageSnapshot == nil {
+		dmg = rollStrikeWithAddedBase(a.Stats, d.Stats, b, rng)
+	}
+
+	if crit && b.NativeDamageSnapshot == nil {
 		dmg = boundedDamage(int64(dmg) * (CritMultiplier*10000 + int64(b.CriticalBonusBP)) / 10000)
 	}
 
@@ -121,6 +176,7 @@ func Strike(a, d *entity.Entity, tr *HitTracker, b Blow, rng Rand) event.DamageD
 //
 // 与 Strike 同一个道理: 算和加血绑在一起, 就不可能出现"飘了绿字但没回血"。
 func Restore(src, dst *entity.Entity, amount int32, skillID int32) event.HealDone {
+	amount = dst.Status.HealingReceivedAmount(amount)
 	if amount < 0 {
 		amount = 0
 	}
