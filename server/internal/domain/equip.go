@@ -497,7 +497,7 @@ func Compute(in StatSource) (Base, Stats) {
 			}
 		}
 		// 步骤 3 的一半: 装备自带的攻防命中先记着, 等六维算完再加
-		equipBase, equipStats := def.Equip.RefinedIntrinsic(st.RefineLevel)
+		equipBase, equipStats := LegendaryIntrinsic(def, st)
 		flat = addStats(flat, equipStats)
 		// 步骤 1: 装备直接给的六维
 		base = base.Add(equipBase)

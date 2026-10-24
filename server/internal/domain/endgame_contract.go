@@ -14,6 +14,9 @@ const EndgameMaxJSONBytes = 60 * 1024
 // EndgameItemState is server-owned metadata on the existing durable equipment UID.
 // UniqueID is the base ItemID in a separate namespace. Zero means ordinary gear.
 type EndgameItemState struct {
+	// SourceLevel is the original monster level for new equipment, independent
+	// of wear level and affix ResourceLevel. Legacy/non-monster zero stays zero.
+	SourceLevel  int32 `json:",omitempty"`
 	Revision     int64
 	UniqueID     int32
 	UniqueRollBP int32
@@ -72,6 +75,7 @@ type LegendaryAffixView struct {
 	Max   int32 `json:"max"`
 }
 type LegendaryItemView struct {
+	Tier        LegendaryTier        `json:"tier,omitempty"`
 	PowerID     string               `json:"powerId"`
 	Name        string               `json:"name"`
 	Description string               `json:"description"`

@@ -27,21 +27,23 @@ type endgameRiftGrant struct {
 	Pet                endgamePetGrant
 }
 type endgameRiftPersisted struct {
-	GuardianID      domain.MonsterID            `json:",omitempty"`
-	Elite           *endgameRiftEliteSnapshot   `json:",omitempty"`
-	GuardianArrival *endgameRiftGuardianArrival `json:",omitempty"`
-	RewardPos       domain.Pos
-	DeathTimes      map[domain.CharID]int64
-	Floor           *domain.RiftFloorPlan
-	StorageRevision int64
-	Version         int
-	Run             *domain.RiftRun
-	MapID           int32
-	Return          domain.Pos
-	Names           map[domain.CharID]string
-	Profiles        map[domain.CharID]endgameRiftIdentity
-	Grants          map[domain.CharID]endgameRiftGrant
-	GrantsReady     bool
+	// Actual guardian encounter level, frozen before deferred grant generation.
+	RewardSourceLevel int32                       `json:",omitempty"`
+	GuardianID        domain.MonsterID            `json:",omitempty"`
+	Elite             *endgameRiftEliteSnapshot   `json:",omitempty"`
+	GuardianArrival   *endgameRiftGuardianArrival `json:",omitempty"`
+	RewardPos         domain.Pos
+	DeathTimes        map[domain.CharID]int64
+	Floor             *domain.RiftFloorPlan
+	StorageRevision   int64
+	Version           int
+	Run               *domain.RiftRun
+	MapID             int32
+	Return            domain.Pos
+	Names             map[domain.CharID]string
+	Profiles          map[domain.CharID]endgameRiftIdentity
+	Grants            map[domain.CharID]endgameRiftGrant
+	GrantsReady       bool
 }
 
 func (d endgameRiftPersisted) clone() endgameRiftPersisted {

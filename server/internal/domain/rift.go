@@ -334,7 +334,10 @@ func RiftScaledStat(base int32, tier int32, party int, class int32, hp bool, rul
 
 // Loot timing bonuses are separate from difficulty progression; use
 // RiftRun.UnlockedTierFor for the completion-time tier entitlement.
-type RiftRewardPlan struct{ Equipment, NormalBossEquipment, Rune, Dust, UniqueChance int32 }
+type RiftRewardPlan struct {
+	Equipment, NormalBossEquipment, Rune, Dust, UniqueChance int32
+	GuaranteedLegendaries, ExtraLegendaryChance              int32
+}
 
 func PlanRiftRewards(tier int32, timely bool, rule *RiftRules) RiftRewardPlan {
 	if rule == nil {
@@ -350,7 +353,22 @@ func PlanRiftRewards(tier int32, timely bool, rule *RiftRules) RiftRewardPlan {
 		p.Rune += rule.TimelyRunes
 		p.Dust += rule.TimelyDust
 	}
+	if rule.CumulativeLegendaryPerTier > 0 {
+		// Replace, rather than multiply, the old special slot and its timely bonus.
+		p.Equipment, p.UniqueChance = 0, 0
+		cumulative := tier * rule.CumulativeLegendaryPerTier
+		p.GuaranteedLegendaries, p.ExtraLegendaryChance = cumulative/100, cumulative%100
+	}
 	return p
+}
+
+// One roll only for the remainder; multiples of 100 are deterministic.
+func (p RiftRewardPlan) CumulativeLegendaryCount(roll func(int) int) int32 {
+	count := p.GuaranteedLegendaries
+	if p.ExtraLegendaryChance > 0 && roll(100) < int(p.ExtraLegendaryChance) {
+		count++
+	}
+	return count
 }
 
 func clampRiftTier(tier int32, rule *RiftRules) int32 {

@@ -622,6 +622,11 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 	}
 	equipBase, equipStats := domain.EnhancedIntrinsic(e, st.RefineLevel, local, roll)
 	_, refinedStats := e.RefinedIntrinsic(st.RefineLevel)
+	if legendary {
+		equipBase, equipStats = domain.LegendaryIntrinsic(def, st)
+		// The tier multiplier is intrinsic white text, not a random affix.
+		refinedStats = equipStats
+	}
 	appendIntrinsicEquipmentStats(&lines, equipStats, equipBase, refinedStats, nativeStats || legendary)
 	if def.Weight != 0 {
 		lines = append(lines, fmt.Sprintf("重量 %d", def.Weight))
@@ -808,7 +813,7 @@ func equipmentKindName(e *domain.EquipDef) string {
 func itemDisplayName(def domain.ItemDef, st domain.Stack) string {
 	name := def.Name
 	if power, ok := domain.LegendaryPower(st.Legendary.PowerID); ok {
-		name = domain.LegendaryDisplayName(def.Name, power)
+		name = domain.LegendaryInstanceDisplayName(def.Name, power, st.Legendary)
 	}
 	uniqueName, unique := domain.UniqueName(st, def.EndgameCatalog)
 	if unique {

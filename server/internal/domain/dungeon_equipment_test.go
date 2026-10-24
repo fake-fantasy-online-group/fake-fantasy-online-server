@@ -52,7 +52,7 @@ func TestDungeonEquipmentRegistrationPreservesDungeonOriginalsAndEnhancesTaskOri
 		}
 		weapons++
 		hard := items[w.HardID]
-		if !hard.HardDungeonOnly || hard.DungeonBaseID != w.BaseID || hard.Name != "真"+old.Name || NativeEquipmentDropEligible(hard) || EnhancedWeaponBaseID(hard.ID) != w.BaseID {
+		if !hard.HardDungeonOnly || hard.DungeonBaseID != w.BaseID || hard.Name != "真*"+old.Name || NativeEquipmentDropEligible(hard) || EnhancedWeaponBaseID(hard.ID) != w.BaseID {
 			t.Fatal("bad hard weapon", w.BaseID)
 		}
 		if len(hard.Equip.Affixes) != len(w.Affixes) {
@@ -68,6 +68,9 @@ func TestDungeonEquipmentRegistrationPreservesDungeonOriginalsAndEnhancesTaskOri
 		for _, id := range set.Members {
 			sets++
 			old, hard := items[id], items[id+HardDungeonItemOffset]
+			if hard.Name != "真*"+old.Name || hard.Equip.Suit.Name != "真*"+old.Equip.Suit.Name {
+				t.Fatal("true set names require one literal star")
+			}
 			if old.Equip.Suit.EnhancedClass != 0 || old.Equip.Suit.ID != set.BaseID || hard.Equip.Suit.EnhancedClass != set.BaseID || hard.Equip.Suit.ID != set.HardID {
 				t.Fatal("set version isolation")
 			}

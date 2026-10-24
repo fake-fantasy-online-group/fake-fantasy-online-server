@@ -834,9 +834,11 @@ func (p *Player) DungeonEvictionDue(now domain.Tick) bool {
 type Monster struct {
 	// Successful theft belongs to this live spawn, shared across players.
 	TheftSuccesses int32
-	TypeID         domain.MonsterID   // 配置表主键: 这是"哪种怪"
-	Kind           domain.MonsterKind // 普通/精英/BOSS/场景物件/采集物。决定战斗类别与重生间隔
-	EliteRing      bool               // 是否由 EliteID 动态转换而来；只有该来源会下发脚下光圈
+	// Once per monster life; kill-only outdoor guarantee, never a theft allowance.
+	OutdoorBossLegendariesGranted bool
+	TypeID                        domain.MonsterID   // 配置表主键: 这是"哪种怪"
+	Kind                          domain.MonsterKind // 普通/精英/BOSS/场景物件/采集物。决定战斗类别与重生间隔
+	EliteRing                     bool               // 是否由 EliteID 动态转换而来；只有该来源会下发脚下光圈
 	// ColorProfile 是这只怪掉出的随机装备使用的染色（属性条数）档位。它从模板
 	// 拷进来，因此光圈精英拿到的是精英模板的档位，而不是被替换掉的原普通怪档位。
 	ColorProfile domain.ColorProfile

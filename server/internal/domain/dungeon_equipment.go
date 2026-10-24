@@ -105,7 +105,7 @@ func RegisterDungeonEquipment(items map[ItemID]ItemDef) error {
 		def.Description = strings.TrimSpace(base.Description + "\n" + dungeonWeaponEffectText(w.Effect))
 		if w.HardID != 0 {
 			def.ID = w.HardID
-			def.Name = "真" + base.Name
+			def.Name = prefixedEquipmentName("真*", base.Name)
 			def.HardDungeonOnly = true
 			def.DungeonBaseID = base.ID
 			equip.NativeDropEligible = false
@@ -124,7 +124,7 @@ func RegisterDungeonEquipment(items map[ItemID]ItemDef) error {
 		}
 		hard := *original
 		hard.ID = set.HardID
-		hard.Name = "真" + original.Name
+		hard.Name = prefixedEquipmentName("真*", original.Name)
 		hard.EnhancedClass = set.BaseID
 		hard.Bonuses = append([]EquipmentSuitBonus(nil), original.Bonuses...)
 		hard.Groups = make([][]ItemID, len(original.Groups))
@@ -147,7 +147,7 @@ func RegisterDungeonEquipment(items map[ItemID]ItemDef) error {
 			he := *base.Equip
 			h.Equip = &he
 			h.ID = HardDungeonItemOffset + id
-			h.Name = "真" + base.Name
+			h.Name = prefixedEquipmentName("真*", base.Name)
 			h.HardDungeonOnly = true
 			h.DungeonBaseID = id
 			he.Suit = &hard

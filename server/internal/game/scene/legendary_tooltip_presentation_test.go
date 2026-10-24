@@ -27,7 +27,7 @@ func legendaryTooltipFixture(t *testing.T, high bool) (*Scene, domain.ItemDef, d
 		roller.equipmentRoll.Options[domain.EquipmentRollKey{Level: 3, Type: 1}]
 	st := domain.NewStack(def, 1)
 	st.UID, st.Bound = 42, true
-	if !roller.equipmentRoll.ApplyLegendary(&st, def, func(n int) int {
+	if !roller.equipmentRoll.ApplyLegendaryLegacy(&st, def, func(n int) int {
 		if high {
 			return n - 1
 		}

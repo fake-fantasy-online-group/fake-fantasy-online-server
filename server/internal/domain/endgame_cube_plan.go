@@ -243,7 +243,7 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 	hasUnique = hasUnique || target.Legendary.PowerID != ""
 	eligible := func() bool {
 		if def.LegendaryEnabled {
-			return ctx.EquipmentRoll.LegendaryReady(def) && len(LegendaryCandidates(def)) > 0
+			return ctx.EquipmentRoll.LegendaryReady(def) && len(LegendaryCandidatesAtLevel(def, LegendaryGenerationLevel(def, target))) > 0
 		}
 		if _, ok := UniqueForBase(target.Item, ctx.Catalog); !ok {
 			return false
@@ -418,6 +418,9 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		}
 	case "unique.reforge":
 		if target.Legendary.PowerID != "" {
+			if !target.Legendary.HasVariableAffixes() {
+				return p, cubeError("requirements", "传奇属性已锁定满值，无需重铸")
+			}
 			if target.Legendary.Validate() != nil || execute && !target.Legendary.Reforge(ctx.Intn) {
 				return p, cubeError("requirements", "无法重铸传奇属性")
 			}

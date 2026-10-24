@@ -129,29 +129,82 @@ func (s *Scene) lootRandomV5(dead domain.EntityID, ordinal int, purpose uint64) 
 }
 
 func (s *Scene) rollNaturalEquipmentV5(def domain.ItemDef, stack *domain.Stack, dead *entity.Entity, ordinal int, profile domain.ColorProfile, rollAffixes bool, context domain.LootContextV5) {
-	if def.Equip == nil {
+	if def.Equip == nil || dead == nil || dead.Monster == nil {
 		return
 	}
 	quality := s.lootRandomV5(dead.ID, ordinal, 0x56350001)
 	values := s.lootRandomV5(dead.ID, ordinal, 0x56350002)
 	unique := s.lootRandomV5(dead.ID, ordinal, 0x56350003)
 	variables := s.lootRandomV5(dead.ID, ordinal, 0x56350004)
-	s.rollNaturalEquipmentQualityV5(def, stack, profile, rollAffixes, context.MagicFind, s.lootRules.Active(), &quality, &values, &unique, &variables)
+	rule, table := s.lootRules.Active(), s.equipmentRoll
+	// Theft is another drop from the same target and uses the same source rules;
+	// its reserved negative ordinal still keeps its random streams independent.
+	var outdoor *domain.OutdoorEquipmentRule
+	if rule != nil && s.outdoorEquipmentQualitySource(dead, def, rollAffixes) {
+		outdoor = rule.OutdoorEquipment
+		if dead.Monster.Kind == domain.MonsterNormal {
+			outdoor = rule.OutdoorNormalEquipment
+		}
+	}
+	if outdoor != nil {
+		// Both are private copies. Never replace the shared profile 1, which is
+		// also used by ordinary dungeon and frozen Rift reward paths.
+		table.Counts = map[domain.ColorProfile][]domain.WeightedAffixCount{profile: outdoor.Counts()}
+		rule.UniqueBasePPB = outdoor.LegendaryBasePPB
+		if !def.LegendaryEnabled {
+			// A missing six-affix/power foundation keeps the ordinary result;
+			// the new outdoor chance must not revive legacy Unique instances.
+			rule.UniqueBasePPB = 0
+		}
+	}
+	s.rollEquipmentQualityV5(def, stack, dead.Level, table, profile, rollAffixes, context.MagicFind, rule, quality.Int63n, values.Int63n, unique.Int63n, variables.Intn)
+}
+
+func (s *Scene) outdoorEquipmentQualitySource(dead *entity.Entity, def domain.ItemDef, rollAffixes bool) bool {
+	return dead != nil && dead.Monster != nil && dead.Monster.Summoner == 0 &&
+		(dead.Monster.Kind == domain.MonsterNormal || dead.Monster.Kind == domain.MonsterElite || dead.Monster.Kind == domain.MonsterBoss) &&
+		s.id.Instance == 0 && s.dungeon == nil && s.rift == nil && s.trialRun == nil && !s.trial.IsMap(s.id.MapID) &&
+		rollAffixes && domain.NativeEquipmentDropEligible(def)
 }
 
 // Shared by natural world drops and new normal-boss reward slots. Callers own
 // independent deterministic streams and the appropriate frozen loot rules.
-func (s *Scene) rollNaturalEquipmentQualityV5(def domain.ItemDef, stack *domain.Stack, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique, variables *lootRandomV5) {
+func (s *Scene) rollNaturalEquipmentQualityV5(def domain.ItemDef, stack *domain.Stack, sourceLevel int32, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique, variables *lootRandomV5) {
+	s.rollEquipmentQualityV5(def, stack, sourceLevel, s.equipmentRoll, profile, rollAffixes, magicFind, rule, quality.Int63n, values.Int63n, unique.Int63n, variables.Intn)
+}
+
+// Frozen pre-v12 Rift snapshots retain their pre-variant rolls and RNG stream.
+func (s *Scene) rollNaturalEquipmentQualityV5Legacy(def domain.ItemDef, stack *domain.Stack, sourceLevel int32, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique, variables *lootRandomV5) {
+	s.rollEquipmentQualityV5WithVariants(def, stack, sourceLevel, s.equipmentRoll, profile, rollAffixes, magicFind, rule, quality.Int63n, values.Int63n, unique.Int63n, variables.Intn, false)
+}
+
+func (s *Scene) rollEquipmentQualityV5(def domain.ItemDef, stack *domain.Stack, sourceLevel int32, table domain.EquipmentRollTable, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique func(int64) int64, variables func(int) int) {
+	s.rollEquipmentQualityV5WithVariants(def, stack, sourceLevel, table, profile, rollAffixes, magicFind, rule, quality, values, unique, variables, true)
+}
+
+func (s *Scene) rollEquipmentQualityV5WithVariants(def domain.ItemDef, stack *domain.Stack, sourceLevel int32, table domain.EquipmentRollTable, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique func(int64) int64, variables func(int) int, variants bool) {
+	if stack == nil || def.Equip == nil {
+		return
+	}
+	// Keep provenance even if promotion misses, so later cube awakening cannot
+	// substitute the player's level or the base's unrelated wear requirement.
+	if sourceLevel > 0 && stack.Endgame.SourceLevel == 0 {
+		stack.Endgame.SourceLevel = sourceLevel
+	}
 	if rollAffixes {
-		_, rolled := s.equipmentRoll.RollColorFirstEquipment(def, profile, magicFind, rule, quality.Int63n, nil, values.Int63n)
+		_, rolled := table.RollColorFirstEquipment(def, profile, magicFind, rule, quality, nil, values)
 		stack.RolledAffixCount = uint8(len(rolled))
 		copy(stack.RolledAffixes[:], rolled)
 	}
 	if def.LegendaryEnabled {
-		if !def.Equip.NoTypeDrop && def.Equip.NativeDropEligible && unique.Int63n(domain.LootProbabilityScaleV5) < domain.UniqueProbabilityV5(magicFind, rule) {
-			s.equipmentRoll.ApplyLegendary(stack, def, variables.Intn)
+		if !def.Equip.NoTypeDrop && def.Equip.NativeDropEligible && unique(domain.LootProbabilityScaleV5) < domain.UniqueProbabilityV5(magicFind, rule) {
+			if variants {
+				table.ApplyLegendaryAtLevel(stack, def, sourceLevel, variables)
+			} else {
+				table.ApplyLegendaryLegacyAtLevel(stack, def, sourceLevel, variables)
+			}
 		}
 		return
 	}
-	domain.RollNaturalUniqueWithMagicFindV5(stack, def, magicFind, unique.Int63n, variables.Intn, rule)
+	domain.RollNaturalUniqueWithMagicFindV5(stack, def, magicFind, unique, variables, rule)
 }

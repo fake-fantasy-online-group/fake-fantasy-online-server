@@ -23,7 +23,7 @@ func TestLegendaryNaturalDropAndView(t *testing.T) {
 	st := domain.NewStack(def, 1)
 	q, v, u, r := lootRandomV5{1}, lootRandomV5{2}, lootRandomV5{3}, lootRandomV5{4}
 	rule := &domain.LootRuleSet{UniqueBasePPB: domain.LootProbabilityScaleV5, UniqueMFDivisor: 250}
-	s.rollNaturalEquipmentQualityV5(def, &st, 1, true, 0, rule, &q, &v, &u, &r)
+	s.rollNaturalEquipmentQualityV5(def, &st, 60, 1, true, 0, rule, &q, &v, &u, &r)
 	if st.Legendary.PowerID == "" || st.Item != def.ID || st.RolledAffixCount != 0 {
 		t.Fatalf("drop integration failed: %+v", st)
 	}

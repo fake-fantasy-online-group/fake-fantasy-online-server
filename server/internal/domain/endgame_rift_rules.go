@@ -58,6 +58,9 @@ type RiftRules struct {
 	CompletionLevelExperience bool `json:",omitempty"`
 	// Zero preserves historical snapshots: tier one is the unscaled anchor.
 	StatAnchorTier int32 `json:",omitempty"`
+	// New v12 reward policy: each 100 cumulative percent produces one Legendary.
+	// Zero preserves old paid-run equipment, chance cap and timely bonus behavior.
+	CumulativeLegendaryPerTier int32 `json:",omitempty"`
 	// Additional fixed-count equipment uses natural boss quality, separate from special slots.
 	NormalBossEquipment int32 `json:",omitempty"`
 	// Zero is the legacy serialized value and means one times population.
@@ -161,6 +164,13 @@ func (r *RiftRules) Validate() error {
 	}
 	if r.NormalBossEquipment < 0 || r.NormalBossEquipment > 20 || r.Equipment < 0 || r.Equipment > 20 || r.Runes < 0 || r.Runes > 28 || r.TimelyEquipment < 0 || r.TimelyEquipment > 20 || r.TimelyRunes < 0 || r.TimelyRunes > 28 || r.DustBase < 0 || r.DustBase > 1000000 || r.TimelyDust < 0 || r.TimelyDust > 1000000 || r.DustTierDivisor < 1 || r.UniqueBaseChance < 0 || r.UniqueBaseChance > 100 || r.UniquePerTier < 0 || r.UniquePerTier > 100 || r.UniqueCap < 0 || r.UniqueCap > 100 || r.GuaranteedUniqueTier < 1 || r.GuaranteedUniqueTier > r.MaxTier || r.ExperienceDivisor < 1 || r.ExperienceDivisor > 1000000 {
 		return fmt.Errorf("invalid rift rewards")
+	}
+	if r.CumulativeLegendaryPerTier != 0 {
+		if r.Version < 12 || r.CumulativeLegendaryPerTier != 10 || r.Equipment != 0 || r.TimelyEquipment != 0 || r.UniqueBaseChance != 0 || r.UniquePerTier != 0 || r.UniqueCap != 0 || r.NormalBossEquipment != 10 || r.Loot.OutdoorEquipment == nil {
+			return fmt.Errorf("invalid cumulative rift reward policy")
+		}
+	} else if r.Version >= 12 {
+		return fmt.Errorf("missing cumulative rift reward policy")
 	}
 	if r.Name == "" || r.BossName == "" || r.ExitName == "" || r.NPCModel < 1 || r.ExitSprite == "" || r.AbilityMaxConcurrent < 1 || r.AbilityMaxConcurrent > 4 || r.AbilityRange < 1 || r.AbilityRange > 10000 || r.AbilityRecoveryMS < 0 || r.AbilityJitterMS < 1 || r.AbilityJitterMS > 86400000 || r.AbilityStartMS < 1 || r.AbilityResetMS < 1 || r.AbilityUnavailableMS < 1 || r.AbilityClassReductionMS < 0 || r.AbilityRecoveryMS > 86400000 || r.AbilityStartMS > 86400000 || r.AbilityResetMS > 86400000 || r.AbilityUnavailableMS > 86400000 || r.AbilityCooldownMS > 86400000 || r.AbilityClassReductionMS > 86400000 || r.AbilityCooldownMS <= 3*r.AbilityClassReductionMS || r.AbilityBossDamagePct < 0 || r.AbilityBossDamagePct > 10000 || (r.Elite == nil && len(r.Abilities) != 3) {
 		return fmt.Errorf("invalid rift presentation/abilities")

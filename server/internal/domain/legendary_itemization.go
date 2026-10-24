@@ -13,6 +13,7 @@ const LegendaryAffixCount = 6
 type LegendaryAffixBounds struct{ Min, Max int32 }
 type LegendaryInstance struct {
 	PowerID string
+	Tier    LegendaryTier `json:",omitempty"`
 	Affixes [LegendaryAffixCount]InstanceAffix
 	Bounds  [LegendaryAffixCount]LegendaryAffixBounds
 }
@@ -27,11 +28,17 @@ func (v LegendaryInstance) Validate() error {
 	if _, ok := LegendaryPower(v.PowerID); !ok {
 		return fmt.Errorf("unknown legendary power %q", v.PowerID)
 	}
+	if !v.Tier.Valid() {
+		return fmt.Errorf("unknown legendary tier %q", v.Tier)
+	}
 	seen := map[int32]bool{}
 	for i, a := range v.Affixes {
 		b := v.Bounds[i]
 		low, high := a.Affix, a.Affix
 		low.Value, high.Value = b.Min, b.Max
+		if v.Tier == LegendaryTierSecret && b.Min != b.Max {
+			return fmt.Errorf("secret legendary affix %d is not locked", i)
+		}
 		if !BeneficialEndgameAffix(low) || !BeneficialEndgameAffix(high) || !BeneficialEndgameAffix(a.Affix) || seen[a.Affix.Attr] || b.Min > b.Max || a.Affix.Value < b.Min || a.Affix.Value > b.Max {
 			return fmt.Errorf("invalid legendary affix %d", i)
 		}
@@ -95,22 +102,52 @@ func (t EquipmentRollTable) LegendaryReady(def ItemDef) bool {
 	return len(seen) >= LegendaryAffixCount
 }
 func LegendaryCandidates(def ItemDef) []LegendaryPowerDefinition {
+	return LegendaryCandidatesAtLevel(def, LegendaryGenerationLevel(def, Stack{}))
+}
+
+func LegendaryCandidatesAtLevel(def ItemDef, sourceLevel int32) []LegendaryPowerDefinition {
 	var out []LegendaryPowerDefinition
 	if !def.LegendaryEnabled {
 		return out
 	}
 	for _, p := range LegendaryPowers() {
-		if LegendaryPowerEligible(p, def) && LegendaryPowerExecutable(p.ID) {
+		if LegendaryPowerEligibleAtLevel(p, def, sourceLevel) && LegendaryPowerExecutable(p.ID) {
 			out = append(out, p)
 		}
 	}
 	return out
 }
+
+// ApplyLegendary is for non-monster awakening: preserve known provenance, or
+// retain the historical base-level eligibility of a legacy/non-monster item.
 func (t EquipmentRollTable) ApplyLegendary(st *Stack, def ItemDef, rng func(int) int) bool {
-	if st == nil || rng == nil || st.UID <= 0 || st.Count != 1 || st.Item != def.ID || st.Legendary.PowerID != "" || st.Endgame.UniqueID != 0 || !CanPromoteSocketlessUnique(*st) || !t.LegendaryReady(def) {
+	if st == nil {
 		return false
 	}
-	powers := LegendaryCandidates(def)
+	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false)
+}
+
+func (t EquipmentRollTable) ApplyLegendaryAtLevel(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int) bool {
+	return t.applyLegendary(st, def, sourceLevel, rng, true, true)
+}
+
+// ApplyLegendaryLegacy preserves pre-variant generation and exact RNG consumption.
+func (t EquipmentRollTable) ApplyLegendaryLegacy(st *Stack, def ItemDef, rng func(int) int) bool {
+	if st == nil {
+		return false
+	}
+	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, false, false)
+}
+
+func (t EquipmentRollTable) ApplyLegendaryLegacyAtLevel(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int) bool {
+	return t.applyLegendary(st, def, sourceLevel, rng, false, true)
+}
+
+func (t EquipmentRollTable) applyLegendary(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int, variants, recordSource bool) bool {
+	if st == nil || sourceLevel < 1 || (st.Endgame.SourceLevel != 0 && st.Endgame.SourceLevel != sourceLevel) || rng == nil || st.UID <= 0 || st.Count != 1 || st.Item != def.ID || st.Legendary.PowerID != "" || st.Endgame.UniqueID != 0 || !CanPromoteSocketlessUnique(*st) || !t.LegendaryReady(def) {
+		return false
+	}
+	powers := LegendaryCandidatesAtLevel(def, sourceLevel)
 	if len(powers) == 0 {
 		return false
 	}
@@ -145,16 +182,31 @@ func (t EquipmentRollTable) ApplyLegendary(st *Stack, def ItemDef, rng func(int)
 		}
 		options = keep
 	}
+	if variants && !v.rollTier(rng) {
+		return false
+	}
 	if v.Validate() != nil {
 		return false
 	}
 	st.Legendary = v
+	if recordSource {
+		st.Endgame.SourceLevel = sourceLevel
+	}
 	st.SocketCount = 0
 	st.RolledAffixCount = 0
 	st.RolledAffixes = [5]InstanceAffix{}
 	st.Endgame.Revision++
 	return true
 }
+func (v LegendaryInstance) HasVariableAffixes() bool {
+	for _, b := range v.Bounds {
+		if b.Min < b.Max {
+			return true
+		}
+	}
+	return false
+}
+
 func (v *LegendaryInstance) Reforge(rng func(int) int) bool {
 	if v == nil || v.PowerID == "" || rng == nil || v.Validate() != nil {
 		return false
@@ -188,7 +240,7 @@ func (v *LegendaryInstance) Reforge(rng func(int) int) bool {
 
 func LegendaryItemBonuses(def ItemDef, st Stack) []Affix {
 	p, ok := LegendaryPower(st.Legendary.PowerID)
-	if !ok || !LegendaryPowerEligible(p, def) || st.Legendary.Validate() != nil {
+	if !ok || !LegendaryPowerEligibleForItem(p, def, st) || st.Legendary.Validate() != nil {
 		return nil
 	}
 	out := make([]Affix, 0, LegendaryAffixCount)

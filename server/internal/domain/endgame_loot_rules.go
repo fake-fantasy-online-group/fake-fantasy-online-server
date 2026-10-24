@@ -14,6 +14,25 @@ type LootGradeRule struct {
 	RuneRateBP    int32
 	SocketWeights [6]int64
 }
+
+// OutdoorEquipmentRule is an optional, versioned override for natural outdoor
+// equipment. Boss/elite and normal sources have separate instances. Weights are
+// conditional on not being
+// promoted: 20/25/20/15/10/5 (total 95) plus 5% promotion gives the requested
+// unconditional 20/25/20/15/10/5/5 baseline on fully eligible dyeable bases.
+type OutdoorEquipmentRule struct {
+	AffixWeights     [6]int64
+	LegendaryBasePPB int64
+}
+
+func (r OutdoorEquipmentRule) Counts() []WeightedAffixCount {
+	counts := make([]WeightedAffixCount, len(r.AffixWeights))
+	for n, weight := range r.AffixWeights {
+		counts[n] = WeightedAffixCount{Count: uint8(n), Weight: weight}
+	}
+	return counts
+}
+
 type LootRuleSet struct {
 	Version                        int32
 	MinRuneLevel                   int32
@@ -25,6 +44,9 @@ type LootRuleSet struct {
 	RuneWeights  []int64 `json:",omitempty"`
 	SocketLevels []LootSocketLevel
 	Grades       []LootGradeRule
+	// Nil in historical snapshots; never changes their shared color profiles.
+	OutdoorEquipment       *OutdoorEquipmentRule `json:",omitempty"`
+	OutdoorNormalEquipment *OutdoorEquipmentRule `json:",omitempty"`
 }
 type LootRuleTable struct {
 	active   int32
@@ -32,6 +54,14 @@ type LootRuleTable struct {
 }
 
 func cloneLootRuleSet(r LootRuleSet) LootRuleSet {
+	if r.OutdoorEquipment != nil {
+		outdoor := *r.OutdoorEquipment
+		r.OutdoorEquipment = &outdoor
+	}
+	if r.OutdoorNormalEquipment != nil {
+		outdoor := *r.OutdoorNormalEquipment
+		r.OutdoorNormalEquipment = &outdoor
+	}
 	r.RunePool = append([]ItemID(nil), r.RunePool...)
 	r.RuneWeights = append([]int64(nil), r.RuneWeights...)
 	r.SocketLevels = append([]LootSocketLevel(nil), r.SocketLevels...)
@@ -47,6 +77,17 @@ func NewLootRuleTable(active int32, rows []LootRuleSet, items map[ItemID]ItemDef
 		}
 		if r.Version < 1 || r.MinRuneLevel < 1 || r.MinRuneLevel > 1000000 || r.UniqueBasePPB < 0 || r.UniqueBasePPB > LootProbabilityScaleV5 || r.UniqueMFBoost < 0 || r.UniqueMFBoost > 100 || r.UniqueMFDivisor < 1 || r.UniqueMFDivisor > 1000000 || r.UniqueBasePPB*(1+r.UniqueMFBoost) > LootProbabilityScaleV5 {
 			return nil, fmt.Errorf("invalid loot rules version %d", r.Version)
+		}
+		for _, outdoor := range []*OutdoorEquipmentRule{r.OutdoorEquipment, r.OutdoorNormalEquipment} {
+			if outdoor == nil {
+				continue
+			}
+			if _, err := NaturalAffixProbabilitiesV5(outdoor.Counts(), 0); err != nil {
+				return nil, fmt.Errorf("invalid outdoor equipment weights version %d: %w", r.Version, err)
+			}
+			if outdoor.LegendaryBasePPB < 0 || outdoor.LegendaryBasePPB > LootProbabilityScaleV5 || outdoor.LegendaryBasePPB*(1+r.UniqueMFBoost) > LootProbabilityScaleV5 {
+				return nil, fmt.Errorf("invalid outdoor legendary probability version %d", r.Version)
+			}
 		}
 		if len(r.RunePool) != 28 || len(r.Grades) != 4 || len(r.SocketLevels) == 0 {
 			return nil, fmt.Errorf("incomplete loot rules version %d", r.Version)

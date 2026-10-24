@@ -1,7 +1,6 @@
 package store
+
 import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
-
 
 import (
 	"context"
@@ -17,7 +16,7 @@ func TestV5CatalogVersionStorageDoesNotRewriteLegacy(t *testing.T) {
 		if err := saveEndgameItem(context.Background(), q, st); err != nil {
 			t.Fatal(err)
 		}
-		if st != before || len(q.args) != 7 || q.args[3] != int32(10123) || q.args[5] != version || q.args[6] != version {
+		if st != before || len(q.args) != 8 || q.args[3] != int32(10123) || q.args[5] != version || q.args[6] != version || q.args[7] != int32(0) {
 			t.Fatal("version or saved roll changed", q.args)
 		}
 	}

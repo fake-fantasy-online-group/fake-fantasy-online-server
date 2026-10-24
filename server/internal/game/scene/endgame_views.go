@@ -55,8 +55,8 @@ func (s *Scene) endgameItem(st domain.Stack, loc string, slot int32) domain.Endg
 	if power, ok := domain.LegendaryPower(st.Legendary.PowerID); ok {
 		// Existing clients compare this text with native tooltip rows exactly.
 		// Keep the name prefix identical so they do not append a second effect.
-		v.Legendary = &domain.LegendaryItemView{PowerID: power.ID, Name: power.Name, Description: power.Name + "：" + power.Effect}
-		v.Name = domain.LegendaryDisplayName(d.Name, power)
+		v.Legendary = &domain.LegendaryItemView{Tier: st.Legendary.Tier, PowerID: power.ID, Name: power.Name, Description: power.Name + "：" + power.Effect}
+		v.Name = domain.LegendaryInstanceDisplayName(d.Name, power, st.Legendary)
 		v.Stats = nil
 		for i, a := range st.Legendary.Affixes {
 			b := st.Legendary.Bounds[i]

@@ -213,6 +213,28 @@ func (s *Scene) startEndgameRiftWithProfile(p *entity.Entity, req domain.Endgame
 		s.endgameError(p, req, "roster", "洞天限1至5名合适等级队员")
 		return
 	}
+	if rules.CumulativeLegendaryPerTier > 0 {
+		poolLevel := int32(0)
+		for _, member := range roster {
+			poolLevel = max(poolLevel, member.Level)
+		}
+		// Check every actual possible encounter Boss baseline. Its level may
+		// differ from the frozen roster's lookup key and the named guardian's
+		// original world level; neither is a substitute for the spawned level.
+		bases := s.riftFloorBaseDefinitionsForRun(run, true)
+		if len(bases) == 0 {
+			s.endgameError(p, req, "reward_pool", "洞天守关怪物奖励来源暂不可用，未扣除洞天符钥。")
+			return
+		}
+		for _, member := range roster {
+			for _, base := range bases {
+				if len(s.riftCumulativeLegendaryPool(rules, poolLevel, member.Level, base.Level, profiles[member.CharID])) == 0 {
+					s.endgameError(p, req, "reward_pool", "队伍中有成员暂无合法暗金奖励底材，未扣除洞天符钥。")
+					return
+				}
+			}
+		}
+	}
 	plan, layoutErr := s.planEndgameRiftFloor(run.RunID, 1, 0)
 	if layoutErr != nil {
 		s.endgameError(p, req, "layout", "洞天地形暂不可用，请稍后重试")

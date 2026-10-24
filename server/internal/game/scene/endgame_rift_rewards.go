@@ -59,7 +59,17 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 		return
 	}
 	r := d.Run
+	sourceLevel := s.riftRewardSourceLevel()
+	if sourceLevel > 0 {
+		d.RewardSourceLevel = sourceLevel
+	}
 	plan := domain.PlanRiftRewards(r.Tier, r.Timely, r.Rules)
+	if sourceLevel <= 0 && (plan.Equipment > 0 || plan.NormalBossEquipment > 0 || r.Rules.CumulativeLegendaryPerTier > 0) {
+		// An old paid run has the same right to a real guaranteed promotion.
+		// Unknown provenance must not turn its entitlement into ordinary gear.
+		s.log.Warn("洞天奖励缺少可核实怪物等级，保留待生成状态", "run", r.RunID)
+		return
+	}
 	// Encounter base level uses the highest frozen admission level, as native rift spawns do.
 	poolLevel := int32(0)
 	for _, member := range r.Members {
@@ -67,6 +77,23 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			poolLevel = member.Level
 		}
 	}
+	// Validate the entire award before generating any instances. A broken content
+	// configuration must not silently turn a guaranteed Legendary into no reward.
+	legendaryPools := map[domain.CharID][]domain.ItemID{}
+	if r.Rules.CumulativeLegendaryPerTier > 0 {
+		for char, member := range r.Members {
+			if !member.Eligible {
+				continue
+			}
+			pool := s.riftCumulativeLegendaryPool(r.Rules, poolLevel, member.Level, sourceLevel, d.Profiles[char])
+			if len(pool) == 0 {
+				s.log.Warn("洞天暗金奖励缺少合法底材，保留待生成状态", "run", r.RunID, "character", char)
+				return
+			}
+			legendaryPools[char] = pool
+		}
+	}
+	grants := make(map[domain.CharID]endgameRiftGrant, len(r.Members))
 	chars := make([]domain.CharID, 0, len(r.Members))
 	for char := range r.Members {
 		chars = append(chars, char)
@@ -83,6 +110,17 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			continue
 		}
 		grant := endgameRiftGrant{}
+		if r.Rules.CumulativeLegendaryPerTier > 0 {
+			count := s.riftCumulativeRandom(char, -1, "count")
+			for i, n := int32(0), plan.CumulativeLegendaryCount(count.Intn); i < n; i++ {
+				stack := s.rollEndgameRiftCumulativeLegendary(char, i, legendaryPools[char])
+				if stack.Empty() {
+					s.log.Warn("洞天暗金奖励生成失败，保留待生成状态", "run", r.RunID, "character", char, "ordinal", i)
+					return
+				}
+				grant.Items = append(grant.Items, stack)
+			}
+		}
 		var equipment, guaranteedUniques []domain.ItemID
 		best, bestUnique := int32(0), int32(0)
 		identity := d.Profiles[char]
@@ -110,7 +148,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			}
 			// A guaranteed unique slot has its own wearer-legal259-base pool.
 			// All other slots retain the complete ordinary native pool above.
-			if s.riftLegendaryBaseEligible(def) {
+			if s.riftLegendaryBaseEligibleAtLevel(def, sourceLevel) {
 				if def.Equip.LevelReq > bestUnique {
 					bestUnique = def.Equip.LevelReq
 					guaranteedUniques = nil
@@ -142,7 +180,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			equipment = r.Rules.EquipmentPoolForLevel(poolLevel, eligible)
 			equipment = r.Rules.FillMissingEquipmentSlots(equipment, m.Level, s.items, eligible)
 			for _, id := range equipment {
-				if s.riftLegendaryBaseEligible(s.items[id]) {
+				if s.riftLegendaryBaseEligibleAtLevel(s.items[id], sourceLevel) {
 					guaranteedUniques = append(guaranteedUniques, id)
 				}
 			}
@@ -159,6 +197,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			def := s.items[candidates[rng.Intn(len(candidates))]]
 			stack := domain.NewStack(def, 1)
 			stack.Bound = true
+			stack.Endgame.SourceLevel = sourceLevel
 			// Explicit named native equipment keeps its original fixed properties.
 			if domain.NativeEquipmentDropEligible(def) {
 				_, affixes := s.equipmentRoll.RollColorFirstEquipment(def, domain.DefaultColorProfile, 0, r.Rules.Loot, rng.Int63n, nil, rng.Int63n)
@@ -166,7 +205,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 				copy(stack.RolledAffixes[:], affixes)
 				if (r.Tier >= r.Rules.GuaranteedUniqueTier && i == 0) || rng.Intn(100) < int(plan.UniqueChance) {
 					if def.LegendaryEnabled {
-						s.equipmentRoll.ApplyLegendary(&stack, def, rng.Intn)
+						s.equipmentRoll.ApplyLegendaryLegacyAtLevel(&stack, def, sourceLevel, rng.Intn)
 					} else {
 						domain.ApplyUnique(&stack, def, rng.Intn)
 					}
@@ -225,8 +264,9 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			allowedItems = append(allowedItems, stack)
 		}
 		grant.Items = allowedItems
-		d.Grants[char] = grant
+		grants[char] = grant
 	}
+	d.Grants = grants
 	d.GrantsReady = true
 }
 
@@ -269,20 +309,122 @@ func (s *Scene) rollEndgameRiftNormalBossEquipment(char domain.CharID, ordinal i
 	def := s.items[pool[item.Intn(len(pool))]]
 	stack := domain.NewStack(def, 1)
 	stack.Bound = true
+	sourceLevel := s.riftRewardSourceLevel()
+	stack.Endgame.SourceLevel = sourceLevel
 	if domain.NativeEquipmentDropEligible(def) {
-		s.rollNaturalEquipmentQualityV5(def, &stack, domain.DefaultColorProfile, true, magicFind, r.Rules.Loot, &quality, &values, &unique, &variables)
+		if r.Rules.CumulativeLegendaryPerTier > 0 {
+			// Copy the pinned policy, never the live outdoor selector or shared table.
+			rule, table := *r.Rules.Loot, s.equipmentRoll
+			table.Counts = map[domain.ColorProfile][]domain.WeightedAffixCount{domain.DefaultColorProfile: rule.OutdoorEquipment.Counts()}
+			rule.UniqueBasePPB = rule.OutdoorEquipment.LegendaryBasePPB
+			if !def.LegendaryEnabled {
+				rule.UniqueBasePPB = 0
+			}
+			s.rollEquipmentQualityV5(def, &stack, sourceLevel, table, domain.DefaultColorProfile, true, magicFind, &rule, quality.Int63n, values.Int63n, unique.Int63n, variables.Intn)
+		} else {
+			s.rollNaturalEquipmentQualityV5Legacy(def, &stack, sourceLevel, domain.DefaultColorProfile, true, magicFind, r.Rules.Loot, &quality, &values, &unique, &variables)
+		}
 	}
 	return stack
 }
 
 // Promotion never expands the existing reward base pool or admits true hard-dungeon bases.
 func (s *Scene) riftLegendaryBaseEligible(def domain.ItemDef) bool {
+	if def.Equip == nil {
+		return false
+	}
+	return s.riftLegendaryBaseEligibleAtLevel(def, def.Equip.LevelReq)
+}
+
+func (s *Scene) riftLegendaryBaseEligibleAtLevel(def domain.ItemDef, sourceLevel int32) bool {
 	if def.HardDungeonOnly || def.Equip == nil || def.Equip.LevelReq > 60 || !domain.NativeEquipmentDropEligible(def) {
 		return false
 	}
 	if def.LegendaryEnabled {
-		return s.equipmentRoll.LegendaryReady(def) && len(domain.LegendaryCandidates(def)) > 0
+		return s.equipmentRoll.LegendaryReady(def) && len(domain.LegendaryCandidatesAtLevel(def, sourceLevel)) > 0
 	}
 	u, ok := domain.UniqueForBase(def.ID, s.endgameCatalog)
 	return ok && u.NativeDropEligible
+}
+
+// Select only frozen native pools and wearer-legal bases with a real executable
+// power and six-affix foundation. No fixed named gear or legacy Unique fallback.
+func (s *Scene) riftCumulativeLegendaryPool(rules *domain.RiftRules, poolLevel, wearLevel, sourceLevel int32, identity endgameRiftIdentity) []domain.ItemID {
+	character := &domain.Character{Race: identity.Race, Employed: identity.Employed, EmploymentKnown: true}
+	sex := uint8(2)
+	if identity.Gender == 1 {
+		sex = 1
+	}
+	if sourceLevel <= 0 {
+		return nil
+	}
+	eligibility := map[domain.ItemID]bool{}
+	eligible := func(id domain.ItemID) bool {
+		if allowed, found := eligibility[id]; found {
+			return allowed
+		}
+		def, ok := s.items[id]
+		allowed := ok && def.LegendaryEnabled && def.Equip != nil && !def.Equip.AscensionOnly &&
+			def.Equip.LevelReq <= wearLevel && def.Equip.Need.Level <= wearLevel && def.Equip.Need.AllowsCharacter(character) &&
+			(def.Equip.Need.Sex == 0 || def.Equip.Need.Sex == sex) && s.riftLegendaryBaseEligibleAtLevel(def, sourceLevel)
+		eligibility[id] = allowed
+		return allowed
+	}
+	pool := rules.EquipmentPoolForLevel(poolLevel, eligible)
+	pool = rules.FillMissingEquipmentSlots(pool, wearLevel, s.items, eligible)
+	sort.Slice(pool, func(i, j int) bool { return pool[i] < pool[j] })
+	return pool
+}
+
+func (s *Scene) riftCumulativeRandom(char domain.CharID, ordinal int32, purpose string) lootRandomV5 {
+	r := s.rift.data.Run
+	hash := sha256.Sum256([]byte(fmt.Sprintf("%s/rift-cumulative/%d/%d/%d/%s", r.RunID, r.RulesVersion, char, ordinal, purpose)))
+	return lootRandomV5{binary.BigEndian.Uint64(hash[:8])}
+}
+
+func (s *Scene) rollEndgameRiftCumulativeLegendary(char domain.CharID, ordinal int32, pool []domain.ItemID) domain.Stack {
+	if len(pool) == 0 {
+		return domain.Stack{}
+	}
+	item, values := s.riftCumulativeRandom(char, ordinal, "item"), s.riftCumulativeRandom(char, ordinal, "values")
+	def := s.items[pool[item.Intn(len(pool))]]
+	stack := domain.NewStack(def, 1)
+	stack.Bound = true
+	if !s.equipmentRoll.ApplyLegendaryAtLevel(&stack, def, s.rift.data.RewardSourceLevel, values.Intn) {
+		return domain.Stack{}
+	}
+	return stack
+}
+
+// Prefer the captured death event. Older pending snapshots can recover the
+// exact encounter definition selected by the existing spawn algorithm, never
+// an equipment requirement or an arbitrary player-level substitute.
+func (s *Scene) riftRewardSourceLevel() int32 {
+	d := &s.rift.data
+	if d.RewardSourceLevel > 0 {
+		return d.RewardSourceLevel
+	}
+	for id, registered := range d.Run.Monsters {
+		if registered != nil && registered.Class == 3 {
+			if monster := s.monsters[id]; monster != nil && monster.Level > 0 {
+				return monster.Level
+			}
+		}
+	}
+	bases := s.riftFloorBaseDefinitions(true)
+	if len(bases) == 0 {
+		return 0
+	}
+	if d.Floor != nil {
+		return bases[d.Floor.Seed%uint64(len(bases))].Level
+	}
+	// Floorless historical encounters lack a deterministic identity once gone.
+	// Recovery is safe only when all possible real Boss definitions agree.
+	level := bases[0].Level
+	for _, base := range bases[1:] {
+		if base.Level != level {
+			return 0
+		}
+	}
+	return level
 }

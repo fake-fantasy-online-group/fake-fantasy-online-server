@@ -152,7 +152,7 @@ func TestRiftCosmeticHatsNativePoolsAndFrozenVersion(t *testing.T) {
 						n++
 					}
 				}
-				if n != 11 {
+				if n != 13 {
 					t.Fatal("legendary base pool changed", n)
 				}
 			}
@@ -200,7 +200,7 @@ func TestRiftCosmeticHatsRealRewardGenerator(t *testing.T) {
 					plan := domain.PlanRiftRewards(tier, true, rules)
 					for seed := 0; seed < 64; seed++ {
 						run := &domain.RiftRun{RunID: fmt.Sprintf("cosmetic-l%d-g%d-t%d-s%d", level, gender, tier, seed), Tier: tier, Timely: true, RulesVersion: rules.Version, Rules: rules, Members: map[domain.CharID]*domain.RiftMember{100: {CharID: 100, Level: level, Eligible: true}}}
-						s.rift = &endgameRiftState{data: endgameRiftPersisted{Version: 2, Run: run, Profiles: map[domain.CharID]endgameRiftIdentity{100: {Race: 2, Gender: gender, Employed: true, RewardLevel: level}}, Grants: map[domain.CharID]endgameRiftGrant{}}}
+						s.rift = &endgameRiftState{data: endgameRiftPersisted{Version: 2, RewardSourceLevel: level, Run: run, Profiles: map[domain.CharID]endgameRiftIdentity{100: {Race: 2, Gender: gender, Employed: true, RewardLevel: level}}, Grants: map[domain.CharID]endgameRiftGrant{}}}
 						s.generateEndgameRiftGrantsWithContexts(map[domain.CharID]endgameRiftRewardContext{100: {Level: level}})
 						count := 0
 						for _, stack := range s.rift.data.Grants[100].Items {

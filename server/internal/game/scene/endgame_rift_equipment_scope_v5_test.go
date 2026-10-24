@@ -32,6 +32,9 @@ func TestV5RiftPendingLegacyRunExcludesAscensionAndOver60(t *testing.T) {
 		r.Members[char] = m
 		s.rift.data.Profiles[char] = endgameRiftIdentity{Race: domain.Warrior, Gender: 1, Employed: true}
 	}
+	// Actual level60 guardian from the original encounter, independent of the
+	// changed admission-level fixture used to test equipment exclusion.
+	s.rift.data.RewardSourceLevel = 60
 	s.generateEndgameRiftGrants()
 	for _, grant := range s.rift.data.Grants {
 		count := 0

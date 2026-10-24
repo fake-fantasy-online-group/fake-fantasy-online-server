@@ -66,11 +66,18 @@ func (s *Scene) validateEndgameRiftFloor(plan domain.RiftFloorPlan) error {
 // level of a randomly chosen map. Existing asset IDs change appearance; the
 // selected tier and party size remain the only additional difficulty scaling.
 func (s *Scene) riftFloorBaseDefinitions(boss bool) []domain.MonsterDef {
-	if s.trial == nil || s.rift == nil {
+	if s.rift == nil {
+		return nil
+	}
+	return s.riftFloorBaseDefinitionsForRun(s.rift.data.Run, boss)
+}
+
+func (s *Scene) riftFloorBaseDefinitionsForRun(run *domain.RiftRun, boss bool) []domain.MonsterDef {
+	if s.trial == nil || run == nil {
 		return nil
 	}
 	level := int32(0)
-	for _, m := range s.rift.data.Run.Members {
+	for _, m := range run.Members {
 		if m.Level > level {
 			level = m.Level
 		}

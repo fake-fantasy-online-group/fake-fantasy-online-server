@@ -44,7 +44,7 @@ func TestLegendarySixAffixesTypedBoundsAndPersistence(t *testing.T) {
 			}
 			return 0
 		}
-		if !table.ApplyLegendary(&st, def, rng) {
+		if !table.ApplyLegendaryLegacy(&st, def, rng) {
 			t.Fatal("promotion failed")
 		}
 		if st.RolledAffixCount != 0 || st.RolledAffixes != [5]InstanceAffix{} || NaturalAttributeCount(def, st) != 6 {

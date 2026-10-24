@@ -60,7 +60,8 @@ func (s *Scene) rollLootWithContextV5(dead *entity.Entity, context domain.LootCo
 	entries := s.withLostTempleAncientDrops(s.lootTable[dead.Monster.TypeID], dead.Monster.TypeID)
 	fixed := s.rollBossFixedEquipment(dead)
 	if len(entries) == 0 && len(fixed) == 0 {
-		s.rollAstralRuneLoot(dead, killer, 0)
+		bonus := s.rollOutdoorBossLegendaries(dead, context, 0)
+		s.rollAstralRuneLoot(dead, killer, bonus)
 		return
 	}
 	// 跨级惩罚的掉率倍率按击杀者等级对怪模板等级算；宠物补刀归主人。
@@ -115,6 +116,7 @@ func (s *Scene) rollLootWithContextV5(dead *entity.Entity, context domain.LootCo
 		n++
 		originalDrops++
 	}
+	n += s.rollOutdoorBossLegendaries(dead, context, startSlot+n)
 	s.rollAstralRuneLoot(dead, killer, startSlot+n)
 }
 

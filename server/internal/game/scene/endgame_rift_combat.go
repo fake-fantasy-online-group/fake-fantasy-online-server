@@ -34,6 +34,7 @@ type endgameRiftDeath struct {
 	EliteLava       *endgameRiftHazard
 	ObservedContext *endgameRiftRewardContext
 	RewardContexts  map[domain.CharID]endgameRiftRewardContext
+	SourceLevel     int32
 	ID              domain.EntityID
 	Pos             domain.Pos
 	MS              int64
@@ -298,6 +299,7 @@ func (s *Scene) onEndgameRiftMonsterDeath(m, killer *entity.Entity) bool {
 	death := endgameRiftDeath{ID: m.ID, Pos: m.Pos, MS: s.riftMS(), Present: present, EliteLava: s.captureRiftEliteDeath(m, s.riftMS())}
 	if registered := x.data.Run.Monsters[m.ID]; registered != nil && registered.Class == 3 {
 		death.RewardContexts = s.freezeEndgameRiftRewardContexts()
+		death.SourceLevel = m.Level
 	}
 	if x.economicPending {
 		x.delayedDeaths = append(x.delayedDeaths, death)
@@ -325,6 +327,7 @@ func (s *Scene) applyEndgameRiftDeath(death endgameRiftDeath) bool {
 	}
 	if x.data.Run.Phase == domain.RiftCompleted && !x.data.GrantsReady {
 		x.data.RewardPos = death.Pos
+		x.data.RewardSourceLevel = death.SourceLevel
 		x.rewardFresh = true
 		s.generateEndgameRiftGrantsWithContexts(death.RewardContexts)
 		x.data.Run.Revision++

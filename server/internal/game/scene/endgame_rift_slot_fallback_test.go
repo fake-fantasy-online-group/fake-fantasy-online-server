@@ -100,7 +100,7 @@ func TestRiftSlotFallbackNativeLevelsClassesAndBoundaries(t *testing.T) {
 				eligible++
 			}
 		}
-		if eligible != 18 {
+		if eligible != 20 {
 			t.Fatal("42/43 legendary bases", level, eligible)
 		}
 		powerIDs := func(pool []domain.ItemID) map[string]bool {
@@ -125,11 +125,12 @@ func TestRiftSlotFallbackRealRewardsAndLegendaryGates(t *testing.T) {
 	s, old, fresh, _ := cosmeticHatFixture(t)
 	observed := map[domain.ItemID]bool{}
 	powers := map[int32]map[string]bool{1: {}, 10: {}}
+	aboveWear := map[int32]bool{}
 	for _, level := range []int32{42, 43} {
 		for _, rules := range []*domain.RiftRules{old, fresh} {
 			for seed := 0; seed < 256; seed++ {
 				run := &domain.RiftRun{RunID: fmt.Sprintf("slot-l%d-v%d-s%d", level, rules.Version, seed), Tier: 10, Timely: true, RulesVersion: rules.Version, Rules: rules, Members: map[domain.CharID]*domain.RiftMember{100: {CharID: 100, Level: level, Eligible: true}}}
-				s.rift = &endgameRiftState{data: endgameRiftPersisted{Version: 2, Run: run, Profiles: map[domain.CharID]endgameRiftIdentity{100: {Race: 2, Gender: 0, Employed: true, RewardLevel: level}}, Grants: map[domain.CharID]endgameRiftGrant{}}}
+				s.rift = &endgameRiftState{data: endgameRiftPersisted{Version: 2, RewardSourceLevel: level, Run: run, Profiles: map[domain.CharID]endgameRiftIdentity{100: {Race: 2, Gender: 0, Employed: true, RewardLevel: level}}, Grants: map[domain.CharID]endgameRiftGrant{}}}
 				s.generateEndgameRiftGrantsWithContexts(map[domain.CharID]endgameRiftRewardContext{100: {Level: level}})
 				for _, st := range s.rift.data.Grants[100].Items {
 					d := s.items[st.Item]
@@ -145,13 +146,14 @@ func TestRiftSlotFallbackRealRewardsAndLegendaryGates(t *testing.T) {
 					}
 					if st.Legendary.PowerID != "" {
 						p, ok := domain.LegendaryPower(st.Legendary.PowerID)
-						if !ok || p.MinLevel > d.Equip.LevelReq || !domain.LegendaryPowerEligible(p, d) {
+						if !ok || st.Endgame.SourceLevel != level || p.MinLevel > level || !domain.LegendaryPowerEligibleForItem(p, d, st) {
 							t.Fatal("ineligible legendary", st.Item, st.Legendary.PowerID)
 						}
 						if err := st.Legendary.Validate(); err != nil {
 							t.Fatal(err)
 						}
 						powers[d.Equip.Slot][p.ID] = true
+						aboveWear[d.Equip.Slot] = aboveWear[d.Equip.Slot] || p.MinLevel > d.Equip.LevelReq
 					}
 				}
 			}
@@ -166,6 +168,9 @@ func TestRiftSlotFallbackRealRewardsAndLegendaryGates(t *testing.T) {
 			t.Fatal("no powers", id)
 		}
 		t.Logf("base%d wear%d resource%d legendary candidates%d", id, s.items[id].Equip.LevelReq, s.items[id].Equip.ResourceLevel, counts)
+	}
+	if !aboveWear[1] || !aboveWear[10] {
+		t.Fatal("real low-wear face/backpack missing higher monster powers", aboveWear)
 	}
 	if len(observed) != 7 || len(powers[1]) == 0 || len(powers[10]) == 0 {
 		t.Fatal("fallback slot quality not observed", observed, powers)
@@ -212,7 +217,7 @@ func TestRiftSlotFallbackMixedPartyRecipientGates(t *testing.T) {
 		members := map[domain.CharID]*domain.RiftMember{100: {CharID: 100, Level: 17, Eligible: true}, 200: {CharID: 200, Level: 65, Eligible: true}}
 		profiles := map[domain.CharID]endgameRiftIdentity{100: {Race: 2, Gender: 0, Employed: true}, 200: {Race: 0, Gender: 1, Employed: true}}
 		run := &domain.RiftRun{RunID: fmt.Sprintf("mixed-slots-%d", seed), Tier: 10, Timely: true, RulesVersion: 11, Rules: fresh, Members: members}
-		s.rift = &endgameRiftState{data: endgameRiftPersisted{Version: 2, Run: run, Profiles: profiles, Grants: map[domain.CharID]endgameRiftGrant{}}}
+		s.rift = &endgameRiftState{data: endgameRiftPersisted{Version: 2, RewardSourceLevel: 68, Run: run, Profiles: profiles, Grants: map[domain.CharID]endgameRiftGrant{}}}
 		s.generateEndgameRiftGrantsWithContexts(map[domain.CharID]endgameRiftRewardContext{100: {Level: 43}, 200: {Level: 65}})
 		for char, grant := range s.rift.data.Grants {
 			profile := profiles[char]

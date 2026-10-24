@@ -87,11 +87,35 @@ func legendaryClassMask(class string) uint8 {
 	return 0
 }
 
-// Eligibility derives slot intersections from category/scope, never names or
-// a player's current level. Higher-level players cannot grow an existing base.
+// LegendaryPowerEligible preserves historical item eligibility for callers with
+// no generation context. Monster drops must use LegendaryPowerEligibleAtLevel.
 func LegendaryPowerEligible(p LegendaryPowerDefinition, base ItemDef) bool {
+	return LegendaryPowerEligibleAtLevel(p, base, LegendaryGenerationLevel(base, Stack{}))
+}
+
+// LegendaryGenerationLevel retains the immutable origin of a monster drop through
+// awakening and reforge. Zero is an old/non-monster item without provenance, so
+// its historical base-level behavior remains intact; player level is never used.
+func LegendaryGenerationLevel(base ItemDef, st Stack) int32 {
+	if st.Endgame.SourceLevel != 0 {
+		return st.Endgame.SourceLevel
+	}
+	if base.Equip != nil {
+		return base.Equip.LevelReq
+	}
+	return 0
+}
+
+func LegendaryPowerEligibleForItem(p LegendaryPowerDefinition, base ItemDef, st Stack) bool {
+	return LegendaryPowerEligibleAtLevel(p, base, LegendaryGenerationLevel(base, st))
+}
+
+// LegendaryPowerEligibleAtLevel separates the monster's generation level from
+// the item's unchanged wear and native affix levels. Slot/type/class restrictions
+// remain authoritative; neither the looter's level nor learned skills are inputs.
+func LegendaryPowerEligibleAtLevel(p LegendaryPowerDefinition, base ItemDef, sourceLevel int32) bool {
 	e := base.Equip
-	if e == nil || e.LevelReq < p.MinLevel {
+	if e == nil || sourceLevel < 1 || p.MinLevel < 1 || sourceLevel < p.MinLevel {
 		return false
 	}
 	parts := strings.Split(p.ID, "-")
@@ -102,11 +126,11 @@ func LegendaryPowerEligible(p LegendaryPowerDefinition, base ItemDef) bool {
 	allowed := false
 	switch parts[1][0] {
 	case 'A':
-		allowed = slot == SlotWeapon || slot == SlotTwoHand || slot == SlotRing || slot == SlotNeck || slot == SlotBody || slot == SlotHead || slot == SlotGlove
+		allowed = slot == SlotWeapon || slot == SlotTwoHand || slot == SlotRing || slot == SlotNeck || slot == SlotBody || slot == SlotHead || slot == SlotGlove || slot == SlotShoe
 	case 'D':
-		allowed = slot == SlotBody || slot == SlotHead || slot == SlotGlove || slot == SlotFace || slot == SlotBag || slot == SlotShield
+		allowed = slot == SlotBody || slot == SlotHead || slot == SlotGlove || slot == SlotFace || slot == SlotBag || slot == SlotShield || slot == SlotShoe
 	case 'U':
-		allowed = slot == SlotWeapon || slot == SlotTwoHand || slot == SlotRing || slot == SlotNeck || slot == SlotFace || slot == SlotBag || slot == SlotShield
+		allowed = slot == SlotWeapon || slot == SlotTwoHand || slot == SlotRing || slot == SlotNeck || slot == SlotFace || slot == SlotBag || slot == SlotShield || slot == SlotShoe
 	}
 	if !allowed {
 		return false
@@ -140,7 +164,7 @@ func ActiveLegendaryPowers(worn *EquipSet, defs func(ItemID) (ItemDef, bool), ch
 			return
 		}
 		d, ok := defs(st.Item)
-		if !ok || d.Equip == nil || int32(slot) != d.Equip.Slot || !EquipmentFunctional(st, d) || !d.Equip.Need.AllowsCharacter(ch) || ch.Level < EquipmentRequiredLevel(d, st) || !LegendaryPowerEligible(p, d) {
+		if !ok || d.Equip == nil || int32(slot) != d.Equip.Slot || !EquipmentFunctional(st, d) || !d.Equip.Need.AllowsCharacter(ch) || ch.Level < EquipmentRequiredLevel(d, st) || !LegendaryPowerEligibleForItem(p, d, st) {
 			return
 		}
 		if p.Class != "全职业" && (!ch.HasProfession() || legendaryClassMask(p.Class)&(1<<uint8(ch.Race)) == 0) {
