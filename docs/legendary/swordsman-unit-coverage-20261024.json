@@ -1,0 +1,3608 @@
+{
+  "schema_version": 1,
+  "group": "swordsman",
+  "review_date": "2026-10-24",
+  "base_commit": "a1da69aae0c63061d102a8a0e10b4c1b2335db46",
+  "effect_source": "server/internal/domain/legendary_powers.json",
+  "coverage_metric": {
+    "name": "威能独立效果用例覆盖",
+    "numerator": 50,
+    "denominator": 50,
+    "percentage": 100,
+    "not_go_statement_coverage": true,
+    "combinations_excluded": true
+  },
+  "validation": {
+    "command": "go test ./internal/game/scene -run 'TestLegendary(Warrior|Swordsman)|TestWarriorFinalReview' -count=1 -json",
+    "jsonl_absolute_path": "/workspace/scratch/1cc826cfb9aa/astra-audit/melee-unit-focused.jsonl",
+    "result": "pass"
+  },
+  "boundaries": [
+    "仅计逐ID独立传奇装备的实际消费者断言，不把注册、catalog、modifier字段或组合计入50分母。",
+    "混合受控SkillDef scene消费者unit和源支持迁移fixture；warriorCoverageNativeCast/swordsmanCoverageNativeCast名称指通过原生onUseSkill入口，不代表其受控SkillDef来自原生数据表。",
+    "面板移速/权威移动速度通过refreshStats及attributeSnapshot和playerMoveSpeedPX验证，非仅临时modifier字段。",
+    "防御是实际怪物→玩家PvE strike/DOT消费者；没有构造不可达PvP来证明线上场景。",
+    "防递归吸血组合注入测试专用skill-origin吸血状态，以验证真实恢复消费者及合法两件威能隔离，不声称原生剑技能授予该状态。",
+    "组合名单允许包含父表驱动测试中的单件基线，但只独立solo_tests列入分母；合法槽位由nativeRepairEquip或明确不同武器/衣服/头盔分配。",
+    "这是效果条款用例覆盖，不是Go行覆盖、mutation覆盖，也不是全等级、全装备部位、全部双三件的穷举。"
+  ],
+  "powers": [
+    {
+      "power_id": "JK-A01",
+      "name": "藏锋出鞘",
+      "effect": "罡气剑的直接伤害提高100%，原有攻击范围、击退和其他效果不变。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A01",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A01/10102",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-A01",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "罡气剑的直接伤害提高100%，原有攻击范围、击退和其他效果不变",
+          "kind": "solo",
+          "assertion": "实际直接200/卸装100；迁移原生罡气击退100距离前后不变。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A01",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A01/10102",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A01"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-A02",
+      "name": "近身空鸣",
+      "effect": "选中有效目标施放真空剑时，还会攻击你周围150距离内最近的最多8名敌人；所有目标的直接伤害提高15%，重叠目标只受击一次。远程主目标不在这8名中时，本次最多攻击9名敌人。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A02",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A02/10117",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloTargetCaps/JK-A02",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "选中有效目标施放真空剑时，还会攻击你周围150距离内最近的最多8名敌人",
+          "kind": "solo",
+          "assertion": "远程主目标及最近8副目标实际各115，最多9人、无重复伤害；卸装100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A02",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A02/10117",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A02"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "所有目标的直接伤害提高15%，重叠目标只受击一次",
+          "kind": "solo",
+          "assertion": "远程主目标及最近8副目标实际各115，最多9人、无重复伤害；卸装100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A02",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A02/10117",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A02"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "远程主目标不在这8名中时，本次最多攻击9名敌人",
+          "kind": "solo",
+          "assertion": "远程主目标及最近8副目标实际各115，最多9人、无重复伤害；卸装100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A02",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A02/10117",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A02"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-A03",
+      "name": "罡锋递进",
+      "effect": "罡气剑命中主目标后，对仍存活的主目标追加攻击力160%的物理伤害，每次施放一次。追加伤害不触发命中威能或恢复效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A03",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A03/10102",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A03",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "罡气剑命中主目标后，对仍存活的主目标追加攻击力160%的物理伤害，每次施放一次",
+          "kind": "solo",
+          "assertion": "实际单目标260/卸装100；追加威能与回蓝/吸血组合不递归另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A03",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A03/10102",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A03"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "追加伤害不触发命中威能或恢复效果",
+          "kind": "solo",
+          "assertion": "实际单目标260/卸装100；追加威能与回蓝/吸血组合不递归另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A03",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A03/10102",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A03"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageCombinations/child-does-not-restore-mana",
+        "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A03"
+      ]
+    },
+    {
+      "power_id": "JK-A04",
+      "name": "远锋留刃",
+      "effect": "真空剑命中敌人后，若最远的命中敌人距你至少75，在其命中位置立即释放一道剑痕，对周围半径100内最近的最多5名敌人造成原技能单次基础伤害75%的物理伤害。每次施放只产生1道剑痕，不留下持续伤害区域。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloSpecialCoverage/JK-A04",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloTargetCaps/JK-A04",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "真空剑命中敌人后，若最远的命中敌人距你至少75，在其命中位置立即释放一道剑痕，对周围半径100内最近的最多5名敌人造成原技能单次基础伤害75%的物理伤害",
+          "kind": "solo",
+          "assertion": "74距离无剑痕、75距离实际额外75；总计最多5命中剑痕，5秒后无持续伤害；不递归组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A04",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A04"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "每次施放只产生1道剑痕，不留下持续伤害区域",
+          "kind": "solo",
+          "assertion": "74距离无剑痕、75距离实际额外75；总计最多5命中剑痕，5秒后无持续伤害；不递归组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A04",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A04"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageCombinations/child-does-not-restore-mana",
+        "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A04"
+      ]
+    },
+    {
+      "power_id": "JK-A05",
+      "name": "金缚剑阵",
+      "effect": "金缚剑冷却改为24秒，直接伤害提高40%；除主目标外，还会攻击其周围150距离内最近的最多5名敌人，并分别尝试附加原有定身。定身时长与控制免疫规则不变。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloControlCoverage/JK-A05",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A05",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A05/10111",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A05",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "金缚剑冷却改为24秒，直接伤害提高40%",
+          "kind": "solo",
+          "assertion": "真实主副目标140、总数6，分别保留原定身和实际原时长；原生冷却存储在24000ms到期。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A05",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A05",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A05/10111",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A05"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "除主目标外，还会攻击其周围150距离内最近的最多5名敌人，并分别尝试附加原有定身",
+          "kind": "solo",
+          "assertion": "真实主副目标140、总数6，分别保留原定身和实际原时长；原生冷却存储在24000ms到期。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A05",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A05",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A05/10111",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A05"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "定身时长与控制免疫规则不变",
+          "kind": "solo",
+          "assertion": "真实主副目标140、总数6，分别保留原定身和实际原时长；原生冷却存储在24000ms到期。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A05",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A05",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A05/10111",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A05"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-A06",
+      "name": "缚敌成阵",
+      "effect": "金缚剑成功施加自身的定身后，对该敌人追加攻击力200%的物理伤害；每名敌人每次施放一次。追加伤害不重复施加控制，也不触发命中威能或恢复效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloControlCoverage/JK-A06",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "金缚剑成功施加自身的定身后，对该敌人追加攻击力200%的物理伤害",
+          "kind": "solo",
+          "assertion": "实际定身成功才追加200，总伤300；没有施加定身仅100；追加恢复隔离组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A06"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "每名敌人每次施放一次",
+          "kind": "solo",
+          "assertion": "实际定身成功才追加200，总伤300；没有施加定身仅100；追加恢复隔离组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A06"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "追加伤害不重复施加控制，也不触发命中威能或恢复效果",
+          "kind": "solo",
+          "assertion": "实际定身成功才追加200，总伤300；没有施加定身仅100；追加恢复隔离组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A06"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A06"
+      ]
+    },
+    {
+      "power_id": "JK-A07",
+      "name": "幻影三叠",
+      "effect": "幻影剑的直接伤害提高10%，原有降低命中效果不变。命中主目标后，若它仍存活且距你不超过150，再追加两道剑影，每道造成原技能基础伤害45%的物理伤害；剑影不重复附加状态或触发命中威能、恢复效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A07",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A07/10103",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A07",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloSpecialCoverage/JK-A07",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "幻影剑的直接伤害提高10%，原有降低命中效果不变",
+          "kind": "solo",
+          "assertion": "150距离内总200、151距离110，原命中降低状态保留；影子不再恢复组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A07",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A07/10103",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A07",
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A07"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "命中主目标后，若它仍存活且距你不超过150，再追加两道剑影，每道造成原技能基础伤害45%的物理伤害",
+          "kind": "solo",
+          "assertion": "150距离内总200、151距离110，原命中降低状态保留；影子不再恢复组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A07",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A07/10103",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A07",
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A07"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "剑影不重复附加状态或触发命中威能、恢复效果",
+          "kind": "solo",
+          "assertion": "150距离内总200、151距离110，原命中降低状态保留；影子不再恢复组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A07",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A07/10103",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A07",
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A07"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageCombinations/child-does-not-restore-mana",
+        "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A07"
+      ]
+    },
+    {
+      "power_id": "JK-A08",
+      "name": "无影独剑",
+      "effect": "幻影剑主目标周围75距离内没有其他敌人时，对主目标的直接伤害提高90%；否则，命中主目标后，对该范围内最近的最多2名其他敌人各追加攻击力130%的物理伤害。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A08",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A08/10103",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloTargetCaps/JK-A08",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "幻影剑主目标周围75距离内没有其他敌人时，对主目标的直接伤害提高90%",
+          "kind": "solo",
+          "assertion": "孤立目标190；有邻敌时主100、最近两副目标各130且其他不受伤；不递归组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A08",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A08/10103",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A08"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "否则，命中主目标后，对该范围内最近的最多2名其他敌人各追加攻击力130%的物理伤害",
+          "kind": "solo",
+          "assertion": "孤立目标190；有邻敌时主100、最近两副目标各130且其他不受伤；不递归组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A08",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A08/10103",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A08"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A08"
+      ]
+    },
+    {
+      "power_id": "JK-A09",
+      "name": "血魂回锋",
+      "effect": "饮血剑和噬魂剑除主目标外，还会攻击其周围100距离内最近的最多4名敌人；所有目标的直接伤害提高15%。技能自带的回血或回蓝每次施放只结算一次，不会因多目标重复恢复。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A09",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A09/10104",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A09/10119",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-A09-restore",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloTargetCaps/JK-A09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "饮血剑和噬魂剑除主目标外，还会攻击其周围100距离内最近的最多4名敌人",
+          "kind": "solo",
+          "assertion": "两种剑直接115，最多5原生目标；多目标施放生命/法力原恢复均仅20一次，三件恢复/盾组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A09",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A09/10104",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A09/10119",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A09-restore",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A09"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "所有目标的直接伤害提高15%",
+          "kind": "solo",
+          "assertion": "两种剑直接115，最多5原生目标；多目标施放生命/法力原恢复均仅20一次，三件恢复/盾组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A09",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A09/10104",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A09/10119",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A09-restore",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A09"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "技能自带的回血或回蓝每次施放只结算一次，不会因多目标重复恢复",
+          "kind": "solo",
+          "assertion": "两种剑直接115，最多5原生目标；多目标施放生命/法力原恢复均仅20一次，三件恢复/盾组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A09",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A09/10104",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A09/10119",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A09-restore",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A09"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/JK-A11-single",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/JK-D03-single",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/❸1",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/❸2",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/❸3",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/➇1",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/➇2",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/➇3"
+      ]
+    },
+    {
+      "power_id": "JK-A10",
+      "name": "饮血止生",
+      "effect": "饮血剑命中主目标后，使其受到的治疗和生命偷取恢复量降低65%，持续8秒；重复命中只刷新，不叠加。不影响法力恢复或生命上限。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A10",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "饮血剑命中主目标后，使其受到的治疗和生命偷取恢复量降低65%，持续8秒",
+          "kind": "solo",
+          "assertion": "真实治疗与同一恢复消费者的生命偷取100→35，不改MaxHP/MP；重复只刷新、8秒后恢复100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A10"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "重复命中只刷新，不叠加",
+          "kind": "solo",
+          "assertion": "真实治疗与同一恢复消费者的生命偷取100→35，不改MaxHP/MP；重复只刷新、8秒后恢复100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A10"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不影响法力恢复或生命上限",
+          "kind": "solo",
+          "assertion": "真实治疗与同一恢复消费者的生命偷取100→35，不改MaxHP/MP；重复只刷新、8秒后恢复100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A10"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-A11",
+      "name": "血魂共鸣",
+      "effect": "饮血剑和噬魂剑的自带恢复量提高50%；本次每多命中一名不同敌人，再增加原恢复量的50%，最多计3名，合计最高恢复原量的3倍。饮血剑恢复生命，噬魂剑恢复法力，每次施放只恢复一次。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A11",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "饮血剑和噬魂剑的自带恢复量提高50%",
+          "kind": "solo",
+          "assertion": "两种技能1/2/3/4/6个不同目标分别原量1.5/2/2.5/3/3倍，只恢复一次；重复同目标/child不能增加计数。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A11"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "本次每多命中一名不同敌人，再增加原恢复量的50%，最多计3名，合计最高恢复原量的3倍",
+          "kind": "solo",
+          "assertion": "两种技能1/2/3/4/6个不同目标分别原量1.5/2/2.5/3/3倍，只恢复一次；重复同目标/child不能增加计数。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A11"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "饮血剑恢复生命，噬魂剑恢复法力，每次施放只恢复一次",
+          "kind": "solo",
+          "assertion": "两种技能1/2/3/4/6个不同目标分别原量1.5/2/2.5/3/3倍，只恢复一次；重复同目标/child不能增加计数。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A11"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/JK-A11-single",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/JK-D03-single",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/❸1",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/❸2",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/❸3",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/➇1",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/➇2",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/➇3"
+      ]
+    },
+    {
+      "power_id": "JK-A12",
+      "name": "魂钉",
+      "effect": "噬魂剑自带回蓝结算后，对仍存活的主目标追加实际恢复法力量280%的物理伤害，每次施放一次。溢出法力和法力返还不计入，追加伤害不再触发恢复或命中威能。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A12",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "噬魂剑自带回蓝结算后，对仍存活的主目标追加实际恢复法力量280%的物理伤害，每次施放一次",
+          "kind": "solo",
+          "assertion": "实际恢复20/10/0MP对应追加56/28/0，溢出不计；不递归组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A12"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "溢出法力和法力返还不计入，追加伤害不再触发恢复或命中威能",
+          "kind": "solo",
+          "assertion": "实际恢复20/10/0MP对应追加56/28/0，溢出不计；不递归组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A12"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A12"
+      ]
+    },
+    {
+      "power_id": "JK-A13",
+      "name": "封法断流",
+      "effect": "封法剑冷却改为24秒，直接伤害提高70%；除主目标外，还会攻击其周围100距离内最近的最多3名敌人，并分别尝试附加原有沉默。沉默时长与控制免疫规则不变。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloControlCoverage/JK-A13",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A13",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A13/10113",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A13",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "封法剑冷却改为24秒，直接伤害提高70%",
+          "kind": "solo",
+          "assertion": "真实主副目标170、最多4，分别保留原沉默；冷却真实24000ms。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A13",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A13",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A13/10113",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A13"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "除主目标外，还会攻击其周围100距离内最近的最多3名敌人，并分别尝试附加原有沉默",
+          "kind": "solo",
+          "assertion": "真实主副目标170、最多4，分别保留原沉默；冷却真实24000ms。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A13",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A13",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A13/10113",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A13"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "沉默时长与控制免疫规则不变",
+          "kind": "solo",
+          "assertion": "真实主副目标170、最多4，分别保留原沉默；冷却真实24000ms。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A13",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A13",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A13/10113",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A13"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-A14",
+      "name": "封法断垒",
+      "effect": "封法剑的主目标有吸收护盾时，额外削减该主目标的护盾，削减量为它本次实际承受的生命伤害与护盾吸收量之和的120%，最高为自身攻击力的400%；不会溢出为生命伤害，其他目标不会受到这次额外破盾。封法剑命中无盾敌人时，对其直接伤害提高50%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+          "test": "TestLegendarySwordsmanAuditA14PrimaryShieldContract/single",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A14",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A14/10113",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A14",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "封法剑的主目标有吸收护盾时，额外削减该主目标的护盾，削减量为它本次实际承受的生命伤害与护盾吸收量之和的120%，最高为自身攻击力的400%",
+          "kind": "solo",
+          "assertion": "无盾150；带盾基础伤100额外削120，不溢出HP；1000基础伤的额外削盾封顶400；真实迁移单目标不扩散，组合主副目标隔离另列。",
+          "tests": [
+            "TestLegendarySwordsmanAuditA14PrimaryShieldContract/single",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A14",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A14/10113",
+            "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A14"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不会溢出为生命伤害，其他目标不会受到这次额外破盾",
+          "kind": "solo",
+          "assertion": "无盾150；带盾基础伤100额外削120，不溢出HP；1000基础伤的额外削盾封顶400；真实迁移单目标不扩散，组合主副目标隔离另列。",
+          "tests": [
+            "TestLegendarySwordsmanAuditA14PrimaryShieldContract/single",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A14",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A14/10113",
+            "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A14"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "封法剑命中无盾敌人时，对其直接伤害提高50%",
+          "kind": "solo",
+          "assertion": "无盾150；带盾基础伤100额外削120，不溢出HP；1000基础伤的额外削盾封顶400；真实迁移单目标不扩散，组合主副目标隔离另列。",
+          "tests": [
+            "TestLegendarySwordsmanAuditA14PrimaryShieldContract/single",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A14",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A14/10113",
+            "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A14"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanAuditA14PrimaryShieldContract/all-unshielded",
+        "TestLegendarySwordsmanAuditA14PrimaryShieldContract/expanded",
+        "TestLegendarySwordsmanAuditA14PrimaryShieldContract/primary-unshielded",
+        "TestLegendarySwordsmanAuditA14PrimaryShieldContract/shield-cap",
+        "TestLegendarySwordsmanAuditA14PrimaryShieldContract/three-powers"
+      ]
+    },
+    {
+      "power_id": "JK-A15",
+      "name": "旋风合刃",
+      "effect": "旋风剑的直接伤害提高60%。本次直接攻击实际扣除的生命值总和的35%，会追加给命中后仍存活、当前生命值最高的一名敌人；护盾吸收和过量伤害不计入。追加伤害不重复计算物理抗性或增伤，不暴击、不触发命中威能或恢复效果，但仍可被护盾抵挡。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A15",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A15/10121",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A15",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "旋风剑的直接伤害提高60%",
+          "kind": "solo",
+          "assertion": "单目标160+56；实际生命扣除汇总不含过量或护盾吸收，128实际伤追加44而不再次扣20物抗；最高血目标集中，额外恢复隔离另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A15",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A15/10121",
+            "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A15"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "本次直接攻击实际扣除的生命值总和的35%，会追加给命中后仍存活、当前生命值最高的一名敌人",
+          "kind": "solo",
+          "assertion": "单目标160+56；实际生命扣除汇总不含过量或护盾吸收，128实际伤追加44而不再次扣20物抗；最高血目标集中，额外恢复隔离另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A15",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A15/10121",
+            "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A15"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "护盾吸收和过量伤害不计入",
+          "kind": "solo",
+          "assertion": "单目标160+56；实际生命扣除汇总不含过量或护盾吸收，128实际伤追加44而不再次扣20物抗；最高血目标集中，额外恢复隔离另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A15",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A15/10121",
+            "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A15"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "追加伤害不重复计算物理抗性或增伤，不暴击、不触发命中威能或恢复效果，但仍可被护盾抵挡",
+          "kind": "solo",
+          "assertion": "单目标160+56；实际生命扣除汇总不含过量或护盾吸收，128实际伤追加44而不再次扣20物抗；最高血目标集中，额外恢复隔离另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A15",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A15/10121",
+            "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A15"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A15"
+      ]
+    },
+    {
+      "power_id": "JK-A16",
+      "name": "旋风收阵",
+      "effect": "旋风剑结算伤害前，将你周围半径150内最近的最多8名可拉拽敌人拉向距你50的位置，遇障碍会提前停止；随后按旋风剑当前范围结算伤害，直接伤害提高30%。免疫拉拽的目标不会移动，若仍在伤害范围内也正常受伤。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A16",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A16/10121",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloPullCap/JK-A16",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A16",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "旋风剑结算伤害前，将你周围半径150内最近的最多8名可拉拽敌人拉向距你50的位置，遇障碍会提前停止",
+          "kind": "solo",
+          "assertion": "实际直接130；150内先拉后按100范围伤害，免疫目标不动，范围内仍伤害；墙阻挡不穿越。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A16",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A16/10121",
+            "TestLegendarySwordsmanSoloPullCap/JK-A16",
+            "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A16"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "随后按旋风剑当前范围结算伤害，直接伤害提高30%",
+          "kind": "solo",
+          "assertion": "实际直接130；150内先拉后按100范围伤害，免疫目标不动，范围内仍伤害；墙阻挡不穿越。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A16",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A16/10121",
+            "TestLegendarySwordsmanSoloPullCap/JK-A16",
+            "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A16"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "免疫拉拽的目标不会移动，若仍在伤害范围内也正常受伤",
+          "kind": "solo",
+          "assertion": "实际直接130；150内先拉后按100范围伤害，免疫目标不动，范围内仍伤害；墙阻挡不穿越。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A16",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A16/10121",
+            "TestLegendarySwordsmanSoloPullCap/JK-A16",
+            "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A16"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-A17",
+      "name": "旋风逐客",
+      "effect": "旋风剑的自身中心作用半径至少提高至150；若原本已更大，则保留更大范围。原有伤害和其他效果不变。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloSpecialCoverage/JK-A17",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "旋风剑的自身中心作用半径至少提高至150",
+          "kind": "solo",
+          "assertion": "原半径100提高到150后140目标受击；原半径200保留并命中180目标。",
+          "tests": [
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A17"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "若原本已更大，则保留更大范围",
+          "kind": "solo",
+          "assertion": "原半径100提高到150后140目标受击；原半径200保留并命中180目标。",
+          "tests": [
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A17"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "原有伤害和其他效果不变",
+          "kind": "solo",
+          "assertion": "原半径100提高到150后140目标受击；原半径200保留并命中180目标。",
+          "tests": [
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A17"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-A18",
+      "name": "混沌裂甲",
+      "effect": "混沌剑命中后，使敌人物理防御降低30%，持续8秒；重复施加只刷新时长，不叠加。原有禁止获得有益状态的效果不变。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloControlCoverage/JK-A18",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-A18",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "混沌剑命中后，使敌人物理防御降低30%，持续8秒",
+          "kind": "solo",
+          "assertion": "重复命中仅一个-30%防御8秒状态，实际Def100→70；迁移原生禁止有益状态仍拒绝新增益。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A18",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A18"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "重复施加只刷新时长，不叠加",
+          "kind": "solo",
+          "assertion": "重复命中仅一个-30%防御8秒状态，实际Def100→70；迁移原生禁止有益状态仍拒绝新增益。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A18",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A18"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "原有禁止获得有益状态的效果不变",
+          "kind": "solo",
+          "assertion": "重复命中仅一个-30%防御8秒状态，实际Def100→70；迁移原生禁止有益状态仍拒绝新增益。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A18",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A18"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-A19",
+      "name": "混沌换式",
+      "effect": "混沌剑和罡气剑的直接伤害提高25%，真空剑的直接伤害提高100%。罡气剑还会攻击主目标周围150距离内最近的最多4名其他敌人，造成相同直接伤害，并沿用该技能原有击退规则。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A19",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A19/10102",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A19/10122",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-A19",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloSpecialCoverage/JK-A19",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloTargetCaps/JK-A19",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "混沌剑和罡气剑的直接伤害提高25%，真空剑的直接伤害提高100%",
+          "kind": "solo",
+          "assertion": "罡气/混沌125、真空200；罡气最多4副目标同伤，迁移原生击退100保留。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A19",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A19/10102",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A19/10122",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A19",
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A19",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A19"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "罡气剑还会攻击主目标周围150距离内最近的最多4名其他敌人，造成相同直接伤害，并沿用该技能原有击退规则",
+          "kind": "solo",
+          "assertion": "罡气/混沌125、真空200；罡气最多4副目标同伤，迁移原生击退100保留。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A19",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A19/10102",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A19/10122",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A19",
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A19",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A19"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-A20",
+      "name": "狮心震列",
+      "effect": "狮心剑命中主目标后，对其周围150距离内最近的最多5名其他敌人各追加攻击力160%的物理伤害，每次施放一次。追加伤害不触发命中威能或恢复效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloTargetCaps/JK-A20",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "狮心剑命中主目标后，对其周围150距离内最近的最多5名其他敌人各追加攻击力160%的物理伤害，每次施放一次",
+          "kind": "solo",
+          "assertion": "主目标100、最近5其他目标各160，第6副目标不受伤；额外恢复隔离组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A20"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "追加伤害不触发命中威能或恢复效果",
+          "kind": "solo",
+          "assertion": "主目标100、最近5其他目标各160，第6副目标不受伤；额外恢复隔离组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A20"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A20"
+      ]
+    },
+    {
+      "power_id": "JK-A21",
+      "name": "狮心决斗",
+      "effect": "狮心剑命中主目标后，对仍存活的主目标追加攻击力320%的物理伤害，每次施放一次。追加伤害不触发命中威能或恢复效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A21",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A21/10116",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A21",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "狮心剑命中主目标后，对仍存活的主目标追加攻击力320%的物理伤害，每次施放一次",
+          "kind": "solo",
+          "assertion": "实际主目标100+320；不递归恢复组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A21",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A21/10116",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A21"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "追加伤害不触发命中威能或恢复效果",
+          "kind": "solo",
+          "assertion": "实际主目标100+320；不递归恢复组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A21",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A21/10116",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A21"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A21"
+      ]
+    },
+    {
+      "power_id": "JK-A22",
+      "name": "陨星迟落",
+      "effect": "陨星剑的直接伤害提高20%，保留主目标原有即死判定。命中主目标后，对其周围120距离内最近的最多5名其他敌人追加原技能基础伤害100%的物理伤害，再对同一区域最近的最多6名敌人追加基础伤害70%的物理伤害。两段追加不进行即死判定，也不触发命中威能或恢复效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A22",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A22/10123",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A22",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-A22",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloTargetCaps/JK-A22",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "陨星剑的直接伤害提高20%，保留主目标原有即死判定",
+          "kind": "solo",
+          "assertion": "主目标120+70、最近5副目标100+70；迁移原生主目标即死保留而副目标不即死，恢复隔离另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A22",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A22/10123",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A22",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A22",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A22"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "命中主目标后，对其周围120距离内最近的最多5名其他敌人追加原技能基础伤害100%的物理伤害，再对同一区域最近的最多6名敌人追加基础伤害70%的物理伤害",
+          "kind": "solo",
+          "assertion": "主目标120+70、最近5副目标100+70；迁移原生主目标即死保留而副目标不即死，恢复隔离另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A22",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A22/10123",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A22",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A22",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A22"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "两段追加不进行即死判定，也不触发命中威能或恢复效果",
+          "kind": "solo",
+          "assertion": "主目标120+70、最近5副目标100+70；迁移原生主目标即死保留而副目标不即死，恢复隔离另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A22",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A22/10123",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A22",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A22",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A22"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A22"
+      ]
+    },
+    {
+      "power_id": "JK-A23",
+      "name": "陨星余烬",
+      "effect": "陨星剑击杀主目标，或命中前主目标生命不高于50%时，在其位置触发剑爆，对周围150距离内最近的最多5名其他敌人造成原技能基础伤害110%的物理伤害。每次施放一次；剑爆不进行即死判定，也不触发命中威能或恢复效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+          "test": "TestLegendarySwordsmanAuditNativeInstantDeathBurst/immune",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+          "test": "TestLegendarySwordsmanAuditNativeInstantDeathBurst/instant-death",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+          "test": "TestLegendarySwordsmanAuditNativeInstantDeathBurst/low-health",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+          "test": "TestLegendarySwordsmanAuditNativeInstantDeathBurst/miss",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+          "test": "TestLegendarySwordsmanAuditNativeInstantDeathBurst/ordinary-kill",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloSpecialCoverage/JK-A23",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloTargetCaps/JK-A23",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "陨星剑击杀主目标，或命中前主目标生命不高于50%时，在其位置触发剑爆，对周围150距离内最近的最多5名其他敌人造成原技能基础伤害110%的物理伤害",
+          "kind": "solo",
+          "assertion": "命中前50001/100000不爆，50000和普通击杀触发110，最多5其他目标；原生即死/免疫/未中对照另列独立证据。",
+          "tests": [
+            "TestLegendarySwordsmanAuditNativeInstantDeathBurst/immune",
+            "TestLegendarySwordsmanAuditNativeInstantDeathBurst/instant-death",
+            "TestLegendarySwordsmanAuditNativeInstantDeathBurst/low-health",
+            "TestLegendarySwordsmanAuditNativeInstantDeathBurst/miss",
+            "TestLegendarySwordsmanAuditNativeInstantDeathBurst/ordinary-kill",
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A23",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A23"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "每次施放一次",
+          "kind": "solo",
+          "assertion": "命中前50001/100000不爆，50000和普通击杀触发110，最多5其他目标；原生即死/免疫/未中对照另列独立证据。",
+          "tests": [
+            "TestLegendarySwordsmanAuditNativeInstantDeathBurst/immune",
+            "TestLegendarySwordsmanAuditNativeInstantDeathBurst/instant-death",
+            "TestLegendarySwordsmanAuditNativeInstantDeathBurst/low-health",
+            "TestLegendarySwordsmanAuditNativeInstantDeathBurst/miss",
+            "TestLegendarySwordsmanAuditNativeInstantDeathBurst/ordinary-kill",
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A23",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A23"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "剑爆不进行即死判定，也不触发命中威能或恢复效果",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；命中前50001/100000不爆，50000和普通击杀触发110，最多5其他目标；原生即死/免疫/未中对照另列独立证据。",
+          "tests": [
+            "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A23"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A23"
+      ]
+    },
+    {
+      "power_id": "JK-A24",
+      "name": "强击破阵",
+      "effect": "强击冷却改为18秒，直接伤害提高80%，主目标原有眩晕不变。若命中前主目标已被定身，还会攻击其周围150距离内最近的最多5名已被定身的敌人，新增目标不附加眩晕。定身可由任意角色施加；仅免疫眩晕不会取消伤害加成。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloControlCoverage/JK-A24",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A24",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A24/10126",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A24",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "强击冷却改为18秒，直接伤害提高80%，主目标原有眩晕不变",
+          "kind": "solo",
+          "assertion": "实际冷却18000ms、主目标180和原眩晕；其他来源定身也扩展最近5定身敌人，各180但不复制眩晕。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A24",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A24",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A24/10126",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A24"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "若命中前主目标已被定身，还会攻击其周围150距离内最近的最多5名已被定身的敌人，新增目标不附加眩晕",
+          "kind": "solo",
+          "assertion": "实际冷却18000ms、主目标180和原眩晕；其他来源定身也扩展最近5定身敌人，各180但不复制眩晕。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A24",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A24",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A24/10126",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A24"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "定身可由任意角色施加",
+          "kind": "solo",
+          "assertion": "实际冷却18000ms、主目标180和原眩晕；其他来源定身也扩展最近5定身敌人，各180但不复制眩晕。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A24",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A24",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A24/10126",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A24"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "仅免疫眩晕不会取消伤害加成",
+          "kind": "solo",
+          "assertion": "实际冷却18000ms、主目标180和原眩晕；其他来源定身也扩展最近5定身敌人，各180但不复制眩晕。",
+          "tests": [
+            "TestLegendarySwordsmanSoloControlCoverage/JK-A24",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A24",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A24/10126",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A24"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-A25",
+      "name": "挑衅应战",
+      "effect": "挑衅成功使怪物以你为当前攻击目标后，对该怪物追加攻击力160%的物理伤害；每名怪物每次施放一次。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloSpecialCoverage/JK-A25",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "挑衅成功使怪物以你为当前攻击目标后，对该怪物追加攻击力160%的物理伤害",
+          "kind": "solo",
+          "assertion": "原生挑衅成功将怪物当前目标设为自身后实际追加160；卸装仍嘲讽但无追加。",
+          "tests": [
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A25"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "每名怪物每次施放一次",
+          "kind": "solo",
+          "assertion": "原生挑衅成功将怪物当前目标设为自身后实际追加160；卸装仍嘲讽但无追加。",
+          "tests": [
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A25"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-A26",
+      "name": "双路剑谱",
+      "effect": "罡气剑、真空剑、饮血剑和噬魂剑的直接伤害提高100%，保留各自原有击退、范围和恢复效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A26",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A26/10102",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A26/10104",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A26/10117",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A26/10119",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-A26",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-A26-restore",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "罡气剑、真空剑、饮血剑和噬魂剑的直接伤害提高100%，保留各自原有击退、范围和恢复效果",
+          "kind": "solo",
+          "assertion": "四种技能直接200，迁移罡气击退100不变，饮血/噬魂仍各恢复20一次。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A26",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A26/10102",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A26/10104",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A26/10117",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A26/10119",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A26",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A26-restore"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-A27",
+      "name": "剑路交织",
+      "effect": "罡气剑、幻影剑或旋风剑每次施放命中至少一名敌人后，以本次命中敌人中结算时距你最近者的位置为中心，对150距离内最近的最多8名敌人各追加攻击力320%的物理伤害。每次施放一次，追加伤害不触发命中威能或恢复效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A27",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A27/10102",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A27/10103",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A27/10121",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloTargetCaps/JK-A27",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "罡气剑、幻影剑或旋风剑每次施放命中至少一名敌人后，以本次命中敌人中结算时距你最近者的位置为中心，对150距离内最近的最多8名敌人各追加攻击力320%的物理伤害",
+          "kind": "solo",
+          "assertion": "三种技能单目标100+320；范围最多8目标，其他目标320；根多命中仅一次阵，不递归回蓝/吸血组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A27",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A27/10102",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A27/10103",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A27/10121",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A27"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "每次施放一次，追加伤害不触发命中威能或恢复效果",
+          "kind": "solo",
+          "assertion": "三种技能单目标100+320；范围最多8目标，其他目标320；根多命中仅一次阵，不递归回蓝/吸血组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A27",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A27/10102",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A27/10103",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A27/10121",
+            "TestLegendarySwordsmanSoloTargetCaps/JK-A27"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageCombinations/child-does-not-restore-mana",
+        "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A27"
+      ]
+    },
+    {
+      "power_id": "JK-A28",
+      "name": "血魂相济",
+      "effect": "饮血剑或噬魂剑命中主目标后，对仍存活的主目标追加攻击力260%的物理伤害，每次施放一次。追加伤害不产生恢复，也不触发命中威能。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A28",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A28/10104",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A28/10119",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A28",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-A28-restore",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "饮血剑或噬魂剑命中主目标后，对仍存活的主目标追加攻击力260%的物理伤害，每次施放一次",
+          "kind": "solo",
+          "assertion": "双剑实际100+260，原恢复仍20一次；child不递归吸血组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A28",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A28/10104",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A28/10119",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A28",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A28-restore"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "追加伤害不产生恢复，也不触发命中威能",
+          "kind": "solo",
+          "assertion": "双剑实际100+260，原恢复仍20一次；child不递归吸血组合另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A28",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A28/10104",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A28/10119",
+            "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A28",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A28-restore"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A28"
+      ]
+    },
+    {
+      "power_id": "JK-A29",
+      "name": "返锋定势",
+      "effect": "被敌人直接攻击命中且你仍存活时，立即对攻击者反击，造成攻击力180%的物理伤害；该次攻击被护盾完全吸收时也可触发。反击、持续伤害和威能追加伤害不会触发本效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloSpecialCoverage/JK-A29",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "被敌人直接攻击命中且你仍存活时，立即对攻击者反击，造成攻击力180%的物理伤害",
+          "kind": "solo",
+          "assertion": "真实直接及全盾吸收时反击180；DOT/proc/己死亡/卸装无反击。",
+          "tests": [
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A29"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "该次攻击被护盾完全吸收时也可触发",
+          "kind": "solo",
+          "assertion": "真实直接及全盾吸收时反击180；DOT/proc/己死亡/卸装无反击。",
+          "tests": [
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A29"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "反击、持续伤害和威能追加伤害不会触发本效果",
+          "kind": "solo",
+          "assertion": "真实直接及全盾吸收时反击180；DOT/proc/己死亡/卸装无反击。",
+          "tests": [
+            "TestLegendarySwordsmanSoloSpecialCoverage/JK-A29"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-A30",
+      "name": "百战收锋",
+      "effect": "狮心剑和陨星剑对主目标的直接伤害提高110%；狮心剑原有必中、陨星剑原有即死判定不变。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A30",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A30/10116",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloDamageCoverage/JK-A30/10123",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-A30",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-A30-lion",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "狮心剑和陨星剑对主目标的直接伤害提高110%",
+          "kind": "solo",
+          "assertion": "两种技能主目标210；迁移狮心零Hit/极高Def仍命中，陨星原2%即死分支仍杀主目标。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A30",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A30/10116",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A30/10123",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A30",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A30-lion"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "狮心剑原有必中、陨星剑原有即死判定不变",
+          "kind": "solo",
+          "assertion": "两种技能主目标210；迁移狮心零Hit/极高Def仍命中，陨星原2%即死分支仍杀主目标。",
+          "tests": [
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A30",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A30/10116",
+            "TestLegendarySwordsmanSoloDamageCoverage/JK-A30/10123",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A30",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-A30-lion"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-D01",
+      "name": "罡气护脉",
+      "effect": "罡气剑命中敌人后，获得最大生命12%的护盾，持续到被消耗。重复获得时，只保留现有剩余护盾与新护盾中较高的数值，不叠加；卸下来源装备后移除。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D01",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D01",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "罡气剑命中敌人后，获得最大生命12%的护盾，持续到被消耗",
+          "kind": "solo",
+          "assertion": "真实罡气触发MaxHP12%盾，消耗后刷新只补上限，较小新盾不覆盖更大剩余，永久且卸装清理。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D01",
+            "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D01"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "重复获得时，只保留现有剩余护盾与新护盾中较高的数值，不叠加",
+          "kind": "solo",
+          "assertion": "真实罡气触发MaxHP12%盾，消耗后刷新只补上限，较小新盾不覆盖更大剩余，永久且卸装清理。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D01",
+            "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D01"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "卸下来源装备后移除",
+          "kind": "solo",
+          "assertion": "真实罡气触发MaxHP12%盾，消耗后刷新只补上限，较小新盾不覆盖更大剩余，永久且卸装清理。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D01",
+            "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D01"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-D02",
+      "name": "饮血余温",
+      "effect": "装备期间，受到的持续伤害降低55%；不影响直接攻击伤害。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/magic",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/unequipped",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "装备期间，受到的持续伤害降低55%",
+          "kind": "solo",
+          "assertion": "实际DOT扣45而直接扣100，卸装DOT100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/unequipped"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不影响直接攻击伤害",
+          "kind": "solo",
+          "assertion": "实际DOT扣45而直接扣100，卸装DOT100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/unequipped"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-D03",
+      "name": "血魂护心",
+      "effect": "饮血剑的溢出治疗、噬魂剑的溢出法力恢复，按溢出量100%转为自身护盾，最多为自身最大生命的16%。护盾持续到被消耗；重复获得只取现有剩余值与新值中较高者，不叠加。卸下来源装备后移除。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D03",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D03-cap",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D03",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "饮血剑的溢出治疗、噬魂剑的溢出法力恢复，按溢出量100%转为自身护盾，最多为自身最大生命的16%",
+          "kind": "solo",
+          "assertion": "真实饮血HP溢出20或噬魂MP溢出20各生成20盾；封顶MaxHP16%，低新值不盖高剩余/不叠加，永久且卸装清理。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D03",
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D03-cap",
+            "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D03"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "护盾持续到被消耗",
+          "kind": "solo",
+          "assertion": "真实饮血HP溢出20或噬魂MP溢出20各生成20盾；封顶MaxHP16%，低新值不盖高剩余/不叠加，永久且卸装清理。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D03",
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D03-cap",
+            "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D03"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "重复获得只取现有剩余值与新值中较高者，不叠加",
+          "kind": "solo",
+          "assertion": "真实饮血HP溢出20或噬魂MP溢出20各生成20盾；封顶MaxHP16%，低新值不盖高剩余/不叠加，永久且卸装清理。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D03",
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D03-cap",
+            "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D03"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "卸下来源装备后移除",
+          "kind": "solo",
+          "assertion": "真实饮血HP溢出20或噬魂MP溢出20各生成20盾；封顶MaxHP16%，低新值不盖高剩余/不叠加，永久且卸装清理。",
+          "tests": [
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D03",
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D03-cap",
+            "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D03"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/JK-A11-single",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/JK-D03-single",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/❸1",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/❸2",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/❸3",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/➇1",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/➇2",
+        "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/➇3"
+      ]
+    },
+    {
+      "power_id": "JK-D04",
+      "name": "挑衅先手",
+      "effect": "当前因你的挑衅而攻击你的敌人，对你造成的直接伤害降低50%；不影响持续伤害。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/magic",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/unequipped",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "当前因你的挑衅而攻击你的敌人，对你造成的直接伤害降低50%",
+          "kind": "solo",
+          "assertion": "当前被自己嘲讽的来源直接50，非自己目标/DOT/卸装100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/unequipped"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不影响持续伤害",
+          "kind": "solo",
+          "assertion": "当前被自己嘲讽的来源直接50，非自己目标/DOT/卸装100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/unequipped"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-D05",
+      "name": "旋风铁围",
+      "effect": "来自你周围75距离内敌人的直接物理伤害降低40%；按受伤时双方距离判断，不影响持续伤害。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/magic",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/unequipped",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "来自你周围75距离内敌人的直接物理伤害降低40%",
+          "kind": "solo",
+          "assertion": "近身直接物理60；76距离/魔法/DOT/卸装100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/unequipped"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "按受伤时双方距离判断，不影响持续伤害",
+          "kind": "solo",
+          "assertion": "近身直接物理60；76距离/魔法/DOT/卸装100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/unequipped"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-D06",
+      "name": "缚敌守势",
+      "effect": "正被你定身或眩晕的敌人，对你造成的直接伤害降低35%；冻结、石化也可触发，不影响持续伤害。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/magic",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/unequipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-D06",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "正被你定身或眩晕的敌人，对你造成的直接伤害降低35%",
+          "kind": "solo",
+          "assertion": "自己的定身/眩晕/冻结/石化来源实际65；其他来源或DOT100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/unequipped",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-D06"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "冻结、石化也可触发，不影响持续伤害",
+          "kind": "solo",
+          "assertion": "自己的定身/眩晕/冻结/石化来源实际65；其他来源或DOT100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/unequipped",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-D06"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-D07",
+      "name": "封法残障",
+      "effect": "正被你沉默的敌人，对你造成的直接伤害降低35%；不影响持续伤害。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/magic",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/unequipped",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "正被你沉默的敌人，对你造成的直接伤害降低35%",
+          "kind": "solo",
+          "assertion": "自己的沉默来源直接65；其他来源/DOT/卸装100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/unequipped"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不影响持续伤害",
+          "kind": "solo",
+          "assertion": "自己的沉默来源直接65；其他来源/DOT/卸装100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/unequipped"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-D08",
+      "name": "狮心护阵",
+      "effect": "狮心剑命中主目标后，你与180距离内生命比例最低的最多2名队友，各获得相当于你最大生命14%的护盾，持续到被消耗。同一来源重复提供时，只取剩余值与新值中较高者；卸下来源装备后移除。队友护盾还会在你或该队友离开场景时移除。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-D08-departure",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D08",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D08-allies",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D08",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "狮心剑命中主目标后，你与180距离内生命比例最低的最多2名队友，各获得相当于你最大生命14%的护盾，持续到被消耗",
+          "kind": "solo",
+          "assertion": "真实狮心给自身和180内最低生命比例两队友各MaxHP14%盾，第三人和范围外无盾；不叠加/高剩余优先/永久；卸装及任一方离场清理。",
+          "tests": [
+            "TestLegendarySwordsmanSoloNativePreservation/JK-D08-departure",
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D08",
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D08-allies",
+            "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D08"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "同一来源重复提供时，只取剩余值与新值中较高者",
+          "kind": "solo",
+          "assertion": "真实狮心给自身和180内最低生命比例两队友各MaxHP14%盾，第三人和范围外无盾；不叠加/高剩余优先/永久；卸装及任一方离场清理。",
+          "tests": [
+            "TestLegendarySwordsmanSoloNativePreservation/JK-D08-departure",
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D08",
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D08-allies",
+            "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D08"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "卸下来源装备后移除",
+          "kind": "solo",
+          "assertion": "真实狮心给自身和180内最低生命比例两队友各MaxHP14%盾，第三人和范围外无盾；不叠加/高剩余优先/永久；卸装及任一方离场清理。",
+          "tests": [
+            "TestLegendarySwordsmanSoloNativePreservation/JK-D08-departure",
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D08",
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D08-allies",
+            "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D08"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "队友护盾还会在你或该队友离开场景时移除",
+          "kind": "solo",
+          "assertion": "真实狮心给自身和180内最低生命比例两队友各MaxHP14%盾，第三人和范围外无盾；不叠加/高剩余优先/永久；卸装及任一方离场清理。",
+          "tests": [
+            "TestLegendarySwordsmanSoloNativePreservation/JK-D08-departure",
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D08",
+            "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D08-allies",
+            "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D08"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-D09",
+      "name": "剑鞘藏命",
+      "effect": "敌人的当次直接伤害经过前面的减伤后，若仍达到你最大生命的8%，该次伤害再降低45%。判定在护盾吸收前进行，不影响持续伤害。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/magic",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/unequipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-D09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "敌人的当次直接伤害经过前面的减伤后，若仍达到你最大生命的8%，该次伤害再降低45%",
+          "kind": "solo",
+          "assertion": "直接1000→550，799不变；先20%减伤后800达到8%阈值再到440，在盾前吸收440；低于阈值799不再减。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/unequipped",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-D09"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "判定在护盾吸收前进行，不影响持续伤害",
+          "kind": "solo",
+          "assertion": "直接1000→550，799不变；先20%减伤后800达到8%阈值再到440，在盾前吸收440；低于阈值799不再减。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/unequipped",
+            "TestLegendarySwordsmanSoloNativePreservation/JK-D09"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-D10",
+      "name": "退守一寸",
+      "effect": "来自你75距离之外敌人的直接伤害降低35%；按受伤时双方距离判断，不影响持续伤害。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/magic",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/unequipped",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "来自你75距离之外敌人的直接伤害降低35%",
+          "kind": "solo",
+          "assertion": "76距离直接65，75距离/DOT/卸装100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/unequipped"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "按受伤时双方距离判断，不影响持续伤害",
+          "kind": "solo",
+          "assertion": "76距离直接65，75距离/DOT/卸装100。",
+          "tests": [
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/condition-false",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/dot",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/equipped",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/magic",
+            "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/unequipped"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-U01",
+      "name": "真空牵步",
+      "effect": "装备期间，移动速度提高35%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloMovementOutput/JK-U01",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U01",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "装备期间，移动速度提高35%",
+          "kind": "solo",
+          "assertion": "refreshStats后客户端面板Current[9]及playerMoveSpeedPX为135%，卸装两者恢复。",
+          "tests": [
+            "TestLegendarySwordsmanSoloMovementOutput/JK-U01",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U01"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-U02",
+      "name": "饮血清创",
+      "effect": "饮血剑实际施放时，移除自身中毒与减速；不解除定身、眩晕、冻结或石化，也不移除同时附带这些控制的减速状态。饮血剑原有治疗不变。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloNativePreservation/JK-U02-restore",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U02",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "饮血剑实际施放时，移除自身中毒与减速",
+          "kind": "solo",
+          "assertion": "真实release消费者清毒/减速，不清定身/眩晕/冻结/石化/混合强控；原饮血治疗20保留，不授予后续免疫。",
+          "tests": [
+            "TestLegendarySwordsmanSoloNativePreservation/JK-U02-restore",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U02"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不解除定身、眩晕、冻结或石化，也不移除同时附带这些控制的减速状态",
+          "kind": "solo",
+          "assertion": "真实release消费者清毒/减速，不清定身/眩晕/冻结/石化/混合强控；原饮血治疗20保留，不授予后续免疫。",
+          "tests": [
+            "TestLegendarySwordsmanSoloNativePreservation/JK-U02-restore",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U02"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "饮血剑原有治疗不变",
+          "kind": "solo",
+          "assertion": "真实release消费者清毒/减速，不清定身/眩晕/冻结/石化/混合强控；原饮血治疗20保留，不授予后续免疫。",
+          "tests": [
+            "TestLegendarySwordsmanSoloNativePreservation/JK-U02-restore",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U02"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-U03",
+      "name": "噬魂回环",
+      "effect": "噬魂剑本次命中至少一名敌人后，返还本次实际消耗法力的60%。同次施放所有法力返还合计不超过实际消耗，且返还不触发恢复威能。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U03",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "噬魂剑本次命中至少一名敌人后，返还本次实际消耗法力的60%",
+          "kind": "solo",
+          "assertion": "实际耗100后返60，卸装或未命中不返；真实MP500→460而非仅记录字段。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U03"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "同次施放所有法力返还合计不超过实际消耗，且返还不触发恢复威能",
+          "kind": "solo",
+          "assertion": "实际耗100后返60，卸装或未命中不返；真实MP500→460而非仅记录字段。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U03"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-U04",
+      "name": "挑衅集结",
+      "effect": "挑衅的作用半径提高35%，保留原有嘲讽效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+          "test": "TestLegendarySwordsmanAuditNativeTauntReachAndSet/radius",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U04",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "挑衅的作用半径提高35%，保留原有嘲讽效果",
+          "kind": "solo",
+          "assertion": "真实自身中心挑衅100→135范围，130敌人装备后才以自身为当前目标；原生135边界/不拉拽另有独立证据。",
+          "tests": [
+            "TestLegendarySwordsmanAuditNativeTauntReachAndSet/radius",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U04"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanAuditNativeTauntReachAndSet/class-set",
+        "TestLegendarySwordsmanAuditNativeTauntReachAndSet/native",
+        "TestLegendarySwordsmanAuditNativeTauntReachAndSet/three-powers"
+      ]
+    },
+    {
+      "power_id": "JK-U05",
+      "name": "幻影洗尘",
+      "effect": "幻影剑实际施放时，移除自身所有减速；不解除定身、眩晕、冻结或石化，也不移除同时附带这些控制的减速状态。不提供后续减速免疫。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U05",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "幻影剑实际施放时，移除自身所有减速",
+          "kind": "solo",
+          "assertion": "实际release消费者只清减速，毒/定身/眩晕/冻结/石化/混合强控保留，再施加减速可成功。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U05"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不解除定身、眩晕、冻结或石化，也不移除同时附带这些控制的减速状态",
+          "kind": "solo",
+          "assertion": "实际release消费者只清减速，毒/定身/眩晕/冻结/石化/混合强控保留，再施加减速可成功。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U05"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不提供后续减速免疫",
+          "kind": "solo",
+          "assertion": "实际release消费者只清减速，毒/定身/眩晕/冻结/石化/混合强控保留，再施加减速可成功。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U05"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-U06",
+      "name": "金缚留客",
+      "effect": "金缚剑本次命中主目标，却未能成功给它施加定身时，返还本次实际消耗法力的60%。同次施放所有法力返还合计不超过实际消耗；未命中不返还，也不额外施加减速。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U06",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "金缚剑本次命中主目标，却未能成功给它施加定身时，返还本次实际消耗法力的60%",
+          "kind": "solo",
+          "assertion": "实际耗100，命中但无定身返60；成功定身/未命中/卸装均不返，无额外减速。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U06"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "同次施放所有法力返还合计不超过实际消耗",
+          "kind": "solo",
+          "assertion": "实际耗100，命中但无定身返60；成功定身/未命中/卸装均不返，无额外减速。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U06"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "未命中不返还，也不额外施加减速",
+          "kind": "solo",
+          "assertion": "实际耗100，命中但无定身返60；成功定身/未命中/卸装均不返，无额外减速。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U06"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-U07",
+      "name": "换式调息",
+      "effect": "罡气剑、真空剑或幻影剑每次施放命中至少一名敌人后，恢复自身最大法力的12%；每次施放一次，不随命中人数重复。此恢复不受本次耗蓝量限制，追加伤害不能触发。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U07",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "罡气剑、真空剑或幻影剑每次施放命中至少一名敌人后，恢复自身最大法力的12%",
+          "kind": "solo",
+          "assertion": "三种技能原生施放命中多目标仍仅恢复MaxMP12%=120，不受100耗蓝限制；child回蓝隔离另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U07"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "每次施放一次，不随命中人数重复",
+          "kind": "solo",
+          "assertion": "三种技能原生施放命中多目标仍仅恢复MaxMP12%=120，不受100耗蓝限制；child回蓝隔离另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U07"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "此恢复不受本次耗蓝量限制，追加伤害不能触发",
+          "kind": "solo",
+          "assertion": "三种技能原生施放命中多目标仍仅恢复MaxMP12%=120，不受100耗蓝限制；child回蓝隔离另列。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U07"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanCoverageCombinations/child-does-not-restore-mana"
+      ]
+    },
+    {
+      "power_id": "JK-U08",
+      "name": "旋风定足",
+      "effect": "装备期间免疫移动减速和定身，装备时解除已有的移动减速和定身；不免疫眩晕、冻结、石化或攻击速度降低，混合效果中的其他部分仍然生效。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/lifecycle-1009-1",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/lifecycle-10111-1",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/lifecycle-1034-41",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1002-existing-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1002-existing-true",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1004-existing-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1004-existing-true",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1005-existing-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1005-existing-true",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-81020-existing-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-81020-existing-true",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "装备期间免疫移动减速和定身，装备时解除已有的移动减速和定身",
+          "kind": "solo",
+          "assertion": "独立单件、无套装的原生减速/定身装备清除和新状态拒绝，卸装可再次施加；混合状态只剥移动部分保留硬控/防御/DOT/盾/时钟；原生攻速减益仍有效。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/lifecycle-1009-1",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/lifecycle-10111-1",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/lifecycle-1034-41",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1002-existing-false",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1002-existing-true",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1004-existing-false",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1004-existing-true",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1005-existing-false",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1005-existing-true",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-81020-existing-false",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-81020-existing-true"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不免疫眩晕、冻结、石化或攻击速度降低，混合效果中的其他部分仍然生效",
+          "kind": "solo",
+          "assertion": "独立单件、无套装的原生减速/定身装备清除和新状态拒绝，卸装可再次施加；混合状态只剥移动部分保留硬控/防御/DOT/盾/时钟；原生攻速减益仍有效。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/lifecycle-1009-1",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/lifecycle-10111-1",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/lifecycle-1034-41",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1002-existing-false",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1002-existing-true",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1004-existing-false",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1004-existing-true",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1005-existing-false",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1005-existing-true",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-81020-existing-false",
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-81020-existing-true"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set0/status{1009_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set0/status{10111_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set0/status{1034_41}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set2/status{1009_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set2/status{10111_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set2/status{1034_41}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set4/status{1009_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set4/status{10111_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set4/status{1034_41}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set0/status{1009_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set0/status{10111_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set0/status{1034_41}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set2/status{1009_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set2/status{10111_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set2/status{1034_41}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set4/status{1009_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set4/status{10111_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set4/status{1034_41}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set0/status{1009_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set0/status{10111_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set0/status{1034_41}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set2/status{1009_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set2/status{10111_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set2/status{1034_41}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set4/status{1009_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set4/status{10111_1}",
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set4/status{1034_41}",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers1/id1002",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers1/id1004",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers1/id1005",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers1/id81020",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers3/id1002",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers3/id1004",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers3/id1005",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers3/id81020",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers1/id1002",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers1/id1004",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers1/id1005",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers1/id81020",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers3/id1002",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers3/id1004",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers3/id1005",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers3/id81020"
+      ]
+    },
+    {
+      "power_id": "JK-U09",
+      "name": "收招归息",
+      "effect": "主动伤害技能本次命中至少一名敌人后，返还本次实际消耗法力的80%。同次施放所有法力返还合计不超过实际消耗；普通攻击、持续伤害和追加伤害不能触发。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "主动伤害技能本次命中至少一名敌人后，返还本次实际消耗法力的80%",
+          "kind": "solo",
+          "assertion": "主动技能实际耗100后返80，未中/卸装不返；普通攻击/追加非付费不产生返还。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U09"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "同次施放所有法力返还合计不超过实际消耗",
+          "kind": "solo",
+          "assertion": "主动技能实际耗100后返80，未中/卸装不返；普通攻击/追加非付费不产生返还。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U09"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "普通攻击、持续伤害和追加伤害不能触发",
+          "kind": "solo",
+          "assertion": "主动技能实际耗100后返80，未中/卸装不返；普通攻击/追加非付费不产生返还。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U09"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "JK-U10",
+      "name": "封法追索",
+      "effect": "封法剑的施法距离提高45%，原有直接伤害和沉默效果不变。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+          "test": "TestLegendarySwordsmanSoloUtilityCoverage/JK-U10",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "封法剑的施法距离提高45%，原有直接伤害和沉默效果不变",
+          "kind": "solo",
+          "assertion": "原100施法距离外140目标装备后才真实准入，实际伤100和沉默仍保留。",
+          "tests": [
+            "TestLegendarySwordsmanSoloUtilityCoverage/JK-U10"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    }
+  ],
+  "combination_tests": [
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendarySwordsmanAuditA14PrimaryShieldContract/all-unshielded",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendarySwordsmanAuditA14PrimaryShieldContract/expanded",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendarySwordsmanAuditA14PrimaryShieldContract/primary-unshielded",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendarySwordsmanAuditA14PrimaryShieldContract/shield-cap",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendarySwordsmanAuditA14PrimaryShieldContract/three-powers",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendarySwordsmanAuditNativeTauntReachAndSet/class-set",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendarySwordsmanAuditNativeTauntReachAndSet/native",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendarySwordsmanAuditNativeTauntReachAndSet/three-powers",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_synergy_test.go",
+      "test": "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/JK-A11-single",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_synergy_test.go",
+      "test": "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/JK-D03-single",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_synergy_test.go",
+      "test": "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/❸1",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_synergy_test.go",
+      "test": "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/❸2",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_synergy_test.go",
+      "test": "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/❸3",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_synergy_test.go",
+      "test": "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/➇1",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_synergy_test.go",
+      "test": "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/➇2",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_synergy_test.go",
+      "test": "TestLegendarySwordsmanBloodSoulStandaloneAndCombinations/➇3",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_synergy_test.go",
+      "test": "TestLegendarySwordsmanBoundStrikeAndSourceDefense",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageCombinations/child-does-not-restore-mana",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A03",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A04",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A06",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A07",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A08",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A12",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A15",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A20",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A21",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A22",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A23",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A27",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_coverage_test.go",
+      "test": "TestLegendarySwordsmanCoverageNoRecursiveLifesteal/JK-A28",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_synergy_test.go",
+      "test": "TestLegendarySwordsmanGatherConcentrateProximity",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set0/status{1009_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set0/status{10111_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set0/status{1034_41}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set2/status{1009_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set2/status{10111_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set2/status{1034_41}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set4/status{1009_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set4/status{10111_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08]/set4/status{1034_41}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set0/status{1009_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set0/status{10111_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set0/status{1034_41}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set2/status{1009_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set2/status{10111_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set2/status{1034_41}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set4/status{1009_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set4/status{10111_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08]/set4/status{1034_41}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set0/status{1009_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set0/status{10111_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set0/status{1034_41}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set2/status{1009_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set2/status{10111_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set2/status{1034_41}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set4/status{1009_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set4/status{10111_1}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle/[JK-U08_TY-U08_TY-D09]/set4/status{1034_41}",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers1/id1002",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers1/id1004",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers1/id1005",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers1/id81020",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers3/id1002",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers3/id1004",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers3/id1005",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingfalse/powers3/id81020",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers1/id1002",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers1/id1004",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers1/id1005",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers1/id81020",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers3/id1002",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers3/id1004",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers3/id1005",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_swordsman_movement_immunity_test.go",
+      "test": "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation/existingtrue/powers3/id81020",
+      "result": "pass"
+    }
+  ]
+}

@@ -6,8 +6,13 @@ import (
 )
 
 func init() {
-	for _, id := range []string{"TY-A04", "TY-A06", "TY-A08", "TY-A24", "TY-U03", "TY-U10", "TY-U13", "TY-U15"} {
+	for _, id := range []string{"TY-A24", "TY-U03", "TY-U13", "TY-U15"} {
 		registerLegendarySynergyHandler(id, legendaryHandler{PrepareSkill: universalSynergyPrepare})
+	}
+	// Class composition can create or replace geometry after PrepareSkill.
+	// Match shape-dependent bonuses only after that final structure is known.
+	for _, id := range []string{"TY-A04", "TY-A06", "TY-A08", "TY-U10"} {
+		registerLegendarySynergyHandler(id, legendaryHandler{ComposeSkill: universalSynergyPrepare})
 	}
 	registerLegendarySynergyHandler("TY-A34", legendaryHandler{TargetDefinition: universalPrimaryModifier})
 	for _, id := range []string{"TY-A18", "TY-A27", "TY-D16", "TY-U05"} {
@@ -63,7 +68,8 @@ func universalSynergyPrepare(c *legendaryContext, d *domain.SkillDef) {
 				m.AngleBP += universalTuning.ConeAngleBP
 			}
 		}
-		if !d.Area.Valid() && d.Kind == domain.SkillArea && d.Radius > 0 {
+		if !d.Area.Valid() && ((d.Kind == domain.SkillArea && d.Radius > 0) || universalHasEffect(d, domain.EffectPlaceTrap)) {
+			// Native traps have circular hit geometry stored on the placement effect.
 			m.RadiusBP += universalTuning.AreaRadiusBP
 		}
 	case "TY-A06":
@@ -106,19 +112,19 @@ func (s *Scene) legendaryFinalizeSkill(d *domain.SkillDef) {
 	if !m.GeometryInherited && d.Area.Valid() {
 		switch d.Area.Shape {
 		case domain.SkillAreaCircle:
-			d.Area.Radius = universalScaleBP(d.Area.Radius, m.RadiusBP)
+			d.Area.Radius = universalScaleBP(domain.SaturateInt32(int64(d.Area.Radius)+int64(m.RadiusFlat)), m.RadiusBP)
 			d.Radius = d.Area.Radius
 		case domain.SkillAreaCone:
-			d.Area.Radius = universalScaleBP(d.Area.Radius, m.RadiusBP)
+			d.Area.Radius = universalScaleBP(domain.SaturateInt32(int64(d.Area.Radius)+int64(m.RadiusFlat)), m.RadiusBP)
 			d.Area.Angle = min(int32(360), universalScaleBP(d.Area.Angle, m.AngleBP))
 			d.Radius = d.Area.Radius
 		case domain.SkillAreaRectangle:
-			d.Area.Width = universalScaleBP(d.Area.Width, m.WidthBP)
-			d.Area.Length = universalScaleBP(d.Area.Length, m.LengthBP)
+			d.Area.Width = universalScaleBP(domain.SaturateInt32(int64(d.Area.Width)+int64(m.WidthFlat)), m.WidthBP)
+			d.Area.Length = universalScaleBP(domain.SaturateInt32(int64(d.Area.Length)+int64(m.LengthFlat)), m.LengthBP)
 		}
 	}
-	if !m.GeometryInherited && !d.Area.Valid() && (d.Kind == domain.SkillArea || universalHasEffect(d, domain.EffectDetectTrap)) && d.Radius > 0 {
-		d.Radius = universalScaleBP(d.Radius, m.RadiusBP)
+	if !m.GeometryInherited && !d.Area.Valid() && d.Radius > 0 {
+		d.Radius = universalScaleBP(domain.SaturateInt32(int64(d.Radius)+int64(m.RadiusFlat)), m.RadiusBP)
 	}
 	if !m.GeometryInherited && (m.RadiusBP != 0 || m.TrapRadiusBP != 0) {
 		d.Effects = append([]domain.SkillEffect(nil), d.DirectEffects()...)

@@ -36,11 +36,35 @@ func init() {
 			c.RefundMP(specialScale(c.PaidMP, 80))
 		}
 	}})
-	// Revised implementation default: equipment-active displacement immunity.
-	registerLegendarySynergyHandler("JK-U08", legendaryHandler{DisplacementImmune: func(c *legendaryContext) bool {
-		return true
-	}})
+	// Equipment-active movement immunity, not a timer or hard-control cleanse.
+	registerLegendarySynergyHandler("JK-U08", legendaryHandler{
+		StatusReceiving: func(c *legendaryContext, d *domain.StatusDef) bool {
+			changed, empty := d.StripMovementImpairments()
+			return !changed || !empty
+		},
+		EquipmentChanged: swordClearMovementImpairments,
+	})
 }
+
+func swordClearMovementImpairments(c *legendaryContext) {
+	if c.Owner.Status == nil {
+		return
+	}
+	changed, removed := c.Owner.Status.StripMovementImpairments()
+	if !changed {
+		return
+	}
+	if len(removed) > 0 {
+		c.Scene.statusesRemoved(c.Owner, removed)
+		return
+	}
+	// Mixed states remain, but their movement contribution and presentation
+	// changed. EquipmentChanged's signature guards this refresh from recursion.
+	c.Scene.refreshEntityStats(c.Owner)
+	c.Scene.emitAttributesIfPlayer(c.Owner)
+	c.Scene.pushStatusSnapshots(c.Owner)
+}
+
 func (s *Scene) legendarySwordsmanDisplacementImmune(target *entity.Entity) bool {
 	immune := false
 	s.forEachLegendary(target, func(c *legendaryContext) {

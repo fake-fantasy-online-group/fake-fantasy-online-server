@@ -26,6 +26,9 @@ func (s *Scene) rollEffectProbability(chance float64) bool {
 }
 
 func (s *Scene) statusEffectLands(target *entity.Entity, def domain.StatusDef, sourceID domain.EntityID) bool {
+	if s.legendaryCasterGuaranteedStatus(s.entities[sourceID], target, def) {
+		return true
+	}
 	base := domain.EffectiveStatusChanceBP(def.ChanceBP, def.ChanceExplicit)
 	if !def.Harmful() {
 		return s.rollEffectProbability(domain.EffectSuccessProbability(base, 0, 0))
@@ -102,7 +105,7 @@ func (s *Scene) resolveSkillStatusDef(skill domain.SkillDef, app domain.StatusAp
 	}
 	applyStatusSource(&def, skill.Icon, int32(skill.ID))
 	specialWeaponStatus(skill, &def)
-	s.legendaryInheritStatusModifiers(skill,&def)
+	s.legendaryInheritStatusModifiers(skill, &def)
 	return def, true
 }
 

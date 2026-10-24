@@ -90,16 +90,7 @@ func init() {
 			}
 		}
 		return n
-	}, AfterHit: func(c *legendaryContext) {
-		if !legendaryMeleeLanded(c) || c.Skill != legendarySwordMeteor || !legendaryMeleePrimary(c) || !legendaryMeleeOnce(c, 0, "burst") {
-			return
-		}
-		if c.Hit.Flag.Has(event.DamageFatal) || c.State(0, "low").Value != 0 {
-			for _, e := range legendaryMeleeNearbyOthers(c, 150, 5) {
-				c.damageVisual("stage-01", e, legendaryMeleeScale(legendaryMeleeBase(c), 110), false, false)
-			}
-		}
-	}})
+	}, AfterHit: legendarySwordsmanMeteorBurst})
 }
 
 func legendaryMeleeFarBlade(c *legendaryContext) {
@@ -142,5 +133,46 @@ func legendaryMeleeMeteor(c *legendaryContext) {
 	}
 	for _, e := range c.Enemies(c.Target.Pos, 120, 6) {
 		c.damageVisual("stage-02", e, legendaryMeleeScale(base, 70), false, false)
+	}
+}
+
+// This callback is shared only by the native direct-hit and instant-death
+// branches. Child explosions never re-enter it or carry an instant-death roll.
+func legendarySwordsmanMeteorBurst(c *legendaryContext) {
+	if !legendaryMeleeLanded(c) || c.Skill != legendarySwordMeteor || !legendaryMeleePrimary(c) {
+		return
+	}
+	low := c.State(0, "low")
+	if !c.Hit.Flag.Has(event.DamageFatal) && (low.RootID != c.RootID || low.Value == 0) {
+		return
+	}
+	if !legendaryMeleeOnce(c, 0, "burst") {
+		return
+	}
+	for _, e := range legendaryMeleeNearbyOthers(c, 150, 5) {
+		c.damageVisual("stage-01", e, legendaryMeleeScale(legendaryMeleeBase(c), 110), false, false)
+	}
+}
+
+// Instant death settles after the native damage callback. Reuse that actual
+// landed primary strike's coefficient, rather than treating remaining HP as
+// base damage or invoking unrelated on-hit powers a second time.
+func (s *Scene) legendarySwordsmanInstantDeath(src, dst *entity.Entity, def domain.SkillDef) {
+	root := s.equipmentState().root
+	if def.ID != legendarySwordMeteor || root == nil || root.src != src.ID || root.primary != dst.ID {
+		return
+	}
+	for _, hit := range root.hits {
+		if hit.src != src.ID || hit.dst != dst.ID || hit.blow.SkillID != int32(def.ID) || hit.blow.Origin != domain.DamageNormalOrigin || hit.blow.ProcDepth != 0 || hit.ev.Flag.Has(event.DamageMiss) {
+			continue
+		}
+		dealt := hit.ev
+		dealt.Flag |= event.DamageFatal
+		for _, c := range s.legendaryContexts(src, dst, hit.blow, dealt) {
+			if c.Power.ID == "JK-A23" {
+				legendarySwordsmanMeteorBurst(&c)
+			}
+		}
+		return
 	}
 }

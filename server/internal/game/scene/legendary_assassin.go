@@ -27,6 +27,11 @@ func legendaryAssassinTransform(c *legendaryContext, d *domain.SkillDef) {
 			d.Kind = domain.SkillArea
 			d.Area = domain.SkillAreaTargeting{Shape: domain.SkillAreaRectangle, Center: domain.SkillAreaCenterCaster, Length: max(d.Dist, int32(c.Owner.Look.AtkDist)), Width: max(int32(40), int32(c.Owner.Look.AtkDist)/2)}
 		}
+	case "CK-A05":
+		if d.ID == 10205 {
+			// Establish the new splash before final geometry modifiers run.
+			d.Radius = max(int32(100), d.Radius)
+		}
 	case "CK-A06":
 		if d.ID == 10206 {
 			d.Kind = domain.SkillArea
@@ -245,14 +250,17 @@ func legendaryAssassinBackstabCooldown(c *legendaryContext) {
 	}
 }
 func legendaryAssassinTrapSkill(id domain.SkillID) bool { return id >= 10213 && id <= 10217 }
-func legendaryAssassinHas(s *Scene, p *entity.Entity, id string) bool {
-	found := false
-	s.forEachLegendary(p, func(c *legendaryContext) {
+func legendaryAssassinHas(s *Scene, p *entity.Entity, id string, accepted ...*domain.CombatSourceSnapshotV5) bool {
+	var source *domain.CombatSourceSnapshotV5
+	if len(accepted) > 0 {
+		source = accepted[0]
+	}
+	for _, c := range s.legendaryContexts(p, nil, combat.Blow{SourceOffense: source}, event.DamageDealt{}) {
 		if c.Power.ID == id {
-			found = true
+			return true
 		}
-	})
-	return found
+	}
+	return false
 }
 
 func legendaryAssassinStunImmune(c *legendaryContext) bool {

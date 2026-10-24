@@ -140,29 +140,68 @@ func legendaryAssassinFrostPoison(c *legendaryContext, d *domain.StatusDef) {
 	if d.ID != domain.StatusFreeze || d.LegendaryFreezePoisonOwner != c.Owner.ID || c.Target == nil || c.Owner.Player == nil || c.Owner.Player.Char.Skills[10211] <= 0 {
 		return
 	}
+	// Both existing and virtual carriers belong to the accepted trap attack.
+	// A later learned skill or stronger active enchantment cannot upgrade it.
+	raw := c.Scene.rawSkillLevels(c.Owner)
+	hard := c.Owner.Player.Char.Skills
+	if c.Def.SnapshotRawRanks != nil {
+		raw = lesserSkillLevels(c.Def.SnapshotRawRanks, raw)
+		hard = lesserSkillLevels(c.Def.SnapshotHardRanks, hard)
+	}
+	if hard[10211] <= 0 {
+		return
+	}
+	bounded, boundedOK := legendaryAssassinFrostPoisonCarrier(c, hard, raw)
 	source := *c.Owner
 	source.Status = c.Owner.Status.Clone()
+	// Native poison's class-set bonus reads this panel, so use the same lesser
+	// accepted/current attack stats as the trap's direct payload.
+	source.Stats = c.Scene.equipmentAttackStats(c.Owner)
 	found := false
 	source.Status.EachEffective(func(a domain.Active) {
 		if a.Def.ID == domain.StatusPoisonHit {
 			carrier := a.Def
+			if boundedOK {
+				carrier.PoisonOnHitLevel = min(carrier.PoisonOnHitLevel, bounded.PoisonOnHitLevel)
+				carrier.PoisonOnHitProgressionRanks = min(carrier.PoisonOnHitProgressionRanks, bounded.PoisonOnHitProgressionRanks)
+				carrier.PoisonOnHitFirstLevel = min(carrier.PoisonOnHitFirstLevel, bounded.PoisonOnHitFirstLevel)
+				carrier.PoisonOnHitFirstDurationSec = min(carrier.PoisonOnHitFirstDurationSec, bounded.PoisonOnHitFirstDurationSec)
+				carrier.PoisonOnHitBaseDurationSec = min(carrier.PoisonOnHitBaseDurationSec, bounded.PoisonOnHitBaseDurationSec)
+				carrier.EffectHitBP = min(carrier.EffectHitBP, bounded.EffectHitBP)
+			}
 			carrier.PoisonOnHitChance = 100
 			source.Status.Apply(carrier, c.Scene.tick, c.Owner.ID)
 			found = true
 		}
 	})
-	if !found && c.Scene.skills != nil {
-		if skill, ok := c.Scene.skills.Get(10211, c.Owner.Player.Char.Skills[10211]); ok {
-			for _, application := range skill.Statuses {
-				if carrier, ok := c.Scene.resolveSkillStatusDef(skill, application, 0); ok && carrier.ID == domain.StatusPoisonHit {
-					carrier.PoisonOnHitChance = 100
-					source.Status.Apply(carrier, c.Scene.tick, c.Owner.ID)
-					found = true
-				}
-			}
-		}
+	if !found && boundedOK {
+		source.Status.Apply(bounded, c.Scene.tick, c.Owner.ID)
+		found = true
 	}
 	if found {
 		c.Scene.applyCombatTriggeredStatus(&source, c.Target, domain.StatusPoison)
 	}
+}
+
+func legendaryAssassinFrostPoisonCarrier(c *legendaryContext, hard, raw domain.Learned) (domain.StatusDef, bool) {
+	if c.Scene.skills == nil {
+		return domain.StatusDef{}, false
+	}
+	skill, ok := c.Scene.skills.Get(10211, raw[10211])
+	if !ok {
+		return domain.StatusDef{}, false
+	}
+	c.Scene.applyResolvedSkillModifiers(c.Owner, &skill, hard, raw)
+	skill.SnapshotRawRanks, skill.SnapshotHardRanks = raw.Clone(), hard.Clone()
+	for _, application := range skill.Statuses {
+		if carrier, ok := c.Scene.resolveSkillStatusDef(skill, application, 0); ok && carrier.ID == domain.StatusPoisonHit {
+			carrier.PoisonOnHitChance = 100
+			// A new virtual native borrow is not an old saved buff with unknown
+			// accuracy. Existing real carriers retain their stricter own snapshot.
+			carrier.SourceEffectHitBP = c.Scene.sourceEffectHitBP(c.Owner)
+			carrier.SourceEffectHitKnown = true
+			return carrier, true
+		}
+	}
+	return domain.StatusDef{}, false
 }

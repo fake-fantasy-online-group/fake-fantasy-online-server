@@ -24,7 +24,7 @@ func (s *Scene) legendaryAssassinPeriodicDamage(src, target *entity.Entity, ev e
 // These values are engineering tuning, not additional user-confirmed numbers.
 func init() {
 	for _, id := range []string{"CK-D01", "CK-D02", "CK-D06", "CK-D04", "CK-D07", "CK-D10"} {
-		registerLegendarySynergyHandler(id, legendaryHandler{BeforeIncoming: legendaryAssassinNativeDefense, PrepareSkill: legendaryAssassinDefensePrepare, TransformSkill: legendaryAssassinSmokeTransform})
+		registerLegendarySynergyHandler(id, legendaryHandler{AllDamageIncoming: id != "CK-D04", BeforeIncoming: legendaryAssassinNativeDefense, PrepareSkill: legendaryAssassinDefensePrepare, TransformSkill: legendaryAssassinSmokeTransform})
 	}
 	registerLegendarySynergyHandler("CK-D03", legendaryHandler{AfterHit: legendaryAssassinCounterHeal})
 	registerLegendarySynergyHandler("CK-D05", legendaryHandler{StatusReceiving: legendaryAssassinReceiveControl})
@@ -34,7 +34,7 @@ func legendaryAssassinNativeDefense(c *legendaryContext, n int32) int32 {
 	active := false
 	switch c.Power.ID {
 	case "CK-D06":
-		active = c.Target != nil && (c.Def.Dist > 100 || c.Blow.SkillID == 0 && c.Target.Look.AtkDist > 100)
+		active = c.Blow.SourceSkillRange > 100 || c.IsBasic && c.Target != nil && c.Target.Look.AtkDist > 100
 	case "CK-D02":
 		if c.Target != nil && c.Target.Status != nil {
 			c.Target.Status.EachEffective(func(a domain.Active) {
@@ -70,7 +70,7 @@ func legendaryAssassinNativeDefense(c *legendaryContext, n int32) int32 {
 			})
 		}
 	case "CK-D10":
-		active = c.Blow.Trap && c.Owner.Player != nil && c.Owner.Player.Char.Skills[10229] > 0
+		active = (c.Blow.Trap || c.Blow.SourceTrap) && c.Owner.Player != nil && c.Owner.Player.Char.Skills[10229] > 0
 	}
 	if active {
 		return clampI32(int64(n) * 80 / 100)

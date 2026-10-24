@@ -35,6 +35,10 @@ func (s *Scene) applyEquipmentSkillVariant(p *entity.Entity, def *domain.SkillDe
 	v, _ := s.endgameCatalog.Variant(a.Effect.VariantID)
 	v.SourceUID, v.Item = a.SourceUID, a.Item
 	v.EquipmentRevision = p.Player.Worn.EffectsRevision()
+	applyEquipmentSkillVariantDefinition(def, v)
+}
+
+func applyEquipmentSkillVariantDefinition(def *domain.SkillDef, v domain.EquipmentSkillVariant) {
 	def.EquipmentVariant = &v
 	switch v.Behavior {
 	case domain.VariantAreaFan, domain.VariantAreaLine:
@@ -117,6 +121,9 @@ type variantMend struct {
 }
 
 func (s *Scene) startVariantMend(src, dst *entity.Entity, def domain.SkillDef, amount int32) int32 {
+	if s.legendaryCasterSecondaryHeal(src, dst, def.ID) {
+		return amount
+	}
 	rt := s.equipmentState()
 	if old, ok := rt.variantMends[dst.ID]; ok && old.skill == def.ID {
 		delete(rt.variantMends, dst.ID)

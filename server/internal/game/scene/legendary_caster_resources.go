@@ -34,10 +34,7 @@ func init() {
 		},
 		RootFinished: func(c *legendaryContext) {
 			if c.Def.LegendaryNativeInstant && len(c.Hits) > 0 && c.Target != nil {
-				d, ok := legendaryCasterSkill(c, c.Skill)
-				if ok {
-					c.ChildSkill(c.Target.ID, d, legendaryChildOptions{ScaleBP: 8000, TargetOnly: true, SuppressGeneration: true})
-				}
+				c.ChildSkill(c.Target.ID, c.Def, legendaryChildOptions{Center: &c.Center, Primary: &c.Primary, PreparedDefinition: true, ScaleBP: 8000, TargetOnly: true, SuppressGeneration: true})
 			}
 		},
 	})

@@ -82,6 +82,9 @@ func (s *Scene) legendaryFinalizeStatus(d *domain.StatusDef) {
 	if d.DamageShield > 0 {
 		d.DamageShield = universalScaleBP(d.DamageShield, m.ShieldBP)
 	}
+	legendaryScaleNativeBuffFields(d, m.BuffMagnitudeBP)
+	d.PhysicalDamageReductionPct = domain.SaturateInt32(int64(d.PhysicalDamageReductionPct) + int64(m.PhysicalReductionBonusPct))
+	d.MagicDamageReductionPct = domain.SaturateInt32(int64(d.MagicDamageReductionPct) + int64(m.MagicReductionBonusPct))
 	d.Affixes = append([]domain.Affix(nil), d.Affixes...)
 	for i := range d.Affixes {
 		a := &d.Affixes[i]
@@ -96,7 +99,9 @@ func (s *Scene) legendaryFinalizeStatus(d *domain.StatusDef) {
 			if a.Mode == domain.ModePercent {
 				a.Value = max(int32(-99), a.Value)
 			}
-		} else if a.Value > 0 && a.Attr != domain.AttrHPRegen && m.BuffMagnitudeBP > 0 {
+		} else if m.BuffMagnitudeBP > 0 && (a.Value > 0 && a.Attr != domain.AttrHPRegen || !d.Harmful() && a.Attr == domain.AttrAtkSpeed && a.Value < 0) {
+			// Native haste uses a negative attack-interval modifier. It is a
+			// benefit, unlike negative defense/movement penalties on other buffs.
 			a.Value = universalScaleBP(a.Value, m.BuffMagnitudeBP)
 		}
 	}
@@ -166,25 +171,43 @@ func universalSynergyIncoming(c *legendaryContext, n int32) int32 {
 	}
 	return n
 }
-func (s *Scene) universalPeriodicIncoming(src, dst *entity.Entity, n int32, sourceID ...domain.EntityID) int32 {
+func (s *Scene) universalPeriodicIncomingContexts(src, dst *entity.Entity, sourceID ...domain.EntityID) []legendaryContext {
 	if src == nil && len(sourceID) > 0 && sourceID[0] != 0 {
 		src = &entity.Entity{ID: sourceID[0]}
 	}
 	if src == nil || dst == nil || src.ID == dst.ID || sameParty(src, dst) {
-		return n
+		return nil
 	}
-	contexts := s.legendaryContexts(dst, src, combat.Blow{Origin: domain.DamageDOTOrigin}, event.DamageDealt{})
+	return s.legendaryIncomingContexts(src, dst, combat.Blow{Origin: domain.DamageDOTOrigin}, event.DamageDealt{Src: src.ID, Dst: dst.ID, Origin: domain.DamageDOTOrigin})
+}
+func universalPeriodicReduce(contexts []legendaryContext, n int32, critical ...bool) int32 {
+	// Match the direct incoming additive bucket. Periodic critical mitigation
+	// is a value consumer, never a new strike or a critical roll.
+	delta := int64(0)
 	for _, c := range contexts {
 		if c.Power.ID == "TY-D19" {
-			n = universalSynergyIncoming(&c, n)
+			delta += int64(universalSynergyIncoming(&c, n)) - int64(n)
+		}
+		if c.Power.ID == "TY-D10" && len(critical) > 0 && critical[0] {
+			delta += int64(universalScaleBP(n, -3000)) - int64(n)
 		}
 	}
+	return max(int32(0), domain.SaturateInt32(int64(n)+delta))
+}
+func universalPeriodicAbsorb(contexts []legendaryContext, n int32) int32 {
 	for _, c := range contexts {
 		if c.Power.ID == "TY-D11" {
 			n = universalSynergyIncoming(&c, n)
 		}
 	}
 	return n
+}
+
+// Keep the standalone adapter; the real tick boundary inserts all-damage pure
+// reductions between the two phases before spending mana and absorbing shields.
+func (s *Scene) universalPeriodicIncoming(src, dst *entity.Entity, n int32, sourceID ...domain.EntityID) int32 {
+	contexts := s.universalPeriodicIncomingContexts(src, dst, sourceID...)
+	return universalPeriodicAbsorb(contexts, universalPeriodicReduce(contexts, n))
 }
 func universalBasicMana(c *legendaryContext) {
 	if !c.IsBasic || c.IsChild || c.RootID == 0 || c.Blow.ProcDepth != 0 || c.Blow.Origin != domain.DamageNormalOrigin || c.Hit.Flag.Has(event.DamageMiss) || c.Owner == nil || c.Target == nil || c.Owner == c.Target || sameParty(c.Owner, c.Target) {

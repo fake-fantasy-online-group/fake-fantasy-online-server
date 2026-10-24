@@ -37,6 +37,7 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("YS-A08", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryHolyLight {
+			d.LegendaryPreservePrimary = true
 			d.Kind = domain.SkillArea
 			d.Radius = 0
 			d.Area = domain.SkillAreaTargeting{Shape: domain.SkillAreaRectangle, Center: domain.SkillAreaCenterCaster, Length: 600, Width: 160}
@@ -48,11 +49,16 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("YS-A12", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryExorcism {
+			d.LegendaryDamageThroughControlImmunity = true
 			d.LegendaryModifiers.DamageBP += 5000
 		}
 	}, SkillResolved: func(c *legendaryContext) {
 		if c.Skill == legendaryExorcism && c.Target != nil && !c.Scene.legendaryCasterSkillImmune(c.Target, c.Skill) {
 			c.Scene.clearCastWindup(c.Target.ID)
+			if m := c.Target.Monster; m != nil && m.CastingSkill != 0 {
+				m.CastSerial++ // Invalidate the actual AI timer closure.
+				m.CastingSkill, m.CastingUntil = 0, 0
+			}
 		}
 	}})
 	registerLegendarySynergyHandler("YS-A14", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
@@ -72,24 +78,24 @@ func init() {
 	registerLegendarySynergyHandler("YS-U10", legendaryCasterGroupCleanse(10318, true))
 	registerLegendarySynergyHandler("YS-D04", legendaryHandler{StatusApplied: func(c *legendaryContext, d *domain.StatusDef) {
 		if c.Skill == 10321 {
-			d.PhysicalDamageReductionPct += 35
-			d.MagicDamageReductionPct += 35
+			d.LegendaryModifiers.PhysicalReductionBonusPct += 35
+			d.LegendaryModifiers.MagicReductionBonusPct += 35
 		}
 	}})
-	registerLegendarySynergyHandler("YS-D06", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {
+	registerLegendarySynergyHandler("YS-D06", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if c.Scene.legendaryCasterWinding(c.Owner, 10304) {
 			return specialScale(n, 60)
 		}
 		return n
 	}})
-	registerLegendarySynergyHandler("YS-D08", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {
+	registerLegendarySynergyHandler("YS-D08", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if c.Scene.legendaryCasterWinding(c.Owner, 10305) {
 			return specialScale(n, 40)
 		}
 		return n
 	}})
 	registerLegendarySynergyHandler("YS-D09", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {
-		if c.Skill == 0 && legendaryCasterHasSkill(c.Owner, 10330) {
+		if c.IsBasic && legendaryCasterHasSkill(c.Owner, 10330) {
 			return specialScale(n, 65)
 		}
 		return n
@@ -98,7 +104,7 @@ func init() {
 			d.PhysicalReflectPct = specialScale(d.PhysicalReflectPct, 175)
 		}
 	}})
-	registerLegendarySynergyHandler("YS-D10", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {
+	registerLegendarySynergyHandler("YS-D10", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if legendaryCasterOwnSkill(c.Target, c.Owner.ID, 10325) {
 			return specialScale(n, 60)
 		}

@@ -28,12 +28,18 @@ func init() {
 			seen := map[domain.EntityID]bool{}
 			for _, h := range c.Hits {
 				t := c.Scene.entities[h.dst]
-				if t != nil && !seen[t.ID] && t.Alive() && t.Monster != nil && !t.Status.SuppressesHarmfulAt(c.Scene.tick) {
+				if t != nil && !seen[t.ID] && legendaryCasterPullEligible(c, t) {
 					seen[t.ID] = true
 					enemies = append(enemies, t)
 				}
 			}
-			sort.Slice(enemies, func(i, j int) bool { return sqDist(enemies[i].Pos, c.Center) > sqDist(enemies[j].Pos, c.Center) })
+			sort.Slice(enemies, func(i, j int) bool {
+				a, b := sqDist(enemies[i].Pos, c.Center), sqDist(enemies[j].Pos, c.Center)
+				if a == b {
+					return enemies[i].ID < enemies[j].ID
+				}
+				return a > b
+			})
 			if len(enemies) > 5 {
 				enemies = enemies[:5]
 			}
@@ -49,22 +55,18 @@ func init() {
 		},
 	})
 }
+func legendaryCasterPullEligible(c *legendaryContext, t *entity.Entity) bool {
+	if t == nil || !t.Alive() || !c.Scene.equipmentProcEnemyTarget(c.Owner, t) || c.Scene.legendaryMeleeDisplacementImmune(t) {
+		return false
+	}
+	if t.Monster != nil && t.Monster.Kind == domain.MonsterBoss || t.Status != nil && t.Status.SuppressesHarmfulAt(c.Scene.tick) {
+		return false
+	}
+	return !c.Scene.legendaryCasterSkillImmune(t, c.Skill)
+}
 func legendaryCasterPull(c *legendaryContext, t *entity.Entity, center domain.Pos, distance float64) {
-	if c.Scene.legendaryMeleeDisplacementImmune(t) {
+	if !legendaryCasterPullEligible(c, t) {
 		return
-	}
-	if t == nil || !t.Alive() || t.Monster == nil {
-		return
-	}
-	if t.Monster.Kind == domain.MonsterBoss || t.Status != nil && t.Status.SuppressesHarmfulAt(c.Scene.tick) {
-		return
-	}
-	if c.Scene.defs != nil {
-		if d, ok := c.Scene.defs.Def(t.Monster.TypeID); ok {
-			if _, immune := d.ImmuneSkills[c.Skill]; immune {
-				return
-			}
-		}
 	}
 	dx, dy := center.X-t.Pos.X, center.Y-t.Pos.Y
 	length := math.Hypot(dx, dy)
@@ -100,6 +102,8 @@ func legendaryCasterPull(c *legendaryContext, t *entity.Entity, center domain.Po
 	c.Scene.aoi.Move(t, to)
 	c.Scene.legendaryMeleeMoved(t, from, to, true)
 	c.Scene.emit(event.EntityMoved{ID: t.ID, To: to, Dir: t.Dir, Snap: true})
-	t.Monster.CombatPathActive = false
-	t.Monster.Roaming = false
+	if t.Monster != nil {
+		t.Monster.CombatPathActive = false
+		t.Monster.Roaming = false
+	}
 }

@@ -50,3 +50,23 @@ func TestLegendaryNativeSnapshotDefendedWithoutReroll(t *testing.T) {
 		t.Fatalf("snapshot repeated offense/crit: %+v", got)
 	}
 }
+
+func TestLegendaryAttackBaseUsesNativeFractionOnce(t *testing.T) {
+	a := &entity.Entity{ID: 1, HP: 1000, Stats: domain.Stats{MinAtk: 100, MaxAtk: 100, MAtk: 100}}
+	d := &entity.Entity{ID: 2, HP: 10000, Stats: domain.Stats{PhysResist: 10, MagicResist: 10, MDef: 100}}
+	for _, tc := range []struct {
+		magic, crit bool
+		want        int32
+	}{{false, false, 215}, {false, true, 430}, {true, false, 152}, {true, true, 304}} {
+		b := Blow{Magic: tc.magic, GuaranteedHit: true, GuaranteedCrit: tc.crit, AttackBaseFlat: 50, SkillPctNumerator: 150, SkillPctDenominator: 1}
+		got := CalculateStrike(a, d, &HitTracker{}, b, nil)
+		if got.Amount != tc.want {
+			t.Fatalf("magic=%v crit=%v got%d want%d", tc.magic, tc.crit, got.Amount, tc.want)
+		}
+	}
+	// Flat native replacement bases remain independent of the attack coefficient.
+	b := Blow{GuaranteedHit: true, AttackBaseFlat: 50, BaseDamageFlat: 70, SkillPctNumerator: 0, SkillPctDenominator: 1}
+	if got := CalculateStrike(a, d, &HitTracker{}, b, nil); got.Amount != 60 {
+		t.Fatalf("zero native coefficient inherited attack base: %+v", got)
+	}
+}

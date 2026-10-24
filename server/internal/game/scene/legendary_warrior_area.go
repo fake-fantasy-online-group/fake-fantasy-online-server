@@ -139,7 +139,7 @@ func init() {
 	}})
 	registerWarriorPower("ZS-A27", legendaryHandler{SelectTargets: warriorPreservePrimary, PrepareSkill: warriorDamageSkills(80, 10027, 10009).PrepareSkill, TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10027 {
-			if b, ok := warriorLearned(c, 10009, true); ok {
+			if b, ok := warriorBorrowedSkill(c, 10009, true); ok {
 				d.Kind = b.Kind
 				d.Area = b.Area
 				d.Radius = b.Radius

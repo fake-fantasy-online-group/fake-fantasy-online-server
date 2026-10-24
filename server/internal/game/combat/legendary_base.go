@@ -25,9 +25,9 @@ func rollStrikeWithAddedBase(a, d domain.Stats, b Blow, rng Rand) int32 {
 		}
 		den = 1
 	}
-	// (attack*coefficient + added base) is one base, defended exactly once.
+	// ((attack + attack-base bonus)*coefficient + flat base) is defended once.
 	var value, extra, div big.Int
-	value.Mul(big.NewInt(base), big.NewInt(n))
+	value.Mul(big.NewInt(base+int64(b.AttackBaseFlat)), big.NewInt(n))
 	div.Mul(big.NewInt(100), big.NewInt(den))
 	extra.Mul(big.NewInt(int64(b.BaseDamageFlat)), &div)
 	value.Add(&value, &extra)

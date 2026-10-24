@@ -56,6 +56,10 @@ func (s *Scene) applyUniqueSkillModifiers(p *entity.Entity, def *domain.SkillDef
 			}
 		}
 	}
+	applyUniqueSkillDefinition(def, x, composedEquipment)
+}
+
+func applyUniqueSkillDefinition(def *domain.SkillDef, x domain.UniqueEffects, composedEquipment bool) {
 	if composedEquipment {
 		def.LegendaryModifiers.ManaReductionBP += x.ManaCostReductionBP
 	} else {

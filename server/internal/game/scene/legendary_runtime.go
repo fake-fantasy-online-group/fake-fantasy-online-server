@@ -13,6 +13,9 @@ import (
 
 // Explicit typed handlers deliberately cannot execute design prose or Lua.
 type legendaryHandler struct {
+	// AllDamageIncoming opts a pure BeforeIncoming modifier into secondary damage.
+	// It never enables AfterIncoming, reflection, or other proc generators.
+	AllDamageIncoming     bool
 	ModifyAppearance      func(*legendaryContext, *domain.Appearance)
 	StatusAccuracy        func(*legendaryContext, *domain.StatusDef)
 	IncomingHeal          func(*legendaryContext, int32) int32
@@ -38,6 +41,7 @@ type legendaryHandler struct {
 	NativeRestoreResolved func(*legendaryContext, int32, int32)
 	TransformSkill        func(*legendaryContext, *domain.SkillDef)
 	BaseSkill             func(*legendaryContext, *domain.SkillDef)
+	ComposeSkill          func(*legendaryContext, *domain.SkillDef) // Completed buckets, before final scaling.
 	ImpactTargets         func(*legendaryContext, []domain.EntityID) []domain.EntityID
 	CastAccepted          func(*legendaryContext)
 	Resurrected           func(*legendaryContext)
@@ -76,7 +80,7 @@ func registerLegendaryHandler(id string, h legendaryHandler) {
 	if _, ok := legendaryHandlers[id]; ok {
 		panic("duplicate legendary handler " + id)
 	}
-	if h.ModifyAppearance == nil && h.StatusAccuracy == nil && h.IncomingHeal == nil && h.ModifyBlow == nil && h.EquipmentChanged == nil && h.AbsorbIncoming == nil && h.TheftAttempt == nil && h.PeriodicResolved == nil && h.MagicResisted == nil && h.ModifyIncoming == nil && h.ShieldDamageBP == nil && h.OwnerPoisonDeath == nil && h.DisplacementImmune == nil && h.StatusCommitted == nil && h.PassiveStats == nil && h.StatusReceiving == nil && h.TrapPlaced == nil && h.ModifyDamage == nil && h.SkillResolved == nil && h.HealResolved == nil && h.NativeRestoreAmount == nil && h.NativeRestoreResolved == nil && h.TransformSkill == nil && h.BaseSkill == nil && h.ImpactTargets == nil && h.CastAccepted == nil && h.Resurrected == nil && h.SelectTargets == nil && h.TargetDefinition == nil && h.Moved == nil && h.Teleported == nil && h.Healed == nil && h.ManaRestored == nil && h.Dispelled == nil && h.StatusApplied == nil && h.PrepareSkill == nil && h.BeforeDamage == nil && h.BeforeIncoming == nil && h.AfterHit == nil && h.AfterIncoming == nil && h.CastReleased == nil && h.RootFinished == nil && h.Tick == nil {
+	if h.ModifyAppearance == nil && h.StatusAccuracy == nil && h.IncomingHeal == nil && h.ModifyBlow == nil && h.EquipmentChanged == nil && h.AbsorbIncoming == nil && h.TheftAttempt == nil && h.PeriodicResolved == nil && h.MagicResisted == nil && h.ModifyIncoming == nil && h.ShieldDamageBP == nil && h.OwnerPoisonDeath == nil && h.DisplacementImmune == nil && h.StatusCommitted == nil && h.PassiveStats == nil && h.StatusReceiving == nil && h.TrapPlaced == nil && h.ModifyDamage == nil && h.SkillResolved == nil && h.HealResolved == nil && h.NativeRestoreAmount == nil && h.NativeRestoreResolved == nil && h.TransformSkill == nil && h.BaseSkill == nil && h.ComposeSkill == nil && h.ImpactTargets == nil && h.CastAccepted == nil && h.Resurrected == nil && h.SelectTargets == nil && h.TargetDefinition == nil && h.Moved == nil && h.Teleported == nil && h.Healed == nil && h.ManaRestored == nil && h.Dispelled == nil && h.StatusApplied == nil && h.PrepareSkill == nil && h.BeforeDamage == nil && h.BeforeIncoming == nil && h.AfterHit == nil && h.AfterIncoming == nil && h.CastReleased == nil && h.RootFinished == nil && h.Tick == nil {
 		panic("empty legendary handler " + id)
 	}
 	legendaryHandlers[id] = h
@@ -219,14 +223,17 @@ func (s *Scene) legendaryContexts(owner, target *entity.Entity, blow combat.Blow
 	return s.legendaryContextsFor(owner, target, blow, hit, false)
 }
 func (s *Scene) legendaryContextsFor(owner, target *entity.Entity, blow combat.Blow, hit event.DamageDealt, modifiersOnly bool) []legendaryContext {
-	if owner == nil || owner.Player == nil || owner.Player.Char == nil || !owner.Alive() || s.entityMapLoading(owner) || s.legendaryState().depth != 0 && !modifiersOnly || s.equipmentState().classSetTriggered != 0 {
+	return s.legendaryContextsMode(owner, target, blow, hit, modifiersOnly, false)
+}
+func (s *Scene) legendaryContextsMode(owner, target *entity.Entity, blow combat.Blow, hit event.DamageDealt, modifiersOnly, defensive bool) []legendaryContext {
+	if owner == nil || owner.Player == nil || owner.Player.Char == nil || !owner.Alive() || s.entityMapLoading(owner) || s.legendaryState().depth != 0 && !modifiersOnly || s.equipmentState().classSetTriggered != 0 && !defensive {
 		return nil
 	}
 	acceptedSource := blow.SourceOffense
-	if hit.Dst == owner.ID && hit.Src != owner.ID {
+	if defensive || hit.Dst == owner.ID && hit.Src != owner.ID {
 		acceptedSource = nil
 	}
-	if root := s.equipmentState().root; acceptedSource == nil && root != nil && root.src == owner.ID {
+	if root := s.equipmentState().root; !defensive && acceptedSource == nil && root != nil && root.src == owner.ID {
 		acceptedSource = root.source
 	}
 	active := domain.ActiveLegendaryPowers(s.functionalWorn(owner), s.itemDef, owner.Player.Char)
@@ -247,7 +254,7 @@ func (s *Scene) legendaryContextsFor(owner, target *entity.Entity, blow combat.B
 		if _, ok := legendaryHandlers[p.Power.ID]; !ok || !legendaryHandlerCurrent(p.Power.ID) {
 			continue
 		}
-		c := legendaryContext{IsBasic: blow.SkillID == 0, IsChild: blow.LegendaryChild, CastPosition: owner.Pos, Scene: s, Owner: owner, Target: target, Power: p.Power, SourceUID: p.SourceUID, Skill: domain.SkillID(blow.SkillID), Blow: blow, Hit: hit, RootID: blow.RootID, NowMS: s.tick.Millis()}
+		c := legendaryContext{IsBasic: legendaryNativeBasic(blow), IsChild: blow.LegendaryChild, CastPosition: owner.Pos, Scene: s, Owner: owner, Target: target, Power: p.Power, SourceUID: p.SourceUID, Skill: domain.SkillID(blow.SkillID), Blow: blow, Hit: hit, RootID: blow.RootID, NowMS: s.tick.Millis()}
 		if acceptedSource != nil {
 			c.CastPosition = acceptedSource.Position
 			c.SourceSnapshot = acceptedSource
@@ -319,7 +326,7 @@ func (s *Scene) legendaryComposeSkill(owner *entity.Entity, def *domain.SkillDef
 
 	// Complete each stage for every item before proceeding. Skill replacement
 	// and base additions must not depend on equipment or power-ID ordering.
-	for stage := 0; stage < 3; stage++ {
+	for stage := 0; stage < 4; stage++ {
 		for _, c := range contexts {
 			c.Skill, c.Def = def.ID, *def
 			c.IsBasic = def.LegendaryBasic
@@ -330,6 +337,9 @@ func (s *Scene) legendaryComposeSkill(owner *entity.Entity, def *domain.SkillDef
 			}
 			if stage == 2 {
 				fn = h.PrepareSkill
+			}
+			if stage == 3 {
+				fn = h.ComposeSkill
 			}
 			if fn != nil {
 				fn(&c, def)
@@ -392,7 +402,7 @@ func (s *Scene) legendaryBeforeDamage(src, dst *entity.Entity, blow combat.Blow,
 		}
 	}
 	if incoming {
-		contexts := s.legendaryContextsFor(dst, src, blow, hit, true)
+		contexts := s.legendaryIncomingContexts(src, dst, blow, hit)
 		base := amount
 		delta := int64(0)
 		for _, c := range contexts {
@@ -403,28 +413,33 @@ func (s *Scene) legendaryBeforeDamage(src, dst *entity.Entity, blow combat.Blow,
 			}
 		}
 		amount = max(int32(0), clampI32(int64(base)+delta))
+		amount = legendaryAllDamageIncoming(contexts, amount)
+		if blow.ProcDepth == 0 && blow.Origin != domain.DamageProcOrigin {
+			// Preserve direct-only admission and the existing generation guards.
+			for _, c := range s.legendaryContexts(dst, src, blow, hit) {
+				c.BeforeHP, c.PreviousHP = dst.HP, dst.HP
+				h := legendaryHandlers[c.Power.ID]
+				if !h.AllDamageIncoming && h.BeforeIncoming != nil {
+					amount = max(int32(0), h.BeforeIncoming(&c, amount))
+				}
+			}
+		}
+		// Mana substitutes for already mitigated damage, not the original hit.
+		// All pure reductions must finish before an absorption spends resources.
 		for _, c := range contexts {
-			c.BeforeHP = dst.HP
-			c.PreviousHP = dst.HP
 			if h := legendaryHandlers[c.Power.ID].AbsorbIncoming; h != nil {
 				amount = max(int32(0), h(&c, amount))
 			}
 		}
+		return amount
 	}
 	if blow.ProcDepth != 0 || blow.Origin == domain.DamageProcOrigin {
 		return amount
 	}
-	owner, target := src, dst
-	if incoming {
-		owner, target = dst, src
-	}
-	for _, c := range s.legendaryContexts(owner, target, blow, hit) {
+	for _, c := range s.legendaryContexts(src, dst, blow, hit) {
 		c.BeforeHP = dst.HP
 		c.PreviousHP = dst.HP
 		h := legendaryHandlers[c.Power.ID].BeforeDamage
-		if incoming {
-			h = legendaryHandlers[c.Power.ID].BeforeIncoming
-		}
 		if h != nil {
 			amount = max(int32(0), h(&c, amount))
 		}
@@ -436,6 +451,9 @@ func (s *Scene) legendaryAfterHit(src, dst *entity.Entity, blow combat.Blow, hit
 		return
 	}
 	for _, c := range s.legendaryContexts(src, dst, blow, hit) {
+		if blow.SuppressLegendaryGeneration {
+			break
+		}
 		c.BeforeHP = beforeHP
 		c.PreviousHP = beforeHP
 		c.LostHP = min(beforeHP, hit.Amount)
@@ -597,7 +615,8 @@ func (c *legendaryContext) Enemies(center domain.Pos, radius float64, limit int)
 }
 
 // Damage cannot recursively trigger powers, crit, or borrow client values.
-// Settled echoes deliberately do not re-run armor or outgoing multipliers.
+// Settled echoes deliberately do not re-run armor, outgoing or incoming
+// multipliers. Their copied amount has already crossed those stages.
 func (c *legendaryContext) Damage(target *entity.Entity, amount int32, magic, settled bool) {
 	if c.Preview {
 		return
@@ -619,6 +638,7 @@ func (c *legendaryContext) Damage(target *entity.Entity, amount int32, magic, se
 	rt.depth++
 	defer func() { rt.depth-- }()
 	var ev event.DamageDealt
+	var reflected int32
 	if settled {
 		if target.Status != nil {
 			if target.Status.Invulnerable() {
@@ -648,9 +668,19 @@ func (c *legendaryContext) Damage(target *entity.Entity, amount int32, magic, se
 			}
 		}
 		blow := combat.Blow{Origin: domain.DamageProcOrigin, ProcDepth: 1, RootID: c.RootID, SkillID: int32(c.Skill), LegendaryPayload: true, AttackStatsSnapshot: true, AttackStats: domain.Stats{MinAtk: amount, MaxAtk: amount, MAtk: amount}, SkillPct: 100, GuaranteedHit: true, Magic: magic, HurtType: hurt, PayloadScaleKnown: true, PayloadScaleBP: 10000}
-		ev, _, _ = s.resolveStrikeStatuses(c.Owner, target, &combat.HitTracker{}, blow)
+		blow.SourceSkillRange = c.Blow.SourceSkillRange
+		blow.SourceTrap = c.Blow.Trap || c.Blow.SourceTrap
+		if c.Skill != 0 && c.Def.ID == c.Skill {
+			blow.SourceSkillRange = c.Def.Dist
+		}
+		ev, _, reflected = s.resolveStrikeStatuses(c.Owner, target, &combat.HitTracker{}, blow)
 	}
 	s.emit(ev)
+	if reflected > 0 {
+		// A resisted payload still owns one native mirror reflection. Do not
+		// call the general on-hit pipeline, which could generate more procs.
+		s.emitReflectedDamage(target, c.Owner, reflected, true)
+	}
 	s.emitAttributesIfPlayer(target)
 	s.aggroAfterHit(target, c.Owner.ID, ev)
 	s.legendaryCasterDamageResolved(c, target, ev)
@@ -895,6 +925,13 @@ func (s *Scene) legendarySelectTargets(owner *entity.Entity, def domain.SkillDef
 			targets = h(&c, append([]domain.EntityID(nil), targets...))
 		}
 	}
+	// Preserving a selected target is not permission to extend cast range.
+	// Keep it first when the effect promises primary-first settlement.
+	if primaryTarget := s.entities[primary]; def.LegendaryPreservePrimary && primaryTarget != nil &&
+		s.validTarget(owner, primaryTarget, def) &&
+		(!def.HasDamageEffect() || s.equipmentProcEnemyTarget(owner, primaryTarget)) {
+		targets = append([]domain.EntityID{primary}, targets...)
+	}
 	out := make([]domain.EntityID, 0, len(targets))
 	seen := map[domain.EntityID]bool{}
 	for _, id := range targets {
@@ -902,7 +939,8 @@ func (s *Scene) legendarySelectTargets(owner *entity.Entity, def domain.SkillDef
 			continue
 		}
 		e := s.entities[id]
-		if e == nil || !originals[id] && !s.validTarget(owner, e, def) {
+		if e == nil || !originals[id] && (!e.Alive() && !def.HasResurrectEffect() || !s.validTarget(owner, e, def) ||
+			id == primary && def.Dist > 0 && sqDist(owner.Pos, e.Pos) > float64(def.Dist)*float64(def.Dist)) {
 			continue
 		}
 		seen[id] = true

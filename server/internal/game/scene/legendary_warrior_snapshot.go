@@ -35,7 +35,7 @@ func (c *legendaryContext) SnapshotNativeDamage() int32 {
 	if !found {
 		return 0
 	}
-	blow := combat.Blow{RootID: c.RootID, SkillID: int32(c.Skill), SkillPct: effect.DamagePct, SkillPctNumerator: effect.DamagePctNumerator, SkillPctDenominator: effect.DamagePctDenominator, BaseDamageFlat: effect.BaseDamageFlat, FlatDamage: effect.DamageFlat, HurtType: c.Def.HurtType, Area: c.Def.Area.Valid() || c.Def.Radius > 0, GuaranteedHit: true, GuaranteedCrit: effect.GuaranteedCrit, SourceOffense: c.SourceSnapshot}
+	blow := combat.Blow{RootID: c.RootID, SkillID: int32(c.Skill), SkillPct: effect.DamagePct, SkillPctNumerator: effect.DamagePctNumerator, SkillPctDenominator: effect.DamagePctDenominator, BaseDamageFlat: effect.BaseDamageFlat, AttackBaseFlat: effect.AttackBaseFlat, FlatDamage: effect.DamageFlat, HurtType: c.Def.HurtType, Area: c.Def.Area.Valid() || c.Def.Radius > 0, GuaranteedHit: true, GuaranteedCrit: effect.GuaranteedCrit, SourceOffense: c.SourceSnapshot}
 	if c.SourceSnapshot != nil {
 		blow.AttackStatsSnapshot = true
 		blow.AttackStats = c.SourceSnapshot.Stats

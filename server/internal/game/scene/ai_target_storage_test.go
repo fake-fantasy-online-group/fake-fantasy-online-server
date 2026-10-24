@@ -220,7 +220,7 @@ func TestTargetInfoStorageTimerRefresh(t *testing.T) {
 				}
 				return
 			}
-			if len(s.casts) != 1 || !reflect.DeepEqual(s.casts[0].targets, []domain.EntityID{2}) || s.casts[0].visualTarget != 2 {
+			if len(s.casts) != 1 || !reflect.DeepEqual(s.casts[0].targets, []domain.EntityID{2}) || s.casts[0].visualTarget != 2 || s.casts[0].primary != 2 {
 				t.Fatalf("timer did not refresh target: %+v", s.casts)
 			}
 			var reused ai.Target

@@ -44,9 +44,7 @@ func init() {
 		c.VisualAt("stage-01", c.Center, 0)
 		radius := max(c.Def.Radius, c.Def.Area.Radius)
 		for _, t := range c.Enemies(c.Center, float64(radius), 256) {
-			if d, ok := legendaryCasterSkill(c, c.Skill); ok {
-				c.ChildSkill(t.ID, d, legendaryChildOptions{ScaleBP: 7000, TargetOnly: true, SuppressGeneration: true, SuppressVisual: true})
-			}
+			c.ChildSkill(t.ID, c.Def, legendaryChildOptions{Center: &c.Center, Primary: &c.Primary, PreparedDefinition: true, ScaleBP: 7000, TargetOnly: true, SuppressGeneration: true, SuppressVisual: true})
 		}
 	}})
 	registerLegendarySynergyHandler("SS-A05", legendaryHandler{TargetDefinition: legendaryCasterTargetBonus(func(c *legendaryContext, n int32) int32 {
@@ -59,7 +57,7 @@ func init() {
 			count = int(cached.Value)
 		} else {
 			for _, id := range c.Targets {
-				if t := c.Scene.entities[id]; t != nil && t.Alive() && c.Scene.equipmentProcEnemyTarget(c.Owner, t) {
+				if t := c.Scene.entities[id]; c.Scene.legendaryCasterFireballLands(c.Owner, t, c.Def) {
 					count++
 				}
 			}

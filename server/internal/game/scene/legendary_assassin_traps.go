@@ -2,21 +2,23 @@ package scene
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 	"math"
 )
 
 // The two side placements inherit the already prepared native definition.
 // generate=false is explicit child lineage: children cannot generate placements.
 func (s *Scene) legendaryAssassinTrapPlaced(owner, trap *entity.Entity, generate bool) {
-	s.forEachLegendary(owner, func(c *legendaryContext) {
+	for _, c := range s.legendaryContexts(owner, nil, combat.Blow{SourceOffense: trap.Trap.SourceOffense}, event.DamageDealt{}) {
 		c.Skill = trap.Trap.Def.ID
 		c.Def = trap.Trap.Def
 		if h := legendaryHandlers[c.Power.ID].TrapPlaced; h != nil {
-			h(c, trap, generate)
+			h(&c, trap, generate)
 		}
-	})
-	if (trap.Trap.Def.ID == 10213 && legendaryAssassinHas(s, owner, "CK-A11")) || (trap.Trap.Def.ID == 10214 && legendaryAssassinHas(s, owner, "CK-A14")) {
+	}
+	if (trap.Trap.Def.ID == 10213 && legendaryAssassinHas(s, owner, "CK-A11", trap.Trap.SourceOffense)) || (trap.Trap.Def.ID == 10214 && legendaryAssassinHas(s, owner, "CK-A14", trap.Trap.SourceOffense)) {
 		s.triggerAssassinTrap(trap, false)
 	}
 }
@@ -24,16 +26,7 @@ func (s *Scene) legendaryAssassinTrapPlaced(owner, trap *entity.Entity, generate
 func legendaryAssassinTriplePlacement(c *legendaryContext, trap *entity.Entity, generate bool) {
 	s, owner := c.Scene, c.Owner
 	if trap.Trap.Def.ID == 10213 && generate {
-		dx, dy := trap.Pos.X-owner.Pos.X, trap.Pos.Y-owner.Pos.Y
-		length := math.Hypot(dx, dy)
-		if length == 0 {
-			dx, dy, length = 1, 0, 1
-		}
-		// Balance default: side spacing 75% of native blast radius. Reverse the
-		// known radius modifiers rather than multiplying a prepared definition again.
-		nativeRadius := float64(trap.Trap.Radius) * 10000 / float64(10000+trap.Trap.Def.LegendaryModifiers.RadiusBP)
-		for _, sign := range []float64{-1, 1} {
-			pos := domain.Pos{MapID: trap.Pos.MapID, X: trap.Pos.X - sign*dy/length*nativeRadius*.75, Y: trap.Pos.Y + sign*dx/length*nativeRadius*.75}
+		for _, pos := range legendaryAssassinSidePlacements(owner.Pos, trap.Pos, trap.Trap.Radius, trap.Trap.Def) {
 			s.placeAssassinTrap(owner, trap.Trap.Def, pos, trap.Trap.Radius, trap.Trap.StatusDurationPct, false, trap.Trap.SourceOffense)
 		}
 	}
@@ -80,8 +73,26 @@ func (s *Scene) triggerAssassinTrap(trap *entity.Entity, _ bool) {
 	for _, id := range targets {
 		target := s.entities[id]
 		if target != nil && target.Alive() {
-			s.applySkill(owner, target, payload, trap.Trap.StatusDurationPct, true)
+			// A point-placed trap has no explicitly selected primary victim.
+			local := s.legendaryTargetDefinition(owner, payload, target, 0, targets)
+			s.applySkill(owner, target, local, trap.Trap.StatusDurationPct, true)
 		}
 	}
 	finish()
+}
+
+// Both persistent traps and enhanced-weapon instant bombs use this same native
+// side spacing. Prepared radius bonuses must not enlarge the spacing again.
+func legendaryAssassinSidePlacements(owner, at domain.Pos, radius int32, def domain.SkillDef) []domain.Pos {
+	dx, dy := at.X-owner.X, at.Y-owner.Y
+	length := math.Hypot(dx, dy)
+	if length == 0 {
+		dx, dy, length = 1, 0, 1
+	}
+	nativeRadius := float64(radius) * 10000 / float64(10000+def.LegendaryModifiers.RadiusBP+def.LegendaryModifiers.TrapRadiusBP)
+	var positions []domain.Pos
+	for _, sign := range []float64{-1, 1} {
+		positions = append(positions, domain.Pos{MapID: at.MapID, X: at.X - sign*dy/length*nativeRadius*.75, Y: at.Y + sign*dx/length*nativeRadius*.75})
+	}
+	return positions
 }

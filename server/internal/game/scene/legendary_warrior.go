@@ -40,10 +40,23 @@ func warriorEffects(d *domain.SkillDef, f func(*domain.SkillEffect)) {
 	}
 }
 func warriorLearned(c *legendaryContext, id domain.SkillID, composed bool) (domain.SkillDef, bool) {
-	if c.Owner == nil || c.Owner.Player == nil || c.Owner.Player.Char.Skills.LevelOf(id) <= 0 || c.Scene.skills == nil {
+	if c.Owner == nil || c.Owner.Player == nil || c.Owner.Player.Char == nil || c.Owner.Player.Char.Skills.LevelOf(id) <= 0 {
 		return domain.SkillDef{}, false
 	}
-	lv, _ := c.Scene.skillLevelForUse(c.Owner, id)
+	return warriorBorrowedSkill(c, id, composed)
+}
+
+// Geometry/range grants do not unlock the donor for active casting. When their
+// contract has no learning prerequisite, use its native minimum-rank definition
+// and still compose the owner's equipment and current legendary geometry.
+func warriorBorrowedSkill(c *legendaryContext, id domain.SkillID, composed bool) (domain.SkillDef, bool) {
+	if c.Owner == nil || c.Owner.Player == nil || c.Owner.Player.Char == nil || c.Scene.skills == nil {
+		return domain.SkillDef{}, false
+	}
+	lv := int32(1)
+	if c.Owner.Player.Char.Skills.LevelOf(id) > 0 {
+		lv, _ = c.Scene.skillLevelForUse(c.Owner, id)
+	}
 	d, ok := c.Scene.skills.Get(id, lv)
 	if !ok {
 		return d, false
@@ -71,6 +84,7 @@ func init() {
 		if d.ID == 10003 {
 			d.LegendaryModifiers.DamageBP += 3000
 			d.WeaponDurabilityReductionPct = 100
+			d.LegendaryModifiers.SkipAttackDurability = true
 			warriorEffects(d, func(e *domain.SkillEffect) { e.WeaponDurabilityCostPct = 0 })
 		}
 	}})
@@ -89,7 +103,7 @@ func init() {
 			d.LegendaryModifiers.DamageBP += 6500
 		}
 		if d.ID == 10002 {
-			if fly, ok := warriorLearned(c, 10017, true); ok {
+			if fly, ok := warriorBorrowedSkill(c, 10017, true); ok {
 				d.Dist = max(d.Dist, fly.Dist)
 			}
 		}

@@ -1,0 +1,2462 @@
+{
+  "schema_version": 1,
+  "group": "sorcerer-50",
+  "coverage_definition": "50 authored SS power IDs; each counted once only if named single-power behavior consumers pass. Not Go line/branch coverage. Combination clauses are supplemental and excluded from numerator.",
+  "native_fixture": "nativeRepairTables migration-backed authored definitions; no live PostgreSQL/runtime deployment claim.",
+  "limits": [
+    "SS-A10 elemental gear defense is exercised at the actual strike boundary, not claimed as currently reachable PvP admission or ordinary monster equipment. Native PvE no-element-defense control is separate.",
+    "No all-rank, all-seed, all-map permutations or Unity rendering claims."
+  ],
+  "powers": [
+    {
+      "power_id": "SS-A01",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDirectDamage/SS-A01",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA01BurnOwnership",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "火球术直接伤害提高70%。",
+          "kind": "solo",
+          "assertion": "原生火球结算实际HP差对照无威能，0/本源/异源燃烧分别170%/210%/170%，不是仅检查modifier。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A01",
+            "TestCasterIndependentA01BurnOwnership"
+          ]
+        },
+        {
+          "clause": "目标带有你施加的燃烧时，再提高40%，本威能合计提高110%。",
+          "kind": "solo",
+          "assertion": "原生火球结算实际HP差对照无威能，0/本源/异源燃烧分别170%/210%/170%，不是仅检查modifier。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A01",
+            "TestCasterIndependentA01BurnOwnership"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A02",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentBurnSettlement/SS-A02",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_test.go",
+          "test": "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration/SS-A02",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "火弹术命中带有你施加的燃烧的敌人时，额外造成相当于这些燃烧剩余伤害80%的火系伤害。",
+          "kind": "solo",
+          "assertion": "原生施法消费本源100剩余燃烧量，HP分别多80/100/160；无燃烧/异源不追加；ExpireAt和每跳值不变；伤害事件恰2次，重复同根/递归hook不再结算。",
+          "tests": [
+            "TestCasterIndependentBurnSettlement/SS-A02",
+            "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration/SS-A02"
+          ]
+        },
+        {
+          "clause": "燃烧不消失、不缩短。",
+          "kind": "solo",
+          "assertion": "原生施法消费本源100剩余燃烧量，HP分别多80/100/160；无燃烧/异源不追加；ExpireAt和每跳值不变；伤害事件恰2次，重复同根/递归hook不再结算。",
+          "tests": [
+            "TestCasterIndependentBurnSettlement/SS-A02",
+            "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration/SS-A02"
+          ]
+        },
+        {
+          "clause": "每次施法对同一敌人只触发一次，追加伤害不会再次触发本效果。",
+          "kind": "solo",
+          "assertion": "原生施法消费本源100剩余燃烧量，HP分别多80/100/160；无燃烧/异源不追加；ExpireAt和每跳值不变；伤害事件恰2次，重复同根/递归hook不再结算。",
+          "tests": [
+            "TestCasterIndependentBurnSettlement/SS-A02",
+            "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration/SS-A02"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A03",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA03SplashBatch",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "火弹术保留主目标完整伤害和效果，并同时攻击其周围半径150内最多4名其他敌人，各造成火弹术基础伤害100%的火系伤害。",
+          "kind": "solo",
+          "assertion": "onUseSkill→stepCasts保留主目标单次完整HP伤害；150范围额外恰4人同额伤害，外部及第5/6人不扩散，未装威能无副攻击。",
+          "tests": [
+            "TestCasterIndependentA03SplashBatch"
+          ]
+        },
+        {
+          "clause": "额外攻击也享受火弹术、火系伤害和燃烧剩余伤害结算的加成。",
+          "kind": "combination",
+          "assertion": "合法装备组合通过原生消费者验证；单列，不增加独立覆盖分子。",
+          "tests": [
+            "TestCasterCombinationFireBoltSplashSettlement"
+          ]
+        },
+        {
+          "clause": "每次施法只选取一批额外目标，不会继续向外扩散。",
+          "kind": "solo",
+          "assertion": "onUseSkill→stepCasts保留主目标单次完整HP伤害；150范围额外恰4人同额伤害，外部及第5/6人不扩散，未装威能无副攻击。",
+          "tests": [
+            "TestCasterIndependentA03SplashBatch"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A04",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA04Echo",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "火球术保留原有伤害，并在爆炸中心立即追加一次同范围爆炸，造成该次火球术基础伤害的70%。",
+          "kind": "solo",
+          "assertion": "原生主/副目标HP各多70%一次；101距离未中，事件恰2次，无凭空状态。",
+          "tests": [
+            "TestCasterIndependentA04Echo"
+          ]
+        },
+        {
+          "clause": "追加爆炸不附加技能状态，也不会再产生爆芯。",
+          "kind": "solo",
+          "assertion": "原生主/副目标HP各多70%一次；101距离未中，事件恰2次，无凭空状态。",
+          "tests": [
+            "TestCasterIndependentA04Echo"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A05",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA05HitCounts",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_repair_test.go",
+          "test": "TestCasterRepairFireballCountsOnlyLegalHits",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA05UnselectedCenter",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "火球术命中1至2名敌人时，对这些敌人的直接伤害提高75%。",
+          "kind": "solo",
+          "assertion": "原生1/2/3/5命中组逐目标HP对照：1-2全175%，>=3仅主135%，副100%；技能免疫旁观者不稀释计数。",
+          "tests": [
+            "TestCasterIndependentA05HitCounts",
+            "TestCasterRepairFireballCountsOnlyLegalHits"
+          ]
+        },
+        {
+          "clause": "命中至少3名敌人时，只对选中的主目标提高35%，其余敌人伤害不变。",
+          "kind": "solo",
+          "assertion": "原生1/2/3/5命中组逐目标HP对照：1-2全175%，>=3仅主135%，副100%；技能免疫旁观者不稀释计数。",
+          "tests": [
+            "TestCasterIndependentA05HitCounts",
+            "TestCasterRepairFireballCountsOnlyLegalHits"
+          ]
+        },
+        {
+          "clause": "条件边界补充（不增加覆盖分母）。",
+          "kind": "solo",
+          "assertion": "原生选点火球>=3敌人但未选择敌方主目标时，每人仅原伤害，不捏造35%主目标加成。",
+          "tests": [
+            "TestCasterIndependentA05UnselectedCenter"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A06",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDirectDamage/SS-A06",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentAreaConsumers/SS-A06",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "火球术范围半径扩大65%。",
+          "kind": "solo",
+          "assertion": "原生范围内/边缘/边界外实体实际HP验证伤害及几何。A06半径165与120/145%；A13半径100与185/165%；A18半径270与140%；A20半径210与155%、实付MP不变及实际CD80%；A21半径150与180/120%。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A06",
+            "TestCasterIndependentAreaConsumers/SS-A06"
+          ]
+        },
+        {
+          "clause": "原半径内侧一半区域的直接伤害提高20%。",
+          "kind": "solo",
+          "assertion": "原生范围内/边缘/边界外实体实际HP验证伤害及几何。A06半径165与120/145%；A13半径100与185/165%；A18半径270与140%；A20半径210与155%、实付MP不变及实际CD80%；A21半径150与180/120%。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A06",
+            "TestCasterIndependentAreaConsumers/SS-A06"
+          ]
+        },
+        {
+          "clause": "超过该距离的环带区域提高45%，包括新增的外圈。",
+          "kind": "solo",
+          "assertion": "原生范围内/边缘/边界外实体实际HP验证伤害及几何。A06半径165与120/145%；A13半径100与185/165%；A18半径270与140%；A20半径210与155%、实付MP不变及实际CD80%；A21半径150与180/120%。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A06",
+            "TestCasterIndependentAreaConsumers/SS-A06"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A07",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA07HighestBurnSpread",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "火球术命中带有你施加的燃烧的敌人时，选取本次命中者中剩余燃烧伤害最高的一名，将该剩余伤害的90%分别造成给爆炸范围内最多4名其他敌人。",
+          "kind": "solo",
+          "assertion": "真实火球根在100与200两份燃烧中选最高，本源给另外恰4人各180且不均分；异源0追加；最高来源不自溅，范围外未中，原燃烧不消失，事件无递归。",
+          "tests": [
+            "TestCasterIndependentA07HighestBurnSpread"
+          ]
+        },
+        {
+          "clause": "每名敌人各承受90%，不均分。",
+          "kind": "solo",
+          "assertion": "真实火球根在100与200两份燃烧中选最高，本源给另外恰4人各180且不均分；异源0追加；最高来源不自溅，范围外未中，原燃烧不消失，事件无递归。",
+          "tests": [
+            "TestCasterIndependentA07HighestBurnSpread"
+          ]
+        },
+        {
+          "clause": "不移除原燃烧，追加伤害不会再次扩散。",
+          "kind": "solo",
+          "assertion": "真实火球根在100与200两份燃烧中选最高，本源给另外恰4人各180且不均分；异源0追加；最高来源不自溅，范围外未中，原燃烧不消失，事件无递归。",
+          "tests": [
+            "TestCasterIndependentA07HighestBurnSpread"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A08",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDirectDamage/SS-A08",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA08RangeThreshold",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "冰箭术命中时，若你与目标的距离达到本次施法距离的一半，直接伤害提高55%。",
+          "kind": "solo",
+          "assertion": "冰箭对224/225/300距离目标实际HP分别120/155/155%（450原射程一半阈值），有无威能对照。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A08",
+            "TestCasterIndependentA08RangeThreshold"
+          ]
+        },
+        {
+          "clause": "不足一半时提高20%。",
+          "kind": "solo",
+          "assertion": "冰箭对224/225/300距离目标实际HP分别120/155/155%（450原射程一半阈值），有无威能对照。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A08",
+            "TestCasterIndependentA08RangeThreshold"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A09",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentControlledDamage/SS-A09",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentGuaranteedStatusLearning/SS-A09",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_repair_test.go",
+          "test": "TestCasterRepairGuaranteedStatusRetainsImmunity/SS-A09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "已学习冰系掌握时，冰箭术必定附加其原有减速，仍遵守目标免疫规则。",
+          "kind": "solo",
+          "assertion": "单威能原生冰箭已有减速伤害200%，无控制100%；未学掌握不给减速；已学则高抗性保证应用，BlockHarmful硬免疫仍挡。",
+          "tests": [
+            "TestCasterIndependentControlledDamage/SS-A09",
+            "TestCasterIndependentGuaranteedStatusLearning/SS-A09",
+            "TestCasterRepairGuaranteedStatusRetainsImmunity/SS-A09"
+          ]
+        },
+        {
+          "clause": "目标在命中前已被冻结或减速时，冰箭术直接伤害提高100%。",
+          "kind": "solo",
+          "assertion": "单威能原生冰箭已有减速伤害200%，无控制100%；未学掌握不给减速；已学则高抗性保证应用，BlockHarmful硬免疫仍挡。",
+          "tests": [
+            "TestCasterIndependentControlledDamage/SS-A09",
+            "TestCasterIndependentGuaranteedStatusLearning/SS-A09",
+            "TestCasterRepairGuaranteedStatusRetainsImmunity/SS-A09"
+          ]
+        },
+        {
+          "clause": "其他威能产生的冰箭术伤害也可获得这项加成，但不会重复施加同一份减速。",
+          "kind": "combination",
+          "assertion": "合法装备组合通过原生消费者验证；单列，不增加独立覆盖分子。",
+          "tests": [
+            "TestCasterCombinationFreezeArrowMastery"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A10",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA10IceMitigation",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA10NativeNoElementDefense",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA10DerivedStrikeBoundary",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "冰箭术及其追加伤害，忽略目标50%的冰系百分比减伤。",
+          "kind": "solo",
+          "assertion": "受控实际applySkill→resolveStrikeStatuses元素装备边界（非PvP准入）：60%冰减伤变30%，伤害40→70；盾后20→50，通用减伤仍算，100%免疫仍0，火系不变。原生普通怪无元素防御时不凭空增伤。；实际派生proc/child标记经同一个strike元素减伤消费者仍70而不是40，非PvP准入声明。",
+          "tests": [
+            "TestCasterIndependentA10IceMitigation",
+            "TestCasterIndependentA10NativeNoElementDefense",
+            "TestCasterIndependentA10DerivedStrikeBoundary"
+          ]
+        },
+        {
+          "clause": "不忽略其他护盾、通用减伤或免疫。",
+          "kind": "solo",
+          "assertion": "受控实际applySkill→resolveStrikeStatuses元素装备边界（非PvP准入）：60%冰减伤变30%，伤害40→70；盾后20→50，通用减伤仍算，100%免疫仍0，火系不变。原生普通怪无元素防御时不凭空增伤。；实际派生proc/child标记经同一个strike元素减伤消费者仍70而不是40，非PvP准入声明。",
+          "tests": [
+            "TestCasterIndependentA10IceMitigation",
+            "TestCasterIndependentA10NativeNoElementDefense",
+            "TestCasterIndependentA10DerivedStrikeBoundary"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A11",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentBurnSettlement/SS-A11",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_test.go",
+          "test": "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration/SS-A11",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "冰箭术命中带有你施加的燃烧的敌人时，额外造成相当于这些燃烧剩余伤害100%的冰系伤害。",
+          "kind": "solo",
+          "assertion": "原生施法消费本源100剩余燃烧量，HP分别多80/100/160；无燃烧/异源不追加；ExpireAt和每跳值不变；伤害事件恰2次，重复同根/递归hook不再结算。",
+          "tests": [
+            "TestCasterIndependentBurnSettlement/SS-A11",
+            "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration/SS-A11"
+          ]
+        },
+        {
+          "clause": "燃烧不消失、不缩短。",
+          "kind": "solo",
+          "assertion": "原生施法消费本源100剩余燃烧量，HP分别多80/100/160；无燃烧/异源不追加；ExpireAt和每跳值不变；伤害事件恰2次，重复同根/递归hook不再结算。",
+          "tests": [
+            "TestCasterIndependentBurnSettlement/SS-A11",
+            "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration/SS-A11"
+          ]
+        },
+        {
+          "clause": "每次施法对同一敌人只触发一次，追加伤害不会再次触发燃烧或本效果。",
+          "kind": "solo",
+          "assertion": "原生施法消费本源100剩余燃烧量，HP分别多80/100/160；无燃烧/异源不追加；ExpireAt和每跳值不变；伤害事件恰2次，重复同根/递归hook不再结算。",
+          "tests": [
+            "TestCasterIndependentBurnSettlement/SS-A11",
+            "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration/SS-A11"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A12",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDirectDamage/SS-A12",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA12Centers",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_repair_test.go",
+          "test": "TestCasterRepairNativeControlSnapshots/SS-A12_preserves_existing_freeze",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentIceBurstNativeControl/SS-A12",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "冰爆术可选择施法距离内的合法敌人为爆炸中心，也可保持以自身为中心释放。",
+          "kind": "solo",
+          "assertion": "单威能实际self/remote中心结算、450距离拒绝不付费、100半径边界、无预冻结也能攻击；原冻结身份/期限保留；HP为120%。；固定成功随机数实际冰爆伤害后原生冻结事件/状态仍存在，不以modifier字段代替控制。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A12",
+            "TestCasterIndependentA12Centers",
+            "TestCasterRepairNativeControlSnapshots/SS-A12_preserves_existing_freeze",
+            "TestCasterIndependentIceBurstNativeControl/SS-A12"
+          ]
+        },
+        {
+          "clause": "射程与冰封相同，直接伤害提高20%，保留原控制效果。",
+          "kind": "solo",
+          "assertion": "单威能实际self/remote中心结算、450距离拒绝不付费、100半径边界、无预冻结也能攻击；原冻结身份/期限保留；HP为120%。；固定成功随机数实际冰爆伤害后原生冻结事件/状态仍存在，不以modifier字段代替控制。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A12",
+            "TestCasterIndependentA12Centers",
+            "TestCasterRepairNativeControlSnapshots/SS-A12_preserves_existing_freeze",
+            "TestCasterIndependentIceBurstNativeControl/SS-A12"
+          ]
+        },
+        {
+          "clause": "无需先冰封目标，也不消耗冻结。",
+          "kind": "solo",
+          "assertion": "单威能实际self/remote中心结算、450距离拒绝不付费、100半径边界、无预冻结也能攻击；原冻结身份/期限保留；HP为120%。；固定成功随机数实际冰爆伤害后原生冻结事件/状态仍存在，不以modifier字段代替控制。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A12",
+            "TestCasterIndependentA12Centers",
+            "TestCasterRepairNativeControlSnapshots/SS-A12_preserves_existing_freeze",
+            "TestCasterIndependentIceBurstNativeControl/SS-A12"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A13",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDirectDamage/SS-A13",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentAreaConsumers/SS-A13",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentIceBurstNativeControl/SS-A13",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "冰爆术直接伤害提高65%，不缩小原有范围。",
+          "kind": "solo",
+          "assertion": "原生范围内/边缘/边界外实体实际HP验证伤害及几何。A06半径165与120/145%；A13半径100与185/165%；A18半径270与140%；A20半径210与155%、实付MP不变及实际CD80%；A21半径150与180/120%。；固定成功随机数实际冰爆伤害后原生冻结事件/状态仍存在，不以modifier字段代替控制。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A13",
+            "TestCasterIndependentAreaConsumers/SS-A13",
+            "TestCasterIndependentIceBurstNativeControl/SS-A13"
+          ]
+        },
+        {
+          "clause": "位于原半径内侧一半的敌人改为受到85%的伤害加成。",
+          "kind": "solo",
+          "assertion": "原生范围内/边缘/边界外实体实际HP验证伤害及几何。A06半径165与120/145%；A13半径100与185/165%；A18半径270与140%；A20半径210与155%、实付MP不变及实际CD80%；A21半径150与180/120%。；固定成功随机数实际冰爆伤害后原生冻结事件/状态仍存在，不以modifier字段代替控制。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A13",
+            "TestCasterIndependentAreaConsumers/SS-A13",
+            "TestCasterIndependentIceBurstNativeControl/SS-A13"
+          ]
+        },
+        {
+          "clause": "保留原控制效果。",
+          "kind": "solo",
+          "assertion": "原生范围内/边缘/边界外实体实际HP验证伤害及几何。A06半径165与120/145%；A13半径100与185/165%；A18半径270与140%；A20半径210与155%、实付MP不变及实际CD80%；A21半径150与180/120%。；固定成功随机数实际冰爆伤害后原生冻结事件/状态仍存在，不以modifier字段代替控制。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A13",
+            "TestCasterIndependentAreaConsumers/SS-A13",
+            "TestCasterIndependentIceBurstNativeControl/SS-A13"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A14",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDirectDamage/SS-A14",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA14PullLimitAndBarrier",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_repair_test.go",
+          "test": "TestCasterRepairPullSkipsImmuneBeforeLimit",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentIceBurstNativeControl/SS-A14",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "冰爆术直接伤害提高20%。",
+          "kind": "solo",
+          "assertion": "原生伤害120%，最远5名真正改变位置、近2名不动；墙阻止穿越但不挡HP结算；5个更远首领不占位移名额且仍受伤。；固定成功随机数实际冰爆伤害后原生冻结事件/状态仍存在，不以modifier字段代替控制。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A14",
+            "TestCasterIndependentA14PullLimitAndBarrier",
+            "TestCasterRepairPullSkipsImmuneBeforeLimit",
+            "TestCasterIndependentIceBurstNativeControl/SS-A14"
+          ]
+        },
+        {
+          "clause": "命中后，将距爆炸中心最远的最多5名可被位移的敌人向中心拉近最多90距离。",
+          "kind": "solo",
+          "assertion": "原生伤害120%，最远5名真正改变位置、近2名不动；墙阻止穿越但不挡HP结算；5个更远首领不占位移名额且仍受伤。；固定成功随机数实际冰爆伤害后原生冻结事件/状态仍存在，不以modifier字段代替控制。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A14",
+            "TestCasterIndependentA14PullLimitAndBarrier",
+            "TestCasterRepairPullSkipsImmuneBeforeLimit",
+            "TestCasterIndependentIceBurstNativeControl/SS-A14"
+          ]
+        },
+        {
+          "clause": "拉拽不能穿过障碍，每次施法只执行一次。",
+          "kind": "solo",
+          "assertion": "原生伤害120%，最远5名真正改变位置、近2名不动；墙阻止穿越但不挡HP结算；5个更远首领不占位移名额且仍受伤。；固定成功随机数实际冰爆伤害后原生冻结事件/状态仍存在，不以modifier字段代替控制。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A14",
+            "TestCasterIndependentA14PullLimitAndBarrier",
+            "TestCasterRepairPullSkipsImmuneBeforeLimit",
+            "TestCasterIndependentIceBurstNativeControl/SS-A14"
+          ]
+        },
+        {
+          "clause": "位移免疫不影响原有伤害和控制判定。",
+          "kind": "solo",
+          "assertion": "原生伤害120%，最远5名真正改变位置、近2名不动；墙阻止穿越但不挡HP结算；5个更远首领不占位移名额且仍受伤。；固定成功随机数实际冰爆伤害后原生冻结事件/状态仍存在，不以modifier字段代替控制。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A14",
+            "TestCasterIndependentA14PullLimitAndBarrier",
+            "TestCasterRepairPullSkipsImmuneBeforeLimit",
+            "TestCasterIndependentIceBurstNativeControl/SS-A14"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A15",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentControlledDamage/SS-A15",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_repair_test.go",
+          "test": "TestCasterRepairNativeControlSnapshots/SS-A15_preserves_existing_freeze",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentIceBurstNativeControl/SS-A15",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA15AcceptedControlSnapshot",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "冰爆术命中在本次施法前已被冻结或减速的敌人时，直接伤害提高60%。",
+          "kind": "solo",
+          "assertion": "原生技能已有控制时实际伤害分别160%/190%，无控制100%；旧冻结实例与到期时间不移除不缩短；A15额外验证受理时快照而非命中后状态。；固定成功随机数实际冰爆伤害后原生冻结事件/状态仍存在，不以modifier字段代替控制。；受理前有减速再移除仍加60%；受理后才减速不加，证明accepted snapshot。",
+          "tests": [
+            "TestCasterIndependentControlledDamage/SS-A15",
+            "TestCasterRepairNativeControlSnapshots/SS-A15_preserves_existing_freeze",
+            "TestCasterIndependentIceBurstNativeControl/SS-A15",
+            "TestCasterIndependentA15AcceptedControlSnapshot"
+          ]
+        },
+        {
+          "clause": "不移除或缩短已有冻结、减速，并保留冰爆术原有控制效果。",
+          "kind": "solo",
+          "assertion": "原生技能已有控制时实际伤害分别160%/190%，无控制100%；旧冻结实例与到期时间不移除不缩短；A15额外验证受理时快照而非命中后状态。；固定成功随机数实际冰爆伤害后原生冻结事件/状态仍存在，不以modifier字段代替控制。；受理前有减速再移除仍加60%；受理后才减速不加，证明accepted snapshot。",
+          "tests": [
+            "TestCasterIndependentControlledDamage/SS-A15",
+            "TestCasterRepairNativeControlSnapshots/SS-A15_preserves_existing_freeze",
+            "TestCasterIndependentIceBurstNativeControl/SS-A15",
+            "TestCasterIndependentA15AcceptedControlSnapshot"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A16",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentBurnSettlement/SS-A16",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_test.go",
+          "test": "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration/SS-A16",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "风焰术命中时，额外造成相当于目标身上由你施加的燃烧剩余伤害160%的火系伤害。",
+          "kind": "solo",
+          "assertion": "原生施法消费本源100剩余燃烧量，HP分别多80/100/160；无燃烧/异源不追加；ExpireAt和每跳值不变；伤害事件恰2次，重复同根/递归hook不再结算。",
+          "tests": [
+            "TestCasterIndependentBurnSettlement/SS-A16",
+            "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration/SS-A16"
+          ]
+        },
+        {
+          "clause": "燃烧不消失、不缩短。",
+          "kind": "solo",
+          "assertion": "原生施法消费本源100剩余燃烧量，HP分别多80/100/160；无燃烧/异源不追加；ExpireAt和每跳值不变；伤害事件恰2次，重复同根/递归hook不再结算。",
+          "tests": [
+            "TestCasterIndependentBurnSettlement/SS-A16",
+            "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration/SS-A16"
+          ]
+        },
+        {
+          "clause": "每次施法对同一敌人只触发一次，追加伤害不会再次触发本效果。",
+          "kind": "solo",
+          "assertion": "原生施法消费本源100剩余燃烧量，HP分别多80/100/160；无燃烧/异源不追加；ExpireAt和每跳值不变；伤害事件恰2次，重复同根/递归hook不再结算。",
+          "tests": [
+            "TestCasterIndependentBurnSettlement/SS-A16",
+            "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration/SS-A16"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A17",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentGuaranteedStatusLearning/SS-A17",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA17BurnTickAndDuration",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_repair_test.go",
+          "test": "TestCasterRepairGuaranteedStatusRetainsImmunity/SS-A17",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "已学习燃烧时，风焰术每次命中必定附加当前等级的燃烧，仍遵守目标免疫规则。",
+          "kind": "solo",
+          "assertion": "已学/未学燃烧区分；原生风焰应用燃烧后实际tickStatus生命损失为182%，持续时间与原生燃烧相同；极高抗性保证但硬免疫不绕过。",
+          "tests": [
+            "TestCasterIndependentGuaranteedStatusLearning/SS-A17",
+            "TestCasterIndependentA17BurnTickAndDuration",
+            "TestCasterRepairGuaranteedStatusRetainsImmunity/SS-A17"
+          ]
+        },
+        {
+          "clause": "这份燃烧每跳伤害提高82%，持续时间与刷新规则不变。",
+          "kind": "solo",
+          "assertion": "已学/未学燃烧区分；原生风焰应用燃烧后实际tickStatus生命损失为182%，持续时间与原生燃烧相同；极高抗性保证但硬免疫不绕过。",
+          "tests": [
+            "TestCasterIndependentGuaranteedStatusLearning/SS-A17",
+            "TestCasterIndependentA17BurnTickAndDuration",
+            "TestCasterRepairGuaranteedStatusRetainsImmunity/SS-A17"
+          ]
+        },
+        {
+          "clause": "搭配“长焰尽算”时，先施加或刷新燃烧，再结算剩余燃烧伤害。",
+          "kind": "combination",
+          "assertion": "合法装备组合通过原生消费者验证；单列，不增加独立覆盖分子。",
+          "tests": [
+            "TestCasterRepairFlameWidthAndNativeBurnCombination"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A18",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDirectDamage/SS-A18",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentAreaConsumers/SS-A18",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA18NativeBurnProbability",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "风焰术的圆形作用范围扩大80%，直接伤害提高40%，原有燃烧概率不变。",
+          "kind": "solo",
+          "assertion": "原生范围内/边缘/边界外实体实际HP验证伤害及几何。A06半径165与120/145%；A13半径100与185/165%；A18半径270与140%；A20半径210与155%、实付MP不变及实际CD80%；A21半径150与180/120%。；相同随机种子、真实已学风焰燃烧被动的有无威能对照，状态应用结果与ExpireAt不变。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A18",
+            "TestCasterIndependentAreaConsumers/SS-A18",
+            "TestCasterIndependentA18NativeBurnProbability"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A19",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA19Opening/10421",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA19Opening/10405",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA19NewBurnOnly",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "你成功施加燃烧时，立即额外造成相当于这份燃烧初始总伤害65%的火系伤害，燃烧本身完整保留。",
+          "kind": "solo",
+          "assertion": "手动燃烧/原生风焰被动燃烧在真实提交后HP多初始总量65%；总燃烧和ExpireAt完整保留；重复施法不重结算旧实例（组合部分另列）。；原生燃烧OverlayCoexist连续两次真实施法即刻结算量相等，不重新结算旧燃烧。",
+          "tests": [
+            "TestCasterIndependentA19Opening/10421",
+            "TestCasterIndependentA19Opening/10405",
+            "TestCasterIndependentA19NewBurnOnly"
+          ]
+        },
+        {
+          "clause": "手动燃烧和风焰术附加的燃烧均可触发。",
+          "kind": "solo",
+          "assertion": "手动燃烧/原生风焰被动燃烧在真实提交后HP多初始总量65%；总燃烧和ExpireAt完整保留；重复施法不重结算旧实例（组合部分另列）。；原生燃烧OverlayCoexist连续两次真实施法即刻结算量相等，不重新结算旧燃烧。",
+          "tests": [
+            "TestCasterIndependentA19Opening/10421",
+            "TestCasterIndependentA19Opening/10405",
+            "TestCasterIndependentA19NewBurnOnly"
+          ]
+        },
+        {
+          "clause": "每次施法对同一敌人只触发一次。",
+          "kind": "solo",
+          "assertion": "手动燃烧/原生风焰被动燃烧在真实提交后HP多初始总量65%；总燃烧和ExpireAt完整保留；重复施法不重结算旧实例（组合部分另列）。；原生燃烧OverlayCoexist连续两次真实施法即刻结算量相等，不重新结算旧燃烧。",
+          "tests": [
+            "TestCasterIndependentA19Opening/10421",
+            "TestCasterIndependentA19Opening/10405",
+            "TestCasterIndependentA19NewBurnOnly"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A20",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDirectDamage/SS-A20",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentAreaConsumers/SS-A20",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "暴雪术直接伤害提高55%，范围半径扩大40%，冷却时间缩短20%，不增加法力消耗。",
+          "kind": "solo",
+          "assertion": "原生范围内/边缘/边界外实体实际HP验证伤害及几何。A06半径165与120/145%；A13半径100与185/165%；A18半径270与140%；A20半径210与155%、实付MP不变及实际CD80%；A21半径150与180/120%。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A20",
+            "TestCasterIndependentAreaConsumers/SS-A20"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A21",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDirectDamage/SS-A21",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentAreaConsumers/SS-A21",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "暴雪术不改变原有半径。",
+          "kind": "solo",
+          "assertion": "原生范围内/边缘/边界外实体实际HP验证伤害及几何。A06半径165与120/145%；A13半径100与185/165%；A18半径270与140%；A20半径210与155%、实付MP不变及实际CD80%；A21半径150与180/120%。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A21",
+            "TestCasterIndependentAreaConsumers/SS-A21"
+          ]
+        },
+        {
+          "clause": "原半径内侧三分之二区域的直接伤害提高80%，其余区域提高20%。",
+          "kind": "solo",
+          "assertion": "原生范围内/边缘/边界外实体实际HP验证伤害及几何。A06半径165与120/145%；A13半径100与185/165%；A18半径270与140%；A20半径210与155%、实付MP不变及实际CD80%；A21半径150与180/120%。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A21",
+            "TestCasterIndependentAreaConsumers/SS-A21"
+          ]
+        },
+        {
+          "clause": "扩圈效果增加的外圈也获得20%加成。",
+          "kind": "solo",
+          "assertion": "原生范围内/边缘/边界外实体实际HP验证伤害及几何。A06半径165与120/145%；A13半径100与185/165%；A18半径270与140%；A20半径210与155%、实付MP不变及实际CD80%；A21半径150与180/120%。",
+          "tests": [
+            "TestCasterIndependentDirectDamage/SS-A21",
+            "TestCasterIndependentAreaConsumers/SS-A21"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A22",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentControlledDamage/SS-A22",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_repair_test.go",
+          "test": "TestCasterRepairNativeControlSnapshots/SS-A22_preserves_existing_freeze",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "暴雪术对已被冻结或减速的敌人，直接伤害提高90%。",
+          "kind": "solo",
+          "assertion": "原生技能已有控制时实际伤害分别160%/190%，无控制100%；旧冻结实例与到期时间不移除不缩短；A15额外验证受理时快照而非命中后状态。",
+          "tests": [
+            "TestCasterIndependentControlledDamage/SS-A22",
+            "TestCasterRepairNativeControlSnapshots/SS-A22_preserves_existing_freeze"
+          ]
+        },
+        {
+          "clause": "不新增区域效果，也不消耗或缩短已有控制。",
+          "kind": "solo",
+          "assertion": "原生技能已有控制时实际伤害分别160%/190%，无控制100%；旧冻结实例与到期时间不移除不缩短；A15额外验证受理时快照而非命中后状态。",
+          "tests": [
+            "TestCasterIndependentControlledDamage/SS-A22",
+            "TestCasterRepairNativeControlSnapshots/SS-A22_preserves_existing_freeze"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A23",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentFreezeAreas/SS-A23",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "冰封作用半径增加150，优先冻结主目标，并对最多4名其他敌人按原免疫规则施加冻结。",
+          "kind": "solo",
+          "assertion": "原生冰封目标中心分别150/100半径、保留主目标并最多4副目标，范围外无冻结，技能本身不捏造伤害。",
+          "tests": [
+            "TestCasterIndependentFreezeAreas/SS-A23"
+          ]
+        },
+        {
+          "clause": "搭配“寒封隔绝”时，作用半径为250，总目标上限仍为5。",
+          "kind": "combination",
+          "assertion": "合法装备组合通过原生消费者验证；单列，不增加独立覆盖分子。",
+          "tests": [
+            "TestCasterCombinationFreezeRadius250"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A24",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA24FreezeDamage",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA24DamageImmunity",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA24ControlImmunity",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "已学习冰箭术时，冰封保留原冻结，并对目标立即追加当前等级冰箭术基础伤害150%的冰系伤害。",
+          "kind": "solo",
+          "assertion": "实际冰封后子冰箭150%真实HP伤害，未学冰箭无额外伤害且不授予学习；冻结持续存在；控制免疫仍受伤，伤害免疫仍0且可冻结。",
+          "tests": [
+            "TestCasterIndependentA24FreezeDamage",
+            "TestCasterIndependentA24DamageImmunity",
+            "TestCasterIndependentA24ControlImmunity"
+          ]
+        },
+        {
+          "clause": "先判定冻结，再计算冰箭术的状态增伤。",
+          "kind": "solo",
+          "assertion": "实际冰封后子冰箭150%真实HP伤害，未学冰箭无额外伤害且不授予学习；冻结持续存在；控制免疫仍受伤，伤害免疫仍0且可冻结。",
+          "tests": [
+            "TestCasterIndependentA24FreezeDamage",
+            "TestCasterIndependentA24DamageImmunity",
+            "TestCasterIndependentA24ControlImmunity"
+          ]
+        },
+        {
+          "clause": "追加伤害不会打碎本次冰封，并享受冰箭术伤害加成和冰系被动。",
+          "kind": "solo",
+          "assertion": "实际冰封后子冰箭150%真实HP伤害，未学冰箭无额外伤害且不授予学习；冻结持续存在；控制免疫仍受伤，伤害免疫仍0且可冻结。",
+          "tests": [
+            "TestCasterIndependentA24FreezeDamage",
+            "TestCasterIndependentA24DamageImmunity",
+            "TestCasterIndependentA24ControlImmunity"
+          ]
+        },
+        {
+          "clause": "目标免疫冻结时仍可受到追加伤害，但伤害免疫仍有效。",
+          "kind": "solo",
+          "assertion": "实际冰封后子冰箭150%真实HP伤害，未学冰箭无额外伤害且不授予学习；冻结持续存在；控制免疫仍受伤，伤害免疫仍0且可冻结。",
+          "tests": [
+            "TestCasterIndependentA24FreezeDamage",
+            "TestCasterIndependentA24DamageImmunity",
+            "TestCasterIndependentA24ControlImmunity"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A25",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA25CrossElement",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA25BurnTick",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "火系伤害额外享受你已学习的寒冰之魂加成，冰系伤害额外享受你已学习的红莲之魂加成。",
+          "kind": "solo",
+          "assertion": "火/冰原生攻击各对照有无对面元素已学被动；一级额外4%实际HP，无被动0加成，每次仅1事件，不要求交替。；实际原生燃烧tickStatus同时享受已学冰魂4%加成。",
+          "tests": [
+            "TestCasterIndependentA25CrossElement",
+            "TestCasterIndependentA25BurnTick"
+          ]
+        },
+        {
+          "clause": "不需要交替施法，也不额外发动攻击。",
+          "kind": "solo",
+          "assertion": "火/冰原生攻击各对照有无对面元素已学被动；一级额外4%实际HP，无被动0加成，每次仅1事件，不要求交替。；实际原生燃烧tickStatus同时享受已学冰魂4%加成。",
+          "tests": [
+            "TestCasterIndependentA25CrossElement",
+            "TestCasterIndependentA25BurnTick"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A26",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA26Reflection",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "魔镜术成功抵抗魔法攻击时，向攻击者反射本次被抵抗伤害的120%，单次不超过你的最大生命18%。",
+          "kind": "solo",
+          "assertion": "真实resolveStrikeStatuses→afterStrikeStatuses魔镜抵抗100/3000攻击，敌HP下降min(抵抗量120%,自身MaxHP18%)；双方镜面无反射循环、伤害事件1次。",
+          "tests": [
+            "TestCasterIndependentA26Reflection"
+          ]
+        },
+        {
+          "clause": "反射可享受防御魔法与反射伤害加成。",
+          "kind": "solo",
+          "assertion": "真实resolveStrikeStatuses→afterStrikeStatuses魔镜抵抗100/3000攻击，敌HP下降min(抵抗量120%,自身MaxHP18%)；双方镜面无反射循环、伤害事件1次。",
+          "tests": [
+            "TestCasterIndependentA26Reflection"
+          ]
+        },
+        {
+          "clause": "搭配“镜面偏转”时，反射比例提高至180%，上限不变，反射不会再次触发反射。",
+          "kind": "combination",
+          "assertion": "合法装备组合通过原生消费者验证；单列，不增加独立覆盖分子。",
+          "tests": [
+            "TestCasterCombinationMirror180Cap"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A27",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentGrantedFireBasis/SS-A27",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA27OnlySuccessfulMoveAndCost",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "秘术：幻影成功移动后，在出发点周围半径180内立即造成火系爆炸，伤害为当前等级火弹术基础伤害的180%。",
+          "kind": "solo",
+          "assertion": "借用火弹0/1/3级对照真实原生伤害基础，未学用1级且不写入学习；A27成功位移出发点半径180、外181不受伤、单次180%；A28无增益可驱散也单次220%且无火弹AoE。；同点传送不生成爆炸；真正成功位移才伤害，实付原生费用与原生20秒CD不变。",
+          "tests": [
+            "TestCasterIndependentGrantedFireBasis/SS-A27",
+            "TestCasterIndependentA27OnlySuccessfulMoveAndCost"
+          ]
+        },
+        {
+          "clause": "未学火弹术时使用其1级伤害，不会因此学会该技能。",
+          "kind": "solo",
+          "assertion": "借用火弹0/1/3级对照真实原生伤害基础，未学用1级且不写入学习；A27成功位移出发点半径180、外181不受伤、单次180%；A28无增益可驱散也单次220%且无火弹AoE。；同点传送不生成爆炸；真正成功位移才伤害，实付原生费用与原生20秒CD不变。",
+          "tests": [
+            "TestCasterIndependentGrantedFireBasis/SS-A27",
+            "TestCasterIndependentA27OnlySuccessfulMoveAndCost"
+          ]
+        },
+        {
+          "clause": "爆炸享受幻影和火系伤害加成。",
+          "kind": "combination",
+          "assertion": "合法装备组合通过原生消费者验证；单列，不增加独立覆盖分子。",
+          "tests": [
+            "TestCasterCombinationPhantomDamage"
+          ]
+        },
+        {
+          "clause": "每次成功移动只触发一次，不会再触发位移，也没有额外冷却。",
+          "kind": "solo",
+          "assertion": "借用火弹0/1/3级对照真实原生伤害基础，未学用1级且不写入学习；A27成功位移出发点半径180、外181不受伤、单次180%；A28无增益可驱散也单次220%且无火弹AoE。；同点传送不生成爆炸；真正成功位移才伤害，实付原生费用与原生20秒CD不变。",
+          "tests": [
+            "TestCasterIndependentGrantedFireBasis/SS-A27",
+            "TestCasterIndependentA27OnlySuccessfulMoveAndCost"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A28",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentGrantedFireBasis/SS-A28",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA28DefenseKindsAndAdmission",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "秘术：消除完成驱散与偷取后，额外造成当前等级火弹术基础伤害220%的魔法伤害。",
+          "kind": "solo",
+          "assertion": "借用火弹0/1/3级对照真实原生伤害基础，未学用1级且不写入学习；A27成功位移出发点半径180、外181不受伤、单次180%；A28无增益可驱散也单次220%且无火弹AoE。；拥有0/1/3/4种防御状态实际HP验证220/270/370/370%上限；451距离原生拒绝且不扣法力。",
+          "tests": [
+            "TestCasterIndependentGrantedFireBasis/SS-A28",
+            "TestCasterIndependentA28DefenseKindsAndAdmission"
+          ]
+        },
+        {
+          "clause": "未学火弹术时使用其1级伤害，不会因此学会该技能。",
+          "kind": "solo",
+          "assertion": "借用火弹0/1/3级对照真实原生伤害基础，未学用1级且不写入学习；A27成功位移出发点半径180、外181不受伤、单次180%；A28无增益可驱散也单次220%且无火弹AoE。；拥有0/1/3/4种防御状态实际HP验证220/270/370/370%上限；451距离原生拒绝且不扣法力。",
+          "tests": [
+            "TestCasterIndependentGrantedFireBasis/SS-A28",
+            "TestCasterIndependentA28DefenseKindsAndAdmission"
+          ]
+        },
+        {
+          "clause": "你每拥有一种防御魔法，再增加50%火弹术基础伤害，最多计算3种，最高370%。",
+          "kind": "solo",
+          "assertion": "借用火弹0/1/3级对照真实原生伤害基础，未学用1级且不写入学习；A27成功位移出发点半径180、外181不受伤、单次180%；A28无增益可驱散也单次220%且无火弹AoE。；拥有0/1/3/4种防御状态实际HP验证220/270/370/370%上限；451距离原生拒绝且不扣法力。",
+          "tests": [
+            "TestCasterIndependentGrantedFireBasis/SS-A28",
+            "TestCasterIndependentA28DefenseKindsAndAdmission"
+          ]
+        },
+        {
+          "clause": "享受消除和秘术伤害加成，不视为施放火弹术。",
+          "kind": "solo",
+          "assertion": "借用火弹0/1/3级对照真实原生伤害基础，未学用1级且不写入学习；A27成功位移出发点半径180、外181不受伤、单次180%；A28无增益可驱散也单次220%且无火弹AoE。；拥有0/1/3/4种防御状态实际HP验证220/270/370/370%上限；451距离原生拒绝且不扣法力。",
+          "tests": [
+            "TestCasterIndependentGrantedFireBasis/SS-A28",
+            "TestCasterIndependentA28DefenseKindsAndAdmission"
+          ]
+        },
+        {
+          "clause": "没有增益可驱散的敌人也可被攻击，仍须满足原有射程和目标限制。",
+          "kind": "solo",
+          "assertion": "借用火弹0/1/3级对照真实原生伤害基础，未学用1级且不写入学习；A27成功位移出发点半径180、外181不受伤、单次180%；A28无增益可驱散也单次220%且无火弹AoE。；拥有0/1/3/4种防御状态实际HP验证220/270/370/370%上限；451距离原生拒绝且不扣法力。",
+          "tests": [
+            "TestCasterIndependentGrantedFireBasis/SS-A28",
+            "TestCasterIndependentA28DefenseKindsAndAdmission"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A29",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentReadyDamage/SS-A29",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA29ReadyKinds",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "秘术：集中、释能或瞬发强化一次伤害技能时，该次技能额外获得66%的直接伤害加成。",
+          "kind": "solo",
+          "assertion": "集中/释能/瞬发各自真实施法伤害额外66%；多种原状态同时存在仍仅一次66%；无状态不加伤，原准备状态随技能消费。",
+          "tests": [
+            "TestCasterIndependentReadyDamage/SS-A29",
+            "TestCasterIndependentA29ReadyKinds"
+          ]
+        },
+        {
+          "clause": "同一次技能即使受到多种秘术强化，也只获得一次66%加成。",
+          "kind": "solo",
+          "assertion": "集中/释能/瞬发各自真实施法伤害额外66%；多种原状态同时存在仍仅一次66%；无状态不加伤，原准备状态随技能消费。",
+          "tests": [
+            "TestCasterIndependentReadyDamage/SS-A29",
+            "TestCasterIndependentA29ReadyKinds"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-A30",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA30EchoConsumedOnce",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentA30DeadPrimaryNoTransfer",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "秘术：瞬发强化的下一次手动伤害技能命中后，对同场景内仍存活的原主目标，追加该技能基础伤害80%的攻击。",
+          "kind": "solo",
+          "assertion": "原生瞬发火球主目标多80%，副目标仅原伤；无瞬发/下次施法无追加，原状态消费；主目标首段死亡不转打副目标。",
+          "tests": [
+            "TestCasterIndependentA30EchoConsumedOnce",
+            "TestCasterIndependentA30DeadPrimaryNoTransfer"
+          ]
+        },
+        {
+          "clause": "每次瞬发只追加一次。",
+          "kind": "solo",
+          "assertion": "原生瞬发火球主目标多80%，副目标仅原伤；无瞬发/下次施法无追加，原状态消费；主目标首段死亡不转打副目标。",
+          "tests": [
+            "TestCasterIndependentA30EchoConsumedOnce",
+            "TestCasterIndependentA30DeadPrimaryNoTransfer"
+          ]
+        },
+        {
+          "clause": "追加攻击不附带控制或触发其他技能。",
+          "kind": "solo",
+          "assertion": "原生瞬发火球主目标多80%，副目标仅原伤；无瞬发/下次施法无追加，原状态消费；主目标首段死亡不转打副目标。",
+          "tests": [
+            "TestCasterIndependentA30EchoConsumedOnce",
+            "TestCasterIndependentA30DeadPrimaryNoTransfer"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-D01",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDefenseConditions/SS-D01",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D01/native",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D01/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D01/reflection",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "火盾生效期间，180距离内敌人对你造成的伤害降低28%。",
+          "kind": "solo",
+          "assertion": "真实resolveStrikeStatuses造成HP损失验证条件和失效：火盾近180内72%、远181无；冰盾>8%时45%、=8%不减；集中每击50%但上限22%MaxHP且不消耗；D06/D10无条件65%；D09本源燃烧60%、异源无且燃烧保留。；生产直接伤害、tickStatus持续伤害、emitReflectedDamage反射各路径实际HP均消费同一独立威能减伤；不以组合填覆盖。",
+          "tests": [
+            "TestCasterIndependentDefenseConditions/SS-D01",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D01/native",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D01/dot",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D01/reflection"
+          ]
+        },
+        {
+          "clause": "与“焚息护身”同时生效时，分别减伤，不直接相加。",
+          "kind": "solo",
+          "assertion": "真实resolveStrikeStatuses造成HP损失验证条件和失效：火盾近180内72%、远181无；冰盾>8%时45%、=8%不减；集中每击50%但上限22%MaxHP且不消耗；D06/D10无条件65%；D09本源燃烧60%、异源无且燃烧保留。；生产直接伤害、tickStatus持续伤害、emitReflectedDamage反射各路径实际HP均消费同一独立威能减伤；不以组合填覆盖。",
+          "tests": [
+            "TestCasterIndependentDefenseConditions/SS-D01",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D01/native",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D01/dot",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D01/reflection"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-D02",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDefenseConditions/SS-D02",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D02/native",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D02/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D02/reflection",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "冰盾生效期间，单次将承受的伤害经过前面的减伤后，若仍超过最大生命的8%，该次伤害再降低55%。",
+          "kind": "solo",
+          "assertion": "真实resolveStrikeStatuses造成HP损失验证条件和失效：火盾近180内72%、远181无；冰盾>8%时45%、=8%不减；集中每击50%但上限22%MaxHP且不消耗；D06/D10无条件65%；D09本源燃烧60%、异源无且燃烧保留。；生产直接伤害、tickStatus持续伤害、emitReflectedDamage反射各路径实际HP均消费同一独立威能减伤；不以组合填覆盖。",
+          "tests": [
+            "TestCasterIndependentDefenseConditions/SS-D02",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D02/native",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D02/dot",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D02/reflection"
+          ]
+        },
+        {
+          "clause": "判定在护盾吸收前进行，无额外冷却。",
+          "kind": "solo",
+          "assertion": "真实resolveStrikeStatuses造成HP损失验证条件和失效：火盾近180内72%、远181无；冰盾>8%时45%、=8%不减；集中每击50%但上限22%MaxHP且不消耗；D06/D10无条件65%；D09本源燃烧60%、异源无且燃烧保留。；生产直接伤害、tickStatus持续伤害、emitReflectedDamage反射各路径实际HP均消费同一独立威能减伤；不以组合填覆盖。",
+          "tests": [
+            "TestCasterIndependentDefenseConditions/SS-D02",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D02/native",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D02/dot",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D02/reflection"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-D03",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentD03NativeDefenseConsumers",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D03/native",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingUntypedPoisonIsNotMirrorMagic",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentD03ChanceCap",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "魔镜术生效期间，受到的魔法伤害额外降低75%。",
+          "kind": "solo",
+          "assertion": "真实原生镜/火盾/冰盾状态应用保持到期时间；火盾减伤30→45与反射增幅到真实HP；镜/冰盾+30百分点命中实际抵抗/冻结随机阈值；真实魔法减伤75%、非魔法毒不被误算。；原生15级魔镜+威能仍概率100%，高随机阈值实际抵抗并反射。",
+          "tests": [
+            "TestCasterIndependentD03NativeDefenseConsumers",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D03/native",
+            "TestLegendaryIncomingUntypedPoisonIsNotMirrorMagic",
+            "TestCasterIndependentD03ChanceCap"
+          ]
+        },
+        {
+          "clause": "自身防御魔法的抗性数值和反射伤害提高50%，冻结或抵抗概率提高30个百分点，最高100%。",
+          "kind": "solo",
+          "assertion": "真实原生镜/火盾/冰盾状态应用保持到期时间；火盾减伤30→45与反射增幅到真实HP；镜/冰盾+30百分点命中实际抵抗/冻结随机阈值；真实魔法减伤75%、非魔法毒不被误算。；原生15级魔镜+威能仍概率100%，高随机阈值实际抵抗并反射。",
+          "tests": [
+            "TestCasterIndependentD03NativeDefenseConsumers",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D03/native",
+            "TestLegendaryIncomingUntypedPoisonIsNotMirrorMagic",
+            "TestCasterIndependentD03ChanceCap"
+          ]
+        },
+        {
+          "clause": "包括偷取的防御魔法。",
+          "kind": "combination",
+          "assertion": "合法装备组合通过原生消费者验证；单列，不增加独立覆盖分子。",
+          "tests": [
+            "TestCasterCombinationMirror180Cap",
+            "TestCasterCombinationStolenShieldKeepsBalance"
+          ]
+        },
+        {
+          "clause": "持续时间与同名状态覆盖规则不变，不补回已消耗的护盾。",
+          "kind": "solo",
+          "assertion": "真实原生镜/火盾/冰盾状态应用保持到期时间；火盾减伤30→45与反射增幅到真实HP；镜/冰盾+30百分点命中实际抵抗/冻结随机阈值；真实魔法减伤75%、非魔法毒不被误算。；原生15级魔镜+威能仍概率100%，高随机阈值实际抵抗并反射。",
+          "tests": [
+            "TestCasterIndependentD03NativeDefenseConsumers",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D03/native",
+            "TestLegendaryIncomingUntypedPoisonIsNotMirrorMagic",
+            "TestCasterIndependentD03ChanceCap"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-D04",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentPassiveConsumers/SS-D04",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "最大生命提高30%。",
+          "kind": "solo",
+          "assertion": "refreshStats后真实MaxHP分别130/128/130%，U04真实像素移速140%且允许额外移动预算；脱装刷新恢复原值，无需命中/低蓝触发。",
+          "tests": [
+            "TestCasterIndependentPassiveConsumers/SS-D04"
+          ]
+        },
+        {
+          "clause": "秘术：幻影造成或派生的伤害提高30%。",
+          "kind": "combination",
+          "assertion": "合法装备组合通过原生消费者验证；单列，不增加独立覆盖分子。",
+          "tests": [
+            "TestCasterCombinationPhantomDamage"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-D05",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDefenseConditions/SS-D05",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D05/native",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D05/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D05/reflection",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "秘术：集中的待生效状态存在时，每次受到伤害可减免50%，但每次最多减免最大生命的22%。",
+          "kind": "solo",
+          "assertion": "真实resolveStrikeStatuses造成HP损失验证条件和失效：火盾近180内72%、远181无；冰盾>8%时45%、=8%不减；集中每击50%但上限22%MaxHP且不消耗；D06/D10无条件65%；D09本源燃烧60%、异源无且燃烧保留。；生产直接伤害、tickStatus持续伤害、emitReflectedDamage反射各路径实际HP均消费同一独立威能减伤；不以组合填覆盖。",
+          "tests": [
+            "TestCasterIndependentDefenseConditions/SS-D05",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D05/native",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D05/dot",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D05/reflection"
+          ]
+        },
+        {
+          "clause": "受击不会消耗集中效果，无内置冷却。",
+          "kind": "solo",
+          "assertion": "真实resolveStrikeStatuses造成HP损失验证条件和失效：火盾近180内72%、远181无；冰盾>8%时45%、=8%不减；集中每击50%但上限22%MaxHP且不消耗；D06/D10无条件65%；D09本源燃烧60%、异源无且燃烧保留。；生产直接伤害、tickStatus持续伤害、emitReflectedDamage反射各路径实际HP均消费同一独立威能减伤；不以组合填覆盖。",
+          "tests": [
+            "TestCasterIndependentDefenseConditions/SS-D05",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D05/native",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D05/dot",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D05/reflection"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-D06",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentFreezeAreas/SS-D06",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDefenseConditions/SS-D06",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D06/native",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D06/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D06/reflection",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "冰封改为以主目标为中心、半径100的范围冻结，优先保留主目标，最多影响5名敌人，仍遵守控制免疫规则。",
+          "kind": "solo",
+          "assertion": "原生冰封目标中心分别150/100半径、保留主目标并最多4副目标，范围外无冻结，技能本身不捏造伤害。；真实resolveStrikeStatuses造成HP损失验证条件和失效：火盾近180内72%、远181无；冰盾>8%时45%、=8%不减；集中每击50%但上限22%MaxHP且不消耗；D06/D10无条件65%；D09本源燃烧60%、异源无且燃烧保留。；生产直接伤害、tickStatus持续伤害、emitReflectedDamage反射各路径实际HP均消费同一独立威能减伤；不以组合填覆盖。",
+          "tests": [
+            "TestCasterIndependentFreezeAreas/SS-D06",
+            "TestCasterIndependentDefenseConditions/SS-D06",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D06/native",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D06/dot",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D06/reflection"
+          ]
+        },
+        {
+          "clause": "装备期间受到的伤害降低35%，不要求成功冻结敌人。",
+          "kind": "solo",
+          "assertion": "原生冰封目标中心分别150/100半径、保留主目标并最多4副目标，范围外无冻结，技能本身不捏造伤害。；真实resolveStrikeStatuses造成HP损失验证条件和失效：火盾近180内72%、远181无；冰盾>8%时45%、=8%不减；集中每击50%但上限22%MaxHP且不消耗；D06/D10无条件65%；D09本源燃烧60%、异源无且燃烧保留。；生产直接伤害、tickStatus持续伤害、emitReflectedDamage反射各路径实际HP均消费同一独立威能减伤；不以组合填覆盖。",
+          "tests": [
+            "TestCasterIndependentFreezeAreas/SS-D06",
+            "TestCasterIndependentDefenseConditions/SS-D06",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D06/native",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D06/dot",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D06/reflection"
+          ]
+        },
+        {
+          "clause": "搭配“冰封广散”时，作用半径为250。",
+          "kind": "combination",
+          "assertion": "合法装备组合通过原生消费者验证；单列，不增加独立覆盖分子。",
+          "tests": [
+            "TestCasterCombinationFreezeRadius250"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-D07",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentPassiveConsumers/SS-D07",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentD07NativeShields",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "火盾与冰盾可同时生效，保留各自原有的抗性、反射和冻结效果。",
+          "kind": "solo",
+          "assertion": "refreshStats后真实MaxHP分别130/128/130%，U04真实像素移速140%且允许额外移动预算；脱装刷新恢复原值，无需命中/低蓝触发。；实际连续火盾/冰盾施法共存，原替换矩阵不被全局污染；物理HP400而单冰盾700，真实火反射与冰反冻事件都执行（反射仍按原规则打碎新冻结）。",
+          "tests": [
+            "TestCasterIndependentPassiveConsumers/SS-D07",
+            "TestCasterIndependentD07NativeShields"
+          ]
+        },
+        {
+          "clause": "最大生命提高28%。",
+          "kind": "solo",
+          "assertion": "refreshStats后真实MaxHP分别130/128/130%，U04真实像素移速140%且允许额外移动预算；脱装刷新恢复原值，无需命中/低蓝触发。；实际连续火盾/冰盾施法共存，原替换矩阵不被全局污染；物理HP400而单冰盾700，真实火反射与冰反冻事件都执行（反射仍按原规则打碎新冻结）。",
+          "tests": [
+            "TestCasterIndependentPassiveConsumers/SS-D07",
+            "TestCasterIndependentD07NativeShields"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-D08",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentPassiveConsumers/SS-D08",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentManaAndCooldown/SS-D08",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "最大生命提高30%，所有技能的法力消耗降低20%，不要求低法力，也不会将伤害转为法力消耗。",
+          "kind": "solo",
+          "assertion": "refreshStats后真实MaxHP分别130/128/130%，U04真实像素移速140%且允许额外移动预算；脱装刷新恢复原值，无需命中/低蓝触发。；六种原生法术实际MP支付与cooldown消费：D08统一80%、U07统一78%且MaxMP不变；U09仅指定四法术80%MP/70%CD，非指定仍原值，无延后返蓝。",
+          "tests": [
+            "TestCasterIndependentPassiveConsumers/SS-D08",
+            "TestCasterIndependentManaAndCooldown/SS-D08"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-D09",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDefenseConditions/SS-D09",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D09/native",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D09/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D09/reflection",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "带有你施加的燃烧的敌人对你造成伤害时，伤害降低40%。",
+          "kind": "solo",
+          "assertion": "真实resolveStrikeStatuses造成HP损失验证条件和失效：火盾近180内72%、远181无；冰盾>8%时45%、=8%不减；集中每击50%但上限22%MaxHP且不消耗；D06/D10无条件65%；D09本源燃烧60%、异源无且燃烧保留。；生产直接伤害、tickStatus持续伤害、emitReflectedDamage反射各路径实际HP均消费同一独立威能减伤；不以组合填覆盖。",
+          "tests": [
+            "TestCasterIndependentDefenseConditions/SS-D09",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D09/native",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D09/dot",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D09/reflection"
+          ]
+        },
+        {
+          "clause": "不消耗或缩短燃烧，无内置冷却。",
+          "kind": "solo",
+          "assertion": "真实resolveStrikeStatuses造成HP损失验证条件和失效：火盾近180内72%、远181无；冰盾>8%时45%、=8%不减；集中每击50%但上限22%MaxHP且不消耗；D06/D10无条件65%；D09本源燃烧60%、异源无且燃烧保留。；生产直接伤害、tickStatus持续伤害、emitReflectedDamage反射各路径实际HP均消费同一独立威能减伤；不以组合填覆盖。",
+          "tests": [
+            "TestCasterIndependentDefenseConditions/SS-D09",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D09/native",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D09/dot",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D09/reflection"
+          ]
+        },
+        {
+          "clause": "与烫手法衣同时生效时分别计算。",
+          "kind": "solo",
+          "assertion": "真实resolveStrikeStatuses造成HP损失验证条件和失效：火盾近180内72%、远181无；冰盾>8%时45%、=8%不减；集中每击50%但上限22%MaxHP且不消耗；D06/D10无条件65%；D09本源燃烧60%、异源无且燃烧保留。；生产直接伤害、tickStatus持续伤害、emitReflectedDamage反射各路径实际HP均消费同一独立威能减伤；不以组合填覆盖。",
+          "tests": [
+            "TestCasterIndependentDefenseConditions/SS-D09",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D09/native",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D09/dot",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D09/reflection"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-D10",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentDefenseConditions/SS-D10",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D10/native",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D10/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_test.go",
+          "test": "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D10/reflection",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentReadyDamage/SS-D10",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "装备期间受到的伤害降低35%。",
+          "kind": "solo",
+          "assertion": "真实resolveStrikeStatuses造成HP损失验证条件和失效：火盾近180内72%、远181无；冰盾>8%时45%、=8%不减；集中每击50%但上限22%MaxHP且不消耗；D06/D10无条件65%；D09本源燃烧60%、异源无且燃烧保留。；生产直接伤害、tickStatus持续伤害、emitReflectedDamage反射各路径实际HP均消费同一独立威能减伤；不以组合填覆盖。；实际释能消费后的单次伤害额外35%，无释能不加伤。",
+          "tests": [
+            "TestCasterIndependentDefenseConditions/SS-D10",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D10/native",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D10/dot",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D10/reflection",
+            "TestCasterIndependentReadyDamage/SS-D10"
+          ]
+        },
+        {
+          "clause": "秘术：释能直接强化的那一次伤害技能，额外获得35%的直接伤害加成。",
+          "kind": "solo",
+          "assertion": "真实resolveStrikeStatuses造成HP损失验证条件和失效：火盾近180内72%、远181无；冰盾>8%时45%、=8%不减；集中每击50%但上限22%MaxHP且不消耗；D06/D10无条件65%；D09本源燃烧60%、异源无且燃烧保留。；生产直接伤害、tickStatus持续伤害、emitReflectedDamage反射各路径实际HP均消费同一独立威能减伤；不以组合填覆盖。；实际释能消费后的单次伤害额外35%，无释能不加伤。",
+          "tests": [
+            "TestCasterIndependentDefenseConditions/SS-D10",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D10/native",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D10/dot",
+            "TestLegendaryIncomingAllDamageConsumerMatrix/SS-D10/reflection",
+            "TestCasterIndependentReadyDamage/SS-D10"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-U01",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentU01Teleport",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentU01RetainsNativeMovementRule",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "秘术：幻影冷却时间变为0，成功率变为100%，法力消耗降低15%。",
+          "kind": "solo",
+          "assertion": "原生rank1真实传送连续6次成功，同tick可再施放、实付85%MP；451距离/不可走落点/昏迷均不移动；普通定身与无威能原技能行为一致，不新增限制。",
+          "tests": [
+            "TestCasterIndependentU01Teleport",
+            "TestCasterIndependentU01RetainsNativeMovementRule"
+          ]
+        },
+        {
+          "clause": "保留原技能的施法与落点规则。",
+          "kind": "solo",
+          "assertion": "原生rank1真实传送连续6次成功，同tick可再施放、实付85%MP；451距离/不可走落点/昏迷均不移动；普通定身与无威能原技能行为一致，不新增限制。",
+          "tests": [
+            "TestCasterIndependentU01Teleport",
+            "TestCasterIndependentU01RetainsNativeMovementRule"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-U02",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentU02NativeSteal",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentU02AgedTransferredShield",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "秘术：消除的驱散成功率提高30个百分点，最高100%。",
+          "kind": "solo",
+          "assertion": "固定随机阈值基线20%失败、加30百分点50%成功的真实驱散；受害者盾移除，施法者得剩余30而非100盾，20秒剩余延至30秒。",
+          "tests": [
+            "TestCasterIndependentU02NativeSteal"
+          ]
+        },
+        {
+          "clause": "成功驱散防御魔法后，将其转移给你，剩余持续时间延长50%。",
+          "kind": "solo",
+          "assertion": "固定随机阈值基线20%失败、加30百分点50%成功的真实驱散；受害者盾移除，施法者得剩余30而非100盾，20秒剩余延至30秒。",
+          "tests": [
+            "TestCasterIndependentU02NativeSteal"
+          ]
+        },
+        {
+          "clause": "只保留原剩余护盾量，不补回已消耗部分，同名状态按原规则处理。",
+          "kind": "solo",
+          "assertion": "固定随机阈值基线20%失败、加30百分点50%成功的真实驱散；受害者盾移除，施法者得剩余30而非100盾，20秒剩余延至30秒。",
+          "tests": [
+            "TestCasterIndependentU02NativeSteal"
+          ]
+        },
+        {
+          "clause": "条件边界补充（不增加覆盖分母）。",
+          "kind": "solo",
+          "assertion": "先消耗盾70/100并让20秒状态经过5秒，再真实驱散转移；剩余15秒延至22.5秒且盾仍30。",
+          "tests": [
+            "TestCasterIndependentU02AgedTransferredShield"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-U03",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentU03Concentration",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentU03StatuslessDoesNotSpendFocus",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "秘术：集中保留延长下一技能状态持续时间的效果，并使该次技能的法力消耗降低55%。",
+          "kind": "solo",
+          "assertion": "真实集中→燃烧/冰封/火盾施法支付原费用45%，沿用原集中时长，集中消费且不是事后退款。；无状态的原生火球不享受集中费用折扣，也不消费集中。",
+          "tests": [
+            "TestCasterIndependentU03Concentration",
+            "TestCasterIndependentU03StatuslessDoesNotSpendFocus"
+          ]
+        },
+        {
+          "clause": "燃烧、冰封和防御魔法均可获得原有时长强化。",
+          "kind": "solo",
+          "assertion": "真实集中→燃烧/冰封/火盾施法支付原费用45%，沿用原集中时长，集中消费且不是事后退款。；无状态的原生火球不享受集中费用折扣，也不消费集中。",
+          "tests": [
+            "TestCasterIndependentU03Concentration",
+            "TestCasterIndependentU03StatuslessDoesNotSpendFocus"
+          ]
+        },
+        {
+          "clause": "集中随本次技能一并消耗，不是施法后返还法力。",
+          "kind": "solo",
+          "assertion": "真实集中→燃烧/冰封/火盾施法支付原费用45%，沿用原集中时长，集中消费且不是事后退款。；无状态的原生火球不享受集中费用折扣，也不消费集中。",
+          "tests": [
+            "TestCasterIndependentU03Concentration",
+            "TestCasterIndependentU03StatuslessDoesNotSpendFocus"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-U04",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentPassiveConsumers/SS-U04",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "移动速度提高40%，装备后持续生效，无需先命中敌人或进入冰雪区域。",
+          "kind": "solo",
+          "assertion": "refreshStats后真实MaxHP分别130/128/130%，U04真实像素移速140%且允许额外移动预算；脱装刷新恢复原值，无需命中/低蓝触发。",
+          "tests": [
+            "TestCasterIndependentPassiveConsumers/SS-U04"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-U05",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentU05NativeBurnDeath",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "你施加的燃烧造成击杀时，恢复最大法力的6%。",
+          "kind": "solo",
+          "assertion": "真正施加原生燃烧后tickStatus击杀，MP+MaxMP6%；重复同尸体tick不重复奖励。",
+          "tests": [
+            "TestCasterIndependentU05NativeBurnDeath"
+          ]
+        },
+        {
+          "clause": "燃烧剩余伤害结算和焰终回响造成的击杀也可触发。",
+          "kind": "solo",
+          "assertion": "真正施加原生燃烧后tickStatus击杀，MP+MaxMP6%；重复同尸体tick不重复奖励。",
+          "tests": [
+            "TestCasterIndependentU05NativeBurnDeath"
+          ]
+        },
+        {
+          "clause": "每次死亡只奖励一次，无内置冷却。",
+          "kind": "solo",
+          "assertion": "真正施加原生燃烧后tickStatus击杀，MP+MaxMP6%；重复同尸体tick不重复奖励。",
+          "tests": [
+            "TestCasterIndependentU05NativeBurnDeath"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-U06",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentU06EmptyRefund",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "火球术或冰爆术未命中任何敌人时，返还本次实际消耗法力的100%，并使本次剩余冷却缩短80%。",
+          "kind": "solo",
+          "assertion": "原生火球选点/自中心冰爆无敌目标结算返还实付100%并实际CD20%；命中不退款/CD不变；重复推进无二次返还。",
+          "tests": [
+            "TestCasterIndependentU06EmptyRefund"
+          ]
+        },
+        {
+          "clause": "每次施法只返还一次，无额外冷却。",
+          "kind": "solo",
+          "assertion": "原生火球选点/自中心冰爆无敌目标结算返还实付100%并实际CD20%；命中不退款/CD不变；重复推进无二次返还。",
+          "tests": [
+            "TestCasterIndependentU06EmptyRefund"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-U07",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentManaAndCooldown/SS-U07",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "所有技能的法力消耗降低22%，装备后持续生效。",
+          "kind": "solo",
+          "assertion": "六种原生法术实际MP支付与cooldown消费：D08统一80%、U07统一78%且MaxMP不变；U09仅指定四法术80%MP/70%CD，非指定仍原值，无延后返蓝。",
+          "tests": [
+            "TestCasterIndependentManaAndCooldown/SS-U07"
+          ]
+        },
+        {
+          "clause": "不增加最大法力，也不产生返还法力。",
+          "kind": "solo",
+          "assertion": "六种原生法术实际MP支付与cooldown消费：D08统一80%、U07统一78%且MaxMP不变；U09仅指定四法术80%MP/70%CD，非指定仍原值，无延后返蓝。",
+          "tests": [
+            "TestCasterIndependentManaAndCooldown/SS-U07"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-U08",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentU08MirrorLifetime",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "魔镜术生效时，清除你已有的减速。",
+          "kind": "solo",
+          "assertion": "原生镜应用清除既有减速，实际applyStatusDef新减速拒绝；移除镜后减速重新生效。",
+          "tests": [
+            "TestCasterIndependentU08MirrorLifetime"
+          ]
+        },
+        {
+          "clause": "魔镜术状态持续期间，你免疫新的减速。",
+          "kind": "solo",
+          "assertion": "原生镜应用清除既有减速，实际applyStatusDef新减速拒绝；移除镜后减速重新生效。",
+          "tests": [
+            "TestCasterIndependentU08MirrorLifetime"
+          ]
+        },
+        {
+          "clause": "保护与原魔镜状态同步结束。",
+          "kind": "solo",
+          "assertion": "原生镜应用清除既有减速，实际applyStatusDef新减速拒绝；移除镜后减速重新生效。",
+          "tests": [
+            "TestCasterIndependentU08MirrorLifetime"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-U09",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentManaAndCooldown/SS-U09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "火球术、冰爆术、风焰术和暴雪术的冷却时间缩短30%，法力消耗降低20%。",
+          "kind": "solo",
+          "assertion": "六种原生法术实际MP支付与cooldown消费：D08统一80%、U07统一78%且MaxMP不变；U09仅指定四法术80%MP/70%CD，非指定仍原值，无延后返蓝。",
+          "tests": [
+            "TestCasterIndependentManaAndCooldown/SS-U09"
+          ]
+        },
+        {
+          "clause": "装备后持续生效，无需连击。",
+          "kind": "solo",
+          "assertion": "六种原生法术实际MP支付与cooldown消费：D08统一80%、U07统一78%且MaxMP不变；U09仅指定四法术80%MP/70%CD，非指定仍原值，无延后返蓝。",
+          "tests": [
+            "TestCasterIndependentManaAndCooldown/SS-U09"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "SS-U10",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+          "test": "TestCasterIndependentU10Admission",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "所有以敌人为目标且有施法距离的法术，射程提高60%，装备后持续生效，不需要秘术：瞬发。",
+          "kind": "solo",
+          "assertion": "原生450法术在719距离装备后受理并伤害、未装拒绝不扣费；自身冰爆101距离仍不命中，未扩半径。",
+          "tests": [
+            "TestCasterIndependentU10Admission"
+          ]
+        },
+        {
+          "clause": "以自身为中心的技能不增加范围半径。",
+          "kind": "solo",
+          "assertion": "原生450法术在719距离装备后受理并伤害、未装拒绝不扣费；自身冰爆101距离仍不命中，未扩半径。",
+          "tests": [
+            "TestCasterIndependentU10Admission"
+          ]
+        }
+      ]
+    }
+  ],
+  "combination_tests": [
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+      "test": "TestCasterCombinationPhantomDamage",
+      "power_ids": [
+        "SS-A27",
+        "SS-D04"
+      ],
+      "status": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+      "test": "TestCasterCombinationDispelSeesSameCastStolenDefense",
+      "power_ids": [
+        "SS-A28",
+        "SS-U02"
+      ],
+      "status": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+      "test": "TestCasterCombinationFreezeRadius250",
+      "power_ids": [
+        "SS-A23",
+        "SS-D06"
+      ],
+      "status": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+      "test": "TestCasterCombinationMirror180Cap",
+      "power_ids": [
+        "SS-A26",
+        "SS-D03"
+      ],
+      "status": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+      "test": "TestCasterCombinationFreezeArrowMastery",
+      "power_ids": [
+        "SS-A24",
+        "SS-A09"
+      ],
+      "status": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+      "test": "TestCasterCombinationBurnKillRewards",
+      "power_ids": [
+        "SS-U05",
+        "SS-A02",
+        "SS-A19"
+      ],
+      "status": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+      "test": "TestCasterCombinationFireBoltSplashSettlement",
+      "power_ids": [
+        "SS-A03",
+        "SS-A02",
+        "SS-A25"
+      ],
+      "status": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_caster_independent_test.go",
+      "test": "TestCasterCombinationStolenShieldKeepsBalance",
+      "power_ids": [
+        "SS-U02",
+        "SS-D03"
+      ],
+      "status": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_caster_repair_test.go",
+      "test": "TestCasterRepairFlameWidthAndNativeBurnCombination",
+      "power_ids": [
+        "SS-A18",
+        "SS-A17",
+        "SS-A16"
+      ],
+      "status": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_repair_integration_test.go",
+      "test": "TestLegendaryRepairFireballChildCenterTriple",
+      "power_ids": [
+        "SS-A04",
+        "SS-A06",
+        "SS-A30"
+      ],
+      "status": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_caster_review_test.go",
+      "test": "TestCasterReviewFireballEchoRetainsOriginalPrimary",
+      "power_ids": [
+        "SS-A04",
+        "SS-A05"
+      ],
+      "status": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_caster_repair_test.go",
+      "test": "TestCasterRepairRangeThresholdAndWideAreaComposition",
+      "power_ids": [
+        "SS-A08",
+        "SS-U10",
+        "SS-A18",
+        "TY-A04"
+      ],
+      "status": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_caster_repair_test.go",
+      "test": "TestCasterRepairNewBurnOnlyAndElementalSharing",
+      "power_ids": [
+        "SS-A19",
+        "SS-A25"
+      ],
+      "status": "pass"
+    }
+  ],
+  "validation": {
+    "result": "pass",
+    "go_toolchain": "/workspace/shared/toolchains/go/bin/go",
+    "base_revision": "a1da69aae0c63061d102a8a0e10b4c1b2335db46",
+    "runtime_fix_revision": "6431d37ef1012c85c7cdfdd7826a9ac9a015cb3b",
+    "runs": [
+      "/workspace/scratch/1cc826cfb9aa/astra-audit/sorcerer-manifest-focused.jsonl",
+      "/workspace/scratch/1cc826cfb9aa/astra-audit/sorcerer-extra-focused.jsonl",
+      "/workspace/scratch/1cc826cfb9aa/astra-audit/sorcerer-extra-boundaries.jsonl"
+    ],
+    "independent_power_count": 50,
+    "denominator": 50,
+    "power_case_coverage_percent": 100,
+    "go_line_or_branch_coverage_percent": null,
+    "passed_named_tests_and_subtests_in_runs": 328,
+    "description_clarification": "SS-U01 retains the original skill cast and landing rules. Movement-only root intentionally does not add a new cast ban; no runtime restriction changed."
+  }
+}

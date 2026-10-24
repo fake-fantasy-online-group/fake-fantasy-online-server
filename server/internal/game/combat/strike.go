@@ -20,10 +20,12 @@ type Blow struct {
 	FixedDefensePenetrationBP     int32
 	ElementReductionPenetrationBP int32
 	BaseDamageFlat                int32
+	AttackBaseFlat                int32
 	EffectiveSkillID              int32
 	LegendaryChild                bool
 	// LegendaryPayload carries a fixed non-critical approved power payload.
-	LegendaryPayload bool
+	LegendaryPayload            bool
+	SuppressLegendaryGeneration bool
 	// Additive critical multiplier BP: 2000 means 200% -> 220%.
 	CriticalBonusBP                        int32
 	SourceOffense, CurrentSourceOffense    *domain.CombatSourceSnapshotV5
@@ -45,6 +47,12 @@ type Blow struct {
 	Area             bool
 	HurtType         int32
 	SkillID          int32 // 0 = 普通攻击
+	// SourceSkillRange is the accepted source definition, not current distance
+	// or an unrelated root cast. Zero/absent does not establish ranged damage.
+	SourceSkillRange int32
+	// SourceTrap is defensive lineage only. It must not re-enable native trap
+	// half-damage rolls or offensive trap multipliers on a generated payload.
+	SourceTrap bool
 	// Magic 表示这是法系技能。**法系技能 100% 命中**（法杖平砍算物理, 照样 miss）。
 	Magic bool
 	// SkillPct 技能倍率, 百分比。0 视为 100。来自 ov_skilldesc 的「130%伤害」。
@@ -123,10 +131,10 @@ func CalculateStrike(a, d *entity.Entity, tr *HitTracker, b Blow, rng Rand) even
 	case b.Magic:
 		// 法系不判命中。
 		ev.Flag |= event.DamageMagic
-		if b.BaseDamageFlat == 0 {
+		if b.BaseDamageFlat == 0 && b.AttackBaseFlat == 0 {
 			dmg = RollMagicFixedDefense(a.Stats.MAtk, b.SkillPct, d.Stats.MDef, d.Stats.MagicResist)
 		}
-		if b.SkillPctDenominator > 0 && b.BaseDamageFlat == 0 {
+		if b.SkillPctDenominator > 0 && b.BaseDamageFlat == 0 && b.AttackBaseFlat == 0 {
 			dmg = RollMagicFixedDefenseFraction(a.Stats.MAtk, b.SkillPctNumerator, b.SkillPctDenominator, d.Stats.MDef, d.Stats.MagicResist)
 		}
 	default:
@@ -137,7 +145,7 @@ func CalculateStrike(a, d *entity.Entity, tr *HitTracker, b Blow, rng Rand) even
 			ev.DstHP = d.HP
 			return ev
 		}
-		if b.BaseDamageFlat != 0 {
+		if b.BaseDamageFlat != 0 || b.AttackBaseFlat != 0 {
 			dmg = 0 // evaluated once below
 		} else if b.SkillPctDenominator > 0 {
 			dmg = RollPhysicalSkillFraction(a.Stats.MinAtk, a.Stats.MaxAtk, d.Stats.PhysResist, b.SkillPctNumerator, b.SkillPctDenominator, rng)
@@ -146,7 +154,7 @@ func CalculateStrike(a, d *entity.Entity, tr *HitTracker, b Blow, rng Rand) even
 		}
 	}
 
-	if b.BaseDamageFlat != 0 && b.NativeDamageSnapshot == nil {
+	if (b.BaseDamageFlat != 0 || b.AttackBaseFlat != 0) && b.NativeDamageSnapshot == nil {
 		dmg = rollStrikeWithAddedBase(a.Stats, d.Stats, b, rng)
 	}
 

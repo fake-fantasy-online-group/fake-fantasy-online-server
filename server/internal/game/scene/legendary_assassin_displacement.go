@@ -24,7 +24,7 @@ func legendaryAssassinPullTransform(c *legendaryContext, d *domain.SkillDef) {
 	}
 }
 func legendaryAssassinPullPrepare(c *legendaryContext, d *domain.SkillDef) {
-	if d.ID != 10225 || c.Owner.Player.Char.Skills[10226] <= 0 {
+	if d.ID != 10225 || c.Power.ID == "CK-A30" && c.Owner.Player.Char.Skills[10226] <= 0 {
 		return
 	}
 	if c.Power.ID == "CK-A28" {
@@ -35,10 +35,12 @@ func legendaryAssassinPullPrepare(c *legendaryContext, d *domain.SkillDef) {
 	}
 }
 func legendaryAssassinPull(c *legendaryContext) {
-	if c.Skill != 10225 || c.Owner.Player.Char.Skills[10226] <= 0 {
+	if c.Skill != 10225 || c.Power.ID == "CK-A30" && c.Owner.Player.Char.Skills[10226] <= 0 {
 		return
 	}
-	if c.Power.ID == "CK-A28" && legendaryAssassinHas(c.Scene, c.Owner, "CK-A30") {
+	// A30 supersedes A28 only while its explicitly required passive is learned.
+	// Merely equipping an inactive A30 must not suppress A28's unconditional pull.
+	if c.Power.ID == "CK-A28" && c.Owner.Player.Char.Skills[10226] > 0 && legendaryAssassinHas(c.Scene, c.Owner, "CK-A30") {
 		return
 	}
 	seen := map[domain.EntityID]bool{}

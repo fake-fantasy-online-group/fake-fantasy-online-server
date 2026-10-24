@@ -87,10 +87,12 @@ func TestLegendaryCasterRemainingHealerDefenses(t *testing.T) {
 			case "YS-D09":
 				c.Owner.Status.Apply(domain.StatusDef{ID: 190100, SkillSnapshotID: 10330, DurationSec: 30}, s.tick, c.Owner.ID)
 				c.Skill = 0
+				c.IsBasic = true
 				if h.BeforeIncoming(c, 100) != 65 {
 					t.Fatal("needle basic defense missing")
 				}
 				c.Skill = 10401
+				c.IsBasic = false
 			case "YS-D10":
 				c.Target.Status.Apply(domain.StatusDef{ID: 190100, SkillSnapshotID: 10325, DurationSec: 30}, s.tick, c.Owner.ID)
 				if h.BeforeIncoming(c, 100) != 60 {

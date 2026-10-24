@@ -16,9 +16,13 @@ func (s *Scene) placeTrap(owner *entity.Entity, def domain.SkillDef, at domain.P
 }
 
 func (s *Scene) placeAssassinTrap(owner *entity.Entity, def domain.SkillDef, at domain.Pos, radius, statusDurationPct int32, generate bool, accepted ...*domain.CombatSourceSnapshotV5) {
-	source := s.captureCombatSourceV5(owner, def.UniqueInvisibleStart || entityInvisible(owner))
+	var source *domain.CombatSourceSnapshotV5
 	if len(accepted) > 0 && accepted[0] != nil {
 		source = accepted[0]
+	} else {
+		// Root admission and side placements already own an immutable source.
+		// Do not allocate a new snapshot only to discard it immediately.
+		source = s.captureCombatSourceV5(owner, def.UniqueInvisibleStart || entityInvisible(owner))
 	}
 	trap := &entity.Entity{
 		ID: s.alloc.Trap(), Kind: domain.KindTrap, Name: def.Name, Pos: at,
@@ -156,12 +160,12 @@ func (s *Scene) detectTraps(detector *entity.Entity, radius, chanceBP int32) {
 func (s *Scene) disarmTrap(detector *entity.Entity, trapID domain.EntityID, chanceBP int32) {
 	if detector != nil && legendaryAssassinHas(s, detector, "CK-U03") {
 		center := s.traps[trapID]
-		if center == nil || center.Trap == nil || center.Trap.Owner == detector.ID || !center.Trap.VisibleToPlayer(detector.ID) {
+		if center == nil || center.Trap == nil || !s.enemyTrapOwner(detector, center.Trap.Owner) || !center.Trap.VisibleToPlayer(detector.ID) {
 			return
 		}
 		ids := []domain.EntityID{}
 		for id, t := range s.traps {
-			if t.Trap != nil && t.Trap.Owner != detector.ID && t.Trap.VisibleToPlayer(detector.ID) && sqDist(center.Pos, t.Pos) <= 150*150 {
+			if t != nil && t.Trap != nil && s.enemyTrapOwner(detector, t.Trap.Owner) && t.Trap.VisibleToPlayer(detector.ID) && sqDist(center.Pos, t.Pos) <= 150*150 {
 				ids = append(ids, id)
 			}
 		}
@@ -220,4 +224,19 @@ func lesserTrapAttackStats(cast, current domain.Stats) domain.Stats {
 	cast.CritRate = min(cast.CritRate, current.CritRate)
 	cast.MCritRate = min(cast.MCritRate, current.MCritRate)
 	return cast
+}
+
+// Disarming is not an attack: preserve native visibility/success rules, while
+// excluding the caster and party-owned traps (including friendly summons).
+func (s *Scene) enemyTrapOwner(detector *entity.Entity, ownerID domain.EntityID) bool {
+	owner := s.entities[ownerID]
+	if detector == nil || owner == nil || owner.ID == detector.ID || sameParty(detector, owner) {
+		return false
+	}
+	if owner.Monster != nil && owner.Monster.Summoner != 0 {
+		if summoner := s.entities[owner.Monster.Summoner]; summoner != nil {
+			return summoner.ID != detector.ID && !sameParty(detector, summoner)
+		}
+	}
+	return true
 }

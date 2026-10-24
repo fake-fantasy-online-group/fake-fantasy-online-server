@@ -44,17 +44,45 @@ func legendaryCasterBurn(c *legendaryContext, target *entity.Entity) int64 {
 	return value
 }
 func legendaryCasterSkill(c *legendaryContext, skill domain.SkillID) (domain.SkillDef, bool) {
-	if c.Scene.skills == nil || c.Owner == nil || c.Owner.Player == nil || c.Owner.Player.Char == nil || c.Owner.Player.Char.Skills[skill] <= 0 {
+	if c.Scene.skills == nil || c.Owner == nil || c.Owner.Player == nil || c.Owner.Player.Char == nil {
+		return domain.SkillDef{}, false
+	}
+	if c.SourceSnapshot != nil && c.SourceSnapshot.ChildPreparation != nil {
+		p := c.SourceSnapshot.ChildPreparation
+		if p.Hard[skill] <= 0 {
+			return domain.SkillDef{}, false
+		}
+		return c.Scene.skills.Get(skill, p.Raw.LevelOf(skill))
+	}
+	if c.Owner.Player.Char.Skills[skill] <= 0 {
 		return domain.SkillDef{}, false
 	}
 	rank, _ := c.Scene.skillLevelForUse(c.Owner, skill)
 	return c.Scene.skills.Get(skill, rank)
 }
+
 func legendaryCasterBase(c *legendaryContext, skill domain.SkillID) int32 {
 	d, ok := legendaryCasterSkill(c, skill)
 	if !ok {
 		return 0
 	}
+	return legendaryCasterBaseDamage(c, d)
+}
+
+// A granted payload may borrow a native spell's numerical basis without
+// requiring or granting the owner's ability to actively cast that spell.
+func legendaryCasterGrantedBase(c *legendaryContext, skill domain.SkillID) int32 {
+	d, ok := legendaryCasterSkill(c, skill)
+	if !ok && c.Scene.skills != nil {
+		d, ok = c.Scene.skills.Get(skill, 1)
+	}
+	if !ok {
+		return 0
+	}
+	return legendaryCasterBaseDamage(c, d)
+}
+
+func legendaryCasterBaseDamage(c *legendaryContext, d domain.SkillDef) int32 {
 	for _, e := range d.DirectEffects() {
 		if e.Kind == domain.EffectDamage {
 			if e.DamagePctDenominator > 0 {
@@ -93,9 +121,13 @@ func init() {
 		if c.Skill != legendaryIceArrow || c.Target == nil {
 			return n
 		}
-		d, ok := legendaryCasterSkill(c, c.Skill)
-		if !ok {
-			return n
+		d := c.Def
+		if d.ID != c.Skill {
+			var ok bool
+			d, ok = legendaryCasterSkill(c, c.Skill)
+			if !ok {
+				return n
+			}
 		}
 		if sqDist(c.Owner.Pos, c.Target.Pos) >= float64(d.Dist)*float64(d.Dist)/4 {
 			return specialScale(n, 155)
@@ -103,7 +135,7 @@ func init() {
 		return specialScale(n, 120)
 	})})
 	registerLegendarySynergyHandler("SS-A15", legendaryHandler{TargetDefinition: legendaryCasterTargetBonus(func(c *legendaryContext, n int32) int32 {
-		if c.Skill == legendaryIceBurst && (legendaryCasterHas(c.Target, domain.StatusFreeze) || legendaryCasterHas(c.Target, domain.StatusSlow)) {
+		if c.Skill == legendaryIceBurst && legendaryCasterHadControl(c) {
 			return specialScale(n, 160)
 		}
 		return n
@@ -115,6 +147,7 @@ func init() {
 		}
 	}})
 	registerLegendarySynergyHandler("YS-A01", legendaryHandler{
+		SelectTargets: legendaryCasterPrismTargets,
 		TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {
 			if d.ID == legendaryLightBolt {
 				specialCircle(d, 180, domain.SkillAreaCenterTarget, 4)
@@ -129,6 +162,7 @@ func init() {
 					}
 				}
 				d.Statuses = nil
+				d.LegendarySuppressGeneration = true
 			}
 		},
 	})

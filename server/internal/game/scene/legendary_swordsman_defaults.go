@@ -125,7 +125,6 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("JK-U04", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10127 {
-			d.Dist = legendaryMeleeScale(d.Dist, 135)
 			d.Radius = legendaryMeleeScale(d.Radius, 135)
 			d.Area.Radius = legendaryMeleeScale(d.Area.Radius, 135)
 		}

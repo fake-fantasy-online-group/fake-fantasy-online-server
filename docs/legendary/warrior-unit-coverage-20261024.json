@@ -1,0 +1,4437 @@
+{
+  "schema_version": 1,
+  "group": "warrior",
+  "review_date": "2026-10-24",
+  "base_commit": "a1da69aae0c63061d102a8a0e10b4c1b2335db46",
+  "effect_source": "server/internal/domain/legendary_powers.json",
+  "coverage_metric": {
+    "name": "威能独立效果用例覆盖",
+    "numerator": 50,
+    "denominator": 50,
+    "percentage": 100,
+    "not_go_statement_coverage": true,
+    "combinations_excluded": true
+  },
+  "validation": {
+    "command": "go test ./internal/game/scene -run 'TestLegendary(Warrior|Swordsman)|TestWarriorFinalReview' -count=1 -json",
+    "jsonl_absolute_path": "/workspace/scratch/1cc826cfb9aa/astra-audit/melee-unit-focused.jsonl",
+    "result": "pass"
+  },
+  "boundaries": [
+    "仅计逐ID独立传奇装备的实际消费者断言，不把注册、catalog、modifier字段或组合计入50分母。",
+    "混合受控SkillDef scene消费者unit和源支持迁移fixture；warriorCoverageNativeCast/swordsmanCoverageNativeCast名称指通过原生onUseSkill入口，不代表其受控SkillDef来自原生数据表。",
+    "面板移速/权威移动速度通过refreshStats及attributeSnapshot和playerMoveSpeedPX验证，非仅临时modifier字段。",
+    "防御是实际怪物→玩家PvE strike/DOT消费者；没有构造不可达PvP来证明线上场景。",
+    "防递归吸血组合注入测试专用skill-origin吸血状态，以验证真实恢复消费者及合法两件威能隔离，不声称原生剑技能授予该状态。",
+    "组合名单允许包含父表驱动测试中的单件基线，但只独立solo_tests列入分母；合法槽位由nativeRepairEquip或明确不同武器/衣服/头盔分配。",
+    "这是效果条款用例覆盖，不是Go行覆盖、mutation覆盖，也不是全等级、全装备部位、全部双三件的穷举。",
+    "百分比减防上限依据domain/skill_status_scaling.go的max(min(-100,原值),新值)及skill_curves_v5.go的百分比削弱100上限；修复仅恢复已有属性边界。combat HitTracker.Roll在Def<=0即必中，物理伤害扣PhysResist而不读Def，所以原负Def没有额外命中/伤害收益；TestLegendaryWarriorArmorDefenseConsumerBoundary使用非GuaranteedHit实际扣血核验。"
+  ],
+  "powers": [
+    {
+      "power_id": "ZS-A01",
+      "name": "三叠穿心",
+      "effect": "连环枪法伤害提高80%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A01",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A01/10002",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "连环枪法伤害提高80%",
+          "kind": "solo",
+          "assertion": "独立装备/卸装的连环枪法实际HP损失180/100。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A01",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A01/10002"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A02",
+      "name": "横扫枪花",
+      "effect": "连环枪法伤害提高15%，同时攻击自身周围1.3倍普通攻击距离内的敌人，最多5名。原选中目标只要在技能施法距离内，就会优先受到攻击并保留原有附加效果；其他目标不额外承受这些控制效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A02",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A02/10002",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A02",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A02",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "连环枪法伤害提高15%，同时攻击自身周围1.3倍普通攻击距离内的敌人，最多5名",
+          "kind": "solo",
+          "assertion": "实际HP115；以自身为中心130距离内/外命中边界，远程主目标优先保留，最多5个唯一目标；主目标保留眩晕，副目标不复制控制。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A02",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A02/10002",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A02",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A02"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "原选中目标只要在技能施法距离内，就会优先受到攻击并保留原有附加效果",
+          "kind": "solo",
+          "assertion": "实际HP115；以自身为中心130距离内/外命中边界，远程主目标优先保留，最多5个唯一目标；主目标保留眩晕，副目标不复制控制。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A02",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A02/10002",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A02",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A02"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "其他目标不额外承受这些控制效果",
+          "kind": "solo",
+          "assertion": "实际HP115；以自身为中心130距离内/外命中边界，远程主目标优先保留，最多5个唯一目标；主目标保留眩晕，副目标不复制控制。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A02",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A02/10002",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A02",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A02"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A03",
+      "name": "收势",
+      "effect": "连环枪法与普通攻击都采用两者中较高的基础伤害倍率；普通攻击的伤害另提高120%。不会额外施放连环枪法。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloSpecialCoverage/ZS-A03",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+          "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/single/set=false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+          "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/single/set=false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+          "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/single/set=false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+          "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/single/set=false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+          "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/single/set=false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+          "test": "TestWarriorFinalReviewUnlearnedChainDoesNotGateBasicCoefficient/false",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "连环枪法与普通攻击都采用两者中较高的基础伤害倍率",
+          "kind": "solo",
+          "assertion": "普通攻击采用更高基础倍率后实际330，连环低倍率提升至150；迁移fixture另验未学借用、不解锁技能、免费普攻与双/三件系数共享。",
+          "tests": [
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A03",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/single/set=false",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/single/set=false",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/single/set=false",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/single/set=false",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/single/set=false",
+            "TestWarriorFinalReviewUnlearnedChainDoesNotGateBasicCoefficient/false"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "普通攻击的伤害另提高120%",
+          "kind": "solo",
+          "assertion": "普通攻击采用更高基础倍率后实际330，连环低倍率提升至150；迁移fixture另验未学借用、不解锁技能、免费普攻与双/三件系数共享。",
+          "tests": [
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A03",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/single/set=false",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/single/set=false",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/single/set=false",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/single/set=false",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/single/set=false",
+            "TestWarriorFinalReviewUnlearnedChainDoesNotGateBasicCoefficient/false"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不会额外施放连环枪法",
+          "kind": "solo",
+          "assertion": "普通攻击采用更高基础倍率后实际330，连环低倍率提升至150；迁移fixture另验未学借用、不解锁技能、免费普攻与双/三件系数共享。",
+          "tests": [
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A03",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/single/set=false",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/single/set=false",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/single/set=false",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/single/set=false",
+            "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/single/set=false",
+            "TestWarriorFinalReviewUnlearnedChainDoesNotGateBasicCoefficient/false"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/pair/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/pair/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/single/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/third-damage/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/third-damage/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/third-flat/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/third-flat/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/pair/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/pair/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/single/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/third-damage/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/third-damage/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/third-flat/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/third-flat/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/pair/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/pair/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/single/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/third-damage/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/third-damage/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/third-flat/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/third-flat/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/pair/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/pair/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/single/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/third-damage/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/third-damage/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/third-flat/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/third-flat/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/pair/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/pair/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/single/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/third-damage/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/third-damage/set=true",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/third-flat/set=false",
+        "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/third-flat/set=true"
+      ]
+    },
+    {
+      "power_id": "ZS-A04",
+      "name": "阔刃",
+      "effect": "穿刺之枪伤害提高15%，攻击宽度增加90%、长度增加20%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A04",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A04/10005",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloGeometryConsumers/ZS-A04/10005",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "穿刺之枪伤害提高15%，攻击宽度增加90%、长度增加20%",
+          "kind": "solo",
+          "assertion": "实际伤害115/100；矩形目标(110,80)位于强化后120长/190宽内而原范围外，真实命中；原已有精确几何断言补充数值边界。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A04",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A04/10005",
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-A04/10005"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A05",
+      "name": "枪尖",
+      "effect": "穿刺之枪对所有目标的伤害提高60%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A05",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A05/10005",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A05",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "穿刺之枪对所有目标的伤害提高60%",
+          "kind": "solo",
+          "assertion": "主副目标均实际160，原范围外目标未命中，原状态保留；卸装100。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A05",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A05/10005",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A05"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A06",
+      "name": "破阵",
+      "effect": "穿刺之枪对选中目标追加相当于该目标本次实际伤害110%的伤害；未选中目标时，追加给最近的命中敌人。只命中一名敌人也生效；追加伤害不重复计算增伤、减防或触发装备特效。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A06",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A06/10005",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A06",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "穿刺之枪对选中目标追加相当于该目标本次实际伤害110%的伤害",
+          "kind": "solo",
+          "assertion": "单目标实际210；双目标含物抗时原伤80，指定目标追加88，无选中目标时最近目标追加88，追加不二次减物抗。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A06",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A06/10005",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A06"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "未选中目标时，追加给最近的命中敌人",
+          "kind": "solo",
+          "assertion": "单目标实际210；双目标含物抗时原伤80，指定目标追加88，无选中目标时最近目标追加88，追加不二次减物抗。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A06",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A06/10005",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A06"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "只命中一名敌人也生效",
+          "kind": "solo",
+          "assertion": "单目标实际210；双目标含物抗时原伤80，指定目标追加88，无选中目标时最近目标追加88，追加不二次减物抗。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A06",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A06/10005",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A06"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "追加伤害不重复计算增伤、减防或触发装备特效",
+          "kind": "solo",
+          "assertion": "单目标实际210；双目标含物抗时原伤80，指定目标追加88，无选中目标时最近目标追加88，追加不二次减物抗。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A06",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A06/10005",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A06"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A07",
+      "name": "开隙",
+      "effect": "穿刺之枪先施加你已学破防之枪的减防效果，再结算本次攻击；破防之枪和穿刺之枪的伤害均提高50%。未学破防之枪时，只获得伤害加成。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A07",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A07/10005",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A07/10009",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A07",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A07-armor",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/miss",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/skill-immune",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/status-immune",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/unlearned",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "穿刺之枪先施加你已学破防之枪的减防效果，再结算本次攻击",
+          "kind": "solo",
+          "assertion": "两技能实际150；未学仅增伤、原生减防在首次命中公式前生效；免疫/未学/未命中分支独立检查，借用减防只取已学来源。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A07",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A07/10005",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A07/10009",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07-armor",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/miss",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/skill-immune",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/status-immune",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/unlearned"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "破防之枪和穿刺之枪的伤害均提高50%",
+          "kind": "solo",
+          "assertion": "两技能实际150；未学仅增伤、原生减防在首次命中公式前生效；免疫/未学/未命中分支独立检查，借用减防只取已学来源。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A07",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A07/10005",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A07/10009",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07-armor",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/miss",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/skill-immune",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/status-immune",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/unlearned"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "未学破防之枪时，只获得伤害加成",
+          "kind": "solo",
+          "assertion": "两技能实际150；未学仅增伤、原生减防在首次命中公式前生效；免疫/未学/未命中分支独立检查，借用减防只取已学来源。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A07",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A07/10005",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A07/10009",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07-armor",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/miss",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/skill-immune",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/status-immune",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/unlearned"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/0",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/1",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/2",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/3",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/0",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/1",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/2",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/3",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/0",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/1",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/2",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/3",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank20",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank5",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank20",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank5",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank20",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank5"
+      ]
+    },
+    {
+      "power_id": "ZS-A08",
+      "name": "裂甲传染",
+      "effect": "破防之枪改为前方矩形攻击，长、宽采用穿刺之枪当前的范围，并始终保留选中目标；未学穿刺之枪时，使用其1级范围，仍接受相关装备和威能的范围强化。破防之枪的减防强度提高50%，持续时间和减防上限不变；搭配“开隙”时，穿刺之枪附带的减防也获得相同强化。不会因此学会穿刺之枪。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+          "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers1/setfalse",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+          "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers1/setfalse",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/absolute-unmodified-scaling",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/authored-below-minus100",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/other-attribute-unchanged",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/positive-defense-unchanged",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/1",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/20",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/5",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloSpecialCoverage/ZS-A08",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "破防之枪改为前方矩形攻击，长、宽采用穿刺之枪当前的范围，并始终保留选中目标",
+          "kind": "solo",
+          "assertion": "原生破防实际命中借用矩形内副目标，已学与未学穿刺均可；原生rank1/5/20的Def100分别降至55/0/0，无装备70/30/0，原15秒时长不变；遵守原生百分比floor且保留已创作低于-100%特例，非百分比/其他属性不改规则；不解锁技能，额外范围/减防组合另列。",
+          "tests": [
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers1/setfalse",
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers1/setfalse",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/absolute-unmodified-scaling",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/authored-below-minus100",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/other-attribute-unchanged",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/positive-defense-unchanged",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/1",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/20",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/5",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A08"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "未学穿刺之枪时，使用其1级范围，仍接受相关装备和威能的范围强化",
+          "kind": "solo",
+          "assertion": "原生破防实际命中借用矩形内副目标，已学与未学穿刺均可；原生rank1/5/20的Def100分别降至55/0/0，无装备70/30/0，原15秒时长不变；遵守原生百分比floor且保留已创作低于-100%特例，非百分比/其他属性不改规则；不解锁技能，额外范围/减防组合另列。",
+          "tests": [
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers1/setfalse",
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers1/setfalse",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/absolute-unmodified-scaling",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/authored-below-minus100",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/other-attribute-unchanged",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/positive-defense-unchanged",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/1",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/20",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/5",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A08"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "破防之枪的减防强度提高50%，持续时间和减防上限不变",
+          "kind": "solo",
+          "assertion": "原生破防实际命中借用矩形内副目标，已学与未学穿刺均可；原生rank1/5/20的Def100分别降至55/0/0，无装备70/30/0，原15秒时长不变；遵守原生百分比floor且保留已创作低于-100%特例，非百分比/其他属性不改规则；不解锁技能，额外范围/减防组合另列。",
+          "tests": [
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers1/setfalse",
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers1/setfalse",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/absolute-unmodified-scaling",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/authored-below-minus100",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/other-attribute-unchanged",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/positive-defense-unchanged",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/1",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/20",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/5",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A08"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "搭配“开隙”时，穿刺之枪附带的减防也获得相同强化",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；原生破防实际命中借用矩形内副目标，已学与未学穿刺均可；原生rank1/5/20的Def100分别降至55/0/0，无装备70/30/0，原15秒时长不变；遵守原生百分比floor且保留已创作低于-100%特例，非百分比/其他属性不改规则；不解锁技能，额外范围/减防组合另列。",
+          "tests": [
+            "TestLegendaryWarriorArmorBuildSameHitAndGeometry/apply",
+            "TestLegendaryWarriorArmorBuildSameHitAndGeometry/strength",
+            "TestLegendaryWarriorArmorBuildSameHitAndGeometry/three",
+            "TestLegendaryWarriorArmorBuildSameHitAndGeometry/width",
+            "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank20",
+            "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank5",
+            "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank20",
+            "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank5",
+            "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank20",
+            "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank5"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不会因此学会穿刺之枪",
+          "kind": "solo",
+          "assertion": "原生破防实际命中借用矩形内副目标，已学与未学穿刺均可；原生rank1/5/20的Def100分别降至55/0/0，无装备70/30/0，原15秒时长不变；遵守原生百分比floor且保留已创作低于-100%特例，非百分比/其他属性不改规则；不解锁技能，额外范围/减防组合另列。",
+          "tests": [
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers1/setfalse",
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers1/setfalse",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/absolute-unmodified-scaling",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/authored-below-minus100",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/other-attribute-unchanged",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/positive-defense-unchanged",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/1",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/20",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/5",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A08"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorArmorBuildSameHitAndGeometry/apply",
+        "TestLegendaryWarriorArmorBuildSameHitAndGeometry/strength",
+        "TestLegendaryWarriorArmorBuildSameHitAndGeometry/three",
+        "TestLegendaryWarriorArmorBuildSameHitAndGeometry/width",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank20",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank5",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank20",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank5",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank20",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank5"
+      ]
+    },
+    {
+      "power_id": "ZS-A09",
+      "name": "碎障",
+      "effect": "破法之枪伤害提高25%。若目标身上有吸收伤害的护盾，本次伤害改为提高120%，打破护盾后的剩余伤害也享受此加成。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A09",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A09/10013",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "破法之枪伤害提高25%",
+          "kind": "solo",
+          "assertion": "无盾实际125；10护盾时生命损失210，1000护盾时无生命损失，完整220系数用于破盾溢出。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A09",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A09/10013",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A09"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "若目标身上有吸收伤害的护盾，本次伤害改为提高120%，打破护盾后的剩余伤害也享受此加成",
+          "kind": "solo",
+          "assertion": "无盾实际125；10护盾时生命损失210，1000护盾时无生命损失，完整220系数用于破盾溢出。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A09",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A09/10013",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A09"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A10",
+      "name": "噤声余响",
+      "effect": "破法之枪保留原有生命伤害和削蓝，并将本次应削减法力量的200%加入物理基础伤害，再一起计算增伤和防御。削蓝量按已学技能等级、破魔及削蓝加成计算，不受敌人剩余法力限制；没有法力的敌人也承受完整增伤。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDrainConsumers/ZS-A10",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "破法之枪保留原有生命伤害和削蓝，并将本次应削减法力量的200%加入物理基础伤害，再一起计算增伤和防御",
+          "kind": "solo",
+          "assertion": "原生命伤100加应削蓝60的200%=220；目标0/20/1000MP分别扣0/20/60，生命增伤均220；原生等级与削蓝组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDrainConsumers/ZS-A10"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "削蓝量按已学技能等级、破魔及削蓝加成计算，不受敌人剩余法力限制",
+          "kind": "solo",
+          "assertion": "原生命伤100加应削蓝60的200%=220；目标0/20/1000MP分别扣0/20/60，生命增伤均220；原生等级与削蓝组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDrainConsumers/ZS-A10"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "没有法力的敌人也承受完整增伤",
+          "kind": "solo",
+          "assertion": "原生命伤100加应削蓝60的200%=220；目标0/20/1000MP分别扣0/20/60，生命增伤均220；原生等级与削蓝组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDrainConsumers/ZS-A10"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorAuditManaConversionCombinations/single/empty=false",
+        "TestLegendaryWarriorAuditManaConversionCombinations/single/empty=true",
+        "TestLegendaryWarriorAuditManaConversionCombinations/three-damage/empty=false",
+        "TestLegendaryWarriorAuditManaConversionCombinations/three-damage/empty=true",
+        "TestLegendaryWarriorAuditManaConversionCombinations/three-drain/empty=false",
+        "TestLegendaryWarriorAuditManaConversionCombinations/three-drain/empty=true",
+        "TestLegendaryWarriorAuditManaConversionCombinations/universal/empty=false",
+        "TestLegendaryWarriorAuditManaConversionCombinations/universal/empty=true",
+        "TestLegendaryWarriorDrainFractionBeforeBaseConversion"
+      ]
+    },
+    {
+      "power_id": "ZS-A11",
+      "name": "追猎",
+      "effect": "飞翔之枪伤害提高60%，不要求目标处于控制状态，也不额外施加减速。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A11",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A11/10017",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "飞翔之枪伤害提高60%，不要求目标处于控制状态，也不额外施加减速",
+          "kind": "solo",
+          "assertion": "无控制目标实际160；卸装100，未添加减速状态。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A11",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A11/10017"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A12",
+      "name": "钉枪",
+      "effect": "飞翔之枪伤害提高10%。命中原目标后，同时攻击其周围1.5倍普通攻击距离内的敌人，连同原目标最多6名；每名目标只受到一次本次技能伤害。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A12",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A12/10017",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A12",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "飞翔之枪伤害提高10%",
+          "kind": "solo",
+          "assertion": "主目标实际110，落点周围最多6个唯一目标各110；151距离外不受击，主目标未命中时副目标不受击。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A12",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A12/10017",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A12"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "命中原目标后，同时攻击其周围1.5倍普通攻击距离内的敌人，连同原目标最多6名",
+          "kind": "solo",
+          "assertion": "主目标实际110，落点周围最多6个唯一目标各110；151距离外不受击，主目标未命中时副目标不受击。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A12",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A12/10017",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A12"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "每名目标只受到一次本次技能伤害",
+          "kind": "solo",
+          "assertion": "主目标实际110，落点周围最多6个唯一目标各110；151距离外不受击，主目标未命中时副目标不受击。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A12",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A12/10017",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A12"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A13",
+      "name": "镇岳",
+      "effect": "震地之枪伤害提高45%，攻击半径增加20%；震空枪气原有的击退几率、距离和其他效果不变。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A13",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A13/10006",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloGeometryConsumers/ZS-A13/10006",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A13",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "震地之枪伤害提高45%，攻击半径增加20%",
+          "kind": "solo",
+          "assertion": "真实伤害145；原半径100外115距离目标命中，原击退40实际位移仍40。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A13",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A13/10006",
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-A13/10006",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A13"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "震空枪气原有的击退几率、距离和其他效果不变",
+          "kind": "solo",
+          "assertion": "真实伤害145；原半径100外115距离目标命中，原击退40实际位移仍40。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A13",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A13/10006",
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-A13/10006",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A13"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A14",
+      "name": "余震",
+      "effect": "震地之枪在自身脚下留下持续3秒的圆形余震区，每秒造成一次物理伤害。初次攻击和余震使用本次施放时相同的攻击、暴击结果及自身伤害加成，余震每次为该防御前伤害的35%，再分别计算敌人的防御。空放也会留下余震；最多同时存在2片，同一敌人每秒最多受一次余震伤害，余震不附加控制。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/accepted-source",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/empty-cast",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/overlap-lifetime",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/same-roll-defense",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "震地之枪在自身脚下留下持续3秒的圆形余震区，每秒造成一次物理伤害",
+          "kind": "solo",
+          "assertion": "实际原生施放/空放留下余震，原攻击/暴击快照供35%脉冲，分别计算目标防御；两片重叠每秒只一次、3次后停止、换图清理、接受后换攻击不升级快照。",
+          "tests": [
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/accepted-source",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/empty-cast",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/overlap-lifetime",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/same-roll-defense"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "初次攻击和余震使用本次施放时相同的攻击、暴击结果及自身伤害加成，余震每次为该防御前伤害的35%，再分别计算敌人的防御",
+          "kind": "solo",
+          "assertion": "实际原生施放/空放留下余震，原攻击/暴击快照供35%脉冲，分别计算目标防御；两片重叠每秒只一次、3次后停止、换图清理、接受后换攻击不升级快照。",
+          "tests": [
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/accepted-source",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/empty-cast",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/overlap-lifetime",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/same-roll-defense"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "空放也会留下余震",
+          "kind": "solo",
+          "assertion": "实际原生施放/空放留下余震，原攻击/暴击快照供35%脉冲，分别计算目标防御；两片重叠每秒只一次、3次后停止、换图清理、接受后换攻击不升级快照。",
+          "tests": [
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/accepted-source",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/empty-cast",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/overlap-lifetime",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/same-roll-defense"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "最多同时存在2片，同一敌人每秒最多受一次余震伤害，余震不附加控制",
+          "kind": "solo",
+          "assertion": "实际原生施放/空放留下余震，原攻击/暴击快照供35%脉冲，分别计算目标防御；两片重叠每秒只一次、3次后停止、换图清理、接受后换攻击不升级快照。",
+          "tests": [
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/accepted-source",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/empty-cast",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/overlap-lifetime",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/same-roll-defense"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A15",
+      "name": "环锋",
+      "effect": "震地之枪对所有目标的伤害提高60%，保留原有控制效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A15",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A15/10006",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A15",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "震地之枪对所有目标的伤害提高60%，保留原有控制效果",
+          "kind": "solo",
+          "assertion": "主副目标均实际160并保留原眩晕；原范围外目标不受击。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A15",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A15/10006",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A15"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A16",
+      "name": "裂阵",
+      "effect": "裂空之枪伤害提高15%，并额外攻击前方长180、宽120范围内的敌人。原选中目标仍会受到攻击，每名目标只受伤一次，每次施放只支付一次原有武器耐久代价。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A16",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A16/10003",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloGeometryConsumers/ZS-A16/10003",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A16",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "裂空之枪伤害提高15%，并额外攻击前方长180、宽120范围内的敌人",
+          "kind": "solo",
+          "assertion": "矩形副目标实际115、原生施法扣耐久5及普通磨损100各一次、MP35；保留原目标，不因多目标重复收费。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A16",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A16/10003",
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-A16/10003",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A16"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "原选中目标仍会受到攻击，每名目标只受伤一次，每次施放只支付一次原有武器耐久代价",
+          "kind": "solo",
+          "assertion": "矩形副目标实际115、原生施法扣耐久5及普通磨损100各一次、MP35；保留原目标，不因多目标重复收费。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A16",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A16/10003",
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-A16/10003",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A16"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A17",
+      "name": "铸魂",
+      "effect": "裂空之枪伤害提高30%，不再消耗武器耐久，法力消耗不变。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A17",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A17/10003",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A17",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "裂空之枪伤害提高30%，不再消耗武器耐久，法力消耗不变",
+          "kind": "solo",
+          "assertion": "实际伤害130；原生技能装备/卸装耐久消耗0/5，额外磨损被取消，法力仍35。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A17",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A17/10003",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A17"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A18",
+      "name": "尾锋",
+      "effect": "流虹之枪或心眼之枪命中后，对距离你最远的命中敌人，额外造成相当于该目标本次实际伤害90%的伤害。只命中一名敌人也生效；「校准」替代的心眼普通攻击同样适用，追加伤害不再触发装备特效。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A18",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A18/10015",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A18/10021",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A18",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "流虹之枪或心眼之枪命中后，对距离你最远的命中敌人，额外造成相当于该目标本次实际伤害90%的伤害",
+          "kind": "solo",
+          "assertion": "两个技能单目标实际190；含物抗双目标原伤80，最远目标追加72且不再次减物抗；校准组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A18",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A18/10015",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A18/10021",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A18"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "只命中一名敌人也生效",
+          "kind": "solo",
+          "assertion": "两个技能单目标实际190；含物抗双目标原伤80，最远目标追加72且不再次减物抗；校准组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A18",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A18/10015",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A18/10021",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A18"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "「校准」替代的心眼普通攻击同样适用，追加伤害不再触发装备特效",
+          "kind": "solo",
+          "assertion": "两个技能单目标实际190；含物抗双目标原伤80，最远目标追加72且不再次减物抗；校准组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A18",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A18/10015",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A18/10021",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A18"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorHeartEyeBuildActualAoE"
+      ]
+    },
+    {
+      "power_id": "ZS-A19",
+      "name": "独虹",
+      "effect": "流虹之枪对所有目标的伤害提高70%，攻击范围和目标数量不变。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A19",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A19/10021",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A19",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "流虹之枪对所有目标的伤害提高70%，攻击范围和目标数量不变",
+          "kind": "solo",
+          "assertion": "主副目标均实际170；保持原半径、范围外不命中，副目标数不增加。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A19",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A19/10021",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A19"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A20",
+      "name": "猎首",
+      "effect": "心眼之枪变为前方长180、宽120的矩形范围攻击，保留原选中目标，并且必定命中。每名目标的本次基础伤害额外增加物理攻击力的240%。搭配「校准」时，心眼普通攻击也获得完整范围和这部分伤害。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A20",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A20/10015",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloGeometryConsumers/ZS-A20/10015",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A20",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "心眼之枪变为前方长180、宽120的矩形范围攻击，保留原选中目标，并且必定命中",
+          "kind": "solo",
+          "assertion": "高防零命中仍命中；前方180x120内副目标和范围外选中主目标各实际340；校准矩形/240平伤组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A20",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A20/10015",
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-A20/10015",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A20"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "每名目标的本次基础伤害额外增加物理攻击力的240%",
+          "kind": "solo",
+          "assertion": "高防零命中仍命中；前方180x120内副目标和范围外选中主目标各实际340；校准矩形/240平伤组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A20",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A20/10015",
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-A20/10015",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A20"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "搭配「校准」时，心眼普通攻击也获得完整范围和这部分伤害",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；高防零命中仍命中；前方180x120内副目标和范围外选中主目标各实际340；校准矩形/240平伤组合另列。",
+          "tests": [
+            "TestLegendaryWarriorBasicNativeAdmissionAndNoCost"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorBasicNativeAdmissionAndNoCost"
+      ]
+    },
+    {
+      "power_id": "ZS-A21",
+      "name": "校准",
+      "effect": "普通攻击改用已学心眼之枪的伤害倍率，并且必定命中，不消耗技能法力，也不改变普通攻击间隔。主动施放心眼之枪仍然可用，伤害提高100%。心眼普通攻击可享受心眼专属装备效果，但不会再次替代或自动施法。未学心眼之枪时，普通攻击改为必中、伤害提高100%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A21",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A21/10015",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A21",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "普通攻击改用已学心眼之枪的伤害倍率，并且必定命中，不消耗技能法力，也不改变普通攻击间隔",
+          "kind": "solo",
+          "assertion": "已学165/未学200的真实普攻，主动心眼200，0MP可攻击，不产生额外施法队列，重复同间隔不再攻击；心眼配装组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A21",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A21/10015",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A21"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "主动施放心眼之枪仍然可用，伤害提高100%",
+          "kind": "solo",
+          "assertion": "已学165/未学200的真实普攻，主动心眼200，0MP可攻击，不产生额外施法队列，重复同间隔不再攻击；心眼配装组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A21",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A21/10015",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A21"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "心眼普通攻击可享受心眼专属装备效果，但不会再次替代或自动施法",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；已学165/未学200的真实普攻，主动心眼200，0MP可攻击，不产生额外施法队列，重复同间隔不再攻击；心眼配装组合另列。",
+          "tests": [
+            "TestLegendaryWarriorBasicNativeAdmissionAndNoCost"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "未学心眼之枪时，普通攻击改为必中、伤害提高100%",
+          "kind": "solo",
+          "assertion": "已学165/未学200的真实普攻，主动心眼200，0MP可攻击，不产生额外施法队列，重复同间隔不再攻击；心眼配装组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A21",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A21/10015",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A21"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorBasicNativeAdmissionAndNoCost"
+      ]
+    },
+    {
+      "power_id": "ZS-A22",
+      "name": "远阵",
+      "effect": "野战八荒伤害提高20%，作用半径增加15%。可以选中3倍普通攻击距离内的敌人，以它为中心施放；不选目标时仍以自身为中心。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A22",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A22/10022",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A22",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "野战八荒伤害提高20%，作用半径增加15%",
+          "kind": "solo",
+          "assertion": "实际120；300距离远程主目标成功准入并以它为中心命中附近目标；不选中时仅自身范围生效；半径15%由现有几何值与真实目标组合核验。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A22",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A22/10022",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A22"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "可以选中3倍普通攻击距离内的敌人，以它为中心施放",
+          "kind": "solo",
+          "assertion": "实际120；300距离远程主目标成功准入并以它为中心命中附近目标；不选中时仅自身范围生效；半径15%由现有几何值与真实目标组合核验。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A22",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A22/10022",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A22"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不选目标时仍以自身为中心",
+          "kind": "solo",
+          "assertion": "实际120；300距离远程主目标成功准入并以它为中心命中附近目标；不选中时仅自身范围生效；半径15%由现有几何值与真实目标组合核验。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A22",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A22/10022",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A22"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A23",
+      "name": "独战",
+      "effect": "野战八荒伤害提高80%，并对原选中目标追加物理攻击力160%的物理伤害。未选中目标时，追加给命中敌人中剩余生命比例最高的一名；每次施放只追加一次。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A23",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A23/10022",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A23",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "野战八荒伤害提高80%，并对原选中目标追加物理攻击力160%的物理伤害",
+          "kind": "solo",
+          "assertion": "主动原目标实际340；未选中时原目标只180，剩余生命比例更高副目标340，额外160只结算一次。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A23",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A23/10022",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A23"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "未选中目标时，追加给命中敌人中剩余生命比例最高的一名",
+          "kind": "solo",
+          "assertion": "主动原目标实际340；未选中时原目标只180，剩余生命比例更高副目标340，额外160只结算一次。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A23",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A23/10022",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A23"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "每次施放只追加一次",
+          "kind": "solo",
+          "assertion": "主动原目标实际340；未选中时原目标只180，剩余生命比例更高副目标340，额外160只结算一次。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A23",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A23/10022",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A23"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A24",
+      "name": "百兵归一",
+      "effect": "战神之枪伤害提高85%，攻击范围改为你已学野战八荒当前的范围，同时保留原选中目标。未学野战八荒时，保持战神之枪原有范围。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A24",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A24/10023",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A24",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "战神之枪伤害提高85%，攻击范围改为你已学野战八荒当前的范围，同时保留原选中目标",
+          "kind": "solo",
+          "assertion": "直接185；已学八荒时130距离副目标受185，未学时仍在原范围之外；借用不替代主目标。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A24",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A24/10023",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A24"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "未学野战八荒时，保持战神之枪原有范围",
+          "kind": "solo",
+          "assertion": "直接185；已学八荒时130距离副目标受185，未学时仍在原范围之外；借用不替代主目标。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A24",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A24/10023",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A24"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A25",
+      "name": "封疆",
+      "effect": "战神之枪与野战八荒的直接伤害提高35%，并先施加你已学破防之枪的减防效果，再结算本次攻击。减防可享受「裂甲传染」的强化；未学破防之枪时，只获得伤害加成。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A25",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A25/10022",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A25/10023",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A25-armor",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "战神之枪与野战八荒的直接伤害提高35%，并先施加你已学破防之枪的减防效果，再结算本次攻击",
+          "kind": "solo",
+          "assertion": "战神/八荒实际135；两技能原生已学减防使目标Def100→70并在当次伤害前应用，未学只增伤；裂甲强化组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A25",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A25/10022",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A25/10023",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A25-armor"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "减防可享受「裂甲传染」的强化",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；战神/八荒实际135；两技能原生已学减防使目标Def100→70并在当次伤害前应用，未学只增伤；裂甲强化组合另列。",
+          "tests": [
+            "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/0",
+            "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/1",
+            "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/2",
+            "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/3",
+            "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/0",
+            "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/1",
+            "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/2",
+            "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/3",
+            "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/0",
+            "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/1",
+            "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/2",
+            "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/3",
+            "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank20",
+            "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank5",
+            "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank20",
+            "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank5",
+            "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank20",
+            "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank5"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "未学破防之枪时，只获得伤害加成",
+          "kind": "solo",
+          "assertion": "战神/八荒实际135；两技能原生已学减防使目标Def100→70并在当次伤害前应用，未学只增伤；裂甲强化组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A25",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A25/10022",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A25/10023",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A25-armor"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/0",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/1",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/2",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/3",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/0",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/1",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/2",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/3",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/0",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/1",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/2",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/3",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank20",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank5",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank20",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank5",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank20",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank5"
+      ]
+    },
+    {
+      "power_id": "ZS-A26",
+      "name": "碎岩",
+      "effect": "石化之枪冷却缩短50%，并对原目标立即造成物理攻击力240%的物理伤害，保留原石化效果。这次伤害不会解除本次新施加的石化；目标免疫石化时，仍会受到伤害。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloSpecialCoverage/ZS-A26",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "石化之枪冷却缩短50%，并对原目标立即造成物理攻击力240%的物理伤害，保留原石化效果",
+          "kind": "solo",
+          "assertion": "原生石化实际立即240、未装备0；免疫石化仍受240而无石化，普通目标新石化不被这次伤害打断；冷却实际减半。",
+          "tests": [
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A26"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "这次伤害不会解除本次新施加的石化",
+          "kind": "solo",
+          "assertion": "原生石化实际立即240、未装备0；免疫石化仍受240而无石化，普通目标新石化不被这次伤害打断；冷却实际减半。",
+          "tests": [
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A26"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "目标免疫石化时，仍会受到伤害",
+          "kind": "solo",
+          "assertion": "原生石化实际立即240、未装备0；免疫石化仍受240而无石化，普通目标新石化不被这次伤害打断；冷却实际减半。",
+          "tests": [
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-A26"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-A27",
+      "name": "崩枪",
+      "effect": "重击伤害提高80%，攻击范围改为破防之枪当前的范围，保留选中目标，并对各目标保留原有控制效果；未学破防之枪时，使用其1级范围，仍接受相关装备和威能的范围强化。破防之枪伤害也提高80%，但不会因此学会该技能。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+          "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers1/setfalse",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+          "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers1/setfalse",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A27",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A27/10009",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A27/10027",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-A27",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "重击伤害提高80%，攻击范围改为破防之枪当前的范围，保留选中目标，并对各目标保留原有控制效果",
+          "kind": "solo",
+          "assertion": "两技能实际180；借用原生一级/已学范围并命中副目标，主副目标各保留原眩晕，未学不解锁；双三件借用链另列。",
+          "tests": [
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers1/setfalse",
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers1/setfalse",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A27",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A27/10009",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A27/10027",
+            "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-A27"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "未学破防之枪时，使用其1级范围，仍接受相关装备和威能的范围强化",
+          "kind": "solo",
+          "assertion": "两技能实际180；借用原生一级/已学范围并命中副目标，主副目标各保留原眩晕，未学不解锁；双三件借用链另列。",
+          "tests": [
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers1/setfalse",
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers1/setfalse",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A27",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A27/10009",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A27/10027",
+            "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-A27"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "破防之枪伤害也提高80%，但不会因此学会该技能",
+          "kind": "solo",
+          "assertion": "两技能实际180；借用原生一级/已学范围并命中副目标，主副目标各保留原眩晕，未学不解锁；双三件借用链另列。",
+          "tests": [
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers1/setfalse",
+            "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers1/setfalse",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A27",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A27/10009",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A27/10027",
+            "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-A27"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers0/setfalse",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers0/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers1/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers2/setfalse",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers2/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers3/setfalse",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers3/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers0/setfalse",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers0/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers1/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers2/setfalse",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers2/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers3/setfalse",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers3/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers0/setfalse",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers0/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers1/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers2/setfalse",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers2/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers3/setfalse",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers3/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers0/setfalse",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers0/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers1/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers2/setfalse",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers2/settrue",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers3/setfalse",
+        "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers3/settrue"
+      ]
+    },
+    {
+      "power_id": "ZS-A28",
+      "name": "宣战",
+      "effect": "战吼半径增加70%，嘲讽强度提高100%，并将范围内可牵引的敌人拉向自身附近。每名敌人每次施放只拉一次，遇墙或其他单位停止；位移免疫及首领控制免疫仍有效，战吼其他效果照常生效。枪系直接伤害提高40%。战吼半径与“行军”“号令”“军令”只取最高加成，不重复叠加。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A28",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10002",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10003",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10005",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10006",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10013",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10015",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10017",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10021",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10022",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10023",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10027",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A28",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "战吼半径增加70%，嘲讽强度提高100%，并将范围内可牵引的敌人拉向自身附近",
+          "kind": "solo",
+          "assertion": "枪系11种直接技能实际140；原生战吼170半径内目标被牵引且嘲讽强度200，墙/其他单位停止，免疫目标不移动；最大范围组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10002",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10003",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10005",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10006",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10013",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10015",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10017",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10021",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10022",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10023",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10027",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A28"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "每名敌人每次施放只拉一次，遇墙或其他单位停止",
+          "kind": "solo",
+          "assertion": "枪系11种直接技能实际140；原生战吼170半径内目标被牵引且嘲讽强度200，墙/其他单位停止，免疫目标不移动；最大范围组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10002",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10003",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10005",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10006",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10013",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10015",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10017",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10021",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10022",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10023",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10027",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A28"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "位移免疫及首领控制免疫仍有效，战吼其他效果照常生效",
+          "kind": "solo",
+          "assertion": "枪系11种直接技能实际140；原生战吼170半径内目标被牵引且嘲讽强度200，墙/其他单位停止，免疫目标不移动；最大范围组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10002",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10003",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10005",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10006",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10013",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10015",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10017",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10021",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10022",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10023",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10027",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A28"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "枪系直接伤害提高40%",
+          "kind": "solo",
+          "assertion": "枪系11种直接技能实际140；原生战吼170半径内目标被牵引且嘲讽强度200，墙/其他单位停止，免疫目标不移动；最大范围组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10002",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10003",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10005",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10006",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10013",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10015",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10017",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10021",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10022",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10023",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10027",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A28"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "战吼半径与“行军”“号令”“军令”只取最高加成，不重复叠加",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；枪系11种直接技能实际140；原生战吼170半径内目标被牵引且嘲讽强度200，墙/其他单位停止，免疫目标不移动；最大范围组合另列。",
+          "tests": [
+            "TestLegendaryWarriorCoverageCombinations/warcry-highest-radius"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorCoverageCombinations/warcry-highest-radius"
+      ]
+    },
+    {
+      "power_id": "ZS-A29",
+      "name": "三式破局",
+      "effect": "枪系主动技能每次命中敌人时，基础伤害额外增加物理攻击力的180%，每次施法对每名敌人只增加一次。普通攻击、“校准”替代的心眼普通攻击和装备追加伤害不获得此加成。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A29",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10002",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10003",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10005",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10006",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10013",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10015",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10017",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10021",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10022",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10023",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10027",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A29",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "枪系主动技能每次命中敌人时，基础伤害额外增加物理攻击力的180%，每次施法对每名敌人只增加一次",
+          "kind": "solo",
+          "assertion": "11种主动技能100基础实际280；普通攻击与装备proc仍100，不把平伤添加给额外伤害。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10002",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10003",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10005",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10006",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10013",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10015",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10017",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10021",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10022",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10023",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10027",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A29"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "普通攻击、“校准”替代的心眼普通攻击和装备追加伤害不获得此加成",
+          "kind": "solo",
+          "assertion": "11种主动技能100基础实际280；普通攻击与装备proc仍100，不把平伤添加给额外伤害。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10002",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10003",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10005",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10006",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10013",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10015",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10017",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10021",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10022",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10023",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10027",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A29"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=0/set=false",
+        "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=0/set=true",
+        "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=1/set=false",
+        "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=1/set=true",
+        "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=2/set=false",
+        "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=2/set=true",
+        "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=3/set=false",
+        "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=3/set=true"
+      ]
+    },
+    {
+      "power_id": "ZS-A30",
+      "name": "合锋",
+      "effect": "飞翔之枪和连环枪法的伤害均提高65%。连环枪法可以使用飞翔之枪的施法距离，且不会缩短原有距离；未学飞翔之枪时，使用其1级施法距离，仍接受相关装备和威能的距离强化，但不会因此学会该技能。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A30",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A30/10002",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDamageCoverage/ZS-A30/10017",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-A30",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-A30",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "飞翔之枪和连环枪法的伤害均提高65%",
+          "kind": "solo",
+          "assertion": "飞翔/连环实际165；原生未学/已学飞翔的借用距离均有真实命中，不解锁技能，短于原距的donor不缩短准入；强化距离组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A30",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A30/10002",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A30/10017",
+            "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-A30",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A30"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "连环枪法可以使用飞翔之枪的施法距离，且不会缩短原有距离",
+          "kind": "solo",
+          "assertion": "飞翔/连环实际165；原生未学/已学飞翔的借用距离均有真实命中，不解锁技能，短于原距的donor不缩短准入；强化距离组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A30",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A30/10002",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A30/10017",
+            "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-A30",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A30"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "未学飞翔之枪时，使用其1级施法距离，仍接受相关装备和威能的距离强化，但不会因此学会该技能",
+          "kind": "solo",
+          "assertion": "飞翔/连环实际165；原生未学/已学飞翔的借用距离均有真实命中，不解锁技能，短于原距的donor不缩短准入；强化距离组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A30",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A30/10002",
+            "TestLegendaryWarriorSoloDamageCoverage/ZS-A30/10017",
+            "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-A30",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-A30"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers0/setfalse/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers0/setfalse/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers0/settrue/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers0/settrue/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers1/setfalse/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers1/setfalse/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers1/settrue/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers1/settrue/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers2/setfalse/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers2/setfalse/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers2/settrue/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers2/settrue/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers3/setfalse/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers3/setfalse/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers3/settrue/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers3/settrue/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers0/setfalse/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers0/setfalse/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers0/settrue/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers0/settrue/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers1/setfalse/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers1/setfalse/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers1/settrue/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers1/settrue/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers2/setfalse/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers2/setfalse/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers2/settrue/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers2/settrue/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers3/setfalse/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers3/setfalse/distance301",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers3/settrue/distance300",
+        "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers3/settrue/distance301"
+      ]
+    },
+    {
+      "power_id": "ZS-D01",
+      "name": "回垒",
+      "effect": "施放战吼时，立即获得相当于最大生命25%的护盾。护盾没有额外时限，耗尽或卸下这件装备后消失；再次施放会补至当前最大生命的25%，不会叠加。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloSpecialCoverage/ZS-D01",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "施放战吼时，立即获得相当于最大生命25%的护盾",
+          "kind": "solo",
+          "assertion": "真实战吼释放得到施放时MaxHP25%盾；实际受击消耗，重放补当前上限不叠加，长期不超时，卸装清理。",
+          "tests": [
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-D01"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "护盾没有额外时限，耗尽或卸下这件装备后消失",
+          "kind": "solo",
+          "assertion": "真实战吼释放得到施放时MaxHP25%盾；实际受击消耗，重放补当前上限不叠加，长期不超时，卸装清理。",
+          "tests": [
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-D01"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "再次施放会补至当前最大生命的25%，不会叠加",
+          "kind": "solo",
+          "assertion": "真实战吼释放得到施放时MaxHP25%盾；实际受击消耗，重放补当前上限不叠加，长期不超时，卸装清理。",
+          "tests": [
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-D01"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-D02",
+      "name": "拒近",
+      "effect": "受到的直接伤害降低16%。穿刺之枪和破防之枪已有的减防效果增强25%；不会让原本没有减防的技能凭空获得减防。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/absolute-unmodified-scaling",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/authored-below-minus100",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/other-attribute-unchanged",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/positive-defense-unchanged",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/1",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/20",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/5",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/unequipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRemainingClauses/ZS-D02",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "受到的直接伤害降低16%",
+          "kind": "solo",
+          "assertion": "直接受击84/卸装100，DOT100；两种技能已有减防40%→50%实际Def100→50，无原减防时不凭空施加；原生rank1/5/20实际Def100→63/13/0，对照70/30/0，时长15秒与百分比原上限保留，已创作特例和非百分比边界由真实状态消费者断言。",
+          "tests": [
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/absolute-unmodified-scaling",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/authored-below-minus100",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/other-attribute-unchanged",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/positive-defense-unchanged",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/1",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/20",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/5",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/condition-false",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/dot",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/equipped",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/unequipped",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-D02"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "穿刺之枪和破防之枪已有的减防效果增强25%",
+          "kind": "solo",
+          "assertion": "直接受击84/卸装100，DOT100；两种技能已有减防40%→50%实际Def100→50，无原减防时不凭空施加；原生rank1/5/20实际Def100→63/13/0，对照70/30/0，时长15秒与百分比原上限保留，已创作特例和非百分比边界由真实状态消费者断言。",
+          "tests": [
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/absolute-unmodified-scaling",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/authored-below-minus100",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/other-attribute-unchanged",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/positive-defense-unchanged",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/1",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/20",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/5",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/condition-false",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/dot",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/equipped",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/unequipped",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-D02"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不会让原本没有减防的技能凭空获得减防",
+          "kind": "solo",
+          "assertion": "直接受击84/卸装100，DOT100；两种技能已有减防40%→50%实际Def100→50，无原减防时不凭空施加；原生rank1/5/20实际Def100→63/13/0，对照70/30/0，时长15秒与百分比原上限保留，已创作特例和非百分比边界由真实状态消费者断言。",
+          "tests": [
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/absolute-unmodified-scaling",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/authored-below-minus100",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/other-attribute-unchanged",
+            "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/positive-defense-unchanged",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/1",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/20",
+            "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/5",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/condition-false",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/dot",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/equipped",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/unequipped",
+            "TestLegendaryWarriorSoloRemainingClauses/ZS-D02"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank20",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank5",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank20",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank5",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank20",
+        "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank5"
+      ]
+    },
+    {
+      "power_id": "ZS-D03",
+      "name": "卸力",
+      "effect": "正受到你施加的破防之枪减防效果的敌人，对你造成的直接伤害降低50%；通过“开隙”等威能附带施加的同类减防也有效。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/unequipped",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "正受到你施加的破防之枪减防效果的敌人，对你造成的直接伤害降低50%",
+          "kind": "solo",
+          "assertion": "自己的破防来源使实际直接受击50，其他来源100，DOT100；原生同源减防/无真正减防的易伤另有原生回归。",
+          "tests": [
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/condition-false",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/dot",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/equipped",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/unequipped"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "通过“开隙”等威能附带施加的同类减防也有效",
+          "kind": "solo",
+          "assertion": "自己的破防来源使实际直接受击50，其他来源100，DOT100；原生同源减防/无真正减防的易伤另有原生回归。",
+          "tests": [
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/condition-false",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/dot",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/equipped",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/unequipped"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-D04",
+      "name": "隔绝",
+      "effect": "受到的魔法直接伤害降低60%。破法之枪的削蓝量提高25%，这部分加成也计入「噤声余响」的伤害换算。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDrainConsumers/ZS-D04",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04/unequipped",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "受到的魔法直接伤害降低60%",
+          "kind": "solo",
+          "assertion": "魔法直接伤40，物理100，DOT100；应削蓝60→75，剩余不足按现有MP扣；转换组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDrainConsumers/ZS-D04",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04/condition-false",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04/dot",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04/equipped",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04/unequipped"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "破法之枪的削蓝量提高25%，这部分加成也计入「噤声余响」的伤害换算",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；魔法直接伤40，物理100，DOT100；应削蓝60→75，剩余不足按现有MP扣；转换组合另列。",
+          "tests": [
+            "TestLegendaryWarriorDrainFractionBeforeBaseConversion"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorDrainFractionBeforeBaseConversion"
+      ]
+    },
+    {
+      "power_id": "ZS-D05",
+      "name": "缓冲",
+      "effect": "受到的直接伤害降低40%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05/unequipped",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "受到的直接伤害降低40%",
+          "kind": "solo",
+          "assertion": "实际直接HP损失60，卸装/DOT100。",
+          "tests": [
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05/condition-false",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05/dot",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05/equipped",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05/unequipped"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-D06",
+      "name": "拒袭",
+      "effect": "当伤害来源处于你1.5倍普通攻击距离内时，它对你造成的直接伤害降低35%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06/unequipped",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "当伤害来源处于你1.5倍普通攻击距离内时，它对你造成的直接伤害降低35%",
+          "kind": "solo",
+          "assertion": "150距离内实际65，151距离100，卸装/DOT100。",
+          "tests": [
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06/condition-false",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06/dot",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06/equipped",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06/unequipped"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-D07",
+      "name": "守步",
+      "effect": "受到的直接伤害降低45%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07/unequipped",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "受到的直接伤害降低45%",
+          "kind": "solo",
+          "assertion": "实际直接HP损失55，卸装/DOT100。",
+          "tests": [
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07/condition-false",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07/dot",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07/equipped",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07/unequipped"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-D08",
+      "name": "人墙",
+      "effect": "受到的直接伤害降低30%，野战八荒的作用半径增加20%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloGeometryConsumers/ZS-D08/10022",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08/unequipped",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "受到的直接伤害降低30%，野战八荒的作用半径增加20%",
+          "kind": "solo",
+          "assertion": "实际直接70，卸装/DOT100；原半径100外115距离目标实际命中。",
+          "tests": [
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-D08/10022",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08/condition-false",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08/dot",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08/equipped",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08/unequipped"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-D09",
+      "name": "留守",
+      "effect": "石化之枪冷却缩短50%；成功施放时，立即获得相当于最大生命25%的护盾，目标免疫石化也不影响获得护盾。护盾没有额外时限，耗尽或卸下装备后消失；重复施放只补满、不叠加。与「碎岩」的冷却缩减只取一次50%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-D09",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloSpecialCoverage/ZS-D09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "石化之枪冷却缩短50%",
+          "kind": "solo",
+          "assertion": "真实石化释放立即MaxHP25%盾、目标免疫仍获盾，实际冷却减半；受击消耗/补满/永久/卸装清理，碎岩组合仍仅一次减半。",
+          "tests": [
+            "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-D09",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-D09"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "成功施放时，立即获得相当于最大生命25%的护盾，目标免疫石化也不影响获得护盾",
+          "kind": "solo",
+          "assertion": "真实石化释放立即MaxHP25%盾、目标免疫仍获盾，实际冷却减半；受击消耗/补满/永久/卸装清理，碎岩组合仍仅一次减半。",
+          "tests": [
+            "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-D09",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-D09"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "护盾没有额外时限，耗尽或卸下装备后消失",
+          "kind": "solo",
+          "assertion": "真实石化释放立即MaxHP25%盾、目标免疫仍获盾，实际冷却减半；受击消耗/补满/永久/卸装清理，碎岩组合仍仅一次减半。",
+          "tests": [
+            "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-D09",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-D09"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "重复施放只补满、不叠加",
+          "kind": "solo",
+          "assertion": "真实石化释放立即MaxHP25%盾、目标免疫仍获盾，实际冷却减半；受击消耗/补满/永久/卸装清理，碎岩组合仍仅一次减半。",
+          "tests": [
+            "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-D09",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-D09"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "与「碎岩」的冷却缩减只取一次50%",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；真实石化释放立即MaxHP25%盾、目标免疫仍获盾，实际冷却减半；受击消耗/补满/永久/卸装清理，碎岩组合仍仅一次减半。",
+          "tests": [
+            "TestLegendaryWarriorCoverageCombinations/petrify-shield-cooldown"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorCoverageCombinations/petrify-shield-cooldown"
+      ]
+    },
+    {
+      "power_id": "ZS-D10",
+      "name": "整阵",
+      "effect": "受到的直接伤害降低25%，免疫减速；装备时也会清除已有减速效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/condition-false",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/equipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/unequipped",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloSpecialCoverage/ZS-D10",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "受到的直接伤害降低25%，免疫减速",
+          "kind": "solo",
+          "assertion": "直接75，卸装/DOT100；装备清已有减速，装备后新减速被拒，卸装恢复可施加。",
+          "tests": [
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/condition-false",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/dot",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/equipped",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/unequipped",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-D10"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "装备时也会清除已有减速效果",
+          "kind": "solo",
+          "assertion": "直接75，卸装/DOT100；装备清已有减速，装备后新减速被拒，卸装恢复可施加。",
+          "tests": [
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/condition-false",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/dot",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/equipped",
+            "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/unequipped",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-D10"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-U01",
+      "name": "回气",
+      "effect": "连环枪法的法力消耗降低40%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloResourceConsumers/ZS-U01/10002",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "连环枪法的法力消耗降低40%",
+          "kind": "solo",
+          "assertion": "实际onUseSkill扣MP60而卸装100，技能仍实际命中100。",
+          "tests": [
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U01/10002"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-U02",
+      "name": "节流",
+      "effect": "破法之枪的法力消耗降低60%，削蓝量提高60%。提高后的削蓝量也会计入「噤声余响」的伤害换算。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloDrainConsumers/ZS-U02",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloResourceConsumers/ZS-U02/10013",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "破法之枪的法力消耗降低60%，削蓝量提高60%",
+          "kind": "solo",
+          "assertion": "真实施放MP40/卸装100，应削蓝60→96；目标0/20/1000MP边界分别扣0/20/96，转换组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloDrainConsumers/ZS-U02",
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U02/10013"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "提高后的削蓝量也会计入「噤声余响」的伤害换算",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；真实施放MP40/卸装100，应削蓝60→96；目标0/20/1000MP边界分别扣0/20/96，转换组合另列。",
+          "tests": [
+            "TestLegendaryWarriorDrainFractionBeforeBaseConversion"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorDrainFractionBeforeBaseConversion"
+      ]
+    },
+    {
+      "power_id": "ZS-U03",
+      "name": "探路",
+      "effect": "飞翔之枪的施法距离增加50%，自身移动速度提高30%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloMovementOutput/ZS-U03",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRangeAndTimingConsumers/ZS-U03",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "飞翔之枪的施法距离增加50%，自身移动速度提高30%",
+          "kind": "solo",
+          "assertion": "原100距离外140目标只有装备后实际准入并命中；refreshStats后面板Current[9]和权威playerMoveSpeedPX均130%，卸装恢复。",
+          "tests": [
+            "TestLegendaryWarriorSoloMovementOutput/ZS-U03",
+            "TestLegendaryWarriorSoloRangeAndTimingConsumers/ZS-U03"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-U04",
+      "name": "行军",
+      "effect": "战吼的半径增加70%、法力消耗降低30%，自身移动速度提高30%。战吼半径与「宣战」「号令」「军令」只取最高加成。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloGeometryConsumers/ZS-U04/10028",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloMovementOutput/ZS-U04",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloResourceConsumers/ZS-U04/10028",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloSpecialCoverage/ZS-U04",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "战吼的半径增加70%、法力消耗降低30%，自身移动速度提高30%",
+          "kind": "solo",
+          "assertion": "真实战吼耗MP70，160距离副目标实际命中；refreshStats后面板/权威移速130%，卸装恢复；最高范围组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-U04/10028",
+            "TestLegendaryWarriorSoloMovementOutput/ZS-U04",
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U04/10028",
+            "TestLegendaryWarriorSoloSpecialCoverage/ZS-U04"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "战吼半径与「宣战」「号令」「军令」只取最高加成",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；真实战吼耗MP70，160距离副目标实际命中；refreshStats后面板/权威移速130%，卸装恢复；最高范围组合另列。",
+          "tests": [
+            "TestLegendaryWarriorCoverageCombinations/warcry-highest-radius"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorCoverageCombinations/warcry-highest-radius"
+      ]
+    },
+    {
+      "power_id": "ZS-U05",
+      "name": "止步",
+      "effect": "震地之枪的扇形攻击半径增加45%，法力消耗降低45%，保留原有控制效果。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloGeometryConsumers/ZS-U05/10006",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloResourceConsumers/ZS-U05/10006",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-U05",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "震地之枪的扇形攻击半径增加45%，法力消耗降低45%，保留原有控制效果",
+          "kind": "solo",
+          "assertion": "真实施放扣MP55，原半径外140距离目标命中；扇形原击退40仍真实移动40。",
+          "tests": [
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-U05/10006",
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U05/10006",
+            "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-U05"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-U06",
+      "name": "换息",
+      "effect": "枪系主动技能的法力消耗降低60%，生命消耗不变。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloResourceConsumers/ZS-U06/10002",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloResourceConsumers/ZS-U06/10005",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloResourceConsumers/ZS-U06/10023",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "枪系主动技能的法力消耗降低60%",
+          "kind": "solo",
+          "assertion": "多种枪系技能真实扣MP40/卸装100，不凭空扣HP；龙套原生命代价/回补另用真实原生组合核验。",
+          "tests": [
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U06/10002",
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U06/10005",
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U06/10023"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "生命消耗不变",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；多种枪系技能真实扣MP40/卸装100，不凭空扣HP；龙套原生命代价/回补另用真实原生组合核验。",
+          "tests": [
+            "TestLegendaryWarriorCoverageCombinations/utility-preserves-set-life-cost"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorCoverageCombinations/utility-preserves-set-life-cost"
+      ]
+    },
+    {
+      "power_id": "ZS-U07",
+      "name": "收枪",
+      "effect": "普通攻击命中时，立即恢复最大法力的5%。每次普通攻击只恢复一次，即使攻击多个目标也不重复恢复；包括「校准」替代的心眼普通攻击。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRangeAndTimingConsumers/ZS-U07",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "普通攻击命中时，立即恢复最大法力的5%",
+          "kind": "solo",
+          "assertion": "真实普通攻击恢复MaxMP5%=50，主动技能不恢复；校准多目标三件组合仍只恢复一次。",
+          "tests": [
+            "TestLegendaryWarriorSoloRangeAndTimingConsumers/ZS-U07"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "每次普通攻击只恢复一次，即使攻击多个目标也不重复恢复",
+          "kind": "solo",
+          "assertion": "真实普通攻击恢复MaxMP5%=50，主动技能不恢复；校准多目标三件组合仍只恢复一次。",
+          "tests": [
+            "TestLegendaryWarriorSoloRangeAndTimingConsumers/ZS-U07"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "包括「校准」替代的心眼普通攻击",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；真实普通攻击恢复MaxMP5%=50，主动技能不恢复；校准多目标三件组合仍只恢复一次。",
+          "tests": [
+            "TestLegendaryWarriorManaRecoveryOnceBasicRoot"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorManaRecoveryOnceBasicRoot"
+      ]
+    },
+    {
+      "power_id": "ZS-U08",
+      "name": "号令",
+      "effect": "穿刺之枪的攻击长度和宽度各增加70%，战吼的半径增加70%；这两个技能的法力消耗都降低30%。战吼半径与「宣战」「行军」「军令」只取最高加成。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloGeometryConsumers/ZS-U08/10005",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloGeometryConsumers/ZS-U08/10028",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloResourceConsumers/ZS-U08/10005",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloResourceConsumers/ZS-U08/10028",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "穿刺之枪的攻击长度和宽度各增加70%，战吼的半径增加70%",
+          "kind": "solo",
+          "assertion": "两技能实际扣MP70；穿刺长宽170范围内(160,80)目标命中，战吼160距离命中；最高范围组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-U08/10005",
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-U08/10028",
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U08/10005",
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U08/10028"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "这两个技能的法力消耗都降低30%",
+          "kind": "solo",
+          "assertion": "两技能实际扣MP70；穿刺长宽170范围内(160,80)目标命中，战吼160距离命中；最高范围组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-U08/10005",
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-U08/10028",
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U08/10005",
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U08/10028"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "战吼半径与「宣战」「行军」「军令」只取最高加成",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；两技能实际扣MP70；穿刺长宽170范围内(160,80)目标命中，战吼160距离命中；最高范围组合另列。",
+          "tests": [
+            "TestLegendaryWarriorCoverageCombinations/warcry-highest-radius"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorCoverageCombinations/warcry-highest-radius"
+      ]
+    },
+    {
+      "power_id": "ZS-U09",
+      "name": "续行",
+      "effect": "飞翔之枪的准备时间和冷却时间均缩短50%，重击的冷却时间缩短50%。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloRangeAndTimingConsumers/ZS-U09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "飞翔之枪的准备时间和冷却时间均缩短50%，重击的冷却时间缩短50%",
+          "kind": "solo",
+          "assertion": "真实cast release deadline飞翔1000→500ms，重击保留1000ms；两技能SkillReadyAt在5000ms前一tick拒绝/到期允许，卸装10000ms。",
+          "tests": [
+            "TestLegendaryWarriorSoloRangeAndTimingConsumers/ZS-U09"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": []
+    },
+    {
+      "power_id": "ZS-U10",
+      "name": "军令",
+      "effect": "战吼不消耗法力，半径增加25%；战神之枪的法力消耗降低60%。战吼半径与「宣战」「行军」「号令」只取最高加成。",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloGeometryConsumers/ZS-U10/10028",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloResourceConsumers/ZS-U10/10023",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+          "test": "TestLegendaryWarriorSoloResourceConsumers/ZS-U10/10028",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "战吼不消耗法力，半径增加25%",
+          "kind": "solo",
+          "assertion": "真实战吼MP0和120距离副目标命中；战神实际MP40；最高范围组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-U10/10028",
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U10/10023",
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U10/10028"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "战神之枪的法力消耗降低60%",
+          "kind": "solo",
+          "assertion": "真实战吼MP0和120距离副目标命中；战神实际MP40；最高范围组合另列。",
+          "tests": [
+            "TestLegendaryWarriorSoloGeometryConsumers/ZS-U10/10028",
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U10/10023",
+            "TestLegendaryWarriorSoloResourceConsumers/ZS-U10/10028"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "战吼半径与「宣战」「行军」「号令」只取最高加成",
+          "kind": "combination",
+          "assertion": "独立分母之外的合法多威能/技能/套装消费者回归；真实战吼MP0和120距离副目标命中；战神实际MP40；最高范围组合另列。",
+          "tests": [
+            "TestLegendaryWarriorCoverageCombinations/warcry-highest-radius"
+          ],
+          "result": "pass"
+        }
+      ],
+      "supplemental_combination_tests": [
+        "TestLegendaryWarriorCoverageCombinations/warcry-highest-radius"
+      ]
+    }
+  ],
+  "combination_tests": [
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_synergy_test.go",
+      "test": "TestLegendaryWarriorArmorBuildSameHitAndGeometry/apply",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_synergy_test.go",
+      "test": "TestLegendaryWarriorArmorBuildSameHitAndGeometry/strength",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_synergy_test.go",
+      "test": "TestLegendaryWarriorArmorBuildSameHitAndGeometry/three",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_synergy_test.go",
+      "test": "TestLegendaryWarriorArmorBuildSameHitAndGeometry/width",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/0",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/1",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/2",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/3",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/0",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/1",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/2",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/3",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/0",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/1",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/2",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/3",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers0/setfalse",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers0/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers1/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers2/setfalse",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers2/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers3/setfalse",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor0/powers3/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers0/setfalse",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers0/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers1/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers2/setfalse",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers2/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers3/setfalse",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10009/donor5/powers3/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers0/setfalse",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers0/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers1/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers2/setfalse",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers2/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers3/setfalse",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor0/powers3/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers0/setfalse",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers0/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers1/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers2/setfalse",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers2/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers3/setfalse",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate/skill10027/donor5/powers3/settrue",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers0/setfalse/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers0/setfalse/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers0/settrue/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers0/settrue/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers1/setfalse/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers1/setfalse/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers1/settrue/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers1/settrue/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers2/setfalse/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers2/setfalse/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers2/settrue/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers2/settrue/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers3/setfalse/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers3/setfalse/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers3/settrue/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor0/powers3/settrue/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers0/setfalse/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers0/setfalse/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers0/settrue/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers0/settrue/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers1/setfalse/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers1/setfalse/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers1/settrue/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers1/settrue/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers2/setfalse/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers2/setfalse/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers2/settrue/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers2/settrue/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers3/setfalse/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers3/setfalse/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers3/settrue/distance300",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_borrow_audit_test.go",
+      "test": "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate/donor5/powers3/settrue/distance301",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditManaConversionCombinations/single/empty=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditManaConversionCombinations/single/empty=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditManaConversionCombinations/three-damage/empty=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditManaConversionCombinations/three-damage/empty=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditManaConversionCombinations/three-drain/empty=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditManaConversionCombinations/three-drain/empty=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditManaConversionCombinations/universal/empty=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditManaConversionCombinations/universal/empty=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditNativeA23PrimaryAndSet/selected=false/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditNativeA23PrimaryAndSet/selected=false/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditNativeA23PrimaryAndSet/selected=true/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditNativeA23PrimaryAndSet/selected=true/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=0/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=0/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=1/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=1/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=2/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=2/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=3/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_audit_regression_test.go",
+      "test": "TestLegendaryWarriorAuditNoDurabilityWholeCast/powers=3/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_synergy_test.go",
+      "test": "TestLegendaryWarriorBasicNativeAdmissionAndNoCost",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+      "test": "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank20",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+      "test": "TestLegendaryWarriorCoverageArmorCapCombinations/skill10005/rank5",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+      "test": "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank20",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+      "test": "TestLegendaryWarriorCoverageArmorCapCombinations/skill10022/rank5",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+      "test": "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank20",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+      "test": "TestLegendaryWarriorCoverageArmorCapCombinations/skill10023/rank5",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+      "test": "TestLegendaryWarriorCoverageCombinations/petrify-shield-cooldown",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+      "test": "TestLegendaryWarriorCoverageCombinations/utility-preserves-set-life-cost",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+      "test": "TestLegendaryWarriorCoverageCombinations/warcry-highest-radius",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_synergy_test.go",
+      "test": "TestLegendaryWarriorDrainFractionBeforeBaseConversion",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_synergy_test.go",
+      "test": "TestLegendaryWarriorHeartEyeBuildActualAoE",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_contract_test.go",
+      "test": "TestLegendaryWarriorManaRecoveryOnceBasicRoot",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/pair/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/pair/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/single/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/third-damage/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/third-damage/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/third-flat/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=0/third-flat/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/pair/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/pair/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/single/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/third-damage/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/third-damage/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/third-flat/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=1/third-flat/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/pair/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/pair/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/single/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/third-damage/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/third-damage/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/third-flat/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=1/eye=20/third-flat/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/pair/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/pair/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/single/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/third-damage/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/third-damage/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/third-flat/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=20/eye=1/third-flat/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/pair/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/pair/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/single/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/third-damage/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/third-damage/set=true",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/third-flat/set=false",
+      "result": "pass"
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_melee_final_review_test.go",
+      "test": "TestWarriorFinalReviewChainSharesReplacedBasicCoefficient/chain=5/eye=1/third-flat/set=true",
+      "result": "pass"
+    }
+  ],
+  "supplemental_consumer_boundary_tests": [
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_warrior_coverage_test.go",
+      "test": "TestLegendaryWarriorArmorDefenseConsumerBoundary",
+      "result": "pass"
+    }
+  ]
+}

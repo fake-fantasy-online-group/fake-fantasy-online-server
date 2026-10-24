@@ -203,7 +203,7 @@ func (s *Scene) executeEquipmentProc(owner *entity.Entity, c equipmentProcCandid
 				tr = &combat.HitTracker{}
 				s.hits[owner.ID] = tr
 			}
-			blow := combat.Blow{Origin: domain.DamageProcOrigin, ProcDepth: 1, RootID: c.hit.ev.RootID, HurtType: def.HurtType, SkillID: int32(def.ID), SkillPct: effect.DamagePct, FlatDamage: effect.DamageFlat, GuaranteedHit: effect.GuaranteedHit, Magic: def.HurtType != domain.HurtNone && def.HurtType != domain.HurtPhysical, PayloadScaleBP: scale, PayloadScaleKnown: true}
+			blow := combat.Blow{Origin: domain.DamageProcOrigin, ProcDepth: 1, RootID: c.hit.ev.RootID, HurtType: def.HurtType, SkillID: int32(def.ID), SourceSkillRange: def.Dist, SkillPct: effect.DamagePct, FlatDamage: effect.DamageFlat, GuaranteedHit: effect.GuaranteedHit, Magic: def.HurtType != domain.HurtNone && def.HurtType != domain.HurtPhysical, PayloadScaleBP: scale, PayloadScaleKnown: true}
 			blow.SkillPctNumerator, blow.SkillPctDenominator = effect.DamagePctNumerator, effect.DamagePctDenominator
 			ev, raw, reflected := s.resolveStrikeStatuses(owner, target, tr, blow)
 			s.emit(ev)

@@ -1137,7 +1137,7 @@ func (s *Scene) passiveCounterPending(defender, attacker *entity.Entity) (pendin
 		fx := counterDef.DirectEffects()[0]
 		return pendingAttack{
 			src: defender.ID, dst: attacker.ID,
-			blow:      combat.Blow{SkillID: int32(passive.ID), SkillPct: fx.DamagePct, SkillPctNumerator: fx.DamagePctNumerator, SkillPctDenominator: fx.DamagePctDenominator},
+			blow:      combat.Blow{SkillID: int32(passive.ID), SourceSkillRange: int32(distance), SkillPct: fx.DamagePct, SkillPctNumerator: fx.DamagePctNumerator, SkillPctDenominator: fx.DamagePctDenominator},
 			resolveAt: s.tick + 1, reserved: true, counter: true,
 		}, true
 	}

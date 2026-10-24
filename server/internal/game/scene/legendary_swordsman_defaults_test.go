@@ -160,18 +160,20 @@ func TestLegendarySwordsmanImmediateUtilityDefaults(t *testing.T) {
 		t.Fatal("cleanse missed poison/slow or removed root")
 	}
 	s, p, m = legendaryMeleeFixture(t, "JK-U08")
-	if !s.legendaryMeleeDisplacementImmune(p) {
-		t.Fatal("equipment displacement immunity missing")
+	slow := domain.StatusDef{ID: domain.StatusSlow, Affixes: []domain.Affix{{Attr: domain.AttrMoveSpeed, Value: -10}}}
+	if s.legendaryStatusReceiving(p, m, &slow) {
+		t.Fatal("equipment movement immunity missing")
 	}
 	p.Player.Worn = &domain.EquipSet{}
-	if s.legendaryMeleeDisplacementImmune(p) {
+	slow.Affixes = []domain.Affix{{Attr: domain.AttrMoveSpeed, Value: -10}}
+	if !s.legendaryStatusReceiving(p, m, &slow) {
 		t.Fatal("immunity survived unequip")
 	}
 	for _, tc := range []struct {
 		id           string
 		skill        domain.SkillID
 		dist, radius int32
-	}{{"JK-U04", 10127, 135, 135}, {"JK-U10", 10113, 145, 100}, {"JK-A17", 10121, 100, 150}} {
+	}{{"JK-U04", 10127, 100, 135}, {"JK-U10", 10113, 145, 100}, {"JK-A17", 10121, 100, 150}} {
 		s, p, m = legendaryMeleeFixture(t, tc.id)
 		d := domain.SkillDef{ID: tc.skill, Dist: 100, Radius: 100}
 		s.legendaryPrepareSkill(p, &d, m.ID)
@@ -313,6 +315,6 @@ func TestLegendarySwordsmanMovePassiveAndCleanseScope(t *testing.T) {
 	}
 	s, p, m = legendaryMeleeFixture(t, "JK-U08")
 	if !s.applyStatusDef(p, domain.StatusDef{ID: domain.StatusStun, Level: 1, DurationSec: 6, Control: domain.ControlStun, TypeKnown: true, Type: domain.StatusBad, EffectHitBP: 100000000}, m.ID) {
-		t.Fatal("displacement immunity became stun immunity")
+		t.Fatal("movement immunity became stun immunity")
 	}
 }

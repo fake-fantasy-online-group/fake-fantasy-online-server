@@ -170,8 +170,12 @@ func TestLegendaryUniversalNativeBaseContributions(t *testing.T) {
 				d.LegendaryBasic = true
 			}
 			s.legendaryPrepareSkill(p, &d, m.ID)
-			if d.Effects[0].BaseDamageFlat != tc.want {
-				t.Fatalf("base%d want%d", d.Effects[0].BaseDamageFlat, tc.want)
+			base := d.Effects[0].BaseDamageFlat
+			if tc.id == "TY-A25" || tc.id == "TY-A26" {
+				base = d.Effects[0].AttackBaseFlat
+			}
+			if base != tc.want {
+				t.Fatalf("base%d want%d", base, tc.want)
 			}
 		})
 	}

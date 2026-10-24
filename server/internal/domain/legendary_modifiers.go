@@ -7,6 +7,8 @@ package domain
 // multiplying the complete bonus twice.
 type LegendarySkillModifiers struct {
 	UniversalSingleCircle                                    bool
+	SkipAttackDurability                                     bool
+	RadiusFlat, WidthFlat, LengthFlat                        int32
 	LifeStealBP                                              int32
 	TrapRadiusBP, PrepareReductionBP, HealingBP, RestoreMPBP int32
 	ManaDrainBP                                              int32
@@ -23,6 +25,8 @@ type LegendarySkillModifiers struct {
 // These modifiers belong to the existing native status instance. They never
 // create another periodic effect, extend duration or change the source owner.
 type LegendaryStatusModifiers struct {
+	// Flat percentage-point grants are added after native buff-strength scaling.
+	PhysicalReductionBonusPct, MagicReductionBonusPct                          int32
 	DurationBP, SlowMagnitudeBP, DefenseLossReductionBP, AttackSlowReductionBP int32
 	EffectHitBonusBP, LifeStealBP, PoisonChancePct                             int32
 	PeriodicCritChanceBP, PeriodicCritBonusBP                                  int32

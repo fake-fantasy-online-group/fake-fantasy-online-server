@@ -199,7 +199,7 @@ func TestLegendaryWarriorSpeedAndOwnArmorDefense(t *testing.T) {
 	s, p, m := legendaryMeleeFixture(t, "ZS-D03")
 	m.Stats = domain.Stats{MinAtk: 100, MaxAtk: 100}
 	m.Status = domain.NewStatusSet()
-	m.Status.Apply(domain.StatusDef{ID: 19001, SourceSkillID: 10009, PhysicalDamageTakenPct: 20, DurationSec: 10}, s.tick, p.ID)
+	m.Status.Apply(domain.StatusDef{ID: 10009, SourceSkillID: 10009, Affixes: []domain.Affix{{Attr: domain.AttrDef, Mode: domain.ModePercent, Value: -30}}, DurationSec: 10}, s.tick, p.ID)
 	ev, _, _ := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true, SkillPct: 100})
 	if ev.Amount != 50 {
 		t.Fatalf("armor defense%d", ev.Amount)

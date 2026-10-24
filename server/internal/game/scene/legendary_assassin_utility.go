@@ -35,7 +35,7 @@ func legendaryAssassinUtilityPrepare(c *legendaryContext, d *domain.SkillDef) {
 		}
 	case "CK-U04":
 		if d.ID == 10228 {
-			d.Radius = specialScale(d.Radius, 150)
+			d.LegendaryModifiers.RadiusBP += 5000
 		}
 	case "CK-U07":
 		if legendaryAssassinTrapSkill(d.ID) {

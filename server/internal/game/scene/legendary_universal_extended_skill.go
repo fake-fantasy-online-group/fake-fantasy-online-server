@@ -97,7 +97,7 @@ func universalExtendedPrepare(c *legendaryContext, d *domain.SkillDef) {
 			m.PrepareReductionBP += 3000
 		}
 	case "TY-U04":
-		if !d.LegendaryBasic && universalHasEffect(d, domain.EffectHeal, domain.EffectRestoreHP) {
+		if !d.LegendaryBasic && universalNativeHealingPayload(c, d) {
 			m.ManaReductionBP += 3000
 		}
 	case "TY-U06":
@@ -156,4 +156,18 @@ func universalHasNativeShield(c *legendaryContext) bool {
 		})
 	}
 	return found
+}
+
+// Native healing includes periodic HP restoration carried by a skill status.
+// It does not turn unrelated buffs or mana restoration into healing spells.
+func universalNativeHealingPayload(c *legendaryContext, d *domain.SkillDef) bool {
+	if universalHasEffect(d, domain.EffectHeal, domain.EffectRestoreHP) {
+		return true
+	}
+	for _, app := range d.Statuses {
+		if st, ok := c.Scene.resolveSkillStatusDef(*d, app, 0); ok && st.IntervalSec > 0 && universalStatusHeals(st) {
+			return true
+		}
+	}
+	return false
 }

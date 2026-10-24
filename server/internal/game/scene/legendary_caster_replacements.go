@@ -19,12 +19,18 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("SS-A18", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryFlame {
-			d.LegendaryModifiers.WidthBP += 8000
+			// Native Flame is circular: its width is its diameter. Keep
+			// that native shape and apply the authored 80% to its extent.
+			if d.Area.Shape == domain.SkillAreaCircle {
+				d.LegendaryModifiers.RadiusBP += 8000
+			} else {
+				d.LegendaryModifiers.WidthBP += 8000
+			}
 			d.LegendaryModifiers.DamageBP += 4000
 		}
 	}})
 	registerLegendarySynergyHandler("SS-A22", legendaryHandler{TargetDefinition: func(c *legendaryContext, d *domain.SkillDef) {
-		if c.Skill == legendaryBlizzard && (legendaryCasterHas(c.Target, domain.StatusFreeze) || legendaryCasterHas(c.Target, domain.StatusSlow)) {
+		if c.Skill == legendaryBlizzard && legendaryCasterControlled(c.Target) {
 			legendaryAddTargetDamage(d, 9000)
 		}
 	}})

@@ -123,6 +123,9 @@ func init() {
 
 }
 func legendaryCasterCenter(c *legendaryContext) domain.Pos {
+	if c.IsChild {
+		return c.Center
+	}
 	if root := c.Scene.equipmentState().root; root != nil {
 		return root.center
 	}

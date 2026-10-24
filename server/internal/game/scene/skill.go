@@ -76,6 +76,10 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		reject(event.RejectWrongProf)
 		return
 	}
+	// A shape replacement must not turn an out-of-range single-target command
+	// into a legal cast. Use the final distance below so range bonuses still apply.
+	_, specializedTargeting := specialSkillEffect(def)
+	selectedSingle := !specializedTargeting && def.Kind == domain.SkillSingle && def.TargetEnemy && !def.TargetSelf
 	s.applyResolvedSkillModifiers(caster, &def, ch.Skills, s.rawSkillLevels(caster))
 	s.legendaryPrepareSkill(caster, &def, cmd.Target)
 	s.specialWeaponAim(caster, &def, cmd.Target)
@@ -120,6 +124,21 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		return
 	}
 
+	// A caster-centered replacement still uses the caster as its center; an
+	// optional directional aim cannot bypass selected-target admission. Actual
+	// target-centered ground casts continue to validate their point below.
+	if selectedSingle && def.Kind != domain.SkillSingle && cmd.Target != 0 && (cmd.At == nil || skillCenteredOnCaster(def)) {
+		target := s.entities[cmd.Target]
+		if target == nil || !s.validSkillCenter(caster, target, def) {
+			reject(event.RejectNoTarget)
+			return
+		}
+		if def.Dist > 0 && sqDist(caster.Pos, target.Pos) > float64(def.Dist)*float64(def.Dist) {
+			reject(event.RejectTooFar)
+			return
+		}
+	}
+
 	// 指向型技能只有两种中心来源：明确坐标，或当前有效目标的位置。
 	// 缺两者时拒绝；不能把“无受击者”误当成可退回施法者脚下。
 	if def.Area.Valid() && def.Area.Center == domain.SkillAreaCenterTarget ||
@@ -127,7 +146,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		point := cmd.At
 		if point == nil {
 			target := s.entities[cmd.Target]
-			if target == nil || !target.Alive() || !s.validTarget(caster, target, def) {
+			if target == nil || !s.validSkillCenter(caster, target, def) {
 				reject(event.RejectNoTarget)
 				return
 			}
@@ -142,7 +161,8 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 	}
 	targets, movementAt := s.resolveSkillTargets(caster, def, cmd.Target, cmd.At)
 	legendaryOriginalTargets := append([]domain.EntityID(nil), targets...)
-	targets = s.legendarySelectTargets(caster, def, cmd.Target, targets)
+	primary := s.skillPrimary(caster, def, cmd.Target, cmd.At, targets)
+	targets = s.legendarySelectTargets(caster, def, primary, targets)
 	targets = s.limitVariantTargets(caster, def, targets, cmd.Target)
 	targets = s.limitSpecialWeaponTargets(caster, def, targets, cmd.Target)
 	if len(targets) == 0 && !(def.Kind == domain.SkillArea && def.Area.Valid()) {
@@ -151,6 +171,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 	}
 	visualTarget, visualAim := s.skillVisualTarget(caster, def, cmd, targets)
 	statusDurationPct := s.prepareSkillStatuses(caster, &def)
+	s.legendaryCasterSnapshotControl(caster, &def)
 	sourceOffense := s.captureCombatSourceV5(caster, def.UniqueInvisibleStart)
 	releaseAtWall := time.Time{}
 	if def.PrepareMS > 0 {
@@ -166,7 +187,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 	legendaryMPBefore := caster.MP
 	s.classSetPaySkillCost(caster, def)
 	legendaryPaidMP := max(int32(0), legendaryMPBefore-caster.MP)
-	s.legendaryCasterAccepted(caster, def, cmd.Target, targets, legendaryPaidMP)
+	s.legendaryCasterAccepted(caster, def, primary, targets, legendaryPaidMP)
 	if durabilityCost.amount > 0 {
 		s.consumeSkillWeaponDurability(caster, durabilityCost, def.ID)
 	}
@@ -198,7 +219,7 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		equipmentOffense: sourceOffense.Equipment, equipmentSnapshot: true,
 		attackStats: sourceOffense.Stats, attackStatsSnapshot: true,
 		cooldownMS: def.CooldownMS, movementAt: movementAt, legendaryPaidMP: legendaryPaidMP,
-		visualTarget: visualTarget, visualAim: visualAim,
+		primary: primary, visualTarget: visualTarget, visualAim: visualAim,
 		releaseAtWall: releaseAtWall,
 	}
 	if def.PrepareMS > 0 {
@@ -792,7 +813,7 @@ func (s *Scene) resolveAreaTargets(caster *entity.Entity, def domain.SkillDef, t
 			center.X, center.Y = at.X, at.Y
 		} else if target != 0 {
 			t, ok := s.entities[target]
-			if !ok || !t.Alive() || !s.validTarget(caster, t, def) {
+			if !ok || !s.validSkillCenter(caster, t, def) {
 				return nil
 			}
 			center = t.Pos
@@ -866,11 +887,11 @@ func skillAreaContains(area domain.SkillAreaTargeting, center domain.Pos, aimX, 
 			return false
 		}
 		forward := dx*aimX + dy*aimY
-		if forward < 0 {
-			return false
-		}
+		// The angular cosine already bounds the cone. A front-half-plane
+		// rejection would incorrectly clip supported angles above 180 degrees.
 		cosHalf := math.Cos(float64(area.Angle) * math.Pi / 360)
-		return forward >= math.Sqrt(d2)*cosHalf
+		// Include the mathematical boundary despite cosine/dot-product roundoff.
+		return forward+1e-9 >= math.Sqrt(d2)*cosHalf
 	case domain.SkillAreaRectangle:
 		forward := dx*aimX + dy*aimY
 		if forward < 0 || forward > float64(area.Length) {
@@ -925,6 +946,55 @@ func (s *Scene) validTarget(caster, t *entity.Entity, def domain.SkillDef) bool 
 	return false
 }
 
+// validSkillCenter allows explicitly configured friendly anchors without making
+// them damage recipients. Damage/status target selection still uses validTarget.
+func (s *Scene) validSkillCenter(caster, target *entity.Entity, def domain.SkillDef) bool {
+	if target == nil || !target.Alive() && !def.HasResurrectEffect() ||
+		!s.equipmentCombatReady(caster) || !s.equipmentCombatReady(target) ||
+		s.entityMapLoading(caster) || s.entityMapLoading(target) {
+		return false
+	}
+	if def.LegendaryEntityCenter && def.LegendaryFriendlyCenter && target.Alive() &&
+		(target.ID == caster.ID || target.Kind == domain.KindPlayer && sameParty(caster, target)) {
+		return true
+	}
+	return s.validTarget(caster, target, def)
+}
+
+func (s *Scene) skillPrimary(caster *entity.Entity, def domain.SkillDef, selected domain.EntityID, at *domain.Pos, resolved []domain.EntityID) domain.EntityID {
+	if selected == 0 {
+		// Native caster-centered areas ignore an optional ground aim. Keep the
+		// same support center whether or not the client supplied that aim.
+		casterArea := def.Area.Valid() && def.Area.Center == domain.SkillAreaCenterCaster
+		if def.TargetSelf && !def.TargetEnemy && (at == nil || casterArea) {
+			return caster.ID
+		}
+		return 0
+	}
+	target := s.entities[selected]
+	// Trap disarm and target teleport have their own native target families.
+	// Reuse their successful admission, not damage-recipient validation.
+	if effect, special := specialSkillEffect(def); special && target != nil && len(resolved) > 0 &&
+		(effect.Kind == domain.EffectDisarmTrap || effect.Kind == domain.EffectTeleportTarget) {
+		return selected
+	}
+	if !s.validSkillCenter(caster, target, def) {
+		return 0
+	}
+	// Native caster-centered areas use their geometry, not Dist, to admit
+	// victims. Preserve a selected victim already accepted by that geometry;
+	// only adding a primary outside the shape needs the cast-distance check.
+	for _, id := range resolved {
+		if id == selected {
+			return selected
+		}
+	}
+	if def.Dist > 0 && sqDist(caster.Pos, target.Pos) > float64(def.Dist)*float64(def.Dist) {
+		return 0
+	}
+	return selected
+}
+
 // pendingCast 是本帧收到、等着结算的一次技能释放。
 type pendingCast struct {
 	legendaryCenter          domain.Pos
@@ -944,6 +1014,7 @@ type pendingCast struct {
 	statusDurationPct        int32
 	cooldownMS               int32
 	movementAt               *domain.Pos
+	primary                  domain.EntityID // Semantic selection, never the actor chosen for art.
 	visualTarget             domain.EntityID
 	visualAim                *domain.Pos
 	releaseAtWall            time.Time
@@ -954,9 +1025,10 @@ type pendingCast struct {
 }
 
 type pendingSkillTeleport struct {
-	skill domain.SkillID
-	who   domain.EntityID
-	to    domain.Pos
+	source *domain.CombatSourceSnapshotV5
+	skill  domain.SkillID
+	who    domain.EntityID
+	to     domain.Pos
 }
 
 // stepCasts 结算本帧到期的技能。技能和普攻分别排队，主帧内仍固定先结算
@@ -1057,7 +1129,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 					c.legendaryCenter = *c.visualAim
 				}
 			}
-			c.legendaryRootID = s.legendaryCastReleasedAt(src, c.def, c.visualTarget, c.targets, c.legendaryPaidMP, c.legendaryCenter, c.sourceOffense)
+			c.legendaryRootID = s.legendaryCastReleasedAt(src, c.def, c.primary, c.targets, c.legendaryPaidMP, c.legendaryCenter, c.sourceOffense)
 			s.legendaryMeleeEnemyCast(src)
 			c.released = true
 			c.releaseAtWall = time.Time{}
@@ -1080,7 +1152,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 			switch effect.Kind {
 			case domain.EffectTeleportPoint, domain.EffectTeleportTarget:
 				if c.movementAt != nil && (effect.ChanceBP >= 10000 || int32(s.rng.Intn(10000)) < effect.ChanceBP) {
-					teleports = append(teleports, pendingSkillTeleport{who: src.ID, to: *c.movementAt, skill: c.def.ID})
+					teleports = append(teleports, pendingSkillTeleport{who: src.ID, to: *c.movementAt, skill: c.def.ID, source: c.sourceOffense})
 					s.applySkillProgressionShield(src, src, c.def)
 				}
 			case domain.EffectPlaceTrap:
@@ -1105,7 +1177,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 		if !c.equipmentSnapshot {
 			offense = s.equipmentOffense(src)
 		}
-		finishEquipment := s.beginEquipmentRoot(src.ID, c.visualTarget, offense)
+		finishEquipment := s.beginEquipmentRoot(src.ID, c.primary, offense)
 		if c.legendaryRootID != 0 {
 			s.equipment.root.id = c.legendaryRootID
 		}
@@ -1121,7 +1193,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 		s.equipment.root.source = c.sourceOffense
 		s.equipment.root.attackStats = c.attackStats
 		s.equipment.root.attackSnapshot = c.attackStatsSnapshot
-		c.targets = s.legendaryImpactTargets(src, c.def, c.visualTarget, c.targets)
+		c.targets = s.legendaryImpactTargets(src, c.def, c.primary, c.targets)
 		s.equipment.root.targets = append([]domain.EntityID(nil), c.targets...)
 		var classSetHits []domain.EntityID
 		for targetIndex, tid := range c.targets {
@@ -1130,7 +1202,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 				continue // 这半帧里已经死了
 			}
 			impactPosition := dst.Pos
-			landed := s.applySkill(src, dst, s.legendaryTargetDefinition(src, variantTargetDef(c.def, targetIndex), dst, c.visualTarget, c.targets), c.statusDurationPct, false)
+			landed := s.applySkill(src, dst, s.legendaryTargetDefinition(src, variantTargetDef(c.def, targetIndex), dst, c.primary, c.targets), c.statusDurationPct, false)
 			if landed {
 				classSetHits = append(classSetHits, tid)
 				s.detonateVariantBomb(src, dst, c.def, impactPosition)
@@ -1140,7 +1212,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 				s.emit(event.SkillHitEffect{Target: dst.ID, Effect: c.def.HitEffect})
 			}
 		}
-		if c.def.HasDamageEffect() {
+		if c.def.HasDamageEffect() && !c.def.LegendaryModifiers.SkipAttackDurability {
 			s.consumeAttackDurability(src)
 		}
 		s.specialWeaponConsumeFreeze(src, c.def)
@@ -1168,7 +1240,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 		}
 		legendaryFrom := player.Pos
 		if s.onTeleport(Teleport{ID: player.ID, To: s.id, At: teleport.to, Dir: player.Dir}) {
-			s.legendaryCasterTeleported(player, legendaryFrom, teleport.skill)
+			s.legendaryCasterTeleported(player, legendaryFrom, teleport.skill, teleport.source)
 		}
 	}
 }
@@ -1406,6 +1478,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 					SkillID: int32(def.ID), Flag: flag,
 				}
 				s.emit(dealt)
+				s.legendarySwordsmanInstantDeath(src, effectTarget, def)
 				s.consumeHitDurability(effectTarget, dealt)
 				s.emitAttributesIfPlayer(effectTarget)
 				s.onDeath(effectTarget, src.ID)
@@ -1419,14 +1492,17 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 				s.hits[src.ID] = tr
 			}
 			blow := combat.Blow{
-				StartedInvisible:  def.UniqueInvisibleStart,
-				Area:              def.Area.Valid() || def.Radius > 0,
-				HurtType:          def.HurtType,
-				SkillID:           int32(def.ID),
-				SkillPct:          effect.DamagePct,
-				FlatDamage:        effect.DamageFlat,
-				BaseDamageFlat:    effect.BaseDamageFlat,
-				SkillPctNumerator: effect.DamagePctNumerator, SkillPctDenominator: effect.DamagePctDenominator,
+				SuppressLegendaryGeneration: def.LegendarySuppressGeneration,
+				StartedInvisible:            def.UniqueInvisibleStart,
+				Area:                        def.Area.Valid() || def.Radius > 0,
+				HurtType:                    def.HurtType,
+				SkillID:                     int32(def.ID),
+				SourceSkillRange:            def.Dist,
+				SkillPct:                    effect.DamagePct,
+				FlatDamage:                  effect.DamageFlat,
+				BaseDamageFlat:              effect.BaseDamageFlat,
+				AttackBaseFlat:              effect.AttackBaseFlat,
+				SkillPctNumerator:           effect.DamagePctNumerator, SkillPctDenominator: effect.DamagePctDenominator,
 				Trap:          triggeredByTrap,
 				GuaranteedHit: effect.GuaranteedHit, GuaranteedCrit: effect.GuaranteedCrit,
 				// 法系技能 100% 命中(docs/战斗公式.md 第一节)。
@@ -1466,6 +1542,10 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 		}
 		statusDef, ok := s.resolveSkillStatusDef(def, app, statusDurationPct)
 		if ok {
+			statusDef.DamageSourceTrap = triggeredByTrap
+			if child := s.legendaryState().child; child != nil {
+				statusDef.DamageSourceTrap = statusDef.DamageSourceTrap || child.SourceTrap
+			}
 			if triggeredByTrap {
 				source, current := s.combatSourceV5(src)
 				scaleClassSetTrapStatus(&statusDef, sourceSuitBonuses(source, current).TrapDamageBP)

@@ -1,0 +1,2155 @@
+{
+  "schema_version": 1,
+  "group": "assassin",
+  "review_date": "2026-10-24",
+  "base_commit": "a1da69aae0c63061d102a8a0e10b4c1b2335db46",
+  "effect_source": "server/internal/domain/legendary_powers.json",
+  "coverage_metric": {
+    "name": "独立特效用例覆盖率",
+    "numerator": 50,
+    "denominator": 50,
+    "percentage": 100,
+    "unit": "至少一个单威能实际行为断言通过的CK ID，且逐条效应条款列证据",
+    "not_go_statement_coverage": true,
+    "combinations_excluded": true
+  },
+  "validation": {
+    "command": "GOPATH=/workspace/shared/go GOCACHE=/workspace/scratch/1cc826cfb9aa/astra-audit/go-cache GOTMPDIR=/workspace/scratch/1cc826cfb9aa/astra-audit/go-tmp /workspace/shared/toolchains/go/bin/go test ./internal/game/scene -run '^(TestAssassinUnitCoverage|TestLegendaryIncomingAssassin)' -count=1 -json",
+    "working_directory": "/workspace/scratch/1cc826cfb9aa/legendary-melee-coverage/server",
+    "jsonl_absolute_path": "/workspace/scratch/1cc826cfb9aa/astra-audit/assassin-unit-focused.jsonl",
+    "result": "pass"
+  },
+  "boundaries": [
+    "单件测试仅1个传奇威能；组合使用可同时装备的合法槽位，另列且不增加50分母。",
+    "采用源支持的有界迁移fixture及可精确计数的消费者unit fixture；不是生产数据库/客户端验收。",
+    "只认实际HP、状态、选中目标、MP、冷却到期、位置、陷阱与队列变化；不以字段/注册/catalog或不存在的PvP路径单独计覆盖。",
+    "这是特效条款用例覆盖，不是Go行覆盖、mutation覆盖或所有等级/部位/随机数/两三件组合的穷举。",
+    "CK-A02的assassinCoverageCrit使用测试专用Pieces:1套装行注入受控+1500BP暴伤，以隔离实际暴击伤害消费者；这不是当前原生catalog合法的一件套。合法槽位指传奇威能装备/组合槽位，不代表每个受控unit fixture都是原生生产套装构筑。"
+  ],
+  "powers": [
+    {
+      "power_id": "CK-A01",
+      "name": "屏息准星",
+      "status": "covered",
+      "effect": "狙击改为朝选中目标方向贯穿的矩形攻击，长度取施法距离与武器攻击距离中的较大值，宽度取40与武器攻击距离一半中的较大值。所有命中敌人承受完整技能伤害，并按原免疫规则附加定身；冷却时间缩短30%。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A01",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "狙击改为朝选中目标方向贯穿的矩形攻击，长度取施法距离与武器攻击距离中的较大值，宽度取40与武器攻击距离一半中的较大值",
+          "kind": "solo",
+          "assertion": "无装备/单件对照，武器距离40与300分别验证max长度/宽度的矩形内外真实命中；主目标与沿途敌人各扣100HP，定身提交，BlockHarmful目标仍扣100但不定身；真实准入冷却在7000ms边界就绪。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A01"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "所有命中敌人承受完整技能伤害，并按原免疫规则附加定身",
+          "kind": "solo",
+          "assertion": "无装备/单件对照，武器距离40与300分别验证max长度/宽度的矩形内外真实命中；主目标与沿途敌人各扣100HP，定身提交，BlockHarmful目标仍扣100但不定身；真实准入冷却在7000ms边界就绪。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A01"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "冷却时间缩短30%",
+          "kind": "solo",
+          "assertion": "无装备/单件对照，武器距离40与300分别验证max长度/宽度的矩形内外真实命中；主目标与沿途敌人各扣100HP，定身提交，BlockHarmful目标仍扣100但不定身；真实准入冷却在7000ms边界就绪。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A01"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A02",
+      "name": "狙击校准",
+      "status": "covered",
+      "effect": "狙击必定命中并暴击，暴击伤害按角色原有暴击倍率计算。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A02",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "狙击必定命中并暴击，暴击伤害按角色原有暴击倍率计算",
+          "kind": "solo",
+          "assertion": "零Hit对高防御目标仍命中并产生200伤害；单威能/无威能对照普通100与必暴击200。assassinCoverageCrit用测试专用Pieces:1套装行注入受控暴伤+1500BP，实际伤害为215，验证装备暴击消费者与角色倍率相容；该输入不是当前原生catalog合法的一件套，仅传奇槽位/激活规则按真实机制校验。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A02"
+          ],
+          "result": "pass"
+        }
+      ],
+      "fixture_boundary": "暴伤+1500BP场景是受控装备输入的消费者单元测试，测试专用Pieces:1不代表生产可获得的原生一件套；不据此证明原生套装构筑覆盖。"
+    },
+    {
+      "power_id": "CK-A03",
+      "name": "贴身暗钉",
+      "status": "covered",
+      "effect": "狙击伤害提高80%，不受攻击距离影响。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A03",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "狙击伤害提高80%，不受攻击距离影响",
+          "kind": "solo",
+          "assertion": "在30/200距离、武器射程50下，实际命中伤害均为180；卸除威能均100，覆盖+80%及不按攻击距离缩放。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A03"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A04",
+      "name": "尾针",
+      "status": "covered",
+      "effect": "连续投掷伤害提高50%。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A04",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "连续投掷伤害提高50%",
+          "kind": "solo",
+          "assertion": "连续投掷实际命中伤害150，对照100，两个距离结果一致。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A04"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A05",
+      "name": "点名飞刃",
+      "status": "covered",
+      "effect": "连续投掷额外攻击选中目标附近最多3个敌人，合计最多4个，每个目标承受完整技能伤害。额外目标的搜索半径至少100；技能已有更大半径时沿用更大范围。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A05",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "连续投掷额外攻击选中目标附近最多3个敌人，合计最多4个，每个目标承受完整技能伤害",
+          "kind": "solo",
+          "assertion": "实际选择并命中主目标+最多3个副目标，每个扣100HP；原radius=0时最低100，原radius=200时150距离目标可命中，201排除；卸除只命中主目标。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A05"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "额外目标的搜索半径至少100",
+          "kind": "solo",
+          "assertion": "实际选择并命中主目标+最多3个副目标，每个扣100HP；原radius=0时最低100，原radius=200时150距离目标可命中，201排除；卸除只命中主目标。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A05"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "技能已有更大半径时沿用更大范围",
+          "kind": "solo",
+          "assertion": "实际选择并命中主目标+最多3个副目标，每个扣100HP；原radius=0时最低100，原radius=200时150距离目标可命中，201排除；卸除只命中主目标。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A05"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A06",
+      "name": "八方暗雨",
+      "status": "covered",
+      "effect": "多重投掷改为攻击自身周围一整圈敌人，作用半径提高20%，伤害提高50%。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A06",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "多重投掷改为攻击自身周围一整圈敌人，作用半径提高20%，伤害提高50%",
+          "kind": "solo",
+          "assertion": "原60度100半径锥形改360度120半径，背后119目标实际扣150，121不命中；主目标150，对照100且背后不命中。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A06"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A07",
+      "name": "孤星聚刃",
+      "status": "covered",
+      "effect": "多重投掷对选中目标的伤害提高50%，不受命中敌人数影响；其他目标不享受这项加成。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A07",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "多重投掷对选中目标的伤害提高50%，不受命中敌人数影响",
+          "kind": "solo",
+          "assertion": "单目标及5目标的主目标均扣150，所有副目标各扣100；无威能均100，不按命中数量分摊加成。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A07"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "其他目标不享受这项加成",
+          "kind": "solo",
+          "assertion": "单目标及5目标的主目标均扣150，所有副目标各扣100；无威能均100，不按命中数量分摊加成。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A07"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A08",
+      "name": "遗毒",
+      "status": "covered",
+      "effect": "受你淬毒术中毒影响的敌人死亡时，将剩余中毒效果传给其周围半径200内最多5个敌人。传播的中毒不会再次传播，也不会叠加成多份同来源中毒。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A08",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "受你淬毒术中毒影响的敌人死亡时，将剩余中毒效果传给其周围半径200内最多5个敌人",
+          "kind": "solo",
+          "assertion": "实际死亡传播至200内最多5个存活敌人，201外不传播；保留剩余到期/下次tick时间，复制tick仍10；同来源仅1份，传播毒死亡与同次死亡重复调用都不再次传播。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A08"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "传播的中毒不会再次传播，也不会叠加成多份同来源中毒",
+          "kind": "solo",
+          "assertion": "实际死亡传播至200内最多5个存活敌人，201外不传播；保留剩余到期/下次tick时间，复制tick仍10；同来源仅1份，传播毒死亡与同次死亡重复调用都不再次传播。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A08"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A09",
+      "name": "行毒",
+      "status": "covered",
+      "effect": "淬毒术造成的每次中毒伤害提高100%，持续时间和伤害次数不变。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "淬毒术造成的每次中毒伤害提高100%，持续时间和伤害次数不变",
+          "kind": "solo",
+          "assertion": "符合淬毒来源的中毒连续5次各扣20，对照10；10秒后消失无第6次伤害；非淬毒中毒每次仍10，持续时间相同。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A09"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A10",
+      "name": "交刃试毒",
+      "status": "covered",
+      "effect": "淬毒术生效期间，连续投掷和多重投掷命中时也会施加淬毒术的中毒效果，每次施法对每个敌人最多施加一次。普通攻击的淬毒几率不变。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A10",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverageAdditional/CK-A10_basic_poison_probability",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "淬毒术生效期间，连续投掷和多重投掷命中时也会施加淬毒术的中毒效果，每次施法对每个敌人最多施加一次",
+          "kind": "solo",
+          "assertion": "连续/多重投掷分别验证有/无淬毒buff及装备对照；同根重复命中不重置第一次中毒时钟，另一个敌人独立中毒，周期伤害保持10；32个固定种子的普通攻击实际中毒成功/失败序列与无装备完全相同。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A10",
+            "TestAssassinUnitCoverageAdditional/CK-A10_basic_poison_probability"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "普通攻击的淬毒几率不变",
+          "kind": "solo",
+          "assertion": "连续/多重投掷分别验证有/无淬毒buff及装备对照；同根重复命中不重置第一次中毒时钟，另一个敌人独立中毒，周期伤害保持10；32个固定种子的普通攻击实际中毒成功/失败序列与无装备完全相同。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A10",
+            "TestAssassinUnitCoverageAdditional/CK-A10_basic_poison_probability"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A11",
+      "name": "触地惊雷",
+      "status": "covered",
+      "effect": "陷阱：爆弹放置后立即爆炸，投放距离提高50%，爆炸半径提高30%，伤害提高40%。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A11",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "陷阱：爆弹放置后立即爆炸，投放距离提高50%，爆炸半径提高30%，伤害提高40%",
+          "kind": "solo",
+          "assertion": "落地立即伤害140且无残留陷阱；130半径内129目标受伤、131外不受伤；原100距离技能真实准入可投至140，无装备拒绝；对照持续陷阱原100伤害。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A11"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A12",
+      "name": "回响爆点",
+      "status": "covered",
+      "effect": "陷阱：爆弹的伤害提高90%，爆炸半径提高30%。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A12",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "陷阱：爆弹的伤害提高90%，爆炸半径提高30%",
+          "kind": "solo",
+          "assertion": "原生放置/stepTraps真实引爆190伤害，对照100；129目标受完整190、131不受伤，体现半径+30%。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A12"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A13",
+      "name": "串联引信",
+      "status": "covered",
+      "effect": "一次施放陷阱：爆弹，在选定地点及其两侧放置共3枚爆弹，只消耗一次技能法力。两侧各偏移爆弹未经威能强化时半径的75%；每枚保留完整伤害并享受爆弹的伤害、范围和立即引爆加成，爆炸重叠时可命中同一敌人。搭配“触地惊雷”时，3枚均落地即爆；额外爆弹不会继续产生更多爆弹。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A13",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "一次施放在选定地点及其两侧共放置3枚爆弹，只消耗一次法力；两侧偏移未经威能强化半径的75%；每枚完整伤害，重叠可命中同一敌人，额外爆弹不继续生成。",
+          "kind": "solo",
+          "assertion": "原生技能准入支付一次MP、实际创建3个陷阱；两侧坐标为未经强化半径的±75%；三枚分别触发合计600伤害/3命中，对照200/1命中；全部销毁且不生成后代。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A13"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "每枚享受爆弹伤害/范围/立即引爆加成；搭配触地惊雷时3枚均落地即爆。",
+          "kind": "combination",
+          "assertion": "3枚全部立即引爆，半径100×(1+.3+.3)=160，每枚230伤害、合计690，无残留/递归陷阱。",
+          "tests": [
+            "TestAssassinUnitCoverageCombinations/A13_A11_A12_instant_triple"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A14",
+      "name": "毒雾追印",
+      "status": "covered",
+      "effect": "陷阱：毒雾放置后立即触发，作用半径提高30%，保留原有伤害和中毒效果。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A14",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "陷阱：毒雾放置后立即触发，作用半径提高30%，保留原有伤害和中毒效果",
+          "kind": "solo",
+          "assertion": "放置即触发并移除陷阱，100爆发伤害及原生中毒提交；129目标获得相同伤害/中毒，131排除；中毒tick10、持续10秒不变，无装备不立即触发。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A14"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A15",
+      "name": "浸骨毒雾",
+      "status": "covered",
+      "effect": "陷阱：毒雾造成的每次中毒伤害提高100%，不改变爆发伤害、中毒持续时间或伤害次数。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A15",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "陷阱：毒雾造成的每次中毒伤害提高100%，不改变爆发伤害、中毒持续时间或伤害次数",
+          "kind": "solo",
+          "assertion": "毒雾来源中毒5次各20HP，对照10；持续10秒/次数5不变且无第6次；非毒雾中毒仍10、毒雾直接爆发仍100。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A15"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A16",
+      "name": "封口余震",
+      "status": "covered",
+      "effect": "陷阱：封印的作用半径提高30%，伤害提高50%，原有封印效果不变。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A16",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "陷阱：封印的作用半径提高30%，伤害提高50%，原有封印效果不变",
+          "kind": "solo",
+          "assertion": "实际陷阱命中150，对照100；129内命中并提交原封印(ControlSilence)，131外排除，原技能状态保留。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A16"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A17",
+      "name": "碎霜刃",
+      "status": "covered",
+      "effect": "背刺和陷阱：冻气的伤害提高50%；陷阱：冻气的作用半径额外提高30%。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A17",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "背刺和陷阱：冻气的伤害提高50%",
+          "kind": "solo",
+          "assertion": "冻气陷阱及背刺均实际150伤害，对照100；冻气129内命中并冻结，131外排除，半径+30%。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A17"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "陷阱：冻气的作用半径额外提高30%",
+          "kind": "solo",
+          "assertion": "冻气陷阱及背刺均实际150伤害，对照100；冻气129内命中并冻结，131外排除，半径+30%。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A17"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A18",
+      "name": "寒阱淬毒",
+      "status": "covered",
+      "effect": "学会淬毒术后，陷阱：冻气成功冻结敌人时，也会尝试施加淬毒术的中毒，无需先主动施放淬毒术；冻结和中毒免疫仍有效。你施加的淬毒术中毒不会打破这次冻结，其他来源的伤害仍可打破。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A18",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "学会淬毒术后，陷阱：冻气成功冻结敌人时，也会尝试施加淬毒术的中毒，无需先主动施放淬毒术",
+          "kind": "solo",
+          "assertion": "真实迁移技能fixture单件下，已学淬毒但未主动施放仍在冻气冻结后中毒；未学不生毒，冻结免疫不冻结/不中毒，毒专属overlay免疫只阻止毒；自身毒tick有伤害但不解冻，其他来源实际攻击解冻。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A18"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "冻结和中毒免疫仍有效",
+          "kind": "solo",
+          "assertion": "真实迁移技能fixture单件下，已学淬毒但未主动施放仍在冻气冻结后中毒；未学不生毒，冻结免疫不冻结/不中毒，毒专属overlay免疫只阻止毒；自身毒tick有伤害但不解冻，其他来源实际攻击解冻。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A18"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "你施加的淬毒术中毒不会打破这次冻结，其他来源的伤害仍可打破",
+          "kind": "solo",
+          "assertion": "真实迁移技能fixture单件下，已学淬毒但未主动施放仍在冻气冻结后中毒；未学不生毒，冻结免疫不冻结/不中毒，毒专属overlay免疫只阻止毒；自身毒tick有伤害但不解冻，其他来源实际攻击解冻。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A18"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A19",
+      "name": "出影横刃",
+      "status": "covered",
+      "effect": "背刺同时攻击选中目标和前方120度扇形内最多4个其他敌人，合计最多5个，每个目标承受完整背刺伤害。扇形半径取背刺施放距离和武器攻击距离中较大的一项。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A19",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "背刺同时攻击选中目标和前方120度扇形内最多4个其他敌人，合计最多5个，每个目标承受完整背刺伤害",
+          "kind": "solo",
+          "assertion": "实选主目标与120度扇形内最多4个副目标；武器40/150分别验证max(80,武器)范围，前方边缘完整100伤害，背后/范围外不命中，选中目标保留。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A19"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "扇形半径取背刺施放距离和武器攻击距离中较大的一项",
+          "kind": "solo",
+          "assertion": "实选主目标与120度扇形内最多4个副目标；武器40/150分别验证max(80,武器)范围，前方边缘完整100伤害，背后/范围外不命中，选中目标保留。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A19"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A20",
+      "name": "明刃背刺",
+      "status": "covered",
+      "effect": "背刺无需隐身也能使用，伤害提高25%；隐身和进阶背刺原有加成仍然有效。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A20",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "背刺无需隐身也能使用，伤害提高25%",
+          "kind": "solo",
+          "assertion": "实际onUseSkill无隐身仅单件可准入，无装备被拒；普通/隐身50%/进阶30%四种组合逐一断言真实HP伤害，传奇+25%且原隐身/被动增伤仍有效。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A20"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "隐身和进阶背刺原有加成仍然有效",
+          "kind": "solo",
+          "assertion": "实际onUseSkill无隐身仅单件可准入，无装备被拒；普通/隐身50%/进阶30%四种组合逐一断言真实HP伤害，传奇+25%且原隐身/被动增伤仍有效。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A20"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A21",
+      "name": "孤猎",
+      "status": "covered",
+      "effect": "背刺对选中目标的伤害提高75%，不受附近敌人数影响；范围背刺中的其他目标不享受这项加成。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A21",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "背刺对选中目标的伤害提高75%，不受附近敌人数影响",
+          "kind": "solo",
+          "assertion": "1及5目标场景中主目标均175，副目标各100；卸除主目标100，附近目标数量不影响加成。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A21"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "范围背刺中的其他目标不享受这项加成",
+          "kind": "solo",
+          "assertion": "1及5目标场景中主目标均175，副目标各100；卸除主目标100，附近目标数量不影响加成。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A21"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A22",
+      "name": "断步伤",
+      "status": "covered",
+      "effect": "背刺每次命中时，按该目标实际损失生命的15%恢复自身生命；命中多个目标可分别回血，最多恢复至生命上限。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A22",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "背刺每次命中时，按该目标实际损失生命的15%恢复自身生命",
+          "kind": "solo",
+          "assertion": "实际背刺两个敌人各损100HP，分别回15合计30；只剩10HP目标不按过量伤害算回血，生命9999封顶10000；无装备无额外回复。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A22"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "命中多个目标可分别回血，最多恢复至生命上限",
+          "kind": "solo",
+          "assertion": "实际背刺两个敌人各损100HP，分别回15合计30；只剩10HP目标不按过量伤害算回血，生命9999封顶10000；无装备无额外回复。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A22"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A23",
+      "name": "破稳击",
+      "status": "covered",
+      "effect": "击晕伤害提高35%，冷却时间缩短40%。对免疫本次眩晕的目标，攻击仍能造成伤害，并额外增加相当于160%物理攻击的伤害，但不能将其击晕。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A23",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "击晕伤害提高35%，冷却时间缩短40%",
+          "kind": "solo",
+          "assertion": "实际命中普通目标135并眩晕；免疫目标295且不眩晕，160%物攻只加一次；无装备100；真实准入冷却6000ms边界就绪。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A23"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "对免疫本次眩晕的目标，攻击仍能造成伤害，并额外增加相当于160%物理攻击的伤害，但不能将其击晕",
+          "kind": "solo",
+          "assertion": "实际命中普通目标135并眩晕；免疫目标295且不眩晕，160%物攻只加一次；无装备100；真实准入冷却6000ms边界就绪。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A23"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A24",
+      "name": "借势藏锋",
+      "status": "covered",
+      "effect": "反击术的伤害提高50%；反击命中仍可触发已有、且符合条件的吸血效果。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A24",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "反击术的伤害提高50%",
+          "kind": "solo",
+          "assertion": "通过原生反击排队/stepCombat执行，单件150伤害对照100；保留原有100%触发的10%吸血，分别回15/10；原反击0%仍不触发。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A24"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "反击命中仍可触发已有、且符合条件的吸血效果",
+          "kind": "solo",
+          "assertion": "通过原生反击排队/stepCombat执行，单件150伤害对照100；保留原有100%触发的10%吸血，分别回15/10；原反击0%仍不触发。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A24"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A25",
+      "name": "逆刃旁落",
+      "status": "covered",
+      "effect": "反击术触发时，同时攻击原攻击者及其周围半径100内的敌人，每个目标承受完整反击伤害。反击概率不变，范围反击不会继续触发反击。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A25",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverageCounterProbability",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "反击术触发时，同时攻击原攻击者及其周围半径100内的敌人，每个目标承受完整反击伤害",
+          "kind": "solo",
+          "assertion": "原生反击命中原攻击者与其99距离副目标，各100伤害；101外不命中；结算完成无后续反击队列，32种子50%原反击成功/失败序列与无装备一致，0/100%端点保留。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A25",
+            "TestAssassinUnitCoverageCounterProbability"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "反击概率不变，范围反击不会继续触发反击",
+          "kind": "solo",
+          "assertion": "原生反击命中原攻击者与其99距离副目标，各100伤害；101外不命中；结算完成无后续反击队列，32种子50%原反击成功/失败序列与无装备一致，0/100%端点保留。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A25",
+            "TestAssassinUnitCoverageCounterProbability"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A26",
+      "name": "妙手震掌",
+      "status": "covered",
+      "effect": "对可偷窃且不免疫偷窃的目标施放偷窃术时，保留原偷窃结果，并对自身周围半径180内的敌人造成物理攻击力240%的伤害。即使没有偷到物品也会发动；不能偷窃或免疫偷窃的目标不触发掌击，掌击不会额外偷窃或造成位移。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A26",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverageImmunityBoundaries/CK-A26",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "对可偷窃且不免疫偷窃的目标施放偷窃术时，保留原偷窃结果，并对自身周围半径180内的敌人造成物理攻击力240%的伤害",
+          "kind": "solo",
+          "assertion": "偷窃成功/失败两分支均产生自身180半径240%物攻掌击，181不受伤；只主目标偷物且掉落次数与原结果一致；无装备无掌击，已偷完/免疫首领不触发，所有目标坐标不变。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A26",
+            "TestAssassinUnitCoverageImmunityBoundaries/CK-A26"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "即使没有偷到物品也会发动",
+          "kind": "solo",
+          "assertion": "偷窃成功/失败两分支均产生自身180半径240%物攻掌击，181不受伤；只主目标偷物且掉落次数与原结果一致；无装备无掌击，已偷完/免疫首领不触发，所有目标坐标不变。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A26",
+            "TestAssassinUnitCoverageImmunityBoundaries/CK-A26"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不能偷窃或免疫偷窃的目标不触发掌击，掌击不会额外偷窃或造成位移",
+          "kind": "solo",
+          "assertion": "偷窃成功/失败两分支均产生自身180半径240%物攻掌击，181不受伤；只主目标偷物且掉落次数与原结果一致；无装备无掌击，已偷完/免疫首领不触发，所有目标坐标不变。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A26",
+            "TestAssassinUnitCoverageImmunityBoundaries/CK-A26"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A27",
+      "name": "暗器延展",
+      "status": "covered",
+      "effect": "连续投掷与多重投掷的施法距离、作用范围均提高50%，包括其他威能改造后的范围；与同类范围加成相加。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A27",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "连续投掷与多重投掷的施法距离、作用范围均提高50%。",
+          "kind": "solo",
+          "assertion": "连续与多重投掷原100施法距离在140的实际准入由拒绝变接受；实际区域149命中/151排除，证明两技能距离及作用范围各+50%。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A27"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "包括其他威能改造后的范围；与同类范围加成相加。",
+          "kind": "combination",
+          "assertion": "真实连续投掷准入、改造后100→150半径，125距离新增目标受击，151排除，主目标完整225而非分摊。；20%+50%范围相加成170，背后169命中150、171排除；主目标200、副目标150。",
+          "tests": [
+            "TestAssassinUnitCoverageCombinations/A05_A27_A04_throw",
+            "TestAssassinUnitCoverageCombinations/A06_A27_A07_circle"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A28",
+      "name": "收网环击",
+      "status": "covered",
+      "effect": "环形爆发伤害提高45%，命中的敌人随后向你拉近最多120，最近停在距你40的位置，无需学会爆发冲击。已学爆发冲击时，原有击退仍可能先触发；再搭配“收网聚势”时，不先击退而直接收拢。位移免疫、首领控制免疫与地形阻挡仍有效。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A28",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverageAdditional/CK-A28_native_knockback_order",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverageImmunityBoundaries/CK-A28",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "环形爆发伤害提高45%，命中后拉近最多120，最近停距40，无需学会爆发冲击。",
+          "kind": "solo",
+          "assertion": "单件/无装备、已学/未学爆发冲击真实对照：伤害145/100，200距离最多拉120、30距离不越过40停止线；免疫不移动、地形停在250、死亡不移动；有原击退时先420再拉回300共两次移动事件。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A28",
+            "TestAssassinUnitCoverageAdditional/CK-A28_native_knockback_order",
+            "TestAssassinUnitCoverageImmunityBoundaries/CK-A28"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "已学爆发冲击时原有击退仍可能先触发；位移免疫、首领控制免疫与地形阻挡仍有效。",
+          "kind": "solo",
+          "assertion": "单件/无装备、已学/未学爆发冲击真实对照：伤害145/100，200距离最多拉120、30距离不越过40停止线；免疫不移动、地形停在250、死亡不移动；有原击退时先420再拉回300共两次移动事件。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A28",
+            "TestAssassinUnitCoverageAdditional/CK-A28_native_knockback_order",
+            "TestAssassinUnitCoverageImmunityBoundaries/CK-A28"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "再搭配收网聚势时不先击退而直接收拢。",
+          "kind": "combination",
+          "assertion": "原100%击退被替换，主目标145伤害且仅1条移动事件直接至40，不先击退、不拉两次。",
+          "tests": [
+            "TestAssassinUnitCoveragePullCombinationOneMovement"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A29",
+      "name": "迟发暗杀",
+      "status": "covered",
+      "effect": "暗杀术的直接伤害提高80%，原有即死几率和判定次数不变。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A29",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "暗杀术的直接伤害提高80%，原有即死几率和判定次数不变",
+          "kind": "solo",
+          "assertion": "48种子原生直接伤害/即死流程对照：存活目标180/100，死亡结果与随机调用次数完全相同；普通1命中、即死2事件，无额外判定；语料实际包含即死成功与失败。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A29"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-A30",
+      "name": "收网聚势",
+      "status": "covered",
+      "effect": "学会爆发冲击后，环形爆发的作用半径扩大50%，不再先击退，而是在命中后将仍存活的敌人收拢至距自己40的可站立位置。原有伤害、位移免疫与地形阻挡规则不变；搭配“收网环击”时也只拉拽一次。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-A30",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverageAdditional/CK-A30_native_knockback_order",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverageImmunityBoundaries/CK-A30",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "学会爆发冲击后作用半径扩大50%，不再先击退，命中后将仍存活敌人收拢至距自己40的可站位置。",
+          "kind": "solo",
+          "assertion": "已学才实际半径扩大至300并收拢至40；未学与无装备保持原半径/位置，伤害100不变；原必触发击退被移除，仅一次到140的移动；免疫、地形、已死亡目标按原规则处理。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A30",
+            "TestAssassinUnitCoverageAdditional/CK-A30_native_knockback_order",
+            "TestAssassinUnitCoverageImmunityBoundaries/CK-A30"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "原有伤害、位移免疫与地形阻挡规则不变。",
+          "kind": "solo",
+          "assertion": "已学才实际半径扩大至300并收拢至40；未学与无装备保持原半径/位置，伤害100不变；原必触发击退被移除，仅一次到140的移动；免疫、地形、已死亡目标按原规则处理。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-A30",
+            "TestAssassinUnitCoverageAdditional/CK-A30_native_knockback_order",
+            "TestAssassinUnitCoverageImmunityBoundaries/CK-A30"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "搭配收网环击时只拉拽一次。",
+          "kind": "combination",
+          "assertion": "原100%击退被替换，主目标145伤害且仅1条移动事件直接至40，不先击退、不拉两次。",
+          "tests": [
+            "TestAssassinUnitCoveragePullCombinationOneMovement"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-D01",
+      "name": "出影护幕",
+      "status": "covered",
+      "effect": "隐身术生效期间，受到的伤害降低20%；离开隐身后失效。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-D01",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/native",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/proc",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/child",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/set_proc",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/proc_dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/reflection",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinUnknownSourceDoesNotBorrowCondition/CK-D01",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinNativeStealthTiming",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "隐身术生效期间，受到的伤害降低20%",
+          "kind": "solo",
+          "assertion": "原生隐身状态存在时直接/DOT损失800，对照1000，移除隐身恢复1000；既有独立原生隐身及payload/child/反射消费者用例补充离开时序与全部伤害来源。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D01",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/native",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/child",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/set_proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/proc_dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/reflection",
+            "TestLegendaryIncomingAssassinUnknownSourceDoesNotBorrowCondition/CK-D01",
+            "TestLegendaryIncomingAssassinNativeStealthTiming"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "离开隐身后失效",
+          "kind": "solo",
+          "assertion": "原生隐身状态存在时直接/DOT损失800，对照1000，移除隐身恢复1000；既有独立原生隐身及payload/child/反射消费者用例补充离开时序与全部伤害来源。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D01",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/native",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/child",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/set_proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/proc_dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D01/reflection",
+            "TestLegendaryIncomingAssassinUnknownSourceDoesNotBorrowCondition/CK-D01",
+            "TestLegendaryIncomingAssassinNativeStealthTiming"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-D02",
+      "name": "烟幕掩体",
+      "status": "covered",
+      "effect": "烟雾弹改为影响选中目标及其周围半径至少100内的敌人，保留降低命中和魔法攻击的效果。受你烟雾弹影响的敌人，对你造成的伤害降低20%。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-D02",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/native",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/proc",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/child",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/set_proc",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/proc_dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/reflection",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinUnknownSourceDoesNotBorrowCondition/CK-D02",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D02/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D02/proc",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D02/reflection",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "烟雾弹改为影响选中目标及其周围半径至少100内的敌人，保留降低命中和魔法攻击的效果",
+          "kind": "solo",
+          "assertion": "实际烟雾选择目标及99范围敌人，129/131排除；原-20%命中/-30%魔攻词缀原样提交；其对自己直接伤害800，对照/烟雾移除1000；额外独立用例覆盖他人烟雾无减伤、DOT/proc/反射。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D02",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/native",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/child",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/set_proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/proc_dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/reflection",
+            "TestLegendaryIncomingAssassinUnknownSourceDoesNotBorrowCondition/CK-D02",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D02/dot",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D02/proc",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D02/reflection"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "受你烟雾弹影响的敌人，对你造成的伤害降低20%",
+          "kind": "solo",
+          "assertion": "实际烟雾选择目标及99范围敌人，129/131排除；原-20%命中/-30%魔攻词缀原样提交；其对自己直接伤害800，对照/烟雾移除1000；额外独立用例覆盖他人烟雾无减伤、DOT/proc/反射。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D02",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/native",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/child",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/set_proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/proc_dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D02/reflection",
+            "TestLegendaryIncomingAssassinUnknownSourceDoesNotBorrowCondition/CK-D02",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D02/dot",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D02/proc",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D02/reflection"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-D03",
+      "name": "回刃护手",
+      "status": "covered",
+      "effect": "反击术每次命中时，按该目标实际损失生命的15%恢复自身生命，最多恢复至生命上限。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-D03",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "反击术每次命中时，按该目标实际损失生命的15%恢复自身生命，最多恢复至生命上限",
+          "kind": "solo",
+          "assertion": "原生反击实际100损血回15，独立双目标分别回15；过量伤害按真实损血，恢复不超过MaxHP；卸除无该额外回复。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D03"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-D04",
+      "name": "毒敌迟手",
+      "status": "covered",
+      "effect": "受你淬毒术中毒影响的敌人，对你造成的直接伤害降低20%；中毒消失后失效。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-D04",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "受你淬毒术中毒影响的敌人，对你造成的直接伤害降低20%",
+          "kind": "solo",
+          "assertion": "只有自己淬毒来源存在时敌人直接伤害800；DOT仍1000、无中毒/其他来源/移除后均1000，卸除同条件1000。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D04"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "中毒消失后失效",
+          "kind": "solo",
+          "assertion": "只有自己淬毒来源存在时敌人直接伤害800；DOT仍1000、无中毒/其他来源/移除后均1000，卸除同条件1000。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D04"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-D05",
+      "name": "霜陷护心",
+      "status": "covered",
+      "effect": "受到的眩晕、冻结和定身持续时间缩短30%；不解除已经生效的控制。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-D05",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "受到的眩晕、冻结和定身持续时间缩短30%",
+          "kind": "solo",
+          "assertion": "眩晕、冻结、定身三类实际提交后均7000ms到期，对照10000ms；提前1tick仍有效、到期消失；装备前已存在控制不被移除或改期。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D05"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不解除已经生效的控制",
+          "kind": "solo",
+          "assertion": "眩晕、冻结、定身三类实际提交后均7000ms到期，对照10000ms；提前1tick仍有效、到期消失；装备前已存在控制不被移除或改期。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D05"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-D06",
+      "name": "布雷退守",
+      "status": "covered",
+      "effect": "陷阱：爆弹的法力消耗降低30%；受到的远程伤害降低20%，包括该远程攻击造成的持续伤害。远程按攻击或技能射程超过100判断，不按双方当前距离判断。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-D06",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinRangedProvenance",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinActualRiftHazardIsNotRangedBasicOrTrap/CK-D06",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "陷阱：爆弹的法力消耗降低30%",
+          "kind": "solo",
+          "assertion": "真实爆弹施法MP从100变70；攻击者贴身时按技能来源射程100/101裁决直接和DOT损血1000/800，不依当前距离；补充原生远程普攻、未知来源/短程/远程技能及非攻击地面伤害边界。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D06",
+            "TestLegendaryIncomingAssassinRangedProvenance",
+            "TestLegendaryIncomingAssassinActualRiftHazardIsNotRangedBasicOrTrap/CK-D06"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "受到的远程伤害降低20%，包括该远程攻击造成的持续伤害",
+          "kind": "solo",
+          "assertion": "真实爆弹施法MP从100变70；攻击者贴身时按技能来源射程100/101裁决直接和DOT损血1000/800，不依当前距离；补充原生远程普攻、未知来源/短程/远程技能及非攻击地面伤害边界。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D06",
+            "TestLegendaryIncomingAssassinRangedProvenance",
+            "TestLegendaryIncomingAssassinActualRiftHazardIsNotRangedBasicOrTrap/CK-D06"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "远程按攻击或技能射程超过100判断，不按双方当前距离判断",
+          "kind": "solo",
+          "assertion": "真实爆弹施法MP从100变70；攻击者贴身时按技能来源射程100/101裁决直接和DOT损血1000/800，不依当前距离；补充原生远程普攻、未知来源/短程/远程技能及非攻击地面伤害边界。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D06",
+            "TestLegendaryIncomingAssassinRangedProvenance",
+            "TestLegendaryIncomingAssassinActualRiftHazardIsNotRangedBasicOrTrap/CK-D06"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-D07",
+      "name": "截腕卸力",
+      "status": "covered",
+      "effect": "击晕的冷却时间缩短30%；被你的击晕眩晕的敌人，对你造成的伤害降低20%，直到这次眩晕结束。目标免疫眩晕时，不获得此减伤。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-D07",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/native",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/proc",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/child",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/set_proc",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/proc_dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/reflection",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinUnknownSourceDoesNotBorrowCondition/CK-D07",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D07/dot",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D07/proc",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D07/reflection",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "击晕的冷却时间缩短30%",
+          "kind": "solo",
+          "assertion": "真实击晕施法冷却7000ms；只有自己成功眩晕仍有效时直接/DOT800，移除或免疫未提交时1000；补充外来眩晕及proc/反射归属测试。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D07",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/native",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/child",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/set_proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/proc_dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/reflection",
+            "TestLegendaryIncomingAssassinUnknownSourceDoesNotBorrowCondition/CK-D07",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D07/dot",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D07/proc",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D07/reflection"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "被你的击晕眩晕的敌人，对你造成的伤害降低20%，直到这次眩晕结束",
+          "kind": "solo",
+          "assertion": "真实击晕施法冷却7000ms；只有自己成功眩晕仍有效时直接/DOT800，移除或免疫未提交时1000；补充外来眩晕及proc/反射归属测试。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D07",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/native",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/child",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/set_proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/proc_dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/reflection",
+            "TestLegendaryIncomingAssassinUnknownSourceDoesNotBorrowCondition/CK-D07",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D07/dot",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D07/proc",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D07/reflection"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "目标免疫眩晕时，不获得此减伤",
+          "kind": "solo",
+          "assertion": "真实击晕施法冷却7000ms；只有自己成功眩晕仍有效时直接/DOT800，移除或免疫未提交时1000；补充外来眩晕及proc/反射归属测试。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D07",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/native",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/child",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/set_proc",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/proc_dot",
+            "TestLegendaryIncomingAssassinAllDamageConsumers/CK-D07/reflection",
+            "TestLegendaryIncomingAssassinUnknownSourceDoesNotBorrowCondition/CK-D07",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D07/dot",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D07/proc",
+            "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval/CK-D07/reflection"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-D08",
+      "name": "以毒清毒",
+      "status": "covered",
+      "effect": "受到的中毒伤害降低30%。主动施放淬毒术时，立即移除自身最多2个可清除的中毒效果。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-D08",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "受到的中毒伤害降低30%",
+          "kind": "solo",
+          "assertion": "真实周期毒伤100变70，对照100；原生可共存的3个可清毒+1永久毒，经主动淬毒释放消费者仅清2个，保留1可清毒与永久毒，无装备4个均保留。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D08"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "主动施放淬毒术时，立即移除自身最多2个可清除的中毒效果",
+          "kind": "solo",
+          "assertion": "真实周期毒伤100变70，对照100；原生可共存的3个可清毒+1永久毒，经主动淬毒释放消费者仅清2个，保留1可清毒与永久毒，无装备4个均保留。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D08"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-D09",
+      "name": "濒危藏身",
+      "status": "covered",
+      "effect": "生命上限提高20%，隐身术的法力消耗降低30%。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-D09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "生命上限提高20%，隐身术的法力消耗降低30%",
+          "kind": "solo",
+          "assertion": "refreshStats实际MaxHP为对照的120%，不是仅查modifier；真实隐身技能准入MP100变70。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D09"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-D10",
+      "name": "避阱余裕",
+      "status": "covered",
+      "effect": "学会陷阱回避后，受到的陷阱伤害降低20%，包括陷阱造成的持续伤害；陷阱回避原有的概率减半效果仍可触发。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-D10",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinRealMonsterTrapDOT",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinTrapLineageDoesNotReplayNativeHalf",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_incoming_assassin_test.go",
+          "test": "TestLegendaryIncomingAssassinActualRiftHazardIsNotRangedBasicOrTrap/CK-D10",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "学会陷阱回避后，受到的陷阱伤害降低20%，包括陷阱造成的持续伤害",
+          "kind": "solo",
+          "assertion": "已学陷阱回避时直接/持续陷阱来源1000变800，未学1000；原生概率减半100%可产生500/单件400；真实怪物陷阱放置/引爆及其DOT、取消学习后失效另有独立用例。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D10",
+            "TestLegendaryIncomingAssassinRealMonsterTrapDOT",
+            "TestLegendaryIncomingAssassinTrapLineageDoesNotReplayNativeHalf",
+            "TestLegendaryIncomingAssassinActualRiftHazardIsNotRangedBasicOrTrap/CK-D10"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "陷阱回避原有的概率减半效果仍可触发",
+          "kind": "solo",
+          "assertion": "已学陷阱回避时直接/持续陷阱来源1000变800，未学1000；原生概率减半100%可产生500/单件400；真实怪物陷阱放置/引爆及其DOT、取消学习后失效另有独立用例。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-D10",
+            "TestLegendaryIncomingAssassinRealMonsterTrapDOT",
+            "TestLegendaryIncomingAssassinTrapLineageDoesNotReplayNativeHalf",
+            "TestLegendaryIncomingAssassinActualRiftHazardIsNotRangedBasicOrTrap/CK-D10"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-U01",
+      "name": "静步换息",
+      "status": "covered",
+      "effect": "隐身术的法力消耗降低30%；主动施放后，立即恢复最大法力的5%，但不超过本次实际消耗的法力。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-U01",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "隐身术的法力消耗降低30%",
+          "kind": "solo",
+          "assertion": "真实隐身技能准入/释放流程，20与100初始cost分别实付14与70，再回复min(最大MP5%,实付)；无装备不减耗/不返还，避免退款超支付。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U01"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "主动施放后，立即恢复最大法力的5%，但不超过本次实际消耗的法力",
+          "kind": "solo",
+          "assertion": "真实隐身技能准入/释放流程，20与100初始cost分别实付14与70，再回复min(最大MP5%,实付)；无装备不减耗/不返还，避免退款超支付。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U01"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-U02",
+      "name": "烟幕归路",
+      "status": "covered",
+      "effect": "烟雾弹改为影响选中目标周围的敌人，施放距离提高50%。范围半径在至少100的基础上提高30%，无其他范围加成时为130。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-U02",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "烟雾弹改为影响选中目标周围的敌人，施放距离提高50%",
+          "kind": "solo",
+          "assertion": "实际烟雾区域129内提交原命中/魔攻debuff，131外排除，对照仅选中目标；原100施法距离实际准入140成功，无装备拒绝。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U02"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "范围半径在至少100的基础上提高30%，无其他范围加成时为130",
+          "kind": "solo",
+          "assertion": "实际烟雾区域129内提交原命中/魔攻debuff，131外排除，对照仅选中目标；原100施法距离实际准入140成功，无装备拒绝。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U02"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-U03",
+      "name": "拆阱回馈",
+      "status": "covered",
+      "effect": "解除陷阱不消耗法力，以选中的可见敌方陷阱为中心，同时尝试拆除半径150内的可见敌方陷阱；每个陷阱的拆除成功率提高25个百分点，最高100%。不会拆除自己或队友的陷阱，也不用于引爆自己的爆弹。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-U03",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverageAdditional/CK-U03_exact_probability",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "解除陷阱不消耗法力，以选中的可见敌方陷阱为中心，同时尝试拆除半径150内的可见敌方陷阱",
+          "kind": "solo",
+          "assertion": "真实解除陷阱技能准入不扣MP；敌/友/己与可见/不可见真实陷阱存活集验证；149内/151外拆除边界；5档概率×24种子×开关对照精确验证+2500BP与100%封顶。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U03",
+            "TestAssassinUnitCoverageAdditional/CK-U03_exact_probability"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "每个陷阱的拆除成功率提高25个百分点，最高100%",
+          "kind": "solo",
+          "assertion": "真实解除陷阱技能准入不扣MP；敌/友/己与可见/不可见真实陷阱存活集验证；149内/151外拆除边界；5档概率×24种子×开关对照精确验证+2500BP与100%封顶。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U03",
+            "TestAssassinUnitCoverageAdditional/CK-U03_exact_probability"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "不会拆除自己或队友的陷阱，也不用于引爆自己的爆弹",
+          "kind": "solo",
+          "assertion": "真实解除陷阱技能准入不扣MP；敌/友/己与可见/不可见真实陷阱存活集验证；149内/151外拆除边界；5档概率×24种子×开关对照精确验证+2500BP与100%封顶。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U03",
+            "TestAssassinUnitCoverageAdditional/CK-U03_exact_probability"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-U04",
+      "name": "探路静行",
+      "status": "covered",
+      "effect": "侦测陷阱的侦测半径提高50%；移动速度提高20%，不需要先发现陷阱。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-U04",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "侦测陷阱的侦测半径提高50%",
+          "kind": "solo",
+          "assertion": "真实侦测施法及概率检测揭示250内但不揭示301外陷阱，对照仅200；没有发现陷阱时refreshStats实际移速仍120%。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U04"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "移动速度提高20%，不需要先发现陷阱",
+          "kind": "solo",
+          "assertion": "真实侦测施法及概率检测揭示250内但不揭示301外陷阱，对照仅200；没有发现陷阱时refreshStats实际移速仍120%。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U04"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-U05",
+      "name": "回收余粮",
+      "status": "covered",
+      "effect": "学会暗器回收后，狙击、连续投掷和多重投掷的法力消耗降低45%；暗器回收原有的耐久节省效果不变。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-U05",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "学会暗器回收后，狙击、连续投掷和多重投掷的法力消耗降低45%",
+          "kind": "solo",
+          "assertion": "狙击/连续/多重投掷实际准入已学暗器回收时扣55MP，对照/未学100；原被动50%耐久节约通过consumeAttackDurability实际累积磨损50验证，装备前后相同。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U05"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "暗器回收原有的耐久节省效果不变",
+          "kind": "solo",
+          "assertion": "狙击/连续/多重投掷实际准入已学暗器回收时扣55MP，对照/未学100；原被动50%耐久节约通过consumeAttackDurability实际累积磨损50验证，装备前后相同。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U05"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-U06",
+      "name": "伏击余裕",
+      "status": "covered",
+      "effect": "背刺命中后，隐身术的剩余冷却时间缩短35%；若这次背刺直接击杀敌人，则改为缩短80%。同一次背刺命中多个敌人也只触发一次。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-U06",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "背刺命中后，隐身术的剩余冷却时间缩短35%",
+          "kind": "solo",
+          "assertion": "背刺真实命中根结束后剩余100tick变65，直接击杀变20；1/3目标都只缩一次，最后副目标击杀仍取80%，无装备100；逐tick边界验证。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U06"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "若这次背刺直接击杀敌人，则改为缩短80%",
+          "kind": "solo",
+          "assertion": "背刺真实命中根结束后剩余100tick变65，直接击杀变20；1/3目标都只缩一次，最后副目标击杀仍取80%，无装备100；逐tick边界验证。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U06"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "同一次背刺命中多个敌人也只触发一次",
+          "kind": "solo",
+          "assertion": "背刺真实命中根结束后剩余100tick变65，直接击杀变20；1/3目标都只缩一次，最后副目标击杀仍取80%，无装备100；逐tick边界验证。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U06"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-U07",
+      "name": "布阵轻装",
+      "status": "covered",
+      "effect": "陷阱：爆弹、毒雾、封印、冻气和新星的法力消耗降低30%。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-U07",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "陷阱：爆弹、毒雾、封印、冻气和新星的法力消耗降低30%",
+          "kind": "solo",
+          "assertion": "爆弹/毒雾/封印/冻气/新星5个技能分别真实准入结算，MP100变70、冷却不变。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U07"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-U08",
+      "name": "隐中布置",
+      "status": "covered",
+      "effect": "隐身术持续时间延长5秒；在这次主动施放的隐身中，前2次布置陷阱不会打破隐身，一次放置3枚爆弹仍只消耗1次机会。其他攻击或伤害仍按原规则打破隐身。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-U08",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "隐身持续时间延长5秒；前2次布置陷阱不打破本次主动隐身。",
+          "kind": "solo",
+          "assertion": "实际隐身到期时间+5000ms；前2次陷阱准入保留隐身、第3次移除；普通攻击及来袭伤害仍打破隐身，卸除没有保留机会。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U08"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "一次放置3枚爆弹只消耗1次机会。",
+          "kind": "combination",
+          "assertion": "原生隐身+3次真实爆弹释放，每次实际3枚但只消费1隐身布陷机会，前2次保持、第3次破隐。",
+          "tests": [
+            "TestAssassinUnitCoverageCombinations/U08_A13_triple_one_charge"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "其他攻击或伤害仍按原规则打破隐身。",
+          "kind": "solo",
+          "assertion": "实际隐身到期时间+5000ms；前2次陷阱准入保留隐身、第3次移除；普通攻击及来袭伤害仍打破隐身，卸除没有保留机会。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U08"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-U09",
+      "name": "失手整备",
+      "status": "covered",
+      "effect": "狙击和击晕的法力消耗降低30%，冷却时间缩短20%。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-U09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "狙击和击晕的法力消耗降低30%，冷却时间缩短20%",
+          "kind": "solo",
+          "assertion": "狙击和击晕分别真实准入，MP100变70，冷却10000变8000ms并验证就绪前1tick/正好到期边界。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U09"
+          ],
+          "result": "pass"
+        }
+      ]
+    },
+    {
+      "power_id": "CK-U10",
+      "name": "轻装潜行",
+      "status": "covered",
+      "effect": "隐身术生效期间，额外获得40%移动速度；原有的隐身速度增减仍然保留，离开隐身后这项加成消失。",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+          "test": "TestAssassinUnitCoverage/CK-U10",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "隐身术生效期间，额外获得40%移动速度",
+          "kind": "solo",
+          "assertion": "实际状态提交及refreshStats验证原生-20%/+20%移速保留，再额外+40个百分点；隐身移除后真实面板移速恢复原值，卸除无额外40%。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U10"
+          ],
+          "result": "pass"
+        },
+        {
+          "clause": "原有的隐身速度增减仍然保留，离开隐身后这项加成消失",
+          "kind": "solo",
+          "assertion": "实际状态提交及refreshStats验证原生-20%/+20%移速保留，再额外+40个百分点；隐身移除后真实面板移速恢复原值，卸除无额外40%。",
+          "tests": [
+            "TestAssassinUnitCoverage/CK-U10"
+          ],
+          "result": "pass"
+        }
+      ]
+    }
+  ],
+  "combination_tests": [
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+      "test": "TestAssassinUnitCoverageCombinations/A13_A11_A12_instant_triple",
+      "power_ids": [
+        "CK-A13",
+        "CK-A11",
+        "CK-A12"
+      ],
+      "assertion": "3枚全部立即引爆，半径100×(1+.3+.3)=160，每枚230伤害、合计690，无残留/递归陷阱。",
+      "result": "pass",
+      "counts_toward_power_coverage": false
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+      "test": "TestAssassinUnitCoverageCombinations/A05_A27_A04_throw",
+      "power_ids": [
+        "CK-A05",
+        "CK-A27",
+        "CK-A04"
+      ],
+      "assertion": "真实连续投掷准入、改造后100→150半径，125距离新增目标受击，151排除，主目标完整225而非分摊。",
+      "result": "pass",
+      "counts_toward_power_coverage": false
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+      "test": "TestAssassinUnitCoverageCombinations/A28_A30_pull",
+      "power_ids": [
+        "CK-A28",
+        "CK-A30",
+        "TY-A04"
+      ],
+      "assertion": "等级1/5/20、已学/未学、单/双/三件合法搭配检查实际半径命中和拉拽结果。",
+      "result": "pass",
+      "counts_toward_power_coverage": false
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+      "test": "TestAssassinUnitCoverageCombinations/A06_A27_A07_circle",
+      "power_ids": [
+        "CK-A06",
+        "CK-A27",
+        "CK-A07"
+      ],
+      "assertion": "20%+50%范围相加成170，背后169命中150、171排除；主目标200、副目标150。",
+      "result": "pass",
+      "counts_toward_power_coverage": false
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+      "test": "TestAssassinUnitCoverageCombinations/U08_A13_triple_one_charge",
+      "power_ids": [
+        "CK-U08",
+        "CK-A13"
+      ],
+      "assertion": "原生隐身+3次真实爆弹释放，每次实际3枚但只消费1隐身布陷机会，前2次保持、第3次破隐。",
+      "result": "pass",
+      "counts_toward_power_coverage": false
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+      "test": "TestAssassinUnitCoverageCombinations/A19_A20_A21_fan",
+      "power_ids": [
+        "CK-A19",
+        "CK-A20",
+        "CK-A21"
+      ],
+      "assertion": "无需隐身的扇形背刺主目标200、副目标125，范围/条件/目标加成同时正确。",
+      "result": "pass",
+      "counts_toward_power_coverage": false
+    },
+    {
+      "package": "./internal/game/scene",
+      "file": "server/internal/game/scene/legendary_assassin_coverage_test.go",
+      "test": "TestAssassinUnitCoveragePullCombinationOneMovement",
+      "power_ids": [
+        "CK-A28",
+        "CK-A30"
+      ],
+      "assertion": "原100%击退被替换，主目标145伤害且仅1条移动事件直接至40，不先击退、不拉两次。",
+      "result": "pass",
+      "counts_toward_power_coverage": false
+    }
+  ]
+}

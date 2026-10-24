@@ -1,6 +1,11 @@
 package scene
 
-import "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+import (
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
+)
 
 func warriorDrain(c *legendaryContext, d *domain.SkillDef) {
 	if d.ID != 10013 {
@@ -14,20 +19,33 @@ func warriorDrain(c *legendaryContext, d *domain.SkillDef) {
 	}
 }
 
-func warriorArmor(c *legendaryContext, n int32) int32 {
-	if !legendaryMeleeDirect(c) || c.Target == nil {
-		return n
+// Native defense is also evasion. Apply borrowed armor break before the hit
+// formula, not in BeforeDamage after CalculateStrike has already decided miss.
+func (s *Scene) legendaryWarriorBeforeStrike(src, dst *entity.Entity, blow combat.Blow) {
+	if blow.LegendaryChild || blow.LegendaryPayload || blow.Origin != domain.DamageNormalOrigin || blow.ProcDepth != 0 {
+		return
+	}
+	for _, c := range s.legendaryContexts(src, dst, blow, event.DamageDealt{}) {
+		if c.Power.ID == "ZS-A07" && c.Skill == 10005 || c.Power.ID == "ZS-A25" && (c.Skill == 10023 || c.Skill == 10022) {
+			warriorArmor(&c)
+		}
+	}
+}
+
+func warriorArmor(c *legendaryContext) {
+	if !legendaryMeleeDirect(c) || c.Target == nil || !c.Target.Alive() {
+		return
 	}
 	if c.Target.Monster != nil && c.Scene.defs != nil {
 		if d, ok := c.Scene.defs.Def(c.Target.Monster.TypeID); ok {
 			if _, immune := d.ImmuneSkills[10009]; immune {
-				return n
+				return
 			}
 		}
 	}
 	d, ok := warriorLearned(c, 10009, false)
 	if !ok {
-		return n
+		return
 	}
 	for _, a := range d.Statuses {
 		if !a.TargetType.Matches(c.Target.Kind) {
@@ -45,7 +63,6 @@ func warriorArmor(c *legendaryContext, n int32) int32 {
 			c.Scene.applyStatusDef(c.Target, st, c.Owner.ID)
 		}
 	}
-	return n
 }
 func warriorArmorStrength(c *legendaryContext, d *domain.StatusDef) {
 	if c.Skill != 10009 && c.Skill != 10005 {
@@ -65,23 +82,23 @@ func warriorArmorStrength(c *legendaryContext, d *domain.StatusDef) {
 	d.Affixes = append([]domain.Affix(nil), d.Affixes...)
 	for i := range d.Affixes {
 		if d.Affixes[i].Attr == domain.AttrDef && d.Affixes[i].Value < 0 {
-			d.Affixes[i].Value = specialScale(d.Affixes[i].Value, 100+pct)
+			original := d.Affixes[i].Value
+			d.Affixes[i].Value = specialScale(original, 100+pct)
+			if d.Affixes[i].Mode == domain.ModePercent {
+				// Match ResolveSkillApplication's percentage-penalty floor:
+				// strength can reach -100% earlier, not exceed the native cap.
+				// Preserve an already-authored exceptional boundary below it.
+				d.Affixes[i].Value = max(min(original, int32(-100)), d.Affixes[i].Value)
+			}
 		}
 	}
 }
 
 func init() {
-	h := warriorDamageSkills(50, 10005, 10009)
-	h.BeforeDamage = func(c *legendaryContext, n int32) int32 {
-		if c.Skill == 10005 {
-			return warriorArmor(c, n)
-		}
-		return n
-	}
-	registerWarriorPower("ZS-A07", h)
+	registerWarriorPower("ZS-A07", warriorDamageSkills(50, 10005, 10009))
 	registerWarriorPower("ZS-A08", legendaryHandler{SelectTargets: warriorPreservePrimary, TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10009 {
-			if p, ok := warriorLearned(c, 10005, true); ok {
+			if p, ok := warriorBorrowedSkill(c, 10005, true); ok {
 				d.Kind = domain.SkillArea
 				d.Area = p.Area
 				d.Radius = p.Radius
@@ -94,7 +111,7 @@ func init() {
 			legendaryAddTargetDamage(d, 9500)
 		}
 	}})
-	registerWarriorPower("ZS-A10", legendaryHandler{BaseSkill: func(c *legendaryContext, d *domain.SkillDef) {
+	registerWarriorPower("ZS-A10", legendaryHandler{ComposeSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID != 10013 {
 			return
 		}
@@ -107,7 +124,7 @@ func init() {
 		}
 		warriorEffects(d, func(e *domain.SkillEffect) {
 			if e.Kind == domain.EffectDamage {
-				e.BaseDamageFlat += 2 * drain
+				e.BaseDamageFlat = domain.SaturateInt32(int64(e.BaseDamageFlat) + 2*int64(drain))
 			}
 		})
 	}})
@@ -148,15 +165,8 @@ func init() {
 			d.LegendaryModifiers.DamageBP += 10000
 		}
 	}})
-	h = warriorDamageSkills(35, 10023, 10022)
-	h.BeforeDamage = func(c *legendaryContext, n int32) int32 {
-		if c.Skill == 10023 || c.Skill == 10022 {
-			return warriorArmor(c, n)
-		}
-		return n
-	}
-	registerWarriorPower("ZS-A25", h)
-	h = warriorIncoming(16)
+	registerWarriorPower("ZS-A25", warriorDamageSkills(35, 10023, 10022))
+	h := warriorIncoming(16)
 	h.StatusApplied = warriorArmorStrength
 	registerWarriorPower("ZS-D02", h)
 	registerWarriorPower("ZS-D04", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) { warriorDrain(c, d) }, ModifyIncoming: func(c *legendaryContext, n int32) int32 {

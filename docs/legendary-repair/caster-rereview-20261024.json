@@ -1,0 +1,1955 @@
+{
+  "as_of_utc": "2026-10-24",
+  "scope": "SS50 + YS50 independent rereview after restored repairs; current effect, registration, actual consumers and legal combinations",
+  "baseline": "4fcbda2",
+  "fixes": [
+    "eff5dc9",
+    "0baa29e",
+    "follow-up donor snapshot closure (same branch)"
+  ],
+  "effect_changes_in_this_pass": false,
+  "source_of_native_data": "nativeRepairTables overlays authored migration62 and later66/68-74 corrections; inspected later migrations through104 for relevant replacements. Not PostgreSQL loader evidence.",
+  "validation": "Default-vet focused scene suite; final integrated full/race results belong to integration owner, not this report.",
+  "important_limits": [
+    "100 source rows and bounded tests do not exhaust every rank, equip permutation, random seed or map obstacle.",
+    "No live database, deployment, Unity rendering or client art validation.",
+    "Native PvE status-consumer interactions do not establish open player PvP.",
+    "Current native variant catalog has no AoE variant for generated caster child IDs; suspected child variant side-target loss is not currently reachable.",
+    "SS-U02 plus SS-U08 is impossible because both occupy weapon slot; enhanced1324 cannot legally supply the deleted workaround."
+  ],
+  "powers": [
+    {
+      "id": "SS-A01",
+      "effect_reviewed": "火球术直接伤害提高70%；目标带有你施加的燃烧时，再提高40%，本威能合计提高110%。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:11",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "70%与同源燃烧40%同桶相加；追加复刻不再重复准备。",
+      "bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline",
+        "TestLegendaryCasterSecondFireballInheritsAmplifierOnce"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A02",
+      "effect_reviewed": "火弹术命中带有你施加的燃烧的敌人时，额外造成相当于这些燃烧剩余伤害80%的火系伤害。燃烧不消失、不缩短；每次施法对同一敌人只触发一次，追加伤害不会再次触发本效果。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster.go:117",
+      "real_consumers": [
+        "applySkill -> legendarySkillResolved after native damage/status result"
+      ],
+      "source_review_conclusion": "读取本施法者燃烧剩余伤害，原实例及期限保留；每root每目标一次。",
+      "bounded_tests": [
+        "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration",
+        "TestLegendaryCasterBurnSettlementKillReward",
+        "TestLegendaryCasterNativeCastEchoAndBurn"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A03",
+      "effect_reviewed": "火弹术保留主目标完整伤害和效果，并同时攻击其周围半径150内最多4名其他敌人，各造成火弹术基础伤害100%的火系伤害。额外攻击也享受火弹术、火系伤害和燃烧剩余伤害结算的加成；每次施法只选取一批额外目标，不会继续向外扩散。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:415",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets"
+      ],
+      "source_review_conclusion": "原目标+最多4旁目标，仅一轮扩散；附带燃烧结算沿同根去重。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingGeometryAndCost",
+        "TestLegendaryCasterSorcererRemainingSplashNativeCast",
+        "TestLegendaryCasterTypedMetadataEquippedAndRemoved"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A04",
+      "effect_reviewed": "火球术保留原有伤害，并在爆炸中心立即追加一次同范围爆炸，造成该次火球术基础伤害的70%。追加爆炸不附加技能状态，也不会再产生爆芯。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_areas.go:40",
+      "real_consumers": [
+        "accepted equipmentRoot completion -> legendaryRootFinished"
+      ],
+      "source_review_conclusion": "本轮修复：原中心和语义主目标（含0）独立保留；70%复刻沿受理定义与来源。",
+      "bounded_tests": [
+        "TestLegendaryCasterBurnSettlementKillReward",
+        "TestLegendaryCasterSecondFireballInheritsAmplifierOnce",
+        "TestLegendaryRepairFireballChildCenterTriple",
+        "TestCasterReviewFireballEchoRetainsOriginalPrimary",
+        "TestCasterReviewUnselectedExplosionDoesNotInventPrimary",
+        "TestCasterReviewAcceptedSourceSurvivesRealEquip"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A05",
+      "effect_reviewed": "火球术命中1至2名敌人时，对这些敌人的直接伤害提高75%；命中至少3名敌人时，只对选中的主目标提高35%，其余敌人伤害不变。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_areas.go:50",
+      "real_consumers": [
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "合法目标计数；三目标仅显式主目标35%；与A04/TY主旁目标倍率对照。",
+      "bounded_tests": [
+        "TestLegendaryCasterFocusedFireballCountStableWithinRoot",
+        "TestLegendaryCasterSorcererRemainingFocusedFireball",
+        "TestCasterRepairFireballCountsOnlyLegalHits",
+        "TestCasterReviewFireballEchoRetainsOriginalPrimary",
+        "TestCasterReviewUnselectedExplosionDoesNotInventPrimary"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A06",
+      "effect_reviewed": "火球术范围半径扩大65%。原半径内侧一半区域的直接伤害提高20%；超过该距离的环带区域提高45%，包括新增的外圈。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_definitions.go:15",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "原生半径分区，扩圈只改变选择范围；受理等级固定。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingGeometryAndCost",
+        "TestLegendaryCasterSorcererRemainingTargetBonuses",
+        "TestLegendaryRepairFireballChildCenterTriple"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A07",
+      "effect_reviewed": "火球术命中带有你施加的燃烧的敌人时，选取本次命中者中剩余燃烧伤害最高的一名，将该剩余伤害的90%分别造成给爆炸范围内最多4名其他敌人。每名敌人各承受90%，不均分；不移除原燃烧，追加伤害不会再次扩散。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:420",
+      "real_consumers": [
+        "accepted equipmentRoot completion -> legendaryRootFinished"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingBurnSpread"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A08",
+      "effect_reviewed": "冰箭术命中时，若你与目标的距离达到本次施法距离的一半，直接伤害提高55%；不足一半时提高20%。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster.go:120",
+      "real_consumers": [
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "按本次修饰后射程一半比较，不用旧固定距离。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingTargetBonuses",
+        "TestCasterRepairRangeThresholdAndWideAreaComposition"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A09",
+      "effect_reviewed": "已学习冰系掌握时，冰箭术必定附加其原有减速，仍遵守目标免疫规则。目标在命中前已被冻结或减速时，冰箭术直接伤害提高100%；其他威能产生的冰箭术伤害也可获得这项加成，但不会重复施加同一份减速。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:269",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets",
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "原生学习前提保留；100%概率不绕过硬免疫，子冰箭不重复同份减速。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingFrozenBonuses",
+        "TestCasterRepairGuaranteedStatusRetainsImmunity",
+        "TestCasterRepairNativeControlSnapshots"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A10",
+      "effect_reviewed": "冰箭术及其追加伤害，忽略目标50%的冰系百分比减伤；不忽略其他护盾、通用减伤或免疫。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:11",
+      "real_consumers": [
+        "resolveStrikeStatuses -> legendaryModifyBlow -> combat.CalculateStrike"
+      ],
+      "source_review_conclusion": "只冰系百分比减伤穿透，同根冰追加继承；不透通用减伤/免疫。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingIcePenetration",
+        "TestCasterRepairIceSettlementInheritsOnlyPurePenetration"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A11",
+      "effect_reviewed": "冰箭术命中带有你施加的燃烧的敌人时，额外造成相当于这些燃烧剩余伤害100%的冰系伤害。燃烧不消失、不缩短；每次施法对同一敌人只触发一次，追加伤害不会再次触发燃烧或本效果。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster.go:118",
+      "real_consumers": [
+        "applySkill -> legendarySkillResolved after native damage/status result"
+      ],
+      "source_review_conclusion": "同源燃烧剩余结算为冰伤；不重入燃烧触发。",
+      "bounded_tests": [
+        "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A12",
+      "effect_reviewed": "冰爆术可选择施法距离内的合法敌人为爆炸中心，也可保持以自身为中心释放。射程与冰封相同，直接伤害提高20%，保留原控制效果；无需先冰封目标，也不消耗冻结。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:58",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets"
+      ],
+      "source_review_conclusion": "选择敌人与自身中心分离；真实冻结实例/期限不被破坏。",
+      "bounded_tests": [
+        "TestLegendaryCasterDamageBonusesAddBeforeChildSettlement",
+        "TestLegendaryCasterOptionalEntityCenterMetadata",
+        "TestLegendaryCasterSynergyFreezeImmediateAndRemoteBurst",
+        "TestCasterRepairNativeControlSnapshots",
+        "TestLegendaryRepairFreezeChildBurnSettlementPreserved"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A13",
+      "effect_reviewed": "冰爆术直接伤害提高65%，不缩小原有范围；位于原半径内侧一半的敌人改为受到85%的伤害加成。保留原控制效果。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_definitions.go:37",
+      "real_consumers": [
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "原生半径分区；不把其他威能扩圈当新的内圈。",
+      "bounded_tests": [
+        "TestLegendaryCasterDamageBonusesAddBeforeChildSettlement"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A14",
+      "effect_reviewed": "冰爆术直接伤害提高20%。命中后，将距爆炸中心最远的最多5名可被位移的敌人向中心拉近最多90距离；拉拽不能穿过障碍，每次施法只执行一次。位移免疫不影响原有伤害和控制判定。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_shields.go:16",
+      "real_consumers": [
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses",
+        "accepted equipmentRoot completion -> legendaryRootFinished"
+      ],
+      "source_review_conclusion": "先排位移免疫再取最远5名；障碍/伤害和控制各独立。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingIcePull",
+        "TestLegendaryCasterSorcererRemainingTargetBonuses",
+        "TestCasterRepairPullSkipsImmuneBeforeLimit"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A15",
+      "effect_reviewed": "冰爆术命中在本次施法前已被冻结或减速的敌人时，直接伤害提高60%。不移除或缩短已有冻结、减速，并保留冰爆术原有控制效果。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster.go:137",
+      "real_consumers": [
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "控制资格在受理快照，旧冻结/减速实例期限保留。",
+      "bounded_tests": [
+        "TestLegendaryCasterDamageBonusesAddBeforeChildSettlement",
+        "TestLegendaryCasterSynergyFreezeImmediateAndRemoteBurst",
+        "TestCasterRepairNativeControlSnapshots",
+        "TestLegendaryRepairFreezeChildBurnSettlementPreserved"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A16",
+      "effect_reviewed": "风焰术命中时，额外造成相当于目标身上由你施加的燃烧剩余伤害160%的火系伤害。燃烧不消失、不缩短；每次施法对同一敌人只触发一次，追加伤害不会再次触发本效果。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster.go:119",
+      "real_consumers": [
+        "applySkill -> legendarySkillResolved after native damage/status result"
+      ],
+      "source_review_conclusion": "A17先应用/刷新再结算剩余；160%额外不消耗燃烧。",
+      "bounded_tests": [
+        "TestLegendaryCasterBurnBurstsPreserveSourceAndDuration",
+        "TestLegendaryCasterSynergyFireNativeBurnBeforeSettlement"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A17",
+      "effect_reviewed": "已学习燃烧时，风焰术每次命中必定附加当前等级的燃烧，仍遵守目标免疫规则。这份燃烧每跳伤害提高82%，持续时间与刷新规则不变；搭配“长焰尽算”时，先施加或刷新燃烧，再结算剩余燃烧伤害。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:208",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets",
+        "applyStatusDef -> legendaryCasterStatusApplying -> native status store"
+      ],
+      "source_review_conclusion": "已学燃烧为原生依赖；概率必定但硬免疫仍有效；+82%跳伤。",
+      "bounded_tests": [
+        "TestLegendaryCasterSynergyFireNativeBurnBeforeSettlement",
+        "TestCasterRepairGuaranteedStatusRetainsImmunity",
+        "TestCasterRepairNativeControlSnapshots"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A18",
+      "effect_reviewed": "风焰术的圆形作用范围扩大80%，直接伤害提高40%，原有燃烧概率不变。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:20",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "最新原生风焰为圆形，半径80%而非旧矩形猜测。",
+      "bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline",
+        "TestCasterRepairFlameWidthAndNativeBurnCombination",
+        "TestCasterRepairRangeThresholdAndWideAreaComposition"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A19",
+      "effect_reviewed": "你成功施加燃烧时，立即额外造成相当于这份燃烧初始总伤害65%的火系伤害，燃烧本身完整保留。手动燃烧和风焰术附加的燃烧均可触发；每次施法对同一敌人只触发一次。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:530",
+      "real_consumers": [
+        "applyStatusDef successful commit -> legendaryStatusCommitted"
+      ],
+      "source_review_conclusion": "仅本次成功提交燃烧实例的初始总伤害65%；不把并存旧燃烧再结一遍。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingBurnOpening",
+        "TestCasterRepairNewBurnOnlyAndElementalSharing"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A20",
+      "effect_reviewed": "暴雪术直接伤害提高55%，范围半径扩大40%，冷却时间缩短20%，不增加法力消耗。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_definitions.go:8",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterDefinitionModifiers"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A21",
+      "effect_reviewed": "暴雪术不改变原有半径。原半径内侧三分之二区域的直接伤害提高80%，其余区域提高20%；扩圈效果增加的外圈也获得20%加成。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_definitions.go:51",
+      "real_consumers": [
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "以原半径2/3分区，扩圈新增区仍20%；基准等级固定。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingTargetBonuses"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A22",
+      "effect_reviewed": "暴雪术对已被冻结或减速的敌人，直接伤害提高90%。不新增区域效果，也不消耗或缩短已有控制。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:32",
+      "real_consumers": [
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "读取当前目标控制，但不清除/缩短冻结和减速。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingFrozenBonuses",
+        "TestCasterRepairNativeControlSnapshots",
+        "TestLegendaryRepairFreezeChildBurnSettlementPreserved"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A23",
+      "effect_reviewed": "冰封作用半径增加150，优先冻结主目标，并对最多4名其他敌人按原免疫规则施加冻结；搭配“寒封隔绝”时，作用半径为250，总目标上限仍为5。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:37",
+      "real_consumers": [
+        "legendaryPrepareSkill/ChildSkill base stage -> legendaryFinalizeSkill -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "与D06叠为250半径，总上限5且优先原目标。",
+      "bounded_tests": [
+        "TestLegendaryCasterExpandedFreezeAppliesRealNativeControls",
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A24",
+      "effect_reviewed": "已学习冰箭术时，冰封保留原冻结，并对目标立即追加当前等级冰箭术基础伤害150%的冰系伤害。先判定冻结，再计算冰箭术的状态增伤；追加伤害不会打碎本次冰封，并享受冰箭术伤害加成和冰系被动。目标免疫冻结时仍可受到追加伤害，但伤害免疫仍有效。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:256",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets",
+        "applySkill -> legendarySkillResolved after native damage/status result"
+      ],
+      "source_review_conclusion": "冻结判定先于追加冰箭；免冻结不免伤；本轮锁定派生装备与donor等级。",
+      "bounded_tests": [
+        "TestLegendaryCasterControlImmuneStillTakesTransformedDamage",
+        "TestLegendaryCasterExpandedFreezeAppliesRealNativeControls",
+        "TestLegendaryCasterSynergyFreezeImmediateAndRemoteBurst",
+        "TestCasterReviewAcceptedSourceSurvivesRealEquip",
+        "TestCasterReviewChildDonorRankStaysAccepted"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A25",
+      "effect_reviewed": "火系伤害额外享受你已学习的寒冰之魂加成，冰系伤害额外享受你已学习的红莲之魂加成。不需要交替施法，也不额外发动攻击。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:573",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "applyStatusDef -> legendaryCasterStatusApplying -> native status store"
+      ],
+      "source_review_conclusion": "本轮补燃烧跨系被动的受理等级固定，原生2409手套不追溯升级。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingElementPassive",
+        "TestCasterRepairNewBurnOnlyAndElementalSharing",
+        "TestCasterReviewNonChildDerivedSourceStaysAccepted"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A26",
+      "effect_reviewed": "魔镜术成功抵抗魔法攻击时，向攻击者反射本次被抵抗伤害的120%，单次不超过你的最大生命18%。反射可享受防御魔法与反射伤害加成；搭配“镜面偏转”时，反射比例提高至180%，上限不变，反射不会再次触发反射。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:625",
+      "real_consumers": [
+        "native magic resistance -> legendaryMagicResisted -> bounded reflection"
+      ],
+      "source_review_conclusion": "抵抗伤害120%/D03合法180%，最大生命18%封顶；反射不重反射。",
+      "bounded_tests": [
+        "TestLegendaryCasterNativeBurnKillAndMirrorReflection",
+        "TestLegendaryIncomingActualPayloadAndChildReflection",
+        "TestLegendaryIncomingMirrorProcCapAndNoReflectionLoop",
+        "TestLegendaryIncomingMirrorAmplifierInsideGenerationGuard"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A27",
+      "effect_reviewed": "秘术：幻影成功移动后，在出发点周围半径180内立即造成火系爆炸，伤害为当前等级火弹术基础伤害的180%；未学火弹术时使用其1级伤害，不会因此学会该技能。爆炸享受幻影和火系伤害加成；每次成功移动只触发一次，不会再触发位移，也没有额外冷却。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:447",
+      "real_consumers": [
+        "successful pending native teleport -> legendaryCasterTeleported with accepted source"
+      ],
+      "source_review_conclusion": "未学借火弹1级数值不解锁技能；成功移动后出发点爆炸；受理源随pending teleport传递。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingTeleportExplosion",
+        "TestCasterReviewAcceptedSourceSurvivesRealEquip"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A28",
+      "effect_reviewed": "秘术：消除完成驱散与偷取后，额外造成当前等级火弹术基础伤害220%的魔法伤害；未学火弹术时使用其1级伤害，不会因此学会该技能。你每拥有一种防御魔法，再增加50%火弹术基础伤害，最多计算3种，最高370%；享受消除和秘术伤害加成，不视为施放火弹术。没有增益可驱散的敌人也可被攻击，仍须满足原有射程和目标限制。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:292",
+      "real_consumers": [
+        "accepted equipmentRoot completion -> legendaryRootFinished"
+      ],
+      "source_review_conclusion": "未学借火弹1级；空驱散也有伤害；本轮补同根donor等级快照；偷得防御种类在驱散后动态读取。",
+      "bounded_tests": [
+        "TestLegendaryCasterSynergyDispelAttackStealDefense",
+        "TestCasterReviewChildDonorRankStaysAccepted"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A29",
+      "effect_reviewed": "秘术：集中、释能或瞬发强化一次伤害技能时，该次技能额外获得66%的直接伤害加成。同一次技能即使受到多种秘术强化，也只获得一次66%加成。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:462",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "原生集中/释能/瞬发任一强化只加一次66%；不新造计时器。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingNativeRelationNegatives",
+        "TestLegendaryCasterSorcererRemainingSecretStateBonuses"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-A30",
+      "effect_reviewed": "秘术：瞬发强化的下一次手动伤害技能命中后，对同场景内仍存活的原主目标，追加该技能基础伤害80%的攻击。每次瞬发只追加一次；追加攻击不附带控制或触发其他技能。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_resources.go:29",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "accepted equipmentRoot completion -> legendaryRootFinished"
+      ],
+      "source_review_conclusion": "80%复制已受理最终定义，避免再次准备放大；原主目标死亡不改选。",
+      "bounded_tests": [
+        "TestLegendaryCasterInstantConsumesNativeAndEchoSingleTarget",
+        "TestLegendaryRepairFireballChildCenterTriple"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-D01",
+      "effect_reviewed": "火盾生效期间，180距离内敌人对你造成的伤害降低28%；与“焚息护身”同时生效时，分别减伤，不直接相加。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:74",
+      "real_consumers": [
+        "resolveStrikeStatuses -> legendaryBeforeDamage(incoming); AllDamageIncoming additionally opts into periodic/reflection consumers"
+      ],
+      "source_review_conclusion": "与D09序列相乘；读取火盾和当前攻击者距离。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingIncoming",
+        "TestLegendaryIncomingAllDamageConsumerMatrix",
+        "TestLegendaryIncomingCombinationShieldAndManaOnce",
+        "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+        "TestLegendaryIncomingActualHealerWindupCombination"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-D02",
+      "effect_reviewed": "冰盾生效期间，单次将承受的伤害经过前面的减伤后，若仍超过最大生命的8%，该次伤害再降低55%。判定在护盾吸收前进行，无额外冷却。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:80",
+      "real_consumers": [
+        "resolveStrikeStatuses -> legendaryBeforeDamage(incoming); AllDamageIncoming additionally opts into periodic/reflection consumers"
+      ],
+      "source_review_conclusion": "公共消费者顺序由shared修复：原生减伤后、盾前判断严格>8%。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingIncoming",
+        "TestLegendaryIncomingAllDamageConsumerMatrix",
+        "TestLegendaryIncomingCombinationShieldAndManaOnce",
+        "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+        "TestLegendaryIncomingActualHealerWindupCombination"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-D03",
+      "effect_reviewed": "魔镜术生效期间，受到的魔法伤害额外降低75%。自身防御魔法的抗性数值和反射伤害提高50%，冻结或抵抗概率提高30个百分点，最高100%；包括偷取的防御魔法。持续时间与同名状态覆盖规则不变，不补回已消耗的护盾。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:368",
+      "real_consumers": [
+        "applyStatusDef -> legendaryCasterStatusApplying -> native status store",
+        "resolveStrikeStatuses -> legendaryBeforeDamage(incoming); AllDamageIncoming additionally opts into periodic/reflection consumers"
+      ],
+      "source_review_conclusion": "防御状态原生字段增强，抵抗概率与数值分开；反射入口由shared交叉修复。",
+      "bounded_tests": [
+        "TestLegendaryCasterSynergyDispelAttackStealDefense",
+        "TestLegendaryIncomingNativeShieldMagnitudeConsumer",
+        "TestLegendaryIncomingActualNativeFireShieldCombination",
+        "TestLegendaryIncomingUntypedPoisonIsNotMirrorMagic"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-D04",
+      "effect_reviewed": "最大生命提高30%，秘术：幻影造成或派生的伤害提高30%。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:539",
+      "real_consumers": [
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses",
+        "refreshStats -> legendaryPassiveStats -> native actor stats"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingPassives"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-D05",
+      "effect_reviewed": "秘术：集中的待生效状态存在时，每次受到伤害可减免50%，但每次最多减免最大生命的22%。受击不会消耗集中效果，无内置冷却。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:86",
+      "real_consumers": [
+        "resolveStrikeStatuses -> legendaryBeforeDamage(incoming); AllDamageIncoming additionally opts into periodic/reflection consumers"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingIncoming",
+        "TestLegendaryIncomingAllDamageConsumerMatrix",
+        "TestLegendaryIncomingCombinationShieldAndManaOnce",
+        "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+        "TestLegendaryIncomingActualHealerWindupCombination"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-D06",
+      "effect_reviewed": "冰封改为以主目标为中心、半径100的范围冻结，优先保留主目标，最多影响5名敌人，仍遵守控制免疫规则。装备期间受到的伤害降低35%，不要求成功冻结敌人；搭配“冰封广散”时，作用半径为250。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:467",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets",
+        "resolveStrikeStatuses -> legendaryBeforeDamage(incoming); AllDamageIncoming additionally opts into periodic/reflection consumers"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterExpandedFreezeAppliesRealNativeControls",
+        "TestLegendaryIncomingAllDamageConsumerMatrix",
+        "TestLegendaryIncomingCombinationShieldAndManaOnce",
+        "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+        "TestLegendaryIncomingActualHealerWindupCombination"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-D07",
+      "effect_reviewed": "火盾与冰盾可同时生效，保留各自原有的抗性、反射和冻结效果；最大生命提高28%。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:545",
+      "real_consumers": [
+        "refreshStats -> legendaryPassiveStats -> native actor stats"
+      ],
+      "source_review_conclusion": "只放开火盾/冰盾覆盖互斥；不生成新的替代护盾。",
+      "bounded_tests": [
+        "TestLegendaryCasterDualNativeShieldsAndNoTimer"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-D08",
+      "effect_reviewed": "最大生命提高30%，所有技能的法力消耗降低20%，不要求低法力，也不会将伤害转为法力消耗。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:546",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "refreshStats -> legendaryPassiveStats -> native actor stats"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingGeometryAndCost",
+        "TestLegendaryCasterSorcererRemainingPassives"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-D09",
+      "effect_reviewed": "带有你施加的燃烧的敌人对你造成伤害时，伤害降低40%。不消耗或缩短燃烧，无内置冷却；与烫手法衣同时生效时分别计算。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:92",
+      "real_consumers": [
+        "resolveStrikeStatuses -> legendaryBeforeDamage(incoming); AllDamageIncoming additionally opts into periodic/reflection consumers"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterSynergyFireNativeBurnBeforeSettlement",
+        "TestLegendaryIncomingAllDamageConsumerMatrix",
+        "TestLegendaryIncomingCombinationShieldAndManaOnce",
+        "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+        "TestLegendaryIncomingActualHealerWindupCombination"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-D10",
+      "effect_reviewed": "装备期间受到的伤害降低35%。秘术：释能直接强化的那一次伤害技能，额外获得35%的直接伤害加成。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:98",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "resolveStrikeStatuses -> legendaryBeforeDamage(incoming); AllDamageIncoming additionally opts into periodic/reflection consumers"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingIncoming",
+        "TestLegendaryCasterSorcererRemainingSecretStateBonuses",
+        "TestLegendaryIncomingAllDamageConsumerMatrix",
+        "TestLegendaryIncomingCombinationShieldAndManaOnce",
+        "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+        "TestLegendaryIncomingActualHealerWindupCombination"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-U01",
+      "effect_reviewed": "秘术：幻影冷却时间变为0，成功率变为100%，法力消耗降低15%。仍须满足距离、合法落点及移动限制。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_definitions.go:65",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterDefinitionModifiers"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-U02",
+      "effect_reviewed": "秘术：消除的驱散成功率提高30个百分点，最高100%。成功驱散防御魔法后，将其转移给你，剩余持续时间延长50%；只保留原剩余护盾量，不补回已消耗部分，同名状态按原规则处理。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_definitions.go:80",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "native dispel effect -> legendaryCasterDispelled -> removed original instances"
+      ],
+      "source_review_conclusion": "仅成功驱散的原防御实例转移；原剩余盾不补满。",
+      "bounded_tests": [
+        "TestLegendaryCasterRegenAndDispelStealRemaining",
+        "TestLegendaryCasterSynergyDispelAttackStealDefense"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-U03",
+      "effect_reviewed": "秘术：集中保留延长下一技能状态持续时间的效果，并使该次技能的法力消耗降低55%。燃烧、冰封和防御魔法均可获得原有时长强化；集中随本次技能一并消耗，不是施法后返还法力。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:103",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "实付前减耗，集中随该次受理消费，不是事后退款。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingGeometryAndCost",
+        "TestLegendaryCasterSorcererRemainingNativeRelationNegatives",
+        "TestLegendaryCasterSorcererRemainingSecretStateBonuses"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-U04",
+      "effect_reviewed": "移动速度提高40%，装备后持续生效，无需先命中敌人或进入冰雪区域。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:547",
+      "real_consumers": [
+        "refreshStats -> legendaryPassiveStats -> native actor stats"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingPassives"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-U05",
+      "effect_reviewed": "你施加的燃烧造成击杀时，恢复最大法力的6%。燃烧剩余伤害结算和焰终回响造成的击杀也可触发；每次死亡只奖励一次，无内置冷却。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:619",
+      "real_consumers": [
+        "tickStatus -> legendaryPeriodicResolved -> actual fatal damage result"
+      ],
+      "source_review_conclusion": "实际燃烧/剩余结算致死奖励，每死亡一次；非任意火伤奖励。",
+      "bounded_tests": [
+        "TestLegendaryCasterBurnSettlementKillReward",
+        "TestLegendaryCasterNativeBurnKillAndMirrorReflection"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-U06",
+      "effect_reviewed": "火球术或冰爆术未命中任何敌人时，返还本次实际消耗法力的100%，并使本次剩余冷却缩短80%。每次施法只返还一次，无额外冷却。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:114",
+      "real_consumers": [
+        "accepted equipmentRoot completion -> legendaryRootFinished"
+      ],
+      "source_review_conclusion": "仅无合法命中返实付，冷却缩剩余80%，不退面板名义耗蓝。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingEmptyRefund"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-U07",
+      "effect_reviewed": "所有技能的法力消耗降低22%，装备后持续生效。不增加最大法力，也不产生返还法力。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:108",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingGeometryAndCost"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-U08",
+      "effect_reviewed": "魔镜术生效时，清除你已有的减速；魔镜术状态持续期间，你免疫新的减速。保护与原魔镜状态同步结束。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:397",
+      "real_consumers": [
+        "applySkill -> legendarySkillResolved after native damage/status result",
+        "applyStatusDef -> legendaryStatusReceiving -> immunity/overlay"
+      ],
+      "source_review_conclusion": "原生镜获得清旧减速、存续拒新减速；U02同武器槽组合非法，已排除旧误报。",
+      "bounded_tests": [
+        "TestLegendaryCasterMirrorSlowImmunityAlsoGuardsChildStatus",
+        "TestLegendaryCasterSorcererRemainingMirrorSlow",
+        "TestCasterRepairNativeMirrorAcquisitionCleansesExistingSlow"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-U09",
+      "effect_reviewed": "火球术、冰爆术、风焰术和暴雪术的冷却时间缩短30%，法力消耗降低20%。装备后持续生效，无需连击。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:42",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "SS-U10",
+      "effect_reviewed": "所有以敌人为目标且有施法距离的法术，射程提高60%，装备后持续生效，不需要秘术：瞬发。以自身为中心的技能不增加范围半径。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:109",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "只敌对且有施法距离的法术；不扩自身圆半径。",
+      "bounded_tests": [
+        "TestLegendaryCasterSorcererRemainingGeometryAndCost",
+        "TestLegendaryCasterSorcererRemainingNativeRelationNegatives"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A01",
+      "effect_reviewed": "光弹术保留主目标完整伤害，并对主目标周围180范围内最近的另外3名敌人造成60%的光弹伤害。副目标不重复附加技能状态，也不触发威能。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster.go:149",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets",
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses",
+        "applySkill/ChildSkill -> legendarySelectTargets -> unique legal target list"
+      ],
+      "source_review_conclusion": "围绕主目标最近3名，主+旁总上限4；旁击禁止生成/状态；A23授予光弹也限4。",
+      "bounded_tests": [
+        "TestLegendaryCasterSplitRetainsSixtyPercentWithAmplifier",
+        "TestLegendaryCasterSynergyHealFullHPStillSplits",
+        "TestLegendaryRepairLightSplitPrimarySecondaryAndNearest",
+        "TestLegendaryRepairHealChildImplicitSelfAndSetIsolation"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A02",
+      "effect_reviewed": "光弹术命中后，立即向同一目标追加本次已结算伤害85%的伤害。追加段不附加状态、不触发威能；目标死亡后不会改打其他敌人。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster.go:144",
+      "real_consumers": [
+        "resolveStrikeStatuses -> legendaryAfterHit -> actual loss/event"
+      ],
+      "source_review_conclusion": "追加已结算伤害85%，不重复减伤、不再生成；原目标死不转移。",
+      "bounded_tests": [
+        "TestLegendaryCasterNativeCastEchoAndBurn",
+        "TestLegendaryCasterSecondLightImmediateNoTransfer"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A03",
+      "effect_reviewed": "光弹术直接伤害提高60%。命中存活目标时，移除其1份可移除的持续回血状态；不会移除永久或有害状态。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:16",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "applySkill -> legendarySkillResolved after native damage/status result"
+      ],
+      "source_review_conclusion": "只移除1份可移除非永久回血；非任意增益清除。",
+      "bounded_tests": [
+        "TestLegendaryCasterDispelHOTIsImmediateAndBounded",
+        "TestLegendaryCasterReplacementModifiersThroughPipeline",
+        "TestLegendaryCasterSplitRetainsSixtyPercentWithAmplifier"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A04",
+      "effect_reviewed": "光弹术命中带有你施加的衰弱术或枷锁术状态的敌人时，直接伤害提高90%。不会消耗或刷新这些状态。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:48",
+      "real_consumers": [
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "衰弱/枷锁须本施法者来源；不消耗状态。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerTargetBranches"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A05",
+      "effect_reviewed": "圣光术仍可攻击敌人，也可选自己或600范围内的队友作为中心。选择友方中心时，攻击其周围200范围内的敌人，伤害提高20%，各自进行原有致盲判定；不会治疗友方。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_admission.go:45",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "applySkill/ChildSkill -> legendarySelectTargets -> unique legal target list"
+      ],
+      "source_review_conclusion": "友方中心受射程/队伍校验；只打周边敌人，不治友方。",
+      "bounded_tests": [
+        "TestLegendaryCasterOptionalEntityCenterMetadata",
+        "TestLegendaryCasterRemainingHealerFriendlyCenters",
+        "TestLegendarySharedFriendlyCenterAdmissionAndVictims",
+        "TestLegendarySharedFriendlyCenterDoesNotRestoreFriendlyVictim",
+        "TestLegendarySharedFriendlyLoadingCenterRejected"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A06",
+      "effect_reviewed": "圣光术改为目标位置周围半径200的圆形攻击。距中心100以内的敌人伤害提高60%，外圈敌人伤害提高20%；每人只命中一次，各自进行原有致盲判定。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_definitions.go:91",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerCenterAndDamageLedger"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A07",
+      "effect_reviewed": "圣光术直接伤害提高10%，并保留原致盲。施法中心留下半径180、持续4秒的光区，每秒造成该等级圣光基础伤害30%的魔法伤害。你最多保留2片光区；重叠处每个敌人每秒只承受较高的一次光区伤害，光区不附加致盲、不触发威能。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_areas.go:79",
+      "real_consumers": [
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses",
+        "accepted equipmentRoot completion -> legendaryRootFinished",
+        "Scene stepLegendaryPowers -> bounded field state -> damage consumer"
+      ],
+      "source_review_conclusion": "本轮固定受理等级的场地伤害基准；实际首跳55→57换装升级已阻断；最多两区重叠取高。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerLightFieldBoundaries",
+        "TestCasterReviewNonChildDerivedSourceStaysAccepted"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A08",
+      "effect_reviewed": "圣光术沿主目标方向形成长600、宽160的矩形攻击，直接伤害提高80%，保留原致盲，并始终保留原选中的主目标。与其他形状改造同装时，每个敌人仍只命中一次。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:38",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets"
+      ],
+      "source_review_conclusion": "最终矩形与主目标保留，不因形状改造重复结算。",
+      "bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline",
+        "TestLegendarySharedPreservePrimaryRangeAdmission"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A09",
+      "effect_reviewed": "驱魔术可攻击所有合法敌人，不再限定亡灵和恶魔；作用半径由150扩大至220，伤害提高40%。命中时尝试移除至多2个可驱散增益，无需成功驱散即可增伤，技能冷却不变；不可驱散的首领效果仍无法移除。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:120",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets",
+        "applySkill -> legendarySkillResolved after native damage/status result"
+      ],
+      "source_review_conclusion": "去族群限制；无可驱散增益也增伤；永久首领效果保留。",
+      "bounded_tests": [
+        "TestLegendaryCasterExorcismDispelNativeBenefitsNotPermanent",
+        "TestLegendaryCasterSynergyExorcismWeaknessPull"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A10",
+      "effect_reviewed": "衰弱术改为目标位置周围的范围技能，作用半径在当前基础上增加100；原有降低攻击效果提高60%。持续时间不变，不额外造成伤害。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:53",
+      "real_consumers": [
+        "legendaryPrepareSkill/ChildSkill base stage -> legendaryFinalizeSkill -> resolveStrikeStatuses",
+        "applyStatusDef -> legendaryCasterStatusApplying -> native status store"
+      ],
+      "source_review_conclusion": "伤害不凭空增加；强化原降低攻击状态。",
+      "bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A11",
+      "effect_reviewed": "驱魔术作用半径增加120，直接伤害提高45%。不会因此多结算一次伤害或驱散。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:67",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A12",
+      "effect_reviewed": "驱魔术直接伤害提高50%。命中时打断敌人可被打断的实际吟唱；免疫打断的目标不被打断，但仍正常承受伤害。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:50",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "applySkill -> legendarySkillResolved after native damage/status result"
+      ],
+      "source_review_conclusion": "真实MonsterAI当前吟唱CastSerial取消；不可中断目标仍受直接伤害。",
+      "bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline",
+        "TestCasterRepairHealerInterruptsMonsterAI"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A13",
+      "effect_reviewed": "神威术命中带有你施加的枷锁术状态的敌人时，直接伤害提高80%；不会消耗或刷新枷锁。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:74",
+      "real_consumers": [
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerTargetBranches"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A14",
+      "effect_reviewed": "神威术冷却时间缩短45%，不需要击杀或残血条件，也不额外返还法力。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:64",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A15",
+      "effect_reviewed": "神威术保留所有目标的完整伤害。若选中了敌方主目标，将其他敌人本次实际损失生命总和的35%追加给该主目标，追加量最多为主目标首段伤害的100%；追加不触发威能，主目标死亡后不转移。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster.go:170",
+      "real_consumers": [
+        "resolveStrikeStatuses -> legendaryAfterHit -> actual loss/event",
+        "accepted equipmentRoot completion -> legendaryRootFinished"
+      ],
+      "source_review_conclusion": "原始合法主目标，累加旁敌实际损失HP35%，不超主首段；追加不递归。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerCenterAndDamageLedger"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A16",
+      "effect_reviewed": "神威术作用半径增加100，施法距离增加200，直接伤害提高35%；施法中心规则不变。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:79",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A17",
+      "effect_reviewed": "衰弱术取消吟唱，改为目标位置周围半径250的攻击，对每个敌人造成180%魔法攻击力的神圣伤害，并按原免疫规则施加衰弱。你的驱魔术命中带有任意施法者衰弱术状态的敌人时，直接伤害提高60%，不消耗或刷新衰弱。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:142",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets",
+        "applySkill/ChildSkill per target -> legendaryTargetDefinition -> resolveStrikeStatuses"
+      ],
+      "source_review_conclusion": "真实衰弱降攻状态保留；免控制不免新增直接伤害。",
+      "bounded_tests": [
+        "TestLegendaryCasterControlImmuneStillTakesTransformedDamage",
+        "TestLegendaryCasterSynergyExorcismWeaknessPull"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A18",
+      "effect_reviewed": "枷锁术原有的降低攻击速度效果提高50%，持续时间不变。枷锁术若获得直接伤害，例如搭配“聚敌枷锁”，该伤害提高60%；本威能不会单独赋予枷锁术伤害或位移。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:87",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "applyStatusDef -> legendaryCasterStatusApplying -> native status store"
+      ],
+      "source_review_conclusion": "单装只加强减攻速，A19赋伤后才60%增伤；文案明确不独立赋伤。",
+      "bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline",
+        "TestCasterRepairHealerShackleAndHolyGeometry"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A19",
+      "effect_reviewed": "枷锁术改为目标位置周围半径250的范围技能，对每名敌人造成200%魔法攻击力的神圣伤害，并按原免疫规则施加减攻速。可移动的普通敌人被拉向中心，最多拉到距中心80的位置；首领和位移免疫目标不移动，但伤害仍结算。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:157",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets",
+        "applySkill -> legendarySkillResolved after native damage/status result"
+      ],
+      "source_review_conclusion": "首领/位移免疫不拉动但正常受伤；目标中心250圆与80停止距。",
+      "bounded_tests": [
+        "TestLegendaryCasterControlImmuneStillTakesTransformedDamage",
+        "TestLegendaryCasterSynergyExorcismWeaknessPull"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A20",
+      "effect_reviewed": "针刺护体保留原有普通攻击反射效果。自身针刺护体生效期间，主动施放光弹术、圣光术或驱魔术，直接伤害提高40%；这些技能若以自身为中心攻击周围敌人，攻击半径为220，范围内敌人在一次施法中各受击一次，原选中目标始终保留。不会改变队友的技能，也不额外发动针刺攻击。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:490",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets"
+      ],
+      "source_review_conclusion": "本人针刺才加强本人技能；自身中心220不重击，非替队友改技能。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerNativeStatusBranches",
+        "TestLegendarySharedPreservePrimaryRangeAdmission"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A21",
+      "effect_reviewed": "主动施放光盾术后，每名本次获得光盾的友方，都对其周围半径220内的敌人造成等于该盾初始吸收量80%的魔法伤害，不消耗护盾。盾量按本次所有强化后的数值计算，因此“专注圣契”和“群盾覆阵”也能提高伤害；同一敌人在同次施法中只承受最强的一道爆光。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:325",
+      "real_consumers": [
+        "accepted equipmentRoot completion -> legendaryRootFinished",
+        "applyStatusDef successful commit -> legendaryStatusCommitted"
+      ],
+      "source_review_conclusion": "取本次最终盾值80%，同敌最强一次；与D03/U02合法组合。",
+      "bounded_tests": [
+        "TestLegendaryCasterSynergyFocusedGroupShieldBurst"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A22",
+      "effect_reviewed": "成功施放净化术后，主净化目标周围220范围内的敌人各受到220%魔法攻击力的神圣伤害。无需实际移除负面状态；每次施法每个敌人只结算一次，不再生成其他技能。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:69",
+      "real_consumers": [
+        "accepted equipmentRoot completion -> legendaryRootFinished"
+      ],
+      "source_review_conclusion": "成功主动净化即触发，不要求清除成功；同root每敌一次且不再生成。",
+      "bounded_tests": [
+        "TestLegendaryCasterNewSupportWavesUseNativeRoots"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A23",
+      "effect_reviewed": "每次主动施放治愈术，保留完整治疗，并向主治疗目标周围250范围内最近的1名敌人发出光弹。基础伤害等于本次主目标应有治疗量的100%，满血也可触发；光弹的伤害与形状威能可以直接修正它，无需另行施放光弹术。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:307",
+      "real_consumers": [
+        "native heal effect -> legendaryHealResolved -> raw/effective/overflow values"
+      ],
+      "source_review_conclusion": "主目标应有治疗raw量作base，满血/未学光弹仍授予；本轮固定纯来源输入。",
+      "bounded_tests": [
+        "TestLegendaryCasterSplitRetainsSixtyPercentWithAmplifier",
+        "TestLegendaryCasterSynergyHealFullHPStillSplits",
+        "TestLegendaryRepairHealChildImplicitSelfAndSetIsolation",
+        "TestCasterRepairGrantedLightWithoutLearningBolt",
+        "TestCasterReviewAcceptedSourceSurvivesRealEquip"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A24",
+      "effect_reviewed": "群疗术结算后，在本次治疗中心周围250范围内，对每名敌人造成250%魔法攻击力的神圣伤害。每次施法每敌人一次，即使全员满血也能触发。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:70",
+      "real_consumers": [
+        "accepted equipmentRoot completion -> legendaryRootFinished"
+      ],
+      "source_review_conclusion": "群疗中心，每敌一次，即便全员满血；采用受理源法攻。",
+      "bounded_tests": [
+        "TestLegendaryCasterNewSupportWavesUseNativeRoots"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A25",
+      "effect_reviewed": "祝福术改为主目标周围半径250的友方群体技能，原有物理攻击和魔法攻击增益强度提高60%。持续时间与原覆盖规则不变。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:101",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets"
+      ],
+      "source_review_conclusion": "主目标周围友方群祝福+60%，沿原覆盖/期限。",
+      "bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A26",
+      "effect_reviewed": "防御术原有防御效果提高70%，并额外覆盖主目标周围250范围内生命比例最低的另外2名队友。防御状态存在期间，受益者主动造成的神圣伤害提高40%；沿用原持续时间，不生成护盾。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:110",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "applySkill/ChildSkill -> legendarySelectTargets -> unique legal target list",
+        "applyStatusDef -> legendaryCasterStatusApplying -> native status store"
+      ],
+      "source_review_conclusion": "主+额外最低HP两友方；受益人原防御期间主动神圣伤害40%。",
+      "bounded_tests": [
+        "TestLegendaryCasterDefenseGrantWorksWithoutRecipientGear",
+        "TestLegendaryCasterReplacementModifiersThroughPipeline",
+        "TestLegendaryIncomingNativeBuffMagnitudeCombinations",
+        "TestLegendarySharedImplicitSelfRetainsSupportCenter"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A27",
+      "effect_reviewed": "自身有有效加速术状态时，光弹术、圣光术和驱魔术的直接伤害提高50%。不会消耗加速状态，也不需要移动。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:124",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerNativeStatusBranches"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A28",
+      "effect_reviewed": "复法术基础回蓝提高70%，目标与溢出规则不变。成功主动施放时，主目标周围180范围内的敌人各受到220%魔法攻击力的神圣伤害；每次施法每敌人一次，溢出分流不会重复触发。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_replacements.go:135",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "accepted equipmentRoot completion -> legendaryRootFinished"
+      ],
+      "source_review_conclusion": "主复法周围爆发，不因溢出分流再生成；同根装备来源固定。",
+      "bounded_tests": [
+        "TestLegendaryCasterNewSupportWavesUseNativeRoots",
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A29",
+      "effect_reviewed": "神术：释能保留强化下一次法术的效果，伤害增强系数额外提高50个百分点。被强化的光弹术改为主目标周围半径220的圆形攻击；圣光术、驱魔术和神威术按改造后的最终形状扩大范围：圆形半径增加100，矩形长度和宽度各增加100。范围内所有目标保留完整伤害。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:503",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "legendaryPrepareSkill/ChildSkill final shape -> legendaryFinalizeSkill -> resolveTargets"
+      ],
+      "source_review_conclusion": "形状Transform/Base/Prepare后Compose，最后TY范围；圆+100，矩形长宽各+100。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerReleaseAndInstant",
+        "TestCasterRepairHealerShackleAndHolyGeometry",
+        "TestCasterRepairChargedHolyFinalShapeComposition",
+        "TestCasterRepairChargedHolyRectangleComposition"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-A30",
+      "effect_reviewed": "神术：瞬发使其强化的下一次吟唱技能完全免除吟唱，并使该次直接伤害或直接治疗提高40%；仍须遵守技能冷却，不额外延长冷却。",
+      "legal_slots": [
+        "武器",
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:404",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "原下一次吟唱免吟唱并伤/疗40%；不擅改技能冷却。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerReleaseAndInstant"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-D01",
+      "effect_reviewed": "治愈术直接治疗量提高60%，主目标和额外治疗的队友都获得完整加成，不会生成护盾。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:71",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "主副治疗各按本身血量基准再获60%，非只加强主目标。",
+      "bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-D02",
+      "effect_reviewed": "净化术改为主目标周围半径250的友方群体技能，对原本可清除的状态，净化成功率为100%；可清除状态种类不变。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:76",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterGroupCleanseNativeTargets",
+        "TestLegendaryCasterTypedMetadataEquippedAndRemoved"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-D03",
+      "effect_reviewed": "光盾术初始吸收量提高60%，并为主目标周围250范围内生命比例最低的另外2名队友施加同样强度的光盾。保留原持续时间、覆盖规则和即死免疫，不另外生成残盾。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:173",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "applySkill/ChildSkill -> legendarySelectTargets -> unique legal target list"
+      ],
+      "source_review_conclusion": "同强度主+最低HP两友方，保持原盾覆盖及即死免疫。",
+      "bounded_tests": [
+        "TestLegendaryCasterSynergyFocusedGroupShieldBurst",
+        "TestLegendarySharedImplicitSelfRetainsSupportCenter"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-D04",
+      "effect_reviewed": "防御术的物理和魔法减伤各提高35个百分点，沿用原状态的持续时间与覆盖规则。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:79",
+      "real_consumers": [
+        "applyStatusDef -> legendaryCasterStatusApplying -> native status store"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterDefenseGrantWorksWithoutRecipientGear"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-D05",
+      "effect_reviewed": "自身回春术状态有效时，实际吟唱治愈术、群疗术或复活术期间，受到伤害降低25%，并且不会被普通受伤打断。昏迷、封印等控制仍生效；无需等到回春跳数，满血也能获得保护。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:199",
+      "real_consumers": [
+        "resolveStrikeStatuses -> legendaryBeforeDamage(incoming); AllDamageIncoming additionally opts into periodic/reflection consumers"
+      ],
+      "source_review_conclusion": "实际治疗/群疗/复活吟唱且自身回春有效；普通伤害打断免疫不免控制。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerDefenses",
+        "TestLegendaryIncomingAllDamageConsumerMatrix",
+        "TestLegendaryIncomingCombinationShieldAndManaOnce",
+        "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+        "TestLegendaryIncomingActualHealerWindupCombination"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-D06",
+      "effect_reviewed": "实际吟唱群疗术期间，受到伤害降低40%，并且不会被普通受伤打断；昏迷、封印等控制仍生效。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:85",
+      "real_consumers": [
+        "resolveStrikeStatuses -> legendaryBeforeDamage(incoming); AllDamageIncoming additionally opts into periodic/reflection consumers"
+      ],
+      "source_review_conclusion": "只有实际群疗吟唱期间保护，结束/取消即失效；不免昏迷封印。",
+      "bounded_tests": [
+        "TestLegendaryCasterNativeWindupDefenseEndsWithCast",
+        "TestLegendaryIncomingAllDamageConsumerMatrix",
+        "TestLegendaryIncomingCombinationShieldAndManaOnce",
+        "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+        "TestLegendaryIncomingActualHealerWindupCombination"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-D07",
+      "effect_reviewed": "清身术改为主目标周围半径250的友方群体技能。沿用原可清除状态列表和原成功率，每名目标分别判定。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:77",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterGroupCleanseNativeTargets"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-D08",
+      "effect_reviewed": "实际吟唱复活术期间，受到伤害降低60%；吟唱结束或取消后立即失效，不额外生成保护状态。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:91",
+      "real_consumers": [
+        "resolveStrikeStatuses -> legendaryBeforeDamage(incoming); AllDamageIncoming additionally opts into periodic/reflection consumers"
+      ],
+      "source_review_conclusion": "仅实际复活吟唱60%，不产生独立残留保护。",
+      "bounded_tests": [
+        "TestLegendaryCasterNativeWindupDefenseEndsWithCast",
+        "TestLegendaryIncomingAllDamageConsumerMatrix",
+        "TestLegendaryIncomingCombinationShieldAndManaOnce",
+        "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+        "TestLegendaryIncomingActualHealerWindupCombination"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-D09",
+      "effect_reviewed": "自身针刺护体状态有效期间，受到的普通攻击伤害降低35%；由你施加的针刺护体，其原物理反射比例提高75%。持续时间不变。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:97",
+      "real_consumers": [
+        "applyStatusDef -> legendaryCasterStatusApplying -> native status store",
+        "resolveStrikeStatuses -> legendaryBeforeDamage(incoming); AllDamageIncoming additionally opts into periodic/reflection consumers"
+      ],
+      "source_review_conclusion": "本轮修复SkillID0误判：显式native basic provenance；真实危害100不降，怪物普攻100→65。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerDefenses",
+        "TestReviewYS09ActualRiftHazard",
+        "TestCasterReviewThornsStillMitigatesActualBasic"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-D10",
+      "effect_reviewed": "你施加的枷锁术状态仍在敌人身上时，该敌人对你造成的伤害降低40%。不会缩短或消耗枷锁。",
+      "legal_slots": [
+        "衣服",
+        "头盔"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:107",
+      "real_consumers": [
+        "resolveStrikeStatuses -> legendaryBeforeDamage(incoming); AllDamageIncoming additionally opts into periodic/reflection consumers"
+      ],
+      "source_review_conclusion": "须攻击者有本人的枷锁；不消耗状态。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerDefenses",
+        "TestLegendaryIncomingAllDamageConsumerMatrix",
+        "TestLegendaryIncomingCombinationShieldAndManaOnce",
+        "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+        "TestLegendaryIncomingActualHealerWindupCombination"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-U01",
+      "effect_reviewed": "回春术无技能冷却，法力消耗降低20%，每次原有回血量提高50%。持续时间、跳数和覆盖规则不变，同一施法者重复施放不会额外叠出跳数。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_definitions.go:107",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "applyStatusDef -> legendaryCasterStatusApplying -> native status store"
+      ],
+      "source_review_conclusion": "同施法者原回春覆盖/跳数，不因无CD多叠跳数。",
+      "bounded_tests": [
+        "TestLegendaryCasterDefinitionModifiers",
+        "TestLegendaryCasterRegenAndDispelStealRemaining"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-U02",
+      "effect_reviewed": "神术：集中保留延长下一技能状态持续时间的效果，一级延长50%，其他等级不变；同时使该技能的正面增益强度提高50%，集中自身法力消耗降低30%。增益强度按原数值提高50%，不是增加50个百分点，不提高直接伤害或直接治疗。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_definitions.go:115",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "原数值×1.5不是+50个百分点；不提高直接伤疗；一级集中时长50%。",
+      "bounded_tests": [
+        "TestLegendaryCasterDefinitionModifiers",
+        "TestLegendaryCasterSynergyFocusedGroupShieldBurst",
+        "TestLegendaryIncomingNativeBuffMagnitudeCombinations"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-U03",
+      "effect_reviewed": "复法术对主目标产生的溢出法力，可按溢出量的100%分给该目标周围350范围内法力比例最低的另外2名队友。先给法力比例最低者，每人最多获得其最大法力的20%，且不超过其缺少法力；剩余额度再给下一人，总转移不超过本次溢出量，不再次分流。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_lifecycle.go:83",
+      "real_consumers": [
+        "native restore effect -> legendaryCasterManaRestored -> actual overflow"
+      ],
+      "source_review_conclusion": "只原主目标溢出，按MP比选最低两人，逐人20%maxMP且总量守恒。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerManaTransfers"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-U04",
+      "effect_reviewed": "治愈术保留主目标完整治疗，并对主目标周围250范围内生命比例最低的另外2名队友，各提供一次100%倍率的治愈术治疗，每人按自身最大生命计算。群疗术优先治疗低血者，至少产生一次有效治疗时返还本次实际消耗法力的35%。新增副治疗不会再触发其他治疗、伤害或护盾转换。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:183",
+      "real_consumers": [
+        "applySkill/ChildSkill -> legendarySelectTargets -> unique legal target list",
+        "native heal effect -> legendaryCasterHealed -> actual healing"
+      ],
+      "source_review_conclusion": "显式/隐式主目标+最低HP两友方；副治疗阻断伤疗盾递归含2/4件套；群疗实付返还需有效疗。",
+      "bounded_tests": [
+        "TestLegendaryCasterSplitRetainsSixtyPercentWithAmplifier",
+        "TestLegendaryCasterSynergyHealFullHPStillSplits",
+        "TestLegendaryRepairHealChildImplicitSelfAndSetIsolation",
+        "TestLegendaryRepairNativeBaseAndSetControls"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-U05",
+      "effect_reviewed": "加速术作用半径扩大至220，原加速强度提高30%。可仍以自己为中心，也可选600范围内队友为中心；远程施放时自己也获得相同加速，每人同次只获得一次，持续时间和法力消耗不变。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_admission.go:19",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "applySkill/ChildSkill -> legendarySelectTargets -> unique legal target list"
+      ],
+      "source_review_conclusion": "远程队友中心仍给自己同样加速；范围去重、原耗蓝/期限不变。",
+      "bounded_tests": [
+        "TestLegendaryCasterOptionalEntityCenterMetadata",
+        "TestLegendaryCasterRemainingHealerFriendlyCenters"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-U06",
+      "effect_reviewed": "主动施放祝福术时，为同一批受术友方一并施加你已学会的防御术和加速术，分别沿用各自持续时间与增益规则。只支付祝福术法力，无需再次吟唱；未学技能不附赠，也不视为再次主动施法。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_synergy.go:472",
+      "real_consumers": [
+        "applySkill -> legendarySkillResolved after native damage/status result"
+      ],
+      "source_review_conclusion": "已学才赠，无二次主动施法；本轮固定赠防御/加速等级与原生准备来源。",
+      "bounded_tests": [
+        "TestLegendaryCasterDefenseGrantWorksWithoutRecipientGear",
+        "TestCasterReviewNonChildDerivedSourceStaysAccepted"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-U07",
+      "effect_reviewed": "成功施放净化术后，若整次施法没有移除任何负面状态，返还本次实付法力的90%，并使本次剩余冷却缩短80%；只要移除过至少1份，就改为返还30%实付法力。两档不叠加，空诊不算成功移除状态。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_resources.go:7",
+      "real_consumers": [
+        "accepted equipmentRoot completion -> legendaryRootFinished",
+        "native dispel effect -> legendaryCasterDispelled -> removed original instances"
+      ],
+      "source_review_conclusion": "整次净化零移除返90%，有移除30%，互斥；按实际耗蓝。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemainingHealerCleanseRefund"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-U08",
+      "effect_reviewed": "装备期间，仍为友方单体的技能施法距离增加200、法力消耗降低25%。鹰眼术可在600范围内选点释放，也可选自己脚下；原显隐范围和持续时间不变。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:113",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill"
+      ],
+      "source_review_conclusion": "最终仍友方单体才射程/减耗；鹰眼合法选点不改原显隐范围。",
+      "bounded_tests": [
+        "TestLegendaryCasterRemoteRevealAdmission",
+        "TestLegendaryCasterTypedMetadataEquippedAndRemoved"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-U09",
+      "effect_reviewed": "复活术成功复活的目标，生命至少恢复至最大生命的70%；仅实际复活成功时返还本次实付法力的50%。不改变死亡损失返还规则。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:123",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> finalized definition -> applySkill",
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets",
+        "accepted equipmentRoot completion -> legendaryRootFinished",
+        "successful native resurrection -> legendary resurrection callback"
+      ],
+      "source_review_conclusion": "实际复活成功才补至少70%与返实付50%；不改死亡损失规则。",
+      "bounded_tests": [
+        "TestLegendaryCasterReplacementModifiersThroughPipeline"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    },
+    {
+      "id": "YS-U10",
+      "effect_reviewed": "解咒术改为主目标周围半径250的友方群体技能，对原本可清除的诅咒，净化成功率为100%；可清除诅咒种类不变。",
+      "legal_slots": [
+        "武器"
+      ],
+      "handler": "server/internal/game/scene/legendary_caster_directions.go:78",
+      "real_consumers": [
+        "skill.go onUseSkill/resolveSkill -> legendaryPrepareSkill -> admission/resolveTargets"
+      ],
+      "source_review_conclusion": "当前effect逐项沿已注册handler与实际消费者复核；未见新的可复现差异。",
+      "bounded_tests": [
+        "TestLegendaryCasterGroupCleanseNativeTargets"
+      ],
+      "claim": "源码与列出的本地有限边界；不是全排列、线上、数据库或客户端认证。"
+    }
+  ]
+}

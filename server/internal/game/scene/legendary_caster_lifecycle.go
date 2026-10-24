@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Scene) legendaryCasterHealed(src, dst *entity.Entity, def domain.SkillDef, beforeHP, effective int32) {
-	if effective <= 0 || s.equipmentState().classSetTriggered != 0 {
+	if effective <= 0 || s.equipmentState().classSetTriggered != 0 || s.legendaryCasterSecondaryHeal(src, dst, def.ID) {
 		return
 	}
 	for _, c := range s.legendaryContexts(src, dst, combat.Blow{SkillID: int32(def.ID)}, event.DamageDealt{}) {

@@ -128,8 +128,15 @@ func init() {
 		}
 		broken := false
 		c.Target.Status.EachEffective(func(a domain.Active) {
-			if a.Source == c.Owner.ID && (a.Def.SkillSnapshotID == 10009 || a.Def.SourceSkillID == 10009) {
-				broken = true
+			if a.Source != c.Owner.ID || a.Def.SkillSnapshotID != 10009 && a.Def.SourceSkillID != 10009 {
+				return
+			}
+			// The passive vulnerability shares the casting skill snapshot, but
+			// does not lower defense and may land when native armor is resisted.
+			for _, affix := range a.Def.Affixes {
+				if affix.Attr == domain.AttrDef && affix.Value < 0 {
+					broken = true
+				}
 			}
 		})
 		if broken {

@@ -32,7 +32,7 @@ func TestLegendaryChildDistinctProducerInheritsModifiersWithoutCycle(t *testing.
 	p.Player.Worn.Set(domain.SlotBody, domain.Stack{UID: 992, Item: 900002, Count: 1, Durability: 100, MaxDurability: 100, Legendary: domain.LegendaryInstance{PowerID: "ZS-A04"}})
 	a, b := legendaryHandlers["ZS-A03"], legendaryHandlers["ZS-A04"]
 	t.Cleanup(func() { legendaryHandlers["ZS-A03"], legendaryHandlers["ZS-A04"] = a, b })
-	def := domain.SkillDef{ID: 10011, HurtType: domain.HurtPhysical, Dist: 500, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100, GuaranteedHit: true}}}
+	def := domain.SkillDef{ID: 10011, HurtType: domain.HurtPhysical, Dist: 500, TargetEnemy: true, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100, GuaranteedHit: true}}}
 	generators := 0
 	generate := func(c *legendaryContext) { generators++; c.ChildSkill(m.ID, def, legendaryChildOptions{}) }
 	legendaryHandlers["ZS-A03"] = legendaryHandler{revision: "synergy-v1", SkillResolved: generate}

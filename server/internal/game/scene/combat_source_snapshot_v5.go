@@ -23,6 +23,7 @@ func (s *Scene) captureCombatSourceV5(src *entity.Entity, invisible bool) *domai
 		return out
 	}
 	out.LegendaryPowers = domain.ActiveLegendaryPowers(s.functionalWorn(src), s.itemDef, src.Player.Char)
+	s.captureLegendaryChildPreparation(src, out)
 	pet := s.entities[src.Player.Pet]
 	if pet == nil || pet.Pet == nil || pet.Pet.Inst == nil || !pet.Alive() {
 		return out

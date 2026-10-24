@@ -393,29 +393,42 @@ func (s *Scene) specialWeaponImmediateTrap(src *entity.Entity, d domain.SkillDef
 	if d.SpecialWeaponBaseID != 1822 || d.ID != 10213 {
 		return false
 	}
-	payload := trapPayload(d)
-	var ids []domain.EntityID
-	for id, p := range s.entities {
-		if p.Alive() && sqDist(at, p.Pos) <= float64(radius)*float64(radius) && s.validTarget(src, p, payload) {
-			ids = append(ids, id)
-		}
+	positions := []domain.Pos{at}
+	if legendaryAssassinHas(s, src, "CK-A13", source) {
+		positions = append(legendaryAssassinSidePlacements(src.Pos, at, radius, d), at)
 	}
-	ids = sortEntityIDs(ids)
+	for _, pos := range positions {
+		s.specialWeaponImmediateTrapAt(src, d, pos, radius, duration, source)
+	}
+	return true
+}
+
+// Each native blast gets its own target set and one target-modifier pass. Side
+// blasts cannot generate more placements or pay the accepted cast cost again.
+func (s *Scene) specialWeaponImmediateTrapAt(src *entity.Entity, d domain.SkillDef, at domain.Pos, radius int32, duration int32, source *domain.CombatSourceSnapshotV5) {
+	payload := trapPayload(d)
+	// Placement spells carry self/point targeting, not the damage payload's
+	// enemy flag. Reuse native trap victim selection, including faction rules.
+	ids := s.trapTargets(&entity.Entity{Pos: at, Trap: &entity.Trap{Owner: src.ID, Radius: radius}})
 	offense := s.equipmentOffense(src)
 	if source != nil {
 		offense = source.Equipment
 	}
 	finish := s.beginEquipmentRoot(src.ID, 0, offense)
 	defer finish()
+	s.equipment.root.def = payload
+	s.equipment.root.targets = ids
+	s.equipment.root.center = at
 	if source != nil {
 		s.equipment.root.source = source
 		s.equipment.root.attackStats = source.Stats
 		s.equipment.root.attackSnapshot = true
 	}
 	for _, id := range ids {
-		s.applySkill(src, s.entities[id], payload, duration, true)
+		target := s.entities[id]
+		local := s.legendaryTargetDefinition(src, payload, target, 0, ids)
+		s.applySkill(src, target, local, duration, true)
 	}
-	return true
 }
 
 type specialWeaponSmoke struct {

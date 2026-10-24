@@ -129,6 +129,9 @@ func (s *Scene) casterSetOutgoingDamage(src *entity.Entity, hurtType int32, amou
 // Copy the nominal healing once, BEFORE the recipient's missing-HP cap. This
 // helper never calls applySkill, so the copy cannot produce another copy.
 func (s *Scene) casterSetCopyHeal(src, dst *entity.Entity, amount int32, skill domain.SkillID) {
+	if s.legendaryCasterSecondaryHeal(src, dst, skill) {
+		return
+	}
 	if src == nil || dst == nil || src == dst || !src.Alive() || !dst.Alive() ||
 		s.equipmentState().classSetTriggered != 0 || s.classSetPieces(src, 2) < classSetFirstSkillPieces || !sameParty(src, dst) || amount <= 0 {
 		return

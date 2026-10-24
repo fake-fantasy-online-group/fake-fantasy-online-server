@@ -121,7 +121,11 @@ type StatusDef struct {
 	ClassSetPoisonBonusTotal int64 `json:",omitempty"`
 	ProgressionAttackFlat    int32
 	// Skill snapshots pin persistent effects to the lesser of cast and current sources.
-	SkillApplied      bool `json:",omitempty"`
+	// Damage provenance is captured at application and survives status copies.
+	// Absent legacy fields are unknown, never inferred from zero skill IDs.
+	DamageSourceRange int32 `json:",omitempty"`
+	DamageSourceTrap  bool  `json:",omitempty"`
+	SkillApplied      bool  `json:",omitempty"`
 	SkillSnapshotID   SkillID
 	SkillSnapshotRank int32
 	SkillSnapshotRaw  Learned

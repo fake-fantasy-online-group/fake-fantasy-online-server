@@ -174,6 +174,9 @@ const (
 
 // SkillEffect 是从 desc_ 解出来的效果。
 type SkillEffect struct {
+	// AttackBaseFlat joins the attack stat before the native skill coefficient.
+	// Unlike BaseDamageFlat, scaling the coefficient already scales this amount.
+	AttackBaseFlat int32 `json:",omitempty"`
 	// BaseDamageFlat joins the native base before defense, critical and modifiers.
 	BaseDamageFlat    int32 `json:",omitempty"`
 	TheftMaxSuccesses int32 `json:",omitempty"`
@@ -333,8 +336,12 @@ type PassiveCounterAttack struct {
 
 // SkillDef 是一个技能在某一级上的定义。
 type SkillDef struct {
+	// Accepted-cast snapshot, never serialized or shared with the skill catalog.
+	LegendaryControlSnapshot              map[EntityID]bool        `json:"-"`
+	LegendarySuppressGeneration           bool                     `json:"-"`
 	LegendaryNextDamageBonusPct           int32                    `json:"-"`
 	LegendarySources                      []LegendarySourceRef     `json:",omitempty"`
+	LegendaryPreservePrimary              bool                     `json:"-"`
 	LegendaryRequiresPrimaryLanded        bool                     `json:"-"`
 	LegendaryNativeInstant                bool                     `json:"-"`
 	LegendaryEntityCenter                 bool                     `json:"-"`

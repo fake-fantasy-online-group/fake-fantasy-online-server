@@ -21,6 +21,10 @@ func init() {
 	}
 }
 func universalEquipmentContribution(c *legendaryContext) (domain.Stats, domain.Stats) {
+	if c.SourceSnapshot != nil && c.SourceSnapshot.ChildPreparation != nil {
+		p := c.SourceSnapshot.ChildPreparation
+		return p.Equipped, p.Bare
+	}
 	if c.Owner == nil || c.Owner.Player == nil || c.Owner.Player.Char == nil {
 		return domain.Stats{}, domain.Stats{}
 	}
@@ -59,7 +63,7 @@ func universalExtendedBase(c *legendaryContext, d *domain.SkillDef) {
 	var base int32
 	switch c.Power.ID {
 	case "TY-A25":
-		if !d.LegendaryBasic && d.HurtType == domain.HurtPhysical {
+		if !d.LegendaryBasic && (d.HurtType == domain.HurtPhysical || d.HurtType == domain.HurtNone) {
 			base = universalPct(max(int32(0), eq.MaxAtk-bare.MaxAtk), 50)
 		}
 	case "TY-A26":
@@ -68,7 +72,11 @@ func universalExtendedBase(c *legendaryContext, d *domain.SkillDef) {
 		}
 	case "TY-A38":
 		if !d.LegendaryBasic {
-			base = universalPct(c.Owner.MaxMP, 4)
+			maximum := c.Owner.MaxMP
+			if c.SourceSnapshot != nil && c.SourceSnapshot.ChildPreparation != nil {
+				maximum = c.SourceSnapshot.ChildPreparation.MaximumMP
+			}
+			base = universalPct(maximum, 4)
 		}
 	case "TY-A39":
 		if d.LegendaryBasic {
@@ -84,7 +92,11 @@ func universalExtendedBase(c *legendaryContext, d *domain.SkillDef) {
 	if base > 0 {
 		universalEditEffects(d, func(e *domain.SkillEffect) {
 			if e.Kind == domain.EffectDamage {
-				e.BaseDamageFlat = domain.SaturateInt32(int64(e.BaseDamageFlat) + int64(base))
+				if c.Power.ID == "TY-A25" || c.Power.ID == "TY-A26" {
+					e.AttackBaseFlat = domain.SaturateInt32(int64(e.AttackBaseFlat) + int64(base))
+				} else {
+					e.BaseDamageFlat = domain.SaturateInt32(int64(e.BaseDamageFlat) + int64(base))
+				}
 			}
 		})
 	}

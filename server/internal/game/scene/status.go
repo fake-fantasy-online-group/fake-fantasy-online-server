@@ -61,6 +61,9 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	if target == nil || !target.Alive() {
 		return false
 	}
+	if def.ID == domain.StatusFreeze && target.Status != nil && target.Status.HasEffective(domain.StatusFreeze) && s.legendaryCasterPreservesFreeze(s.entities[src], target, int32(def.SkillSnapshotID)) {
+		return true // Never replace the preserved freeze with a shorter native layer.
+	}
 	if s.riftMonster(target) && disabledRiftMonsterStatus(def) {
 		return false
 	}
@@ -134,6 +137,11 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 		}
 		return false
 	}
+	// A successfully committed hard control cancels the current unreleased
+	// windup even when ordinary hit interruption is suppressed. Cancel now,
+	// not at release: a short control must not resurrect a queued spell after
+	// it expires. Finished/released windups are ignored by clearCastWindup.
+	s.cancelControlledWindup(target)
 	s.legendaryStatusCommitted(s.entities[src], target, &def)
 	if poisonBurst > 0 {
 		s.dealClassSetPoisonBurst(target, src, poisonBurst)
@@ -298,16 +306,29 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 	beforeHP := dst.HP
 	if child := s.legendaryState().child; child != nil {
 		blow.LegendaryChild = true
+		blow.SourceTrap = blow.SourceTrap || child.SourceTrap
 		blow.Origin = domain.DamageProcOrigin
 		blow.ProcDepth = 1
 		blow.RootID = child.RootID
 		blow.SourceOffense = child.Source
+		if child.Source != nil {
+			if !blow.AttackStatsSnapshot {
+				blow.AttackStatsSnapshot, blow.AttackStats = true, child.Source.Stats
+			}
+			if !blow.EquipmentSnapshot {
+				blow.EquipmentSnapshot, blow.EquipmentOffense = true, child.Source.Equipment
+			}
+		}
+	}
+	if legendaryNativeBasic(blow) && blow.SourceSkillRange == 0 {
+		blow.SourceSkillRange = int32(src.Look.AtkDist)
 	}
 	blow = s.equipmentBlow(src, blow)
 	s.legendaryModifyBlow(src, dst, &blow)
 	if root := s.equipmentState().root; root != nil && root.src == src.ID && !blow.LegendaryChild && blow.Origin == domain.DamageNormalOrigin && blow.SkillID == int32(root.def.ID) {
 		blow.NativeDamageSnapshot = s.legendaryState().nativeDamageSnapshots[root.id]
 	}
+	s.legendaryWarriorBeforeStrike(src, dst, blow)
 	ev := combat.CalculateStrike(src, dst, tr, blow, s.rng)
 	rawDamage := ev.Amount
 	if ev.Flag.Has(event.DamageMiss) || rawDamage <= 0 && blow.FlatDamage <= 0 {
@@ -533,6 +554,9 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 			if child := s.legendaryState().child; child != nil && child.PreserveControlSkill != 0 && (d.SkillSnapshotID == child.PreserveControlSkill || d.SourceSkillID == int32(child.PreserveControlSkill)) {
 				return false
 			}
+			if d.ID == domain.StatusFreeze && s.legendaryCasterPreservesFreeze(src, dst, ev.SkillID) {
+				return false
+			}
 			return d.BreakOnDamage
 		}))
 	}
@@ -581,7 +605,28 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 		return
 	}
 	s.expireHarmfulSuppression(attacker)
-	amount = s.mitigateSecondaryStatusDamageKind(attacker, magic, amount, true)
+	// Reflection is a new incoming payload, but not a new strike. Apply the
+	// selected pure defenses before the one shield settlement, without ever
+	// re-entering afterStrikeStatuses or a reflection producer.
+	legacy := attacker.Status.DamageReductionCapPct() <= domain.DefaultDamageReductionCapPct && !s.legendaryMitigationNeeded(attacker)
+	amount, usesShield := s.secondaryDamageBeforeShield(attacker, magic, amount, true, 10000)
+	if attacker.Status.Invulnerable() && !legacy {
+		return
+	}
+	blow := combat.Blow{Origin: domain.DamageReflectionOrigin, Magic: magic}
+	amount = s.legendarySecondaryIncoming(reflector, attacker, blow, amount)
+	// Reflection is enemy damage too. Spend mana only after its pure reductions,
+	// without entering any strike, on-hit, or reflection-generating callback.
+	for _, c := range s.legendaryIncomingContexts(reflector, attacker, blow, event.DamageDealt{Src: reflector.ID, Dst: attacker.ID, Origin: domain.DamageReflectionOrigin}) {
+		if h := legendaryHandlers[c.Power.ID].AbsorbIncoming; h != nil {
+			amount = max(int32(0), h(&c, amount))
+		}
+	}
+	if usesShield && !legacy {
+		var removed []domain.StatusID
+		amount, removed = attacker.Status.AbsorbDamage(amount)
+		s.statusesRemoved(attacker, removed)
+	}
 	if amount <= 0 {
 		return
 	}
@@ -674,8 +719,23 @@ func (s *Scene) statusesRemoved(e *entity.Entity, ids []domain.StatusID) {
 		s.updatePlayerVisibility(e, true)
 	}
 	s.refreshEntityStats(e)
+	s.cancelControlledWindup(e)
 	s.emitAttributesIfPlayer(e)
 	s.pushStatusSnapshots(e)
+}
+
+// cancelControlledWindup also handles a stored control becoming effective when
+// a suppressing status is removed or expires. It never revokes released work.
+func (s *Scene) cancelControlledWindup(e *entity.Entity) {
+	if e == nil || e.Player == nil || e.Status == nil || e.Status.Controlled() == domain.ControlNone || canCast(e) {
+		return
+	}
+	for _, cast := range s.casts {
+		if cast.src == e.ID && !cast.released && cast.windup != nil && !cast.windup.finished {
+			s.clearCastWindup(e.ID)
+			return
+		}
+	}
 }
 
 // isHarmful 使用 ov_exceptdetail_entry.except_type 的官方 BAD 分类。
@@ -727,6 +787,7 @@ func (s *Scene) stepStatus() {
 			s.emitRemovedEntityStatusEffects(e, gone)
 			s.updatePlayerVisibility(e, wasInvisible)
 			s.refreshEntityStats(e)
+			s.cancelControlledWindup(e)
 			s.emitAttributesIfPlayer(e)
 			s.pushStatusSnapshots(e)
 		}
@@ -1056,7 +1117,8 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 		}
 	} else if hpDelta < 0 {
 		// 掉血。走一条独立的路径而不是 combat.Strike ——
-		// 周期伤害不判命中、不吃暴击、不触发“挨打还手”。
+		// 周期伤害不走常规命中/暴击判定，也不触发“挨打还手”。
+		// 显式威能允许的周期暴击已在上方独立结算。
 		if gmGodEnabled(e) {
 			hpDelta = 0
 		} else {
@@ -1070,11 +1132,18 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 			}
 			incoming = s.legendaryMeleeDotDamage(e, incoming)
 			dmg, usesShield := s.secondaryDamageBeforeShield(e, false, incoming, false, scaleBP)
+			var periodicContexts []legendaryContext
 			if e.Status.Invulnerable() && usesShield {
 				dmg = 0
-			} else if a.Def.LegendaryPowerID == "" {
-				dmg = s.universalPeriodicIncoming(s.entities[a.Source], e, dmg, a.Source)
+			} else {
+				// Incoming value modifiers are not effect generators. A power-
+				// produced periodic payload is still enemy damage and must not
+				// bypass periodic reduction or mana absorption.
+				periodicContexts = s.universalPeriodicIncomingContexts(s.entities[a.Source], e, a.Source)
+				dmg = universalPeriodicReduce(periodicContexts, dmg, periodicCrit)
 			}
+			dmg = s.legendarySecondaryIncoming(s.entities[a.Source], e, s.legendaryPeriodicBlow(a), dmg)
+			dmg = universalPeriodicAbsorb(periodicContexts, dmg)
 			if usesShield {
 				var removed []domain.StatusID
 				dmg, removed = e.Status.AbsorbDamage(dmg)

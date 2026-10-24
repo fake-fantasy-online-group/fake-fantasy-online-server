@@ -10,12 +10,16 @@ import (
 
 type legendaryChildOptions struct {
 	TargetOnly, SuppressGeneration bool
+	Center                         *domain.Pos
+	Primary                        *domain.EntityID // nil starts a new child primary; non-nil preserves semantic selection
 	PreserveControl                bool
 	SuppressVisual                 bool // synthetic payload supplies an explicit producer visual instead
 	BaseDamage, ScaleBP            int32
 	ApplyStatuses                  bool
+	PreparedDefinition             bool // already composed at parent admission; do not apply equipment twice
 }
 type legendaryChildFrame struct {
+	SourceTrap           bool
 	SuppressGeneration   bool
 	PreserveControlSkill domain.SkillID
 	Producers            map[string]bool
@@ -24,6 +28,8 @@ type legendaryChildFrame struct {
 	Producer             string
 	Source               *domain.CombatSourceSnapshotV5
 	Def                  domain.SkillDef
+	Center               domain.Pos
+	Primary              domain.EntityID
 }
 
 // ChildSkill is one declared skill-derived payload, not another player cast.
@@ -37,6 +43,13 @@ func (c *legendaryContext) ChildSkill(target domain.EntityID, def domain.SkillDe
 	rt := s.legendaryState()
 	if rt.depth != 0 && rt.child == nil || rt.child != nil && (rt.child.SuppressGeneration || rt.child.Depth >= 8 || rt.child.Producers[c.Power.ID]) || dst == nil || !dst.Alive() || !s.equipmentProcEnemyTarget(c.Owner, dst) {
 		return false
+	}
+	primary := target
+	if opt.Primary != nil {
+		primary = *opt.Primary
+	}
+	if def.ID == c.Skill && c.Def.LegendaryControlSnapshot != nil {
+		def.LegendaryControlSnapshot = c.Def.LegendaryControlSnapshot
 	}
 	def.Effects = append([]domain.SkillEffect(nil), def.DirectEffects()...)
 	if !opt.ApplyStatuses {
@@ -61,10 +74,12 @@ func (c *legendaryContext) ChildSkill(target domain.EntityID, def domain.SkillDe
 			}
 		}
 	}
-	s.applyResolvedSkillModifiers(c.Owner, &def, c.Owner.Player.Char.Skills, s.rawSkillLevels(c.Owner))
+	if !opt.PreparedDefinition {
+		s.prepareLegendaryChildNative(c.Owner, &def, c.SourceSnapshot)
+	}
 	contexts := s.legendaryContextsFor(c.Owner, dst, combat.Blow{SkillID: int32(def.ID), SourceOffense: c.SourceSnapshot}, event.DamageDealt{}, true)
 	legendaryOrderSkillContexts(contexts)
-	for stage := 0; stage < 3; stage++ {
+	for stage := 0; !opt.PreparedDefinition && stage < 4; stage++ {
 		for _, cc := range contexts {
 			cc.IsChild = true
 			cc.RootID = c.RootID
@@ -78,13 +93,18 @@ func (c *legendaryContext) ChildSkill(target domain.EntityID, def domain.SkillDe
 			if stage == 2 {
 				fn = h.PrepareSkill
 			}
+			if stage == 3 {
+				fn = h.ComposeSkill
+			}
 			if fn != nil {
 				fn(&cc, &def)
 			}
 		}
 	}
-	legendaryCasterHolyStatusBonus(c.Owner, &def)
-	s.legendaryFinalizeSkill(&def)
+	if !opt.PreparedDefinition {
+		legendaryCasterHolyStatusBonus(c.Owner, &def)
+		s.legendaryFinalizeSkill(&def)
+	}
 	if !opt.ApplyStatuses {
 		def.Statuses = nil
 		effects := def.Effects[:0]
@@ -104,6 +124,13 @@ func (c *legendaryContext) ChildSkill(target domain.EntityID, def domain.SkillDe
 			}
 		}
 	}
+	center := dst.Pos
+	if skillCenteredOnCaster(def) || def.Area.Center == domain.SkillAreaCenterCaster {
+		center = c.Owner.Pos
+	}
+	if opt.Center != nil {
+		center = *opt.Center
+	}
 	previous := rt.child
 	producers := map[string]bool{c.Power.ID: true}
 	depth := 1
@@ -117,7 +144,11 @@ func (c *legendaryContext) ChildSkill(target domain.EntityID, def domain.SkillDe
 	if opt.PreserveControl {
 		preserve = c.Skill
 	}
-	rt.child = &legendaryChildFrame{SuppressGeneration: opt.SuppressGeneration, PreserveControlSkill: preserve, Producers: producers, Depth: depth, RootID: c.RootID, Producer: c.Power.ID, Source: c.SourceSnapshot, Def: def}
+	sourceTrap := c.Blow.Trap || c.Blow.SourceTrap
+	if previous != nil {
+		sourceTrap = sourceTrap || previous.SourceTrap
+	}
+	rt.child = &legendaryChildFrame{SourceTrap: sourceTrap, SuppressGeneration: opt.SuppressGeneration, PreserveControlSkill: preserve, Producers: producers, Depth: depth, RootID: c.RootID, Producer: c.Power.ID, Source: c.SourceSnapshot, Def: def, Center: center, Primary: primary}
 	rt.depth++
 	defer func() { rt.child = previous; rt.depth-- }()
 	targets := []domain.EntityID{target}
@@ -128,8 +159,10 @@ func (c *legendaryContext) ChildSkill(target domain.EntityID, def domain.SkillDe
 	if !opt.TargetOnly {
 		for _, cc := range contexts {
 			cc.IsChild = true
+			cc.Skill = def.ID
+			cc.Center = center
 			cc.Def = def
-			cc.Primary = target
+			cc.Primary = primary
 			cc.Targets = targets
 			cc.OriginalTargets = originalTargets
 			if h := legendaryHandlers[cc.Power.ID].SelectTargets; h != nil {
@@ -137,15 +170,16 @@ func (c *legendaryContext) ChildSkill(target domain.EntityID, def domain.SkillDe
 			}
 		}
 	}
+	if !opt.TargetOnly {
+		targets = s.limitVariantTargets(c.Owner, def, targets, primary)
+		targets = s.limitSpecialWeaponTargets(c.Owner, def, targets, primary)
+	}
 	if len(targets) == 0 {
-		targets = []domain.EntityID{target}
+		return false
 	}
 	// One art-only native release per admitted child. It does not create another
 	// gameplay cast, change the actor animation, or schedule delayed damage.
-	center := dst.Pos
-	if skillCenteredOnCaster(def) || def.Area.Center == domain.SkillAreaCenterCaster {
-		center = c.Owner.Pos
-	}
+
 	if !opt.SuppressVisual {
 		s.emit(event.ChildSkillReleased{Caster: c.Owner.ID, Skill: def.ID, Target: target, Origin: c.Owner.Pos, Center: center})
 	}
@@ -166,15 +200,20 @@ func (c *legendaryContext) ChildSkill(target domain.EntityID, def domain.SkillDe
 		local := def
 		for _, cc := range contexts {
 			cc.IsChild = true
+			cc.Skill = def.ID
 			cc.Target = victim
+			cc.Center = center
+			cc.RootID = c.RootID
 			cc.Def = local
-			cc.Primary = target
+			cc.Primary = primary
 			cc.Targets = targets
 			cc.OriginalTargets = originalTargets
 			if h := legendaryHandlers[cc.Power.ID].TargetDefinition; h != nil {
 				h(&cc, &local)
 			}
 		}
+		rt.child.Def = local
+		rt.child.SuppressGeneration = opt.SuppressGeneration || local.LegendarySuppressGeneration
 		hit := s.applySkill(c.Owner, victim, local, 0, false)
 		if hit && !opt.SuppressVisual {
 			if local.HitEffect != "" {
@@ -189,7 +228,7 @@ func (c *legendaryContext) ChildSkill(target domain.EntityID, def domain.SkillDe
 }
 func (s *Scene) legendarySkillResolved(src, dst *entity.Entity, def domain.SkillDef, landed bool) {
 	child := s.legendaryState().child
-	if child != nil && child.SuppressGeneration {
+	if def.LegendarySuppressGeneration || child != nil && child.SuppressGeneration {
 		return
 	}
 	for _, c := range s.legendaryContextsFor(src, dst, combat.Blow{SkillID: int32(def.ID), LegendaryChild: child != nil}, event.DamageDealt{}, child != nil) {
@@ -204,6 +243,9 @@ func (s *Scene) legendarySkillResolved(src, dst *entity.Entity, def domain.Skill
 	}
 }
 func (s *Scene) legendaryHealResolved(src, dst *entity.Entity, def domain.SkillDef, raw, effective, overflow int32) {
+	if s.legendaryCasterSecondaryHeal(src, dst, def.ID) {
+		return
+	}
 	for _, c := range s.legendaryContexts(src, dst, combat.Blow{SkillID: int32(def.ID)}, event.DamageDealt{}) {
 		c.Def = def
 		if h := legendaryHandlers[c.Power.ID].HealResolved; h != nil {
@@ -317,10 +359,10 @@ func (s *Scene) legendaryPeriodicResolved(src, dst *entity.Entity, active domain
 	}
 }
 func (s *Scene) legendaryMagicResisted(owner, attacker *entity.Entity, blow combat.Blow, amount int32) int32 {
-	if blow.ProcDepth != 0 || blow.Origin == domain.DamageProcOrigin {
+	if blow.Origin == domain.DamageReflectionOrigin {
 		return amount
 	}
-	for _, c := range s.legendaryContexts(owner, attacker, blow, event.DamageDealt{Src: attacker.ID, Dst: owner.ID}) {
+	for _, c := range s.legendaryIncomingContexts(attacker, owner, blow, event.DamageDealt{Src: attacker.ID, Dst: owner.ID}) {
 		if h := legendaryHandlers[c.Power.ID].MagicResisted; h != nil {
 			amount = max(int32(0), h(&c, amount))
 		}
@@ -359,14 +401,19 @@ func (s *Scene) legendaryEquipmentChanged(owner *entity.Entity) {
 
 // legendaryModifyBlow only changes this strike's value snapshot, never entities.
 func (s *Scene) legendaryModifyBlow(src, dst *entity.Entity, blow *combat.Blow) {
-	if blow == nil || blow.LegendaryPayload {
+	if blow == nil {
 		return
 	}
 	child := blow.LegendaryChild
-	if blow.Origin == domain.DamageProcOrigin && !child {
+	if blow.Origin == domain.DamageProcOrigin && !child && !blow.LegendaryPayload {
 		return
 	}
-	for _, c := range s.legendaryContextsFor(src, dst, *blow, event.DamageDealt{}, child) {
+	for _, c := range s.legendaryContextsFor(src, dst, *blow, event.DamageDealt{}, child || blow.LegendaryPayload) {
+		// Settlement payloads may inherit pure ice penetration, never rerun
+		// unrelated outgoing producers or basic-attack modifiers.
+		if blow.LegendaryPayload && c.Power.ID != "SS-A10" {
+			continue
+		}
 		if fn := legendaryHandlers[c.Power.ID].ModifyBlow; fn != nil {
 			fn(&c, blow)
 		}

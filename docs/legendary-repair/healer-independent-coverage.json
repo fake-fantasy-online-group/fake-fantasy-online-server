@@ -1,0 +1,2072 @@
+{
+  "schema_version": 1,
+  "group": "YS",
+  "powers": [
+    {
+      "power_id": "YS-A01",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA01",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "光弹术保留主目标完整伤害，并对主目标周围180范围内最近的另外3名敌人造成60%的光弹伤害。",
+          "kind": "solo",
+          "assertion": "原生光弹onUseSkill→applySkill的主目标HP保持100%，最近3名副目标各60%；第4名与180外不伤，副目标只有1条伤害事件且无致盲。",
+          "tests": [
+            "TestHealerIndependentA01"
+          ]
+        },
+        {
+          "clause": "副目标不重复附加技能状态，也不触发威能。",
+          "kind": "solo",
+          "assertion": "原生光弹onUseSkill→applySkill的主目标HP保持100%，最近3名副目标各60%；第4名与180外不伤，副目标只有1条伤害事件且无致盲。",
+          "tests": [
+            "TestHealerIndependentA01"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A02",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA02",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "光弹术命中后，立即向同一目标追加本次已结算伤害85%的伤害。",
+          "kind": "solo",
+          "assertion": "原生光弹实际HP损失为无威能已结算伤害185%，有魔抗仍不二次减伤，目标恰2次伤害；首段击杀后旁敌HP不变。",
+          "tests": [
+            "TestHealerIndependentA02"
+          ]
+        },
+        {
+          "clause": "追加段不附加状态、不触发威能；",
+          "kind": "solo",
+          "assertion": "原生光弹实际HP损失为无威能已结算伤害185%，有魔抗仍不二次减伤，目标恰2次伤害；首段击杀后旁敌HP不变。",
+          "tests": [
+            "TestHealerIndependentA02"
+          ]
+        },
+        {
+          "clause": "目标死亡后不会改打其他敌人。",
+          "kind": "solo",
+          "assertion": "原生光弹实际HP损失为无威能已结算伤害185%，有魔抗仍不二次减伤，目标恰2次伤害；首段击杀后旁敌HP不变。",
+          "tests": [
+            "TestHealerIndependentA02"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A03",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA03",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "光弹术直接伤害提高60%。",
+          "kind": "solo",
+          "assertion": "原生光弹实际HP损失160%；目标两份可移除HOT仅剩1份，永久HOT和有害HOT均保留，无威能对照两份皆在。",
+          "tests": [
+            "TestHealerIndependentA03"
+          ]
+        },
+        {
+          "clause": "命中存活目标时，移除其1份可移除的持续回血状态；",
+          "kind": "solo",
+          "assertion": "原生光弹实际HP损失160%；目标两份可移除HOT仅剩1份，永久HOT和有害HOT均保留，无威能对照两份皆在。",
+          "tests": [
+            "TestHealerIndependentA03"
+          ]
+        },
+        {
+          "clause": "不会移除永久或有害状态。",
+          "kind": "solo",
+          "assertion": "原生光弹实际HP损失160%；目标两份可移除HOT仅剩1份，永久HOT和有害HOT均保留，无威能对照两份皆在。",
+          "tests": [
+            "TestHealerIndependentA03"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A04",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA04",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "光弹术命中带有你施加的衰弱术或枷锁术状态的敌人时，直接伤害提高90%。",
+          "kind": "solo",
+          "assertion": "原生衰弱/枷锁后光弹实际HP损失190%，无状态和异源状态保持基准；原有来源与ExpireAt不变。",
+          "tests": [
+            "TestHealerIndependentA04"
+          ]
+        },
+        {
+          "clause": "不会消耗或刷新这些状态。",
+          "kind": "solo",
+          "assertion": "原生衰弱/枷锁后光弹实际HP损失190%，无状态和异源状态保持基准；原有来源与ExpireAt不变。",
+          "tests": [
+            "TestHealerIndependentA04"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A05",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA05",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "圣光术仍可攻击敌人，也可选自己或600范围内的队友作为中心。",
+          "kind": "solo",
+          "assertion": "原生圣光在自己/600内队友中心结算周围200内敌人120%伤害并施加原致盲，不治疗中心；敌方中心伤害保持基准，超距/异队中心零扣蓝且无受理cast。",
+          "tests": [
+            "TestHealerIndependentA05"
+          ]
+        },
+        {
+          "clause": "选择友方中心时，攻击其周围200范围内的敌人，伤害提高20%，各自进行原有致盲判定；",
+          "kind": "solo",
+          "assertion": "原生圣光在自己/600内队友中心结算周围200内敌人120%伤害并施加原致盲，不治疗中心；敌方中心伤害保持基准，超距/异队中心零扣蓝且无受理cast。",
+          "tests": [
+            "TestHealerIndependentA05"
+          ]
+        },
+        {
+          "clause": "不会治疗友方。",
+          "kind": "solo",
+          "assertion": "原生圣光在自己/600内队友中心结算周围200内敌人120%伤害并施加原致盲，不治疗中心；敌方中心伤害保持基准，超距/异队中心零扣蓝且无受理cast。",
+          "tests": [
+            "TestHealerIndependentA05"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A06",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA06",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA06PerTargetBlindImmunity",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "圣光术改为目标位置周围半径200的圆形攻击。",
+          "kind": "solo",
+          "assertion": "原生圣光中心100内HP伤害160%、200内外圈120%、201外不伤，所有受击各1次并有原致盲；一名免疫致盲不影响另一名，免疫者仍承受直接伤害。",
+          "tests": [
+            "TestHealerIndependentA06",
+            "TestHealerIndependentA06PerTargetBlindImmunity"
+          ]
+        },
+        {
+          "clause": "距中心100以内的敌人伤害提高60%，外圈敌人伤害提高20%；",
+          "kind": "solo",
+          "assertion": "原生圣光中心100内HP伤害160%、200内外圈120%、201外不伤，所有受击各1次并有原致盲；一名免疫致盲不影响另一名，免疫者仍承受直接伤害。",
+          "tests": [
+            "TestHealerIndependentA06",
+            "TestHealerIndependentA06PerTargetBlindImmunity"
+          ]
+        },
+        {
+          "clause": "每人只命中一次，各自进行原有致盲判定。",
+          "kind": "solo",
+          "assertion": "原生圣光中心100内HP伤害160%、200内外圈120%、201外不伤，所有受击各1次并有原致盲；一名免疫致盲不影响另一名，免疫者仍承受直接伤害。",
+          "tests": [
+            "TestHealerIndependentA06",
+            "TestHealerIndependentA06PerTargetBlindImmunity"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A07",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA07",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA07OverlapUsesStrongerField",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "圣光术直接伤害提高10%，并保留原致盲。",
+          "kind": "solo",
+          "assertion": "原生圣光直接HP伤害110%及原致盲；stepLegendaryPowers在1..4秒各结算基础30%，0秒/第5秒不伤，180范围外不伤，光区目标无致盲；两区池与重复调度不叠跳，1级/5级重叠取高档实际伤害。",
+          "tests": [
+            "TestHealerIndependentA07",
+            "TestHealerIndependentA07OverlapUsesStrongerField"
+          ]
+        },
+        {
+          "clause": "施法中心留下半径180、持续4秒的光区，每秒造成该等级圣光基础伤害30%的魔法伤害。",
+          "kind": "solo",
+          "assertion": "原生圣光直接HP伤害110%及原致盲；stepLegendaryPowers在1..4秒各结算基础30%，0秒/第5秒不伤，180范围外不伤，光区目标无致盲；两区池与重复调度不叠跳，1级/5级重叠取高档实际伤害。",
+          "tests": [
+            "TestHealerIndependentA07",
+            "TestHealerIndependentA07OverlapUsesStrongerField"
+          ]
+        },
+        {
+          "clause": "你最多保留2片光区；",
+          "kind": "solo",
+          "assertion": "原生圣光直接HP伤害110%及原致盲；stepLegendaryPowers在1..4秒各结算基础30%，0秒/第5秒不伤，180范围外不伤，光区目标无致盲；两区池与重复调度不叠跳，1级/5级重叠取高档实际伤害。",
+          "tests": [
+            "TestHealerIndependentA07",
+            "TestHealerIndependentA07OverlapUsesStrongerField"
+          ]
+        },
+        {
+          "clause": "重叠处每个敌人每秒只承受较高的一次光区伤害，光区不附加致盲、不触发威能。",
+          "kind": "solo",
+          "assertion": "原生圣光直接HP伤害110%及原致盲；stepLegendaryPowers在1..4秒各结算基础30%，0秒/第5秒不伤，180范围外不伤，光区目标无致盲；两区池与重复调度不叠跳，1级/5级重叠取高档实际伤害。",
+          "tests": [
+            "TestHealerIndependentA07",
+            "TestHealerIndependentA07OverlapUsesStrongerField"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A08",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA08",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "圣光术沿主目标方向形成长600、宽160的矩形攻击，直接伤害提高80%，保留原致盲，并始终保留原选中的主目标。",
+          "kind": "solo",
+          "assertion": "原生圣光最终矩形600×160真实命中边界、主目标与内部对象各180%且仅1击并保留致盲；宽/长外对象HP不变。",
+          "tests": [
+            "TestHealerIndependentA08"
+          ]
+        },
+        {
+          "clause": "与其他形状改造同装时，每个敌人仍只命中一次。",
+          "kind": "combination",
+          "assertion": "原生释能+A08合法二威能同装后矩形700×260，长/宽边界受击且每敌恰1击，外部HP不变。",
+          "tests": [
+            "TestHealerIndependentCombinations/release_final_rectangle"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A09",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "驱魔术可攻击所有合法敌人，不再限定亡灵和恶魔；",
+          "kind": "solo",
+          "assertion": "原生驱魔亡灵与普通族群都受140%直接HP伤害，220边界内命中、外不伤；3个可驱散增益仅留1个，永久/有害保留；无增益照样增伤，实际技能冷却与无威能一致。",
+          "tests": [
+            "TestHealerIndependentA09"
+          ]
+        },
+        {
+          "clause": "作用半径由150扩大至220，伤害提高40%。",
+          "kind": "solo",
+          "assertion": "原生驱魔亡灵与普通族群都受140%直接HP伤害，220边界内命中、外不伤；3个可驱散增益仅留1个，永久/有害保留；无增益照样增伤，实际技能冷却与无威能一致。",
+          "tests": [
+            "TestHealerIndependentA09"
+          ]
+        },
+        {
+          "clause": "命中时尝试移除至多2个可驱散增益，无需成功驱散即可增伤，技能冷却不变；",
+          "kind": "solo",
+          "assertion": "原生驱魔亡灵与普通族群都受140%直接HP伤害，220边界内命中、外不伤；3个可驱散增益仅留1个，永久/有害保留；无增益照样增伤，实际技能冷却与无威能一致。",
+          "tests": [
+            "TestHealerIndependentA09"
+          ]
+        },
+        {
+          "clause": "不可驱散的首领效果仍无法移除。",
+          "kind": "solo",
+          "assertion": "原生驱魔亡灵与普通族群都受140%直接HP伤害，220边界内命中、外不伤；3个可驱散增益仅留1个，永久/有害保留；无增益照样增伤，实际技能冷却与无威能一致。",
+          "tests": [
+            "TestHealerIndependentA09"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A10",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA10",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "衰弱术改为目标位置周围的范围技能，作用半径在当前基础上增加100；",
+          "kind": "solo",
+          "assertion": "原生衰弱进入目标周围100圆，旁敌得到实际降攻状态、101外没有；原Affix负值×160%，原ExpireAt不变，所有对象HP和位置不变。",
+          "tests": [
+            "TestHealerIndependentA10"
+          ]
+        },
+        {
+          "clause": "原有降低攻击效果提高60%。",
+          "kind": "solo",
+          "assertion": "原生衰弱进入目标周围100圆，旁敌得到实际降攻状态、101外没有；原Affix负值×160%，原ExpireAt不变，所有对象HP和位置不变。",
+          "tests": [
+            "TestHealerIndependentA10"
+          ]
+        },
+        {
+          "clause": "持续时间不变，不额外造成伤害。",
+          "kind": "solo",
+          "assertion": "原生衰弱进入目标周围100圆，旁敌得到实际降攻状态、101外没有；原Affix负值×160%，原ExpireAt不变，所有对象HP和位置不变。",
+          "tests": [
+            "TestHealerIndependentA10"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A11",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA11",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "驱魔术作用半径增加120，直接伤害提高45%。",
+          "kind": "solo",
+          "assertion": "原生驱魔实际HP伤害145%，270边界内命中、外不伤，主目标只有1条伤害事件，无威能对照旁敌不伤。",
+          "tests": [
+            "TestHealerIndependentA11"
+          ]
+        },
+        {
+          "clause": "不会因此多结算一次伤害或驱散。",
+          "kind": "solo",
+          "assertion": "原生驱魔实际HP伤害145%，270边界内命中、外不伤，主目标只有1条伤害事件，无威能对照旁敌不伤。",
+          "tests": [
+            "TestHealerIndependentA11"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A12",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA12",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "驱魔术直接伤害提高50%。",
+          "kind": "solo",
+          "assertion": "原生驱魔伤害150%；启动真实MonsterAI吟唱后施法，普通目标CastingSkill归零且CastSerial变更，到期timer不释放；免疫目标吟唱仍在且照常受伤，无威能不取消AI。",
+          "tests": [
+            "TestHealerIndependentA12"
+          ]
+        },
+        {
+          "clause": "命中时打断敌人可被打断的实际吟唱；",
+          "kind": "solo",
+          "assertion": "原生驱魔伤害150%；启动真实MonsterAI吟唱后施法，普通目标CastingSkill归零且CastSerial变更，到期timer不释放；免疫目标吟唱仍在且照常受伤，无威能不取消AI。",
+          "tests": [
+            "TestHealerIndependentA12"
+          ]
+        },
+        {
+          "clause": "免疫打断的目标不被打断，但仍正常承受伤害。",
+          "kind": "solo",
+          "assertion": "原生驱魔伤害150%；启动真实MonsterAI吟唱后施法，普通目标CastingSkill归零且CastSerial变更，到期timer不释放；免疫目标吟唱仍在且照常受伤，无威能不取消AI。",
+          "tests": [
+            "TestHealerIndependentA12"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A13",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA13",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "神威术命中带有你施加的枷锁术状态的敌人时，直接伤害提高80%；",
+          "kind": "solo",
+          "assertion": "原生本源枷锁后神威实际HP伤害180%；缺失/异源枷锁不增伤，来源与ExpireAt不变。",
+          "tests": [
+            "TestHealerIndependentA13"
+          ]
+        },
+        {
+          "clause": "不会消耗或刷新枷锁。",
+          "kind": "solo",
+          "assertion": "原生本源枷锁后神威实际HP伤害180%；缺失/异源枷锁不增伤，来源与ExpireAt不变。",
+          "tests": [
+            "TestHealerIndependentA13"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A14",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA14",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "神威术冷却时间缩短45%，不需要击杀或残血条件，也不额外返还法力。",
+          "kind": "solo",
+          "assertion": "原生神威成功施法后真实SkillReadyIn为无威能55%，就绪前后各1tick边界明确；满血、未击杀也生效，MP实付与无威能相同。",
+          "tests": [
+            "TestHealerIndependentA14"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A15",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA15",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "神威术保留所有目标的完整伤害。",
+          "kind": "solo",
+          "assertion": "原生神威全部副敌保持完整HP伤害；主目标追加旁敌实际HP损失35%，受主首段上限约束，低HP旁敌按实际损失计池；主目标首段死亡不转移。",
+          "tests": [
+            "TestHealerIndependentA15"
+          ]
+        },
+        {
+          "clause": "若选中了敌方主目标，将其他敌人本次实际损失生命总和的35%追加给该主目标，追加量最多为主目标首段伤害的100%；",
+          "kind": "solo",
+          "assertion": "原生神威全部副敌保持完整HP伤害；主目标追加旁敌实际HP损失35%，受主首段上限约束，低HP旁敌按实际损失计池；主目标首段死亡不转移。",
+          "tests": [
+            "TestHealerIndependentA15"
+          ]
+        },
+        {
+          "clause": "追加不触发威能，主目标死亡后不转移。",
+          "kind": "solo",
+          "assertion": "原生神威全部副敌保持完整HP伤害；主目标追加旁敌实际HP损失35%，受主首段上限约束，低HP旁敌按实际损失计池；主目标首段死亡不转移。",
+          "tests": [
+            "TestHealerIndependentA15"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A16",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA16",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "神威术作用半径增加100，施法距离增加200，直接伤害提高35%；",
+          "kind": "solo",
+          "assertion": "原生神威实际HP伤害135%，原目标中心半径+100边界命中；原射程+199可受理而无威能拒绝，半径外不伤。",
+          "tests": [
+            "TestHealerIndependentA16"
+          ]
+        },
+        {
+          "clause": "施法中心规则不变。",
+          "kind": "solo",
+          "assertion": "原生神威实际HP伤害135%，原目标中心半径+100边界命中；原射程+199可受理而无威能拒绝，半径外不伤。",
+          "tests": [
+            "TestHealerIndependentA16"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A17",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA17",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "衰弱术取消吟唱，改为目标位置周围半径250的攻击，对每个敌人造成180%魔法攻击力的神圣伤害，并按原免疫规则施加衰弱。",
+          "kind": "solo",
+          "assertion": "原生衰弱受理cast没有wall-clock吟唱，250内各实际扣180HP，251外不伤；免疫者仍受伤但无衰弱；驱魔对任意来源原生衰弱目标造成160%HP伤害且状态不消耗/刷新。",
+          "tests": [
+            "TestHealerIndependentA17"
+          ]
+        },
+        {
+          "clause": "你的驱魔术命中带有任意施法者衰弱术状态的敌人时，直接伤害提高60%，不消耗或刷新衰弱。",
+          "kind": "solo",
+          "assertion": "原生衰弱受理cast没有wall-clock吟唱，250内各实际扣180HP，251外不伤；免疫者仍受伤但无衰弱；驱魔对任意来源原生衰弱目标造成160%HP伤害且状态不消耗/刷新。",
+          "tests": [
+            "TestHealerIndependentA17"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A18",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA18",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "枷锁术原有的降低攻击速度效果提高50%，持续时间不变。",
+          "kind": "solo",
+          "assertion": "原生枷锁仅施加攻速降低状态，值30→45，ExpireAt不变，单装不产生HP伤害或移动。",
+          "tests": [
+            "TestHealerIndependentA18"
+          ]
+        },
+        {
+          "clause": "枷锁术若获得直接伤害，例如搭配“聚敌枷锁”，该伤害提高60%；",
+          "kind": "combination",
+          "assertion": "合法A18+A19原生枷锁实际扣血320（200×160%）、减攻速45且拉到80，单装A18测试另证无伤害/位移。",
+          "tests": [
+            "TestHealerIndependentCombinations/shackle_damage_and_slow"
+          ]
+        },
+        {
+          "clause": "本威能不会单独赋予枷锁术伤害或位移。",
+          "kind": "solo",
+          "assertion": "原生枷锁仅施加攻速降低状态，值30→45，ExpireAt不变，单装不产生HP伤害或移动。",
+          "tests": [
+            "TestHealerIndependentA18"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A19",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA19",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "枷锁术改为目标位置周围半径250的范围技能，对每名敌人造成200%魔法攻击力的神圣伤害，并按原免疫规则施加减攻速。",
+          "kind": "solo",
+          "assertion": "原生枷锁250内每目标实际扣200HP并保留原减速；普通敌人实际拉到中心80，首领/免疫者位置不变仍扣血，免疫者不受减速，范围外不伤。",
+          "tests": [
+            "TestHealerIndependentA19"
+          ]
+        },
+        {
+          "clause": "可移动的普通敌人被拉向中心，最多拉到距中心80的位置；",
+          "kind": "solo",
+          "assertion": "原生枷锁250内每目标实际扣200HP并保留原减速；普通敌人实际拉到中心80，首领/免疫者位置不变仍扣血，免疫者不受减速，范围外不伤。",
+          "tests": [
+            "TestHealerIndependentA19"
+          ]
+        },
+        {
+          "clause": "首领和位移免疫目标不移动，但伤害仍结算。",
+          "kind": "solo",
+          "assertion": "原生枷锁250内每目标实际扣200HP并保留原减速；普通敌人实际拉到中心80，首领/免疫者位置不变仍扣血，免疫者不受减速，范围外不伤。",
+          "tests": [
+            "TestHealerIndependentA19"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A20",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA20",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA20DoesNotModifyOtherCaster",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "针刺护体保留原有普通攻击反射效果。",
+          "kind": "solo",
+          "assertion": "自身原生针刺在场时三个指定攻击技能实际HP伤害140%，无状态/无威能回到基准；原针刺反射经afterStrikeStatuses实际反伤且不多一针；另一个无威能施法者的光弹保持210伤害。",
+          "tests": [
+            "TestHealerIndependentA20",
+            "TestHealerIndependentA20DoesNotModifyOtherCaster"
+          ]
+        },
+        {
+          "clause": "自身针刺护体生效期间，主动施放光弹术、圣光术或驱魔术，直接伤害提高40%；",
+          "kind": "solo",
+          "assertion": "自身原生针刺在场时三个指定攻击技能实际HP伤害140%，无状态/无威能回到基准；原针刺反射经afterStrikeStatuses实际反伤且不多一针；另一个无威能施法者的光弹保持210伤害。",
+          "tests": [
+            "TestHealerIndependentA20",
+            "TestHealerIndependentA20DoesNotModifyOtherCaster"
+          ]
+        },
+        {
+          "clause": "这些技能若以自身为中心攻击周围敌人，攻击半径为220，范围内敌人在一次施法中各受击一次，原选中目标始终保留。",
+          "kind": "combination",
+          "assertion": "合法A08使圣光成为caster-centered矩形，A20在自身针刺有效时最终变半径220圆；实际击中220内侧向敌人与220外原主目标，221侧向外不伤，每敌1击。",
+          "tests": [
+            "TestHealerIndependentA20SelfCenterCombination"
+          ]
+        },
+        {
+          "clause": "不会改变队友的技能，也不额外发动针刺攻击。",
+          "kind": "solo",
+          "assertion": "自身原生针刺在场时三个指定攻击技能实际HP伤害140%，无状态/无威能回到基准；原针刺反射经afterStrikeStatuses实际反伤且不多一针；另一个无威能施法者的光弹保持210伤害。",
+          "tests": [
+            "TestHealerIndependentA20",
+            "TestHealerIndependentA20DoesNotModifyOtherCaster"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A21",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA21",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "主动施放光盾术后，每名本次获得光盾的友方，都对其周围半径220内的敌人造成等于该盾初始吸收量80%的魔法伤害，不消耗护盾。",
+          "kind": "solo",
+          "assertion": "原生光盾成功提交后220内敌人实际HP损失=最终ShieldLeft的80%，范围外不伤，护盾值未被消耗，目标仅1次爆光；无威能无爆光。",
+          "tests": [
+            "TestHealerIndependentA21"
+          ]
+        },
+        {
+          "clause": "盾量按本次所有强化后的数值计算，因此“专注圣契”和“群盾覆阵”也能提高伤害；",
+          "kind": "combination",
+          "assertion": "集中+群盾+爆光合法三槽真实施盾后每敌只受一次最终盾量80%；另一个队友自身TY-D13令盾量更强，重叠处实际HP损失取最高盾80%，全部护盾未消耗。",
+          "tests": [
+            "TestHealerIndependentCombinations/focused_group_shield_strongest_burst",
+            "TestHealerIndependentShieldStrongestRecipientCombination"
+          ]
+        },
+        {
+          "clause": "同一敌人在同次施法中只承受最强的一道爆光。",
+          "kind": "combination",
+          "assertion": "集中+群盾+爆光合法三槽真实施盾后每敌只受一次最终盾量80%；另一个队友自身TY-D13令盾量更强，重叠处实际HP损失取最高盾80%，全部护盾未消耗。",
+          "tests": [
+            "TestHealerIndependentCombinations/focused_group_shield_strongest_burst",
+            "TestHealerIndependentShieldStrongestRecipientCombination"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A22",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA22",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "成功施放净化术后，主净化目标周围220范围内的敌人各受到220%魔法攻击力的神圣伤害。",
+          "kind": "solo",
+          "assertion": "原生净化成功施法，无需移除状态，主目标220内每敌实际扣220HP、恰1条伤害事件，221外不伤；无威能无额外伤害。",
+          "tests": [
+            "TestHealerIndependentA22"
+          ]
+        },
+        {
+          "clause": "无需实际移除负面状态；",
+          "kind": "solo",
+          "assertion": "原生净化成功施法，无需移除状态，主目标220内每敌实际扣220HP、恰1条伤害事件，221外不伤；无威能无额外伤害。",
+          "tests": [
+            "TestHealerIndependentA22"
+          ]
+        },
+        {
+          "clause": "每次施法每个敌人只结算一次，不再生成其他技能。",
+          "kind": "solo",
+          "assertion": "原生净化成功施法，无需移除状态，主目标220内每敌实际扣220HP、恰1条伤害事件，221外不伤；无威能无额外伤害。",
+          "tests": [
+            "TestHealerIndependentA22"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A23",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA23",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "每次主动施放治愈术，保留完整治疗，并向主治疗目标周围250范围内最近的1名敌人发出光弹。",
+          "kind": "solo",
+          "assertion": "原生治愈完整1100治疗保留，只最近1名250内敌人承受1100HP损失，满血也触发；未学光弹仍生成且不会把主动技能学入角色，旁敌/范围外不伤。",
+          "tests": [
+            "TestHealerIndependentA23"
+          ]
+        },
+        {
+          "clause": "基础伤害等于本次主目标应有治疗量的100%，满血也可触发；",
+          "kind": "solo",
+          "assertion": "原生治愈完整1100治疗保留，只最近1名250内敌人承受1100HP损失，满血也触发；未学光弹仍生成且不会把主动技能学入角色，旁敌/范围外不伤。",
+          "tests": [
+            "TestHealerIndependentA23"
+          ]
+        },
+        {
+          "clause": "光弹的伤害与形状威能可以直接修正它，无需另行施放光弹术。",
+          "kind": "combination",
+          "assertion": "合法A23+A01+A03治愈生成光弹无需再主动施放，原治疗1100保留，主敌1760，最近3名副敌1056各1击，第4名不伤。",
+          "tests": [
+            "TestHealerIndependentCombinations/healing_prism_amplifier"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A24",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA24",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "群疗术结算后，在本次治疗中心周围250范围内，对每名敌人造成250%魔法攻击力的神圣伤害。",
+          "kind": "solo",
+          "assertion": "原生群疗保留治疗，中心250内每敌实际扣250HP且恰1次；全员满血仍触发，251外不伤，无威能无波。",
+          "tests": [
+            "TestHealerIndependentA24"
+          ]
+        },
+        {
+          "clause": "每次施法每敌人一次，即使全员满血也能触发。",
+          "kind": "solo",
+          "assertion": "原生群疗保留治疗，中心250内每敌实际扣250HP且恰1次；全员满血仍触发，251外不伤，无威能无波。",
+          "tests": [
+            "TestHealerIndependentA24"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A25",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA25",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "祝福术改为主目标周围半径250的友方群体技能，原有物理攻击和魔法攻击增益强度提高60%。",
+          "kind": "solo",
+          "assertion": "原生祝福施加到主目标250内友方，物攻/魔攻两个真实Affix均×160%，ExpireAt与原生相同，251外不加；无威能不扩展到240。",
+          "tests": [
+            "TestHealerIndependentA25"
+          ]
+        },
+        {
+          "clause": "持续时间与原覆盖规则不变。",
+          "kind": "solo",
+          "assertion": "原生祝福施加到主目标250内友方，物攻/魔攻两个真实Affix均×160%，ExpireAt与原生相同，251外不加；无威能不扩展到240。",
+          "tests": [
+            "TestHealerIndependentA25"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A26",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA26",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA26AllyHolyDamage",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "防御术原有防御效果提高70%，并额外覆盖主目标周围250范围内生命比例最低的另外2名队友。",
+          "kind": "solo",
+          "assertion": "原生防御实际来伤从900→830（10%→17%），持续300秒且无盾；额外选择250内最低HP比例2人；本人和另一个受益队友实际主动神圣伤害均140%。",
+          "tests": [
+            "TestHealerIndependentA26",
+            "TestHealerIndependentA26AllyHolyDamage"
+          ]
+        },
+        {
+          "clause": "防御状态存在期间，受益者主动造成的神圣伤害提高40%；",
+          "kind": "solo",
+          "assertion": "原生防御实际来伤从900→830（10%→17%），持续300秒且无盾；额外选择250内最低HP比例2人；本人和另一个受益队友实际主动神圣伤害均140%。",
+          "tests": [
+            "TestHealerIndependentA26",
+            "TestHealerIndependentA26AllyHolyDamage"
+          ]
+        },
+        {
+          "clause": "沿用原持续时间，不生成护盾。",
+          "kind": "solo",
+          "assertion": "原生防御实际来伤从900→830（10%→17%），持续300秒且无盾；额外选择250内最低HP比例2人；本人和另一个受益队友实际主动神圣伤害均140%。",
+          "tests": [
+            "TestHealerIndependentA26",
+            "TestHealerIndependentA26AllyHolyDamage"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A27",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA27",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "自身有有效加速术状态时，光弹术、圣光术和驱魔术的直接伤害提高50%。",
+          "kind": "solo",
+          "assertion": "原生加速状态在场时指定三技能实际伤害150%，无状态/无威能回到基准，角色未移动，原ExpireAt不变。",
+          "tests": [
+            "TestHealerIndependentA27"
+          ]
+        },
+        {
+          "clause": "不会消耗加速状态，也不需要移动。",
+          "kind": "solo",
+          "assertion": "原生加速状态在场时指定三技能实际伤害150%，无状态/无威能回到基准，角色未移动，原ExpireAt不变。",
+          "tests": [
+            "TestHealerIndependentA27"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A28",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA28",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "复法术基础回蓝提高70%，目标与溢出规则不变。",
+          "kind": "solo",
+          "assertion": "原生复法主目标实际MP100→170，主目标180内每敌实际扣220HP且1条伤害事件，181外不伤；无威能MP100且无波。",
+          "tests": [
+            "TestHealerIndependentA28"
+          ]
+        },
+        {
+          "clause": "成功主动施放时，主目标周围180范围内的敌人各受到220%魔法攻击力的神圣伤害；",
+          "kind": "solo",
+          "assertion": "原生复法主目标实际MP100→170，主目标180内每敌实际扣220HP且1条伤害事件，181外不伤；无威能MP100且无波。",
+          "tests": [
+            "TestHealerIndependentA28"
+          ]
+        },
+        {
+          "clause": "每次施法每敌人一次，溢出分流不会重复触发。",
+          "kind": "combination",
+          "assertion": "合法U03+A28，主目标满MP，170溢出分流给低蓝队友但波伤仍220且目标恰1次，不按分流重复生成。",
+          "tests": [
+            "TestHealerIndependentCombinations/mana_overflow_wave_once"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A29",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA29",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "神术：释能保留强化下一次法术的效果，伤害增强系数额外提高50个百分点。",
+          "kind": "solo",
+          "assertion": "原生释能状态将下一次四种指定攻击的实际HP伤害由140%变190%（基准100%），原一次性状态消耗；光弹220圆、圣光100圆、驱魔/神威250圆实际内外边界与全额伤害明确。",
+          "tests": [
+            "TestHealerIndependentA29"
+          ]
+        },
+        {
+          "clause": "被强化的光弹术改为主目标周围半径220的圆形攻击；",
+          "kind": "solo",
+          "assertion": "原生释能状态将下一次四种指定攻击的实际HP伤害由140%变190%（基准100%），原一次性状态消耗；光弹220圆、圣光100圆、驱魔/神威250圆实际内外边界与全额伤害明确。",
+          "tests": [
+            "TestHealerIndependentA29"
+          ]
+        },
+        {
+          "clause": "圣光术、驱魔术和神威术按改造后的最终形状扩大范围：圆形半径增加100，矩形长度和宽度各增加100。",
+          "kind": "combination",
+          "assertion": "合法A29+A08/ A06分别消费最终700×260矩形和300圆的真实内外命中，形状不重复结算。",
+          "tests": [
+            "TestHealerIndependentCombinations/release_final_rectangle",
+            "TestHealerIndependentCombinations/release_final_circle"
+          ]
+        },
+        {
+          "clause": "范围内所有目标保留完整伤害。",
+          "kind": "solo",
+          "assertion": "原生释能状态将下一次四种指定攻击的实际HP伤害由140%变190%（基准100%），原一次性状态消耗；光弹220圆、圣光100圆、驱魔/神威250圆实际内外边界与全额伤害明确。",
+          "tests": [
+            "TestHealerIndependentA29"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-A30",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA30",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentA30NativeDamage",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "神术：瞬发使其强化的下一次吟唱技能完全免除吟唱，并使该次直接伤害或直接治疗提高40%；",
+          "kind": "solo",
+          "assertion": "原生瞬发后群疗实际吟唱归零且真实治疗140%；原生天罚10313的5000ms吟唱也归零且实际HP伤害140%，未改写PrepareMS；复活仍受原技能冷却约束，重施失败不扣蓝。",
+          "tests": [
+            "TestHealerIndependentA30",
+            "TestHealerIndependentA30NativeDamage"
+          ]
+        },
+        {
+          "clause": "仍须遵守技能冷却，不额外延长冷却。",
+          "kind": "solo",
+          "assertion": "原生瞬发后群疗实际吟唱归零且真实治疗140%；原生天罚10313的5000ms吟唱也归零且实际HP伤害140%，未改写PrepareMS；复活仍受原技能冷却约束，重施失败不扣蓝。",
+          "tests": [
+            "TestHealerIndependentA30",
+            "TestHealerIndependentA30NativeDamage"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-D01",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentD01",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "治愈术直接治疗量提高60%。",
+          "kind": "solo",
+          "assertion": "原生治愈经真实heal consumer恢复HP为无威能160%，实际StatusSet没有护盾。",
+          "tests": [
+            "TestHealerIndependentD01"
+          ]
+        },
+        {
+          "clause": "主目标和额外治疗的队友都获得完整加成。",
+          "kind": "combination",
+          "assertion": "合法D01+U04治愈实际生命恢复：主1760、副目标按各自最大生命320/480，均无护盾。",
+          "tests": [
+            "TestHealerIndependentCombinations/full_strength_extra_heals"
+          ]
+        },
+        {
+          "clause": "不会生成护盾。",
+          "kind": "solo",
+          "assertion": "原生治愈结算后实际盾池为0，直接治疗仍完整增加生命。",
+          "tests": [
+            "TestHealerIndependentD01"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-D02",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentD02",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "净化术改为主目标周围半径250的友方群体技能，对原本可清除的状态，净化成功率为100%；",
+          "kind": "solo",
+          "assertion": "原生净化真实清除自己及250内队友原列表状态，12种固定种子均成功；原列表外状态、251外/异队目标保留，无威能仍单体。",
+          "tests": [
+            "TestHealerIndependentD02"
+          ]
+        },
+        {
+          "clause": "可清除状态种类不变。",
+          "kind": "solo",
+          "assertion": "原生净化真实清除自己及250内队友原列表状态，12种固定种子均成功；原列表外状态、251外/异队目标保留，无威能仍单体。",
+          "tests": [
+            "TestHealerIndependentD02"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-D03",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentD03",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "光盾术初始吸收量提高60%，并为主目标周围250范围内生命比例最低的另外2名队友施加同样强度的光盾。",
+          "kind": "solo",
+          "assertion": "原生光盾吸收池700→1120，最低HP比例2名额外友方同盾、250外/高血额外对象无盾；native持续时间/即死免疫保留，实际攻击消耗盾且未多生成残盾。",
+          "tests": [
+            "TestHealerIndependentD03"
+          ]
+        },
+        {
+          "clause": "保留原持续时间、覆盖规则和即死免疫，不另外生成残盾。",
+          "kind": "solo",
+          "assertion": "原生光盾吸收池700→1120，最低HP比例2名额外友方同盾、250外/高血额外对象无盾；native持续时间/即死免疫保留，实际攻击消耗盾且未多生成残盾。",
+          "tests": [
+            "TestHealerIndependentD03"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-D04",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentD04",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "防御术的物理和魔法减伤各提高35个百分点，沿用原状态的持续时间与覆盖规则。",
+          "kind": "solo",
+          "assertion": "原生防御后物理/魔法实际扣血各由900→550，300秒原持续时间，过期后恢复1000来伤。",
+          "tests": [
+            "TestHealerIndependentD04"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-D05",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentD05",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentNativeWindupControl/YS-D05/1002",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentNativeWindupControl/YS-D05/1003",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentD05InstantHealDoesNotProtect",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "自身回春术状态有效时，实际吟唱治愈术、群疗术或复活术期间，受到伤害降低25%，并且不会被普通受伤打断。",
+          "kind": "solo",
+          "assertion": "满血原生回春未跳前，原生群疗/复活实际windup中HP伤害750而非1000、普通受伤不取消；无回春/无威能/取消windup均1000；真实原生昏迷/封印仍取消未释放cast，且无释放/治疗/二次扣蓝。 原生10301治愈为瞬发，未改写PrepareMS；受理/完成后都不产生windup或常驻保护，实际来伤仍1000。",
+          "tests": [
+            "TestHealerIndependentD05",
+            "TestHealerIndependentNativeWindupControl/YS-D05/1002",
+            "TestHealerIndependentNativeWindupControl/YS-D05/1003",
+            "TestHealerIndependentD05InstantHealDoesNotProtect"
+          ]
+        },
+        {
+          "clause": "昏迷、封印等控制仍生效；",
+          "kind": "solo",
+          "assertion": "满血原生回春未跳前，原生群疗/复活实际windup中HP伤害750而非1000、普通受伤不取消；无回春/无威能/取消windup均1000；真实原生昏迷/封印仍取消未释放cast，且无释放/治疗/二次扣蓝。 原生10301治愈为瞬发，未改写PrepareMS；受理/完成后都不产生windup或常驻保护，实际来伤仍1000。",
+          "tests": [
+            "TestHealerIndependentD05",
+            "TestHealerIndependentNativeWindupControl/YS-D05/1002",
+            "TestHealerIndependentNativeWindupControl/YS-D05/1003",
+            "TestHealerIndependentD05InstantHealDoesNotProtect"
+          ]
+        },
+        {
+          "clause": "无需等到回春跳数，满血也能获得保护。",
+          "kind": "solo",
+          "assertion": "满血原生回春未跳前，原生群疗/复活实际windup中HP伤害750而非1000、普通受伤不取消；无回春/无威能/取消windup均1000；真实原生昏迷/封印仍取消未释放cast，且无释放/治疗/二次扣蓝。 原生10301治愈为瞬发，未改写PrepareMS；受理/完成后都不产生windup或常驻保护，实际来伤仍1000。",
+          "tests": [
+            "TestHealerIndependentD05",
+            "TestHealerIndependentNativeWindupControl/YS-D05/1002",
+            "TestHealerIndependentNativeWindupControl/YS-D05/1003",
+            "TestHealerIndependentD05InstantHealDoesNotProtect"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-D06",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentD06",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentNativeWindupControl/YS-D06/1002",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentNativeWindupControl/YS-D06/1003",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentNativeControlBoundaries/rejected_control_preserves_windup",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentNativeControlBoundaries/suppressed_control_does_not_cancel",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentNativeControlBoundaries/short_control_cannot_resurrect_cancelled_cast",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentNativeControlBoundaries/released_projectile_survives",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentNativeReactivatedControl/removed",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentNativeReactivatedControl/expired",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentNativeReactivatedControlExpiresBeforeRelease",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "实际吟唱群疗术期间，受到伤害降低40%，并且不会被普通受伤打断；",
+          "kind": "solo",
+          "assertion": "原生群疗真实windup中实际HP伤害600、普通受伤不取消；无威能/取消后1000，原生昏迷/封印成功落地仍取消，受拒绝/被抑制的control不误取消，已释放弹道不撤销。 已存储的原生硬控因保护显式解除或到期重新有效时立即取消；短控制再次过期也不会让原cast复活。",
+          "tests": [
+            "TestHealerIndependentD06",
+            "TestHealerIndependentNativeWindupControl/YS-D06/1002",
+            "TestHealerIndependentNativeWindupControl/YS-D06/1003",
+            "TestHealerIndependentNativeControlBoundaries/rejected_control_preserves_windup",
+            "TestHealerIndependentNativeControlBoundaries/suppressed_control_does_not_cancel",
+            "TestHealerIndependentNativeControlBoundaries/short_control_cannot_resurrect_cancelled_cast",
+            "TestHealerIndependentNativeControlBoundaries/released_projectile_survives",
+            "TestHealerIndependentNativeReactivatedControl/removed",
+            "TestHealerIndependentNativeReactivatedControl/expired",
+            "TestHealerIndependentNativeReactivatedControlExpiresBeforeRelease"
+          ]
+        },
+        {
+          "clause": "昏迷、封印等控制仍生效。",
+          "kind": "solo",
+          "assertion": "原生群疗真实windup中实际HP伤害600、普通受伤不取消；无威能/取消后1000，原生昏迷/封印成功落地仍取消，受拒绝/被抑制的control不误取消，已释放弹道不撤销。 已存储的原生硬控因保护显式解除或到期重新有效时立即取消；短控制再次过期也不会让原cast复活。",
+          "tests": [
+            "TestHealerIndependentD06",
+            "TestHealerIndependentNativeWindupControl/YS-D06/1002",
+            "TestHealerIndependentNativeWindupControl/YS-D06/1003",
+            "TestHealerIndependentNativeControlBoundaries/rejected_control_preserves_windup",
+            "TestHealerIndependentNativeControlBoundaries/suppressed_control_does_not_cancel",
+            "TestHealerIndependentNativeControlBoundaries/short_control_cannot_resurrect_cancelled_cast",
+            "TestHealerIndependentNativeControlBoundaries/released_projectile_survives",
+            "TestHealerIndependentNativeReactivatedControl/removed",
+            "TestHealerIndependentNativeReactivatedControl/expired",
+            "TestHealerIndependentNativeReactivatedControlExpiresBeforeRelease"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-D07",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentD07",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "清身术改为主目标周围半径250的友方群体技能。",
+          "kind": "solo",
+          "assertion": "原生清身在250内逐目标执行原20%判定，12个固定种子既有成功也有失败；原列表外、范围外/异队保留，无威能仍单体。",
+          "tests": [
+            "TestHealerIndependentD07"
+          ]
+        },
+        {
+          "clause": "沿用原可清除状态列表和原成功率，每名目标分别判定。",
+          "kind": "solo",
+          "assertion": "原生清身在250内逐目标执行原20%判定，12个固定种子既有成功也有失败；原列表外、范围外/异队保留，无威能仍单体。",
+          "tests": [
+            "TestHealerIndependentD07"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-D08",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentD08",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "实际吟唱复活术期间，受到伤害降低60%；",
+          "kind": "solo",
+          "assertion": "原生复活实际windup中来伤400，无威能/取消后1000；不生成额外保护状态，普通受伤仍可按原规则取消。",
+          "tests": [
+            "TestHealerIndependentD08"
+          ]
+        },
+        {
+          "clause": "吟唱结束或取消后立即失效，不额外生成保护状态。",
+          "kind": "solo",
+          "assertion": "原生复活实际windup中来伤400，无威能/取消后1000；不生成额外保护状态，普通受伤仍可按原规则取消。",
+          "tests": [
+            "TestHealerIndependentD08"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-D09",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentD09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "自身针刺护体状态有效期间，受到的普通攻击伤害降低35%；",
+          "kind": "solo",
+          "assertion": "原生针刺状态下真实普通攻击1000→650，非普通技能仍1000；原反射10%→17%且持续20秒，afterStrikeStatuses对实际结算量反伤；真实裂隙光环hazard不误按普攻减伤。",
+          "tests": [
+            "TestHealerIndependentD09"
+          ]
+        },
+        {
+          "clause": "由你施加的针刺护体，其原物理反射比例提高75%。",
+          "kind": "solo",
+          "assertion": "原生针刺状态下真实普通攻击1000→650，非普通技能仍1000；原反射10%→17%且持续20秒，afterStrikeStatuses对实际结算量反伤；真实裂隙光环hazard不误按普攻减伤。",
+          "tests": [
+            "TestHealerIndependentD09"
+          ]
+        },
+        {
+          "clause": "持续时间不变。",
+          "kind": "solo",
+          "assertion": "原生针刺状态下真实普通攻击1000→650，非普通技能仍1000；原反射10%→17%且持续20秒，afterStrikeStatuses对实际结算量反伤；真实裂隙光环hazard不误按普攻减伤。",
+          "tests": [
+            "TestHealerIndependentD09"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-D10",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentD10",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "你施加的枷锁术状态仍在敌人身上时，该敌人对你造成的伤害降低40%。",
+          "kind": "solo",
+          "assertion": "原生本源枷锁敌人实际来伤1000→600，缺失/异源枷锁与另一个未枷锁敌人仍1000；原Source和ExpireAt不变。",
+          "tests": [
+            "TestHealerIndependentD10"
+          ]
+        },
+        {
+          "clause": "不会缩短或消耗枷锁。",
+          "kind": "solo",
+          "assertion": "原生本源枷锁敌人实际来伤1000→600，缺失/异源枷锁与另一个未枷锁敌人仍1000；原Source和ExpireAt不变。",
+          "tests": [
+            "TestHealerIndependentD10"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-U01",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentU01",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentU01NativeTickCount",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "回春术无技能冷却，法力消耗降低20%，每次原有回血量提高50%。",
+          "kind": "solo",
+          "assertion": "原生回春实际支付降低20%，立即重复施放成功且仅一个状态实例；stepStatus每秒实际回血150%，同tick不重跳，原120秒结束后无状态。 逐秒推进原120秒周期，重复同源施放仍恰120条原生HoT治疗事件，总实际恢复量为基准150%。",
+          "tests": [
+            "TestHealerIndependentU01",
+            "TestHealerIndependentU01NativeTickCount"
+          ]
+        },
+        {
+          "clause": "持续时间、跳数和覆盖规则不变，同一施法者重复施放不会额外叠出跳数。",
+          "kind": "solo",
+          "assertion": "原生回春实际支付降低20%，立即重复施放成功且仅一个状态实例；stepStatus每秒实际回血150%，同tick不重跳，原120秒结束后无状态。 逐秒推进原120秒周期，重复同源施放仍恰120条原生HoT治疗事件，总实际恢复量为基准150%。",
+          "tests": [
+            "TestHealerIndependentU01",
+            "TestHealerIndependentU01NativeTickCount"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-U02",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentU02",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentU02ReductionStrength",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "神术：集中保留延长下一技能状态持续时间的效果，一级延长50%，其他等级不变；",
+          "kind": "solo",
+          "assertion": "原生集中1/2级后下个光盾真实吸收值150%、持续时间与同等级原集中一致（1级60→90秒），集中实际支付降低30%；防御10%→15%造成真实来伤850非+50个百分点；直接治疗/伤害均不增幅。",
+          "tests": [
+            "TestHealerIndependentU02",
+            "TestHealerIndependentU02ReductionStrength"
+          ]
+        },
+        {
+          "clause": "同时使该技能的正面增益强度提高50%，集中自身法力消耗降低30%。",
+          "kind": "solo",
+          "assertion": "原生集中1/2级后下个光盾真实吸收值150%、持续时间与同等级原集中一致（1级60→90秒），集中实际支付降低30%；防御10%→15%造成真实来伤850非+50个百分点；直接治疗/伤害均不增幅。",
+          "tests": [
+            "TestHealerIndependentU02",
+            "TestHealerIndependentU02ReductionStrength"
+          ]
+        },
+        {
+          "clause": "增益强度按原数值提高50%，不是增加50个百分点，不提高直接伤害或直接治疗。",
+          "kind": "solo",
+          "assertion": "原生集中1/2级后下个光盾真实吸收值150%、持续时间与同等级原集中一致（1级60→90秒），集中实际支付降低30%；防御10%→15%造成真实来伤850非+50个百分点；直接治疗/伤害均不增幅。",
+          "tests": [
+            "TestHealerIndependentU02",
+            "TestHealerIndependentU02ReductionStrength"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-U03",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentU03",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "复法术对主目标产生的溢出法力，可按溢出量的100%分给该目标周围350范围内法力比例最低的另外2名队友。",
+          "kind": "solo",
+          "assertion": "原生复法满蓝主目标的100溢出，按最低MP比例2人先40后60；缺口限量与20%最大MP上限、无溢出不分流、第三人/350外不获得MP，主目标原恢复不变。",
+          "tests": [
+            "TestHealerIndependentU03"
+          ]
+        },
+        {
+          "clause": "先给法力比例最低者，每人最多获得其最大法力的20%，且不超过其缺少法力；",
+          "kind": "solo",
+          "assertion": "原生复法满蓝主目标的100溢出，按最低MP比例2人先40后60；缺口限量与20%最大MP上限、无溢出不分流、第三人/350外不获得MP，主目标原恢复不变。",
+          "tests": [
+            "TestHealerIndependentU03"
+          ]
+        },
+        {
+          "clause": "剩余额度再给下一人，总转移不超过本次溢出量，不再次分流。",
+          "kind": "solo",
+          "assertion": "原生复法满蓝主目标的100溢出，按最低MP比例2人先40后60；缺口限量与20%最大MP上限、无溢出不分流、第三人/350外不获得MP，主目标原恢复不变。",
+          "tests": [
+            "TestHealerIndependentU03"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-U04",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentU04",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "治愈术保留主目标完整治疗，并对主目标周围250范围内生命比例最低的另外2名队友，各提供一次100%倍率的治愈术治疗，每人按自身最大生命计算。",
+          "kind": "solo",
+          "assertion": "原生治愈主目标完整1100，并按额外2名最低生命比例对象自身MaxHP分别恢复200/300，范围外/高血额外目标不受；原生群疗有效治疗才返实付35%，满血不返，HealDone首个有效目标是低血者。",
+          "tests": [
+            "TestHealerIndependentU04"
+          ]
+        },
+        {
+          "clause": "群疗术优先治疗低血者，至少产生一次有效治疗时返还本次实际消耗法力的35%。",
+          "kind": "solo",
+          "assertion": "原生治愈主目标完整1100，并按额外2名最低生命比例对象自身MaxHP分别恢复200/300，范围外/高血额外目标不受；原生群疗有效治疗才返实付35%，满血不返，HealDone首个有效目标是低血者。",
+          "tests": [
+            "TestHealerIndependentU04"
+          ]
+        },
+        {
+          "clause": "新增副治疗不会再触发其他治疗、伤害或护盾转换。",
+          "kind": "combination",
+          "assertion": "合法U04+A23只由主治疗生成1次1100光弹，副治疗实际各200但不再次生成；D01+U04另证副治疗完整加成而无盾。",
+          "tests": [
+            "TestHealerIndependentCombinations/triage_does_not_repeat_granted_bolt",
+            "TestHealerIndependentCombinations/full_strength_extra_heals"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-U05",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentU05",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "加速术作用半径扩大至220，原加速强度提高30%。",
+          "kind": "solo",
+          "assertion": "原生加速自己或600内队友中心，220内与远端施法者自身均得到20→26的实际加速状态，30秒/105MP不变，每对象仅1份；221外不覆盖、600外拒绝不扣蓝。",
+          "tests": [
+            "TestHealerIndependentU05"
+          ]
+        },
+        {
+          "clause": "可仍以自己为中心，也可选600范围内队友为中心；",
+          "kind": "solo",
+          "assertion": "原生加速自己或600内队友中心，220内与远端施法者自身均得到20→26的实际加速状态，30秒/105MP不变，每对象仅1份；221外不覆盖、600外拒绝不扣蓝。",
+          "tests": [
+            "TestHealerIndependentU05"
+          ]
+        },
+        {
+          "clause": "远程施放时自己也获得相同加速，每人同次只获得一次，持续时间和法力消耗不变。",
+          "kind": "solo",
+          "assertion": "原生加速自己或600内队友中心，220内与远端施法者自身均得到20→26的实际加速状态，30秒/105MP不变，每对象仅1份；221外不覆盖、600外拒绝不扣蓝。",
+          "tests": [
+            "TestHealerIndependentU05"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-U06",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentU06",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "主动施放祝福术时，为同一批受术友方一并施加你已学会的防御术和加速术，分别沿用各自持续时间与增益规则。",
+          "kind": "solo",
+          "assertion": "原生祝福真实命中同一批对象，已学防御/加速同时落地且各持续300/30秒；只付祝福35MP，无再次主动SkillCastChanged；未学、无威能、原祝福范围外均不附赠。",
+          "tests": [
+            "TestHealerIndependentU06"
+          ]
+        },
+        {
+          "clause": "只支付祝福术法力，无需再次吟唱；",
+          "kind": "solo",
+          "assertion": "原生祝福真实命中同一批对象，已学防御/加速同时落地且各持续300/30秒；只付祝福35MP，无再次主动SkillCastChanged；未学、无威能、原祝福范围外均不附赠。",
+          "tests": [
+            "TestHealerIndependentU06"
+          ]
+        },
+        {
+          "clause": "未学技能不附赠，也不视为再次主动施法。",
+          "kind": "solo",
+          "assertion": "原生祝福真实命中同一批对象，已学防御/加速同时落地且各持续300/30秒；只付祝福35MP，无再次主动SkillCastChanged；未学、无威能、原祝福范围外均不附赠。",
+          "tests": [
+            "TestHealerIndependentU06"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-U07",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentU07",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "成功施放净化术后，若整次施法没有移除任何负面状态，返还本次实付法力的90%，并使本次剩余冷却缩短80%；",
+          "kind": "solo",
+          "assertion": "原生净化12种种子、空诊/成功/失败分支均真实结算；零移除实付48返90%、剩余CD200ms，有移除返30%且CD1000ms，两档排斥。",
+          "tests": [
+            "TestHealerIndependentU07"
+          ]
+        },
+        {
+          "clause": "只要移除过至少1份，就改为返还30%实付法力。",
+          "kind": "solo",
+          "assertion": "原生净化12种种子、空诊/成功/失败分支均真实结算；零移除实付48返90%、剩余CD200ms，有移除返30%且CD1000ms，两档排斥。",
+          "tests": [
+            "TestHealerIndependentU07"
+          ]
+        },
+        {
+          "clause": "两档不叠加，空诊不算成功移除状态。",
+          "kind": "solo",
+          "assertion": "原生净化12种种子、空诊/成功/失败分支均真实结算；零移除实付48返90%、剩余CD200ms，有移除返30%且CD1000ms，两档排斥。",
+          "tests": [
+            "TestHealerIndependentU07"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-U08",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentU08",
+          "result": "pass"
+        },
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentU08RangeLimit",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "装备期间，仍为友方单体的技能施法距离增加200、法力消耗降低25%。",
+          "kind": "solo",
+          "assertion": "原生友方单体治愈649距离成功且实际支付按75%向上整数18，原450距离版本拒绝；原生鹰眼自己脚下及600远点实际揭隐300内敌方玩家、301外保留隐身，原10秒与63MP不变（不声称PvP攻击）。 原450+200射程外651距离明确拒绝，零扣蓝、零治疗。",
+          "tests": [
+            "TestHealerIndependentU08",
+            "TestHealerIndependentU08RangeLimit"
+          ]
+        },
+        {
+          "clause": "鹰眼术可在600范围内选点释放，也可选自己脚下；",
+          "kind": "solo",
+          "assertion": "原生友方单体治愈649距离成功且实际支付按75%向上整数18，原450距离版本拒绝；原生鹰眼自己脚下及600远点实际揭隐300内敌方玩家、301外保留隐身，原10秒与63MP不变（不声称PvP攻击）。 原450+200射程外651距离明确拒绝，零扣蓝、零治疗。",
+          "tests": [
+            "TestHealerIndependentU08",
+            "TestHealerIndependentU08RangeLimit"
+          ]
+        },
+        {
+          "clause": "原显隐范围和持续时间不变。",
+          "kind": "solo",
+          "assertion": "原生友方单体治愈649距离成功且实际支付按75%向上整数18，原450距离版本拒绝；原生鹰眼自己脚下及600远点实际揭隐300内敌方玩家、301外保留隐身，原10秒与63MP不变（不声称PvP攻击）。 原450+200射程外651距离明确拒绝，零扣蓝、零治疗。",
+          "tests": [
+            "TestHealerIndependentU08",
+            "TestHealerIndependentU08RangeLimit"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-U09",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentU09",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "复活术成功复活的目标，生命至少恢复至最大生命的70%；",
+          "kind": "solo",
+          "assertion": "原生复活成功后目标50→700HP、实付81返50%，死亡损失仍原60%且清空原记录；目标在吟唱间被别人复活后本次不返蓝、不补70%血。",
+          "tests": [
+            "TestHealerIndependentU09"
+          ]
+        },
+        {
+          "clause": "仅实际复活成功时返还本次实付法力的50%。",
+          "kind": "solo",
+          "assertion": "原生复活成功后目标50→700HP、实付81返50%，死亡损失仍原60%且清空原记录；目标在吟唱间被别人复活后本次不返蓝、不补70%血。",
+          "tests": [
+            "TestHealerIndependentU09"
+          ]
+        },
+        {
+          "clause": "不改变死亡损失返还规则。",
+          "kind": "solo",
+          "assertion": "原生复活成功后目标50→700HP、实付81返50%，死亡损失仍原60%且清空原记录；目标在吟唱间被别人复活后本次不返蓝、不补70%血。",
+          "tests": [
+            "TestHealerIndependentU09"
+          ]
+        }
+      ]
+    },
+    {
+      "power_id": "YS-U10",
+      "status": "covered",
+      "solo_tests": [
+        {
+          "package": "./internal/game/scene",
+          "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+          "test": "TestHealerIndependentU10",
+          "result": "pass"
+        }
+      ],
+      "effect_clauses": [
+        {
+          "clause": "解咒术改为主目标周围半径250的友方群体技能，对原本可清除的诅咒，净化成功率为100%；",
+          "kind": "solo",
+          "assertion": "原生解咒真实清除自己及250内队友原诅咒列表，12个固定种子均成功；原列表外、251外/异队保留，无威能仍单体。",
+          "tests": [
+            "TestHealerIndependentU10"
+          ]
+        },
+        {
+          "clause": "可清除诅咒种类不变。",
+          "kind": "solo",
+          "assertion": "原生解咒真实清除自己及250内队友原诅咒列表，12个固定种子均成功；原列表外、251外/异队保留，无威能仍单体。",
+          "tests": [
+            "TestHealerIndependentU10"
+          ]
+        }
+      ]
+    }
+  ],
+  "combination_tests": [
+    {
+      "power_ids": [
+        "YS-A01",
+        "YS-A02"
+      ],
+      "test": "TestHealerIndependentCombinations/prism_echo_primary_only",
+      "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+      "package": "./internal/game/scene"
+    },
+    {
+      "power_ids": [
+        "YS-A23",
+        "YS-A01",
+        "YS-A03"
+      ],
+      "test": "TestHealerIndependentCombinations/healing_prism_amplifier",
+      "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+      "package": "./internal/game/scene"
+    },
+    {
+      "power_ids": [
+        "YS-A18",
+        "YS-A19"
+      ],
+      "test": "TestHealerIndependentCombinations/shackle_damage_and_slow",
+      "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+      "package": "./internal/game/scene"
+    },
+    {
+      "power_ids": [
+        "YS-U02",
+        "YS-D03",
+        "YS-A21"
+      ],
+      "test": "TestHealerIndependentCombinations/focused_group_shield_strongest_burst",
+      "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+      "package": "./internal/game/scene"
+    },
+    {
+      "power_ids": [
+        "YS-U04",
+        "YS-D01"
+      ],
+      "test": "TestHealerIndependentCombinations/full_strength_extra_heals",
+      "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+      "package": "./internal/game/scene"
+    },
+    {
+      "power_ids": [
+        "YS-U04",
+        "YS-A23"
+      ],
+      "test": "TestHealerIndependentCombinations/triage_does_not_repeat_granted_bolt",
+      "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+      "package": "./internal/game/scene"
+    },
+    {
+      "power_ids": [
+        "YS-U03",
+        "YS-A28"
+      ],
+      "test": "TestHealerIndependentCombinations/mana_overflow_wave_once",
+      "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+      "package": "./internal/game/scene"
+    },
+    {
+      "power_ids": [
+        "YS-A29",
+        "YS-A08"
+      ],
+      "test": "TestHealerIndependentCombinations/release_final_rectangle",
+      "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+      "package": "./internal/game/scene"
+    },
+    {
+      "power_ids": [
+        "YS-A29",
+        "YS-A06"
+      ],
+      "test": "TestHealerIndependentCombinations/release_final_circle",
+      "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+      "package": "./internal/game/scene"
+    },
+    {
+      "power_ids": [
+        "YS-A20",
+        "YS-A08"
+      ],
+      "test": "TestHealerIndependentA20SelfCenterCombination",
+      "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+      "package": "./internal/game/scene"
+    },
+    {
+      "power_ids": [
+        "YS-U02",
+        "YS-D03",
+        "YS-A21",
+        "TY-D13"
+      ],
+      "test": "TestHealerIndependentShieldStrongestRecipientCombination",
+      "file": "server/internal/game/scene/legendary_healer_independent_test.go",
+      "actors": "YS三威能同一施法者合法三槽；TY-D13另一个队友自身衣服，非同人四槽冒领。",
+      "package": "./internal/game/scene"
+    }
+  ],
+  "validation": {
+    "independent_denominator": 50,
+    "native_fixture": "nativeRepairFixture/nativeRepairCast preserve original migration-backed definitions. Scene fixture, not PostgreSQL/live deployment.",
+    "bounds": "Each independent test equips only its named YS power; no-power/failed-condition control included. Combinations are separate and never add independent IDs. No assertion of player PvP or client rendering.",
+    "control_fix": "6431d37 and 2069535: successful effective hard control or a stored control reactivated by removal/expiry cancels unreleased windup; rejected/suppressed control and released projectile boundaries preserved.",
+    "runs": [
+      {
+        "command": "go test ./internal/game/scene -run '^TestHealerIndependent' -count=1 -json",
+        "result": "pass",
+        "jsonl": "/workspace/shared/healer-independent-final.jsonl",
+        "passed_test_records": 94,
+        "scope": "Complete final healer independent and combination test file."
+      },
+      {
+        "command": "go test -race ./internal/game/scene -run '^TestHealerIndependent' -count=1 -json",
+        "result": "pass",
+        "jsonl": "/workspace/shared/healer-independent-race.jsonl",
+        "passed_test_records": 90,
+        "scope": "Full healer suite before final player-only guard and final added instant/monster negative cases."
+      },
+      {
+        "command": "go test -race ./internal/game/scene -run '^TestHealerIndependent(Native|D05Instant)' -count=1 -json",
+        "result": "pass",
+        "jsonl": "/workspace/shared/healer-final-control-race.jsonl",
+        "passed_test_records": 20,
+        "scope": "Final control lifecycle, player-only guard, instant/monster and reactivated-control boundaries."
+      }
+    ],
+    "case_coverage": {
+      "covered": 50,
+      "total": 50,
+      "percent": 100,
+      "metric": "independent power effect cases, not Go statement/branch coverage"
+    },
+    "combination_count": 11,
+    "race_test_name_union_matches_final": true,
+    "verified_origin_main_ancestor": "489706a"
+  }
+}

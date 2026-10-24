@@ -10,6 +10,7 @@ func stampSkillStatusSnapshot(status *domain.StatusDef, def domain.SkillDef) {
 		return
 	}
 	status.SkillApplied = true
+	status.DamageSourceRange = def.Dist
 	status.LegendarySources = append([]domain.LegendarySourceRef(nil), def.LegendarySources...)
 	if def.FormulaVersion != domain.SkillFormulaVersion {
 		return
@@ -51,6 +52,15 @@ func (s *Scene) lesserPersistentSkill(source *entity.Entity, def domain.SkillDef
 	}
 	next.SpecialWeaponStatusPowerPct = def.SpecialWeaponStatusPowerPct
 	s.legendaryPrepareSkillSources(source, &next, def.LegendarySources, true)
+	// Equipment-contributed attack bases may shrink after source loss, but a
+	// later gear upgrade must not strengthen an already placed native trap.
+	next.Effects = append([]domain.SkillEffect(nil), next.DirectEffects()...)
+	acceptedEffects := def.DirectEffects()
+	for i := range next.Effects {
+		if i < len(acceptedEffects) && next.Effects[i].Kind == acceptedEffects[i].Kind {
+			next.Effects[i].AttackBaseFlat = min(next.Effects[i].AttackBaseFlat, acceptedEffects[i].AttackBaseFlat)
+		}
+	}
 	// Geometric bonuses survive while equipped but cannot exceed the cast snapshot.
 	if def.Radius > 0 {
 		next.Radius = min(next.Radius, def.Radius)
@@ -130,6 +140,8 @@ func (s *Scene) resolvePersistentStatus(source, holder *entity.Entity, old domai
 		next := old
 		next.DamageShield = min(old.DamageShield, def.ProgressionShieldFlat)
 		stampSkillStatusSnapshot(&next, def)
+		next.DamageSourceRange = old.DamageSourceRange
+		next.DamageSourceTrap = old.DamageSourceTrap
 		return next, next.DamageShield > 0, true
 	}
 	for _, app := range def.Statuses {
@@ -159,6 +171,10 @@ func (s *Scene) resolvePersistentStatus(source, holder *entity.Entity, old domai
 		base.SourceSkillID = old.SourceSkillID
 		base.SpecialWeaponNextBasicPct = min(base.SpecialWeaponNextBasicPct, old.SpecialWeaponNextBasicPct)
 		stampSkillStatusSnapshot(&base, def)
+		// A refresh cannot change the accepted attack category, including legacy
+		// unknown provenance, merely because its skill is rebuilt today.
+		base.DamageSourceRange = old.DamageSourceRange
+		base.DamageSourceTrap = old.DamageSourceTrap
 		return base, true, true
 	}
 	return domain.StatusDef{}, false, true

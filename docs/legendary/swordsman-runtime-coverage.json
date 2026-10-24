@@ -396,9 +396,9 @@
     },
     {
       "id": "JK-U04",
-      "effect": "挑衅的施法距离与作用半径提高35%，保留原生嘲讽效果；不生成加速状态、计时或触发冷却。",
+      "effect": "挑衅的作用半径提高35%，保留原有嘲讽效果。",
       "tests": [
-        "TestLegendarySwordsmanImmediateUtilityDefaults"
+        "TestLegendarySwordsmanAuditNativeTauntReachAndSet"
       ],
       "status": "passed-scoped-pve",
       "limitations": []
@@ -432,9 +432,12 @@
     },
     {
       "id": "JK-U08",
-      "effect": "装备期间免疫击退与拉拽；不免疫定身、眩晕或冻结，也不解除已有控制，不增加计时或触发冷却。",
+      "effect": "装备期间免疫移动减速和定身，装备时解除已有的移动减速和定身；不免疫眩晕、冻结、石化或攻击速度降低，混合效果中的其他部分仍然生效。",
       "tests": [
-        "TestLegendarySwordsmanImmediateUtilityDefaults"
+        "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle",
+        "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation",
+        "TestLegendarySwordsmanMovementImmunityPreservesNativeAttackSlow",
+        "TestLegendarySwordsmanMovementImmunityMonsterSlowCast"
       ],
       "status": "passed-scoped-pve",
       "limitations": []

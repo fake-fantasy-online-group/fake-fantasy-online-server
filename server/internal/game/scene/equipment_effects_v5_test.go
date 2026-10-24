@@ -114,7 +114,7 @@ func TestEquipmentProcV5ActualRootFixedRankAndCooldown(t *testing.T) {
 	for s.equipmentProcRoll(p.ID, "firebolt_echo", root) >= 1000 {
 		s.equipmentSeed++
 	}
-	s.casts = append(s.casts, pendingCast{src: p.ID, def: domain.SkillDef{ID: 10402, HurtType: domain.HurtFire, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}, targets: ids, visualTarget: ids[10]})
+	s.casts = append(s.casts, pendingCast{src: p.ID, def: domain.SkillDef{ID: 10402, HurtType: domain.HurtFire, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}, targets: ids, primary: ids[10], visualTarget: ids[10]})
 	s.stepCasts()
 	s.flush()
 	count := 0

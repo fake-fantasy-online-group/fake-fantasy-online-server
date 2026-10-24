@@ -21,7 +21,13 @@ func (s *Scene) legendaryBasicAttack(src, dst *entity.Entity, tr *combat.HitTrac
 	if !def.LegendaryBasic {
 		def.LegendaryBasic = true
 	}
-	if def.ID == 0 && !def.Area.Valid() && def.Radius == 0 && len(def.Effects) == 1 && def.Effects[0].DamagePct == max(int32(100), original.SkillPct) && def.Effects[0].BaseDamageFlat == 0 && def.Effects[0].GuaranteedHit == original.GuaranteedHit {
+	// A target-conditional power can leave preparation entirely unchanged. Do not
+	// bypass its target phase just because this swing has no shape/stat modifier.
+	hasTargetModifier := false
+	s.forEachLegendary(src, func(c *legendaryContext) {
+		hasTargetModifier = hasTargetModifier || legendaryHandlers[c.Power.ID].TargetDefinition != nil
+	})
+	if !hasTargetModifier && def.ID == 0 && !def.Area.Valid() && def.Radius == 0 && len(def.Effects) == 1 && def.Effects[0].DamagePct == max(int32(100), original.SkillPct) && def.Effects[0].BaseDamageFlat == 0 && def.Effects[0].AttackBaseFlat == 0 && def.Effects[0].GuaranteedHit == original.GuaranteedHit {
 		return false
 	}
 	targets := []domain.EntityID{dst.ID}
@@ -52,12 +58,14 @@ func (s *Scene) legendaryBasicAttack(src, dst *entity.Entity, tr *combat.HitTrac
 				continue
 			}
 			blow := original
+			blow.SourceSkillRange = local.Dist
 			blow.EffectiveSkillID = int32(local.ID)
 			blow.SkillID = 0
 			blow.SkillPct = effect.DamagePct
 			blow.SkillPctNumerator = effect.DamagePctNumerator
 			blow.SkillPctDenominator = effect.DamagePctDenominator
 			blow.BaseDamageFlat = effect.BaseDamageFlat
+			blow.AttackBaseFlat = effect.AttackBaseFlat
 			blow.FlatDamage = effect.DamageFlat
 			blow.GuaranteedHit = effect.GuaranteedHit
 			blow.GuaranteedCrit = original.GuaranteedCrit || effect.GuaranteedCrit

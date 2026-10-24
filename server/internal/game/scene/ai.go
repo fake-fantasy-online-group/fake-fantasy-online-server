@@ -659,6 +659,7 @@ func (s *Scene) startMonsterSkill(m *entity.Entity, rule domain.MonsterSkillRule
 	cast := pendingCast{
 		src: m.ID, def: def, targets: targets, statusDurationPct: statusDurationPct,
 		cooldownMS:   int32(cooldown.Millis()),
+		primary:      targets[0],
 		visualTarget: targets[0],
 		extras:       append([]domain.MonsterSkillExtra(nil), rule.Extra...),
 	}
@@ -702,6 +703,7 @@ func (s *Scene) startMonsterSkill(m *entity.Entity, rule domain.MonsterSkillRule
 		caster.DelayAttackUntil(s.tick + 1)
 		caster.Monster.SkillCasts[def.ID]++
 		cast.targets = freshTargets
+		cast.primary = freshTargets[0]
 		cast.visualTarget = freshTargets[0]
 		s.setMonsterGroundVisual(caster, rule, &cast)
 		s.casts = append(s.casts, cast)
@@ -1161,7 +1163,7 @@ func (s *Scene) moveEntity(m *entity.Entity, to domain.Pos) {
 	legendaryFrom := m.Pos
 	s.aoi.Move(m, to)
 	s.legendaryCasterMoved(m, legendaryFrom, to, true, false)
- s.legendaryMeleeMoved(m,legendaryFrom,to,false)
+	s.legendaryMeleeMoved(m, legendaryFrom, to, false)
 	if m.Kind == domain.KindMonster && m.Monster != nil && m.Monster.Roaming {
 		if (uint64(s.tick)+uint64(m.ID))%uint64(monsterMoveBroadcastEvery) != 0 {
 			return // 游荡直线已在起步前经 MASK 校验，500ms 同步足够

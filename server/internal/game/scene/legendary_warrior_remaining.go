@@ -11,15 +11,33 @@ func init() {
 			return
 		}
 		num, den := int64(100), int64(1)
-		if chain, ok := warriorLearned(c, 10002, false); ok {
-			for _, e := range chain.DirectEffects() {
-				if e.Kind == domain.EffectDamage {
-					n, k := e.DamagePctNumerator, e.DamagePctDenominator
-					if k <= 0 {
-						n, k = int64(e.DamagePct), 1
-					}
-					if n*den > num*k {
-						num, den = n, k
+		donors := []domain.SkillID{10002}
+		if warriorHas(c, "ZS-A21") {
+			// A21 replaces the basic coefficient before A03. Share that base
+			// with the chain as well, but never recursively prepare the eye:
+			// its active-only bonus and A20 flat payload are not coefficients.
+			donors = append(donors, 10015)
+		}
+		for _, id := range donors {
+			var donor domain.SkillDef
+			var ok bool
+			if id == 10002 {
+				// A03 does not require learning the coefficient donor and does
+				// not unlock it for active use. A21's eye donor remains learned-only.
+				donor, ok = warriorBorrowedSkill(c, id, false)
+			} else {
+				donor, ok = warriorLearned(c, id, false)
+			}
+			if ok {
+				for _, e := range donor.DirectEffects() {
+					if e.Kind == domain.EffectDamage {
+						n, k := e.DamagePctNumerator, e.DamagePctDenominator
+						if k <= 0 {
+							n, k = int64(e.DamagePct), 1
+						}
+						if n*den > num*k {
+							num, den = n, k
+						}
 					}
 				}
 			}

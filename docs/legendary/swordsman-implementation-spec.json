@@ -723,11 +723,11 @@
     "slots": [
       "武器"
     ],
-    "effect": "挑衅的施法距离与作用半径提高35%，保留原生嘲讽效果；不生成加速状态、计时或触发冷却。",
+    "effect": "挑衅的作用半径提高35%，保留原有嘲讽效果。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Implemented; PvE runtime scoped tests pass; see coverage ledger",
     "skill_basis": "挑衅（10127，36级）",
-    "design_source": "implementation-defaults-reviewed-by-parent"
+    "design_source": "user-approved-swordsman-finish-2026-10-24"
   },
   {
     "id": "JK-U05",
@@ -783,11 +783,11 @@
     "slots": [
       "武器"
     ],
-    "effect": "装备期间免疫击退与拉拽；不免疫定身、眩晕或冻结，也不解除已有控制，不增加计时或触发冷却。",
+    "effect": "装备期间免疫移动减速和定身，装备时解除已有的移动减速和定身；不免疫眩晕、冻结、石化或攻击速度降低，混合效果中的其他部分仍然生效。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Implemented; PvE runtime scoped tests pass; see coverage ledger",
-    "skill_basis": "旋风剑（10121，36级）",
-    "design_source": "implementation-defaults-reviewed-by-parent"
+    "skill_basis": "装备期间常驻被动；负移动速度词条与纯BlockMove定身，不按状态ID或眩晕推断。",
+    "design_source": "user-approved-swordsman-finish-2026-10-24"
   },
   {
     "id": "JK-U09",

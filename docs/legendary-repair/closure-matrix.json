@@ -1,0 +1,2019 @@
+[
+  {
+    "id": "ZS-A02",
+    "name": "横扫枪花",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "连环枪法同时攻击自身周围1.3倍普通攻击距离内最多5名敌人，每名敌人承受原伤害的115%；原选中目标只要满足原技能施法距离便必定纳入且优先结算，原附带状态完整保留，新增旁侧目标不复制控制状态。",
+    "audit_findings": [
+      {
+        "kind": "primary_target_range_bypass",
+        "intended": "保留合法原选中目标，不应绕过原技能施法距离；当前原生Dist=100。",
+        "actual": "warriorCircle/warriorPreservePrimary无距离判断；公共SelectTargets只验合法敌人。入口级测试将目标放到1000距离，仍成功施放并造成149伤害。",
+        "source": "legendary_warrior_area.go:8-19,152-158;legendary_runtime.go:884-915;skill.go:130-150,767-813,1118-1140;warrior-expanded-results.txt",
+        "confidence": "high"
+      },
+      {
+        "kind": "primary_identity_lost",
+        "intended": "原选中目标完整保留控制，只剥除新增目标的控制。",
+        "actual": "skillVisualTarget把自身圆形的主目标改为施法者ID，之后TargetDefinition拿这个ID比较，使原选中敌人也被剥除控制。添加控制的边界fixture已复现；原生连环本身无控制，该次测试不代表生产存在这项附加控制。",
+        "source": "skill.go:263-280,1118-1140;legendary_warrior_area.go:54-57;TestAstraWarriorA02PrimaryControlBoundary",
+        "confidence": "high_code_medium_reachability"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySharedPreservePrimaryRangeAdmission",
+      "TestLegendarySharedPrimaryControlAttachmentBoundary"
+    ],
+    "remaining_limits": [],
+    "outcome": "语义主目标与表现中心分离；只补入原施法距离内合法敌人，保留原控制和一次费用。"
+  },
+  {
+    "id": "ZS-A07",
+    "name": "开隙",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "穿刺之枪也施加你已学破防之枪当前等级的减防效果，先施加减防再结算本次伤害；破防之枪和穿刺之枪伤害均提高50%。仅沿用原技能减防状态，不新增裂隙、消耗次数或计时窗口。未学破防时仍享受两技能50%增伤，不解锁技能。",
+    "audit_findings": [
+      {
+        "kind": "armor_after_hit_calculation",
+        "intended": "原生减防应在本次攻击受益之前施加，而不是本次判定命中后才施加。",
+        "actual": "真实破防状态10009是AttrDef负百分比。CalculateStrike已用旧防御完成命中判定，随后BeforeDamage才调用warriorArmor；miss时更会提前返回，减防不加。本次未学破甲时不存在可在后半结算生效的PhysicalDamageTakenPct；现有合成易伤测试不能证明该承诺。",
+        "source": "migrations/000000_init-62.sql:$skill_config$.States[ID=10009];combat/strike.go:96-149;status.go:311-320,384;legendary_warrior_synergy.go:17-46;TestAstraWarriorA07FirstMissNoArmor",
+        "confidence": "high"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryWarriorAuditArmorBeforeNativeHit",
+      "TestLegendaryWarriorAuditArmorImmunityAndUnlearned"
+    ],
+    "remaining_limits": [],
+    "outcome": "真实10009负防御状态先于命中计算；保留学习、抵抗、免疫、来源与时长规则。"
+  },
+  {
+    "id": "ZS-A08",
+    "name": "裂甲传染",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "破防之枪改为前方矩形攻击，使用穿刺之枪当前的长宽参数，原选中目标始终保留；破防之枪及穿刺之枪施加的原减防效果强度提高50%，沿用原状态时长及合法上限。没有A07时仅强化原生破防，有A07时同样强化穿刺的减防。",
+    "audit_findings": [
+      {
+        "kind": "primary_target_range_bypass",
+        "intended": "保留合法原选中目标，不应绕过原技能施法距离；当前原生Dist=100。",
+        "actual": "warriorCircle/warriorPreservePrimary无距离判断；公共SelectTargets只验合法敌人。入口级测试将目标放到1000距离，仍成功施放并造成100伤害。",
+        "source": "legendary_warrior_area.go:8-19,152-158;legendary_runtime.go:884-915;skill.go:130-150,767-813,1118-1140;warrior-expanded-results.txt",
+        "confidence": "high"
+      },
+      {
+        "kind": "unmentioned_learned_donor_requirement",
+        "intended": "破防之枪改成矩形并借穿刺当前范围，原文未要求先学穿刺。",
+        "actual": "只有硬学过10005才复制范围；未学穿刺时仍为单体。聚焦测试已确认，没有默认一级穿刺范围作为后备。是否增加学习前提须先确认设计，不以缩减文案代替实现。",
+        "source": "legendary_warrior.go:40-55;legendary_warrior_synergy.go:82-91;TestAstraWarriorA08A27MissingDonor",
+        "confidence": "high"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySharedPreservePrimaryRangeAdmission",
+      "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate",
+      "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate",
+      "TestLegendaryWarriorAuditBorrowedRankAndNativeRows",
+      "TestLegendaryWarriorSoloArmorCapCoverage",
+      "TestLegendaryWarriorSoloArmorCapBoundaries",
+      "TestLegendaryWarriorCoverageArmorCapCombinations",
+      "TestLegendaryWarriorArmorDefenseConsumerBoundary"
+    ],
+    "remaining_limits": [
+      "不推广到已有明确学习前提的A07/A24/A25。"
+    ],
+    "outcome": "合法主目标边界已修；未学donor使用原生一级范围/射程，已学使用有效等级并继承形态，且不解锁主动技能。 独立用例阶段补齐：负百分比Def延续原生floor=min(-100,原始值)，保留原始<-100特例，非百分比/其他属性不改；低阶仍增强。Def≤0命中原已相同，此修复是状态/面板原有边界，不是额外物理增伤。",
+    "coverage_phase_followup": "独立用例阶段补齐：负百分比Def延续原生floor=min(-100,原始值)，保留原始<-100特例，非百分比/其他属性不改；低阶仍增强。Def≤0命中原已相同，此修复是状态/面板原有边界，不是额外物理增伤。"
+  },
+  {
+    "id": "ZS-A10",
+    "name": "噤声余响",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "破法之枪保留生命伤害和削蓝，并把本次理论削蓝量的200%作为本次物理伤害的额外基础值，统一进入本次攻击的增伤与防御结算。理论削蓝取实际已学等级及破魔加成，不取敌人剩余法力；无蓝敌人也获得完整增伤。不等待敌人施法，不延迟引爆。",
+    "audit_findings": [
+      {
+        "kind": "mana_conversion_stage_order",
+        "intended": "按本次理论削蓝量的200%加入基础伤害，组成后的削蓝加成应一致反映。",
+        "actual": "A10在Base阶段先换算，TY-A19在稍后Prepare阶段才加8000BP。物攻100、原削蓝60的边界里，最终理论削蓝108，但转换基础仍120而非216；U02/D04提前在Transform加值则能正确换算。",
+        "source": "legendary_runtime.go:321-343;legendary_warrior_synergy.go:97-113;legendary_universal_extended_skill.go:87-88;TestAstraWarriorA10UniversalManaComposition",
+        "confidence": "high"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryWarriorAuditManaConversionCombinations"
+    ],
+    "remaining_limits": [],
+    "outcome": "理论削蓝换算移至所有修饰汇总后，TY-A19/U02/D04均纳入；敌方空蓝不缩水。"
+  },
+  {
+    "id": "ZS-A16",
+    "name": "裂阵",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "裂空之枪在完整保留原选中目标攻击的同时，攻击前方长180、宽120矩形内的其他敌人，所有命中目标承受原技能115%的伤害；同一目标每次施放只受一次伤害，每次施放只支付一次原有武器耐久代价。",
+    "audit_findings": [
+      {
+        "kind": "primary_target_range_bypass",
+        "intended": "保留合法原选中目标，不应绕过原技能施法距离；当前原生Dist=100。",
+        "actual": "warriorCircle/warriorPreservePrimary无距离判断；公共SelectTargets只验合法敌人。入口级测试将目标放到1000距离，仍成功施放并造成115伤害。",
+        "source": "legendary_warrior_area.go:8-19,152-158;legendary_runtime.go:884-915;skill.go:130-150,767-813,1118-1140;warrior-expanded-results.txt",
+        "confidence": "high"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySharedPreservePrimaryRangeAdmission",
+      "TestLegendarySharedPrimaryControlAttachmentBoundary"
+    ],
+    "remaining_limits": [],
+    "outcome": "语义主目标与表现中心分离；只补入原施法距离内合法敌人，保留原控制和一次费用。"
+  },
+  {
+    "id": "ZS-A17",
+    "name": "铸魂",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "裂空之枪不再消耗武器耐久，法力消耗维持原技能正常值，伤害提高30%。",
+    "audit_findings": [
+      {
+        "kind": "ordinary_durability_wear_remains",
+        "intended": "裂空之枪“不再消耗武器耐久”，不能未经确认缩窄为仅取消额外技能耐久。",
+        "actual": "百分比施法耐久被免除，但技能结尾仍consumeAttackDurability，读取武器attack_consume并累积普通磨损。独立入口fixture中额外5%已免，普通DurabilityWearRaw仍从0到100。",
+        "source": "legendary_warrior.go:70-76;skill.go:1142-1144;durability.go:34-39,95-116;data/gamedb.go:869,939;TestAstraWarriorA17NativeWear",
+        "confidence": "high"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryWarriorAuditNoDurabilityWholeCast"
+    ],
+    "remaining_limits": [],
+    "outcome": "同次施法同时免百分比耐久和普通攻击磨损，法力及套装生命代价保持。"
+  },
+  {
+    "id": "ZS-A20",
+    "name": "猎首",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "心眼之枪改为前方长180、宽120的矩形必中攻击，保留原选中目标；每名命中目标在原技能基础伤害上增加物理攻击力240%的基础伤害，统一结算。取消猎首印和生命阈值。与A21配合时，心眼替代普攻继承本条完整范围及基础伤害。",
+    "audit_findings": [
+      {
+        "kind": "primary_target_range_bypass",
+        "intended": "保留合法原选中目标，不应绕过原技能施法距离；当前原生Dist=100。",
+        "actual": "warriorCircle/warriorPreservePrimary无距离判断；公共SelectTargets只验合法敌人。入口级测试将目标放到1000距离，仍成功施放并造成405伤害。",
+        "source": "legendary_warrior_area.go:8-19,152-158;legendary_runtime.go:884-915;skill.go:130-150,767-813,1118-1140;warrior-expanded-results.txt",
+        "confidence": "high"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySharedPreservePrimaryRangeAdmission",
+      "TestLegendarySharedPrimaryControlAttachmentBoundary"
+    ],
+    "remaining_limits": [],
+    "outcome": "语义主目标与表现中心分离；只补入原施法距离内合法敌人，保留原控制和一次费用。"
+  },
+  {
+    "id": "ZS-A23",
+    "name": "独战",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "野战八荒对所有命中目标伤害提高80%，并对原选中目标（无目标则生命比例最高者）追加物理攻击力160%的物理伤害；每次仅一次追加，不再按目标数量分档。",
+    "audit_findings": [
+      {
+        "kind": "native_self_centered_bonus_not_effective",
+        "intended": "默认野战八荒每次应追加160%物攻给原选中目标；未选中则给命中者中剩余生命比例最高者。",
+        "actual": "默认自身圆形的visualTarget/root.primary变成自身，chosen不可能为施法者，直接return。真实受理→结算路径中，有选中和无选中都只造成279，而不是439；搭A22且选敌时追加才可达，伤害为470。80%主伤害增幅有效，160%默认追加无效。",
+        "source": "skill.go:263-280,1118-1140;legendary_warrior_area.go:101-129;TestAstraWarriorA23NativePrimary;TestAstraWarriorA23WithA22Selected",
+        "confidence": "high"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySharedSelfCirclePrimaryAndAdditiveBuilds",
+      "TestLegendaryWarriorAuditNativeA23PrimaryAndSet"
+    ],
+    "remaining_limits": [],
+    "outcome": "自身圆形保留被选敌人；无选中时按实际命中敌人生命比例选追加目标。"
+  },
+  {
+    "id": "ZS-A24",
+    "name": "百兵归一",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "战神之枪伤害提高85%，并使用野战八荒当前等级的攻击范围（未学时保留原范围），保留原选中目标。不要求先使用两种技能。",
+    "audit_findings": [
+      {
+        "kind": "primary_target_range_bypass",
+        "intended": "保留合法原选中目标，不应绕过原技能施法距离；当前原生Dist=350。",
+        "actual": "warriorCircle/warriorPreservePrimary无距离判断；公共SelectTargets只验合法敌人。入口级测试将目标放到1000距离，仍成功施放并造成305伤害。",
+        "source": "legendary_warrior_area.go:8-19,152-158;legendary_runtime.go:884-915;skill.go:130-150,767-813,1118-1140;warrior-expanded-results.txt",
+        "confidence": "high"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySharedPreservePrimaryRangeAdmission",
+      "TestLegendarySharedPrimaryControlAttachmentBoundary"
+    ],
+    "remaining_limits": [],
+    "outcome": "语义主目标与表现中心分离；只补入原施法距离内合法敌人，保留原控制和一次费用。"
+  },
+  {
+    "id": "ZS-A25",
+    "name": "封疆",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "战神之枪与野战八荒直接伤害提高35%，且命中时先施加已学破防之枪当前等级的原生减防，再结算本次伤害；此减防同样接受A08的强度强化。未学破防时仍享受35%增伤，不解锁技能。删除战旗、离区宽限和定时区域。",
+    "audit_findings": [
+      {
+        "kind": "armor_after_hit_calculation",
+        "intended": "原生减防应在本次攻击受益之前施加，而不是本次判定命中后才施加。",
+        "actual": "真实破防状态10009是AttrDef负百分比。CalculateStrike已用旧防御完成命中判定，随后BeforeDamage才调用warriorArmor；miss时更会提前返回，减防不加。本次未学破甲时不存在可在后半结算生效的PhysicalDamageTakenPct；现有合成易伤测试不能证明该承诺。",
+        "source": "migrations/000000_init-62.sql:$skill_config$.States[ID=10009];combat/strike.go:96-149;status.go:311-320,384;legendary_warrior_synergy.go:17-46;TestAstraWarriorA07FirstMissNoArmor",
+        "confidence": "high"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryWarriorAuditArmorBeforeNativeHit",
+      "TestLegendaryWarriorAuditArmorImmunityAndUnlearned"
+    ],
+    "remaining_limits": [],
+    "outcome": "真实10009负防御状态先于命中计算；保留学习、抵抗、免疫、来源与时长规则。"
+  },
+  {
+    "id": "ZS-A27",
+    "name": "崩枪",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "重击改为使用破防之枪的当前范围，未被范围覆盖的原选中目标仍保留；全部命中目标承受原重击180%伤害及原生控制。破防之枪伤害提高80%。无10秒连招奖励。",
+    "audit_findings": [
+      {
+        "kind": "primary_target_range_bypass",
+        "intended": "保留合法原选中目标，不应绕过原技能施法距离；当前原生Dist=100。",
+        "actual": "warriorCircle/warriorPreservePrimary无距离判断；公共SelectTargets只验合法敌人。入口级测试将目标放到1000距离，仍成功施放并造成180伤害。",
+        "source": "legendary_warrior_area.go:8-19,152-158;legendary_runtime.go:884-915;skill.go:130-150,767-813,1118-1140;warrior-expanded-results.txt",
+        "confidence": "high"
+      },
+      {
+        "kind": "unmentioned_learned_donor_requirement",
+        "intended": "重击借破防当前范围，原文未说明硬学过破防的前提。",
+        "actual": "未学破防时完全不复制范围。原生已学破防也只是单体，只有A08等先把其改成范围才有群体重击；+80%伤害及重击原控制仍保留。",
+        "source": "legendary_warrior.go:40-55;legendary_warrior_area.go:140-149;TestAstraWarriorA08A27MissingDonor",
+        "confidence": "high"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySharedPreservePrimaryRangeAdmission",
+      "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate",
+      "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate",
+      "TestLegendaryWarriorAuditBorrowedRankAndNativeRows"
+    ],
+    "remaining_limits": [
+      "不推广到已有明确学习前提的A07/A24/A25。"
+    ],
+    "outcome": "合法主目标边界已修；未学donor使用原生一级范围/射程，已学使用有效等级并继承形态，且不解锁主动技能。"
+  },
+  {
+    "id": "ZS-A30",
+    "name": "合锋",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "飞翔之枪和连环枪法伤害均提高65%；连环枪法可使用飞翔之枪的施法距离，无额外弹道系统，使用现有直接命中表现。取消交替施放窗口。",
+    "audit_findings": [
+      {
+        "kind": "unmentioned_learned_donor_requirement",
+        "intended": "连环可使用飞翔施法距离，原文未注明必须已学习飞翔。",
+        "actual": "未学飞翔则不借距离，连环仍Dist100，伤害+65%有效。测试已复现；应确认是否需要无学习后备范围，不能直接删掉这部分承诺。",
+        "source": "legendary_warrior.go:87-96;TestAstraWarriorA30UnlearnedFly",
+        "confidence": "high"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySharedPreservePrimaryRangeAdmission",
+      "TestLegendaryWarriorAuditBorrowedGeometryWithoutLearningGate",
+      "TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate",
+      "TestLegendaryWarriorAuditBorrowedRankAndNativeRows"
+    ],
+    "remaining_limits": [
+      "不推广到已有明确学习前提的A07/A24/A25。"
+    ],
+    "outcome": "合法主目标边界已修；未学donor使用原生一级范围/射程，已学使用有效等级并继承形态，且不解锁主动技能。"
+  },
+  {
+    "id": "ZS-D03",
+    "name": "卸力",
+    "baseline_status": "uncertain",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "来自处于你施加的原生减防状态的敌人的直接伤害降低50%；仅查询现有状态，不增加持续时间、次数或另行标记。与A07/A08共享减防来源。",
+    "audit_findings": [
+      {
+        "kind": "unconfirmed_source_only_condition",
+        "intended": "只有处于自己施加的原生减防状态的敌人才触发 50% 直接减伤。",
+        "actual": "源码按施加者和 SourceSkillID/SkillSnapshotID=10009 判断，未直接核对状态 ID 或减防内容。其他原生状态是否会在无减防时满足此条件尚未证实；最后的 fixture 反例失败，不能确认存在误触发。",
+        "source": "server/internal/game/scene/legendary_warrior_guard.go:125-139; TestAstraWarriorD03VulnerabilityWithoutArmor",
+        "confidence": "uncertain_not_confirmed_defect"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryWarriorAuditD03NativeVulnerabilityWithoutArmor",
+      "TestLegendaryWarriorAuditD03ActualArmorSource"
+    ],
+    "remaining_limits": [],
+    "outcome": "从不确定转为真实反例后修复：10009被抵抗而10012易伤成功不再误减伤；只认可本人真实负防御。"
+  },
+  {
+    "id": "JK-A14",
+    "name": "封法断垒",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "封法剑命中拥有伤害吸收护盾的敌人时，对护盾额外削减本次主目标实际承受伤害与吸收量之和的120%；额外削减最多为自身攻击力的400%，不溢出为生命伤害；命中没有护盾的敌人时，本次伤害提高50%。",
+    "audit_findings": [
+      {
+        "kind": "missing_or_ambiguous_target_scope",
+        "intended": "当前effect泛称命中有盾敌人均额外削盾，却又以主目标受伤+吸收为基数，未明确只主目标。",
+        "actual": "JK-A13群体封法旁侧盾不受额外削减。不能把文案改为仅主目标后称缺陷已解决；应先明确设计范围，若要覆盖各目标须补行为。"
+      }
+    ],
+    "repair_status": "verified_existing_contract",
+    "verification": [
+      "TestLegendarySwordsmanAuditA14PrimaryShieldContract"
+    ],
+    "remaining_limits": [
+      "未扩展旁侧额外削盾；不是本轮新增此玩法。"
+    ],
+    "outcome": "原始规格明确额外削盾按主目标结算；验证旁侧仅正常吸收，主目标120%与400%攻击上限不变。"
+  },
+  {
+    "id": "JK-A23",
+    "name": "陨星余烬",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "陨星剑击杀主目标，或命中生命比例不高于50%的主目标时，在其位置产生半径150距离单位的剑爆，对最多5名其他敌人造成原技能直接伤害110%的物理伤害；同次施放只产生一次剑爆，剑爆没有即死判定，也不会再触发剑爆。",
+    "audit_findings": [
+      {
+        "kind": "missing_instant_death_kill_trigger",
+        "intended": "陨星剑击杀主目标应包含本技能原生即死击杀。",
+        "actual": "独立即死在回调之后，不触发剑爆；不能把玩家描述缩为“普通伤害击杀”来掩盖该分支缺失。"
+      },
+      "50%是命中前阈值，不是挨打后降至半血即触发；剑爆110%取技能基础伤害，不取主目标实际损血。"
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySwordsmanAuditNativeInstantDeathBurst"
+    ],
+    "remaining_limits": [],
+    "outcome": "真实即死成功分支补一次剑爆；不重复死亡回调、不再产生即死或剑爆。"
+  },
+  {
+    "id": "JK-U04",
+    "name": "挑衅集结",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "挑衅的施法距离与作用半径提高35%，保留原生嘲讽效果；不生成加速状态、计时或触发冷却。",
+    "audit_findings": [
+      {
+        "kind": "inert_field_on_real_native_skill",
+        "intended": "当前effect承诺施法距离和作用半径两项均提高35%。",
+        "actual": "原生Dist=0，自身圆形，乘1.35仍0。不得删掉“施法距离”后宣称整条兑现；需明确是否设计只要半径或另补实际距离机制。"
+      }
+    ],
+    "repair_status": "resolved_approved_scope",
+    "verification": [
+      "TestLegendarySwordsmanAuditNativeTauntReachAndSet"
+    ],
+    "remaining_limits": [],
+    "outcome": "按本轮收尾方向，只保留真实挑衅半径+35%（100→135），移除对原生0施法距离无效的乘数；没有新增远程中心挑衅。"
+  },
+  {
+    "id": "JK-U08",
+    "name": "旋风定足",
+    "baseline_status": "not_effective",
+    "baseline_revision": "489706a",
+    "owner": "warrior_swordsman",
+    "original_promise": "装备期间免疫击退与拉拽；不免疫定身、眩晕或冻结，也不解除已有控制，不增加计时或触发冷却。",
+    "audit_findings": [
+      {
+        "kind": "no_incremental_player_benefit",
+        "intended": "玩家装备后获得本来没有的击退/拉拽免疫。",
+        "actual": "真实执行目标交集为空：佩戴者是Player，位移仅Monster。不得用“免疫函数已实现”或测试true当成玩家收益，也不得换文案为默认不能位移来冒充完成。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySwordsmanMovementImmunityMonsterSlowCast",
+      "TestLegendarySwordsmanMovementImmunityEquipmentLifecycle",
+      "TestLegendarySwordsmanMovementImmunityMixedStatusPreservation",
+      "TestLegendarySwordsmanMovementImmunityPreservesNativeAttackSlow",
+      "TestMovementImmunityKeepsActiveBalancesAndCoexistingLayers"
+    ],
+    "remaining_limits": [
+      "原生怪物减速经正式施法链验证；混合状态与根免疫边界含受控构造，不宣称全部当前怪物目录都具备这些组合。"
+    ],
+    "outcome": "装备期间免移动减速与定身，并清理已有相应组件；混合状态中的眩晕/冻结/石化、攻速降低及其他伤害/护盾/易伤载荷保留；卸装后新减速/定身恢复正常。"
+  },
+  {
+    "id": "CK-A07",
+    "name": "孤星聚刃",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal",
+    "original_promise": "多重投掷始终强化主选目标的原生伤害，不检查命中人数；单体增幅和A06范围改形作用于同一次技能。主目标选择需要实现时保留明确合法选中目标。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "A06改形后仍应强化明确合法选中的主目标。",
+        "actual": "A07单独100→150；A06+A07本应100→200，实测仅150。特殊武器1926的施法者圆形也有相同代码风险。",
+        "blocking": true
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySharedAssassinPrimaryBuilds",
+      "TestLegendarySharedNativeWeaponCircleKeepsSelection",
+      "TestLegendarySharedNativeAreaPrimaryUsesAdmittedGeometry",
+      "TestLegendaryRepairCirclePrimaryTripleComposition"
+    ],
+    "remaining_limits": [],
+    "outcome": "原生扇形、A06圆形和1926武器圆形均保留合法被选敌人身份；原生几何内目标不误按Dist拒绝。"
+  },
+  {
+    "id": "CK-A13",
+    "name": "串联引信",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal",
+    "original_promise": "串联引信改为并列布雷：一次施放陷阱：爆弹时，在选定落点及其两侧同时布置共3枚同规格爆弹；全部承接爆弹技能的伤害、范围与投放即炸改形，因此装A11时三枚落地即结算，无需二次手动引爆。每枚完整保留原技能伤害，落点可重叠覆盖；额外布置不再触发额外布置，本次只支付一次原技能法力。沿用既有布置合法性，不新增引信或链式扫描。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "全部承接投放即炸改形，仍为3枚完整爆弹。",
+        "actual": "与增强武器1822组合时只有一次即时爆炸，没有两侧爆弹。A11自身即时路径与三枚兼容，不应把两种路径混为一谈。",
+        "blocking": true
+      },
+      {
+        "kind": "event_order",
+        "intended": "旧文说同时布置。",
+        "actual": "同一施法内顺序执行；带A11时两个侧雷先触发、原落点雷后触发，不是三枚同时做伤害快照。",
+        "blocking": false
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestAssassinRegressionInstantBombNativeCombinations",
+      "TestUniversalRegressionTrapConditionalDoubleAndTriple",
+      "TestAssassinRegressionAcceptedBombDoesNotBorrowNewTriplePower"
+    ],
+    "remaining_limits": [
+      "同次施法内按顺序触发，不宣称三份目标状态同时快照。1822为26级，A13不能放该武器。"
+    ],
+    "outcome": "1822真实即时爆弹改用陷阱敌方目标选择，三枚各承继已受理技能和来源；一次费用，无残留或递归布雷。"
+  },
+  {
+    "id": "CK-A27",
+    "name": "暗器延展",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal",
+    "original_promise": "连续投掷与多重投掷施法距离及既有作用范围增加50%，作用于最终技能形态，不创建弹体。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "最终技能形态的既有范围也增加50%，包括A05多目标范围。",
+        "actual": "A05范围100是选择器后置兜底，A27只放大0，最终仍100；距离400→600确实生效。",
+        "blocking": true
+      },
+      {
+        "kind": "stacking_rule",
+        "intended": "“最终形态增加50%”容易读成在A06之后乘1.5。",
+        "actual": "统一半径桶+20%与+50%相加，原生500→850，不是900。",
+        "blocking": false
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestAssassinRegressionThrowFinalSplashNativeCast"
+    ],
+    "remaining_limits": [],
+    "outcome": "A05最终溅射半径先形成再消费加成；与其他范围增幅按同一桶相加。"
+  },
+  {
+    "id": "CK-A28",
+    "name": "收网环击",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal",
+    "original_promise": "保留环形爆发增伤及命中时即时聚怪，服务近身暗器玩法；不新增延时场地。原位移免疫仍有效。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "旧效果只说环形爆发增伤及命中即时聚怪，未明确还必须学会爆发冲击。",
+        "actual": "未学10226时，+45%伤害与拉近均完全不执行。需明确原意后修实现或明确条件，不能假称已无条件实现。",
+        "blocking": true
+      },
+      {
+        "kind": "event_order",
+        "intended": "即时聚怪可能被理解为直接收拢、不先推远。",
+        "actual": "A28保留原生概率击退，可能先推100再拉最多120；A30才去掉击退。",
+        "blocking": false
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestAssassinFinalReviewPullLearningAndGeometryCombinations",
+      "TestAssassinRegressionPullNativePassiveAndA30"
+    ],
+    "remaining_limits": [],
+    "outcome": "取消无依据的已学爆发冲击前置：未学也获得45%增伤与有界牵引；已学时保留原先击退。A30仍保留它原有的学习前置，只在真正生效时覆盖A28的牵引。"
+  },
+  {
+    "id": "CK-D01",
+    "name": "出影护幕",
+    "baseline_status": "uncertain",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal + incoming_damage",
+    "original_promise": "隐身术原生状态存在时获得固定减伤，破隐后不再额外创建8秒护幕与6秒冷却。用于保留隐身的玩法，不强行塞进明刃常态背刺。",
+    "audit_findings": [
+      {
+        "kind": "scope_not_confirmed",
+        "intended": "旧文“固定减伤”未限定直接伤害，是否也包括中毒等持续伤害缺少明确设计结论。",
+        "actual": "目前只进入BeforeIncoming的原生直接攻击减伤链；周期伤害另走status tick，不消费本条。此处不是“全部未实现”，也不能仅缩成直接伤害后宣称原承诺已完成。",
+        "blocking": false
+      },
+      {
+        "kind": "missing_number",
+        "intended": "旧文未给减伤数值。",
+        "actual": "直接攻击减伤现为20%。",
+        "blocking": false
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAssassinAllDamageConsumers",
+      "TestLegendaryIncomingAssassinCombinationAndShieldOnce",
+      "TestLegendaryIncomingAssassinNativeStealthTiming",
+      "TestLegendaryIncomingAssassinUnknownSourceDoesNotBorrowCondition"
+    ],
+    "remaining_limits": [
+      "跨伤害类别矩阵含受控来源/状态的消费者测试，不能据此宣称玩家PvP或原生怪物已具备所有攻击组合。"
+    ],
+    "outcome": "隐身原状态生效期间，纯减伤覆盖直接、派生、持续及反射伤害；按原破隐时序立即失效，来源未知也可按自身状态判定。"
+  },
+  {
+    "id": "CK-D02",
+    "name": "烟幕掩体",
+    "baseline_status": "uncertain",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal + incoming_damage",
+    "original_promise": "烟雾弹原减命中效果扩大为目标周围范围；受自己烟雾弹原生减命中影响的敌人对自己伤害降低，直接复用原状态，不建地面掩体或离场3秒余效。",
+    "audit_findings": [
+      {
+        "kind": "scope_not_confirmed",
+        "intended": "旧文“敌人对自己伤害降低”未限定直接伤害，是否也包括中毒等持续伤害缺少明确设计结论。",
+        "actual": "目前只进入BeforeIncoming的原生直接攻击减伤链；周期伤害另走status tick，不消费本条。此处不是“全部未实现”，也不能仅缩成直接伤害后宣称原承诺已完成。",
+        "blocking": false
+      },
+      {
+        "kind": "missing_number_and_shape",
+        "intended": "旧文没给半径/数值。",
+        "actual": "默认半径100、直接伤害减20%；U02同用一次范围形态，默认半径扩大为130。",
+        "blocking": false
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAssassinAllDamageConsumers",
+      "TestLegendaryIncomingAssassinCombinationAndShieldOnce",
+      "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval",
+      "TestLegendaryIncomingAssassinActualPayloadMirror"
+    ],
+    "remaining_limits": [
+      "跨伤害类别矩阵含受控来源/状态的消费者测试，不能据此宣称玩家PvP或原生怪物已具备所有攻击组合。"
+    ],
+    "outcome": "仍以自己烟雾弹的有效负命中状态为条件；覆盖来自该敌人的直接、派生、持续及反射伤害，不借用他人或未知来源状态。"
+  },
+  {
+    "id": "CK-D06",
+    "name": "布雷退守",
+    "baseline_status": "uncertain",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal + incoming_damage",
+    "original_promise": "陷阱：爆弹的实际法力消耗直接降低，角色获得固定远程减伤；删除离开布置点、8秒窗口及定时护盾。作为投弹流生存替换件，不在三件伤害组合外追加第四槽。",
+    "audit_findings": [
+      {
+        "kind": "scope_not_confirmed",
+        "intended": "旧文“固定远程减伤”未限定直接伤害，是否也包括中毒等持续伤害缺少明确设计结论。",
+        "actual": "目前只进入BeforeIncoming的原生直接攻击减伤链；周期伤害另走status tick，不消费本条。此处不是“全部未实现”，也不能仅缩成直接伤害后宣称原承诺已完成。",
+        "blocking": false
+      },
+      {
+        "kind": "range_definition",
+        "intended": "旧文未说明远程判定。",
+        "actual": "按技能Dist或普攻AtkDist是否>100，而不是屏幕观感、投射物标记或实时距离。",
+        "blocking": false
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAssassinAllDamageConsumers",
+      "TestLegendaryIncomingAssassinCombinationAndShieldOnce",
+      "TestLegendaryIncomingAssassinRangedProvenance",
+      "TestLegendaryIncomingAssassinDOTProvenancePersistence",
+      "TestLegendaryIncomingAssassinActualRiftHazardIsNotRangedBasicOrTrap"
+    ],
+    "remaining_limits": [
+      "跨伤害类别矩阵含受控来源/状态的消费者测试，不能据此宣称玩家PvP或原生怪物已具备所有攻击组合。",
+      "旧存档缺失的新来源字段按未知处理；未知来源不猜测远程或陷阱。已验证JSON保存/恢复，未运行数据库往返。"
+    ],
+    "outcome": "纯远程减伤覆盖已知来源射程大于100的直接、派生及持续伤害；保存来源定义，不用当前距离、技能ID=0或无关根施法猜测远程。"
+  },
+  {
+    "id": "CK-D07",
+    "name": "截腕卸力",
+    "baseline_status": "uncertain",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal + incoming_damage",
+    "original_promise": "击晕原生控制影响的敌人对自己伤害降低，并保留击晕基础冷却缩短；删除独立10秒卸力及2次消费。免控怪由A23提供伤害补偿，不假造控制生效。",
+    "audit_findings": [
+      {
+        "kind": "scope_not_confirmed",
+        "intended": "旧文“敌人对自己伤害降低”未限定直接伤害，是否也包括中毒等持续伤害缺少明确设计结论。",
+        "actual": "目前只进入BeforeIncoming的原生直接攻击减伤链；周期伤害另走status tick，不消费本条。此处不是“全部未实现”，也不能仅缩成直接伤害后宣称原承诺已完成。",
+        "blocking": false
+      },
+      {
+        "kind": "missing_numbers",
+        "intended": "旧文未给冷却/减伤数值。",
+        "actual": "基础冷却-30%，真实眩晕状态中直接减伤20%。",
+        "blocking": false
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAssassinAllDamageConsumers",
+      "TestLegendaryIncomingAssassinCombinationAndShieldOnce",
+      "TestLegendaryIncomingAssassinDebuffOwnerAndRemoval",
+      "TestLegendaryIncomingAssassinActualPayloadMirror"
+    ],
+    "remaining_limits": [
+      "跨伤害类别矩阵含受控来源/状态的消费者测试，不能据此宣称玩家PvP或原生怪物已具备所有攻击组合。"
+    ],
+    "outcome": "自己击晕的真实眩晕状态存在时，对该来源的直接、派生、持续及反射伤害均减伤；移除、免控、别人施加及未知来源均不假造条件。"
+  },
+  {
+    "id": "CK-D10",
+    "name": "避阱余裕",
+    "baseline_status": "uncertain",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal + incoming_damage",
+    "original_promise": "学习陷阱回避后固定降低所受陷阱伤害，原生概率减半仍保留；删除受伤回血与后续6秒状态。",
+    "audit_findings": [
+      {
+        "kind": "scope_not_confirmed",
+        "intended": "旧文“所受陷阱伤害”未限定直接伤害，是否也包括中毒等持续伤害缺少明确设计结论。",
+        "actual": "目前只进入BeforeIncoming的原生直接攻击减伤链；周期伤害另走status tick，不消费本条。此处不是“全部未实现”，也不能仅缩成直接伤害后宣称原承诺已完成。",
+        "blocking": false
+      },
+      {
+        "kind": "missing_number",
+        "intended": "旧文未给固定减伤。",
+        "actual": "现值20%；原生概率减半不是被本条替换。",
+        "blocking": false
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAssassinAllDamageConsumers",
+      "TestLegendaryIncomingAssassinCombinationAndShieldOnce",
+      "TestLegendaryIncomingAssassinRealMonsterTrapDOT",
+      "TestLegendaryIncomingAssassinDOTProvenancePersistence",
+      "TestLegendaryIncomingAssassinPersistentRefreshPreservesCategory",
+      "TestLegendaryIncomingAssassinTrapLineageDoesNotReplayNativeHalf"
+    ],
+    "remaining_limits": [
+      "跨伤害类别矩阵含受控来源/状态的消费者测试，不能据此宣称玩家PvP或原生怪物已具备所有攻击组合。",
+      "旧存档缺失的新来源字段按未知处理；未知来源不猜测远程或陷阱。已验证JSON保存/恢复，未运行数据库往返。"
+    ],
+    "outcome": "已学陷阱回避时，固定减伤覆盖有明确陷阱来源的直接、派生与持续伤害；派生只保留承伤分类，绝不重放原生概率半伤或进攻陷阱倍率。"
+  },
+  {
+    "id": "CK-U03",
+    "name": "拆阱回馈",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal",
+    "original_promise": "解除陷阱改为一次处理指定区域内的可见敌方陷阱，保留原成功判定并提高成功率；该技能自身法力消耗直接取消，取消成功奖励额度、15秒期限及3秒内置冷却。只改敌方拆阱功能，绝不把爆弹改回手动引爆。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "明确只处理可见敌方陷阱。",
+        "actual": "同队玩家布置的可见陷阱也被删除；现有EnemyAreaDisarm测试只有本人/他人，没有同队反例。",
+        "blocking": true
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestAssassinRegressionDisarmPreservesVisibleFriendlyTraps"
+    ],
+    "remaining_limits": [],
+    "outcome": "拆阱复用专用准入并过滤本人/同队陷阱；敌方可见陷阱保留成功率和免费。"
+  },
+  {
+    "id": "CK-U04",
+    "name": "探路静行",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal",
+    "original_promise": "侦测陷阱范围直接扩大，并固定提高移动速度；删除发现奖励的6/10秒速度状态和5秒内部冷却。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "侦测范围直接扩大50%。",
+        "actual": "原生结构下final Radius200、Area.Radius200，范围未增加；移速乘120%生效。",
+        "blocking": true
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestAssassinRegressionDetectNativeFinalRadius"
+    ],
+    "remaining_limits": [],
+    "outcome": "侦测最终半径实际消费增幅，常驻移动增幅保留。"
+  },
+  {
+    "id": "SS-A04",
+    "name": "静候爆芯",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "火球术完整保留原有伤害，并在命中位置留下爆芯，立即在原半径内爆炸，额外造成该次火球术基础伤害的70%；爆芯不附加技能状态或递归产生爆芯。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "同一爆炸位置、同一火球基础的70%追加，正确继承中心/环带条件",
+        "actual": "A04+A06子爆炸未继承中心，实际把中心敌人按世界原点判为环带，伤害197而非约163。",
+        "impact": "联动数值与位置判断不一致。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryRepairFireballChildCenterTriple"
+    ],
+    "remaining_limits": [
+      "原生瞬发刷新MAtk后245+171+196=612，不按旧手填100属性强改期望。"
+    ],
+    "outcome": "子爆炸/复诵显式承接原施法中心与主目标，中心/环带不再误用世界原点；瞬发原生属性刷新保留。"
+  },
+  {
+    "id": "SS-A05",
+    "name": "聚焦炎核",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "火球术命中1至2名敌人时，对这些敌人的伤害提高75%；命中3名或更多敌人时，主目标伤害仍提高35%，其他目标维持原效果。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "按实际命中1至2人或至少3人分档",
+        "actual": "按命中前合法目标人数分档，后续未命中/技能免疫目标仍可能计数。",
+        "impact": "例如选中3人但实际仅1人受击时，不能保证该敌人获得75%。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairFireballCountsOnlyLegalHits"
+    ],
+    "remaining_limits": [],
+    "outcome": "分档仅纳入可实际承受该火球的合法目标，技能免疫旁观者不降主目标档。"
+  },
+  {
+    "id": "SS-A06",
+    "name": "焚圈",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "火球术的范围半径扩大65%，全范围伤害提高20%；距离爆炸中心超过原半径50%的环带内，伤害改为提高45%，中心区域仍完整造成伤害。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "所有继承火球术修正的伤害都按该次爆炸中心区分中心与环带",
+        "actual": "A04子火球上下文Center缺失，错误按原点计算，中心敌人可拿到环带加成；A30同样经过此子技能路径。",
+        "impact": "原生火球有效，但派生火球条件偏离文案。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryRepairFireballChildCenterTriple"
+    ],
+    "remaining_limits": [
+      "原生瞬发刷新MAtk后245+171+196=612，不按旧手填100属性强改期望。"
+    ],
+    "outcome": "子爆炸/复诵显式承接原施法中心与主目标，中心/环带不再误用世界原点；瞬发原生属性刷新保留。"
+  },
+  {
+    "id": "SS-A08",
+    "name": "远寒凝尖",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "冰箭术命中时，你与目标的距离达到该技能施法距离的50%或以上，伤害提高55%；距离不足时伤害仍提高20%。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "按该技能本次施法距离的50%判断远程增伤",
+        "actual": "固定读取原生射程50%；射程加成不会改变门槛。",
+        "impact": "与U10同时装备时文本门槛不成立；若设计本意是原生射程，应明确批准改词，而非默认变更。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairRangeThresholdAndWideAreaComposition"
+    ],
+    "remaining_limits": [],
+    "outcome": "远距增幅门槛按本次最终射程计算，包含U10常驻射程。"
+  },
+  {
+    "id": "SS-A09",
+    "name": "霜纹刻痕",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "冰箭术附加的冰系掌握减速改为必定生效，保留原减速参数；对已受冻结或减速的敌人，冰箭术直接伤害额外提高100%。不留下霜纹计数、不要求手动来源；其他威能生成且带冰箭技能标签的伤害可接受增伤，但不重复施加同一份减速。需要已学习冰系掌握。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "冰系掌握减速必定生效",
+        "actual": "只把基础几率改为100%；效果抵抗、免疫及叠加阻断仍可令减速失败。",
+        "impact": "保证性收益未实现；不能把“必定”偷偷改成基础100%后宣称已完成。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      },
+      {
+        "kind": "behavior_mismatch",
+        "intended": "对已减速的敌人增伤",
+        "actual": "只识别三个固定状态ID，不识别其他带负移动速度的减速状态，而U08已存在泛化减速识别。",
+        "impact": "其他减速来源可能无法触发100%增伤。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairGuaranteedStatusRetainsImmunity",
+      "TestCasterRepairNativeControlSnapshots"
+    ],
+    "remaining_limits": [
+      "“必定”不绕过硬免疫/禁止叠加；A17旧版全等级总收益等价未验证。"
+    ],
+    "outcome": "保证减速/燃烧绕过概率抵抗，但保留硬免疫；泛化识别负移速，原生时长与来源保留。"
+  },
+  {
+    "id": "SS-A10",
+    "name": "寒针破抗",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "冰箭术及带冰箭标签的派生伤害穿透目标50%的冰系百分比减伤；不穿透其他护盾、通用减伤或免疫。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "带冰箭标签的派生伤害均穿透50%冰系百分比减伤",
+        "actual": "A24生成的子冰箭有效，A11冰箭燃烧结算被LegendaryPayload门禁排除。",
+        "impact": "冰火组合A10+A11不能得到文案所称派生穿透。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      },
+      {
+        "kind": "wording_or_design_note",
+        "intended": "catalog 中写明的工程默认数值",
+        "actual": "design_note 明确为 parent-reviewed engineering defaults; not individually user-confirmed。只能认定代码默认值，未找到逐条用户批准依据。",
+        "required_resolution": "玩家说明只保留可理解的机制；开发备注留在审计，不包装为玩家已批准设计。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairIceSettlementInheritsOnlyPurePenetration"
+    ],
+    "remaining_limits": [
+      "数值沿现有规格；未宣称找到逐条更早用户设计批准。"
+    ],
+    "outcome": "冰箭标识派生结算同样消费50%冰系百分比减伤穿透，其他防御不穿透。"
+  },
+  {
+    "id": "SS-A12",
+    "name": "遥爆冰棺",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "冰爆术可直接以施法距离内任意合法敌人为中心远程释放，使用冰封的施法距离，伤害提高20%；同时保留原自身中心释放方式和原控制效果。不再要求先冰封、不记录十秒标记、不消耗冻结。目标中心范围选取，不依赖飞行弹道。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "不消耗冻结",
+        "actual": "不要求冻结作为施法资格，但命中造成伤害后仍按原生规则打碎已有冻结。",
+        "impact": "若“不消耗冻结”意为冻结完整保留，则未实现；需明确修复或批准限定为“不以冻结为施法前提”。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairNativeControlSnapshots",
+      "TestLegendaryRepairFreezeChildBurnSettlementPreserved"
+    ],
+    "remaining_limits": [],
+    "outcome": "保留原冻结实例、时长和负移速；A15按受理前控制状态快照，不读命中时临时状态。"
+  },
+  {
+    "id": "SS-A14",
+    "name": "凝霜牵引",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "冰爆术伤害提高20%，命中后将范围内距离中心最远的最多5名可被位移的敌人向爆炸中心拉近90距离；拉拽不能穿越障碍，每次施法只拉拽一次，位移免疫目标仍正常受到伤害和原技能效果。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "最多5名可被位移的敌人，包含所有合法敌人类别",
+        "actual": "只拉怪物；先选最远5个再跳过免疫，免疫目标占用名额，玩家不拉。",
+        "impact": "存在可拉目标仍少拉或完全不拉，泛称敌人覆盖过广。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairPullSkipsImmuneBeforeLimit"
+    ],
+    "remaining_limits": [
+      "当前合法敌人消费者仍为怪物，未引入PvP位移。"
+    ],
+    "outcome": "先过滤不可位移者，再取最远5个，避免免疫目标占名额；障碍与原效果保留。"
+  },
+  {
+    "id": "SS-A15",
+    "name": "破冻重锤",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "冰爆术命中在此次施法前已处于冻结或减速状态的敌人时，伤害提高60%；不移除或缩短任何冻结、减速，完整保留冰爆术原有控制。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "冻结/减速任意来源均可触发60%增伤",
+        "actual": "不识别原生10427冰系掌握减速，仅1004/1009有效。",
+        "impact": "主流冰箭减速接冰爆收益缺失。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      },
+      {
+        "kind": "behavior_mismatch",
+        "intended": "不移除或缩短已有冻结",
+        "actual": "原冰封在冰爆伤害后被打碎，可能再按冰爆原概率施加另一份较短冻结。",
+        "impact": "核心保留控制承诺不成立。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      },
+      {
+        "kind": "behavior_mismatch",
+        "intended": "按此次施法前已存在状态判定",
+        "actual": "按每个目标命中处理前当前状态判断，未存施法前快照。",
+        "impact": "飞行/等待阶段新增或消失的控制会改变增伤资格。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairNativeControlSnapshots",
+      "TestLegendaryRepairFreezeChildBurnSettlementPreserved"
+    ],
+    "remaining_limits": [],
+    "outcome": "保留原冻结实例、时长和负移速；A15按受理前控制状态快照，不读命中时临时状态。"
+  },
+  {
+    "id": "SS-A17",
+    "name": "风焰续薪",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "风焰术每次命中必定附加你已学习的当前等级燃烧，燃烧每跳伤害提高82%，保持燃烧原生持续时间与刷新规则；不再追加四秒、八秒延时账本。与长焰尽算同时装备时，先施加或刷新燃烧，再结算剩余伤害。82%是旧版20秒燃烧延长至28秒且每跳提高30%的总量补偿起点，正式数值须按实际等级燃烧时长核算，不降低原组合总伤害。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "每次命中必定附加燃烧",
+        "actual": "仅基础几率100%，仍可能被效果抵抗、免疫、叠加阻断。",
+        "impact": "“必燃”收益未实现。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      },
+      {
+        "kind": "wording_or_design_note",
+        "intended": "82%补偿及“不降低原组合总伤害”",
+        "actual": "这是设计校准要求，不是已经完成的等价测试结论；未对旧版频次、全等级、各种抗性和多层燃烧做收益等价验证。玩家文案不应夹带待办。",
+        "required_resolution": "玩家说明只保留可理解的机制；开发备注留在审计，不包装为玩家已批准设计。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairGuaranteedStatusRetainsImmunity",
+      "TestCasterRepairNativeControlSnapshots"
+    ],
+    "remaining_limits": [
+      "“必定”不绕过硬免疫/禁止叠加；A17旧版全等级总收益等价未验证。"
+    ],
+    "outcome": "保证减速/燃烧绕过概率抵抗，但保留硬免疫；泛化识别负移速，原生时长与来源保留。"
+  },
+  {
+    "id": "SS-A18",
+    "name": "风焰宽带",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "风焰术原生作用宽度提高80%、直接伤害提高40%，保留原生燃烧概率；可与必燃和剩余结算组合。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "作用宽度提高80%",
+        "actual": "只写入对圆形风焰不消费的宽度字段，范围完全不扩大；40%直接增伤有效。",
+        "impact": "范围收益未实现，不能删除扩宽承诺或擅改成半径扩大80%。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      },
+      {
+        "kind": "wording_or_design_note",
+        "intended": "catalog 中写明的工程默认数值",
+        "actual": "design_note 明确为 parent-reviewed engineering defaults; not individually user-confirmed。只能认定代码默认值，未找到逐条用户批准依据。",
+        "required_resolution": "玩家说明只保留可理解的机制；开发备注留在审计，不包装为玩家已批准设计。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairFlameWidthAndNativeBurnCombination",
+      "TestCasterRepairRangeThresholdAndWideAreaComposition"
+    ],
+    "remaining_limits": [
+      "几何解释经本轮确认，未把原圆形换成新矩形。"
+    ],
+    "outcome": "保留圆形，将原80%作用宽度按直径对应到实际半径150→270；再与TY-A04统一范围桶组合。"
+  },
+  {
+    "id": "SS-A19",
+    "name": "焰终回响",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "你施加燃烧时，立即额外造成该份燃烧初始总伤害65%的火系伤害，燃烧本体完整保留。不等待八秒或自然到期；手动燃烧与风焰产生的燃烧均可获得此技能修正。一次根施法对同一目标只结算一次；这笔即时伤害本身不能再生产燃烧。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "只结算本次新施加这一份燃烧初始总伤害的65%",
+        "actual": "计算所有既存本人燃烧的剩余总量65%，新一份燃烧会再次结算旧燃烧。",
+        "impact": "多次燃烧造成额外重复结算，不能用单实例合成测试宣称符合文案。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairNewBurnOnlyAndElementalSharing"
+    ],
+    "remaining_limits": [],
+    "outcome": "仅计算本次新施加的燃烧初始总伤害65%，不重算共存旧燃烧，原燃烧继续。"
+  },
+  {
+    "id": "SS-A22",
+    "name": "暴雪凝域",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "暴雪对受冻结或减速目标直接伤害提高90%，不新建雪域、不消费控制。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "冻结或减速目标都增伤90%",
+        "actual": "原生10427减速被遗漏，仅1004/1009识别。",
+        "impact": "冰箭冰系掌握接暴雪的预期增伤缺失。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      },
+      {
+        "kind": "behavior_mismatch",
+        "intended": "不消费控制",
+        "actual": "虽然没有专门主动删除逻辑，但正伤害照常打碎原冻结。",
+        "impact": "玩家仍会失去冻结，不能以“未调用Remove”认定承诺成立。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      },
+      {
+        "kind": "wording_or_design_note",
+        "intended": "catalog 中写明的工程默认数值",
+        "actual": "design_note 明确为 parent-reviewed engineering defaults; not individually user-confirmed。只能认定代码默认值，未找到逐条用户批准依据。",
+        "required_resolution": "玩家说明只保留可理解的机制；开发备注留在审计，不包装为玩家已批准设计。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairNativeControlSnapshots",
+      "TestLegendaryRepairFreezeChildBurnSettlementPreserved"
+    ],
+    "remaining_limits": [],
+    "outcome": "保留原冻结实例、时长和负移速；A15按受理前控制状态快照，不读命中时临时状态。"
+  },
+  {
+    "id": "SS-A25",
+    "name": "法式终章",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "取消十秒内两种法术计数，改为冰火技能共享各自已学的元素伤害被动：火系伤害也受寒冰之魂增幅，冰系伤害也受红莲之魂增幅；不生成额外技能。涉及60级技能，最低等级同步改为60。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "火系伤害与冰系伤害共享已学对应元素被动",
+        "actual": "只对经过技能准备的直接/ChildSkill伤害有效，燃烧持续伤害和燃烧追加结算无此增幅。",
+        "impact": "当前广义元素伤害承诺覆盖过大，冰火结算组合收益缺失；需修复或批准明确限定直接技能伤害。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairNewBurnOnlyAndElementalSharing"
+    ],
+    "remaining_limits": [],
+    "outcome": "元素被动共享延伸到原生燃烧每跳和剩余结算；已有修饰只消费一次。"
+  },
+  {
+    "id": "SS-A26",
+    "name": "镜中讨还",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "魔镜术原生抵抗成功时，立即对该攻击者结算本次被抵抗伤害120%的魔法反射伤害，单次上限仍为最大生命18%；不留下十秒标记、不等待下一次施法、不设六秒内置冷却。反射带魔镜、反射标签，可受防御魔法及反射增幅，但反射伤害不能再次触发反射生产器。不把原生概率抵抗改称原生反射。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "每次魔镜原生抵抗成功都按120%和18%生命上限结算",
+        "actual": "抵抗子技能/追加触发魔法伤害时，A26钩子被跳过，保持原生100%反射且不受A26的18%上限。",
+        "impact": "不同伤害来源不一致，且可超过文案上限。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      },
+      {
+        "kind": "wording_or_design_note",
+        "intended": "旧文案“不把原生概率抵抗改称原生反射”",
+        "actual": "loader和status.go明确实现原生概率抵抗并反射，不能用开发备注否认真实消费者；新文案同时说明抵抗与反射。",
+        "required_resolution": "玩家说明只保留可理解的机制；开发备注留在审计，不包装为玩家已批准设计。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingActualPayloadAndChildReflection",
+      "TestLegendaryIncomingMirrorProcCapAndNoReflectionLoop",
+      "TestLegendaryIncomingMirrorAmplifierInsideGenerationGuard"
+    ],
+    "remaining_limits": [
+      "子伤害攻击玩家为伤害消费者边界测试，不代表开放玩家PvP。"
+    ],
+    "outcome": "被抵抗的派生/追加魔法也用A26系数和18%生命上限，D03倍率在生成保护内保留；反射不再产反射。"
+  },
+  {
+    "id": "SS-A30",
+    "name": "瞬发复诵",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "秘术：瞬发生效后，你下一次受其影响的手动伤害技能命中时，立即对原主目标追加该技能基础伤害的80%；每次秘术：瞬发只复诵一次，目标仍为同场景存活合法敌人即可结算，复诵不带控制和技能触发效果。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "追加技能正确继承本次技能的位置相关伤害修正",
+        "actual": "追加火球和A04一样经根结束后ChildSkill，未传Center；搭配A06时可能把原中心目标判为环带。",
+        "impact": "80%基准倍率存在，但中心/环带联动不正确。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryRepairFireballChildCenterTriple"
+    ],
+    "remaining_limits": [
+      "原生瞬发刷新MAtk后245+171+196=612，不按旧手填100属性强改期望。"
+    ],
+    "outcome": "子爆炸/复诵显式承接原施法中心与主目标，中心/环带不再误用世界原点；瞬发原生属性刷新保留。"
+  },
+  {
+    "id": "SS-D01",
+    "name": "烫手法衣",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer + incoming_damage",
+    "original_promise": "火盾生效期间，180距离内敌人造成的伤害直接降低28%；删除先挨打与六秒敌方标记。与燃烧减伤并存时按乘区计算，不直接相加。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "近身火盾28%减伤应覆盖描述中的伤害",
+        "actual": "只对普通直击伤害有效；持续伤害、追加结算、派生子技能及反射不进入此SS减伤钩子。",
+        "impact": "将其写成所有伤害或常驻通用减伤会高估实际生存收益。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAllDamageConsumerMatrix",
+      "TestLegendaryIncomingCombinationShieldAndManaOnce",
+      "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+      "TestLegendaryIncomingActualHealerWindupCombination"
+    ],
+    "remaining_limits": [
+      "受理后复制已结算伤害不重复承伤；未知DOT类型不猜魔法；PVP派生为消费者边界而非可达玩法。"
+    ],
+    "outcome": "明确的纯承伤修饰覆盖正常、追加、子伤害、DOT与反射，并在原减伤后/盾前只应用一次；不放开递归生成。"
+  },
+  {
+    "id": "SS-D02",
+    "name": "冰甲承峰",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer + incoming_damage",
+    "original_promise": "冰盾生效期间，超过最大生命8%的单次伤害均额外削减55%；删除四秒内置冷却，仅保留大伤害防护规则，不建新状态。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "冰盾大额伤害55%削减应覆盖描述中的伤害",
+        "actual": "只对普通直击伤害有效；持续伤害、追加结算、派生子技能及反射不进入此SS减伤钩子。",
+        "impact": "将其写成所有伤害或常驻通用减伤会高估实际生存收益。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAllDamageConsumerMatrix",
+      "TestLegendaryIncomingCombinationShieldAndManaOnce",
+      "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+      "TestLegendaryIncomingActualHealerWindupCombination"
+    ],
+    "remaining_limits": [
+      "受理后复制已结算伤害不重复承伤；未知DOT类型不猜魔法；PVP派生为消费者边界而非可达玩法。"
+    ],
+    "outcome": "明确的纯承伤修饰覆盖正常、追加、子伤害、DOT与反射，并在原减伤后/盾前只应用一次；不放开递归生成。"
+  },
+  {
+    "id": "SS-D03",
+    "name": "镜面偏转",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer + incoming_damage",
+    "original_promise": "魔镜术生效期间，受到的魔法伤害额外降低75%，不再只保护十秒内首次命中，也不设六秒内置冷却。自身防御魔法的抗性数值与反射伤害系数提高50%，冻结或抵抗概率提高30个百分点、最高100%；包含夺法镜钥偷来的状态，直接强化现有状态，不另开持续时间。不同来源同名状态仍依原覆盖规则，不复制护盾余额。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "魔镜75%魔法减伤应覆盖描述中的伤害",
+        "actual": "只对普通直击伤害有效；持续伤害、追加结算、派生子技能及反射不进入此SS减伤钩子。",
+        "impact": "将其写成所有伤害或常驻通用减伤会高估实际生存收益。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      },
+      {
+        "kind": "behavior_mismatch",
+        "intended": "自身防御魔法的抗性提高50%",
+        "actual": "原生火盾、冰盾真实减伤保存在PhysicalDamageReductionPct，D03乘的是已被loader删除的Affixes属性。反射和冻结概率提升有消费者。",
+        "impact": "核心盾防护强化缺失，不能仅保留反射条款掩盖。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingNativeShieldMagnitudeConsumer",
+      "TestLegendaryIncomingActualNativeFireShieldCombination",
+      "TestLegendaryIncomingUntypedPoisonIsNotMirrorMagic"
+    ],
+    "remaining_limits": [],
+    "outcome": "跨入口魔法减伤补齐；真实规范化火/冰盾减伤字段放大，不仅放大已移除的旧Affix字段。"
+  },
+  {
+    "id": "SS-D05",
+    "name": "凝神护界",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer + incoming_damage",
+    "original_promise": "集中激活的原生待消费状态存在时受到伤害降低50%，上限保持最大生命22%/次；删除额外十二秒状态与六秒内置冷却，不因受击消费集中。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "集中待消费时每次伤害减免应覆盖描述中的伤害",
+        "actual": "只对普通直击伤害有效；持续伤害、追加结算、派生子技能及反射不进入此SS减伤钩子。",
+        "impact": "将其写成所有伤害或常驻通用减伤会高估实际生存收益。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAllDamageConsumerMatrix",
+      "TestLegendaryIncomingCombinationShieldAndManaOnce",
+      "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+      "TestLegendaryIncomingActualHealerWindupCombination"
+    ],
+    "remaining_limits": [
+      "受理后复制已结算伤害不重复承伤；未知DOT类型不猜魔法；PVP派生为消费者边界而非可达玩法。"
+    ],
+    "outcome": "明确的纯承伤修饰覆盖正常、追加、子伤害、DOT与反射，并在原减伤后/盾前只应用一次；不放开递归生成。"
+  },
+  {
+    "id": "SS-D06",
+    "name": "寒封隔绝",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer + incoming_damage",
+    "original_promise": "改为冰封的冻结覆盖同一中心半径100内最多5名敌人，原主目标优先且不损失原控制；同时装备时受到伤害常驻降低35%。删除冻结结束后八秒减伤标记，并让免控目标不影响基础防护。该范围变形能与A24的冰封伤害标签配合，但D06仍只能放衣服/头盔，需替换原构筑中的一件。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "装备常驻35%减伤应覆盖描述中的伤害",
+        "actual": "只对普通直击伤害有效；持续伤害、追加结算、派生子技能及反射不进入此SS减伤钩子。",
+        "impact": "将其写成所有伤害或常驻通用减伤会高估实际生存收益。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      },
+      {
+        "kind": "wording_or_design_note",
+        "intended": "衣服/头盔和构筑替换说明",
+        "actual": "槽位限制属于装备信息与开发构筑备注，不混进效果正文；本审计不更改槽位。",
+        "required_resolution": "玩家说明只保留可理解的机制；开发备注留在审计，不包装为玩家已批准设计。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAllDamageConsumerMatrix",
+      "TestLegendaryIncomingCombinationShieldAndManaOnce",
+      "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+      "TestLegendaryIncomingActualHealerWindupCombination"
+    ],
+    "remaining_limits": [
+      "受理后复制已结算伤害不重复承伤；未知DOT类型不猜魔法；PVP派生为消费者边界而非可达玩法。"
+    ],
+    "outcome": "明确的纯承伤修饰覆盖正常、追加、子伤害、DOT与反射，并在原减伤后/盾前只应用一次；不放开递归生成。"
+  },
+  {
+    "id": "SS-D09",
+    "name": "焚息护身",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer + incoming_damage",
+    "original_promise": "带有你施加的燃烧的敌人对你造成伤害时，每次伤害均降低40%，不消耗或缩短燃烧，不再设同一敌人三秒内置冷却。读取已有燃烧归属即可，不创建新的减伤标记。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "本人燃烧敌人的每次伤害降低40%应覆盖描述中的伤害",
+        "actual": "只对普通直击伤害有效；持续伤害、追加结算、派生子技能及反射不进入此SS减伤钩子。",
+        "impact": "将其写成所有伤害或常驻通用减伤会高估实际生存收益。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAllDamageConsumerMatrix",
+      "TestLegendaryIncomingCombinationShieldAndManaOnce",
+      "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+      "TestLegendaryIncomingActualHealerWindupCombination"
+    ],
+    "remaining_limits": [
+      "受理后复制已结算伤害不重复承伤；未知DOT类型不猜魔法；PVP派生为消费者边界而非可达玩法。"
+    ],
+    "outcome": "明确的纯承伤修饰覆盖正常、追加、子伤害、DOT与反射，并在原减伤后/盾前只应用一次；不放开递归生成。"
+  },
+  {
+    "id": "SS-D10",
+    "name": "释能护息",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer + incoming_damage",
+    "original_promise": "装备时受到伤害常驻降低35%；释能对其直接强化法术额外提高35%伤害。删除释能后的八秒减伤与十二秒内置冷却，使用原生释能待消费关系放大输出，不额外记录窗口。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "装备常驻35%减伤应覆盖描述中的伤害",
+        "actual": "只对普通直击伤害有效；持续伤害、追加结算、派生子技能及反射不进入此SS减伤钩子。",
+        "impact": "将其写成所有伤害或常驻通用减伤会高估实际生存收益。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAllDamageConsumerMatrix",
+      "TestLegendaryIncomingCombinationShieldAndManaOnce",
+      "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+      "TestLegendaryIncomingActualHealerWindupCombination"
+    ],
+    "remaining_limits": [
+      "受理后复制已结算伤害不重复承伤；未知DOT类型不猜魔法；PVP派生为消费者边界而非可达玩法。"
+    ],
+    "outcome": "明确的纯承伤修饰覆盖正常、追加、子伤害、DOT与反射，并在原减伤后/盾前只应用一次；不放开递归生成。"
+  },
+  {
+    "id": "SS-U08",
+    "name": "净镜通行",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "魔镜术生效时清除减速，并在原生魔镜状态存在期间免疫减速；删除独立五秒保护和六秒内置冷却。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "任何魔镜术生效时都清除已有减速",
+        "actual": "直接施放魔镜可清除；夺法镜钥偷取魔镜后仅免疫后续减速，旧减速残留。",
+        "impact": "状态获取方式改变净化效果，联动不符合宽泛生效承诺。",
+        "required_resolution": "修复行为并回归后才能发布承诺；或取得明确设计变更批准，不能仅删掉未实现收益。"
+      }
+    ],
+    "repair_status": "corrected_audit_false_positive",
+    "verification": [
+      "TestCasterRepairNativeMirrorAcquisitionCleansesExistingSlow",
+      "TestLegendaryCasterSorcererRemainingMirrorSlow"
+    ],
+    "remaining_limits": [
+      "未将直接状态注入当可达组合，未更改武器等级或威能部位来制造通过。"
+    ],
+    "outcome": "直接施放魔镜的正式入口本已清旧减速并免疫新减速。原审计偷镜组合不可装备：U02与U08同武器槽，另一转移武器1324原生38级低于U08最低51级。撤去为不可达组合新增的钩子。"
+  },
+  {
+    "id": "YS-A01",
+    "name": "散光棱镜",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "光弹术命中主目标后，同时对其180范围内最近的另外3名敌人造成该次光弹术原伤害的60%；主目标伤害不变，追加伤害不再触发威能。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "选取距主目标最近的3人；副伤害不触发威能；最多4名受击者。",
+        "actual": "实际按距施法者排序；A01+A02 的副目标也追加85%回响；A23+A01 子光弹实测命中7人。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryRepairLightSplitPrimarySecondaryAndNearest",
+      "TestLegendaryRepairHealChildImplicitSelfAndSetIsolation"
+    ],
+    "remaining_limits": [],
+    "outcome": "主目标周围按距主目标最近选3旁侧；副段禁重复威能，治疗派生也遵守总4目标。"
+  },
+  {
+    "id": "YS-A05",
+    "name": "借位圣光",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "圣光术保留原敌方目标施法方式，也可选择自身或一名600范围内的队友为中心；选择友方中心时，对其200范围内敌人造成原伤害的120%，各自按原概率判定致盲，不会治疗队友。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "可选600范围内队友投送圣光。",
+        "actual": "合法队友中心在施法入队前被拒绝；自身中心可施放。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySharedFriendlyCenterAdmissionAndVictims",
+      "TestLegendarySharedFriendlyCenterDoesNotRestoreFriendlyVictim",
+      "TestLegendarySharedFriendlyLoadingCenterRejected"
+    ],
+    "remaining_limits": [],
+    "outcome": "合法友军中心在正式受理路径可用；死亡/陌生/loading/超600范围被拒，友军中心不变伤害目标。"
+  },
+  {
+    "id": "YS-A08",
+    "name": "圣光贯阵",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "圣光术改为向主目标方向长600、宽160的矩形贯穿；全部目标伤害提高80%，保留原致盲；主目标始终保留。同形状冲突不叠加两次命中。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "原主目标始终保留。",
+        "actual": "范围外原目标不会被追加，根主目标还被替换成施法者；只传入敌方 primary 的合成测试不能覆盖此入口。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySharedPreservePrimaryRangeAdmission"
+    ],
+    "remaining_limits": [],
+    "outcome": "矩形/自身圆形变形保留语义主目标和合法形外主目标，不把施法者替换为伤害主目标。"
+  },
+  {
+    "id": "YS-A12",
+    "name": "断咏裁决",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "驱魔术直接伤害提高50%，命中时打断可打断的实际吟唱；控制免疫目标不被打断，仍承受正常伤害。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "可打断合法敌人的实际吟唱。",
+        "actual": "当前合法敌人为怪物，真实怪物吟唱不会被 clearCastWindup 清除。"
+      },
+      {
+        "kind": "behavior_mismatch",
+        "intended": "控制免疫只免打断，不免伤害。",
+        "actual": "本条使用的技能免疫标记同时阻止驱魔伤害，未开启穿控制免疫伤害。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairHealerInterruptsMonsterAI"
+    ],
+    "remaining_limits": [],
+    "outcome": "打断真实怪物AI吟唱与timer序号；控制免疫只阻止打断，不阻止此伤害。"
+  },
+  {
+    "id": "YS-A18",
+    "name": "枷锁重压",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "枷锁术降低攻击速度的原生数值提高50%，直接伤害提高60%；使用原生持续时间，不造成额外位移。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "独立装备可获得直接伤害提高60%的收益。",
+        "actual": "原生枷锁无伤害，单独装备此收益不生效；A19加入伤害后该加成才被消费。"
+      }
+    ],
+    "repair_status": "verified_combination_contract",
+    "verification": [
+      "TestCasterRepairHealerShackleAndHolyGeometry"
+    ],
+    "remaining_limits": [
+      "单件不凭空新增伤害，伤害增幅需已有伤害来源；不是新增一段攻击。"
+    ],
+    "outcome": "原生枷锁无直接伤害；单件攻速减益30→45，和A19赋伤组合后伤害200→320。"
+  },
+  {
+    "id": "YS-A20",
+    "name": "针光护体",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "针刺护体保留原反射普通攻击效果，其存在期间，持有者主动施放光弹术、圣光术或驱魔术时，技能主伤害提高40%；该技能以自己为中心220范围释放时，改为在一次技能结算内覆盖该范围的全部合法目标，原选中目标始终保留。取消额外针刺触发、2.5秒内部冷却。范围改造仅限药师本人已学的三技能，不改变队友技能。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "原选中目标始终保留。",
+        "actual": "改为自身220圆后，范围外原选中敌人会丢失；根主目标同时变成施法者。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySharedPreservePrimaryRangeAdmission"
+    ],
+    "remaining_limits": [],
+    "outcome": "矩形/自身圆形变形保留语义主目标和合法形外主目标，不把施法者替换为伤害主目标。"
+  },
+  {
+    "id": "YS-A23",
+    "name": "仁心裁光",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "每次主动施放治愈术，保留完整原治疗，并向治疗主目标250范围内最近的1名合法敌人立即发出一道光弹。该光弹基础伤害等于本次主目标原始应有治疗量的100%，不以有效治疗或低血量为门槛；满血也能发动。有光弹术伤害与目标形状威能时，直接修正这道光弹，无需另施光弹术。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "每次治愈都发出光弹，未列“已学光弹术”门槛。",
+        "actual": "未学光弹术时附加攻击完全不产生；该条件需产品决定保留并明示，或修复成无学习前置。"
+      },
+      {
+        "kind": "behavior_mismatch",
+        "intended": "形状威能应完整继承自身目标约束。",
+        "actual": "与 A01 组合的子光弹绕过其4目标限制，详见 A01。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryRepairHealChildImplicitSelfAndSetIsolation",
+      "TestCasterRepairGrantedLightWithoutLearningBolt"
+    ],
+    "remaining_limits": [],
+    "outcome": "未学光弹也用原生一级形态承载授予攻击；原始应有治疗量作基础，不看有效治疗；组合A01限额。"
+  },
+  {
+    "id": "YS-A26",
+    "name": "防御共鸣",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "防御术原生防御数值提高70%，同时为主目标250范围另外2名生命比例最低队友施加完整防御；不造护盾。同一防御术原生状态使受益者主动神圣伤害提高40%，保留施法者与装备来源；不新建时限。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "原生防御数值提高70%。",
+        "actual": "StatusPowerBP无原生防御减伤字段消费者，单独本条无防御增强。"
+      },
+      {
+        "kind": "behavior_mismatch",
+        "intended": "默认自施法也补250范围两名队友。",
+        "actual": "target=0路径不能取得主目标中心，不补额外目标；原200范围防御仍照常。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingNativeBuffMagnitudeCombinations",
+      "TestLegendarySharedImplicitSelfRetainsSupportCenter"
+    ],
+    "remaining_limits": [],
+    "outcome": "实际防御字段70%强度已消费，默认target0及附带被忽略At均保留自身主目标并扩展250范围内队友。"
+  },
+  {
+    "id": "YS-A29",
+    "name": "释能广照",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "神术：释能仍作用于原本的下一个法术，不再添加12秒记账期。被其强化的光弹术直接变为主目标220范围的圆形攻击；圣光术与驱魔术作用半径增加100，神威术作用半径增加100。释能自身的原伤害增强系数额外提高50个百分点，各技能全体目标保留完整伤害。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "被强化的圣光范围增加100。",
+        "actual": "原圣光无范围图形，只有无效Radius字段；和A06同装又被固定半径覆盖。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestCasterRepairHealerShackleAndHolyGeometry",
+      "TestCasterRepairChargedHolyFinalShapeComposition",
+      "TestCasterRepairChargedHolyRectangleComposition"
+    ],
+    "remaining_limits": [],
+    "outcome": "原单体圣光+100形成圆形；最终形状确定后再消费TY-A04。原矩形长/宽各+100，再受同类比例加成，A08+TY-A06为700×416。"
+  },
+  {
+    "id": "YS-D03",
+    "name": "群盾覆阵",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "光盾术初始吸收量提高60%，并同时为主目标250范围内另外2名生命百分比最低的队友施加同等完整光盾；原覆盖规则和即死免疫保留。只有原技能拥有的盾实体，不生成破盾残盾或额外寿命。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "自施光盾同样能给附近2名队友加盾。",
+        "actual": "默认自施法未传target ID时不选额外队友；明确选自己或队友才正常扩展。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendarySharedImplicitSelfRetainsSupportCenter"
+    ],
+    "remaining_limits": [],
+    "outcome": "隐式自身成为治疗/辅助语义主目标，低生命比例队友选取与完整光盾保留。"
+  },
+  {
+    "id": "YS-D05",
+    "name": "回春护咏",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer + incoming_damage",
+    "original_promise": "自身原生回春术状态存在期间，吟唱治愈术、群疗术、复活术时不会被普通受伤打断，且吟唱期间减伤25%；昏迷、封印等控制照常生效。无需每跳治疗建立3秒保护，满血也不影响保护。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "吟唱期间所有受到伤害降低25%。",
+        "actual": "只覆盖普通直接伤害，不覆盖追加proc与持续扣血。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAllDamageConsumerMatrix",
+      "TestLegendaryIncomingCombinationShieldAndManaOnce",
+      "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+      "TestLegendaryIncomingActualHealerWindupCombination",
+      "TestHealerIndependentNativeReactivatedControl",
+      "TestHealerIndependentNativeReactivatedControlExpiresBeforeRelease",
+      "TestHealerIndependentD05InstantHealDoesNotProtect",
+      "TestHealerIndependentNativeControlIgnoresMonsterAndNoWindup"
+    ],
+    "remaining_limits": [
+      "受理后复制已结算伤害不重复承伤；未知DOT类型不猜魔法；PVP派生为消费者边界而非可达玩法。"
+    ],
+    "outcome": "明确的纯承伤修饰覆盖正常、追加、子伤害、DOT与反射，并在原减伤后/盾前只应用一次；不放开递归生成。 独立用例阶段补齐：真正有效硬控立即取消未释放吟唱，受压制控制重新生效时也取消，短控制结束不复活旧cast；免疫失败、仍压制、原生瞬发无windup及已释放弹道不误取消。",
+    "coverage_phase_followup": "独立用例阶段补齐：真正有效硬控立即取消未释放吟唱，受压制控制重新生效时也取消，短控制结束不复活旧cast；免疫失败、仍压制、原生瞬发无windup及已释放弹道不误取消。"
+  },
+  {
+    "id": "YS-D06",
+    "name": "群疗定心",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer + incoming_damage",
+    "original_promise": "实际吟唱群疗术期间受到伤害降低40%，不会因普通受伤中断；昏迷、封印等控制仍生效。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "吟唱期受到伤害均降低40%。",
+        "actual": "仅普通直接伤害获减伤；proc和DOT完全绕过。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAllDamageConsumerMatrix",
+      "TestLegendaryIncomingCombinationShieldAndManaOnce",
+      "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+      "TestLegendaryIncomingActualHealerWindupCombination",
+      "TestHealerIndependentNativeReactivatedControl",
+      "TestHealerIndependentNativeReactivatedControlExpiresBeforeRelease"
+    ],
+    "remaining_limits": [
+      "受理后复制已结算伤害不重复承伤；未知DOT类型不猜魔法；PVP派生为消费者边界而非可达玩法。"
+    ],
+    "outcome": "明确的纯承伤修饰覆盖正常、追加、子伤害、DOT与反射，并在原减伤后/盾前只应用一次；不放开递归生成。 独立用例阶段补齐：有效硬控及保护解除/到期后重新有效的旧控制取消未释放吟唱，普通受伤保护不变；免疫失败与已释放弹道保留，短控制消退不复活旧cast。",
+    "coverage_phase_followup": "独立用例阶段补齐：有效硬控及保护解除/到期后重新有效的旧控制取消未释放吟唱，普通受伤保护不变；免疫失败与已释放弹道保留，短控制消退不复活旧cast。"
+  },
+  {
+    "id": "YS-D08",
+    "name": "复苏守望",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer + incoming_damage",
+    "original_promise": "实际吟唱复活术期间受到伤害降低60%，吟唱结束或取消立即失效，无额外状态。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "吟唱复活期间受到伤害均降低60%。",
+        "actual": "只覆盖普通直接伤害，不覆盖proc与DOT。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAllDamageConsumerMatrix",
+      "TestLegendaryIncomingCombinationShieldAndManaOnce",
+      "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+      "TestLegendaryIncomingActualHealerWindupCombination"
+    ],
+    "remaining_limits": [
+      "受理后复制已结算伤害不重复承伤；未知DOT类型不猜魔法；PVP派生为消费者边界而非可达玩法。"
+    ],
+    "outcome": "明确的纯承伤修饰覆盖正常、追加、子伤害、DOT与反射，并在原减伤后/盾前只应用一次；不放开递归生成。"
+  },
+  {
+    "id": "YS-D10",
+    "name": "枷锁息战",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer + incoming_damage",
+    "original_promise": "你施加的枷锁术原生减益存在期间，该目标对你的伤害降低40%；不缩短或消费枷锁。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "带自己枷锁的敌人对自己全部伤害降低40%。",
+        "actual": "只减普通直接伤害，未覆盖该敌人DOT和proc。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingAllDamageConsumerMatrix",
+      "TestLegendaryIncomingCombinationShieldAndManaOnce",
+      "TestLegendaryRepairAreaNativeShieldsAndMonsterAI",
+      "TestLegendaryIncomingActualHealerWindupCombination"
+    ],
+    "remaining_limits": [
+      "受理后复制已结算伤害不重复承伤；未知DOT类型不猜魔法；PVP派生为消费者边界而非可达玩法。"
+    ],
+    "outcome": "明确的纯承伤修饰覆盖正常、追加、子伤害、DOT与反射，并在原减伤后/盾前只应用一次；不放开递归生成。"
+  },
+  {
+    "id": "YS-U02",
+    "name": "专注圣契",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "神术：集中保留原本延长下一个技能时限的效果（一级延长50%，其他等级沿用原值），并使该技能施加的正面增益强度额外提高50%，集中自身法力消耗降低30%；50%为原增益强度乘数，不增加50个百分点，不额外提高直接伤害或治疗量。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "下一技能的所有正面增益强度额外提高50%。",
+        "actual": "防御、反射等实际原生字段未缩放；定向测试中防御10%仍10%，针刺10%仍10%，持续时间则正常1.5倍。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingNativeBuffMagnitudeCombinations"
+    ],
+    "remaining_limits": [
+      "YS-D04固定+35百分点与U02倍率分开，避免错误放大固定百分点。"
+    ],
+    "outcome": "原生规范化防御/反射等正面强度字段可消费50%乘数，时限与一次性关系保留。"
+  },
+  {
+    "id": "YS-U04",
+    "name": "治愈术群体化",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "mage_healer",
+    "original_promise": "治愈术保留主目标完整治疗，并对其250范围内生命百分比最低的另外2名队友各进行一次完整治愈术治疗；每位目标按自身最大生命计算，治疗倍率均为100%。原群疗术保留低血优先和35%实际法力返还。新增副治疗不再生成其他治疗、伤害或护盾转换。",
+    "audit_findings": [
+      {
+        "kind": "behavior_mismatch",
+        "intended": "默认给自己施治愈也覆盖额外2名队友。",
+        "actual": "target=0时选择器缺主目标，不扩展。"
+      },
+      {
+        "kind": "behavior_mismatch",
+        "intended": "副治疗不再生成其他治疗转换。",
+        "actual": "普通副治疗仍可触发药师2件套对施法者的复制治疗，缺少副目标禁转换标记。"
+      },
+      {
+        "kind": "wording_clarification",
+        "intended": "35%返蓝的触发条件不清楚。",
+        "actual": "群疗必须至少有一次实际回复生命；全员满血不返本条35%。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryRepairHealChildImplicitSelfAndSetIsolation",
+      "TestLegendaryRepairNativeBaseAndSetControls"
+    ],
+    "remaining_limits": [
+      "群疗35%返法仍要求至少一名真正恢复生命；全满血无返还。"
+    ],
+    "outcome": "默认自身扩散成立；新增副治疗禁止2件套/伤害/护盾转换，根治疗的4件套正常一次转换保留。"
+  },
+  {
+    "id": "TY-A04",
+    "name": "广域",
+    "baseline_status": "uncertain",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal",
+    "original_promise": "在职业形态改造后，最终圆形技能半径提高40%，最终扇形技能角度提高40%且最多360度。其他形状不改变，不新增伤害波次。",
+    "audit_findings": [
+      {
+        "kind": "scope_dispute",
+        "intended": "圆形技能半径提高40%。",
+        "actual": "原生圆形陷阱10213..10217以TrapRadius而非Area/Radius存几何，A04完全不匹配；10213原生半径100准备后仍100。需确认“圆形技能”是否包含该既有圆形陷阱；没有把文案直接缩成不含陷阱来关闭问题。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestUniversalRegressionPhysicalTrapEquipmentBaseAndGeometry",
+      "TestLegendarySharedFinalGeometryBuckets",
+      "TestCasterRepairChargedHolyFinalShapeComposition",
+      "TestLegendaryUniversalSoloConeConsumerBoundary"
+    ],
+    "remaining_limits": [],
+    "outcome": "圆形原生陷阱半径纳入最终范围桶，组合A21和职业改形仍一次生效。 独立用例阶段补齐：扇形消费者不再额外截断前半平面，60/120/168/180/240/360四向及精确角度/半径边界验证；常见原生小角未受旧问题影响，宽角是明确支持的消费者边界。",
+    "coverage_phase_followup": "独立用例阶段补齐：扇形消费者不再额外截断前半平面，60/120/168/180/240/360四向及精确角度/半径边界验证；常见原生小角未受旧问题影响，宽角是明确支持的消费者边界。"
+  },
+  {
+    "id": "TY-A25",
+    "name": "铁铸锋",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal",
+    "original_promise": "物理主动技能在原生基础伤害中加入装备物理攻击贡献的50%，再统一受技能系数影响",
+    "audit_findings": [
+      {
+        "kind": "confirmed_static_reachable_behavior_mismatch",
+        "intended": "物理主动技能获得装备物攻贡献的50%基础伤害。",
+        "actual": "10213..10217原生陷阱HurtType=None(0)，正式EffectDamage把None按非Magic物理伤害结算，但本威能只匹配HurtPhysical(1)。因此这些真实物理陷阱不获得基础追加；普通物理主动技能能获得。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestUniversalRegressionPhysicalTrapEquipmentBaseAndGeometry",
+      "TestUniversalRegressionMagicAttackBaseNativeCombination",
+      "TestUniversalRegressionTrapAttackBaseCannotUpgradeAfterPlacement"
+    ],
+    "remaining_limits": [],
+    "outcome": "物理陷阱HurtNone归入真实物理伤害；装备攻击贡献先入攻击基础再乘原技能系数，TY-A26同语义并测。"
+  },
+  {
+    "id": "TY-A30",
+    "name": "制敌",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal",
+    "original_promise": "对当前受原生硬控制/定身的敌人，本次直接伤害+50%，不延长控制",
+    "audit_findings": [
+      {
+        "kind": "confirmed_reachable_behavior_mismatch",
+        "intended": "对满足控制/本人中毒/本人燃烧条件的目标，所有本次直接伤害获得承诺增幅。",
+        "actual": "普通攻击只装备本项时，legendaryBasicAttack在TargetDefinition之前快速返回；刺客原生陷阱triggerAssassinTrap也直接applySkill，没有目标加成阶段。实测制敌普通普攻100而非150、爆弹200而非300；毒蚀破绽普攻100而非140、爆弹200而非280。普通主动技能和另有改变普攻定义的搭配可生效，因此是部分实现而非整体失效。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestUniversalRegressionTargetBonusRealBasicAndTrap",
+      "TestUniversalRegressionTrapConditionalDoubleAndTriple",
+      "TestUniversalRegressionOwnPoisonBasicWithAssassinSet",
+      "TestLegendaryRepairBasicFanTargetModifiers"
+    ],
+    "remaining_limits": [],
+    "outcome": "普攻无额外变形也执行目标修饰；陷阱含1822使用同目标阶段；三威能/套装/来源快照均验证。"
+  },
+  {
+    "id": "TY-A31",
+    "name": "毒蚀破绽",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal",
+    "original_promise": "对本人原生中毒中的目标，本次直接伤害+40%，不复制毒",
+    "audit_findings": [
+      {
+        "kind": "confirmed_reachable_behavior_mismatch",
+        "intended": "对满足控制/本人中毒/本人燃烧条件的目标，所有本次直接伤害获得承诺增幅。",
+        "actual": "普通攻击只装备本项时，legendaryBasicAttack在TargetDefinition之前快速返回；刺客原生陷阱triggerAssassinTrap也直接applySkill，没有目标加成阶段。实测制敌普通普攻100而非150、爆弹200而非300；毒蚀破绽普攻100而非140、爆弹200而非280。普通主动技能和另有改变普攻定义的搭配可生效，因此是部分实现而非整体失效。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestUniversalRegressionTargetBonusRealBasicAndTrap",
+      "TestUniversalRegressionTrapConditionalDoubleAndTriple",
+      "TestUniversalRegressionOwnPoisonBasicWithAssassinSet",
+      "TestLegendaryRepairBasicFanTargetModifiers"
+    ],
+    "remaining_limits": [],
+    "outcome": "普攻无额外变形也执行目标修饰；陷阱含1822使用同目标阶段；三威能/套装/来源快照均验证。"
+  },
+  {
+    "id": "TY-A32",
+    "name": "灼热破绽",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal",
+    "original_promise": "对本人原生燃烧中的目标，本次直接伤害+40%，不复制燃烧",
+    "audit_findings": [
+      {
+        "kind": "confirmed_reachable_behavior_mismatch",
+        "intended": "对满足控制/本人中毒/本人燃烧条件的目标，所有本次直接伤害获得承诺增幅。",
+        "actual": "普通攻击只装备本项时，legendaryBasicAttack在TargetDefinition之前快速返回；术士本人原生燃烧目标上的普攻实测100而非140。普通主动技能及另有改变普攻定义的搭配可生效，因此是部分实现。陷阱分支虽也漏目标修饰，但术士本人燃烧与刺客放陷阱的跨职业组合未证明可达，不计为本项已确认缺陷。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestUniversalRegressionTargetBonusRealBasicAndTrap"
+    ],
+    "remaining_limits": [
+      "未把未证明可达的跨职业本人燃烧+刺客陷阱算验收。"
+    ],
+    "outcome": "自身燃烧目标上的普通攻击执行目标修饰，不再因普攻未变形提前返回。"
+  },
+  {
+    "id": "TY-D06",
+    "name": "卸招",
+    "baseline_status": "partial",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal",
+    "original_promise": "受到普通攻击原生伤害降低25%，不影响主动技能",
+    "audit_findings": [
+      {
+        "kind": "confirmed_reachable_behavior_mismatch",
+        "intended": "只减少普通攻击伤害，不作用于主动技能或其他范围危害。",
+        "actual": "裂隙地面危害hitRiftHazard为DamageAuraOrigin、Area=true，但SkillID默认为0，被IsBasic误分类。正式危害消费者复现基准100、装备本项75。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestLegendaryIncomingRiftHazardNotBasic"
+    ],
+    "remaining_limits": [],
+    "outcome": "普通攻击按真实来源识别，裂隙地面危害的SkillID0不再误判普攻。"
+  },
+  {
+    "id": "TY-U04",
+    "name": "济耗",
+    "baseline_status": "uncertain",
+    "baseline_revision": "489706a",
+    "owner": "assassin_universal",
+    "original_promise": "原生含治疗段的主动技能耗蓝降低30%，同组相加",
+    "audit_findings": [
+      {
+        "kind": "scope_dispute",
+        "intended": "原生含治疗段的主动技能耗蓝降低30%。",
+        "actual": "只检测直接Heal/RestoreHP。原生回春术10303提供持续治疗状态、耗蓝208→208，未获减耗。若“治疗段”本就仅限直接治疗则可澄清文案，否则属于遗漏；本审计保留承诺，待范围确认。"
+      }
+    ],
+    "repair_status": "repaired",
+    "verification": [
+      "TestUniversalRegressionHealingStatusManaNativeCast"
+    ],
+    "remaining_limits": [],
+    "outcome": "原生持续治疗状态也识别为治疗段，回春术实际MP208→145，和减耗同桶。"
+  }
+]
