@@ -76,8 +76,8 @@ func TestLegendarySlotCategoryAndProfessionMatrix(t *testing.T) {
 				t.Fatalf("slot %d power %s category %s class %s: eligible=%v want %v", slot, p.ID, p.Category, p.Class, got, want)
 			}
 			base.Equip.LevelReq--
-			if LegendaryPowerEligible(p, base) {
-				t.Fatalf("slot %d power %s ignored original base level", slot, p.ID)
+			if got := LegendaryPowerEligible(p, base); got != (want && p.Class == "全职业") {
+				t.Fatalf("slot %d power %s has wrong universal/profession level policy", slot, p.ID)
 			}
 			base.Equip.LevelReq++
 			base.Equip.Need.Professions = 0

@@ -146,7 +146,7 @@ func TestRiftSlotFallbackRealRewardsAndLegendaryGates(t *testing.T) {
 					}
 					if st.Legendary.PowerID != "" {
 						p, ok := domain.LegendaryPower(st.Legendary.PowerID)
-						if !ok || st.Endgame.SourceLevel != level || p.MinLevel > level || !domain.LegendaryPowerEligibleForItem(p, d, st) {
+						if !ok || st.Endgame.SourceLevel != level || !domain.LegendaryPowerSourceLevelEligible(p, level) || !domain.LegendaryPowerEligibleForItem(p, d, st) {
 							t.Fatal("ineligible legendary", st.Item, st.Legendary.PowerID)
 						}
 						if err := st.Legendary.Validate(); err != nil {

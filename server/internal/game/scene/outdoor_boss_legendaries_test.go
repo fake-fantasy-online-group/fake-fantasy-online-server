@@ -119,9 +119,9 @@ func TestOutdoorBossSourceAndEligibilityBoundaries(t *testing.T) {
 		"trial": func(s *Scene, _ *entity.Entity, _ *domain.ItemDef) {
 			s.trial = &domain.TrialRules{Maps: map[int32][]domain.TrialSpawn{s.id.MapID: {{}}}}
 		},
-		"old rules":   func(s *Scene, _ *entity.Entity, _ *domain.ItemDef) { s.lootRules = lootRulesTableFixture() },
-		"low monster": func(_ *Scene, e *entity.Entity, _ *domain.ItemDef) { e.Level = 8 },
-		"empty table": func(s *Scene, e *entity.Entity, _ *domain.ItemDef) { s.lootTable[e.Monster.TypeID] = nil },
+		"old rules":             func(s *Scene, _ *entity.Entity, _ *domain.ItemDef) { s.lootRules = lootRulesTableFixture() },
+		"invalid monster level": func(_ *Scene, e *entity.Entity, _ *domain.ItemDef) { e.Level = 0 },
+		"empty table":           func(s *Scene, e *entity.Entity, _ *domain.ItemDef) { s.lootTable[e.Monster.TypeID] = nil },
 		"dungeon only row": func(s *Scene, e *entity.Entity, _ *domain.ItemDef) {
 			s.lootTable[e.Monster.TypeID][0].DungeonOnly = true
 		},

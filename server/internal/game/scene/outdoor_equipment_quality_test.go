@@ -94,7 +94,7 @@ func TestOutdoorEquipmentExactFinalColorPartition(t *testing.T) {
 func TestOutdoorEquipmentFailedPromotionRetainsOrdinaryRoll(t *testing.T) {
 	s, original := outdoorQualityFixture(t)
 	for name, mutate := range map[string]func(*domain.ItemDef, *domain.EquipmentRollTable){
-		"no legal power": func(d *domain.ItemDef, _ *domain.EquipmentRollTable) { d.Equip.LevelReq = 1 },
+		"no legal power": func(d *domain.ItemDef, _ *domain.EquipmentRollTable) { d.Equip.Slot = -1 },
 		"sparse pool": func(d *domain.ItemDef, r *domain.EquipmentRollTable) {
 			d.Equip.ResourceLevel = 0
 			d.Equip.Type = 0

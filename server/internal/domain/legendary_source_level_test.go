@@ -30,7 +30,7 @@ func TestLegendarySourceLevelCandidateBoundaries(t *testing.T) {
 	def, _ := sourceLevelFixture(t)
 	aboveWear := false
 	for _, p := range LegendaryCandidatesAtLevel(def, 43) {
-		if p.MinLevel > 43 || p.Class != "全职业" || (p.Category != "防御" && p.Category != "通用") {
+		if p.Class != "全职业" || (p.Category != "防御" && p.Category != "通用") {
 			t.Fatal("invalid face candidate", p.ID)
 		}
 		aboveWear = aboveWear || p.MinLevel > def.Equip.LevelReq
@@ -38,11 +38,13 @@ func TestLegendarySourceLevelCandidateBoundaries(t *testing.T) {
 	if !aboveWear {
 		t.Fatal("low-wear face did not receive higher powers from level43 monster")
 	}
-	p, _ := LegendaryPower("TY-D09") // Actual catalog threshold 42.
+	p, _ := LegendaryPower("ZS-A01") // Profession-specific threshold remains10.
+	def.Equip.Slot = int32(SlotWeapon)
+	def.Equip.Need.Professions = 1
 	for _, tc := range []struct {
 		level int32
 		want  bool
-	}{{-1, false}, {0, false}, {1, false}, {41, false}, {42, true}, {43, true}, {math.MaxInt32, true}} {
+	}{{-1, false}, {0, false}, {1, false}, {9, false}, {10, true}, {43, true}, {math.MaxInt32, true}} {
 		for _, wear := range []int32{1, 18, 60, 100} {
 			def.Equip.LevelReq = wear
 			if got := LegendaryPowerEligibleAtLevel(p, def, tc.level); got != tc.want {
@@ -54,7 +56,7 @@ func TestLegendarySourceLevelCandidateBoundaries(t *testing.T) {
 	if LegendaryPowerEligibleAtLevel(p, def, 43) {
 		t.Fatal("invalid power threshold admitted")
 	}
-	for _, source := range []int32{-1, 0, 1} {
+	for _, source := range []int32{-1, 0} {
 		if len(LegendaryCandidatesAtLevel(def, source)) != 0 {
 			t.Fatal("invalid/underlevel source admitted", source)
 		}
@@ -137,7 +139,7 @@ func TestLegendarySourceLevelPersistenceActivationAndAffixes(t *testing.T) {
 
 func TestLegendarySourceLevelAwakeningPreservesOriginAndLegacy(t *testing.T) {
 	def, table := sourceLevelFixture(t)
-	for _, source := range []int32{0, 12, 43} {
+	for _, source := range []int32{0, 1, 12, 43} {
 		for _, characterLevel := range []int32{18, 100} {
 			ctx, req := cubeInputs(CubeAwakenUnique)
 			old := ctx.Items[def.ID]

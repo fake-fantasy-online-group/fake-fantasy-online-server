@@ -30,7 +30,7 @@ func TestLegendaryShoesNative42And43CandidatesAndNaturalDrops(t *testing.T) {
 				}
 				categories := map[string]bool{}
 				for _, p := range domain.LegendaryCandidates(def) {
-					if p.Class != "全职业" || p.MinLevel > def.Equip.LevelReq {
+					if p.Class != "全职业" {
 						t.Fatalf("shoe %d admitted class/over-level power %s", id, p.ID)
 					}
 					categories[p.Category] = true

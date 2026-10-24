@@ -1,14 +1,17 @@
 # Legendary eligibility follows the source monster
 
 New monster equipment records its generation level in `Endgame.SourceLevel`.
-Legendary candidate admission compares the existing catalog `MinLevel` with that
-monster level, not the item's wear requirement, affix resource level, or the
-recipient's level. Slot, type, profession, and executable-handler restrictions
+Profession-specific candidate admission compares the existing catalog `MinLevel`
+with that monster level, not the item's wear requirement, affix resource level, or
+the recipient's level. All80 full-class universal powers (A40/D20/U20) have no
+minimum drop level; their catalog `MinLevel` remains unused historical metadata.
+A positive source level still identifies a real monster, rather than unknown0. Slot, type, profession, and executable-handler restrictions
 remain unchanged. No new learned-skill gate is added.
 
-For example, a level43 monster can produce a threshold42 universal defensive
-power on a level18 face item. The face item still requires level18 to wear and
-retains its own native affix pool. A level12 monster cannot produce that power
+For example, even a level1 monster can produce a universal defensive power on
+a level18 face item when the unchanged native pool contains six eligible affixes.
+The face item still requires level18 to wear and keeps that native affix pool.
+A level12 monster cannot produce a profession-specific power requiring level42,
 even on a level60 base. True and secret multipliers and all six affixes remain
 valid after reload because runtime checks use the persisted generation level.
 

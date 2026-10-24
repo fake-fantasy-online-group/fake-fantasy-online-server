@@ -43,3 +43,33 @@ func TestEquipmentSourceLevelExactSaveAndMemoryReload(t *testing.T) {
 		}
 	}
 }
+
+func TestUniversalLowSourcePersistsEveryTierWithoutWeakeningProfessionGate(t *testing.T) {
+	for _, tier := range []domain.LegendaryTier{domain.LegendaryTierNormal, domain.LegendaryTierTrue, domain.LegendaryTierSecret} {
+		st := legendaryStoreFixture()
+		st.Endgame.SourceLevel = 1
+		st.Legendary.PowerID = "TY-D09"
+		st.Legendary.Tier = tier
+		if tier == domain.LegendaryTierSecret {
+			for i, a := range st.Legendary.Affixes {
+				st.Legendary.Bounds[i] = domain.LegendaryAffixBounds{Min: a.Affix.Value, Max: a.Affix.Value}
+			}
+		}
+		if err := validateEndgameItem(st, nil); err != nil {
+			t.Fatal("universal low source rejected", tier, err)
+		}
+		m, s := endgameFixture(t)
+		s.Bag.Set(0, st)
+		if err := m.SaveSnapshot(context.Background(), s); err != nil {
+			t.Fatal(err)
+		}
+		bag, err := m.LoadBag(context.Background(), s.Char.ID, 400)
+		if err != nil || bag.At(0) != st {
+			t.Fatal("universal tier lost on reload", tier, err)
+		}
+		st.Legendary.PowerID = "ZS-A01"
+		if validateEndgameItem(st, nil) == nil {
+			t.Fatal("profession source threshold removed")
+		}
+	}
+}

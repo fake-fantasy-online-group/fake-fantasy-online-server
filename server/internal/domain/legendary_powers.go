@@ -87,8 +87,8 @@ func legendaryClassMask(class string) uint8 {
 	return 0
 }
 
-// LegendaryPowerEligible preserves historical item eligibility for callers with
-// no generation context. Monster drops must use LegendaryPowerEligibleAtLevel.
+// LegendaryPowerEligible uses the legacy generation-level fallback for callers
+// with no generation context. Monster drops must use LegendaryPowerEligibleAtLevel.
 func LegendaryPowerEligible(p LegendaryPowerDefinition, base ItemDef) bool {
 	return LegendaryPowerEligibleAtLevel(p, base, LegendaryGenerationLevel(base, Stack{}))
 }
@@ -110,12 +110,19 @@ func LegendaryPowerEligibleForItem(p LegendaryPowerDefinition, base ItemDef, st 
 	return LegendaryPowerEligibleAtLevel(p, base, LegendaryGenerationLevel(base, st))
 }
 
+// LegendaryPowerSourceLevelEligible validates provenance for every power, but
+// only profession-specific powers retain a minimum drop-level requirement.
+// Universal A/D/U powers keep catalog MinLevel as historical design metadata.
+func LegendaryPowerSourceLevelEligible(p LegendaryPowerDefinition, sourceLevel int32) bool {
+	return sourceLevel > 0 && (p.Class == "全职业" || p.MinLevel > 0 && sourceLevel >= p.MinLevel)
+}
+
 // LegendaryPowerEligibleAtLevel separates the monster's generation level from
 // the item's unchanged wear and native affix levels. Slot/type/class restrictions
 // remain authoritative; neither the looter's level nor learned skills are inputs.
 func LegendaryPowerEligibleAtLevel(p LegendaryPowerDefinition, base ItemDef, sourceLevel int32) bool {
 	e := base.Equip
-	if e == nil || sourceLevel < 1 || p.MinLevel < 1 || sourceLevel < p.MinLevel {
+	if e == nil || !LegendaryPowerSourceLevelEligible(p, sourceLevel) {
 		return false
 	}
 	parts := strings.Split(p.ID, "-")

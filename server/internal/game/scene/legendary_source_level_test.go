@@ -45,7 +45,7 @@ func TestLegendarySourceLevelNaturalKillAndFixedRows(t *testing.T) {
 			for id, drop := range s.ground {
 				st := drop.Drop.Stack
 				p, ok := domain.LegendaryPower(st.Legendary.PowerID)
-				if !ok || st.Endgame.SourceLevel != 43 || p.MinLevel > 43 || domain.EquipmentRequiredLevel(def, st) != 18 {
+				if !ok || st.Endgame.SourceLevel != 43 || !domain.LegendaryPowerSourceLevelEligible(p, 43) || domain.EquipmentRequiredLevel(def, st) != 18 {
 					t.Fatal("wrong source/wear in kill path", fixed, st)
 				}
 				aboveWear = aboveWear || p.MinLevel > 18
@@ -88,7 +88,7 @@ func TestLegendarySourceLevelTheftIgnoresPlayerLevelAndLearnedSkills(t *testing.
 				drop := onlyTheftDrop(t, s)
 				st := drop.Drop.Stack
 				p, ok := domain.LegendaryPower(st.Legendary.PowerID)
-				if !ok || st.Endgame.SourceLevel != tc.source || p.MinLevel > tc.source || domain.EquipmentRequiredLevel(def, st) != tc.wear {
+				if !ok || st.Endgame.SourceLevel != tc.source || !domain.LegendaryPowerSourceLevelEligible(p, tc.source) || domain.EquipmentRequiredLevel(def, st) != tc.wear {
 					t.Fatal("theft source/wear wrong", tc, st)
 				}
 				if playerLevel == 1 {
@@ -121,6 +121,41 @@ func TestLegendarySourceLevelRealSkillThresholdWithoutLearnedGate(t *testing.T) 
 	for _, source := range []int32{skill.LevelNeed - 1, skill.LevelNeed, 43} {
 		if got := domain.LegendaryPowerEligibleAtLevel(p, def, source); got != (source >= skill.LevelNeed) {
 			t.Fatal("real skill source boundary mismatch", source)
+		}
+	}
+}
+
+func TestLegendaryUniversalLevelOneNaturalAndBossDrops(t *testing.T) {
+	fixture, def := legendaryDropFixture(t)
+	def.Equip.Slot = int32(domain.SlotShoe)
+	def.Equip.LevelReq = 18
+	def.Equip.Need = domain.Requirement{Level: 18}
+	s, id := lootScene(t, []domain.DropEntry{{Item: def.ID, RatePct: 100, RollAffixes: true}})
+	s.items[def.ID] = def
+	s.equipmentRoll = fixture.equipmentRoll
+	s.lootRules = sourceLevelLootRules(t)
+	dead := s.entities[id]
+	dead.Level = 1
+	s.rollLootWithContextV5(dead, domain.LootContextV5{Version: 5})
+	for _, drop := range s.ground {
+		st := drop.Drop.Stack
+		p, ok := domain.LegendaryPower(st.Legendary.PowerID)
+		if !ok || p.Class != "全职业" || st.Endgame.SourceLevel != 1 || domain.EquipmentRequiredLevel(def, st) != 18 {
+			t.Fatal("level1 universal drop/wear mismatch", st)
+		}
+	}
+	if len(s.ground) != 1 {
+		t.Fatal("expected one natural equipment drop")
+	}
+	bossScene, boss, _ := outdoorBossFixture(t)
+	boss.Level = 1
+	if n := bossScene.rollOutdoorBossLegendaries(boss, domain.LootContextV5{}, 0); n != 2 {
+		t.Fatal("level1 universal Boss guarantee failed", n)
+	}
+	for _, drop := range bossScene.ground {
+		p, ok := domain.LegendaryPower(drop.Drop.Stack.Legendary.PowerID)
+		if !ok || p.Class != "全职业" || drop.Drop.Stack.Endgame.SourceLevel != 1 {
+			t.Fatal("profession power bypassed source minimum")
 		}
 	}
 }

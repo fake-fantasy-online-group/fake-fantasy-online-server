@@ -273,7 +273,9 @@ func TestRiftCumulativeLegacyPreVariantOracle(t *testing.T) {
 	old.EquipmentPools = []domain.RiftEquipmentPool{{MonsterLevel: 43, SourceMonsters: []domain.MonsterID{1}, Items: []domain.ItemID{2105}}}
 	old.EquipmentSlotFallbacks = nil
 	prepareCumulativeRun(s, old, "legacy-prevariant-oracle", 150, true, 43)
-	s.rift.data.RewardSourceLevel = 35
+	// Source100 already admitted all universal powers before their level gate was removed.
+	// This golden was independently derived from baseline96d8adb at source100.
+	s.rift.data.RewardSourceLevel = 100
 	s.generateEndgameRiftGrantsWithContexts(map[domain.CharID]endgameRiftRewardContext{100: {Level: 43, MagicFind: 100}})
 	items := normalizeRiftStacks(s.rift.data.Grants[100].Items)
 	for i := range items {
@@ -284,7 +286,7 @@ func TestRiftCumulativeLegacyPreVariantOracle(t *testing.T) {
 	}
 	raw, _ := json.Marshal(items)
 	got := fmt.Sprintf("%x", sha256.Sum256(raw))
-	if got != "ab207f898ebe67f2b440d60b965cd47285b1091e09c7053e895b6a151b157c74" {
+	if got != "b648c14518deb94802ff36c15dde9b30e0027ed8d7e7ad2eae855f0cf7990a82" {
 		t.Fatalf("pre-variant normalized item oracle changed: %s", got)
 	}
 }

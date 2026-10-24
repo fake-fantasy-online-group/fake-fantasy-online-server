@@ -11,7 +11,7 @@ func validateLegendaryItem(st domain.Stack) error {
 	if st.Endgame.SourceLevel < 0 {
 		return fmt.Errorf("invalid equipment source level")
 	}
-	if p, ok := domain.LegendaryPower(st.Legendary.PowerID); ok && st.Endgame.SourceLevel > 0 && st.Endgame.SourceLevel < p.MinLevel {
+	if p, ok := domain.LegendaryPower(st.Legendary.PowerID); ok && st.Endgame.SourceLevel > 0 && !domain.LegendaryPowerSourceLevelEligible(p, st.Endgame.SourceLevel) {
 		return fmt.Errorf("legendary power exceeds source level uid=%d", st.UID)
 	}
 	if err := st.Legendary.Validate(); err != nil {
