@@ -49,7 +49,9 @@ type RiftRules struct {
 	FloorLayoutVersion   int32               `json:",omitempty"`
 	GuardianRecentWindow int32               `json:",omitempty"`
 	EquipmentPools       []RiftEquipmentPool `json:",omitempty"`
-	Elite                *RiftEliteRules     `json:",omitempty"`
+	// Optional frozen native IDs; only v11+ fills missing face/backpack slots.
+	EquipmentSlotFallbacks []ItemID        `json:",omitempty"`
+	Elite                  *RiftEliteRules `json:",omitempty"`
 	// Zero keeps historical immediate guardians; v5 freezes a five-second arrival.
 	GuardianArrivalMS int64 `json:",omitempty"`
 	// New runs freeze reward level at guardian death; old runs keep admission level.
@@ -95,6 +97,9 @@ func (t *RiftRuleTable) Entrances() []EndgameRiftEntranceView {
 }
 
 func cloneRiftRules(r RiftRules) RiftRules {
+	if r.EquipmentSlotFallbacks != nil {
+		r.EquipmentSlotFallbacks = append([]ItemID{}, r.EquipmentSlotFallbacks...)
+	}
 	if r.EquipmentPools != nil {
 		r.EquipmentPools = append([]RiftEquipmentPool{}, r.EquipmentPools...)
 		for i := range r.EquipmentPools {

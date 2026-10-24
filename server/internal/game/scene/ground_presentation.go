@@ -13,7 +13,13 @@ import (
 var groundPresentationToken = time.Now().UnixNano()
 
 func (s *Scene) groundUniqueID(stack domain.Stack) int32 {
-	if _, ok := domain.UniqueOf(stack,s.endgameCatalog); ok {
+	// The client uses a positive identity to enable the beam; DropToken owns
+	// sound deduplication. Keep this compatibility marker out of persisted
+	// Endgame.UniqueID, which identifies the separate legacy Unique system.
+	if stack.UID > 0 && stack.Count == 1 && stack.Item > 0 && stack.Legendary.PowerID != "" && stack.Legendary.Validate() == nil {
+		return int32(stack.Item)
+	}
+	if _, ok := domain.UniqueOf(stack, s.endgameCatalog); ok {
 		return stack.Endgame.UniqueID
 	}
 	return 0

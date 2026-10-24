@@ -128,7 +128,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			}
 		}
 		if r.Rules.EquipmentPools != nil {
-			equipment = r.Rules.EquipmentPoolForLevel(poolLevel, func(id domain.ItemID) bool {
+			eligible := func(id domain.ItemID) bool {
 				def, ok := s.items[id]
 				if !ok || def.HardDungeonOnly || def.Equip == nil || def.Equip.LevelReq > m.Level || def.Equip.LevelReq > 60 || def.Equip.AscensionOnly {
 					return false
@@ -138,7 +138,9 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 					sex = 1
 				}
 				return def.Equip.Need.AllowsCharacter(character) && (def.Equip.Need.Sex == 0 || def.Equip.Need.Sex == sex)
-			})
+			}
+			equipment = r.Rules.EquipmentPoolForLevel(poolLevel, eligible)
+			equipment = r.Rules.FillMissingEquipmentSlots(equipment, m.Level, s.items, eligible)
 			for _, id := range equipment {
 				if s.riftLegendaryBaseEligible(s.items[id]) {
 					guaranteedUniques = append(guaranteedUniques, id)
