@@ -201,3 +201,29 @@ Run the focused PostgreSQL-engine check with:
 This checks migration SQL and rollback against reduced prerequisites, not a full
 initializer or production deployment. Apply the SQL transaction before starting
 the corresponding server; do not apply the fresh-init file to an existing database.
+
+## 000111_20261025_rift_slot_first.sql
+
+Publishes Rift15 as an exact immutable clone of Rift14, changing only its version.
+The matching runtime selects a uniformly random nonempty legal equipment part,
+then a uniformly random template in that part. One- and two-handed weapons share
+one part; legal shields remain separate. This is not a profession-slot bonus.
+Only an active Rift14 selector advances to15; older rollback selections and newer
+versions remain selected. All prior frozen rules and ready rewards are untouched.
+The clone preserves guardian HP divisor10, complete WingRewards (including the
+independent 0.5% rare feather), reward quantities, MF and quality policies.
+
+Deploy only as part of the authorized matching-server release. Existing databases
+use this transaction after migration110; never rerun fresh init. The matching
+`000000_init-111.sql` body is included automatically by numeric fresh-init order.
+An operator can roll back new admissions by selecting the published Rift14, but
+must keep a server capable of honoring already-admitted Rift15 snapshots; do not
+rewrite their rules or rewards.
+
+Focused validation:
+`PGLITE_MODULE=/path/to/@electric-sql/pglite node server/tests/rift_slot_first_postgres.mjs`.
+This uses a real PostgreSQL engine with reduced prerequisites and production loader
+SQL. It covers exact cloning, immutable guards, invalid source/dependency/collision
+rejection, transaction rollback, repeat application, old/future selectors and
+saved-state preservation. It does not validate a full initializer, concurrent
+migration or production deployment.

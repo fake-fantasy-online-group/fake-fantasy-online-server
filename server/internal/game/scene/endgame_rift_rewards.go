@@ -349,7 +349,11 @@ func (s *Scene) rollEndgameRiftNormalBossEquipment(char domain.CharID, ordinal i
 	item := stream("item")
 	quality, values := stream("quality"), stream("values")
 	unique, variables := stream("unique"), stream("variables")
-	def := s.items[pool[item.Intn(len(pool))]]
+	id, ok := s.rift.data.Run.Rules.RollEquipmentBase(pool, s.items, item.Intn)
+	if !ok {
+		return domain.Stack{}
+	}
+	def := s.items[id]
 	stack := domain.NewStack(def, 1)
 	stack.Bound = true
 	sourceLevel := s.riftRewardSourceLevel()
@@ -438,7 +442,11 @@ func (s *Scene) rollEndgameRiftCumulativeLegendary(char domain.CharID, ordinal i
 		return domain.Stack{}
 	}
 	item, values := s.riftCumulativeRandom(char, ordinal, "item"), s.riftCumulativeRandom(char, ordinal, "values")
-	def := s.items[pool[item.Intn(len(pool))]]
+	id, ok := s.rift.data.Run.Rules.RollEquipmentBase(pool, s.items, item.Intn)
+	if !ok {
+		return domain.Stack{}
+	}
+	def := s.items[id]
 	stack := domain.NewStack(def, 1)
 	stack.Bound = true
 	if !s.equipmentRoll.ApplyLegendaryForRecipientAtLevel(&stack, def, s.rift.data.RewardSourceLevel, recipient, values.Intn) {
