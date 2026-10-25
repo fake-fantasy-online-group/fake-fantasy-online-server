@@ -166,19 +166,29 @@ func ActiveLegendaryPowers(worn *EquipSet, defs func(ItemID) (ItemDef, bool), ch
 	}
 	selected := map[string]ActiveLegendaryPower{}
 	worn.Each(func(slot EquipSlot, st Stack) {
-		p, ok := LegendaryPower(st.Legendary.PowerID)
-		if !ok {
-			return
-		}
 		d, ok := defs(st.Item)
-		if !ok || d.Equip == nil || int32(slot) != d.Equip.Slot || !EquipmentFunctional(st, d) || !d.Equip.Need.AllowsCharacter(ch) || ch.Level < EquipmentRequiredLevel(d, st) || !LegendaryPowerEligibleForItem(p, d, st) {
+		if !ok || d.Equip == nil || int32(slot) != d.Equip.Slot || !EquipmentFunctional(st, d) || !d.Equip.Need.AllowsCharacter(ch) || ch.Level < EquipmentRequiredLevel(d, st) {
 			return
 		}
-		if p.Class != "全职业" && (!ch.HasProfession() || legendaryClassMask(p.Class)&(1<<uint8(ch.Race)) == 0) {
-			return
+		accept := func(p LegendaryPowerDefinition) {
+			if p.Class != "全职业" && (!ch.HasProfession() || legendaryClassMask(p.Class)&(1<<uint8(ch.Race)) == 0) {
+				return
+			}
+			if old, exists := selected[p.ID]; !exists || st.UID < old.SourceUID {
+				selected[p.ID] = ActiveLegendaryPower{st.UID, st.Item, p}
+			}
 		}
-		if old, exists := selected[p.ID]; !exists || st.UID < old.SourceUID {
-			selected[p.ID] = ActiveLegendaryPower{st.UID, st.Item, p}
+		if p, valid := LegendaryPower(st.Legendary.PowerID); valid && LegendaryPowerEligibleForItem(p, d, st) {
+			accept(p)
+		}
+		// Wing sockets deliberately accept A/D/U independently of the original
+		// donor slot, but never bypass the wearer's class or the wing's wear state.
+		if slot == SlotBag && st.Legendary.PowerID == "" && st.WingPowers.Validate() == nil {
+			for _, power := range st.WingPowers {
+				if p, valid := LegendaryPower(power.PowerID); valid && LegendaryPowerExecutable(p.ID) {
+					accept(p)
+				}
+			}
 		}
 	})
 	out := make([]ActiveLegendaryPower, 0, len(selected))

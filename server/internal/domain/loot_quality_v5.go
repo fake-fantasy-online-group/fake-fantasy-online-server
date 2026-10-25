@@ -18,9 +18,10 @@ const LootRuleVersionV5 = 5
 // kill experience or other rewards can change the owner's effective equipment.
 // No party member or subsequent picker contributes magic find.
 type LootContextV5 struct {
-	Owner     EntityID
-	MagicFind int64
-	Version   int
+	Owner          EntityID
+	RecipientClass LegendaryRecipientClass
+	MagicFind      int64
+	Version        int
 }
 
 // NaturalAffixProbabilitiesV5 transforms the ORIGINAL support first. The caller

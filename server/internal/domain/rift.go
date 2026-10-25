@@ -303,7 +303,8 @@ func (r *RiftRun) MarkClaimed(id CharID) bool {
 // Invalid inputs are clamped to tier 1..150, party 1..5 and class 0..3
 // (normal, blue elite, yellow elite, guardian); nonpositive bases stay zero.
 // Clamp before subtracting or exponentiating so even extreme inputs cannot
-// overflow intermediates. The final wire-compatible stat saturates at int32.
+// overflow intermediates. The final wire-compatible stat saturates at int32
+// before the versioned guardian-only HP reduction is applied.
 func RiftScaledStat(base int32, tier int32, party int, class int32, hp bool, rule *RiftRules) int32 {
 	if rule == nil {
 		return 0
@@ -326,10 +327,14 @@ func RiftScaledStat(base int32, tier int32, party int, class int32, hp bool, rul
 	} else {
 		v *= float64(rule.Classes[class].DamageBP) / 10000
 	}
-	if v > math.MaxInt32 {
-		return math.MaxInt32
+	result := int32(math.MaxInt32)
+	if v <= math.MaxInt32 {
+		result = int32(math.Ceil(v))
 	}
-	return int32(math.Ceil(v))
+	if hp && class == 3 && rule.GuardianHPDivisor > 0 {
+		result = max(int32(1), result/rule.GuardianHPDivisor)
+	}
+	return result
 }
 
 // Loot timing bonuses are separate from difficulty progression; use

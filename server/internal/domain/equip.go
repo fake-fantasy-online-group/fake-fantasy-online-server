@@ -11,7 +11,9 @@ package domain
 //	2. 二级   = DeriveFromBase(六维)                    ← 先由六维推
 //	3. 二级  += 装备主表 ov_arm 自带的攻防命中
 //	4. 二级  += Σ词条绝对值
-//	5. 二级  ×= (1 + Σ词条百分比)
+//	5. 二级  ×= (1 + Σ全局词条百分比)
+//
+// 武器自身的攻击/魔攻百分比先按本件未加工白字折为固定增量，不进入第 5 步。
 //
 // 顺序错了结果就不一样: 装备加的力量必须先进六维、再参与"力量÷2=攻击"的推导,
 // 直接当二级攻击加上去会少算一半。
@@ -501,26 +503,32 @@ func Compute(in StatSource) (Base, Stats) {
 		flat = addStats(flat, equipStats)
 		// 步骤 1: 装备直接给的六维
 		base = base.Add(equipBase)
-
-		if st.Legendary.PowerID == "" {
-			for _, a := range def.Equip.Affixes {
+		var localAttack weaponAttackPercent
+		applyItemAffix := func(a Affix) {
+			if !localAttack.add(def.Equip, a) {
 				applyAffix(a, &base, &basePct, &flat, &pct)
 			}
 		}
+
+		if st.Legendary.PowerID == "" {
+			for _, a := range def.Equip.Affixes {
+				applyItemAffix(a)
+			}
+		}
 		for _, a := range LegendaryItemBonuses(def, st) {
-			applyAffix(a, &base, &basePct, &flat, &pct)
+			applyItemAffix(a)
 		}
 		for _, a := range UniqueItemBonuses(def, st) {
-			applyAffix(a, &base, &basePct, &flat, &pct)
+			applyItemAffix(a)
 		}
 		for i := 0; i < int(st.RolledAffixCount) && i < len(st.RolledAffixes); i++ {
-			applyAffix(st.RolledAffixes[i].Affix, &base, &basePct, &flat, &pct)
+			applyItemAffix(st.RolledAffixes[i].Affix)
 		}
 		if st.FusedAppearance != 0 {
 			if fused, ok := src.Defs(st.FusedAppearance); ok && fused.AvatarFusion != nil &&
 				AppearancePartAcceptsSlot(fused.AvatarFusion.Appearance.Part, slot) {
 				for _, a := range fused.AvatarFusion.Affixes {
-					applyAffix(a, &base, &basePct, &flat, &pct)
+					applyItemAffix(a)
 				}
 			}
 		}
@@ -528,14 +536,14 @@ func Compute(in StatSource) (Base, Stats) {
 			if soul, ok := src.Defs(st.FusedSoul); ok && soul.EquipmentSoul != nil &&
 				soul.EquipmentSoul.AcceptsSlot(slot) {
 				for _, a := range soul.EquipmentSoul.Affixes {
-					applyAffix(a, &base, &basePct, &flat, &pct)
+					applyItemAffix(a)
 				}
 			}
 		}
 		if st.FusedDragon != 0 {
 			if dragon, ok := src.Defs(st.FusedDragon); ok && dragon.DragonFusion != nil && dragon.DragonFusion.AcceptsSlot(slot) {
 				for _, a := range dragon.DragonFusion.Affixes {
-					applyAffix(a, &base, &basePct, &flat, &pct)
+					applyItemAffix(a)
 				}
 			}
 		}
@@ -544,12 +552,13 @@ func Compute(in StatSource) (Base, Stats) {
 				continue
 			}
 			for _, a := range st.SocketCards[i].StaticAffixes() {
-				applyAffix(a, &base, &basePct, &flat, &pct)
+				applyItemAffix(a)
 			}
 		}
 		for i := 0; i < int(st.WashCount) && i < len(st.WashAffixes); i++ {
-			applyAffix(st.WashAffixes[i], &base, &basePct, &flat, &pct)
+			applyItemAffix(st.WashAffixes[i])
 		}
+		flat = addStats(flat, localAttack.bonuses(def, st))
 	})
 	for _, a := range src.Passive {
 		applyAffix(a, &base, &basePct, &flat, &pct)

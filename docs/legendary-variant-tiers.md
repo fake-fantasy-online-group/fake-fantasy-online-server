@@ -14,6 +14,8 @@ True tier independently rerolls each of its existing six selected affixes betwee
 
 True and secret multiply only the native equipment template's innate white attributes by 2 and 3. Already-resolved fixed refinement increments remain separate; a template attack of 100 plus fixed refinement 30 becomes 230/330, not 260/390. Random affixes, skill/power coefficients, suit bonuses, socket/fusion attributes, requirements, durability and weight costs are not multiplied. Combat aggregation and native tooltips share the same pure intrinsic calculation.
 
+Weapon attack/magic-attack percentage attributes are local to that weapon, including its native, random, legendary, socket, wash and fusion lines. Their stored percentage and roll range remain unchanged, but their base is the tier-adjusted, unrefined innate weapon value. For example, true/secret innate attack 100 with refinement +30 and an attack +50% line contributes 330/480 attack, before independent character and other-equipment contributions. Min/max percentage lines affect only their respective endpoints. Genuine global suit, skill, status and power effects remain global; the tooltip continues to show innate/refined values and a separate percentage line.
+
 Reforge retains the tier and its immutable bounds. Secret rolls have no variable range, so reforge/temper previews and execution reject without consuming ingredients. Salvage and transfers retain their existing rules.
 
 ## Presentation and compatibility

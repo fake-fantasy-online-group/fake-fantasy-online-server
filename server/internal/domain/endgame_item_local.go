@@ -136,6 +136,7 @@ func UniqueItemBonuses(def ItemDef, st Stack) []Affix {
 }
 func AstralItemBonuses(def ItemDef, st Stack, r AstralRecipe) []Affix {
 	out := ResolveVariableAffixes(r.Affixes, r.VariableAffixes, st.Endgame.FormationRollBP)
+	out = resolveWeaponAttackAffixes(def, st, out)
 	return append(out, ResolveItemLocalEnhancements(def.Equip, r.LocalEnhancements, st.Endgame.FormationRollBP)...)
 }
 

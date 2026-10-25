@@ -16,21 +16,34 @@ type endgameRiftIdentity struct {
 	Gender   uint8
 	Employed bool
 	// Latest authoritative personal MF, retained for eligible disconnected members.
-	MagicFind   int64 `json:",omitempty"`
-	RewardLevel int32 `json:",omitempty"`
+	MagicFind        int64                          `json:",omitempty"`
+	RewardLevel      int32                          `json:",omitempty"`
+	RewardClass      domain.LegendaryRecipientClass `json:",omitempty"`
+	RewardClassKnown bool                           `json:",omitempty"`
+}
+
+// Admission profiles are usable for legacy pending rewards, but a missing
+// profile must not invent warrior merely because Race's zero value is warrior.
+func (identity endgameRiftIdentity) legendaryRecipientClass() domain.LegendaryRecipientClass {
+	if identity.RewardClassKnown {
+		return identity.RewardClass
+	}
+	return domain.LegendaryClassForCharacter(&domain.Character{Race: identity.Race, Employed: identity.Employed, EmploymentKnown: true})
 }
 
 // Completion constructs exact instance identities once; retries never reroll.
 type endgameRiftRewardContext struct {
-	Level     int32
-	MagicFind int64
+	Level               int32
+	MagicFind           int64
+	RecipientClass      domain.LegendaryRecipientClass
+	RecipientClassKnown bool
 }
 
 func (s *Scene) freezeEndgameRiftRewardContexts() map[domain.CharID]endgameRiftRewardContext {
 	contexts := map[domain.CharID]endgameRiftRewardContext{}
 	for char, member := range s.rift.data.Run.Members {
 		profile := s.rift.data.Profiles[char]
-		context := endgameRiftRewardContext{Level: profile.RewardLevel, MagicFind: profile.MagicFind}
+		context := endgameRiftRewardContext{Level: profile.RewardLevel, MagicFind: profile.MagicFind, RecipientClass: profile.legendaryRecipientClass(), RecipientClassKnown: true}
 		if context.Level == 0 {
 			context.Level = member.Level
 		}
@@ -43,6 +56,10 @@ func (s *Scene) freezeEndgameRiftRewardContexts() map[domain.CharID]endgameRiftR
 		}
 		if owner := s.endgameRewardPlayer(char); owner != nil {
 			context.Level, context.MagicFind = owner.Player.Char.Level, s.magicFindV5(owner)
+			context.RecipientClass, context.RecipientClassKnown = domain.LegendaryClassForCharacter(owner.Player.Char), true
+		}
+		if s.rift.data.RewardClasses != nil {
+			context.RecipientClass, context.RecipientClassKnown = s.rift.data.RewardClasses[char], true
 		}
 		contexts[char] = context
 	}
@@ -59,6 +76,18 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 		return
 	}
 	r := d.Run
+	// Capture even if content/provenance prevents this attempt. The exact accepted
+	// death classes survive retries, reconnects and persistence, including zero.
+	if d.RewardClasses == nil {
+		d.RewardClasses = make(map[domain.CharID]domain.LegendaryRecipientClass, len(r.Members))
+		for char := range r.Members {
+			recipient := d.Profiles[char].legendaryRecipientClass()
+			if context := contexts[char]; context.RecipientClassKnown {
+				recipient = context.RecipientClass
+			}
+			d.RewardClasses[char] = recipient
+		}
+	}
 	sourceLevel := s.riftRewardSourceLevel()
 	if sourceLevel > 0 {
 		d.RewardSourceLevel = sourceLevel
@@ -85,7 +114,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			if !member.Eligible {
 				continue
 			}
-			pool := s.riftCumulativeLegendaryPool(r.Rules, poolLevel, member.Level, sourceLevel, d.Profiles[char])
+			pool := s.riftCumulativeLegendaryPool(r.Rules, poolLevel, member.Level, sourceLevel, d.Profiles[char], d.RewardClasses[char])
 			if len(pool) == 0 {
 				s.log.Warn("洞天暗金奖励缺少合法底材，保留待生成状态", "run", r.RunID, "character", char)
 				return
@@ -110,10 +139,24 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			continue
 		}
 		grant := endgameRiftGrant{}
+		rareStacks, err := s.riftRareFeatherStacks(char)
+		if err != nil {
+			s.log.Warn("洞天稀羽配置无效，保留待生成状态", "run", r.RunID, "error", err)
+			return
+		}
+		grant.Items = append(grant.Items, rareStacks...)
+		if reward, ok := r.Rules.WingRepeatReward(r.Tier); ok {
+			stacks, err := s.riftWingPackage(reward.Rewards())
+			if err != nil {
+				s.log.Warn("洞天羽毛配置无效，保留待生成状态", "run", r.RunID, "error", err)
+				return
+			}
+			grant.Items = append(grant.Items, stacks...)
+		}
 		if r.Rules.CumulativeLegendaryPerTier > 0 {
 			count := s.riftCumulativeRandom(char, -1, "count")
 			for i, n := int32(0), plan.CumulativeLegendaryCount(count.Intn); i < n; i++ {
-				stack := s.rollEndgameRiftCumulativeLegendary(char, i, legendaryPools[char])
+				stack := s.rollEndgameRiftCumulativeLegendary(char, i, legendaryPools[char], d.RewardClasses[char])
 				if stack.Empty() {
 					s.log.Warn("洞天暗金奖励生成失败，保留待生成状态", "run", r.RunID, "character", char, "ordinal", i)
 					return
@@ -148,7 +191,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			}
 			// A guaranteed unique slot has its own wearer-legal259-base pool.
 			// All other slots retain the complete ordinary native pool above.
-			if s.riftLegendaryBaseEligibleAtLevel(def, sourceLevel) {
+			if s.riftLegendaryBaseEligibleAtLevel(def, sourceLevel, d.RewardClasses[char]) {
 				if def.Equip.LevelReq > bestUnique {
 					bestUnique = def.Equip.LevelReq
 					guaranteedUniques = nil
@@ -180,7 +223,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			equipment = r.Rules.EquipmentPoolForLevel(poolLevel, eligible)
 			equipment = r.Rules.FillMissingEquipmentSlots(equipment, m.Level, s.items, eligible)
 			for _, id := range equipment {
-				if s.riftLegendaryBaseEligibleAtLevel(s.items[id], sourceLevel) {
+				if s.riftLegendaryBaseEligibleAtLevel(s.items[id], sourceLevel, d.RewardClasses[char]) {
 					guaranteedUniques = append(guaranteedUniques, id)
 				}
 			}
@@ -205,7 +248,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 				copy(stack.RolledAffixes[:], affixes)
 				if (r.Tier >= r.Rules.GuaranteedUniqueTier && i == 0) || rng.Intn(100) < int(plan.UniqueChance) {
 					if def.LegendaryEnabled {
-						s.equipmentRoll.ApplyLegendaryLegacyAtLevel(&stack, def, sourceLevel, rng.Intn)
+						s.equipmentRoll.ApplyLegendaryLegacyForRecipientAtLevel(&stack, def, sourceLevel, d.RewardClasses[char], rng.Intn)
 					} else {
 						domain.ApplyUnique(&stack, def, rng.Intn)
 					}
@@ -235,7 +278,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 		if plan.NormalBossEquipment > 0 {
 			grant.MagicFind = contexts[char].MagicFind
 			for i := int32(0); i < plan.NormalBossEquipment && len(equipment) > 0; i++ {
-				if stack := s.rollEndgameRiftNormalBossEquipment(char, i, equipment, grant.MagicFind); !stack.Empty() {
+				if stack := s.rollEndgameRiftNormalBossEquipment(char, i, equipment, grant.MagicFind, d.RewardClasses[char]); !stack.Empty() {
 					grant.Items = append(grant.Items, stack)
 				}
 			}
@@ -285,7 +328,7 @@ func (s *Scene) publishEndgameRewardExperience(p *entity.Entity, previousLevel i
 
 // Each item/purpose is keyed to the durable run and recipient, not scene tick,
 // killer, live loot version or another reward slot's RNG consumption.
-func (s *Scene) rollEndgameRiftNormalBossEquipment(char domain.CharID, ordinal int32, pool []domain.ItemID, magicFind int64) domain.Stack {
+func (s *Scene) rollEndgameRiftNormalBossEquipment(char domain.CharID, ordinal int32, pool []domain.ItemID, magicFind int64, recipient ...domain.LegendaryRecipientClass) domain.Stack {
 	// Refilter even explicit/cached pools. A stale database pool is not permission
 	// to award hard-dungeon equipment in a Rift.
 	allowed := make([]domain.ItemID, 0, len(pool))
@@ -320,9 +363,9 @@ func (s *Scene) rollEndgameRiftNormalBossEquipment(char domain.CharID, ordinal i
 			if !def.LegendaryEnabled {
 				rule.UniqueBasePPB = 0
 			}
-			s.rollEquipmentQualityV5(def, &stack, sourceLevel, table, domain.DefaultColorProfile, true, magicFind, &rule, quality.Int63n, values.Int63n, unique.Int63n, variables.Intn)
+			s.rollEquipmentQualityV5(def, &stack, sourceLevel, table, domain.DefaultColorProfile, true, magicFind, &rule, quality.Int63n, values.Int63n, unique.Int63n, variables.Intn, recipient...)
 		} else {
-			s.rollNaturalEquipmentQualityV5Legacy(def, &stack, sourceLevel, domain.DefaultColorProfile, true, magicFind, r.Rules.Loot, &quality, &values, &unique, &variables)
+			s.rollNaturalEquipmentQualityV5Legacy(def, &stack, sourceLevel, domain.DefaultColorProfile, true, magicFind, r.Rules.Loot, &quality, &values, &unique, &variables, recipient...)
 		}
 	}
 	return stack
@@ -336,12 +379,16 @@ func (s *Scene) riftLegendaryBaseEligible(def domain.ItemDef) bool {
 	return s.riftLegendaryBaseEligibleAtLevel(def, def.Equip.LevelReq)
 }
 
-func (s *Scene) riftLegendaryBaseEligibleAtLevel(def domain.ItemDef, sourceLevel int32) bool {
+func (s *Scene) riftLegendaryBaseEligibleAtLevel(def domain.ItemDef, sourceLevel int32, recipient ...domain.LegendaryRecipientClass) bool {
 	if def.HardDungeonOnly || def.Equip == nil || def.Equip.LevelReq > 60 || !domain.NativeEquipmentDropEligible(def) {
 		return false
 	}
 	if def.LegendaryEnabled {
-		return s.equipmentRoll.LegendaryReady(def) && len(domain.LegendaryCandidatesAtLevel(def, sourceLevel)) > 0
+		var recipientClass domain.LegendaryRecipientClass
+		if len(recipient) > 0 {
+			recipientClass = recipient[0]
+		}
+		return s.equipmentRoll.LegendaryReady(def) && len(domain.LegendaryCandidatesForRecipientAtLevel(def, sourceLevel, recipientClass)) > 0
 	}
 	u, ok := domain.UniqueForBase(def.ID, s.endgameCatalog)
 	return ok && u.NativeDropEligible
@@ -349,7 +396,11 @@ func (s *Scene) riftLegendaryBaseEligibleAtLevel(def domain.ItemDef, sourceLevel
 
 // Select only frozen native pools and wearer-legal bases with a real executable
 // power and six-affix foundation. No fixed named gear or legacy Unique fallback.
-func (s *Scene) riftCumulativeLegendaryPool(rules *domain.RiftRules, poolLevel, wearLevel, sourceLevel int32, identity endgameRiftIdentity) []domain.ItemID {
+func (s *Scene) riftCumulativeLegendaryPool(rules *domain.RiftRules, poolLevel, wearLevel, sourceLevel int32, identity endgameRiftIdentity, recipient ...domain.LegendaryRecipientClass) []domain.ItemID {
+	recipientClass := identity.legendaryRecipientClass()
+	if len(recipient) > 0 {
+		recipientClass = recipient[0]
+	}
 	character := &domain.Character{Race: identity.Race, Employed: identity.Employed, EmploymentKnown: true}
 	sex := uint8(2)
 	if identity.Gender == 1 {
@@ -366,7 +417,7 @@ func (s *Scene) riftCumulativeLegendaryPool(rules *domain.RiftRules, poolLevel, 
 		def, ok := s.items[id]
 		allowed := ok && def.LegendaryEnabled && def.Equip != nil && !def.Equip.AscensionOnly &&
 			def.Equip.LevelReq <= wearLevel && def.Equip.Need.Level <= wearLevel && def.Equip.Need.AllowsCharacter(character) &&
-			(def.Equip.Need.Sex == 0 || def.Equip.Need.Sex == sex) && s.riftLegendaryBaseEligibleAtLevel(def, sourceLevel)
+			(def.Equip.Need.Sex == 0 || def.Equip.Need.Sex == sex) && s.riftLegendaryBaseEligibleAtLevel(def, sourceLevel, recipientClass)
 		eligibility[id] = allowed
 		return allowed
 	}
@@ -382,7 +433,7 @@ func (s *Scene) riftCumulativeRandom(char domain.CharID, ordinal int32, purpose 
 	return lootRandomV5{binary.BigEndian.Uint64(hash[:8])}
 }
 
-func (s *Scene) rollEndgameRiftCumulativeLegendary(char domain.CharID, ordinal int32, pool []domain.ItemID) domain.Stack {
+func (s *Scene) rollEndgameRiftCumulativeLegendary(char domain.CharID, ordinal int32, pool []domain.ItemID, recipient domain.LegendaryRecipientClass) domain.Stack {
 	if len(pool) == 0 {
 		return domain.Stack{}
 	}
@@ -390,7 +441,7 @@ func (s *Scene) rollEndgameRiftCumulativeLegendary(char domain.CharID, ordinal i
 	def := s.items[pool[item.Intn(len(pool))]]
 	stack := domain.NewStack(def, 1)
 	stack.Bound = true
-	if !s.equipmentRoll.ApplyLegendaryAtLevel(&stack, def, s.rift.data.RewardSourceLevel, values.Intn) {
+	if !s.equipmentRoll.ApplyLegendaryForRecipientAtLevel(&stack, def, s.rift.data.RewardSourceLevel, recipient, values.Intn) {
 		return domain.Stack{}
 	}
 	return stack

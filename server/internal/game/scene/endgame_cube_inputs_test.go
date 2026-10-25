@@ -135,7 +135,7 @@ func TestEndgameCubeInputsWorkbenchBindingAndNoMatch(t *testing.T) {
 	r.CubeInputs[0].Count++
 	s.onEndgameCube(s.players[1], r)
 	ev, _ = firstOf[event.EndgameMessage](cubeTake(s, sink))
-	if ev.Message.Error != "no_match" || !reflect.DeepEqual(before, s.players[1].Player.Bag) || s.endgamePlayer(s.players[1]).cube != nil {
+	if ev.Message.Error != "partial_match" || !reflect.DeepEqual(before, s.players[1].Player.Bag) || s.endgamePlayer(s.players[1]).cube != nil {
 		t.Fatal("unmatched quantity consumed or preserved executable quote")
 	}
 }
@@ -172,6 +172,36 @@ func TestEndgameCubeQuoteBindsImmutableRulesAcrossCachedRetry(t *testing.T) {
 			ev, _ := firstOf[event.EndgameMessage](cubeTake(s, sink))
 			if ev.Message.Error != "quote_expired" || b.commits != committed || !reflect.DeepEqual(before, p.Player.Bag) || s.endgamePlayer(p).cube != nil {
 				t.Fatalf("replaced rule snapshot executed: %+v", ev.Message)
+			}
+		})
+	}
+}
+
+func TestEndgameCubeMismatchUsesExistingErrorEnvelopeWithoutConsumption(t *testing.T) {
+	for _, tc := range []struct {
+		name, code, message string
+		inputs              []domain.CubeInput
+	}{
+		{"none", "no_match", "鼎中诸物，未合炼方。", []domain.CubeInput{{ItemID: 1999999999, Count: 1}}},
+		{"partial", "partial_match", "部分材料相合，尚需调配。", []domain.CubeInput{{ItemID: domain.CubeStarMarrow, Count: 30}}},
+		{"count", "insufficient_count", "材料虽合，数目尚缺。", []domain.CubeInput{{ItemID: domain.CubeStarMarrow, Count: 29}, {ItemID: domain.CubePurifiedDust, Count: 10}}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			s, sink, b := cubeSceneFixture(t)
+			inputCubeNPC(s)
+			p := s.players[1]
+			s.items[1999999999] = domain.ItemDef{ID: 1999999999, Name: "无关材料", Stackable: true, InventoryTab: 1, InventoryTabKnown: true}
+			p.Player.Bag.Set(102, domain.Stack{Item: 1999999999, Count: 1})
+			before, money := p.Player.Bag.Clone(), p.Player.Char.Money
+			req := inputCubeQuoteRequest()
+			req.CubeInputs = tc.inputs
+			s.onEndgameCube(p, req)
+			ev, ok := firstOf[event.EndgameMessage](cubeTake(s, sink))
+			if !ok || ev.Message.OK || ev.Message.Error != tc.code || ev.Message.Message != tc.message || ev.Message.Quote != nil {
+				t.Fatalf("wrong envelope: %+v", ev.Message)
+			}
+			if b.commits != 0 || !reflect.DeepEqual(before, p.Player.Bag) || money != p.Player.Char.Money || s.endgamePlayer(p).cube != nil {
+				t.Fatal("mismatch created a quote or consumed inputs")
 			}
 		})
 	}

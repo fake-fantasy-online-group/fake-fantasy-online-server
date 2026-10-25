@@ -1,0 +1,54 @@
+// Real PostgreSQL engine, focused prerequisite schema; not a full/live initializer.
+// PGLITE_MODULE=/path/to/@electric-sql/pglite node server/tests/cube_wing_migration_postgres.mjs
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
+const {PGlite}=require(process.env.PGLITE_MODULE||'@electric-sql/pglite');
+const root=new URL('../',import.meta.url);
+const read=p=>fs.readFileSync(new URL(p,root),'utf8');
+const sql=read('migrations/upgrades/000110_20261025_cube_wing_progression.sql');
+assert.equal(sql,'-- Existing databases: apply atomically; do not rerun fresh init.\nBEGIN;\n'+read('migrations/000000_init-110.sql')+'COMMIT;\n');
+const cfg=JSON.parse(read('config/cube-wing-progression-v1.json'));
+const rewards=JSON.parse(read('config/rift-wing-rewards-v14.json'));
+assert.deepEqual(rewards.RareFeather,{Item:11682,Count:1,ChanceBP:50});
+async function setup(){const db=new PGlite();await db.exec(`
+ CREATE TABLE game_equipment(id integer PRIMARY KEY,name text NOT NULL,raw bytea NOT NULL DEFAULT ''::bytea);
+ CREATE TABLE item_instances(uid bigint PRIMARY KEY);
+ CREATE TABLE game_rift_rule_versions(version integer PRIMARY KEY,published boolean,cumulative_legendary_per_tier integer,normal_boss_equipment integer,sentinel text,guardian_hp_divisor integer);
+ CREATE TABLE game_rift_rule_active(id integer PRIMARY KEY,version integer);
+ CREATE TABLE game_rift_class_rules(version integer,class integer,hp_bp integer,damage_bp integer,PRIMARY KEY(version,class));
+ CREATE TABLE game_rift_ability_rules(version integer,id integer,name text,affix text,warning text,shape text,radius integer,inner_radius integer,length integer,delay_ms integer,damage_pct integer,PRIMARY KEY(version,id));
+ CREATE TABLE map_npcs(map_file text,npc_id integer,sprite integer,name text,script text,x integer,y integer,dir integer,sell_list integer,trans_list integer,hide boolean,PRIMARY KEY(map_file,npc_id));
+ CREATE TABLE game_tasks(id integer PRIMARY KEY,name text,npc text,map text,level_min integer,level_max integer,descr text,reward text);
+ CREATE TABLE game_task_prerequisites(task_id integer,seq integer,prerequisite_task_id integer,PRIMARY KEY(task_id,seq));
+ CREATE TABLE game_task_rewards(task_id integer PRIMARY KEY);
+ CREATE TABLE game_task_reward_items(task_id integer,seq integer,item_id integer,qty integer,PRIMARY KEY(task_id,seq));
+ CREATE TABLE game_task_flows(layer text,task_id integer,task_name text,publisher text,PRIMARY KEY(layer,task_id));
+ CREATE TABLE game_task_flow_steps(layer text,task_id integer,step_no integer,target_npc text,kind text,text text,say text,done boolean,PRIMARY KEY(layer,task_id,step_no));
+ INSERT INTO game_rift_rule_versions VALUES(12,true,10,10,'preserve-old-economy',NULL),(13,true,10,10,'preserve-old-economy',10);
+ INSERT INTO game_rift_rule_active VALUES(1,13);
+ INSERT INTO game_rift_class_rules SELECT 13,n,10000,10000 FROM generate_series(0,3)n;
+ INSERT INTO game_rift_ability_rules SELECT 13,n,'a','b','c','circle',10,0,0,1000,10 FROM generate_series(1,3)n;
+ INSERT INTO map_npcs VALUES('qw0007',73,611,'巧匠左慈','N611FY',0,0,0,0,0,false);
+ INSERT INTO game_tasks(id,name) VALUES(1900030001,'问鼎周天');
+ `);for(const w of cfg.Items)await db.query('INSERT INTO game_equipment(id,name) VALUES($1,$2)',[w.Item,w.Item===20609?'光之翼':'native']);return db;}
+const db=await setup();await db.exec(sql);
+assert.deepEqual((await db.query('SELECT configuration FROM game_wing_progression_rules WHERE active')).rows[0].configuration,cfg);
+assert.equal((await db.query('SELECT count(*)::integer AS n FROM game_wing_transform_edges')).rows[0].n,cfg.Recipes.filter(r=>r.Operation!=='wing.feather').length);
+assert.equal((await db.query('SELECT version FROM game_rift_rule_active')).rows[0].version,14);
+assert.deepEqual((await db.query('SELECT wing_rewards FROM game_rift_rule_versions WHERE version=14')).rows[0].wing_rewards,rewards);
+assert.equal((await db.query('SELECT wing_rewards FROM game_rift_rule_versions WHERE version=12')).rows[0].wing_rewards,null);
+assert.equal((await db.query('SELECT sentinel FROM game_rift_rule_versions WHERE version=14')).rows[0].sentinel,'preserve-old-economy');
+assert.equal((await db.query('SELECT guardian_hp_divisor FROM game_rift_rule_versions WHERE version=14')).rows[0].guardian_hp_divisor,10);
+assert.deepEqual((await db.query('SELECT item_id,qty FROM game_task_reward_items WHERE task_id=1900030002')).rows,[{item_id:20609,qty:1}]);
+await db.exec(sql);assert.equal((await db.query('SELECT count(*)::integer AS n FROM game_task_reward_items')).rows[0].n,1);
+await db.exec('INSERT INTO item_instances VALUES(99)');
+await db.query('INSERT INTO equipment_wing_power_state VALUES(99,$1::jsonb)',[JSON.stringify([{},{},{}])]);
+await assert.rejects(db.query('UPDATE equipment_wing_power_state SET state=$1::jsonb WHERE uid=99',[JSON.stringify([{},{}])]));
+const bad=await setup();await bad.exec("INSERT INTO map_npcs VALUES('qw0007',96,1,'occupied','other',0,0,0,0,0,false)");
+await assert.rejects(bad.exec(sql));await bad.exec('ROLLBACK');
+assert.equal((await bad.query('SELECT version FROM game_rift_rule_active')).rows[0].version,13);
+assert.equal((await bad.query("SELECT to_regclass('game_wing_progression_rules') AS name")).rows[0].name,null);
+console.log('PASS: active config, native edges, immutable prior rules, white packages, guide gift, replay, power array constraint, atomic rollback');
+await db.close();await bad.close();

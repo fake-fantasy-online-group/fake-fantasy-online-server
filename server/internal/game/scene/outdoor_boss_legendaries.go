@@ -22,7 +22,7 @@ func (s *Scene) rollOutdoorBossLegendaries(dead *entity.Entity, context domain.L
 		return 0
 	}
 	dead.Monster.OutdoorBossLegendariesGranted = true
-	pool := s.outdoorBossLegendaryPool(dead)
+	pool := s.outdoorBossLegendaryPool(dead, context.RecipientClass)
 	if len(pool) == 0 {
 		s.log.Warn("野外 BOSS 暗金保底没有合法底材", "monster", dead.Monster.TypeID, "level", dead.Level, "owner", context.Owner)
 		return 0
@@ -40,7 +40,7 @@ func (s *Scene) rollOutdoorBossLegendaries(dead *entity.Entity, context domain.L
 		st := domain.NewStack(def, 1)
 		// Generates six legal affixes, one power and its variant exactly once. Power
 		// level eligibility follows the source monster, not the equipment or owner.
-		if !s.equipmentRoll.ApplyLegendaryAtLevel(&st, def, dead.Level, variables.Intn) {
+		if !s.equipmentRoll.ApplyLegendaryForRecipientAtLevel(&st, def, dead.Level, context.RecipientClass, variables.Intn) {
 			s.log.Error("野外 BOSS 暗金保底生成失败", "monster", dead.Monster.TypeID, "item", def.ID, "level", dead.Level)
 			return 0 // Do not publish a partial pair or replace it with old Unique.
 		}
@@ -55,15 +55,19 @@ func (s *Scene) rollOutdoorBossLegendaries(dead *entity.Entity, context domain.L
 	return len(stacks)
 }
 
-func (s *Scene) outdoorBossLegendaryPool(dead *entity.Entity) []domain.ItemID {
+func (s *Scene) outdoorBossLegendaryPool(dead *entity.Entity, recipient ...domain.LegendaryRecipientClass) []domain.ItemID {
 	if dead == nil || dead.Monster == nil {
 		return nil
+	}
+	var recipientClass domain.LegendaryRecipientClass
+	if len(recipient) > 0 {
+		recipientClass = recipient[0]
 	}
 	unique := map[domain.ItemID]bool{}
 	add := func(id domain.ItemID) {
 		def, ok := s.items[id]
 		if ok && domain.NativeEquipmentDropEligible(def) && def.LegendaryEnabled &&
-			s.equipmentRoll.LegendaryReady(def) && len(domain.LegendaryCandidatesAtLevel(def, dead.Level)) > 0 {
+			s.equipmentRoll.LegendaryReady(def) && len(domain.LegendaryCandidatesForRecipientAtLevel(def, dead.Level, recipientClass)) > 0 {
 			unique[id] = true
 		}
 	}

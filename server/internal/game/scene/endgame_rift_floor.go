@@ -118,10 +118,8 @@ func (s *Scene) advanceEndgameRift(p *entity.Entity, req domain.EndgameRequest) 
 		s.endgameError(p, req, "layout", "暂无可用下一层，请稍后重试")
 		return
 	}
-	if x.data.Run.Rules.CompletionLevelExperience || x.data.Run.Rules.NormalBossEquipment > 0 {
-		for char, context := range s.freezeEndgameRiftRewardContexts() {
-			s.cacheEndgameRiftRewardContext(char, context)
-		}
+	for char, context := range s.freezeEndgameRiftRewardContexts() {
+		s.cacheEndgameRiftRewardContext(char, context)
 	}
 	next := x.data.clone()
 	next.Floor = &plan

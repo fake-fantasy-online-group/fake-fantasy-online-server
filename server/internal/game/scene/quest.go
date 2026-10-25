@@ -50,6 +50,10 @@ func (s *Scene) onAcceptQuest(cmd AcceptQuest) {
 	reject := func(r event.RejectReason) {
 		s.emitTo(p.ID, event.Rejected{Who: p.ID, Cmd: "AcceptQuest", Reason: r})
 	}
+	if cmd.Quest == domain.WingGuideQuestID && s.wingRules == nil {
+		reject(event.RejectUnknown)
+		return
+	}
 	if s.quests == nil {
 		reject(event.RejectUnknown)
 		return
@@ -147,6 +151,10 @@ func (s *Scene) onCompleteQuest(cmd CompleteQuest) {
 	reject := func(r event.RejectReason) {
 		s.emitTo(p.ID, event.Rejected{Who: p.ID, Cmd: "CompleteQuest", Reason: r})
 	}
+	if cmd.Quest == domain.WingGuideQuestID && s.wingRules == nil {
+		reject(event.RejectUnknown)
+		return
+	}
 	if s.quests == nil {
 		reject(event.RejectUnknown)
 		return
@@ -167,6 +175,10 @@ func (s *Scene) onCompleteQuest(cmd CompleteQuest) {
 	}
 	if !ch.AllowsCareerQuest(def.ID) {
 		reject(event.RejectWrongProf)
+		return
+	}
+	if s.wingRules != nil && def.ID == s.wingRules.Config().Quest {
+		s.completeWingGuide(p, def, reject)
 		return
 	}
 	if def.RecoveryItem != 0 {

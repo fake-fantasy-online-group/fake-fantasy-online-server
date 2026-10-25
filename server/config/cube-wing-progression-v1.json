@@ -1,0 +1,1673 @@
+{
+  "Version": 1,
+  "Entrance": {
+    "mapId": 7,
+    "npcId": 96,
+    "npc": "幻翼域使者",
+    "script": "N2619LC"
+  },
+  "Quest": 1900030002,
+  "Starter": 20609,
+  "Items": [
+    {
+      "Item": 20609,
+      "Tier": 1,
+      "Series": "light",
+      "Variant": "",
+      "Ascended": false
+    },
+    {
+      "Item": 20611,
+      "Tier": 2,
+      "Series": "light",
+      "Variant": "",
+      "Ascended": false
+    },
+    {
+      "Item": 20613,
+      "Tier": 3,
+      "Series": "light",
+      "Variant": "",
+      "Ascended": false
+    },
+    {
+      "Item": 20615,
+      "Tier": 4,
+      "Series": "light",
+      "Variant": "",
+      "Ascended": false
+    },
+    {
+      "Item": 20617,
+      "Tier": 5,
+      "Series": "light",
+      "Variant": "physical",
+      "Ascended": false
+    },
+    {
+      "Item": 20621,
+      "Tier": 6,
+      "Series": "light",
+      "Variant": "physical",
+      "Ascended": false
+    },
+    {
+      "Item": 20625,
+      "Tier": 7,
+      "Series": "light",
+      "Variant": "physical",
+      "Ascended": false
+    },
+    {
+      "Item": 21905,
+      "Tier": 8,
+      "Series": "light",
+      "Variant": "physical",
+      "Ascended": true
+    },
+    {
+      "Item": 20618,
+      "Tier": 5,
+      "Series": "light",
+      "Variant": "magic",
+      "Ascended": false
+    },
+    {
+      "Item": 20622,
+      "Tier": 6,
+      "Series": "light",
+      "Variant": "magic",
+      "Ascended": false
+    },
+    {
+      "Item": 20626,
+      "Tier": 7,
+      "Series": "light",
+      "Variant": "magic",
+      "Ascended": false
+    },
+    {
+      "Item": 21906,
+      "Tier": 8,
+      "Series": "light",
+      "Variant": "magic",
+      "Ascended": true
+    },
+    {
+      "Item": 20610,
+      "Tier": 1,
+      "Series": "light",
+      "Variant": "",
+      "Ascended": true
+    },
+    {
+      "Item": 20612,
+      "Tier": 2,
+      "Series": "light",
+      "Variant": "",
+      "Ascended": true
+    },
+    {
+      "Item": 20614,
+      "Tier": 3,
+      "Series": "light",
+      "Variant": "",
+      "Ascended": true
+    },
+    {
+      "Item": 20616,
+      "Tier": 4,
+      "Series": "light",
+      "Variant": "",
+      "Ascended": true
+    },
+    {
+      "Item": 20619,
+      "Tier": 5,
+      "Series": "light",
+      "Variant": "physical",
+      "Ascended": true
+    },
+    {
+      "Item": 20623,
+      "Tier": 6,
+      "Series": "light",
+      "Variant": "physical",
+      "Ascended": true
+    },
+    {
+      "Item": 20627,
+      "Tier": 7,
+      "Series": "light",
+      "Variant": "physical",
+      "Ascended": true
+    },
+    {
+      "Item": 20620,
+      "Tier": 5,
+      "Series": "light",
+      "Variant": "magic",
+      "Ascended": true
+    },
+    {
+      "Item": 20624,
+      "Tier": 6,
+      "Series": "light",
+      "Variant": "magic",
+      "Ascended": true
+    },
+    {
+      "Item": 20628,
+      "Tier": 7,
+      "Series": "light",
+      "Variant": "magic",
+      "Ascended": true
+    },
+    {
+      "Item": 22863,
+      "Tier": 1,
+      "Series": "dark",
+      "Variant": "",
+      "Ascended": false
+    },
+    {
+      "Item": 22864,
+      "Tier": 2,
+      "Series": "dark",
+      "Variant": "",
+      "Ascended": false
+    },
+    {
+      "Item": 22865,
+      "Tier": 3,
+      "Series": "dark",
+      "Variant": "",
+      "Ascended": false
+    },
+    {
+      "Item": 22866,
+      "Tier": 4,
+      "Series": "dark",
+      "Variant": "",
+      "Ascended": false
+    },
+    {
+      "Item": 22867,
+      "Tier": 5,
+      "Series": "dark",
+      "Variant": "physical",
+      "Ascended": false
+    },
+    {
+      "Item": 22869,
+      "Tier": 6,
+      "Series": "dark",
+      "Variant": "physical",
+      "Ascended": false
+    },
+    {
+      "Item": 22871,
+      "Tier": 7,
+      "Series": "dark",
+      "Variant": "physical",
+      "Ascended": false
+    },
+    {
+      "Item": 21907,
+      "Tier": 8,
+      "Series": "dark",
+      "Variant": "physical",
+      "Ascended": true
+    },
+    {
+      "Item": 22868,
+      "Tier": 5,
+      "Series": "dark",
+      "Variant": "magic",
+      "Ascended": false
+    },
+    {
+      "Item": 22870,
+      "Tier": 6,
+      "Series": "dark",
+      "Variant": "magic",
+      "Ascended": false
+    },
+    {
+      "Item": 22872,
+      "Tier": 7,
+      "Series": "dark",
+      "Variant": "magic",
+      "Ascended": false
+    },
+    {
+      "Item": 21908,
+      "Tier": 8,
+      "Series": "dark",
+      "Variant": "magic",
+      "Ascended": true
+    },
+    {
+      "Item": 23669,
+      "Tier": 1,
+      "Series": "dark",
+      "Variant": "",
+      "Ascended": true
+    },
+    {
+      "Item": 23670,
+      "Tier": 2,
+      "Series": "dark",
+      "Variant": "",
+      "Ascended": true
+    },
+    {
+      "Item": 23671,
+      "Tier": 3,
+      "Series": "dark",
+      "Variant": "",
+      "Ascended": true
+    },
+    {
+      "Item": 23672,
+      "Tier": 4,
+      "Series": "dark",
+      "Variant": "",
+      "Ascended": true
+    },
+    {
+      "Item": 23673,
+      "Tier": 5,
+      "Series": "dark",
+      "Variant": "physical",
+      "Ascended": true
+    },
+    {
+      "Item": 23675,
+      "Tier": 6,
+      "Series": "dark",
+      "Variant": "physical",
+      "Ascended": true
+    },
+    {
+      "Item": 23677,
+      "Tier": 7,
+      "Series": "dark",
+      "Variant": "physical",
+      "Ascended": true
+    },
+    {
+      "Item": 23674,
+      "Tier": 5,
+      "Series": "dark",
+      "Variant": "magic",
+      "Ascended": true
+    },
+    {
+      "Item": 23676,
+      "Tier": 6,
+      "Series": "dark",
+      "Variant": "magic",
+      "Ascended": true
+    },
+    {
+      "Item": 23678,
+      "Tier": 7,
+      "Series": "dark",
+      "Variant": "magic",
+      "Ascended": true
+    }
+  ],
+  "FeatherIDs": [
+    25027,
+    25028,
+    25029,
+    11682
+  ],
+  "Recipes": [
+    {
+      "ID": 900001,
+      "Source": 20609,
+      "Target": 20611,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 2
+        },
+        {
+          "ItemID": 25028,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "ID": 900002,
+      "Source": 20611,
+      "Target": 20613,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 6
+        },
+        {
+          "ItemID": 25028,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "ID": 900003,
+      "Source": 20613,
+      "Target": 20615,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 16
+        }
+      ]
+    },
+    {
+      "ID": 900004,
+      "Source": 20615,
+      "Target": 20617,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 32
+        }
+      ],
+      "ProfessionMask": 7
+    },
+    {
+      "ID": 900005,
+      "Source": 20617,
+      "Target": 20621,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 60
+        }
+      ]
+    },
+    {
+      "ID": 900006,
+      "Source": 20621,
+      "Target": 20625,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 100
+        }
+      ]
+    },
+    {
+      "ID": 900007,
+      "Source": 20625,
+      "Target": 21905,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 160
+        }
+      ]
+    },
+    {
+      "ID": 900008,
+      "Source": 20615,
+      "Target": 20618,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 32
+        }
+      ],
+      "ProfessionMask": 24
+    },
+    {
+      "ID": 900009,
+      "Source": 20618,
+      "Target": 20622,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 60
+        }
+      ]
+    },
+    {
+      "ID": 900010,
+      "Source": 20622,
+      "Target": 20626,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 100
+        }
+      ]
+    },
+    {
+      "ID": 900011,
+      "Source": 20626,
+      "Target": 21906,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 160
+        }
+      ]
+    },
+    {
+      "ID": 900012,
+      "Source": 20610,
+      "Target": 20612,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 2
+        },
+        {
+          "ItemID": 25028,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "ID": 900013,
+      "Source": 20612,
+      "Target": 20614,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 6
+        },
+        {
+          "ItemID": 25028,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "ID": 900014,
+      "Source": 20614,
+      "Target": 20616,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 16
+        }
+      ]
+    },
+    {
+      "ID": 900015,
+      "Source": 20616,
+      "Target": 20619,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 32
+        }
+      ],
+      "ProfessionMask": 7
+    },
+    {
+      "ID": 900016,
+      "Source": 20619,
+      "Target": 20623,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 60
+        }
+      ]
+    },
+    {
+      "ID": 900017,
+      "Source": 20623,
+      "Target": 20627,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 100
+        }
+      ]
+    },
+    {
+      "ID": 900018,
+      "Source": 20627,
+      "Target": 21905,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 160
+        }
+      ]
+    },
+    {
+      "ID": 900019,
+      "Source": 20616,
+      "Target": 20620,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 32
+        }
+      ],
+      "ProfessionMask": 24
+    },
+    {
+      "ID": 900020,
+      "Source": 20620,
+      "Target": 20624,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 60
+        }
+      ]
+    },
+    {
+      "ID": 900021,
+      "Source": 20624,
+      "Target": 20628,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 100
+        }
+      ]
+    },
+    {
+      "ID": 900022,
+      "Source": 20628,
+      "Target": 21906,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 160
+        }
+      ]
+    },
+    {
+      "ID": 900023,
+      "Source": 22863,
+      "Target": 22864,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 2
+        },
+        {
+          "ItemID": 25028,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "ID": 900024,
+      "Source": 22864,
+      "Target": 22865,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 6
+        },
+        {
+          "ItemID": 25028,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "ID": 900025,
+      "Source": 22865,
+      "Target": 22866,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 16
+        }
+      ]
+    },
+    {
+      "ID": 900026,
+      "Source": 22866,
+      "Target": 22867,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 32
+        }
+      ],
+      "ProfessionMask": 7
+    },
+    {
+      "ID": 900027,
+      "Source": 22867,
+      "Target": 22869,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 60
+        }
+      ]
+    },
+    {
+      "ID": 900028,
+      "Source": 22869,
+      "Target": 22871,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 100
+        }
+      ]
+    },
+    {
+      "ID": 900029,
+      "Source": 22871,
+      "Target": 21907,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 160
+        }
+      ]
+    },
+    {
+      "ID": 900030,
+      "Source": 22866,
+      "Target": 22868,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 32
+        }
+      ],
+      "ProfessionMask": 24
+    },
+    {
+      "ID": 900031,
+      "Source": 22868,
+      "Target": 22870,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 60
+        }
+      ]
+    },
+    {
+      "ID": 900032,
+      "Source": 22870,
+      "Target": 22872,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 100
+        }
+      ]
+    },
+    {
+      "ID": 900033,
+      "Source": 22872,
+      "Target": 21908,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 160
+        }
+      ]
+    },
+    {
+      "ID": 900034,
+      "Source": 23669,
+      "Target": 23670,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 2
+        },
+        {
+          "ItemID": 25028,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "ID": 900035,
+      "Source": 23670,
+      "Target": 23671,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 6
+        },
+        {
+          "ItemID": 25028,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "ID": 900036,
+      "Source": 23671,
+      "Target": 23672,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 16
+        }
+      ]
+    },
+    {
+      "ID": 900037,
+      "Source": 23672,
+      "Target": 23673,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 32
+        }
+      ],
+      "ProfessionMask": 7
+    },
+    {
+      "ID": 900038,
+      "Source": 23673,
+      "Target": 23675,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 60
+        }
+      ]
+    },
+    {
+      "ID": 900039,
+      "Source": 23675,
+      "Target": 23677,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 100
+        }
+      ]
+    },
+    {
+      "ID": 900040,
+      "Source": 23677,
+      "Target": 21907,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 160
+        }
+      ]
+    },
+    {
+      "ID": 900041,
+      "Source": 23672,
+      "Target": 23674,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 32
+        }
+      ],
+      "ProfessionMask": 24
+    },
+    {
+      "ID": 900042,
+      "Source": 23674,
+      "Target": 23676,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 60
+        }
+      ]
+    },
+    {
+      "ID": 900043,
+      "Source": 23676,
+      "Target": 23678,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 100
+        }
+      ]
+    },
+    {
+      "ID": 900044,
+      "Source": 23678,
+      "Target": 21908,
+      "Operation": "wing.upgrade",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 160
+        }
+      ]
+    },
+    {
+      "ID": 900045,
+      "Source": 20609,
+      "Target": 22863,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900046,
+      "Source": 20611,
+      "Target": 22864,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900047,
+      "Source": 20613,
+      "Target": 22865,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900048,
+      "Source": 20615,
+      "Target": 22866,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900049,
+      "Source": 20617,
+      "Target": 22867,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900050,
+      "Source": 20621,
+      "Target": 22869,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900051,
+      "Source": 20625,
+      "Target": 22871,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900052,
+      "Source": 21905,
+      "Target": 21907,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900053,
+      "Source": 20618,
+      "Target": 22868,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900054,
+      "Source": 20622,
+      "Target": 22870,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900055,
+      "Source": 20626,
+      "Target": 22872,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900056,
+      "Source": 21906,
+      "Target": 21908,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900057,
+      "Source": 20610,
+      "Target": 23669,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900058,
+      "Source": 20612,
+      "Target": 23670,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900059,
+      "Source": 20614,
+      "Target": 23671,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900060,
+      "Source": 20616,
+      "Target": 23672,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900061,
+      "Source": 20619,
+      "Target": 23673,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900062,
+      "Source": 20623,
+      "Target": 23675,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900063,
+      "Source": 20627,
+      "Target": 23677,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900064,
+      "Source": 20620,
+      "Target": 23674,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900065,
+      "Source": 20624,
+      "Target": 23676,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900066,
+      "Source": 20628,
+      "Target": 23678,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 11682,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900067,
+      "Source": 22863,
+      "Target": 20609,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900068,
+      "Source": 22864,
+      "Target": 20611,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900069,
+      "Source": 22865,
+      "Target": 20613,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900070,
+      "Source": 22866,
+      "Target": 20615,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900071,
+      "Source": 22867,
+      "Target": 20617,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900072,
+      "Source": 22869,
+      "Target": 20621,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900073,
+      "Source": 22871,
+      "Target": 20625,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900074,
+      "Source": 21907,
+      "Target": 21905,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900075,
+      "Source": 22868,
+      "Target": 20618,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900076,
+      "Source": 22870,
+      "Target": 20622,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900077,
+      "Source": 22872,
+      "Target": 20626,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900078,
+      "Source": 21908,
+      "Target": 21906,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900079,
+      "Source": 23669,
+      "Target": 20610,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900080,
+      "Source": 23670,
+      "Target": 20612,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900081,
+      "Source": 23671,
+      "Target": 20614,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900082,
+      "Source": 23672,
+      "Target": 20616,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900083,
+      "Source": 23673,
+      "Target": 20619,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900084,
+      "Source": 23675,
+      "Target": 20623,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900085,
+      "Source": 23677,
+      "Target": 20627,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900086,
+      "Source": 23674,
+      "Target": 20620,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900087,
+      "Source": 23676,
+      "Target": 20624,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900088,
+      "Source": 23678,
+      "Target": 20628,
+      "Operation": "wing.change",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 8
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900089,
+      "Source": 0,
+      "Target": 0,
+      "Operation": "wing.feather",
+      "Materials": [
+        {
+          "ItemID": 25027,
+          "Count": 5
+        }
+      ],
+      "Outputs": [
+        {
+          "ItemID": 25028,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900090,
+      "Source": 0,
+      "Target": 0,
+      "Operation": "wing.feather",
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 1
+        }
+      ],
+      "Outputs": [
+        {
+          "ItemID": 25027,
+          "Count": 5
+        }
+      ]
+    },
+    {
+      "ID": 900091,
+      "Source": 0,
+      "Target": 0,
+      "Operation": "wing.feather",
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 5
+        }
+      ],
+      "Outputs": [
+        {
+          "ItemID": 25029,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "ID": 900092,
+      "Source": 0,
+      "Target": 0,
+      "Operation": "wing.feather",
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 1
+        }
+      ],
+      "Outputs": [
+        {
+          "ItemID": 25028,
+          "Count": 5
+        }
+      ]
+    }
+  ]
+}

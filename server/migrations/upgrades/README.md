@@ -173,3 +173,31 @@ merging these files is not authorization to execute them.
 See `server/docs/quest-special-weapons-100.md` and
 `server/docs/pet-merchant-supplies-101.md` for scope and test details. Actual
 PostgreSQL execution/replay has not yet been validated in this cloud environment.
+
+## 109: Rift guardian HP
+
+`000109_20261024_rift_guardian_hp.sql` publishes immutable Rift rule 13 and moves
+only an active rule 12 selector to 13. It divides the final scaled guardian HP by
+ten for new runs, with minimum one; old paid runs, other monster stats and all
+rewards remain frozen. Deploy the matching server before the separately
+approved migration. Do not run full init on an existing database.
+See `server/docs/endgame/rift-guardian-hp-v13.md` for scope and focused coverage.
+
+## 000110_20261025_cube_wing_progression.sql
+
+Adds active cube-only wing rules, the native UID transform allowlist and three-slot
+wing power storage; creates the one-time `幻翼初展` guide and `幻翼域使者` turn-in.
+Publishes Rift14 from the existing published Rift12 or Rift13 predecessor without
+rewriting old paid runs. The guide is not an admission requirement for rifts.
+
+The JSON policies are checked in under `server/config/`. White feather unit values
+are 1/5/25. First milestones 10/30/50/70/90/110/130/150 grant full fixed packages;
+repeat clears grant `1 + floor(tier/10)` units, split into existing white feathers.
+Repeat clears do not directly roll high feathers; the cube denomination exchanges
+allow accumulation into them. A separate approved rare slot rolls one 暗之羽 (11682) at 0.5% once per eligible character and completed run, unaffected by MF or tier. No white/black exchange is added. The independent four-fix migration109 precedes this migration. Rift14 preserves the published Rift13 guardian HP divisor and other predecessor fields.
+
+Run the focused PostgreSQL-engine check with:
+`PGLITE_MODULE=/path/to/@electric-sql/pglite node server/tests/cube_wing_migration_postgres.mjs`.
+This checks migration SQL and rollback against reduced prerequisites, not a full
+initializer or production deployment. Apply the SQL transaction before starting
+the corresponding server; do not apply the fresh-init file to an existing database.

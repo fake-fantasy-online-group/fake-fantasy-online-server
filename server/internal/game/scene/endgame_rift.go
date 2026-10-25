@@ -329,6 +329,7 @@ func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d 
 	previousLevel := candidate.Char.Level
 	var gainedExp int64
 	var petGrant endgamePetGrant
+	var message string
 	if riftNeedsCompensation(next.Run, live, char) {
 		def, ok := s.itemDef(domain.RiftKeyItemID)
 		if !ok || candidate.Bag.AddStack(def, domain.Stack{Item: def.ID, Count: 1, Bound: true}) != 0 {
@@ -343,7 +344,13 @@ func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d 
 			s.endgameError(p, req, "not_claimable", "没有可领取的奖励")
 			return
 		}
+		if err := s.resolveEndgameRiftWingMilestones(&next, char, &profile); err != nil {
+			s.endgameError(p, req, "configuration", "羽毛奖励配置暂不可用，奖励将保留")
+			return
+		}
 		grant := next.Grants[char]
+		batch := next.Run.Rules.WingRewards != nil
+		partial, collected := false, false
 		for index, stack := range grant.Items {
 			if grant.Collected[index] {
 				continue
@@ -353,10 +360,35 @@ func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d 
 				s.endgameError(p, req, "invalid_reward_source", "奖励来源无效，请联系管理员")
 				return
 			}
+			if batch && ok {
+				// v14 packages can exceed an entire inventory page. Transfer only
+				// complete frozen stacks, with per-index collection persisted in the
+				// same transaction. AddStack may partially fill, so probe a clone.
+				bag := candidate.Bag.Clone()
+				if bag.AddStack(def, stack) != 0 {
+					partial = true
+					continue
+				}
+				candidate.Bag = bag
+				if grant.Collected == nil {
+					grant.Collected = map[int]bool{}
+				}
+				grant.Collected[index] = true
+				collected = true
+				continue
+			}
 			if !ok || candidate.Bag.AddStack(def, stack) != 0 {
 				s.endgameError(p, req, "bag_full", "背包空间不足，奖励将保留")
 				return
 			}
+		}
+		if partial {
+			if !collected {
+				s.endgameError(p, req, "bag_full", "背包空间不足，奖励将保留")
+				return
+			}
+			next.Run.Members[char].Claimed = false
+			message = "已领取可放入背包的奖励，其余奖励保留，请腾出空间后继续领取。"
 		}
 		if !grant.ExperienceClaimed {
 			gain := candidate.Char.AddExp(s.levels, grant.Exp, domain.LevelCap)
@@ -374,7 +406,7 @@ func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d 
 			grant.ExperienceClaimed = true
 		}
 		next.Grants[char] = grant
-		profile = riftProfileWithCompletion(s.endgamePlayer(p).state.Payload, next.Run, char)
+		profile.UnlockedTier = next.Run.UnlockedTierFor(char, profile.UnlockedTier)
 	}
 	profile.RunID = next.Run.RunID
 	all := true
@@ -390,7 +422,7 @@ func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d 
 	if live {
 		s.rift.economicPending = true
 	}
-	ok := s.endgameCommitPayload(p, req, candidate, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Rift: s.riftView(p, next, true, live)}, &record, revision, func() {
+	ok := s.endgameCommitPayload(p, req, candidate, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Message: message, Rift: s.riftView(p, next, true, live)}, &record, revision, func() {
 		s.publishEndgameRewardExperience(p, previousLevel, gainedExp)
 		s.publishEndgamePetGrant(p, petGrant)
 		if live {

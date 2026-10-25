@@ -267,7 +267,7 @@ func run() int {
 		}
 		cfg := scene.Config{Trial: world.trial, EndgameBackend: endgameBackend, RiftLayouts: riftLayouts,
 			EndgameCatalog: world.endgameCatalog, CubeRules: world.cubeRules,
-			LootRules: world.lootRules, RiftRules: world.riftRules,
+			LootRules: world.lootRules, RiftRules: world.riftRules, WingRules: world.wingRules,
 			DungeonParty: func(char domain.CharID) domain.DungeonParty {
 				p, ok := parties.Get(parties.PartyOf(char))
 				if !ok {
@@ -738,6 +738,7 @@ type worldData struct {
 	riftRules      *domain.RiftRuleTable
 	endgameCatalog *domain.EndgameCatalog
 	cubeRules      *domain.CubeRuleTable
+	wingRules      *domain.WingProgressionRules
 	endgameDataErr error
 	trial          *domain.TrialRules
 	pickupRange    int32

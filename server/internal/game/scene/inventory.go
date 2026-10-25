@@ -641,6 +641,13 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 		}
 		specialEffects = append(specialEffects, power.Name+"："+power.Effect)
 	}
+	if e.Slot == int32(domain.SlotBag) && st.WingPowers.Validate() == nil {
+		for _, v := range st.WingPowers {
+			if power, ok := domain.LegendaryPower(v.PowerID); ok {
+				specialEffects = append(specialEffects, power.Name+"："+power.Effect)
+			}
+		}
+	}
 	if st.RefineLevel > 0 {
 		if refine, ok := e.RefineEffectAt(st.RefineLevel); !ok {
 			text := "精炼属性未配置"
@@ -718,6 +725,12 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 				}
 			}
 		}
+	}
+	// Ordinary named weapons do not use the client's legendary overlay. Emit
+	// their actual skill effects at the same visible attribute-block boundary,
+	// before sockets, sets and lore, using its existing orange marker.
+	for _, text := range domain.DungeonWeaponEffectLines(def.ID) {
+		lines = append(lines, "\x06"+text)
 	}
 	// 分母是这件装备实际已打出的孔，不是模板可打孔上限。
 	// 无孔装备不显示；空孔计入分母，只有已镶嵌的孔计入分子。

@@ -40,6 +40,7 @@ type Config struct {
 	RiftRules       *domain.RiftRuleTable
 	EndgameCatalog  *domain.EndgameCatalog
 	CubeRules       *domain.CubeRuleTable
+	WingRules       *domain.WingProgressionRules
 	RequireGrowthV5 bool
 
 	// RiftLayouts is the immutable, collision-validated startup map catalog.
@@ -211,6 +212,7 @@ type Scene struct {
 	riftRules       *domain.RiftRuleTable
 	endgameCatalog  *domain.EndgameCatalog
 	cubeRules       *domain.CubeRuleTable
+	wingRules       *domain.WingProgressionRules
 	requireGrowthV5 bool
 
 	equipment     *equipmentRuntime
@@ -418,6 +420,7 @@ func New(cfg Config) *Scene {
 		riftRules:            cfg.RiftRules,
 		endgameCatalog:       cfg.EndgameCatalog,
 		cubeRules:            cfg.CubeRules,
+		wingRules:            cfg.WingRules,
 		requireGrowthV5:      cfg.RequireGrowthV5,
 		equipmentSeed:        uint64(cfg.Seed),
 		riftLayouts:          cfg.RiftLayouts,

@@ -29,6 +29,7 @@ func registerEndgameItems(w *worldData) error {
 		}
 	}
 	registerEndgameEquipmentIcons(w)
+	registerEndgameToolIcons(w)
 	w.itemIconsKnown = true
 	return nil
 }

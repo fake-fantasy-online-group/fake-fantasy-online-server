@@ -82,7 +82,7 @@ func TestCubeFullGridRejectsInvalidSelectionsWithoutConsumption(t *testing.T) {
 		}, "materials"},
 		"unavailable quantity": {func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[33].Count = 6 }, "materials"},
 		"maximum quantity":     {func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[33].Count = math.MaxInt32 }, "materials"},
-		"wrong quantity":       {func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[33].Count = 1 }, "no_match"},
+		"wrong quantity":       {func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[33].Count = 1 }, "insufficient_count"},
 		"zero quantity":        {func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[33].Count = 0 }, "invalid_request"},
 		"negative quantity":    {func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[33].Count = -1 }, "invalid_request"},
 	}

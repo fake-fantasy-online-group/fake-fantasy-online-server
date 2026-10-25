@@ -10,16 +10,19 @@ import (
 )
 
 type CubeContext struct {
-	EquipmentRoll EquipmentRollTable
-	Rules         *CubeRuleTable
-	Catalog       *EndgameCatalog
-	Level         int32
-	Bag           *Bag
-	Money         int64
-	Items         map[ItemID]ItemDef
-	IsUniqueBase  func(ItemID) bool
-	Intn          func(int) int
-	NewUID        func() int64
+	WingRules      *WingProgressionRules
+	Character      *Character
+	EquipmentRoll  EquipmentRollTable
+	RecipientClass LegendaryRecipientClass
+	Rules          *CubeRuleTable
+	Catalog        *EndgameCatalog
+	Level          int32
+	Bag            *Bag
+	Money          int64
+	Items          map[ItemID]ItemDef
+	IsUniqueBase   func(ItemID) bool
+	Intn           func(int) int
+	NewUID         func() int64
 }
 type CubePlan struct {
 	Bag                      *Bag
@@ -65,6 +68,9 @@ func CubeFingerprint(bag *Bag, money int64, req EndgameRequest) string {
 // Capacity and costs are checked without RNG or permanent UID allocation first.
 // execute still produces only a candidate for the actor's atomic transaction.
 func PlanCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, error) {
+	if req.RecipeID >= WingPowerRecipeID && req.RecipeID <= 901024 {
+		return planWingCube(ctx, req)
+	}
 	p, err := planCube(ctx, req, false)
 	if err != nil || !execute {
 		return p, err
@@ -72,6 +78,15 @@ func PlanCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 	return planCube(ctx, req, true)
 }
 func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, error) {
+	return planCubeMode(ctx, req, execute, false)
+}
+
+// diagnostic validates ingredient identity/eligibility only. It is private, never
+// executes, and cannot authorize a quote or consume the caller's inventory.
+func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool) (CubePlan, error) {
+	if diagnostic {
+		execute = false
+	}
 	p := CubePlan{Money: ctx.Money, Fingerprint: CubeFingerprint(ctx.Bag, ctx.Money, req)}
 	if ctx.Rules == nil {
 		return p, cubeError("configuration", "周天鼎配置尚未载入")
@@ -177,7 +192,7 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		return p, cubeError("invalid_request", "额外投料参数无效")
 	}
 	fee := recipe.Money
-	if ctx.Money < fee {
+	if !diagnostic && ctx.Money < fee {
 		return p, cubeError("funds", fmt.Sprintf("铜币不足：需要%d，当前%d", fee, ctx.Money))
 	}
 	for _, m := range r.Materials {
@@ -187,12 +202,17 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		}
 		m.Owned = ctx.Bag.UsableCountOf(ItemID(m.ItemID))
 		p.Materials = append(p.Materials, m)
-		if !p.Bag.Remove(ItemID(m.ItemID), m.Count) {
+		if !diagnostic && !p.Bag.Remove(ItemID(m.ItemID), m.Count) {
 			return p, cubeError("materials", fmt.Sprintf("%s不足或已锁定：需要%d，当前可用%d", m.Name, m.Count, m.Owned))
 		}
 	}
-	p.Money -= fee
+	if !diagnostic {
+		p.Money -= fee
+	}
 	add := func(st Stack) error {
+		if diagnostic {
+			return nil
+		}
 		d, exists := ctx.Items[st.Item]
 		if !exists || !d.InventoryTabKnown {
 			return cubeError("requirements", "产物模板缺失")
@@ -243,7 +263,7 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 	hasUnique = hasUnique || target.Legendary.PowerID != ""
 	eligible := func() bool {
 		if def.LegendaryEnabled {
-			return ctx.EquipmentRoll.LegendaryReady(def) && len(LegendaryCandidatesAtLevel(def, LegendaryGenerationLevel(def, target))) > 0
+			return ctx.EquipmentRoll.LegendaryReady(def) && len(LegendaryCandidatesForRecipientAtLevel(def, LegendaryGenerationLevel(def, target), ctx.RecipientClass)) > 0
 		}
 		if _, ok := UniqueForBase(target.Item, ctx.Catalog); !ok {
 			return false
@@ -370,6 +390,9 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		if reason := AstralBaseIneligibility(def, target); reason != "" {
 			return p, cubeError("requirements", reason)
 		}
+		if diagnostic && target.SocketCount >= 2 && UsedEquipmentSockets(target) == 0 {
+			p.Target = target // target eligibility survives a separate rune mismatch
+		}
 		if target.SocketCount < 2 || UsedEquipmentSockets(target) != 0 || len(req.ItemUIDs) != int(target.SocketCount) {
 			return p, cubeError("requirements", "须选择与全部空孔数量相同的有序星篆")
 		}
@@ -408,7 +431,7 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 		if execute {
 			applied := false
 			if def.LegendaryEnabled {
-				applied = ctx.EquipmentRoll.ApplyLegendary(&target, def, ctx.Intn)
+				applied = ctx.EquipmentRoll.ApplyLegendaryForRecipient(&target, def, ctx.RecipientClass, ctx.Intn)
 			} else {
 				applied = ApplyUnique(&target, def, ctx.Intn)
 			}
@@ -490,7 +513,7 @@ func planCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, erro
 				return p, err
 			}
 		} else if convert {
-			if len(req.ItemUIDs) != int(recipe.SourceCount) {
+			if len(req.ItemUIDs) != int(recipe.SourceCount) && !(diagnostic && len(req.ItemUIDs) > 0 && len(req.ItemUIDs) < int(recipe.SourceCount)) {
 				return p, cubeError("requirements", fmt.Sprintf("须选择%d枚相同的同象星篆", recipe.SourceCount))
 			}
 			out, _ := AstralRune(outputRune, ctx.Catalog)

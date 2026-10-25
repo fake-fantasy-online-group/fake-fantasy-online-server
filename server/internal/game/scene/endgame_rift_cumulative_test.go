@@ -284,7 +284,21 @@ func TestRiftCumulativeLegacyPreVariantOracle(t *testing.T) {
 		}
 		items[i].Endgame.SourceLevel = 0 // The sole new provenance metadata is excluded from this pre-variant oracle.
 	}
-	raw, _ := json.Marshal(items)
+	// Wings add independent durable metadata; absent powers must not change
+	// this pre-wing gameplay oracle or be mistaken for a changed old drop.
+	type legacyStack domain.Stack
+	type legacyProjection struct {
+		legacyStack
+		WingPowers *domain.WingPowers `json:",omitempty"`
+	}
+	projected := make([]legacyProjection, len(items))
+	for i, st := range items {
+		if st.WingPowers != (domain.WingPowers{}) {
+			t.Fatal("old paid run gained wing powers")
+		}
+		projected[i] = legacyProjection{legacyStack: legacyStack(st)}
+	}
+	raw, _ := json.Marshal(projected)
 	got := fmt.Sprintf("%x", sha256.Sum256(raw))
 	if got != "b648c14518deb94802ff36c15dde9b30e0027ed8d7e7ad2eae855f0cf7990a82" {
 		t.Fatalf("pre-variant normalized item oracle changed: %s", got)

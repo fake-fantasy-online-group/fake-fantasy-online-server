@@ -152,13 +152,21 @@ func TestExtendedExtraAffixSlicesDoNotTruncateOrRewriteInstances(t *testing.T) {
 		t.Fatal("extended definition was truncated or persisted instance changed")
 	}
 	def := uniqueFixture(d)
+	def.Equip.Bonus = Stats{MinAtk: 100, MaxAtk: 200}
 	worn := NewEquipSet()
 	worn.Set(EquipSlot(d.Slot), st)
 	base := Base{STR: 100, INT: 100, VIT: 100, AGI: 100, DEX: 100, SPI: 100}
 	actualBase, actualStats := Compute(StatSource{Base: base, Level: 1000, Worn: worn,
 		Defs: func(id ItemID) (ItemDef, bool) { return def, id == def.ID }})
-	expectedBase, expectedStats := Compute(StatSource{Base: base, Level: 1000,
-		Passive: append(append([]Affix{}, want...), st.RolledAffixes[0].Affix)})
+	// The weapon's authored +30% is local: 100/200 innate contributes
+	// 130/260, without multiplying character STR or the retained rolled STR.
+	expectedAffixes := []Affix{{Attr: AttrMinAtk, Value: 130}, {Attr: AttrMaxAtk, Value: 260}, st.RolledAffixes[0].Affix}
+	for _, a := range want {
+		if a.Attr != AttrAtk || a.Mode != ModePercent {
+			expectedAffixes = append(expectedAffixes, a)
+		}
+	}
+	expectedBase, expectedStats := Compute(StatSource{Base: base, Level: 1000, Passive: expectedAffixes})
 	if actualBase != expectedBase || actualStats != expectedStats || worn.At(EquipSlot(d.Slot)) != before {
 		t.Fatal("Compute lost extended extra lines, failed retained-roll stacking or changed saved state")
 	}

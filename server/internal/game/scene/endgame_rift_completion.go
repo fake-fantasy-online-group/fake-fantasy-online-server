@@ -34,7 +34,11 @@ func (s *Scene) cachedEndgameRiftCompletionLayout() *endgameRiftRewardLayout {
 		slots += len(grant.Items)
 	}
 	if x.rewardLayout == nil || x.rewardLayout.Slots != slots {
-		npc, ready, positions := s.endgameRiftCompletionLayout()
+		var prior *endgameRiftRewardLayout
+		if x.data.Run.Rules.WingRewards != nil {
+			prior = x.rewardLayout
+		}
+		npc, ready, positions := s.endgameRiftCompletionLayoutWithPrior(prior)
 		x.rewardLayout = &endgameRiftRewardLayout{NPC: npc, NPCReady: ready, Slots: slots, Positions: positions}
 	}
 	return x.rewardLayout
@@ -72,6 +76,10 @@ func (s *Scene) endgameRiftRewardPosition() domain.Pos {
 // unusually narrow map has too few safe points, keep the unplaced entitlement
 // for offline recovery rather than put it inside a wall or on another player's drop.
 func (s *Scene) endgameRiftCompletionLayout() (domain.Pos, bool, map[endgameRiftGroundReward]domain.Pos) {
+	return s.endgameRiftCompletionLayoutWithPrior(nil)
+}
+
+func (s *Scene) endgameRiftCompletionLayoutWithPrior(prior *endgameRiftRewardLayout) (domain.Pos, bool, map[endgameRiftGroundReward]domain.Pos) {
 	center := s.endgameRiftRewardPosition()
 	walkable := func(pos domain.Pos) bool {
 		return (s.walkable == nil || s.walkable(pos)) && s.straightPathWalkable(center, pos)
@@ -84,6 +92,16 @@ func (s *Scene) endgameRiftCompletionLayout() (domain.Pos, bool, map[endgameRift
 		npcOK = walkable(npc)
 	}
 	positions := map[endgameRiftGroundReward]domain.Pos{}
+	used := []domain.Pos{}
+	// First-clear packages may be appended by a later personal settlement. Keep
+	// existing drop coordinates stable when another member's slots are added.
+	if prior != nil {
+		npc, npcOK = prior.NPC, prior.NPCReady
+		for ref, pos := range prior.Positions {
+			positions[ref] = pos
+			used = append(used, pos)
+		}
+	}
 	chars := make([]domain.CharID, 0, len(s.rift.data.Grants))
 	for char := range s.rift.data.Grants {
 		chars = append(chars, char)
@@ -92,10 +110,12 @@ func (s *Scene) endgameRiftCompletionLayout() (domain.Pos, bool, map[endgameRift
 	var refs []endgameRiftGroundReward
 	for _, char := range chars {
 		for index := range s.rift.data.Grants[char].Items {
-			refs = append(refs, endgameRiftGroundReward{Char: char, Index: index})
+			ref := endgameRiftGroundReward{Char: char, Index: index}
+			if _, exists := positions[ref]; !exists {
+				refs = append(refs, ref)
+			}
 		}
 	}
-	used := []domain.Pos{}
 	next := 0
 	for _, spacing := range []float64{monsterLootGridSpacing, 20} {
 		maxRing := int(320 / spacing)
@@ -242,7 +262,7 @@ func (s *Scene) syncEndgameRiftCompletion() {
 
 func markEndgameRiftGrantClaimed(d *endgameRiftPersisted, char domain.CharID) {
 	grant := d.Grants[char]
-	if !grant.ExperienceClaimed {
+	if !grant.ExperienceClaimed || (d.Run.Rules.WingRewards != nil && !grant.WingMilestonesResolved) {
 		return
 	}
 	for i := range grant.Items {
@@ -275,8 +295,14 @@ func (s *Scene) endgameRiftRewardReady(p *entity.Entity) bool {
 func (s *Scene) commitEndgameRiftReward(p *entity.Entity, next endgameRiftPersisted, candidate domain.Snapshot, suffix, message string, after func()) bool {
 	x := s.rift
 	req := s.endgameRiftRewardRequest(p, suffix)
+	char := domain.CharID(p.Player.Char.ID)
+	profile := riftProfileWithCompletion(s.endgamePlayer(p).state.Payload, next.Run, char)
+	if err := s.resolveEndgameRiftWingMilestones(&next, char, &profile); err != nil {
+		s.endgameError(p, req, "configuration", "羽毛奖励配置暂不可用，奖励将保留")
+		return false
+	}
+	markEndgameRiftGrantClaimed(&next, char)
 	record := next.record(x.revision + 1)
-	profile := riftProfileWithCompletion(s.endgamePlayer(p).state.Payload, next.Run, domain.CharID(p.Player.Char.ID))
 	profile.RunID = next.Run.RunID
 	x.economicPending = true
 	ok := s.endgameCommitPayload(p, req, candidate, domain.EndgameResponse{Kind: "rift.reward", OK: true, Message: message}, &record, x.revision, func() {

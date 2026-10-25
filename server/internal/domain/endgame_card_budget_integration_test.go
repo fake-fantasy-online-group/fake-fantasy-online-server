@@ -412,6 +412,16 @@ func TestFormationAllSourceBudgetLanesThroughActivation(t *testing.T) {
 	}
 	seen := map[int32]bool{}
 	scenarios := 0
+	// The 2026-10-24 weapon-local correction supersedes the historical global
+	// MAtk-percent margin for these three legacy formation comparisons only.
+	// Freeze exact corrected outcomes instead of retuning owned catalog items
+	// or silently lowering the shared tier floors for unrelated comparisons.
+	localMagicOutcomes := map[[3]int32][3]float64{
+		{2, int32(Healer), 1309}:  {182, 184, 148}, // formed, yellow, ingredients
+		{2, int32(Warlock), 1309}: {197, 199, 163},
+		{8, int32(Warlock), 1309}: {200, 203, 164},
+	}
+	localMagicChecked := 0
 	minimum := math.Inf(1)
 	for _, target := range targets {
 		t.Run(fmt.Sprint(target.RecipeID), func(t *testing.T) {
@@ -494,6 +504,14 @@ func TestFormationAllSourceBudgetLanesThroughActivation(t *testing.T) {
 				formedScore := cardBudgetMetric(t, formed, comparison.Lane, level)
 				ingredientScore := cardBudgetMetric(t, ingredientsOnly, comparison.Lane, level)
 				ratio := formedScore / yellowScore
+				localOutcome, correctedLocalWeapon := localMagicOutcomes[[3]int32{recipe.ID, int32(comparison.Class), int32(r.BaseID)}]
+				if correctedLocalWeapon {
+					if comparison.Lane != "magic" || (EquipSlot(r.Slot) != SlotWeapon && EquipSlot(r.Slot) != SlotTwoHand) ||
+						formedScore != localOutcome[0] || yellowScore != localOutcome[1] || ingredientScore != localOutcome[2] {
+						t.Fatalf("corrected local weapon baseline changed: formed/yellow/ingredients=%g/%g/%g, want %v", formedScore, yellowScore, ingredientScore, localOutcome)
+					}
+					localMagicChecked++
+				}
 				// Exercise the actual winner at both persisted roll boundaries,
 				// preserving the same ingredient snapshots and native base.
 				for _, roll := range []int32{UniqueRollMinBP, UniqueRollMaxBP} {
@@ -502,7 +520,9 @@ func TestFormationAllSourceBudgetLanesThroughActivation(t *testing.T) {
 					worn.Set(EquipSlot(r.Slot), rolled)
 					_, rolledStats := Compute(StatSource{Base: base, Level: level, Innate: Stats{MoveSpeed: 100}, Worn: worn, Defs: lookup, Passive: AstralBonuses(worn, lookup, ch)})
 					score := cardBudgetMetric(t, rolledStats, comparison.Lane, level)
-					if score/yellowScore+1e-9 < comparison.RequiredRatio {
+					if correctedLocalWeapon && score != localOutcome[0] {
+						t.Errorf("formation %d roll%d local MAtk=%g, want %g", recipe.ID, roll, score, localOutcome[0])
+					} else if !correctedLocalWeapon && score/yellowScore+1e-9 < comparison.RequiredRatio {
 						t.Errorf("formation %d roll%d falls below unchanged yellow margin: %g", recipe.ID, roll, score/yellowScore)
 					}
 					if roll == UniqueRollMinBP && score > formedScore+1e-9 || roll == UniqueRollMaxBP && score+1e-9 < formedScore {
@@ -514,7 +534,7 @@ func TestFormationAllSourceBudgetLanesThroughActivation(t *testing.T) {
 				if minRatio <= 1 || comparison.RequiredRatio+1e-9 < minRatio {
 					t.Fatal("formation target weakens independently specified tier floor")
 				}
-				if yellowScore <= 0 || ratio+1e-9 < comparison.RequiredRatio {
+				if yellowScore <= 0 || !correctedLocalWeapon && ratio+1e-9 < comparison.RequiredRatio {
 					t.Errorf("class=%d base=%d level=%d lane=%s formed=%g yellow=%g ratio=%.6f want>=%.6f", comparison.Class, r.BaseID, level, comparison.Lane, formedScore, yellowScore, ratio, comparison.RequiredRatio)
 				}
 				if formedScore <= ingredientScore {
@@ -542,6 +562,9 @@ func TestFormationAllSourceBudgetLanesThroughActivation(t *testing.T) {
 	}
 	if len(seen) != 40 {
 		t.Fatal("formation activation coverage incomplete")
+	}
+	if localMagicChecked != len(localMagicOutcomes) {
+		t.Fatalf("local weapon semantic comparisons=%d, want %d", localMagicChecked, len(localMagicOutcomes))
 	}
 	t.Logf("actual formation activation scenarios=%d minimum formed/yellow=%.6f; real saved rune snapshots included separately from authored extra-line count", scenarios, minimum)
 }

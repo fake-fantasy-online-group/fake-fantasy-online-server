@@ -289,6 +289,7 @@ func TestRiftOfflineContextSurvivesAnotherMembersPendingLeave(t *testing.T) {
 				}
 				recipient := s.players[2]
 				recipient.Player.Char.Level = 61
+				recipient.Player.Char.Race = domain.Assassin
 				_, _, mf := magicFindGearV5(t, s, recipient)
 				s.exec(Leave{ID: recipient.ID, Reason: "disconnect during teammate leave"})
 				if s.players[2] != nil || s.rift.data.Profiles[200].RewardLevel != 61 {
@@ -309,13 +310,16 @@ func TestRiftOfflineContextSurvivesAnotherMembersPendingLeave(t *testing.T) {
 					s.stepEndgameRift()
 				}
 				context := s.freezeEndgameRiftRewardContexts()[200]
-				if context.Level != 61 || context.MagicFind != mf {
+				if context.Level != 61 || context.MagicFind != mf || !context.RecipientClassKnown || context.RecipientClass != 4 {
 					t.Fatal("pending aggregate discarded offline observation", context, mf)
 				}
 				*now += 1000
 				boss.HP = 0
 				s.onDeath(boss, s.players[3].ID)
 				grant, ok := s.rift.data.Grants[200]
+				if s.rift.data.RewardClasses[200] != 4 {
+					t.Fatal("offline reward lost class through replay", s.rift.data.RewardClasses)
+				}
 				if !ok || !s.rift.data.Run.Members[200].Eligible || grant.ExperienceLevel != 61 || grant.Exp != 27027200 || grant.MagicFind != mf {
 					t.Fatalf("wrong offline grant: %+v", grant)
 				}
@@ -355,6 +359,7 @@ func TestRiftOfflineContextPersistsBeforeFloorPublication(t *testing.T) {
 				}
 				// A change after the immutable next-floor write, before its ACK.
 				recipient.Player.Char.Level = 61
+				recipient.Player.Char.EmploymentKnown, recipient.Player.Char.Employed = true, false
 				_, _, mf := magicFindGearV5(t, s, recipient)
 				s.exec(Leave{ID: recipient.ID, Reason: "disconnect during floor save"})
 				b.finishFloorWrite(t, 0, true, initialLostACK)
@@ -375,12 +380,12 @@ func TestRiftOfflineContextPersistsBeforeFloorPublication(t *testing.T) {
 					t.Fatal("durable context did not release floor")
 				}
 				admission, ok := s.router.riftAdmission(target.id)
-				if !ok || admission.Profiles[200].RewardLevel != 61 || admission.Profiles[200].MagicFind != mf {
+				if !ok || admission.Profiles[200].RewardLevel != 61 || admission.Profiles[200].MagicFind != mf || !admission.Profiles[200].RewardClassKnown || admission.Profiles[200].RewardClass != 0 {
 					t.Fatal("target received stale offline context", admission.Profiles)
 				}
 				record := b.runs[s.rift.data.Run.RunID]
 				restored, ok := decodeEndgameRift(&record, s.riftRules)
-				if !ok || restored.Profiles[200].RewardLevel != 61 || restored.Profiles[200].MagicFind != mf {
+				if !ok || restored.Profiles[200].RewardLevel != 61 || restored.Profiles[200].MagicFind != mf || !restored.Profiles[200].RewardClassKnown || restored.Profiles[200].RewardClass != 0 {
 					t.Fatal("reconnect durable context stale", restored.Profiles)
 				}
 				// The target can complete with the recipient still offline; its grant uses
@@ -398,6 +403,9 @@ func TestRiftOfflineContextPersistsBeforeFloorPublication(t *testing.T) {
 				target.rift.data.Run.Phase = domain.RiftCompleted
 				target.generateEndgameRiftGrants()
 				g := target.rift.data.Grants[200]
+				if class, known := target.rift.data.RewardClasses[200]; !known || class != 0 {
+					t.Fatal("offline unknown class was invented")
+				}
 				if g.ExperienceLevel != 61 || g.Exp != 27027200 || g.MagicFind != mf {
 					t.Fatal("target offline reward used stale snapshot", g.ExperienceLevel, g.Exp, g.MagicFind)
 				}

@@ -1,6 +1,30 @@
 package main
 
-import "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+import (
+	"sort"
+
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+)
+
+// Portable cube tools were added after the fixed 32-material/rune/key catalog.
+// Their IDs are configured in the database, as is their native artwork alias.
+// Publish that same alias through 0x804d, not the new synthetic ItemID as a sprite.
+func registerEndgameToolIcons(w *worldData) {
+	mapped := make(map[domain.ItemID]bool, len(w.itemIcons))
+	for _, pair := range w.itemIcons {
+		mapped[pair.Item] = true
+	}
+	var ids []domain.ItemID
+	for id, def := range w.items {
+		if !mapped[id] && def.UseAction == "cube" && def.Icon > 0 {
+			ids = append(ids, id)
+		}
+	}
+	sort.Slice(ids, func(i, j int) bool { return ids[i] < ids[j] })
+	for _, id := range ids {
+		w.itemIcons = append(w.itemIcons, domain.ItemIconMapping{Item: id, Icon: w.items[id].Icon})
+	}
+}
 
 // Unique rolls keep their original equipment ItemID. Publish those base sprites
 // too: relying only on a client's installed item_icons table leaves renamed

@@ -239,6 +239,11 @@ func TestRiftFloorTransitionLostACKReadsDurableFloorOnce(t *testing.T) {
 func TestRiftFloorTransitionRollbackKeepsPopulationAndRetryPlan(t *testing.T) {
 	s, b, _ := seededRiftFloorFixture(t)
 	target := prepareRiftFloorTarget(t, s)
+	// Admission freezes recipient context independently of the floor CAS.
+	// Establish that metadata before measuring rollback's gameplay baseline.
+	for char, context := range s.freezeEndgameRiftRewardContexts() {
+		s.cacheEndgameRiftRewardContext(char, context)
+	}
 	before := s.rift.data.clone()
 	abilityCount := len(s.rift.abilities)
 	if abilityCount == 0 {

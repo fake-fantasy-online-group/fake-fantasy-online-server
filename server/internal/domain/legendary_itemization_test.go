@@ -146,6 +146,7 @@ func TestLegendaryCubeAwakenReforgeTemperAndSalvage(t *testing.T) {
 	def.Equip.Durable = 100
 	ctx.Items[def.ID] = def
 	ctx.EquipmentRoll = table
+	ctx.RecipientClass = LegendaryRecipientClass(legendaryClassMask(LegendaryCandidates(def)[0].Class))
 	preview, err := PlanCube(ctx, req, false)
 	if err != nil {
 		t.Fatal(err)

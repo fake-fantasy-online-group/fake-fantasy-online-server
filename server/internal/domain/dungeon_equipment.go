@@ -16,15 +16,16 @@ const HardDungeonItemOffset ItemID = 1800000000
 var dungeonEquipmentJSON []byte
 
 type DungeonEquipmentWeapon struct {
-	BeginnerAllowedOverride bool            `json:"beginner_allowed_override"`
-	TaskOriginal            bool            `json:"task_original"`
-	MechanismEnabled        bool            `json:"mechanism_enabled"`
-	BaseID                  ItemID          `json:"base_id"`
-	HardID                  ItemID          `json:"hard_id"`
-	Name                    string          `json:"name"`
-	Affixes                 []Affix         `json:"affixes"`
-	Effect                  json.RawMessage `json:"effect"`
-	Sources                 [][2]int32      `json:"sources"`
+	BeginnerAllowedOverride bool              `json:"beginner_allowed_override"`
+	TaskOriginal            bool              `json:"task_original"`
+	MechanismEnabled        bool              `json:"mechanism_enabled"`
+	BaseID                  ItemID            `json:"base_id"`
+	HardID                  ItemID            `json:"hard_id"`
+	Name                    string            `json:"name"`
+	Affixes                 []Affix           `json:"affixes"`
+	Effect                  json.RawMessage   `json:"effect"`
+	EffectNames             map[string]string `json:"effect_names"` // affected native skill names; empty key for a single profession
+	Sources                 [][2]int32        `json:"sources"`
 }
 type DungeonEquipmentSource struct {
 	BaseID    ItemID    `json:"base_id"`
@@ -102,7 +103,11 @@ func RegisterDungeonEquipment(items map[ItemID]ItemDef) error {
 		if w.TaskOriginal && w.BeginnerAllowedOverride {
 			equip.Need.BeginnerAllowed = true
 		}
-		def.Description = strings.TrimSpace(base.Description + "\n" + dungeonWeaponEffectText(w.Effect))
+		// Keep mechanics out of lore. The native tooltip emits these separately
+		// with the same named orange rows as legendary effects.
+		if !w.MechanismEnabled {
+			def.Description = strings.TrimSpace(base.Description + "\n" + dungeonWeaponEffectText(w.Effect))
+		}
 		if w.HardID != 0 {
 			def.ID = w.HardID
 			def.Name = prefixedEquipmentName("真*", base.Name)
@@ -244,6 +249,52 @@ func dungeonWeaponEffectText(raw json.RawMessage) string {
 		lines = append(lines, name+"："+byClass[name])
 	}
 	return strings.Join(lines, "\n")
+}
+
+// DungeonWeaponEffectLines is presentation only. The existing exact mechanism
+// identity gate excludes ordinary dungeon originals and no-effect task weapons.
+// It does not grant a skill or change any equipment/combat state.
+func DungeonWeaponEffectLines(id ItemID) []string {
+	base := EnhancedWeaponBaseID(id)
+	if base == 0 {
+		return nil
+	}
+	for _, w := range dungeonEquipmentManifest.Weapons {
+		if w.BaseID != base {
+			continue
+		}
+		var text string
+		if json.Unmarshal(w.Effect, &text) == nil {
+			return []string{dungeonWeaponNamedEffect(w.EffectNames[""], "", text)}
+		}
+		var byClass map[string]string
+		if json.Unmarshal(w.Effect, &byClass) != nil {
+			return nil
+		}
+		classes := make([]string, 0, len(byClass))
+		for class := range byClass {
+			classes = append(classes, class)
+		}
+		sort.Strings(classes)
+		lines := make([]string, 0, len(classes))
+		for _, class := range classes {
+			lines = append(lines, dungeonWeaponNamedEffect(w.EffectNames[class], class, byClass[class]))
+		}
+		return lines
+	}
+	return nil
+}
+
+func dungeonWeaponNamedEffect(name, class, text string) string {
+	// Remove only an adjacent repeated subject, never a skill name inside a
+	// conditional or another part of the authored mechanics description.
+	if strings.HasPrefix(text, name) {
+		text = strings.TrimPrefix(strings.TrimPrefix(text, name), "的")
+	}
+	if class != "" {
+		name += "（" + class + "）"
+	}
+	return name + "：" + text
 }
 
 // AdditionalLostTempleDrops is an explicit additive map/monster allowlist.

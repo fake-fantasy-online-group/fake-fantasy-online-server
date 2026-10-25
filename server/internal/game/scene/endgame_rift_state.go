@@ -10,23 +10,27 @@ import (
 )
 
 type endgameRiftProfile struct {
+	WingMilestones  []int32            `json:"wingMilestones,omitempty"`
 	RecentGuardians []domain.MonsterID `json:"recentGuardians,omitempty"`
 	RunID           string             `json:"runId"`
 	UnlockedTier    int32              `json:"unlockedTier"`
 }
 type endgameRiftGrant struct {
-	ExperienceLevel    int32 `json:",omitempty"`
-	ExperienceBase     int64 `json:",omitempty"`
-	MagicFind          int64 `json:",omitempty"`
-	ExperienceClaimed  bool
-	Collected          map[int]bool
-	Items              []domain.Stack
-	Exp                int64
-	ProgressionVersion string
-	RewardVersion      string
-	Pet                endgamePetGrant
+	WingMilestonesResolved bool  `json:",omitempty"`
+	ExperienceLevel        int32 `json:",omitempty"`
+	ExperienceBase         int64 `json:",omitempty"`
+	MagicFind              int64 `json:",omitempty"`
+	ExperienceClaimed      bool
+	Collected              map[int]bool
+	Items                  []domain.Stack
+	Exp                    int64
+	ProgressionVersion     string
+	RewardVersion          string
+	Pet                    endgamePetGrant
 }
 type endgameRiftPersisted struct {
+	// Accepted recipient classes survive deferred generation, including unknown zero.
+	RewardClasses map[domain.CharID]domain.LegendaryRecipientClass `json:",omitempty"`
 	// Actual guardian encounter level, frozen before deferred grant generation.
 	RewardSourceLevel int32                       `json:",omitempty"`
 	GuardianID        domain.MonsterID            `json:",omitempty"`

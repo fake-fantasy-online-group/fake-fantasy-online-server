@@ -68,7 +68,11 @@ func (s *Scene) lootOwnerV5(source domain.EntityID) domain.EntityID {
 
 func (s *Scene) freezeLootContextV5(source domain.EntityID) domain.LootContextV5 {
 	owner := s.lootOwnerV5(source)
-	return domain.LootContextV5{Owner: owner, MagicFind: s.magicFindV5(s.players[owner]), Version: domain.LootRuleVersionV5}
+	var recipient domain.LegendaryRecipientClass
+	if p := s.players[owner]; p != nil && p.Player != nil {
+		recipient = domain.LegendaryClassForCharacter(p.Player.Char)
+	}
+	return domain.LootContextV5{Owner: owner, RecipientClass: recipient, MagicFind: s.magicFindV5(s.players[owner]), Version: domain.LootRuleVersionV5}
 }
 
 func (s *Scene) periodicDamageOwnerV5(def domain.StatusDef, source domain.EntityID) domain.EntityID {
@@ -157,7 +161,7 @@ func (s *Scene) rollNaturalEquipmentV5(def domain.ItemDef, stack *domain.Stack, 
 			rule.UniqueBasePPB = 0
 		}
 	}
-	s.rollEquipmentQualityV5(def, stack, dead.Level, table, profile, rollAffixes, context.MagicFind, rule, quality.Int63n, values.Int63n, unique.Int63n, variables.Intn)
+	s.rollEquipmentQualityV5(def, stack, dead.Level, table, profile, rollAffixes, context.MagicFind, rule, quality.Int63n, values.Int63n, unique.Int63n, variables.Intn, context.RecipientClass)
 }
 
 func (s *Scene) outdoorEquipmentQualitySource(dead *entity.Entity, def domain.ItemDef, rollAffixes bool) bool {
@@ -169,20 +173,20 @@ func (s *Scene) outdoorEquipmentQualitySource(dead *entity.Entity, def domain.It
 
 // Shared by natural world drops and new normal-boss reward slots. Callers own
 // independent deterministic streams and the appropriate frozen loot rules.
-func (s *Scene) rollNaturalEquipmentQualityV5(def domain.ItemDef, stack *domain.Stack, sourceLevel int32, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique, variables *lootRandomV5) {
-	s.rollEquipmentQualityV5(def, stack, sourceLevel, s.equipmentRoll, profile, rollAffixes, magicFind, rule, quality.Int63n, values.Int63n, unique.Int63n, variables.Intn)
+func (s *Scene) rollNaturalEquipmentQualityV5(def domain.ItemDef, stack *domain.Stack, sourceLevel int32, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique, variables *lootRandomV5, recipient ...domain.LegendaryRecipientClass) {
+	s.rollEquipmentQualityV5(def, stack, sourceLevel, s.equipmentRoll, profile, rollAffixes, magicFind, rule, quality.Int63n, values.Int63n, unique.Int63n, variables.Intn, recipient...)
 }
 
 // Frozen pre-v12 Rift snapshots retain their pre-variant rolls and RNG stream.
-func (s *Scene) rollNaturalEquipmentQualityV5Legacy(def domain.ItemDef, stack *domain.Stack, sourceLevel int32, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique, variables *lootRandomV5) {
-	s.rollEquipmentQualityV5WithVariants(def, stack, sourceLevel, s.equipmentRoll, profile, rollAffixes, magicFind, rule, quality.Int63n, values.Int63n, unique.Int63n, variables.Intn, false)
+func (s *Scene) rollNaturalEquipmentQualityV5Legacy(def domain.ItemDef, stack *domain.Stack, sourceLevel int32, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique, variables *lootRandomV5, recipient ...domain.LegendaryRecipientClass) {
+	s.rollEquipmentQualityV5WithVariants(def, stack, sourceLevel, s.equipmentRoll, profile, rollAffixes, magicFind, rule, quality.Int63n, values.Int63n, unique.Int63n, variables.Intn, false, recipient...)
 }
 
-func (s *Scene) rollEquipmentQualityV5(def domain.ItemDef, stack *domain.Stack, sourceLevel int32, table domain.EquipmentRollTable, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique func(int64) int64, variables func(int) int) {
-	s.rollEquipmentQualityV5WithVariants(def, stack, sourceLevel, table, profile, rollAffixes, magicFind, rule, quality, values, unique, variables, true)
+func (s *Scene) rollEquipmentQualityV5(def domain.ItemDef, stack *domain.Stack, sourceLevel int32, table domain.EquipmentRollTable, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique func(int64) int64, variables func(int) int, recipient ...domain.LegendaryRecipientClass) {
+	s.rollEquipmentQualityV5WithVariants(def, stack, sourceLevel, table, profile, rollAffixes, magicFind, rule, quality, values, unique, variables, true, recipient...)
 }
 
-func (s *Scene) rollEquipmentQualityV5WithVariants(def domain.ItemDef, stack *domain.Stack, sourceLevel int32, table domain.EquipmentRollTable, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique func(int64) int64, variables func(int) int, variants bool) {
+func (s *Scene) rollEquipmentQualityV5WithVariants(def domain.ItemDef, stack *domain.Stack, sourceLevel int32, table domain.EquipmentRollTable, profile domain.ColorProfile, rollAffixes bool, magicFind int64, rule *domain.LootRuleSet, quality, values, unique func(int64) int64, variables func(int) int, variants bool, recipient ...domain.LegendaryRecipientClass) {
 	if stack == nil || def.Equip == nil {
 		return
 	}
@@ -196,12 +200,16 @@ func (s *Scene) rollEquipmentQualityV5WithVariants(def domain.ItemDef, stack *do
 		stack.RolledAffixCount = uint8(len(rolled))
 		copy(stack.RolledAffixes[:], rolled)
 	}
+	var recipientClass domain.LegendaryRecipientClass
+	if len(recipient) > 0 {
+		recipientClass = recipient[0]
+	}
 	if def.LegendaryEnabled {
 		if !def.Equip.NoTypeDrop && def.Equip.NativeDropEligible && unique(domain.LootProbabilityScaleV5) < domain.UniqueProbabilityV5(magicFind, rule) {
 			if variants {
-				table.ApplyLegendaryAtLevel(stack, def, sourceLevel, variables)
+				table.ApplyLegendaryForRecipientAtLevel(stack, def, sourceLevel, recipientClass, variables)
 			} else {
-				table.ApplyLegendaryLegacyAtLevel(stack, def, sourceLevel, variables)
+				table.ApplyLegendaryLegacyForRecipientAtLevel(stack, def, sourceLevel, recipientClass, variables)
 			}
 		}
 		return

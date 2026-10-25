@@ -45,6 +45,8 @@ type RiftAbilityRule struct {
 	DamagePct                   int32
 }
 type RiftRules struct {
+	// Nil preserves historical paid runs. v14 freezes existing feather rewards.
+	WingRewards *RiftWingRewardRules `json:",omitempty"`
 	// Zero preserves historical floor generation and guardian selection.
 	FloorLayoutVersion   int32               `json:",omitempty"`
 	GuardianRecentWindow int32               `json:",omitempty"`
@@ -56,6 +58,8 @@ type RiftRules struct {
 	GuardianArrivalMS int64 `json:",omitempty"`
 	// New runs freeze reward level at guardian death; old runs keep admission level.
 	CompletionLevelExperience bool `json:",omitempty"`
+	// Zero preserves historical guardian HP; v13 divides the final scaled HP by ten.
+	GuardianHPDivisor int32 `json:",omitempty"`
 	// Zero preserves historical snapshots: tier one is the unscaled anchor.
 	StatAnchorTier int32 `json:",omitempty"`
 	// New v12 reward policy: each 100 cumulative percent produces one Legendary.
@@ -100,6 +104,22 @@ func (t *RiftRuleTable) Entrances() []EndgameRiftEntranceView {
 }
 
 func cloneRiftRules(r RiftRules) RiftRules {
+	if r.WingRewards != nil {
+		w := *r.WingRewards
+		if w.RareFeather != nil {
+			rare := *w.RareFeather
+			w.RareFeather = &rare
+		}
+		w.Milestones = append([]RiftWingMilestone(nil), w.Milestones...)
+		w.RepeatBands = append([]RiftWingRepeatBand(nil), w.RepeatBands...)
+		for i := range w.Milestones {
+			w.Milestones[i].Materials = append([]CubeMaterialDef(nil), w.Milestones[i].Materials...)
+		}
+		for i := range w.RepeatBands {
+			w.RepeatBands[i].Materials = append([]CubeMaterialDef(nil), w.RepeatBands[i].Materials...)
+		}
+		r.WingRewards = &w
+	}
 	if r.EquipmentSlotFallbacks != nil {
 		r.EquipmentSlotFallbacks = append([]ItemID{}, r.EquipmentSlotFallbacks...)
 	}
@@ -157,6 +177,9 @@ func (r *RiftRules) Validate() error {
 	if r.StatAnchorTier < 0 || r.StatAnchorTier > r.MaxTier || r.HPGrowthBP < 10000 || r.HPGrowthBP > 100000 || r.DamageGrowthBP < 10000 || r.DamageGrowthBP > 100000 || r.PartyHPBP < 0 || r.PartyHPBP > 100000 || len(r.Classes) != 4 {
 		return fmt.Errorf("invalid rift scaling")
 	}
+	if (r.GuardianHPDivisor != 0 && (r.Version < 13 || r.GuardianHPDivisor != 10)) || (r.Version >= 13 && r.GuardianHPDivisor != 10) {
+		return fmt.Errorf("invalid rift guardian HP divisor")
+	}
 	for i, c := range r.Classes {
 		if c.Class != int32(i) || c.HPBP < 1 || c.HPBP > 10000000 || c.DamageBP < 1 || c.DamageBP > 10000000 {
 			return fmt.Errorf("invalid rift class")
@@ -189,6 +212,9 @@ func (r *RiftRules) Validate() error {
 	if err := r.validateEquipmentPools(nil); err != nil {
 		return err
 	}
+	if err := r.validateWingRewards(nil); err != nil {
+		return err
+	}
 	return r.validateWire()
 }
 func NewRiftRuleTable(active int32, rows []RiftRules, loot *LootRuleTable, items map[ItemID]ItemDef, entrances ...EndgameRiftEntranceView) (*RiftRuleTable, error) {
@@ -218,6 +244,9 @@ func NewRiftRuleTable(active int32, rows []RiftRules, loot *LootRuleTable, items
 			return nil, err
 		}
 		if err := r.validateEquipmentPools(items); err != nil {
+			return nil, err
+		}
+		if err := r.validateWingRewards(items); err != nil {
 			return nil, err
 		}
 		d, ok := items[r.DustItem]

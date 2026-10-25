@@ -43,6 +43,12 @@ func loadEndgameData(ctx context.Context, q data.Querier, w *worldData, log *slo
 		w.endgameDataErr = fmt.Errorf("load rift rules: %w", err)
 		return
 	}
+	wings, err := data.LoadWingProgression(ctx, q, w.items)
+	if err != nil {
+		w.endgameDataErr = fmt.Errorf("load wing progression: %w", err)
+		return
+	}
+	w.wingRules = wings
 	domain.AttachEndgameCatalog(w.items, catalog)
 	w.endgameCatalog, w.cubeRules = catalog, rules
 	w.lootRules, w.riftRules = loot, rifts

@@ -72,6 +72,9 @@ func saveItemInstances(ctx context.Context, q querier, source string, stacks ...
 		if kind != domain.ItemInstanceEquipment {
 			continue
 		}
+		if err := saveWingPowerItem(ctx, q, st); err != nil {
+			return err
+		}
 		if err := saveLegendaryItem(ctx, q, st); err != nil {
 			return err
 		}
@@ -212,6 +215,9 @@ func loadItemInstances(ctx context.Context, q querier, uids []int64) (map[int64]
 	if err := loadLegendaryItems(ctx, q, out); err != nil {
 		return nil, err
 	}
+	if err := loadWingPowerItems(ctx, q, out); err != nil {
+		return nil, err
+	}
 	if err := loadCardInstances(ctx, q, out); err != nil {
 		return nil, err
 	}
@@ -232,7 +238,7 @@ func hydrateStack(cached domain.Stack, facts map[int64]domain.Stack) (domain.Sta
 	}
 	// 历史位置表没有 instance_kind 列；装备的类型可由模板确定，保留旧栈的
 	// 零值以兼容既有快照。卡片则必须带回 kind=2，镶嵌入口据此拒绝普通物品。
-	if fact.InstanceKind == domain.ItemInstanceEquipment && cached.InstanceKind == domain.ItemInstanceNone {
+	if fact.InstanceKind == domain.ItemInstanceEquipment && cached.InstanceKind == domain.ItemInstanceNone && fact.WingPowers == (domain.WingPowers{}) {
 		fact.InstanceKind = domain.ItemInstanceNone
 	}
 	return fact, nil

@@ -119,6 +119,17 @@ func (b *endgameBackend) Commit(p domain.EndgameCommitPlan) <-chan domain.Endgam
 				if err = e.SaveEndgameState(ctx, p.Receipt.CharID, p.State, p.ExpectedRevision); err != nil {
 					return err
 				}
+				if p.Receipt.Operation == "cube.execute" {
+					before, after, transformErr := wingTransformationOf(p)
+					if transformErr != nil {
+						return transformErr
+					}
+					if before.UID > 0 {
+						if err = e.TransformWingInstance(ctx, p.Receipt.CharID, before.UID, before.Item, after.Item); err != nil {
+							return err
+						}
+					}
+				}
 				if err = tx.SaveSnapshot(ctx, p.Snapshot); err != nil {
 					return err
 				}

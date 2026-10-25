@@ -1,0 +1,271 @@
+{
+  "Milestones": [
+    {
+      "Tier": 10,
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 4
+        }
+      ]
+    },
+    {
+      "Tier": 30,
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 2
+        },
+        {
+          "ItemID": 25028,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "Tier": 50,
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 6
+        },
+        {
+          "ItemID": 25028,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "Tier": 70,
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 16
+        }
+      ]
+    },
+    {
+      "Tier": 90,
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 32
+        }
+      ]
+    },
+    {
+      "Tier": 110,
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 60
+        }
+      ]
+    },
+    {
+      "Tier": 130,
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 100
+        }
+      ]
+    },
+    {
+      "Tier": 150,
+      "Materials": [
+        {
+          "ItemID": 25029,
+          "Count": 160
+        }
+      ]
+    }
+  ],
+  "RepeatBands": [
+    {
+      "MinTier": 1,
+      "Materials": [
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "MinTier": 10,
+      "Materials": [
+        {
+          "ItemID": 25027,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "MinTier": 20,
+      "Materials": [
+        {
+          "ItemID": 25027,
+          "Count": 3
+        }
+      ]
+    },
+    {
+      "MinTier": 30,
+      "Materials": [
+        {
+          "ItemID": 25027,
+          "Count": 4
+        }
+      ]
+    },
+    {
+      "MinTier": 40,
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "MinTier": 50,
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 1
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "MinTier": 60,
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 1
+        },
+        {
+          "ItemID": 25027,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "MinTier": 70,
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 1
+        },
+        {
+          "ItemID": 25027,
+          "Count": 3
+        }
+      ]
+    },
+    {
+      "MinTier": 80,
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 1
+        },
+        {
+          "ItemID": 25027,
+          "Count": 4
+        }
+      ]
+    },
+    {
+      "MinTier": 90,
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "MinTier": 100,
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 2
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "MinTier": 110,
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 2
+        },
+        {
+          "ItemID": 25027,
+          "Count": 2
+        }
+      ]
+    },
+    {
+      "MinTier": 120,
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 2
+        },
+        {
+          "ItemID": 25027,
+          "Count": 3
+        }
+      ]
+    },
+    {
+      "MinTier": 130,
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 2
+        },
+        {
+          "ItemID": 25027,
+          "Count": 4
+        }
+      ]
+    },
+    {
+      "MinTier": 140,
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 3
+        }
+      ]
+    },
+    {
+      "MinTier": 150,
+      "Materials": [
+        {
+          "ItemID": 25028,
+          "Count": 3
+        },
+        {
+          "ItemID": 25027,
+          "Count": 1
+        }
+      ]
+    }
+  ],
+  "RareFeather": {
+    "Item": 11682,
+    "Count": 1,
+    "ChanceBP": 50
+  }
+}

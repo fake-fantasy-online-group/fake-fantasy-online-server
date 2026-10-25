@@ -120,8 +120,8 @@ func (s *Scene) syncEndgameRift(p *entity.Entity) {
 func (s *Scene) disconnectEndgameRift(p *entity.Entity) {
 	if s.rift != nil && p != nil && p.Player != nil {
 		char := domain.CharID(p.Player.Char.ID)
-		if !s.rift.data.GrantsReady && (s.rift.data.Run.Rules.NormalBossEquipment > 0 || s.rift.data.Run.Rules.CompletionLevelExperience) && s.rift.data.Run.Admitted(char) {
-			context := endgameRiftRewardContext{Level: p.Player.Char.Level, MagicFind: s.magicFindV5(p)}
+		if !s.rift.data.GrantsReady && s.rift.data.Run.Admitted(char) {
+			context := endgameRiftRewardContext{Level: p.Player.Char.Level, MagicFind: s.magicFindV5(p), RecipientClass: domain.LegendaryClassForCharacter(p.Player.Char), RecipientClassKnown: true}
 			s.cacheEndgameRiftRewardContext(char, context)
 			if transition := s.rift.transition; transition != nil && !s.rift.retired {
 				if transition.rewardContexts == nil {
@@ -153,10 +153,13 @@ func cacheRiftRewardContext(data *endgameRiftPersisted, char domain.CharID, cont
 		data.Profiles = map[domain.CharID]endgameRiftIdentity{}
 	}
 	profile := data.Profiles[char]
-	if profile.RewardLevel == context.Level && profile.MagicFind == context.MagicFind {
+	if profile.RewardLevel == context.Level && profile.MagicFind == context.MagicFind && (!context.RecipientClassKnown || profile.RewardClassKnown && profile.RewardClass == context.RecipientClass) {
 		return false
 	}
 	profile.RewardLevel, profile.MagicFind = context.Level, context.MagicFind
+	if context.RecipientClassKnown {
+		profile.RewardClass, profile.RewardClassKnown = context.RecipientClass, true
+	}
 	data.Profiles[char] = profile
 	data.Run.Revision++
 	return true

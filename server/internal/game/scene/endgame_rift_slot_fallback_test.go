@@ -114,7 +114,7 @@ func TestRiftSlotFallbackNativeLevelsClassesAndBoundaries(t *testing.T) {
 		}
 		beforePowers := powerIDs(missingSlotLegalPool(s, old, level, level, 2, true, 0))
 		afterPowers := powerIDs(got)
-		if !reflect.DeepEqual(beforePowers, afterPowers) || len(afterPowers) != 94 {
+		if !reflect.DeepEqual(beforePowers, afterPowers) || len(afterPowers) != 117 {
 			t.Fatal("42/43 power gates unexpectedly expanded", len(beforePowers), len(afterPowers))
 		}
 	}

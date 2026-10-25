@@ -15,6 +15,7 @@ var ErrEndgameReceiptConflict = domain.ErrEndgameReceiptConflict
 // EndgameStore is optional: old Store implementors do not silently claim support.
 // All writes, locks, and recovery reads are used within Store.WithTx.
 type EndgameStore interface {
+	TransformWingInstance(context.Context, int64, int64, domain.ItemID, domain.ItemID) error
 	LockEndgameCharacter(context.Context, int64) error
 	LockEndgameRun(context.Context, string) error
 	LoadEndgameSnapshot(context.Context, domain.Snapshot) (domain.Snapshot, error)

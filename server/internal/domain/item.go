@@ -525,6 +525,7 @@ type Stack struct {
 	RolledAffixCount uint8
 	RolledAffixes    [5]InstanceAffix
 	Legendary        LegendaryInstance
+	WingPowers       WingPowers
 	WashQuality      uint8
 	WashCount        uint8
 	WashAffixes      [4]Affix

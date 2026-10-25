@@ -264,6 +264,7 @@ func TestRiftExperienceCompletionLevelItemAndLegacySnapshot(t *testing.T) {
 func TestRiftExperienceQueuedGuardianFreezesActualDeathLevel(t *testing.T) {
 	s, b, now, boss := riftExperienceAuditScene(t, 150, true, 60)
 	riftExperienceAuditUseLevelItem(t, s)
+	s.players[1].Player.Char.Race = domain.Assassin
 	s.rift.economicPending = true
 	*now += 1000
 	boss.HP = 0
@@ -271,11 +272,15 @@ func TestRiftExperienceQueuedGuardianFreezesActualDeathLevel(t *testing.T) {
 	if len(s.rift.delayedDeaths) != 1 || s.rift.data.GrantsReady {
 		t.Fatal("guardian was not queued")
 	}
+	s.players[1].Player.Char.Race = domain.Warrior
 	s.players[1].Player.Char.Level = 80 // A later economic update must not alter death-time evidence.
 	s.rift.economicPending = false
 	s.stepEndgameRift()
 	s.stepEndgameRift()
 	grant := s.rift.data.Grants[100]
+	if s.rift.data.RewardClasses[100] != 4 {
+		t.Fatal("queued guardian borrowed later recipient class", s.rift.data.RewardClasses)
+	}
 	if grant.ExperienceLevel != 61 || grant.ExperienceBase != 1689200 || grant.Exp != 27027200 {
 		t.Fatalf("queued death used later current level: level=%d base=%d XP=%d", grant.ExperienceLevel, grant.ExperienceBase, grant.Exp)
 	}

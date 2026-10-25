@@ -118,17 +118,62 @@ func LegendaryCandidatesAtLevel(def ItemDef, sourceLevel int32) []LegendaryPower
 	return out
 }
 
+// LegendaryRecipientClass is a frozen single-profession mask. Zero is an
+// unknown/unemployed recipient and permits only universal powers. It is not a
+// wearer requirement and is never persisted on an item or checked on transfer.
+type LegendaryRecipientClass uint8
+
+func LegendaryClassForCharacter(ch *Character) LegendaryRecipientClass {
+	if ch == nil || !ch.HasProfession() || !ch.Race.Valid() {
+		return 0
+	}
+	return 1 << uint8(ch.Race)
+}
+
+func (recipient LegendaryRecipientClass) allows(power LegendaryPowerDefinition) bool {
+	return power.Class == "全职业" || recipient != 0 && recipient&(recipient-1) == 0 && uint8(recipient) == legendaryClassMask(power.Class)
+}
+
+// Recipient filtering intersects, never replaces, the item's existing native
+// type/slot/profession and source-monster-level eligibility. A different-class
+// base stays the same base and may receive only legal universal powers.
+func LegendaryCandidatesForRecipientAtLevel(def ItemDef, sourceLevel int32, recipient LegendaryRecipientClass) []LegendaryPowerDefinition {
+	candidates := LegendaryCandidatesAtLevel(def, sourceLevel)
+	out := candidates[:0]
+	for _, power := range candidates {
+		if recipient.allows(power) {
+			out = append(out, power)
+		}
+	}
+	return out
+}
+
+func (t EquipmentRollTable) ApplyLegendaryForRecipient(st *Stack, def ItemDef, recipient LegendaryRecipientClass, rng func(int) int) bool {
+	if st == nil {
+		return false
+	}
+	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false, &recipient)
+}
+
+func (t EquipmentRollTable) ApplyLegendaryForRecipientAtLevel(st *Stack, def ItemDef, sourceLevel int32, recipient LegendaryRecipientClass, rng func(int) int) bool {
+	return t.applyLegendary(st, def, sourceLevel, rng, true, true, &recipient)
+}
+
+func (t EquipmentRollTable) ApplyLegendaryLegacyForRecipientAtLevel(st *Stack, def ItemDef, sourceLevel int32, recipient LegendaryRecipientClass, rng func(int) int) bool {
+	return t.applyLegendary(st, def, sourceLevel, rng, false, true, &recipient)
+}
+
 // ApplyLegendary is for non-monster awakening: preserve known provenance, or
 // retain the historical base-level eligibility of a legacy/non-monster item.
 func (t EquipmentRollTable) ApplyLegendary(st *Stack, def ItemDef, rng func(int) int) bool {
 	if st == nil {
 		return false
 	}
-	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false)
+	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false, nil)
 }
 
 func (t EquipmentRollTable) ApplyLegendaryAtLevel(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int) bool {
-	return t.applyLegendary(st, def, sourceLevel, rng, true, true)
+	return t.applyLegendary(st, def, sourceLevel, rng, true, true, nil)
 }
 
 // ApplyLegendaryLegacy preserves pre-variant generation and exact RNG consumption.
@@ -136,18 +181,23 @@ func (t EquipmentRollTable) ApplyLegendaryLegacy(st *Stack, def ItemDef, rng fun
 	if st == nil {
 		return false
 	}
-	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, false, false)
+	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, false, false, nil)
 }
 
 func (t EquipmentRollTable) ApplyLegendaryLegacyAtLevel(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int) bool {
-	return t.applyLegendary(st, def, sourceLevel, rng, false, true)
+	return t.applyLegendary(st, def, sourceLevel, rng, false, true, nil)
 }
 
-func (t EquipmentRollTable) applyLegendary(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int, variants, recordSource bool) bool {
+func (t EquipmentRollTable) applyLegendary(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int, variants, recordSource bool, recipient *LegendaryRecipientClass) bool {
 	if st == nil || sourceLevel < 1 || (st.Endgame.SourceLevel != 0 && st.Endgame.SourceLevel != sourceLevel) || rng == nil || st.UID <= 0 || st.Count != 1 || st.Item != def.ID || st.Legendary.PowerID != "" || st.Endgame.UniqueID != 0 || !CanPromoteSocketlessUnique(*st) || !t.LegendaryReady(def) {
 		return false
 	}
-	powers := LegendaryCandidatesAtLevel(def, sourceLevel)
+	var powers []LegendaryPowerDefinition
+	if recipient == nil {
+		powers = LegendaryCandidatesAtLevel(def, sourceLevel)
+	} else {
+		powers = LegendaryCandidatesForRecipientAtLevel(def, sourceLevel, *recipient)
+	}
 	if len(powers) == 0 {
 		return false
 	}

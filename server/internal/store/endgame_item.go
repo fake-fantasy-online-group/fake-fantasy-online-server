@@ -7,6 +7,9 @@ import (
 )
 
 func validateEndgameItem(st domain.Stack, catalog *domain.EndgameCatalog) error {
+	if err := validateWingPowerItem(st); err != nil {
+		return err
+	}
 	if err := validateLegendaryItem(st); err != nil {
 		return err
 	}

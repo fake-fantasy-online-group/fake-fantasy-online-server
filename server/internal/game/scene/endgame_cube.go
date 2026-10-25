@@ -22,6 +22,7 @@ type endgameCubeState struct {
 	choices   []domain.EndgameRequest
 	rules     *domain.CubeRuleTable
 	catalog   *domain.EndgameCatalog
+	wingRules *domain.WingProgressionRules
 }
 
 func (s *Scene) catalogCubeRecipeViews() []domain.EndgameRecipeView {
@@ -35,7 +36,7 @@ func (s *Scene) endgameCubeContext(p *entity.Entity) (domain.CubeContext, error)
 	if err != nil {
 		return domain.CubeContext{}, &domain.CubeError{Code: "requirements", Message: "铜币状态无效"}
 	}
-	return domain.CubeContext{EquipmentRoll: s.equipmentRoll, Rules: s.cubeRules, Catalog: s.endgameCatalog, Level: p.Player.Char.Level, Bag: p.Player.Bag, Money: money, Items: s.items, Intn: s.rng.Intn, NewUID: domain.NewItemInstanceID}, nil
+	return domain.CubeContext{WingRules: s.wingRules, Character: p.Player.Char, EquipmentRoll: s.equipmentRoll, RecipientClass: domain.LegendaryClassForCharacter(p.Player.Char), Rules: s.cubeRules, Catalog: s.endgameCatalog, Level: p.Player.Char.Level, Bag: p.Player.Bag, Money: money, Items: s.items, Intn: s.rng.Intn, NewUID: domain.NewItemInstanceID}, nil
 }
 func (s *Scene) planEndgameCube(p *entity.Entity, req domain.EndgameRequest, execute bool) (domain.CubePlan, error) {
 	ctx, err := s.endgameCubeContext(p)
@@ -112,7 +113,7 @@ func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 		expires := s.now().Add(60 * time.Second)
 		req.ItemUIDs = append([]string(nil), req.ItemUIDs...)
 		req.CubeInputs = append([]domain.CubeInput(nil), req.CubeInputs...)
-		state.cube = &endgameCubeState{quoteID: id, request: req, revision: state.state.Revision, fingerprint: plan.Fingerprint, expires: expires, choices: choices, rules: s.cubeRules, catalog: s.endgameCatalog}
+		state.cube = &endgameCubeState{quoteID: id, request: req, revision: state.state.Revision, fingerprint: plan.Fingerprint, expires: expires, choices: choices, rules: s.cubeRules, catalog: s.endgameCatalog, wingRules: s.wingRules}
 		quote := domain.EndgameQuoteView{QuoteID: id, RecipeID: req.RecipeID, TargetUID: req.TargetUID, Revision: strconv.FormatInt(state.state.Revision, 10), Money: plan.Recipe.Money, Materials: plan.Materials, ExpiresAt: expires.UTC().Format(time.RFC3339), Description: plan.Description}
 		s.endgameReply(p, domain.EndgameResponse{Kind: "cube.quote", RequestID: req.RequestID, OK: true, Quote: &quote})
 	case "cube.execute":
@@ -124,7 +125,7 @@ func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 		// Rules and catalog are immutable startup snapshots whose accessors
 		// return deep copies. A replacement must invalidate quotes, including
 		// an already-rolled cached candidate; fees/results cannot change under it.
-		if q.rules != s.cubeRules || q.catalog != s.endgameCatalog {
+		if q.rules != s.cubeRules || q.catalog != s.endgameCatalog || q.wingRules != s.wingRules {
 			state.cube = nil
 			s.endgameError(p, req, "quote_expired", "炼化配置已变化，请重新问鼎")
 			return
