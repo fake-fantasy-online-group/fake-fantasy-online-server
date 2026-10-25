@@ -2,6 +2,7 @@ package scene
 
 import (
 	"math"
+	"sort"
 	"time"
 
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -761,6 +762,7 @@ func (s *Scene) onLeave(cmd Leave) {
 	s.flush() // 立刻冲刷: 下面就要把他从 players 里删掉, 留到帧末就发不出去了
 
 	s.revokeDepartingSkillSource(e)
+	s.cancelReplication(e.ID)
 	s.aoi.Leave(e)
 	delete(s.entities, e.ID)
 	delete(s.players, e.ID)
@@ -1039,6 +1041,25 @@ func projectileTravelDuration(from, to domain.Pos, speedPXPerSec int32) time.Dur
 // NPC 的排障开关仍然生效。
 func (s *Scene) sendAllEntities(to domain.EntityID) {
 	s.replayGroundEffects(to)
+	p := s.players[to]
+	if p == nil {
+		return
+	}
+	_, paced := p.Player.Sink.(pacedEventSink)
+	var stream *replicationStream
+	if paced || s.rift != nil {
+		stream = s.replicationFor(p)
+		if stream.ready {
+			s.resetReplicationSnapshot(stream)
+		}
+		stream.ready = true
+		stream.initialReady = false
+		s.emitTo(to, replicationBarrier{who: to})
+		s.ensureRiftVisibility()
+		if s.riftVisibility != nil {
+			s.riftVisibility.subscribe(to, p.Pos, s.replicationMovementBuffer(p))
+		}
+	}
 	n := 0
 	for _, o := range s.entities {
 		if s.entityMapLoading(o) {
@@ -1055,9 +1076,23 @@ func (s *Scene) sendAllEntities(to domain.EntityID) {
 		if o.Kind == domain.KindTrap && (o.Trap == nil || !o.Trap.VisibleToPlayer(to)) {
 			continue
 		}
-		s.emitTo(to, s.spawnEvent(o))
-		s.sendEntityStatusEffects(to, o)
+		if stream != nil {
+			s.queueReplicationSpawn(stream, o, false)
+		} else {
+			s.emitTo(to, s.spawnEvent(o))
+			s.sendEntityStatusEffects(to, o)
+		}
 		n++
+	}
+	if stream != nil {
+		sort.SliceStable(stream.initial[stream.initialAt:], func(i, j int) bool {
+			a, b := stream.initial[stream.initialAt+i], stream.initial[stream.initialAt+j]
+			da, db := sqDist(p.Pos, a.Pos), sqDist(p.Pos, b.Pos)
+			if da == db {
+				return a.ID < b.ID
+			}
+			return da < db
+		})
 	}
 	if n > 0 {
 		s.log.Debug("下发全图实体", "给", to, "数量", n)

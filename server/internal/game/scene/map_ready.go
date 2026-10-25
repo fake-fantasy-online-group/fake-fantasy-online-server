@@ -61,6 +61,9 @@ func (s *Scene) onClientSceneReady(cmd ClientSceneReady) {
 	if !ok || !sink.CurrentSceneReady(e.ID, s.id, cmd.Epoch) {
 		return
 	}
+	if r := s.replication[e.ID]; r != nil {
+		s.resetReplicationSnapshot(r)
+	}
 	s.flush()
 	// Session teardown may run while a flush is delivering prior events.
 	if !sink.CurrentSceneReady(e.ID, s.id, cmd.Epoch) {
@@ -83,6 +86,7 @@ func (s *Scene) onClientSceneReady(cmd ClientSceneReady) {
 }
 
 func (s *Scene) beginMapLoad(e *entity.Entity, alreadyReady bool) bool {
+	s.cancelReplication(e.ID)
 	sink, supported := e.Player.Sink.(mapLoadSink)
 	if !supported {
 		return true // non-network scene consumers do not perform client loading
@@ -220,5 +224,5 @@ func (s *Scene) canDeliverWorldEvent(to domain.EntityID, ev event.Event) bool {
 	if _, despawn := ev.(event.EntityDespawned); despawn {
 		return s.mapLoads[to] == nil
 	}
-	return !worldEntityEvent(ev) || (s.mapLoads[to] == nil && !s.entityMapLoading(s.entities[ev.Subject()]))
+	return !replicationStagedEvent(ev) || (s.mapLoads[to] == nil && !s.entityMapLoading(s.entities[ev.Subject()]))
 }

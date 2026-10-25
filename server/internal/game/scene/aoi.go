@@ -18,6 +18,10 @@ type cell struct{ x, y int32 }
 
 // AOI 管一张图上实体的空间分布。
 type AOI struct {
+	// onChange observes index lifecycle on the owning scene goroutine. Visibility
+	// keeps its own fixed-size blocks; combat cell sizing and queries are unchanged.
+	onChange func(*entity.Entity, bool)
+
 	cellSize float64
 	players  map[cell]map[domain.EntityID]*entity.Entity // Kind is fixed while indexed; use Enter to refresh any kind conversion.
 	cells    map[cell]map[domain.EntityID]*entity.Entity
@@ -46,6 +50,9 @@ func (a *AOI) Enter(e *entity.Entity) cell {
 		a.remove(previous, e.ID)
 	}
 	a.add(c, e)
+	if a.onChange != nil {
+		a.onChange(e, true)
+	}
 	return c
 }
 
@@ -57,6 +64,9 @@ func (a *AOI) Leave(e *entity.Entity) {
 	}
 	a.remove(c, e.ID)
 	delete(a.at, e.ID)
+	if a.onChange != nil {
+		a.onChange(e, false)
+	}
 }
 
 // Move 更新实体在服务端空间索引中的位置。
@@ -64,6 +74,9 @@ func (a *AOI) Move(e *entity.Entity, to domain.Pos) (crossed bool, from, dst cel
 	from = a.at[e.ID]
 	dst = a.cellOf(to)
 	e.Pos = to
+	if a.onChange != nil {
+		a.onChange(e, true)
+	}
 	if dst == from {
 		return false, from, dst
 	}

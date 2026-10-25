@@ -184,6 +184,10 @@ type Config struct {
 	// Walkable 是客户端 QQF MASK 的可行走判定。nil 只用于不带地图资源的测试；
 	// 正式场景加载不到碰撞图时由装配层注入“全部不可走”，宁可停掉游荡也不能进水。
 	Walkable func(domain.Pos) bool
+	// NativeMapWidth/Height must be the verified native camera dimensions, not
+	// a collision-mask or monster-population envelope. Zero uses a conservative
+	// unknown-camera-bounds visibility window. Current production defaults to zero.
+	NativeMapWidth, NativeMapHeight float64
 
 	// Seed 是本场景随机数的种子。0 = 按时间取。
 	//
@@ -268,6 +272,10 @@ type Scene struct {
 	aoi                  *AOI
 	timer                timers
 	outbox               []pending
+	replication          map[domain.EntityID]*replicationStream
+	replicationLeaves    []replicationLeave
+	replicationDeparting map[domain.EntityID]bool
+	riftVisibility       *riftBlockIndex
 	mapLoads             map[domain.EntityID]*mapLoad
 	attacks              []pendingAttack                        // 已受理、等待动画命中帧的攻击
 	steppingCasts        bool                                   // stable cast slots owned by stepCastsAt
@@ -280,8 +288,10 @@ type Scene struct {
 	combatTiming         domain.CombatTimingRule                // 正式普通攻击命中时序
 	monsterDialogs       *domain.MonsterDialogs                 // 怪物各事件的原始台词
 	spawner              *spawn.Spawner                         // nil = 这张图不刷怪
-	walkable             func(domain.Pos) bool                  // 怪物游荡和局部追击寻路的 MASK 判定
-	portals              []domain.Portal                        // 本图的传送门
+	nativeMapWidth       float64
+	nativeMapHeight      float64
+	walkable             func(domain.Pos) bool // 怪物游荡和局部追击寻路的 MASK 判定
+	portals              []domain.Portal       // 本图的传送门
 	riftPortalAreas      []domain.Polygon
 	transports           domain.TransportTable // NPC 传送菜单
 	shops                domain.ShopTable      // NPC 商店库存
@@ -362,8 +372,10 @@ type Scene struct {
 // pending 是一条待投递的事件。广播中心格在**产生事件时**就取好, 因为到帧末
 // 冲刷时主体可能已经离场了(典型: 死亡消失事件)。
 type pending struct {
-	ev event.Event
-	to domain.EntityID // 非 0 = 只发这个人; 0 = 发给同地图全部玩家
+	control bool
+	refs    [2]*entity.Entity
+	ev      event.Event
+	to      domain.EntityID // 非 0 = 只发这个人; 0 = 发给同地图全部玩家
 	// except 在广播时跳过这个人。移动事件用它跳过自己 —— 客户端已经本地移动过了,
 	// 再收一条自己的移动会把画面拽回去。
 	except domain.EntityID
@@ -450,6 +462,8 @@ func New(cfg Config) *Scene {
 		spawner:              cfg.Spawner,
 		trial:                cfg.Trial, dungeonParty: cfg.DungeonParty, dungeonNotify: cfg.DungeonNotify,
 		walkable:          cfg.Walkable,
+		nativeMapWidth:    cfg.NativeMapWidth,
+		nativeMapHeight:   cfg.NativeMapHeight,
 		portals:           cfg.Portals,
 		riftPortalAreas:   cfg.RiftPortalAreas,
 		transports:        cfg.Transports,
@@ -1516,12 +1530,18 @@ func (s *Scene) emitExcept(ev event.Event, except domain.EntityID) { s.push(ev, 
 // emitTo 只发给一个玩家。经验、属性变化、拒绝回执走这条。
 func (s *Scene) emitTo(to domain.EntityID, ev event.Event) {
 	ev = s.withNativeAttackRange(ev)
-	s.outbox = append(s.outbox, pending{ev: ev, to: to})
+	s.outbox = append(s.outbox, pending{ev: ev, to: to, refs: s.replicationEventRefs(ev)})
+}
+
+// Native mapless cleanup belongs to the immediate control FIFO, not an old
+// scene's cancelable entity stream.
+func (s *Scene) emitControlTo(to domain.EntityID, ev event.Event) {
+	s.outbox = append(s.outbox, pending{ev: ev, to: to, control: true})
 }
 
 func (s *Scene) push(ev event.Event, to, except domain.EntityID) {
 	ev = s.withNativeAttackRange(ev)
-	s.outbox = append(s.outbox, pending{ev: ev, to: to, except: except})
+	s.outbox = append(s.outbox, pending{ev: ev, to: to, except: except, refs: s.replicationEventRefs(ev)})
 }
 
 // flush 把本帧攒下的事件送出去。
@@ -1530,18 +1550,23 @@ func (s *Scene) push(ev event.Event, to, except domain.EntityID) {
 // 顺序确定; 二是将来要做移动合并/包合并时, 这里是唯一的下手点。
 func (s *Scene) flush() {
 	if len(s.outbox) == 0 {
+		s.drainReplication()
 		return
 	}
 	for _, p := range s.outbox {
 		if p.to != 0 {
 			if e := s.players[p.to]; e != nil && s.canDeliverWorldEvent(p.to, p.ev) {
-				e.Player.Sink.Emit(p.ev)
+				if p.control {
+					e.Player.Sink.Emit(p.ev)
+				} else {
+					s.deliverReplication(e, p.ev, p.refs)
+				}
 			}
 			continue
 		}
 		for _, o := range s.players {
 			if o.ID != p.except && s.canDeliverWorldEvent(o.ID, p.ev) {
-				o.Player.Sink.Emit(p.ev)
+				s.deliverReplication(o, p.ev, p.refs)
 			}
 		}
 	}
@@ -1549,6 +1574,7 @@ func (s *Scene) flush() {
 	// Release event references without mutating payloads retained by sinks.
 	clear(s.outbox)
 	s.outbox = s.outbox[:0]
+	s.drainReplication()
 }
 
 // ── 存档 ──
@@ -1635,8 +1661,12 @@ func (s *Scene) shutdown(reason string) {
 		}
 	}
 	for _, e := range s.players {
+		s.cancelReplication(e.ID)
 		e.Player.Sink.Close()
 	}
+	s.replicationLeaves = nil
+	s.riftVisibility = nil
+	s.aoi.onChange = nil
 	for _, m := range s.monsters {
 		if m.Monster != nil {
 			m.Monster.CarriedLoot = nil

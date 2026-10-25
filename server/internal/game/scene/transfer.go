@@ -129,6 +129,11 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 		// WorkStopped 是按产生时的源 AOI 格广播；若等 force move 后才在帧末
 		// flush，本人跨格后反而不在旧格视野里，会漏掉收工事件。传送本来就是
 		// 生命周期边界，先把此前事件按旧坐标冲刷完，再下发权威落点。
+		if cmd.ClientGateReady {
+			if r := s.replication[e.ID]; r != nil {
+				s.resetReplicationSnapshot(r)
+			}
+		}
 		s.flush()
 		if cmd.ClientGateReady {
 			owner, ok := e.Player.Sink.(clientGateReadySink)
@@ -197,6 +202,12 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	// that interval must be removed before any destination snapshot. Player,
 	// monster and pet packets already carry their own map guard; do not clear
 	// those unrelated registries or the local player here.
+	s.cancelReplication(e.ID)
+	if s.replicationDeparting == nil {
+		s.replicationDeparting = make(map[domain.EntityID]bool)
+	}
+	s.replicationDeparting[e.ID] = true
+	defer delete(s.replicationDeparting, e.ID)
 	s.clearSourceMaplessEntities(e.ID)
 
 	// 1~2. 让周围的人看到他走了
@@ -204,6 +215,7 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 	s.flush()
 
 	// 3. 彻底摘除。漏掉任何一个 map 都会留下悬空引用
+	s.cancelReplication(e.ID)
 	s.aoi.Leave(e)
 	delete(s.entities, e.ID)
 	delete(s.players, e.ID)
@@ -475,6 +487,6 @@ func (s *Scene) clearSourceMaplessEntities(to domain.EntityID) {
 		if o.Kind == domain.KindNPC && s.skipNPC && !s.isEndgameRiftExitNPC(o) {
 			continue
 		}
-		s.emitTo(to, event.EntityDespawned{ID: o.ID, Kind: o.Kind, Reason: event.DespawnTimeout})
+		s.emitControlTo(to, event.EntityDespawned{ID: o.ID, Kind: o.Kind, Reason: event.DespawnTimeout})
 	}
 }

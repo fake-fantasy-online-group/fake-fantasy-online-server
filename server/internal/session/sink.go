@@ -29,9 +29,12 @@ type eventSink struct {
 	// 1.5.8 的背包、仓库和宠物增量包都以客户端已经收到一份完整快照为前提。
 	// 缓存放在每连接的接缝层：场景继续只产出权威完整视图，协议差分不会渗进
 	// 购买、拾取、换装等每一条业务路径。
-	inventory *event.InventorySnapshot
-	warehouse *event.WarehouseSnapshot
-	pet       *event.PetSnapshot
+	inventory    *event.InventorySnapshot
+	warehouse    *event.WarehouseSnapshot
+	pet          *event.PetSnapshot
+	staged       *stagedEmission
+	capturing    bool
+	afterCapture []func()
 }
 
 func (s *eventSink) Emit(ev event.Event) {
@@ -198,17 +201,19 @@ func (s *eventSink) Emit(ev event.Event) {
 	if entered && s.sess != nil {
 		// 好友快照要查 PostgreSQL，不能阻塞场景 goroutine。EnterWorld 已经先进入
 		// 同一连接的 FIFO 发送队列，因此异步刷新不会越过进世界主包。
-		go func() {
-			s.sess.refreshFriendList()
-			s.sess.refreshBlockList()
-			s.sess.refreshSystemRequests()
-			s.sess.refreshMailIndicator()
-			s.sess.refreshFamily()
-			s.sess.refreshApprentice()
-		}()
+		s.afterEmit(func() {
+			go func() {
+				s.sess.refreshFriendList()
+				s.sess.refreshBlockList()
+				s.sess.refreshSystemRequests()
+				s.sess.refreshMailIndicator()
+				s.sess.refreshFamily()
+				s.sess.refreshApprentice()
+			}()
+		})
 	}
 	if persistTipID != 0 && s.sess != nil {
-		s.sess.persistServerTip(persistTipCharID, persistTipID)
+		s.afterEmit(func() { s.sess.persistServerTip(persistTipCharID, persistTipID) })
 	}
 	for _, tipID := range followTipIDs {
 		s.Emit(event.NewbieTipRequested{Who: s.observer, ID: tipID})

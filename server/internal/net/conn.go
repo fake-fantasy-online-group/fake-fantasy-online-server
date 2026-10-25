@@ -27,14 +27,23 @@ type Handler interface {
 	OnClose(reason string)
 }
 
+type outboundPacket struct {
+	inner      []byte
+	pacedEpoch uint64 // zero identifies ordinary/control traffic, never purged
+}
+
 // Conn 封装一个客户端连接。实现 world.Sink(Send/Close/SessionID), 供世界循环往此连接发包。
 type Conn struct {
-	id      int64
-	raw     net.Conn
-	keys    atomic.Pointer[wire.Keys]
-	out     chan []byte // 下行内层包队列(未加密), 写 goroutine 消费
-	handler Handler
-	log     *slog.Logger
+	id         int64
+	raw        net.Conn
+	keys       atomic.Pointer[wire.Keys]
+	out        chan outboundPacket // 下行内层包队列(未加密), 写 goroutine 消费
+	outMu      sync.Mutex          // serializes producers for atomic batch admission; never held during network I/O
+	outBytes   atomic.Int64
+	outWake    chan struct{} // one wake token, not an additional packet queue
+	pacedEpoch uint64        // protected by outMu; zero is reserved for normal traffic
+	handler    Handler
+	log        *slog.Logger
 
 	closeOnce sync.Once
 	closed    atomic.Bool
@@ -74,7 +83,9 @@ func newConn(id int64, raw net.Conn, h Handler, o Options) *Conn {
 	o = normalizeOptions(o)
 	return &Conn{
 		id: id, raw: raw, handler: h,
-		out:          make(chan []byte, o.OutBuffer),
+		out:          make(chan outboundPacket, o.OutBuffer),
+		outWake:      make(chan struct{}, 1),
+		pacedEpoch:   1,
 		closeCh:      make(chan struct{}),
 		log:          o.Log.With("conn", id),
 		handshakeLen: o.HandshakeLen,
@@ -86,19 +97,92 @@ func newConn(id int64, raw net.Conn, h Handler, o Options) *Conn {
 
 func (c *Conn) SessionID() int64 { return c.id }
 
+// stagedQueueByteWatermark limits new paced presentation admission. Ordinary
+// Send retains its legacy packet-count-only contract; a valid global burst can
+// exceed this watermark, in which case paced traffic pauses until it drains.
+const stagedQueueByteWatermark = 4 << 20
+
 // Send 把一个下行内层包投入发送队列。非阻塞: 队列满(慢客户端)则断开该连接,
 // 绝不阻塞调用方(世界循环)。这是背压的关键。
 func (c *Conn) Send(inner []byte) {
 	if c.closed.Load() {
 		return
 	}
-	select {
-	case c.out <- inner:
-	default:
+	c.outMu.Lock()
+	if c.closed.Load() {
+		c.outMu.Unlock()
+		return
+	}
+	if len(c.out) == cap(c.out) {
+		c.outMu.Unlock()
 		c.log.Warn("下行队列满, 判定慢客户端, 断开")
 		c.Close()
+		return
 	}
+	// Preserve normal/control delivery semantics: no new aggregate byte or
+	// frame-size rejection is imposed on the pre-existing Send path. Producers
+	// serialize only this nonblocking admission, never socket writes.
+	c.outBytes.Add(int64(len(inner)))
+	c.out <- outboundPacket{inner: inner}
+	c.wakeWriter()
+	c.outMu.Unlock()
 }
+
+// TrySendBatch atomically admits a bounded batch without waiting for the writer.
+// False means no packet was accepted. Unlike Send, transient congestion does not
+// close the connection: the scene owns the bounded retry deadline. A little room
+// remains for ordinary session replies, so one joining client cannot fill its
+// connection with a snapshot at the expense of its live control traffic.
+func (c *Conn) TrySendBatch(packets [][]byte) bool { return c.trySendBatch(packets, 0) }
+
+// TrySendBatchEpoch rejects an already encoded old-world batch after retirement.
+func (c *Conn) TrySendBatchEpoch(packets [][]byte, epoch uint64) bool {
+	if epoch == 0 {
+		return false
+	}
+	return c.trySendBatch(packets, epoch)
+}
+func (c *Conn) trySendBatch(packets [][]byte, epoch uint64) bool {
+	if c.closed.Load() {
+		return false
+	}
+	n := int64(0)
+	for _, p := range packets {
+		if len(p) > wire.MaxFrame {
+			return false
+		}
+		n += int64(len(p))
+		if n > stagedQueueByteWatermark {
+			return false
+		}
+	}
+	c.outMu.Lock()
+	defer c.outMu.Unlock()
+	if c.closed.Load() || epoch != 0 && epoch != c.pacedEpoch {
+		return false
+	}
+	limit := cap(c.out)
+	byteLimit := int64(stagedQueueByteWatermark - 64<<10)
+	headroom := limit / 8
+	if headroom > 64 {
+		headroom = 64
+	}
+	limit -= headroom
+	if len(packets) > limit-len(c.out) || n > byteLimit-c.outBytes.Load() {
+		return false
+	}
+	// Only the writer can remove entries and all producers hold outMu. The
+	// sends below cannot block after the capacity check above.
+	c.outBytes.Add(n)
+	for _, p := range packets {
+		c.out <- outboundPacket{inner: p, pacedEpoch: c.pacedEpoch}
+	}
+	c.wakeWriter()
+	return true
+}
+
+// Closed lets an actor discard a pending stream promptly after transport loss.
+func (c *Conn) Closed() bool { return c.closed.Load() }
 
 // Close 幂等关闭。触发读写 goroutine 退出与 OnClose。
 func (c *Conn) Close() {
@@ -210,25 +294,92 @@ func (c *Conn) writeLoop(ctx context.Context) {
 			return
 		case <-c.closeCh:
 			return
-		case inner := <-c.out:
-			k := c.keys.Load()
-			if k == nil {
-				continue
-			}
-			frame, err := sealer.SealSequenced(k, c.sendSeq, inner)
-			c.sendSeq++
-			if err != nil {
-				c.log.Error("封包失败", "err", err)
-				continue
-			}
-			_ = c.raw.SetWriteDeadline(time.Now().Add(c.opts.WriteWait))
-			if _, err := c.raw.Write(frame); err != nil {
-				c.log.Warn("写出失败, 断开", "err", err)
-				c.Close()
+		default:
+		}
+		inner, ok := c.takeOutbound()
+		if !ok {
+			select {
+			case <-ctx.Done():
 				return
+			case <-c.closeCh:
+				return
+			case <-c.outWake:
 			}
+			continue
+		}
+		k := c.keys.Load()
+		if k == nil {
+			continue
+		}
+		frame, err := sealer.SealSequenced(k, c.sendSeq, inner)
+		c.sendSeq++
+		if err != nil {
+			c.log.Error("封包失败", "err", err)
+			continue
+		}
+		_ = c.raw.SetWriteDeadline(time.Now().Add(c.opts.WriteWait))
+		if _, err := c.raw.Write(frame); err != nil {
+			c.log.Warn("写出失败, 断开", "err", err)
+			c.Close()
+			return
 		}
 	}
+}
+
+// takeOutbound is the writer's dequeue linearization point. Epoch retirement
+// shares this mutex; after it returns at most this one in-flight old frame can
+// finish, always before a subsequently enqueued native reset/control packet.
+func (c *Conn) takeOutbound() ([]byte, bool) {
+	c.outMu.Lock()
+	defer c.outMu.Unlock()
+	select {
+	case p := <-c.out:
+		c.outBytes.Add(-int64(len(p.inner)))
+		return p.inner, true
+	default:
+		return nil, false
+	}
+}
+func (c *Conn) wakeWriter() {
+	select {
+	case c.outWake <- struct{}{}:
+	default:
+	}
+}
+
+func (c *Conn) PacedEpoch() uint64 {
+	c.outMu.Lock()
+	defer c.outMu.Unlock()
+	return c.pacedEpoch
+}
+
+// CancelPacedEpoch retires queued, unwritten presentation only. Normal/control
+// packets retain their exact FIFO order. A stale caller cannot purge a newer
+// generation. The fixed-capacity channel is filtered in place while the writer
+// is excluded: no second packet queue, socket work, or wait for I/O is involved.
+func (c *Conn) CancelPacedEpoch(epoch uint64) (uint64, bool) {
+	c.outMu.Lock()
+	defer c.outMu.Unlock()
+	if epoch == 0 || epoch != c.pacedEpoch {
+		return c.pacedEpoch, false
+	}
+	c.pacedEpoch++
+	if c.pacedEpoch == 0 {
+		c.pacedEpoch = 1
+	}
+	n := len(c.out)
+	for i := 0; i < n; i++ {
+		p := <-c.out
+		if p.pacedEpoch != 0 {
+			c.outBytes.Add(-int64(len(p.inner)))
+		} else {
+			c.out <- p
+		}
+	}
+	if len(c.out) > 0 {
+		c.wakeWriter()
+	}
+	return c.pacedEpoch, true
 }
 
 // SetKeys 允许上层在握手后更新本连接的会话密钥。

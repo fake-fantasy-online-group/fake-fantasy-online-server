@@ -65,5 +65,10 @@ func (s *eventSink) ConfirmClientGateReady(id domain.EntityID, sc domain.SceneID
 	}
 	owner.clientMapReady = nil
 	owner.mapEpoch++
+	// The old-world flush may have captured a refused reconciliation Remove.
+	// Keep that scene queue head, but re-encode it against this new binding on
+	// retry. Do not retire the transport epoch: accepted ordered removals must
+	// still precede the rebuilt snapshot.
+	s.CancelPendingEmit()
 	return true
 }
