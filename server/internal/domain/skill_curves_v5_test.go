@@ -51,6 +51,16 @@ func TestOriginalSkillEveryAuthoredRankExactParity(t *testing.T) {
 			t.Fatalf("missing %+v", k)
 		}
 		got.FormulaVersion = 0
+		// The only intentional legacy-row override is elemental shield lifetime.
+		if k.ID == 10425 || k.ID == 10435 {
+			want = cloneOriginalSkill(want)
+			for i := range want.Statuses {
+				if (k.ID == 10425 && want.Statuses[i].ID == 1037) || (k.ID == 10435 && want.Statuses[i].ID == 1038) {
+					want.Statuses[i].DurationSec = 30 * k.Level
+					want.Statuses[i].SourceSkill = k.ID
+				}
+			}
+		}
 		if !reflect.DeepEqual(got, want) {
 			t.Fatalf("original row %d/%d was changed:\ngot %+v\nwant %+v", k.ID, k.Level, got, want)
 		}
@@ -126,6 +136,9 @@ func TestOriginalSkillEveryRankPreservesScopeAndNeverInventsCarriers(t *testing.
 			}
 			for i, app := range got.Statuses {
 				old := original.Statuses[i]
+				if (id == 10425 && old.ID == 1037) || (id == 10435 && old.ID == 1038) {
+					old.DurationSec = 150
+				}
 				if app.ID != old.ID || app.Level != old.Level || app.DurationSec != old.DurationSec || app.ChanceBP > 10000 || app.ProgressionRanks != rank-5 || app.ProgressionAttackFlat != 0 || app.ProgressionDamageShield != 0 || app.ProgressionReflectFlat != 0 || app.ProgressionHPPerTick != 0 || len(app.ProgressionAffixes) != 0 {
 					t.Fatalf("skill%d changed status identity/bounds or invented filler: %+v", id, app)
 				}

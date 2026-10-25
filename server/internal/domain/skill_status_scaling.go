@@ -12,6 +12,9 @@ func (t StatusTable) ResolveSkillApplication(app StatusApplication) (StatusDef, 
 		return fifth, false
 	}
 	if app.ProgressionRanks <= 0 {
+		if elementalShieldStatus(app.SourceSkill, app.ID) && app.DurationSec > 0 {
+			fifth.DurationSec = app.DurationSec
+		}
 		return applyPeriodicSkillDamageBonus(fifth, app.PeriodicDamageBonusPct)
 	}
 	first, ok := t.Get(app.ID, app.ProgressionFirstLevel)
@@ -135,7 +138,15 @@ func (t StatusTable) ResolveSkillApplication(app StatusApplication) (StatusDef, 
 		d.ControlPower, d.EffectHitBP = 0, 0
 	}
 	policy, _ := app.Progression.Policy(app.SourceSkill)
-	if policy.ProtectionCapRank > 0 && int64(ranks)+5 > int64(policy.ProtectionCapRank) {
+	if elementalShieldStatus(app.SourceSkill, app.ID) {
+		// Protection chance caps do not cap elemental shield lifetime.
+		value := 30 * (int64(ranks) + 5)
+		if value > math.MaxInt32 {
+			valid = false
+		} else {
+			d.DurationSec = int32(value)
+		}
+	} else if policy.ProtectionCapRank > 0 && int64(ranks)+5 > int64(policy.ProtectionCapRank) {
 		capRanks := policy.ProtectionCapRank - 5
 		atCap, _ := continueSkillStatusDuration(timing, firstDuration, baseDuration, capRanks)
 		step := max(int32(1), baseDuration/50)
@@ -151,7 +162,7 @@ func (t StatusTable) ResolveSkillApplication(app StatusApplication) (StatusDef, 
 	}
 	if durationAdjustment != 0 {
 		cap := skillStatusDurationCap(timing, baseDuration)
-		if policy.ProtectionCapRank > 0 {
+		if policy.ProtectionCapRank > 0 || elementalShieldStatus(app.SourceSkill, app.ID) {
 			cap = math.MaxInt32
 		}
 		value := min(int64(cap), int64(d.DurationSec)+durationAdjustment)
@@ -181,7 +192,9 @@ func applyPeriodicSkillDamageBonus(d StatusDef, bonus int32) (StatusDef, bool) {
 		}
 		wide := int64(v) * (100 + int64(bonus))
 		n := wide / 100
-		if mode == ModeAbsolute { d.PeriodicDamageFraction100 += (-wide) % 100 }
+		if mode == ModeAbsolute {
+			d.PeriodicDamageFraction100 += (-wide) % 100
+		}
 		if n < math.MinInt32 {
 			valid = false
 			return 0
@@ -245,7 +258,7 @@ func (t StatusTable) SkillApplicationDurationCap(app StatusApplication) int32 {
 		d.Control = app.Control
 	}
 	d.BlockHarmful = d.BlockHarmful || app.BlockHarmful
-	if policy, _ := app.Progression.Policy(app.SourceSkill); policy.ProtectionCapRank > 0 {
+	if policy, _ := app.Progression.Policy(app.SourceSkill); policy.ProtectionCapRank > 0 || elementalShieldStatus(app.SourceSkill, app.ID) {
 		return math.MaxInt32
 	}
 	if app.SourceSkill == 10018 {

@@ -49,7 +49,7 @@ func EvaluateV5Skill(first, fifth SkillDef, rank int32, originalRows ...SkillDef
 		out := cloneOriginalSkill(original)
 		out.Level = rank
 		out.FormulaVersion = SkillFormulaVersion
-		return out, nil
+		return normalizeElementalShieldDuration(out), nil
 	}
 	e := v5Evaluator{id: first.ID, rank: rank, catalog: first.Progression}
 	out := e.continueOriginal(first, fifth)
@@ -64,7 +64,7 @@ func EvaluateV5Skill(first, fifth SkillDef, rank int32, originalRows ...SkillDef
 	if len(out.Effects) > 0 {
 		out.Effect = out.Effects[0]
 	}
-	return out, nil
+	return normalizeElementalShieldDuration(out), nil
 }
 
 func cloneOriginalSkill(d SkillDef) SkillDef {
@@ -374,4 +374,34 @@ func (e *v5Evaluator) affixValue(a, b Affix) int32 {
 		return -e.bounded(-a.Value, -b.Value, 0, 100, "percentage attribute reduction")
 	}
 	return e.blend(a.Value, b.Value)
+}
+
+// Elemental shields use effective skill rank, never the legacy status-row rank.
+// Normalize before passive/unique duration bonuses; the stored anchors stay intact.
+func normalizeElementalShieldDuration(d SkillDef) SkillDef {
+	if d.ID != 10425 && d.ID != 10435 {
+		return d
+	}
+	d.Statuses = append([]StatusApplication(nil), d.Statuses...)
+	for i := range d.Statuses {
+		app := &d.Statuses[i]
+		if !elementalShieldStatus(d.ID, app.ID) {
+			continue
+		}
+		app.SourceSkill = d.ID
+		baseRank := d.Level
+		if app.ProgressionRanks > 0 {
+			baseRank = OriginalSkillRankCap
+		}
+		app.DurationSec = SaturateInt32(int64(30) * int64(baseRank))
+		if app.ProgressionRanks > 0 {
+			app.ProgressionFirstDurationSec = 30
+			app.ProgressionBaseDurationSec = 150
+		}
+	}
+	return d
+}
+
+func elementalShieldStatus(skill SkillID, status StatusID) bool {
+	return skill == 10425 && status == 1037 || skill == 10435 && status == 1038
 }

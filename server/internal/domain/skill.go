@@ -558,7 +558,7 @@ func (t SkillTable) Get(id SkillID, level int32) (SkillDef, bool) {
 		return d, err == nil
 	}
 	d, ok := t[SkillKey{ID: id, Level: level}]
-	return d, ok
+	return normalizeElementalShieldDuration(d), ok
 }
 
 // MaxLevelOf 返回某技能的最高等级。0 表示没有这个技能。

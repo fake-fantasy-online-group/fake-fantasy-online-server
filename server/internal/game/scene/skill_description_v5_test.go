@@ -45,6 +45,10 @@ func TestOriginalSkillDescriptionAll745RanksRemainVerbatim(t *testing.T) {
 				}
 				expected = append(expected, "消耗: "+cost, "技能吟唱: "+cast, "技能间隔: "+skillMillisecondsText(original.CooldownMS))
 			}
+			// Only the two elemental shields now expose lifetime at every rank.
+			if id == 10425 || id == 10435 {
+				expected = append(expected, fmt.Sprintf("保护持续时间: %d秒", 30*rank))
+			}
 			// Maintenance alone reaches its original boundary before rank five.
 			if id == 10024 && rank == 5 {
 				expected = append(expected, "体质 +1")

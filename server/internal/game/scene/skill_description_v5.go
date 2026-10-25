@@ -87,9 +87,10 @@ func (s *Scene) skillOriginalEffectLines(def domain.SkillDef) []string {
 			}
 		}
 	}
-	// These three authored descriptions omit protection time altogether. Keep
-	// their original prose and expose only the duration the resolver actually uses.
-	if policy, ok := domain.LookupSkillGrowthPolicy(def.ID, s.skills.ProgressionCatalog()); ok && policy.ProtectionCapRank > 0 && def.Level > policy.ProtectionCapRank {
+	// Elemental shield duration is visible at every rank. Keep the mirror
+	// threshold and all authored prose/detail-row formatting unchanged.
+	policy, hasPolicy := domain.LookupSkillGrowthPolicy(def.ID, s.skills.ProgressionCatalog())
+	if def.ID == 10425 || def.ID == 10435 || (hasPolicy && policy.ProtectionCapRank > 0 && def.Level > policy.ProtectionCapRank) {
 		switch def.ID {
 		case 10417, 10425, 10435:
 			if len(def.Statuses) > 0 {
