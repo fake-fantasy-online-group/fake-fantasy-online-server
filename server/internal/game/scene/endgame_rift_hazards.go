@@ -120,6 +120,11 @@ func (s *Scene) forgetRiftHazardPlayer(id domain.EntityID) {
 	}
 	s.rift.hazardViewerGeneration[id]++
 	delete(s.rift.data.Elite.PoisonNext, id)
+	for key := range s.rift.data.Elite.periodicSourceNext {
+		if key.target == id {
+			delete(s.rift.data.Elite.periodicSourceNext, key)
+		}
+	}
 	for _, h := range s.rift.data.Elite.Effects {
 		delete(h.Viewers, id)
 		delete(h.Occupants, id)
@@ -133,8 +138,24 @@ func (s *Scene) riftHazardPlayerReady(h *endgameRiftHazard, p *entity.Entity, no
 	after, seen := h.Viewers[p.ID]
 	return seen && now >= after && h.ViewerGeneration[p.ID] == s.rift.hazardViewerGeneration[p.ID]
 }
+
+// Runtime-only cadence identity: different casters may hurt the same victim.
+// Reconnection/reconstruction re-arms occupancy rather than replaying old ticks.
+type riftPeriodicTarget struct {
+	target, source domain.EntityID
+	mechanism      string
+}
+
 func (s *Scene) stepRiftHazards(now int64) {
 	x := s.eliteSnapshot()
+	if x.periodicSourceNext == nil {
+		x.periodicSourceNext = map[riftPeriodicTarget]int64{}
+	}
+	for key, next := range x.periodicSourceNext {
+		if key.mechanism != "poison_pool" && now >= next {
+			delete(x.periodicSourceNext, key)
+		}
+	}
 	ids := make([]string, 0, len(x.Effects))
 	for id := range x.Effects {
 		ids = append(ids, id)
@@ -146,8 +167,8 @@ func (s *Scene) stepRiftHazards(now int64) {
 		pct   int32
 		power int64
 	}
-	poison := map[domain.EntityID]poisonHit{}
-	poisonDue := map[domain.EntityID]bool{}
+	poison := map[riftPeriodicTarget]poisonHit{}
+	poisonDue := map[riftPeriodicTarget]bool{}
 	for _, id := range ids {
 		h := x.Effects[id]
 		if h == nil {
@@ -190,6 +211,11 @@ func (s *Scene) stepRiftHazards(now int64) {
 						d := math.Sqrt(riftDistance2(h.Pos, p.Pos))
 						if d >= inner && d <= outer {
 							h.PulseHits[pid] = true
+							key := riftPeriodicTarget{target: pid, source: h.Source, mechanism: a.Mechanism}
+							if now < x.periodicSourceNext[key] {
+								continue
+							}
+							x.periodicSourceNext[key] = now + a.PulseMS
 							s.hitRiftHazard(h, p, a.DamagePct)
 						}
 					}
@@ -213,15 +239,16 @@ func (s *Scene) stepRiftHazards(now int64) {
 				// At most one tick per scene observation; advance over missed intervals.
 				seconds := (now - o.EnteredMS) / a.PulseMS
 				pct := min(a.MaxDamagePct, a.DamagePct+int32(max(int64(0), seconds-1))*a.StepDamagePct)
+				key := riftPeriodicTarget{target: pid, source: h.Source, mechanism: a.Mechanism}
 				if now >= o.NextMS {
-					poisonDue[pid] = true
+					poisonDue[key] = true
 					o.NextMS = now + a.PulseMS
 					h.Occupants[pid] = o
 				}
 				power := int64(s.riftPoisonNominalDamage(h, p, pct))
-				old, ok := poison[pid]
+				old, ok := poison[key]
 				if !ok || power > old.power {
-					poison[pid] = poisonHit{h, p, pct, power}
+					poison[key] = poisonHit{h, p, pct, power}
 				}
 			}
 		}
@@ -234,20 +261,25 @@ func (s *Scene) stepRiftHazards(now int64) {
 			s.eliteChanged()
 		}
 	}
-	pids := make([]domain.EntityID, 0, len(poison))
+	pids := make([]riftPeriodicTarget, 0, len(poison))
 	for id := range poison {
 		pids = append(pids, id)
 	}
-	sort.Slice(pids, func(i, j int) bool { return pids[i] < pids[j] })
-	for id := range x.PoisonNext {
-		if _, inside := poison[id]; !inside {
-			delete(x.PoisonNext, id)
+	sort.Slice(pids, func(i, j int) bool {
+		if pids[i].target != pids[j].target {
+			return pids[i].target < pids[j].target
+		}
+		return pids[i].source < pids[j].source
+	})
+	for id := range x.periodicSourceNext {
+		if _, inside := poison[id]; id.mechanism == "poison_pool" && !inside {
+			delete(x.periodicSourceNext, id)
 		}
 	}
 	for _, id := range pids {
 		hit := poison[id]
-		if poisonDue[id] && now >= x.PoisonNext[id] && s.riftHazardPlayerReady(hit.h, hit.p, now) {
-			x.PoisonNext[id] = now + hit.h.Ability.PulseMS
+		if poisonDue[id] && now >= x.periodicSourceNext[id] && s.riftHazardPlayerReady(hit.h, hit.p, now) {
+			x.periodicSourceNext[id] = now + hit.h.Ability.PulseMS
 			s.hitRiftHazard(hit.h, hit.p, hit.pct)
 		}
 	}
@@ -267,15 +299,25 @@ func (s *Scene) hitRiftHazard(h *endgameRiftHazard, p *entity.Entity, pct int32)
 	// A detached, dead source preserves the accepted attack snapshot. It cannot
 	// be targeted, controlled, killed or reflected into a second death/reward.
 	source := &entity.Entity{ID: h.Source, Kind: domain.KindMonster, Level: h.SourceLevel, Pos: h.Pos, Stats: h.Attack, Status: domain.NewStatusSet(), Monster: &entity.Monster{}}
-	magic := h.Attack.MAtk > h.Attack.MaxAtk
+	attack := h.Attack
+	magic := attack.MAtk > attack.MaxAtk
+	if riftHazardPeriodic(h) && !magic {
+		// Keep physical-heavy elites' authored attack budget; only its damage
+		// classification changes, so magic defense is evaluated exactly once.
+		attack.MAtk = combat.RollPhysicalSkill(attack.MinAtk, attack.MaxAtk, 0, 100, s.rng)
+		magic = true
+	}
 	hurt := int32(domain.HurtPhysical)
 	if magic {
-		hurt = domain.HurtFire
+		hurt = domain.HurtNone
+		if h.Attack.MAtk > h.Attack.MaxAtk {
+			hurt = domain.HurtFire
+		}
 		if h.Ability.Mechanism == "ice_orb" {
 			hurt = domain.HurtIce
 		}
 	}
-	ev, raw, reflected := s.resolveStrikeStatuses(source, p, &combat.HitTracker{}, combat.Blow{Origin: domain.DamageAuraOrigin, Area: true, Magic: magic, HurtType: hurt, SkillPct: pct, GuaranteedHit: true, AttackStatsSnapshot: true, AttackStats: h.Attack})
+	ev, raw, reflected := s.resolveStrikeStatuses(source, p, &combat.HitTracker{}, combat.Blow{Origin: domain.DamageAuraOrigin, Area: true, Magic: magic, HurtType: hurt, SkillPct: pct, GuaranteedHit: true, AttackStatsSnapshot: true, AttackStats: attack})
 	s.emit(ev)
 	s.afterStrikeStatuses(source, p, ev, raw, reflected)
 	s.consumeHitDurability(p, ev)
@@ -364,12 +406,18 @@ func (s *Scene) riftPoisonNominalDamage(h *endgameRiftHazard, p *entity.Entity, 
 	}
 	magic := h.Attack.MAtk > h.Attack.MaxAtk
 	midpoint := domain.SaturateInt32((int64(h.Attack.MinAtk) + int64(h.Attack.MaxAtk)) / 2)
+	attack := h.Attack.MAtk
+	if riftHazardPeriodic(h) && !magic {
+		magic, attack = true, midpoint
+	}
 	amount := combat.RollPhysicalSkill(midpoint, midpoint, p.Stats.PhysResist, pct, nil)
 	defensive := s.equipmentDefense(p, false)
 	elemental := domain.ElementCombatStats{}
 	if magic {
-		amount = combat.RollMagicFixedDefense(h.Attack.MAtk, pct, p.Stats.MDef, p.Stats.MagicResist)
-		elemental = defensive.Elements[domain.HurtElementIndex(domain.HurtFire)]
+		amount = combat.RollMagicFixedDefense(attack, pct, p.Stats.MDef, p.Stats.MagicResist)
+		if h.Attack.MAtk > h.Attack.MaxAtk {
+			elemental = defensive.Elements[domain.HurtElementIndex(domain.HurtFire)]
+		}
 	}
 	guard := domain.EvaluateUniqueTraits(s.uniqueTraits(p), domain.UniqueContext{HPPercent: uniquePercent(p.HP, p.MaxHP), Magic: magic})
 	mitigation := int64(elemental.MitigationBP) + int64(guard.MitigationBP)
@@ -414,4 +462,9 @@ func (s *Scene) retainFatalRiftImpact(h *endgameRiftHazard, p *entity.Entity) {
 		}
 		i.FatalViewers[p.ID] = true
 	}
+}
+
+// Delayed explosions are one-shot impacts, not sustained damage.
+func riftHazardPeriodic(h *endgameRiftHazard) bool {
+	return h != nil && (h.Ability.Mechanism == "poison_pool" || h.Ability.Mechanism == "lightning_orb")
 }

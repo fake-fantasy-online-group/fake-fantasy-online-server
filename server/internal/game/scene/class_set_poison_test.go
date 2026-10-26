@@ -98,7 +98,10 @@ func TestClassSetPoisonBurstRequiresSuccessAndLiveBalance(t *testing.T) {
 	t.Run("blocked", func(t *testing.T) {
 		s, p, target := classPoisonScene(t, 4)
 		s.applyCombatTriggeredStatus(p, target, domain.StatusPoison)
-		s.statusOverlay = domain.StatusOverlay{{Existing: domain.StatusPoison, Incoming: domain.StatusPoison}: domain.OverlayBlock}
+		// DoT same-ID rules now refresh by source; an unrelated status still
+		// blocks admission and must prevent the successful-application burst.
+		target.Status.Apply(domain.StatusDef{ID: 990101, DurationSec: 60}, s.tick, target.ID)
+		s.statusOverlay = domain.StatusOverlay{{Existing: 990101, Incoming: domain.StatusPoison}: domain.OverlayBlock}
 		before := target.HP
 		if s.applyCombatTriggeredStatus(p, target, domain.StatusPoison) {
 			t.Fatal("blocked apply succeeded")

@@ -170,6 +170,7 @@ func TestClassSetSwordActualCastSingleStackAndAllTargets(t *testing.T) {
 
 func TestClassSetMeleeSecondaryDamageAndLifesteal(t *testing.T) {
 	s, p := meleeSetFixture(t, 5, 4)
+	p.Stats.MDef, p.Stats.MagicResist = 0, 0 // isolate set vulnerability/reduction
 	p.HP = 1000
 	p.MaxHP = 2000
 	dot := domain.Active{Def: domain.StatusDef{ID: 1001, Affixes: []domain.Affix{{Attr: domain.AttrHPRegen, Value: -100}}}, Source: 99}
@@ -183,6 +184,7 @@ func TestClassSetMeleeSecondaryDamageAndLifesteal(t *testing.T) {
 		t.Fatalf("reflection multiplier must apply once %d", p.HP)
 	}
 	p.Stats.MAtk = 1000
+	p.Stats.MDef, p.Stats.MagicResist = 0, 0 // isolate set vulnerability/reduction
 	p.HP = 1000
 	ev, raw, reflect := s.resolveStrikeStatuses(p, foe, &combat.HitTracker{}, combat.Blow{Magic: true, HurtType: domain.HurtFire})
 	s.afterStrikeStatuses(p, foe, ev, raw, reflect)
@@ -190,6 +192,7 @@ func TestClassSetMeleeSecondaryDamageAndLifesteal(t *testing.T) {
 		t.Fatalf("life steal should restore 20 percent of damage amount%d hp%d", ev.Amount, p.HP)
 	}
 	s, p = meleeSetFixture(t, 4, 4)
+	p.Stats.MDef, p.Stats.MagicResist = 0, 0 // isolate set vulnerability/reduction
 	p.HP = 1000
 	taunt := domain.SkillDef{ID: classSetTaunt}
 	for i := 0; i < 10; i++ {

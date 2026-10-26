@@ -17,13 +17,15 @@ const (
 // This state is part of the run aggregate. Each successful cast owns its own
 // deadline. Effect lifetime never occupies the original monster's action gate.
 type endgameRiftEliteSnapshot struct {
-	PoisonNext map[domain.EntityID]int64
-	Sequence   uint64
-	Casters    map[string]*endgameRiftEliteCaster
-	Effects    map[string]*endgameRiftHazard
-	Deaths     map[domain.EntityID]bool
-	Clones     map[domain.EntityID]endgameRiftClone
-	Walls      []temporaryWall
+	// PoisonNext is retained for decoding old saves; admission is rebuilt on restore.
+	PoisonNext         map[domain.EntityID]int64
+	periodicSourceNext map[riftPeriodicTarget]int64
+	Sequence           uint64
+	Casters            map[string]*endgameRiftEliteCaster
+	Effects            map[string]*endgameRiftHazard
+	Deaths             map[domain.EntityID]bool
+	Clones             map[domain.EntityID]endgameRiftClone
+	Walls              []temporaryWall
 }
 type endgameRiftEliteCaster struct {
 	GoldenUntilMS int64
@@ -130,6 +132,7 @@ func (s *Scene) stepRiftElite(now int64) {
 			h.Occupants = map[domain.EntityID]endgameRiftOccupant{}
 		}
 		x.PoisonNext = map[domain.EntityID]int64{}
+		x.periodicSourceNext = nil
 		s.rift.eliteNeedsRearm = false
 	}
 	s.expireTemporaryWalls(now)

@@ -272,11 +272,12 @@ func TestClassSetPartyAuraSameTickAttackSnapshotWithdrawal(t *testing.T) {
 	}
 }
 
-func TestClassSetPartyAuraUntypedPoisonDoesNotUsePhysicalWard(t *testing.T) {
+func TestClassSetPartyAuraMagicPoisonDoesNotUsePhysicalWard(t *testing.T) {
 	s := newCombatScene(t)
 	p := partySetMember(t, s, 1, 4)
 	s.stepEquipmentAuras()
 	p.HP = 800
+	p.Stats.MDef, p.Stats.MagicResist = 0, 0 // isolate the physical-only ward
 	dot := domain.Active{Def: domain.StatusDef{ID: 1001, Affixes: []domain.Affix{{Attr: domain.AttrHPRegen, Value: -100}}}, Source: 99}
 	s.tickStatus(p, dot)
 	if p.HP != 700 {

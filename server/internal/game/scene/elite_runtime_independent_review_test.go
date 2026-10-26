@@ -165,6 +165,7 @@ func TestEliteRuntimeReviewPoisonComparisonHasNoCombatSideEffects(t *testing.T) 
 	s.refreshEntityStats(p)
 	p.HP = p.MaxHP
 	p.Stats.PhysResist = 0
+	p.Stats.MDef, p.Stats.MagicResist = 0, 0
 	p.Status.Apply(domain.StatusDef{ID: 99981, Level: 1, TypeKnown: true, Type: domain.StatusGood, DamageShield: 3, DurationSec: 20}, s.tick, p.ID)
 	p.Status.Apply(domain.StatusDef{ID: 99982, Level: 1, TypeKnown: true, Type: domain.StatusBad, BreakOnDamage: true, DurationSec: 20}, s.tick, m.ID)
 	s.createRiftHazard(m, p.Pos, s.currentRiftRules().Abilities[6], *now)

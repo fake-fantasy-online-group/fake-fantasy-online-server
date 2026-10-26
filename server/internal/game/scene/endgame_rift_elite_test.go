@@ -33,6 +33,8 @@ func riftEliteRulesFixture(t *testing.T) *domain.RiftRules {
 func riftEliteFixture(t *testing.T, ability int32) (*Scene, *entity.Entity, *entity.Entity, *int64) {
 	t.Helper()
 	s, m, p, now := riftAbilityFixture(t, riftEruption)
+	// Lifecycle tests isolate cadence from the newly magical hazard defense.
+	p.Stats.MDef, p.Stats.MagicResist = 0, 0
 	r := riftEliteRulesFixture(t)
 	s.rift.data.Run.Rules = r
 	s.rift.data.Run.RulesVersion = r.Version

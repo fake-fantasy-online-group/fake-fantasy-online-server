@@ -110,7 +110,7 @@ func TestLegendaryUniversalSoloManaOrder(t *testing.T) {
 				p.Stats = domain.Stats{}
 				p.MP = mp
 				m.Stats = domain.Stats{MinAtk: 1000, MaxAtk: 1000}
-				p.Status.Apply(domain.StatusDef{ID: 10320, SourceSkillID: 10320, DurationSec: 10, DamageShield: 100, PhysicalDamageReductionPct: 20}, s.tick, p.ID)
+				p.Status.Apply(domain.StatusDef{ID: 10320, SourceSkillID: 10320, DurationSec: 10, DamageShield: 100, PhysicalDamageReductionPct: 20, MagicDamageReductionPct: 20}, s.tick, p.ID)
 				s.refreshStats(p)
 				p.Stats = domain.Stats{}
 				p.HP = p.MaxHP
@@ -125,7 +125,7 @@ func TestLegendaryUniversalSoloManaOrder(t *testing.T) {
 				default:
 					s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{SkillID: 10002, GuaranteedHit: true})
 				}
-				// Preserve the native untyped periodic adapter, then mana and shield once.
+				// Physical direct/reflection and magical periodic reduction precede mana and shield once.
 				reduced := int32(800)
 				spent := min(mp, reduced*30/100)
 				want := reduced - spent - 100
@@ -186,6 +186,7 @@ func TestLegendaryUniversalSoloStatusLifetime(t *testing.T) {
 				t.Fatal("control did not block movement")
 			}
 			if tc.status == domain.StatusPoison || tc.status == 1036 {
+				dst.Stats.MDef, dst.Stats.MagicResist = 0, 0 // isolate lifetime modifiers
 				before := dst.HP
 				s.tickStatus(dst, a)
 				if before-dst.HP != 10 || a.Def.IntervalSec != 1 {

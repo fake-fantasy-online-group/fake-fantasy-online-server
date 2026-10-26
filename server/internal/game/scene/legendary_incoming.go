@@ -54,22 +54,19 @@ func (s *Scene) legendarySecondaryIncoming(src, dst *entity.Entity, blow combat.
 	return legendaryAllDamageIncoming(s.legendaryIncomingContexts(src, dst, blow, hit), amount)
 }
 
-// Native resource ticks remain untyped for legacy armor/aura mitigation. Only
-// their authoritative source skill may classify them for a typed power such as
-// the magic mirror; an absent source/skill must not turn poison into magic or a
-// basic attack merely because its event has no skill ID.
+// All periodic HP damage is magic. Source metadata only refines its element
+// and lineage; a missing source must not turn a tick into a basic attack.
 func (s *Scene) legendaryPeriodicBlow(a domain.Active) combat.Blow {
 	skill := a.Def.SkillSnapshotID
 	if skill == 0 {
 		skill = domain.SkillID(a.Def.SourceSkillID)
 	}
-	b := combat.Blow{Origin: domain.DamageDOTOrigin, SkillID: int32(skill), SourceSkillRange: a.Def.DamageSourceRange, SourceTrap: a.Def.DamageSourceTrap}
+	b := combat.Blow{Magic: true, Origin: domain.DamageDOTOrigin, SkillID: int32(skill), SourceSkillRange: a.Def.DamageSourceRange, SourceTrap: a.Def.DamageSourceTrap}
 	if a.Def.LegendaryPowerID != "" {
 		b.ProcDepth = 1
 	}
 	if d, ok := s.skills.Get(skill, max(int32(1), a.Def.SkillSnapshotRank)); ok {
 		b.HurtType = d.HurtType
-		b.Magic = d.HurtType != domain.HurtNone && d.HurtType != domain.HurtPhysical
 	}
 	return b
 }

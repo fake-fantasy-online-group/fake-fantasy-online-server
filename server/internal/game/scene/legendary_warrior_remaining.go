@@ -117,7 +117,7 @@ func warriorQuakeTick(c *legendaryContext) {
 					continue
 				}
 				last.Value = at
-				c.Damage(t, domain.SaturateInt32(st.Value), false, false)
+				c.Damage(t, domain.SaturateInt32(st.Value), true, false)
 			}
 		}
 	}

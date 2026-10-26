@@ -78,6 +78,7 @@ func TestDungeonDOTSnapshotsAtApplicationWithoutMutatingTemplate(t *testing.T) {
 		t.Fatal("missing immutable source snapshot")
 	}
 	delete(s.entities, m.ID)
+	p.Stats.MDef, p.Stats.MagicResist = 0, 0 // isolate snapshotted dungeon scale
 	p.HP = 1000
 	p.MaxHP = 1000
 	s.tickStatus(p, snapshot)

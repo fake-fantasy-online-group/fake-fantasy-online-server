@@ -128,7 +128,7 @@ func TestExplicitSuppressionSceneDOTClockAndQueuedReceipt(t *testing.T) {
 			s.tick = start + domain.Ticks(5000)
 		}
 		s.stepStatus()
-		if p.HP != hp-20 || p.MP != mp-2 {
+		if p.HP != hp-combat.RollMagicFixedDefense(20, 100, p.Stats.MDef, p.Stats.MagicResist) || p.MP != mp-2 {
 			t.Fatalf("late=%v expected one resumed tick, HP %d->%d MP %d->%d", late, hp, p.HP, mp, p.MP)
 		}
 	}

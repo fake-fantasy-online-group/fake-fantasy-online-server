@@ -69,6 +69,7 @@ func (s *Scene) restoreRiftElite() {
 	}
 	x := s.eliteSnapshot()
 	x.PoisonNext = map[domain.EntityID]int64{}
+	x.periodicSourceNext = nil
 	now := s.riftMS()
 	for id, h := range x.Effects {
 		h.Viewers = map[domain.EntityID]int64{}

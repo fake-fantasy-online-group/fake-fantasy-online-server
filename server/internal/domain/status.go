@@ -396,6 +396,11 @@ func (m StatusOverlay) Rule(existing, incoming StatusID) (OverlayRule, bool) {
 
 // Active 是一个实体身上正在生效的一个状态。
 type Active struct {
+	// Only the immediate post-admission balance transfer consults this marker.
+	dotRefreshed      bool
+	dotPreviousExpire Tick
+	// Restored external sources are intentionally unknown, not one shared caster.
+	sourceUnknown              bool
 	Def                        StatusDef
 	PeriodicDamageRemainder100 int64 `json:",omitempty"`
 	ClassSetPoisonRemainder    int64 `json:",omitempty"`
@@ -436,7 +441,7 @@ func CloneSavedStatuses(src []SavedStatus) []SavedStatus {
 }
 
 // StatusSet 是一个实体身上的全部状态。同一状态 id 可有多个实例：
-// ov_exceptoverlay 有 150 个对角线是 COEXIST，不能再用 map[id]Active 静默覆盖。
+// 普通状态遵循 ov_exceptoverlay；持续伤害按 (状态 ID, 施加者) 保留一份。
 type StatusSet struct {
 	act map[StatusID][]Active
 }
@@ -454,6 +459,10 @@ func (s *StatusSet) Apply(def StatusDef, now Tick, src EntityID) {
 	}
 	if s.act == nil {
 		s.act = map[StatusID][]Active{}
+	}
+	if def.DamageOverTime() {
+		s.applyDOT(def, now, src)
+		return
 	}
 	a := newActive(def, now, src)
 	old := s.act[def.ID]
@@ -509,6 +518,9 @@ func (s *StatusSet) BlockedByOverlay(def StatusDef, overlay StatusOverlay) bool 
 			continue
 		}
 		for _, old := range list {
+			if id == def.ID && def.DamageOverTime() && old.Def.DamageOverTime() {
+				continue // Same DoT is keyed by caster, not the matrix diagonal.
+			}
 			if suppress && old.Def.Harmful() {
 				continue
 			}
@@ -528,7 +540,7 @@ func (s *StatusSet) ApplyWithOverlay(def StatusDef, now Tick, src EntityID, over
 	if _, valid := def.OverlayPriority(); !valid {
 		return StatusApplyResult{Blocked: true}
 	}
-	// 没注入矩阵的是旧测试/手工场景，保持 Apply 的单实例、高等级优先语义。
+	// 没注入矩阵的是旧测试/手工场景，保持 Apply 的高级优先语义；DoT 同样按来源区分。
 	// 正式服启动时会载入完整矩阵，不会走这里。
 	if len(overlay) == 0 {
 		s.Apply(def, now, src)
@@ -550,6 +562,15 @@ func (s *StatusSet) ApplyWithOverlay(def StatusDef, now Tick, src EntityID, over
 	sort.Ints(ids)
 	for _, raw := range ids {
 		id := StatusID(raw)
+		if id == def.ID && def.DamageOverTime() {
+			hasOther := false
+			for _, old := range s.act[id] {
+				hasOther = hasOther || (!old.Def.DamageOverTime() && (!suppress || !old.Def.Harmful()))
+			}
+			if !hasOther {
+				continue // Preserve other casters; applyDOT refreshes only this source.
+			}
+		}
 		if suppress {
 			hasEffective := false
 			for _, old := range s.act[id] {
@@ -576,23 +597,27 @@ func (s *StatusSet) ApplyWithOverlay(def StatusDef, now Tick, src EntityID, over
 		}
 	}
 	if len(counteract) > 0 {
-		return StatusApplyResult{Counteracted: true, Removed: s.removeOverlayInstances(counteract, suppress)}
+		return StatusApplyResult{Counteracted: true, Removed: s.removeOverlayInstances(counteract, suppress, def)}
 	}
-	removed := s.removeOverlayInstances(replace, suppress)
-	s.act[def.ID] = append(s.act[def.ID], newActive(def, now, src))
+	removed := s.removeOverlayInstances(replace, suppress, def)
+	if def.DamageOverTime() {
+		s.applyDOT(def, now, src)
+	} else {
+		s.act[def.ID] = append(s.act[def.ID], newActive(def, now, src))
+	}
 	return StatusApplyResult{Applied: true, Removed: removed}
 }
 
 // removeOverlayInstances applies a resolved matrix rule only to effective
 // instances. Same-ID layers may have different official good/bad categories;
 // an affected positive layer must not erase its suspended harmful sibling.
-func (s *StatusSet) removeOverlayInstances(ids []StatusID, suppress bool) []StatusID {
+func (s *StatusSet) removeOverlayInstances(ids []StatusID, suppress bool, incoming StatusDef) []StatusID {
 	var removed []StatusID
 	for _, id := range ids {
 		list := s.act[id]
 		kept := list[:0]
 		for _, a := range list {
-			if suppress && a.Def.Harmful() {
+			if suppress && a.Def.Harmful() || id == incoming.ID && incoming.DamageOverTime() && a.Def.DamageOverTime() {
 				kept = append(kept, a)
 			}
 		}
@@ -1101,7 +1126,7 @@ func RestoreSavedStatuses(saved []SavedStatus, now Tick, wall time.Time, owner E
 		if record.Def.ID <= 0 || record.RemainingTicks == 0 || record.RemainingTicks < -1 {
 			continue
 		}
-		a := Active{Def: record.Def, ShieldLeft: record.ShieldLeft, PeriodicDamageRemainder100: record.PeriodicDamageRemainder100, ClassSetPoisonRemainder: record.ClassSetPoisonRemainder}
+		a := Active{sourceUnknown: !record.SourceSelf, Def: record.Def, ShieldLeft: record.ShieldLeft, PeriodicDamageRemainder100: record.PeriodicDamageRemainder100, ClassSetPoisonRemainder: record.ClassSetPoisonRemainder}
 		if a.PeriodicDamageRemainder100 < 0 || a.PeriodicDamageRemainder100 >= 100 {
 			continue
 		}
@@ -1356,12 +1381,20 @@ func (s *StatusSet) RestoreTransferredStatusBalance(source EntityID, snapshot Ac
 	}
 	list := s.act[snapshot.Def.ID]
 	for i := range list {
-		if list[i].Source == source && list[i].Def.Level == snapshot.Def.Level {
-			list[i].ExpireAt = snapshot.ExpireAt
-			list[i].NextTickAt = snapshot.NextTickAt
+		if !list[i].sourceUnknown && list[i].Source == source && (list[i].Def.Level == snapshot.Def.Level || list[i].dotRefreshed && list[i].Def.DamageOverTime() && snapshot.Def.DamageOverTime()) {
+			if list[i].dotRefreshed && list[i].Def.DamageOverTime() {
+				// A copied/spread poison refresh must not restart the continuing
+				// target clock or reset its fractional damage credit.
+				list[i].ExpireAt = longerDOTExpiry(list[i].dotPreviousExpire, snapshot.ExpireAt)
+			} else {
+				list[i].ExpireAt = snapshot.ExpireAt
+				list[i].NextTickAt = snapshot.NextTickAt
+				list[i].PeriodicDamageRemainder100 = snapshot.PeriodicDamageRemainder100
+				list[i].ClassSetPoisonRemainder = snapshot.ClassSetPoisonRemainder
+			}
 			list[i].ShieldLeft = snapshot.ShieldLeft
-			list[i].PeriodicDamageRemainder100 = snapshot.PeriodicDamageRemainder100
-			list[i].ClassSetPoisonRemainder = snapshot.ClassSetPoisonRemainder
+			list[i].dotRefreshed = false
+			list[i].dotPreviousExpire = 0
 		}
 	}
 	s.act[snapshot.Def.ID] = list

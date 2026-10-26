@@ -157,7 +157,7 @@ func TestLegendaryIncomingCombinationShieldAndManaOnce(t *testing.T) {
 			incomingEnablePower(s, p, m, "SS-D09")
 			p.Stats = domain.Stats{}
 			m.Stats = domain.Stats{MinAtk: 1000, MaxAtk: 1000}
-			p.Status.Apply(domain.StatusDef{ID: 199901, DurationSec: 30, DamageShield: 100, PhysicalDamageReductionPct: 20}, s.tick, p.ID)
+			p.Status.Apply(domain.StatusDef{ID: 199901, DurationSec: 30, DamageShield: 100, PhysicalDamageReductionPct: 20, MagicDamageReductionPct: 20}, s.tick, p.ID)
 			s.refreshStats(p)
 			p.Stats = domain.Stats{}
 			p.HP, p.MP = p.MaxHP, p.MaxMP
@@ -454,13 +454,14 @@ func TestLegendaryIncomingMirrorAmplifierInsideGenerationGuard(t *testing.T) {
 	}
 }
 
-func TestLegendaryIncomingUntypedPoisonIsNotMirrorMagic(t *testing.T) {
+func TestLegendaryIncomingPoisonUsesMirrorMagicReduction(t *testing.T) {
 	s, c := legendaryCasterFixture(t, "SS-D03")
 	incomingEnablePower(s, c.Owner, c.Target, "SS-D03")
+	c.Owner.Stats.MDef, c.Owner.Stats.MagicResist = 0, 0
 	before := c.Owner.HP
 	s.tickStatus(c.Owner, domain.Active{Source: c.Target.ID, Def: domain.StatusDef{ID: domain.StatusPoison, TypeKnown: true, Type: domain.StatusBad, HPChanges: []domain.ResourceChange{{Value: -1000}}}})
-	if before-c.Owner.HP != 1000 {
-		t.Fatal("untyped poison misclassified as magic")
+	if before-c.Owner.HP != 250 {
+		t.Fatal("periodic magic bypassed mirror reduction")
 	}
 }
 

@@ -76,7 +76,7 @@ func (s *Scene) freezeLootContextV5(source domain.EntityID) domain.LootContextV5
 }
 
 func (s *Scene) periodicDamageOwnerV5(def domain.StatusDef, source domain.EntityID) domain.EntityID {
-	damaging := false
+	damaging := def.DamageOverTime()
 	for _, change := range def.HPChanges {
 		damaging = damaging || change.Value < 0
 	}

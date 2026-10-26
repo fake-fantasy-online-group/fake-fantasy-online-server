@@ -653,7 +653,7 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 	}
 }
 
-// mitigateSecondaryStatusDamage preserves legacy reflection/resource tick
+// mitigateSecondaryStatusDamage preserves legacy reflected-damage
 // settlement unless a source explicitly opts into an expanded mitigation
 // budget. Such a source uses the same status adapter and common formula as
 // direct hits; no ability, monster or scene identity enters the calculation.
@@ -661,8 +661,8 @@ func (s *Scene) mitigateSecondaryStatusDamage(e *entity.Entity, magic bool, amou
 	return s.mitigateSecondaryStatusDamageKind(e, magic, amount, false)
 }
 
-// Resource/poison ticks have no physical-or-magic classification. Only callers
-// with an explicit damage type (reflection) may use typed aura mitigation.
+// Reflected damage retains its existing typed/untyped adapter. Native HP-loss
+// ticks use the dedicated magical periodic incoming boundary below.
 func (s *Scene) mitigateSecondaryStatusDamageKind(e *entity.Entity, magic bool, amount int32, typed bool) int32 {
 	return s.mitigateSecondaryStatusDamageScaled(e, magic, amount, typed, 10000)
 }
@@ -671,7 +671,7 @@ func (s *Scene) mitigateSecondaryStatusDamageScaled(e *entity.Entity, magic bool
 	legacy := e == nil || e.Status.DamageReductionCapPct() <= domain.DefaultDamageReductionCapPct && !s.legendaryMitigationNeeded(e)
 	amount, shield := s.secondaryDamageBeforeShield(e, magic, amount, typed, scaleBP)
 	// The compatibility helper retains legacy reflection semantics. Native DOT
-	// settlement calls the staged boundary directly and settles shields there.
+	// settlement uses periodicMagicBeforeShield and settles shields there.
 	if legacy || !shield {
 		return amount
 	}
@@ -1126,14 +1126,17 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 			if scaleBP <= 0 {
 				scaleBP = s.dungeonMonsterDamage(src, e, 10000)
 			}
-			incoming := clampI32(-hpDelta)
+			// Apply ordinary magic native defense once to the raw snapshot,
+			// before incoming percentage/flat reductions and shields.
+			incoming := combat.RollMagicFixedDefense(clampI32(-hpDelta), 100, e.Stats.MDef, e.Stats.MagicResist)
+			periodicBlow := s.legendaryPeriodicBlow(a)
+			dmg := s.periodicMagicBeforeShield(e, s.entities[a.Source], periodicBlow, incoming, scaleBP)
 			if a.Def.ID == domain.StatusPoison {
-				incoming = s.legendaryAssassinPoisonIncoming(e, incoming)
+				dmg = s.legendaryAssassinPoisonIncoming(e, dmg)
 			}
-			incoming = s.legendaryMeleeDotDamage(e, incoming)
-			dmg, usesShield := s.secondaryDamageBeforeShield(e, false, incoming, false, scaleBP)
+			dmg = s.legendaryMeleeDotDamage(e, dmg)
 			var periodicContexts []legendaryContext
-			if e.Status.Invulnerable() && usesShield {
+			if e.Status.Invulnerable() {
 				dmg = 0
 			} else {
 				// Incoming value modifiers are not effect generators. A power-
@@ -1142,15 +1145,16 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 				periodicContexts = s.universalPeriodicIncomingContexts(s.entities[a.Source], e, a.Source)
 				dmg = universalPeriodicReduce(periodicContexts, dmg, periodicCrit)
 			}
-			dmg = s.legendarySecondaryIncoming(s.entities[a.Source], e, s.legendaryPeriodicBlow(a), dmg)
+			dmg = s.legendarySecondaryIncoming(s.entities[a.Source], e, periodicBlow, dmg)
 			dmg = universalPeriodicAbsorb(periodicContexts, dmg)
-			if usesShield {
+			if dmg > 0 {
 				var removed []domain.StatusID
-				dmg, removed = e.Status.AbsorbDamage(dmg)
+				dmg, removed = s.legendaryAbsorbDamage(s.entities[a.Source], e, periodicBlow, dmg)
 				s.statusesRemoved(e, removed)
 			}
+			dmg = s.petGuardDamage(e, a.Source, dmg)
 			e.HP -= dmg
-			ev := event.DamageDealt{Origin: domain.DamageDOTOrigin, Src: a.Source, Dst: e.ID, Amount: dmg, DstHP: e.HP}
+			ev := event.DamageDealt{Origin: domain.DamageDOTOrigin, Src: a.Source, Dst: e.ID, Amount: dmg, DstHP: e.HP, Flag: event.DamageMagic}
 			if periodicCrit {
 				ev.Flag |= event.DamageCrit
 			}

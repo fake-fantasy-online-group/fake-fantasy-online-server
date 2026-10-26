@@ -81,7 +81,7 @@ func TestLegendaryIncomingAssassinCombinationAndShieldOnce(t *testing.T) {
 				for _, id := range pair {
 					incomingAssassinCondition(s, p, m, id)
 				}
-				p.Status.Apply(domain.StatusDef{ID: 199932, DurationSec: 30, PhysicalDamageReductionPct: 20, DamageShield: 100}, s.tick, p.ID)
+				p.Status.Apply(domain.StatusDef{ID: 199932, DurationSec: 30, PhysicalDamageReductionPct: 20, MagicDamageReductionPct: 20, DamageShield: 100}, s.tick, p.ID)
 				s.refreshStats(p)
 				p.HP = p.MaxHP
 				p.Stats = domain.Stats{}
@@ -131,6 +131,7 @@ func TestLegendaryIncomingAssassinNativeStealthTiming(t *testing.T) {
 			}
 			// Follow the real native break rule, never add a new break/retention rule.
 			stillInvisible := entityInvisible(p)
+			p.Stats.MDef, p.Stats.MagicResist = 0, 0 // breaking stealth refreshes stats; isolate its timing
 			before = p.HP
 			incomingAssassinHit(s, p, m, "dot", combat.Blow{})
 			want = 1000
@@ -256,6 +257,7 @@ func TestLegendaryIncomingAssassinRealMonsterTrapDOT(t *testing.T) {
 			if a.Def.ID == 0 || a.Def.DamageSourceTrap != triggered || a.Def.DamageSourceRange != 300 {
 				t.Fatalf("bad provenance:%+v", a.Def)
 			}
+			p.Stats.MDef, p.Stats.MagicResist = 0, 0 // isolate trap provenance mitigation
 			p.HP = p.MaxHP
 			before = p.HP
 			s.tickStatus(p, a)

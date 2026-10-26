@@ -96,12 +96,17 @@ func TestSkillRoundingBurnInstanceCloneSaveAndReplace(t *testing.T) {
 			t.Fatal("lost/duplicated instance credit", first, second)
 		}
 	}
+	// Scene processing expires old instances before a later independent cast.
+	set.Expire(1000)
 	set.Apply(def, 1000, 2)
 	if got := set.DueTicks(1020); len(got) != 1 || got[0].PeriodicDamageTickExtra != 0 || got[0].Source != 2 {
-		t.Fatal("replacement inherited credit", got)
+		t.Fatal("new source inherited expired credit", got)
 	}
-	overlay := StatusOverlay{{Existing: 1036, Incoming: 1036}: OverlayCoexist}
+	overlay := StatusOverlay{{Existing: 1036, Incoming: 1036}: OverlayMustReplace}
 	set.ApplyWithOverlay(def, 1020, 3, overlay)
+	if set.Count() != 2 {
+		t.Fatal("different DoT sources must coexist even under same-ID replacement")
+	}
 	due = set.DueTicks(1040)
 	if len(due) != 2 || due[0].PeriodicDamageTickExtra != 0 || due[1].PeriodicDamageTickExtra != 0 {
 		t.Fatal("instances shared credit", due)

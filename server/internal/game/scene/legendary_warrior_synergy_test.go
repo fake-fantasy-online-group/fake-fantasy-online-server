@@ -312,7 +312,7 @@ func TestLegendaryWarriorQuakeExactReleaseSnapshotAndDefenses(t *testing.T) {
 	p.Stats.MinAtk = 100
 	p.Stats.MaxAtk = 200
 	p.Stats.CritRate = 10000
-	other := putMonster(s, 901, 10000, domain.Stats{PhysResist: 20}, 150, 100)
+	other := putMonster(s, 901, 10000, domain.Stats{PhysResist: 20, MagicResist: 20, MDef: 100}, 150, 100)
 	d := domain.SkillDef{ID: 10006, Level: 1, Prof: 1, Kind: domain.SkillArea, TargetEnemy: true, Area: domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterCaster, Radius: 100}, HurtType: domain.HurtPhysical, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
 	s.skills = skillTable(d)
 	before, otherBefore := m.HP, other.HP
@@ -328,7 +328,7 @@ func TestLegendaryWarriorQuakeExactReleaseSnapshotAndDefenses(t *testing.T) {
 	s.tick = domain.Tick(1000 / domain.TickMS)
 	before, otherBefore = m.HP, other.HP
 	s.stepLegendaryPowers()
-	if before-m.HP != damage*35/100 || otherBefore-other.HP != max(int32(1), damage*35/100-20) {
+	if before-m.HP != damage*35/100 || otherBefore-other.HP != max(int32(1), damage*35/100-83) {
 		t.Fatalf("field did not share source snapshot, initial%d pulse%d other%d", damage, before-m.HP, otherBefore-other.HP)
 	}
 	if len(s.legendaryState().nativeDamageSnapshots) != 0 {

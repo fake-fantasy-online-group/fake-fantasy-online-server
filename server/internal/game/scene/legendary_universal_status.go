@@ -178,7 +178,7 @@ func (s *Scene) universalPeriodicIncomingContexts(src, dst *entity.Entity, sourc
 	if src == nil || dst == nil || src.ID == dst.ID || sameParty(src, dst) {
 		return nil
 	}
-	return s.legendaryIncomingContexts(src, dst, combat.Blow{Origin: domain.DamageDOTOrigin}, event.DamageDealt{Src: src.ID, Dst: dst.ID, Origin: domain.DamageDOTOrigin})
+	return s.legendaryIncomingContexts(src, dst, combat.Blow{Magic: true, Origin: domain.DamageDOTOrigin}, event.DamageDealt{Src: src.ID, Dst: dst.ID, Origin: domain.DamageDOTOrigin, Flag: event.DamageMagic})
 }
 func universalPeriodicReduce(contexts []legendaryContext, n int32, critical ...bool) int32 {
 	// Match the direct incoming additive bucket. Periodic critical mitigation

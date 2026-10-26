@@ -44,6 +44,7 @@ func TestLegendaryReviewNativeDOTRespectsOrdinaryShield(t *testing.T) {
 	s, _, sink := statusScene(t)
 	p := beefUp(s)
 	s.applyStatusDef(p, domain.StatusDef{ID: 99983, DurationSec: 10, DamageShield: 80}, p.ID)
+	p.Stats.MDef, p.Stats.MagicResist = 0, 0 // isolate shield consumption
 	sink.take()
 	s.tickStatus(p, domain.Active{Source: p.ID, Def: domain.StatusDef{ID: 99984, HPChanges: []domain.ResourceChange{{Value: -100}}}})
 	s.flush()

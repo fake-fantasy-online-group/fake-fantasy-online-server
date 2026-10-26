@@ -1,7 +1,6 @@
 package scene
+
 import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
-
 
 import (
 	"testing"
@@ -246,7 +245,8 @@ func TestPoisonTicks(t *testing.T) {
 	s, _, sink := statusScene(t)
 	p := beefUp(s)
 	s.applyStatus(p, domain.StatusPoison, 1, 0)
-	full := p.HP // 施加之后再记 —— applyStatus 会重算属性
+	p.Stats.MDef, p.Stats.MagicResist = 0, 0 // isolate tick count from magic mitigation
+	full := p.HP                             // 施加之后再记 —— applyStatus 会重算属性
 	sink.take()
 
 	// 跑满 10 秒
@@ -271,6 +271,7 @@ func TestPoisonCanKill(t *testing.T) {
 	s, _, sink := statusScene(t)
 	p := beefUp(s)
 	s.applyStatus(p, domain.StatusPoison, 1, 0)
+	p.Stats.MDef, p.Stats.MagicResist = 0, 0
 	p.HP = 5 // 施加之后再压血, 否则会被属性重算覆盖
 	sink.take()
 
