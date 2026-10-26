@@ -44,7 +44,7 @@ func (s *Scene) onValidateTradeOffer(cmd ValidateTradeOffer) {
 		}
 		seen[ref.Slot] = struct{}{}
 		stack := p.Player.Bag.At(int(ref.Slot))
-		if stack.Empty() || stack.Bound || stack.Locked || ref.Count > stack.Count {
+		if stack.Empty() || stack.Bound || stack.Locked || domain.AstralRuneTransferProtected(stack) || ref.Count > stack.Count {
 			return
 		}
 		def, ok := s.itemDef(stack.Item)
@@ -187,13 +187,15 @@ func (s *Scene) validateTradeSettlementOffer(p *entity.Entity, offer TradeSettle
 		seen[item.Slot] = struct{}{}
 		actual := p.Player.Bag.At(int(item.Slot))
 		def, ok := s.itemDef(actual.Item)
-		if !ok || actual.Empty() || actual.Count < item.Stack.Count || actual.Bound || actual.Locked ||
+		if !ok || actual.Empty() || actual.Count < item.Stack.Count || actual.Bound || actual.Locked || domain.AstralRuneTransferProtected(actual) ||
 			!def.CanTrade || !def.InventoryTabKnown || def.InventoryTab != item.Tab ||
 			!sameTradeInstance(actual, item.Stack) || !s.petTradeAllowed(p, actual) || !reflect.DeepEqual(item.Pet, s.petItemInfo(p, actual)) {
 			return nil, "物品状态已经变化"
 		}
-		transfer := actual
-		transfer.Count = item.Stack.Count
+		_, transfer, splitOK := domain.SplitOwnedStack(actual, item.Stack.Count)
+		if !splitOK {
+			return nil, "物品数量无效"
+		}
 		stacks = append(stacks, transfer)
 	}
 	return stacks, ""

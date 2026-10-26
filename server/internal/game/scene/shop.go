@@ -124,7 +124,7 @@ func (s *Scene) onSellItem(cmd SellItem) {
 		return
 	}
 	stack := p.Player.Bag.At(cmd.Slot)
-	if stack.Empty() || stack.Item != cmd.Item || stack.Count < cmd.Count {
+	if stack.Empty() || stack.Item != cmd.Item || stack.Count < cmd.Count || domain.IsAstralRuneStack(stack) && (stack.Locked || stack.Card.Locked) {
 		reject(event.RejectNoItem)
 		return
 	}

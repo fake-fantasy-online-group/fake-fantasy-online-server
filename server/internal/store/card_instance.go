@@ -16,11 +16,11 @@ func saveCardInstance(ctx context.Context, q querier, uid int64, card domain.Car
 	for i, e := range card.Effects {
 		ops[i], attrs[i], modes[i], probabilities[i], values[i] = e.Op, e.Attr, e.Mode, e.Probability, e.Value
 	}
-	_, err := q.Exec(ctx, `INSERT INTO card_instances(uid,effect_count,ops,attrs,modes,probabilities,effect_values)
- VALUES($1,$2,$3,$4,$5,$6,$7)
+	_, err := q.Exec(ctx, `INSERT INTO card_instances(uid,effect_count,ops,attrs,modes,probabilities,effect_values,snapshot_bound,snapshot_locked)
+ VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)
  ON CONFLICT(uid) DO UPDATE SET effect_count=EXCLUDED.effect_count,ops=EXCLUDED.ops,
- attrs=EXCLUDED.attrs,modes=EXCLUDED.modes,probabilities=EXCLUDED.probabilities,effect_values=EXCLUDED.effect_values`,
-		uid, int16(card.Count), ops, attrs, modes, probabilities, values)
+ attrs=EXCLUDED.attrs,modes=EXCLUDED.modes,probabilities=EXCLUDED.probabilities,effect_values=EXCLUDED.effect_values,snapshot_bound=EXCLUDED.snapshot_bound,snapshot_locked=EXCLUDED.snapshot_locked`,
+		uid, int16(card.Count), ops, attrs, modes, probabilities, values, card.Bound, card.Locked)
 	if err != nil {
 		return fmt.Errorf("store: 写卡实例 %d 属性: %w", uid, err)
 	}
@@ -45,7 +45,9 @@ func loadCardInstances(ctx context.Context, q querier, facts map[int64]domain.St
 		return nil
 	}
 	rows, err := q.Query(ctx, `SELECT i.uid,i.item_id,i.bound,i.locked,c.effect_count,
- c.ops,c.attrs,c.modes,c.probabilities,c.effect_values
+ c.ops,c.attrs,c.modes,c.probabilities,c.effect_values,
+ CASE WHEN i.item_id BETWEEN 1900028001 AND 1900028028 THEN COALESCE(c.snapshot_bound,i.bound) ELSE i.bound END AS snapshot_bound,
+ CASE WHEN i.item_id BETWEEN 1900028001 AND 1900028028 THEN COALESCE(c.snapshot_locked,i.locked) ELSE i.locked END AS snapshot_locked
  FROM item_instances i JOIN card_instances c ON c.uid=i.uid
  WHERE i.uid=ANY($1) AND i.instance_kind=2`, uids)
 	if err != nil {
@@ -56,14 +58,15 @@ func loadCardInstances(ctx context.Context, q querier, facts map[int64]domain.St
 	for rows.Next() {
 		var st domain.Stack
 		var count int16
+		var snapshotBound, snapshotLocked bool
 		var ops, attrs, modes, probabilities, values []int32
-		if err := rows.Scan(&st.UID, &st.Item, &st.Bound, &st.Locked, &count, &ops, &attrs, &modes, &probabilities, &values); err != nil {
+		if err := rows.Scan(&st.UID, &st.Item, &st.Bound, &st.Locked, &count, &ops, &attrs, &modes, &probabilities, &values, &snapshotBound, &snapshotLocked); err != nil {
 			return err
 		}
 		if count < 0 || count > 8 || len(ops) != 8 || len(attrs) != 8 || len(modes) != 8 || len(probabilities) != 8 || len(values) != 8 {
 			return fmt.Errorf("store: 卡实例 %d 属性数组非法", st.UID)
 		}
-		st.Card = domain.CardInstanceState{Initialized: true, Count: uint8(count), Bound: st.Bound, Locked: st.Locked}
+		st.Card = domain.CardInstanceState{Initialized: true, Count: uint8(count), Bound: snapshotBound, Locked: snapshotLocked}
 		for i := range st.Card.Effects {
 			st.Card.Effects[i] = domain.CardEffect{Op: ops[i], Attr: attrs[i], Mode: modes[i], Probability: probabilities[i], Value: values[i]}
 		}

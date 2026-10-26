@@ -92,7 +92,7 @@ func (s *Scene) onReserveFamilyStashDeposit(cmd ReserveFamilyStashDeposit) {
 		return
 	}
 	def, ok := s.itemDef(stack.Item)
-	if stack.Empty() || !ok || stack.Locked || stack.Bound || def.InventoryTab != cmd.BagTab {
+	if stack.Empty() || !ok || stack.Locked || stack.Bound || domain.AstralRuneTransferProtected(stack) || def.InventoryTab != cmd.BagTab {
 		result.Reason = "该物品不能存入家族仓库"
 		return
 	}

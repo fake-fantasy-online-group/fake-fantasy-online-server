@@ -25,7 +25,8 @@ func (s *Scene) onSetItemLock(cmd SetItemLock) {
 		_ = s.pushInventory(p)
 		return
 	}
-	if st.Locked == cmd.On {
+	astral := domain.IsAstralRuneStack(st)
+	if st.Locked == cmd.On && (!astral || st.Card.Locked == cmd.On) {
 		result.OK = true
 		if cmd.On {
 			result.Message = "物品已经锁定"
@@ -39,6 +40,9 @@ func (s *Scene) onSetItemLock(cmd SetItemLock) {
 
 	planned := p.Player.Bag.Clone()
 	st.Locked = cmd.On
+	if astral {
+		st.Card.Locked = cmd.On
+	}
 	if planned == nil || !planned.Set(int(cmd.Slot), st) {
 		s.emitTo(p.ID, result)
 		return

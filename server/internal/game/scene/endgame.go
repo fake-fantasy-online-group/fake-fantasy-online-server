@@ -62,6 +62,11 @@ func (s *Scene) endgameReply(p *entity.Entity, r domain.EndgameResponse) {
 	for _, frame := range frames {
 		s.emitTo(p.ID, event.EndgameMessage{Who: p.ID, Message: frame})
 	}
+	// Public clients already route native 0x8008 mode 5 to the bottom-right
+	// notice box. Keep the structured failure too so pending requests settle.
+	if (r.Kind == "cube.quote" || r.Kind == "cube.execute") && !r.OK && r.Error != "" && r.Message != "" {
+		s.emitTo(p.ID, event.NewbieTextNotice{Who: p.ID, Text: r.Message})
+	}
 	if (r.Kind == "cube.claim" || r.Kind == "cube.recover") && r.Message != "" {
 		s.trialNotice(p, r.Message)
 	}

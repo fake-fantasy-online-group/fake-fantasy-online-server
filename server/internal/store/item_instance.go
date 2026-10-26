@@ -44,7 +44,7 @@ func saveItemInstances(ctx context.Context, q querier, source string, stacks ...
 		if kind == domain.ItemInstanceNone {
 			continue
 		}
-		if st.UID <= 0 || st.Count != 1 {
+		if st.UID <= 0 || (st.Count != 1 && !domain.IsAstralRuneStack(st)) {
 			return fmt.Errorf("store: 实例物品 %d 缺少合法UID或数量 uid=%d count=%d", st.Item, st.UID, st.Count)
 		}
 		if _, ok := seen[st.UID]; ok {
@@ -235,6 +235,12 @@ func hydrateStack(cached domain.Stack, facts map[int64]domain.Stack) (domain.Sta
 	if fact.Item != cached.Item {
 		return cached, fmt.Errorf("store: 位置与实例模板冲突 uid=%d location=%d instance=%d",
 			cached.UID, cached.Item, fact.Item)
+	}
+	// Quantity belongs to the location; the unified instance owns the card snapshot.
+	// Old singleton locations require no migration.
+	fact.Count = cached.Count
+	if fact.Count != 1 && !domain.IsAstralRuneStack(fact) {
+		return cached, fmt.Errorf("store: 实例位置数量非法 uid=%d count=%d", cached.UID, cached.Count)
 	}
 	// 历史位置表没有 instance_kind 列；装备的类型可由模板确定，保留旧栈的
 	// 零值以兼容既有快照。卡片则必须带回 kind=2，镶嵌入口据此拒绝普通物品。

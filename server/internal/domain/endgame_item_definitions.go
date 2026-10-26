@@ -24,8 +24,8 @@ func ValidateEndgameItemDefinitions(items map[ItemID]ItemDef) error {
 			return fmt.Errorf("endgame item %d has incomplete database base definition", id)
 		}
 		if id >= FirstAstralRune && id <= LastAstralRune {
-			if d.Stackable || d.InstanceKind != ItemInstanceSocketCard || d.Level <= 0 || d.UseLevel != d.Level || !d.CardDefaults.Initialized || d.CardDefaults.Count == 0 {
-				return fmt.Errorf("endgame rune %d has incompatible database card identity or level", id)
+			if !d.Stackable || d.InstanceKind != ItemInstanceSocketCard || d.Level <= 0 || d.UseLevel != d.Level || !d.CardDefaults.Initialized || d.CardDefaults.Count == 0 {
+				return fmt.Errorf("endgame rune %d has incompatible database card identity or level; apply migration 000000_init-113.sql", id)
 			}
 		} else if !d.Stackable || d.InstanceKind != ItemInstanceNone {
 			return fmt.Errorf("endgame material/key %d has incompatible database stack identity", id)

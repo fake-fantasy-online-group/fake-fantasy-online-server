@@ -832,7 +832,8 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 		if physicalSocketCard {
 			d.InstanceKind = domain.ItemInstanceSocketCard
 			d.CardDefaults.Initialized = true
-			d.Stackable = false
+			// Only authored astral runes support homogeneous instance stacks.
+			d.Stackable = d.Stackable && d.ID >= domain.FirstAstralRune && d.ID <= domain.LastAstralRune
 		}
 		d.ConsumeOnUse = useWaste != 0
 		d.CanMail = canMail != 0

@@ -110,6 +110,10 @@ func (s *Scene) onUseItem(cmd UseItem) {
 		p.Player.StartItemCooldown(def.CooldownGroup, s.tick,
 			domain.Ticks(int(def.CooldownSec)*1000))
 	}
+	if def.UseAction == "skill.reset" && def.ID == 3380 {
+		s.useSkillResetCrystal(p, bagSlot)
+		return
+	}
 	if def.StatReset != domain.StatResetNone {
 		s.useCharacterStatResetItem(p, bagSlot, def, startCooldown, reject)
 		return

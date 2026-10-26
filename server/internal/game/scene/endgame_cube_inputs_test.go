@@ -130,13 +130,17 @@ func TestEndgameCubeInputsWorkbenchBindingAndNoMatch(t *testing.T) {
 		t.Fatal("quote executed after tool left the bag")
 	}
 	s.players[1].Player.Bag.Set(98, tool)
+	// Quantities are hints: make the actual selected inventory insufficient.
+	short := s.players[1].Player.Bag.At(100)
+	short.Count = 29
+	s.players[1].Player.Bag.Set(100, short)
 	before := s.players[1].Player.Bag.Clone()
 	r := inputCubeQuoteRequest()
 	r.CubeInputs[0].Count++
 	s.onEndgameCube(s.players[1], r)
 	ev, _ = firstOf[event.EndgameMessage](cubeTake(s, sink))
-	if ev.Message.Error != "partial_match" || !reflect.DeepEqual(before, s.players[1].Player.Bag) || s.endgamePlayer(s.players[1]).cube != nil {
-		t.Fatal("unmatched quantity consumed or preserved executable quote")
+	if ev.Message.Error != "insufficient_count" || !reflect.DeepEqual(before, s.players[1].Player.Bag) || s.endgamePlayer(s.players[1]).cube != nil {
+		t.Fatal("insufficient actual inventory consumed or preserved executable quote")
 	}
 }
 
@@ -192,6 +196,11 @@ func TestEndgameCubeMismatchUsesExistingErrorEnvelopeWithoutConsumption(t *testi
 			p := s.players[1]
 			s.items[1999999999] = domain.ItemDef{ID: 1999999999, Name: "无关材料", Stackable: true, InventoryTab: 1, InventoryTabKnown: true}
 			p.Player.Bag.Set(102, domain.Stack{Item: 1999999999, Count: 1})
+			if tc.name == "count" {
+				st := p.Player.Bag.At(100)
+				st.Count = 29
+				p.Player.Bag.Set(100, st)
+			}
 			before, money := p.Player.Bag.Clone(), p.Player.Char.Money
 			req := inputCubeQuoteRequest()
 			req.CubeInputs = tc.inputs
@@ -204,5 +213,43 @@ func TestEndgameCubeMismatchUsesExistingErrorEnvelopeWithoutConsumption(t *testi
 				t.Fatal("mismatch created a quote or consumed inputs")
 			}
 		})
+	}
+}
+
+func TestEndgameCubeCountOneSelectsSufficientInventory(t *testing.T) {
+	s, sink, b := cubeSceneFixture(t)
+	inputCubeNPC(s)
+	p := s.players[1]
+	before := p.Player.Bag.Clone()
+	req := inputCubeQuoteRequest()
+	for i := range req.CubeInputs {
+		req.CubeInputs[i].Count = 1
+	}
+	s.onEndgameCube(p, req)
+	ev, ok := firstOf[event.EndgameMessage](cubeTake(s, sink))
+	if !ok || !ev.Message.OK || ev.Message.Quote == nil || !reflect.DeepEqual(before, p.Player.Bag) {
+		t.Fatalf("count1 did not select actual inventory: %+v", ev.Message)
+	}
+	q := *ev.Message.Quote
+	s.onEndgame(EndgameRequest{ID: p.ID, Request: cubeExecute(q)})
+	s.finishEndgame(false)
+	if b.commits != 1 || !reflect.DeepEqual(before, p.Player.Bag) {
+		t.Fatal("quote/commit isolation")
+	}
+	b.receipt = &b.plan.Receipt
+	b.result <- domain.EndgameCommitResult{State: b.plan.State, Receipt: b.plan.Receipt}
+	s.finishEndgame(false)
+	cubeTake(s, sink)
+	for _, m := range q.Materials {
+		if m.Count <= 1 || p.Player.Bag.CountOf(domain.ItemID(m.ItemID)) != before.CountOf(domain.ItemID(m.ItemID))-m.Count {
+			t.Fatalf("did not debit actual recipe cost: %+v", m)
+		}
+	}
+	after := p.Player.Bag.Clone()
+	s.onEndgame(EndgameRequest{ID: p.ID, Request: cubeExecute(q)})
+	s.finishEndgame(false)
+	cubeTake(s, sink)
+	if b.commits != 1 || !reflect.DeepEqual(after, p.Player.Bag) {
+		t.Fatal("count1 replay charged twice")
 	}
 }

@@ -10,28 +10,35 @@ func TestCubeMismatchClassesAndReservationSafety(t *testing.T) {
 		name, code, message string
 		alter               func(*CubeContext, *EndgameRequest)
 	}{
-		{"short", "insufficient_count", "材料虽合，数目尚缺。", func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[0].Count-- }},
+		{"short", "insufficient_count", "材料虽合，数目尚缺。", func(c *CubeContext, r *EndgameRequest) { cubeShortenSelectedMaterial(c, r, 0) }},
 		{"missing type", "partial_match", "部分材料相合，尚需调配。", func(c *CubeContext, r *EndgameRequest) { r.CubeInputs = r.CubeInputs[1:] }},
 		{"extra type", "partial_match", "部分材料相合，尚需调配。", func(c *CubeContext, r *EndgameRequest) {
 			r.CubeInputs = append(r.CubeInputs, CubeInput{ItemID: CubeImmortalEcho, Count: 1})
 		}},
-		{"overfilled", "partial_match", "部分材料相合，尚需调配。", func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[0].Count++ }},
-		{"short plus surplus", "partial_match", "部分材料相合，尚需调配。", func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[0].Count--; r.CubeInputs[1].Count++ }},
+		{"short plus surplus", "insufficient_count", "材料虽合，数目尚缺。", func(c *CubeContext, r *EndgameRequest) {
+			cubeShortenSelectedMaterial(c, r, 0)
+			st := c.Bag.At(101)
+			st.Count += 20
+			c.Bag.Set(101, st)
+		}},
 		{"wrong", "no_match", "鼎中诸物，未合炼方。", func(c *CubeContext, r *EndgameRequest) {
 			r.CubeInputs = []CubeInput{{ItemID: CubeImmortalEcho, Count: 1}}
 		}},
-		{"wrong equipment plus short", "partial_match", "部分材料相合，尚需调配。", func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[0].Count--; cubeMakeUnique(c) }},
+		{"wrong equipment plus short", "partial_match", "部分材料相合，尚需调配。", func(c *CubeContext, r *EndgameRequest) { cubeShortenSelectedMaterial(c, r, 0); cubeMakeUnique(c) }},
 		{"missing equipment", "partial_match", "部分材料相合，尚需调配。", func(c *CubeContext, r *EndgameRequest) { r.CubeInputs = r.CubeInputs[:2] }},
-		{"invalid mixed uid", "invalid_request", "", func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[0].Count--; r.CubeInputs[2].UID = "042" }},
+		{"invalid mixed uid", "invalid_request", "", func(c *CubeContext, r *EndgameRequest) {
+			cubeShortenSelectedMaterial(c, r, 0)
+			r.CubeInputs[2].UID = "042"
+		}},
 		{"locked mixed uid", "locked", "", func(c *CubeContext, r *EndgameRequest) {
-			r.CubeInputs[0].Count--
+			cubeShortenSelectedMaterial(c, r, 0)
 			st := c.Bag.At(200)
 			st.Locked = true
 			c.Bag.Set(200, st)
 		}},
-		{"missing ownership", "not_owner", "", func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[0].Count--; c.Bag.Set(200, Stack{}) }},
-		{"unavailable quantity", "materials", "", func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[0].Count = 900 }},
-		{"invalid parameters", "invalid_request", "", func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[0].Count--; r.Tier = 1 }},
+		{"missing ownership", "not_owner", "", func(c *CubeContext, r *EndgameRequest) { cubeShortenSelectedMaterial(c, r, 0); c.Bag.Set(200, Stack{}) }},
+		{"unavailable quantity", "materials", "", func(c *CubeContext, r *EndgameRequest) { c.Bag.Set(100, Stack{}) }},
+		{"invalid parameters", "invalid_request", "", func(c *CubeContext, r *EndgameRequest) { cubeShortenSelectedMaterial(c, r, 0); r.Tier = 1 }},
 		{"funds", "funds", "", func(c *CubeContext, r *EndgameRequest) { c.Money = 0 }},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
@@ -64,7 +71,7 @@ func TestCubeMismatchClassesAndReservationSafety(t *testing.T) {
 func TestCubeMismatchOrderIndependentPrecedence(t *testing.T) {
 	ctx, legacy := cubeInputs(CubeAwakenUnique)
 	req := inputSelection(ctx, legacy)
-	req.CubeInputs[0].Count--
+	cubeShortenSelectedMaterial(&ctx, &req, 0)
 	recipe, _ := ctx.Rules.Recipe(legacy.RecipeID)
 	other := cloneCubeRecipe(recipe)
 	other.ID += 10000
@@ -119,7 +126,7 @@ func TestCubeEveryRecipeMaterialShortage(t *testing.T) {
 			t.Fatal(err)
 		}
 		req := inputSelection(ctx, legacy)
-		req.CubeInputs[0].Count--
+		cubeShortenSelectedMaterial(&ctx, &req, 0)
 		before := ctx.Bag.Clone()
 		_, _, err = MatchCubeInputs(ctx, req)
 		if CubeErrorCode(err) != "insufficient_count" {
@@ -147,4 +154,16 @@ func TestCubePartialRuneOverlapDoesNotDependOnOrder(t *testing.T) {
 			t.Fatalf("mixed sources: %v", err)
 		}
 	}
+}
+
+// A count shortage is a shortage of owned inventory, not a UI count hint.
+func cubeShortenSelectedMaterial(c *CubeContext, r *EndgameRequest, index int) {
+	selected := r.CubeInputs[index]
+	required := selected.Count
+	c.Bag.Each(func(slot int, st Stack) {
+		if st.Item == selected.ItemID {
+			st.Count = required - 1
+			c.Bag.Set(slot, st)
+		}
+	})
 }

@@ -64,23 +64,14 @@ func (s *Scene) onOpenWarehouse(cmd OpenWarehouse) {
 }
 
 func removeStackCount(st domain.Stack, count int32) (domain.Stack, domain.Stack, bool) {
-	if st.Empty() || count <= 0 || count > st.Count {
-		return st, domain.Stack{}, false
-	}
-	moved := st
-	moved.Count = count
-	st.Count -= count
-	if st.Count == 0 {
-		st = domain.Stack{}
-	}
-	return st, moved, true
+	return domain.SplitOwnedStack(st, count)
 }
 
 func putWarehouse(w *domain.Warehouse, def domain.ItemDef, page, slot int, moved domain.Stack) bool {
 	if w == nil || moved.Empty() || page < 0 || page >= w.PageCount() {
 		return false
 	}
-	if !def.Stackable || moved.UID != 0 {
+	if !def.Stackable || (moved.UID != 0 && !domain.IsAstralRuneStack(moved)) {
 		if moved.Count != 1 {
 			return false
 		}
@@ -127,7 +118,7 @@ func putBag(bag *domain.Bag, def domain.ItemDef, slot int, moved domain.Stack) b
 		return false
 	}
 	dst := bag.At(slot)
-	if !def.Stackable || moved.UID != 0 {
+	if !def.Stackable || (moved.UID != 0 && !domain.IsAstralRuneStack(moved)) {
 		return moved.Count == 1 && dst.Empty() && bag.Set(slot, moved)
 	}
 	if moved.Count > domain.MaxStack {
@@ -324,7 +315,7 @@ func (s *Scene) onWarehouseSplit(cmd WarehouseSplit) {
 	}
 	src := w.At(page, slot)
 	def, ok := s.itemDef(src.Item)
-	if src.Empty() || !ok || !def.Stackable || src.UID != 0 || cmd.Count >= src.Count {
+	if src.Empty() || !ok || !def.Stackable || (src.UID != 0 && !domain.IsAstralRuneStack(src)) || cmd.Count >= src.Count {
 		return
 	}
 	to := w.FirstEmpty(page)
@@ -363,7 +354,7 @@ func (s *Scene) onWarehouseRearrange(cmd WarehouseRearrange) {
 	if !ok {
 		return
 	}
-	if def.Stackable && src.UID == 0 && domain.SameStackInstance(src, dst) && dst.Count < w.MaxStack() {
+	if def.Stackable && (src.UID == 0 || domain.IsAstralRuneStack(src)) && domain.SameStackInstance(src, dst) && dst.Count < w.MaxStack() {
 		put := w.MaxStack() - dst.Count
 		if put > src.Count {
 			put = src.Count
@@ -418,7 +409,7 @@ func (s *Scene) onSortWarehouse(cmd SortWarehouse) {
 		if !ok {
 			return
 		}
-		if def.Stackable && st.UID == 0 && len(merged) > 0 {
+		if def.Stackable && (st.UID == 0 || domain.IsAstralRuneStack(st)) && len(merged) > 0 {
 			last := &merged[len(merged)-1]
 			if domain.SameStackInstance(*last, st) && last.Count < w.MaxStack() {
 				put := w.MaxStack() - last.Count

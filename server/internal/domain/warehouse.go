@@ -151,5 +151,8 @@ func SameStackInstance(a, b Stack) bool {
 	}
 	ac, bc := a, b
 	ac.Count, bc.Count = 0, 0
+	if IsAstralRuneStack(a) && IsAstralRuneStack(b) {
+		ac.UID, bc.UID = 0, 0
+	}
 	return ac == bc
 }

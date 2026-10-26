@@ -119,6 +119,29 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 	if duplicate {
 		return p, cubeError("invalid_request", "背包中存在重复物品实例")
 	}
+	// Preview identities are local placeholders, never persisted or allocated.
+	previewUID := int64(1<<63 - 1)
+	allocateRuneUID := func() (int64, error) {
+		var uid int64
+		if execute {
+			allocate := ctx.NewUID
+			if allocate == nil {
+				allocate = NewItemInstanceID
+			}
+			uid = allocate()
+		} else {
+			for owned[previewUID] {
+				previewUID--
+			}
+			uid = previewUID
+			previewUID--
+		}
+		if uid <= 0 || owned[uid] {
+			return 0, cubeError("invalid_request", "新物品实例号无效")
+		}
+		owned[uid] = true
+		return uid, nil
+	}
 	find := func(raw string) (int, Stack, error) {
 		uid, err := strconv.ParseInt(raw, 10, 64)
 		if err != nil || uid <= 0 {
@@ -130,7 +153,7 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 				continue
 			}
 			d, ok := ctx.Items[st.Item]
-			if !ok || !d.InventoryTabKnown || !p.Bag.AllowsSlot(d, i) || st.Count != 1 {
+			if !ok || !d.InventoryTabKnown || !p.Bag.AllowsSlot(d, i) || st.Count != 1 && !IsAstralRuneStack(st) {
 				return -1, Stack{}, cubeError("requirements", "物品位置或模板无效")
 			}
 			if st.Locked || st.InstanceKind == ItemInstanceSocketCard && st.Card.Locked {
@@ -143,7 +166,7 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 	runeValid := func(st Stack) bool {
 		_, ok := AstralRune(st.Item, ctx.Catalog)
 		d, exists := ctx.Items[st.Item]
-		return ok && exists && d.InstanceKind == ItemInstanceSocketCard && st.InstanceKind == ItemInstanceSocketCard && st.UID > 0 && st.Card.Initialized && st.Card.Count <= 8 && st.Count == 1 && !st.Locked && !st.Card.Locked
+		return ok && exists && d.InstanceKind == ItemInstanceSocketCard && st.InstanceKind == ItemInstanceSocketCard && st.UID > 0 && st.Card.Initialized && st.Card.Count <= 8 && IsAstralRuneStack(st) && !st.Locked && !st.Card.Locked
 	}
 	inscribe, convert := recipe.Operation == "rune.inscribe", recipe.Operation == "rune.convert"
 	var outputRune ItemID
@@ -227,20 +250,15 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 	material := func(id ItemID, n int32) error { return add(Stack{Item: id, Count: n, Bound: true}) }
 	newRune := func(id ItemID) error {
 		d, exists := ctx.Items[id]
-		if !exists || d.Stackable || d.InstanceKind != ItemInstanceSocketCard || !d.CardDefaults.Initialized {
+		if !exists || !d.Stackable || d.InstanceKind != ItemInstanceSocketCard || !d.CardDefaults.Initialized {
 			return cubeError("invalid_rune", "星篆模板无效")
 		}
 		st := Stack{Item: id, Count: 1, InstanceKind: ItemInstanceSocketCard, Card: d.CardDefaults, Bound: true}
 		st.Card.Bound = true
-		if execute {
-			allocate := ctx.NewUID
-			if allocate == nil {
-				allocate = NewItemInstanceID
-			}
-			st.UID = allocate()
-			if st.UID <= 0 || owned[st.UID] {
-				return cubeError("invalid_request", "新物品实例号无效")
-			}
+		var err error
+		st.UID, err = allocateRuneUID()
+		if err != nil {
+			return err
 		}
 		return add(st)
 	}
@@ -311,8 +329,10 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 		if !runeValid(st) {
 			return p, cubeError("invalid_rune", "请选择一枚背包星篆")
 		}
-		p.Bag.Set(i, Stack{})
-		p.ConsumedUIDs = append(p.ConsumedUIDs, st.UID)
+		p.Bag.RemoveAt(i, 1)
+		if st.Count == 1 {
+			p.ConsumedUIDs = append(p.ConsumedUIDs, st.UID)
+		}
 		for _, out := range recipe.Outputs {
 			count, err := out.Quantity(0)
 			if err != nil {
@@ -405,7 +425,16 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 			if !runeValid(st) {
 				return p, cubeError("invalid_rune", "只能用背包星篆布阵")
 			}
-			p.Bag.Set(idx, Stack{})
+			unit := st
+			unit.Count = 1
+			if st.Count > 1 {
+				unit.UID, err = allocateRuneUID()
+				if err != nil {
+					return p, err
+				}
+			}
+			p.Bag.RemoveAt(idx, 1)
+			st = unit
 			card := st.Card
 			card.Bound = st.Bound || card.Bound || target.Bound
 			target.Bound = target.Bound || card.Bound
@@ -529,8 +558,10 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 					return p, cubeError("invalid_rune", fmt.Sprintf("须用%d枚相同且不同于产物的同象星篆", recipe.SourceCount))
 				}
 				source = st.Item
-				p.Bag.Set(i, Stack{})
-				p.ConsumedUIDs = append(p.ConsumedUIDs, st.UID)
+				p.Bag.RemoveAt(i, 1)
+				if st.Count == 1 {
+					p.ConsumedUIDs = append(p.ConsumedUIDs, st.UID)
+				}
 			}
 			p.Description += " 产物：" + ctx.Items[outputRune].Name + "×1。"
 			if err := newRune(outputRune); err != nil {

@@ -64,13 +64,16 @@ func (s *Scene) onReserveMailSend(cmd ReserveMailSend) {
 		seen[ref.Slot] = struct{}{}
 		st := p.Player.Bag.At(int(ref.Slot))
 		def, ok := s.itemDef(st.Item)
-		if !ok || st.Empty() || st.Count < ref.Count || st.Locked || st.Bound || !def.CanMail ||
-			!def.InventoryTabKnown || def.InventoryTab != ref.Tab || st.UID != 0 && ref.Count != 1 {
+		if !ok || st.Empty() || st.Count < ref.Count || st.Locked || st.Bound || domain.AstralRuneTransferProtected(st) || !def.CanMail ||
+			!def.InventoryTabKnown || def.InventoryTab != ref.Tab || st.UID != 0 && ref.Count != 1 && !domain.IsAstralRuneStack(st) {
 			result.Reason = "该物品不能邮寄"
 			return
 		}
-		attached := st
-		attached.Count = ref.Count
+		_, attached, splitOK := domain.SplitOwnedStack(st, ref.Count)
+		if !splitOK {
+			result.Reason = "附件数量无效"
+			return
+		}
 		attached.Locked = false
 		result.Attachments = append(result.Attachments, domain.MailAttachment{
 			Ordinal: int32(i), Stack: attached,

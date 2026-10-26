@@ -130,20 +130,23 @@ func PlanAstralInsert(bag *Bag, worn *EquipSet, defs func(ItemID) (ItemDef, bool
 		return AstralSocketPlan{}, AstralSocketError("not_owner")
 	}
 	rd, ok := defs(rune.Item)
-	if _, astral := AstralRune(rune.Item,rd.EndgameCatalog); !ok || !astral || rd.InstanceKind != ItemInstanceSocketCard || rune.InstanceKind != ItemInstanceSocketCard || rune.Count != 1 || !rune.Card.Initialized {
+	if _, astral := AstralRune(rune.Item, rd.EndgameCatalog); !ok || !astral || rd.InstanceKind != ItemInstanceSocketCard || rune.InstanceKind != ItemInstanceSocketCard || !IsAstralRuneStack(rune) || !rune.Card.Initialized {
 		return AstralSocketPlan{}, AstralSocketError("invalid_rune")
 	}
-	runeDef, _ := AstralRune(rune.Item,rd.EndgameCatalog)
+	runeDef, _ := AstralRune(rune.Item, rd.EndgameCatalog)
 	if ch == nil || ch.Level < runeDef.MinLevel {
 		return AstralSocketPlan{}, AstralSocketError("rune_level")
 	}
 	if rune.Locked || rune.Card.Locked {
 		return AstralSocketPlan{}, AstralSocketError("locked")
 	}
-	p := AstralSocketPlan{Bag: bag.Clone(), Worn: worn.Clone(), Target: t.stack, Rune: rune, Socket: hole}
-	if !p.Bag.RemoveAt(slot, 1) {
+	remaining, unit, splitOK := SplitOwnedStack(rune, 1)
+	if !splitOK {
 		return AstralSocketPlan{}, AstralSocketError("invalid_rune")
 	}
+	rune = unit
+	p := AstralSocketPlan{Bag: bag.Clone(), Worn: worn.Clone(), Target: t.stack, Rune: rune, Socket: hole}
+	p.Bag.Set(slot, remaining)
 	card := rune.Card
 	card.Bound = rune.Bound || rune.Card.Bound || t.stack.Bound
 	card.Locked = false
@@ -173,7 +176,7 @@ func PlanAstralRemove(bag *Bag, worn *EquipSet, defs func(ItemID) (ItemDef, bool
 		return AstralSocketPlan{}, err
 	}
 	id, uid, card := t.stack.Sockets[hole], t.stack.SocketUIDs[hole], t.stack.SocketCards[hole]
-	if _, ok := AstralRune(id,t.def.EndgameCatalog); !ok || uid <= 0 || astralUIDCount(bag, worn, uid) != 1 || !card.Initialized {
+	if _, ok := AstralRune(id, t.def.EndgameCatalog); !ok || uid <= 0 || astralUIDCount(bag, worn, uid) != 1 || !card.Initialized {
 		return AstralSocketPlan{}, AstralSocketError("invalid_rune")
 	}
 	if card.Locked {

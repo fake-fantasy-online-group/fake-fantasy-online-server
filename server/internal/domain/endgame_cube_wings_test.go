@@ -155,7 +155,6 @@ func TestWingCubeRejectsMalformedAndStaleInputsWithoutMutation(t *testing.T) {
 		func(c *CubeContext, r *EndgameRequest) { r.CubeInputs = append(r.CubeInputs, r.CubeInputs[0]) },
 		func(c *CubeContext, r *EndgameRequest) { st := c.Bag.At(200); st.Locked = true; c.Bag.Set(200, st) },
 		func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[0].UID = "042" },
-		func(c *CubeContext, r *EndgameRequest) { r.CubeInputs[0].Count = 2 },
 		func(c *CubeContext, r *EndgameRequest) { c.Bag.Set(200, Stack{}) },
 	} {
 		ctx := wingCubeFixture(t)

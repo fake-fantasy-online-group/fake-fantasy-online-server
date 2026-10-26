@@ -319,7 +319,7 @@ func (s *Scene) onDropBagItem(cmd DropBagItem) {
 		return
 	}
 	if st.Empty() || !ok || st.Item != cmd.Item || !def.InventoryTabKnown ||
-		def.InventoryTab != cmd.Tab || (st.Bound && !domain.IsStartingSword(st.Item)) || st.Locked {
+		def.InventoryTab != cmd.Tab || (st.Bound && !domain.IsStartingSword(st.Item)) || st.Locked || domain.AstralRuneTransferProtected(st) {
 		_ = s.pushInventory(p)
 		return
 	}
@@ -365,7 +365,7 @@ func (s *Scene) onSplitBagItem(cmd SplitBagItem) {
 	st := bag.At(cmd.Slot)
 	def, ok := s.itemDef(st.Item)
 	if st.Empty() || !ok || !def.Stackable || !def.InventoryTabKnown ||
-		def.InventoryTab != cmd.Tab || cmd.Count >= st.Count || st.UID != 0 || st.Locked {
+		def.InventoryTab != cmd.Tab || cmd.Count >= st.Count || (st.UID != 0 && !domain.IsAstralRuneStack(st)) || st.Locked {
 		_ = s.pushInventory(p)
 		return
 	}
@@ -379,9 +379,10 @@ func (s *Scene) onSplitBagItem(cmd SplitBagItem) {
 	if planned == nil {
 		return
 	}
-	remain, split := st, st
-	remain.Count -= cmd.Count
-	split.Count = cmd.Count
+	remain, split, valid := domain.SplitOwnedStack(st, cmd.Count)
+	if !valid {
+		return
+	}
 	if !planned.Set(cmd.Slot, remain) || !planned.Set(free, split) {
 		_ = s.pushInventory(p)
 		return
@@ -406,15 +407,14 @@ func (s *Scene) mergeSortedBagStacks(stacks []domain.Stack) []domain.Stack {
 	out := make([]domain.Stack, 0, len(stacks))
 	for _, st := range stacks {
 		def, ok := s.itemDef(st.Item)
-		if !ok || !def.Stackable || st.UID != 0 {
+		if !ok || !def.Stackable || (st.UID != 0 && !domain.IsAstralRuneStack(st)) {
 			out = append(out, st)
 			continue
 		}
 		for st.Count > 0 {
 			if len(out) > 0 {
 				last := &out[len(out)-1]
-				if last.Item == st.Item && last.UID == 0 && last.Bound == st.Bound &&
-					last.Locked == st.Locked && last.Count < domain.MaxStack {
+				if domain.SameStackInstance(*last, st) && last.Count < domain.MaxStack {
 					put := domain.MaxStack - last.Count
 					if put > st.Count {
 						put = st.Count

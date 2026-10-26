@@ -758,6 +758,20 @@ func (b *Bag) Add(def ItemDef, count int32) int32 {
 	if start >= end {
 		return count
 	}
+	if def.Stackable && def.InstanceKind == ItemInstanceSocketCard && def.ID >= FirstAstralRune && def.ID <= LastAstralRune {
+		for count > 0 {
+			n := count
+			if n > MaxStack {
+				n = MaxStack
+			}
+			left := b.AddStack(def, NewStack(def, n))
+			count -= n - left
+			if left != 0 {
+				return count
+			}
+		}
+		return 0
+	}
 	if !def.Stackable {
 		// 不可堆叠的东西一件占一格, 每件都是独立实例
 		for i := start; i < end; i++ {
@@ -817,6 +831,9 @@ func (b *Bag) AddStack(def ItemDef, incoming Stack) int32 {
 	start, end := bagRange(def, len(b.slots))
 	if start >= end {
 		return incoming.Count
+	}
+	if IsAstralRuneStack(incoming) {
+		return b.addAstralRuneStack(def, incoming)
 	}
 	if !def.Stackable || incoming.UID != 0 || incoming.Durability != 0 ||
 		incoming.MaxDurability != 0 || incoming.DurabilityWearRaw != 0 || incoming.FusedAppearance != 0 {
@@ -942,8 +959,8 @@ func (b *Bag) Move(from, to int) bool {
 		return false
 	}
 	// 同种且目标没满: 合并
-	if !dst.Empty() && dst.Item == src.Item && dst.Count < MaxStack &&
-		src.UID == 0 && dst.UID == 0 && src.Bound == dst.Bound && src.Locked == dst.Locked {
+	if !dst.Empty() && dst.Count < MaxStack && SameStackInstance(*src, *dst) &&
+		(src.UID == 0 && dst.UID == 0 || IsAstralRuneStack(*src) && IsAstralRuneStack(*dst) && src.UID != dst.UID) {
 		room := MaxStack - dst.Count
 		if room > src.Count {
 			room = src.Count

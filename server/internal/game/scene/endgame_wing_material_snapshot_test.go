@@ -84,7 +84,17 @@ func TestWingMaterialSnapshotQuoteExecuteNativeInputs(t *testing.T) {
 		output      domain.ItemID
 		outputCount int32
 	}{
+		{"rune_stack_count1", false, []domain.CubeInput{{UID: "501", Count: 1}}, 0, domain.FirstAstralRune, 1},
+		{"automatic_high_change", true, []domain.CubeInput{{ItemID: 25029, Count: 1}}, 20611, 25027, 15},
+		{"automatic_low_count1", true, []domain.CubeInput{{ItemID: 25027, Count: 1}}, 20611, 0, 0},
 		{"upgrade", true, []domain.CubeInput{{ItemID: 25029, Count: 2}, {ItemID: 25028, Count: 2}}, 20611, 0, 0},
+		{"top_upgrade_low", true, []domain.CubeInput{{ItemID: 25027, Count: 4000}}, 21905, 0, 0},
+		{"top_upgrade_mid", true, []domain.CubeInput{{ItemID: 25028, Count: 800}}, 21905, 0, 0},
+		{"upgrade_low", true, []domain.CubeInput{{ItemID: 25027, Count: 60}}, 20611, 0, 0},
+		{"upgrade_mid", true, []domain.CubeInput{{ItemID: 25028, Count: 12}}, 20611, 0, 0},
+		{"upgrade_mixed", true, []domain.CubeInput{{ItemID: 25027, Count: 10}, {ItemID: 25028, Count: 5}, {ItemID: 25029, Count: 1}}, 20611, 0, 0},
+		{"convert_mixed", true, []domain.CubeInput{{ItemID: 25027, Count: 100}, {ItemID: 25028, Count: 20}, {ItemID: 11682, Count: 1}}, 22863, 0, 0},
+		{"convert_light_marker", true, []domain.CubeInput{{ItemID: 25027, Count: 51}, {ItemID: 25029, Count: 6}}, 20609, 0, 0},
 		{"convert", true, []domain.CubeInput{{ItemID: 25029, Count: 8}, {ItemID: 11682, Count: 1}}, 22863, 0, 0},
 		{"low_to_mid", false, []domain.CubeInput{{ItemID: 25027, Count: 5}}, 0, 25028, 1},
 		{"mid_to_low", false, []domain.CubeInput{{ItemID: 25028, Count: 1}}, 0, 25027, 5},
@@ -94,6 +104,41 @@ func TestWingMaterialSnapshotQuoteExecuteNativeInputs(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			s, sink, b := wingSnapshotScene(t)
 			p := s.players[1]
+			var runeSource domain.Stack
+			var runeCost int32
+			if tc.name == "rune_stack_count1" {
+				p.Player.Bag.Set(200, domain.Stack{})
+				recipe, ok := s.cubeRules.Recipe(domain.CubeConvertRuneBase + 1)
+				if !ok {
+					t.Fatal("missing authored recipe")
+				}
+				var err error
+				s.cubeRules, err = domain.NewCubeRuleTable([]domain.CubeRecipeDef{recipe}, s.items)
+				if err != nil {
+					t.Fatal(err)
+				}
+				runeCost = recipe.SourceCount
+				id := domain.FirstAstralRune + 1
+				runeSource = domain.Stack{Item: id, UID: 501, Count: runeCost + 2, InstanceKind: domain.ItemInstanceSocketCard, Card: s.items[id].CardDefaults, Bound: true}
+				runeSource.Card.Bound = true
+				p.Player.Bag.Set(120, runeSource)
+				for _, m := range recipe.Materials {
+					tc.materials = append(tc.materials, domain.CubeInput{ItemID: m.ItemID, Count: 1})
+				}
+			}
+			if tc.target == 21905 {
+				st := p.Player.Bag.At(200)
+				st.Item = 20625
+				p.Player.Bag.Set(200, st)
+				for i, id := range []domain.ItemID{25027, 25028, 25029, 11682} {
+					p.Player.Bag.Set(110+i, domain.Stack{Item: id, Count: 5000, Bound: true})
+				}
+			}
+			if tc.target == 20609 {
+				st := p.Player.Bag.At(200)
+				st.Item = 22863
+				p.Player.Bag.Set(200, st)
+			}
 			before := p.Player.Bag.Clone()
 			snapshots := wingSnapshotResponses(t, s, sink)
 			exportWingSnapshotFixture(t, tc.name, "snapshot.json", snapshots)
@@ -118,7 +163,7 @@ func TestWingMaterialSnapshotQuoteExecuteNativeInputs(t *testing.T) {
 				}
 			}
 			for _, id := range []domain.ItemID{25027, 25028, 25029, 11682} {
-				if counts[id] != 100 {
+				if counts[id] != p.Player.Bag.CountOf(id) {
 					t.Fatalf("native client would reject %d: %d", id, counts[id])
 				}
 			}
@@ -193,9 +238,15 @@ func TestWingMaterialSnapshotQuoteExecuteNativeInputs(t *testing.T) {
 				t.Fatalf("missing commit receipt: %+v", result)
 			}
 			exportWingSnapshotFixture(t, tc.name, "execute-response.json", result)
-			for _, m := range tc.materials {
-				if got := p.Player.Bag.CountOf(m.ItemID); got != before.CountOf(m.ItemID)-m.Count {
+			for _, m := range reply.Message.Quote.Materials {
+				if got := p.Player.Bag.CountOf(domain.ItemID(m.ItemID)); got != before.CountOf(domain.ItemID(m.ItemID))-m.Count {
 					t.Fatal("wrong consumed amount", m, got)
+				}
+			}
+			if tc.name == "rune_stack_count1" {
+				remain := p.Player.Bag.At(120)
+				if remain.UID != runeSource.UID || remain.Count != 2 || before.At(120).Count-remain.Count != runeCost {
+					t.Fatalf("single selected UID did not consume authored cost %d: %+v", runeCost, remain)
 				}
 			}
 			if tc.target != 0 && (p.Player.Bag.At(200).Item != tc.target || p.Player.Bag.At(200).UID != 42) {
@@ -249,5 +300,33 @@ func TestWingMaterialSnapshotDoesNotWaiveInputValidation(t *testing.T) {
 				t.Fatalf("unsafe input accepted: %+v", reply.Message)
 			}
 		})
+	}
+}
+
+func TestWingValueQuoteRejectsChangedSelectedDenomination(t *testing.T) {
+	for _, locked := range []bool{false, true} {
+		s, sink, b := wingSnapshotScene(t)
+		p := s.players[1]
+		snap := wingSnapshotResponses(t, s, sink)
+		req := domain.EndgameRequest{Op: "cube.quote", RequestID: "mixed-quote", ExpectedRevision: snap[0].Revision, CubeInputs: []domain.CubeInput{{UID: "42", Count: 1}, {ItemID: 25027, Count: 10}, {ItemID: 25028, Count: 5}, {ItemID: 25029, Count: 1}}}
+		s.onEndgameCube(p, req)
+		reply, ok := firstOf[event.EndgameMessage](cubeTake(s, sink))
+		if !ok || !reply.Message.OK || reply.Message.Quote == nil {
+			t.Fatal("quote failed", reply.Message)
+		}
+		st := p.Player.Bag.At(110)
+		if locked {
+			st.Locked = true
+		} else {
+			st.Count--
+		}
+		p.Player.Bag.Set(110, st)
+		before := p.Player.Bag.Clone()
+		s.onEndgameCube(p, cubeExecute(*reply.Message.Quote))
+		s.finishEndgame(false)
+		result, ok := firstOf[event.EndgameMessage](cubeTake(s, sink))
+		if !ok || result.Message.OK || result.Message.Error != "stale_revision" || b.commits != 0 || !reflect.DeepEqual(before, p.Player.Bag) {
+			t.Fatal("stale mixed quote executed", result.Message)
+		}
 	}
 }

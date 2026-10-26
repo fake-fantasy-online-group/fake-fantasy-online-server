@@ -45,6 +45,18 @@ func LoadEndgameItems(dst any) error {
 	if err = json.Unmarshal(raw, &rows); err != nil {
 		return err
 	}
+	stackRaw, err := ReadMigrationJSON("000000_init-113.sql", "$rune_stack_ids$")
+	if err != nil {
+		return err
+	}
+	var stackIDs []int32
+	if err := json.Unmarshal(stackRaw, &stackIDs); err != nil {
+		return err
+	}
+	stackableRunes := make(map[int32]bool, len(stackIDs))
+	for _, id := range stackIDs {
+		stackableRunes[id] = true
+	}
 	out := make([]map[string]any, 0, len(rows))
 	for _, r := range rows {
 		d := map[string]any{"ID": r.ID, "Name": r.Name, "Description": r.Description,
@@ -60,6 +72,9 @@ func LoadEndgameItems(dst any) error {
 			}
 			d["CardDefaults"] = map[string]any{"Initialized": true, "Count": len(effects), "Effects": effects}
 			d["SocketAffixes"] = r.Effects
+		}
+		if stackableRunes[r.ID] {
+			d["Stackable"] = true
 		}
 		out = append(out, d)
 	}

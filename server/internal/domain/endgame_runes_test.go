@@ -48,7 +48,7 @@ func TestAstralCatalogCompleteImmutable(t *testing.T) {
 	}
 	for _, d := range AstralRuneItems(7) {
 		st := NewStack(d, 1)
-		if st.UID <= 0 || st.Count != 1 || !st.Card.Initialized || d.Stackable || len(st.Card.StaticAffixes()) != 1 {
+		if st.UID <= 0 || st.Count != 1 || !st.Card.Initialized || !d.Stackable || len(st.Card.StaticAffixes()) != 1 {
 			t.Fatal("invalid card", d.ID)
 		}
 	}

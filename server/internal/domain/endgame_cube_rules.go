@@ -142,7 +142,7 @@ func validateCubeRecipe(r CubeRecipeDef, items map[ItemID]ItemDef) error {
 		}
 		seen[o.ItemID] = true
 		if runeOutput {
-			if d.InstanceKind != ItemInstanceSocketCard || d.Stackable || !d.CardDefaults.Initialized || o.ItemID < FirstAstralRune || o.ItemID > LastAstralRune || o.Count != 1 || o.Multiplier != 1 || o.LevelDivisor != 0 || o.LevelCap != 0 {
+			if d.InstanceKind != ItemInstanceSocketCard || !d.Stackable || !d.CardDefaults.Initialized || o.ItemID < FirstAstralRune || o.ItemID > LastAstralRune || o.Count != 1 || o.Multiplier != 1 || o.LevelDivisor != 0 || o.LevelCap != 0 {
 				return fmt.Errorf("invalid rune output %d", o.ItemID)
 			}
 		} else if !d.Stackable || d.InstanceKind != ItemInstanceNone {

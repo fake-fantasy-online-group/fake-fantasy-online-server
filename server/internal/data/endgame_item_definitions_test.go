@@ -35,7 +35,7 @@ func TestEndgameDatabaseDefinitionsRejectMissingOrInvalidBase(t *testing.T) {
 		}
 	}
 	for _, change := range []func(*domain.ItemDef){
-		func(d *domain.ItemDef) { d.Stackable = true },
+		func(d *domain.ItemDef) { d.Stackable = false },
 		func(d *domain.ItemDef) { d.InstanceKind = domain.ItemInstanceNone },
 		func(d *domain.ItemDef) { d.UseLevel = 0 },
 		func(d *domain.ItemDef) { d.CardDefaults.Count = 0 },
@@ -79,7 +79,7 @@ func TestEndgameDatabaseDefinitionsActualReadOnlyLoader(t *testing.T) {
 		if got.Name != want.Name || got.Description != want.Description || got.Icon != want.Icon || got.Level != want.Level || got.UseLevel != want.UseLevel || got.Weight != want.Weight || got.Price != want.Price || got.SellPrice != want.SellPrice || got.Stackable != want.Stackable || got.CanMail != want.CanMail || got.CanTrade != want.CanTrade || got.InventoryTab != want.InventoryTab || !got.InventoryTabKnown || got.InstanceKind != want.InstanceKind || got.CardDefaults != want.CardDefaults || !reflect.DeepEqual(got.SocketAffixes, want.SocketAffixes) {
 			t.Fatalf("database item %d differs from committed configuration: got=%+v want=%+v", id, got, want)
 		}
-		if !got.Stackable {
+		if got.InstanceKind == domain.ItemInstanceSocketCard {
 			st := domain.NewStack(got, 1)
 			if st.UID <= 0 || st.Item != id || st.InstanceKind != domain.ItemInstanceSocketCard || st.Card != want.CardDefaults {
 				t.Fatalf("physical rune instance semantics lost: %+v", st)

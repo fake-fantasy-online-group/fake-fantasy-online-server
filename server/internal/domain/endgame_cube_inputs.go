@@ -9,8 +9,9 @@ import (
 const CubeInputCapacity = 35
 
 // CubeInput is a reservation in the player's bag, never a second inventory.
-// An instance uses UID/count=1; a stackable material uses ItemID/count. Both
-// forms together, duplicate identities and quantities not actually owned fail.
+// An instance uses UID; a stackable material uses ItemID. Count is a legacy
+// presentation hint, not spending authority. Only selected, owned identities
+// may supply the server-derived recipe cost; duplicate identities fail.
 type CubeInput struct {
 	UID    string `json:"uid,omitempty"`
 	ItemID ItemID `json:"itemId,omitempty"`
@@ -37,22 +38,19 @@ func MatchCubeInputs(ctx CubeContext, input EndgameRequest) ([]EndgameRequest, [
 	var gears []string
 	var runes []string
 	for _, selected := range input.CubeInputs {
-		if selected.Count <= 0 {
-			return fail("invalid_request", "投料数量无效")
-		}
 		if selected.UID == "" {
 			def, ok := ctx.Items[selected.ItemID]
 			if !ok || selected.ItemID <= 0 || !def.Stackable || def.InstanceKind != ItemInstanceNone || !def.InventoryTabKnown || materials[selected.ItemID] != 0 {
 				return fail("invalid_request", "投料材料无效或重复")
 			}
-			if ctx.Bag.UsableCountOf(selected.ItemID) < selected.Count {
+			if ctx.Bag.UsableCountOf(selected.ItemID) <= 0 {
 				return fail("materials", "投料材料不足或已锁定")
 			}
-			materials[selected.ItemID] = selected.Count
+			materials[selected.ItemID] = ctx.Bag.UsableCountOf(selected.ItemID)
 			continue
 		}
 		uid, err := strconv.ParseInt(selected.UID, 10, 64)
-		if err != nil || uid <= 0 || strconv.FormatInt(uid, 10) != selected.UID || selected.ItemID != 0 || selected.Count != 1 || seen[uid] {
+		if err != nil || uid <= 0 || strconv.FormatInt(uid, 10) != selected.UID || selected.ItemID != 0 || seen[uid] {
 			return fail("invalid_request", "投料实例无效或重复")
 		}
 		seen[uid] = true
@@ -96,7 +94,7 @@ func MatchCubeInputs(ctx CubeContext, input EndgameRequest) ([]EndgameRequest, [
 		}
 		match := true
 		for _, material := range recipe.Materials {
-			if materials[material.ItemID] != material.Count {
+			if materials[material.ItemID] <= 0 {
 				match = false
 				break
 			}
@@ -120,6 +118,15 @@ func MatchCubeInputs(ctx CubeContext, input EndgameRequest) ([]EndgameRequest, [
 				continue
 			}
 			req.ItemUIDs = append([]string(nil), runes...)
+			required := int(recipe.SourceCount)
+			if recipe.Operation == "socket.array" {
+				ctx.Bag.Each(func(_ int, st Stack) {
+					if strconv.FormatInt(st.UID, 10) == gear {
+						required = int(st.SocketCount)
+					}
+				})
+			}
+			req.ItemUIDs = expandSelectedCubeRunes(ctx, runes, required)
 		case "socket.reorder":
 			if len(runes) != 0 {
 				continue
@@ -130,21 +137,82 @@ func MatchCubeInputs(ctx CubeContext, input EndgameRequest) ([]EndgameRequest, [
 				continue
 			}
 		}
-		plan, err := PlanCube(ctx, req, false)
+		_, err := planCubeMode(ctx, req, false, true)
 		if err != nil {
 			eligibleError = err
 			continue
 		}
-		if len(plans) > 0 && (plan.Recipe.Operation != plans[0].Recipe.Operation || plan.Money != plans[0].Money) {
-			return fail("configuration", "这些投料匹配了不同炼化方式，暂不能炼化")
-		}
 		requests = append(requests, req)
+	}
+	sameFamily := func(reqs []EndgameRequest) bool {
+		if len(reqs) < 2 {
+			return true
+		}
+		first := ctx.Rules.recipes[reqs[0].RecipeID]
+		for _, r := range reqs[1:] {
+			next := ctx.Rules.recipes[r.RecipeID]
+			if first.Operation != next.Operation || first.Money != next.Money || !sameCubeCosts(first, next) {
+				return false
+			}
+		}
+		return true
+	}
+	if !sameFamily(requests) {
+		declared := map[ItemID]int32{}
+		for _, in := range input.CubeInputs {
+			if in.UID == "" {
+				declared[in.ItemID] = in.Count
+			}
+		}
+		var exact []EndgameRequest
+		for _, req := range requests {
+			r := ctx.Rules.recipes[req.RecipeID]
+			matches := true
+			for _, m := range r.Materials {
+				matches = matches && declared[m.ItemID] == m.Count
+			}
+			if r.Operation == "rune.convert" {
+				var count int64
+				for _, in := range input.CubeInputs {
+					if seenCubeRune(runes, parseCubeUID(in.UID)) {
+						if in.Count <= 0 {
+							matches = false
+						}
+						count += int64(in.Count)
+					}
+				}
+				matches = matches && count == int64(r.SourceCount)
+			}
+			if matches {
+				exact = append(exact, req)
+			}
+		}
+		if len(exact) == 0 || !sameFamily(exact) {
+			return fail("configuration", "这些投料匹配了不同炼化方式，请调整数量以明炼意。")
+		}
+		requests = exact
+	}
+	for _, req := range requests {
+		recipe := ctx.Rules.recipes[req.RecipeID]
+		for _, m := range recipe.Materials {
+			if materials[m.ItemID] < m.Count {
+				return fail("insufficient_count", "材料虽合，数目尚缺。")
+			}
+		}
+		if recipe.Operation == "rune.convert" && len(req.ItemUIDs) < int(recipe.SourceCount) {
+			return fail("insufficient_count", "材料虽合，数目尚缺。")
+		}
+		plan, err := PlanCube(ctx, req, false)
+		if err != nil {
+			return nil, nil, err
+		}
 		plans = append(plans, plan)
 	}
+
 	if len(plans) == 0 {
 		if eligibleError != nil {
 			mismatch := cubeInputMismatch(ctx, input, materials, gear, runes)
-			if CubeErrorCode(eligibleError) == "requirements" && CubeErrorCode(mismatch) == "insufficient_count" {
+			if CubeErrorCode(eligibleError) == "requirements" && (CubeErrorCode(mismatch) == "insufficient_count" || CubeErrorCode(mismatch) == "partial_match") {
 				return nil, nil, mismatch
 			}
 			return nil, nil, eligibleError
@@ -154,15 +222,15 @@ func MatchCubeInputs(ctx CubeContext, input EndgameRequest) ([]EndgameRequest, [
 	return requests, plans, nil
 }
 
-// Diagnose only after reservation validation and unsuccessful exact matching.
+// Diagnose only after identity validation and unsuccessful type matching.
 // Rank is independent of recipe order: a fully compatible, underfilled recipe
 // outranks partial overlap, which outranks no overlap. No names, IDs, quantities,
-// hidden outputs or candidate counts are disclosed. Extra items or overfilling
-// are partial mismatch, never misleadingly reported as a shortage.
+// hidden outputs or candidate counts are disclosed. Extra item types are a
+// partial mismatch; excess inventory is never an error.
 func cubeInputMismatch(ctx CubeContext, input EndgameRequest, materials map[ItemID]int32, gear string, runes []string) error {
 	partial := false
 	for _, recipe := range ctx.Rules.Recipes() {
-		sameTypes, short, over := len(materials) == len(recipe.Materials), false, false
+		sameTypes, short := len(materials) == len(recipe.Materials), false
 		for _, m := range recipe.Materials {
 			n := materials[m.ItemID]
 			if n > 0 {
@@ -171,7 +239,6 @@ func cubeInputMismatch(ctx CubeContext, input EndgameRequest, materials map[Item
 				sameTypes = false
 			}
 			short = short || n < m.Count
-			over = over || n > m.Count
 		}
 		if recipe.Operation == "rune.convert" || recipe.Operation == "salvage.rune" {
 			ctx.Bag.Each(func(_ int, st Stack) {
@@ -179,7 +246,7 @@ func cubeInputMismatch(ctx CubeContext, input EndgameRequest, materials map[Item
 					return
 				}
 				r, ok := AstralRune(st.Item, ctx.Catalog)
-				if !ok || !st.Card.Initialized || st.Card.Count > 8 || st.Count != 1 || st.InstanceKind != ItemInstanceSocketCard {
+				if !ok || !st.Card.Initialized || st.Card.Count > 8 || !IsAstralRuneStack(st) || st.InstanceKind != ItemInstanceSocketCard {
 					return
 				}
 				if recipe.Operation == "salvage.rune" {
@@ -227,7 +294,7 @@ func cubeInputMismatch(ctx CubeContext, input EndgameRequest, materials map[Item
 				continue
 			}
 		}
-		if gear == "" && len(runes) == 0 && (!sameTypes || over || !short) {
+		if gear == "" && len(runes) == 0 && (!sameTypes || !short) {
 			continue // no instance overlap or possible count-only match to validate
 		}
 		// Reuse the actual planner's equipment, socket, rune and level checks;
@@ -242,7 +309,7 @@ func cubeInputMismatch(ctx CubeContext, input EndgameRequest, materials map[Item
 		if gear != "" || len(runes) > 0 {
 			partial = true
 		}
-		if sameTypes && !over && (short || sourceShort) {
+		if sameTypes && (short || sourceShort) {
 			return cubeError("insufficient_count", "材料虽合，数目尚缺。")
 		}
 	}
@@ -260,3 +327,46 @@ func seenCubeRune(runes []string, uid int64) bool {
 	}
 	return false
 }
+
+// A random-output family may share an input signature only when every candidate
+// charges the same costs. Inventory abundance must never select an expensive row.
+func sameCubeCosts(a, b CubeRecipeDef) bool {
+	if a.SourceCount != b.SourceCount || len(a.Materials) != len(b.Materials) {
+		return false
+	}
+	for _, x := range a.Materials {
+		found := false
+		for _, y := range b.Materials {
+			if x.ItemID == y.ItemID && x.Count == y.Count {
+				found = true
+				break
+			}
+		}
+		if !found {
+			return false
+		}
+	}
+	return true
+}
+
+func expandSelectedCubeRunes(ctx CubeContext, selected []string, required int) []string {
+	// At least one from every selected UID: extra selected identities never vanish.
+	if required < len(selected) || len(selected) == 0 {
+		return append([]string(nil), selected...)
+	}
+	out := append([]string(nil), selected...)
+	for _, raw := range selected {
+		count := int32(0)
+		ctx.Bag.Each(func(_ int, st Stack) {
+			if strconv.FormatInt(st.UID, 10) == raw {
+				count = st.Count
+			}
+		})
+		for n := int32(1); n < count && len(out) < required; n++ {
+			out = append(out, raw)
+		}
+	}
+	return out
+}
+
+func parseCubeUID(raw string) int64 { uid, _ := strconv.ParseInt(raw, 10, 64); return uid }

@@ -167,7 +167,7 @@ func (s *Scene) onReserveStallAdd(cmd ReserveStallAdd) {
 	def, ok := s.itemDef(stack.Item)
 	if !ok || stack.Empty() || stack.Item != cmd.Item || cmd.Count <= 0 ||
 		(p.Player.Stall.Type == domain.StallSell && cmd.Count > stack.Count) ||
-		cmd.Price <= 0 || stack.Bound || stack.Locked || !def.CanTrade ||
+		cmd.Price <= 0 || stack.Bound || stack.Locked || domain.AstralRuneTransferProtected(stack) || !def.CanTrade ||
 		!def.InventoryTabKnown || def.InventoryTab != cmd.Tab {
 		result.Reason = "该物品不能上架"
 		return
@@ -182,6 +182,12 @@ func (s *Scene) onReserveStallAdd(cmd ReserveStallAdd) {
 	listed := stack
 	listed.Count = cmd.Count
 	if stall.Type == domain.StallSell {
+		_, unit, splitOK := domain.SplitOwnedStack(stack, cmd.Count)
+		if !splitOK {
+			result.Reason = "物品数量无效"
+			return
+		}
+		listed = unit
 		if !bag.RemoveAt(int(cmd.Slot), cmd.Count) {
 			result.Reason = "物品状态已经变化"
 			return
@@ -319,7 +325,7 @@ func (s *Scene) onReserveStallDeal(cmd ReserveStallDeal) {
 		return
 	}
 	def, ok := s.itemDef(listing.Stack.Item)
-	if !ok || !def.CanTrade || !def.InventoryTabKnown {
+	if !ok || !def.CanTrade || !def.InventoryTabKnown || domain.AstralRuneTransferProtected(listing.Stack) {
 		result.Reason = "商品当前不可交易"
 		return
 	}
@@ -344,8 +350,11 @@ func (s *Scene) onReserveStallDeal(cmd ReserveStallDeal) {
 			result.Reason = "随身金钱不足"
 			return
 		}
-		transfer := listing.Stack
-		transfer.Count = cmd.Count
+		_, transfer, splitOK := domain.SplitOwnedStack(listing.Stack, cmd.Count)
+		if !splitOK {
+			result.Reason = "物品数量无效"
+			return
+		}
 		if actorBag.AddStack(def, transfer) != 0 {
 			result.Reason = "背包空间不足"
 			return
@@ -369,12 +378,15 @@ func (s *Scene) onReserveStallDeal(cmd ReserveStallDeal) {
 		}
 		source := actorBag.At(int(cmd.Slot))
 		if source.Empty() || source.Item != listing.Stack.Item || source.Count < cmd.Count ||
-			source.Bound || source.Locked || cmd.Tab != def.InventoryTab {
+			source.Bound || source.Locked || domain.AstralRuneTransferProtected(source) || cmd.Tab != def.InventoryTab {
 			result.Reason = "出售物品状态无效"
 			return
 		}
-		transfer := source
-		transfer.Count = cmd.Count
+		_, transfer, splitOK := domain.SplitOwnedStack(source, cmd.Count)
+		if !splitOK {
+			result.Reason = "物品数量无效"
+			return
+		}
 		if ownerBag.AddStack(def, transfer) != 0 || !actorBag.RemoveAt(int(cmd.Slot), cmd.Count) {
 			result.Reason = "摊主背包空间不足"
 			return
@@ -532,7 +544,7 @@ func (s *Scene) stallRowBlocked(owner, viewer *entity.Entity, item domain.StallI
 	}
 	var available int32
 	viewer.Player.Bag.Each(func(_ int, stack domain.Stack) {
-		if stack.Item == item.Stack.Item && !stack.Bound && !stack.Locked {
+		if stack.Item == item.Stack.Item && !stack.Bound && !stack.Locked && !domain.AstralRuneTransferProtected(stack) {
 			available += stack.Count
 		}
 	})

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 	"strconv"
 )
 
@@ -70,6 +71,10 @@ func (s *Scene) applyEndgameSnapshot(p *entity.Entity, snap domain.Snapshot) {
 }
 func (s *Scene) finishEndgameCommit(p *entity.Entity, x *endgamePlayerState, r domain.EndgameCommitResult) {
 	x.commit = nil
+	var resetBefore domain.Learned
+	if x.pending.Op == "skill.reset" {
+		resetBefore = p.Player.Char.Clone().Skills
+	}
 	after, failed := x.after, x.onFailure
 	x.after = nil
 	x.onFailure = nil
@@ -88,6 +93,9 @@ func (s *Scene) finishEndgameCommit(p *entity.Entity, x *endgamePlayerState, r d
 	if r.Err == nil && r.State.Revision >= x.state.Revision {
 		x.state = r.State
 	}
+	if (publish || recovered) && x.pending.Op == "skill.reset" {
+		s.reconcileSkillReset(p, resetBefore)
+	}
 	if publish {
 		if after != nil {
 			after()
@@ -96,6 +104,13 @@ func (s *Scene) finishEndgameCommit(p *entity.Entity, x *endgamePlayerState, r d
 		failed()
 	}
 	p.Player.TradeBusy = false
+	if x.pending.Op == "skill.reset" && !publish {
+		message := "技能重置未完成，请稍后重试"
+		if recovered || r.Replayed {
+			message = "技能存档已同步，请查看当前技能与点数"
+		}
+		s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: message})
+	}
 	switch {
 	case r.Err != nil:
 		code, message := "storage", "结算未完成，请使用原请求编号重试"
