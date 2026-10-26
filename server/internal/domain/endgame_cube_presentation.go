@@ -9,11 +9,21 @@ import (
 
 // CubeSnapshotMaterialIDs is shared by startup validation and the actual snapshot
 // writer. Materials follow database recipes; catalogue identities are not formulas.
-func CubeSnapshotMaterialIDs(rules *CubeRuleTable, catalog *EndgameCatalog) []ItemID {
+func CubeSnapshotMaterialIDs(rules *CubeRuleTable, catalog *EndgameCatalog, wings ...*WingProgressionRules) []ItemID {
 	ids := map[ItemID]bool{RiftKeyItemID: true}
 	for _, recipe := range rules.Recipes() {
 		for _, m := range recipe.Materials {
 			ids[m.ItemID] = true
+		}
+	}
+	// Wing recipes live in their own immutable table, but use the same native
+	// cube input contract. Omitting them makes old and new clients see zero
+	// owned feathers and reject the drag before a quote reaches the server.
+	for _, wingRules := range wings {
+		for _, recipe := range wingRules.Recipes() {
+			for _, material := range recipe.Materials {
+				ids[material.ItemID] = true
+			}
 		}
 	}
 	if catalog != nil {
@@ -28,11 +38,11 @@ func CubeSnapshotMaterialIDs(rules *CubeRuleTable, catalog *EndgameCatalog) []It
 	sort.Slice(sorted, func(i, j int) bool { return sorted[i] < sorted[j] })
 	return sorted
 }
-func ValidateCubeSnapshotMaterials(items map[ItemID]ItemDef, catalog *EndgameCatalog, rules *CubeRuleTable) error {
+func ValidateCubeSnapshotMaterials(items map[ItemID]ItemDef, catalog *EndgameCatalog, rules *CubeRuleTable, wings ...*WingProgressionRules) error {
 	if catalog == nil || rules == nil {
 		return fmt.Errorf("missing cube snapshot configuration")
 	}
-	ids := CubeSnapshotMaterialIDs(rules, catalog)
+	ids := CubeSnapshotMaterialIDs(rules, catalog, wings...)
 	if len(ids) > 64 {
 		return fmt.Errorf("cube material snapshot exceeds client 64-row limit: %d", len(ids))
 	}

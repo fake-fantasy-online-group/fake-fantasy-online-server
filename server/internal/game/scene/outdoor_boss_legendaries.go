@@ -40,7 +40,7 @@ func (s *Scene) rollOutdoorBossLegendaries(dead *entity.Entity, context domain.L
 		st := domain.NewStack(def, 1)
 		// Generates six legal affixes, one power and its variant exactly once. Power
 		// level eligibility follows the source monster, not the equipment or owner.
-		if !s.equipmentRoll.ApplyLegendaryForRecipientAtLevel(&st, def, dead.Level, context.RecipientClass, variables.Intn) {
+		if !s.equipmentRoll.ApplyLegendaryForRecipientWithPolicyAtLevel(&st, def, dead.Level, context.RecipientClass, rule.LegendaryPowerPolicy, true, variables.Intn) {
 			s.log.Error("野外 BOSS 暗金保底生成失败", "monster", dead.Monster.TypeID, "item", def.ID, "level", dead.Level)
 			return 0 // Do not publish a partial pair or replace it with old Unique.
 		}
@@ -63,11 +63,15 @@ func (s *Scene) outdoorBossLegendaryPool(dead *entity.Entity, recipient ...domai
 	if len(recipient) > 0 {
 		recipientClass = recipient[0]
 	}
+	var policy int32
+	if rule := s.lootRules.Active(); rule != nil {
+		policy = rule.LegendaryPowerPolicy
+	}
 	unique := map[domain.ItemID]bool{}
 	add := func(id domain.ItemID) {
 		def, ok := s.items[id]
 		if ok && domain.NativeEquipmentDropEligible(def) && def.LegendaryEnabled &&
-			s.equipmentRoll.LegendaryReady(def) && len(domain.LegendaryCandidatesForRecipientAtLevel(def, dead.Level, recipientClass)) > 0 {
+			s.equipmentRoll.LegendaryReady(def) && len(domain.LegendaryCandidatesForRecipientWithPolicyAtLevel(def, dead.Level, recipientClass, policy)) > 0 {
 			unique[id] = true
 		}
 	}

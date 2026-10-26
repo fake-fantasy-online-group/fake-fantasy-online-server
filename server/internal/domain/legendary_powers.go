@@ -107,7 +107,10 @@ func LegendaryGenerationLevel(base ItemDef, st Stack) int32 {
 }
 
 func LegendaryPowerEligibleForItem(p LegendaryPowerDefinition, base ItemDef, st Stack) bool {
-	return LegendaryPowerEligibleAtLevel(p, base, LegendaryGenerationLevel(base, st))
+	// Owned instances are never rerolled. Accept the new all-slot profession
+	// placement as well as every historically legal placement. Generation uses
+	// its separately frozen policy, not this runtime compatibility predicate.
+	return legendaryPowerEligibleAllClassSlots(p, base, LegendaryGenerationLevel(base, st))
 }
 
 // LegendaryPowerSourceLevelEligible validates provenance for every power, but

@@ -10,19 +10,20 @@ import (
 )
 
 type CubeContext struct {
-	WingRules      *WingProgressionRules
-	Character      *Character
-	EquipmentRoll  EquipmentRollTable
-	RecipientClass LegendaryRecipientClass
-	Rules          *CubeRuleTable
-	Catalog        *EndgameCatalog
-	Level          int32
-	Bag            *Bag
-	Money          int64
-	Items          map[ItemID]ItemDef
-	IsUniqueBase   func(ItemID) bool
-	Intn           func(int) int
-	NewUID         func() int64
+	WingRules            *WingProgressionRules
+	Character            *Character
+	EquipmentRoll        EquipmentRollTable
+	RecipientClass       LegendaryRecipientClass
+	LegendaryPowerPolicy int32
+	Rules                *CubeRuleTable
+	Catalog              *EndgameCatalog
+	Level                int32
+	Bag                  *Bag
+	Money                int64
+	Items                map[ItemID]ItemDef
+	IsUniqueBase         func(ItemID) bool
+	Intn                 func(int) int
+	NewUID               func() int64
 }
 type CubePlan struct {
 	Bag                      *Bag
@@ -263,7 +264,7 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 	hasUnique = hasUnique || target.Legendary.PowerID != ""
 	eligible := func() bool {
 		if def.LegendaryEnabled {
-			return ctx.EquipmentRoll.LegendaryReady(def) && len(LegendaryCandidatesForRecipientAtLevel(def, LegendaryGenerationLevel(def, target), ctx.RecipientClass)) > 0
+			return ctx.EquipmentRoll.LegendaryReady(def) && len(LegendaryCandidatesForRecipientWithPolicyAtLevel(def, LegendaryGenerationLevel(def, target), ctx.RecipientClass, ctx.LegendaryPowerPolicy)) > 0
 		}
 		if _, ok := UniqueForBase(target.Item, ctx.Catalog); !ok {
 			return false
@@ -431,7 +432,7 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 		if execute {
 			applied := false
 			if def.LegendaryEnabled {
-				applied = ctx.EquipmentRoll.ApplyLegendaryForRecipient(&target, def, ctx.RecipientClass, ctx.Intn)
+				applied = ctx.EquipmentRoll.ApplyLegendaryForRecipientWithPolicy(&target, def, ctx.RecipientClass, ctx.LegendaryPowerPolicy, ctx.Intn)
 			} else {
 				applied = ApplyUnique(&target, def, ctx.Intn)
 			}

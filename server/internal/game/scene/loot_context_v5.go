@@ -206,11 +206,11 @@ func (s *Scene) rollEquipmentQualityV5WithVariants(def domain.ItemDef, stack *do
 	}
 	if def.LegendaryEnabled {
 		if !def.Equip.NoTypeDrop && def.Equip.NativeDropEligible && unique(domain.LootProbabilityScaleV5) < domain.UniqueProbabilityV5(magicFind, rule) {
-			if variants {
-				table.ApplyLegendaryForRecipientAtLevel(stack, def, sourceLevel, recipientClass, variables)
-			} else {
-				table.ApplyLegendaryLegacyForRecipientAtLevel(stack, def, sourceLevel, recipientClass, variables)
+			var policy int32
+			if rule != nil {
+				policy = rule.LegendaryPowerPolicy
 			}
+			table.ApplyLegendaryForRecipientWithPolicyAtLevel(stack, def, sourceLevel, recipientClass, policy, variants, variables)
 		}
 		return
 	}

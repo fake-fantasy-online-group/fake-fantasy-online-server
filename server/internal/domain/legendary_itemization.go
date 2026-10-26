@@ -152,15 +152,15 @@ func (t EquipmentRollTable) ApplyLegendaryForRecipient(st *Stack, def ItemDef, r
 	if st == nil {
 		return false
 	}
-	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false, &recipient)
+	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false, &recipient, 0)
 }
 
 func (t EquipmentRollTable) ApplyLegendaryForRecipientAtLevel(st *Stack, def ItemDef, sourceLevel int32, recipient LegendaryRecipientClass, rng func(int) int) bool {
-	return t.applyLegendary(st, def, sourceLevel, rng, true, true, &recipient)
+	return t.applyLegendary(st, def, sourceLevel, rng, true, true, &recipient, 0)
 }
 
 func (t EquipmentRollTable) ApplyLegendaryLegacyForRecipientAtLevel(st *Stack, def ItemDef, sourceLevel int32, recipient LegendaryRecipientClass, rng func(int) int) bool {
-	return t.applyLegendary(st, def, sourceLevel, rng, false, true, &recipient)
+	return t.applyLegendary(st, def, sourceLevel, rng, false, true, &recipient, 0)
 }
 
 // ApplyLegendary is for non-monster awakening: preserve known provenance, or
@@ -169,11 +169,11 @@ func (t EquipmentRollTable) ApplyLegendary(st *Stack, def ItemDef, rng func(int)
 	if st == nil {
 		return false
 	}
-	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false, nil)
+	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false, nil, 0)
 }
 
 func (t EquipmentRollTable) ApplyLegendaryAtLevel(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int) bool {
-	return t.applyLegendary(st, def, sourceLevel, rng, true, true, nil)
+	return t.applyLegendary(st, def, sourceLevel, rng, true, true, nil, 0)
 }
 
 // ApplyLegendaryLegacy preserves pre-variant generation and exact RNG consumption.
@@ -181,14 +181,14 @@ func (t EquipmentRollTable) ApplyLegendaryLegacy(st *Stack, def ItemDef, rng fun
 	if st == nil {
 		return false
 	}
-	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, false, false, nil)
+	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, false, false, nil, 0)
 }
 
 func (t EquipmentRollTable) ApplyLegendaryLegacyAtLevel(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int) bool {
-	return t.applyLegendary(st, def, sourceLevel, rng, false, true, nil)
+	return t.applyLegendary(st, def, sourceLevel, rng, false, true, nil, 0)
 }
 
-func (t EquipmentRollTable) applyLegendary(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int, variants, recordSource bool, recipient *LegendaryRecipientClass) bool {
+func (t EquipmentRollTable) applyLegendary(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int, variants, recordSource bool, recipient *LegendaryRecipientClass, policy int32) bool {
 	if st == nil || sourceLevel < 1 || (st.Endgame.SourceLevel != 0 && st.Endgame.SourceLevel != sourceLevel) || rng == nil || st.UID <= 0 || st.Count != 1 || st.Item != def.ID || st.Legendary.PowerID != "" || st.Endgame.UniqueID != 0 || !CanPromoteSocketlessUnique(*st) || !t.LegendaryReady(def) {
 		return false
 	}
@@ -196,10 +196,17 @@ func (t EquipmentRollTable) applyLegendary(st *Stack, def ItemDef, sourceLevel i
 	if recipient == nil {
 		powers = LegendaryCandidatesAtLevel(def, sourceLevel)
 	} else {
-		powers = LegendaryCandidatesForRecipientAtLevel(def, sourceLevel, *recipient)
+		powers = LegendaryCandidatesForRecipientWithPolicyAtLevel(def, sourceLevel, *recipient, policy)
 	}
 	if len(powers) == 0 {
 		return false
+	}
+	if policy == LegendaryPowerPolicySplit && recipient != nil {
+		var ok bool
+		powers, ok = chooseLegendaryPowerPool(powers, rng)
+		if !ok {
+			return false
+		}
 	}
 	n := rng(len(powers))
 	if n < 0 || n >= len(powers) {

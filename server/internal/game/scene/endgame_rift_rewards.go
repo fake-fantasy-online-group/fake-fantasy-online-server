@@ -191,7 +191,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			}
 			// A guaranteed unique slot has its own wearer-legal259-base pool.
 			// All other slots retain the complete ordinary native pool above.
-			if s.riftLegendaryBaseEligibleAtLevel(def, sourceLevel, d.RewardClasses[char]) {
+			if s.riftLegendaryBaseEligibleWithPolicyAtLevel(def, sourceLevel, r.Rules.Loot.LegendaryPowerPolicy, d.RewardClasses[char]) {
 				if def.Equip.LevelReq > bestUnique {
 					bestUnique = def.Equip.LevelReq
 					guaranteedUniques = nil
@@ -223,7 +223,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			equipment = r.Rules.EquipmentPoolForLevel(poolLevel, eligible)
 			equipment = r.Rules.FillMissingEquipmentSlots(equipment, m.Level, s.items, eligible)
 			for _, id := range equipment {
-				if s.riftLegendaryBaseEligibleAtLevel(s.items[id], sourceLevel, d.RewardClasses[char]) {
+				if s.riftLegendaryBaseEligibleWithPolicyAtLevel(s.items[id], sourceLevel, r.Rules.Loot.LegendaryPowerPolicy, d.RewardClasses[char]) {
 					guaranteedUniques = append(guaranteedUniques, id)
 				}
 			}
@@ -384,6 +384,10 @@ func (s *Scene) riftLegendaryBaseEligible(def domain.ItemDef) bool {
 }
 
 func (s *Scene) riftLegendaryBaseEligibleAtLevel(def domain.ItemDef, sourceLevel int32, recipient ...domain.LegendaryRecipientClass) bool {
+	return s.riftLegendaryBaseEligibleWithPolicyAtLevel(def, sourceLevel, 0, recipient...)
+}
+
+func (s *Scene) riftLegendaryBaseEligibleWithPolicyAtLevel(def domain.ItemDef, sourceLevel int32, policy int32, recipient ...domain.LegendaryRecipientClass) bool {
 	if def.HardDungeonOnly || def.Equip == nil || def.Equip.LevelReq > 60 || !domain.NativeEquipmentDropEligible(def) {
 		return false
 	}
@@ -392,7 +396,7 @@ func (s *Scene) riftLegendaryBaseEligibleAtLevel(def domain.ItemDef, sourceLevel
 		if len(recipient) > 0 {
 			recipientClass = recipient[0]
 		}
-		return s.equipmentRoll.LegendaryReady(def) && len(domain.LegendaryCandidatesForRecipientAtLevel(def, sourceLevel, recipientClass)) > 0
+		return s.equipmentRoll.LegendaryReady(def) && len(domain.LegendaryCandidatesForRecipientWithPolicyAtLevel(def, sourceLevel, recipientClass, policy)) > 0
 	}
 	u, ok := domain.UniqueForBase(def.ID, s.endgameCatalog)
 	return ok && u.NativeDropEligible
@@ -421,7 +425,7 @@ func (s *Scene) riftCumulativeLegendaryPool(rules *domain.RiftRules, poolLevel, 
 		def, ok := s.items[id]
 		allowed := ok && def.LegendaryEnabled && def.Equip != nil && !def.Equip.AscensionOnly &&
 			def.Equip.LevelReq <= wearLevel && def.Equip.Need.Level <= wearLevel && def.Equip.Need.AllowsCharacter(character) &&
-			(def.Equip.Need.Sex == 0 || def.Equip.Need.Sex == sex) && s.riftLegendaryBaseEligibleAtLevel(def, sourceLevel, recipientClass)
+			(def.Equip.Need.Sex == 0 || def.Equip.Need.Sex == sex) && s.riftLegendaryBaseEligibleWithPolicyAtLevel(def, sourceLevel, rules.Loot.LegendaryPowerPolicy, recipientClass)
 		eligibility[id] = allowed
 		return allowed
 	}
@@ -449,7 +453,7 @@ func (s *Scene) rollEndgameRiftCumulativeLegendary(char domain.CharID, ordinal i
 	def := s.items[id]
 	stack := domain.NewStack(def, 1)
 	stack.Bound = true
-	if !s.equipmentRoll.ApplyLegendaryForRecipientAtLevel(&stack, def, s.rift.data.RewardSourceLevel, recipient, values.Intn) {
+	if !s.equipmentRoll.ApplyLegendaryForRecipientWithPolicyAtLevel(&stack, def, s.rift.data.RewardSourceLevel, recipient, s.rift.data.Run.Rules.Loot.LegendaryPowerPolicy, true, values.Intn) {
 		return domain.Stack{}
 	}
 	return stack

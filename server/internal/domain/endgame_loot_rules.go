@@ -34,7 +34,9 @@ func (r OutdoorEquipmentRule) Counts() []WeightedAffixCount {
 }
 
 type LootRuleSet struct {
-	Version                        int32
+	Version int32
+	// Zero preserves historical mixed-pool RNG. One selects class/universal 50:50.
+	LegendaryPowerPolicy           int32 `json:",omitempty"`
 	MinRuneLevel                   int32
 	UniqueBasePPB                  int64
 	UniqueMFBoost, UniqueMFDivisor int64
@@ -74,6 +76,9 @@ func NewLootRuleTable(active int32, rows []LootRuleSet, items map[ItemID]ItemDef
 		r = cloneLootRuleSet(r)
 		if _, ok := t.versions[r.Version]; ok {
 			return nil, fmt.Errorf("duplicate loot version %d", r.Version)
+		}
+		if r.LegendaryPowerPolicy < 0 || r.LegendaryPowerPolicy > 1 || (r.Version < 4 && r.LegendaryPowerPolicy != 0) {
+			return nil, fmt.Errorf("invalid legendary power policy for loot version %d", r.Version)
 		}
 		if r.Version < 1 || r.MinRuneLevel < 1 || r.MinRuneLevel > 1000000 || r.UniqueBasePPB < 0 || r.UniqueBasePPB > LootProbabilityScaleV5 || r.UniqueMFBoost < 0 || r.UniqueMFBoost > 100 || r.UniqueMFDivisor < 1 || r.UniqueMFDivisor > 1000000 || r.UniqueBasePPB*(1+r.UniqueMFBoost) > LootProbabilityScaleV5 {
 			return nil, fmt.Errorf("invalid loot rules version %d", r.Version)

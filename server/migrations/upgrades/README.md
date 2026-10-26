@@ -227,3 +227,24 @@ SQL. It covers exact cloning, immutable guards, invalid source/dependency/collis
 rejection, transaction rollback, repeat application, old/future selectors and
 saved-state preservation. It does not validate a full initializer, concurrent
 migration or production deployment.
+
+## 000112_20261026_legendary_power_policy.sql
+
+Publishes loot4 as loot3 plus LegendaryPowerPolicy=1 (class/universal 50:50,
+then uniform selection within that eligible pool). Publishes Rift16 as Rift15
+with loot_version=4. Historical loot1–3 and Rift1–15 retain policy0 and the
+existing mixed-pool RNG; ready grants and owned items are never rewritten.
+Only active loot3 / Rift15 selectors advance. Older rollback and future selectors
+are preserved. All reward quantities, MF, colour/variant odds, feather rules,
+slot-first selection and other rule fields and dependencies are copied intact.
+
+Apply this transaction after111 with the matching server. Never rerun fresh init
+against an existing database. Rollback of new admissions can select loot3/Rift15,
+but the server must continue to understand already-admitted Rift16 snapshots.
+
+Focused validation:
+`PGLITE_MODULE=/path/to/@electric-sql/pglite node server/tests/legendary_power_policy_postgres.mjs`.
+Uses PostgreSQL with reduced prerequisites and production loader SQL; checks
+schema/source/guard validation, exact clone, rollback, idempotence, collisions,
+old/future selectors and saved-state preservation. Not a live deployment or a
+full initializer/concurrent-migration test.

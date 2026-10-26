@@ -24,10 +24,6 @@ func loadEndgameData(ctx context.Context, q data.Querier, w *worldData, log *slo
 		log.Error("魔盒配方加载失败", "err", w.endgameDataErr)
 		return
 	}
-	if err := domain.ValidateCubeSnapshotMaterials(w.items, catalog, rules); err != nil {
-		w.endgameDataErr = fmt.Errorf("validate cube snapshot materials: %w", err)
-		return
-	}
 	if err := domain.ValidateEquipmentRuntimeV5(w.skills, catalog); err != nil {
 		w.endgameDataErr = fmt.Errorf("validate equipment skill references: %w", err)
 		log.Error("装备技能规则校验失败", "err", w.endgameDataErr)
@@ -46,6 +42,10 @@ func loadEndgameData(ctx context.Context, q data.Querier, w *worldData, log *slo
 	wings, err := data.LoadWingProgression(ctx, q, w.items)
 	if err != nil {
 		w.endgameDataErr = fmt.Errorf("load wing progression: %w", err)
+		return
+	}
+	if err := domain.ValidateCubeSnapshotMaterials(w.items, catalog, rules, wings); err != nil {
+		w.endgameDataErr = fmt.Errorf("validate cube snapshot materials: %w", err)
 		return
 	}
 	w.wingRules = wings

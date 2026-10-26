@@ -101,7 +101,7 @@ func TestWingPowerActivationClassDuplicateWearAndClone(t *testing.T) {
 	}
 }
 
-func TestWingPowerRejectsDonorClassAndSlot(t *testing.T) {
+func TestWingPowerDonorClassAndVersionedSlotCompatibility(t *testing.T) {
 	wing := Stack{UID: 9, Item: 20609, Count: 1, InstanceKind: ItemInstanceEquipment}
 	src, d := wingPowerDonor("ZS-A01")
 	d.Equip.Need.Professions = 2
@@ -110,7 +110,13 @@ func TestWingPowerRejectsDonorClassAndSlot(t *testing.T) {
 	}
 	d.Equip.Need.Professions = 1
 	d.Equip.Slot = int32(SlotRing)
+	if _, err := ExtractWingPower(wing, src, d); err != nil {
+		t.Fatal("new all-slot class donor rejected", err)
+	}
+	// This change does not widen universal A/D/U placement rules.
+	src, d = wingPowerDonor("TY-A01")
+	d.Equip.Slot = int32(SlotFace)
 	if _, err := ExtractWingPower(wing, src, d); err == nil {
-		t.Fatal("class power on universal-only donor accepted")
+		t.Fatal("universal attack power on forbidden donor slot accepted")
 	}
 }
