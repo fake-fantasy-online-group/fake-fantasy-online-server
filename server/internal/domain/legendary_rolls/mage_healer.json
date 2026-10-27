@@ -1,0 +1,1222 @@
+[
+  {
+    "id": "SS-A01",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "直接伤害提高70%",
+        "base": 7000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ],
+    "omit_when_rolled": [
+      "，本威能合计提高110%"
+    ]
+  },
+  {
+    "id": "SS-A02",
+    "parameters": [
+      {
+        "key": "burn_pct",
+        "text": "剩余伤害80%",
+        "base": 80,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A03",
+    "parameters": [
+      {
+        "key": "radius",
+        "text": "半径150",
+        "base": 150,
+        "divisor": 1,
+        "unit": ""
+      }
+    ]
+  },
+  {
+    "id": "SS-A04",
+    "parameters": [
+      {
+        "key": "child_bp",
+        "text": "基础伤害的70%",
+        "base": 7000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A05",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "75%",
+        "base": 75,
+        "divisor": 1,
+        "unit": "%"
+      },
+      {
+        "key": "damage_pct",
+        "text": "35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A06",
+    "parameters": [
+      {
+        "key": "radius_bp",
+        "text": "半径扩大65%",
+        "base": 6500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A07",
+    "parameters": [
+      {
+        "key": "burn_pct",
+        "text": "90%",
+        "base": 90,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A08",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "55%",
+        "base": 55,
+        "divisor": 1,
+        "unit": "%"
+      },
+      {
+        "key": "damage_pct",
+        "text": "20%",
+        "base": 20,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A09",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高100%",
+        "base": 100,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A10",
+    "parameters": [
+      {
+        "key": "penetration_bp",
+        "text": "忽略目标50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A11",
+    "parameters": [
+      {
+        "key": "burn_pct",
+        "text": "剩余伤害100%",
+        "base": 100,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A12",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "直接伤害提高20%",
+        "base": 2000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A13",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "85%",
+        "base": 85,
+        "divisor": 1,
+        "unit": "%"
+      },
+      {
+        "key": "damage_pct",
+        "text": "65%",
+        "base": 65,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A14",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高20%",
+        "base": 20,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A15",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高60%",
+        "base": 60,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A16",
+    "parameters": [
+      {
+        "key": "burn_pct",
+        "text": "剩余伤害160%",
+        "base": 160,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A17",
+    "parameters": [
+      {
+        "key": "tick_bp",
+        "text": "每跳伤害提高82%",
+        "base": 8200,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A18",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "直接伤害提高40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A19",
+    "parameters": [
+      {
+        "key": "burn_pct",
+        "text": "初始总伤害65%",
+        "base": 65,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A20",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "直接伤害提高55%",
+        "base": 5500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A21",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "80%",
+        "base": 80,
+        "divisor": 1,
+        "unit": "%"
+      },
+      {
+        "key": "damage_pct",
+        "text": "20%",
+        "base": 20,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A22",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "直接伤害提高90%",
+        "base": 9000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A23",
+    "parameters": [
+      {
+        "key": "radius",
+        "text": "作用半径增加150",
+        "base": 150,
+        "divisor": 1,
+        "unit": ""
+      }
+    ]
+  },
+  {
+    "id": "SS-A24",
+    "parameters": [
+      {
+        "key": "child_bp",
+        "text": "基础伤害150%",
+        "base": 15000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A25",
+    "parameters": [],
+    "fixed_reason": "仅继承已学习被动技能的当前等级数值，不另造威能数值；借用机制固定。"
+  },
+  {
+    "id": "SS-A26",
+    "parameters": [
+      {
+        "key": "reflection_cap_pct",
+        "text": "最大生命18%",
+        "base": 18,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A27",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "基础伤害的180%",
+        "base": 180,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A28",
+    "parameters": [
+      {
+        "key": "base_burst_pct",
+        "text": "基础伤害220%",
+        "base": 220,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ],
+    "omit_when_rolled": [
+      "，最高370%"
+    ]
+  },
+  {
+    "id": "SS-A29",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "66%",
+        "base": 6600,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-A30",
+    "parameters": [
+      {
+        "key": "child_bp",
+        "text": "追加80%",
+        "base": 8000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-D01",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "降低28%",
+        "base": 28,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-D02",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "降低55%",
+        "base": 55,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-D03",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "降低75%",
+        "base": 75,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-D04",
+    "parameters": [
+      {
+        "key": "life_pct",
+        "text": "最大生命提高30%",
+        "base": 30,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-D05",
+    "parameters": [
+      {
+        "key": "reduction_cap_pct",
+        "text": "最大生命的22%",
+        "base": 22,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-D06",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "降低35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-D07",
+    "parameters": [
+      {
+        "key": "life_pct",
+        "text": "最大生命提高28%",
+        "base": 28,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-D08",
+    "parameters": [
+      {
+        "key": "life_pct",
+        "text": "最大生命提高30%",
+        "base": 30,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-D09",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "降低40%",
+        "base": 40,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-D10",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "降低35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-U01",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗降低15%",
+        "base": 1500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-U02",
+    "parameters": [
+      {
+        "key": "radius",
+        "text": "半径250",
+        "base": 250,
+        "divisor": 1,
+        "unit": ""
+      }
+    ]
+  },
+  {
+    "id": "SS-U03",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗降低55%",
+        "base": 5500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-U04",
+    "parameters": [
+      {
+        "key": "move_pct",
+        "text": "移动速度提高80%",
+        "base": 80,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-U05",
+    "parameters": [
+      {
+        "key": "restore_pct",
+        "text": "最大法力的10%",
+        "base": 10,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-U06",
+    "parameters": [],
+    "fixed_reason": "控制下施法与成功位移解控为开关机制，无独立数值。"
+  },
+  {
+    "id": "SS-U07",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗降低45%",
+        "base": 4500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-U08",
+    "parameters": [],
+    "fixed_reason": "常驻已学习魔镜及减速免疫为开关机制，不修改原技能等级数值。"
+  },
+  {
+    "id": "SS-U09",
+    "parameters": [
+      {
+        "key": "cooldown_bp",
+        "text": "冷却时间缩短30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "SS-U10",
+    "parameters": [
+      {
+        "key": "range_pct",
+        "text": "法术射程提高100%",
+        "base": 100,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A01",
+    "parameters": [
+      {
+        "key": "secondary_pct",
+        "text": "造成60%",
+        "base": 60,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A02",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "已结算伤害85%",
+        "base": 85,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A03",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A04",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高90%",
+        "base": 9000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A05",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高20%",
+        "base": 2000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A06",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "伤害提高60%",
+        "base": 60,
+        "divisor": 1,
+        "unit": "%"
+      },
+      {
+        "key": "damage_pct",
+        "text": "伤害提高20%",
+        "base": 20,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A07",
+    "parameters": [
+      {
+        "key": "field_pct",
+        "text": "基础伤害30%",
+        "base": 30,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A08",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高80%",
+        "base": 8000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A09",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A10",
+    "parameters": [
+      {
+        "key": "weaken_pct",
+        "text": "降低攻击效果提高60%",
+        "base": 60,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A11",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高45%",
+        "base": 4500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A12",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A13",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高80%",
+        "base": 8000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A14",
+    "parameters": [
+      {
+        "key": "cooldown_bp",
+        "text": "冷却时间缩短45%",
+        "base": 4500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A15",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "生命总和的35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A16",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高35%",
+        "base": 3500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A17",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "造成180%",
+        "base": 180,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A18",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A19",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "造成200%",
+        "base": 200,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A20",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A21",
+    "parameters": [
+      {
+        "key": "shield_burst_pct",
+        "text": "初始吸收量80%",
+        "base": 80,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A22",
+    "parameters": [
+      {
+        "key": "wave_pct",
+        "text": "220%魔法攻击力",
+        "base": 220,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A23",
+    "parameters": [
+      {
+        "key": "heal_burst_pct",
+        "text": "应有治疗量的100%",
+        "base": 100,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A24",
+    "parameters": [
+      {
+        "key": "wave_pct",
+        "text": "250%魔法攻击力",
+        "base": 250,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A25",
+    "parameters": [
+      {
+        "key": "buff_bp",
+        "text": "增益强度提高60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A26",
+    "parameters": [
+      {
+        "key": "buff_bp",
+        "text": "效果提高70%",
+        "base": 7000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A27",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A28",
+    "parameters": [
+      {
+        "key": "wave_pct",
+        "text": "220%魔法攻击力",
+        "base": 220,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-A29",
+    "parameters": [
+      {
+        "key": "next_damage_pct",
+        "text": "额外提高50个百分点",
+        "base": 50,
+        "divisor": 1,
+        "unit": "个百分点"
+      }
+    ]
+  },
+  {
+    "id": "YS-A30",
+    "parameters": [
+      {
+        "key": "instant_bp",
+        "text": "直接伤害或直接治疗提高40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-D01",
+    "parameters": [
+      {
+        "key": "healing_bp",
+        "text": "直接治疗量提高60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-D02",
+    "parameters": [
+      {
+        "key": "radius",
+        "text": "半径250",
+        "base": 250,
+        "divisor": 1,
+        "unit": ""
+      }
+    ]
+  },
+  {
+    "id": "YS-D03",
+    "parameters": [
+      {
+        "key": "shield_bp",
+        "text": "初始吸收量提高60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-D04",
+    "parameters": [
+      {
+        "key": "status_reduction_pct",
+        "text": "各提高35个百分点",
+        "base": 35,
+        "divisor": 1,
+        "unit": "个百分点"
+      }
+    ]
+  },
+  {
+    "id": "YS-D05",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "受到伤害降低25%",
+        "base": 25,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-D06",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "伤害降低40%",
+        "base": 40,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-D07",
+    "parameters": [
+      {
+        "key": "radius",
+        "text": "半径250",
+        "base": 250,
+        "divisor": 1,
+        "unit": ""
+      }
+    ]
+  },
+  {
+    "id": "YS-D08",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "伤害降低60%",
+        "base": 60,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-D09",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "伤害降低35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-D10",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "伤害降低40%",
+        "base": 40,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-U01",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗降低20%",
+        "base": 2000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-U02",
+    "parameters": [
+      {
+        "key": "buff_bp",
+        "text": "正面增益强度提高50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "buff_bp",
+        "text": "增益强度按原数值提高50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-U03",
+    "parameters": [
+      {
+        "key": "restore_cap_pct",
+        "text": "最大法力的20%",
+        "base": 20,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-U04",
+    "parameters": [
+      {
+        "key": "refund_pct",
+        "text": "实际消耗法力的35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-U05",
+    "parameters": [
+      {
+        "key": "buff_bp",
+        "text": "原加速强度提高30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-U06",
+    "parameters": [],
+    "fixed_reason": "附赠已学习防御术与加速术为开关机制，沿用各自原技能数值。"
+  },
+  {
+    "id": "YS-U07",
+    "parameters": [
+      {
+        "key": "move_pct",
+        "text": "移动速度提高60%",
+        "base": 60,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-U08",
+    "parameters": [
+      {
+        "key": "range",
+        "text": "施法距离增加400",
+        "base": 400,
+        "divisor": 1,
+        "unit": ""
+      }
+    ]
+  },
+  {
+    "id": "YS-U09",
+    "parameters": [
+      {
+        "key": "refund_pct",
+        "text": "本次实付法力的50%",
+        "base": 50,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "YS-U10",
+    "parameters": [
+      {
+        "key": "radius",
+        "text": "半径250",
+        "base": 250,
+        "divisor": 1,
+        "unit": ""
+      }
+    ]
+  }
+]

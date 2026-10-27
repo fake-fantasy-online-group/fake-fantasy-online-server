@@ -96,11 +96,11 @@ func (s *Scene) onUseSkill(cmd UseSkill) {
 		reject(event.RejectNotEnoughMP)
 		return
 	}
-	if !canAct(caster) {
+	if !canAct(caster) && !s.legendarySorcererMayEscape(caster, def.ID) {
 		reject(event.RejectStunned)
 		return
 	}
-	if !canCast(caster) {
+	if !canCast(caster) && !s.legendarySorcererMayEscape(caster, def.ID) {
 		reject(event.RejectSilenced)
 		return
 	}
@@ -1330,7 +1330,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 					var legendaryRemoved []domain.Active
 					effectTarget.Status.EachEffective(func(a domain.Active) {
 						for _, id := range effect.RemoveStatusIDs {
-							if a.Def.ID == id {
+							if a.Def.ID == id && !(def.ID == 10433 && a.Def.Permanent) {
 								legendaryRemoved = append(legendaryRemoved, a)
 								break
 							}
@@ -1338,7 +1338,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 					})
 					removed := effectTarget.Status.RemoveWhere(func(existing domain.StatusDef) bool {
 						for _, id := range effect.RemoveStatusIDs {
-							if existing.ID == id {
+							if existing.ID == id && !(def.ID == 10433 && existing.Permanent) {
 								return true
 							}
 						}

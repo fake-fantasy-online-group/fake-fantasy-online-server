@@ -73,12 +73,22 @@ func (t EquipmentRollTable) ApplyLegendaryForRecipientWithPolicyAtLevel(st *Stac
 	if policy != 0 && policy != LegendaryPowerPolicySplit {
 		return false
 	}
-	return t.applyLegendary(st, def, sourceLevel, rng, variants, true, &recipient, policy)
+	return t.applyLegendary(st, def, sourceLevel, rng, variants, true, &recipient, policy, false)
 }
 
 func (t EquipmentRollTable) ApplyLegendaryForRecipientWithPolicy(st *Stack, def ItemDef, recipient LegendaryRecipientClass, policy int32, rng func(int) int) bool {
 	if st == nil || policy != 0 && policy != LegendaryPowerPolicySplit {
 		return false
 	}
-	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false, &recipient, policy)
+	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false, &recipient, policy, true)
+}
+
+// ApplyLegendaryForRecipientWithGenerationAtLevel keeps tier and numerical
+// power-roll introductions independent. Both switches come from the frozen
+// reward rules, never the current live rule during replay.
+func (t EquipmentRollTable) ApplyLegendaryForRecipientWithGenerationAtLevel(st *Stack, def ItemDef, sourceLevel int32, recipient LegendaryRecipientClass, policy int32, variants, powerRolls bool, rng func(int) int) bool {
+	if policy != 0 && policy != LegendaryPowerPolicySplit || powerRolls && !variants {
+		return false
+	}
+	return t.applyLegendary(st, def, sourceLevel, rng, variants, true, &recipient, policy, powerRolls)
 }

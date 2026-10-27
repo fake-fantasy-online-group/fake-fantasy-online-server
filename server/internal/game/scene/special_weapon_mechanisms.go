@@ -66,7 +66,7 @@ func specialCircle(d *domain.SkillDef, radius int32, center domain.SkillAreaCent
 	d.Kind = domain.SkillArea
 	d.Area = domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: center, Radius: radius}
 	d.Radius = radius
-	d.SpecialWeaponTargetLimit = limit
+	d.SpecialWeaponTargetLimit = 0 // Area geometry, not headcount, bounds targets.
 }
 
 // This function is pure: copied skill definitions can be used for both UI
@@ -255,7 +255,7 @@ func (s *Scene) applySpecialWeaponModifiers(p *entity.Entity, d *domain.SkillDef
 	applySpecialWeaponDefinition(s.specialWeapon(p), d)
 }
 func (s *Scene) limitSpecialWeaponTargets(src *entity.Entity, d domain.SkillDef, ids []domain.EntityID, primary domain.EntityID) []domain.EntityID {
-	if d.SpecialWeaponTargetLimit <= 0 || len(ids) <= int(d.SpecialWeaponTargetLimit) {
+	if len(ids) < 2 {
 		return ids
 	}
 	sort.SliceStable(ids, func(i, j int) bool {
@@ -278,7 +278,7 @@ func (s *Scene) limitSpecialWeaponTargets(src *entity.Entity, d domain.SkillDef,
 		}
 		return da < db
 	})
-	return ids[:d.SpecialWeaponTargetLimit]
+	return ids
 }
 func specialWeaponStatus(d domain.SkillDef, status *domain.StatusDef) {
 	if d.SpecialWeaponBaseID == 0 && d.SpecialWeaponStatusPowerPct == 0 {

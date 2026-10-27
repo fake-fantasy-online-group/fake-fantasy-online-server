@@ -63,44 +63,44 @@ func universalSynergyPrepare(c *legendaryContext, d *domain.SkillDef) {
 		if d.Area.Valid() {
 			switch d.Area.Shape {
 			case domain.SkillAreaCircle:
-				m.RadiusBP += universalTuning.AreaRadiusBP
+				m.RadiusBP += c.RollValue("benefit", universalTuning.AreaRadiusBP)
 			case domain.SkillAreaCone:
-				m.AngleBP += universalTuning.ConeAngleBP
+				m.AngleBP += c.RollValue("benefit", universalTuning.ConeAngleBP)
 			}
 		}
 		if !d.Area.Valid() && ((d.Kind == domain.SkillArea && d.Radius > 0) || universalHasEffect(d, domain.EffectPlaceTrap)) {
 			// Native traps have circular hit geometry stored on the placement effect.
-			m.RadiusBP += universalTuning.AreaRadiusBP
+			m.RadiusBP += c.RollValue("benefit", universalTuning.AreaRadiusBP)
 		}
 	case "TY-A06":
 		if d.Area.Valid() && d.Area.Shape == domain.SkillAreaRectangle {
-			m.WidthBP += universalTuning.RectangleWidthBP
+			m.WidthBP += c.RollValue("benefit", universalTuning.RectangleWidthBP)
 		}
 	case "TY-A08":
 		if !d.LegendaryBasic && universalSingleDamage(d) {
-			m.DamageBP += universalTuning.SingleTargetDamageBP
+			m.DamageBP += c.RollValue("benefit", universalTuning.SingleTargetDamageBP)
 		}
 	case "TY-A24":
 		if !d.LegendaryBasic && d.HasDamageEffect() {
-			m.ConservationDamagePerReductionBP += universalTuning.ConservationDamagePerReductionBP
+			m.ConservationDamagePerReductionBP += c.RollValue("benefit", universalTuning.ConservationDamagePerReductionBP)
 		}
 	case "TY-U03":
 		if !d.LegendaryBasic {
-			m.ManaReductionBP += universalTuning.ManaReductionBP
+			m.ManaReductionBP += c.RollValue("benefit", universalTuning.ManaReductionBP)
 		}
 	case "TY-U10":
 		if universalHealingSkill(d) && d.Area.Valid() && (d.Area.Shape == domain.SkillAreaCircle || d.Area.Shape == domain.SkillAreaCone) {
-			m.RadiusBP += universalTuning.HealingRadiusBP
+			m.RadiusBP += c.RollValue("benefit", universalTuning.HealingRadiusBP)
 		}
 		if universalHealingSkill(d) && !d.Area.Valid() && d.Kind == domain.SkillArea && d.Radius > 0 {
-			m.RadiusBP += universalTuning.HealingRadiusBP
+			m.RadiusBP += c.RollValue("benefit", universalTuning.HealingRadiusBP)
 		}
 	case "TY-U13":
 		if universalShieldSkill(c, d) {
-			m.ManaReductionBP += universalTuning.ShieldManaReductionBP
+			m.ManaReductionBP += c.RollValue("benefit", universalTuning.ShieldManaReductionBP)
 		}
 	case "TY-U15":
-		m.CooldownReductionBP += universalTuning.CooldownReductionBP
+		m.CooldownReductionBP += c.RollValue("benefit", universalTuning.CooldownReductionBP)
 	}
 }
 func (s *Scene) legendaryFinalizeSkill(d *domain.SkillDef) {
@@ -224,7 +224,7 @@ func legendaryAddTargetDamage(d *domain.SkillDef, bp int32) {
 }
 func universalPrimaryModifier(c *legendaryContext, d *domain.SkillDef) {
 	if c.Target != nil && c.Primary != 0 && c.Target.ID == c.Primary && d.HasDamageEffect() && universalArea(d) {
-		legendaryAddTargetDamage(d, universalTuning.PrimaryAreaDamageBP)
+		legendaryAddTargetDamage(d, c.RollValue("benefit", universalTuning.PrimaryAreaDamageBP))
 	}
 }
 

@@ -127,7 +127,7 @@ func TestSpecialWeaponControlAndGeometry(t *testing.T) {
 	}{{1022, 10103, 100, 3, domain.SkillAreaCenterCaster}, {1521, 10111, 100, 3, domain.SkillAreaCenterTarget}, {1825, 10224, 120, 5, domain.SkillAreaCenterCaster}, {1927, 10224, 150, 5, domain.SkillAreaCenterTarget}, {1321, 10306, 150, 3, domain.SkillAreaCenterTarget}} {
 		d, _ := skills.Get(tc.skill, 1)
 		applySpecialWeaponDefinition(tc.item, &d)
-		if !d.Area.Valid() || d.Area.Center != tc.center || d.Area.Radius != tc.radius || d.SpecialWeaponTargetLimit != tc.limit {
+		if !d.Area.Valid() || d.Area.Center != tc.center || d.Area.Radius != tc.radius || d.SpecialWeaponTargetLimit != 0 {
 			t.Fatal("invalid area", tc, d.Area)
 		}
 	}
@@ -293,7 +293,7 @@ func TestSpecialWeaponAcceptedGroupCleanseMatchesPreviewAndBrokenGate(t *testing
 	}
 	before := p.MP
 	s.onUseSkill(UseSkill{ID: p.ID, Skill: 10306, Target: p.ID})
-	if len(s.casts) != 1 || len(s.casts[0].targets) != 3 || before-p.MP != view.MPCost || s.casts[0].def.CooldownMS != view.CooldownMS {
+	if len(s.casts) != 1 || len(s.casts[0].targets) != 5 || before-p.MP != view.MPCost || s.casts[0].def.CooldownMS != view.CooldownMS {
 		t.Fatal("accepted cast differs from preview", len(s.casts), view)
 	}
 	st := p.Player.Worn.At(domain.SlotWeapon)

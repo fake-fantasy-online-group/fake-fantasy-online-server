@@ -14,19 +14,19 @@ func universalNativeStatus(c *legendaryContext, d *domain.StatusDef) {
 	switch c.Power.ID {
 	case "TY-A18":
 		if d.ID == domain.StatusPoison && d.IntervalSec > 0 {
-			d.LegendaryModifiers.DamageTickBP += universalTuning.PoisonTickBP
+			d.LegendaryModifiers.DamageTickBP += c.RollValue("benefit", universalTuning.PoisonTickBP)
 		}
 	case "TY-A27":
 		if d.ID == 1036 && d.IntervalSec > 0 {
-			d.LegendaryModifiers.DamageTickBP += universalTuning.BurnTickBP
+			d.LegendaryModifiers.DamageTickBP += c.RollValue("benefit", universalTuning.BurnTickBP)
 		}
 	case "TY-D16":
 		if d.DamageShield > 0 {
-			d.LegendaryModifiers.ShieldBP += universalTuning.ShieldStrengthBP
+			d.LegendaryModifiers.ShieldBP += c.RollValue("benefit", universalTuning.ShieldStrengthBP)
 		}
 	case "TY-U05":
 		if d.IntervalSec > 0 && universalStatusHeals(*d) {
-			d.LegendaryModifiers.HealingTickBP += universalTuning.HealingTickBP
+			d.LegendaryModifiers.HealingTickBP += c.RollValue("benefit", universalTuning.HealingTickBP)
 		}
 	}
 }
@@ -136,12 +136,12 @@ func universalNativeStatusReceiving(c *legendaryContext, d *domain.StatusDef) bo
 	switch c.Power.ID {
 	case "TY-D09":
 		if d.Control != domain.ControlNone || d.BlockMove {
-			d.LegendaryModifiers.ControlDurationReductionBP += universalTuning.ControlDurationReductionBP
+			d.LegendaryModifiers.ControlDurationReductionBP += c.RollValue("benefit", universalTuning.ControlDurationReductionBP)
 		}
 	case "TY-U08":
 		for _, a := range d.Affixes {
 			if a.Attr == domain.AttrMoveSpeed && a.Value < 0 {
-				d.LegendaryModifiers.SlowMagnitudeReductionBP += universalTuning.SlowMagnitudeReductionBP
+				d.LegendaryModifiers.SlowMagnitudeReductionBP += c.RollValue("benefit", universalTuning.SlowMagnitudeReductionBP)
 				break
 			}
 		}
@@ -155,14 +155,14 @@ func universalSynergyIncoming(c *legendaryContext, n int32) int32 {
 	switch c.Power.ID {
 	case "TY-D05":
 		if c.Blow.Area && c.Blow.Origin != domain.DamageDOTOrigin {
-			return universalScaleBP(n, -universalTuning.AreaMitigationBP)
+			return universalScaleBP(n, -c.RollValue("benefit", universalTuning.AreaMitigationBP))
 		}
 	case "TY-D19":
 		if c.Blow.Origin == domain.DamageDOTOrigin {
-			return universalScaleBP(n, -universalTuning.PeriodicMitigationBP)
+			return universalScaleBP(n, -c.RollValue("benefit", universalTuning.PeriodicMitigationBP))
 		}
 	case "TY-D11":
-		taken := min(max(int32(0), c.Owner.MP), domain.SaturateInt32(int64(n)*int64(universalTuning.ManaAbsorbBP)/10000))
+		taken := min(max(int32(0), c.Owner.MP), domain.SaturateInt32(int64(n)*int64(c.RollValue("benefit", universalTuning.ManaAbsorbBP))/10000))
 		c.Owner.MP -= taken
 		if taken > 0 {
 			c.Scene.emitAttributesIfPlayer(c.Owner)
@@ -189,7 +189,7 @@ func universalPeriodicReduce(contexts []legendaryContext, n int32, critical ...b
 			delta += int64(universalSynergyIncoming(&c, n)) - int64(n)
 		}
 		if c.Power.ID == "TY-D10" && len(critical) > 0 && critical[0] {
-			delta += int64(universalScaleBP(n, -3000)) - int64(n)
+			delta += int64(universalScaleBP(n, -c.RollValue("benefit", 3000))) - int64(n)
 		}
 	}
 	return max(int32(0), domain.SaturateInt32(int64(n)+delta))
@@ -218,6 +218,6 @@ func universalBasicMana(c *legendaryContext) {
 		return
 	}
 	st.RootID = c.RootID
-	c.Owner.MP = min(c.Owner.MaxMP, c.Owner.MP+universalTuning.BasicManaFlat)
+	c.Owner.MP = min(c.Owner.MaxMP, c.Owner.MP+c.RollValue("benefit", universalTuning.BasicManaFlat))
 	c.Scene.emitAttributesIfPlayer(c.Owner)
 }

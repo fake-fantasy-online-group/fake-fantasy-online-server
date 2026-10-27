@@ -101,10 +101,6 @@ func (s *Scene) limitVariantTargets(caster *entity.Entity, def domain.SkillDef, 
 		}
 		return ids[i] < ids[j]
 	})
-	n := int(def.EquipmentVariant.MaxTargets)
-	if n > 0 && len(ids) > n {
-		ids = ids[:n]
-	}
 	return ids
 }
 
@@ -236,9 +232,6 @@ func (s *Scene) detonateVariantBomb(src, dst *entity.Entity, def domain.SkillDef
 	}
 	chosen.Trap.Radius = max(chosen.Trap.Radius, params.TrapMinRadius)
 	targets := s.trapTargets(chosen)
-	if len(targets) > int(params.TrapMaxTargets) {
-		targets = targets[:params.TrapMaxTargets]
-	}
 	// Consume before settlement. Trap damage is marked and cannot proc equipment.
 	s.removeTrap(chosen.ID)
 	rt := s.equipmentState()
@@ -273,7 +266,7 @@ func finalizeEquipmentSkillVariant(def *domain.SkillDef) {
 		if v.Params.DamagePercent == 100 {
 			primary = "全额伤害"
 		}
-		v.Description = fmt.Sprintf("%s改为%d度、半径%d的近身扇面，最多%d敌；首目标%s，其余%g%%伤害", def.Name, def.Area.Angle, def.Area.Radius, v.MaxTargets, primary, float64(v.Params.DamagePercent)*float64(v.Params.SecondaryDamagePercent)/100)
+		v.Description = fmt.Sprintf("%s改为%d度、半径%d的近身扇面；首目标%s，其余%g%%伤害", def.Name, def.Area.Angle, def.Area.Radius, primary, float64(v.Params.DamagePercent)*float64(v.Params.SecondaryDamagePercent)/100)
 		if v.Params.SecondaryNoStatuses {
 			v.Description += "且不附加状态"
 		}
@@ -282,7 +275,7 @@ func finalizeEquipmentSkillVariant(def *domain.SkillDef) {
 		}
 		v.Description += "。"
 	case domain.VariantAreaLine:
-		v.Description = fmt.Sprintf("%s改为向前%d距离、%d宽的贯穿枪线，最多%d敌，每敌%d%%伤害。", def.Name, def.Area.Length, def.Area.Width, v.MaxTargets, v.Params.DamagePercent)
+		v.Description = fmt.Sprintf("%s改为向前%d距离、%d宽的贯穿枪线，每敌%d%%伤害。", def.Name, def.Area.Length, def.Area.Width, v.Params.DamagePercent)
 	}
 	def.EquipmentVariant = &v
 }

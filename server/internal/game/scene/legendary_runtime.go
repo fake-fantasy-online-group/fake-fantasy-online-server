@@ -96,6 +96,7 @@ type legendaryContext struct {
 	Scene                                   *Scene
 	Owner, Target                           *entity.Entity
 	Power                                   domain.LegendaryPowerDefinition
+	PowerRollBP                             int32
 	SourceUID                               int64
 	Skill                                   domain.SkillID
 	Def                                     domain.SkillDef
@@ -142,6 +143,7 @@ type legendaryRefund struct {
 	AtMS   int64
 }
 type legendaryRuntime struct {
+	permanentSyncing      bool
 	nativeDamageSnapshots map[uint64]*combat.NativeDamageSnapshot
 	equipmentSignature    map[domain.EntityID]string
 	presentation          map[domain.EntityID]string
@@ -243,6 +245,8 @@ func (s *Scene) legendaryContextsMode(owner, target *entity.Entity, blow combat.
 			found := false
 			for _, accepted := range acceptedSource.LegendaryPowers {
 				if accepted.SourceUID == p.SourceUID && accepted.Power.ID == p.Power.ID {
+					p.PowerRollBP = accepted.PowerRollBP
+					p.Power, _ = domain.LegendaryPowerForRoll(p.Power.ID, p.PowerRollBP)
 					found = true
 					break
 				}
@@ -254,7 +258,7 @@ func (s *Scene) legendaryContextsMode(owner, target *entity.Entity, blow combat.
 		if _, ok := legendaryHandlers[p.Power.ID]; !ok || !legendaryHandlerCurrent(p.Power.ID) {
 			continue
 		}
-		c := legendaryContext{IsBasic: legendaryNativeBasic(blow), IsChild: blow.LegendaryChild, CastPosition: owner.Pos, Scene: s, Owner: owner, Target: target, Power: p.Power, SourceUID: p.SourceUID, Skill: domain.SkillID(blow.SkillID), Blow: blow, Hit: hit, RootID: blow.RootID, NowMS: s.tick.Millis()}
+		c := legendaryContext{IsBasic: legendaryNativeBasic(blow), IsChild: blow.LegendaryChild, CastPosition: owner.Pos, Scene: s, Owner: owner, Target: target, Power: p.Power, PowerRollBP: p.PowerRollBP, SourceUID: p.SourceUID, Skill: domain.SkillID(blow.SkillID), Blow: blow, Hit: hit, RootID: blow.RootID, NowMS: s.tick.Millis()}
 		if acceptedSource != nil {
 			c.CastPosition = acceptedSource.Position
 			c.SourceSnapshot = acceptedSource
@@ -300,7 +304,7 @@ func (s *Scene) legendaryComposeSkill(owner *entity.Entity, def *domain.SkillDef
 	if preview && owner != nil && owner.Player != nil && owner.Player.Char != nil {
 		for _, p := range domain.ActiveLegendaryPowers(s.functionalWorn(owner), s.itemDef, owner.Player.Char) {
 			if legendaryHandlerCurrent(p.Power.ID) {
-				contexts = append(contexts, legendaryContext{Preview: true, Scene: s, Owner: owner, Target: target, Power: p.Power, SourceUID: p.SourceUID, NowMS: s.tick.Millis()})
+				contexts = append(contexts, legendaryContext{Preview: true, Scene: s, Owner: owner, Target: target, Power: p.Power, PowerRollBP: p.PowerRollBP, SourceUID: p.SourceUID, NowMS: s.tick.Millis()})
 			}
 		}
 	} else {
@@ -311,6 +315,8 @@ func (s *Scene) legendaryComposeSkill(owner *entity.Entity, def *domain.SkillDef
 		for _, c := range contexts {
 			for _, source := range accepted {
 				if source.PowerID == c.Power.ID && source.SourceUID == c.SourceUID {
+					c.PowerRollBP = source.PowerRollBP
+					c.Power, _ = domain.LegendaryPowerForRoll(c.Power.ID, c.PowerRollBP)
 					filtered = append(filtered, c)
 					break
 				}
@@ -321,7 +327,7 @@ func (s *Scene) legendaryComposeSkill(owner *entity.Entity, def *domain.SkillDef
 	legendaryOrderSkillContexts(contexts)
 	var sources []domain.LegendarySourceRef
 	for _, c := range contexts {
-		sources = append(sources, domain.LegendarySourceRef{PowerID: c.Power.ID, SourceUID: c.SourceUID})
+		sources = append(sources, domain.LegendarySourceRef{PowerID: c.Power.ID, SourceUID: c.SourceUID, PowerRollBP: c.PowerRollBP})
 	}
 
 	// Complete each stage for every item before proceeding. Skill replacement
@@ -539,6 +545,7 @@ func (s *Scene) stepLegendaryPowers() {
 	sort.Slice(ids, func(i, j int) bool { return ids[i] < ids[j] })
 	for _, id := range ids {
 		owner := s.players[id]
+		s.syncLegendaryPermanentBuffs(owner)
 		for _, c := range s.legendaryContexts(owner, nil, combat.Blow{}, event.DamageDealt{}) {
 			valid[c.key(0, "")] = true
 			if h := legendaryHandlers[c.Power.ID].Tick; h != nil {
@@ -592,7 +599,7 @@ func (c *legendaryContext) Attack(magic bool) int32 {
 	return clampI32((int64(stats.MinAtk) + int64(stats.MaxAtk)) / 2)
 }
 func (c *legendaryContext) Enemies(center domain.Pos, radius float64, limit int) []*entity.Entity {
-	if radius < 0 || limit <= 0 {
+	if radius < 0 || limit < 0 {
 		return nil
 	}
 	var out []*entity.Entity
@@ -608,7 +615,7 @@ func (c *legendaryContext) Enemies(center domain.Pos, radius float64, limit int)
 		}
 		return out[i].ID < out[j].ID
 	})
-	if len(out) > limit {
+	if limit > 0 && len(out) > limit {
 		out = out[:limit]
 	}
 	return out
@@ -626,9 +633,9 @@ func (c *legendaryContext) Damage(target *entity.Entity, amount int32, magic, se
 		return
 	}
 	if root := s.equipmentState().root; root != nil && root.id == c.RootID {
-		if len(root.legendaryDamage) < 256 {
-			root.legendaryDamage = append(root.legendaryDamage, legendaryDamagePayload{*c, target, amount, magic, settled})
-		}
+		// The source root and proc-depth guards bound generation; target count
+		// must not silently discard otherwise eligible area victims.
+		root.legendaryDamage = append(root.legendaryDamage, legendaryDamagePayload{*c, target, amount, magic, settled})
 		return
 	}
 	rt := s.legendaryState()
@@ -945,9 +952,6 @@ func (s *Scene) legendarySelectTargets(owner *entity.Entity, def domain.SkillDef
 		}
 		seen[id] = true
 		out = append(out, id)
-		if len(out) == 256 {
-			break
-		}
 	}
 	return out
 }

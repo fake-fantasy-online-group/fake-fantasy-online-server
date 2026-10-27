@@ -174,6 +174,9 @@ func (r *RiftRules) Validate() error {
 	if (r.Version < 16 && r.Loot.LegendaryPowerPolicy != 0) || (r.Version >= 16 && r.Loot.LegendaryPowerPolicy != 1) {
 		return fmt.Errorf("invalid versioned rift legendary power policy")
 	}
+	if r.Loot.LegendaryPowerRolls != (r.Version >= 17) || (r.Version >= 17 && r.LootVersion < 5) {
+		return fmt.Errorf("invalid versioned rift numerical power roll policy")
+	}
 	if (r.GuardianArrivalMS != 0 && r.GuardianArrivalMS != 5000) || r.TimedMS < 1000 || r.HardMS < r.TimedMS || r.HardMS > 86400000 || r.ReconnectMS < 0 || r.ReconnectMS > r.HardMS || r.DeathPenaltyMS < 0 || r.DeathPenaltyMS > r.HardMS || r.PresenceBP < 1 || r.PresenceBP > 10000 || r.TierJumpSeconds < 1 {
 		return fmt.Errorf("invalid rift time rules")
 	}

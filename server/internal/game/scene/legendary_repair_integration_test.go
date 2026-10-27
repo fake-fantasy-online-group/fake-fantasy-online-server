@@ -93,7 +93,7 @@ func TestLegendaryRepairNativeBaseAndSetControls(t *testing.T) {
 	}
 }
 
-func TestLegendaryRepairLightSplitPrimarySecondaryAndNearest(t *testing.T) {
+func TestLegendaryRepairLightSplitPrimarySecondaryAndFullRadius(t *testing.T) {
 	run := func(echo bool) (int32, []int32) {
 		powers := []string{"YS-A01", "TY-A04"}
 		if echo {
@@ -104,7 +104,7 @@ func TestLegendaryRepairLightSplitPrimarySecondaryAndNearest(t *testing.T) {
 		pos.X = 400
 		s.aoi.Move(m, pos)
 		var sides []*entity.Entity
-		for i, x := range []float64{410, 420, 430, 230, 620} {
+		for i, x := range []float64{410, 420, 430, 230, 620, 653} {
 			sides = append(sides, putMonster(s, domain.EntityID(901+i), 100000, domain.Stats{}, x, 100))
 		}
 		nativeRepairCast(t, s, p, 10319, m.ID)
@@ -119,14 +119,14 @@ func TestLegendaryRepairLightSplitPrimarySecondaryAndNearest(t *testing.T) {
 	if primary != 210 || echo != 388 {
 		t.Fatalf("primary/echo damage %d/%d want210/388", primary, echo)
 	}
-	for i := 0; i < 3; i++ {
+	for i := 0; i < 5; i++ {
 		if sides[i] != 126 || echoSides[i] != 126 {
 			t.Fatalf("secondary %d generated an echo or lost native 60%%: %v/%v", i, sides, echoSides)
 		}
 	}
-	for i := 3; i < 5; i++ {
+	for i := 5; i < len(sides); i++ {
 		if sides[i] != 0 || echoSides[i] != 0 {
-			t.Fatalf("not nearest three to primary or cap exceeded: %v/%v", sides, echoSides)
+			t.Fatalf("secondary exceeded the amplified native radius: %v/%v", sides, echoSides)
 		}
 	}
 }
@@ -160,8 +160,8 @@ func TestLegendaryRepairHealChildImplicitSelfAndSetIsolation(t *testing.T) {
 						n++
 					}
 				}
-				if n != 4 {
-					t.Fatalf("healing-derived A01 child hit%d enemies want4", n)
+				if n != 7 {
+					t.Fatalf("healing-derived A01 child hit%d enemies want7", n)
 				}
 			}
 			before := m.HP

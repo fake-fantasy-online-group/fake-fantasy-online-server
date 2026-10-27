@@ -40,7 +40,7 @@ func (s *Scene) rollOutdoorBossLegendaries(dead *entity.Entity, context domain.L
 		st := domain.NewStack(def, 1)
 		// Generates six legal affixes, one power and its variant exactly once. Power
 		// level eligibility follows the source monster, not the equipment or owner.
-		if !s.equipmentRoll.ApplyLegendaryForRecipientWithPolicyAtLevel(&st, def, dead.Level, context.RecipientClass, rule.LegendaryPowerPolicy, true, variables.Intn) {
+		if !s.equipmentRoll.ApplyLegendaryForRecipientWithGenerationAtLevel(&st, def, dead.Level, context.RecipientClass, rule.LegendaryPowerPolicy, true, rule.LegendaryPowerRolls, variables.Intn) {
 			s.log.Error("野外 BOSS 暗金保底生成失败", "monster", dead.Monster.TypeID, "item", def.ID, "level", dead.Level)
 			return 0 // Do not publish a partial pair or replace it with old Unique.
 		}

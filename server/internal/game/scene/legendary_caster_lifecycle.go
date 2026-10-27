@@ -97,11 +97,11 @@ func init() {
 			}
 			return allies[i].ID < allies[j].ID
 		})
-		for i, p := range allies {
-			if i == 2 || overflow <= 0 {
+		for _, p := range allies {
+			if overflow <= 0 {
 				break
 			}
-			amount := min(overflow, specialScale(p.MaxMP, 20), max(int32(0), p.MaxMP-p.MP))
+			amount := min(overflow, specialScale(p.MaxMP, c.RollValue("restore_cap_pct", 20)), max(int32(0), p.MaxMP-p.MP))
 			legendaryCasterRestoreMP(c, p, amount)
 			if amount > 0 {
 				c.Visual("stage-01", p)
@@ -117,19 +117,25 @@ func legendaryCasterSteal(c *legendaryContext, removed []domain.Active) {
 		return
 	}
 	for _, a := range removed {
-		if !specialDefensiveStatus(a.Def.ID) {
+		if !specialDefensiveStatus(a.Def.ID) || a.Def.Permanent {
 			continue
 		}
-		left := a.ExpireAt - c.Scene.tick
-		if left <= 0 {
+		if a.Def.DurationSec <= 0 || !legendaryCasterOnce(c, domain.EntityID(a.Def.ID), "stolen-native") {
 			continue
 		}
-		a.ExpireAt = c.Scene.tick + left*3/2
-		a.Def.DurationSec = int32((a.ExpireAt-c.Scene.tick).Millis()+999) / 1000
-		if c.Scene.applyStatusDef(c.Owner, a.Def, c.Owner.ID) {
-			c.Owner.Status.RestoreTransferredStatusBalance(c.Owner.ID, a)
-			c.Scene.pushStatusSnapshots(c.Owner)
-		}
+		// Rebuild the defensive spell from its accepted full definition, never
+		// transfer the victim's remaining shield balance or multiply one kind.
+		a.Def.Permanent = false
+		a.Def.SkillSnapshotID, a.Def.SkillSnapshotRank = 0, 0
+		a.Def.SkillSnapshotRaw, a.Def.SkillSnapshotHard = nil, nil
+		a.Def.LegendarySources = nil
+		a.Def.SpecialWeaponSourceBase = 0
+		a.Def.ChanceExplicit, a.Def.ChanceBP = true, 10000
+		a.Def.LegendaryPermanentPower = ""
+		a.Def.LegendaryPowerID = ""
+		c.Scene.legendaryCasterStatusApplying(c.Owner.ID, c.Owner, &a.Def)
+		a.Def.LegendaryPowerID, a.Def.LegendarySourceUID = c.Power.ID, c.SourceUID
+		c.Scene.applyStatusDef(c.Owner, a.Def, c.Owner.ID)
 	}
 }
 func legendaryCasterRegen(c *legendaryContext, d *domain.StatusDef) {

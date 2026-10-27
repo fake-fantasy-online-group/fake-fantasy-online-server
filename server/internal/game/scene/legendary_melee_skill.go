@@ -5,7 +5,7 @@ import "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/i
 func legendaryMeleeSkillDamage(skill domain.SkillID, pct int64) func(*legendaryContext, int32) int32 {
 	return func(c *legendaryContext, n int32) int32 {
 		if legendaryMeleeDirect(c) && c.Skill == skill {
-			return legendaryMeleeScale(n, pct)
+			return legendaryMeleeScale(n, 100+int64(c.RollValue("damage_pct", int32(pct-100))))
 		}
 		return n
 	}

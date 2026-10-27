@@ -156,9 +156,10 @@ func LegendaryPowerEligibleAtLevel(p LegendaryPowerDefinition, base ItemDef, sou
 }
 
 type ActiveLegendaryPower struct {
-	SourceUID int64
-	Item      ItemID
-	Power     LegendaryPowerDefinition
+	SourceUID   int64
+	PowerRollBP int32
+	Item        ItemID
+	Power       LegendaryPowerDefinition
 }
 
 // Duplicate powers never stack. Choose a stable instance, independently of
@@ -173,23 +174,28 @@ func ActiveLegendaryPowers(worn *EquipSet, defs func(ItemID) (ItemDef, bool), ch
 		if !ok || d.Equip == nil || int32(slot) != d.Equip.Slot || !EquipmentFunctional(st, d) || !d.Equip.Need.AllowsCharacter(ch) || ch.Level < EquipmentRequiredLevel(d, st) {
 			return
 		}
-		accept := func(p LegendaryPowerDefinition) {
+		accept := func(p LegendaryPowerDefinition, roll int32) {
+			var valid bool
+			p, valid = LegendaryPowerForRoll(p.ID, roll)
+			if !valid {
+				return
+			}
 			if p.Class != "全职业" && (!ch.HasProfession() || legendaryClassMask(p.Class)&(1<<uint8(ch.Race)) == 0) {
 				return
 			}
-			if old, exists := selected[p.ID]; !exists || st.UID < old.SourceUID {
-				selected[p.ID] = ActiveLegendaryPower{st.UID, st.Item, p}
+			if old, exists := selected[p.ID]; !exists || EffectiveLegendaryPowerRollBP(p.ID, roll) > EffectiveLegendaryPowerRollBP(p.ID, old.PowerRollBP) || EffectiveLegendaryPowerRollBP(p.ID, roll) == EffectiveLegendaryPowerRollBP(p.ID, old.PowerRollBP) && st.UID < old.SourceUID {
+				selected[p.ID] = ActiveLegendaryPower{SourceUID: st.UID, PowerRollBP: roll, Item: st.Item, Power: p}
 			}
 		}
 		if p, valid := LegendaryPower(st.Legendary.PowerID); valid && LegendaryPowerEligibleForItem(p, d, st) {
-			accept(p)
+			accept(p, st.Legendary.PowerRollBP)
 		}
 		// Wing sockets deliberately accept A/D/U independently of the original
 		// donor slot, but never bypass the wearer's class or the wing's wear state.
 		if slot == SlotBag && st.Legendary.PowerID == "" && st.WingPowers.Validate() == nil {
 			for _, power := range st.WingPowers {
 				if p, valid := LegendaryPower(power.PowerID); valid && LegendaryPowerExecutable(p.ID) {
-					accept(p)
+					accept(p, power.PowerRollBP)
 				}
 			}
 		}

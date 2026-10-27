@@ -6,10 +6,11 @@ import (
 )
 
 // WingPower preserves a consumed legendary's power, not its six rolled affixes
-// or intrinsic tier multiplier. All existing power mechanics are fixed by the
-// power definition/handler; SourceTier is provenance, never a potency multiplier.
+// or intrinsic tier multiplier. PowerRollBP preserves the donor’s immutable
+// authored strength; SourceTier is provenance, never a potency multiplier.
 type WingPower struct {
 	PowerID     string
+	PowerRollBP int32         `json:",omitempty"`
 	SourceTier  LegendaryTier `json:",omitempty"`
 	SourceLevel int32
 }
@@ -42,7 +43,7 @@ func (w WingPowers) Validate() error {
 		}
 		p, ok := LegendaryPower(v.PowerID)
 		index, category := WingPowerIndex(p)
-		if !ok || !category || index != i || !v.SourceTier.Valid() || !LegendaryPowerSourceLevelEligible(p, v.SourceLevel) {
+		if !ok || !LegendaryPowerRollValid(v.PowerID, v.PowerRollBP) || !category || index != i || !v.SourceTier.Valid() || !LegendaryPowerSourceLevelEligible(p, v.SourceLevel) {
 			return fmt.Errorf("invalid wing power slot %d", i)
 		}
 	}
@@ -66,6 +67,6 @@ func ExtractWingPower(target, source Stack, sourceDef ItemDef) (Stack, error) {
 	if !ok || !category || !LegendaryPowerEligibleForItem(p, sourceDef, source) || !LegendaryPowerExecutable(p.ID) {
 		return target, fmt.Errorf("此暗金器物的威能无法提取")
 	}
-	target.WingPowers[index] = WingPower{PowerID: p.ID, SourceTier: source.Legendary.Tier, SourceLevel: LegendaryGenerationLevel(sourceDef, source)}
+	target.WingPowers[index] = WingPower{PowerID: p.ID, PowerRollBP: source.Legendary.PowerRollBP, SourceTier: source.Legendary.Tier, SourceLevel: LegendaryGenerationLevel(sourceDef, source)}
 	return target, nil
 }

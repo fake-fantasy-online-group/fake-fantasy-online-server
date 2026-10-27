@@ -75,7 +75,7 @@ func TestLegendaryTierNativeViewsAndGroundKeepDarkGold(t *testing.T) {
 					t.Fatal("missing six darkgold affixes")
 				}
 			}
-			power, _ := domain.LegendaryPower(st.Legendary.PowerID)
+			power, _ := domain.LegendaryPowerForRoll(st.Legendary.PowerID, st.Legendary.PowerRollBP)
 			if strings.Count(tip, "\x06"+power.Name+"："+power.Effect) != 1 {
 				t.Fatal("power text changed")
 			}

@@ -1,7 +1,6 @@
 package scene
+
 import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
-
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -47,7 +46,7 @@ func TestEquipmentAuraSourceBoundBuffAndSkillCoexist(t *testing.T) {
 			if b.RemainSec != -2 {
 				t.Fatalf("source-bound aura must not count down: %+v", b)
 			}
-			for _, part := range []string{"2级", "12%", "6%", "来源：来源", "范围240", "最多6人", "只取最高", "离线"} {
+			for _, part := range []string{"2级", "12%", "6%", "来源：来源", "范围240", "同队成员均可生效", "只取最高", "离线"} {
 				if !strings.Contains(b.Desc, part) {
 					t.Errorf("missing %q in %q", part, b.Desc)
 				}

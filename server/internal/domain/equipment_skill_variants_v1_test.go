@@ -6,7 +6,7 @@ func TestEquipmentSkillVariantClosedDefinitions(t *testing.T) {
 	seen := map[SkillID]bool{}
 	for _, id := range []string{"sword_gale_fan", "warrior_piercing_lance", "assassin_bomb_fuse", "healer_guarded_mend", "warlock_flash_fire"} {
 		v, ok := testEndgameCatalog().Variant(id)
-		if !ok || v.SkillID == 0 || v.MaxTargets < 1 || v.MaxTargets > 6 || seen[v.SkillID] {
+		if !ok || v.SkillID == 0 || v.MaxTargets < 0 || v.MaxTargets > 6 || seen[v.SkillID] {
 			t.Fatal(v)
 		}
 		seen[v.SkillID] = true
@@ -18,5 +18,18 @@ func TestEquipmentSkillVariantClosedDefinitions(t *testing.T) {
 		if ValidateEquipmentEffects([]EquipmentEffect{e}, testEndgameCatalog()) == nil {
 			t.Fatal("accepted malformed variant", e)
 		}
+	}
+}
+
+func TestEquipmentVariantAreaHeadcountsRetired(t *testing.T) {
+	for _, id := range []string{"sword_gale_fan", "warrior_piercing_lance"} {
+		v, ok := testEndgameCatalog().Variant(id)
+		if !ok || v.MaxTargets != 0 {
+			t.Fatalf("%s retains target cap: %+v", id, v)
+		}
+	}
+	trap, ok := testEndgameCatalog().Variant("assassin_bomb_fuse")
+	if !ok || trap.Params.TrapMaxTargets != 0 || trap.MaxTargets != 1 {
+		t.Fatal("trap victims unlimited; one selected trigger remains", trap)
 	}
 }

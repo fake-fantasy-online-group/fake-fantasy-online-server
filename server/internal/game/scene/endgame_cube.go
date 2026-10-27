@@ -207,7 +207,12 @@ func (s *Scene) onEndgameCube(p *entity.Entity, req domain.EndgameRequest) {
 		if plan.Recipe.Operation == "socket.open" {
 			message = plan.Recipe.Name + "完成：开出" + strconv.Itoa(int(plan.Target.SocketCount)) + "孔。"
 		}
-		s.endgameCommit(p, req, candidate, domain.EndgameResponse{Kind: "cube.result", Message: message, Result: result}, nil, 0, func() { state.cube = nil })
+		payload, err := powerBookAfterCube(state.state.Payload, p.Player.Bag, plan)
+		if err != nil {
+			s.endgameError(p, req, "storage", "威能录暂不可写，器物尚未分解")
+			return
+		}
+		s.endgameCommitPayload(p, req, candidate, domain.EndgameResponse{Kind: "cube.result", Message: message, Result: result}, nil, 0, func() { state.cube = nil }, payload)
 	default:
 		s.endgameError(p, req, "unsupported_operation", "不支持的周天鼎操作")
 	}

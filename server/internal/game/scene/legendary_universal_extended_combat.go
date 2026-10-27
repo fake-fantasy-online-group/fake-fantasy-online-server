@@ -43,16 +43,16 @@ func universalExtendedStats(c *legendaryContext, st *domain.Stats) {
 		if ms <= 0 {
 			ms = 1500
 		}
-		st.AtkSpeedMS = max(int32(100), universalScaleBP(ms, -2000))
-		st.AtkSpeedPct = domain.SaturateInt32((100+int64(st.AtkSpeedPct))*100/80 - 100)
+		st.AtkSpeedMS = max(int32(100), universalScaleBP(ms, -c.RollValue("benefit", 2000)))
+		st.AtkSpeedPct = domain.SaturateInt32((100+int64(st.AtkSpeedPct))*10000/int64(10000-c.RollValue("benefit", 2000)) - 100)
 	case "TY-D02":
-		st.MDef = domain.SaturateInt32(int64(st.MDef) + int64(universalPct(max(int32(0), eq.MDef-bare.MDef), 40)))
+		st.MDef = domain.SaturateInt32(int64(st.MDef) + int64(universalPct(max(int32(0), eq.MDef-bare.MDef), int64(c.RollValue("benefit", 40)))))
 	case "TY-D03":
-		st.MaxHP = domain.SaturateInt32(int64(st.MaxHP) + int64(universalPct(max(int32(0), eq.MaxHP-bare.MaxHP), 30)))
+		st.MaxHP = domain.SaturateInt32(int64(st.MaxHP) + int64(universalPct(max(int32(0), eq.MaxHP-bare.MaxHP), int64(c.RollValue("benefit", 30)))))
 	case "TY-D04":
-		st.MaxMP = domain.SaturateInt32(int64(st.MaxMP) + int64(universalPct(max(int32(0), eq.MaxMP-bare.MaxMP), 40)))
+		st.MaxMP = domain.SaturateInt32(int64(st.MaxMP) + int64(universalPct(max(int32(0), eq.MaxMP-bare.MaxMP), int64(c.RollValue("benefit", 40)))))
 	case "TY-U09":
-		st.MoveSpeed = domain.SaturateInt32(int64(st.MoveSpeed) + int64(universalPct(max(int32(0), bare.MoveSpeed), 20)))
+		st.MoveSpeed = domain.SaturateInt32(int64(st.MoveSpeed) + int64(universalPct(max(int32(0), bare.MoveSpeed), int64(c.RollValue("benefit", 20)))))
 	}
 }
 func universalExtendedBase(c *legendaryContext, d *domain.SkillDef) {
@@ -64,11 +64,11 @@ func universalExtendedBase(c *legendaryContext, d *domain.SkillDef) {
 	switch c.Power.ID {
 	case "TY-A25":
 		if !d.LegendaryBasic && (d.HurtType == domain.HurtPhysical || d.HurtType == domain.HurtNone) {
-			base = universalPct(max(int32(0), eq.MaxAtk-bare.MaxAtk), 50)
+			base = universalPct(max(int32(0), eq.MaxAtk-bare.MaxAtk), int64(c.RollValue("benefit", 50)))
 		}
 	case "TY-A26":
 		if !d.LegendaryBasic && d.HurtType != domain.HurtPhysical && d.HurtType != domain.HurtNone {
-			base = universalPct(max(int32(0), eq.MAtk-bare.MAtk), 50)
+			base = universalPct(max(int32(0), eq.MAtk-bare.MAtk), int64(c.RollValue("benefit", 50)))
 		}
 	case "TY-A38":
 		if !d.LegendaryBasic {
@@ -76,17 +76,17 @@ func universalExtendedBase(c *legendaryContext, d *domain.SkillDef) {
 			if c.SourceSnapshot != nil && c.SourceSnapshot.ChildPreparation != nil {
 				maximum = c.SourceSnapshot.ChildPreparation.MaximumMP
 			}
-			base = universalPct(maximum, 4)
+			base = universalPct(maximum, int64(c.RollValue("benefit", 4)))
 		}
 	case "TY-A39":
 		if d.LegendaryBasic {
 			contribution := max(int32(0), eq.Def-bare.Def)
 			c.Scene.forEachLegendary(c.Owner, func(other *legendaryContext) {
 				if other.Power.ID == "TY-D01" {
-					contribution = universalScaleBP(contribution, universalTuning.EquipmentDefenseBP)
+					contribution = universalScaleBP(contribution, other.RollValue("benefit", universalTuning.EquipmentDefenseBP))
 				}
 			})
-			base = universalPct(contribution, 20)
+			base = universalPct(contribution, int64(c.RollValue("benefit", 20)))
 		}
 	}
 	if base > 0 {
@@ -131,19 +131,19 @@ func universalExtendedTarget(c *legendaryContext, d *domain.SkillDef) {
 	switch c.Power.ID {
 	case "TY-A30":
 		if universalNativeControlled(c.Target) {
-			bp = 5000
+			bp = c.RollValue("benefit", 5000)
 		}
 	case "TY-A31":
 		if universalOwnedNativeStatus(c, domain.StatusPoison) {
-			bp = 4000
+			bp = c.RollValue("benefit", 4000)
 		}
 	case "TY-A32":
 		if universalOwnedNativeStatus(c, 1036) {
-			bp = 4000
+			bp = c.RollValue("benefit", 4000)
 		}
 	case "TY-A36":
 		if universalArea(d) && c.Primary != 0 && c.Target.ID != c.Primary {
-			bp = 4000
+			bp = c.RollValue("benefit", 4000)
 		}
 	}
 	legendaryAddTargetDamage(d, bp)
@@ -156,23 +156,23 @@ func universalExtendedIncoming(c *legendaryContext, n int32) int32 {
 	switch c.Power.ID {
 	case "TY-D06":
 		if c.IsBasic {
-			bp = 2500
+			bp = c.RollValue("benefit", 2500)
 		}
 	case "TY-D07":
 		if !c.Blow.Magic && !c.Hit.Flag.Has(event.DamageMagic) {
-			bp = 2000
+			bp = c.RollValue("benefit", 2000)
 		}
 	case "TY-D08":
 		if c.Blow.Magic || c.Hit.Flag.Has(event.DamageMagic) {
-			bp = 2000
+			bp = c.RollValue("benefit", 2000)
 		}
 	case "TY-D10":
 		if c.Hit.Flag.Has(event.DamageCrit) {
-			bp = 3000
+			bp = c.RollValue("benefit", 3000)
 		}
 	case "TY-D17":
 		if universalNativeControlled(c.Owner) {
-			bp = 2500
+			bp = c.RollValue("benefit", 2500)
 		}
 	}
 	return universalScaleBP(n, -bp)

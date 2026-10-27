@@ -1,0 +1,961 @@
+[
+  {
+    "id": "TY-A01",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "70%",
+        "base": 70,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A02",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A03",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A04",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A05",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "半径120",
+        "base": 120,
+        "divisor": 1,
+        "unit": ""
+      }
+    ]
+  },
+  {
+    "id": "TY-A06",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A07",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "100%",
+        "base": 10000,
+        "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A08",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A09",
+    "parameters": [],
+    "fixed_reason": "必中或允许持续伤害暴击属于完整机制，不将其改为概率或强度加成。"
+  },
+  {
+    "id": "TY-A10",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "20%",
+        "base": 2000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A11",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "20个百分点",
+        "base": 2000,
+        "divisor": 100,
+        "unit": "个百分点"
+      }
+    ]
+  },
+  {
+    "id": "TY-A12",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A13",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A14",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A15",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "30个百分点",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "个百分点"
+      }
+    ]
+  },
+  {
+    "id": "TY-A16",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "100%",
+        "base": 10000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ],
+    "omit_when_rolled": [
+      "：每1点伤害可消耗2点护盾"
+    ]
+  },
+  {
+    "id": "TY-A17",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A18",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "100%",
+        "base": 10000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A19",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "80%",
+        "base": 8000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A20",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "最多100距离",
+        "base": 100,
+        "divisor": 1,
+        "unit": "距离"
+      }
+    ]
+  },
+  {
+    "id": "TY-A21",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A22",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A23",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40个百分点",
+        "base": 40,
+        "divisor": 1,
+        "unit": "个百分点"
+      }
+    ]
+  },
+  {
+    "id": "TY-A24",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "2%",
+        "base": 20000,
+        "divisor": 10000,
+        "unit": "%"
+      },
+      {
+        "key": "benefit",
+        "text": "200%",
+        "base": 20000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A25",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "50%",
+        "base": 50,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A26",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "50%",
+        "base": 50,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A27",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "100%",
+        "base": 10000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A28",
+    "parameters": [],
+    "fixed_reason": "必中或允许持续伤害暴击属于完整机制，不将其改为概率或强度加成。"
+  },
+  {
+    "id": "TY-A29",
+    "parameters": [],
+    "fixed_reason": "必中或允许持续伤害暴击属于完整机制，不将其改为概率或强度加成。"
+  },
+  {
+    "id": "TY-A30",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A31",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A32",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A33",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "50个百分点",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "个百分点"
+      }
+    ],
+    "omit_when_rolled": [
+      "，例如2倍变为2.5倍"
+    ]
+  },
+  {
+    "id": "TY-A34",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "80%",
+        "base": 8000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A35",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A36",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A37",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "75%",
+        "base": 7500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A38",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "4%",
+        "base": 4,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A39",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "20%",
+        "base": 20,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-A40",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D01",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D02",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 40,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D03",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "30%",
+        "base": 30,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D04",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 40,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D05",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "25%",
+        "base": 2500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D06",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "25%",
+        "base": 2500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D07",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "20%",
+        "base": 2000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D08",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "20%",
+        "base": 2000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D09",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D10",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D11",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D12",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D13",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D14",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D15",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D16",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D17",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "25%",
+        "base": 2500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D18",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D19",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "25%",
+        "base": 2500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-D20",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U01",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U02",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "10点法力",
+        "base": 10,
+        "divisor": 1,
+        "unit": "点法力"
+      }
+    ]
+  },
+  {
+    "id": "TY-U03",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U04",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U05",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U06",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U07",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U08",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U09",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "20%",
+        "base": 20,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U10",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U11",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U12",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U13",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "20%",
+        "base": 2000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U14",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U15",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "20%",
+        "base": 2000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U16",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U17",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U18",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40个百分点",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "个百分点"
+      }
+    ]
+  },
+  {
+    "id": "TY-U19",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "100%",
+        "base": 10000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "TY-U20",
+    "parameters": [
+      {
+        "key": "benefit",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  }
+]

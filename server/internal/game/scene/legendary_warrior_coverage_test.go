@@ -129,12 +129,17 @@ func TestLegendaryWarriorSoloResourceConsumers(t *testing.T) {
 		id    string
 		skill domain.SkillID
 		mana  int32
-	}{{"ZS-U01", 10002, 60}, {"ZS-U02", 10013, 40}, {"ZS-U04", 10028, 70}, {"ZS-U05", 10006, 55}, {"ZS-U06", 10002, 40}, {"ZS-U06", 10005, 40}, {"ZS-U06", 10023, 40}, {"ZS-U08", 10005, 70}, {"ZS-U08", 10028, 70}, {"ZS-U10", 10028, 0}, {"ZS-U10", 10023, 40}} {
+	}{{"ZS-U01", 10002, 0}, {"ZS-U02", 10013, 40}, {"ZS-U04", 10028, 70}, {"ZS-U05", 10006, 55}, {"ZS-U06", 10002, 40}, {"ZS-U06", 10005, 40}, {"ZS-U06", 10023, 40}, {"ZS-U08", 10005, 70}, {"ZS-U08", 10028, 70}, {"ZS-U10", 10028, 0}, {"ZS-U10", 10023, 40}} {
 		t.Run(tc.id+"/"+fmt.Sprint(tc.skill), func(t *testing.T) {
 			for _, equipped := range []bool{false, true} {
 				s, p, m := warriorCoverageFixture(t, tc.id, equipped)
 				d := warriorCoverageDef(tc.skill)
 				d.MPCost = 100
+				// Timed movement legitimately refreshes real character stats.
+				// Keep this synthetic cost fixture below its derived HP/MP limits.
+				s.refreshStats(p)
+				p.Stats.MinAtk, p.Stats.MaxAtk = 100, 100
+				p.MP, p.HP = p.MaxMP, p.MaxHP
 
 				mp, hp, enemy := p.MP, p.HP, m.HP
 				warriorCoverageNativeCast(t, s, p, d, m.ID)
@@ -233,7 +238,7 @@ func TestLegendaryWarriorSoloRangeAndTimingConsumers(t *testing.T) {
 			s.legendaryPassiveStats(p, &st)
 			want := int32(100)
 			if equipped {
-				want = 130
+				want = 180
 			}
 			if st.MoveSpeed != want {
 				t.Fatal("movement consumer", st.MoveSpeed)
@@ -433,9 +438,10 @@ func TestLegendaryWarriorSoloSpecialCoverage(t *testing.T) {
 	})
 	t.Run("ZS-U04", func(t *testing.T) {
 		s, p, _ := warriorCoverageFixture(t, "ZS-U04", true)
+		s.legendaryCastReleased(p, domain.SkillDef{ID: 10028}, 0, nil)
 		st := domain.Stats{MoveSpeed: 100}
 		s.legendaryPassiveStats(p, &st)
-		if st.MoveSpeed != 130 {
+		if st.MoveSpeed != 160 {
 			t.Fatal(st.MoveSpeed)
 		}
 		p.Player.Worn = &domain.EquipSet{}
@@ -460,7 +466,7 @@ func TestLegendaryWarriorSoloTargetAndStatusCoverage(t *testing.T) {
 		}
 		far := putMonster(s, 990, 10000, domain.Stats{}, 451, 100)
 		ids := warriorTestCast(t, s, p, m, warriorCoverageDef(10017))
-		if len(ids) != 6 || m.MaxHP-m.HP != 110 || far.HP != 10000 {
+		if len(ids) != 9 || m.MaxHP-m.HP != 110 || far.HP != 10000 {
 			t.Fatal("landing circle cap/radius/primary", ids, m.HP, far.HP)
 		}
 		for _, id := range ids[1:] {
@@ -815,7 +821,11 @@ func TestLegendaryWarriorSoloRemainingClauses(t *testing.T) {
 
 func TestLegendaryWarriorSoloMovementOutput(t *testing.T) {
 	for _, id := range []string{"ZS-U03", "ZS-U04"} {
-		t.Run(id, func(t *testing.T) { meleeCoverageMovementOutput(t, id, 130) })
+		pct := int32(180)
+		if id == "ZS-U04" {
+			pct = 160
+		}
+		t.Run(id, func(t *testing.T) { meleeCoverageMovementOutput(t, id, pct) })
 	}
 }
 func meleeCoverageMovementOutput(t *testing.T, id string, pct int32) {
@@ -831,6 +841,14 @@ func meleeCoverageMovementOutput(t *testing.T, id string, pct int32) {
 	}
 	p.Player.Worn = worn
 	s.refreshStats(p)
+	switch id {
+	case "ZS-U03":
+		s.legendaryCastReleased(p, domain.SkillDef{ID: 10017}, 0, nil)
+	case "ZS-U04":
+		s.legendaryCastReleased(p, domain.SkillDef{ID: 10028}, 0, nil)
+	case "JK-U01":
+		s.legendaryCastReleased(p, domain.SkillDef{ID: 10117}, 0, nil)
+	}
 	panel := s.attributeSnapshot(p)
 	if panel.Current[9] != basePanel*pct/100 || s.playerMoveSpeedPX(p) != basePX*pct/100 {
 		t.Fatalf("real movement output panel=%d px=%d base=%d/%d", panel.Current[9], s.playerMoveSpeedPX(p), basePanel, basePX)

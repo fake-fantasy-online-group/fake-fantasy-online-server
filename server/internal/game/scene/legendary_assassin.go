@@ -30,7 +30,7 @@ func legendaryAssassinTransform(c *legendaryContext, d *domain.SkillDef) {
 	case "CK-A05":
 		if d.ID == 10205 {
 			// Establish the new splash before final geometry modifiers run.
-			d.Radius = max(int32(100), d.Radius)
+			d.Radius = max(c.RollValue("radius", 100), d.Radius)
 		}
 	case "CK-A06":
 		if d.ID == 10206 {
@@ -49,32 +49,32 @@ func legendaryAssassinPrepare(c *legendaryContext, d *domain.SkillDef) {
 	switch c.Power.ID {
 	case "CK-A04":
 		if d.ID == 10205 {
-			d.LegendaryModifiers.DamageBP += 5000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 5000)
 		}
 	case "CK-A14":
 		if d.ID == 10214 {
-			d.LegendaryModifiers.RadiusBP += 3000
+			d.LegendaryModifiers.RadiusBP += c.RollValue("radius_bp", 3000)
 		}
 	case "CK-A16":
 		if d.ID == 10215 {
 			d.LegendaryModifiers.RadiusBP += 3000
-			d.LegendaryModifiers.DamageBP += 5000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 5000)
 		}
 	case "CK-A17":
 		if d.ID == 10216 {
 			d.LegendaryModifiers.RadiusBP += 3000
 		}
 		if d.ID == 10216 || d.ID == 10209 {
-			d.LegendaryModifiers.DamageBP += 5000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 5000)
 		}
 	case "CK-A24":
 		if d.ID == 10203 {
-			d.LegendaryModifiers.DamageBP += 5000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 5000)
 		}
 	case "CK-A23":
 		if d.ID == 10219 {
 			d.LegendaryDamageThroughControlImmunity = true
-			d.LegendaryModifiers.DamageBP += 3500
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 3500)
 			d.LegendaryModifiers.CooldownReductionBP += 4000
 		}
 	case "CK-A02":
@@ -89,45 +89,45 @@ func legendaryAssassinPrepare(c *legendaryContext, d *domain.SkillDef) {
 		}
 	case "CK-A27":
 		if d.ID == 10205 || d.ID == 10206 {
-			d.Dist = specialScale(d.Dist, 150)
-			d.LegendaryModifiers.RadiusBP += 5000
-			d.LegendaryModifiers.WidthBP += 5000
+			d.Dist = domain.SaturateInt32(int64(d.Dist) * (10000 + int64(c.RollValue("geometry_bp", 5000))) / 10000)
+			d.LegendaryModifiers.RadiusBP += c.RollValue("geometry_bp", 5000)
+			d.LegendaryModifiers.WidthBP += c.RollValue("geometry_bp", 5000)
 		}
 	case "CK-A01":
 		if d.ID == 10221 {
-			d.LegendaryModifiers.CooldownReductionBP += 3000
+			d.LegendaryModifiers.CooldownReductionBP += c.RollValue("cooldown_bp", 3000)
 		}
 	case "CK-A03":
 		if d.ID == 10221 {
-			d.LegendaryModifiers.DamageBP += 8000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 8000)
 		}
 	case "CK-A06":
 		if d.ID == 10206 {
 			d.LegendaryModifiers.RadiusBP += 2000
-			d.LegendaryModifiers.DamageBP += 5000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 5000)
 		}
 	case "CK-A11":
 		if d.ID == 10213 {
 			d.Dist = specialScale(d.Dist, 150)
 			d.LegendaryModifiers.RadiusBP += 3000
-			d.LegendaryModifiers.DamageBP += 4000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 4000)
 		}
 	case "CK-A12":
 		if d.ID == 10213 {
 			d.LegendaryModifiers.RadiusBP += 3000
-			d.LegendaryModifiers.DamageBP += 9000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 9000)
 		}
 	case "CK-A20":
 		if d.ID == 10209 {
-			d.LegendaryModifiers.DamageBP += 2500
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 2500)
 		}
 	case "CK-A29":
 		if d.ID == 10210 {
-			d.LegendaryModifiers.DamageBP += 8000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 8000)
 		}
 	case "CK-U05":
 		if c.Owner.Player.Char.Skills[10222] > 0 && (d.ID == 10221 || d.ID == 10205 || d.ID == 10206) {
-			d.LegendaryModifiers.ManaReductionBP += 4500
+			d.LegendaryModifiers.ManaReductionBP += c.RollValue("mana_bp", 4500)
 		}
 	}
 }
@@ -152,13 +152,10 @@ func legendaryAssassinTargets(c *legendaryContext, ids []domain.EntityID) []doma
 			return ids
 		}
 		out := []domain.EntityID{primary.ID}
-		radius := float64(max(int32(100), c.Def.Radius))
-		for _, target := range c.Enemies(primary.Pos, radius, 100000) {
+		radius := float64(max(c.RollValue("radius", 100), c.Def.Radius))
+		for _, target := range c.Enemies(primary.Pos, radius, 0) {
 			if target.ID != primary.ID && c.Scene.validTarget(c.Owner, target, c.Def) {
 				out = append(out, target.ID)
-				if len(out) == 4 {
-					break
-				}
 			}
 		}
 		return out
@@ -180,7 +177,7 @@ func legendaryAssassinTargets(c *legendaryContext, ids []domain.EntityID) []doma
 	if length == 0 {
 		dx, dy, length = 1, 0, 1
 	}
-	for _, target := range c.Enemies(c.Owner.Pos, radius, 100000) {
+	for _, target := range c.Enemies(c.Owner.Pos, radius, 0) {
 		if target.ID == primary.ID {
 			continue
 		}
@@ -193,9 +190,6 @@ func legendaryAssassinTargets(c *legendaryContext, ids []domain.EntityID) []doma
 			continue
 		}
 		out = append(out, target.ID)
-		if len(out) == 5 {
-			break
-		}
 	}
 	return out
 }
@@ -212,10 +206,10 @@ func legendaryAssassinTargetDefinition(c *legendaryContext, d *domain.SkillDef) 
 		}
 	}
 	if c.Power.ID == "CK-A07" && d.ID == 10206 && c.Target != nil && c.Target.ID == c.Primary {
-		legendaryAddTargetDamage(d, 5000)
+		legendaryAddTargetDamage(d, c.RollValue("damage_bp", 5000))
 	}
 	if c.Power.ID == "CK-A21" && d.ID == 10209 && c.Target != nil && c.Target.ID == c.Primary {
-		legendaryAddTargetDamage(d, 7500)
+		legendaryAddTargetDamage(d, c.RollValue("damage_bp", 7500))
 	}
 }
 func legendaryAssassinLifesteal(c *legendaryContext) {
@@ -223,7 +217,7 @@ func legendaryAssassinLifesteal(c *legendaryContext) {
 		return
 	}
 	// Effective loss, not overkill or shield absorption, is the native damage base.
-	amount := clampI32(int64(c.LostHP) * 15 / 100)
+	amount := clampI32(int64(c.LostHP) * int64(c.RollValue("restore_pct", 15)) / 100)
 	if amount <= 0 {
 		return
 	}
@@ -242,9 +236,9 @@ func legendaryAssassinBackstabCooldown(c *legendaryContext) {
 		}
 	}
 	if landed {
-		pct := uint64(65)
+		pct := uint64(100 - c.RollValue("cooldown_pct", 35))
 		if killed {
-			pct = 20
+			pct = uint64(100 - c.RollValue("cooldown_pct", 80))
 		}
 		c.Owner.Player.ScaleRemainingSkillCooldown(10208, c.Scene.tick, pct)
 	}
@@ -277,4 +271,13 @@ func legendaryAssassinStunImmune(c *legendaryContext) bool {
 		}
 	}
 	return false
+}
+
+func legendaryAssassinPowerContext(s *Scene, owner *entity.Entity, id string) (legendaryContext, bool) {
+	for _, c := range s.legendaryContexts(owner, nil, combat.Blow{}, event.DamageDealt{}) {
+		if c.Power.ID == id {
+			return c, true
+		}
+	}
+	return legendaryContext{}, false
 }

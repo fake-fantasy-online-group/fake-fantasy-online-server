@@ -52,7 +52,7 @@ func (s *Scene) endgameItem(st domain.Stack, loc string, slot int32) domain.Endg
 		}
 		v.Trait = strings.Join(ts, "；")
 	}
-	if power, ok := domain.LegendaryPower(st.Legendary.PowerID); ok {
+	if power, ok := domain.LegendaryPowerForRoll(st.Legendary.PowerID, st.Legendary.PowerRollBP); ok {
 		// Existing clients compare this text with native tooltip rows exactly.
 		// Keep the name prefix identical so they do not append a second effect.
 		v.Legendary = &domain.LegendaryItemView{Tier: st.Legendary.Tier, PowerID: power.ID, Name: power.Name, Description: power.Name + "：" + power.Effect}

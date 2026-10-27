@@ -17,23 +17,34 @@ func init() {
 		if !legendaryMeleeLanded(c) || c.Skill != 10116 || !legendaryMeleePrimary(c) || !swordNativeOnce(c, 0) {
 			return
 		}
-		for _, e := range legendaryMeleeNearbyOthers(c, 150, 5) {
-			c.damageVisual("stage-01", e, legendaryMeleeScale(c.Attack(false), 160), false, false)
+		for _, e := range legendaryMeleeNearbyOthers(c, 150, len(c.Scene.entities)) {
+			c.damageVisual("stage-01", e, legendaryMeleeScale(c.Attack(false), int64(c.RollValue("proc_pct", 160))), false, false)
 		}
 	}})
 	registerLegendarySynergyHandler("JK-U03", legendaryHandler{RootFinished: func(c *legendaryContext) {
 		if c.Skill == 10119 && swordLandedCount(c.Owner.ID, c.Skill, c.Hits) > 0 {
-			c.RefundMP(specialScale(c.PaidMP, 60))
+			c.RefundMP(specialScale(c.PaidMP, c.RollValue("refund_pct", 60)))
 		}
 	}})
 	registerLegendarySynergyHandler("JK-U05", legendaryHandler{CastReleased: func(c *legendaryContext) {
-		if c.Skill == 10103 {
+		if c.Skill == 10103 && warriorFunctionalLearned(c, 10103) && !c.IsChild && c.Blow.ProcDepth == 0 {
+			warriorFunctionalRelease(10103, int64(c.RollValue("duration_ms", 8000)), false)(c)
 			swordCleanse(c, false)
 		}
+	}, Tick: warriorFunctionalTick(10103, false), StatusReceiving: func(c *legendaryContext, d *domain.StatusDef) bool {
+		if !warriorFunctionalActive(c, 10103) {
+			return true
+		}
+		// Use the native mixed-payload preservation rules, but retain roots:
+		// this power immunizes movement slow only, not immobility.
+		block, immobile := d.BlockMove, d.Immobile
+		changed, empty := d.StripMovementImpairments()
+		d.BlockMove, d.Immobile = block, immobile
+		return !changed || !empty || block || immobile != 0
 	}})
 	registerLegendarySynergyHandler("JK-U09", legendaryHandler{RootFinished: func(c *legendaryContext) {
 		if c.Skill != 0 && swordLandedCount(c.Owner.ID, c.Skill, c.Hits) > 0 {
-			c.RefundMP(specialScale(c.PaidMP, 80))
+			c.RefundMP(specialScale(c.PaidMP, c.RollValue("refund_pct", 80)))
 		}
 	}})
 	// Equipment-active movement immunity, not a timer or hard-control cleanse.

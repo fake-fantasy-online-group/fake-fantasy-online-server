@@ -210,7 +210,7 @@ func (s *Scene) rollEquipmentQualityV5WithVariants(def domain.ItemDef, stack *do
 			if rule != nil {
 				policy = rule.LegendaryPowerPolicy
 			}
-			table.ApplyLegendaryForRecipientWithPolicyAtLevel(stack, def, sourceLevel, recipientClass, policy, variants, variables)
+			table.ApplyLegendaryForRecipientWithGenerationAtLevel(stack, def, sourceLevel, recipientClass, policy, variants, variants && rule != nil && rule.LegendaryPowerRolls, variables)
 		}
 		return
 	}

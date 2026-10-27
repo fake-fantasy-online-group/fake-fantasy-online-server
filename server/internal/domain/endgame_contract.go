@@ -28,6 +28,7 @@ type EndgameItemState struct {
 }
 
 type EndgameRequest struct {
+	PowerID          string      `json:"powerId,omitempty"`
 	SkillID          int32       `json:"skillId,omitempty"`
 	Op               string      `json:"op"`
 	RequestID        string      `json:"requestId,omitempty"`
@@ -50,7 +51,7 @@ type EndgameRequest struct {
 
 func (r EndgameRequest) Mutates() bool {
 	switch r.Op {
-	case "skill.upgrade", "socket.insert", "socket.remove", "cube.execute", "cube.recover", "rift.start", "rift.claim", "rift.leave", "rift.advance":
+	case "powerbook.imprint", "skill.upgrade", "socket.insert", "socket.remove", "cube.execute", "cube.recover", "rift.start", "rift.claim", "rift.leave", "rift.advance":
 		return true
 	}
 	return false
@@ -283,7 +284,20 @@ type EndgameRiftEntranceView struct {
 	Script string `json:"script"`
 }
 
+type EndgamePowerBookView struct {
+	PowerID     string `json:"powerId"`
+	Name        string `json:"name"`
+	Category    string `json:"category"`
+	Class       string `json:"class"`
+	Description string `json:"description"`
+	RollBP      int32  `json:"rollBp"`
+	MinRollBP   int32  `json:"minRollBp"`
+	MaxRollBP   int32  `json:"maxRollBp"`
+	MinLevel    int32  `json:"minLevel"`
+}
+
 type EndgameResponse struct {
+	Powers         []EndgamePowerBookView    `json:"powers,omitempty"`
 	RiftEntrances  []EndgameRiftEntranceView `json:"riftEntrances,omitempty"`
 	CombatStats    *EndgameCombatStatsV5     `json:"combatStats,omitempty"`
 	SkillRanks     []SkillRankView           `json:"skillRanks,omitempty"`

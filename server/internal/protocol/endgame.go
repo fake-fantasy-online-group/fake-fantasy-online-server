@@ -47,7 +47,7 @@ func DecodeEndgame(payload []byte) (v domain.EndgameRequest, ok bool) {
 	if json.Unmarshal([]byte(raw), &keys) != nil {
 		return v, false
 	}
-	allowed := map[string]bool{"skillId": true, "op": true, "requestId": true, "expectedRevision": true, "capabilities": true, "catalog": true, "cursor": true, "targetUid": true, "runeUid": true, "socket": true, "recipeId": true, "quoteId": true, "runId": true, "tier": true, "floorIndex": true, "itemUids": true, "npcEntityId": true, "cubeInputs": true}
+	allowed := map[string]bool{"powerId": true, "skillId": true, "op": true, "requestId": true, "expectedRevision": true, "capabilities": true, "catalog": true, "cursor": true, "targetUid": true, "runeUid": true, "socket": true, "recipeId": true, "quoteId": true, "runId": true, "tier": true, "floorIndex": true, "itemUids": true, "npcEntityId": true, "cubeInputs": true}
 	for key := range keys {
 		if !allowed[key] {
 			return v, false
@@ -134,8 +134,14 @@ func validEndgameRequest(v domain.EndgameRequest) bool {
 		return false
 	}
 	switch v.Op {
-	case "skill.ranks", "skill.upgrade", "hello", "capabilities", "snapshot", "catalog", "socket.insert", "socket.remove", "cube.quote", "cube.execute", "cube.recover", "rift.start", "rift.state", "rift.claim", "rift.leave", "rift.advance":
+	case "powerbook.list", "powerbook.imprint", "skill.ranks", "skill.upgrade", "hello", "capabilities", "snapshot", "catalog", "socket.insert", "socket.remove", "cube.quote", "cube.execute", "cube.recover", "rift.start", "rift.state", "rift.claim", "rift.leave", "rift.advance":
 	default:
+		return false
+	}
+	if v.PowerID != "" && (v.Op != "powerbook.imprint" || !endgameASCII(v.PowerID, 1, 32)) {
+		return false
+	}
+	if v.Op == "powerbook.imprint" && (v.PowerID == "" || v.TargetUID == "" || v.RuneUID != "" || v.RecipeID != 0 || v.QuoteID != "" || len(v.ItemUIDs) != 0 || len(v.CubeInputs) != 0 || v.Socket != 0 || v.Tier != 0 || v.RunID != "" || v.Cursor != "" || v.Catalog != "" || v.FloorIndex != 0 || len(v.Capabilities) != 0) {
 		return false
 	}
 	if v.Op == "skill.upgrade" && v.SkillID <= 0 {

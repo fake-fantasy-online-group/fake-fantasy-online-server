@@ -12,10 +12,10 @@ func init() {
 	registerLegendarySynergyHandler("TY-A01", legendaryHandler{TransformSkill: universalBasicFan, SelectTargets: universalBasicTargets, TargetDefinition: universalBasicSide})
 	registerLegendarySynergyHandler("TY-A37", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if c.IsBasic || d.LegendaryBasic {
-			d.LegendaryModifiers.DamageBP += universalTuning.BasicDamageBP
+			d.LegendaryModifiers.DamageBP += c.RollValue("benefit", universalTuning.BasicDamageBP)
 		}
 	}})
-	registerLegendarySynergyHandler("TY-A16", legendaryHandler{ShieldDamageBP: func(c *legendaryContext) int32 { return universalTuning.ShieldDamageBP }})
+	registerLegendarySynergyHandler("TY-A16", legendaryHandler{ShieldDamageBP: func(c *legendaryContext) int32 { return c.RollValue("benefit", universalTuning.ShieldDamageBP) }})
 	for _, id := range []string{"TY-D01", "TY-U20"} {
 		registerLegendarySynergyHandler(id, legendaryHandler{PassiveStats: universalEquipmentStats})
 	}
@@ -45,12 +45,12 @@ func universalBasicTargets(c *legendaryContext, ids []domain.EntityID) []domain.
 		ex, ey := int64(b.Pos.X-c.Owner.Pos.X), int64(b.Pos.Y-c.Owner.Pos.Y)
 		return dx*dx+dy*dy < ex*ex+ey*ey
 	})
-	out := make([]domain.EntityID, 0, 5)
+	out := make([]domain.EntityID, 0, len(ids))
 	if c.Primary != 0 {
 		out = append(out, c.Primary)
 	}
 	for _, id := range ids {
-		if id != c.Primary && len(out) < 5 {
+		if id != c.Primary {
 			out = append(out, id)
 		}
 	}
@@ -64,8 +64,8 @@ func universalBasicSide(c *legendaryContext, d *domain.SkillDef) {
 	for i := range d.Effects {
 		e := &d.Effects[i]
 		if e.Kind == domain.EffectDamage {
-			domain.ScaleSkillDamageFraction(e, 70, 100)
-			e.DamageFlat = universalPct(e.DamageFlat, 70)
+			domain.ScaleSkillDamageFraction(e, int64(c.RollValue("benefit", 70)), 100)
+			e.DamageFlat = universalPct(e.DamageFlat, int64(c.RollValue("benefit", 70)))
 		}
 	}
 }
@@ -80,9 +80,9 @@ func universalEquipmentStats(c *legendaryContext, stats *domain.Stats) {
 	_, bare := domain.Compute(src)
 	switch c.Power.ID {
 	case "TY-D01":
-		stats.Def = domain.SaturateInt32(int64(stats.Def) + int64(max(int32(0), equipped.Def-bare.Def))*int64(universalTuning.EquipmentDefenseBP)/10000)
+		stats.Def = domain.SaturateInt32(int64(stats.Def) + int64(max(int32(0), equipped.Def-bare.Def))*int64(c.RollValue("benefit", universalTuning.EquipmentDefenseBP))/10000)
 	case "TY-U20":
-		stats.MoveSpeed = domain.SaturateInt32(int64(stats.MoveSpeed) + int64(max(int32(0), equipped.MoveSpeed-bare.MoveSpeed))*int64(universalTuning.EquipmentMoveBP)/10000)
+		stats.MoveSpeed = domain.SaturateInt32(int64(stats.MoveSpeed) + int64(max(int32(0), equipped.MoveSpeed-bare.MoveSpeed))*int64(c.RollValue("benefit", universalTuning.EquipmentMoveBP))/10000)
 	}
 }
 

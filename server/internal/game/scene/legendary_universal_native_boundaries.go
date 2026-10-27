@@ -48,11 +48,7 @@ func universalLandingPull(c *legendaryContext, from domain.Pos) {
 	if !universalHasEffect(&d, domain.EffectTeleportPoint, domain.EffectTeleportTarget) {
 		return
 	}
-	moved := 0
-	for _, e := range c.Enemies(c.Owner.Pos, 200, 256) {
-		if moved >= 6 {
-			break
-		}
+	for _, e := range c.Enemies(c.Owner.Pos, 200, 0) {
 		if e.Monster == nil {
 			continue
 		}
@@ -64,8 +60,6 @@ func universalLandingPull(c *legendaryContext, from domain.Pos) {
 		source.Pos = e.Pos
 		source.Pos.X += (e.Pos.X - c.Owner.Pos.X) / distance
 		source.Pos.Y += (e.Pos.Y - c.Owner.Pos.Y) / distance
-		if c.Scene.knockbackMonster(&source, e, int32(math.Min(100, math.Max(0, distance-1)))) {
-			moved++
-		}
+		c.Scene.knockbackMonster(&source, e, int32(math.Min(float64(c.RollValue("benefit", 100)), math.Max(0, distance-1))))
 	}
 }

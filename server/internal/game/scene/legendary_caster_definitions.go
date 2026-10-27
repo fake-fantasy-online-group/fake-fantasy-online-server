@@ -7,7 +7,7 @@ import "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/i
 func init() {
 	registerLegendarySynergyHandler("SS-A20", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryBlizzard {
-			d.LegendaryModifiers.DamageBP += 5500
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 5500)
 			d.LegendaryModifiers.RadiusBP += 4000
 			d.LegendaryModifiers.CooldownReductionBP += 2000
 		}
@@ -15,7 +15,7 @@ func init() {
 	registerLegendarySynergyHandler("SS-A06", legendaryHandler{
 		PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 			if d.ID == legendaryFireball {
-				d.LegendaryModifiers.RadiusBP += 6500
+				d.LegendaryModifiers.RadiusBP += c.RollValue("radius_bp", 6500)
 			}
 		},
 		TargetDefinition: legendaryCasterTargetBonus(func(c *legendaryContext, n int32) int32 {
@@ -44,9 +44,9 @@ func init() {
 		}
 		r := max(d.Radius, d.Area.Radius)
 		if sqDist(legendaryCasterCenter(c), c.Target.Pos) <= float64(r)*float64(r)/4 {
-			return specialScale(n, 185)
+			return specialScale(n, 100+c.RollValue("damage_pct", 85))
 		}
-		return specialScale(n, 165)
+		return specialScale(n, 100+c.RollValue("damage_pct", 65))
 	})})
 	registerLegendarySynergyHandler("SS-A21", legendaryHandler{TargetDefinition: legendaryCasterTargetBonus(func(c *legendaryContext, n int32) int32 {
 		if c.Skill != legendaryBlizzard || c.Target == nil {
@@ -58,9 +58,9 @@ func init() {
 		}
 		r := float64(max(d.Radius, d.Area.Radius)) * 2 / 3
 		if sqDist(legendaryCasterCenter(c), c.Target.Pos) <= r*r {
-			return specialScale(n, 180)
+			return specialScale(n, 100+c.RollValue("damage_pct", 80))
 		}
-		return specialScale(n, 120)
+		return specialScale(n, 100+c.RollValue("damage_pct", 20))
 	})})
 	registerLegendarySynergyHandler("SS-U01", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID != 10432 {
@@ -69,7 +69,7 @@ func init() {
 		d.CooldownMS = 0
 		d.CooldownFractionNumeratorMS = 0
 		d.CooldownFractionDenominator = 0
-		d.LegendaryModifiers.ManaReductionBP += 1500
+		d.LegendaryModifiers.ManaReductionBP += c.RollValue("mana_bp", 1500)
 		d.Effects = append([]domain.SkillEffect(nil), d.DirectEffects()...)
 		for i := range d.Effects {
 			if d.Effects[i].Kind == domain.EffectTeleportPoint || d.Effects[i].Kind == domain.EffectTeleportTarget {
@@ -77,14 +77,18 @@ func init() {
 			}
 		}
 	}})
-	registerLegendarySynergyHandler("SS-U02", legendaryHandler{Dispelled: legendaryCasterSteal, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
+	registerLegendarySynergyHandler("SS-U02", legendaryHandler{Dispelled: legendaryCasterSteal, TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {
+		if d.ID == 10433 {
+			specialCircle(d, c.RollValue("radius", 250), domain.SkillAreaCenterTarget, 0)
+		}
+	}, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID != 10433 {
 			return
 		}
 		d.Effects = append([]domain.SkillEffect(nil), d.DirectEffects()...)
 		for i := range d.Effects {
 			if len(d.Effects[i].RemoveStatusIDs) > 0 {
-				d.Effects[i].DispelChanceBP = min(int32(10000), d.Effects[i].DispelChanceBP+3000)
+				d.Effects[i].DispelChanceBP = 10000
 			}
 		}
 	}})
@@ -99,9 +103,9 @@ func init() {
 				return n
 			}
 			if sqDist(legendaryCasterCenter(c), c.Target.Pos) <= 100*100 {
-				return specialScale(n, 160)
+				return specialScale(n, 100+c.RollValue("damage_pct", 60))
 			}
-			return specialScale(n, 120)
+			return specialScale(n, 100+c.RollValue("damage_pct", 20))
 		}),
 	})
 	registerLegendarySynergyHandler("YS-U01", legendaryHandler{StatusApplied: legendaryCasterRegen, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
@@ -109,7 +113,7 @@ func init() {
 			d.CooldownMS = 0
 			d.CooldownFractionNumeratorMS = 0
 			d.CooldownFractionDenominator = 0
-			d.LegendaryModifiers.ManaReductionBP += 2000
+			d.LegendaryModifiers.ManaReductionBP += c.RollValue("mana_bp", 2000)
 		}
 	}})
 	registerLegendarySynergyHandler("YS-U02", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
@@ -117,7 +121,7 @@ func init() {
 			d.LegendaryModifiers.ManaReductionBP += 3000
 		}
 		if len(d.Statuses) > 0 && legendaryCasterNativeReady(c.Owner, true, false, false) {
-			d.LegendaryModifiers.StatusPowerBP += 5000
+			d.LegendaryModifiers.StatusPowerBP += c.RollValue("buff_bp", 5000)
 		}
 	}})
 

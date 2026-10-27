@@ -4,6 +4,7 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
 
 type specialWeaponState struct {
@@ -213,10 +214,18 @@ func (s *Scene) specialWeaponDispel(src, dst *entity.Entity, d domain.SkillDef, 
 	if d.SpecialWeaponBaseID != 1324 || d.ID != 10433 || dst.Status == nil {
 		return nil
 	}
+	// The learned legendary group steal owns this cast's transfer. Running the
+	// older weapon transfer first would overwrite its fresh shield on later
+	// victims before the legendary same-status deduplicator rejects them.
+	for _, ctx := range s.legendaryContexts(src, dst, combat.Blow{SkillID: int32(d.ID)}, event.DamageDealt{}) {
+		if ctx.Power.ID == "SS-U02" {
+			return nil
+		}
+	}
 	var stolen []domain.Active
 	dst.Status.EachEffective(func(a domain.Active) {
 		for _, id := range ids {
-			if a.Def.ID == id {
+			if a.Def.ID == id && !a.Def.Permanent {
 				stolen = append(stolen, a)
 				break
 			}
@@ -229,7 +238,14 @@ func (s *Scene) specialWeaponAfterDispel(src, dst *entity.Entity, d domain.Skill
 		amount := domain.SaturateInt32(int64(dst.MaxHP) * int64(min(3, len(removed))) * 3 / 100)
 		s.specialWeaponHeal(src, dst, amount, d)
 	}
+	removedIDs := make(map[domain.StatusID]bool, len(removed))
+	for _, id := range removed {
+		removedIDs[id] = true
+	}
 	for _, a := range stolen {
+		if a.Def.Permanent || !removedIDs[a.Def.ID] {
+			continue
+		}
 		if a.ExpireAt <= s.tick && !a.Def.Permanent {
 			continue
 		}

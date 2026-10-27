@@ -98,7 +98,7 @@ func legendaryCasterBurnBurst(skill domain.SkillID, percent int32) legendaryHand
 		if c.Skill != skill || c.Target == nil || c.Blow.ProcDepth > 0 && !c.IsChild || !legendaryCasterOnce(c, c.Target.ID, "burn-burst") {
 			return
 		}
-		c.Damage(c.Target, clampI32(legendaryCasterBurn(c, c.Target)*int64(percent)/100), true, false)
+		c.Damage(c.Target, clampI32(legendaryCasterBurn(c, c.Target)*int64(c.RollValue("burn_pct", percent))/100), true, false)
 	}}
 }
 func legendaryCasterFlatSkill(skill domain.SkillID, percent int32) legendaryHandler {
@@ -130,20 +130,20 @@ func init() {
 			}
 		}
 		if sqDist(c.Owner.Pos, c.Target.Pos) >= float64(d.Dist)*float64(d.Dist)/4 {
-			return specialScale(n, 155)
+			return specialScale(n, 100+c.RollValue("damage_pct", 55))
 		}
-		return specialScale(n, 120)
+		return specialScale(n, 100+c.RollValue("damage_pct", 20))
 	})})
 	registerLegendarySynergyHandler("SS-A15", legendaryHandler{TargetDefinition: legendaryCasterTargetBonus(func(c *legendaryContext, n int32) int32 {
 		if c.Skill == legendaryIceBurst && legendaryCasterHadControl(c) {
-			return specialScale(n, 160)
+			return specialScale(n, 100+c.RollValue("damage_pct", 60))
 		}
 		return n
 	})})
 
 	registerLegendarySynergyHandler("YS-A02", legendaryHandler{AfterHit: func(c *legendaryContext) {
 		if c.Skill == legendaryLightBolt && legendaryCasterLanded(c) && legendaryCasterOnce(c, c.Target.ID, "second-light") {
-			c.Damage(c.Target, specialScale(c.Hit.Amount, 85), true, true)
+			c.Damage(c.Target, specialScale(c.Hit.Amount, c.RollValue("proc_pct", 85)), true, true)
 		}
 	}})
 	registerLegendarySynergyHandler("YS-A01", legendaryHandler{
@@ -158,7 +158,7 @@ func init() {
 				d.Effects = append([]domain.SkillEffect(nil), d.DirectEffects()...)
 				for i := range d.Effects {
 					if d.Effects[i].Kind == domain.EffectDamage {
-						domain.ScaleSkillDamageFraction(&d.Effects[i], 60, 100)
+						domain.ScaleSkillDamageFraction(&d.Effects[i], int64(c.RollValue("secondary_pct", 60)), 100)
 					}
 				}
 				d.Statuses = nil
@@ -190,7 +190,7 @@ func init() {
 			}
 			st := c.State(0, "divine-pool")
 			if st.RootID == c.RootID {
-				c.Damage(c.Target, min(st.Stacks, clampI32(st.Value*35/100)), true, true)
+				c.Damage(c.Target, min(st.Stacks, clampI32(st.Value*int64(c.RollValue("proc_pct", 35))/100)), true, true)
 			}
 		}})
 

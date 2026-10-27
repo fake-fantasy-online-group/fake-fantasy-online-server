@@ -1,0 +1,233 @@
+{
+  "TY-A01": [
+    "legendary_universal_combat.go: universalBasicSide"
+  ],
+  "TY-A37": [
+    "legendary_universal_combat.go: init"
+  ],
+  "TY-A16": [
+    "legendary_universal_combat.go: init"
+  ],
+  "TY-D01": [
+    "legendary_universal_combat.go: universalEquipmentStats"
+  ],
+  "TY-U20": [
+    "legendary_universal_combat.go: universalEquipmentStats"
+  ],
+  "TY-A04": [
+    "legendary_universal_skill.go: universalSynergyPrepare"
+  ],
+  "TY-A06": [
+    "legendary_universal_skill.go: universalSynergyPrepare"
+  ],
+  "TY-A08": [
+    "legendary_universal_skill.go: universalSynergyPrepare"
+  ],
+  "TY-A24": [
+    "legendary_universal_skill.go: universalSynergyPrepare"
+  ],
+  "TY-U03": [
+    "legendary_universal_skill.go: universalSynergyPrepare"
+  ],
+  "TY-U10": [
+    "legendary_universal_skill.go: universalSynergyPrepare"
+  ],
+  "TY-U13": [
+    "legendary_universal_skill.go: universalSynergyPrepare"
+  ],
+  "TY-U15": [
+    "legendary_universal_skill.go: universalSynergyPrepare"
+  ],
+  "TY-A34": [
+    "legendary_universal_skill.go: universalPrimaryModifier"
+  ],
+  "TY-A18": [
+    "legendary_universal_status.go: universalNativeStatus"
+  ],
+  "TY-A27": [
+    "legendary_universal_status.go: universalNativeStatus"
+  ],
+  "TY-D16": [
+    "legendary_universal_status.go: universalNativeStatus"
+  ],
+  "TY-U05": [
+    "legendary_universal_status.go: universalNativeStatus"
+  ],
+  "TY-D05": [
+    "legendary_universal_status.go: universalSynergyIncoming"
+  ],
+  "TY-D11": [
+    "legendary_universal_status.go: universalSynergyIncoming"
+  ],
+  "TY-D19": [
+    "legendary_universal_status.go: universalSynergyIncoming"
+  ],
+  "TY-U02": [
+    "legendary_universal_status.go: universalBasicMana"
+  ],
+  "TY-D09": [
+    "legendary_universal_status.go: universalNativeStatusReceiving"
+  ],
+  "TY-U08": [
+    "legendary_universal_status.go: universalNativeStatusReceiving"
+  ],
+  "TY-A02": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-A03": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-A07": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-A19": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-A21": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-A40": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-U01": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-U04": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-U06": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-U07": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-U12": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-U14": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-U16": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-U17": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-U18": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-U19": [
+    "legendary_universal_extended_skill.go: universalExtendedPrepare"
+  ],
+  "TY-A05": [
+    "legendary_universal_extended_skill.go: universalSingleCircle"
+  ],
+  "TY-A10": [
+    "legendary_universal_extended_combat.go: universalExtendedStats"
+  ],
+  "TY-D02": [
+    "legendary_universal_extended_combat.go: universalExtendedStats"
+  ],
+  "TY-D03": [
+    "legendary_universal_extended_combat.go: universalExtendedStats"
+  ],
+  "TY-D04": [
+    "legendary_universal_extended_combat.go: universalExtendedStats"
+  ],
+  "TY-U09": [
+    "legendary_universal_extended_combat.go: universalExtendedStats"
+  ],
+  "TY-A25": [
+    "legendary_universal_extended_combat.go: universalExtendedBase"
+  ],
+  "TY-A26": [
+    "legendary_universal_extended_combat.go: universalExtendedBase"
+  ],
+  "TY-A38": [
+    "legendary_universal_extended_combat.go: universalExtendedBase"
+  ],
+  "TY-A39": [
+    "legendary_universal_extended_combat.go: universalExtendedBase"
+  ],
+  "TY-A30": [
+    "legendary_universal_extended_combat.go: universalExtendedTarget"
+  ],
+  "TY-A31": [
+    "legendary_universal_extended_combat.go: universalExtendedTarget"
+  ],
+  "TY-A32": [
+    "legendary_universal_extended_combat.go: universalExtendedTarget"
+  ],
+  "TY-A36": [
+    "legendary_universal_extended_combat.go: universalExtendedTarget"
+  ],
+  "TY-D06": [
+    "legendary_universal_extended_combat.go: universalExtendedIncoming"
+  ],
+  "TY-D07": [
+    "legendary_universal_extended_combat.go: universalExtendedIncoming"
+  ],
+  "TY-D08": [
+    "legendary_universal_extended_combat.go: universalExtendedIncoming"
+  ],
+  "TY-D10": [
+    "legendary_universal_extended_combat.go: universalExtendedIncoming"
+  ],
+  "TY-D17": [
+    "legendary_universal_extended_combat.go: universalExtendedIncoming"
+  ],
+  "TY-A15": [
+    "legendary_universal_extended_status.go: init"
+  ],
+  "TY-D12": [
+    "legendary_universal_extended_status.go: init"
+  ],
+  "TY-A13": [
+    "legendary_universal_extended_status.go: universalExtendedStatus"
+  ],
+  "TY-A14": [
+    "legendary_universal_extended_status.go: universalExtendedStatus"
+  ],
+  "TY-A17": [
+    "legendary_universal_extended_status.go: universalExtendedStatus"
+  ],
+  "TY-A22": [
+    "legendary_universal_extended_status.go: universalExtendedStatus"
+  ],
+  "TY-A23": [
+    "legendary_universal_extended_status.go: universalExtendedStatus"
+  ],
+  "TY-D18": [
+    "legendary_universal_extended_status.go: universalExtendedStatus"
+  ],
+  "TY-U11": [
+    "legendary_universal_extended_status.go: universalExtendedStatus"
+  ],
+  "TY-D13": [
+    "legendary_universal_extended_status.go: universalExtendedReceiving"
+  ],
+  "TY-D14": [
+    "legendary_universal_extended_status.go: universalExtendedReceiving"
+  ],
+  "TY-D15": [
+    "legendary_universal_extended_status.go: universalExtendedReceiving"
+  ],
+  "TY-D20": [
+    "legendary_universal_extended_status.go: universalExtendedReceiving"
+  ],
+  "TY-A11": [
+    "legendary_universal_extended_status.go: universalExtendedBlow"
+  ],
+  "TY-A12": [
+    "legendary_universal_extended_status.go: universalExtendedBlow"
+  ],
+  "TY-A33": [
+    "legendary_universal_extended_status.go: universalExtendedBlow"
+  ],
+  "TY-A35": [
+    "legendary_universal_appearance.go: init"
+  ],
+  "TY-A20": [
+    "legendary_universal_native_boundaries.go: universalLandingPull"
+  ]
+}

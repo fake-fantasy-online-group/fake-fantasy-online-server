@@ -28,7 +28,7 @@ func init() {
 				d.Area.Center = domain.SkillAreaCenterTarget
 				d.Dist = 600
 			}
-			d.LegendaryModifiers.StatusPowerBP += 3000
+			d.LegendaryModifiers.StatusPowerBP += c.RollValue("buff_bp", 3000)
 		},
 		SelectTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {
 			if c.Skill != 10311 || c.Target == nil || c.Target == c.Owner || !sameParty(c.Owner, c.Target) {
@@ -60,7 +60,7 @@ func init() {
 		specialCircle(d, 200, domain.SkillAreaCenterTarget, 0)
 		d.TargetSelf = true
 		d.TargetTeam = true
-		d.LegendaryModifiers.DamageBP += 2000
+		d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 2000)
 	}, SelectTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {
 		if c.Skill != legendaryHolyLight || c.Target == nil || c.Target != c.Owner && !sameParty(c.Owner, c.Target) {
 			return ids

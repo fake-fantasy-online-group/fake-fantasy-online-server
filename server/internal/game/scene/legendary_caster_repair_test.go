@@ -246,7 +246,18 @@ func TestCasterRepairRangeThresholdAndWideAreaComposition(t *testing.T) {
 		if extended {
 			powers = append(powers, "SS-U10")
 		}
-		s, p, m := nativeRepairFixture(t, domain.Warlock, domain.Learned{10409: 1}, powers...)
+		s, p, m := nativeRepairFixture(t, domain.Warlock, domain.Learned{10409: 1, 10432: 5}, powers...)
+		if extended {
+			from := p.Pos
+			to := from
+			to.X += 100
+			s.onUseSkill(UseSkill{ID: p.ID, Skill: 10432, At: &to})
+			sharedTargetFinishCasts(t, s)
+			if p.Pos == from {
+				t.Fatal("teleport did not move")
+			}
+		}
+
 		pos := m.Pos
 		pos.X = p.Pos.X + 300
 		s.aoi.Move(m, pos)
@@ -391,8 +402,8 @@ func TestCasterRepairGrantedLightWithoutLearningBolt(t *testing.T) {
 			hits++
 		}
 	}
-	if m.HP == 100000 || hits != 4 {
-		t.Fatal("granted rank-one light bolt missing or split cap bypassed", m.HP, hits)
+	if m.HP == 100000 || hits != 7 {
+		t.Fatal("granted rank-one light bolt missing or legal targets capped", m.HP, hits)
 	}
 }
 

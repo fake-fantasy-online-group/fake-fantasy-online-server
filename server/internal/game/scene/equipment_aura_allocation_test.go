@@ -31,9 +31,6 @@ func (s *Scene) auditLegacyAuraRecipients(source equipmentAuraSource) []*entity.
 		}
 		return x.ID < y.ID
 	})
-	if len(candidates) > int(a.MaxPlayers) {
-		candidates = candidates[:a.MaxPlayers]
-	}
 	out := append([]*entity.Entity(nil), candidates...)
 	for _, p := range candidates {
 		if a.IncludeActivePet && p.Player.Pet != 0 {
@@ -84,7 +81,7 @@ func (s *Scene) auditLegacyAuraStatuses(e *entity.Entity) []statusPresentation {
 			label = equipmentElementName(a.Element) + "伤害"
 			pvpCondition = "对玩家造成伤害时"
 		}
-		desc := fmt.Sprintf("%d级光环：%s +%s；%s +%s。\n来源：%s；范围%d，含来源最多%d人；同类光环只取最高，不叠加。", a.FixedRank, label, equipmentPercent(a.Value), pvpCondition, equipmentPercent(int32(int64(a.Value)*int64(a.PVPScaleBP)/10000)), sourceName, a.RadiusPX, a.MaxPlayers)
+		desc := fmt.Sprintf("%d级光环：%s +%s；%s +%s。\n来源：%s；范围%d内的同队成员均可生效；同类光环只取最高，不叠加。", a.FixedRank, label, equipmentPercent(a.Value), pvpCondition, equipmentPercent(int32(int64(a.Value)*int64(a.PVPScaleBP)/10000)), sourceName, a.RadiusPX)
 		if a.IncludeActivePet {
 			desc += "惠及出战宠物。"
 		}
@@ -157,9 +154,9 @@ func TestEquipmentAuraAllocationOwnsRecipientAndSourceSlices(t *testing.T) {
 	previousSources := rt.auraSources
 	previousValues := append([]equipmentAuraSource(nil), previousSources...)
 	source := previousSources[0]
-	source.effect.MaxPlayers = 2 // Pet appends can reuse the truncated candidate backing array.
+	source.effect.MaxPlayers = 2 // Legacy headcount must not truncate the player prefix.
 	first := s.equipmentAuraRecipients(source)
-	if len(first) != 4 || first[0].ID != 1 || first[1].ID != 2 || first[2].ID != 101 || first[3].ID != 102 {
+	if len(first) != 16 || first[0].ID != 1 || first[1].ID != 2 || first[8].ID != 101 || first[9].ID != 102 {
 		t.Fatalf("pet append changed selected player prefix: %v", first)
 	}
 	first[0] = nil

@@ -14,14 +14,14 @@ func universalSingleCircle(c *legendaryContext, d *domain.SkillDef) {
 	}
 	d.LegendaryModifiers.UniversalSingleCircle = true
 	d.Kind = domain.SkillArea
-	d.Area = domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterTarget, Radius: 120}
-	d.Radius = 120
+	d.Area = domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterTarget, Radius: c.RollValue("benefit", 120)}
+	d.Radius = c.RollValue("benefit", 120)
 }
 func universalCircleTargets(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {
 	if !c.Def.LegendaryModifiers.UniversalSingleCircle || c.Def.LegendaryBasic || c.Def.Area.Shape != domain.SkillAreaCircle || c.Def.Area.Center != domain.SkillAreaCenterTarget {
 		return ids
 	}
-	out := make([]domain.EntityID, 0, 5)
+	out := make([]domain.EntityID, 0, len(ids))
 	if c.Primary != 0 {
 		for _, id := range ids {
 			if id == c.Primary {
@@ -31,7 +31,7 @@ func universalCircleTargets(c *legendaryContext, ids []domain.EntityID) []domain
 		}
 	}
 	for _, id := range ids {
-		if id != c.Primary && len(out) < 5 {
+		if id != c.Primary {
 			out = append(out, id)
 		}
 	}
@@ -65,16 +65,16 @@ func universalExtendedPrepare(c *legendaryContext, d *domain.SkillDef) {
 	switch c.Power.ID {
 	case "TY-A02":
 		if d.Area.Valid() && d.Area.Shape == domain.SkillAreaRectangle {
-			m.LengthBP += 6000
+			m.LengthBP += c.RollValue("benefit", 6000)
 		}
 	case "TY-A03":
 		if d.Area.Valid() && d.Area.Shape == domain.SkillAreaCone {
-			m.RadiusBP += 5000
+			m.RadiusBP += c.RollValue("benefit", 5000)
 		}
 	case "TY-A07":
 		if d.ProjectileSpeedPXPerSec > 0 {
-			d.ProjectileSpeedPXPerSec = universalScaleBP(d.ProjectileSpeedPXPerSec, 10000)
-			d.Dist = universalScaleBP(d.Dist, 4000)
+			d.ProjectileSpeedPXPerSec = universalScaleBP(d.ProjectileSpeedPXPerSec, c.RollValue("benefit", 10000))
+			d.Dist = universalScaleBP(d.Dist, c.RollValue("benefit", 4000))
 		}
 	case "TY-A09":
 		if d.LegendaryBasic {
@@ -85,57 +85,57 @@ func universalExtendedPrepare(c *legendaryContext, d *domain.SkillDef) {
 			})
 		}
 	case "TY-A19":
-		m.ManaDrainBP += 8000
+		m.ManaDrainBP += c.RollValue("benefit", 8000)
 	case "TY-A21":
-		m.TrapRadiusBP += 5000
+		m.TrapRadiusBP += c.RollValue("benefit", 5000)
 	case "TY-A40":
 		if !d.LegendaryBasic && d.HasDamageEffect() && universalHasNativeShield(c) {
-			m.DamageBP += 4000
+			m.DamageBP += c.RollValue("benefit", 4000)
 		}
 	case "TY-U01":
 		if !d.LegendaryBasic {
-			m.PrepareReductionBP += 3000
+			m.PrepareReductionBP += c.RollValue("benefit", 3000)
 		}
 	case "TY-U04":
 		if !d.LegendaryBasic && universalNativeHealingPayload(c, d) {
-			m.ManaReductionBP += 3000
+			m.ManaReductionBP += c.RollValue("benefit", 3000)
 		}
 	case "TY-U06":
-		m.RestoreMPBP += 5000
+		m.RestoreMPBP += c.RollValue("benefit", 5000)
 	case "TY-U07":
 		if universalHasEffect(d, domain.EffectTeleportPoint, domain.EffectTeleportTarget) {
-			d.Dist = universalScaleBP(d.Dist, 4000)
+			d.Dist = universalScaleBP(d.Dist, c.RollValue("benefit", 4000))
 		}
 	case "TY-U12":
 		if !d.LegendaryBasic && universalNativeStatusKind(c, d, true) {
-			m.ManaReductionBP += 3000
+			m.ManaReductionBP += c.RollValue("benefit", 3000)
 		}
 	case "TY-U14":
 		if !d.LegendaryBasic && universalNativeStatusKind(c, d, false) {
-			m.ManaReductionBP += 3000
+			m.ManaReductionBP += c.RollValue("benefit", 3000)
 		}
 	case "TY-U16":
-		m.HealingBP += 6000
+		m.HealingBP += c.RollValue("benefit", 6000)
 	case "TY-U17":
 		universalEditEffects(d, func(e *domain.SkillEffect) {
 			if e.Kind == domain.EffectResurrect {
-				e.HealPctOfMax = min(int32(100), universalScaleBP(e.HealPctOfMax, 5000))
-				e.HealFlat = universalScaleBP(e.HealFlat, 5000)
+				e.HealPctOfMax = min(int32(100), universalScaleBP(e.HealPctOfMax, c.RollValue("benefit", 5000)))
+				e.HealFlat = universalScaleBP(e.HealFlat, c.RollValue("benefit", 5000))
 			}
 		})
 	case "TY-U18":
 		universalEditEffects(d, func(e *domain.SkillEffect) {
 			if e.ClearHarmful || len(e.RemoveStatusIDs) > 0 {
-				e.DispelChanceBP = min(int32(10000), e.DispelChanceBP+4000)
+				e.DispelChanceBP = min(int32(10000), e.DispelChanceBP+c.RollValue("benefit", 4000))
 			}
 		})
 	case "TY-U19":
 		if universalHasEffect(d, domain.EffectDetectTrap) {
-			m.RadiusBP += 10000
+			m.RadiusBP += c.RollValue("benefit", 10000)
 		}
 		universalEditEffects(d, func(e *domain.SkillEffect) {
 			if e.Kind == domain.EffectRevealInvisible {
-				e.RevealRadius = universalScaleBP(e.RevealRadius, 10000)
+				e.RevealRadius = universalScaleBP(e.RevealRadius, c.RollValue("benefit", 10000))
 			}
 		})
 	}

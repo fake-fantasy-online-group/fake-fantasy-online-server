@@ -10,12 +10,12 @@ import (
 func init() {
 	registerLegendarySynergyHandler("SS-A10", legendaryHandler{ModifyBlow: func(c *legendaryContext, b *combat.Blow) {
 		if c.Skill == legendaryIceArrow {
-			b.ElementReductionPenetrationBP += 5000
+			b.ElementReductionPenetrationBP += c.RollValue("penetration_bp", 5000)
 		}
 	}})
 	registerLegendarySynergyHandler("YS-A03", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryLightBolt {
-			d.LegendaryModifiers.DamageBP += 6000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 6000)
 		}
 	}, SkillResolved: func(c *legendaryContext) {
 		if c.Skill != legendaryLightBolt || c.Target == nil || c.Target.Status == nil {
@@ -44,13 +44,13 @@ func init() {
 		}
 	}, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryHolyLight {
-			d.LegendaryModifiers.DamageBP += 8000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 8000)
 		}
 	}})
 	registerLegendarySynergyHandler("YS-A12", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryExorcism {
 			d.LegendaryDamageThroughControlImmunity = true
-			d.LegendaryModifiers.DamageBP += 5000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 5000)
 		}
 	}, SkillResolved: func(c *legendaryContext) {
 		if c.Skill == legendaryExorcism && c.Target != nil && !c.Scene.legendaryCasterSkillImmune(c.Target, c.Skill) {
@@ -63,14 +63,14 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("YS-A14", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryDivine {
-			d.LegendaryModifiers.CooldownReductionBP += 4500
+			d.LegendaryModifiers.CooldownReductionBP += c.RollValue("cooldown_bp", 4500)
 		}
 	}})
 	registerLegendarySynergyHandler("YS-A22", legendaryCasterSupportWave(10306, 220, 220))
 	registerLegendarySynergyHandler("YS-A24", legendaryCasterSupportWave(10304, 250, 250))
 	registerLegendarySynergyHandler("YS-D01", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10301 {
-			d.LegendaryModifiers.HealingBP += 6000
+			d.LegendaryModifiers.HealingBP += c.RollValue("healing_bp", 6000)
 		}
 	}})
 	registerLegendarySynergyHandler("YS-D02", legendaryCasterGroupCleanse(10306, true))
@@ -78,25 +78,25 @@ func init() {
 	registerLegendarySynergyHandler("YS-U10", legendaryCasterGroupCleanse(10318, true))
 	registerLegendarySynergyHandler("YS-D04", legendaryHandler{StatusApplied: func(c *legendaryContext, d *domain.StatusDef) {
 		if c.Skill == 10321 {
-			d.LegendaryModifiers.PhysicalReductionBonusPct += 35
-			d.LegendaryModifiers.MagicReductionBonusPct += 35
+			d.LegendaryModifiers.PhysicalReductionBonusPct += c.RollValue("status_reduction_pct", 35)
+			d.LegendaryModifiers.MagicReductionBonusPct += c.RollValue("status_reduction_pct", 35)
 		}
 	}})
 	registerLegendarySynergyHandler("YS-D06", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if c.Scene.legendaryCasterWinding(c.Owner, 10304) {
-			return specialScale(n, 60)
+			return specialScale(n, 100-c.RollValue("reduction_pct", 40))
 		}
 		return n
 	}})
 	registerLegendarySynergyHandler("YS-D08", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if c.Scene.legendaryCasterWinding(c.Owner, 10305) {
-			return specialScale(n, 40)
+			return specialScale(n, 100-c.RollValue("reduction_pct", 60))
 		}
 		return n
 	}})
 	registerLegendarySynergyHandler("YS-D09", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if c.IsBasic && legendaryCasterHasSkill(c.Owner, 10330) {
-			return specialScale(n, 65)
+			return specialScale(n, 100-c.RollValue("reduction_pct", 35))
 		}
 		return n
 	}, StatusApplied: func(c *legendaryContext, d *domain.StatusDef) {
@@ -106,20 +106,11 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("YS-D10", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if legendaryCasterOwnSkill(c.Target, c.Owner.ID, 10325) {
-			return specialScale(n, 60)
+			return specialScale(n, 100-c.RollValue("reduction_pct", 40))
 		}
 		return n
 	}})
-	registerLegendarySynergyHandler("YS-U08", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
-		if (d.TargetSelf || d.TargetTeam) && !d.TargetEnemy && d.Area.Shape == domain.SkillAreaNone {
-			d.Dist += 200
-			d.LegendaryModifiers.ManaReductionBP += 2500
-		}
-		if d.ID == 10327 {
-			d.LegendaryRevealPoint = true
-			d.Dist = 600
-		}
-	}})
+	registerLegendarySynergyHandler("YS-U08", legendaryHealerFarClinic())
 	registerLegendarySynergyHandler("YS-U09", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10305 {
 			d.Effects = append([]domain.SkillEffect(nil), d.DirectEffects()...)
@@ -131,7 +122,7 @@ func init() {
 		}
 	}, Resurrected: func(c *legendaryContext) {
 		if c.Skill == 10305 && legendaryCasterOnce(c, 0, "revive-refund") {
-			c.RefundMP(specialScale(c.PaidMP, 50))
+			c.RefundMP(specialScale(c.PaidMP, c.RollValue("refund_pct", 50)))
 		}
 	}})
 }
@@ -145,8 +136,8 @@ func legendaryCasterSupportWave(skill domain.SkillID, radius float64, pct int32)
 			center = c.Target.Pos
 		}
 		d := domain.SkillDef{ID: skill, Level: c.Def.Level, Kind: domain.SkillSingle, TargetEnemy: true, HurtType: domain.HurtHoly, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
-		for _, target := range c.Enemies(center, radius, 256) {
-			if c.ChildSkill(target.ID, d, legendaryChildOptions{BaseDamage: specialScale(c.Attack(true), pct), TargetOnly: true, SuppressGeneration: true, SuppressVisual: true}) {
+		for _, target := range c.Enemies(center, radius, 0) {
+			if c.ChildSkill(target.ID, d, legendaryChildOptions{BaseDamage: specialScale(c.Attack(true), c.RollValue("wave_pct", pct)), TargetOnly: true, SuppressGeneration: true, SuppressVisual: true}) {
 				if c.Power.ID == "YS-A28" {
 					// The new mana-restoration wave has no custom asset. Reuse
 					// only the native holy bolt impact, never a support cast on enemies.
@@ -163,7 +154,7 @@ func legendaryCasterGroupCleanse(skill domain.SkillID, guaranteed bool) legendar
 		if d.ID != skill {
 			return
 		}
-		specialCircle(d, 250, domain.SkillAreaCenterTarget, 0)
+		specialCircle(d, c.RollValue("radius", 250), domain.SkillAreaCenterTarget, 0)
 		d.TargetSelf = true
 		d.TargetTeam = true
 		d.TargetEnemy = false

@@ -1,0 +1,297 @@
+{
+  "SS-A02": [
+    "legendary_caster.go: legendaryCasterBurnBurst burn_pct"
+  ],
+  "SS-A11": [
+    "legendary_caster.go: legendaryCasterBurnBurst burn_pct"
+  ],
+  "SS-A16": [
+    "legendary_caster.go: legendaryCasterBurnBurst burn_pct"
+  ],
+  "SS-A03": [
+    "legendary_caster_synergy.go: specialCircle(d, 150, → specialCircle(d, c.RollValue(\"radius\", 150),"
+  ],
+  "SS-A04": [
+    "legendary_caster_areas.go: ScaleBP: 7000 → ScaleBP: c.RollValue(\"child_bp\", 7000)"
+  ],
+  "SS-A05": [
+    "legendary_caster_areas.go: specialScale(n, 175) → specialScale(n, 100+c.RollValue(\"damage_pct\", 75))",
+    "legendary_caster_areas.go: specialScale(n, 135) → specialScale(n, 100+c.RollValue(\"damage_pct\", 35))"
+  ],
+  "SS-A08": [
+    "legendary_caster.go: specialScale(n, 155) → specialScale(n, 100+c.RollValue(\"damage_pct\", 55))",
+    "legendary_caster.go: specialScale(n, 120) → specialScale(n, 100+c.RollValue(\"damage_pct\", 20))"
+  ],
+  "SS-A13": [
+    "legendary_caster_definitions.go: specialScale(n, 185) → specialScale(n, 100+c.RollValue(\"damage_pct\", 85))",
+    "legendary_caster_definitions.go: specialScale(n, 165) → specialScale(n, 100+c.RollValue(\"damage_pct\", 65))"
+  ],
+  "SS-A21": [
+    "legendary_caster_definitions.go: specialScale(n, 180) → specialScale(n, 100+c.RollValue(\"damage_pct\", 80))",
+    "legendary_caster_definitions.go: specialScale(n, 120) → specialScale(n, 100+c.RollValue(\"damage_pct\", 20))"
+  ],
+  "SS-A06": [
+    "legendary_caster_definitions.go: RadiusBP += 6500 → RadiusBP += c.RollValue(\"radius_bp\", 6500)"
+  ],
+  "SS-A07": [
+    "legendary_caster_synergy.go: best*90/100 → best*int64(c.RollValue(\"burn_pct\", 90))/100"
+  ],
+  "SS-A09": [
+    "legendary_caster_synergy.go: specialScale(n, 200) → specialScale(n, 100+c.RollValue(\"damage_pct\", 100))"
+  ],
+  "SS-A10": [
+    "legendary_caster_directions.go: ElementReductionPenetrationBP += 5000 → ElementReductionPenetrationBP += c.RollValue(\"penetration_bp\", 5000)"
+  ],
+  "SS-A12": [
+    "legendary_caster_synergy.go: DamageBP += 2000 → DamageBP += c.RollValue(\"damage_bp\", 2000)"
+  ],
+  "SS-A14": [
+    "legendary_caster_shields.go: specialScale(n, 120) → specialScale(n, 100+c.RollValue(\"damage_pct\", 20))"
+  ],
+  "SS-A15": [
+    "legendary_caster.go: specialScale(n, 160) → specialScale(n, 100+c.RollValue(\"damage_pct\", 60))"
+  ],
+  "SS-A17": [
+    "legendary_caster_synergy.go: DamageTickBP += 8200 → DamageTickBP += c.RollValue(\"tick_bp\", 8200)"
+  ],
+  "SS-A18": [
+    "legendary_caster_replacements.go: DamageBP += 4000 → DamageBP += c.RollValue(\"damage_bp\", 4000)"
+  ],
+  "SS-A19": [
+    "legendary_caster_synergy.go: legendaryCasterNewBurnTotal(c, *d)*65/100 → legendaryCasterNewBurnTotal(c, *d)*int64(c.RollValue(\"burn_pct\", 65))/100"
+  ],
+  "SS-A20": [
+    "legendary_caster_definitions.go: DamageBP += 5500 → DamageBP += c.RollValue(\"damage_bp\", 5500)"
+  ],
+  "SS-A22": [
+    "legendary_caster_replacements.go: legendaryAddTargetDamage(d, 9000) → legendaryAddTargetDamage(d, c.RollValue(\"damage_bp\", 9000))"
+  ],
+  "SS-A24": [
+    "legendary_caster_synergy.go: ScaleBP: 15000 → ScaleBP: c.RollValue(\"child_bp\", 15000)"
+  ],
+  "SS-A26": [
+    "legendary_caster_synergy.go: specialScale(c.Owner.MaxHP, 18) → specialScale(c.Owner.MaxHP, c.RollValue(\"reflection_cap_pct\", 18))"
+  ],
+  "SS-A27": [
+    "legendary_caster_synergy.go: specialScale(legendaryCasterGrantedBase(c, legendaryFireBolt), 180) → specialScale(legendaryCasterGrantedBase(c, legendaryFireBolt), c.RollValue(\"proc_pct\", 180))"
+  ],
+  "SS-A29": [
+    "legendary_caster_synergy.go: DamageBP += 6600 → DamageBP += c.RollValue(\"damage_bp\", 6600)"
+  ],
+  "SS-A30": [
+    "legendary_caster_resources.go: ScaleBP: 8000 → ScaleBP: c.RollValue(\"child_bp\", 8000)"
+  ],
+  "SS-D01": [
+    "legendary_caster_synergy.go: specialScale(n, 72) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 28))"
+  ],
+  "SS-D02": [
+    "legendary_caster_synergy.go: specialScale(n, 45) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 55))"
+  ],
+  "SS-D03": [
+    "legendary_caster_synergy.go: specialScale(n, 25) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 75))"
+  ],
+  "SS-D06": [
+    "legendary_caster_synergy.go: specialScale(n, 65) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 35))"
+  ],
+  "SS-D09": [
+    "legendary_caster_synergy.go: specialScale(n, 60) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 40))"
+  ],
+  "SS-D10": [
+    "legendary_caster_synergy.go: specialScale(n, 65) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 35))"
+  ],
+  "SS-D04": [
+    "legendary_caster_synergy.go: specialScale(s.MaxHP, 130) → specialScale(s.MaxHP, 100+c.RollValue(\"life_pct\", 30))"
+  ],
+  "SS-D07": [
+    "legendary_caster_synergy.go: specialScale(s.MaxHP, 128) → specialScale(s.MaxHP, 100+c.RollValue(\"life_pct\", 28))"
+  ],
+  "SS-D08": [
+    "legendary_caster_synergy.go: specialScale(s.MaxHP, 130) → specialScale(s.MaxHP, 100+c.RollValue(\"life_pct\", 30))"
+  ],
+  "SS-D05": [
+    "legendary_caster_synergy.go: specialScale(c.Owner.MaxHP, 22) → specialScale(c.Owner.MaxHP, c.RollValue(\"reduction_cap_pct\", 22))"
+  ],
+  "SS-U01": [
+    "legendary_caster_definitions.go: ManaReductionBP += 1500 → ManaReductionBP += c.RollValue(\"mana_bp\", 1500)"
+  ],
+  "SS-U02": [
+    "legendary_caster_definitions.go: specialCircle(d, 250, → specialCircle(d, c.RollValue(\"radius\", 250),"
+  ],
+  "SS-U03": [
+    "legendary_caster_synergy.go: ManaReductionBP += 5500 → ManaReductionBP += c.RollValue(\"mana_bp\", 5500)"
+  ],
+  "SS-U04": [
+    "legendary_sorcerer_functional_rework.go: specialScale(stats.MoveSpeed, 180) → specialScale(stats.MoveSpeed, 100+c.RollValue(\"move_pct\", 80))"
+  ],
+  "SS-U05": [
+    "legendary_caster_synergy.go: specialScale(c.Owner.MaxMP, 10) → specialScale(c.Owner.MaxMP, c.RollValue(\"restore_pct\", 10))"
+  ],
+  "SS-U07": [
+    "legendary_sorcerer_functional_rework.go: ManaReductionBP += 4500 → ManaReductionBP += c.RollValue(\"mana_bp\", 4500)"
+  ],
+  "SS-U09": [
+    "legendary_caster_replacements.go: CooldownReductionBP += 3000 → CooldownReductionBP += c.RollValue(\"cooldown_bp\", 3000)"
+  ],
+  "SS-U10": [
+    "legendary_sorcerer_functional_rework.go: specialScale(d.Dist, 200) → specialScale(d.Dist, 100+c.RollValue(\"range_pct\", 100))"
+  ],
+  "YS-A01": [
+    "legendary_caster.go: domain.ScaleSkillDamageFraction(&d.Effects[i], 60, 100) → domain.ScaleSkillDamageFraction(&d.Effects[i], int64(c.RollValue(\"secondary_pct\", 60)), 100)"
+  ],
+  "YS-A02": [
+    "legendary_caster.go: specialScale(c.Hit.Amount, 85) → specialScale(c.Hit.Amount, c.RollValue(\"proc_pct\", 85))"
+  ],
+  "YS-A03": [
+    "legendary_caster_directions.go: DamageBP += 6000 → DamageBP += c.RollValue(\"damage_bp\", 6000)"
+  ],
+  "YS-A05": [
+    "legendary_caster_admission.go: DamageBP += 2000 → DamageBP += c.RollValue(\"damage_bp\", 2000)"
+  ],
+  "YS-A08": [
+    "legendary_caster_directions.go: DamageBP += 8000 → DamageBP += c.RollValue(\"damage_bp\", 8000)"
+  ],
+  "YS-A09": [
+    "legendary_caster_synergy.go: DamageBP += 4000 → DamageBP += c.RollValue(\"damage_bp\", 4000)"
+  ],
+  "YS-A11": [
+    "legendary_caster_replacements.go: DamageBP += 4500 → DamageBP += c.RollValue(\"damage_bp\", 4500)"
+  ],
+  "YS-A12": [
+    "legendary_caster_directions.go: DamageBP += 5000 → DamageBP += c.RollValue(\"damage_bp\", 5000)"
+  ],
+  "YS-A16": [
+    "legendary_caster_replacements.go: DamageBP += 3500 → DamageBP += c.RollValue(\"damage_bp\", 3500)"
+  ],
+  "YS-A18": [
+    "legendary_caster_replacements.go: DamageBP += 6000 → DamageBP += c.RollValue(\"damage_bp\", 6000)"
+  ],
+  "YS-A20": [
+    "legendary_caster_synergy.go: DamageBP += 4000 → DamageBP += c.RollValue(\"damage_bp\", 4000)"
+  ],
+  "YS-A27": [
+    "legendary_caster_replacements.go: DamageBP += 5000 → DamageBP += c.RollValue(\"damage_bp\", 5000)"
+  ],
+  "YS-A04": [
+    "legendary_caster_replacements.go: legendaryAddTargetDamage(d, 9000) → legendaryAddTargetDamage(d, c.RollValue(\"damage_bp\", 9000))"
+  ],
+  "YS-A13": [
+    "legendary_caster_replacements.go: legendaryAddTargetDamage(d, 8000) → legendaryAddTargetDamage(d, c.RollValue(\"damage_bp\", 8000))"
+  ],
+  "YS-A06": [
+    "legendary_caster_definitions.go: specialScale(n, 160) → specialScale(n, 100+c.RollValue(\"damage_pct\", 60))",
+    "legendary_caster_definitions.go: specialScale(n, 120) → specialScale(n, 100+c.RollValue(\"damage_pct\", 20))"
+  ],
+  "YS-A07": [
+    "legendary_caster_areas.go: specialScale(legendaryCasterBase(c, c.Skill), 30) → specialScale(legendaryCasterBase(c, c.Skill), c.RollValue(\"field_pct\", 30))"
+  ],
+  "YS-A10": [
+    "legendary_caster_replacements.go: specialScale(d.Affixes[i].Value, 160) → specialScale(d.Affixes[i].Value, 100+c.RollValue(\"weaken_pct\", 60))"
+  ],
+  "YS-A14": [
+    "legendary_caster_directions.go: CooldownReductionBP += 4500 → CooldownReductionBP += c.RollValue(\"cooldown_bp\", 4500)"
+  ],
+  "YS-A15": [
+    "legendary_caster.go: st.Value*35/100 → st.Value*int64(c.RollValue(\"proc_pct\", 35))/100"
+  ],
+  "YS-A17": [
+    "legendary_caster_synergy.go: DamagePct: 180 → DamagePct: c.RollValue(\"proc_pct\", 180)"
+  ],
+  "YS-A19": [
+    "legendary_caster_synergy.go: DamagePct: 200 → DamagePct: c.RollValue(\"proc_pct\", 200)"
+  ],
+  "YS-A21": [
+    "legendary_caster_synergy.go: specialScale(shield, 80) → specialScale(shield, c.RollValue(\"shield_burst_pct\", 80))"
+  ],
+  "YS-A22": [
+    "legendary_caster_directions.go: legendaryCasterSupportWave wave_pct"
+  ],
+  "YS-A24": [
+    "legendary_caster_directions.go: legendaryCasterSupportWave wave_pct"
+  ],
+  "YS-A28": [
+    "legendary_caster_directions.go: legendaryCasterSupportWave wave_pct"
+  ],
+  "YS-A23": [
+    "legendary_caster_synergy.go: BaseDamage: raw → BaseDamage: specialScale(raw, c.RollValue(\"heal_burst_pct\", 100))"
+  ],
+  "YS-A25": [
+    "legendary_caster_replacements.go: StatusPowerBP += 6000 → StatusPowerBP += c.RollValue(\"buff_bp\", 6000)"
+  ],
+  "YS-A26": [
+    "legendary_caster_replacements.go: StatusPowerBP += 7000 → StatusPowerBP += c.RollValue(\"buff_bp\", 7000)"
+  ],
+  "YS-A29": [
+    "legendary_caster_synergy.go: LegendaryNextDamageBonusPct += 50 → LegendaryNextDamageBonusPct += c.RollValue(\"next_damage_pct\", 50)"
+  ],
+  "YS-A30": [
+    "legendary_caster_synergy.go: DamageBP += 4000 → DamageBP += c.RollValue(\"instant_bp\", 4000)",
+    "legendary_caster_synergy.go: HealingBP += 4000 → HealingBP += c.RollValue(\"instant_bp\", 4000)"
+  ],
+  "YS-D01": [
+    "legendary_caster_directions.go: HealingBP += 6000 → HealingBP += c.RollValue(\"healing_bp\", 6000)"
+  ],
+  "YS-D02": [
+    "legendary_caster_directions.go: legendaryCasterGroupCleanse radius"
+  ],
+  "YS-D07": [
+    "legendary_caster_directions.go: legendaryCasterGroupCleanse radius"
+  ],
+  "YS-U10": [
+    "legendary_caster_directions.go: legendaryCasterGroupCleanse radius"
+  ],
+  "YS-D03": [
+    "legendary_caster_synergy.go: StatusPowerBP += 6000 → StatusPowerBP += c.RollValue(\"shield_bp\", 6000)"
+  ],
+  "YS-D04": [
+    "legendary_caster_directions.go: PhysicalReductionBonusPct += 35 → PhysicalReductionBonusPct += c.RollValue(\"status_reduction_pct\", 35)",
+    "legendary_caster_directions.go: MagicReductionBonusPct += 35 → MagicReductionBonusPct += c.RollValue(\"status_reduction_pct\", 35)"
+  ],
+  "YS-D05": [
+    "legendary_healer_functional_rework.go: specialScale(n, 75) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 25))"
+  ],
+  "YS-D06": [
+    "legendary_caster_directions.go: specialScale(n, 60) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 40))"
+  ],
+  "YS-D08": [
+    "legendary_caster_directions.go: specialScale(n, 40) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 60))"
+  ],
+  "YS-D09": [
+    "legendary_caster_directions.go: specialScale(n, 65) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 35))"
+  ],
+  "YS-D10": [
+    "legendary_caster_directions.go: specialScale(n, 60) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 40))"
+  ],
+  "YS-U01": [
+    "legendary_caster_definitions.go: ManaReductionBP += 2000 → ManaReductionBP += c.RollValue(\"mana_bp\", 2000)"
+  ],
+  "YS-U02": [
+    "legendary_caster_definitions.go: StatusPowerBP += 5000 → StatusPowerBP += c.RollValue(\"buff_bp\", 5000)"
+  ],
+  "YS-U03": [
+    "legendary_caster_lifecycle.go: specialScale(p.MaxMP, 20) → specialScale(p.MaxMP, c.RollValue(\"restore_cap_pct\", 20))"
+  ],
+  "YS-U04": [
+    "legendary_caster_synergy.go: specialScale(c.PaidMP, 35) → specialScale(c.PaidMP, c.RollValue(\"refund_pct\", 35))"
+  ],
+  "YS-U05": [
+    "legendary_caster_admission.go: StatusPowerBP += 3000 → StatusPowerBP += c.RollValue(\"buff_bp\", 3000)"
+  ],
+  "YS-U07": [
+    "legendary_healer_functional_rework.go: Value: 60 → Value: c.RollValue(\"move_pct\", 60)"
+  ],
+  "YS-U08": [
+    "legendary_healer_functional_rework.go: d.Dist += 400 → d.Dist += c.RollValue(\"range\", 400)"
+  ],
+  "YS-U09": [
+    "legendary_caster_directions.go: specialScale(c.PaidMP, 50) → specialScale(c.PaidMP, c.RollValue(\"refund_pct\", 50))"
+  ],
+  "SS-A01": [
+    "legendary_caster_replacements.go: DamageBP += c.RollValue(\"damage_bp\", 7000)"
+  ],
+  "SS-A23": [
+    "legendary_caster_replacements.go: radius + c.RollValue(\"radius\",150)"
+  ],
+  "SS-A28": [
+    "legendary_caster_synergy.go: base c.RollValue(\"base_burst_pct\", 220) + fixed50 per defense"
+  ]
+}

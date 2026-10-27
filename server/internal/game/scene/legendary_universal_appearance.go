@@ -7,7 +7,7 @@ import (
 
 func init() {
 	registerLegendarySynergyHandler("TY-A35", legendaryHandler{ModifyAppearance: func(c *legendaryContext, look *domain.Appearance) {
-		look.AtkDist = uint16(min(int32(65535), universalScaleBP(int32(look.AtkDist), 5000)))
+		look.AtkDist = uint16(min(int32(65535), universalScaleBP(int32(look.AtkDist), c.RollValue("benefit", 5000))))
 	}})
 }
 
@@ -22,7 +22,7 @@ func (s *Scene) legendaryModifyAppearance(owner *entity.Entity, look *domain.App
 		if !ok || !legendaryHandlerCurrent(p.Power.ID) || h.ModifyAppearance == nil {
 			continue
 		}
-		c := legendaryContext{Scene: s, Owner: owner, Power: p.Power, SourceUID: p.SourceUID}
+		c := legendaryContext{Scene: s, Owner: owner, Power: p.Power, PowerRollBP: p.PowerRollBP, SourceUID: p.SourceUID}
 		h.ModifyAppearance(&c, look)
 	}
 }

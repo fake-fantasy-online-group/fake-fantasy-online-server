@@ -47,7 +47,7 @@ func (s *Scene) legendaryCasterSteadyCast(e *entity.Entity, skill domain.SkillID
 	}
 	ready := false
 	s.forEachLegendary(e, func(c *legendaryContext) {
-		if c.Power.ID == "YS-D05" && legendaryCasterHasSkill(e, 10303) || c.Power.ID == "YS-D06" && skill == 10304 {
+		if c.Power.ID == "YS-D05" && legendaryHealerInvested(c, 10303) && legendaryCasterHasSkill(e, 10303) || c.Power.ID == "YS-D06" && skill == 10304 {
 			ready = true
 		}
 	})

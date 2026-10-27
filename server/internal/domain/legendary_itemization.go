@@ -12,10 +12,11 @@ const LegendaryAffixCount = 6
 // deliberately unchanged; loading never rerolls or scales an owned item.
 type LegendaryAffixBounds struct{ Min, Max int32 }
 type LegendaryInstance struct {
-	PowerID string
-	Tier    LegendaryTier `json:",omitempty"`
-	Affixes [LegendaryAffixCount]InstanceAffix
-	Bounds  [LegendaryAffixCount]LegendaryAffixBounds
+	PowerID     string
+	PowerRollBP int32         `json:",omitempty"`
+	Tier        LegendaryTier `json:",omitempty"`
+	Affixes     [LegendaryAffixCount]InstanceAffix
+	Bounds      [LegendaryAffixCount]LegendaryAffixBounds
 }
 
 func (v LegendaryInstance) Validate() error {
@@ -27,6 +28,9 @@ func (v LegendaryInstance) Validate() error {
 	}
 	if _, ok := LegendaryPower(v.PowerID); !ok {
 		return fmt.Errorf("unknown legendary power %q", v.PowerID)
+	}
+	if !LegendaryPowerRollValid(v.PowerID, v.PowerRollBP) {
+		return fmt.Errorf("invalid legendary power roll")
 	}
 	if !v.Tier.Valid() {
 		return fmt.Errorf("unknown legendary tier %q", v.Tier)
@@ -152,15 +156,18 @@ func (t EquipmentRollTable) ApplyLegendaryForRecipient(st *Stack, def ItemDef, r
 	if st == nil {
 		return false
 	}
-	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false, &recipient, 0)
+	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false, &recipient, 0, true)
 }
 
+// ApplyLegendaryForRecipientAtLevel is the frozen pre-power-roll tier generator.
+// New monster drops use ApplyLegendaryForRecipientWithGenerationAtLevel with
+// the immutable loot-rule power-roll flag. Keep this entrypoint for replay.
 func (t EquipmentRollTable) ApplyLegendaryForRecipientAtLevel(st *Stack, def ItemDef, sourceLevel int32, recipient LegendaryRecipientClass, rng func(int) int) bool {
-	return t.applyLegendary(st, def, sourceLevel, rng, true, true, &recipient, 0)
+	return t.applyLegendary(st, def, sourceLevel, rng, true, true, &recipient, 0, false)
 }
 
 func (t EquipmentRollTable) ApplyLegendaryLegacyForRecipientAtLevel(st *Stack, def ItemDef, sourceLevel int32, recipient LegendaryRecipientClass, rng func(int) int) bool {
-	return t.applyLegendary(st, def, sourceLevel, rng, false, true, &recipient, 0)
+	return t.applyLegendary(st, def, sourceLevel, rng, false, true, &recipient, 0, false)
 }
 
 // ApplyLegendary is for non-monster awakening: preserve known provenance, or
@@ -169,11 +176,11 @@ func (t EquipmentRollTable) ApplyLegendary(st *Stack, def ItemDef, rng func(int)
 	if st == nil {
 		return false
 	}
-	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false, nil, 0)
+	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, true, false, nil, 0, true)
 }
 
 func (t EquipmentRollTable) ApplyLegendaryAtLevel(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int) bool {
-	return t.applyLegendary(st, def, sourceLevel, rng, true, true, nil, 0)
+	return t.applyLegendary(st, def, sourceLevel, rng, true, true, nil, 0, true)
 }
 
 // ApplyLegendaryLegacy preserves pre-variant generation and exact RNG consumption.
@@ -181,14 +188,14 @@ func (t EquipmentRollTable) ApplyLegendaryLegacy(st *Stack, def ItemDef, rng fun
 	if st == nil {
 		return false
 	}
-	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, false, false, nil, 0)
+	return t.applyLegendary(st, def, LegendaryGenerationLevel(def, *st), rng, false, false, nil, 0, false)
 }
 
 func (t EquipmentRollTable) ApplyLegendaryLegacyAtLevel(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int) bool {
-	return t.applyLegendary(st, def, sourceLevel, rng, false, true, nil, 0)
+	return t.applyLegendary(st, def, sourceLevel, rng, false, true, nil, 0, false)
 }
 
-func (t EquipmentRollTable) applyLegendary(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int, variants, recordSource bool, recipient *LegendaryRecipientClass, policy int32) bool {
+func (t EquipmentRollTable) applyLegendary(st *Stack, def ItemDef, sourceLevel int32, rng func(int) int, variants, recordSource bool, recipient *LegendaryRecipientClass, policy int32, powerRolls bool) bool {
 	if st == nil || sourceLevel < 1 || (st.Endgame.SourceLevel != 0 && st.Endgame.SourceLevel != sourceLevel) || rng == nil || st.UID <= 0 || st.Count != 1 || st.Item != def.ID || st.Legendary.PowerID != "" || st.Endgame.UniqueID != 0 || !CanPromoteSocketlessUnique(*st) || !t.LegendaryReady(def) {
 		return false
 	}
@@ -240,6 +247,9 @@ func (t EquipmentRollTable) applyLegendary(st *Stack, def ItemDef, sourceLevel i
 		options = keep
 	}
 	if variants && !v.rollTier(rng) {
+		return false
+	}
+	if powerRolls && !v.RollPower(rng) {
 		return false
 	}
 	if v.Validate() != nil {

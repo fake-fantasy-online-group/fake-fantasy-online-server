@@ -58,14 +58,14 @@ func init() {
 		})
 	}, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.LegendaryBasic {
-			d.LegendaryModifiers.DamageBP += 12000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 12000)
 		}
 	}})
 	registerWarriorPower("ZS-A14", legendaryHandler{CastReleased: warriorQuakeZone, Tick: warriorQuakeTick})
 	registerWarriorPower("ZS-A26", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10016 {
 			d.LegendaryDamageThroughControlImmunity = true
-			d.Effects = append([]domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 240, GuaranteedHit: true}}, d.DirectEffects()...)
+			d.Effects = append([]domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: c.RollValue("proc_pct", 240), GuaranteedHit: true}}, d.DirectEffects()...)
 		}
 	}, PrepareSkill: warriorSkill(10016, 0, 0, 0, 50).PrepareSkill})
 }
@@ -87,7 +87,7 @@ func warriorQuakeZone(c *legendaryContext) {
 	st.NextMS = c.NowMS + 1000
 	st.GroundEffectKey = fmt.Sprintf("%s/%d/stage-01", c.Power.ID, c.RootID)
 	c.VisualAt("stage-01", st.Position, 3000)
-	st.Value = int64(c.SnapshotNativeDamage()) * 35 / 100
+	st.Value = int64(c.SnapshotNativeDamage()) * int64(c.RollValue("field_pct", 35)) / 100
 	st.Stacks = max(c.Def.Area.Radius, c.Def.Radius)
 
 	st.Name = c.Power.Name
@@ -108,7 +108,7 @@ func warriorQuakeTick(c *legendaryContext) {
 			visual := *c
 			visual.RootID = st.RootID
 			visual.VisualAt("stage-02", st.Position, 0)
-			for _, t := range c.Enemies(st.Position, float64(st.Stacks), 256) {
+			for _, t := range c.Enemies(st.Position, float64(st.Stacks), len(c.Scene.entities)) {
 				if !c.Scene.validTarget(c.Owner, t, domain.SkillDef{ID: 10006, TargetEnemy: true, Effect: domain.SkillEffect{Kind: domain.EffectDamage}}) {
 					continue
 				}

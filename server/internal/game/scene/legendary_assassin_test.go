@@ -229,7 +229,7 @@ func TestLegendaryAssassinSynergyStaticPreparation(t *testing.T) {
 		id             string
 		skill          domain.SkillID
 		damage, mp, cd int32
-	}{{"CK-A03", 10221, 180, 100, 10000}, {"CK-A04", 10205, 150, 100, 10000}, {"CK-A17", 10209, 150, 100, 10000}, {"CK-A24", 10203, 150, 100, 10000}, {"CK-A29", 10210, 180, 100, 10000}, {"CK-U05", 10206, 100, 55, 10000}, {"CK-U07", 10213, 100, 70, 10000}, {"CK-U09", 10221, 100, 70, 8000}, {"CK-D06", 10213, 100, 70, 10000}, {"CK-D09", 10208, 100, 70, 10000}, {"CK-D07", 10219, 100, 100, 7000}, {"CK-A23", 10219, 135, 100, 6000}, {"CK-U03", 10218, 100, 0, 10000}} {
+	}{{"CK-A03", 10221, 180, 100, 10000}, {"CK-A04", 10205, 150, 100, 10000}, {"CK-A17", 10209, 150, 100, 10000}, {"CK-A24", 10203, 150, 100, 10000}, {"CK-A29", 10210, 180, 100, 10000}, {"CK-U05", 10206, 100, 55, 10000}, {"CK-U07", 10213, 100, 100, 10000}, {"CK-U09", 10221, 100, 70, 8000}, {"CK-D06", 10213, 100, 70, 10000}, {"CK-D09", 10208, 100, 70, 10000}, {"CK-D07", 10219, 100, 100, 7000}, {"CK-A23", 10219, 135, 100, 6000}, {"CK-U03", 10218, 100, 0, 10000}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := legendaryAssassinFixture(t, tc.id)
 			d := domain.SkillDef{ID: tc.skill, Kind: domain.SkillSingle, TargetEnemy: true, MPCost: 100, CooldownMS: 10000, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
@@ -257,14 +257,14 @@ func TestLegendaryAssassinSynergyNativeStealthTrapBudget(t *testing.T) {
 	for i := 0; i < 3; i++ {
 		d := domain.SkillDef{ID: 10213}
 		s.legendaryPrepareSkill(p, &d)
-		if (d.PreserveInvisibleChanceBP == 10000) != (i < 2) {
+		if d.PreserveInvisibleChanceBP != 10000 {
 			t.Fatalf("placement%d preserve%d", i, d.PreserveInvisibleChanceBP)
 		}
 		s.prepareSkillStatuses(p, &d)
 		s.legendaryCasterAccepted(p, d, 0, nil, 0)
 	}
-	if entityInvisible(p) {
-		t.Fatal("third trap did not consume native stealth")
+	if !entityInvisible(p) {
+		t.Fatal("trap consumed native stealth")
 	}
 	// A fresh native stealth instance restores exactly2, not an external timer.
 	s.applyStatusDef(p, stealth, p.ID)
@@ -277,7 +277,7 @@ func TestLegendaryAssassinSynergyNativeStealthTrapBudget(t *testing.T) {
 			}
 		}
 	})
-	if charges != 2 {
+	if charges != 0 {
 		t.Fatal("fresh stealth budget", charges)
 	}
 }
@@ -513,7 +513,7 @@ func TestLegendaryAssassinSynergyGeometryAndPrimaryBonuses(t *testing.T) {
 					s.monsters[v.ID] = v
 				}
 				ids := s.legendarySelectTargets(p, d, m.ID, []domain.EntityID{m.ID})
-				if len(ids) != 4 || ids[0] != m.ID {
+				if len(ids) != 6 || ids[0] != m.ID {
 					t.Fatal("primary plus3", ids)
 				}
 				assassinNativeHits(s, p, d, m.ID, ids)
@@ -546,7 +546,7 @@ func TestLegendaryAssassinSynergyGeometryAndPrimaryBonuses(t *testing.T) {
 				}
 				st := domain.Stats{MoveSpeed: 100}
 				s.legendaryPassiveStats(p, &st)
-				if st.MoveSpeed != 120 {
+				if st.MoveSpeed != 100 {
 					t.Fatal("static speed")
 				}
 			}
@@ -603,12 +603,17 @@ func TestLegendaryAssassinSynergyNativeStaticDefenses(t *testing.T) {
 			case "CK-D06":
 				m.Look.AtkDist = 200
 			case "CK-D07":
+				s.legendaryCastReleased(p, domain.SkillDef{ID: 10219}, m.ID, []domain.EntityID{m.ID})
 				m.Status.Apply(domain.StatusDef{ID: domain.StatusStun, Control: domain.ControlStun, SourceSkillID: 10219, DurationSec: 10}, s.tick, p.ID)
 			case "CK-D10":
 				b.Trap = true
 			}
 			ev, _, _ := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, b)
-			if ev.Amount != 80 {
+			want := int32(80)
+			if id == "CK-D01" || id == "CK-D07" {
+				want = 65
+			}
+			if ev.Amount != want {
 				t.Fatalf("native mitigation=%d", ev.Amount)
 			}
 			if id == "CK-D01" {
@@ -620,6 +625,9 @@ func TestLegendaryAssassinSynergyNativeStaticDefenses(t *testing.T) {
 			}
 			if id == "CK-D04" || id == "CK-D07" {
 				m.Status = domain.NewStatusSet()
+				if id == "CK-D07" {
+					s.tick += domain.Ticks(8000)
+				}
 				ev, _, _ = s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, b)
 				if ev.Amount != 100 {
 					t.Fatal("native status no longer exists but mitigation lingered")
@@ -657,7 +665,7 @@ func TestLegendaryAssassinSynergyNativeCleanseAndManaRefund(t *testing.T) {
 	s, p, _ = legendaryAssassinFixture(t, "CK-U01")
 	p.MP = 200
 	s.legendaryCastReleased(p, domain.SkillDef{ID: 10208}, p.ID, []domain.EntityID{p.ID}, 20)
-	if p.MP != 220 {
+	if p.MP != 200 {
 		t.Fatal("immediate refund actual paid ceiling", p.MP)
 	}
 }
@@ -770,7 +778,7 @@ func TestLegendaryAssassinSynergyNativeStealthRefreshKeepsConsumedBudget(t *test
 			if !keep || !changed {
 				t.Fatal("native lower-rank rebuild not reached")
 			}
-			wantCharges, wantDuration, wantSpeed := int32(1), int32(15), int32(20)
+			wantCharges, wantDuration, wantSpeed := int32(0), int32(15), int32(20)
 			if id == "CK-U10" {
 				wantCharges, wantDuration, wantSpeed = 0, 10, 60
 			}

@@ -28,10 +28,10 @@ func legendaryAssassinPullPrepare(c *legendaryContext, d *domain.SkillDef) {
 		return
 	}
 	if c.Power.ID == "CK-A28" {
-		d.LegendaryModifiers.DamageBP += 4500
+		d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 4500)
 	}
 	if c.Power.ID == "CK-A30" {
-		d.LegendaryModifiers.RadiusBP += 5000
+		d.LegendaryModifiers.RadiusBP += c.RollValue("radius_bp", 5000)
 	}
 }
 func legendaryAssassinPull(c *legendaryContext) {
@@ -77,6 +77,6 @@ func (s *Scene) legendaryAssassinPullTarget(owner, target *entity.Entity, maximu
 }
 func legendaryAssassinStealthSpeed(c *legendaryContext, d *domain.StatusDef) {
 	if d.Invisible && (d.SourceSkillID == 10208 || d.SkillSnapshotID == 10208) {
-		d.LegendaryModifiers.MoveSpeedBonusPct += 40
+		d.LegendaryModifiers.MoveSpeedBonusPct += c.RollValue("move_pct", 40)
 	}
 }

@@ -1,0 +1,41 @@
+{
+  "powers": [
+    {
+      "powerId": "SS-A01",
+      "name": "燃核增幅",
+      "category": "攻击",
+      "class": "术士",
+      "description": "燃核增幅：火球术直接伤害提高70%（52.5%～70%）；目标带有你施加的燃烧时，再提高40%。",
+      "rollBp": 10000,
+      "minRollBp": 7500,
+      "maxRollBp": 10000,
+      "minLevel": 20
+    },
+    {
+      "powerId": "SS-U06",
+      "name": "幻影解缚",
+      "category": "通用",
+      "class": "术士",
+      "description": "幻影解缚：已学会幻影时，允许在昏迷、封印等控制下施放幻影；成功移动后清除自身的控制和减速。失败或未移动不清除，不提供后续免控。原有耗蓝、成功率和落点规则不变。",
+      "rollBp": 0,
+      "minRollBp": 0,
+      "maxRollBp": 0,
+      "minLevel": 25
+    },
+    {
+      "powerId": "TY-A01",
+      "name": "普攻横扫",
+      "category": "攻击",
+      "class": "全职业",
+      "description": "普攻横扫：普通攻击改为前方120度扇形攻击，范围等于普通攻击距离。选中目标保留100%伤害，范围内其他敌人各承受56%（52%～70%）普通攻击伤害，保留淬毒、吸血等原有普攻效果。每次出手的固定回蓝只结算一次；吸血、吸蓝按本次横扫的总伤害计算，不会再产生横扫或额外普攻。",
+      "rollBp": 8123,
+      "minRollBp": 7500,
+      "maxRollBp": 10000,
+      "minLevel": 10
+    }
+  ],
+  "kind": "powerbook.list",
+  "requestId": "powerbook-list-fixture",
+  "ok": true,
+  "revision": "0"
+}

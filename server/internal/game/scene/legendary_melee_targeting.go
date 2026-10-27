@@ -23,7 +23,7 @@ func init() {
 		if c.Skill != 10117 || len(ids) == 0 {
 			return ids
 		}
-		for _, e := range c.Enemies(c.Owner.Pos, 150, 8) {
+		for _, e := range c.Enemies(c.Owner.Pos, 150, 0) {
 			ids = legendaryMeleeAppendUnique(ids, e.ID)
 		}
 		return ids

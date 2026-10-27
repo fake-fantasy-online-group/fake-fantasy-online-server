@@ -413,8 +413,8 @@ func TestLegendarySwordsmanAuditNativeTauntReachAndSet(t *testing.T) {
 			if mode == "class-set" {
 				meleeAuditEquipSet(t, s, p, 4)
 			}
-			edge := putMonster(s, 901, 10000, domain.Stats{}, 235, 100)
-			outside := putMonster(s, 902, 10000, domain.Stats{}, 236, 100)
+			edge := putMonster(s, 901, 10000, domain.Stats{}, 280, 100)
+			outside := putMonster(s, 902, 10000, domain.Stats{}, 281, 100)
 			edgePos, outsidePos := edge.Pos, outside.Pos
 			d := meleeAuditCast(t, s, p, 10127, 0)
 			if edge.Pos != edgePos || outside.Pos != outsidePos {
@@ -422,7 +422,7 @@ func TestLegendarySwordsmanAuditNativeTauntReachAndSet(t *testing.T) {
 			}
 			wantRadius := int32(100)
 			if mode != "native" {
-				wantRadius = 135
+				wantRadius = 180
 			}
 			if d.Dist != 0 || d.Area.Center != domain.SkillAreaCenterCaster || d.Area.Radius != wantRadius {
 				t.Fatal("invented remote taunt center or distance", d.Dist, d.Area)

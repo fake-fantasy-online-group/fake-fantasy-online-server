@@ -14,7 +14,7 @@ func legendaryAssassinCounterTargets(c *legendaryContext, ids []domain.EntityID)
 		return ids
 	}
 	out := []domain.EntityID{c.Target.ID}
-	for _, v := range c.Enemies(c.Target.Pos, 100, 100000) {
+	for _, v := range c.Enemies(c.Target.Pos, float64(c.RollValue("radius", 100)), 0) {
 		if v.ID != c.Target.ID {
 			out = append(out, v.ID)
 		}
@@ -22,10 +22,11 @@ func legendaryAssassinCounterTargets(c *legendaryContext, ids []domain.EntityID)
 	return out
 }
 func (s *Scene) legendaryAssassinCounterArea(owner, primary *entity.Entity, b combat.Blow) {
-	if !legendaryAssassinHas(s, owner, "CK-A25") {
+	c, ok := legendaryAssassinPowerContext(s, owner, "CK-A25")
+	if !ok {
 		return
 	}
-	c := legendaryContext{Scene: s, Owner: owner, Target: primary, Skill: 10203}
+	c.Target, c.Skill = primary, 10203
 	ids := legendaryAssassinCounterTargets(&c, []domain.EntityID{primary.ID})
 	for _, id := range ids {
 		if id == primary.ID {

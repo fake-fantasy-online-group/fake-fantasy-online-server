@@ -248,3 +248,31 @@ Uses PostgreSQL with reduced prerequisites and production loader SQL; checks
 schema/source/guard validation, exact clone, rollback, idempotence, collisions,
 old/future selectors and saved-state preservation. Not a live deployment or a
 full initializer/concurrent-migration test.
+
+### 000115 — numerical legendary power rolls (Loot 5 / Rift 17)
+
+Apply `000115_20261027_legendary_power_rolls.sql` atomically after 000114.
+It clones published Loot 4 and Rift 16, enables `legendary_power_rolls` only in
+Loot 5, and publishes Rift 17 pointing to Loot 5. Only selectors still on 4/16
+advance; older or newer selections remain untouched. Existing items, frozen
+runs, pending grants and their RNG streams are not rewritten. Missing/mutated
+source rules, missing dependencies, disabled immutable guards or conflicting
+published destinations fail rather than silently repair. Reapplying is safe.
+
+The new server reads old snapshots with the missing flag as false. New world,
+boss and Rift drops honor their frozen flag independently of tier variants;
+new awakening operations also roll numeric powers. Pure-mechanic powers keep
+zero. Existing zero-roll equipment retains its original fixed effect.
+
+Rollback caution: changing active selectors back prevents new admissions from
+using the new rules but does not rewrite already frozen runs or generated gear.
+An old binary does not understand `PowerRollBP` and would treat rolled gear as
+full-strength legacy gear. Do not deploy such a binary after numeric gear exists
+without a separately reviewed compatibility plan.
+
+Verification: `server/tests/legendary_power_roll_postgres.mjs` exercises the
+production migration with reduced PostgreSQL prerequisites, atomic rollback,
+idempotence, immutable guards and selector preservation. Official PostgreSQL
+17.11 also applied the upgrade twice against a disposable complete 0–114 seed;
+the seed explicitly activates published Rift 10 after migration 99 to model the
+prior rollout (99 intentionally does not activate it). No production DB used.

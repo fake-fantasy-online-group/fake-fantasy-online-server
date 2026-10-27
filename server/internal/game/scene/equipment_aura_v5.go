@@ -216,11 +216,6 @@ func (s *Scene) equipmentAuraRecipients(source equipmentAuraSource) []*entity.En
 		}
 		return x.ID < y.ID
 	})
-	// Only the new class-set auras use zero as unlimited; preserve the
-	// existing catalog/allocator contract where zero grants no recipients.
-	if (a.MaxPlayers > 0 || classSetAuraID(a) == 0) && len(candidates) > int(a.MaxPlayers) {
-		candidates = candidates[:a.MaxPlayers]
-	}
 	// candidates is private to this call. Pet appends cannot overwrite its player prefix.
 	out := candidates
 	if len(out) == 0 {
@@ -295,7 +290,7 @@ func (s *Scene) equipmentAuraStatuses(e *entity.Entity) []statusPresentation {
 			label = equipmentElementName(a.Element) + "伤害"
 			pvpCondition = "对玩家造成伤害时"
 		}
-		desc := fmt.Sprintf("%d级光环：%s +%s；%s +%s。\n来源：%s；范围%d，含来源最多%d人；同类光环只取最高，不叠加。", a.FixedRank, label, equipmentPercent(a.Value), pvpCondition, equipmentPercent(int32(int64(a.Value)*int64(a.PVPScaleBP)/10000)), sourceName, a.RadiusPX, a.MaxPlayers)
+		desc := fmt.Sprintf("%d级光环：%s +%s；%s +%s。\n来源：%s；范围%d内的同队成员均可生效；同类光环只取最高，不叠加。", a.FixedRank, label, equipmentPercent(a.Value), pvpCondition, equipmentPercent(int32(int64(a.Value)*int64(a.PVPScaleBP)/10000)), sourceName, a.RadiusPX)
 		if a.IncludeActivePet {
 			desc += "惠及出战宠物。"
 		}

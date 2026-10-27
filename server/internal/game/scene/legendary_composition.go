@@ -8,7 +8,12 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
 
+// A declared multi-primary volley may share one target budget: each primary
+// keeps its full payload and overlapping shape secondaries only land once.
+// This is de-duplication, never a count limit.
+type legendaryChildBatch struct{ Primaries, Seen map[domain.EntityID]bool }
 type legendaryChildOptions struct {
+	Batch                          *legendaryChildBatch
 	TargetOnly, SuppressGeneration bool
 	Center                         *domain.Pos
 	Primary                        *domain.EntityID // nil starts a new child primary; non-nil preserves semantic selection
@@ -186,16 +191,16 @@ func (c *legendaryContext) ChildSkill(target domain.EntityID, def domain.SkillDe
 	landed := false
 	seen := map[domain.EntityID]bool{}
 	for _, id := range targets {
-		if seen[id] {
+		if seen[id] || opt.Batch != nil && (opt.Batch.Seen[id] || id != target && opt.Batch.Primaries[id]) {
 			continue
 		}
 		seen[id] = true
-		if len(seen) > 256 {
-			break
-		}
 		victim := s.entities[id]
 		if victim == nil || !victim.Alive() || !s.equipmentProcEnemyTarget(c.Owner, victim) {
 			continue
+		}
+		if opt.Batch != nil {
+			opt.Batch.Seen[id] = true
 		}
 		local := def
 		for _, cc := range contexts {
@@ -286,7 +291,7 @@ func (s *Scene) legendaryPassiveStats(owner *entity.Entity, stats *domain.Stats)
 		if !legendaryHandlerCurrent(power.Power.ID) {
 			continue
 		}
-		c := legendaryContext{Scene: s, Owner: owner, Power: power.Power, SourceUID: power.SourceUID, NowMS: s.tick.Millis()}
+		c := legendaryContext{Scene: s, Owner: owner, Power: power.Power, PowerRollBP: power.PowerRollBP, SourceUID: power.SourceUID, NowMS: s.tick.Millis()}
 		if h := legendaryHandlers[c.Power.ID].PassiveStats; h != nil {
 			local := base
 			h(&c, &local)
@@ -377,7 +382,7 @@ func (s *Scene) legendaryEquipmentChanged(owner *entity.Entity) {
 	powers := domain.ActiveLegendaryPowers(s.functionalWorn(owner), s.itemDef, owner.Player.Char)
 	signature := ""
 	for _, power := range powers {
-		signature += power.Power.ID + ":" + fmt.Sprint(power.SourceUID) + ";"
+		signature += power.Power.ID + ":" + fmt.Sprint(power.SourceUID) + ":" + fmt.Sprint(power.PowerRollBP) + ";"
 	}
 	rt := s.legendaryState()
 	if rt.equipmentSignature == nil {
@@ -392,7 +397,7 @@ func (s *Scene) legendaryEquipmentChanged(owner *entity.Entity) {
 		if !legendaryHandlerCurrent(power.Power.ID) {
 			continue
 		}
-		c := legendaryContext{Scene: s, Owner: owner, Power: power.Power, SourceUID: power.SourceUID, NowMS: s.tick.Millis()}
+		c := legendaryContext{Scene: s, Owner: owner, Power: power.Power, PowerRollBP: power.PowerRollBP, SourceUID: power.SourceUID, NowMS: s.tick.Millis()}
 		if h := legendaryHandlers[c.Power.ID].EquipmentChanged; h != nil {
 			h(&c)
 		}

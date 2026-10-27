@@ -257,6 +257,7 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 			configuration = map[string]string{}
 		}
 		configuration["riftPages"] = "1"
+		configuration["powerBook"] = "1"
 		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: caps, CatalogVersion: domain.UniqueCatalogVersion, RiftEntrances: entrances, Result: configuration})
 		s.sendRiftSceneContext(p)
 		s.sendEndgameSnapshot(p)
@@ -277,6 +278,8 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 		s.recoverCubeTool(p, r)
 	case strings.HasPrefix(r.Op, "cube."):
 		s.onEndgameCube(p, r)
+	case strings.HasPrefix(r.Op, "powerbook."):
+		s.onEndgamePowerBook(p, r)
 	case strings.HasPrefix(r.Op, "rift."):
 		s.onEndgameRift(p, r)
 	default:

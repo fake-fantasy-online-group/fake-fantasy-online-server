@@ -49,7 +49,7 @@ func legendaryCasterAdditionalAllies(c *legendaryContext, ids []domain.EntityID,
 		}
 		return a.ID < b.ID
 	})
-	for i := 0; i < len(allies) && i < count; i++ {
+	for i := 0; i < len(allies); i++ {
 		ids = append(ids, allies[i].ID)
 	}
 	return ids
@@ -68,55 +68,51 @@ func init() {
 		}
 	}, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryIceBurst {
-			d.LegendaryModifiers.DamageBP += 2000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 2000)
 		}
 	}})
 	registerLegendarySynergyHandler("SS-D01", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if legendaryCasterHasSkill(c.Owner, 10425) && c.Target != nil && sqDist(c.Owner.Pos, c.Target.Pos) <= 180*180 {
-			return specialScale(n, 72)
+			return specialScale(n, 100-c.RollValue("reduction_pct", 28))
 		}
 		return n
 	}})
 	registerLegendarySynergyHandler("SS-D02", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if legendaryCasterHasSkill(c.Owner, 10435) && int64(n)*100 > int64(c.Owner.MaxHP)*8 {
-			return specialScale(n, 45)
+			return specialScale(n, 100-c.RollValue("reduction_pct", 55))
 		}
 		return n
 	}})
 	registerLegendarySynergyHandler("SS-D05", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if legendaryCasterNativeReady(c.Owner, true, false, false) {
-			return n - min(n/2, specialScale(c.Owner.MaxHP, 22))
+			return n - min(n/2, specialScale(c.Owner.MaxHP, c.RollValue("reduction_cap_pct", 22)))
 		}
 		return n
 	}})
 	registerLegendarySynergyHandler("SS-D09", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if _, ok := legendaryCasterSourceStatus(c.Target, 1036, c.Owner.ID); ok {
-			return specialScale(n, 60)
+			return specialScale(n, 100-c.RollValue("reduction_pct", 40))
 		}
 		return n
 	}})
-	registerLegendarySynergyHandler("SS-D10", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 { return specialScale(n, 65) }, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
+	registerLegendarySynergyHandler("SS-D10", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
+		if c.Owner.Player.Char.Skills[10419] > 0 {
+			return specialScale(n, 100-c.RollValue("reduction_pct", 35))
+		}
+		return n
+	}, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.HasDamageEffect() && legendaryCasterNativeReady(c.Owner, false, false, true) {
 			d.LegendaryModifiers.DamageBP += 3500
 		}
 	}})
 	registerLegendarySynergyHandler("SS-U03", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if len(d.Statuses) > 0 && legendaryCasterNativeReady(c.Owner, true, false, false) {
-			d.LegendaryModifiers.ManaReductionBP += 5500
+			d.LegendaryModifiers.ManaReductionBP += c.RollValue("mana_bp", 5500)
 		}
 	}})
-	registerLegendarySynergyHandler("SS-U07", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) { d.LegendaryModifiers.ManaReductionBP += 2200 }})
-	registerLegendarySynergyHandler("SS-U10", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
-		if d.TargetEnemy && d.Dist > 0 && d.Area.Center != domain.SkillAreaCenterCaster {
-			d.Dist = specialScale(d.Dist, 160)
-		}
-	}})
-	registerLegendarySynergyHandler("SS-U06", legendaryHandler{RootFinished: func(c *legendaryContext) {
-		if (c.Skill == legendaryFireball || c.Skill == legendaryIceBurst) && len(c.Hits) == 0 {
-			c.RefundMP(c.PaidMP)
-			c.Owner.Player.ScaleRemainingSkillCooldown(c.Skill, c.Scene.tick, 20)
-		}
-	}})
+	registerLegendarySynergyHandler("SS-U07", legendarySorcererManaReserve())
+	registerLegendarySynergyHandler("SS-U10", legendarySorcererFarCast())
+	registerLegendarySynergyHandler("SS-U06", legendarySorcererControlBreak())
 	registerLegendarySynergyHandler("YS-A09", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryExorcism {
 			d.TargetFamilies = nil
@@ -124,7 +120,7 @@ func init() {
 		}
 	}, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryExorcism {
-			d.LegendaryModifiers.DamageBP += 4000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 4000)
 		}
 	}, SkillResolved: func(c *legendaryContext) {
 		if c.Skill != legendaryExorcism || c.Target == nil || c.Target.Status == nil {
@@ -146,7 +142,7 @@ func init() {
 			d.PrepareMS = 0
 			d.HurtType = domain.HurtHoly
 			d.Effects = append([]domain.SkillEffect(nil), d.DirectEffects()...)
-			d.Effects = append(d.Effects, domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 180})
+			d.Effects = append(d.Effects, domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: c.RollValue("proc_pct", 180)})
 		}
 	}, TargetDefinition: legendaryCasterTargetBonus(func(c *legendaryContext, n int32) int32 {
 		if c.Skill == legendaryExorcism && legendaryCasterHasSkill(c.Target, 10324) {
@@ -160,7 +156,7 @@ func init() {
 			specialCircle(d, 250, domain.SkillAreaCenterTarget, 0)
 			d.HurtType = domain.HurtHoly
 			d.Effects = append([]domain.SkillEffect(nil), d.DirectEffects()...)
-			d.Effects = append(d.Effects, domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 200})
+			d.Effects = append(d.Effects, domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: c.RollValue("proc_pct", 200)})
 		}
 	}, SkillResolved: func(c *legendaryContext) {
 		if c.Skill == 10325 && c.Target != nil && (c.Target.Monster == nil || c.Target.Monster.Kind != domain.MonsterBoss) {
@@ -177,7 +173,7 @@ func init() {
 		return ids
 	}, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10320 {
-			d.LegendaryModifiers.StatusPowerBP += 6000
+			d.LegendaryModifiers.StatusPowerBP += c.RollValue("shield_bp", 6000)
 		}
 	}})
 	registerLegendarySynergyHandler("YS-U04", legendaryHandler{SelectTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {
@@ -193,15 +189,10 @@ func init() {
 		return ids
 	}, Healed: func(c *legendaryContext, before, n int32) {
 		if c.Skill == 10304 && legendaryCasterOnce(c, 0, "triage-refund") {
-			c.RefundMP(specialScale(c.PaidMP, 35))
+			c.RefundMP(specialScale(c.PaidMP, c.RollValue("refund_pct", 35)))
 		}
 	}})
-	registerLegendarySynergyHandler("YS-D05", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
-		if legendaryCasterHasSkill(c.Owner, 10303) && c.Scene.legendaryCasterHealingWindup(c.Owner) {
-			return specialScale(n, 75)
-		}
-		return n
-	}})
+	registerLegendarySynergyHandler("YS-D05", legendaryHealerRejuvenationGuard())
 }
 
 func init() {
@@ -249,7 +240,7 @@ func init() {
 			if _, ok := legendaryCasterSkill(c, 10421); !ok {
 				return
 			}
-			d.LegendaryModifiers.DamageTickBP += 8200
+			d.LegendaryModifiers.DamageTickBP += c.RollValue("tick_bp", 8200)
 		}
 	},
 	})
@@ -263,7 +254,7 @@ func init() {
 		}
 		d, ok := legendaryCasterSkill(c, legendaryIceArrow)
 		if ok {
-			c.ChildSkill(c.Target.ID, d, legendaryChildOptions{ScaleBP: 15000, ApplyStatuses: true, PreserveControl: true})
+			c.ChildSkill(c.Target.ID, d, legendaryChildOptions{ScaleBP: c.RollValue("child_bp", 15000), ApplyStatuses: true, PreserveControl: true})
 		}
 	}})
 	registerLegendarySynergyHandler("SS-A09", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {
@@ -285,7 +276,7 @@ func init() {
 			return n
 		}
 		if c.Skill == legendaryIceArrow && legendaryCasterControlled(c.Target) {
-			return specialScale(n, 200)
+			return specialScale(n, 100+c.RollValue("damage_pct", 100))
 		}
 		return n
 	})})
@@ -301,14 +292,14 @@ func init() {
 				}
 			})
 		}
-		n := specialScale(legendaryCasterGrantedBase(c, legendaryFireBolt), int32(220+50*min(3, len(kinds))))
+		n := specialScale(legendaryCasterGrantedBase(c, legendaryFireBolt), c.RollValue("base_burst_pct", 220)+int32(50*min(3, len(kinds))))
 		c.Damage(c.Target, n, true, false)
 	}})
 	registerLegendarySynergyHandler("YS-A23", legendaryHandler{HealResolved: func(c *legendaryContext, raw, effective, overflow int32) {
 		if c.Skill != 10301 || c.Target == nil || c.Target.ID != c.Primary || raw <= 0 || !legendaryCasterOnce(c, 0, "heal-light") {
 			return
 		}
-		enemies := c.Enemies(c.Target.Pos, 250, 1)
+		enemies := c.Enemies(c.Target.Pos, 250, 0)
 		if len(enemies) == 0 {
 			return
 		}
@@ -319,7 +310,13 @@ func init() {
 			d, ok = c.Scene.skills.Get(legendaryLightBolt, 1)
 		}
 		if ok {
-			c.ChildSkill(enemies[0].ID, d, legendaryChildOptions{BaseDamage: raw})
+			batch := &legendaryChildBatch{Primaries: map[domain.EntityID]bool{}, Seen: map[domain.EntityID]bool{}}
+			for _, target := range enemies {
+				batch.Primaries[target.ID] = true
+			}
+			for _, target := range enemies {
+				c.ChildSkill(target.ID, d, legendaryChildOptions{BaseDamage: specialScale(raw, c.RollValue("heal_burst_pct", 100)), Batch: batch})
+			}
 		}
 	}})
 	registerLegendarySynergyHandler("YS-A21", legendaryHandler{StatusCommitted: func(c *legendaryContext, d *domain.StatusDef) {
@@ -349,8 +346,8 @@ func init() {
 				continue
 			}
 			c.VisualAt("stage-01", ally.Pos, 0)
-			for _, t := range c.Enemies(ally.Pos, 220, 256) {
-				strongest[t.ID] = max(strongest[t.ID], specialScale(shield, 80))
+			for _, t := range c.Enemies(ally.Pos, 220, 0) {
+				strongest[t.ID] = max(strongest[t.ID], specialScale(shield, c.RollValue("shield_burst_pct", 80)))
 			}
 		}
 		ids := make([]domain.EntityID, 0, len(strongest))
@@ -367,7 +364,7 @@ func init() {
 func init() {
 	registerLegendarySynergyHandler("SS-D03", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if c.Blow.Magic && legendaryCasterHasSkill(c.Owner, 10417) {
-			return specialScale(n, 25)
+			return specialScale(n, 100-c.RollValue("reduction_pct", 75))
 		}
 		return n
 	}, StatusApplied: func(c *legendaryContext, d *domain.StatusDef) {
@@ -394,7 +391,11 @@ func init() {
 			d.MagicFullReflectChancePct = min(int32(100), d.MagicFullReflectChancePct+30)
 		}
 	}})
-	registerLegendarySynergyHandler("SS-U08", legendaryHandler{StatusReceiving: func(c *legendaryContext, d *domain.StatusDef) bool {
+	registerLegendarySynergyHandler("SS-U08", legendaryHandler{StatusCommitted: func(c *legendaryContext, d *domain.StatusDef) {
+		if d.SourceSkillID == 10417 || d.SkillSnapshotID == 10417 {
+			c.Scene.statusesRemoved(c.Owner, c.Owner.Status.RemoveWhere(legendaryCasterSlow))
+		}
+	}, StatusReceiving: func(c *legendaryContext, d *domain.StatusDef) bool {
 		return !legendaryCasterSlow(*d) || !legendaryCasterHasSkill(c.Owner, 10417)
 	}, SkillResolved: func(c *legendaryContext) {
 		if c.Skill == 10417 && c.Owner.Status != nil && legendaryCasterHasSkill(c.Owner, 10417) {
@@ -406,15 +407,15 @@ func init() {
 			return
 		}
 		d.LegendaryInstantCast = true
-		d.LegendaryModifiers.DamageBP += 4000
-		d.LegendaryModifiers.HealingBP += 4000
+		d.LegendaryModifiers.DamageBP += c.RollValue("instant_bp", 4000)
+		d.LegendaryModifiers.HealingBP += c.RollValue("instant_bp", 4000)
 	}})
 }
 
 func init() {
 	registerLegendarySynergyHandler("SS-A03", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryFireBolt {
-			specialCircle(d, 150, domain.SkillAreaCenterTarget, 5)
+			specialCircle(d, c.RollValue("radius", 150), domain.SkillAreaCenterTarget, 5)
 		}
 	}})
 	registerLegendarySynergyHandler("SS-A07", legendaryHandler{RootFinished: func(c *legendaryContext) {
@@ -432,43 +433,38 @@ func init() {
 		if best <= 0 {
 			return
 		}
-		n := 0
-		for _, t := range c.Enemies(c.Center, float64(max(c.Def.Radius, c.Def.Area.Radius)), 256) {
+		for _, t := range c.Enemies(c.Center, float64(max(c.Def.Radius, c.Def.Area.Radius)), 0) {
 			if t.ID == original {
 				continue
 			}
-			c.Damage(t, clampI32(best*90/100), true, false)
-			n++
-			if n == 4 {
-				break
-			}
+			c.Damage(t, clampI32(best*int64(c.RollValue("burn_pct", 90))/100), true, false)
 		}
 	}})
 	registerLegendarySynergyHandler("SS-A27", legendaryHandler{Teleported: func(c *legendaryContext, from domain.Pos) {
 		if c.Skill != 10432 {
 			return
 		}
-		amount := specialScale(legendaryCasterGrantedBase(c, legendaryFireBolt), 180)
+		amount := specialScale(legendaryCasterGrantedBase(c, legendaryFireBolt), c.RollValue("proc_pct", 180))
 		if amount <= 0 {
 			return
 		}
 		d := domain.SkillDef{ID: 10432, Level: 1, Prof: 5, Kind: domain.SkillSingle, HurtType: domain.HurtFire, TargetEnemy: true, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
 		c.VisualAt("stage-01", from, 0)
-		for _, t := range c.Enemies(from, 180, 256) {
+		for _, t := range c.Enemies(from, 180, 0) {
 			c.ChildSkill(t.ID, d, legendaryChildOptions{BaseDamage: amount, TargetOnly: true, SuppressGeneration: true, SuppressVisual: true})
 		}
 	}})
 
 	registerLegendarySynergyHandler("SS-A29", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.HasDamageEffect() && (legendaryCasterNativeReady(c.Owner, false, false, true) || d.PrepareMS > 0 && legendaryCasterNativeReady(c.Owner, false, true, false) || len(d.Statuses) > 0 && legendaryCasterNativeReady(c.Owner, true, false, false)) {
-			d.LegendaryModifiers.DamageBP += 6600
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 6600)
 		}
 	}})
 	registerLegendarySynergyHandler("SS-D06", legendaryHandler{AllDamageIncoming: true, TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryFreeze {
 			specialCircle(d, 100, domain.SkillAreaCenterTarget, 5)
 		}
-	}, BeforeIncoming: func(c *legendaryContext, n int32) int32 { return specialScale(n, 65) }})
+	}, BeforeIncoming: func(c *legendaryContext, n int32) int32 { return specialScale(n, 100-c.RollValue("reduction_pct", 35)) }})
 	registerLegendarySynergyHandler("YS-U06", legendaryHandler{SkillResolved: func(c *legendaryContext) {
 		if c.Skill != 10307 || c.Target == nil {
 			return
@@ -497,7 +493,7 @@ func init() {
 		}
 	}, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if legendaryCasterHasSkill(c.Owner, 10330) && (d.ID == legendaryLightBolt || d.ID == legendaryHolyLight || d.ID == legendaryExorcism) {
-			d.LegendaryModifiers.DamageBP += 4000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 4000)
 		}
 	}})
 	registerLegendarySynergyHandler("YS-A29", legendaryHandler{ComposeSkill: func(c *legendaryContext, d *domain.SkillDef) {
@@ -521,7 +517,7 @@ func init() {
 		}
 	}, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.HasDamageEffect() && legendaryCasterNativeReady(c.Owner, false, false, true) {
-			d.LegendaryNextDamageBonusPct += 50
+			d.LegendaryNextDamageBonusPct += c.RollValue("next_damage_pct", 50)
 		}
 	}})
 }
@@ -531,20 +527,26 @@ func init() {
 		if d.ID != 1036 || c.Target == nil || !legendaryCasterOnce(c, c.Target.ID, "burn-opening") {
 			return
 		}
-		c.DamageTyped(c.Target, clampI32(legendaryCasterNewBurnTotal(c, *d)*65/100), domain.HurtFire, false)
+		c.DamageTyped(c.Target, clampI32(legendaryCasterNewBurnTotal(c, *d)*int64(c.RollValue("burn_pct", 65))/100), domain.HurtFire, false)
 	}})
 }
 
 func init() {
-	registerLegendarySynergyHandler("SS-D04", legendaryHandler{PassiveStats: func(c *legendaryContext, s *domain.Stats) { s.MaxHP = specialScale(s.MaxHP, 130) }, TargetDefinition: legendaryCasterTargetBonus(func(c *legendaryContext, n int32) int32 {
+	registerLegendarySynergyHandler("SS-D04", legendaryHandler{PassiveStats: func(c *legendaryContext, s *domain.Stats) {
+		s.MaxHP = specialScale(s.MaxHP, 100+c.RollValue("life_pct", 30))
+	}, TargetDefinition: legendaryCasterTargetBonus(func(c *legendaryContext, n int32) int32 {
 		if c.Skill == 10432 {
 			return specialScale(n, 130)
 		}
 		return n
 	})})
-	registerLegendarySynergyHandler("SS-D07", legendaryHandler{PassiveStats: func(c *legendaryContext, s *domain.Stats) { s.MaxHP = specialScale(s.MaxHP, 128) }})
-	registerLegendarySynergyHandler("SS-D08", legendaryHandler{PassiveStats: func(c *legendaryContext, s *domain.Stats) { s.MaxHP = specialScale(s.MaxHP, 130) }, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) { d.LegendaryModifiers.ManaReductionBP += 2000 }})
-	registerLegendarySynergyHandler("SS-U04", legendaryHandler{PassiveStats: func(c *legendaryContext, s *domain.Stats) { s.MoveSpeed = specialScale(s.MoveSpeed, 140) }})
+	registerLegendarySynergyHandler("SS-D07", legendaryHandler{PassiveStats: func(c *legendaryContext, s *domain.Stats) {
+		s.MaxHP = specialScale(s.MaxHP, 100+c.RollValue("life_pct", 28))
+	}})
+	registerLegendarySynergyHandler("SS-D08", legendaryHandler{PassiveStats: func(c *legendaryContext, s *domain.Stats) {
+		s.MaxHP = specialScale(s.MaxHP, 100+c.RollValue("life_pct", 30))
+	}, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) { d.LegendaryModifiers.ManaReductionBP += 2000 }})
+	registerLegendarySynergyHandler("SS-U04", legendarySorcererIceStride())
 }
 
 func (s *Scene) legendaryCasterOverlay(target *entity.Entity, d domain.StatusDef, base domain.StatusOverlay) domain.StatusOverlay {
@@ -616,7 +618,11 @@ func legendaryCasterTargetBonus(fn func(*legendaryContext, int32) int32) func(*l
 }
 
 func init() {
-	registerLegendarySynergyHandler("SS-U05", legendaryHandler{PeriodicResolved: func(c *legendaryContext, a domain.Active) {
+	registerLegendarySynergyHandler("SS-U05", legendaryHandler{AfterHit: func(c *legendaryContext) {
+		if _, ok := legendaryCasterSourceStatus(c.Target, 1036, c.Owner.ID); ok {
+			legendaryCasterBurnDeathReward(c)
+		}
+	}, PeriodicResolved: func(c *legendaryContext, a domain.Active) {
 		if a.Def.ID != 1036 || a.Source != c.Owner.ID || c.Target == nil || c.Target.Alive() || !c.Hit.Flag.Has(event.DamageFatal) {
 			return
 		}
@@ -629,7 +635,7 @@ func init() {
 				pct = 180
 			}
 		}
-		return min(specialScale(n, pct), specialScale(c.Owner.MaxHP, 18))
+		return min(specialScale(n, pct), specialScale(c.Owner.MaxHP, c.RollValue("reflection_cap_pct", 18)))
 	}})
 }
 
@@ -671,9 +677,7 @@ func (s *Scene) legendaryCasterDamageResolved(source *legendaryContext, target *
 	if target.Alive() || !hit.Flag.Has(event.DamageFatal) {
 		return
 	}
-	switch source.Power.ID {
-	case "SS-A02", "SS-A07", "SS-A11", "SS-A16", "SS-A19":
-	default:
+	if _, ok := legendaryCasterSourceStatus(target, 1036, source.Owner.ID); !ok {
 		return
 	}
 	for _, c := range s.legendaryContextsFor(source.Owner, target, combat.Blow{}, hit, true) {
@@ -694,5 +698,5 @@ func legendaryCasterBurnDeathReward(c *legendaryContext) {
 	st.Stacks = 1
 	st.Value = life
 	st.ExpiresMS = c.NowMS + 1
-	legendaryCasterRestoreMP(c, c.Owner, specialScale(c.Owner.MaxMP, 6))
+	legendaryCasterRestoreMP(c, c.Owner, specialScale(c.Owner.MaxMP, c.RollValue("restore_pct", 10)))
 }

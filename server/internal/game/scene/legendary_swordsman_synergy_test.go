@@ -4,6 +4,7 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 	"testing"
 )
 
@@ -66,7 +67,7 @@ func TestLegendarySwordsmanBloodSoulStandaloneAndCombinations(t *testing.T) {
 					putMonster(s, domain.EntityID(901+i), 10000, domain.Stats{}, 140+float64(i), 100)
 				}
 				ids := swordCast(t, s, p, m, swordDualDef(skill))
-				if len(ids) != 5 {
+				if len(ids) != 6 {
 					t.Fatalf("targets=%v", ids)
 				}
 				wantRestore := int32(20)
@@ -167,14 +168,24 @@ func TestLegendarySwordsmanBoundStrikeAndSourceDefense(t *testing.T) {
 	if len(ids) != 2 || q.HP != before-180 || q.Status.Controlled() == domain.ControlStun {
 		t.Fatal("root expansion copied stun or damage failed", ids, q.HP)
 	}
-	c := legendaryContext{Scene: s, Owner: p, Target: q, Blow: combat.Blow{}}
+	s.legendaryCastReleased(p, domain.SkillDef{ID: 10111}, q.ID, nil)
+	var c legendaryContext
+	for _, ctx := range s.legendaryContexts(p, q, combat.Blow{}, event.DamageDealt{}) {
+		if ctx.Power.ID == "JK-D06" {
+			c = ctx
+		}
+	}
 	if n := legendaryHandlers["JK-D06"].BeforeIncoming(&c, 100); n != 65 {
-		t.Fatal("missing own root defense", n)
+		t.Fatal("missing bind window defense", n)
 	}
 	q.Status = domain.NewStatusSet()
 	q.Status.Apply(rootDef, s.tick, 999)
+	if n := legendaryHandlers["JK-D06"].BeforeIncoming(&c, 100); n != 65 {
+		t.Fatal("window incorrectly depends on target control", n)
+	}
+	c.NowMS += 8000
 	if n := legendaryHandlers["JK-D06"].BeforeIncoming(&c, 100); n != 100 {
-		t.Fatal("borrowed another source control", n)
+		t.Fatal("expired window remained", n)
 	}
 }
 func TestLegendarySwordsmanGatherConcentrateProximity(t *testing.T) {
@@ -339,7 +350,7 @@ func TestLegendarySwordsmanSilenceAndArmorRefresh(t *testing.T) {
 	d := domain.SkillDef{ID: 10113, CooldownMS: 120000, HurtType: domain.HurtPhysical, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100, GuaranteedHit: true}}, Statuses: []domain.StatusApplication{{ID: st.ID, Level: 1}}}
 	s.legendaryPrepareSkill(p, &d, m.ID)
 	ids := swordCast(t, s, p, m, d)
-	if d.CooldownMS != 24000 || len(ids) != 4 {
+	if d.CooldownMS != 24000 || len(ids) != 6 {
 		t.Fatal("group silence shape/cooldown", d.CooldownMS, ids)
 	}
 	for _, id := range ids {

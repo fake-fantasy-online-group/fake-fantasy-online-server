@@ -1,0 +1,577 @@
+{
+  "ZS-A03": [
+    "legendary_warrior_remaining.go: DamageBP += 12000 -> DamageBP += c.RollValue(\"damage_bp\", 12000)",
+    "server/internal/game/scene/legendary_warrior_remaining.go:9: binding: registerWarriorPower(\"ZS-A03\", legendaryHandler{BaseSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A04": [
+    "legendary_warrior.go: DamageBP += 1500 -> DamageBP += c.RollValue(\"damage_bp\", 1500)",
+    "server/internal/game/scene/legendary_warrior.go:72: binding: registerWarriorPower(\"ZS-A04\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A17": [
+    "legendary_warrior.go: DamageBP += 3000 -> DamageBP += c.RollValue(\"damage_bp\", 3000)",
+    "server/internal/game/scene/legendary_warrior.go:83: binding: registerWarriorPower(\"ZS-A17\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A22": [
+    "legendary_warrior_area.go: DamageBP += 2000 -> DamageBP += c.RollValue(\"damage_bp\", 2000)",
+    "server/internal/game/scene/legendary_warrior_area.go:88: binding: registerWarriorPower(\"ZS-A22\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A28": [
+    "legendary_warrior_guard.go: DamageBP += 4000 -> DamageBP += c.RollValue(\"damage_bp\", 4000)",
+    "server/internal/game/scene/legendary_warrior_guard.go:101: binding: registerWarriorPower(\"ZS-A28\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A30": [
+    "legendary_warrior.go: DamageBP += 6500 -> DamageBP += c.RollValue(\"damage_bp\", 6500)",
+    "server/internal/game/scene/legendary_warrior.go:101: binding: registerWarriorPower(\"ZS-A30\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A21": [
+    "legendary_warrior_synergy.go: DamageBP += 10000 -> DamageBP += c.RollValue(\"damage_bp\", 10000)",
+    "server/internal/game/scene/legendary_warrior_synergy.go:143: binding: registerWarriorPower(\"ZS-A21\", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A09": [
+    "legendary_warrior_synergy.go: legendaryAddTargetDamage(d, 9500) -> legendaryAddTargetDamage(d, c.RollValue(\"damage_bp\", 12000)-c.RollValue(\"damage_bp\", 2500))",
+    "server/internal/game/scene/legendary_warrior_synergy.go:109: binding: registerWarriorPower(\"ZS-A09\", legendaryHandler{PrepareSkill: warriorSkill(10013, 25, 0, 0, 0).PrepareSkill, TargetDefinition: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A10": [
+    "legendary_warrior_synergy.go: 2*int64(drain) -> int64(drain)*int64(c.RollValue(\"drain_damage_pct\", 200))/100",
+    "server/internal/game/scene/legendary_warrior_synergy.go:114: binding: registerWarriorPower(\"ZS-A10\", legendaryHandler{ComposeSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A20": [
+    "legendary_warrior_synergy.go: legendaryMeleeScale(c.Attack(false), 240) -> legendaryMeleeScale(c.Attack(false), int64(c.RollValue(\"proc_pct\", 240)))",
+    "server/internal/game/scene/legendary_warrior_synergy.go:131: binding: registerWarriorPower(\"ZS-A20\", legendaryHandler{SelectTargets: warriorPreservePrimary, BaseSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A29": [
+    "legendary_warrior.go: legendaryMeleeScale(c.Attack(false), 180) -> legendaryMeleeScale(c.Attack(false), int64(c.RollValue(\"proc_pct\", 180)))",
+    "server/internal/game/scene/legendary_warrior.go:92: binding: registerWarriorPower(\"ZS-A29\", legendaryHandler{BaseSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A26": [
+    "legendary_warrior_remaining.go: DamagePct: 240 -> DamagePct: c.RollValue(\"proc_pct\", 240)",
+    "server/internal/game/scene/legendary_warrior_remaining.go:65: binding: registerWarriorPower(\"ZS-A26\", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-D03": [
+    "legendary_warrior_guard.go: legendaryMeleeScale(n, 50) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 50)))",
+    "server/internal/game/scene/legendary_warrior_guard.go:125: binding: registerWarriorPower(\"ZS-D03\", legendaryHandler{ModifyIncoming: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "ZS-D04": [
+    "legendary_warrior_synergy.go: legendaryMeleeScale(n, 40) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 60)))",
+    "server/internal/game/scene/legendary_warrior_synergy.go:172: binding: registerWarriorPower(\"ZS-D04\", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) { warriorDrain(c, d) }, ModifyIncoming: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "ZS-D06": [
+    "legendary_warrior.go: legendaryMeleeScale(n, 65) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 35)))",
+    "server/internal/game/scene/legendary_warrior.go:113: binding: registerWarriorPower(\"ZS-D06\", legendaryHandler{ModifyIncoming: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "ZS-U06": [
+    "legendary_warrior.go: ManaReductionBP += 6000 -> ManaReductionBP += c.RollValue(\"mana_bp\", 6000)",
+    "server/internal/game/scene/legendary_warrior.go:128: binding: registerWarriorPower(\"ZS-U06\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-U08": [
+    "legendary_warrior_guard.go: ManaReductionBP += 3000 -> ManaReductionBP += c.RollValue(\"mana_bp\", 3000)",
+    "server/internal/game/scene/legendary_warrior_guard.go:171: binding: registerWarriorPower(\"ZS-U08\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-U10": [
+    "legendary_warrior_guard.go: ManaReductionBP += 6000 -> ManaReductionBP += c.RollValue(\"mana_bp\", 6000)",
+    "server/internal/game/scene/legendary_warrior_guard.go:181: binding: registerWarriorPower(\"ZS-U10\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-U07": [
+    "legendary_warrior.go: legendaryMeleeScale(c.Owner.MaxMP, 5) -> legendaryMeleeScale(c.Owner.MaxMP, int64(c.RollValue(\"restore_pct\", 5)))",
+    "server/internal/game/scene/legendary_warrior.go:133: binding: registerWarriorPower(\"ZS-U07\", legendaryHandler{AfterHit: func(c *legendaryContext) {"
+  ],
+  "ZS-U09": [
+    "legendary_warrior.go: d.PrepareMS /= 2 -> d.PrepareMS = domain.SaturateInt32(int64(d.PrepareMS) * (10000-int64(c.RollValue(\"cooldown_bp\", 5000))) / 10000)",
+    "legendary_warrior.go: CooldownReductionBP += 5000 -> CooldownReductionBP += c.RollValue(\"cooldown_bp\", 5000)",
+    "server/internal/game/scene/legendary_warrior.go:138: binding: registerWarriorPower(\"ZS-U09\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "JK-A06": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(c.Attack(false), 200) -> legendaryMeleeScale(c.Attack(false), int64(c.RollValue(\"proc_pct\", 200)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:16: binding: registerLegendarySynergyHandler(\"JK-A06\", legendaryHandler{StatusCommitted: func(c *legendaryContext, d *domain.StatusDef) {"
+  ],
+  "JK-A20": [
+    "legendary_swordsman_immediate.go: legendaryMeleeScale(c.Attack(false), 160) -> legendaryMeleeScale(c.Attack(false), int64(c.RollValue(\"proc_pct\", 160)))",
+    "server/internal/game/scene/legendary_swordsman_immediate.go:16: binding: registerLegendarySynergyHandler(\"JK-A20\", legendaryHandler{AfterHit: func(c *legendaryContext) {"
+  ],
+  "JK-A25": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(c.Attack(false), 160) -> legendaryMeleeScale(c.Attack(false), int64(c.RollValue(\"proc_pct\", 160)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:59: binding: registerLegendarySynergyHandler(\"JK-A25\", legendaryHandler{SkillResolved: func(c *legendaryContext) {"
+  ],
+  "JK-A29": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(c.Attack(false), 180) -> legendaryMeleeScale(c.Attack(false), int64(c.RollValue(\"proc_pct\", 180)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:76: binding: registerLegendarySynergyHandler(\"JK-A29\", legendaryHandler{AfterIncoming: func(c *legendaryContext) {"
+  ],
+  "JK-A07": [
+    "legendary_melee_area.go: legendaryMeleeScale(legendaryMeleeBase(c), 45) -> legendaryMeleeScale(legendaryMeleeBase(c), int64(c.RollValue(\"proc_pct\", 45)))",
+    "server/internal/game/scene/legendary_melee_area.go:39: binding: registerLegendaryHandler(\"JK-A07\", legendaryHandler{BeforeDamage: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-A08": [
+    "legendary_melee_area.go: legendaryMeleeScale(n, 190) -> legendaryMeleeScale(n, 100+int64(c.RollValue(\"damage_pct\", 90)))",
+    "server/internal/game/scene/legendary_melee_area.go:55: binding: registerLegendaryHandler(\"JK-A08\", legendaryHandler{BeforeDamage: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-A10": [
+    "legendary_swordsman_keep.go: HealingReceivedReductionPct: 65 -> HealingReceivedReductionPct: c.RollValue(\"antiheal_pct\", 65)",
+    "server/internal/game/scene/legendary_swordsman_keep.go:9: binding: registerLegendaryHandler(\"JK-A10\", legendaryHandler{AfterHit: func(c *legendaryContext) {"
+  ],
+  "JK-A11": [
+    "legendary_swordsman_synergy.go: 150+50*int64(min(3, max(0, swordLandedCount(c.Owner.ID, c.Skill, hits)-1))) -> 100+int64(c.RollValue(\"restore_pct\", 50))*(1+int64(min(3, max(0, swordLandedCount(c.Owner.ID, c.Skill, hits)-1))))",
+    "server/internal/game/scene/legendary_swordsman_synergy.go:19: binding: registerLegendarySynergyHandler(\"JK-A11\", legendaryHandler{NativeRestoreAmount: func(c *legendaryContext, n int32, hits []equipmentHit) int32 {"
+  ],
+  "JK-A12": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(effective, 280) -> legendaryMeleeScale(effective, int64(c.RollValue(\"proc_pct\", 280)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:21: binding: registerLegendarySynergyHandler(\"JK-A12\", legendaryHandler{NativeRestoreResolved: func(c *legendaryContext, effective, overflow int32) {"
+  ],
+  "JK-A14": [
+    "legendary_swordsman_keep.go: legendaryMeleeScale(n, 150) -> legendaryMeleeScale(n, 100+int64(c.RollValue(\"damage_pct\", 50)))",
+    "server/internal/game/scene/legendary_swordsman_keep.go:19: binding: registerLegendaryHandler(\"JK-A14\", legendaryHandler{BeforeDamage: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-A17": [
+    "legendary_swordsman_defaults.go: max(d.Radius, 150) -> max(d.Radius, c.RollValue(\"radius\", 150))",
+    "legendary_swordsman_defaults.go: max(d.Area.Radius, 150) -> max(d.Area.Radius, c.RollValue(\"radius\", 150))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:26: binding: registerLegendarySynergyHandler(\"JK-A17\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "JK-A18": [
+    "legendary_swordsman_keep.go: Value: -30 -> Value: -c.RollValue(\"armor_pct\", 30)",
+    "server/internal/game/scene/legendary_swordsman_keep.go:14: binding: registerLegendaryHandler(\"JK-A18\", legendaryHandler{AfterHit: func(c *legendaryContext) {"
+  ],
+  "JK-A19": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 125) -> legendaryMeleeScale(n, 100+int64(c.RollValue(\"damage_pct\", 25)))",
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 200) -> legendaryMeleeScale(n, 100+int64(c.RollValue(\"damage_pct\", 100)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:34: binding: registerLegendarySynergyHandler(\"JK-A19\", legendaryHandler{AfterHit: func(c *legendaryContext) {"
+  ],
+  "JK-A26": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 200) -> legendaryMeleeScale(n, 100+int64(c.RollValue(\"damage_pct\", 100)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:64: binding: registerLegendarySynergyHandler(\"JK-A26\", legendaryHandler{BeforeDamage: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-A30": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 210) -> legendaryMeleeScale(n, 100+int64(c.RollValue(\"damage_pct\", 110)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:81: binding: registerLegendarySynergyHandler(\"JK-A30\", legendaryHandler{BeforeDamage: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-D01": [
+    "legendary_swordsman_defaults.go: specialScale(c.Owner.MaxHP, 12) -> specialScale(c.Owner.MaxHP, c.RollValue(\"shield_pct\", 12))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:87: binding: registerLegendarySynergyHandler(\"JK-D01\", legendaryHandler{AfterHit: func(c *legendaryContext) {"
+  ],
+  "JK-D02": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 45) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 55)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:92: binding: registerLegendarySynergyHandler(\"JK-D02\", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-D04": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 50) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 50)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:98: binding: registerLegendarySynergyHandler(\"JK-D04\", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-D05": [
+    "legendary_swordsman_synergy.go: legendaryMeleeScale(n, 60) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 40)))",
+    "server/internal/game/scene/legendary_swordsman_synergy.go:56: binding: registerLegendarySynergyHandler(\"JK-D05\", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-D06": [
+    "legendary_swordsman_synergy.go: legendaryMeleeScale(n, 65) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 35)))",
+    "server/internal/game/scene/legendary_swordsman_synergy.go:48: binding: registerLegendarySynergyHandler(\"JK-D06\", legendaryHandler{CastReleased: warriorFunctionalRelease(10111, 8000, false), Tick: warriorFunctionalTick(10111, false), BeforeIncoming: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-D07": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 50) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 50)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:104: binding: registerLegendarySynergyHandler(\"JK-D07\", legendaryHandler{CastReleased: warriorFunctionalRelease(10113, 8000, false), Tick: warriorFunctionalTick(10113, false), BeforeIncoming: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-D09": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 55) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 45)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:111: binding: registerLegendarySynergyHandler(\"JK-D09\", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-D10": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 65) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 35)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:117: binding: registerLegendarySynergyHandler(\"JK-D10\", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-U03": [
+    "legendary_swordsman_immediate.go: specialScale(c.PaidMP, 60) -> specialScale(c.PaidMP, c.RollValue(\"refund_pct\", 60))",
+    "server/internal/game/scene/legendary_swordsman_immediate.go:24: binding: registerLegendarySynergyHandler(\"JK-U03\", legendaryHandler{RootFinished: func(c *legendaryContext) {"
+  ],
+  "JK-U09": [
+    "legendary_swordsman_immediate.go: specialScale(c.PaidMP, 80) -> specialScale(c.PaidMP, c.RollValue(\"refund_pct\", 80))",
+    "server/internal/game/scene/legendary_swordsman_immediate.go:45: binding: registerLegendarySynergyHandler(\"JK-U09\", legendaryHandler{RootFinished: func(c *legendaryContext) {"
+  ],
+  "JK-U04": [
+    "legendary_swordsman_defaults.go: ManaReductionBP += 5000 -> ManaReductionBP += c.RollValue(\"mana_bp\", 5000)",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:124: binding: registerLegendarySynergyHandler(\"JK-U04\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "JK-U05": [
+    "legendary_swordsman_immediate.go: warriorFunctionalRelease(10103, 8000, false)(c) -> warriorFunctionalRelease(10103, int64(c.RollValue(\"duration_ms\", 8000)), false)(c)",
+    "server/internal/game/scene/legendary_swordsman_immediate.go:29: binding: registerLegendarySynergyHandler(\"JK-U05\", legendaryHandler{CastReleased: func(c *legendaryContext) {"
+  ],
+  "JK-U06": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(d.Dist, 180) -> legendaryMeleeScale(d.Dist, 100+int64(c.RollValue(\"range_pct\", 80)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:131: binding: registerLegendarySynergyHandler(\"JK-U06\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "JK-U10": [
+    "legendary_swordsman_defaults.go: legendaryMeleeScale(d.Dist, 145) -> legendaryMeleeScale(d.Dist, 100+int64(c.RollValue(\"range_pct\", 45)))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:142: binding: registerLegendarySynergyHandler(\"JK-U10\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "JK-U07": [
+    "legendary_swordsman_defaults.go: specialScale(c.Owner.MaxMP, 12) -> specialScale(c.Owner.MaxMP, c.RollValue(\"restore_pct\", 12))",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:137: binding: registerLegendarySynergyHandler(\"JK-U07\", legendaryHandler{RootFinished: func(c *legendaryContext) {"
+  ],
+  "ZS-A01": [
+    "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior.go:71: binding: registerWarriorPower(\"ZS-A01\", warriorSkill(10002, 80, 0, 0, 0))"
+  ],
+  "ZS-A02": [
+    "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior_area.go:41: binding: registerWarriorPower(\"ZS-A02\", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A05": [
+    "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior.go:79: binding: registerWarriorPower(\"ZS-A05\", warriorSkill(10005, 60, 0, 0, 0))"
+  ],
+  "ZS-A11": [
+    "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior.go:80: binding: registerWarriorPower(\"ZS-A11\", warriorSkill(10017, 60, 0, 0, 0))"
+  ],
+  "ZS-A12": [
+    "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior_area.go:61: binding: registerWarriorPower(\"ZS-A12\", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A13": [
+    "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior.go:81: binding: registerWarriorPower(\"ZS-A13\", warriorSkill(10006, 45, 0, 20, 0))"
+  ],
+  "ZS-A15": [
+    "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior.go:82: binding: registerWarriorPower(\"ZS-A15\", warriorSkill(10006, 60, 0, 0, 0))"
+  ],
+  "ZS-A16": [
+    "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior_area.go:77: binding: registerWarriorPower(\"ZS-A16\", legendaryHandler{SelectTargets: warriorPreservePrimary, PrepareSkill: warriorSkill(10003, 15, 0, 0, 0).PrepareSkill, TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A19": [
+    "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior.go:91: binding: registerWarriorPower(\"ZS-A19\", warriorSkill(10021, 70, 0, 0, 0))"
+  ],
+  "ZS-A23": [
+    "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior_area.go:98: binding: registerWarriorPower(\"ZS-A23\", legendaryHandler{PrepareSkill: warriorSkill(10022, 80, 0, 0, 0).PrepareSkill, RootFinished: func(c *legendaryContext) {"
+  ],
+  "ZS-A24": [
+    "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior_area.go:127: binding: registerWarriorPower(\"ZS-A24\", legendaryHandler{SelectTargets: warriorPreservePrimary, PrepareSkill: warriorSkill(10023, 85, 0, 0, 0).PrepareSkill, TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-U02": [
+    "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters mana_bp",
+    "server/internal/game/scene/legendary_warrior_synergy.go:178: binding: registerWarriorPower(\"ZS-U02\", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) { warriorDrain(c, d) }, PrepareSkill: warriorSkill(10013, 0, 60, 0, 0).PrepareSkill})"
+  ],
+  "ZS-U05": [
+    "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters mana_bp",
+    "server/internal/game/scene/legendary_warrior.go:127: binding: registerWarriorPower(\"ZS-U05\", warriorSkill(10006, 0, 45, 45, 0))"
+  ],
+  "ZS-A07": [
+    "server/internal/game/scene/legendary_warrior.go:18: warriorDamageSkills; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior_synergy.go:98: binding: registerWarriorPower(\"ZS-A07\", warriorDamageSkills(50, 10005, 10009))"
+  ],
+  "ZS-A25": [
+    "server/internal/game/scene/legendary_warrior.go:18: warriorDamageSkills; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior_synergy.go:168: binding: registerWarriorPower(\"ZS-A25\", warriorDamageSkills(35, 10023, 10022))"
+  ],
+  "ZS-A27": [
+    "server/internal/game/scene/legendary_warrior.go:18: warriorDamageSkills; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_warrior_area.go:137: binding: registerWarriorPower(\"ZS-A27\", legendaryHandler{SelectTargets: warriorPreservePrimary, PrepareSkill: warriorDamageSkills(80, 10027, 10009).PrepareSkill, TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A06": [
+    "server/internal/game/scene/legendary_warrior_area.go:18: warriorEcho; authored parameters proc_pct",
+    "server/internal/game/scene/legendary_warrior_area.go:56: binding: registerWarriorPower(\"ZS-A06\", legendaryHandler{RootFinished: func(c *legendaryContext) {"
+  ],
+  "ZS-A18": [
+    "server/internal/game/scene/legendary_warrior_area.go:18: warriorEcho; authored parameters proc_pct",
+    "server/internal/game/scene/legendary_warrior_area.go:83: binding: registerWarriorPower(\"ZS-A18\", legendaryHandler{RootFinished: func(c *legendaryContext) {"
+  ],
+  "ZS-A08": [
+    "server/internal/game/scene/legendary_warrior_synergy.go:67: warriorArmorStrength; authored parameters armor_pct",
+    "server/internal/game/scene/legendary_warrior_synergy.go:99: binding: registerWarriorPower(\"ZS-A08\", legendaryHandler{SelectTargets: warriorPreservePrimary, TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-A14": [
+    "server/internal/game/scene/legendary_warrior_remaining.go:72: warriorQuakeZone; authored parameters field_pct",
+    "server/internal/game/scene/legendary_warrior_remaining.go:64: binding: registerWarriorPower(\"ZS-A14\", legendaryHandler{CastReleased: warriorQuakeZone, Tick: warriorQuakeTick})"
+  ],
+  "ZS-D01": [
+    "server/internal/game/scene/legendary_warrior_guard.go:32: warriorShield; authored parameters shield_pct",
+    "server/internal/game/scene/legendary_warrior_guard.go:120: binding: registerWarriorPower(\"ZS-D01\", legendaryHandler{CastReleased: func(c *legendaryContext) {"
+  ],
+  "ZS-D09": [
+    "server/internal/game/scene/legendary_warrior_guard.go:32: warriorShield; authored parameters shield_pct",
+    "server/internal/game/scene/legendary_warrior_guard.go:147: binding: registerWarriorPower(\"ZS-D09\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-D02": [
+    "server/internal/game/scene/legendary_warrior.go:28: warriorIncoming; authored parameters reduction_pct",
+    "server/internal/game/scene/legendary_warrior_synergy.go:171: binding: registerWarriorPower(\"ZS-D02\", h)"
+  ],
+  "ZS-D05": [
+    "server/internal/game/scene/legendary_warrior.go:28: warriorIncoming; authored parameters reduction_pct",
+    "server/internal/game/scene/legendary_warrior.go:111: binding: registerWarriorPower(\"ZS-D05\", warriorIncoming(40))"
+  ],
+  "ZS-D07": [
+    "server/internal/game/scene/legendary_warrior.go:28: warriorIncoming; authored parameters reduction_pct",
+    "server/internal/game/scene/legendary_warrior.go:112: binding: registerWarriorPower(\"ZS-D07\", warriorIncoming(45))"
+  ],
+  "ZS-D08": [
+    "server/internal/game/scene/legendary_warrior.go:28: warriorIncoming; authored parameters reduction_pct",
+    "server/internal/game/scene/legendary_warrior.go:121: binding: registerWarriorPower(\"ZS-D08\", h)"
+  ],
+  "ZS-D10": [
+    "server/internal/game/scene/legendary_warrior.go:28: warriorIncoming; authored parameters reduction_pct",
+    "server/internal/game/scene/legendary_warrior_guard.go:159: binding: registerWarriorPower(\"ZS-D10\", h)"
+  ],
+  "ZS-U03": [
+    "server/internal/game/scene/legendary_warrior_functional.go:48: warriorFunctionalMove; authored parameters move_pct",
+    "server/internal/game/scene/legendary_warrior_guard.go:160: binding: registerWarriorPower(\"ZS-U03\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "ZS-U04": [
+    "server/internal/game/scene/legendary_warrior_functional.go:48: warriorFunctionalMove; authored parameters move_pct",
+    "server/internal/game/scene/legendary_warrior_guard.go:165: binding: registerWarriorPower(\"ZS-U04\", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {"
+  ],
+  "JK-U01": [
+    "server/internal/game/scene/legendary_warrior_functional.go:48: warriorFunctionalMove; authored parameters move_pct",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:123: binding: registerLegendarySynergyHandler(\"JK-U01\", legendaryHandler{CastReleased: warriorFunctionalRelease(10117, 8000, true), PassiveStats: warriorFunctionalMove(10117, 80), Tick: warriorFunctionalTick(10117, true)})"
+  ],
+  "JK-A01": [
+    "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:14: binding: registerLegendarySynergyHandler(\"JK-A01\", legendaryHandler{BeforeDamage: legendaryMeleeSkillDamage(10102, 200)})"
+  ],
+  "JK-A02": [
+    "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct",
+    "server/internal/game/scene/legendary_melee_targeting.go:22: binding: registerLegendaryHandler(\"JK-A02\", legendaryHandler{BeforeDamage: legendaryMeleeSkillDamage(10117, 115), SelectTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {"
+  ],
+  "JK-A05": [
+    "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct",
+    "server/internal/game/scene/legendary_swordsman_synergy.go:26: binding: registerLegendarySynergyHandler(\"JK-A05\", legendaryHandler{PrepareSkill: swordCooldown(10111, 24000), BeforeDamage: legendaryMeleeSkillDamage(10111, 140), ImpactTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {"
+  ],
+  "JK-A13": [
+    "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct",
+    "server/internal/game/scene/legendary_swordsman_synergy.go:32: binding: registerLegendarySynergyHandler(\"JK-A13\", legendaryHandler{PrepareSkill: swordCooldown(10113, 24000), BeforeDamage: legendaryMeleeSkillDamage(10113, 170), ImpactTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {"
+  ],
+  "JK-A15": [
+    "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct",
+    "server/internal/game/scene/legendary_swordsman_synergy.go:55: binding: registerLegendarySynergyHandler(\"JK-A15\", legendaryHandler{BeforeDamage: legendaryMeleeSkillDamage(10121, 160), AfterHit: swordRecordActualDamage, RootFinished: swordConcentrate})"
+  ],
+  "JK-A16": [
+    "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct",
+    "server/internal/game/scene/legendary_swordsman_synergy.go:54: binding: registerLegendarySynergyHandler(\"JK-A16\", legendaryHandler{BeforeDamage: legendaryMeleeSkillDamage(10121, 130), SelectTargets: swordGatherAdmission, ImpactTargets: swordGather})"
+  ],
+  "JK-A24": [
+    "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct",
+    "server/internal/game/scene/legendary_swordsman_synergy.go:38: binding: registerLegendarySynergyHandler(\"JK-A24\", legendaryHandler{PrepareSkill: swordCooldown(10126, 18000), BeforeDamage: legendaryMeleeSkillDamage(10126, 180), ImpactTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {"
+  ],
+  "JK-A03": [
+    "server/internal/game/scene/legendary_swordsman_defaults.go:166: swordImmediatePrimary; authored parameters proc_pct",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:15: binding: registerLegendarySynergyHandler(\"JK-A03\", legendaryHandler{AfterHit: swordImmediatePrimary(10102, 160)})"
+  ],
+  "JK-A21": [
+    "server/internal/game/scene/legendary_swordsman_defaults.go:166: swordImmediatePrimary; authored parameters proc_pct",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:58: binding: registerLegendarySynergyHandler(\"JK-A21\", legendaryHandler{AfterHit: swordImmediatePrimary(10116, 320)})"
+  ],
+  "JK-A28": [
+    "server/internal/game/scene/legendary_swordsman_defaults.go:166: swordImmediatePrimary; authored parameters proc_pct",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:71: binding: registerLegendarySynergyHandler(\"JK-A28\", legendaryHandler{AfterHit: func(c *legendaryContext) {"
+  ],
+  "JK-A04": [
+    "server/internal/game/scene/legendary_melee_area.go:93: legendaryMeleeFarBlade; authored parameters proc_pct",
+    "server/internal/game/scene/legendary_melee_area.go:37: binding: registerLegendaryHandler(\"JK-A04\", legendaryHandler{RootFinished: legendaryMeleeFarBlade})"
+  ],
+  "JK-A09": [
+    "server/internal/game/scene/legendary_swordsman_synergy.go:64: swordDualDamage; authored parameters damage_pct",
+    "server/internal/game/scene/legendary_swordsman_synergy.go:13: binding: registerLegendarySynergyHandler(\"JK-A09\", legendaryHandler{BeforeDamage: swordDualDamage, ImpactTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {"
+  ],
+  "JK-A22": [
+    "server/internal/game/scene/legendary_melee_area.go:123: legendaryMeleeMeteor; authored parameters proc_pct",
+    "server/internal/game/scene/legendary_melee_area.go:74: binding: registerLegendaryHandler(\"JK-A22\", legendaryHandler{BeforeDamage: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-A23": [
+    "server/internal/game/scene/legendary_melee_area.go:138: legendarySwordsmanMeteorBurst; authored parameters proc_pct",
+    "server/internal/game/scene/legendary_melee_area.go:80: binding: registerLegendaryHandler(\"JK-A23\", legendaryHandler{BeforeDamage: func(c *legendaryContext, n int32) int32 {"
+  ],
+  "JK-A27": [
+    "server/internal/game/scene/legendary_swordsman_defaults.go:177: swordSingleCastArray; authored parameters proc_pct",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:70: binding: registerLegendarySynergyHandler(\"JK-A27\", legendaryHandler{RootFinished: swordSingleCastArray})"
+  ],
+  "JK-D03": [
+    "server/internal/game/scene/legendary_swordsman_synergy.go:126: swordOverflowShield; authored parameters shield_pct",
+    "server/internal/game/scene/legendary_swordsman_synergy.go:25: binding: registerLegendarySynergyHandler(\"JK-D03\", legendaryHandler{NativeRestoreResolved: swordOverflowShield})"
+  ],
+  "JK-D08": [
+    "server/internal/game/scene/legendary_swordsman_defaults.go:227: swordLionShields; authored parameters shield_pct",
+    "server/internal/game/scene/legendary_swordsman_defaults.go:110: binding: registerLegendarySynergyHandler(\"JK-D08\", legendaryHandler{AfterHit: swordLionShields})"
+  ],
+  "CK-A01": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters cooldown_bp",
+    "server/internal/game/scene/legendary_assassin.go:25: binding: case \"CK-A01\":"
+  ],
+  "CK-A03": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin.go:100: binding: case \"CK-A03\":"
+  ],
+  "CK-A04": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin.go:50: binding: case \"CK-A04\":"
+  ],
+  "CK-A06": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin.go:35: binding: case \"CK-A06\":"
+  ],
+  "CK-A11": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin.go:109: binding: case \"CK-A11\":"
+  ],
+  "CK-A12": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin.go:115: binding: case \"CK-A12\":"
+  ],
+  "CK-A14": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters radius_bp",
+    "server/internal/game/scene/legendary_assassin.go:54: binding: case \"CK-A14\":"
+  ],
+  "CK-A16": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin.go:58: binding: case \"CK-A16\":"
+  ],
+  "CK-A17": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin.go:63: binding: case \"CK-A17\":"
+  ],
+  "CK-A20": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin.go:42: binding: case \"CK-A20\":"
+  ],
+  "CK-A23": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin.go:74: binding: case \"CK-A23\":"
+  ],
+  "CK-A24": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin.go:70: binding: case \"CK-A24\":"
+  ],
+  "CK-A27": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters geometry_bp",
+    "server/internal/game/scene/legendary_assassin.go:90: binding: case \"CK-A27\":"
+  ],
+  "CK-A29": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin.go:124: binding: case \"CK-A29\":"
+  ],
+  "CK-U05": [
+    "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters mana_bp",
+    "server/internal/game/scene/legendary_assassin.go:128: binding: case \"CK-U05\":"
+  ],
+  "CK-A05": [
+    "server/internal/game/scene/legendary_assassin.go:23: legendaryAssassinTransform; authored parameters radius",
+    "server/internal/game/scene/legendary_assassin.go:148: legendaryAssassinTargets; authored parameters radius",
+    "server/internal/game/scene/legendary_assassin.go:30: binding: case \"CK-A05\":"
+  ],
+  "CK-A07": [
+    "server/internal/game/scene/legendary_assassin.go:196: legendaryAssassinTargetDefinition; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin.go:14: binding: for _, id := range []string{\"CK-A01\", \"CK-A23\", \"CK-A02\", \"CK-A27\", \"CK-A03\", \"CK-A04\", \"CK-A05\", \"CK-A07\", \"CK-A14\", \"CK-A16\", \"CK-A17\", \"CK-A24\", \"CK-A06\", \"CK-A11\", \"CK-A12\", \"CK-A19\", \"CK-A20\", \"CK-A21\", \"CK-A29\", \"CK-U05\"} {"
+  ],
+  "CK-A21": [
+    "server/internal/game/scene/legendary_assassin.go:196: legendaryAssassinTargetDefinition; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin.go:14: binding: for _, id := range []string{\"CK-A01\", \"CK-A23\", \"CK-A02\", \"CK-A27\", \"CK-A03\", \"CK-A04\", \"CK-A05\", \"CK-A07\", \"CK-A14\", \"CK-A16\", \"CK-A17\", \"CK-A24\", \"CK-A06\", \"CK-A11\", \"CK-A12\", \"CK-A19\", \"CK-A20\", \"CK-A21\", \"CK-A29\", \"CK-U05\"} {"
+  ],
+  "CK-A08": [
+    "server/internal/game/scene/legendary_assassin_poison.go:115: legendaryAssassinSpreadDeath; authored parameters radius",
+    "server/internal/game/scene/legendary_assassin_poison.go:113: binding: registerLegendarySynergyHandler(\"CK-A08\", legendaryHandler{OwnerPoisonDeath: legendaryAssassinSpreadDeath})"
+  ],
+  "CK-A09": [
+    "server/internal/game/scene/legendary_assassin_poison.go:9: legendaryAssassinPoisonStatus; authored parameters tick_bp",
+    "server/internal/game/scene/legendary_assassin_poison.go:22: legendaryAssassinPreparePoison; authored parameters tick_bp",
+    "server/internal/game/scene/legendary_assassin_poison.go:15: legendaryAssassinAmplifyPoisonBonus; authored parameters tick_bp",
+    "server/internal/game/scene/legendary_assassin.go:17: binding: registerLegendarySynergyHandler(\"CK-A09\", legendaryHandler{StatusApplied: legendaryAssassinPoisonStatus})"
+  ],
+  "CK-A15": [
+    "server/internal/game/scene/legendary_assassin_utility.go:95: legendaryAssassinTrapPoison; authored parameters tick_bp",
+    "server/internal/game/scene/legendary_assassin_utility.go:10: binding: registerLegendarySynergyHandler(\"CK-A15\", legendaryHandler{StatusApplied: legendaryAssassinTrapPoison})"
+  ],
+  "CK-A22": [
+    "server/internal/game/scene/legendary_assassin.go:215: legendaryAssassinLifesteal; authored parameters restore_pct",
+    "server/internal/game/scene/legendary_assassin.go:19: binding: registerLegendarySynergyHandler(\"CK-A22\", legendaryHandler{AfterHit: legendaryAssassinLifesteal})"
+  ],
+  "CK-A25": [
+    "server/internal/game/scene/legendary_assassin_counter.go:12: legendaryAssassinCounterTargets; authored parameters radius",
+    "server/internal/game/scene/legendary_assassin_counter.go:24: legendaryAssassinCounterArea; authored parameters radius",
+    "server/internal/game/scene/legendary_assassin_counter.go:10: binding: registerLegendarySynergyHandler(\"CK-A25\", legendaryHandler{SelectTargets: legendaryAssassinCounterTargets})"
+  ],
+  "CK-A26": [
+    "server/internal/game/scene/legendary_assassin_theft.go:25: legendaryAssassinTheftPalm; authored parameters proc_pct",
+    "server/internal/game/scene/legendary_assassin_theft.go:11: binding: registerLegendarySynergyHandler(\"CK-A26\", legendaryHandler{TheftAttempt: legendaryAssassinTheftPalm})"
+  ],
+  "CK-A28": [
+    "server/internal/game/scene/legendary_assassin_displacement.go:26: legendaryAssassinPullPrepare; authored parameters damage_bp",
+    "server/internal/game/scene/legendary_assassin_displacement.go:11: binding: for _, id := range []string{\"CK-A28\", \"CK-A30\"} {"
+  ],
+  "CK-A30": [
+    "server/internal/game/scene/legendary_assassin_displacement.go:26: legendaryAssassinPullPrepare; authored parameters radius_bp",
+    "server/internal/game/scene/legendary_assassin_displacement.go:11: binding: for _, id := range []string{\"CK-A28\", \"CK-A30\"} {"
+  ],
+  "CK-D01": [
+    "server/internal/game/scene/legendary_assassin_defense.go:43: legendaryAssassinNativeDefense; authored parameters reduction_pct",
+    "server/internal/game/scene/legendary_assassin_defense.go:60: binding: case \"CK-D01\":"
+  ],
+  "CK-D02": [
+    "server/internal/game/scene/legendary_assassin_defense.go:43: legendaryAssassinNativeDefense; authored parameters reduction_pct",
+    "server/internal/game/scene/legendary_assassin_defense.go:48: binding: case \"CK-D02\":"
+  ],
+  "CK-D04": [
+    "server/internal/game/scene/legendary_assassin_defense.go:43: legendaryAssassinNativeDefense; authored parameters reduction_pct",
+    "server/internal/game/scene/legendary_assassin_defense.go:37: binding: registerLegendarySynergyHandler(id, legendaryHandler{AllDamageIncoming: id != \"CK-D04\", BeforeIncoming: legendaryAssassinNativeDefense, PrepareSkill: legendaryAssassinDefensePrepare, TransformSkill: legendaryAssassinSmokeTransform, CastReleased: legendaryAssassinDefenseRelease, StatusCommitted: legendaryAssassinDefenseCommitted})"
+  ],
+  "CK-D06": [
+    "server/internal/game/scene/legendary_assassin_defense.go:43: legendaryAssassinNativeDefense; authored parameters reduction_pct",
+    "server/internal/game/scene/legendary_assassin_defense.go:46: binding: case \"CK-D06\":"
+  ],
+  "CK-D07": [
+    "server/internal/game/scene/legendary_assassin_defense.go:43: legendaryAssassinNativeDefense; authored parameters reduction_pct",
+    "server/internal/game/scene/legendary_assassin_defense.go:69: binding: case \"CK-D07\":"
+  ],
+  "CK-D10": [
+    "server/internal/game/scene/legendary_assassin_defense.go:43: legendaryAssassinNativeDefense; authored parameters reduction_pct",
+    "server/internal/game/scene/legendary_assassin_defense.go:82: binding: case \"CK-D10\":"
+  ],
+  "CK-D03": [
+    "server/internal/game/scene/legendary_assassin_defense.go:93: legendaryAssassinCounterHeal; authored parameters restore_pct",
+    "server/internal/game/scene/legendary_assassin_defense.go:39: binding: registerLegendarySynergyHandler(\"CK-D03\", legendaryHandler{AfterHit: legendaryAssassinCounterHeal})"
+  ],
+  "CK-D05": [
+    "server/internal/game/scene/legendary_assassin_defense.go:99: legendaryAssassinReceiveControl; authored parameters control_bp",
+    "server/internal/game/scene/legendary_assassin_defense.go:40: binding: registerLegendarySynergyHandler(\"CK-D05\", legendaryHandler{StatusReceiving: legendaryAssassinReceiveControl})"
+  ],
+  "CK-D08": [
+    "server/internal/game/scene/legendary_assassin_defense.go:24: legendaryAssassinPoisonIncoming; authored parameters reduction_pct",
+    "server/internal/game/scene/legendary_assassin_defense.go:129: binding: registerLegendarySynergyHandler(\"CK-D08\", legendaryHandler{CastReleased: legendaryAssassinCleanPoison})"
+  ],
+  "CK-D09": [
+    "server/internal/game/scene/legendary_assassin_defense.go:116: legendaryAssassinDefenseStats; authored parameters life_pct",
+    "server/internal/game/scene/legendary_assassin_defense.go:41: binding: registerLegendarySynergyHandler(\"CK-D09\", legendaryHandler{PrepareSkill: legendaryAssassinDefensePrepare, PassiveStats: legendaryAssassinDefenseStats})"
+  ],
+  "CK-U01": [
+    "server/internal/game/scene/legendary_assassin_utility.go:18: legendaryAssassinUtilityPrepare; authored parameters mana_bp",
+    "server/internal/game/scene/legendary_assassin_utility.go:26: binding: case \"CK-U01\":"
+  ],
+  "CK-U02": [
+    "server/internal/game/scene/legendary_assassin_utility.go:18: legendaryAssassinUtilityPrepare; authored parameters range_pct",
+    "server/internal/game/scene/legendary_assassin_utility.go:33: binding: case \"CK-U02\":"
+  ],
+  "CK-U07": [
+    "server/internal/game/scene/legendary_assassin_utility.go:18: legendaryAssassinUtilityPrepare; authored parameters mana_bp",
+    "server/internal/game/scene/legendary_assassin_utility.go:42: binding: case \"CK-U07\":"
+  ],
+  "CK-U09": [
+    "server/internal/game/scene/legendary_assassin_utility.go:18: legendaryAssassinUtilityPrepare; authored parameters mana_bp",
+    "server/internal/game/scene/legendary_assassin_utility.go:46: binding: case \"CK-U09\":"
+  ],
+  "CK-U03": [
+    "server/internal/game/scene/trap.go:160: disarmTrap; authored parameters disarm_bp",
+    "server/internal/game/scene/legendary_assassin_utility.go:20: binding: case \"CK-U03\":"
+  ],
+  "CK-U04": [
+    "server/internal/game/scene/legendary_assassin_utility.go:80: legendaryAssassinUtilityStats; authored parameters move_pct",
+    "server/internal/game/scene/legendary_assassin_utility.go:38: binding: case \"CK-U04\":"
+  ],
+  "CK-U06": [
+    "server/internal/game/scene/legendary_assassin.go:227: legendaryAssassinBackstabCooldown; authored parameters cooldown_pct",
+    "server/internal/game/scene/legendary_assassin.go:21: binding: registerLegendarySynergyHandler(\"CK-U06\", legendaryHandler{RootFinished: legendaryAssassinBackstabCooldown})"
+  ],
+  "CK-U08": [
+    "server/internal/game/scene/legendary_assassin_utility.go:104: legendaryAssassinStealthBudget; authored parameters duration_ms",
+    "server/internal/game/scene/legendary_assassin_utility.go:102: binding: registerLegendarySynergyHandler(\"CK-U08\", legendaryHandler{StatusApplied: legendaryAssassinStealthBudget, PrepareSkill: legendaryAssassinStealthTrapPrepare, CastAccepted: legendaryAssassinStealthTrapAccepted})"
+  ],
+  "CK-U10": [
+    "server/internal/game/scene/legendary_assassin_displacement.go:78: legendaryAssassinStealthSpeed; authored parameters move_pct",
+    "server/internal/game/scene/legendary_assassin_displacement.go:14: binding: registerLegendarySynergyHandler(\"CK-U10\", legendaryHandler{StatusApplied: legendaryAssassinStealthSpeed})"
+  ]
+}

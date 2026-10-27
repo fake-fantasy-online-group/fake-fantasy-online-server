@@ -23,14 +23,11 @@ func legendaryMeleeBase(c *legendaryContext) int32 {
 	return legendaryMeleeScale(c.Attack(false), int64(pct))
 }
 func legendaryMeleeNearbyOthers(c *legendaryContext, radius float64, limit int) []*entity.Entity {
-	all := c.Enemies(c.Target.Pos, radius, limit+1)
-	out := make([]*entity.Entity, 0, limit)
+	all := c.Enemies(c.Target.Pos, radius, 0)
+	out := make([]*entity.Entity, 0, len(all))
 	for _, e := range all {
 		if e.ID != c.Target.ID {
 			out = append(out, e)
-			if len(out) == limit {
-				break
-			}
 		}
 	}
 	return out
@@ -48,7 +45,7 @@ func init() {
 		if !legendaryMeleeLanded(c) || c.Skill != 10103 || !legendaryMeleePrimary(c) || !legendaryMeleeOnce(c, 0, "shadows") {
 			return
 		}
-		amount := legendaryMeleeScale(legendaryMeleeBase(c), 45)
+		amount := legendaryMeleeScale(legendaryMeleeBase(c), int64(c.RollValue("proc_pct", 45)))
 		for i := 0; i < 2; i++ {
 			if c.Target.Alive() && sqDist(c.Owner.Pos, c.Target.Pos) <= 150*150 {
 				c.damageVisual("stage-01", c.Target, amount, false, false)
@@ -64,7 +61,7 @@ func init() {
 		st.Value = 0
 		if len(legendaryMeleeNearbyOthers(c, 75, 1)) == 0 {
 			st.Value = 1
-			return legendaryMeleeScale(n, 190)
+			return legendaryMeleeScale(n, 100+int64(c.RollValue("damage_pct", 90)))
 		}
 		return n
 	}, AfterHit: func(c *legendaryContext) {
@@ -117,8 +114,8 @@ func legendaryMeleeFarBlade(c *legendaryContext) {
 	copy := *c
 	copy.Blow = chosen.blow
 	center := c.Scene.entities[chosen.dst].Pos
-	amount := legendaryMeleeScale(legendaryMeleeBase(&copy), 75)
-	for _, e := range c.Enemies(center, 100, 5) {
+	amount := legendaryMeleeScale(legendaryMeleeBase(&copy), int64(c.RollValue("proc_pct", 75)))
+	for _, e := range c.Enemies(center, 100, 0) {
 		c.damageVisual("stage-01", e, amount, false, false)
 	}
 }
@@ -131,8 +128,8 @@ func legendaryMeleeMeteor(c *legendaryContext) {
 	for _, e := range legendaryMeleeNearbyOthers(c, 120, 5) {
 		c.damageVisual("stage-01", e, base, false, false)
 	}
-	for _, e := range c.Enemies(c.Target.Pos, 120, 6) {
-		c.damageVisual("stage-02", e, legendaryMeleeScale(base, 70), false, false)
+	for _, e := range c.Enemies(c.Target.Pos, 120, 0) {
+		c.damageVisual("stage-02", e, legendaryMeleeScale(base, int64(c.RollValue("proc_pct", 70))), false, false)
 	}
 }
 
@@ -150,7 +147,7 @@ func legendarySwordsmanMeteorBurst(c *legendaryContext) {
 		return
 	}
 	for _, e := range legendaryMeleeNearbyOthers(c, 150, 5) {
-		c.damageVisual("stage-01", e, legendaryMeleeScale(legendaryMeleeBase(c), 110), false, false)
+		c.damageVisual("stage-01", e, legendaryMeleeScale(legendaryMeleeBase(c), int64(c.RollValue("proc_pct", 110))), false, false)
 	}
 }
 

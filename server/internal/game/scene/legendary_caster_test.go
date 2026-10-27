@@ -138,7 +138,7 @@ func TestLegendaryCasterSecondLightImmediateNoTransfer(t *testing.T) {
 	}
 }
 
-func TestLegendaryCasterRegenAndDispelStealRemaining(t *testing.T) {
+func TestLegendaryCasterRegenAndDispelStealFullDuration(t *testing.T) {
 	_, c := legendaryCasterFixture(t, "YS-U01")
 	c.Skill = 10303
 	d := domain.StatusDef{DurationSec: 12, HPChanges: []domain.ResourceChange{{Value: 20, Mode: domain.ModeAbsolute}}}
@@ -154,8 +154,8 @@ func TestLegendaryCasterRegenAndDispelStealRemaining(t *testing.T) {
 	c.Owner.Status.EachEffective(func(a domain.Active) {
 		if a.Def.ID == 1021 {
 			found = true
-			if a.ShieldLeft != 30 || a.ExpireAt != c.Scene.tick+domain.Ticks(15000) {
-				t.Fatal("refilled stolen shield", a)
+			if a.ShieldLeft != 100 || a.ExpireAt != c.Scene.tick+domain.Ticks(10000) {
+				t.Fatal("stolen shield must refill once with full base duration", a)
 			}
 		}
 	})
@@ -256,7 +256,10 @@ func TestLegendaryCasterSynergyFireNativeBurnBeforeSettlement(t *testing.T) {
 func TestLegendaryCasterSynergyHealFullHPStillSplits(t *testing.T) {
 	s, c := legendaryCasterFixture(t, "YS-U04")
 	legendaryCasterEquipBuild(t, s, c.Owner, "YS-U04", "YS-A23", "YS-A01")
-	side := putMonster(s, 901, 100000, domain.Stats{}, 150, 100)
+	// Only the primary is within the heal-origin 250 radius; the side is
+	// reached solely by the child bolt's 180-radius split.
+	s.aoi.Move(c.Target, domain.Pos{MapID: c.Owner.Pos.MapID, X: 330, Y: 100})
+	side := putMonster(s, 901, 100000, domain.Stats{}, 400, 100)
 	far := putMonster(s, 902, 100000, domain.Stats{}, 900, 100)
 	before, sideBefore, farBefore := c.Target.HP, side.HP, far.HP
 	legendaryCasterCastNow(t, s, c.Owner, 10301, c.Owner.ID)
@@ -354,8 +357,8 @@ func TestLegendaryCasterSynergyFocusedGroupShieldBurst(t *testing.T) {
 	if got := before - c.Target.HP; got != shield*80/100 {
 		t.Fatal("shield burst did not deduplicate overlapping allies", got, shield)
 	}
-	if legendaryCasterNativeReady(c.Owner, true, false, false) {
-		t.Fatal("focus was not consumed natively")
+	if !legendaryCasterNativeReady(c.Owner, true, false, false) {
+		t.Fatal("learned permanent focus was consumed")
 	}
 }
 func TestLegendaryCasterSynergyExorcismWeaknessPull(t *testing.T) {
@@ -389,11 +392,11 @@ func TestLegendaryCasterNativeBurnKillAndMirrorReflection(t *testing.T) {
 		c.Target.HP = 5
 		a := domain.Active{Source: c.Owner.ID, Def: domain.StatusDef{ID: 1036, SkillSnapshotID: 10421, SourceSkillID: 10421, TypeKnown: true, Type: domain.StatusBad, HPChanges: []domain.ResourceChange{{Value: -10, Mode: domain.ModeAbsolute}}}}
 		s.tickStatus(c.Target, a)
-		if c.Owner.MP != 560 {
+		if c.Owner.MP != 600 {
 			t.Fatal("native fatal burn refund", c.Owner.MP)
 		}
 		s.legendaryPeriodicResolved(c.Owner, c.Target, a, event.DamageDealt{Flag: event.DamageFatal})
-		if c.Owner.MP != 560 {
+		if c.Owner.MP != 600 {
 			t.Fatal("duplicate death refund", c.Owner.MP)
 		}
 	})
@@ -469,7 +472,10 @@ func TestLegendaryCasterControlImmuneStillTakesTransformedDamage(t *testing.T) {
 		})
 	}
 }
-func TestLegendaryCasterInstantConsumesNativeAndEchoSingleTarget(t *testing.T) {
+
+// A manually supplied state without invested instant-cast remains one-shot;
+// equipment must not turn an unlearned skill into a permanent preparation.
+func TestLegendaryCasterUnlearnedManualInstantConsumesAndEchoSingleTarget(t *testing.T) {
 	s, c := legendaryCasterFixture(t, "SS-A30")
 	side := putMonster(s, 901, 100000, domain.Stats{}, 140, 100)
 	side.Status = domain.NewStatusSet()
@@ -610,7 +616,7 @@ func TestLegendaryCasterReplacementModifiersThroughPipeline(t *testing.T) {
 			}
 			switch tc.id {
 			case "SS-A23":
-				if d.Area.Radius < 150 || d.SpecialWeaponTargetLimit != 5 {
+				if d.Area.Radius < 150 || d.SpecialWeaponTargetLimit != 0 {
 					t.Fatal("freeze replacement not actual area", d.Area)
 				}
 			case "YS-A08":
@@ -665,7 +671,8 @@ func TestLegendaryCasterDefenseGrantWorksWithoutRecipientGear(t *testing.T) {
 func TestLegendaryCasterSplitRetainsSixtyPercentWithAmplifier(t *testing.T) {
 	s, c := legendaryCasterFixture(t, "YS-U04")
 	legendaryCasterEquipBuild(t, s, c.Owner, "YS-A23", "YS-A01", "YS-A03")
-	side := putMonster(s, 901, 100000, domain.Stats{}, 170, 100)
+	s.aoi.Move(c.Target, domain.Pos{MapID: c.Owner.Pos.MapID, X: 330, Y: 100})
+	side := putMonster(s, 901, 100000, domain.Stats{}, 400, 100)
 	side.Status = domain.NewStatusSet()
 	before, other := c.Target.HP, side.HP
 	legendaryCasterCastNow(t, s, c.Owner, 10301, c.Owner.ID)

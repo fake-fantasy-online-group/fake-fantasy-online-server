@@ -1,0 +1,11 @@
+{
+  "kind": "powerbook.result",
+  "requestId": "powerbook-fixture-0001",
+  "ok": true,
+  "message": "威能已刻入器物。",
+  "revision": "1",
+  "result": {
+    "itemUid": "42",
+    "powerId": "TY-A01"
+  }
+}

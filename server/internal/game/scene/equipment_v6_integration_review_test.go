@@ -1,7 +1,6 @@
 package scene
+
 import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
-
 
 import (
 	"reflect"
@@ -72,7 +71,7 @@ func TestV6ReviewVariantDuplicateWinnerAndIsolation(t *testing.T) {
 	s.equipmentState().cache[p.ID] = cached
 	def, _ := s.skills.Get(10102, 5)
 	s.applyResolvedSkillModifiers(p, &def, p.Player.Char.Skills, p.Player.Char.Skills)
-	if def.EquipmentVariant == nil || def.EquipmentVariant.SourceUID != 7 || def.EquipmentVariant.MaxTargets != 4 {
+	if def.EquipmentVariant == nil || def.EquipmentVariant.SourceUID != 7 || def.EquipmentVariant.MaxTargets != 0 {
 		t.Fatalf("duplicate changed winner/budget: %+v", def.EquipmentVariant)
 	}
 	before := append([]domain.SkillEffect(nil), def.DirectEffects()...)

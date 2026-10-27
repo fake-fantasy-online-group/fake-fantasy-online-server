@@ -8,17 +8,17 @@ import (
 func init() {
 	registerLegendaryHandler("JK-A10", legendaryHandler{AfterHit: func(c *legendaryContext) {
 		if legendaryMeleeLanded(c) && c.Skill == 10104 && legendaryMeleePrimary(c) {
-			swordDebuff(c, "antiheal", domain.StatusDef{HealingReceivedReductionPct: 65})
+			swordDebuff(c, "antiheal", domain.StatusDef{HealingReceivedReductionPct: c.RollValue("antiheal_pct", 65)})
 		}
 	}})
 	registerLegendaryHandler("JK-A18", legendaryHandler{AfterHit: func(c *legendaryContext) {
 		if legendaryMeleeLanded(c) && c.Skill == 10122 {
-			swordDebuff(c, "armor", domain.StatusDef{Affixes: []domain.Affix{{Attr: domain.AttrDef, Mode: domain.ModePercent, Value: -30}}})
+			swordDebuff(c, "armor", domain.StatusDef{Affixes: []domain.Affix{{Attr: domain.AttrDef, Mode: domain.ModePercent, Value: -c.RollValue("armor_pct", 30)}}})
 		}
 	}})
 	registerLegendaryHandler("JK-A14", legendaryHandler{BeforeDamage: func(c *legendaryContext, n int32) int32 {
 		if legendaryMeleeDirect(c) && c.Skill == 10113 && !swordHasShield(c.Target) {
-			return legendaryMeleeScale(n, 150)
+			return legendaryMeleeScale(n, 100+int64(c.RollValue("damage_pct", 50)))
 		}
 		return n
 	}, AfterHit: func(c *legendaryContext) {

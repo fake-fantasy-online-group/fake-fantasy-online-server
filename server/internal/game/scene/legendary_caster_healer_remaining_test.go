@@ -84,6 +84,10 @@ func TestLegendaryCasterRemainingHealerDefenses(t *testing.T) {
 					t.Fatal("HoT native windup defense missing")
 				}
 				s.casts = nil
+				if h.BeforeIncoming(c, 100) != 75 {
+					t.Fatal("HoT guard disappeared after windup")
+				}
+				c.Owner.Status.Remove(190100)
 			case "YS-D09":
 				c.Owner.Status.Apply(domain.StatusDef{ID: 190100, SkillSnapshotID: 10330, DurationSec: 30}, s.tick, c.Owner.ID)
 				c.Skill = 0
@@ -186,7 +190,7 @@ func TestLegendaryCasterRemainingHealerManaTransfers(t *testing.T) {
 		p.MP = 0
 	}
 	legendaryHandlers["YS-U03"].ManaRestored(c, 0, 500)
-	if s.players[2].MP != 200 || s.players[3].MP != 200 || s.players[4].MP != 0 {
+	if s.players[2].MP != 200 || s.players[3].MP != 200 || s.players[4].MP != 100 {
 		t.Fatal("overflow transfer bounds")
 	}
 	c.Skill = 10301
@@ -202,8 +206,8 @@ func TestLegendaryCasterBurnSettlementKillReward(t *testing.T) {
 	c.Target.HP = 500
 	c.Target.Status.Apply(domain.StatusDef{ID: 1036, DurationSec: 20, IntervalSec: 1, TypeKnown: true, Type: domain.StatusBad, HPChanges: []domain.ResourceChange{{Value: -100, Mode: domain.ModeAbsolute}}}, s.tick, c.Owner.ID)
 	legendaryCasterCastNow(t, s, c.Owner, 10401, c.Target.ID)
-	if c.Target.Alive() || c.Owner.MP != c.Owner.MaxMP*6/100 {
-		t.Fatal("burn settlement fatal did not restore exactly6 percent", c.Target.HP, c.Owner.MP, c.Owner.MaxMP)
+	if c.Target.Alive() || c.Owner.MP != c.Owner.MaxMP*10/100 {
+		t.Fatal("burn settlement fatal did not restore exactly10 percent", c.Target.HP, c.Owner.MP, c.Owner.MaxMP)
 	}
 	c.Hit = event.DamageDealt{Flag: event.DamageFatal}
 	c.Target.HP = 0
@@ -215,16 +219,32 @@ func TestLegendaryCasterBurnSettlementKillReward(t *testing.T) {
 	}
 	c.Target.LegendaryLifeSequence++
 	s.legendaryCasterDamageResolved(c, c.Target, c.Hit)
-	if c.Owner.MP != before+c.Owner.MaxMP*6/100 {
+	if c.Owner.MP != before+c.Owner.MaxMP*10/100 {
 		t.Fatal("new life death incorrectly deduplicated")
 	}
 	c.Power, _ = domain.LegendaryPower("SS-A04")
 	c.Target.LegendaryLifeSequence++
 	before = c.Owner.MP
 	s.legendaryCasterDamageResolved(c, c.Target, c.Hit)
-	if c.Owner.MP != before {
-		t.Fatal("ordinary fire echo counted as burn settlement")
+	if c.Owner.MP != before+c.Owner.MaxMP*10/100 {
+		t.Fatal("ordinary damage kill of own burning target lost reward")
 	}
+	// A fire damage label alone is insufficient; the dying target must carry
+	// this caster's own burning status, not another caster's burn.
+	c.Target.Status.Remove(1036)
+	c.Target.LegendaryLifeSequence++
+	before = c.Owner.MP
+	s.legendaryCasterDamageResolved(c, c.Target, c.Hit)
+	if c.Owner.MP != before {
+		t.Fatal("kill without burn generated reward")
+	}
+	c.Target.Status.Apply(domain.StatusDef{ID: 1036, DurationSec: 20, IntervalSec: 1, TypeKnown: true, Type: domain.StatusBad, HPChanges: []domain.ResourceChange{{Value: -100, Mode: domain.ModeAbsolute}}}, s.tick, 999)
+	c.Target.LegendaryLifeSequence++
+	s.legendaryCasterDamageResolved(c, c.Target, c.Hit)
+	if c.Owner.MP != before {
+		t.Fatal("another caster's burn generated reward")
+	}
+
 }
 
 func TestLegendaryCasterRemainingHealerCenterAndDamageLedger(t *testing.T) {
@@ -289,28 +309,18 @@ func TestLegendaryCasterRemainingHealerLightFieldBoundaries(t *testing.T) {
 		t.Fatal("overlapping/repeated field ticks stacked")
 	}
 }
-func TestLegendaryCasterRemainingHealerCleanseRefund(t *testing.T) {
-	for _, success := range []bool{false, true} {
-		s, c := legendaryCasterFixture(t, "YS-U07")
-		c.Owner.MP = 0
-		c.Skill = 10306
-		c.PaidMP = 100
-		c.RootID = 123
-		root := s.equipmentState()
-		root.root = &equipmentRoot{id: 123, paidMP: 100, src: c.Owner.ID, def: domain.SkillDef{ID: 10306}}
-		if success {
-			legendaryHandlers["YS-U07"].Dispelled(c, []domain.Active{{}})
-		}
-		legendaryHandlers["YS-U07"].RootFinished(c)
-		want := int32(90)
-		if success {
-			want = 30
-		}
-		if c.Owner.MP != want {
-			t.Fatal("cleanse refund", success, c.Owner.MP, want)
-		}
+func TestLegendaryCasterRemainingHealerCleanseEscort(t *testing.T) {
+	s, c := legendaryCasterFixture(t, "YS-U07")
+	s.refreshStats(c.Owner)
+	c.Owner.MP = 0
+	c.Skill = 10306
+	c.PaidMP = 100
+	legendaryHandlers["YS-U07"].RootFinished(c)
+	if c.Owner.MP != 0 || !c.Owner.Status.HasEffective(legendaryHealerEscortStatus) {
+		t.Fatal("cleanse must grant escort, not empty-cast refunds", c.Owner.MP)
 	}
 }
+
 func TestLegendaryCasterExorcismDispelNativeBenefitsNotPermanent(t *testing.T) {
 	s, c := legendaryCasterFixture(t, "YS-A09")
 	c.Target.Status.Apply(domain.StatusDef{ID: 190001, DurationSec: 60, TypeKnown: true, Type: domain.StatusGood, Affixes: []domain.Affix{{Attr: domain.AttrMAtk, Value: 50, Mode: domain.ModePercent}}}, s.tick, c.Target.ID)

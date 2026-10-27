@@ -449,7 +449,7 @@ func equipmentQuality(def domain.ItemDef, stacks ...domain.Stack) uint8 {
 	if len(stacks) != 0 {
 		st = stacks[0]
 	}
-	if _, ok := domain.LegendaryPower(st.Legendary.PowerID); ok {
+	if _, ok := domain.LegendaryPowerForRoll(st.Legendary.PowerID, st.Legendary.PowerRollBP); ok {
 		return 5
 	}
 	if _, ok := domain.UniqueOf(st, def.EndgameCatalog); ok {
@@ -543,7 +543,7 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 	quality := equipmentQuality(def, st)
 	textQuality := quality
 	_, unique := domain.UniqueOf(st, s.endgameCatalog)
-	_, legendary := domain.LegendaryPower(st.Legendary.PowerID)
+	_, legendary := domain.LegendaryPowerForRoll(st.Legendary.PowerID, st.Legendary.PowerRollBP)
 	_, formed := domain.MatchAstralRecipe(def, st)
 	nativeStats := s.nativeEndgameStats(viewer) && (unique || formed)
 	if nativeStats || legendary {
@@ -635,7 +635,7 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 	if st.Legendary.PowerID == "" {
 		appendEquipmentAffixes(&lines, e.Affixes, textQuality)
 	}
-	if power, ok := domain.LegendaryPower(st.Legendary.PowerID); ok {
+	if power, ok := domain.LegendaryPowerForRoll(st.Legendary.PowerID, st.Legendary.PowerRollBP); ok {
 		for _, a := range st.Legendary.Affixes {
 			lines = append(lines, qualityColoredLine(tooltipDarkGold, affixText(a.Affix)))
 		}
@@ -643,7 +643,7 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 	}
 	if e.Slot == int32(domain.SlotBag) && st.WingPowers.Validate() == nil {
 		for _, v := range st.WingPowers {
-			if power, ok := domain.LegendaryPower(v.PowerID); ok {
+			if power, ok := domain.LegendaryPowerForRoll(v.PowerID, v.PowerRollBP); ok {
 				specialEffects = append(specialEffects, power.Name+"："+power.Effect)
 			}
 		}
@@ -825,7 +825,7 @@ func equipmentKindName(e *domain.EquipDef) string {
 
 func itemDisplayName(def domain.ItemDef, st domain.Stack) string {
 	name := def.Name
-	if power, ok := domain.LegendaryPower(st.Legendary.PowerID); ok {
+	if power, ok := domain.LegendaryPowerForRoll(st.Legendary.PowerID, st.Legendary.PowerRollBP); ok {
 		name = domain.LegendaryInstanceDisplayName(def.Name, power, st.Legendary)
 	}
 	uniqueName, unique := domain.UniqueName(st, def.EndgameCatalog)

@@ -16,6 +16,7 @@ func incomingAssassinCondition(s *Scene, p, source *entity.Entity, id string) {
 	case "CK-D02":
 		source.Status.Apply(domain.StatusDef{ID: domain.StatusBlind, SourceSkillID: 10224, DurationSec: 30, TypeKnown: true, Type: domain.StatusBad, Affixes: []domain.Affix{{Attr: domain.AttrHit, Value: -10}}}, s.tick, p.ID)
 	case "CK-D07":
+		s.legendaryCastReleased(p, domain.SkillDef{ID: 10219}, source.ID, []domain.EntityID{source.ID})
 		source.Status.Apply(domain.StatusDef{ID: domain.StatusStun, SourceSkillID: 10219, DurationSec: 30, TypeKnown: true, Type: domain.StatusBad, Control: domain.ControlStun}, s.tick, p.ID)
 	}
 }
@@ -58,6 +59,9 @@ func TestLegendaryIncomingAssassinAllDamageConsumers(t *testing.T) {
 				before := p.HP
 				incomingAssassinHit(s, p, m, kind, b)
 				want := int32(800)
+				if id == "CK-D01" || id == "CK-D07" {
+					want = 650
+				}
 				// A mirror does not inherit the reflected attack's range or trap category.
 				if kind == "reflection" && (id == "CK-D06" || id == "CK-D10") {
 					want = 1000
@@ -89,7 +93,11 @@ func TestLegendaryIncomingAssassinCombinationAndShieldOnce(t *testing.T) {
 				before := p.HP
 				incomingAssassinHit(s, p, m, kind, combat.Blow{GuaranteedHit: true})
 				// Native20%, then two independent20% powers, then shield once.
-				if before-p.HP != 412 || universalShieldValue(p) != 0 {
+				want := int32(316)
+				if pair[0] == "CK-D01" && pair[1] == "CK-D07" {
+					want = 238
+				}
+				if before-p.HP != want || universalShieldValue(p) != 0 {
 					t.Fatalf("loss%d shield%d want412/0", before-p.HP, universalShieldValue(p))
 				}
 			})
@@ -122,9 +130,9 @@ func TestLegendaryIncomingAssassinNativeStealthTiming(t *testing.T) {
 			} else {
 				incomingAssassinHit(s, p, m, kind, combat.Blow{GuaranteedHit: true})
 			}
-			want := int32(800)
+			want := int32(650)
 			if kind == "owner_attacks" {
-				want = 1000
+				want = 650
 			}
 			if before-p.HP != want {
 				t.Fatalf("loss%d want%d", before-p.HP, want)
@@ -134,9 +142,9 @@ func TestLegendaryIncomingAssassinNativeStealthTiming(t *testing.T) {
 			p.Stats.MDef, p.Stats.MagicResist = 0, 0 // breaking stealth refreshes stats; isolate its timing
 			before = p.HP
 			incomingAssassinHit(s, p, m, "dot", combat.Blow{})
-			want = 1000
+			want = 650
 			if stillInvisible {
-				want = 800
+				want = 650
 			}
 			if before-p.HP != want {
 				t.Fatalf("post-transition loss%d want%d", before-p.HP, want)
@@ -161,10 +169,17 @@ func TestLegendaryIncomingAssassinDebuffOwnerAndRemoval(t *testing.T) {
 				incomingAssassinCondition(s, p, m, id)
 				before = p.HP
 				incomingAssassinHit(s, p, m, kind, combat.Blow{GuaranteedHit: true})
-				if before-p.HP != 800 {
+				want := int32(800)
+				if id == "CK-D07" {
+					want = 650
+				}
+				if before-p.HP != want {
 					t.Fatal("own condition missing")
 				}
 				m.Status = domain.NewStatusSet()
+				if id == "CK-D07" {
+					s.tick += domain.Ticks(8000)
+				}
 				before = p.HP
 				incomingAssassinHit(s, p, m, kind, combat.Blow{GuaranteedHit: true})
 				if before-p.HP != 1000 {
@@ -382,7 +397,11 @@ func TestLegendaryIncomingAssassinActualPayloadMirror(t *testing.T) {
 				} else if !c.ChildSkill(m.ID, c.Def, legendaryChildOptions{BaseDamage: 1000, TargetOnly: true, SuppressGeneration: true}) {
 					t.Fatal("child rejected")
 				}
-				if before-p.HP != 800 || m.HP != targetBefore {
+				want := int32(800)
+				if id == "CK-D01" || id == "CK-D07" {
+					want = 650
+				}
+				if before-p.HP != want || m.HP != targetBefore {
 					t.Fatalf("reflection loss%d targetloss%d", before-p.HP, targetBefore-m.HP)
 				}
 				if s.legendaryState().depth != 0 || s.legendaryState().child != nil {
@@ -456,8 +475,8 @@ func TestLegendaryIncomingAssassinUnknownSourceDoesNotBorrowCondition(t *testing
 			before := p.HP
 			s.tickStatus(p, domain.Active{Source: 0, Def: domain.StatusDef{ID: 199945, HPChanges: []domain.ResourceChange{{Value: -1000}}}})
 			want := int32(1000)
-			if id == "CK-D01" {
-				want = 800
+			if id == "CK-D01" || id == "CK-D07" {
+				want = 650
 			}
 			if before-p.HP != want {
 				t.Fatalf("unknown source loss%d want%d", before-p.HP, want)

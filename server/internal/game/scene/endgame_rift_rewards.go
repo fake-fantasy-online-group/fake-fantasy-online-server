@@ -453,7 +453,7 @@ func (s *Scene) rollEndgameRiftCumulativeLegendary(char domain.CharID, ordinal i
 	def := s.items[id]
 	stack := domain.NewStack(def, 1)
 	stack.Bound = true
-	if !s.equipmentRoll.ApplyLegendaryForRecipientWithPolicyAtLevel(&stack, def, s.rift.data.RewardSourceLevel, recipient, s.rift.data.Run.Rules.Loot.LegendaryPowerPolicy, true, values.Intn) {
+	if !s.equipmentRoll.ApplyLegendaryForRecipientWithGenerationAtLevel(&stack, def, s.rift.data.RewardSourceLevel, recipient, s.rift.data.Run.Rules.Loot.LegendaryPowerPolicy, true, s.rift.data.Run.Rules.Loot.LegendaryPowerRolls, values.Intn) {
 		return domain.Stack{}
 	}
 	return stack

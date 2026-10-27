@@ -1,0 +1,8 @@
+{
+  "kind": "powerbook.imprint",
+  "requestId": "powerbook-fixture-0002",
+  "ok": false,
+  "error": "power_locked",
+  "message": "此威能尚未收入威能录",
+  "revision": "1"
+}

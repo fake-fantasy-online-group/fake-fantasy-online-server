@@ -1,0 +1,6221 @@
+{
+  "total": 330,
+  "ranged": 315,
+  "fixed": 15,
+  "roll_min_bp": 7500,
+  "roll_max_bp": 10000,
+  "legacy_roll_bp": 0,
+  "powers": [
+    {
+      "id": "CK-A01",
+      "name": "屏息准星",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "cooldown_bp",
+          "text": "冷却时间缩短30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters cooldown_bp"
+      ]
+    },
+    {
+      "id": "CK-A02",
+      "name": "狙击校准",
+      "class": "刺客",
+      "ranged": false,
+      "fixed_reason": "必中、必暴击机制开关，保留角色自身暴击倍率。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "CK-A03",
+      "name": "贴身暗钉",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高80%",
+          "base": 8000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A04",
+      "name": "尾针",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A05",
+      "name": "点名飞刃",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "radius",
+          "text": "搜索半径至少100",
+          "base": 100,
+          "divisor": 1,
+          "unit": ""
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:23: legendaryAssassinTransform; authored parameters radius",
+        "server/internal/game/scene/legendary_assassin.go:148: legendaryAssassinTargets; authored parameters radius"
+      ]
+    },
+    {
+      "id": "CK-A06",
+      "name": "八方暗雨",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A07",
+      "name": "孤星聚刃",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:196: legendaryAssassinTargetDefinition; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A08",
+      "name": "遗毒",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "radius",
+          "text": "半径200",
+          "base": 200,
+          "divisor": 1,
+          "unit": ""
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_poison.go:115: legendaryAssassinSpreadDeath; authored parameters radius"
+      ]
+    },
+    {
+      "id": "CK-A09",
+      "name": "行毒",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "tick_bp",
+          "text": "中毒伤害提高100%",
+          "base": 10000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_poison.go:9: legendaryAssassinPoisonStatus; authored parameters tick_bp",
+        "server/internal/game/scene/legendary_assassin_poison.go:22: legendaryAssassinPreparePoison; authored parameters tick_bp",
+        "server/internal/game/scene/legendary_assassin_poison.go:15: legendaryAssassinAmplifyPoisonBonus; authored parameters tick_bp"
+      ]
+    },
+    {
+      "id": "CK-A10",
+      "name": "交刃试毒",
+      "class": "刺客",
+      "ranged": false,
+      "fixed_reason": "已学习淬毒术常驻与投掷传毒机制，数值沿用技能等级。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "CK-A11",
+      "name": "触地惊雷",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A12",
+      "name": "回响爆点",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高90%",
+          "base": 9000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A13",
+      "name": "串联引信",
+      "class": "刺客",
+      "ranged": false,
+      "fixed_reason": "三枚爆弹固定阵型机制；数量与位置不随机，沿用原技能伤害。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "CK-A14",
+      "name": "毒雾追印",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "radius_bp",
+          "text": "作用半径提高30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters radius_bp"
+      ]
+    },
+    {
+      "id": "CK-A15",
+      "name": "浸骨毒雾",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "tick_bp",
+          "text": "中毒伤害提高100%",
+          "base": 10000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_utility.go:95: legendaryAssassinTrapPoison; authored parameters tick_bp"
+      ]
+    },
+    {
+      "id": "CK-A16",
+      "name": "封口余震",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A17",
+      "name": "碎霜刃",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A18",
+      "name": "寒阱淬毒",
+      "class": "刺客",
+      "ranged": false,
+      "fixed_reason": "已学习淬毒术与冻结联动的机制开关，数值沿用技能等级。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "CK-A19",
+      "name": "出影横刃",
+      "class": "刺客",
+      "ranged": false,
+      "fixed_reason": "固定120度扇形拓扑，射程沿用原技能与武器，不虚构额外数值。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "CK-A20",
+      "name": "明刃背刺",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高25%",
+          "base": 2500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A21",
+      "name": "孤猎",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高75%",
+          "base": 7500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:196: legendaryAssassinTargetDefinition; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A22",
+      "name": "断步伤",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "restore_pct",
+          "text": "损失生命的15%",
+          "base": 15,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:215: legendaryAssassinLifesteal; authored parameters restore_pct"
+      ]
+    },
+    {
+      "id": "CK-A23",
+      "name": "破稳击",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高35%",
+          "base": 3500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A24",
+      "name": "借势藏锋",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A25",
+      "name": "逆刃旁落",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "radius",
+          "text": "半径100",
+          "base": 100,
+          "divisor": 1,
+          "unit": ""
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_counter.go:12: legendaryAssassinCounterTargets; authored parameters radius",
+        "server/internal/game/scene/legendary_assassin_counter.go:24: legendaryAssassinCounterArea; authored parameters radius"
+      ]
+    },
+    {
+      "id": "CK-A26",
+      "name": "妙手震掌",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "物理攻击力240%",
+          "base": 240,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_theft.go:25: legendaryAssassinTheftPalm; authored parameters proc_pct"
+      ]
+    },
+    {
+      "id": "CK-A27",
+      "name": "暗器延展",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "geometry_bp",
+          "text": "均提高50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters geometry_bp"
+      ]
+    },
+    {
+      "id": "CK-A28",
+      "name": "收网环击",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高45%",
+          "base": 4500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_displacement.go:26: legendaryAssassinPullPrepare; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A29",
+      "name": "迟发暗杀",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高80%",
+          "base": 8000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "CK-A30",
+      "name": "收网聚势",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "radius_bp",
+          "text": "作用半径扩大50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_displacement.go:26: legendaryAssassinPullPrepare; authored parameters radius_bp"
+      ]
+    },
+    {
+      "id": "CK-D01",
+      "name": "出影护幕",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "伤害降低35%",
+          "base": 35,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_defense.go:43: legendaryAssassinNativeDefense; authored parameters reduction_pct"
+      ]
+    },
+    {
+      "id": "CK-D02",
+      "name": "烟幕掩体",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "伤害降低20%",
+          "base": 20,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_defense.go:43: legendaryAssassinNativeDefense; authored parameters reduction_pct"
+      ]
+    },
+    {
+      "id": "CK-D03",
+      "name": "回刃护手",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "restore_pct",
+          "text": "损失生命的15%",
+          "base": 15,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_defense.go:93: legendaryAssassinCounterHeal; authored parameters restore_pct"
+      ]
+    },
+    {
+      "id": "CK-D04",
+      "name": "毒敌迟手",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "伤害降低20%",
+          "base": 20,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_defense.go:43: legendaryAssassinNativeDefense; authored parameters reduction_pct"
+      ]
+    },
+    {
+      "id": "CK-D05",
+      "name": "霜陷护心",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "control_bp",
+          "text": "持续时间缩短30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_defense.go:99: legendaryAssassinReceiveControl; authored parameters control_bp"
+      ]
+    },
+    {
+      "id": "CK-D06",
+      "name": "布雷退守",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "伤害降低20%",
+          "base": 20,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_defense.go:43: legendaryAssassinNativeDefense; authored parameters reduction_pct"
+      ]
+    },
+    {
+      "id": "CK-D07",
+      "name": "截腕卸力",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "伤害降低35%",
+          "base": 35,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_defense.go:43: legendaryAssassinNativeDefense; authored parameters reduction_pct"
+      ]
+    },
+    {
+      "id": "CK-D08",
+      "name": "以毒清毒",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "中毒伤害降低30%",
+          "base": 30,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_defense.go:24: legendaryAssassinPoisonIncoming; authored parameters reduction_pct"
+      ]
+    },
+    {
+      "id": "CK-D09",
+      "name": "濒危藏身",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "life_pct",
+          "text": "生命上限提高20%",
+          "base": 20,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_defense.go:116: legendaryAssassinDefenseStats; authored parameters life_pct"
+      ]
+    },
+    {
+      "id": "CK-D10",
+      "name": "避阱余裕",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "伤害降低20%",
+          "base": 20,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_defense.go:43: legendaryAssassinNativeDefense; authored parameters reduction_pct"
+      ]
+    },
+    {
+      "id": "CK-U01",
+      "name": "静步换息",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗降低45%",
+          "base": 4500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_utility.go:18: legendaryAssassinUtilityPrepare; authored parameters mana_bp"
+      ]
+    },
+    {
+      "id": "CK-U02",
+      "name": "烟幕归路",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "range_pct",
+          "text": "施放距离提高50%",
+          "base": 50,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_utility.go:18: legendaryAssassinUtilityPrepare; authored parameters range_pct"
+      ]
+    },
+    {
+      "id": "CK-U03",
+      "name": "拆阱回馈",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "disarm_bp",
+          "text": "成功率提高25个百分点",
+          "base": 2500,
+          "divisor": 100,
+          "unit": "个百分点"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/trap.go:160: disarmTrap; authored parameters disarm_bp"
+      ]
+    },
+    {
+      "id": "CK-U04",
+      "name": "探路静行",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "move_pct",
+          "text": "移动速度提高60%",
+          "base": 60,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_utility.go:80: legendaryAssassinUtilityStats; authored parameters move_pct"
+      ]
+    },
+    {
+      "id": "CK-U05",
+      "name": "回收余粮",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗降低45%",
+          "base": 4500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:48: legendaryAssassinPrepare; authored parameters mana_bp"
+      ]
+    },
+    {
+      "id": "CK-U06",
+      "name": "伏击余裕",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "cooldown_pct",
+          "text": "缩短35%",
+          "base": 35,
+          "divisor": 1,
+          "unit": "%"
+        },
+        {
+          "key": "cooldown_pct",
+          "text": "缩短80%",
+          "base": 80,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin.go:227: legendaryAssassinBackstabCooldown; authored parameters cooldown_pct"
+      ]
+    },
+    {
+      "id": "CK-U07",
+      "name": "布阵轻装",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗降低55%",
+          "base": 5500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_utility.go:18: legendaryAssassinUtilityPrepare; authored parameters mana_bp"
+      ]
+    },
+    {
+      "id": "CK-U08",
+      "name": "隐中布置",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "duration_ms",
+          "text": "持续时间延长5秒",
+          "base": 5000,
+          "divisor": 1000,
+          "unit": "秒"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_utility.go:104: legendaryAssassinStealthBudget; authored parameters duration_ms"
+      ]
+    },
+    {
+      "id": "CK-U09",
+      "name": "失手整备",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗降低30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_utility.go:18: legendaryAssassinUtilityPrepare; authored parameters mana_bp"
+      ]
+    },
+    {
+      "id": "CK-U10",
+      "name": "轻装潜行",
+      "class": "刺客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "move_pct",
+          "text": "40%移动速度",
+          "base": 40,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_assassin_displacement.go:78: legendaryAssassinStealthSpeed; authored parameters move_pct"
+      ]
+    },
+    {
+      "id": "JK-A01",
+      "name": "藏锋出鞘",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高100%",
+          "base": 100,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct"
+      ]
+    },
+    {
+      "id": "JK-A02",
+      "name": "近身空鸣",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高15%",
+          "base": 15,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct"
+      ]
+    },
+    {
+      "id": "JK-A03",
+      "name": "罡锋递进",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "攻击力160%",
+          "base": 160,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_swordsman_defaults.go:166: swordImmediatePrimary; authored parameters proc_pct"
+      ]
+    },
+    {
+      "id": "JK-A04",
+      "name": "远锋留刃",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "基础伤害75%",
+          "base": 75,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_melee_area.go:93: legendaryMeleeFarBlade; authored parameters proc_pct"
+      ]
+    },
+    {
+      "id": "JK-A05",
+      "name": "金缚剑阵",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高40%",
+          "base": 40,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct"
+      ]
+    },
+    {
+      "id": "JK-A06",
+      "name": "缚敌成阵",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "攻击力200%",
+          "base": 200,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(c.Attack(false), 200) -> legendaryMeleeScale(c.Attack(false), int64(c.RollValue(\"proc_pct\", 200)))"
+      ]
+    },
+    {
+      "id": "JK-A07",
+      "name": "幻影三叠",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "基础伤害45%",
+          "base": 45,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_melee_area.go: legendaryMeleeScale(legendaryMeleeBase(c), 45) -> legendaryMeleeScale(legendaryMeleeBase(c), int64(c.RollValue(\"proc_pct\", 45)))"
+      ]
+    },
+    {
+      "id": "JK-A08",
+      "name": "无影独剑",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高90%",
+          "base": 90,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_melee_area.go: legendaryMeleeScale(n, 190) -> legendaryMeleeScale(n, 100+int64(c.RollValue(\"damage_pct\", 90)))"
+      ]
+    },
+    {
+      "id": "JK-A09",
+      "name": "血魂回锋",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高15%",
+          "base": 15,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_swordsman_synergy.go:64: swordDualDamage; authored parameters damage_pct"
+      ]
+    },
+    {
+      "id": "JK-A10",
+      "name": "饮血止生",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "antiheal_pct",
+          "text": "降低65%",
+          "base": 65,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_keep.go: HealingReceivedReductionPct: 65 -> HealingReceivedReductionPct: c.RollValue(\"antiheal_pct\", 65)"
+      ]
+    },
+    {
+      "id": "JK-A11",
+      "name": "血魂共鸣",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "restore_pct",
+          "text": "50%",
+          "base": 50,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_synergy.go: 150+50*int64(min(3, max(0, swordLandedCount(c.Owner.ID, c.Skill, hits)-1))) -> 100+int64(c.RollValue(\"restore_pct\", 50))*(1+int64(min(3, max(0, swordLandedCount(c.Owner.ID, c.Skill, hits)-1))))"
+      ]
+    },
+    {
+      "id": "JK-A12",
+      "name": "魂钉",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "法力量280%",
+          "base": 280,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(effective, 280) -> legendaryMeleeScale(effective, int64(c.RollValue(\"proc_pct\", 280)))"
+      ]
+    },
+    {
+      "id": "JK-A13",
+      "name": "封法断流",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高70%",
+          "base": 70,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct"
+      ]
+    },
+    {
+      "id": "JK-A14",
+      "name": "封法断垒",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高50%",
+          "base": 50,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_keep.go: legendaryMeleeScale(n, 150) -> legendaryMeleeScale(n, 100+int64(c.RollValue(\"damage_pct\", 50)))"
+      ]
+    },
+    {
+      "id": "JK-A15",
+      "name": "旋风合刃",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高60%",
+          "base": 60,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct"
+      ]
+    },
+    {
+      "id": "JK-A16",
+      "name": "旋风收阵",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高30%",
+          "base": 30,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct"
+      ]
+    },
+    {
+      "id": "JK-A17",
+      "name": "旋风逐客",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "radius",
+          "text": "至少提高至150",
+          "base": 150,
+          "divisor": 1,
+          "unit": ""
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: max(d.Radius, 150) -> max(d.Radius, c.RollValue(\"radius\", 150))",
+        "legendary_swordsman_defaults.go: max(d.Area.Radius, 150) -> max(d.Area.Radius, c.RollValue(\"radius\", 150))"
+      ]
+    },
+    {
+      "id": "JK-A18",
+      "name": "混沌裂甲",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "armor_pct",
+          "text": "物理防御降低30%",
+          "base": 30,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_keep.go: Value: -30 -> Value: -c.RollValue(\"armor_pct\", 30)"
+      ]
+    },
+    {
+      "id": "JK-A19",
+      "name": "混沌换式",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高25%",
+          "base": 25,
+          "divisor": 1,
+          "unit": "%"
+        },
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高100%",
+          "base": 100,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 125) -> legendaryMeleeScale(n, 100+int64(c.RollValue(\"damage_pct\", 25)))",
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 200) -> legendaryMeleeScale(n, 100+int64(c.RollValue(\"damage_pct\", 100)))"
+      ]
+    },
+    {
+      "id": "JK-A20",
+      "name": "狮心震列",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "攻击力160%",
+          "base": 160,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_immediate.go: legendaryMeleeScale(c.Attack(false), 160) -> legendaryMeleeScale(c.Attack(false), int64(c.RollValue(\"proc_pct\", 160)))"
+      ]
+    },
+    {
+      "id": "JK-A21",
+      "name": "狮心决斗",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "攻击力320%",
+          "base": 320,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_swordsman_defaults.go:166: swordImmediatePrimary; authored parameters proc_pct"
+      ]
+    },
+    {
+      "id": "JK-A22",
+      "name": "陨星迟落",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "基础伤害70%",
+          "base": 70,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_melee_area.go:123: legendaryMeleeMeteor; authored parameters proc_pct"
+      ]
+    },
+    {
+      "id": "JK-A23",
+      "name": "陨星余烬",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "基础伤害110%",
+          "base": 110,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_melee_area.go:138: legendarySwordsmanMeteorBurst; authored parameters proc_pct"
+      ]
+    },
+    {
+      "id": "JK-A24",
+      "name": "强击破阵",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高80%",
+          "base": 80,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_melee_skill.go:5: legendaryMeleeSkillDamage; authored parameters damage_pct"
+      ]
+    },
+    {
+      "id": "JK-A25",
+      "name": "挑衅应战",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "攻击力160%",
+          "base": 160,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(c.Attack(false), 160) -> legendaryMeleeScale(c.Attack(false), int64(c.RollValue(\"proc_pct\", 160)))"
+      ]
+    },
+    {
+      "id": "JK-A26",
+      "name": "双路剑谱",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高100%",
+          "base": 100,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 200) -> legendaryMeleeScale(n, 100+int64(c.RollValue(\"damage_pct\", 100)))"
+      ]
+    },
+    {
+      "id": "JK-A27",
+      "name": "剑路交织",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "攻击力320%",
+          "base": 320,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_swordsman_defaults.go:177: swordSingleCastArray; authored parameters proc_pct"
+      ]
+    },
+    {
+      "id": "JK-A28",
+      "name": "血魂相济",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "攻击力260%",
+          "base": 260,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_swordsman_defaults.go:166: swordImmediatePrimary; authored parameters proc_pct"
+      ]
+    },
+    {
+      "id": "JK-A29",
+      "name": "返锋定势",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "攻击力180%",
+          "base": 180,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(c.Attack(false), 180) -> legendaryMeleeScale(c.Attack(false), int64(c.RollValue(\"proc_pct\", 180)))"
+      ]
+    },
+    {
+      "id": "JK-A30",
+      "name": "百战收锋",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高110%",
+          "base": 110,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 210) -> legendaryMeleeScale(n, 100+int64(c.RollValue(\"damage_pct\", 110)))"
+      ]
+    },
+    {
+      "id": "JK-D01",
+      "name": "罡气护脉",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "shield_pct",
+          "text": "最大生命12%",
+          "base": 12,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: specialScale(c.Owner.MaxHP, 12) -> specialScale(c.Owner.MaxHP, c.RollValue(\"shield_pct\", 12))"
+      ]
+    },
+    {
+      "id": "JK-D02",
+      "name": "饮血余温",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "降低55%",
+          "base": 55,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 45) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 55)))"
+      ]
+    },
+    {
+      "id": "JK-D03",
+      "name": "血魂护心",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "shield_pct",
+          "text": "最大生命的16%",
+          "base": 16,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_swordsman_synergy.go:126: swordOverflowShield; authored parameters shield_pct"
+      ]
+    },
+    {
+      "id": "JK-D04",
+      "name": "挑衅先手",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "降低50%",
+          "base": 50,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 50) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 50)))"
+      ]
+    },
+    {
+      "id": "JK-D05",
+      "name": "旋风铁围",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "降低40%",
+          "base": 40,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_synergy.go: legendaryMeleeScale(n, 60) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 40)))"
+      ]
+    },
+    {
+      "id": "JK-D06",
+      "name": "缚敌守势",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "降低35%",
+          "base": 35,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_synergy.go: legendaryMeleeScale(n, 65) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 35)))"
+      ]
+    },
+    {
+      "id": "JK-D07",
+      "name": "封法残障",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "降低50%",
+          "base": 50,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 50) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 50)))"
+      ]
+    },
+    {
+      "id": "JK-D08",
+      "name": "狮心护阵",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "shield_pct",
+          "text": "最大生命14%",
+          "base": 14,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_swordsman_defaults.go:227: swordLionShields; authored parameters shield_pct"
+      ]
+    },
+    {
+      "id": "JK-D09",
+      "name": "剑鞘藏命",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "降低45%",
+          "base": 45,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 55) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 45)))"
+      ]
+    },
+    {
+      "id": "JK-D10",
+      "name": "退守一寸",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "降低35%",
+          "base": 35,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(n, 65) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 35)))"
+      ]
+    },
+    {
+      "id": "JK-U01",
+      "name": "真空牵步",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "move_pct",
+          "text": "移动速度提高80%",
+          "base": 80,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior_functional.go:48: warriorFunctionalMove; authored parameters move_pct"
+      ]
+    },
+    {
+      "id": "JK-U02",
+      "name": "饮血清创",
+      "class": "剑客",
+      "ranged": false,
+      "fixed_reason": "解除自身中毒与减速的机制开关，无独立可变数值。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "JK-U03",
+      "name": "噬魂回环",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "refund_pct",
+          "text": "法力的60%",
+          "base": 60,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_immediate.go: specialScale(c.PaidMP, 60) -> specialScale(c.PaidMP, c.RollValue(\"refund_pct\", 60))"
+      ]
+    },
+    {
+      "id": "JK-U04",
+      "name": "挑衅集结",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗降低50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: ManaReductionBP += 5000 -> ManaReductionBP += c.RollValue(\"mana_bp\", 5000)"
+      ]
+    },
+    {
+      "id": "JK-U05",
+      "name": "幻影洗尘",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "duration_ms",
+          "text": "8秒",
+          "base": 8000,
+          "divisor": 1000,
+          "unit": "秒"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_immediate.go: warriorFunctionalRelease(10103, 8000, false)(c) -> warriorFunctionalRelease(10103, int64(c.RollValue(\"duration_ms\", 8000)), false)(c)"
+      ]
+    },
+    {
+      "id": "JK-U06",
+      "name": "金缚留客",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "range_pct",
+          "text": "施法距离提高80%",
+          "base": 80,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(d.Dist, 180) -> legendaryMeleeScale(d.Dist, 100+int64(c.RollValue(\"range_pct\", 80)))"
+      ]
+    },
+    {
+      "id": "JK-U07",
+      "name": "换式调息",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "restore_pct",
+          "text": "最大法力的12%",
+          "base": 12,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: specialScale(c.Owner.MaxMP, 12) -> specialScale(c.Owner.MaxMP, c.RollValue(\"restore_pct\", 12))"
+      ]
+    },
+    {
+      "id": "JK-U08",
+      "name": "旋风定足",
+      "class": "剑客",
+      "ranged": false,
+      "fixed_reason": "装备期间移动减速与定身免疫的机制开关，无独立可变数值。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "JK-U09",
+      "name": "收招归息",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "refund_pct",
+          "text": "法力的80%",
+          "base": 80,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_immediate.go: specialScale(c.PaidMP, 80) -> specialScale(c.PaidMP, c.RollValue(\"refund_pct\", 80))"
+      ]
+    },
+    {
+      "id": "JK-U10",
+      "name": "封法追索",
+      "class": "剑客",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "range_pct",
+          "text": "施法距离提高45%",
+          "base": 45,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_swordsman_defaults.go: legendaryMeleeScale(d.Dist, 145) -> legendaryMeleeScale(d.Dist, 100+int64(c.RollValue(\"range_pct\", 45)))"
+      ]
+    },
+    {
+      "id": "SS-A01",
+      "name": "燃核增幅",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "直接伤害提高70%",
+          "base": 7000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: DamageBP += c.RollValue(\"damage_bp\", 7000)"
+      ]
+    },
+    {
+      "id": "SS-A02",
+      "name": "残烬封口",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "burn_pct",
+          "text": "剩余伤害80%",
+          "base": 80,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster.go: legendaryCasterBurnBurst burn_pct"
+      ]
+    },
+    {
+      "id": "SS-A03",
+      "name": "灼步火签",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "radius",
+          "text": "半径150",
+          "base": 150,
+          "divisor": 1,
+          "unit": ""
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialCircle(d, 150, → specialCircle(d, c.RollValue(\"radius\", 150),"
+      ]
+    },
+    {
+      "id": "SS-A04",
+      "name": "静候爆芯",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "child_bp",
+          "text": "基础伤害的70%",
+          "base": 7000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_areas.go: ScaleBP: 7000 → ScaleBP: c.RollValue(\"child_bp\", 7000)"
+      ]
+    },
+    {
+      "id": "SS-A05",
+      "name": "聚焦炎核",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "75%",
+          "base": 75,
+          "divisor": 1,
+          "unit": "%"
+        },
+        {
+          "key": "damage_pct",
+          "text": "35%",
+          "base": 35,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_areas.go: specialScale(n, 175) → specialScale(n, 100+c.RollValue(\"damage_pct\", 75))",
+        "legendary_caster_areas.go: specialScale(n, 135) → specialScale(n, 100+c.RollValue(\"damage_pct\", 35))"
+      ]
+    },
+    {
+      "id": "SS-A06",
+      "name": "焚圈",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "radius_bp",
+          "text": "半径扩大65%",
+          "base": 6500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_definitions.go: RadiusBP += 6500 → RadiusBP += c.RollValue(\"radius_bp\", 6500)"
+      ]
+    },
+    {
+      "id": "SS-A07",
+      "name": "薪火递送",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "burn_pct",
+          "text": "90%",
+          "base": 90,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: best*90/100 → best*int64(c.RollValue(\"burn_pct\", 90))/100"
+      ]
+    },
+    {
+      "id": "SS-A08",
+      "name": "远寒凝尖",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "55%",
+          "base": 55,
+          "divisor": 1,
+          "unit": "%"
+        },
+        {
+          "key": "damage_pct",
+          "text": "20%",
+          "base": 20,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster.go: specialScale(n, 155) → specialScale(n, 100+c.RollValue(\"damage_pct\", 55))",
+        "legendary_caster.go: specialScale(n, 120) → specialScale(n, 100+c.RollValue(\"damage_pct\", 20))"
+      ]
+    },
+    {
+      "id": "SS-A09",
+      "name": "霜纹刻痕",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高100%",
+          "base": 100,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(n, 200) → specialScale(n, 100+c.RollValue(\"damage_pct\", 100))"
+      ]
+    },
+    {
+      "id": "SS-A10",
+      "name": "寒针破抗",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "penetration_bp",
+          "text": "忽略目标50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: ElementReductionPenetrationBP += 5000 → ElementReductionPenetrationBP += c.RollValue(\"penetration_bp\", 5000)"
+      ]
+    },
+    {
+      "id": "SS-A11",
+      "name": "融霜取焰",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "burn_pct",
+          "text": "剩余伤害100%",
+          "base": 100,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster.go: legendaryCasterBurnBurst burn_pct"
+      ]
+    },
+    {
+      "id": "SS-A12",
+      "name": "遥爆冰棺",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "直接伤害提高20%",
+          "base": 2000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: DamageBP += 2000 → DamageBP += c.RollValue(\"damage_bp\", 2000)"
+      ]
+    },
+    {
+      "id": "SS-A13",
+      "name": "压缩冰核",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "85%",
+          "base": 85,
+          "divisor": 1,
+          "unit": "%"
+        },
+        {
+          "key": "damage_pct",
+          "text": "65%",
+          "base": 65,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_definitions.go: specialScale(n, 185) → specialScale(n, 100+c.RollValue(\"damage_pct\", 85))",
+        "legendary_caster_definitions.go: specialScale(n, 165) → specialScale(n, 100+c.RollValue(\"damage_pct\", 65))"
+      ]
+    },
+    {
+      "id": "SS-A14",
+      "name": "凝霜牵引",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高20%",
+          "base": 20,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_shields.go: specialScale(n, 120) → specialScale(n, 100+c.RollValue(\"damage_pct\", 20))"
+      ]
+    },
+    {
+      "id": "SS-A15",
+      "name": "破冻重锤",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "直接伤害提高60%",
+          "base": 60,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster.go: specialScale(n, 160) → specialScale(n, 100+c.RollValue(\"damage_pct\", 60))"
+      ]
+    },
+    {
+      "id": "SS-A16",
+      "name": "长焰尽算",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "burn_pct",
+          "text": "剩余伤害160%",
+          "base": 160,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster.go: legendaryCasterBurnBurst burn_pct"
+      ]
+    },
+    {
+      "id": "SS-A17",
+      "name": "风焰续薪",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "tick_bp",
+          "text": "每跳伤害提高82%",
+          "base": 8200,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: DamageTickBP += 8200 → DamageTickBP += c.RollValue(\"tick_bp\", 8200)"
+      ]
+    },
+    {
+      "id": "SS-A18",
+      "name": "风焰宽带",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "直接伤害提高40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: DamageBP += 4000 → DamageBP += c.RollValue(\"damage_bp\", 4000)"
+      ]
+    },
+    {
+      "id": "SS-A19",
+      "name": "焰终回响",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "burn_pct",
+          "text": "初始总伤害65%",
+          "base": 65,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: legendaryCasterNewBurnTotal(c, *d)*65/100 → legendaryCasterNewBurnTotal(c, *d)*int64(c.RollValue(\"burn_pct\", 65))/100"
+      ]
+    },
+    {
+      "id": "SS-A20",
+      "name": "白灾扩界",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "直接伤害提高55%",
+          "base": 5500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_definitions.go: DamageBP += 5500 → DamageBP += c.RollValue(\"damage_bp\", 5500)"
+      ]
+    },
+    {
+      "id": "SS-A21",
+      "name": "雪心独守",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "80%",
+          "base": 80,
+          "divisor": 1,
+          "unit": "%"
+        },
+        {
+          "key": "damage_pct",
+          "text": "20%",
+          "base": 20,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_definitions.go: specialScale(n, 180) → specialScale(n, 100+c.RollValue(\"damage_pct\", 80))",
+        "legendary_caster_definitions.go: specialScale(n, 120) → specialScale(n, 100+c.RollValue(\"damage_pct\", 20))"
+      ]
+    },
+    {
+      "id": "SS-A22",
+      "name": "暴雪凝域",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "直接伤害提高90%",
+          "base": 9000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: legendaryAddTargetDamage(d, 9000) → legendaryAddTargetDamage(d, c.RollValue(\"damage_bp\", 9000))"
+      ]
+    },
+    {
+      "id": "SS-A23",
+      "name": "冰封广散",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "radius",
+          "text": "作用半径增加150",
+          "base": 150,
+          "divisor": 1,
+          "unit": ""
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: radius + c.RollValue(\"radius\",150)"
+      ]
+    },
+    {
+      "id": "SS-A24",
+      "name": "冰封释压",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "child_bp",
+          "text": "基础伤害150%",
+          "base": 15000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: ScaleBP: 15000 → ScaleBP: c.RollValue(\"child_bp\", 15000)"
+      ]
+    },
+    {
+      "id": "SS-A25",
+      "name": "法式终章",
+      "class": "术士",
+      "ranged": false,
+      "fixed_reason": "仅继承已学习被动技能的当前等级数值，不另造威能数值；借用机制固定。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "SS-A26",
+      "name": "镜中讨还",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reflection_cap_pct",
+          "text": "最大生命18%",
+          "base": 18,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(c.Owner.MaxHP, 18) → specialScale(c.Owner.MaxHP, c.RollValue(\"reflection_cap_pct\", 18))"
+      ]
+    },
+    {
+      "id": "SS-A27",
+      "name": "幻步遗焰",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "基础伤害的180%",
+          "base": 180,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(legendaryCasterGrantedBase(c, legendaryFireBolt), 180) → specialScale(legendaryCasterGrantedBase(c, legendaryFireBolt), c.RollValue(\"proc_pct\", 180))"
+      ]
+    },
+    {
+      "id": "SS-A28",
+      "name": "剥法裂响",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "base_burst_pct",
+          "text": "基础伤害220%",
+          "base": 220,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: base c.RollValue(\"base_burst_pct\", 220) + fixed50 per defense"
+      ]
+    },
+    {
+      "id": "SS-A29",
+      "name": "法耗熔炉",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "66%",
+          "base": 6600,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: DamageBP += 6600 → DamageBP += c.RollValue(\"damage_bp\", 6600)"
+      ]
+    },
+    {
+      "id": "SS-A30",
+      "name": "瞬发复诵",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "child_bp",
+          "text": "追加80%",
+          "base": 8000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_resources.go: ScaleBP: 8000 → ScaleBP: c.RollValue(\"child_bp\", 8000)"
+      ]
+    },
+    {
+      "id": "SS-D01",
+      "name": "烫手法衣",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "降低28%",
+          "base": 28,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(n, 72) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 28))"
+      ]
+    },
+    {
+      "id": "SS-D02",
+      "name": "冰甲承峰",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "降低55%",
+          "base": 55,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(n, 45) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 55))"
+      ]
+    },
+    {
+      "id": "SS-D03",
+      "name": "镜面偏转",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "降低75%",
+          "base": 75,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(n, 25) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 75))"
+      ]
+    },
+    {
+      "id": "SS-D04",
+      "name": "幻步缓冲",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "life_pct",
+          "text": "最大生命提高30%",
+          "base": 30,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(s.MaxHP, 130) → specialScale(s.MaxHP, 100+c.RollValue(\"life_pct\", 30))"
+      ]
+    },
+    {
+      "id": "SS-D05",
+      "name": "凝神护界",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_cap_pct",
+          "text": "最大生命的22%",
+          "base": 22,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(c.Owner.MaxHP, 22) → specialScale(c.Owner.MaxHP, c.RollValue(\"reduction_cap_pct\", 22))"
+      ]
+    },
+    {
+      "id": "SS-D06",
+      "name": "寒封隔绝",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "降低35%",
+          "base": 35,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(n, 65) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 35))"
+      ]
+    },
+    {
+      "id": "SS-D07",
+      "name": "双盾换防",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "life_pct",
+          "text": "最大生命提高28%",
+          "base": 28,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(s.MaxHP, 128) → specialScale(s.MaxHP, 100+c.RollValue(\"life_pct\", 28))"
+      ]
+    },
+    {
+      "id": "SS-D08",
+      "name": "枯蓝应急",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "life_pct",
+          "text": "最大生命提高30%",
+          "base": 30,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(s.MaxHP, 130) → specialScale(s.MaxHP, 100+c.RollValue(\"life_pct\", 30))"
+      ]
+    },
+    {
+      "id": "SS-D09",
+      "name": "焚息护身",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "降低40%",
+          "base": 40,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(n, 60) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 40))"
+      ]
+    },
+    {
+      "id": "SS-D10",
+      "name": "释能护息",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "降低35%",
+          "base": 35,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(n, 65) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 35))"
+      ]
+    },
+    {
+      "id": "SS-U01",
+      "name": "无隙幻步",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗降低15%",
+          "base": 1500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_definitions.go: ManaReductionBP += 1500 → ManaReductionBP += c.RollValue(\"mana_bp\", 1500)"
+      ]
+    },
+    {
+      "id": "SS-U02",
+      "name": "夺法镜钥",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "radius",
+          "text": "半径250",
+          "base": 250,
+          "divisor": 1,
+          "unit": ""
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_definitions.go: specialCircle(d, 250, → specialCircle(d, c.RollValue(\"radius\", 250),"
+      ]
+    },
+    {
+      "id": "SS-U03",
+      "name": "凝神回路",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗降低55%",
+          "base": 5500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: ManaReductionBP += 5500 → ManaReductionBP += c.RollValue(\"mana_bp\", 5500)"
+      ]
+    },
+    {
+      "id": "SS-U04",
+      "name": "冰径游走",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "move_pct",
+          "text": "移动速度提高80%",
+          "base": 80,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_sorcerer_functional_rework.go: specialScale(stats.MoveSpeed, 180) → specialScale(stats.MoveSpeed, 100+c.RollValue(\"move_pct\", 80))"
+      ]
+    },
+    {
+      "id": "SS-U05",
+      "name": "余温归流",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "restore_pct",
+          "text": "最大法力的10%",
+          "base": 10,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(c.Owner.MaxMP, 10) → specialScale(c.Owner.MaxMP, c.RollValue(\"restore_pct\", 10))"
+      ]
+    },
+    {
+      "id": "SS-U06",
+      "name": "幻影解缚",
+      "class": "术士",
+      "ranged": false,
+      "fixed_reason": "控制下施法与成功位移解控为开关机制，无独立数值。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "SS-U07",
+      "name": "法力寄存",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗降低45%",
+          "base": 4500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_sorcerer_functional_rework.go: ManaReductionBP += 4500 → ManaReductionBP += c.RollValue(\"mana_bp\", 4500)"
+      ]
+    },
+    {
+      "id": "SS-U08",
+      "name": "净镜通行",
+      "class": "术士",
+      "ranged": false,
+      "fixed_reason": "常驻已学习魔镜及减速免疫为开关机制，不修改原技能等级数值。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "SS-U09",
+      "name": "元素节律",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "cooldown_bp",
+          "text": "冷却时间缩短30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: CooldownReductionBP += 3000 → CooldownReductionBP += c.RollValue(\"cooldown_bp\", 3000)"
+      ]
+    },
+    {
+      "id": "SS-U10",
+      "name": "瞬念远投",
+      "class": "术士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "range_pct",
+          "text": "法术射程提高100%",
+          "base": 100,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_sorcerer_functional_rework.go: specialScale(d.Dist, 200) → specialScale(d.Dist, 100+c.RollValue(\"range_pct\", 100))"
+      ]
+    },
+    {
+      "id": "TY-A01",
+      "name": "普攻横扫",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "70%",
+          "base": 70,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_combat.go: universalBasicSide"
+      ]
+    },
+    {
+      "id": "TY-A02",
+      "name": "长锋",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-A03",
+      "name": "展翼",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-A04",
+      "name": "广域",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_skill.go: universalSynergyPrepare"
+      ]
+    },
+    {
+      "id": "TY-A05",
+      "name": "汇击",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "半径120",
+          "base": 120,
+          "divisor": 1,
+          "unit": ""
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalSingleCircle"
+      ]
+    },
+    {
+      "id": "TY-A06",
+      "name": "贯线",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_skill.go: universalSynergyPrepare"
+      ]
+    },
+    {
+      "id": "TY-A07",
+      "name": "远投",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "100%",
+          "base": 10000,
+          "divisor": 100,
+          "unit": "%"
+        },
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-A08",
+      "name": "独锋",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_skill.go: universalSynergyPrepare"
+      ]
+    },
+    {
+      "id": "TY-A09",
+      "name": "必中手",
+      "class": "全职业",
+      "ranged": false,
+      "fixed_reason": "必中或允许持续伤害暴击属于完整机制，不将其改为概率或强度加成。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "TY-A10",
+      "name": "迅击",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "20%",
+          "base": 2000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedStats"
+      ]
+    },
+    {
+      "id": "TY-A11",
+      "name": "锐势",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "20个百分点",
+          "base": 2000,
+          "divisor": 100,
+          "unit": "个百分点"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedBlow"
+      ]
+    },
+    {
+      "id": "TY-A12",
+      "name": "破抗",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedBlow"
+      ]
+    },
+    {
+      "id": "TY-A13",
+      "name": "深制",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedStatus"
+      ]
+    },
+    {
+      "id": "TY-A14",
+      "name": "寒行",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedStatus"
+      ]
+    },
+    {
+      "id": "TY-A15",
+      "name": "精确施术",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "30个百分点",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "个百分点"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: init"
+      ]
+    },
+    {
+      "id": "TY-A16",
+      "name": "碎盾",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "100%",
+          "base": 10000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_combat.go: init"
+      ]
+    },
+    {
+      "id": "TY-A17",
+      "name": "汲命",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedStatus"
+      ]
+    },
+    {
+      "id": "TY-A18",
+      "name": "毒性深化",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "100%",
+          "base": 10000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_status.go: universalNativeStatus"
+      ]
+    },
+    {
+      "id": "TY-A19",
+      "name": "蚀魔",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "80%",
+          "base": 8000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-A20",
+      "name": "落点牵引",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "最多100距离",
+          "base": 100,
+          "divisor": 1,
+          "unit": "距离"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_native_boundaries.go: universalLandingPull"
+      ]
+    },
+    {
+      "id": "TY-A21",
+      "name": "伏场",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-A22",
+      "name": "余毒余焰",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedStatus"
+      ]
+    },
+    {
+      "id": "TY-A23",
+      "name": "稳定淬毒",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40个百分点",
+          "base": 40,
+          "divisor": 1,
+          "unit": "个百分点"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedStatus"
+      ]
+    },
+    {
+      "id": "TY-A24",
+      "name": "节流增幅",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "2%",
+          "base": 20000,
+          "divisor": 10000,
+          "unit": "%"
+        },
+        {
+          "key": "benefit",
+          "text": "200%",
+          "base": 20000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_skill.go: universalSynergyPrepare"
+      ]
+    },
+    {
+      "id": "TY-A25",
+      "name": "铁铸锋",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "50%",
+          "base": 50,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedBase"
+      ]
+    },
+    {
+      "id": "TY-A26",
+      "name": "灵铸锋",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "50%",
+          "base": 50,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedBase"
+      ]
+    },
+    {
+      "id": "TY-A27",
+      "name": "燃烧深化",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "100%",
+          "base": 10000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_status.go: universalNativeStatus"
+      ]
+    },
+    {
+      "id": "TY-A28",
+      "name": "毒锋暴击",
+      "class": "全职业",
+      "ranged": false,
+      "fixed_reason": "必中或允许持续伤害暴击属于完整机制，不将其改为概率或强度加成。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "TY-A29",
+      "name": "焰锋暴击",
+      "class": "全职业",
+      "ranged": false,
+      "fixed_reason": "必中或允许持续伤害暴击属于完整机制，不将其改为概率或强度加成。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "TY-A30",
+      "name": "制敌",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedTarget"
+      ]
+    },
+    {
+      "id": "TY-A31",
+      "name": "毒蚀破绽",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedTarget"
+      ]
+    },
+    {
+      "id": "TY-A32",
+      "name": "灼热破绽",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedTarget"
+      ]
+    },
+    {
+      "id": "TY-A33",
+      "name": "会心重击",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "50个百分点",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "个百分点"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedBlow"
+      ]
+    },
+    {
+      "id": "TY-A34",
+      "name": "主锋",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "80%",
+          "base": 8000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_skill.go: universalPrimaryModifier"
+      ]
+    },
+    {
+      "id": "TY-A35",
+      "name": "伸锋",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_appearance.go: init"
+      ]
+    },
+    {
+      "id": "TY-A36",
+      "name": "扫群",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedTarget"
+      ]
+    },
+    {
+      "id": "TY-A37",
+      "name": "稳刃",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "75%",
+          "base": 7500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_combat.go: init"
+      ]
+    },
+    {
+      "id": "TY-A38",
+      "name": "灵池武装",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "4%",
+          "base": 4,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedBase"
+      ]
+    },
+    {
+      "id": "TY-A39",
+      "name": "铠锋",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "20%",
+          "base": 20,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedBase"
+      ]
+    },
+    {
+      "id": "TY-A40",
+      "name": "护阵施术",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-D01",
+      "name": "坚甲",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_combat.go: universalEquipmentStats"
+      ]
+    },
+    {
+      "id": "TY-D02",
+      "name": "灵甲",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 40,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedStats"
+      ]
+    },
+    {
+      "id": "TY-D03",
+      "name": "厚生",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "30%",
+          "base": 30,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedStats"
+      ]
+    },
+    {
+      "id": "TY-D04",
+      "name": "灵容",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 40,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedStats"
+      ]
+    },
+    {
+      "id": "TY-D05",
+      "name": "范围卸力",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "25%",
+          "base": 2500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_status.go: universalSynergyIncoming"
+      ]
+    },
+    {
+      "id": "TY-D06",
+      "name": "卸招",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "25%",
+          "base": 2500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedIncoming"
+      ]
+    },
+    {
+      "id": "TY-D07",
+      "name": "铁壁",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "20%",
+          "base": 2000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedIncoming"
+      ]
+    },
+    {
+      "id": "TY-D08",
+      "name": "法壁",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "20%",
+          "base": 2000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedIncoming"
+      ]
+    },
+    {
+      "id": "TY-D09",
+      "name": "定神",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_status.go: universalNativeStatusReceiving"
+      ]
+    },
+    {
+      "id": "TY-D10",
+      "name": "抗暴",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedIncoming"
+      ]
+    },
+    {
+      "id": "TY-D11",
+      "name": "法力承伤",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_status.go: universalSynergyIncoming"
+      ]
+    },
+    {
+      "id": "TY-D12",
+      "name": "受疗",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: init"
+      ]
+    },
+    {
+      "id": "TY-D13",
+      "name": "承盾",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedReceiving"
+      ]
+    },
+    {
+      "id": "TY-D14",
+      "name": "稳甲",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedReceiving"
+      ]
+    },
+    {
+      "id": "TY-D15",
+      "name": "稳手",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedReceiving"
+      ]
+    },
+    {
+      "id": "TY-D16",
+      "name": "厚盾",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_status.go: universalNativeStatus"
+      ]
+    },
+    {
+      "id": "TY-D17",
+      "name": "定心",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "25%",
+          "base": 2500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedIncoming"
+      ]
+    },
+    {
+      "id": "TY-D18",
+      "name": "长护",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedStatus"
+      ]
+    },
+    {
+      "id": "TY-D19",
+      "name": "缓蚀",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "25%",
+          "base": 2500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_status.go: universalSynergyIncoming"
+      ]
+    },
+    {
+      "id": "TY-D20",
+      "name": "净毒",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedReceiving"
+      ]
+    },
+    {
+      "id": "TY-U01",
+      "name": "速咏",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-U02",
+      "name": "普攻汲能",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "10点法力",
+          "base": 10,
+          "divisor": 1,
+          "unit": "点法力"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_status.go: universalBasicMana"
+      ]
+    },
+    {
+      "id": "TY-U03",
+      "name": "轻耗",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_skill.go: universalSynergyPrepare"
+      ]
+    },
+    {
+      "id": "TY-U04",
+      "name": "济耗",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-U05",
+      "name": "凝疗",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_status.go: universalNativeStatus"
+      ]
+    },
+    {
+      "id": "TY-U06",
+      "name": "引灵",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-U07",
+      "name": "远跃",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-U08",
+      "name": "轻足",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_status.go: universalNativeStatusReceiving"
+      ]
+    },
+    {
+      "id": "TY-U09",
+      "name": "轻行",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "20%",
+          "base": 20,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_combat.go: universalExtendedStats"
+      ]
+    },
+    {
+      "id": "TY-U10",
+      "name": "广疗",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_skill.go: universalSynergyPrepare"
+      ]
+    },
+    {
+      "id": "TY-U11",
+      "name": "长佑",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_status.go: universalExtendedStatus"
+      ]
+    },
+    {
+      "id": "TY-U12",
+      "name": "御制节用",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-U13",
+      "name": "盾耗优化",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "20%",
+          "base": 2000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_skill.go: universalSynergyPrepare"
+      ]
+    },
+    {
+      "id": "TY-U14",
+      "name": "蚀耗",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-U15",
+      "name": "疾式",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "20%",
+          "base": 2000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_skill.go: universalSynergyPrepare"
+      ]
+    },
+    {
+      "id": "TY-U16",
+      "name": "强疗",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-U17",
+      "name": "复苏",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-U18",
+      "name": "净明",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40个百分点",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "个百分点"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-U19",
+      "name": "洞察",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "100%",
+          "base": 10000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_extended_skill.go: universalExtendedPrepare"
+      ]
+    },
+    {
+      "id": "TY-U20",
+      "name": "护行",
+      "class": "全职业",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "benefit",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_universal_combat.go: universalEquipmentStats"
+      ]
+    },
+    {
+      "id": "YS-A01",
+      "name": "散光棱镜",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "secondary_pct",
+          "text": "造成60%",
+          "base": 60,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster.go: domain.ScaleSkillDamageFraction(&d.Effects[i], 60, 100) → domain.ScaleSkillDamageFraction(&d.Effects[i], int64(c.RollValue(\"secondary_pct\", 60)), 100)"
+      ]
+    },
+    {
+      "id": "YS-A02",
+      "name": "迟明双响",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "已结算伤害85%",
+          "base": 85,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster.go: specialScale(c.Hit.Amount, 85) → specialScale(c.Hit.Amount, c.RollValue(\"proc_pct\", 85))"
+      ]
+    },
+    {
+      "id": "YS-A03",
+      "name": "断愈裁光",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: DamageBP += 6000 → DamageBP += c.RollValue(\"damage_bp\", 6000)"
+      ]
+    },
+    {
+      "id": "YS-A04",
+      "name": "圣言共振",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高90%",
+          "base": 9000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: legendaryAddTargetDamage(d, 9000) → legendaryAddTargetDamage(d, c.RollValue(\"damage_bp\", 9000))"
+      ]
+    },
+    {
+      "id": "YS-A05",
+      "name": "借位圣光",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高20%",
+          "base": 2000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_admission.go: DamageBP += 2000 → DamageBP += c.RollValue(\"damage_bp\", 2000)"
+      ]
+    },
+    {
+      "id": "YS-A06",
+      "name": "光心裁切",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_pct",
+          "text": "伤害提高60%",
+          "base": 60,
+          "divisor": 1,
+          "unit": "%"
+        },
+        {
+          "key": "damage_pct",
+          "text": "伤害提高20%",
+          "base": 20,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_definitions.go: specialScale(n, 160) → specialScale(n, 100+c.RollValue(\"damage_pct\", 60))",
+        "legendary_caster_definitions.go: specialScale(n, 120) → specialScale(n, 100+c.RollValue(\"damage_pct\", 20))"
+      ]
+    },
+    {
+      "id": "YS-A07",
+      "name": "留灯三刻",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "field_pct",
+          "text": "基础伤害30%",
+          "base": 30,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_areas.go: specialScale(legendaryCasterBase(c, c.Skill), 30) → specialScale(legendaryCasterBase(c, c.Skill), c.RollValue(\"field_pct\", 30))"
+      ]
+    },
+    {
+      "id": "YS-A08",
+      "name": "圣光贯阵",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高80%",
+          "base": 8000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: DamageBP += 8000 → DamageBP += c.RollValue(\"damage_bp\", 8000)"
+      ]
+    },
+    {
+      "id": "YS-A09",
+      "name": "万象驱魔",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: DamageBP += 4000 → DamageBP += c.RollValue(\"damage_bp\", 4000)"
+      ]
+    },
+    {
+      "id": "YS-A10",
+      "name": "衰弱深蚀",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "weaken_pct",
+          "text": "降低攻击效果提高60%",
+          "base": 60,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: specialScale(d.Affixes[i].Value, 160) → specialScale(d.Affixes[i].Value, 100+c.RollValue(\"weaken_pct\", 60))"
+      ]
+    },
+    {
+      "id": "YS-A11",
+      "name": "驱魔广断",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高45%",
+          "base": 4500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: DamageBP += 4500 → DamageBP += c.RollValue(\"damage_bp\", 4500)"
+      ]
+    },
+    {
+      "id": "YS-A12",
+      "name": "断咏裁决",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: DamageBP += 5000 → DamageBP += c.RollValue(\"damage_bp\", 5000)"
+      ]
+    },
+    {
+      "id": "YS-A13",
+      "name": "神威破阵",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高80%",
+          "base": 8000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: legendaryAddTargetDamage(d, 8000) → legendaryAddTargetDamage(d, c.RollValue(\"damage_bp\", 8000))"
+      ]
+    },
+    {
+      "id": "YS-A14",
+      "name": "神威常照",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "cooldown_bp",
+          "text": "冷却时间缩短45%",
+          "base": 4500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: CooldownReductionBP += 4500 → CooldownReductionBP += c.RollValue(\"cooldown_bp\", 4500)"
+      ]
+    },
+    {
+      "id": "YS-A15",
+      "name": "神威聚诊",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "生命总和的35%",
+          "base": 35,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster.go: st.Value*35/100 → st.Value*int64(c.RollValue(\"proc_pct\", 35))/100"
+      ]
+    },
+    {
+      "id": "YS-A16",
+      "name": "神威广照",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高35%",
+          "base": 3500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: DamageBP += 3500 → DamageBP += c.RollValue(\"damage_bp\", 3500)"
+      ]
+    },
+    {
+      "id": "YS-A17",
+      "name": "衰弱疫阵",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "造成180%",
+          "base": 180,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: DamagePct: 180 → DamagePct: c.RollValue(\"proc_pct\", 180)"
+      ]
+    },
+    {
+      "id": "YS-A18",
+      "name": "枷锁重压",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: DamageBP += 6000 → DamageBP += c.RollValue(\"damage_bp\", 6000)"
+      ]
+    },
+    {
+      "id": "YS-A19",
+      "name": "聚敌枷锁",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "造成200%",
+          "base": 200,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: DamagePct: 200 → DamagePct: c.RollValue(\"proc_pct\", 200)"
+      ]
+    },
+    {
+      "id": "YS-A20",
+      "name": "针光护体",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: DamageBP += 4000 → DamageBP += c.RollValue(\"damage_bp\", 4000)"
+      ]
+    },
+    {
+      "id": "YS-A21",
+      "name": "施盾耀击",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "shield_burst_pct",
+          "text": "初始吸收量80%",
+          "base": 80,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(shield, 80) → specialScale(shield, c.RollValue(\"shield_burst_pct\", 80))"
+      ]
+    },
+    {
+      "id": "YS-A22",
+      "name": "净秽裁光",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "wave_pct",
+          "text": "220%魔法攻击力",
+          "base": 220,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: legendaryCasterSupportWave wave_pct"
+      ]
+    },
+    {
+      "id": "YS-A23",
+      "name": "仁心裁光",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "heal_burst_pct",
+          "text": "应有治疗量的100%",
+          "base": 100,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: BaseDamage: raw → BaseDamage: specialScale(raw, c.RollValue(\"heal_burst_pct\", 100))"
+      ]
+    },
+    {
+      "id": "YS-A24",
+      "name": "群诊光潮",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "wave_pct",
+          "text": "250%魔法攻击力",
+          "base": 250,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: legendaryCasterSupportWave wave_pct"
+      ]
+    },
+    {
+      "id": "YS-A25",
+      "name": "祝福圣锋",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "buff_bp",
+          "text": "增益强度提高60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: StatusPowerBP += 6000 → StatusPowerBP += c.RollValue(\"buff_bp\", 6000)"
+      ]
+    },
+    {
+      "id": "YS-A26",
+      "name": "防御共鸣",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "buff_bp",
+          "text": "效果提高70%",
+          "base": 7000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: StatusPowerBP += 7000 → StatusPowerBP += c.RollValue(\"buff_bp\", 7000)"
+      ]
+    },
+    {
+      "id": "YS-A27",
+      "name": "疾光贯注",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "伤害提高50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_replacements.go: DamageBP += 5000 → DamageBP += c.RollValue(\"damage_bp\", 5000)"
+      ]
+    },
+    {
+      "id": "YS-A28",
+      "name": "复法盈护",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "wave_pct",
+          "text": "220%魔法攻击力",
+          "base": 220,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: legendaryCasterSupportWave wave_pct"
+      ]
+    },
+    {
+      "id": "YS-A29",
+      "name": "释能广照",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "next_damage_pct",
+          "text": "额外提高50个百分点",
+          "base": 50,
+          "divisor": 1,
+          "unit": "个百分点"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: LegendaryNextDamageBonusPct += 50 → LegendaryNextDamageBonusPct += c.RollValue(\"next_damage_pct\", 50)"
+      ]
+    },
+    {
+      "id": "YS-A30",
+      "name": "瞬发直施",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "instant_bp",
+          "text": "直接伤害或直接治疗提高40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: DamageBP += 4000 → DamageBP += c.RollValue(\"instant_bp\", 4000)",
+        "legendary_caster_synergy.go: HealingBP += 4000 → HealingBP += c.RollValue(\"instant_bp\", 4000)"
+      ]
+    },
+    {
+      "id": "YS-D01",
+      "name": "厚生处方",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "healing_bp",
+          "text": "直接治疗量提高60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: HealingBP += 6000 → HealingBP += c.RollValue(\"healing_bp\", 6000)"
+      ]
+    },
+    {
+      "id": "YS-D02",
+      "name": "净化覆阵",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "radius",
+          "text": "半径250",
+          "base": 250,
+          "divisor": 1,
+          "unit": ""
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: legendaryCasterGroupCleanse radius"
+      ]
+    },
+    {
+      "id": "YS-D03",
+      "name": "群盾覆阵",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "shield_bp",
+          "text": "初始吸收量提高60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: StatusPowerBP += 6000 → StatusPowerBP += c.RollValue(\"shield_bp\", 6000)"
+      ]
+    },
+    {
+      "id": "YS-D04",
+      "name": "坚守医誓",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "status_reduction_pct",
+          "text": "各提高35个百分点",
+          "base": 35,
+          "divisor": 1,
+          "unit": "个百分点"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: PhysicalReductionBonusPct += 35 → PhysicalReductionBonusPct += c.RollValue(\"status_reduction_pct\", 35)",
+        "legendary_caster_directions.go: MagicReductionBonusPct += 35 → MagicReductionBonusPct += c.RollValue(\"status_reduction_pct\", 35)"
+      ]
+    },
+    {
+      "id": "YS-D05",
+      "name": "回春护咏",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "受到伤害降低25%",
+          "base": 25,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_healer_functional_rework.go: specialScale(n, 75) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 25))"
+      ]
+    },
+    {
+      "id": "YS-D06",
+      "name": "群疗定心",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "伤害降低40%",
+          "base": 40,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: specialScale(n, 60) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 40))"
+      ]
+    },
+    {
+      "id": "YS-D07",
+      "name": "清身同济",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "radius",
+          "text": "半径250",
+          "base": 250,
+          "divisor": 1,
+          "unit": ""
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: legendaryCasterGroupCleanse radius"
+      ]
+    },
+    {
+      "id": "YS-D08",
+      "name": "复苏守望",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "伤害降低60%",
+          "base": 60,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: specialScale(n, 40) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 60))"
+      ]
+    },
+    {
+      "id": "YS-D09",
+      "name": "反针坚衣",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "伤害降低35%",
+          "base": 35,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: specialScale(n, 65) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 35))"
+      ]
+    },
+    {
+      "id": "YS-D10",
+      "name": "枷锁息战",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "伤害降低40%",
+          "base": 40,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: specialScale(n, 60) → specialScale(n, 100-c.RollValue(\"reduction_pct\", 40))"
+      ]
+    },
+    {
+      "id": "YS-U01",
+      "name": "回春长流",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗降低20%",
+          "base": 2000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_definitions.go: ManaReductionBP += 2000 → ManaReductionBP += c.RollValue(\"mana_bp\", 2000)"
+      ]
+    },
+    {
+      "id": "YS-U02",
+      "name": "专注圣契",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "buff_bp",
+          "text": "正面增益强度提高50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        },
+        {
+          "key": "buff_bp",
+          "text": "增益强度按原数值提高50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_definitions.go: StatusPowerBP += 5000 → StatusPowerBP += c.RollValue(\"buff_bp\", 5000)"
+      ]
+    },
+    {
+      "id": "YS-U03",
+      "name": "分流处方",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "restore_cap_pct",
+          "text": "最大法力的20%",
+          "base": 20,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_lifecycle.go: specialScale(p.MaxMP, 20) → specialScale(p.MaxMP, c.RollValue(\"restore_cap_pct\", 20))"
+      ]
+    },
+    {
+      "id": "YS-U04",
+      "name": "治愈术群体化",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "refund_pct",
+          "text": "实际消耗法力的35%",
+          "base": 35,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_synergy.go: specialScale(c.PaidMP, 35) → specialScale(c.PaidMP, c.RollValue(\"refund_pct\", 35))"
+      ]
+    },
+    {
+      "id": "YS-U05",
+      "name": "远程巡诊",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "buff_bp",
+          "text": "原加速强度提高30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_admission.go: StatusPowerBP += 3000 → StatusPowerBP += c.RollValue(\"buff_bp\", 3000)"
+      ]
+    },
+    {
+      "id": "YS-U06",
+      "name": "一令三佑",
+      "class": "药师",
+      "ranged": false,
+      "fixed_reason": "附赠已学习防御术与加速术为开关机制，沿用各自原技能数值。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "YS-U07",
+      "name": "净化护行",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "move_pct",
+          "text": "移动速度提高60%",
+          "base": 60,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_healer_functional_rework.go: Value: 60 → Value: c.RollValue(\"move_pct\", 60)"
+      ]
+    },
+    {
+      "id": "YS-U08",
+      "name": "鹰眼远诊",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "range",
+          "text": "施法距离增加400",
+          "base": 400,
+          "divisor": 1,
+          "unit": ""
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_healer_functional_rework.go: d.Dist += 400 → d.Dist += c.RollValue(\"range\", 400)"
+      ]
+    },
+    {
+      "id": "YS-U09",
+      "name": "复苏满生",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "refund_pct",
+          "text": "本次实付法力的50%",
+          "base": 50,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: specialScale(c.PaidMP, 50) → specialScale(c.PaidMP, c.RollValue(\"refund_pct\", 50))"
+      ]
+    },
+    {
+      "id": "YS-U10",
+      "name": "解咒同辉",
+      "class": "药师",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "radius",
+          "text": "半径250",
+          "base": 250,
+          "divisor": 1,
+          "unit": ""
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_caster_directions.go: legendaryCasterGroupCleanse radius"
+      ]
+    },
+    {
+      "id": "ZS-A01",
+      "name": "三叠穿心",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "80%",
+          "base": 8000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A02",
+      "name": "横扫枪花",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "15%",
+          "base": 1500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A03",
+      "name": "收势",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "120%",
+          "base": 12000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior_remaining.go: DamageBP += 12000 -> DamageBP += c.RollValue(\"damage_bp\", 12000)"
+      ]
+    },
+    {
+      "id": "ZS-A04",
+      "name": "阔刃",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "15%",
+          "base": 1500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior.go: DamageBP += 1500 -> DamageBP += c.RollValue(\"damage_bp\", 1500)"
+      ]
+    },
+    {
+      "id": "ZS-A05",
+      "name": "枪尖",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A06",
+      "name": "破阵",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "110%",
+          "base": 110,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior_area.go:18: warriorEcho; authored parameters proc_pct"
+      ]
+    },
+    {
+      "id": "ZS-A07",
+      "name": "开隙",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:18: warriorDamageSkills; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A08",
+      "name": "裂甲传染",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "armor_pct",
+          "text": "强度提高50%",
+          "base": 50,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior_synergy.go:67: warriorArmorStrength; authored parameters armor_pct"
+      ]
+    },
+    {
+      "id": "ZS-A09",
+      "name": "碎障",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "25%",
+          "base": 2500,
+          "divisor": 100,
+          "unit": "%"
+        },
+        {
+          "key": "damage_bp",
+          "text": "120%",
+          "base": 12000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior_synergy.go: legendaryAddTargetDamage(d, 9500) -> legendaryAddTargetDamage(d, c.RollValue(\"damage_bp\", 12000)-c.RollValue(\"damage_bp\", 2500))"
+      ]
+    },
+    {
+      "id": "ZS-A10",
+      "name": "噤声余响",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "drain_damage_pct",
+          "text": "200%",
+          "base": 200,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior_synergy.go: 2*int64(drain) -> int64(drain)*int64(c.RollValue(\"drain_damage_pct\", 200))/100"
+      ]
+    },
+    {
+      "id": "ZS-A11",
+      "name": "追猎",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A12",
+      "name": "钉枪",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "10%",
+          "base": 1000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A13",
+      "name": "镇岳",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "45%",
+          "base": 4500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A14",
+      "name": "余震",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "field_pct",
+          "text": "35%",
+          "base": 35,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior_remaining.go:72: warriorQuakeZone; authored parameters field_pct"
+      ]
+    },
+    {
+      "id": "ZS-A15",
+      "name": "环锋",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A16",
+      "name": "裂阵",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "15%",
+          "base": 1500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A17",
+      "name": "铸魂",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior.go: DamageBP += 3000 -> DamageBP += c.RollValue(\"damage_bp\", 3000)"
+      ]
+    },
+    {
+      "id": "ZS-A18",
+      "name": "尾锋",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "90%",
+          "base": 90,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior_area.go:18: warriorEcho; authored parameters proc_pct"
+      ]
+    },
+    {
+      "id": "ZS-A19",
+      "name": "独虹",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "70%",
+          "base": 7000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A20",
+      "name": "猎首",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "240%",
+          "base": 240,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior_synergy.go: legendaryMeleeScale(c.Attack(false), 240) -> legendaryMeleeScale(c.Attack(false), int64(c.RollValue(\"proc_pct\", 240)))"
+      ]
+    },
+    {
+      "id": "ZS-A21",
+      "name": "校准",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "100%",
+          "base": 10000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior_synergy.go: DamageBP += 10000 -> DamageBP += c.RollValue(\"damage_bp\", 10000)"
+      ]
+    },
+    {
+      "id": "ZS-A22",
+      "name": "远阵",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "20%",
+          "base": 2000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior_area.go: DamageBP += 2000 -> DamageBP += c.RollValue(\"damage_bp\", 2000)"
+      ]
+    },
+    {
+      "id": "ZS-A23",
+      "name": "独战",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "80%",
+          "base": 8000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A24",
+      "name": "百兵归一",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "85%",
+          "base": 8500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A25",
+      "name": "封疆",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "35%",
+          "base": 3500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:18: warriorDamageSkills; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A26",
+      "name": "碎岩",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "240%",
+          "base": 240,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior_remaining.go: DamagePct: 240 -> DamagePct: c.RollValue(\"proc_pct\", 240)"
+      ]
+    },
+    {
+      "id": "ZS-A27",
+      "name": "崩枪",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "80%",
+          "base": 8000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:18: warriorDamageSkills; authored parameters damage_bp"
+      ]
+    },
+    {
+      "id": "ZS-A28",
+      "name": "宣战",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "40%",
+          "base": 4000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior_guard.go: DamageBP += 4000 -> DamageBP += c.RollValue(\"damage_bp\", 4000)"
+      ]
+    },
+    {
+      "id": "ZS-A29",
+      "name": "三式破局",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "proc_pct",
+          "text": "180%",
+          "base": 180,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior.go: legendaryMeleeScale(c.Attack(false), 180) -> legendaryMeleeScale(c.Attack(false), int64(c.RollValue(\"proc_pct\", 180)))"
+      ]
+    },
+    {
+      "id": "ZS-A30",
+      "name": "合锋",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "damage_bp",
+          "text": "65%",
+          "base": 6500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior.go: DamageBP += 6500 -> DamageBP += c.RollValue(\"damage_bp\", 6500)"
+      ]
+    },
+    {
+      "id": "ZS-D01",
+      "name": "回垒",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "shield_pct",
+          "text": "25%",
+          "base": 25,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior_guard.go:32: warriorShield; authored parameters shield_pct"
+      ]
+    },
+    {
+      "id": "ZS-D02",
+      "name": "拒近",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "16%",
+          "base": 16,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:28: warriorIncoming; authored parameters reduction_pct"
+      ]
+    },
+    {
+      "id": "ZS-D03",
+      "name": "卸力",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "50%",
+          "base": 50,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior_guard.go: legendaryMeleeScale(n, 50) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 50)))"
+      ]
+    },
+    {
+      "id": "ZS-D04",
+      "name": "隔绝",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "60%",
+          "base": 60,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior_synergy.go: legendaryMeleeScale(n, 40) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 60)))"
+      ]
+    },
+    {
+      "id": "ZS-D05",
+      "name": "缓冲",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "40%",
+          "base": 40,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:28: warriorIncoming; authored parameters reduction_pct"
+      ]
+    },
+    {
+      "id": "ZS-D06",
+      "name": "拒袭",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "35%",
+          "base": 35,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior.go: legendaryMeleeScale(n, 65) -> legendaryMeleeScale(n, 100-int64(c.RollValue(\"reduction_pct\", 35)))"
+      ]
+    },
+    {
+      "id": "ZS-D07",
+      "name": "守步",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "45%",
+          "base": 45,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:28: warriorIncoming; authored parameters reduction_pct"
+      ]
+    },
+    {
+      "id": "ZS-D08",
+      "name": "人墙",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "30%",
+          "base": 30,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:28: warriorIncoming; authored parameters reduction_pct"
+      ]
+    },
+    {
+      "id": "ZS-D09",
+      "name": "留守",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "shield_pct",
+          "text": "25%",
+          "base": 25,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior_guard.go:32: warriorShield; authored parameters shield_pct"
+      ]
+    },
+    {
+      "id": "ZS-D10",
+      "name": "整阵",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "reduction_pct",
+          "text": "25%",
+          "base": 25,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:28: warriorIncoming; authored parameters reduction_pct"
+      ]
+    },
+    {
+      "id": "ZS-U01",
+      "name": "回气",
+      "class": "战士",
+      "ranged": false,
+      "fixed_reason": "法力消耗归零的机制开关，无独立可变数值。",
+      "parameters": [],
+      "runtime_callsites": []
+    },
+    {
+      "id": "ZS-U02",
+      "name": "节流",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗降低60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters mana_bp"
+      ]
+    },
+    {
+      "id": "ZS-U03",
+      "name": "探路",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "move_pct",
+          "text": "移动速度提高80%",
+          "base": 80,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior_functional.go:48: warriorFunctionalMove; authored parameters move_pct"
+      ]
+    },
+    {
+      "id": "ZS-U04",
+      "name": "行军",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "move_pct",
+          "text": "移动速度提高60%",
+          "base": 60,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior_functional.go:48: warriorFunctionalMove; authored parameters move_pct"
+      ]
+    },
+    {
+      "id": "ZS-U05",
+      "name": "止步",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗降低45%",
+          "base": 4500,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "server/internal/game/scene/legendary_warrior.go:7: warriorSkill; authored parameters mana_bp"
+      ]
+    },
+    {
+      "id": "ZS-U06",
+      "name": "换息",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗降低60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior.go: ManaReductionBP += 6000 -> ManaReductionBP += c.RollValue(\"mana_bp\", 6000)"
+      ]
+    },
+    {
+      "id": "ZS-U07",
+      "name": "收枪",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "restore_pct",
+          "text": "最大法力的5%",
+          "base": 5,
+          "divisor": 1,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior.go: legendaryMeleeScale(c.Owner.MaxMP, 5) -> legendaryMeleeScale(c.Owner.MaxMP, int64(c.RollValue(\"restore_pct\", 5)))"
+      ]
+    },
+    {
+      "id": "ZS-U08",
+      "name": "号令",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗都降低30%",
+          "base": 3000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior_guard.go: ManaReductionBP += 3000 -> ManaReductionBP += c.RollValue(\"mana_bp\", 3000)"
+      ]
+    },
+    {
+      "id": "ZS-U09",
+      "name": "续行",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "cooldown_bp",
+          "text": "50%",
+          "base": 5000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior.go: d.PrepareMS /= 2 -> d.PrepareMS = domain.SaturateInt32(int64(d.PrepareMS) * (10000-int64(c.RollValue(\"cooldown_bp\", 5000))) / 10000)",
+        "legendary_warrior.go: CooldownReductionBP += 5000 -> CooldownReductionBP += c.RollValue(\"cooldown_bp\", 5000)"
+      ]
+    },
+    {
+      "id": "ZS-U10",
+      "name": "军令",
+      "class": "战士",
+      "ranged": true,
+      "fixed_reason": "",
+      "parameters": [
+        {
+          "key": "mana_bp",
+          "text": "法力消耗降低60%",
+          "base": 6000,
+          "divisor": 100,
+          "unit": "%"
+        }
+      ],
+      "runtime_callsites": [
+        "legendary_warrior_guard.go: ManaReductionBP += 6000 -> ManaReductionBP += c.RollValue(\"mana_bp\", 6000)"
+      ]
+    }
+  ]
+}

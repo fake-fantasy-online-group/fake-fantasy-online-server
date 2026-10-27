@@ -160,7 +160,7 @@ func TestLegendaryWarriorAuditBorrowedReachWithoutLearningGate(t *testing.T) {
 						if set && (d.MPCost != 0 || p.MP != mp || p.HP >= 10000) {
 							t.Fatal("dragon set cost/lifesteal path lost")
 						}
-						if !set && (d.MPCost <= 0 || p.MP != mp-d.MPCost) {
+						if !set && ((pieces < 3 && d.MPCost <= 0) || (pieces >= 3 && d.MPCost != 0) || p.MP != mp-d.MPCost) {
 							t.Fatal("native mana changed")
 						}
 						if rank == 0 {

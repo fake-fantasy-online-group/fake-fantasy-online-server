@@ -38,8 +38,28 @@ type EquipmentSkillVariantRule struct {
 }
 
 func (r EquipmentSkillVariantRule) Variant() EquipmentSkillVariant {
-	return EquipmentSkillVariant{ID: r.ID, Name: r.Name, Description: r.Description,
+	v := EquipmentSkillVariant{ID: r.ID, Name: r.Name, Description: r.Description,
 		SkillID: r.SkillID, Profession: r.Profession, MaxTargets: r.MaxTargets, Behavior: r.Behavior, Params: r.Params}
+	// Legacy catalog rows retain their schema. Area targeting is governed only
+	// by its geometry; expose zero (unlimited) instead of the retired headcount.
+	switch r.Behavior {
+	case VariantAreaFan:
+		v.MaxTargets = 0
+		v.Description = fmt.Sprintf("技能改为%d度、半径%d的近身扇面；首目标%d%%伤害，其余%d%%伤害。", r.Params.Area.Angle, r.Params.Area.Radius, r.Params.DamagePercent, r.Params.SecondaryDamagePercent)
+		if r.Params.SecondaryNoStatuses {
+			v.Description += "其他目标不附加状态。"
+		}
+		if r.Params.SecondaryNoKnockback {
+			v.Description += "其他目标不震退。"
+		}
+	case VariantAreaLine:
+		v.MaxTargets = 0
+		v.Description = fmt.Sprintf("技能改为向前%d距离、%d宽的贯穿枪线，每敌%d%%伤害。", r.Params.Area.Length, r.Params.Area.Width, r.Params.DamagePercent)
+	case VariantDetonateOwnedTrap:
+		v.Params.TrapMaxTargets = 0
+		v.Description = fmt.Sprintf("有效命中后，引爆落点%d距离内自己最近一枚爆弹；爆炸半径至少%d，范围内符合条件的敌人均受影响，不连锁引爆。", r.Params.TrapSearchRadius, r.Params.TrapMinRadius)
+	}
+	return v
 }
 func (r EquipmentSkillVariantRule) Validate() error {
 	if r.ID == "" || r.Name == "" || r.Description == "" || r.SkillID <= 0 || r.Profession < 1 || r.Profession > 5 || r.MaxTargets < 1 || r.MaxTargets > 16 {

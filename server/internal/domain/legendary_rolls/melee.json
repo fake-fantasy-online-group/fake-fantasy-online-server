@@ -1,0 +1,1770 @@
+[
+  {
+    "id": "ZS-A01",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "80%",
+        "base": 8000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A02",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "15%",
+        "base": 1500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A03",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "120%",
+        "base": 12000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A04",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "15%",
+        "base": 1500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A05",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A06",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "110%",
+        "base": 110,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A07",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A08",
+    "parameters": [
+      {
+        "key": "armor_pct",
+        "text": "强度提高50%",
+        "base": 50,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A09",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "25%",
+        "base": 2500,
+        "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "damage_bp",
+        "text": "120%",
+        "base": 12000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A10",
+    "parameters": [
+      {
+        "key": "drain_damage_pct",
+        "text": "200%",
+        "base": 200,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A11",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A12",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "10%",
+        "base": 1000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A13",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "45%",
+        "base": 4500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A14",
+    "parameters": [
+      {
+        "key": "field_pct",
+        "text": "35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A15",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A16",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "15%",
+        "base": 1500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A17",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A18",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "90%",
+        "base": 90,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A19",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "70%",
+        "base": 7000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A20",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "240%",
+        "base": 240,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A21",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "100%",
+        "base": 10000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A22",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "20%",
+        "base": 2000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A23",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "80%",
+        "base": 8000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A24",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "85%",
+        "base": 8500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A25",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "35%",
+        "base": 3500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A26",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "240%",
+        "base": 240,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A27",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "80%",
+        "base": 8000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A28",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A29",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "180%",
+        "base": 180,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-A30",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "65%",
+        "base": 6500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-D01",
+    "parameters": [
+      {
+        "key": "shield_pct",
+        "text": "25%",
+        "base": 25,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-D02",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "16%",
+        "base": 16,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-D03",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "50%",
+        "base": 50,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-D04",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "60%",
+        "base": 60,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-D05",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "40%",
+        "base": 40,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-D06",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-D07",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "45%",
+        "base": 45,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-D08",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "30%",
+        "base": 30,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-D09",
+    "parameters": [
+      {
+        "key": "shield_pct",
+        "text": "25%",
+        "base": 25,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-D10",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "25%",
+        "base": 25,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-U01",
+    "parameters": [],
+    "fixed_reason": "法力消耗归零的机制开关，无独立可变数值。"
+  },
+  {
+    "id": "ZS-U02",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗降低60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-U03",
+    "parameters": [
+      {
+        "key": "move_pct",
+        "text": "移动速度提高80%",
+        "base": 80,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-U04",
+    "parameters": [
+      {
+        "key": "move_pct",
+        "text": "移动速度提高60%",
+        "base": 60,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-U05",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗降低45%",
+        "base": 4500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-U06",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗降低60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-U07",
+    "parameters": [
+      {
+        "key": "restore_pct",
+        "text": "最大法力的5%",
+        "base": 5,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-U08",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗都降低30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-U09",
+    "parameters": [
+      {
+        "key": "cooldown_bp",
+        "text": "50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "ZS-U10",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗降低60%",
+        "base": 6000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A01",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高100%",
+        "base": 100,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A02",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高15%",
+        "base": 15,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A03",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "攻击力160%",
+        "base": 160,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A04",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "基础伤害75%",
+        "base": 75,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A05",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高40%",
+        "base": 40,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A06",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "攻击力200%",
+        "base": 200,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A07",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "基础伤害45%",
+        "base": 45,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A08",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高90%",
+        "base": 90,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A09",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高15%",
+        "base": 15,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A10",
+    "parameters": [
+      {
+        "key": "antiheal_pct",
+        "text": "降低65%",
+        "base": 65,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A11",
+    "parameters": [
+      {
+        "key": "restore_pct",
+        "text": "50%",
+        "base": 50,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ],
+    "omit_when_rolled": [
+      "，合计最高恢复原量的3倍"
+    ]
+  },
+  {
+    "id": "JK-A12",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "法力量280%",
+        "base": 280,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A13",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高70%",
+        "base": 70,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A14",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高50%",
+        "base": 50,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A15",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高60%",
+        "base": 60,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A16",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高30%",
+        "base": 30,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A17",
+    "parameters": [
+      {
+        "key": "radius",
+        "text": "至少提高至150",
+        "base": 150,
+        "divisor": 1,
+        "unit": ""
+      }
+    ]
+  },
+  {
+    "id": "JK-A18",
+    "parameters": [
+      {
+        "key": "armor_pct",
+        "text": "物理防御降低30%",
+        "base": 30,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A19",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高25%",
+        "base": 25,
+        "divisor": 1,
+        "unit": "%"
+      },
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高100%",
+        "base": 100,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A20",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "攻击力160%",
+        "base": 160,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A21",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "攻击力320%",
+        "base": 320,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A22",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "基础伤害70%",
+        "base": 70,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A23",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "基础伤害110%",
+        "base": 110,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A24",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高80%",
+        "base": 80,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A25",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "攻击力160%",
+        "base": 160,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A26",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高100%",
+        "base": 100,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A27",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "攻击力320%",
+        "base": 320,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A28",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "攻击力260%",
+        "base": 260,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A29",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "攻击力180%",
+        "base": 180,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-A30",
+    "parameters": [
+      {
+        "key": "damage_pct",
+        "text": "直接伤害提高110%",
+        "base": 110,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-D01",
+    "parameters": [
+      {
+        "key": "shield_pct",
+        "text": "最大生命12%",
+        "base": 12,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-D02",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "降低55%",
+        "base": 55,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-D03",
+    "parameters": [
+      {
+        "key": "shield_pct",
+        "text": "最大生命的16%",
+        "base": 16,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-D04",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "降低50%",
+        "base": 50,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-D05",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "降低40%",
+        "base": 40,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-D06",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "降低35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-D07",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "降低50%",
+        "base": 50,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-D08",
+    "parameters": [
+      {
+        "key": "shield_pct",
+        "text": "最大生命14%",
+        "base": 14,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-D09",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "降低45%",
+        "base": 45,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-D10",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "降低35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-U01",
+    "parameters": [
+      {
+        "key": "move_pct",
+        "text": "移动速度提高80%",
+        "base": 80,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-U02",
+    "parameters": [],
+    "fixed_reason": "解除自身中毒与减速的机制开关，无独立可变数值。"
+  },
+  {
+    "id": "JK-U03",
+    "parameters": [
+      {
+        "key": "refund_pct",
+        "text": "法力的60%",
+        "base": 60,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-U04",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗降低50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-U05",
+    "parameters": [
+      {
+        "key": "duration_ms",
+        "text": "8秒",
+        "base": 8000,
+        "divisor": 1000,
+        "unit": "秒"
+      }
+    ]
+  },
+  {
+    "id": "JK-U06",
+    "parameters": [
+      {
+        "key": "range_pct",
+        "text": "施法距离提高80%",
+        "base": 80,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-U07",
+    "parameters": [
+      {
+        "key": "restore_pct",
+        "text": "最大法力的12%",
+        "base": 12,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-U08",
+    "parameters": [],
+    "fixed_reason": "装备期间移动减速与定身免疫的机制开关，无独立可变数值。"
+  },
+  {
+    "id": "JK-U09",
+    "parameters": [
+      {
+        "key": "refund_pct",
+        "text": "法力的80%",
+        "base": 80,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "JK-U10",
+    "parameters": [
+      {
+        "key": "range_pct",
+        "text": "施法距离提高45%",
+        "base": 45,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A01",
+    "parameters": [
+      {
+        "key": "cooldown_bp",
+        "text": "冷却时间缩短30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A02",
+    "parameters": [],
+    "fixed_reason": "必中、必暴击机制开关，保留角色自身暴击倍率。"
+  },
+  {
+    "id": "CK-A03",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高80%",
+        "base": 8000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A04",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A05",
+    "parameters": [
+      {
+        "key": "radius",
+        "text": "搜索半径至少100",
+        "base": 100,
+        "divisor": 1,
+        "unit": ""
+      }
+    ]
+  },
+  {
+    "id": "CK-A06",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A07",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A08",
+    "parameters": [
+      {
+        "key": "radius",
+        "text": "半径200",
+        "base": 200,
+        "divisor": 1,
+        "unit": ""
+      }
+    ]
+  },
+  {
+    "id": "CK-A09",
+    "parameters": [
+      {
+        "key": "tick_bp",
+        "text": "中毒伤害提高100%",
+        "base": 10000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A10",
+    "parameters": [],
+    "fixed_reason": "已学习淬毒术常驻与投掷传毒机制，数值沿用技能等级。"
+  },
+  {
+    "id": "CK-A11",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A12",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高90%",
+        "base": 9000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A13",
+    "parameters": [],
+    "fixed_reason": "三枚爆弹固定阵型机制；数量与位置不随机，沿用原技能伤害。"
+  },
+  {
+    "id": "CK-A14",
+    "parameters": [
+      {
+        "key": "radius_bp",
+        "text": "作用半径提高30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A15",
+    "parameters": [
+      {
+        "key": "tick_bp",
+        "text": "中毒伤害提高100%",
+        "base": 10000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A16",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A17",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A18",
+    "parameters": [],
+    "fixed_reason": "已学习淬毒术与冻结联动的机制开关，数值沿用技能等级。"
+  },
+  {
+    "id": "CK-A19",
+    "parameters": [],
+    "fixed_reason": "固定120度扇形拓扑，射程沿用原技能与武器，不虚构额外数值。"
+  },
+  {
+    "id": "CK-A20",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高25%",
+        "base": 2500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A21",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高75%",
+        "base": 7500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A22",
+    "parameters": [
+      {
+        "key": "restore_pct",
+        "text": "损失生命的15%",
+        "base": 15,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A23",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高35%",
+        "base": 3500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A24",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A25",
+    "parameters": [
+      {
+        "key": "radius",
+        "text": "半径100",
+        "base": 100,
+        "divisor": 1,
+        "unit": ""
+      }
+    ]
+  },
+  {
+    "id": "CK-A26",
+    "parameters": [
+      {
+        "key": "proc_pct",
+        "text": "物理攻击力240%",
+        "base": 240,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A27",
+    "parameters": [
+      {
+        "key": "geometry_bp",
+        "text": "均提高50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A28",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高45%",
+        "base": 4500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A29",
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高80%",
+        "base": 8000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-A30",
+    "parameters": [
+      {
+        "key": "radius_bp",
+        "text": "作用半径扩大50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-D01",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "伤害降低35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-D02",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "伤害降低20%",
+        "base": 20,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-D03",
+    "parameters": [
+      {
+        "key": "restore_pct",
+        "text": "损失生命的15%",
+        "base": 15,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-D04",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "伤害降低20%",
+        "base": 20,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-D05",
+    "parameters": [
+      {
+        "key": "control_bp",
+        "text": "持续时间缩短30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-D06",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "伤害降低20%",
+        "base": 20,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-D07",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "伤害降低35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-D08",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "中毒伤害降低30%",
+        "base": 30,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-D09",
+    "parameters": [
+      {
+        "key": "life_pct",
+        "text": "生命上限提高20%",
+        "base": 20,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-D10",
+    "parameters": [
+      {
+        "key": "reduction_pct",
+        "text": "伤害降低20%",
+        "base": 20,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-U01",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗降低45%",
+        "base": 4500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-U02",
+    "parameters": [
+      {
+        "key": "range_pct",
+        "text": "施放距离提高50%",
+        "base": 50,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-U03",
+    "parameters": [
+      {
+        "key": "disarm_bp",
+        "text": "成功率提高25个百分点",
+        "base": 2500,
+        "divisor": 100,
+        "unit": "个百分点"
+      }
+    ]
+  },
+  {
+    "id": "CK-U04",
+    "parameters": [
+      {
+        "key": "move_pct",
+        "text": "移动速度提高60%",
+        "base": 60,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-U05",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗降低45%",
+        "base": 4500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-U06",
+    "parameters": [
+      {
+        "key": "cooldown_pct",
+        "text": "缩短35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      },
+      {
+        "key": "cooldown_pct",
+        "text": "缩短80%",
+        "base": 80,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-U07",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗降低55%",
+        "base": 5500,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-U08",
+    "parameters": [
+      {
+        "key": "duration_ms",
+        "text": "持续时间延长5秒",
+        "base": 5000,
+        "divisor": 1000,
+        "unit": "秒"
+      }
+    ]
+  },
+  {
+    "id": "CK-U09",
+    "parameters": [
+      {
+        "key": "mana_bp",
+        "text": "法力消耗降低30%",
+        "base": 3000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
+  },
+  {
+    "id": "CK-U10",
+    "parameters": [
+      {
+        "key": "move_pct",
+        "text": "40%移动速度",
+        "base": 40,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
+  }
+]

@@ -30,7 +30,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "连环枪法伤害提高15%，同时攻击自身周围1.3倍普通攻击距离内的敌人，最多5名。原选中目标只要在技能施法距离内，就会优先受到攻击并保留原有附加效果；其他目标不额外承受这些控制效果。",
+    "effect": "连环枪法伤害提高15%，同时攻击自身周围1.3倍普通攻击距离内的敌人。原选中目标只要在技能施法距离内，就会优先受到攻击并保留原有附加效果；其他目标不额外承受这些控制效果。",
     "design_note": "把入门单体技改造成近身清群分支。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "连环枪法：一级学习等级10，已核实",
@@ -230,7 +230,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "飞翔之枪伤害提高10%。命中原目标后，同时攻击其周围1.5倍普通攻击距离内的敌人，连同原目标最多6名；每名目标只受到一次本次技能伤害。",
+    "effect": "飞翔之枪伤害提高10%。命中原目标后，同时攻击其周围1.5倍普通攻击距离内的敌人；每名目标只受到一次本次技能伤害。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -798,7 +798,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "连环枪法的法力消耗降低40%。",
+    "effect": "连环枪法不消耗法力，生命消耗不变。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -834,7 +834,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "飞翔之枪的施法距离增加50%，自身移动速度提高30%。",
+    "effect": "飞翔之枪的施法距离增加50%；施放已学习的飞翔之枪后，8秒内移动速度提高80%。重复施放只刷新时长，不叠加。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -852,7 +852,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "战吼的半径增加70%、法力消耗降低30%，自身移动速度提高30%。战吼半径与「宣战」「号令」「军令」只取最高加成。",
+    "effect": "战吼的半径增加70%、法力消耗降低30%；施放已学习的战吼后，12秒内移动速度提高60%。重复施放只刷新时长，不叠加。战吼半径与「宣战」「号令」「军令」只取最高加成。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1000,7 +1000,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "选中有效目标施放真空剑时，还会攻击你周围150距离内最近的最多8名敌人；所有目标的直接伤害提高15%，重叠目标只受击一次。远程主目标不在这8名中时，本次最多攻击9名敌人。",
+    "effect": "选中有效目标施放真空剑时，还会攻击你周围150距离内的所有敌人；所有目标的直接伤害提高15%，重叠目标只受击一次。",
     "design_note": "移除85%伤害折损并保留远程功能，伤害提高至115%，范围100扩大至150、目标5增至8。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "真空剑（10117，10级）",
@@ -1040,7 +1040,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "真空剑命中敌人后，若最远的命中敌人距你至少75，在其命中位置立即释放一道剑痕，对周围半径100内最近的最多5名敌人造成原技能单次基础伤害75%的物理伤害。每次施放只产生1道剑痕，不留下持续伤害区域。",
+    "effect": "真空剑命中敌人后，若最远的命中敌人距你至少75，在其命中位置立即释放一道剑痕，对周围半径100内敌人造成原技能单次基础伤害75%的物理伤害。每次施放只产生1道剑痕，不留下持续伤害区域。",
     "design_note": "仅删除触发条件满足之后的固定短等待；原条件、数值、目标、范围、冷却与连招窗口不变。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "真空剑（10117，10级）",
@@ -1060,7 +1060,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "金缚剑冷却改为24秒，直接伤害提高40%；除主目标外，还会攻击其周围150距离内最近的最多5名敌人，并分别尝试附加原有定身。定身时长与控制免疫规则不变。",
+    "effect": "金缚剑冷却改为24秒，直接伤害提高40%；除主目标外，还会攻击其周围150距离内敌人，并分别尝试附加原有定身。定身时长与控制免疫规则不变。",
     "design_note": "剑印4秒延至10秒，普攻也可引爆，附伤翻倍并缩短触发间隔。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1120,7 +1120,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "幻影剑主目标周围75距离内没有其他敌人时，对主目标的直接伤害提高90%；否则，命中主目标后，对该范围内最近的最多2名其他敌人各追加攻击力130%的物理伤害。",
+    "effect": "幻影剑主目标周围75距离内没有其他敌人时，对主目标的直接伤害提高90%；否则，命中主目标后，对该范围内其他敌人各追加攻击力130%的物理伤害。",
     "design_note": "孤立检测半径120缩至75，单体增伤翻倍，拥挤分支副伤与目标数均加强。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "幻影剑（10103，20级）",
@@ -1140,7 +1140,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "饮血剑和噬魂剑除主目标外，还会攻击其周围100距离内最近的最多4名敌人；所有目标的直接伤害提高15%。技能自带的回血或回蓝每次施放只结算一次，不会因多目标重复恢复。",
+    "effect": "饮血剑和噬魂剑除主目标外，还会攻击其周围100距离内敌人；所有目标的直接伤害提高15%。技能自带的回血或回蓝每次施放只结算一次，不会因多目标重复恢复。",
     "design_note": "不再要求溢出才有收益，溢出转化与储量上限翻倍，技能也可释放储刃。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1180,7 +1180,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "饮血剑和噬魂剑的自带恢复量提高50%；本次每多命中一名不同敌人，再增加原恢复量的50%，最多计3名，合计最高恢复原量的3倍。饮血剑恢复生命，噬魂剑恢复法力，每次施放只恢复一次。",
+    "effect": "饮血剑和噬魂剑的自带恢复量提高50%；本次每多命中一名不同敌人，再增加原恢复量的50%，合计最高恢复原量的3倍。饮血剑恢复生命，噬魂剑恢复法力，每次施放只恢复一次。",
     "design_note": "取消回蓝减半代价，高蓝门槛80%降50%，增伤40%升65%，低蓝获得回蓝强化。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1220,7 +1220,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "封法剑冷却改为24秒，直接伤害提高70%；除主目标外，还会攻击其周围100距离内最近的最多3名敌人，并分别尝试附加原有沉默。沉默时长与控制免疫规则不变。",
+    "effect": "封法剑冷却改为24秒，直接伤害提高70%；除主目标外，还会攻击其周围100距离内敌人，并分别尝试附加原有沉默。沉默时长与控制免疫规则不变。",
     "design_note": "伤害160%提高至300%，延长观察窗，并为不施法目标加入到期结算。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1280,7 +1280,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "旋风剑结算伤害前，将你周围半径150内最近的最多8名可拉拽敌人拉向距你50的位置，遇障碍会提前停止；随后按旋风剑当前范围结算伤害，直接伤害提高30%。免疫拉拽的目标不会移动，若仍在伤害范围内也正常受伤。",
+    "effect": "旋风剑结算伤害前，将你周围半径150内可拉拽敌人拉向距你50的位置，遇障碍会提前停止；随后按旋风剑当前范围结算伤害，直接伤害提高30%。免疫拉拽的目标不会移动，若仍在伤害范围内也正常受伤。",
     "design_note": "每秒伤害翻倍，持续3秒升4秒，范围与目标数加强。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1340,7 +1340,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "混沌剑和罡气剑的直接伤害提高25%，真空剑的直接伤害提高100%。罡气剑还会攻击主目标周围150距离内最近的最多4名其他敌人，造成相同直接伤害，并沿用该技能原有击退规则。",
+    "effect": "混沌剑和罡气剑的直接伤害提高25%，真空剑的直接伤害提高100%。罡气剑还会攻击主目标周围150距离内其他敌人，造成相同直接伤害，并沿用该技能原有击退规则。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1360,7 +1360,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "狮心剑命中主目标后，对其周围150距离内最近的最多5名其他敌人各追加攻击力160%的物理伤害，每次施放一次。追加伤害不触发命中威能或恢复效果。",
+    "effect": "狮心剑命中主目标后，对其周围150距离内其他敌人各追加攻击力160%的物理伤害，每次施放一次。追加伤害不触发命中威能或恢复效果。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1400,7 +1400,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "陨星剑的直接伤害提高20%，保留主目标原有即死判定。命中主目标后，对其周围120距离内最近的最多5名其他敌人追加原技能基础伤害100%的物理伤害，再对同一区域最近的最多6名敌人追加基础伤害70%的物理伤害。两段追加不进行即死判定，也不触发命中威能或恢复效果。",
+    "effect": "陨星剑的直接伤害提高20%，保留主目标原有即死判定。命中主目标后，对其周围120距离内其他敌人追加原技能基础伤害100%的物理伤害，再对同一区域敌人追加基础伤害70%的物理伤害。两段追加不进行即死判定，也不触发命中威能或恢复效果。",
     "design_note": "仅删除触发条件满足之后的固定短等待；原条件、数值、目标、范围、冷却与连招窗口不变。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "陨星剑（10123，51级）",
@@ -1420,7 +1420,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "陨星剑击杀主目标，或命中前主目标生命不高于50%时，在其位置触发剑爆，对周围150距离内最近的最多5名其他敌人造成原技能基础伤害110%的物理伤害。每次施放一次；剑爆不进行即死判定，也不触发命中威能或恢复效果。",
+    "effect": "陨星剑击杀主目标，或命中前主目标生命不高于50%时，在其位置触发剑爆，对周围150距离内其他敌人造成原技能基础伤害110%的物理伤害。每次施放一次；剑爆不进行即死判定，也不触发命中威能或恢复效果。",
     "design_note": "击杀门槛放宽为半血也可触发，剑爆60%升110%，范围与目标数提高。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "陨星剑（10123，51级）",
@@ -1440,7 +1440,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "强击冷却改为18秒，直接伤害提高80%，主目标原有眩晕不变。若命中前主目标已被定身，还会攻击其周围150距离内最近的最多5名已被定身的敌人，新增目标不附加眩晕。定身可由任意角色施加；仅免疫眩晕不会取消伤害加成。",
+    "effect": "强击冷却改为18秒，直接伤害提高80%，主目标原有眩晕不变。若命中前主目标已被定身，还会攻击其周围150距离内已被定身的敌人，新增目标不附加眩晕。定身可由任意角色施加；仅免疫眩晕不会取消伤害加成。",
     "design_note": "失手重试由3秒缩至1秒，增伤翻倍至100%，加返还法力并延长窗口。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1500,7 +1500,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "罡气剑、幻影剑或旋风剑每次施放命中至少一名敌人后，以本次命中敌人中结算时距你最近者的位置为中心，对150距离内最近的最多8名敌人各追加攻击力320%的物理伤害。每次施放一次，追加伤害不触发命中威能或恢复效果。",
+    "effect": "罡气剑、幻影剑或旋风剑每次施放命中至少一名敌人后，以本次命中敌人中结算时距你最近者的位置为中心，对150距离内敌人各追加攻击力320%的物理伤害。每次施放一次，追加伤害不触发命中威能或恢复效果。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1674,7 +1674,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "正被你定身或眩晕的敌人，对你造成的直接伤害降低35%；冻结、石化也可触发，不影响持续伤害。",
+    "effect": "施放已学习的金缚剑后，8秒内受到的直接伤害降低35%；无需命中或成功定身，不影响持续伤害。重复施放只刷新时长，不叠加。",
     "design_note": "减伤20%升35%，持续4秒延至10秒覆盖控制结束后的战斗。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1693,7 +1693,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "正被你沉默的敌人，对你造成的直接伤害降低35%；不影响持续伤害。",
+    "effect": "施放已学习的封法剑后，8秒内受到的魔法直接伤害降低50%；无需命中或成功沉默，不影响物理直接伤害和持续伤害。重复施放只刷新时长，不叠加。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1712,7 +1712,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "狮心剑命中主目标后，你与180距离内生命比例最低的最多2名队友，各获得相当于你最大生命14%的护盾，持续到被消耗。同一来源重复提供时，只取剩余值与新值中较高者；卸下来源装备后移除。队友护盾还会在你或该队友离开场景时移除。",
+    "effect": "狮心剑命中主目标后，你与180距离内所有队友，各获得相当于你最大生命14%的护盾，持续到被消耗。同一来源重复提供时，只取剩余值与新值中较高者；卸下来源装备后移除。队友护盾还会在你或该队友离开场景时移除。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1768,7 +1768,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "装备期间，移动速度提高35%。",
+    "effect": "施放已学习的真空剑后，8秒内移动速度提高80%。重复施放只刷新时长，不叠加。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1822,7 +1822,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "挑衅的作用半径提高35%，保留原有嘲讽效果。",
+    "effect": "挑衅的作用半径提高80%，法力消耗降低50%，保留原有嘲讽效果。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1840,7 +1840,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "幻影剑实际施放时，移除自身所有减速；不解除定身、眩晕、冻结或石化，也不移除同时附带这些控制的减速状态。不提供后续减速免疫。",
+    "effect": "施放已学习的幻影剑时，清除自身不附带控制的移动减速，并在8秒内免疫移动减速；不解除或免疫定身、眩晕、冻结、石化或攻击速度降低，混合状态的其他效果仍保留。重复施放只刷新时长，不叠加。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1858,7 +1858,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "金缚剑本次命中主目标，却未能成功给它施加定身时，返还本次实际消耗法力的60%。同次施放所有法力返还合计不超过实际消耗；未命中不返还，也不额外施加减速。",
+    "effect": "金缚剑的施法距离提高80%，不消耗法力，保留原有定身效果。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2030,7 +2030,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "连续投掷额外攻击选中目标附近最多3个敌人，合计最多4个，每个目标承受完整技能伤害。额外目标的搜索半径至少100；技能已有更大半径时沿用更大范围。",
+    "effect": "连续投掷额外攻击选中目标附近所有敌人，每个目标承受完整技能伤害。额外目标的搜索半径至少100；技能已有更大半径时沿用更大范围。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2090,7 +2090,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "受你淬毒术中毒影响的敌人死亡时，将剩余中毒效果传给其周围半径200内最多5个敌人。传播的中毒不会再次传播，也不会叠加成多份同来源中毒。",
+    "effect": "受你淬毒术中毒影响的敌人死亡时，将剩余中毒效果传给其周围半径200内敌人。传播的中毒不会再次传播，也不会叠加成多份同来源中毒。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2130,7 +2130,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "淬毒术生效期间，连续投掷和多重投掷命中时也会施加淬毒术的中毒效果，每次施法对每个敌人最多施加一次。普通攻击的淬毒几率不变。",
+    "effect": "已学会淬毒术时，装备期间淬毒术按当前技能等级常驻，不随攻击消耗。淬毒术生效期间，连续投掷和多重投掷命中时也会施加淬毒术的中毒效果，每次施法对每个敌人最多施加一次。普通攻击的淬毒几率不变。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2310,7 +2310,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "背刺同时攻击选中目标和前方120度扇形内最多4个其他敌人，合计最多5个，每个目标承受完整背刺伤害。扇形半径取背刺施放距离和武器攻击距离中较大的一项。",
+    "effect": "背刺同时攻击选中目标和前方120度扇形内所有其他敌人，每个目标承受完整背刺伤害。扇形半径取背刺施放距离和武器攻击距离中较大的一项。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2549,7 +2549,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "隐身术生效期间，受到的伤害降低20%；离开隐身后失效。",
+    "effect": "隐身术生效期间，受到的伤害降低35%。装备此威能后施加的隐身结束时，减伤继续保持8秒；重复触发刷新时间，不叠加。必须已学习隐身术。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2663,7 +2663,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "击晕的冷却时间缩短30%；被你的击晕眩晕的敌人，对你造成的伤害降低20%，直到这次眩晕结束。目标免疫眩晕时，不获得此减伤。",
+    "effect": "击晕的冷却时间缩短30%；主动施放已学习的击晕后8秒内，受到的伤害降低35%，无须目标被眩晕。重复施放刷新时间。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2738,7 +2738,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "隐身术的法力消耗降低30%；主动施放后，立即恢复最大法力的5%，但不超过本次实际消耗的法力。",
+    "effect": "隐身术的法力消耗降低30%；主动施放已学习的隐身术后10秒内，所有技能法力消耗降低45%。触发本次不追溯减耗，重复施放刷新时间。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2792,7 +2792,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "侦测陷阱的侦测半径提高50%；移动速度提高20%，不需要先发现陷阱。",
+    "effect": "侦测陷阱的侦测半径提高50%；主动施放已学习的侦测陷阱后10秒内，移动速度提高60%。重复施放刷新时间。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2846,7 +2846,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "陷阱：爆弹、毒雾、封印、冻气和新星的法力消耗降低30%。",
+    "effect": "主动施放已学习的陷阱：爆弹、毒雾、封印、冻气或新星后10秒内，这五种陷阱的法力消耗降低55%。触发本次不追溯减耗，重复施放刷新时间。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2864,7 +2864,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "隐身术持续时间延长5秒；在这次主动施放的隐身中，前2次布置陷阱不会打破隐身，一次放置3枚爆弹仍只消耗1次机会。其他攻击或伤害仍按原规则打破隐身。",
+    "effect": "隐身术持续时间延长5秒；已学习隐身术时，在其生效期间布置陷阱不会打破隐身，不限次数。其他攻击或受到伤害仍按原规则打破隐身。",
     "design_note": "一次免破隐布置升至两次，取消立即伤害破隐的例外，额外延长5秒隐身。 保留本条机制定位，V2强化数值待实测。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "隐身术（10208，一级学习等级25，已核实）；陷阱：爆弹（10213，一级学习等级25，已核实）；原生形态及冷却已对照 skill-original-ranks.json 一级记录。",
@@ -2960,7 +2960,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "火弹术保留主目标完整伤害和效果，并同时攻击其周围半径150内最多4名其他敌人，各造成火弹术基础伤害100%的火系伤害。额外攻击也享受火弹术、火系伤害和燃烧剩余伤害结算的加成；每次施法只选取一批额外目标，不会继续向外扩散。",
+    "effect": "火弹术保留主目标完整伤害和效果，并同时攻击其周围半径150内其他敌人，各造成火弹术基础伤害100%的火系伤害。额外攻击也享受火弹术、火系伤害和燃烧剩余伤害结算的加成；每次施法只选取一批额外目标，不会继续向外扩散。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3040,7 +3040,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "火球术命中带有你施加的燃烧的敌人时，选取本次命中者中剩余燃烧伤害最高的一名，将该剩余伤害的90%分别造成给爆炸范围内最多4名其他敌人。每名敌人各承受90%，不均分；不移除原燃烧，追加伤害不会再次扩散。",
+    "effect": "火球术命中带有你施加的燃烧的敌人时，选取本次命中者中剩余燃烧伤害最高的一名，将该剩余伤害的90%分别造成给爆炸范围内其他敌人。每名敌人各承受90%，不均分；不移除原燃烧，追加伤害不会再次扩散。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3180,7 +3180,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "冰爆术直接伤害提高20%。命中后，将距爆炸中心最远的最多5名可被位移的敌人向中心拉近最多90距离；拉拽不能穿过障碍，每次施法只执行一次。位移免疫不影响原有伤害和控制判定。",
+    "effect": "冰爆术直接伤害提高20%。命中后，将本次命中的所有可被位移的敌人向中心拉近最多90距离；拉拽不能穿过障碍，每次施法只执行一次。位移免疫不影响原有伤害和控制判定。",
     "design_note": "强化版：取消伤害降低15%并改为提高20%，牵引3人升至5人、距离60升至90。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "冰爆术（10410，一级学习等级20，已核实）",
@@ -3360,7 +3360,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "冰封作用半径增加150，优先冻结主目标，并对最多4名其他敌人按原免疫规则施加冻结；搭配“寒封隔绝”时，作用半径为250，总目标上限仍为5。",
+    "effect": "冰封作用半径增加150，优先冻结主目标，并对范围内其他敌人按原免疫规则施加冻结；搭配“寒封隔绝”时，在其基础范围上增加上述半径。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3500,7 +3500,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "秘术：瞬发强化的下一次手动伤害技能命中后，对同场景内仍存活的原主目标，追加该技能基础伤害80%的攻击。每次瞬发只追加一次；追加攻击不附带控制或触发其他技能。",
+    "effect": "已学会瞬发时，装备期间瞬发按当前技能等级常驻，不随施法消耗。每次受到瞬发强化的手动伤害技能命中后，向仍存活的原主目标追加80%技能基础伤害；追加不附带控制，不再触发威能或再次复诵。瞬发不改变技能冷却和法力消耗。",
     "design_note": "仅删除触发条件满足之后的固定短等待；原条件、数值、目标、范围、冷却与连招窗口不变。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "秘术：瞬发（10420，一级学习等级60，已核实）",
@@ -3595,7 +3595,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "秘术：集中的待生效状态存在时，每次受到伤害可减免50%，但每次最多减免最大生命的22%。受击不会消耗集中效果，无内置冷却。",
+    "effect": "秘术：集中状态存在时（包括凝神回路提供的常驻集中），每次受到伤害可减免50%，但每次最多减免最大生命的22%。受击不会消耗集中效果，无内置冷却。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3614,7 +3614,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "冰封改为以主目标为中心、半径100的范围冻结，优先保留主目标，最多影响5名敌人，仍遵守控制免疫规则。装备期间受到的伤害降低35%，不要求成功冻结敌人；搭配“冰封广散”时，作用半径为250。",
+    "effect": "冰封改为以主目标为中心、半径100的范围冻结，优先保留主目标，仍遵守控制免疫规则。装备期间受到的伤害降低35%，不要求成功冻结敌人；搭配“冰封广散”时，再增加其提供的作用半径。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3690,7 +3690,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "装备期间受到的伤害降低35%。秘术：释能直接强化的那一次伤害技能，额外获得35%的直接伤害加成。",
+    "effect": "已学会释能时，装备期间释能按当前技能等级常驻，不随施法消耗，受到的伤害降低35%；释能强化的伤害技能直接伤害再提高35%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3726,7 +3726,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "秘术：消除的驱散成功率提高30个百分点，最高100%。成功驱散防御魔法后，将其转移给你，剩余持续时间延长50%；只保留原剩余护盾量，不补回已消耗部分，同名状态按原规则处理。",
+    "effect": "消除改为以目标为中心、半径250的群体消除，对范围内所有可驱散的防御魔法必定驱散成功；不可驱散的状态不受影响。偷来的防御魔法获得完整持续时间和重新生成的完整护盾，同一种防御状态每次施法只获得一份，不叠加多层护盾。",
     "design_note": "强化版：新增驱散成功率30个百分点，偷取防御魔法的剩余时长提高50%。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "秘术：消除（10433，一级学习等级36，已核实）",
@@ -3744,7 +3744,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "秘术：集中保留延长下一技能状态持续时间的效果，并使该次技能的法力消耗降低55%。燃烧、冰封和防御魔法均可获得原有时长强化；集中随本次技能一并消耗，不是施法后返还法力。",
+    "effect": "已学会集中时，装备期间集中按当前技能等级常驻，不随施法消耗。每次符合集中条件的带状态技能法力消耗降低55%，保留集中原有的状态时长强化。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3762,7 +3762,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "移动速度提高40%，装备后持续生效，无需先命中敌人或进入冰雪区域。",
+    "effect": "主动施放已学习的冰爆术或暴雪术后，8秒内移动速度提高80%；无需命中敌人，重复施放只刷新时长、不叠加。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3780,7 +3780,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "你施加的燃烧造成击杀时，恢复最大法力的6%。燃烧剩余伤害结算和焰终回响造成的击杀也可触发；每次死亡只奖励一次，无内置冷却。",
+    "effect": "自己击杀带有自己燃烧的敌人时，恢复最大法力的10%；不要求最后一击来自燃烧。同一次死亡只恢复一次，没有额外冷却。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3791,14 +3791,14 @@
   },
   {
     "id": "SS-U06",
-    "name": "空释回收",
+    "name": "幻影解缚",
     "category": "通用",
     "class": "术士",
     "min_level": 25,
     "slots": [
       "武器"
     ],
-    "effect": "火球术或冰爆术未命中任何敌人时，返还本次实际消耗法力的100%，并使本次剩余冷却缩短80%。每次施法只返还一次，无额外冷却。",
+    "effect": "已学会幻影时，允许在昏迷、封印等控制下施放幻影；成功移动后清除自身的控制和减速。失败或未移动不清除，不提供后续免控。原有耗蓝、成功率和落点规则不变。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3816,7 +3816,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "所有技能的法力消耗降低22%，装备后持续生效。不增加最大法力，也不产生返还法力。",
+    "effect": "主动施放已学习的火球术、冰爆术、风焰术或暴雪术后，10秒内所有技能法力消耗降低45%；触发本次不追溯减耗，重复施放只刷新时长、不叠加。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3834,7 +3834,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "魔镜术生效时，清除你已有的减速；魔镜术状态持续期间，你免疫新的减速。保护与原魔镜状态同步结束。",
+    "effect": "已学会魔镜时，装备期间获得当前技能等级的常驻魔镜；获得魔镜时清除已有减速，魔镜生效期间免疫移动减速。卸下威能或洗去魔镜技能后，常驻效果失效。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3870,7 +3870,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "所有以敌人为目标且有施法距离的法术，射程提高60%，装备后持续生效，不需要秘术：瞬发。以自身为中心的技能不增加范围半径。",
+    "effect": "已学习的幻影成功移动后，12秒内以敌人为目标且有施法距离的法术射程提高100%；不扩大自身中心技能的作用半径，重复触发只刷新时长。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3890,7 +3890,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "光弹术保留主目标完整伤害，并对主目标周围180范围内最近的另外3名敌人造成60%的光弹伤害。副目标不重复附加技能状态，也不触发威能。",
+    "effect": "光弹术保留主目标完整伤害，并对主目标周围180范围内所有其他敌人造成60%的光弹伤害。副目标不重复附加技能状态，也不触发威能。",
     "design_note": "强化版：追加伤害35%提高至60%，额外目标2增至3，搜索范围100扩大至180。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "光弹术（ID 10319，一级学习等级10，已核实）",
@@ -4330,7 +4330,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "每次主动施放治愈术，保留完整治疗，并向主治疗目标周围250范围内最近的1名敌人发出光弹。基础伤害等于本次主目标应有治疗量的100%，满血也可触发；光弹的伤害与形状威能可以直接修正它，无需另行施放光弹术。",
+    "effect": "每次主动施放治愈术，保留完整治疗，并向主治疗目标周围250范围内的所有敌人分别发出光弹。每发基础伤害等于本次主目标应有治疗量的100%，满血也可触发；光弹的伤害与形状威能可以直接修正它，无需另行施放光弹术。同一次治愈产生的光弹及其范围追加，对每名敌人只结算一次；原范围内主弹优先保留完整伤害。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4390,7 +4390,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "防御术原有防御效果提高70%，并额外覆盖主目标周围250范围内生命比例最低的另外2名队友。防御状态存在期间，受益者主动造成的神圣伤害提高40%；沿用原持续时间，不生成护盾。",
+    "effect": "防御术原有防御效果提高70%，并额外覆盖主目标周围250范围内所有队友。防御状态存在期间，受益者主动造成的神圣伤害提高40%；沿用原持续时间，不生成护盾。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4450,7 +4450,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "神术：释能保留强化下一次法术的效果，伤害增强系数额外提高50个百分点。被强化的光弹术改为主目标周围半径220的圆形攻击；圣光术、驱魔术和神威术按改造后的最终形状扩大范围：圆形半径增加100，矩形长度和宽度各增加100。范围内所有目标保留完整伤害。",
+    "effect": "已学会神术释能时，装备期间神术释能按当前技能等级常驻，不随施法消耗。神术：释能保留强化每次法术的效果，伤害增强系数额外提高50个百分点。被强化的光弹术改为主目标周围半径220的圆形攻击；圣光术、驱魔术和神威术按改造后的最终形状扩大范围：圆形半径增加100，矩形长度和宽度各增加100。范围内所有目标保留完整伤害。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4470,7 +4470,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "神术：瞬发使其强化的下一次吟唱技能完全免除吟唱，并使该次直接伤害或直接治疗提高40%；仍须遵守技能冷却，不额外延长冷却。",
+    "effect": "已学会神术瞬发时，装备期间神术瞬发按当前技能等级常驻，不随施法消耗。神术：瞬发使其强化的每次吟唱技能完全免除吟唱，并使该次直接伤害或直接治疗提高40%；仍须遵守技能冷却，不额外延长冷却。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4527,7 +4527,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "光盾术初始吸收量提高60%，并为主目标周围250范围内生命比例最低的另外2名队友施加同样强度的光盾。保留原持续时间、覆盖规则和即死免疫，不另外生成残盾。",
+    "effect": "光盾术初始吸收量提高60%，并为主目标周围250范围内所有队友施加同样强度的光盾。保留原持续时间、覆盖规则和即死免疫，不另外生成残盾。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4565,7 +4565,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "自身回春术状态有效时，实际吟唱治愈术、群疗术或复活术期间，受到伤害降低25%，并且不会被普通受伤打断。昏迷、封印等控制仍生效；无需等到回春跳数，满血也能获得保护。",
+    "effect": "已学会回春术且自身回春术状态有效期间，受到伤害降低25%；吟唱治愈术、群疗术或复活术时不会被普通受伤打断，昏迷、封印等控制仍生效。满血同样有效。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4696,7 +4696,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "神术：集中保留延长下一技能状态持续时间的效果，一级延长50%，其他等级不变；同时使该技能的正面增益强度提高50%，集中自身法力消耗降低30%。增益强度按原数值提高50%，不是增加50个百分点，不提高直接伤害或直接治疗。",
+    "effect": "已学会神术集中时，装备期间神术集中按当前技能等级常驻，不随施法消耗。神术：集中保留延长每次技能状态持续时间的效果，一级延长50%，其他等级不变；同时使该技能的正面增益强度提高50%，集中自身法力消耗降低30%。增益强度按原数值提高50%，不是增加50个百分点，不提高直接伤害或直接治疗。",
     "design_note": "强化版：正面增益强度额外25%提高至50%，并降低集中自身法力消耗30%。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "神术：集中（ID 10322，一级学习等级30，已核实）",
@@ -4714,7 +4714,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "复法术对主目标产生的溢出法力，可按溢出量的100%分给该目标周围350范围内法力比例最低的另外2名队友。先给法力比例最低者，每人最多获得其最大法力的20%，且不超过其缺少法力；剩余额度再给下一人，总转移不超过本次溢出量，不再次分流。",
+    "effect": "复法术对主目标产生的溢出法力，可按溢出量的100%分给该目标周围350范围内所有队友。先给法力比例最低者，每人最多获得其最大法力的20%，且不超过其缺少法力；剩余额度再给下一人，总转移不超过本次溢出量，不再次分流。",
     "design_note": "强化版：溢出利用率60%提高至100%，扩大范围与单人上限，最多分给2人且不复制法力。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "复法术（ID 10302，一级学习等级25，已核实）",
@@ -4732,7 +4732,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "治愈术保留主目标完整治疗，并对主目标周围250范围内生命比例最低的另外2名队友，各提供一次100%倍率的治愈术治疗，每人按自身最大生命计算。群疗术优先治疗低血者，至少产生一次有效治疗时返还本次实际消耗法力的35%。新增副治疗不会再触发其他治疗、伤害或护盾转换。",
+    "effect": "治愈术保留主目标完整治疗，并对主目标周围250范围内所有队友，各提供一次100%倍率的治愈术治疗，每人按自身最大生命计算。群疗术优先治疗低血者，至少产生一次有效治疗时返还本次实际消耗法力的35%。新增副治疗不会再触发其他治疗、伤害或护盾转换。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4779,14 +4779,14 @@
   },
   {
     "id": "YS-U07",
-    "name": "净化空诊",
+    "name": "净化护行",
     "category": "通用",
     "class": "药师",
     "min_level": 25,
     "slots": [
       "武器"
     ],
-    "effect": "成功施放净化术后，若整次施法没有移除任何负面状态，返还本次实付法力的90%，并使本次剩余冷却缩短80%；只要移除过至少1份，就改为返还30%实付法力。两档不叠加，空诊不算成功移除状态。",
+    "effect": "主动施放已学习的净化术后，8秒内移动速度提高60%，受到的物理和魔法伤害降低25%；无需实际移除负面状态，重复施放刷新持续时间、不叠加。",
     "design_note": "强化版：空诊返蓝70%提高至90%、冷却缩短50%提高至80%，成功净化也有30%返蓝收益。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "净化术（ID 10306，一级学习等级20，已核实）",
@@ -4804,7 +4804,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "装备期间，仍为友方单体的技能施法距离增加200、法力消耗降低25%。鹰眼术可在600范围内选点释放，也可选自己脚下；原显隐范围和持续时间不变。",
+    "effect": "主动施放已学习的鹰眼术后，12秒内仍为友方单体的技能施法距离增加400、法力消耗降低45%；重复施放刷新持续时间、不叠加。鹰眼术仍可在600范围内选点释放，也可选自己脚下，原显隐范围和持续时间不变。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4863,7 +4863,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "普通攻击改为前方120度扇形攻击，范围等于普通攻击距离。选中目标保留100%伤害，另外最多4名最近的敌人各承受70%普通攻击伤害，保留淬毒、吸血等原有普攻效果。每次出手的固定回蓝只结算一次；吸血、吸蓝按本次横扫的总伤害计算，不会再产生横扫或额外普攻。",
+    "effect": "普通攻击改为前方120度扇形攻击，范围等于普通攻击距离。选中目标保留100%伤害，范围内其他敌人各承受70%普通攻击伤害，保留淬毒、吸血等原有普攻效果。每次出手的固定回蓝只结算一次；吸血、吸蓝按本次横扫的总伤害计算，不会再产生横扫或额外普攻。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4955,7 +4955,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "单体伤害技能改为攻击选中目标及其周围半径120内的敌人，合计最多5个。技能原有伤害和附加效果不变。普通攻击、地面技能和已经变为范围攻击的技能不受影响；生效后不再获得“独锋”的伤害加成。",
+    "effect": "单体伤害技能改为攻击选中目标及其周围半径120内的敌人。技能原有伤害和附加效果不变。普通攻击、地面技能和已经变为范围攻击的技能不受影响；生效后不再获得“独锋”的伤害加成。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5300,7 +5300,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "位移技能成功移动后，将落点周围200范围内最近的最多6名可牵引敌人向落点拉近最多100距离。障碍和位移免疫仍有效，不造成伤害，也不触发额外施法或资源恢复。",
+    "effect": "位移技能成功移动后，将落点周围200范围内可牵引敌人向落点拉近最多100距离。障碍和位移免疫仍有效，不造成伤害，也不触发额外施法或资源恢复。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",

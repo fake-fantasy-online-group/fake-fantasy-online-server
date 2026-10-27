@@ -77,6 +77,17 @@ func TestV5SkillCurvesActualReadOnlyLoader(t *testing.T) {
 			if rank <= domain.OriginalSkillRankCap {
 				original := table[domain.SkillKey{ID: id, Level: rank}]
 				original.FormulaVersion = domain.SkillFormulaVersion
+				// The approved elemental-shield lifetime override also applies to
+				// database-loaded authored ranks, matching the domain parity test.
+				if id == 10425 || id == 10435 {
+					original.Statuses = append([]domain.StatusApplication(nil), original.Statuses...)
+					for i := range original.Statuses {
+						app := &original.Statuses[i]
+						if id == 10425 && app.ID == 1037 || id == 10435 && app.ID == 1038 {
+							app.DurationSec, app.SourceSkill = 30*rank, id
+						}
+					}
+				}
 				if !reflect.DeepEqual(a, original) {
 					t.Fatalf("real skill%d original rank%d differs from loaded row", id, rank)
 				}
@@ -96,8 +107,14 @@ func TestV5SkillCurvesActualReadOnlyLoader(t *testing.T) {
 				}
 			}
 			for _, app := range a.Statuses {
-				if _, ok := statuses.ResolveSkillApplication(app); !ok {
+				resolved, ok := statuses.ResolveSkillApplication(app)
+				if !ok {
 					t.Fatalf("real skill%d rank%d refers to missing state%d/%d", id, rank, app.ID, app.Level)
+				}
+				if id == 10425 && app.ID == 1037 || id == 10435 && app.ID == 1038 {
+					if resolved.DurationSec != 30*rank {
+						t.Fatalf("elemental shield%d rank%d duration=%d, want%d", id, rank, resolved.DurationSec, 30*rank)
+					}
 				}
 			}
 			for _, trigger := range a.PassiveTriggers {

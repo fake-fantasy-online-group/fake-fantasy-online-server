@@ -82,6 +82,10 @@ func (s *Scene) refreshSkillPersistentEffects(source *entity.Entity) {
 	if s == nil || source == nil || source.Player == nil || s.skillProgressionRefreshing {
 		return
 	}
+	// refreshStats defers this until its HP/MP growth accounting is committed.
+	// Applying a native status earlier would reenter refreshStats and charge
+	// the same maximum-resource delta twice.
+	s.syncLegendaryPermanentBuffs(source)
 	s.skillProgressionRefreshing = true
 	defer func() { s.skillProgressionRefreshing = false }()
 	for _, target := range s.entities {
@@ -120,6 +124,9 @@ func (s *Scene) revokeDepartingSkillSource(source *entity.Entity) {
 }
 
 func (s *Scene) resolvePersistentStatus(source, holder *entity.Entity, old domain.StatusDef) (domain.StatusDef, bool, bool) {
+	if old.LegendaryPermanentPower != "" {
+		return old, true, false // Rebuilt by the equipment/learned-skill reconciler.
+	}
 	current := s.rawSkillLevels(source)
 	decreased := current[old.SkillSnapshotID] < old.SkillSnapshotRank
 	for id, rank := range old.SkillSnapshotRaw {

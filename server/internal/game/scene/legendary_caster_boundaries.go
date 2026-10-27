@@ -141,8 +141,5 @@ func legendaryCasterPrismTargets(c *legendaryContext, ids []domain.EntityID) []d
 		}
 		return da < db
 	})
-	if len(out) > 4 {
-		out = out[:4]
-	}
 	return out
 }

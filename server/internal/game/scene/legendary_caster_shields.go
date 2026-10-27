@@ -16,7 +16,7 @@ func init() {
 	registerLegendarySynergyHandler("SS-A14", legendaryHandler{
 		TargetDefinition: legendaryCasterTargetBonus(func(c *legendaryContext, n int32) int32 {
 			if c.Skill == legendaryIceBurst {
-				return specialScale(n, 120)
+				return specialScale(n, 100+c.RollValue("damage_pct", 20))
 			}
 			return n
 		}),
@@ -40,9 +40,6 @@ func init() {
 				}
 				return a > b
 			})
-			if len(enemies) > 5 {
-				enemies = enemies[:5]
-			}
 			moved := false
 			for _, t := range enemies {
 				before := t.Pos

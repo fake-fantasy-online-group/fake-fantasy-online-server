@@ -173,7 +173,7 @@ func TestCasterIndependentA03SplashBatch(t *testing.T) {
 			}
 			want := 0
 			if on {
-				want = 4
+				want = 6
 			}
 			if count != want || outside.HP != 100000 {
 				t.Fatal("batch cap/radius/recursion", count, want, outside.HP)
@@ -399,7 +399,7 @@ func TestCasterIndependentA07HighestBurnSpread(t *testing.T) {
 			}
 			want := 0
 			if own {
-				want = 4
+				want = 6
 			}
 			if spread != want || outside.HP != 100000 || !m.Status.HasEffective(1036) || !strong.Status.HasEffective(1036) {
 				t.Fatal("spread source/count/radius/preservation", spread, want)
@@ -517,7 +517,7 @@ func TestCasterIndependentFreezeAreas(t *testing.T) {
 					count++
 				}
 			}
-			if count != 4 || (outside.Status != nil && outside.Status.HasEffective(domain.StatusFreeze)) {
+			if count != 6 || (outside.Status != nil && outside.Status.HasEffective(domain.StatusFreeze)) {
 				t.Fatal("freeze area cap/center", count)
 			}
 			if m.HP != 100000 {
@@ -589,7 +589,7 @@ func TestCasterIndependentManaAndCooldown(t *testing.T) {
 					d, _ := s.skills.Get(skill, 1)
 					pct, cd := int32(80), int32(100)
 					if id == "SS-U07" {
-						pct = 78
+						pct = 100
 					}
 					if id == "SS-U09" {
 						if skill == 10401 || skill == 10421 {
@@ -619,7 +619,15 @@ func TestCasterIndependentManaAndCooldown(t *testing.T) {
 func TestCasterIndependentU10Admission(t *testing.T) {
 	for _, on := range []bool{false, true} {
 		t.Run(fmt.Sprint(on), func(t *testing.T) {
-			s, p, m := casterIndependentFixture(t, "SS-U10", domain.Learned{10401: 1, 10410: 1}, on)
+			s, p, m := casterIndependentFixture(t, "SS-U10", domain.Learned{10401: 1, 10410: 1, 10418: 1, 10432: 5}, on)
+			from := p.Pos
+			to := from
+			to.X += 100
+			s.onUseSkill(UseSkill{ID: p.ID, Skill: 10432, At: &to})
+			sharedTargetFinishCasts(t, s)
+			if p.Pos == from {
+				t.Fatal("native teleport did not move")
+			}
 			s.aoi.Move(m, domain.Pos{MapID: p.Pos.MapID, X: p.Pos.X + 719, Y: 100})
 			before := p.MP
 			s.onUseSkill(UseSkill{ID: p.ID, Skill: 10401, Target: m.ID})
@@ -643,7 +651,7 @@ func TestCasterIndependentU10Admission(t *testing.T) {
 		})
 	}
 }
-func TestCasterIndependentU06EmptyRefund(t *testing.T) {
+func TestCasterIndependentU06NoObsoleteEmptyRefund(t *testing.T) {
 	for _, skill := range []domain.SkillID{10402, 10410} {
 		t.Run(fmt.Sprint(skill), func(t *testing.T) {
 			for _, hit := range []bool{false, true} {
@@ -672,17 +680,11 @@ func TestCasterIndependentU06EmptyRefund(t *testing.T) {
 						s.aoi.Move(m, domain.Pos{MapID: p.Pos.MapID, X: 900, Y: 900})
 					}
 					sharedTargetFinishCasts(t, s)
-					want := before
-					if hit {
-						want -= d.MPCost
-					}
+					want := before - d.MPCost
 					if p.MP != want {
 						t.Fatal("actual refund", p.MP, want)
 					}
-					pct := int32(20)
-					if hit {
-						pct = 100
-					}
+					pct := int32(100)
 					ready := s.tick + domain.Ticks(int(d.CooldownMS*pct/100))
 					if !p.Player.SkillReadyAt(skill, ready) || p.Player.SkillReadyAt(skill, ready-1) {
 						t.Fatal("remaining cooldown not scaled", skill, hit)
@@ -924,12 +926,19 @@ func TestCasterIndependentPassiveConsumers(t *testing.T) {
 	for _, tc := range []struct {
 		id  string
 		pct int32
-	}{{"SS-D04", 130}, {"SS-D07", 128}, {"SS-D08", 130}, {"SS-U04", 140}} {
+	}{{"SS-D04", 130}, {"SS-D07", 128}, {"SS-D08", 130}, {"SS-U04", 180}} {
 		t.Run(tc.id, func(t *testing.T) {
 			run := func(on bool) (int32, int32, *Scene, *entity.Entity) {
-				s, p, _ := casterIndependentFixture(t, tc.id, domain.Learned{}, on)
+				learned := domain.Learned{}
+				if tc.id == "SS-U04" {
+					learned[10410] = 1
+				}
+				s, p, _ := casterIndependentFixture(t, tc.id, learned, on)
 				s.refreshStats(p)
 				p.HP, p.MP = p.MaxHP, p.MaxMP
+				if tc.id == "SS-U04" {
+					nativeRepairCast(t, s, p, 10410, 0)
+				}
 				return p.MaxHP, s.playerMoveSpeedPX(p), s, p
 			}
 			hp, speed, _, _ := run(false)
@@ -990,7 +999,7 @@ func TestCasterIndependentDefenseConditions(t *testing.T) {
 			for _, state := range []bool{false, true} {
 				got, retained := run(state, 1000, 100, 1)
 				want := int32(1000)
-				if id == "SS-D06" || id == "SS-D10" {
+				if id == "SS-D06" {
 					want = 650
 				} else if state {
 					switch id {
@@ -1150,7 +1159,7 @@ func TestCasterIndependentU02NativeSteal(t *testing.T) {
 			p.Status.EachEffective(func(a domain.Active) {
 				if a.Def.ID == 1021 {
 					found = true
-					if a.ShieldLeft != 30 || a.ExpireAt != s.tick+domain.Ticks(30000) {
+					if a.ShieldLeft != 100 || a.ExpireAt != s.tick+domain.Ticks(20000) {
 						t.Fatal("stolen shield refilled/lifetime", a.ShieldLeft, a.ExpireAt)
 					}
 				}
@@ -1184,7 +1193,7 @@ func TestCasterIndependentU03Concentration(t *testing.T) {
 			}
 			base, duration, _ := run(false)
 			got, longer, ready := run(true)
-			if got != (base*45+99)/100 || longer != duration || duration <= 0 || ready {
+			if got != (base*45+99)/100 || longer != duration || duration <= 0 || !ready {
 				t.Fatal("paid focus discount/native duration/consume", base, got, duration, longer, ready)
 			}
 		})
@@ -1200,11 +1209,11 @@ func TestCasterIndependentU05NativeBurnDeath(t *testing.T) {
 	p.MP = 1000
 	m.HP = 1
 	s.tickStatus(m, a)
-	if m.HP != 0 || p.MP != 1600 {
+	if m.HP != 0 || p.MP != 2000 {
 		t.Fatal("burn kill mana reward", m.HP, p.MP)
 	}
 	s.tickStatus(m, a)
-	if p.MP != 1600 {
+	if p.MP != 2000 {
 		t.Fatal("same death rewarded twice")
 	}
 }
@@ -1219,7 +1228,8 @@ func TestCasterIndependentU08MirrorLifetime(t *testing.T) {
 	if s.applyStatusDef(p, slow, m.ID) || p.Status.HasEffective(slow.ID) {
 		t.Fatal("new slow bypassed native mirror protection")
 	}
-	p.Status.Remove(1011)
+	p.Player.Worn = &domain.EquipSet{}
+	s.refreshStats(p)
 	if !s.applyStatusDef(p, slow, m.ID) || !p.Status.HasEffective(slow.ID) {
 		t.Fatal("slow immunity outlived mirror")
 	}
@@ -1231,7 +1241,7 @@ func (casterIndependentZeroSource) Int63() int64 { return 0 }
 func (casterIndependentZeroSource) Seed(int64)   {}
 
 func TestCasterIndependentA14PullLimitAndBarrier(t *testing.T) {
-	t.Run("farthest_five", func(t *testing.T) {
+	t.Run("all_eligible_targets", func(t *testing.T) {
 		s, p, m := casterIndependentFixture(t, "SS-A14", domain.Learned{10410: 1}, true)
 		s.aoi.Move(m, domain.Pos{MapID: p.Pos.MapID, X: 120, Y: 100})
 		near := putMonster(s, 901, 100000, domain.Stats{}, 100, 130)
@@ -1241,8 +1251,8 @@ func TestCasterIndependentA14PullLimitAndBarrier(t *testing.T) {
 			far = append(far, putMonster(s, domain.EntityID(902+i), 100000, domain.Stats{}, 100+95*math.Cos(angle), 100+95*math.Sin(angle)))
 		}
 		nativeRepairCast(t, s, p, 10410, 0)
-		if m.Pos.X != 120 || near.Pos.Y != 130 {
-			t.Fatal("near target displaced instead of farthest")
+		if near.Pos.Y >= 130 || m.HP == 100000 {
+			t.Fatal("in-range near targets were excluded")
 		}
 		for _, e := range far {
 			if sqDist(e.Pos, p.Pos) >= 95*95-.01 || 100000-e.HP <= 0 {
@@ -1403,7 +1413,7 @@ func TestCasterCombinationBurnKillRewards(t *testing.T) {
 			}
 			d, _ := s.skills.Get(skill, 1)
 			nativeRepairCast(t, s, p, skill, m.ID)
-			want := int32(1000) - d.MPCost + p.MaxMP*6/100
+			want := int32(1000) - d.MPCost + p.MaxMP*10/100
 			if m.HP != 0 || p.MP != want {
 				t.Fatal("derived burn death reward", m.HP, p.MP, want)
 			}
@@ -1522,7 +1532,7 @@ func TestCasterCombinationStolenShieldKeepsBalance(t *testing.T) {
 	p.Status.EachEffective(func(a domain.Active) {
 		if a.Def.ID == 1021 {
 			found = true
-			if a.ShieldLeft != 30 || a.ExpireAt != s.tick+domain.Ticks(30000) {
+			if a.ShieldLeft != 100 || a.ExpireAt != s.tick+domain.Ticks(20000) {
 				t.Fatal("strengthened transferred shield refilled or time changed", a.ShieldLeft, a.ExpireAt)
 			}
 		}
@@ -1707,12 +1717,34 @@ func TestCasterIndependentU02AgedTransferredShield(t *testing.T) {
 	p.Status.EachEffective(func(a domain.Active) {
 		if a.Def.ID == 1021 {
 			found = true
-			if a.ShieldLeft != 30 || a.ExpireAt != s.tick+domain.Ticks(22500) {
+			if a.ShieldLeft != 100 || a.ExpireAt != s.tick+domain.Ticks(20000) {
 				t.Fatal("remaining lifetime not scaled or shield refilled", a.ShieldLeft, a.ExpireAt)
 			}
 		}
 	})
 	if !found {
 		t.Fatal("aged native shield not transferred")
+	}
+}
+
+func TestCasterIndependentU07SubsequentCastWindow(t *testing.T) {
+	s, p, m := casterIndependentFixture(t, "SS-U07", domain.Learned{10402: 1, 10401: 1}, true)
+	fireball, _ := s.skills.Get(10402, 1)
+	firebolt, _ := s.skills.Get(10401, 1)
+	before := p.MP
+	nativeRepairCast(t, s, p, 10402, m.ID)
+	if before-p.MP != fireball.MPCost {
+		t.Fatal("triggering cast received retroactive discount")
+	}
+	before = p.MP
+	nativeRepairCast(t, s, p, 10401, m.ID)
+	if before-p.MP != (firebolt.MPCost*55+99)/100 {
+		t.Fatal("subsequent cast did not receive 45 percent discount", before-p.MP)
+	}
+	s.tick += domain.Ticks(10000)
+	before = p.MP
+	nativeRepairCast(t, s, p, 10401, m.ID)
+	if before-p.MP != firebolt.MPCost {
+		t.Fatal("expired mana window persisted")
 	}
 }

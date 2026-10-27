@@ -1,7 +1,6 @@
 package scene
+
 import catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
-
-
 
 import (
 	"encoding/json"
@@ -84,7 +83,7 @@ func TestEquipmentSkillVariantsGeometryAndBudget(t *testing.T) {
 		s.applyResolvedSkillModifiers(p, &d, p.Player.Char.Skills, p.Player.Char.Skills)
 		ids, _ := s.resolveSkillTargets(p, d, 905, nil)
 		ids = s.limitVariantTargets(p, d, ids, 905)
-		if len(ids) != 4 || ids[0] != 905 {
+		if len(ids) != 8 || ids[0] != 905 {
 			t.Fatal("bounded primary", id, ids)
 		}
 		for _, n := range ids {

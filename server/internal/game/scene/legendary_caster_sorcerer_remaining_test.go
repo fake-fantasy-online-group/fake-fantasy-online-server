@@ -29,6 +29,14 @@ func TestLegendaryCasterSorcererRemainingGeometryAndCost(t *testing.T) {
 				d.ID = legendaryFireBolt
 				d.Area = domain.SkillAreaTargeting{}
 				d.Kind = domain.SkillSingle
+			case "SS-U07":
+				c.Skill = legendaryFireball
+				c.NowMS = s.tick.Millis()
+				legendaryHandlers[id].RootFinished(c)
+			case "SS-U10":
+				c.Skill = 10432
+				c.NowMS = s.tick.Millis()
+				legendaryHandlers[id].Teleported(c, domain.Pos{})
 			case "SS-U03":
 				d.Statuses = []domain.StatusApplication{{ID: 1036}}
 				sorcererRemainingReady(c, domain.StatusDef{NextStatusDurationPct: 100})
@@ -36,7 +44,7 @@ func TestLegendaryCasterSorcererRemainingGeometryAndCost(t *testing.T) {
 			s.legendaryPrepareSkill(c.Owner, &d, c.Target.ID)
 			switch id {
 			case "SS-A03":
-				if d.Area.Radius != 150 || d.SpecialWeaponTargetLimit != 5 {
+				if d.Area.Radius != 150 || d.SpecialWeaponTargetLimit != 0 {
 					t.Fatalf("splash geometry %+v", d.Area)
 				}
 			case "SS-A06":
@@ -48,7 +56,7 @@ func TestLegendaryCasterSorcererRemainingGeometryAndCost(t *testing.T) {
 					t.Fatal(d.MPCost)
 				}
 			case "SS-U07":
-				if d.MPCost != 78 {
+				if d.MPCost != 55 {
 					t.Fatal(d.MPCost)
 				}
 			case "SS-D08":
@@ -56,7 +64,7 @@ func TestLegendaryCasterSorcererRemainingGeometryAndCost(t *testing.T) {
 					t.Fatal(d.MPCost)
 				}
 			case "SS-U10":
-				if d.Dist != 480 {
+				if d.Dist != 600 {
 					t.Fatal(d.Dist)
 				}
 			}
@@ -222,7 +230,7 @@ func TestLegendaryCasterSorcererRemainingPassives(t *testing.T) {
 	for _, tc := range []struct {
 		id        string
 		hp, speed int32
-	}{{"SS-D04", 1300, 100}, {"SS-D08", 1300, 100}, {"SS-U04", 1000, 140}} {
+	}{{"SS-D04", 1300, 100}, {"SS-D08", 1300, 100}, {"SS-U04", 1000, 100}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, c := legendaryCasterFixture(t, tc.id)
 			st := domain.Stats{MaxHP: 1000, MoveSpeed: 100}
@@ -351,7 +359,7 @@ func TestLegendaryCasterSorcererRemainingBurnSpread(t *testing.T) {
 			}
 			want := 0
 			if own {
-				want = 4
+				want = 5
 			}
 			if count != want {
 				t.Fatalf("spread count%d want%d", count, want)
@@ -399,7 +407,7 @@ func TestLegendaryCasterSorcererRemainingTeleportExplosion(t *testing.T) {
 		t.Fatal("unrelated teleport exploded")
 	}
 }
-func TestLegendaryCasterSorcererRemainingEmptyRefund(t *testing.T) {
+func TestLegendaryCasterSorcererRemainingControlBreakDoesNotRefund(t *testing.T) {
 	for _, landed := range []bool{false, true} {
 		t.Run(map[bool]string{true: "hit", false: "empty"}[landed], func(t *testing.T) {
 			s, c := legendaryCasterFixture(t, "SS-U06")
@@ -413,15 +421,12 @@ func TestLegendaryCasterSorcererRemainingEmptyRefund(t *testing.T) {
 				root.hits = []equipmentHit{{src: c.Owner.ID, dst: c.Target.ID, ev: event.DamageDealt{Amount: 100}}}
 			}
 			finish()
-			want := int32(900)
-			if landed {
-				want = 800
-			}
+			want := int32(800)
 			if c.Owner.MP != want {
 				t.Fatalf("refund%d want%d", c.Owner.MP, want)
 			}
-			if c.Owner.Player.SkillReadyAt(legendaryFireball, s.tick+20) != !landed {
-				t.Fatal("remaining cooldown not scaled80percent")
+			if c.Owner.Player.SkillReadyAt(legendaryFireball, s.tick+20) {
+				t.Fatal("control-break power must not alter fireball cooldown")
 			}
 		})
 	}
@@ -439,6 +444,8 @@ func TestLegendaryCasterSorcererRemainingMirrorSlow(t *testing.T) {
 	if s.legendaryStatusReceiving(c.Owner, c.Target, &slow) {
 		t.Fatal("mirror did not prevent new slow")
 	}
+	delete(c.Owner.Player.Char.Skills, 10417)
+	s.syncLegendaryPermanentBuffs(c.Owner)
 	c.Owner.Status.Remove(10417)
 	if !s.legendaryStatusReceiving(c.Owner, c.Target, &slow) {
 		t.Fatal("slow immunity outlived mirror")
@@ -469,8 +476,8 @@ func TestLegendaryCasterSorcererRemainingSplashNativeCast(t *testing.T) {
 			}
 		}
 	}
-	if count != 4 {
-		t.Fatalf("side count%d want4, no recursive expansion", count)
+	if count != 5 {
+		t.Fatalf("side count%d want5, no recursive expansion", count)
 	}
 }
 func TestLegendaryCasterSorcererRemainingIcePull(t *testing.T) {

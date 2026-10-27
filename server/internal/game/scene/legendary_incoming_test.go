@@ -227,7 +227,7 @@ func TestLegendaryIncomingActualPayloadAndChildReflection(t *testing.T) {
 			s, c := legendaryCasterFixture(t, "SS-D10")
 			p, m := c.Owner, c.Target
 			p.Stats = domain.Stats{MinAtk: 1000, MaxAtk: 1000, MAtk: 1000}
-			p.Player.Char.Skills = domain.Learned{}
+			p.Player.Char.Skills = domain.Learned{10419: 1} // SS-D10 is learned-only; the child spell remains unlearned.
 			m.Status.Apply(domain.StatusDef{ID: 199903, DurationSec: 30, MagicFullReflectChancePct: 100}, s.tick, m.ID)
 			// Both actors may reflect; the returned reflection must not reflect again.
 			p.Status.Apply(domain.StatusDef{ID: 199904, DurationSec: 30, MagicFullReflectChancePct: 100}, s.tick, p.ID)
@@ -350,7 +350,7 @@ func TestLegendaryIncomingNativeBuffMagnitudeCombinations(t *testing.T) {
 		skill domain.SkillID
 		field string
 		want  int32
-	}{{10330, "reflect", 15}, {10322, "duration", 75}, {10315, "haste", -37}} {
+	}{{10330, "reflect", 15}, {10322, "duration", 50}, {10315, "haste", -37}} {
 		t.Run(tc.field, func(t *testing.T) {
 			s, c := legendaryCasterFixture(t, "YS-U02")
 			incomingNativeCatalog(t, s)
@@ -364,6 +364,7 @@ func TestLegendaryIncomingNativeBuffMagnitudeCombinations(t *testing.T) {
 			})
 			got := d.PhysicalReflectPct
 			if tc.field == "duration" {
+				// Permanent concentration keeps native rank magnitude; it cannot amplify itself.
 				got = d.NextStatusDurationPct
 			}
 			if tc.field == "haste" {

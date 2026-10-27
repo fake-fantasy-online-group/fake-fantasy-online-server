@@ -43,7 +43,7 @@ func TestLegendaryPlayerDescriptionsPreserveCriticalConditions(t *testing.T) {
 		"ZS-A07": {"已学破防之枪", "50%", "未学破防之枪"},
 		"ZS-A24": {"85%", "未学野战八荒", "保持战神之枪原有范围"},
 		"ZS-D09": {"25%", "目标免疫", "不叠加", "只取一次50%"},
-		"JK-U04": {"作用半径", "35%"},
+		"JK-U04": {"作用半径", "80%", "50%"},
 		"JK-U08": {"免疫移动减速和定身", "装备时解除已有", "不免疫眩晕、冻结、石化", "攻击速度降低", "混合效果"},
 		"JK-A14": {"主目标有吸收护盾", "120%", "400%", "其他目标不会", "50%"},
 		"CK-A04": {"连续投掷", "50%"},
@@ -84,7 +84,7 @@ func TestLegendaryPlayerDescriptionsPreserveCriticalConditions(t *testing.T) {
 
 func TestLegendaryHuijiUsesApprovedPlayerDescription(t *testing.T) {
 	p, ok := LegendaryPower("TY-A05")
-	const want = "单体伤害技能改为攻击选中目标及其周围半径120内的敌人，合计最多5个。技能原有伤害和附加效果不变。普通攻击、地面技能和已经变为范围攻击的技能不受影响；生效后不再获得“独锋”的伤害加成。"
+	const want = "单体伤害技能改为攻击选中目标及其周围半径120内的敌人。技能原有伤害和附加效果不变。普通攻击、地面技能和已经变为范围攻击的技能不受影响；生效后不再获得“独锋”的伤害加成。"
 	if !ok || p.Effect != want {
 		t.Fatalf("approved Huiji description changed: %q", p.Effect)
 	}

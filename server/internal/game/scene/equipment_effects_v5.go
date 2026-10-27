@@ -202,12 +202,9 @@ func (s *Scene) collectEquipmentHit(src, dst *entity.Entity, blow combat.Blow, e
 	}
 	rt := s.equipmentState()
 	if rt.root != nil {
-		if len(rt.root.hits) < 256 {
-			rt.root.hits = append(rt.root.hits, equipmentHit{src.ID, dst.ID, blow, ev})
-		} else {
-			rt.suppressedProcs++
-			s.log.Warn("equipment root hit budget exceeded", "root", rt.root.id)
-		}
+		// Keep every admitted direct target. Origin/proc-depth gates above
+		// prevent generated hits from extending this finite root.
+		rt.root.hits = append(rt.root.hits, equipmentHit{src.ID, dst.ID, blow, ev})
 	}
 }
 func (s *Scene) equipmentAbsorb(dst *entity.Entity, damage, absorbBP int32, pvp bool) domain.ElementAbsorbResult {

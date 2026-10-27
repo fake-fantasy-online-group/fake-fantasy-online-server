@@ -46,7 +46,7 @@ func TestLegendaryWarriorResourceAndGeometryContracts(t *testing.T) {
 		id                                  string
 		skill                               domain.SkillID
 		mana, radius, width, dist, prep, cd int32
-	}{{"ZS-U01", 10002, 60, 100, 100, 100, 1000, 1000}, {"ZS-U02", 10013, 40, 100, 100, 100, 1000, 1000}, {"ZS-U03", 10017, 100, 100, 100, 150, 1000, 1000}, {"ZS-U04", 10028, 70, 170, 100, 100, 1000, 1000}, {"ZS-U05", 10006, 55, 145, 100, 100, 1000, 1000}, {"ZS-U06", 10005, 40, 100, 100, 100, 1000, 1000}, {"ZS-U08", 10005, 70, 100, 170, 100, 1000, 1000}, {"ZS-U09", 10017, 100, 100, 100, 100, 500, 500}, {"ZS-U10", 10028, 0, 125, 100, 100, 1000, 1000}} {
+	}{{"ZS-U01", 10002, 0, 100, 100, 100, 1000, 1000}, {"ZS-U02", 10013, 40, 100, 100, 100, 1000, 1000}, {"ZS-U03", 10017, 100, 100, 100, 150, 1000, 1000}, {"ZS-U04", 10028, 70, 170, 100, 100, 1000, 1000}, {"ZS-U05", 10006, 55, 145, 100, 100, 1000, 1000}, {"ZS-U06", 10005, 40, 100, 100, 100, 1000, 1000}, {"ZS-U08", 10005, 70, 100, 170, 100, 1000, 1000}, {"ZS-U09", 10017, 100, 100, 100, 100, 500, 500}, {"ZS-U10", 10028, 0, 125, 100, 100, 1000, 1000}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := legendaryMeleeFixture(t, tc.id)
 			area := domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterCaster, Radius: 100}
@@ -184,9 +184,14 @@ func TestLegendaryWarriorManaRecoveryOnceBasicRoot(t *testing.T) {
 func TestLegendaryWarriorSpeedAndOwnArmorDefense(t *testing.T) {
 	for _, id := range []string{"ZS-U03", "ZS-U04"} {
 		s, p, _ := legendaryMeleeFixture(t, id)
+		skill, want := domain.SkillID(10017), int32(180)
+		if id == "ZS-U04" {
+			skill, want = 10028, 160
+		}
+		s.legendaryCastReleased(p, domain.SkillDef{ID: skill}, 0, nil)
 		st := domain.Stats{MoveSpeed: 100}
 		s.legendaryPassiveStats(p, &st)
-		if st.MoveSpeed != 130 {
+		if st.MoveSpeed != want {
 			t.Fatalf("%s speed%d", id, st.MoveSpeed)
 		}
 		p.Player.Worn = &domain.EquipSet{}
@@ -250,7 +255,7 @@ func TestLegendaryWarriorChainCircleTargetCapAndNativeControls(t *testing.T) {
 	}
 	d := domain.SkillDef{ID: 10002, Level: 1, HurtType: domain.HurtPhysical, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100, GuaranteedHit: true}, Statuses: []domain.StatusApplication{{ID: domain.StatusStun, Level: 1, ChanceBP: 10000, ChanceExplicit: true}}}
 	ids := warriorTestCast(t, s, p, m, d)
-	if len(ids) != 5 || ids[0] != m.ID {
+	if len(ids) != 7 || ids[0] != m.ID {
 		t.Fatalf("targets %v", ids)
 	}
 	if m.Status == nil || !m.Status.Has(domain.StatusStun) {

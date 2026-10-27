@@ -36,7 +36,7 @@ func TestLegendaryAssassinVisualSpreadCommittedOncePerRecipient(t *testing.T) {
 	s.outbox = nil
 	s.legendaryAssassinDeath(dead)
 	hits, ground := assassinCustomEvents(s)
-	if len(hits) != 5 || len(ground) != 0 {
+	if len(hits) != 7 || len(ground) != 0 {
 		t.Fatalf("spread hits=%v ground=%v", hits, ground)
 	}
 	for _, h := range hits {

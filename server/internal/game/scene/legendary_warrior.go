@@ -9,17 +9,17 @@ func warriorSkill(id domain.SkillID, damage, mana, radius, cooldown int64) legen
 		if d.ID != id {
 			return
 		}
-		d.LegendaryModifiers.DamageBP += int32(damage * 100)
-		d.LegendaryModifiers.ManaReductionBP += int32(mana * 100)
-		d.LegendaryModifiers.RadiusBP += int32(radius * 100)
-		d.LegendaryModifiers.CooldownReductionBP += int32(cooldown * 100)
+		d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", int32(damage*100))
+		d.LegendaryModifiers.ManaReductionBP += c.RollValue("mana_bp", int32(mana*100))
+		d.LegendaryModifiers.RadiusBP += c.RollValue("radius_bp", int32(radius*100))
+		d.LegendaryModifiers.CooldownReductionBP += c.RollValue("cooldown_bp", int32(cooldown*100))
 	}}
 }
 func warriorDamageSkills(pct int64, ids ...domain.SkillID) legendaryHandler {
 	return legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		for _, id := range ids {
 			if d.ID == id {
-				d.LegendaryModifiers.DamageBP += int32(pct * 100)
+				d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", int32(pct*100))
 				return
 			}
 		}
@@ -28,7 +28,7 @@ func warriorDamageSkills(pct int64, ids ...domain.SkillID) legendaryHandler {
 func warriorIncoming(pct int64) legendaryHandler {
 	return legendaryHandler{ModifyIncoming: func(c *legendaryContext, n int32) int32 {
 		if warriorDirectIncoming(c) {
-			return legendaryMeleeScale(n, 100-pct)
+			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", int32(pct))))
 		}
 		return n
 	}}
@@ -71,7 +71,7 @@ func init() {
 	registerWarriorPower("ZS-A01", warriorSkill(10002, 80, 0, 0, 0))
 	registerWarriorPower("ZS-A04", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10005 {
-			d.LegendaryModifiers.DamageBP += 1500
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 1500)
 			d.LegendaryModifiers.WidthBP += 9000
 			d.LegendaryModifiers.LengthBP += 2000
 		}
@@ -82,7 +82,7 @@ func init() {
 	registerWarriorPower("ZS-A15", warriorSkill(10006, 60, 0, 0, 0))
 	registerWarriorPower("ZS-A17", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10003 {
-			d.LegendaryModifiers.DamageBP += 3000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 3000)
 			d.WeaponDurabilityReductionPct = 100
 			d.LegendaryModifiers.SkipAttackDurability = true
 			warriorEffects(d, func(e *domain.SkillEffect) { e.WeaponDurabilityCostPct = 0 })
@@ -93,14 +93,14 @@ func init() {
 		if legendaryMeleeSpearActive(*d) && !d.LegendaryBasic {
 			warriorEffects(d, func(e *domain.SkillEffect) {
 				if e.Kind == domain.EffectDamage {
-					e.BaseDamageFlat += legendaryMeleeScale(c.Attack(false), 180)
+					e.BaseDamageFlat += legendaryMeleeScale(c.Attack(false), int64(c.RollValue("proc_pct", 180)))
 				}
 			})
 		}
 	}})
 	registerWarriorPower("ZS-A30", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10002 || d.ID == 10017 {
-			d.LegendaryModifiers.DamageBP += 6500
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 6500)
 		}
 		if d.ID == 10002 {
 			if fly, ok := warriorBorrowedSkill(c, 10017, true); ok {
@@ -112,31 +112,35 @@ func init() {
 	registerWarriorPower("ZS-D07", warriorIncoming(45))
 	registerWarriorPower("ZS-D06", legendaryHandler{ModifyIncoming: func(c *legendaryContext, n int32) int32 {
 		if warriorDirectIncoming(c) && sqDist(c.Owner.Pos, c.Target.Pos) <= 2.25*legendaryMeleeReach(c)*legendaryMeleeReach(c) {
-			return legendaryMeleeScale(n, 65)
+			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 35)))
 		}
 		return n
 	}})
 	h := warriorIncoming(30)
 	h.PrepareSkill = warriorSkill(10022, 0, 0, 20, 0).PrepareSkill
 	registerWarriorPower("ZS-D08", h)
-	registerWarriorPower("ZS-U01", warriorSkill(10002, 0, 40, 0, 0))
+	registerWarriorPower("ZS-U01", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
+		if d.ID == 10002 {
+			warriorFunctionalFreeMana(d)
+		}
+	}})
 	registerWarriorPower("ZS-U05", warriorSkill(10006, 0, 45, 45, 0))
 	registerWarriorPower("ZS-U06", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if legendaryMeleeSpearActive(*d) && !d.LegendaryBasic {
-			d.LegendaryModifiers.ManaReductionBP += 6000
+			d.LegendaryModifiers.ManaReductionBP += c.RollValue("mana_bp", 6000)
 		}
 	}})
 	registerWarriorPower("ZS-U07", legendaryHandler{AfterHit: func(c *legendaryContext) {
 		if c.IsBasic && legendaryMeleeLanded(c) && legendaryMeleeOnce(c, 0, "basic-mana") {
-			legendaryMeleeRestoreMP(c, legendaryMeleeScale(c.Owner.MaxMP, 5))
+			legendaryMeleeRestoreMP(c, legendaryMeleeScale(c.Owner.MaxMP, int64(c.RollValue("restore_pct", 5))))
 		}
 	}})
 	registerWarriorPower("ZS-U09", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10017 {
-			d.PrepareMS /= 2
+			d.PrepareMS = domain.SaturateInt32(int64(d.PrepareMS) * (10000 - int64(c.RollValue("cooldown_bp", 5000))) / 10000)
 		}
 		if d.ID == 10017 || d.ID == 10027 {
-			d.LegendaryModifiers.CooldownReductionBP += 5000
+			d.LegendaryModifiers.CooldownReductionBP += c.RollValue("cooldown_bp", 5000)
 		}
 	}})
 }

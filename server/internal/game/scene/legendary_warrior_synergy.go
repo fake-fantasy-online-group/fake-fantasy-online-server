@@ -70,7 +70,7 @@ func warriorArmorStrength(c *legendaryContext, d *domain.StatusDef) {
 	}
 	pct := int32(0)
 	if warriorHas(c, "ZS-A08") {
-		pct += 50
+		pct += c.RollValue("armor_pct", 50)
 		if c.Power.ID != "ZS-A08" {
 			return
 		}
@@ -108,7 +108,7 @@ func init() {
 	}, StatusApplied: warriorArmorStrength})
 	registerWarriorPower("ZS-A09", legendaryHandler{PrepareSkill: warriorSkill(10013, 25, 0, 0, 0).PrepareSkill, TargetDefinition: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10013 && legendaryMeleeShieldRemaining(c) > 0 {
-			legendaryAddTargetDamage(d, 9500)
+			legendaryAddTargetDamage(d, c.RollValue("damage_bp", 12000)-c.RollValue("damage_bp", 2500))
 		}
 	}})
 	registerWarriorPower("ZS-A10", legendaryHandler{ComposeSkill: func(c *legendaryContext, d *domain.SkillDef) {
@@ -124,7 +124,7 @@ func init() {
 		}
 		warriorEffects(d, func(e *domain.SkillEffect) {
 			if e.Kind == domain.EffectDamage {
-				e.BaseDamageFlat = domain.SaturateInt32(int64(e.BaseDamageFlat) + 2*int64(drain))
+				e.BaseDamageFlat = domain.SaturateInt32(int64(e.BaseDamageFlat) + int64(drain)*int64(c.RollValue("drain_damage_pct", 200))/100)
 			}
 		})
 	}})
@@ -135,7 +135,7 @@ func init() {
 			warriorEffects(d, func(e *domain.SkillEffect) {
 				if e.Kind == domain.EffectDamage {
 					e.GuaranteedHit = true
-					e.BaseDamageFlat += legendaryMeleeScale(c.Attack(false), 240)
+					e.BaseDamageFlat += legendaryMeleeScale(c.Attack(false), int64(c.RollValue("proc_pct", 240)))
 				}
 			})
 		}
@@ -158,11 +158,11 @@ func init() {
 					e.GuaranteedHit = true
 				}
 			})
-			d.LegendaryModifiers.DamageBP += 10000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 10000)
 		}
 	}, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10015 && !d.LegendaryBasic {
-			d.LegendaryModifiers.DamageBP += 10000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 10000)
 		}
 	}})
 	registerWarriorPower("ZS-A25", warriorDamageSkills(35, 10023, 10022))
@@ -171,7 +171,7 @@ func init() {
 	registerWarriorPower("ZS-D02", h)
 	registerWarriorPower("ZS-D04", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) { warriorDrain(c, d) }, ModifyIncoming: func(c *legendaryContext, n int32) int32 {
 		if warriorDirectIncoming(c) && c.Blow.Magic {
-			return legendaryMeleeScale(n, 40)
+			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 60)))
 		}
 		return n
 	}})

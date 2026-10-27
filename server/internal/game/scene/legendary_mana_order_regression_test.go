@@ -16,12 +16,15 @@ func TestLegendaryManaAfterAllIncomingReductions(t *testing.T) {
 		power     string
 		remaining int32
 	}{
-		{domain.Warlock, "SS-D10", 650}, {domain.Assassin, "CK-D01", 800}, {domain.Swordsman, "JK-D05", 600},
+		{domain.Warlock, "SS-D10", 650}, {domain.Assassin, "CK-D01", 650}, {domain.Swordsman, "JK-D05", 600},
 	} {
 		for _, mana := range []int32{0, 100, 1000} {
 			for _, shield := range []int32{0, 100, 10000} {
 				t.Run(fmt.Sprintf("%s/mana%d/shield%d", tc.power, mana, shield), func(t *testing.T) {
 					learned := domain.Learned{}
+					if tc.race == domain.Warlock {
+						learned[10419] = 1
+					} // Learned release is required by SS-D10.
 					if tc.race == domain.Assassin {
 						learned[10208] = 1
 					}
@@ -63,7 +66,7 @@ func TestLegendaryManaAfterNativePeriodicReductions(t *testing.T) {
 						if extra {
 							powers = append(powers, "TY-D19")
 						}
-						s, p, m := nativeRepairFixture(t, domain.Warlock, domain.Learned{}, powers...)
+						s, p, m := nativeRepairFixture(t, domain.Warlock, domain.Learned{10419: 1}, powers...)
 						var burn domain.StatusDef
 						for _, d := range s.statuses {
 							if d.ID == 1036 && (burn.ID == 0 || d.Level < burn.Level) {
@@ -158,7 +161,7 @@ func TestLegendaryManaDerivedConsumerBoundaries(t *testing.T) {
 	for _, kind := range []string{"proc", "child", "set_proc"} {
 		for _, mana := range []int32{0, 100, 1000} {
 			t.Run(fmt.Sprintf("%s/mana%d", kind, mana), func(t *testing.T) {
-				s, p, m := nativeRepairFixture(t, domain.Warlock, domain.Learned{}, "SS-D10", "TY-D11")
+				s, p, m := nativeRepairFixture(t, domain.Warlock, domain.Learned{10419: 1}, "SS-D10", "TY-D11")
 				p.Status.Apply(domain.StatusDef{ID: 199972, DurationSec: 30, DamageShield: 100}, s.tick, p.ID)
 				s.refreshStats(p)
 				p.HP, p.MP = p.MaxHP, mana
@@ -189,7 +192,7 @@ func TestLegendaryManaActualNativeReflection(t *testing.T) {
 					if reduction {
 						powers = append(powers, "SS-D10")
 					}
-					s, p, m := nativeRepairFixture(t, domain.Warlock, domain.Learned{10425: 1}, powers...)
+					s, p, m := nativeRepairFixture(t, domain.Warlock, domain.Learned{10425: 1, 10419: 1}, powers...)
 					d, ok := s.skills.Get(10425, 1)
 					if !ok || !s.applySkill(m, m, d, 0, false) {
 						t.Fatal("native monster fire shield unavailable")

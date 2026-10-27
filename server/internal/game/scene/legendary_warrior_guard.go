@@ -35,7 +35,7 @@ func warriorShield(c *legendaryContext) {
 	if p.Status != nil {
 		c.Scene.statusesRemoved(p, p.Status.RemoveWhere(func(d domain.StatusDef) bool { return d.ID == id }))
 	}
-	if c.Scene.applyStatusDef(p, domain.StatusDef{ID: id, Level: 1, Permanent: true, DamageShield: legendaryMeleeScale(p.MaxHP, 25), LegendaryPowerID: c.Power.ID, LegendarySourceUID: c.SourceUID, Name: c.Power.Name, Desc: c.Power.Effect, Icon: legendaryMeleeIcon(c), IconKnown: true, TypeKnown: true, Type: domain.StatusGood}, p.ID) {
+	if c.Scene.applyStatusDef(p, domain.StatusDef{ID: id, Level: 1, Permanent: true, DamageShield: legendaryMeleeScale(p.MaxHP, int64(c.RollValue("shield_pct", 25))), LegendaryPowerID: c.Power.ID, LegendarySourceUID: c.SourceUID, Name: c.Power.Name, Desc: c.Power.Effect, Icon: legendaryMeleeIcon(c), IconKnown: true, TypeKnown: true, Type: domain.StatusGood}, p.ID) {
 		c.Visual("stage-01", p)
 	}
 }
@@ -101,7 +101,7 @@ func init() {
 	registerWarriorPower("ZS-A28", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		warriorWarcryRadius(c, d)
 		if legendaryMeleeSpearActive(*d) && d.HasDamageEffect() {
-			d.LegendaryModifiers.DamageBP += 4000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 4000)
 		}
 		if d.ID == 10028 {
 			warriorEffects(d, func(e *domain.SkillEffect) {
@@ -140,7 +140,7 @@ func init() {
 			}
 		})
 		if broken {
-			return legendaryMeleeScale(n, 50)
+			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 50)))
 		}
 		return n
 	}})
@@ -161,13 +161,13 @@ func init() {
 		if d.ID == 10017 {
 			d.Dist = specialScale(d.Dist, 150)
 		}
-	}, PassiveStats: func(c *legendaryContext, s *domain.Stats) { s.MoveSpeed = specialScale(s.MoveSpeed, 130) }})
+	}, CastReleased: warriorFunctionalRelease(10017, 8000, true), PassiveStats: warriorFunctionalMove(10017, 80), Tick: warriorFunctionalTick(10017, true)})
 	registerWarriorPower("ZS-U04", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		warriorWarcryRadius(c, d)
 		if d.ID == 10028 {
 			d.LegendaryModifiers.ManaReductionBP += 3000
 		}
-	}, PassiveStats: func(c *legendaryContext, s *domain.Stats) { s.MoveSpeed = specialScale(s.MoveSpeed, 130) }})
+	}, CastReleased: warriorFunctionalRelease(10028, 12000, true), PassiveStats: warriorFunctionalMove(10028, 60), Tick: warriorFunctionalTick(10028, true)})
 	registerWarriorPower("ZS-U08", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		warriorWarcryRadius(c, d)
 		if d.ID == 10005 {
@@ -175,7 +175,7 @@ func init() {
 			d.LegendaryModifiers.LengthBP += 7000
 		}
 		if d.ID == 10005 || d.ID == 10028 {
-			d.LegendaryModifiers.ManaReductionBP += 3000
+			d.LegendaryModifiers.ManaReductionBP += c.RollValue("mana_bp", 3000)
 		}
 	}})
 	registerWarriorPower("ZS-U10", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
@@ -187,7 +187,7 @@ func init() {
 			d.RoundingPreviewReady = false
 		}
 		if d.ID == 10023 {
-			d.LegendaryModifiers.ManaReductionBP += 6000
+			d.LegendaryModifiers.ManaReductionBP += c.RollValue("mana_bp", 6000)
 		}
 	}})
 }

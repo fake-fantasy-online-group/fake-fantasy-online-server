@@ -25,7 +25,7 @@ func legendaryCasterTickArea(c *legendaryContext, key string) {
 	}
 	// One payload per authored tick, even when the scheduler resumes late.
 	for st.Stacks > 0 && timer.Value <= c.NowMS {
-		for _, t := range c.Enemies(st.Position, float64(timer.Stacks), 256) {
+		for _, t := range c.Enemies(st.Position, float64(timer.Stacks), 0) {
 			c.Damage(t, clampI32(st.Value), true, false)
 		}
 		st.Stacks--
@@ -43,8 +43,8 @@ func init() {
 		}
 		c.VisualAt("stage-01", c.Center, 0)
 		radius := max(c.Def.Radius, c.Def.Area.Radius)
-		for _, t := range c.Enemies(c.Center, float64(radius), 256) {
-			c.ChildSkill(t.ID, c.Def, legendaryChildOptions{Center: &c.Center, Primary: &c.Primary, PreparedDefinition: true, ScaleBP: 7000, TargetOnly: true, SuppressGeneration: true, SuppressVisual: true})
+		for _, t := range c.Enemies(c.Center, float64(radius), 0) {
+			c.ChildSkill(t.ID, c.Def, legendaryChildOptions{Center: &c.Center, Primary: &c.Primary, PreparedDefinition: true, ScaleBP: c.RollValue("child_bp", 7000), TargetOnly: true, SuppressGeneration: true, SuppressVisual: true})
 		}
 	}})
 	registerLegendarySynergyHandler("SS-A05", legendaryHandler{TargetDefinition: legendaryCasterTargetBonus(func(c *legendaryContext, n int32) int32 {
@@ -68,10 +68,10 @@ func init() {
 			}
 		}
 		if count >= 1 && count <= 2 {
-			return specialScale(n, 175)
+			return specialScale(n, 100+c.RollValue("damage_pct", 75))
 		}
 		if c.Target != nil && c.Target.ID == c.Primary {
-			return specialScale(n, 135)
+			return specialScale(n, 100+c.RollValue("damage_pct", 35))
 		}
 		return n
 	})})
@@ -93,7 +93,7 @@ func init() {
 				key = "light-field-1"
 			}
 			c.Scene.legendaryStopStateGroundEffect(c.key(0, key), c.State(0, key))
-			legendaryCasterArea(c, key, c.Center, 180, specialScale(legendaryCasterBase(c, c.Skill), 30), 4)
+			legendaryCasterArea(c, key, c.Center, 180, specialScale(legendaryCasterBase(c, c.Skill), c.RollValue("field_pct", 30)), 4)
 			// Slot identity replaces the old visual when the two-zone pool wraps.
 			if fx, _, ok := legendaryVisualEffect(c.Power.ID, "stage-01"); ok && !c.Preview {
 				groundKey := fmt.Sprintf("%s/%d/%s", c.Power.ID, c.SourceUID, key)
@@ -111,7 +111,7 @@ func init() {
 					continue
 				}
 				c.VisualAt("stage-01", st.Position, 0)
-				for _, t := range c.Enemies(st.Position, 180, 256) {
+				for _, t := range c.Enemies(st.Position, 180, 0) {
 					hit := c.State(t.ID, "light-field-tick")
 					if hit.ExpiresMS > c.NowMS {
 						continue

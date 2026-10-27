@@ -7,18 +7,21 @@ import (
 )
 
 func legendaryAssassinPoisonStatus(c *legendaryContext, d *domain.StatusDef) {
-	legendaryAssassinAmplifyPoison(d)
+	legendaryAssassinAmplifyPoisonBonus(d, c.RollValue("tick_bp", 10000))
 }
 func legendaryAssassinAmplifyPoison(d *domain.StatusDef) {
+	legendaryAssassinAmplifyPoisonBonus(d, 10000)
+}
+func legendaryAssassinAmplifyPoisonBonus(d *domain.StatusDef, bonus int32) {
 	if d == nil || d.ID != domain.StatusPoison || !d.ClassSetPoison || d.LegendaryPoisonAmplified {
 		return
 	}
 	d.LegendaryPoisonAmplified = true
-	d.LegendaryModifiers.DamageTickBP += 10000
+	d.LegendaryModifiers.DamageTickBP += bonus
 }
 func (s *Scene) legendaryAssassinPreparePoison(source *entity.Entity, d *domain.StatusDef) {
-	if legendaryAssassinHas(s, source, "CK-A09") {
-		legendaryAssassinAmplifyPoison(d)
+	if c, ok := legendaryAssassinPowerContext(s, source, "CK-A09"); ok {
+		legendaryAssassinAmplifyPoisonBonus(d, c.RollValue("tick_bp", 10000))
 	}
 }
 func legendaryAssassinNativePoisonHit(c *legendaryContext) {
@@ -110,7 +113,7 @@ func init() {
 	registerLegendarySynergyHandler("CK-A08", legendaryHandler{OwnerPoisonDeath: legendaryAssassinSpreadDeath})
 }
 func legendaryAssassinSpreadDeath(c *legendaryContext, poison domain.Active, dead *entity.Entity) {
-	for _, target := range c.Enemies(dead.Pos, 200, 5) {
+	for _, target := range c.Enemies(dead.Pos, float64(c.RollValue("radius", 200)), 0) {
 		legendaryAssassinCopyPoison(c, target, poison)
 	}
 }

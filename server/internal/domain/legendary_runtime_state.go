@@ -33,6 +33,7 @@ type LegendaryTransferredCooldown struct {
 // LegendarySourceRef is the accepted equipment identity for a persistent skill.
 // Reconciliation may retain or remove these sources, never acquire new gear.
 type LegendarySourceRef struct {
-	PowerID   string
-	SourceUID int64
+	PowerRollBP int32 `json:",omitempty"`
+	PowerID     string
+	SourceUID   int64
 }

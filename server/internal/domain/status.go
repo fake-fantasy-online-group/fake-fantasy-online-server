@@ -93,6 +93,8 @@ const (
 
 // StatusDef 是一个状态在某一级上的定义。
 type StatusDef struct {
+	// Equipment-owned native buff; reconstructed from learned skill, never saved.
+	LegendaryPermanentPower     string               `json:",omitempty"`
 	LegendarySources            []LegendarySourceRef `json:",omitempty"`
 	HealingReceivedReductionPct int32
 	LegendaryModifiers          LegendaryStatusModifiers `json:",omitempty"`
@@ -1003,7 +1005,7 @@ func (s *StatusSet) ConsumeAttackModifiers(skill, hasDamage, hasDuration, hasCas
 		if consume {
 			kept := list[:0]
 			for _, a := range list {
-				if suppress && a.Def.Harmful() {
+				if a.Def.LegendaryPermanentPower != "" || suppress && a.Def.Harmful() {
 					kept = append(kept, a)
 				}
 			}
@@ -1090,6 +1092,9 @@ func (s *StatusSet) SaveForLogout(now Tick, wall time.Time, owner EntityID) []Sa
 	var out []SavedStatus
 	for _, id := range s.sortedIDs() {
 		for _, a := range s.act[id] {
+			if a.Def.LegendaryPermanentPower != "" {
+				continue
+			}
 			if a.Def.SkillSnapshotID != 0 && (owner == 0 || a.Source != owner) {
 				continue
 			}
@@ -1120,6 +1125,9 @@ func (s *StatusSet) SaveForLogout(now Tick, wall time.Time, owner EntityID) []Sa
 func RestoreSavedStatuses(saved []SavedStatus, now Tick, wall time.Time, owner EntityID) *StatusSet {
 	out := NewStatusSet()
 	for _, record := range saved {
+		if record.Def.LegendaryPermanentPower != "" {
+			continue
+		}
 		if record.Def.SkillSnapshotID != 0 && !record.SourceSelf {
 			continue
 		}

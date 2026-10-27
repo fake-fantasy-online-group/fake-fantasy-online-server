@@ -131,7 +131,7 @@ func TestLegendarySwordsmanImmediateDefenseDefaults(t *testing.T) {
 		damage   int32
 		want     int32
 	}{
-		{"JK-D04", 30, 100, 50}, {"JK-D07", 30, 100, 65}, {"JK-D09", 30, 800, 440}, {"JK-D09", 30, 799, 799}, {"JK-D10", 76, 100, 65}, {"JK-D10", 75, 100, 100},
+		{"JK-D04", 30, 100, 50}, {"JK-D07", 30, 100, 100}, {"JK-D09", 30, 800, 440}, {"JK-D09", 30, 799, 799}, {"JK-D10", 76, 100, 65}, {"JK-D10", 75, 100, 100},
 	} {
 		s, p, m := legendaryMeleeFixture(t, tc.id)
 		m.Pos.X = p.Pos.X + tc.distance
@@ -173,7 +173,7 @@ func TestLegendarySwordsmanImmediateUtilityDefaults(t *testing.T) {
 		id           string
 		skill        domain.SkillID
 		dist, radius int32
-	}{{"JK-U04", 10127, 100, 135}, {"JK-U10", 10113, 145, 100}, {"JK-A17", 10121, 100, 150}} {
+	}{{"JK-U04", 10127, 100, 180}, {"JK-U10", 10113, 145, 100}, {"JK-A17", 10121, 100, 150}} {
 		s, p, m = legendaryMeleeFixture(t, tc.id)
 		d := domain.SkillDef{ID: tc.skill, Dist: 100, Radius: 100}
 		s.legendaryPrepareSkill(p, &d, m.ID)
@@ -210,7 +210,7 @@ func TestLegendarySwordsmanExplicitKeeps(t *testing.T) {
 	}
 }
 func TestLegendarySwordsmanRefundCapsAndDefensiveCounter(t *testing.T) {
-	for _, id := range []string{"JK-U03", "JK-U09", "JK-U06"} {
+	for _, id := range []string{"JK-U03", "JK-U09"} {
 		s, p, m := legendaryMeleeFixture(t, id)
 		p.MaxMP = 1000
 		p.MP = 0
@@ -279,12 +279,9 @@ func TestLegendarySwordsmanLionSplashLimitAndNativeCounterShield(t *testing.T) {
 	}
 	swordCast(t, s, p, m, domain.SkillDef{ID: 10116, HurtType: domain.HurtPhysical, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100, GuaranteedHit: true}}})
 	for i := 0; i < 7; i++ {
-		want := int32(10000)
-		if i < 5 {
-			want -= 160
-		}
+		want := int32(9840)
 		if got := s.entities[domain.EntityID(901+i)].HP; got != want {
-			t.Fatal("splash nearest five", i, got, want)
+			t.Fatal("splash every in-range enemy", i, got, want)
 		}
 	}
 	s, p, m = legendaryMeleeFixture(t, "JK-A29")
@@ -300,9 +297,10 @@ func TestLegendarySwordsmanLionSplashLimitAndNativeCounterShield(t *testing.T) {
 }
 func TestLegendarySwordsmanMovePassiveAndCleanseScope(t *testing.T) {
 	s, p, m := legendaryMeleeFixture(t, "JK-U01")
+	s.legendaryCastReleased(p, domain.SkillDef{ID: 10117}, 0, nil)
 	stats := domain.Stats{MoveSpeed: 100}
 	s.legendaryPassiveStats(p, &stats)
-	if stats.MoveSpeed != 135 {
+	if stats.MoveSpeed != 180 {
 		t.Fatal("passive move", stats.MoveSpeed)
 	}
 	s, p, m = legendaryMeleeFixture(t, "JK-U05")

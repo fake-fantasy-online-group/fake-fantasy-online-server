@@ -5,16 +5,13 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
 
-func warriorCircle(c *legendaryContext, ids []domain.EntityID, center domain.Pos, r float64, cap int) []domain.EntityID {
+func warriorCircle(c *legendaryContext, ids []domain.EntityID, center domain.Pos, r float64) []domain.EntityID {
 	out := []domain.EntityID{}
 	if c.Primary != 0 {
 		out = append(out, c.Primary)
 	}
-	for _, e := range c.Enemies(center, r, cap) {
+	for _, e := range c.Enemies(center, r, len(c.Scene.entities)) {
 		out = legendaryMeleeAppendUnique(out, e.ID)
-		if len(out) >= cap {
-			break
-		}
 	}
 	return out
 }
@@ -37,7 +34,7 @@ func warriorEcho(c *legendaryContext, pct int64, farthest bool) {
 		}
 	}
 	if best != nil && (farthest || c.Primary == 0 || best.dst == c.Primary) {
-		c.damageVisual("stage-01", c.Scene.entities[best.dst], legendaryMeleeScale(best.ev.Amount, pct), best.blow.Magic, true)
+		c.damageVisual("stage-01", c.Scene.entities[best.dst], legendaryMeleeScale(best.ev.Amount, int64(c.RollValue("proc_pct", int32(pct)))), best.blow.Magic, true)
 	}
 }
 func init() {
@@ -48,7 +45,7 @@ func init() {
 		}
 	}, PrepareSkill: warriorSkill(10002, 15, 0, 0, 0).PrepareSkill, SelectTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {
 		if c.Skill == 10002 {
-			return warriorCircle(c, ids, c.Owner.Pos, float64(c.Def.Area.Radius), 5)
+			return warriorCircle(c, ids, c.Owner.Pos, float64(c.Def.Area.Radius))
 		}
 		return ids
 	}, TargetDefinition: func(c *legendaryContext, d *domain.SkillDef) {
@@ -73,7 +70,7 @@ func init() {
 			if t := c.Scene.entities[c.Primary]; t != nil {
 				center = t.Pos
 			}
-			return warriorCircle(c, ids, center, float64(c.Def.Area.Radius), 6)
+			return warriorCircle(c, ids, center, float64(c.Def.Area.Radius))
 		}
 		return ids
 	}})
@@ -92,7 +89,7 @@ func init() {
 		if d.ID == 10022 {
 			d.Dist = int32(3 * legendaryMeleeReach(c))
 			d.LegendaryModifiers.RadiusBP += 1500
-			d.LegendaryModifiers.DamageBP += 2000
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 2000)
 			if c.Target != nil {
 				d.Area.Center = domain.SkillAreaCenterTarget
 			}

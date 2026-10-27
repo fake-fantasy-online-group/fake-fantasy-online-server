@@ -248,7 +248,7 @@ func TestLegendaryUniversalSoloMovement(t *testing.T) {
 		}
 		for id, pos := range positions {
 			e := s.entities[id]
-			moved := id < 907
+			moved := true
 			if (e.Pos != pos) != moved {
 				t.Fatal("nearest six pull cap", id, e.Pos, pos)
 			}

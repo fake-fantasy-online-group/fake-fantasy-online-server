@@ -76,7 +76,7 @@ func TestLegendarySwordsmanSoloIncomingCoverage(t *testing.T) {
 	for _, tc := range []struct {
 		id   string
 		want int32
-	}{{"JK-D02", 100}, {"JK-D04", 50}, {"JK-D05", 60}, {"JK-D06", 65}, {"JK-D07", 65}, {"JK-D09", 550}, {"JK-D10", 65}} {
+	}{{"JK-D02", 100}, {"JK-D04", 50}, {"JK-D05", 60}, {"JK-D06", 65}, {"JK-D07", 100}, {"JK-D09", 550}, {"JK-D10", 65}} {
 		t.Run(tc.id, func(t *testing.T) {
 			for _, mode := range []string{"equipped", "unequipped", "dot", "condition-false", "magic"} {
 				t.Run(mode, func(t *testing.T) {
@@ -103,16 +103,12 @@ func TestLegendarySwordsmanSoloIncomingCoverage(t *testing.T) {
 							m.Pos.X = p.Pos.X + 75
 						}
 					}
-					if tc.id == "JK-D06" || tc.id == "JK-D07" {
-						st := swordsmanCoverageRootStatus()
+					if (tc.id == "JK-D06" || tc.id == "JK-D07") && mode != "condition-false" {
+						skill := domain.SkillID(10111)
 						if tc.id == "JK-D07" {
-							st = domain.StatusDef{ID: domain.StatusSilence, DurationSec: 6, Control: domain.ControlSilence}
+							skill = 10113
 						}
-						source := p.ID
-						if mode == "condition-false" {
-							source = 999
-						}
-						m.Status.Apply(st, s.tick, source)
+						s.legendaryCastReleased(p, domain.SkillDef{ID: skill}, 0, nil)
 					}
 					if tc.id == "JK-D09" && mode == "condition-false" {
 						damage = 799
@@ -125,6 +121,9 @@ func TestLegendarySwordsmanSoloIncomingCoverage(t *testing.T) {
 						s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{SkillPct: 100, Magic: mode == "magic", GuaranteedHit: true})
 					}
 					want := tc.want
+					if tc.id == "JK-D07" && mode == "magic" {
+						want = 50
+					}
 					if mode == "unequipped" || mode == "condition-false" || mode == "dot" {
 						want = damage
 					}
@@ -151,11 +150,11 @@ func TestLegendarySwordsmanSoloTargetCaps(t *testing.T) {
 		primary, side int32
 		remote        bool
 	}{
-		{"JK-A02", 10117, 9, 115, 115, true}, {"JK-A04", 10117, 5, 175, 75, true},
-		{"JK-A08", 10103, 3, 100, 130, false}, {"JK-A09", 10104, 5, 115, 115, false},
-		{"JK-A19", 10102, 5, 125, 125, false}, {"JK-A20", 10116, 6, 100, 160, false},
-		{"JK-A22", 10123, 6, 190, 170, false}, {"JK-A23", 10123, 6, 100, 110, false},
-		{"JK-A27", 10103, 8, 420, 320, false},
+		{"JK-A02", 10117, 11, 115, 115, true}, {"JK-A04", 10117, 11, 175, 75, true},
+		{"JK-A08", 10103, 11, 100, 130, false}, {"JK-A09", 10104, 11, 115, 115, false},
+		{"JK-A19", 10102, 11, 125, 125, false}, {"JK-A20", 10116, 11, 100, 160, false},
+		{"JK-A22", 10123, 11, 190, 170, false}, {"JK-A23", 10123, 11, 100, 110, false},
+		{"JK-A27", 10103, 11, 420, 320, false},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := swordsmanCoverageFixture(t, tc.id, true)
@@ -202,7 +201,7 @@ func TestLegendarySwordsmanSoloControlCoverage(t *testing.T) {
 		skill            domain.SkillID
 		limit            int
 		damage, cooldown int32
-	}{{"JK-A05", 10111, 6, 140, 24000}, {"JK-A13", 10113, 4, 170, 24000}, {"JK-A24", 10126, 6, 180, 18000}} {
+	}{{"JK-A05", 10111, 9, 140, 24000}, {"JK-A13", 10113, 9, 170, 24000}, {"JK-A24", 10126, 9, 180, 18000}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := swordsmanCoverageFixture(t, tc.id, true)
 			st := swordsmanCoverageRootStatus()
@@ -423,7 +422,7 @@ func TestLegendarySwordsmanSoloRestoreAndShieldCoverage(t *testing.T) {
 		s.aoi.Move(far, far.Pos)
 		swordCast(t, s, p, m, swordsmanCoverageDef(10116))
 		want := p.MaxHP * 14 / 100
-		if universalShieldValue(s.players[2]) != want || universalShieldValue(s.players[3]) != want || universalShieldValue(s.players[4]) != 0 || universalShieldValue(far) != 0 {
+		if universalShieldValue(s.players[2]) != want || universalShieldValue(s.players[3]) != want || universalShieldValue(s.players[4]) != want || universalShieldValue(far) != 0 {
 			t.Fatal("ally ratio/radius/cap filtering")
 		}
 		p.Player.Worn = &domain.EquipSet{}
@@ -440,11 +439,12 @@ func TestLegendarySwordsmanSoloUtilityCoverage(t *testing.T) {
 	t.Run("JK-U01", func(t *testing.T) {
 		for _, equipped := range []bool{false, true} {
 			s, p, _ := swordsmanCoverageFixture(t, "JK-U01", equipped)
+			s.legendaryCastReleased(p, domain.SkillDef{ID: 10117}, 0, nil)
 			st := domain.Stats{MoveSpeed: 100}
 			s.legendaryPassiveStats(p, &st)
 			want := int32(100)
 			if equipped {
-				want = 135
+				want = 180
 			}
 			if st.MoveSpeed != want {
 				t.Fatal("movement stat consumer", st.MoveSpeed)
@@ -490,7 +490,7 @@ func TestLegendarySwordsmanSoloUtilityCoverage(t *testing.T) {
 		id     string
 		skill  domain.SkillID
 		refund int32
-	}{{"JK-U03", 10119, 60}, {"JK-U06", 10111, 60}, {"JK-U09", 10103, 80}} {
+	}{{"JK-U03", 10119, 60}, {"JK-U09", 10103, 80}} {
 		t.Run(tc.id, func(t *testing.T) {
 			for _, mode := range []string{"equipped", "unequipped", "miss", "control-success"} {
 				s, p, m := swordsmanCoverageFixture(t, tc.id, mode != "unequipped")
@@ -792,6 +792,7 @@ func TestLegendarySwordsmanSoloNativePreservation(t *testing.T) {
 	t.Run("JK-D06", func(t *testing.T) {
 		for _, status := range []domain.StatusID{domain.StatusStun, domain.StatusFreeze, domain.StatusPetrify} {
 			s, p, m := swordsmanCoverageFixture(t, "JK-D06", true)
+			s.legendaryCastReleased(p, domain.SkillDef{ID: 10111}, 0, nil)
 			m.Status = domain.NewStatusSet()
 			m.Status.Apply(domain.StatusDef{ID: status, Control: domain.ControlStun, DurationSec: 10}, s.tick, p.ID)
 			m.Stats = domain.Stats{MinAtk: 100, MaxAtk: 100}
@@ -891,7 +892,7 @@ func TestLegendarySwordsmanSoloSettledAndPullBoundaries(t *testing.T) {
 }
 
 func TestLegendarySwordsmanSoloMovementOutput(t *testing.T) {
-	t.Run("JK-U01", func(t *testing.T) { meleeCoverageMovementOutput(t, "JK-U01", 135) })
+	t.Run("JK-U01", func(t *testing.T) { meleeCoverageMovementOutput(t, "JK-U01", 180) })
 }
 func swordsmanCoverageSoloMovementImmunity(t *testing.T) {
 	for _, key := range []domain.StatusKey{{ID: 1009, Level: 1}, {ID: 10111, Level: 1}, {ID: 1034, Level: 41}} {
@@ -1093,8 +1094,8 @@ func TestLegendarySwordsmanSoloPullCap(t *testing.T) {
 				}
 			}
 		}
-		if moved != 8 {
-			t.Fatalf("successful pulls=%d want8", moved)
+		if moved != len(targets) {
+			t.Fatalf("successful pulls=%d want%d", moved, len(targets))
 		}
 	})
 }

@@ -127,7 +127,7 @@ func TestLegendaryUniversalSoloGeometry(t *testing.T) {
 		}
 		dmg := m.MaxHP - m.HP
 		for i, e := range sides {
-			want := i < 4
+			want := true
 			if (e.HP < 10000) != want {
 				t.Fatalf("nearest cap side%d hp%d", i, e.HP)
 			}
@@ -168,18 +168,15 @@ func TestLegendaryUniversalSoloBasic(t *testing.T) {
 		universalSoloAttack(t, s, p, m, combat.Blow{GuaranteedHit: true})
 		universalSoloDamage(t, s, m.ID, 0, 100, 1)
 		for i, e := range sides {
-			want := int32(0)
-			if i < 4 {
-				want = 70
-			}
+			want := int32(70)
 			if 10000-e.HP != want {
 				t.Fatalf("cap/nearest side%d damage%d", i, 10000-e.HP)
 			}
-			if i < 4 && !e.Status.Has(domain.StatusPoison) {
+			if !e.Status.Has(domain.StatusPoison) {
 				t.Fatal("native poison missing")
 			}
 		}
-		if p.HP != 1038 || p.MP != 38 || behind.HP != 10000 || !m.Status.Has(domain.StatusPoison) {
+		if p.HP != 1052 || p.MP != 52 || behind.HP != 10000 || !m.Status.Has(domain.StatusPoison) {
 			t.Fatalf("fan leech/geometry hp%d mp%d behind%d", p.HP, p.MP, behind.HP)
 		}
 	})

@@ -186,7 +186,7 @@ func assassinCoveragePower(t *testing.T, id string) {
 	case "CK-U06":
 		assassinCoverageCooldown(t)
 	case "CK-U07":
-		assassinCoverageCosts(t, id, []domain.SkillID{10213, 10214, 10215, 10216, 10217}, 70, 10000)
+		assassinCoverageCosts(t, id, []domain.SkillID{10213, 10214, 10215, 10216, 10217}, 100, 10000)
 	case "CK-U08":
 		assassinCoverageStealthBudget(t)
 	case "CK-U09":
@@ -259,7 +259,10 @@ func assassinCoverageSplash(t *testing.T) {
 			ids = s.legendarySelectTargets(p, d, m.ID, []domain.EntityID{m.ID})
 			want := 1
 			if enabled {
-				want = 4
+				want = 9
+				if radius == 200 {
+					want = 10
+				}
 			}
 			if len(ids) != want || ids[0] != m.ID {
 				t.Fatal("primary + 3 cap", ids)
@@ -365,7 +368,7 @@ func assassinCoverageSpread(t *testing.T) {
 		}
 		want := 1
 		if enabled {
-			want = 5
+			want = 7
 		}
 		if count != want || far.Status.Has(domain.StatusPoison) {
 			t.Fatal("spread cap/radius", count)
@@ -671,7 +674,10 @@ func assassinCoverageFan(t *testing.T) {
 			ids = s.legendarySelectTargets(p, d, m.ID, []domain.EntityID{m.ID})
 			want := 1
 			if enabled {
-				want = 5
+				want = 10
+				if weapon == 150 {
+					want = 11
+				}
 			}
 			if len(ids) != want || ids[0] != m.ID {
 				t.Fatal("fan primary and four cap")
@@ -1013,6 +1019,7 @@ func assassinCoverageDefense(t *testing.T, id string) {
 					m.Pos.X = p.Pos.X + 1
 				case "CK-D07":
 					if active {
+						s.legendaryCastReleased(p, domain.SkillDef{ID: 10219}, m.ID, []domain.EntityID{m.ID})
 						incomingAssassinCondition(s, p, m, id)
 					}
 				case "CK-D10":
@@ -1026,6 +1033,9 @@ func assassinCoverageDefense(t *testing.T, id string) {
 				want := int32(1000)
 				if enabled && active && (id != "CK-D04" || kind == "native") {
 					want = 800
+					if id == "CK-D01" || id == "CK-D07" {
+						want = 650
+					}
 				}
 				if hp-p.HP != want {
 					t.Fatal("conditional damage consumer", id, enabled, active, kind, hp-p.HP, want)
@@ -1037,6 +1047,9 @@ func assassinCoverageDefense(t *testing.T, id string) {
 					m.Status = domain.NewStatusSet()
 				}
 				if id == "CK-D01" || id == "CK-D04" || id == "CK-D07" {
+					if id == "CK-D07" {
+						s.tick += domain.Ticks(8000)
+					}
 					hp = p.HP
 					incomingAssassinHit(s, p, m, kind, b)
 					if hp-p.HP != 1000 {
@@ -1266,7 +1279,7 @@ func assassinCoverageRefund(t *testing.T) {
 			refund := int32(0)
 			if enabled {
 				paid = cost * 70 / 100
-				refund = min(p.MaxMP*5/100, paid)
+				refund = 0
 			}
 			if p.MP != before-paid+refund {
 				t.Fatal("native reduced payment and bounded refund", cost, p.MP, before-paid+refund)
@@ -1310,7 +1323,16 @@ func assassinCoverageDetect(t *testing.T) {
 		for _, dist := range []float64{199, 250, 301} {
 			s.placeTrap(m, domain.SkillDef{ID: 10213}, domain.Pos{MapID: p.Pos.MapID, X: p.Pos.X + dist, Y: p.Pos.Y}, 50, 100)
 		}
+		s.refreshStats(p)
+		baseSpeed := p.Stats.MoveSpeed
 		d := assassinRegressionCast(t, s, p, UseSkill{Skill: 10228})
+		wantSpeed := baseSpeed
+		if enabled {
+			wantSpeed = baseSpeed * 160 / 100
+		}
+		if p.Stats.MoveSpeed != wantSpeed {
+			t.Fatal("native detection release failed speed window", p.Stats.MoveSpeed, wantSpeed)
+		}
 		for i := 0; i < 50; i++ {
 			s.detectTraps(p, d.Radius, d.DirectEffects()[0].ChanceBP)
 		}
@@ -1330,7 +1352,7 @@ func assassinCoverageDetect(t *testing.T) {
 		s.refreshStats(p)
 		speed[n] = p.Stats.MoveSpeed
 	}
-	if speed[0] <= 0 || speed[1] != speed[0]*120/100 {
+	if speed[0] <= 0 || speed[1] != speed[0] {
 		t.Fatal("unconditional actual move speed", speed)
 	}
 }
@@ -1417,7 +1439,7 @@ func assassinCoverageStealthBudget(t *testing.T) {
 			s.legendaryPrepareSkill(p, &d, m.ID)
 			s.prepareSkillStatuses(p, &d)
 			s.legendaryCasterAccepted(p, d, m.ID, []domain.EntityID{m.ID}, 0)
-			if entityInvisible(p) != (enabled && n < 2) {
+			if entityInvisible(p) != enabled {
 				t.Fatal("stealth trap budget", enabled, n)
 			}
 		}
@@ -1511,12 +1533,12 @@ func TestAssassinUnitCoverageCombinations(t *testing.T) {
 			if len(s.traps) != 3 {
 				t.Fatal("triple placement cardinality")
 			}
-			if entityInvisible(p) != (i < 2) {
+			if !entityInvisible(p) {
 				t.Fatal("one cast consumed more than one stealth opportunity", i)
 			}
 			if i < 2 {
 				a := assassinCoverageActive(t, p, domain.StatusStealth)
-				if a.Def.LegendaryStealthTrapCharges != int32(1-i) {
+				if a.Def.LegendaryStealthTrapCharges != 0 {
 					t.Fatal("triple consumed wrong budget")
 				}
 			}
