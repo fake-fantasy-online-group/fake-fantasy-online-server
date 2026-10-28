@@ -203,7 +203,8 @@ func (s *Scene) onMoveBagItem(cmd MoveBagItem) {
 }
 
 // onSortBag 处理正式客户端 0x1078。当前背包模型使用一套权威线性格号，
-// 因此把所选分页排到前面并按物品号稳定排序，其余分页保持原有相对顺序；
+// 先合并所选页中实例属性一致的堆，再按物品号稳定排序；其他页不参与合并。
+// 兼容旧的小背包模型时，其余分页保持原有相对顺序；
 // 这样所选页从第 0 格连续显示，同时不会丢失或伪造任何物品。
 func (s *Scene) onSortBag(cmd SortBag) {
 	p := s.players[cmd.ID]
@@ -235,6 +236,7 @@ func (s *Scene) onSortBag(cmd SortBag) {
 		_ = s.pushInventory(p)
 		return
 	}
+	selected = s.mergeSortedBagStacks(selected)
 	sort.SliceStable(selected, func(i, j int) bool {
 		if selected[i].Item != selected[j].Item {
 			return selected[i].Item < selected[j].Item
@@ -247,14 +249,13 @@ func (s *Scene) onSortBag(cmd SortBag) {
 		}
 		return selected[i].UID < selected[j].UID
 	})
-	selected = s.mergeSortedBagStacks(selected)
 	ordered := selected
 	if !fourPages {
 		ordered = append(ordered, rest...)
 	}
 
 	planned := bag.Clone()
-	if planned == nil || len(ordered) > planned.Cap() {
+	if planned == nil || len(ordered) > planned.Cap() || fourPages && len(ordered) > domain.BagPageSlots {
 		_ = s.pushInventory(p)
 		return
 	}
@@ -401,8 +402,10 @@ func (s *Scene) onSplitBagItem(cmd SplitBagItem) {
 		"from", cmd.Slot, "to", free)
 }
 
-// mergeSortedBagStacks 合并整理页中可堆叠且实例属性一致的相邻堆。
-// 不可堆叠物和绑定状态不同的同名物品仍各占一格。
+// mergeSortedBagStacks consolidates every compatible stack in the selected page,
+// not just adjacent entries. Sorting by item/protection/UID does not make equal
+// instance snapshots adjacent (e.g. rune rolls A, B, A). Never normalize away
+// instance metadata to make stacks compatible.
 func (s *Scene) mergeSortedBagStacks(stacks []domain.Stack) []domain.Stack {
 	out := make([]domain.Stack, 0, len(stacks))
 	for _, st := range stacks {
@@ -411,19 +414,29 @@ func (s *Scene) mergeSortedBagStacks(stacks []domain.Stack) []domain.Stack {
 			out = append(out, st)
 			continue
 		}
-		for st.Count > 0 {
-			if len(out) > 0 {
-				last := &out[len(out)-1]
-				if domain.SameStackInstance(*last, st) && last.Count < domain.MaxStack {
-					put := domain.MaxStack - last.Count
-					if put > st.Count {
-						put = st.Count
-					}
-					last.Count += put
-					st.Count -= put
-					continue
-				}
+		// A bound rune cannot become transferable again. Older loot paths set
+		// the root flag without mirroring it into the card snapshot, whereas
+		// crafting sets both. Reconcile only this redundant protection bit on
+		// a validated rune; never erase effects or relax binding/locking.
+		if domain.IsAstralRuneStack(st) && st.Bound {
+			st.Card.Bound = true
+		}
+		for i := range out {
+			dst := &out[i]
+			if st.Count == 0 {
+				break
 			}
+			if dst.Count >= domain.MaxStack || !domain.SameStackInstance(*dst, st) {
+				continue
+			}
+			put := domain.MaxStack - dst.Count
+			if put > st.Count {
+				put = st.Count
+			}
+			dst.Count += put
+			st.Count -= put
+		}
+		for st.Count > 0 {
 			put := st.Count
 			if put > domain.MaxStack {
 				put = domain.MaxStack

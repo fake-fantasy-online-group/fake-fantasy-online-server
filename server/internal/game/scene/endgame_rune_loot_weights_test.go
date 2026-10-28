@@ -116,7 +116,7 @@ func TestRiftRuneRewardsUsePinnedWeightsAndPersistExactGrants(t *testing.T) {
 					want = domain.FirstAstralRune + domain.ItemID(rng.Intn(28))
 				}
 				st := items[i]
-				if st.Item != want || st.UID <= 0 || !st.Bound || st.Count != 1 || !st.Card.Initialized {
+				if st.Item != want || st.UID <= 0 || !st.Bound || !st.Card.Bound || st.Count != 1 || !st.Card.Initialized {
 					t.Fatalf("version %d sample %d reward %d: want %d got %+v", version, sample, i, want, st)
 				}
 			}
