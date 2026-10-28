@@ -12,11 +12,12 @@ const LegendaryAffixCount = 6
 // deliberately unchanged; loading never rerolls or scales an owned item.
 type LegendaryAffixBounds struct{ Min, Max int32 }
 type LegendaryInstance struct {
-	PowerID     string
-	PowerRollBP int32         `json:",omitempty"`
-	Tier        LegendaryTier `json:",omitempty"`
-	Affixes     [LegendaryAffixCount]InstanceAffix
-	Bounds      [LegendaryAffixCount]LegendaryAffixBounds
+	TemperedSlot uint8 `json:",omitempty"` // 1-based affix index; zero means no temper
+	PowerID      string
+	PowerRollBP  int32         `json:",omitempty"`
+	Tier         LegendaryTier `json:",omitempty"`
+	Affixes      [LegendaryAffixCount]InstanceAffix
+	Bounds       [LegendaryAffixCount]LegendaryAffixBounds
 }
 
 func (v LegendaryInstance) Validate() error {
@@ -34,6 +35,15 @@ func (v LegendaryInstance) Validate() error {
 	}
 	if !v.Tier.Valid() {
 		return fmt.Errorf("unknown legendary tier %q", v.Tier)
+	}
+	if v.TemperedSlot > LegendaryAffixCount {
+		return fmt.Errorf("invalid tempered affix")
+	}
+	if v.TemperedSlot > 0 {
+		b := v.Bounds[v.TemperedSlot-1]
+		if b.Min >= b.Max || (int64(b.Min)*3-1)/2 < math.MinInt32 || (int64(b.Max)*3+1)/2 > math.MaxInt32 {
+			return fmt.Errorf("invalid tempered bounds")
+		}
 	}
 	seen := map[int32]bool{}
 	for i, a := range v.Affixes {
@@ -311,7 +321,8 @@ func LegendaryItemBonuses(def ItemDef, st Stack) []Affix {
 		return nil
 	}
 	out := make([]Affix, 0, LegendaryAffixCount)
-	for _, a := range st.Legendary.Affixes {
+	for i := range st.Legendary.Affixes {
+		a, _ := st.Legendary.EffectiveAffix(i)
 		out = append(out, a.Affix)
 	}
 	return out

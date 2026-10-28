@@ -104,7 +104,9 @@ type StatusDef struct {
 	LegendaryVisualStage        string
 	// LegendaryDurationMS preserves fractional seconds for an exact authored reduction.
 	LegendaryDurationMS int32 `json:",omitempty"`
-	// Legendary grants cannot recursively trigger powers and retain source identity.
+	// Causal producer ancestry survives delayed ticks and saved-status restoration.
+	CombatCausalPath []string `json:",omitempty"`
+	// Legendary grants retain source identity.
 	LegendaryPowerID   string
 	LegendarySourceUID int64
 	// Snapshot at application; applied once per tick even after source despawns.
@@ -435,6 +437,7 @@ type SavedStatus struct {
 func CloneSavedStatuses(src []SavedStatus) []SavedStatus {
 	out := append([]SavedStatus(nil), src...)
 	for i := range out {
+		out[i].Def.CombatCausalPath = append([]string(nil), src[i].Def.CombatCausalPath...)
 		out[i].Def.Affixes = append([]Affix(nil), src[i].Def.Affixes...)
 		out[i].Def.HPChanges = append([]ResourceChange(nil), src[i].Def.HPChanges...)
 		out[i].Def.MPChanges = append([]ResourceChange(nil), src[i].Def.MPChanges...)

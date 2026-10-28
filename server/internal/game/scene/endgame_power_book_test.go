@@ -14,6 +14,7 @@ import (
 func powerBookSceneFixture(t *testing.T) (*Scene, *fakeSink, *cubeTestBackend) {
 	t.Helper()
 	s, sink, b := cubeSceneFixture(t)
+	s.players[1].Player.EndgamePowerCodex = true
 	d := s.items[1001]
 	d.LegendaryEnabled = true
 	d.Equip.LevelReq = 100
@@ -26,6 +27,12 @@ func powerBookSceneFixture(t *testing.T) (*Scene, *fakeSink, *cubeTestBackend) {
 		st.Legendary.Bounds[i] = domain.LegendaryAffixBounds{Min: 2, Max: 4}
 	}
 	s.players[1].Player.Bag.Set(200, st)
+	dbook := domain.ItemDef{ID: domain.PowerCodexItemID, Name: "万象秘典", InventoryTabKnown: true}
+	dscroll := domain.ItemDef{ID: domain.PowerScrollItemID, Name: "威能卷轴", InventoryTabKnown: true}
+	s.items[dbook.ID] = dbook
+	s.items[dscroll.ID] = dscroll
+	s.players[1].Player.Char.Quests.Finish(domain.PowerCodexQuestID)
+	s.players[1].Player.Bag.Set(5, domain.Stack{Item: dbook.ID, UID: 91, Count: 1, Bound: true})
 	return s, sink, b
 }
 
@@ -89,7 +96,8 @@ func TestPowerBookImprintReceiptAndRevision(t *testing.T) {
 		t.Fatal(err)
 	}
 	s.endgamePlayer(p).state.Payload = payload
-	req := domain.EndgameRequest{Op: "powerbook.imprint", RequestID: "imprint-power-0001", ExpectedRevision: "0", TargetUID: "42", PowerID: "TY-A02"}
+	p.Player.Bag.Set(6, domain.Stack{Item: domain.PowerScrollItemID, UID: 92, Count: 1, Bound: true, Endgame: domain.EndgameItemState{PowerScrollID: "TY-A02", PowerScrollRollBP: 10000}})
+	req := domain.EndgameRequest{Op: "powerbook.apply", RequestID: "imprint-power-0001", ExpectedRevision: "0", TargetUID: "42", RuneUID: "92"}
 	before := p.Player.Bag.At(200)
 	s.onEndgame(EndgameRequest{ID: p.ID, Request: req})
 	s.finishEndgame(false)

@@ -8,6 +8,7 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/spawn"
 )
 
@@ -247,14 +248,17 @@ func (meleeAuditZeroSource) Int63() int64 { return 0 }
 func (meleeAuditZeroSource) Seed(int64)   {}
 
 func TestLegendarySwordsmanAuditNativeInstantDeathBurst(t *testing.T) {
-	for _, mode := range []string{"instant-death", "ordinary-kill", "low-health", "immune", "miss", "two-powers", "three-powers", "class-set"} {
+	for _, mode := range []string{"instant-death", "ordinary-kill", "low-health", "immune", "miss", "two-powers", "three-powers", "three-powers-reversed", "class-set"} {
 		t.Run(mode, func(t *testing.T) {
 			powers := []string{"JK-A23"}
-			if mode == "two-powers" || mode == "three-powers" {
+			if mode == "two-powers" || mode == "three-powers" || mode == "three-powers-reversed" {
 				powers = append(powers, "JK-A30")
 			}
-			if mode == "three-powers" {
+			if mode == "three-powers" || mode == "three-powers-reversed" {
 				powers = append(powers, "JK-A22")
+			}
+			if mode == "three-powers-reversed" {
+				powers = []string{"JK-A22", "JK-A30", "JK-A23"}
 			}
 			s, p, m := meleeAuditNativeScene(t, domain.Swordsman, domain.Learned{10123: 1}, powers...)
 			s.rng = rand.New(meleeAuditZeroSource{})
@@ -285,11 +289,28 @@ func TestLegendarySwordsmanAuditNativeInstantDeathBurst(t *testing.T) {
 			if mode == "immune" || mode == "miss" {
 				want = 0
 			}
-			if mode == "three-powers" {
-				want += 165 + 115
+			if mode == "three-powers" || mode == "three-powers-reversed" {
+				// A22 boosts A23 burst and its own two payloads by20%. This pure modifier does not create another A22 wave. A30 remains primary-only.
+				want = want*120/100 + 165*120/100 + 115*120/100
 			}
 			if got := 10000 - q.HP; got != want {
+				for _, msg := range s.outbox {
+					if e, ok := msg.ev.(event.DamageDealt); ok {
+						t.Logf("damage=%+v", e)
+					}
+				}
 				t.Fatalf("burst amount/count=%d want%d", got, want)
+			}
+			if mode == "three-powers" || mode == "three-powers-reversed" {
+				count := 0
+				for _, msg := range s.outbox {
+					if e, ok := msg.ev.(event.DamageDealt); ok && e.Dst == q.ID && e.Amount > 0 {
+						count++
+					}
+				}
+				if count != 3 {
+					t.Fatalf("independent A22/A23 payload count=%d want3", count)
+				}
 			}
 			if far.HP != 10000 {
 				t.Fatal("burst escaped150 radius")
@@ -400,7 +421,7 @@ func TestLegendarySwordsmanAuditA14PrimaryShieldContract(t *testing.T) {
 }
 
 func TestLegendarySwordsmanAuditNativeTauntReachAndSet(t *testing.T) {
-	for _, mode := range []string{"native", "radius", "three-powers", "class-set"} {
+	for _, mode := range []string{"native", "radius", "three-powers", "three-powers-reversed", "class-set"} {
 		t.Run(mode, func(t *testing.T) {
 			powers := []string{}
 			if mode != "native" {

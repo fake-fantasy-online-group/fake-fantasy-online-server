@@ -2,11 +2,10 @@ package domain
 
 import (
 	"reflect"
-	"strconv"
 	"testing"
 )
 
-func TestWingCubePowerSelectionAndInheritance(t *testing.T) {
+func TestWingScrollSelectionAndCubeInheritance(t *testing.T) {
 	ctx := wingCubeFixture(t)
 	extra, def := wingPowerDonor("TY-A02")
 	extra.UID = 999
@@ -24,35 +23,19 @@ func TestWingCubePowerSelectionAndInheritance(t *testing.T) {
 		ctx.Items[def.ID] = def
 		ctx.Bag.Set(201, source)
 		before := ctx.Bag.Clone()
-		prior := ctx.Bag.At(200).WingPowers
-		req := wingInputs(42)
-		req.CubeInputs = append(req.CubeInputs, CubeInput{UID: strconv.FormatInt(source.UID, 10), Count: 1})
-		requests, plans, err := MatchCubeInputs(ctx, req)
-		if err != nil || len(requests) != 1 || len(plans) != 1 {
-			t.Fatalf("two gear match %s: %v", id, err)
-		}
-		if !reflect.DeepEqual(before, ctx.Bag) {
-			t.Fatal("quote mutated original inventory")
-		}
-		plan, err := PlanCube(ctx, requests[0], true)
+		wing := ctx.Bag.At(200)
+		wing.Legendary = LegendaryInstance{}
+		got, err := (LegendaryPowerBook{id: 8123}).ImprintWingPower(wing, ctx.Items[wing.Item], ctx.Character, id, ctx.WingRules)
 		if err != nil {
 			t.Fatal(err)
 		}
-		if !plan.Bag.At(201).Empty() || plan.Bag.At(202) != extra || len(plan.ConsumedUIDs) != 1 || plan.ConsumedUIDs[0] != source.UID || plan.Target.UID != 42 {
-			t.Fatal("selected UID consumption violated", plan)
+		if !reflect.DeepEqual(before, ctx.Bag) {
+			t.Fatal("imprint mutated original inventory")
 		}
-		p, _ := LegendaryPower(id)
-		index, _ := WingPowerIndex(p)
-		for i, v := range plan.Target.WingPowers {
-			if i == index {
-				if v.PowerID != id {
-					t.Fatal("wrong power extracted")
-				}
-			} else if v != prior[i] {
-				t.Fatal("other category overwritten")
-			}
+		if ctx.Bag.At(201) != source || ctx.Bag.At(202) != extra {
+			t.Fatal("scroll imprint consumed unrelated donor")
 		}
-		ctx.Bag = plan.Bag
+		ctx.Bag.Set(200, got)
 	}
 	powers := ctx.Bag.At(200).WingPowers
 	for _, materials := range [][]CubeMaterialDef{{{25029, 2}, {25028, 2}}, {{25029, 8}, {11682, 1}}} {

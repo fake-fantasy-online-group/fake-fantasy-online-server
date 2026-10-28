@@ -246,8 +246,9 @@ func TestCasterSetsHealerDamageHealsSingleRadiusWithoutRecursiveCopy(t *testing.
 	light, _ := s.skills.Get(10319, 1)
 	c := pendingCast{def: light, classSetArea: s.captureCasterSetArea(p, light, tid, nil)}
 	s.finishCasterSetCast(p, c, []domain.EntityID{tid})
-	if p.HP != 300 || ally.HP != 300 {
-		t.Fatalf("one heal each, no copied generated heal self=%d ally=%d", p.HP, ally.HP)
+	// Each ally receives 200; the ally heal also copies 200 to its caster.
+	if p.HP != 100+200+200 || ally.HP != 100+200 {
+		t.Fatalf("one heal each, plus one distinct set copy self=%d ally=%d", p.HP, ally.HP)
 	}
 	if s.equipmentState().classSetTriggered != 0 || len(s.casts) != 0 {
 		t.Fatal("recursive payload")
@@ -290,7 +291,7 @@ func TestCasterSetsHealerAreaUsesOriginalShapeOnce(t *testing.T) {
 	area.Area.Radius = 100
 	c := pendingCast{def: area, classSetArea: s.captureCasterSetArea(p, area, 0, nil)}
 	s.finishCasterSetCast(p, c, nil)
-	if p.HP != 300 || s.entities[2].HP != 300 || s.entities[3].HP != 100 {
+	if p.HP != 100+200+200 || s.entities[2].HP != 100+200 || s.entities[3].HP != 100 {
 		t.Fatalf("original area self=%d inside=%d outside=%d", p.HP, s.entities[2].HP, s.entities[3].HP)
 	}
 }
@@ -355,8 +356,9 @@ func TestCasterSetsHealerActualDamageAndHealCast(t *testing.T) {
 	target.MaxHP = 10000
 	s.exec(UseSkill{ID: 1, Skill: 10319, Target: tid})
 	s.stepCasts()
-	if p.HP != 300 || ally.HP != 300 {
-		t.Fatalf("actual damage cast did not heal once each: %d %d", p.HP, ally.HP)
+	// Each ally receives 200; the ally heal also copies 200 to its caster.
+	if p.HP != 100+200+200 || ally.HP != 100+200 {
+		t.Fatalf("actual damage cast did not heal each and copy the ally heal: %d %d", p.HP, ally.HP)
 	}
 	before := target.HP
 	s.exec(UseSkill{ID: 1, Skill: 10301, Target: 2})
@@ -364,7 +366,7 @@ func TestCasterSetsHealerActualDamageAndHealCast(t *testing.T) {
 	if before-target.HP != 100 {
 		t.Fatalf("actual heal cast missing light bolt: %d", before-target.HP)
 	}
-	if p.HP != 500 || ally.HP != 500 {
+	if p.HP != 100+200+200+200 || ally.HP != 100+200+200 {
 		t.Fatalf("actual healing copy wrong: %d %d", p.HP, ally.HP)
 	}
 }
@@ -631,5 +633,21 @@ func TestCasterSetsGeneratedSpellDoesNotDoubleStatusDuration(t *testing.T) {
 	})
 	if expiry-s.tick != domain.Ticks(10000) {
 		t.Fatalf("generated status duration=%d ticks", expiry-s.tick)
+	}
+}
+
+func TestCasterSetsHealerUsesActualPowerRectangleDirection(t *testing.T) {
+	s, p, m := nativeRepairFixture(t, domain.Healer, domain.Learned{10317: 1, 10301: 1}, "YS-A08")
+	nativeRepairSet(t, s, p, 2, 4)
+	inside := nativeRepairAlly(t, s, p, 2, 650)
+	outsideWidth := nativeRepairAlly(t, s, p, 3, 300)
+	s.aoi.Move(outsideWidth, domain.Pos{MapID: p.Pos.MapID, X: 300, Y: 190})
+	behind := nativeRepairAlly(t, s, p, 4, 50)
+	// A08 transforms 圣光术 into the actual 600×160 forward rectangle.
+	// Its set-generated heal must use that shape, not the legacy 200-radius
+	// selected-target fallback or a rectangle with an unset aim vector.
+	nativeRepairCast(t, s, p, 10317, m.ID)
+	if inside.HP != 201 || outsideWidth.HP != 1 || behind.HP != 1 {
+		t.Fatalf("set payload lost accepted rectangle direction: inside%d width%d behind%d", inside.HP, outsideWidth.HP, behind.HP)
 	}
 }

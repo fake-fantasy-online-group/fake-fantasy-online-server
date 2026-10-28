@@ -68,6 +68,12 @@ func (s *Scene) legendaryPeriodicBlow(a domain.Active) combat.Blow {
 	if d, ok := s.skills.Get(skill, max(int32(1), a.Def.SkillSnapshotRank)); ok {
 		b.HurtType = d.HurtType
 	}
+	// Native 燃烧 is carried by status1036; its applying skill10421 has
+	// no direct damage/HurtType. Burn remains fire even when another spell
+	// applies it, rather than borrowing that spell's ice/holy element.
+	if a.Def.ID == 1036 {
+		b.HurtType = domain.HurtFire
+	}
 	return b
 }
 
@@ -90,4 +96,9 @@ func legendaryScaleNativeBuffFields(d *domain.StatusDef, bp int32) {
 			*value = universalScaleBP(*value, bp)
 		}
 	}
+}
+
+// Pure reductions consume enemy damage regardless of its producing effect.
+func legendaryPureIncoming(c *legendaryContext) bool {
+	return c.Owner != nil && c.Target != nil && c.Owner.ID != c.Target.ID && !sameParty(c.Owner, c.Target)
 }

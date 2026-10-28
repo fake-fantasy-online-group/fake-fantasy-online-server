@@ -676,6 +676,20 @@ func TestHealerIndependentA17(t *testing.T) {
 	}
 }
 func TestHealerIndependentA19(t *testing.T) {
+	for _, unequipped := range []bool{false, true} {
+		s, p, m := healerSoloFixture(t, "YS-A19", domain.Learned{10325: 1}, unequipped)
+		side := healerSoloMonster(s, 901, 330, 100)
+		if unequipped {
+			p.Player.Worn = &domain.EquipSet{}
+			s.refreshStats(p)
+		}
+		pos := side.Pos
+		nativeRepairCast(t, s, p, 10325, m.ID)
+		if m.HP != 100000 || side.HP != 100000 || side.Pos != pos || legendaryCasterHasSkill(side, 10325) {
+			t.Fatalf("absent/removed power granted shackle damage, splash or pull: unequipped=%v", unequipped)
+		}
+	}
+
 	for _, kind := range []string{"normal", "boss", "immune"} {
 		s, p, m := healerSoloFixture(t, "YS-A19", domain.Learned{10325: 1}, true)
 		side := healerSoloMonster(s, 901, 330, 100)
@@ -1841,16 +1855,16 @@ func TestHealerIndependentNativeControlBoundaries(t *testing.T) {
 }
 
 func TestHealerIndependentCombinations(t *testing.T) {
-	t.Run("prism_echo_primary_only", func(t *testing.T) {
+	t.Run("prism_echo_each_distinct_victim", func(t *testing.T) {
 		s, p, m := nativeRepairFixture(t, domain.Healer, domain.Learned{10319: 1}, "YS-A01", "YS-A02")
 		side := healerSoloMonster(s, 901, 140, 100)
 		nativeRepairCast(t, s, p, 10319, m.ID)
-		if 100000-m.HP != 388 || 100000-side.HP != 126 {
-			t.Fatal("secondary generated echo or primary lost full hit", 100000-m.HP, 100000-side.HP)
+		if 100000-m.HP != 388 || 100000-side.HP != 126+126*85/100 {
+			t.Fatal("secondary lost distinct echo or primary lost full hit", 100000-m.HP, 100000-side.HP)
 		}
 		_, primaryCount := healerSoloCount(s, m.ID)
 		_, sideCount := healerSoloCount(s, side.ID)
-		if primaryCount != 2 || sideCount != 1 {
+		if primaryCount != 2 || sideCount != 2 {
 			t.Fatal("echo generation scope", primaryCount, sideCount)
 		}
 	})
@@ -2294,4 +2308,36 @@ func TestHealerIndependentNativeControlIgnoresMonsterAndNoWindup(t *testing.T) {
 			t.Fatal("windup-only cancellation revoked accepted instant payload or removed control")
 		}
 	})
+}
+
+// A23 is the named 治愈术 producer, not a generic heal-to-damage passive.
+// 回春术 keeps its periodic healing identity; assigning every tick a synthetic
+// primary would incorrectly turn that different skill into repeated light bolts.
+func TestHealerA23NativePeriodicIdentityAndDelayedDirectHeal(t *testing.T) {
+	s, p, m := healerSoloFixture(t, "YS-A23", domain.Learned{10301: 1, 10303: 1}, true)
+	for key, def := range s.skills {
+		if key.ID != 10301 {
+			continue
+		}
+		if len(def.Statuses) != 0 {
+			t.Fatalf("治愈术 rank %d unexpectedly gained a status producer", key.Level)
+		}
+		for _, effect := range def.DirectEffects() {
+			if effect.Kind != domain.EffectHeal {
+				t.Fatalf("治愈术 rank %d is no longer a direct-only heal: %+v", key.Level, effect)
+			}
+		}
+	}
+	p.HP = 1
+	nativeRepairCast(t, s, p, 10303, p.ID)
+	a := healerSoloStatus(t, p, 10303)
+	before := p.HP
+	s.tickStatus(p, a)
+	if p.HP <= before || m.HP != 100000 {
+		t.Fatal("回春术 must heal without impersonating 治愈术 or generating its light bolts", p.HP, before, m.HP)
+	}
+	nativeRepairCast(t, s, p, 10301, p.ID)
+	if m.HP >= 100000 {
+		t.Fatal("the actual delayed 治愈术 primary heal lost A23")
+	}
 }

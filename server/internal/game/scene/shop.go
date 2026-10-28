@@ -24,7 +24,7 @@ func (s *Scene) onOpenShop(cmd OpenShop) {
 		return
 	}
 	shop, ok := s.shops[cmd.Shop]
-	if !ok || !s.hasShopNPC(cmd.Shop) {
+	if !ok || !s.hasShopNPC(cmd.Shop) || !s.canUseSpiritShop(p, cmd.Shop) {
 		reject(event.RejectNoTarget)
 		return
 	}
@@ -60,7 +60,7 @@ func (s *Scene) onBuyItem(cmd BuyItem) {
 		s.emitTo(p.ID, event.Rejected{Who: p.ID, Cmd: cmd.CmdName(), Reason: reason})
 	}
 	shop, ok := s.shops[p.Player.ShopID]
-	if !p.Alive() || !ok || !s.hasShopNPC(p.Player.ShopID) {
+	if !p.Alive() || !ok || !s.hasShopNPC(p.Player.ShopID) || !s.canUseSpiritShop(p, p.Player.ShopID) {
 		p.Player.ShopID = 0
 		reject(event.RejectNoTarget)
 		return

@@ -40,7 +40,11 @@ func (s *Scene) classSetAuraSources(p *entity.Entity) []equipmentAuraSource {
 	for suit := int32(1); suit <= 5; suit++ {
 		if s.classSetPieces(p, suit) >= classSetSecondSkillPieces {
 			a, _ := classSetAura(suit)
-			return []equipmentAuraSource{{owner: p.ID, uid: -int64(930000 + suit), party: p.Player.Party, effect: a}}
+			var sources []equipmentAuraSource
+			s.dispatchEquipmentEffect(p, domain.RuntimeBuiltinEquipmentEffect("set:party-aura", false), func() {
+				sources = []equipmentAuraSource{{owner: p.ID, uid: -int64(930000 + suit), party: p.Player.Party, effect: a}}
+			})
+			return sources
 		}
 	}
 	return nil

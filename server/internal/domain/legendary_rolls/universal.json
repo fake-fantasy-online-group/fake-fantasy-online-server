@@ -189,9 +189,6 @@
         "divisor": 100,
         "unit": "%"
       }
-    ],
-    "omit_when_rolled": [
-      "：每1点伤害可消耗2点护盾"
     ]
   },
   {
@@ -286,13 +283,6 @@
         "text": "2%",
         "base": 20000,
         "divisor": 10000,
-        "unit": "%"
-      },
-      {
-        "key": "benefit",
-        "text": "200%",
-        "base": 20000,
-        "divisor": 100,
         "unit": "%"
       }
     ]
@@ -389,9 +379,6 @@
         "divisor": 100,
         "unit": "个百分点"
       }
-    ],
-    "omit_when_rolled": [
-      "，例如2倍变为2.5倍"
     ]
   },
   {

@@ -53,8 +53,8 @@ func TestLegendaryHealerFunctionalCleanseEscort(t *testing.T) {
 	c.Owner.Player.Char.Skills[10306] = 1
 	c.IsChild = true
 	h.RootFinished(c)
-	if c.Owner.Status.Has(legendaryHealerEscortStatus) {
-		t.Fatal("child generated escort")
+	if !c.Owner.Status.Has(legendaryHealerEscortStatus) {
+		t.Fatal("distinct generated cleanse did not grant learned escort")
 	}
 	c.IsChild = false
 	c.RootID++
@@ -117,8 +117,8 @@ func TestLegendaryHealerFunctionalFarClinic(t *testing.T) {
 	c.Owner.Player.Char.Skills[10327] = 1
 	c.IsChild = true
 	h.CastReleased(c)
-	if c.State(0, "far-clinic").ExpiresMS != 0 {
-		t.Fatal("child generated clinic")
+	if c.State(0, "far-clinic").ExpiresMS != c.NowMS+12000 {
+		t.Fatal("distinct generated reveal did not grant learned clinic")
 	}
 }
 

@@ -829,6 +829,9 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 				d.ID, cooldownSec, cooldownGroup)
 		}
 		d.Stackable = pile != 0
+		if d.ID == domain.PowerScrollItemID && d.UseAction == "power_scroll" || d.ID == domain.PowerCodexItemID && d.UseAction == "power_codex" {
+			d.InstanceKind = domain.ItemInstanceEquipment
+		}
 		if physicalSocketCard {
 			d.InstanceKind = domain.ItemInstanceSocketCard
 			d.CardDefaults.Initialized = true
@@ -1118,7 +1121,26 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 	if err := domain.RegisterDungeonEquipment(out); err != nil {
 		return nil, err
 	}
+	finalizeDynamicSpiritItems(out)
 	return out, nil
+}
+
+// Native spirit templates also exist in game_equipment. Normalize only after
+// that table and the legacy EquipmentSoul affixes have been loaded, otherwise
+// the equipment pass silently overwrites the dynamic instance kind. Keep the
+// native soul metadata for old fixed FusedSoul saves; these items are processed
+// and fused, never directly worn as ordinary equipment.
+func finalizeDynamicSpiritItems(items ItemDefs) {
+	for _, spirit := range domain.SpiritDefinitions() {
+		def, ok := items[spirit.ItemID]
+		if !ok {
+			continue
+		}
+		def.InstanceKind = domain.ItemInstanceSpirit
+		def.Stackable = false
+		def.Equip = nil
+		items[spirit.ItemID] = def
+	}
 }
 
 func loadItemUseAudit(ctx context.Context, q Querier, items ItemDefs) error {

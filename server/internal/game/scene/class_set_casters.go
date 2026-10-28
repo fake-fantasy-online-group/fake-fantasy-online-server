@@ -5,7 +5,6 @@ import (
 	"sort"
 
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
-	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
@@ -88,14 +87,18 @@ func (s *Scene) stepCasterSets() {
 		if s.entityMapLoading(p) {
 			continue
 		}
-		amount := int32(int64(p.MaxMP) * 3 / 100)
-		p.MP = min(p.MaxMP, clampI32(int64(p.MP)+int64(amount)))
-		s.emitAttributesIfPlayer(p)
+		s.dispatchEquipmentEffect(p, domain.RuntimeBuiltinEquipmentEffect("set:periodic-mana", true), func() {
+			amount := int32(int64(p.MaxMP) * 3 / 100)
+			before := p.MP
+			p.MP = min(p.MaxMP, clampI32(int64(p.MP)+int64(amount)))
+			s.legendaryCasterManaRestored(p, p, domain.SkillDef{}, p.MP-before, max(int32(0), amount-(p.MP-before)))
+			s.emitAttributesIfPlayer(p)
+		})
 	}
 }
 
-func (s *Scene) startCasterSetCast(src *entity.Entity, def domain.SkillDef) {
-	if s.equipmentState().classSetTriggered != 0 || s.classSetPieces(src, 3) < classSetFirstSkillPieces {
+func (s *Scene) startCasterSetCastPayload(src *entity.Entity, def domain.SkillDef) {
+	if s.classSetPieces(src, 3) < classSetFirstSkillPieces {
 		return
 	}
 	st := s.casterSetState(src)
@@ -112,7 +115,7 @@ func (s *Scene) startCasterSetCast(src *entity.Entity, def domain.SkillDef) {
 
 // Apply after the existing outgoing buckets, not to the spell coefficient:
 // +50% elemental damage must not amplify the target's native magic defense.
-func (s *Scene) casterSetOutgoingDamage(src *entity.Entity, hurtType int32, amount int32) int32 {
+func (s *Scene) casterSetOutgoingDamagePayload(src *entity.Entity, hurtType int32, amount int32) int32 {
 	if amount <= 0 || s.classSetPieces(src, 3) < classSetFirstSkillPieces {
 		return amount
 	}
@@ -129,15 +132,13 @@ func (s *Scene) casterSetOutgoingDamage(src *entity.Entity, hurtType int32, amou
 // Copy the nominal healing once, BEFORE the recipient's missing-HP cap. This
 // helper never calls applySkill, so the copy cannot produce another copy.
 func (s *Scene) casterSetCopyHeal(src, dst *entity.Entity, amount int32, skill domain.SkillID) {
-	if s.legendaryCasterSecondaryHeal(src, dst, skill) {
-		return
-	}
 	if src == nil || dst == nil || src == dst || !src.Alive() || !dst.Alive() ||
-		s.equipmentState().classSetTriggered != 0 || s.classSetPieces(src, 2) < classSetFirstSkillPieces || !sameParty(src, dst) || amount <= 0 {
+		s.combatEffectActive(src.ID, "set:healing-copy") || s.classSetPieces(src, 2) < classSetFirstSkillPieces || !sameParty(src, dst) || amount <= 0 {
 		return
 	}
-	s.emit(combat.Restore(src, src, amount, int32(skill)))
-	s.emitAttributesIfPlayer(src)
+	s.dispatchEquipmentEffect(src, domain.RuntimeBuiltinEquipmentEffect("set:healing-copy", true), func() {
+		s.restoreHealthWithReactions(src, src, amount, skill)
+	})
 }
 
 // Snapshot the accepted cast's geometry. The opposite payload must not expand
@@ -194,7 +195,7 @@ func (s *Scene) casterSetPayload(src *entity.Entity, id domain.SkillID) (domain.
 	s.applyResolvedSkillModifiers(src, &def, src.Player.Char.Skills, s.rawSkillLevels(src))
 	// Generated payloads are immediate, single-target and free. Use the resolved
 	// learned spell's potency, but not equipment variants that create more casts.
-	def.EquipmentVariant = nil
+	s.legendaryPrepareSkill(src, &def)
 	def.Kind, def.Area, def.Radius = domain.SkillSingle, domain.SkillAreaTargeting{}, 0
 	def.MPCost, def.CooldownMS, def.PrepareMS = 0, 0, 0
 	return def, true
@@ -204,15 +205,17 @@ func (s *Scene) emitCasterSetPayload(src, dst *entity.Entity, def domain.SkillDe
 	if !src.Alive() || !dst.Alive() || !s.validTarget(src, dst, def) {
 		return
 	}
-	rt := s.equipmentState()
-	rt.classSetTriggered++
-	defer func() { rt.classSetTriggered-- }()
-	s.emit(event.SkillCastChanged{Caster: src.ID, Skill: def.ID, Phase: event.SkillCastRelease, Target: dst.ID})
-	s.applySkill(src, dst, def, 0, false)
+	s.dispatchEquipmentEffect(src, domain.RuntimeBuiltinEquipmentEffect("set:opposite-spell", true), func() {
+		rt := s.equipmentState()
+		rt.classSetTriggered++
+		defer func() { rt.classSetTriggered-- }()
+		s.emit(event.SkillCastChanged{Caster: src.ID, Skill: def.ID, Phase: event.SkillCastRelease, Target: dst.ID})
+		s.applySkill(src, dst, def, 0, false)
+	})
 }
 
 func (s *Scene) finishCasterSetCast(src *entity.Entity, c pendingCast, hits []domain.EntityID) {
-	if src == nil || !src.Alive() || s.equipmentState().classSetTriggered != 0 {
+	if src == nil || !src.Alive() || s.combatEffectActive(src.ID, "set:opposite-spell") {
 		return
 	}
 	if s.classSetPieces(src, 3) >= classSetSecondSkillPieces && c.def.HasDamageEffect() {
@@ -361,4 +364,14 @@ func (s *Scene) classSetCasterPresentation(p *entity.Entity) []statusPresentatio
 			buff: event.BuffView{SkillID: v.id, Icon: icon, Name: v.name, Desc: v.desc, Beneficial: true, RemainSec: (remain + 999) / 1000}})
 	}
 	return out
+}
+
+func (s *Scene) casterSetOutgoingDamage(src *entity.Entity, hurtType int32, amount int32) int32 {
+	out := amount
+	s.dispatchEquipmentEffect(src, domain.RuntimeBuiltinEquipmentEffect("set:element-window", false), func() { out = s.casterSetOutgoingDamagePayload(src, hurtType, amount) })
+	return out
+}
+
+func (s *Scene) startCasterSetCast(src *entity.Entity, def domain.SkillDef) {
+	s.dispatchEquipmentEffect(src, domain.RuntimeBuiltinEquipmentEffect("set:element-window", false), func() { s.startCasterSetCastPayload(src, def) })
 }

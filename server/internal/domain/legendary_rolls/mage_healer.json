@@ -9,9 +9,6 @@
         "divisor": 100,
         "unit": "%"
       }
-    ],
-    "omit_when_rolled": [
-      "，本威能合计提高110%"
     ]
   },
   {
@@ -357,9 +354,6 @@
         "divisor": 1,
         "unit": "%"
       }
-    ],
-    "omit_when_rolled": [
-      "，最高370%"
     ]
   },
   {
@@ -629,7 +623,7 @@
     "parameters": [
       {
         "key": "proc_pct",
-        "text": "已结算伤害85%",
+        "text": "实际伤害85%",
         "base": 85,
         "divisor": 1,
         "unit": "%"
@@ -1123,7 +1117,7 @@
       },
       {
         "key": "buff_bp",
-        "text": "增益强度按原数值提高50%",
+        "text": "增益强度提高50%",
         "base": 5000,
         "divisor": 100,
         "unit": "%"

@@ -63,6 +63,10 @@ func (s *Scene) onUseItem(cmd UseItem) {
 		reject(event.RejectInvalid)
 		return
 	}
+	if def.UseAction == "power_codex" || def.UseAction == "power_scroll" {
+		// Client opens codex / target cursor. Consumption belongs only to the atomic scroll apply operation.
+		return
+	}
 	if def.UseAction == "cube" {
 		if !s.hasCubeTool(p) {
 			reject(event.RejectInvalid)

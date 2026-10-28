@@ -12,7 +12,7 @@ func legendaryHealerInvested(c *legendaryContext, skill domain.SkillID) bool {
 func legendaryHealerCleanseEscort() legendaryHandler {
 	return legendaryHandler{
 		RootFinished: func(c *legendaryContext) {
-			if c.Skill != 10306 || c.IsChild || c.Blow.ProcDepth != 0 || !legendaryHealerInvested(c, 10306) || !legendaryCasterOnce(c, 0, "cleanse-escort") {
+			if c.Skill != 10306 || !legendaryHealerInvested(c, 10306) || !legendaryCasterOnce(c, 0, "cleanse-escort") {
 				return
 			}
 			// One source-bound native status refreshes both effects together. It
@@ -47,7 +47,7 @@ func legendaryHealerPruneEscort(c *legendaryContext) {
 func legendaryHealerFarClinic() legendaryHandler {
 	return legendaryHandler{
 		CastReleased: func(c *legendaryContext) {
-			if c.Skill != 10327 || c.IsChild || c.Blow.ProcDepth != 0 || !legendaryHealerInvested(c, 10327) {
+			if c.Skill != 10327 || !legendaryHealerInvested(c, 10327) {
 				return
 			}
 			st := c.State(0, "far-clinic")

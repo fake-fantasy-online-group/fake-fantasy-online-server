@@ -1,0 +1,26 @@
+{
+  "kind": "snapshot",
+  "ok": true,
+  "revision": "1",
+  "items": [
+    {
+      "powerScroll": {
+        "powerId": "TY-A02",
+        "rollBp": 8123,
+        "name": "长锋",
+        "description": "长锋：矩形技能的长度提高48.73%，宽度不变。"
+      },
+      "tab": 0,
+      "uid": "9007199254740993",
+      "itemId": 1900028303,
+      "location": "bag",
+      "slot": 6,
+      "revision": "0",
+      "name": "长锋卷轴",
+      "description": "长锋：矩形技能的长度提高48.73%，宽度不变。",
+      "socketCount": 0,
+      "bound": true,
+      "locked": false
+    }
+  ]
+}

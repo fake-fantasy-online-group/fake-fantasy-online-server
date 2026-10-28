@@ -18,12 +18,12 @@ func (s *Scene) legendaryAssassinTheftAttempt(owner, target *entity.Entity, def 
 		c.Def = def
 		c.Skill = def.ID
 		if h := legendaryHandlers[c.Power.ID].TheftAttempt; h != nil {
-			h(&c)
+			c.invoke(h)
 		}
 	}
 }
 func legendaryAssassinTheftPalm(c *legendaryContext) {
-	if c.Skill != 10212 || c.Target == nil || c.IsChild {
+	if c.Skill != 10212 || c.Target == nil {
 		return
 	}
 	d := domain.SkillDef{ID: 10212, Name: "妙手震掌", Kind: domain.SkillArea, TargetEnemy: true, HurtType: domain.HurtPhysical, Radius: 180, Area: domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterCaster, Radius: 180}, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: c.RollValue("proc_pct", 240)}}

@@ -44,10 +44,10 @@ func TestLegendarySwordsmanSoloDamageCoverage(t *testing.T) {
 		want   int32
 	}{
 		{"JK-A01", []domain.SkillID{10102}, 200}, {"JK-A02", []domain.SkillID{10117}, 115}, {"JK-A03", []domain.SkillID{10102}, 260},
-		{"JK-A05", []domain.SkillID{10111}, 140}, {"JK-A07", []domain.SkillID{10103}, 200}, {"JK-A08", []domain.SkillID{10103}, 190},
+		{"JK-A05", []domain.SkillID{10111}, 140}, {"JK-A07", []domain.SkillID{10103}, 110 + 2*(45*110/100)}, {"JK-A08", []domain.SkillID{10103}, 190},
 		{"JK-A09", []domain.SkillID{10104, 10119}, 115}, {"JK-A13", []domain.SkillID{10113}, 170}, {"JK-A14", []domain.SkillID{10113}, 150},
 		{"JK-A15", []domain.SkillID{10121}, 216}, {"JK-A16", []domain.SkillID{10121}, 130}, {"JK-A19", []domain.SkillID{10102, 10122}, 125},
-		{"JK-A21", []domain.SkillID{10116}, 420}, {"JK-A22", []domain.SkillID{10123}, 190}, {"JK-A24", []domain.SkillID{10126}, 180},
+		{"JK-A21", []domain.SkillID{10116}, 420}, {"JK-A22", []domain.SkillID{10123}, 120 + 70*120/100}, {"JK-A24", []domain.SkillID{10126}, 180},
 		{"JK-A26", []domain.SkillID{10102, 10117, 10104, 10119}, 200}, {"JK-A27", []domain.SkillID{10102, 10103, 10121}, 420},
 		{"JK-A28", []domain.SkillID{10104, 10119}, 360}, {"JK-A30", []domain.SkillID{10116, 10123}, 210},
 	} {
@@ -127,6 +127,12 @@ func TestLegendarySwordsmanSoloIncomingCoverage(t *testing.T) {
 					if mode == "unequipped" || mode == "condition-false" || mode == "dot" {
 						want = damage
 					}
+					if tc.id == "JK-D06" && mode == "dot" {
+						want = 65
+					}
+					if tc.id == "JK-D07" && mode == "dot" {
+						want = 50
+					}
 					if tc.id == "JK-D02" && mode == "dot" {
 						want = 45
 					}
@@ -153,7 +159,7 @@ func TestLegendarySwordsmanSoloTargetCaps(t *testing.T) {
 		{"JK-A02", 10117, 11, 115, 115, true}, {"JK-A04", 10117, 11, 175, 75, true},
 		{"JK-A08", 10103, 11, 100, 130, false}, {"JK-A09", 10104, 11, 115, 115, false},
 		{"JK-A19", 10102, 11, 125, 125, false}, {"JK-A20", 10116, 11, 100, 160, false},
-		{"JK-A22", 10123, 11, 190, 170, false}, {"JK-A23", 10123, 11, 100, 110, false},
+		{"JK-A22", 10123, 11, 120 + 70*120/100, 100*120/100 + 70*120/100, false}, {"JK-A23", 10123, 11, 100, 110, false},
 		{"JK-A27", 10103, 11, 420, 320, false},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
@@ -631,7 +637,7 @@ func TestLegendarySwordsmanSoloSpecialCoverage(t *testing.T) {
 				s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{SkillPct: 100, GuaranteedHit: true})
 			}
 			want := int32(0)
-			if kind == "direct" || kind == "shielded" {
+			if kind == "direct" || kind == "shielded" || kind == "proc" {
 				want = 180
 			}
 			if before-m.HP != want {
@@ -674,7 +680,7 @@ func TestLegendarySwordsmanSoloSpecialCoverage(t *testing.T) {
 			swordCast(t, s, p, m, d)
 			want := int32(110)
 			if dist <= 150 {
-				want = 200
+				want = 110 + 2*(45*110/100)
 			}
 			if before-m.HP != want || !m.Status.Has(st.ID) {
 				t.Fatal("shadow range/native hit debuff", before-m.HP)
@@ -992,7 +998,7 @@ func TestLegendarySwordsmanCoverageCombinations(t *testing.T) {
 	t.Run("double-sword-three-powers", TestLegendarySwordsmanBloodSoulStandaloneAndCombinations)
 }
 
-func TestLegendarySwordsmanCoverageNoRecursiveLifesteal(t *testing.T) {
+func TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce(t *testing.T) {
 	for _, tc := range []struct {
 		id     string
 		skill  domain.SkillID
@@ -1027,11 +1033,37 @@ func TestLegendarySwordsmanCoverageNoRecursiveLifesteal(t *testing.T) {
 			if tc.id == "JK-A12" {
 				d.Effects = []domain.SkillEffect{d.Effect, {Kind: domain.EffectRestoreMP, Target: domain.EffectTargetCaster, SourceAttackPct: 20, RequiresPreviousLanded: true}}
 			}
+			s.outbox = nil
 			swordCast(t, s, p, m, d)
-			want := int32(1000) + tc.direct*160/100
-			if p.HP != want {
-				t.Fatalf("equipment child repeated native lifesteal: HP=%d want=%d", p.HP, want)
+			want := int32(1000)
+			hits, heals, generated := 0, 0, 0
+			for _, message := range s.outbox {
+				switch e := message.ev.(type) {
+				case event.DamageDealt:
+					if e.Src == p.ID && e.Dst != p.ID && e.Amount > 0 && !e.Flag.Has(event.DamageMiss) {
+						// 100% native leech enhanced by TY-A17's 60%, with one truncation per hit.
+						want += e.Amount * 160 / 100
+						hits++
+						if e.Origin == domain.DamageProcOrigin {
+							generated++
+						}
+					}
+				case event.HealDone:
+					if e.Src == p.ID && e.Dst == p.ID && e.Amount > 0 {
+						heals++
+					}
+				}
 			}
+			if generated == 0 || hits != heals {
+				t.Fatalf("independent generated hits must each leech once: hits=%d heals=%d generated=%d", hits, heals, generated)
+			}
+			if p.HP != want {
+				t.Fatalf("per-hit leech settlement HP=%d want=%d", p.HP, want)
+			}
+			if len(s.legendaryState().causalPath) != 0 {
+				t.Fatal("leech lineage leaked beyond root")
+			}
+
 		})
 	}
 }
@@ -1106,7 +1138,7 @@ func TestLegendarySwordsmanSoloExactPayloadClauses(t *testing.T) {
 		s.outbox = nil
 		swordCast(t, s, p, m, swordsmanCoverageDef(10103))
 		got := meleeCoverageDamageAmounts(s, p.ID, m.ID)
-		if !reflect.DeepEqual(got, []int32{110, 45, 45}) {
+		if !reflect.DeepEqual(got, []int32{110, 45 * 110 / 100, 45 * 110 / 100}) {
 			t.Fatal("two distinct45% shadows", got)
 		}
 	})
@@ -1115,10 +1147,10 @@ func TestLegendarySwordsmanSoloExactPayloadClauses(t *testing.T) {
 		side := putMonster(s, 901, 10000, domain.Stats{}, 140, 100)
 		s.outbox = nil
 		swordCast(t, s, p, m, swordsmanCoverageDef(10123))
-		if got := meleeCoverageDamageAmounts(s, p.ID, m.ID); !reflect.DeepEqual(got, []int32{120, 70}) {
+		if got := meleeCoverageDamageAmounts(s, p.ID, m.ID); !reflect.DeepEqual(got, []int32{120, 70 * 120 / 100}) {
 			t.Fatal("primary native then70%", got)
 		}
-		if got := meleeCoverageDamageAmounts(s, p.ID, side.ID); !reflect.DeepEqual(got, []int32{100, 70}) {
+		if got := meleeCoverageDamageAmounts(s, p.ID, side.ID); !reflect.DeepEqual(got, []int32{100 * 120 / 100, 70 * 120 / 100}) {
 			t.Fatal("separate100% and70% side waves", got)
 		}
 	})

@@ -21,7 +21,7 @@ const (
 )
 
 func legendaryCasterLanded(c *legendaryContext) bool {
-	return c.Owner != nil && c.Target != nil && !c.Hit.Flag.Has(event.DamageMiss) && c.Blow.ProcDepth == 0 && !c.Blow.Trap && c.Scene.equipmentState().classSetTriggered == 0 && c.Blow.Origin == domain.DamageNormalOrigin
+	return c.Owner != nil && c.Target != nil && !c.Hit.Flag.Has(event.DamageMiss) && !c.Blow.Trap && (c.Blow.Origin == domain.DamageNormalOrigin || c.Blow.Origin == domain.DamageProcOrigin)
 }
 func legendaryCasterOnce(c *legendaryContext, target domain.EntityID, phase string) bool {
 	st := c.State(target, phase)
@@ -95,7 +95,7 @@ func legendaryCasterBaseDamage(c *legendaryContext, d domain.SkillDef) int32 {
 }
 func legendaryCasterBurnBurst(skill domain.SkillID, percent int32) legendaryHandler {
 	return legendaryHandler{SkillResolved: func(c *legendaryContext) {
-		if c.Skill != skill || c.Target == nil || c.Blow.ProcDepth > 0 && !c.IsChild || !legendaryCasterOnce(c, c.Target.ID, "burn-burst") {
+		if c.Skill != skill || c.Target == nil || !legendaryCasterOnce(c, c.Target.ID, "burn-burst") {
 			return
 		}
 		c.Damage(c.Target, clampI32(legendaryCasterBurn(c, c.Target)*int64(c.RollValue("burn_pct", percent))/100), true, false)

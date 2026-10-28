@@ -94,13 +94,13 @@ func TestLegendaryUniversalContractCombinations(t *testing.T) {
 			t.Fatal("geometry added attack or changed damage", a, b, n, bn)
 		}
 	})
-	t.Run("single_conversion_excludes_single_bonus", func(t *testing.T) {
+	t.Run("single_conversion_preserves_single_bonus", func(t *testing.T) {
 		s, p, m := nativeRepairFixture(t, domain.Warrior, domain.Learned{10002: 1}, "TY-A05", "TY-A08", "TY-A04")
 		side := putMonster(s, 901, 10000, domain.Stats{}, 280, 100)
 		outside := putMonster(s, 902, 10000, domain.Stats{}, 299, 100)
 		assassinRegressionCast(t, s, p, UseSkill{Skill: 10002, Target: m.ID})
-		universalSoloDamage(t, s, m.ID, 10002, 130, 1)
-		universalSoloDamage(t, s, side.ID, 10002, 130, 1)
+		universalSoloDamage(t, s, m.ID, 10002, 130*160/100, 1)
+		universalSoloDamage(t, s, side.ID, 10002, 130*160/100, 1)
 		if outside.HP != 10000 {
 			t.Fatal("single conversion final radius168 escaped")
 		}

@@ -1,6 +1,7 @@
 package domain
 
 // EndgameV1 is explicitly negotiated; native positional packets remain unchanged.
+const EndgamePowerCodexV1 = "endgame.power-codex.v1"
 const EndgameV1 = "endgame.v1"
 const EndgameNativeStatsV1 = "endgame.native-stats.v1"
 const EndgameGrowthV5 = "endgame.growth.v5"
@@ -14,6 +15,8 @@ const EndgameMaxJSONBytes = 60 * 1024
 // EndgameItemState is server-owned metadata on the existing durable equipment UID.
 // UniqueID is the base ItemID in a separate namespace. Zero means ordinary gear.
 type EndgameItemState struct {
+	PowerScrollID     string `json:",omitempty"`
+	PowerScrollRollBP int32  `json:",omitempty"`
 	// SourceLevel is the original monster level for new equipment, independent
 	// of wear level and affix ResourceLevel. Legacy/non-monster zero stays zero.
 	SourceLevel  int32 `json:",omitempty"`
@@ -28,30 +31,32 @@ type EndgameItemState struct {
 }
 
 type EndgameRequest struct {
-	PowerID          string      `json:"powerId,omitempty"`
-	SkillID          int32       `json:"skillId,omitempty"`
-	Op               string      `json:"op"`
-	RequestID        string      `json:"requestId,omitempty"`
-	ExpectedRevision string      `json:"expectedRevision,omitempty"`
-	Capabilities     []string    `json:"capabilities,omitempty"`
-	Catalog          string      `json:"catalog,omitempty"`
-	Cursor           string      `json:"cursor,omitempty"`
-	TargetUID        string      `json:"targetUid,omitempty"`
-	RuneUID          string      `json:"runeUid,omitempty"`
-	Socket           int32       `json:"socket,omitempty"`
-	RecipeID         int32       `json:"recipeId,omitempty"`
-	QuoteID          string      `json:"quoteId,omitempty"`
-	RunID            string      `json:"runId,omitempty"`
-	Tier             int32       `json:"tier,omitempty"`
-	NPCEntityID      EntityID    `json:"npcEntityId,omitempty"`
-	FloorIndex       int32       `json:"floorIndex,omitempty"`
-	ItemUIDs         []string    `json:"itemUids,omitempty"`
-	CubeInputs       []CubeInput `json:"cubeInputs,omitempty"`
+	SpiritItem       *SpiritSelection `json:"spiritItem,omitempty"`
+	SpiritMaterial   *SpiritSelection `json:"spiritMaterial,omitempty"`
+	PowerID          string           `json:"powerId,omitempty"`
+	SkillID          int32            `json:"skillId,omitempty"`
+	Op               string           `json:"op"`
+	RequestID        string           `json:"requestId,omitempty"`
+	ExpectedRevision string           `json:"expectedRevision,omitempty"`
+	Capabilities     []string         `json:"capabilities,omitempty"`
+	Catalog          string           `json:"catalog,omitempty"`
+	Cursor           string           `json:"cursor,omitempty"`
+	TargetUID        string           `json:"targetUid,omitempty"`
+	RuneUID          string           `json:"runeUid,omitempty"`
+	Socket           int32            `json:"socket,omitempty"`
+	RecipeID         int32            `json:"recipeId,omitempty"`
+	QuoteID          string           `json:"quoteId,omitempty"`
+	RunID            string           `json:"runId,omitempty"`
+	Tier             int32            `json:"tier,omitempty"`
+	NPCEntityID      EntityID         `json:"npcEntityId,omitempty"`
+	FloorIndex       int32            `json:"floorIndex,omitempty"`
+	ItemUIDs         []string         `json:"itemUids,omitempty"`
+	CubeInputs       []CubeInput      `json:"cubeInputs,omitempty"`
 }
 
 func (r EndgameRequest) Mutates() bool {
 	switch r.Op {
-	case "powerbook.imprint", "skill.upgrade", "socket.insert", "socket.remove", "cube.execute", "cube.recover", "rift.start", "rift.claim", "rift.leave", "rift.advance":
+	case "spirit.unseal", "spirit.process", "spirit.rollback", "spirit.reset", "spirit.fuse", "spirit.separate", "spirit.appearance", "powerbook.extract", "powerbook.apply", "powerbook.recover", "powerbook.imprint", "skill.upgrade", "socket.insert", "socket.remove", "cube.execute", "cube.recover", "rift.start", "rift.claim", "rift.leave", "rift.advance":
 		return true
 	}
 	return false
@@ -82,29 +87,39 @@ type LegendaryItemView struct {
 	Description string               `json:"description"`
 	Affixes     []LegendaryAffixView `json:"affixes"`
 }
+type EndgamePowerScrollView struct {
+	PowerID     string `json:"powerId"`
+	RollBP      int32  `json:"rollBp"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
 type EndgameItemView struct {
-	Legendary      *LegendaryItemView  `json:"legendary,omitempty"`
-	Tab            int32               `json:"tab"`
-	Level          int32               `json:"level,omitempty"`
-	Profession     int32               `json:"profession,omitempty"`
-	UID            string              `json:"uid"`
-	ItemID         int32               `json:"itemId"`
-	Location       string              `json:"location"`
-	Slot           int32               `json:"slot"`
-	Revision       string              `json:"revision"`
-	UniqueID       int32               `json:"uniqueId,omitempty"`
-	UniqueRollBP   int32               `json:"uniqueRollBp,omitempty"`
-	Name           string              `json:"name,omitempty"`
-	Description    string              `json:"description,omitempty"`
-	Trait          string              `json:"trait,omitempty"`
-	SocketCount    int32               `json:"socketCount"`
-	Sockets        []EndgameSocketView `json:"sockets,omitempty"`
-	Stats          []EndgameStatView   `json:"stats,omitempty"`
-	FormationID    int32               `json:"formationId,omitempty"`
-	Active         bool                `json:"active,omitempty"`
-	InactiveReason string              `json:"inactiveReason,omitempty"`
-	Bound          bool                `json:"bound"`
-	Locked         bool                `json:"locked"`
+	Spirit                 *SpiritView             `json:"spirit,omitempty"`
+	FusedSpirit            *SpiritView             `json:"fusedSpirit,omitempty"`
+	SpiritAppearanceItemID ItemID                  `json:"spiritAppearanceItemId,omitempty"`
+	PowerScroll            *EndgamePowerScrollView `json:"powerScroll,omitempty"`
+	Legendary              *LegendaryItemView      `json:"legendary,omitempty"`
+	Tab                    int32                   `json:"tab"`
+	Level                  int32                   `json:"level,omitempty"`
+	Profession             int32                   `json:"profession,omitempty"`
+	UID                    string                  `json:"uid"`
+	ItemID                 int32                   `json:"itemId"`
+	Location               string                  `json:"location"`
+	Slot                   int32                   `json:"slot"`
+	Revision               string                  `json:"revision"`
+	UniqueID               int32                   `json:"uniqueId,omitempty"`
+	UniqueRollBP           int32                   `json:"uniqueRollBp,omitempty"`
+	Name                   string                  `json:"name,omitempty"`
+	Description            string                  `json:"description,omitempty"`
+	Trait                  string                  `json:"trait,omitempty"`
+	SocketCount            int32                   `json:"socketCount"`
+	Sockets                []EndgameSocketView     `json:"sockets,omitempty"`
+	Stats                  []EndgameStatView       `json:"stats,omitempty"`
+	FormationID            int32                   `json:"formationId,omitempty"`
+	Active                 bool                    `json:"active,omitempty"`
+	InactiveReason         string                  `json:"inactiveReason,omitempty"`
+	Bound                  bool                    `json:"bound"`
+	Locked                 bool                    `json:"locked"`
 }
 type EndgameRuneView struct {
 	MinLevel    int32             `json:"minLevel"`
@@ -285,45 +300,53 @@ type EndgameRiftEntranceView struct {
 }
 
 type EndgamePowerBookView struct {
-	PowerID     string `json:"powerId"`
-	Name        string `json:"name"`
-	Category    string `json:"category"`
-	Class       string `json:"class"`
-	Description string `json:"description"`
-	RollBP      int32  `json:"rollBp"`
-	MinRollBP   int32  `json:"minRollBp"`
-	MaxRollBP   int32  `json:"maxRollBp"`
-	MinLevel    int32  `json:"minLevel"`
+	Unlocked         bool     `json:"unlocked"`
+	Slots            []string `json:"slots"`
+	PowerID          string   `json:"powerId"`
+	Name             string   `json:"name"`
+	Category         string   `json:"category"`
+	Class            string   `json:"class"`
+	Description      string   `json:"description"`
+	RangeText        string   `json:"rangeText,omitempty"`
+	CurrentValueText string   `json:"currentValueText,omitempty"`
+	PrimaryRangeText string   `json:"primaryRangeText,omitempty"`
+	RollBP           int32    `json:"rollBp"`
+	MinRollBP        int32    `json:"minRollBp"`
+	MaxRollBP        int32    `json:"maxRollBp"`
+	MinLevel         int32    `json:"minLevel"`
 }
 
 type EndgameResponse struct {
-	Powers         []EndgamePowerBookView    `json:"powers,omitempty"`
-	RiftEntrances  []EndgameRiftEntranceView `json:"riftEntrances,omitempty"`
-	CombatStats    *EndgameCombatStatsV5     `json:"combatStats,omitempty"`
-	SkillRanks     []SkillRankView           `json:"skillRanks,omitempty"`
-	Kind           string                    `json:"kind"`
-	RequestID      string                    `json:"requestId,omitempty"`
-	OK             bool                      `json:"ok"`
-	Error          string                    `json:"error,omitempty"`
-	Message        string                    `json:"message,omitempty"`
-	Revision       string                    `json:"revision,omitempty"`
-	CatalogVersion string                    `json:"catalogVersion,omitempty"`
-	Capabilities   []string                  `json:"capabilities,omitempty"`
-	Cursor         string                    `json:"cursor,omitempty"`
-	NextCursor     string                    `json:"nextCursor,omitempty"`
-	SnapshotID     string                    `json:"snapshotId,omitempty"`
-	Chunk          int32                     `json:"chunk,omitempty"`
-	Chunks         int32                     `json:"chunks,omitempty"`
-	TotalBytes     int32                     `json:"totalBytes,omitempty"`
-	Data           string                    `json:"data,omitempty"`
-	Items          []EndgameItemView         `json:"items,omitempty"`
-	Runes          []EndgameRuneView         `json:"runes,omitempty"`
-	Formations     []EndgameFormationView    `json:"formations,omitempty"`
-	Recipes        []EndgameRecipeView       `json:"recipes,omitempty"`
-	Materials      []EndgameMaterialView     `json:"materials,omitempty"`
-	Quote          *EndgameQuoteView         `json:"quote,omitempty"`
-	Rift           *EndgameRiftView          `json:"rift,omitempty"`
-	Result         map[string]string         `json:"result,omitempty"`
+	Spirit              *SpiritView               `json:"spirit,omitempty"`
+	Spirits             []SpiritDefinitionView    `json:"spirits,omitempty"`
+	SpiritAppearanceIDs []ItemID                  `json:"spiritAppearanceIds,omitempty"`
+	Powers              []EndgamePowerBookView    `json:"powers,omitempty"`
+	RiftEntrances       []EndgameRiftEntranceView `json:"riftEntrances,omitempty"`
+	CombatStats         *EndgameCombatStatsV5     `json:"combatStats,omitempty"`
+	SkillRanks          []SkillRankView           `json:"skillRanks,omitempty"`
+	Kind                string                    `json:"kind"`
+	RequestID           string                    `json:"requestId,omitempty"`
+	OK                  bool                      `json:"ok"`
+	Error               string                    `json:"error,omitempty"`
+	Message             string                    `json:"message,omitempty"`
+	Revision            string                    `json:"revision,omitempty"`
+	CatalogVersion      string                    `json:"catalogVersion,omitempty"`
+	Capabilities        []string                  `json:"capabilities,omitempty"`
+	Cursor              string                    `json:"cursor,omitempty"`
+	NextCursor          string                    `json:"nextCursor,omitempty"`
+	SnapshotID          string                    `json:"snapshotId,omitempty"`
+	Chunk               int32                     `json:"chunk,omitempty"`
+	Chunks              int32                     `json:"chunks,omitempty"`
+	TotalBytes          int32                     `json:"totalBytes,omitempty"`
+	Data                string                    `json:"data,omitempty"`
+	Items               []EndgameItemView         `json:"items,omitempty"`
+	Runes               []EndgameRuneView         `json:"runes,omitempty"`
+	Formations          []EndgameFormationView    `json:"formations,omitempty"`
+	Recipes             []EndgameRecipeView       `json:"recipes,omitempty"`
+	Materials           []EndgameMaterialView     `json:"materials,omitempty"`
+	Quote               *EndgameQuoteView         `json:"quote,omitempty"`
+	Rift                *EndgameRiftView          `json:"rift,omitempty"`
+	Result              map[string]string         `json:"result,omitempty"`
 }
 
 const EndgameGroundFXV1 = "endgame.ground-fx.v1"

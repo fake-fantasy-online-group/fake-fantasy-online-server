@@ -583,35 +583,40 @@ func TestCasterIndependentA25CrossElement(t *testing.T) {
 func TestCasterIndependentManaAndCooldown(t *testing.T) {
 	for _, id := range []string{"SS-D08", "SS-U07", "SS-U09"} {
 		t.Run(id, func(t *testing.T) {
-			for _, skill := range []domain.SkillID{10401, 10402, 10410, 10405, 10412, 10421} {
-				t.Run(fmt.Sprint(skill), func(t *testing.T) {
-					s, p, m := casterIndependentFixture(t, id, domain.Learned{skill: 1}, true)
-					d, _ := s.skills.Get(skill, 1)
-					pct, cd := int32(80), int32(100)
-					if id == "SS-U07" {
-						pct = 100
-					}
-					if id == "SS-U09" {
-						if skill == 10401 || skill == 10421 {
+			for _, on := range []bool{false, true} {
+				for _, skill := range []domain.SkillID{10401, 10402, 10410, 10405, 10412, 10421} {
+					t.Run(fmt.Sprint(skill), func(t *testing.T) {
+						s, p, m := casterIndependentFixture(t, id, domain.Learned{skill: 1}, on)
+						d, _ := s.skills.Get(skill, 1)
+						pct, cd := int32(80), int32(100)
+						if id == "SS-U07" {
 							pct = 100
-						} else {
-							cd = 70
 						}
-					}
-					before, max := p.MP, p.MaxMP
-					nativeRepairCast(t, s, p, skill, m.ID)
-					if p.MaxMP != max || before-p.MP != (d.MPCost*pct+99)/100 {
-						t.Fatal("actual mana payment/max changed", before-p.MP, d.MPCost, pct)
-					}
-					ready := s.tick + domain.Ticks(int(d.CooldownMS*cd/100))
-					if !p.Player.SkillReadyAt(skill, ready) || p.Player.SkillReadyAt(skill, ready-1) {
-						t.Fatal("actual cooldown wrong", skill, d.CooldownMS, cd)
-					}
-					s.stepCasts()
-					if p.MP != before-(d.MPCost*pct+99)/100 {
-						t.Fatal("unexpected deferred refund")
-					}
-				})
+						if id == "SS-U09" {
+							if skill == 10401 || skill == 10421 {
+								pct = 100
+							} else {
+								cd = 70
+							}
+						}
+						if !on {
+							pct, cd = 100, 100
+						}
+						before, max := p.MP, p.MaxMP
+						nativeRepairCast(t, s, p, skill, m.ID)
+						if p.MaxMP != max || before-p.MP != (d.MPCost*pct+99)/100 {
+							t.Fatal("actual mana payment/max changed", before-p.MP, d.MPCost, pct)
+						}
+						ready := s.tick + domain.Ticks(int(d.CooldownMS*cd/100))
+						if !p.Player.SkillReadyAt(skill, ready) || p.Player.SkillReadyAt(skill, ready-1) {
+							t.Fatal("actual cooldown wrong", skill, d.CooldownMS, cd)
+						}
+						s.stepCasts()
+						if p.MP != before-(d.MPCost*pct+99)/100 {
+							t.Fatal("unexpected deferred refund")
+						}
+					})
+				}
 			}
 		})
 	}
@@ -1200,23 +1205,36 @@ func TestCasterIndependentU03Concentration(t *testing.T) {
 	}
 }
 func TestCasterIndependentU05NativeBurnDeath(t *testing.T) {
-	s, p, m := casterIndependentFixture(t, "SS-U05", domain.Learned{10421: 1}, true)
-	nativeRepairCast(t, s, p, 10421, m.ID)
-	a, ok := legendaryCasterSourceStatus(m, 1036, p.ID)
-	if !ok {
-		t.Fatal("native burn absent")
-	}
-	p.MP = 1000
-	m.HP = 1
-	s.tickStatus(m, a)
-	if m.HP != 0 || p.MP != 2000 {
-		t.Fatal("burn kill mana reward", m.HP, p.MP)
-	}
-	s.tickStatus(m, a)
-	if p.MP != 2000 {
-		t.Fatal("same death rewarded twice")
+	for _, mode := range []string{"off", "equipped", "unequipped"} {
+		t.Run(mode, func(t *testing.T) {
+			s, p, m := casterIndependentFixture(t, "SS-U05", domain.Learned{10421: 1}, mode != "off")
+			nativeRepairCast(t, s, p, 10421, m.ID)
+			a, ok := legendaryCasterSourceStatus(m, 1036, p.ID)
+			if !ok {
+				t.Fatal("native burn absent")
+			}
+			if mode == "unequipped" {
+				p.Player.Worn = &domain.EquipSet{}
+				s.refreshStats(p)
+			}
+			p.MP = 1000
+			m.HP = 1
+			s.tickStatus(m, a)
+			want := int32(1000)
+			if mode == "equipped" {
+				want += 1000
+			}
+			if m.HP != 0 || p.MP != want {
+				t.Fatal("burn kill mana reward", m.HP, p.MP, want)
+			}
+			s.tickStatus(m, a)
+			if p.MP != want {
+				t.Fatal("same death rewarded twice")
+			}
+		})
 	}
 }
+
 func TestCasterIndependentU08MirrorLifetime(t *testing.T) {
 	s, p, m := casterIndependentFixture(t, "SS-U08", domain.Learned{10417: 1}, true)
 	slow := domain.StatusDef{ID: 199985, DurationSec: 30, TypeKnown: true, Type: domain.StatusBad, Affixes: []domain.Affix{{Attr: domain.AttrMoveSpeed, Mode: domain.ModePercent, Value: -20}}}

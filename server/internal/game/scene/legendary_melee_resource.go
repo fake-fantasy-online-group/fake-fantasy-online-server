@@ -6,7 +6,7 @@ func legendaryMeleeRestoreMP(c *legendaryContext, amount int32) {
 	if amount <= 0 {
 		return
 	}
-	c.Owner.MP = min(c.Owner.MaxMP, c.Owner.MP+amount)
+	legendaryCasterRestoreMP(c, c.Owner, amount)
 	c.Scene.emitAttributesIfPlayer(c.Owner)
 }
 func legendaryMeleeSpearActive(d domain.SkillDef) bool {

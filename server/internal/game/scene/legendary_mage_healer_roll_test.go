@@ -27,7 +27,7 @@ func TestLegendaryMageHealerRollMetadataAndLegacy(t *testing.T) {
 		}
 		ranged++
 		low, ok := domain.LegendaryPowerForRoll(spec.ID, 7500)
-		if !ok || !strings.Contains(low.Effect, "～") {
+		if !ok || strings.Contains(low.Effect, "～") {
 			t.Fatal("missing real range", spec.ID)
 		}
 		for _, parameter := range spec.Parameters {

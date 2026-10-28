@@ -14,7 +14,7 @@ func (s *Scene) legendaryCasterAccepted(src *entity.Entity, def domain.SkillDef,
 		c.Primary = primary
 		c.Targets = targets
 		if h := legendaryHandlers[c.Power.ID].CastAccepted; h != nil {
-			h(&c)
+			c.invoke(h)
 		}
 	}
 }
@@ -22,7 +22,7 @@ func (s *Scene) legendaryCasterResurrected(src, dst *entity.Entity, def domain.S
 	for _, c := range s.legendaryContexts(src, dst, combat.Blow{SkillID: int32(def.ID)}, event.DamageDealt{}) {
 		c.Def = def
 		if h := legendaryHandlers[c.Power.ID].Resurrected; h != nil {
-			h(&c)
+			c.invoke(h)
 		}
 	}
 }

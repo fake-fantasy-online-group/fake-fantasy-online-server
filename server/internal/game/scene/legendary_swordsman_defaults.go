@@ -101,8 +101,8 @@ func init() {
 		}
 		return n
 	}})
-	registerLegendarySynergyHandler("JK-D07", legendaryHandler{CastReleased: warriorFunctionalRelease(10113, 8000, false), Tick: warriorFunctionalTick(10113, false), BeforeIncoming: func(c *legendaryContext, n int32) int32 {
-		if legendaryMeleeIncoming(c) && c.Blow.Magic && warriorFunctionalActive(c, 10113) {
+	registerLegendarySynergyHandler("JK-D07", legendaryHandler{AllDamageIncoming: true, CastReleased: warriorFunctionalRelease(10113, 8000, false), Tick: warriorFunctionalTick(10113, false), BeforeIncoming: func(c *legendaryContext, n int32) int32 {
+		if legendaryPureIncoming(c) && c.Blow.Magic && warriorFunctionalActive(c, 10113) {
 			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 50)))
 		}
 		return n
@@ -146,7 +146,7 @@ func init() {
 	}})
 }
 func swordNativeHit(c *legendaryContext, h equipmentHit) bool {
-	return h.src == c.Owner.ID && h.blow.SkillID == int32(c.Skill) && h.blow.Origin == domain.DamageNormalOrigin && h.blow.ProcDepth == 0 && !h.ev.Flag.Has(event.DamageMiss)
+	return h.src == c.Owner.ID && h.blow.SkillID == int32(c.Skill) && (h.blow.Origin == domain.DamageNormalOrigin || h.blow.Origin == domain.DamageProcOrigin) && !h.ev.Flag.Has(event.DamageMiss)
 }
 func swordNativeOnce(c *legendaryContext, target domain.EntityID) bool {
 	root := c.Scene.equipmentState().root

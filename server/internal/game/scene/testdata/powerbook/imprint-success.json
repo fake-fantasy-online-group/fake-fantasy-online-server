@@ -2,7 +2,7 @@
   "kind": "powerbook.result",
   "requestId": "powerbook-fixture-0001",
   "ok": true,
-  "message": "威能已刻入器物。",
+  "message": "威能已附着于器物。",
   "revision": "1",
   "result": {
     "itemUid": "42",

@@ -106,6 +106,9 @@ func (s *Scene) rollLootWithContextV5(dead *entity.Entity, context domain.LootCo
 		if len(e.Choices) > 0 {
 			itemID = e.Choices[s.rng.Intn(len(e.Choices))]
 		}
+		if !s.lootRules.Active().AllowsCombatMaterial(itemID) {
+			continue
+		}
 		def, ok := s.dungeonLootItem(itemID, dead.Monster.TypeID)
 		if !ok {
 			continue

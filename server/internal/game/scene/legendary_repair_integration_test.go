@@ -120,8 +120,8 @@ func TestLegendaryRepairLightSplitPrimarySecondaryAndFullRadius(t *testing.T) {
 		t.Fatalf("primary/echo damage %d/%d want210/388", primary, echo)
 	}
 	for i := 0; i < 5; i++ {
-		if sides[i] != 126 || echoSides[i] != 126 {
-			t.Fatalf("secondary %d generated an echo or lost native 60%%: %v/%v", i, sides, echoSides)
+		if sides[i] != 126 || echoSides[i] != 126+126*85/100 {
+			t.Fatalf("secondary %d lost native 60%% or its distinct 85%% echo: %v/%v", i, sides, echoSides)
 		}
 	}
 	for i := 5; i < len(sides); i++ {
@@ -147,8 +147,14 @@ func TestLegendaryRepairHealChildImplicitSelfAndSetIsolation(t *testing.T) {
 			if a.HP <= 1 || b.HP <= 1 {
 				t.Fatal("implicit self heal failed to expand to allies", a.HP, b.HP)
 			}
-			if p.HP != 1101 {
-				t.Fatalf("secondary healing recursively copied by set%d: ownerHP=%d want1101", pieces, p.HP)
+			wantHP := int32(1101)
+			if pieces >= 2 {
+				// Each of the two distinct ally heals copies its 200 nominal
+				// healing to the caster. The copy producer cannot copy itself.
+				wantHP += 2 * 200
+			}
+			if p.HP != wantHP {
+				t.Fatalf("secondary heal/set composition %d: ownerHP=%d want%d", pieces, p.HP, wantHP)
 			}
 			if m.HP == 100000 {
 				t.Fatal("primary healing did not generate its permitted child")
@@ -186,10 +192,16 @@ func TestLegendaryRepairFireballChildCenterTriple(t *testing.T) {
 		before := p.MP
 		// Native instant-cast status refreshes the character's actual attributes.
 		// Preserve that consumer instead of resetting the fixture back to MAtk=100.
-		main := int32(int64(p.Stats.MAtk) * 195 * 120 / 10000)
-		want := main + main*70/100
+		baseNumerator := int64(p.Stats.MAtk) * 195 * 120
+		main := int32(baseNumerator / 10000)
+		want := main + int32(baseNumerator*70/1000000)
 		if reprise {
-			want += main * 80 / 100
+			want += int32(baseNumerator * 80 / 1000000)
+			// A04→A30 and A30→A04 each run once. Neither path revisits
+			// its original producer, so these are distinct finite branches.
+			// Native child coefficients retain fractions until hit settlement.
+			want += int32(baseNumerator * 70 * 80 / 100000000)
+			want += int32(baseNumerator * 80 * 70 / 100000000)
 		}
 		nativeRepairCast(t, s, p, 10402, m.ID)
 		if got := 100000 - m.HP; got != want {

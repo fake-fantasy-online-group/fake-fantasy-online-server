@@ -2,6 +2,7 @@ package scene
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
@@ -68,15 +69,19 @@ func (s *Scene) legendaryAssassinDeath(dead *entity.Entity) {
 		}
 	})
 	for _, poison := range poisons {
-		owner := s.entities[poison.Source]
-		s.forEachLegendary(owner, func(c *legendaryContext) {
-			if c.Power.ID != "CK-A08" {
-				return
+		func() {
+			owner := s.entities[poison.Source]
+			restore := s.withCombatCausalPath(mergeStatusCausalPath(poison.Def.CombatCausalPath, s.legendaryState().causalPath))
+			defer restore()
+			for _, c := range s.legendaryContexts(owner, dead, combat.Blow{}, event.DamageDealt{}) {
+				if c.Power.ID != "CK-A08" {
+					continue
+				}
+				if h := legendaryHandlers[c.Power.ID].OwnerPoisonDeath; h != nil && dead.Status.MarkLegendaryPoisonSpread(c.Owner.ID) {
+					c.invoke(func(c *legendaryContext) { h(c, poison, dead) })
+				}
 			}
-			if h := legendaryHandlers[c.Power.ID].OwnerPoisonDeath; h != nil && dead.Status.MarkLegendaryPoisonSpread(c.Owner.ID) {
-				h(c, poison, dead)
-			}
-		})
+		}()
 	}
 }
 func legendaryAssassinPoisonTickPower(c *legendaryContext, a domain.Active, target *entity.Entity) int64 {

@@ -9,13 +9,13 @@ import (
 )
 
 // The two side placements inherit the already prepared native definition.
-// generate=false is explicit child lineage: children cannot generate placements.
+// Producer ancestry prevents self-reentry without disabling other trap powers.
 func (s *Scene) legendaryAssassinTrapPlaced(owner, trap *entity.Entity, generate bool) {
 	for _, c := range s.legendaryContexts(owner, nil, combat.Blow{SourceOffense: trap.Trap.SourceOffense}, event.DamageDealt{}) {
 		c.Skill = trap.Trap.Def.ID
 		c.Def = trap.Trap.Def
 		if h := legendaryHandlers[c.Power.ID].TrapPlaced; h != nil {
-			h(&c, trap, generate)
+			c.invoke(func(c *legendaryContext) { h(c, trap, generate) })
 		}
 	}
 	if (trap.Trap.Def.ID == 10213 && legendaryAssassinHas(s, owner, "CK-A11", trap.Trap.SourceOffense)) || (trap.Trap.Def.ID == 10214 && legendaryAssassinHas(s, owner, "CK-A14", trap.Trap.SourceOffense)) {
@@ -23,9 +23,9 @@ func (s *Scene) legendaryAssassinTrapPlaced(owner, trap *entity.Entity, generate
 	}
 }
 
-func legendaryAssassinTriplePlacement(c *legendaryContext, trap *entity.Entity, generate bool) {
+func legendaryAssassinTriplePlacement(c *legendaryContext, trap *entity.Entity, _ bool) {
 	s, owner := c.Scene, c.Owner
-	if trap.Trap.Def.ID == 10213 && generate {
+	if trap.Trap.Def.ID == 10213 {
 		for _, pos := range legendaryAssassinSidePlacements(owner.Pos, trap.Pos, trap.Trap.Radius, trap.Trap.Def) {
 			s.placeAssassinTrap(owner, trap.Trap.Def, pos, trap.Trap.Radius, trap.Trap.StatusDurationPct, false, trap.Trap.SourceOffense)
 		}
@@ -37,6 +37,9 @@ func legendaryAssassinTriplePlacement(c *legendaryContext, trap *entity.Entity, 
 func (s *Scene) triggerAssassinTrap(trap *entity.Entity, _ bool) {
 	if trap == nil || trap.Trap == nil || s.traps[trap.ID] != trap {
 		return
+	}
+	if source := trap.Trap.SourceOffense; source != nil {
+		defer s.withCombatCausalPath(mergeStatusCausalPath(source.CombatCausalPath, s.legendaryState().causalPath))()
 	}
 	owner := s.entities[trap.Trap.Owner]
 	if owner == nil || !owner.Alive() {

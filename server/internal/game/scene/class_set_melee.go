@@ -3,7 +3,6 @@ package scene
 import (
 	"fmt"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
-	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
@@ -23,7 +22,7 @@ type classSetUnruly struct {
 
 // Apply the transformation to the final derived values, not affix percentages:
 // both the panel and source snapshots consume this same computed bundle.
-func (s *Scene) classSetMeleeStats(p *entity.Entity, worn *domain.EquipSet, stats domain.Stats) domain.Stats {
+func (s *Scene) classSetMeleeStatsPayload(p *entity.Entity, worn *domain.EquipSet, stats domain.Stats) domain.Stats {
 	if s.classSetPiecesInWorn(p, worn, classSetWarrior) < classSetSecondSkillPieces {
 		return stats
 	}
@@ -47,7 +46,7 @@ func classSetBloodCost(hp int32) int32 {
 	return min(hp-1, max(int32(1), hp/10))
 }
 
-func (s *Scene) classSetPaySkillCost(p *entity.Entity, def domain.SkillDef) {
+func (s *Scene) classSetPaySkillCostPayload(p *entity.Entity, def domain.SkillDef) {
 	if s.classSetDragonActive(p) {
 		cost := classSetBloodCost(p.HP)
 		p.HP -= cost
@@ -57,7 +56,7 @@ func (s *Scene) classSetPaySkillCost(p *entity.Entity, def domain.SkillDef) {
 	}
 }
 
-func (s *Scene) classSetMissingHealthDamage(p *entity.Entity, damage int32) int32 {
+func (s *Scene) classSetMissingHealthDamagePayload(p *entity.Entity, damage int32) int32 {
 	if damage <= 0 || p == nil || !p.Alive() || p.MaxHP <= 0 || s.classSetPieces(p, classSetWarrior) < classSetFirstSkillPieces {
 		return damage
 	}
@@ -84,7 +83,7 @@ func (s *Scene) classSetUnrulyStacks(p *entity.Entity) int32 {
 // Called once on actual cast release, never per hit or on rejected requests.
 // A canceled chant does not grant or consume a stack. Refreshing taunt refreshes
 // the whole stack group's thirty-second lifetime.
-func (s *Scene) classSetMeleeCastReleased(p *entity.Entity, def *domain.SkillDef) int32 {
+func (s *Scene) classSetMeleeCastReleasedPayload(p *entity.Entity, def *domain.SkillDef) int32 {
 	if p == nil || def == nil || !p.Alive() {
 		return 10000
 	}
@@ -113,7 +112,7 @@ func (s *Scene) classSetMeleeCastReleased(p *entity.Entity, def *domain.SkillDef
 }
 
 // Set multipliers remain independent from the legacy equipment mitigation cap.
-func (s *Scene) classSetMeleeIncomingDamage(p *entity.Entity, amount int32) int32 {
+func (s *Scene) classSetMeleeIncomingDamagePayload(p *entity.Entity, amount int32) int32 {
 	if amount <= 0 {
 		return amount
 	}
@@ -127,11 +126,13 @@ func (s *Scene) classSetDragonSteal(p *entity.Entity, ev event.DamageDealt) {
 	if ev.Amount <= 0 || ev.Flag.Has(event.DamageMiss) || !s.classSetDragonActive(p) {
 		return
 	}
-	amount := clampI32(int64(ev.Amount) * 20 / 100)
-	if amount > 0 {
-		s.emit(combat.Restore(p, p, amount, ev.SkillID))
-		s.emitAttributesIfPlayer(p)
-	}
+	s.dispatchEquipmentEffect(p, domain.RuntimeBuiltinEquipmentEffect("set:dragon-steal", true), func() {
+		amount := clampI32(int64(ev.Amount) * 20 / 100)
+		if amount > 0 {
+			s.restoreHealthWithReactions(p, p, amount, domain.SkillID(ev.SkillID))
+			s.emitAttributesIfPlayer(p)
+		}
+	})
 }
 
 func (s *Scene) clearClassSetMelee(id domain.EntityID) {
@@ -160,4 +161,32 @@ func (s *Scene) classSetUnrulyPresentation(p *entity.Entity) []statusPresentatio
 	return []statusPresentation{{name: name, desc: desc,
 		icon: event.StatusIconView{Status: classSetUnrulyViewID, Icon: icon, Beneficial: true, RemainMS: remain},
 		buff: event.BuffView{SkillID: classSetUnrulyViewID, Icon: icon, Name: name, Desc: desc, Beneficial: true, RemainSec: (remain + 999) / 1000}}}
+}
+
+func (s *Scene) classSetMeleeStats(p *entity.Entity, worn *domain.EquipSet, stats domain.Stats) domain.Stats {
+	out := stats
+	s.dispatchEquipmentEffect(p, domain.RuntimeBuiltinEquipmentEffect("set:dragon-stats", false), func() { out = s.classSetMeleeStatsPayload(p, worn, stats) })
+	return out
+}
+
+func (s *Scene) classSetMissingHealthDamage(p *entity.Entity, damage int32) int32 {
+	out := damage
+	s.dispatchEquipmentEffect(p, domain.RuntimeBuiltinEquipmentEffect("set:missing-health", false), func() { out = s.classSetMissingHealthDamagePayload(p, damage) })
+	return out
+}
+
+func (s *Scene) classSetMeleeIncomingDamage(p *entity.Entity, amount int32) int32 {
+	out := amount
+	s.dispatchEquipmentEffect(p, domain.RuntimeBuiltinEquipmentEffect("set:melee-mitigation", false), func() { out = s.classSetMeleeIncomingDamagePayload(p, amount) })
+	return out
+}
+
+func (s *Scene) classSetMeleeCastReleased(p *entity.Entity, def *domain.SkillDef) int32 {
+	out := int32(10000)
+	s.dispatchEquipmentEffect(p, domain.RuntimeBuiltinEquipmentEffect("set:unruly-release", false), func() { out = s.classSetMeleeCastReleasedPayload(p, def) })
+	return out
+}
+
+func (s *Scene) classSetPaySkillCost(p *entity.Entity, def domain.SkillDef) {
+	s.dispatchEquipmentEffect(p, domain.RuntimeBuiltinEquipmentEffect("set:blood-cost", false), func() { s.classSetPaySkillCostPayload(p, def) })
 }

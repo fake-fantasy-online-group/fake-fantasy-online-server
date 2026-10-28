@@ -1,0 +1,2508 @@
+{
+  "scope": "56 approved named weapon item/profession branches",
+  "identityOnlyTestsExcluded": [
+    "TestSpecialWeaponEveryApprovedBranch",
+    "TestSpecialWeaponAllApprovedBranchesActivateWithCorrectItemIdentity"
+  ],
+  "branches": [
+    {
+      "key": "1021/2",
+      "item": 1021,
+      "profession": 2,
+      "skills": [
+        10102
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponClauseARemovedEffectSettlement"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1021/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseARemovedEffectSettlement"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "No actual displacement assertion; knockback removal currently checked in transformed effects."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1022/2",
+      "item": 1022,
+      "profession": 2,
+      "skills": [
+        10103
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponClauseACircleActualBoundaryRecipients",
+        "TestSpecialWeaponClauseABlindMagnitudeAndHalfExpiry"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1022/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseACircleActualBoundaryRecipients",
+          "TestSpecialWeaponClauseABlindMagnitudeAndHalfExpiry"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "100-radius inside/outside actual recipients not covered.",
+        "Native hit-reduction magnitude and half-duration not exercised on live target."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1023/2",
+      "item": 1023,
+      "profession": 2,
+      "skills": [
+        10104
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponResourceBranchActualSettlement"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1023/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement",
+          "TestSpecialWeaponResourceBranchActualSettlement"
+        ],
+        "additionalWitnesses": [],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1024/2",
+      "item": 1024,
+      "profession": 2,
+      "skills": [
+        10111
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponControlStatusActualApplication",
+        "TestSpecialWeaponClauseANativeControlRelease",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        },
+        {
+          "mechanism": "control duration scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponControlAndGeometry",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponControlStatusActualApplication",
+            "TestStatusExpires",
+            "TestStunWearsOff"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "40% cooldown actual expiry/recast boundary not covered.",
+        "Root status installation verified duration, not movement rejection/release boundary."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1024/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponControlStatusActualApplication"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseANativeControlRelease",
+          "TestSpecialWeaponClauseANativeCooldownBoundary"
+        ],
+        "sharedParameterizedConsumerWitnesses": [
+          "TestSpecialWeaponFinalRequestedChanges"
+        ],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges"
+      ]
+    },
+    {
+      "key": "1025/2",
+      "item": 1025,
+      "profession": 2,
+      "skills": [
+        10113
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponControlStatusActualApplication",
+        "TestSpecialWeaponClauseANativeControlRelease",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        },
+        {
+          "mechanism": "control duration scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponControlAndGeometry",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponControlStatusActualApplication",
+            "TestStatusExpires",
+            "TestStunWearsOff"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "30% cooldown actual expiry/recast boundary not covered.",
+        "Seal live casting prohibition/release boundary not covered."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1025/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponControlStatusActualApplication"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseANativeControlRelease",
+          "TestSpecialWeaponClauseANativeCooldownBoundary"
+        ],
+        "sharedParameterizedConsumerWitnesses": [
+          "TestSpecialWeaponFinalRequestedChanges"
+        ],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges"
+      ]
+    },
+    {
+      "key": "1026/2",
+      "item": 1026,
+      "profession": 2,
+      "skills": [
+        10107
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponControlStatusActualApplication",
+        "TestSpecialWeaponDefenseBranchActualIncomingDamage",
+        "TestSpecialWeaponClauseADefenseCapSettlement",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "60% cooldown actual expiry/recast boundary not covered."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1026/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponControlStatusActualApplication",
+          "TestSpecialWeaponDefenseBranchActualIncomingDamage"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseADefenseCapSettlement",
+          "TestSpecialWeaponClauseANativeCooldownBoundary"
+        ],
+        "sharedParameterizedConsumerWitnesses": [
+          "TestSpecialWeaponFinalRequestedChanges"
+        ],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "80% reduction cap and preservation of native >80% reduction lack actual incoming-hit cases."
+      ],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges"
+      ]
+    },
+    {
+      "key": "1027/2",
+      "item": 1027,
+      "profession": 2,
+      "skills": [
+        10122
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponConditionalAndSecondaryHooks",
+        "TestSpecialWeaponClauseAChaosNativeDenialAndDispelSelection",
+        "TestSpecialWeaponClauseAChaosPreservesUndispellableDefense"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1027/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponConditionalAndSecondaryHooks"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseAChaosNativeDenialAndDispelSelection",
+          "TestSpecialWeaponClauseAChaosPreservesUndispellableDefense"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Non-dispellable/foreign non-defense buff untouched cases missing.",
+        "Original deny-new-beneficial-status behavior not exercised with weapon."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1028/2",
+      "item": 1028,
+      "profession": 2,
+      "skills": [
+        10116
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponConditionalDamageActualSettlement"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1028/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponConditionalDamageActualSettlement"
+        ],
+        "additionalWitnesses": [],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1520/2",
+      "item": 1520,
+      "profession": 2,
+      "skills": [
+        10117
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "geometry scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponAllApprovedGeometryRatios",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponGeometryActualRecipients",
+            "TestSpecialWeaponRemoteGroupHealActualRecipients",
+            "TestSkillOutOfRange"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "140% range native cast inside/outside edge not covered."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1520/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [],
+        "sharedParameterizedConsumerWitnesses": [
+          "TestSpecialWeaponAllApprovedGeometryRatios",
+          "TestSharedReviewSelectedSingleAimRange"
+        ],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponAllApprovedGeometryRatios",
+        "TestSharedReviewSelectedSingleAimRange"
+      ]
+    },
+    {
+      "key": "1521/2",
+      "item": 1521,
+      "profession": 2,
+      "skills": [
+        10111
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponClauseACircleActualBoundaryRecipients",
+        "TestSpecialWeaponClauseANativeControlRelease",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "50% cooldown expiry/recast boundary missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1521/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseACircleActualBoundaryRecipients",
+          "TestSpecialWeaponClauseANativeControlRelease",
+          "TestSpecialWeaponClauseANativeCooldownBoundary"
+        ],
+        "sharedParameterizedConsumerWitnesses": [
+          "TestSpecialWeaponFinalRequestedChanges"
+        ],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Target-centered actual nearby recipients and native half root duration missing."
+      ],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges"
+      ]
+    },
+    {
+      "key": "1522/2",
+      "item": 1522,
+      "profession": 2,
+      "skills": [
+        10119
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponSwordOverflowNativeRoot",
+        "TestSpecialWeaponClauseAShieldsReplaceAndExpire"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1522/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponSwordOverflowNativeRoot"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseAShieldsReplaceAndExpire"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Repeat shield replacement (not sum) and expiry boundary missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1523/2",
+      "item": 1523,
+      "profession": 2,
+      "skills": [
+        10119
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponResourceBranchActualSettlement"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1523/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement",
+          "TestSpecialWeaponResourceBranchActualSettlement"
+        ],
+        "additionalWitnesses": [],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1524/2",
+      "item": 1524,
+      "profession": 2,
+      "skills": [
+        10121
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponClauseACircleActualBoundaryRecipients"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "geometry scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponAllApprovedGeometryRatios",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponGeometryActualRecipients",
+            "TestSpecialWeaponRemoteGroupHealActualRecipients"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "135% radius actual edge target selection missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1524/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseACircleActualBoundaryRecipients"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1525/2",
+      "item": 1525,
+      "profession": 2,
+      "skills": [
+        10122
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponConditionalAndSecondaryHooks",
+        "TestSpecialWeaponClauseADefenseDebuffActualStatsAndExpiry"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1525/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponConditionalAndSecondaryHooks"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseADefenseDebuffActualStatsAndExpiry"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Actual post-debuff physical damage increase and 5-second expiry missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1526/2",
+      "item": 1526,
+      "profession": 2,
+      "skills": [
+        10127
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponConditionalAndSecondaryHooks",
+        "TestSpecialWeaponClauseACircleActualBoundaryRecipients",
+        "TestSpecialWeaponClauseATauntSpeedThresholdAndExpiry"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "geometry scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponAllApprovedGeometryRatios",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponGeometryActualRecipients",
+            "TestSpecialWeaponRemoteGroupHealActualRecipients"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "Actual 160% radius targets missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1526/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponConditionalAndSecondaryHooks"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseACircleActualBoundaryRecipients",
+          "TestSpecialWeaponClauseATauntSpeedThresholdAndExpiry"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Below-three-target negative, exact20% speed and5-second expiry missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1527/2",
+      "item": 1527,
+      "profession": 2,
+      "skills": [
+        10123
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponConditionalDamageActualSettlement",
+        "TestSpecialWeaponClauseARemovedEffectSettlement"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1527/2",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponConditionalDamageActualSettlement"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseARemovedEffectSettlement"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Instant-death absence checked structurally, not actual would-kill roll outcome."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1620/1",
+      "item": 1620,
+      "profession": 1,
+      "skills": [
+        10005
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "geometry scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponAllApprovedGeometryRatios",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponGeometryActualRecipients",
+            "TestSpecialWeaponRemoteGroupHealActualRecipients"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "160% width actual parallel-target edge missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1620/1",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [],
+        "sharedParameterizedConsumerWitnesses": [
+          "TestSpecialWeaponAllApprovedGeometryRatios",
+          "TestSpecialWeaponGeometryActualRecipients"
+        ],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponAllApprovedGeometryRatios",
+        "TestSpecialWeaponGeometryActualRecipients"
+      ]
+    },
+    {
+      "key": "1621/1",
+      "item": 1621,
+      "profession": 1,
+      "skills": [
+        10017
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "geometry scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponAllApprovedGeometryRatios",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponGeometryActualRecipients",
+            "TestSpecialWeaponRemoteGroupHealActualRecipients",
+            "TestSkillOutOfRange"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "140% range native admission edge missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1621/1",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [],
+        "sharedParameterizedConsumerWitnesses": [
+          "TestSpecialWeaponAllApprovedGeometryRatios",
+          "TestSharedReviewSelectedSingleAimRange"
+        ],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponAllApprovedGeometryRatios",
+        "TestSharedReviewSelectedSingleAimRange"
+      ]
+    },
+    {
+      "key": "1622/1",
+      "item": 1622,
+      "profession": 1,
+      "skills": [
+        10013
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponOverflowAndActualManaShield",
+        "TestSpecialWeaponClauseAShieldsReplaceAndExpire"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1622/1",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponOverflowAndActualManaShield"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseAShieldsReplaceAndExpire"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Actual 4-second shield expiration and fresh replacement with smaller/larger gain missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1623/1",
+      "item": 1623,
+      "profession": 1,
+      "skills": [
+        10006
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponGeometryActualRecipients",
+        "TestSpecialWeaponClauseAUnchangedConeAndBasicTradeoffHP"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "geometry scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponAllApprovedGeometryRatios",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponGeometryActualRecipients",
+            "TestSpecialWeaponRemoteGroupHealActualRecipients"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1623/1",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponGeometryActualRecipients"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseAUnchangedConeAndBasicTradeoffHP"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Actual unchanged damage not separately checked."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1624/1",
+      "item": 1624,
+      "profession": 1,
+      "skills": [
+        10028
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponWarcryAndFollowupAreConsumedOnce",
+        "TestSpecialWeaponClauseAWarcryRefreshAndGunOnly"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1624/1",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponWarcryAndFollowupAreConsumedOnce"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseAWarcryRefreshAndGunOnly"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Repeat warcry refresh-vs-sum window case missing.",
+        "Only gun attack consumes/other-weapon attack preserves and5-second shield expiry missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1625/1",
+      "item": 1625,
+      "profession": 1,
+      "skills": [
+        10021
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponGeometryActualRecipients"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "geometry scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponAllApprovedGeometryRatios",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponGeometryActualRecipients",
+            "TestSpecialWeaponRemoteGroupHealActualRecipients"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1625/1",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponGeometryActualRecipients"
+        ],
+        "additionalWitnesses": [],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1626/1",
+      "item": 1626,
+      "profession": 1,
+      "skills": [
+        10027,
+        10009
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponWarcryAndFollowupAreConsumedOnce",
+        "TestSpecialWeaponBreakFollowupActualDamage",
+        "TestSpecialWeaponClauseABreakFollowupExpiry",
+        "TestSpecialWeaponClauseANativeControlRelease",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        },
+        {
+          "mechanism": "control duration scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponControlAndGeometry",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponControlStatusActualApplication",
+            "TestStatusExpires",
+            "TestStunWearsOff"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "35% cooldown live expiry and half-stun live release missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1626/1",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponWarcryAndFollowupAreConsumedOnce",
+          "TestSpecialWeaponBreakFollowupActualDamage"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseABreakFollowupExpiry",
+          "TestSpecialWeaponClauseANativeControlRelease",
+          "TestSpecialWeaponClauseANativeCooldownBoundary"
+        ],
+        "sharedParameterizedConsumerWitnesses": [
+          "TestSpecialWeaponFinalRequestedChanges"
+        ],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "5-second expiry negative missing."
+      ],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges"
+      ]
+    },
+    {
+      "key": "1627/1",
+      "item": 1627,
+      "profession": 1,
+      "skills": [
+        10022
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponClauseACircleActualBoundaryRecipients"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "geometry scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponAllApprovedGeometryRatios",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponGeometryActualRecipients",
+            "TestSpecialWeaponRemoteGroupHealActualRecipients"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "80% radius actual boundary recipients missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1627/1",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseACircleActualBoundaryRecipients"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1820/3",
+      "item": 1820,
+      "profession": 3,
+      "skills": [
+        10219
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponClauseANativeControlRelease",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        },
+        {
+          "mechanism": "control duration scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponControlAndGeometry",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponControlStatusActualApplication",
+            "TestStatusExpires",
+            "TestStunWearsOff"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "25% cooldown actual expiry and20% stun live release missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1820/3",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseANativeControlRelease",
+          "TestSpecialWeaponClauseANativeCooldownBoundary"
+        ],
+        "sharedParameterizedConsumerWitnesses": [
+          "TestSpecialWeaponFinalRequestedChanges"
+        ],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges"
+      ]
+    },
+    {
+      "key": "1821/3",
+      "item": 1821,
+      "profession": 3,
+      "skills": [
+        10203
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponCounterActualSettlement",
+        "TestSpecialWeaponClauseAUnchangedConeAndBasicTradeoffHP"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1821/3",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponCounterActualSettlement"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseAUnchangedConeAndBasicTradeoffHP"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "90% ordinary attack only Blow coefficient asserted, not finalHP."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1822/3",
+      "item": 1822,
+      "profession": 3,
+      "skills": [
+        10213
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponInstantTrapDoesNotRemainPlaced"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "geometry scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponAllApprovedGeometryRatios",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponGeometryActualRecipients",
+            "TestSpecialWeaponRemoteGroupHealActualRecipients",
+            "TestSkillOutOfRange"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "120% placement-distance native admission edge missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1822/3",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponInstantTrapDoesNotRemainPlaced"
+        ],
+        "additionalWitnesses": [],
+        "sharedParameterizedConsumerWitnesses": [
+          "TestSpecialWeaponAllApprovedGeometryRatios",
+          "TestSharedReviewSelectedSingleAimRange"
+        ],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponAllApprovedGeometryRatios",
+        "TestSharedReviewSelectedSingleAimRange"
+      ]
+    },
+    {
+      "key": "1823/3",
+      "item": 1823,
+      "profession": 3,
+      "skills": [
+        10208
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponControlStatusActualApplication",
+        "TestSpecialWeaponStealthBranchActualFirstHit",
+        "TestSpecialWeaponClauseAStealthHalfExpiry"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-a-evidence.json",
+      "closureEvidence": {
+        "key": "1823/3",
+        "existingActualConsumerWitnesses": [
+          "TestSpecialWeaponControlStatusActualApplication",
+          "TestSpecialWeaponStealthBranchActualFirstHit"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseAStealthHalfExpiry"
+        ],
+        "sharedParameterizedConsumerWitnesses": [],
+        "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+        "unresolvedClauses": []
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Half stealth actual expiry/visibility boundary missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1824/3",
+      "item": 1824,
+      "profession": 3,
+      "skills": [
+        10209,
+        10208
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponConditionalAndSecondaryHooks",
+        "TestSpecialWeaponClauseBBackstabKillNegatives"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1824/3",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponConditionalAndSecondaryHooks"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBBackstabKillNegatives"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "Nonkill and non-backstab no-refresh negatives missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Nonkill and non-backstab no-refresh negatives missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1825/3",
+      "item": 1825,
+      "profession": 3,
+      "skills": [
+        10224,
+        10208,
+        10209
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponSmokePersistsAndCleansUp",
+        "TestSpecialWeaponClauseBSmokeLearnedAdmissionAndStealthExpiry",
+        "TestSpecialWeaponClauseBSmokeExactZoneBoundary",
+        "TestSpecialWeaponClauseBSmokeLiveDebuffMagnitude"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1825/3",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponSmokePersistsAndCleansUp"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBSmokeLearnedAdmissionAndStealthExpiry",
+          "TestSpecialWeaponClauseBSmokeExactZoneBoundary",
+          "TestSpecialWeaponClauseBSmokeLiveDebuffMagnitude"
+        ],
+        "sharedConsumerReuse": [
+          "cooldown"
+        ],
+        "previousClauses": [
+          "Learned vs unlearned dualblade smoke native admission missing.",
+          "120-radius exact edge, half debuff magnitude actual stats,2-second stealth expiry missing.",
+          "150% cooldown actual expiry missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Learned vs unlearned dualblade smoke native admission missing.",
+        "120-radius exact edge, half debuff magnitude actual stats,2-second stealth expiry missing.",
+        "150% cooldown actual expiry missing."
+      ],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ]
+    },
+    {
+      "key": "1826/3",
+      "item": 1826,
+      "profession": 3,
+      "skills": [
+        10209
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponVisibleBackstabNativeAdmission"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1826/3",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement",
+          "TestSpecialWeaponVisibleBackstabNativeAdmission"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponVisibleBackstabNativeAdmission"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1827/3",
+      "item": 1827,
+      "profession": 3,
+      "skills": [
+        10209
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponClauseBBackstabRetainsInvisibleAdmission"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1827/3",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBBackstabRetainsInvisibleAdmission"
+        ],
+        "sharedConsumerReuse": [
+          "cooldown"
+        ],
+        "previousClauses": [
+          "Native visible rejection/invisible acceptance and120% cooldown live expiry missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Native visible rejection/invisible acceptance and120% cooldown live expiry missing."
+      ],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ]
+    },
+    {
+      "key": "1922/3",
+      "item": 1922,
+      "profession": 3,
+      "skills": [
+        10221
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        },
+        {
+          "mechanism": "control duration scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponControlAndGeometry",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponControlStatusActualApplication",
+            "TestStatusExpires",
+            "TestStunWearsOff"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "25% cooldown actual expiry and30% root live release missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1922/3",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [],
+        "sharedConsumerReuse": [
+          "cooldown",
+          "control"
+        ],
+        "previousClauses": [
+          "25% cooldown actual expiry and30% root live release missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges",
+        "TestSpecialWeaponClauseANativeCooldownBoundary",
+        "TestSpecialWeaponControlAndGeometry",
+        "TestSpecialWeaponClauseANativeControlRelease"
+      ]
+    },
+    {
+      "key": "1923/3",
+      "item": 1923,
+      "profession": 3,
+      "skills": [
+        10205
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponClauseBNativeManaPayments"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "mana cost scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "120% actual mana payment missing (definition arithmetic only)."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1923/3",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBNativeManaPayments"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "120% actual mana payment missing (definition arithmetic only)."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1924/3",
+      "item": 1924,
+      "profession": 3,
+      "skills": [
+        10213
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponTrapRadiusActualPlacement",
+        "TestSpecialWeaponClauseBTrapBoundaryAndUnchangedDamage",
+        "TestSpecialWeaponClauseBTrapNativePlacementRange"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "geometry scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponAllApprovedGeometryRatios",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponGeometryActualRecipients",
+            "TestSpecialWeaponRemoteGroupHealActualRecipients",
+            "TestSkillOutOfRange"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "150% placement-distance native admission edge missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1924/3",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponTrapRadiusActualPlacement"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBTrapBoundaryAndUnchangedDamage",
+          "TestSpecialWeaponClauseBTrapNativePlacementRange"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "120% radius stored on trap, actual inside/outside enemy trigger missing.",
+          "Unchanged explosion actual damage missing.",
+          "150% placement-distance native admission edge missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "120% radius stored on trap, actual inside/outside enemy trigger missing.",
+        "Unchanged explosion actual damage missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1925/3",
+      "item": 1925,
+      "profession": 3,
+      "skills": [
+        10223
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponConditionalAndSecondaryHooks",
+        "TestSpecialWeaponClauseBSlowLiveStatsAndPreservation"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1925/3",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement",
+          "TestSpecialWeaponConditionalAndSecondaryHooks"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBSlowLiveStatsAndPreservation"
+        ],
+        "sharedConsumerReuse": [
+          "knockback"
+        ],
+        "previousClauses": [
+          "No actual knockback movement check.",
+          "30% live movement speed and3-second expiry missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "No actual knockback movement check.",
+        "30% live movement speed and3-second expiry missing."
+      ],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponRemovedNativeEffects",
+        "TestSpecialWeaponClauseARemovedEffectSettlement"
+      ]
+    },
+    {
+      "key": "1926/3",
+      "item": 1926,
+      "profession": 3,
+      "skills": [
+        10206
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponClauseBCircleReplacesConeRearAndSide"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "geometry scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponAllApprovedGeometryRatios",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponGeometryActualRecipients",
+            "TestSpecialWeaponRemoteGroupHealActualRecipients"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1926/3",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBCircleReplacesConeRearAndSide"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "Actual rear/side inclusion and80% radius edge missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Actual rear/side inclusion and80% radius edge missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1927/3",
+      "item": 1927,
+      "profession": 3,
+      "skills": [
+        10224
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponControlStatusActualApplication",
+        "TestSpecialWeaponClauseBSmokeLiveDebuffMagnitude"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "150% cooldown expiry missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1927/3",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponControlStatusActualApplication"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBSmokeLiveDebuffMagnitude"
+        ],
+        "sharedConsumerReuse": [
+          "circle",
+          "cooldown"
+        ],
+        "previousClauses": [
+          "150-radius target-centered recipient edge missing.",
+          "Unchanged live hit/magic debuff magnitude missing.",
+          "150% cooldown expiry missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "150-radius target-centered recipient edge missing.",
+        "Unchanged live hit/magic debuff magnitude missing."
+      ],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponAllApprovedGeometryRatios",
+        "TestSpecialWeaponControlAndGeometry",
+        "TestSpecialWeaponClauseACircleActualBoundaryRecipients",
+        "TestSpecialWeaponFinalRequestedChanges",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ]
+    },
+    {
+      "key": "1928/3",
+      "item": 1928,
+      "profession": 3,
+      "skills": [
+        10216
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponConditionalAndSecondaryHooks",
+        "TestSpecialWeaponClauseBSlowLiveStatsAndPreservation",
+        "TestSpecialWeaponClauseBFrostCannotFreeze"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "70% live speed,6-second expiry and70% cooldown live expiry missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1928/3",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement",
+          "TestSpecialWeaponConditionalAndSecondaryHooks"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBSlowLiveStatsAndPreservation",
+          "TestSpecialWeaponClauseBFrostCannotFreeze"
+        ],
+        "sharedConsumerReuse": [
+          "cooldown"
+        ],
+        "previousClauses": [
+          "Actual cannot-freeze check missing.",
+          "70% live speed,6-second expiry and70% cooldown live expiry missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Actual cannot-freeze check missing."
+      ],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ]
+    },
+    {
+      "key": "1929/3",
+      "item": 1929,
+      "profession": 3,
+      "skills": [
+        10225
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponNativeResourceAcceptance"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        },
+        {
+          "mechanism": "mana cost scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "75% cooldown accepted value verified, actual expiry/recast boundary missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1929/3",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponNativeResourceAcceptance"
+        ],
+        "additionalWitnesses": [],
+        "sharedConsumerReuse": [
+          "cooldown"
+        ],
+        "previousClauses": [
+          "75% cooldown accepted value verified, actual expiry/recast boundary missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ]
+    },
+    {
+      "key": "1320/4",
+      "item": 1320,
+      "profession": 4,
+      "skills": [
+        10301
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponResourceBranchActualSettlement",
+        "TestSpecialWeaponClauseBNativeManaPayments"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "mana cost scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "110% actual mana payment missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1320/4",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponResourceBranchActualSettlement"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBNativeManaPayments"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "110% actual mana payment missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1320/5",
+      "item": 1320,
+      "profession": 5,
+      "skills": [
+        10409
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponConditionalAndSecondaryHooks",
+        "TestSpecialWeaponClauseBSlowLiveStatsAndPreservation"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1320/5",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement",
+          "TestSpecialWeaponConditionalAndSecondaryHooks"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBSlowLiveStatsAndPreservation"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "20% slow live speed missing; existing duration2s only.",
+          "Existing stronger/longer slow preservation negative missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "20% slow live speed missing; existing duration2s only.",
+        "Existing stronger/longer slow preservation negative missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1321/4",
+      "item": 1321,
+      "profession": 4,
+      "skills": [
+        10306
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponAcceptedGroupCleanseMatchesPreviewAndBrokenGate",
+        "TestSpecialWeaponClauseBNativeManaPayments"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        },
+        {
+          "mechanism": "mana cost scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "200% actual mana payment and150% cooldown live expiry missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1321/4",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponAcceptedGroupCleanseMatchesPreviewAndBrokenGate"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBNativeManaPayments"
+        ],
+        "sharedConsumerReuse": [
+          "cooldown"
+        ],
+        "previousClauses": [
+          "200% actual mana payment and150% cooldown live expiry missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ]
+    },
+    {
+      "key": "1321/5",
+      "item": 1321,
+      "profession": 5,
+      "skills": [
+        10410
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "geometry scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponAllApprovedGeometryRatios",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponGeometryActualRecipients",
+            "TestSpecialWeaponRemoteGroupHealActualRecipients"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "140% radius actual edge recipients missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1321/5",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [],
+        "sharedConsumerReuse": [
+          "circle"
+        ],
+        "previousClauses": [
+          "140% radius actual edge recipients missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponAllApprovedGeometryRatios",
+        "TestSpecialWeaponControlAndGeometry",
+        "TestSpecialWeaponClauseACircleActualBoundaryRecipients"
+      ]
+    },
+    {
+      "key": "1322/4",
+      "item": 1322,
+      "profession": 4,
+      "skills": [
+        10302
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponOverflowAndActualManaShield",
+        "TestSpecialWeaponClauseBOverflowShieldReplacesAndExpires"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1322/4",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponOverflowAndActualManaShield"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBOverflowShieldReplacesAndExpires"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "Shield replacement and8-second actual expiry missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Shield replacement and8-second actual expiry missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1322/5",
+      "item": 1322,
+      "profession": 5,
+      "skills": [
+        10421,
+        10401
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponBurnBranchesRouteOwnBurn",
+        "TestSpecialWeaponClauseBForeignBurnIsUntouched"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1322/5",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponBurnBranchesRouteOwnBurn"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBForeignBurnIsUntouched"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "Foreign-source burn must not cash out missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Foreign-source burn must not cash out missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1323/4",
+      "item": 1323,
+      "profession": 4,
+      "skills": [
+        10320
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponHealingActualCastSetIntegration",
+        "TestSpecialWeaponShieldConversionActualSplitSelection",
+        "TestSpecialWeaponClauseBShieldForeignSourceAndTie"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1323/4",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponHealingActualCastSetIntegration",
+          "TestSpecialWeaponShieldConversionActualSplitSelection"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBShieldForeignSourceAndTie"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "Foreign-source shield ignored and equal-health-ratio deterministic tie selection not separately tested."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Foreign-source shield ignored and equal-health-ratio deterministic tie selection not separately tested."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1323/5",
+      "item": 1323,
+      "profession": 5,
+      "skills": [
+        10428,
+        10410
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponRemoteIceBlastConsumesOnlyActiveIcebind",
+        "TestSpecialWeaponClauseBRemoteIceBlastActualRecipients"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1323/5",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponRemoteIceBlastConsumesOnlyActiveIcebind"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBRemoteIceBlastActualRecipients"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "80% actual explosion damage/target center recipients missing (aim+freeze consumption covered)."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Controlled100 attack coefficient gives80 actual HP loss at frozen target center and neighbor, while caster-neighbor untouched; native freeze-source/consumption is separately tested by existing witness."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "80% actual explosion damage/target center recipients missing (aim+freeze consumption covered)."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1324/4",
+      "item": 1324,
+      "profession": 4,
+      "skills": [
+        10304
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponRemoteGroupHealActualRecipients"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1324/4",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponRemoteGroupHealActualRecipients"
+        ],
+        "additionalWitnesses": [],
+        "sharedConsumerReuse": [
+          "range"
+        ],
+        "previousClauses": [
+          "300-distance actual native admission edge missing; actual remote recipients covered."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Fixed300 remote range is additionally asserted by TestSpecialWeaponRemoteGroupHealActualRecipients prepared definition and actual recipient settlement; shared range admission supplies exact-edge consumer."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "300-distance actual native admission edge missing; actual remote recipients covered."
+      ],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponAllApprovedGeometryRatios",
+        "TestSharedReviewSelectedSingleAimRange"
+      ]
+    },
+    {
+      "key": "1324/5",
+      "item": 1324,
+      "profession": 5,
+      "skills": [
+        10433
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponStealPreservesExactInstanceBalance",
+        "TestSpecialWeaponClauseBStealRejectsPermanentAndNonWhitelist"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1324/5",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponStealPreservesExactInstanceBalance"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBStealRejectsPermanentAndNonWhitelist"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "Undispellable defense rejection negative not separately covered."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Undispellable defense rejection negative not separately covered."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1325/4",
+      "item": 1325,
+      "profession": 4,
+      "skills": [
+        10316
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponHealingActualCastSetIntegration",
+        "TestSpecialWeaponClauseBCleanseHealCountCap"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1325/4",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponHealingActualCastSetIntegration"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBCleanseHealCountCap"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "Multiple removed-status count to3/9% actual heal case missing; current native integration one removal3%."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Count0..4 helper HP test composes with TestSpecialWeaponHealingActualCastSetIntegration native one-removal cast +2/4piece reactions; helper is not claimed as native multi-status cast."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Multiple removed-status count to3/9% actual heal case missing; current native integration one removal3%."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1325/5",
+      "item": 1325,
+      "profession": 5,
+      "skills": [
+        10405,
+        10421
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponBurnBranchesRouteOwnBurn",
+        "TestSpecialWeaponClauseBForeignBurnIsUntouched"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1325/5",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponBurnBranchesRouteOwnBurn"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBForeignBurnIsUntouched"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "Foreign-source burn must not cash out missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Foreign-source burn must not cash out missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1326/4",
+      "item": 1326,
+      "profession": 4,
+      "skills": [
+        10322
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponConcentrationNextBuffActualShield",
+        "TestSpecialWeaponClauseBConcentrationNativeStatAndConsumption"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1326/4",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponConcentrationNextBuffActualShield"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBConcentrationNativeStatAndConsumption"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "25% stat-affix live resulting stats and preserved native next-duration consumption missing; live shield125 covered."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "25% stat-affix live resulting stats and preserved native next-duration consumption missing; live shield125 covered."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1326/5",
+      "item": 1326,
+      "profession": 5,
+      "skills": [
+        10412
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "geometry scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponAllApprovedGeometryRatios",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponGeometryActualRecipients",
+            "TestSpecialWeaponRemoteGroupHealActualRecipients"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [
+        "120% radius actual recipient boundary missing."
+      ],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1326/5",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponDamageBranchActualSettlement"
+        ],
+        "additionalWitnesses": [],
+        "sharedConsumerReuse": [
+          "circle"
+        ],
+        "previousClauses": [
+          "120% radius actual recipient boundary missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [],
+      "sharedClosureWitnesses": [
+        "TestSpecialWeaponAllApprovedGeometryRatios",
+        "TestSpecialWeaponControlAndGeometry",
+        "TestSpecialWeaponClauseACircleActualBoundaryRecipients"
+      ]
+    },
+    {
+      "key": "1327/4",
+      "item": 1327,
+      "profession": 4,
+      "skills": [
+        10303
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponNativeResourceAcceptance",
+        "TestSpecialWeaponClauseBRejuvenationNativeTicksAndRecast"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1327/4",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponNativeResourceAcceptance"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponClauseBRejuvenationNativeTicksAndRecast"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "Native periodic total heal/duration unchanged and immediate second cast acceptance missing."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Native periodic total heal/duration unchanged and immediate second cast acceptance missing."
+      ],
+      "sharedClosureWitnesses": []
+    },
+    {
+      "key": "1327/5",
+      "item": 1327,
+      "profession": 5,
+      "skills": [
+        10432
+      ],
+      "actualConsumerWitnesses": [
+        "TestSpecialWeaponNativeResourceAcceptance",
+        "TestSpecialWeaponTeleportActualMovementAndRecast"
+      ],
+      "status": "closed_actual_and_parameterized_shared_consumers",
+      "sharedPipelineEvidence": [
+        {
+          "mechanism": "cooldown scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance",
+            "TestGrowthRoundingActualCastsConserveManaAndFrames"
+          ]
+        },
+        {
+          "mechanism": "mana cost scalar",
+          "status": "covered_shared_pipeline",
+          "branchParameterAssertions": "TestSpecialWeaponFinalRequestedChanges",
+          "sharedActualConsumerAssertions": [
+            "TestSpecialWeaponNativeResourceAcceptance"
+          ]
+        }
+      ],
+      "coreIndependentMechanismGaps": [],
+      "optionalRepeatedParameterBoundaries": [],
+      "closureEvidenceFile": "docs/special-weapon-clause-b-evidence.json",
+      "closureEvidence": {
+        "key": "1327/5",
+        "existingActualWitnesses": [
+          "TestSpecialWeaponNativeResourceAcceptance"
+        ],
+        "additionalWitnesses": [
+          "TestSpecialWeaponTeleportActualMovementAndRecast"
+        ],
+        "sharedConsumerReuse": [],
+        "previousClauses": [
+          "Actual teleport succeeds/moves and immediate second cast acceptance missing;100%chance only definition assertion."
+        ],
+        "remainingIndependentClauses": [],
+        "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+      },
+      "preClosureIndependentMechanismGaps": [
+        "Actual teleport succeeds/moves and immediate second cast acceptance missing;100%chance only definition assertion."
+      ],
+      "sharedClosureWitnesses": []
+    }
+  ],
+  "consumerPositiveCount": 56,
+  "total": 56,
+  "complete": true,
+  "execution": {
+    "head": "18a7adc6153ba6daf47c31edbcabd1cb3f9dbc2d",
+    "package_pass": true,
+    "passing_test_nodes": 6256,
+    "failures": [],
+    "log_sha256": "96a0a104e4b042187dcc5ddf10e8f2fd6ee28ad1c7bfa11cb16a0e5dcc666993",
+    "cover_sha256": "cc890bfd1139b5fe4e20b7de60889034f1a5c0ae987a3704d863308da42c0e61",
+    "command": "go test ./internal/game/scene -run \"$(python3 ../scripts/effect-behavior-test-selector.py)\" -count=1 -timeout=180s -coverprofile=PROFILE -json",
+    "log": "/tmp/effect-gate-acceptance.jsonl",
+    "cover": "/tmp/effect-gate-acceptance.cover",
+    "elapsed_seconds": 80.001,
+    "scene_statement_percent": 47.3
+  },
+  "limitations": [
+    "Per-branch numeric transformations reuse explicitly linked shared consumers for scalar range, cooldown and duration behavior.",
+    "Synthetic deterministic payloads are used in some damage comparisons; actual native entrypoint/resource/geometry/status consumers are separately linked.",
+    "Does not certify every possible equipment combination or every Go statement."
+  ],
+  "clauseAudit": {
+    "basis": "Current scene tests and checked-in approved-branches fixture. Fixture text retains legacy target caps, excluded per latest user removal request. Concrete unproved clauses are coverage gaps, not confirmed production defects.",
+    "branchesWithIndependentCoreGaps": 0,
+    "sharedEvidencePolicy": "Per-branch numeric transformation assertions plus an executed shared runtime consumer prove parameter-only variations; repeated identical scalar expiry/edge tests are optional. Unique trigger, state transition, geometry-center or recipient-selection behavior is not waived.",
+    "note": "A/B independent clause evidence merged and reviewed; all mapped consumers passed in final frozen acceptance.",
+    "preClosureBranchesWithIndependentCoreGaps": 35
+  },
+  "sharedPipelineExecution": {
+    "result": "PASS",
+    "go": "1.27.2",
+    "elapsedSeconds": 2.047,
+    "testNodes": 29,
+    "log": "/tmp/special-shared-pipeline-final.jsonl",
+    "selectors": [
+      "TestSpecialWeaponNativeResourceAcceptance",
+      "TestSpecialWeaponGeometryActualRecipients",
+      "TestSpecialWeaponRemoteGroupHealActualRecipients",
+      "TestSpecialWeaponControlStatusActualApplication",
+      "TestSpecialWeaponVisibleBackstabNativeAdmission",
+      "TestSpecialWeaponBreakFollowupActualDamage",
+      "TestGrowthRoundingActualCastsConserveManaAndFrames",
+      "TestStatusExpires",
+      "TestStunWearsOff",
+      "TestSkillOutOfRange"
+    ]
+  },
+  "independentCoreRowsRemaining": 0,
+  "clauseClosureRows": 56,
+  "completionNote": "Reviewed current semantic clauses closed with explicit shared parameter/consumer evidence; frozen acceptance execution passed. Not exhaustive Cartesian combinations or 100% statement coverage."
+}

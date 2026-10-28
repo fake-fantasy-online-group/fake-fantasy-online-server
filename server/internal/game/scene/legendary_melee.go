@@ -24,7 +24,7 @@ const (
 )
 
 func legendaryMeleeDirect(c *legendaryContext) bool {
-	return c.Owner != nil && c.Target != nil && c.Blow.Origin == domain.DamageNormalOrigin && c.Blow.ProcDepth == 0
+	return c.Owner != nil && c.Target != nil && (c.Blow.Origin == domain.DamageNormalOrigin || c.Blow.Origin == domain.DamageProcOrigin)
 }
 func legendaryMeleeLanded(c *legendaryContext) bool {
 	return legendaryMeleeDirect(c) && !c.Hit.Flag.Has(event.DamageMiss)

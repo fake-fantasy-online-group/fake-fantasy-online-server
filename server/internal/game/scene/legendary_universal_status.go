@@ -188,6 +188,9 @@ func universalPeriodicReduce(contexts []legendaryContext, n int32, critical ...b
 		if c.Power.ID == "TY-D19" {
 			delta += int64(universalSynergyIncoming(&c, n)) - int64(n)
 		}
+		if c.Power.ID == "TY-D08" || c.Power.ID == "TY-D17" {
+			delta += int64(universalExtendedIncoming(&c, n)) - int64(n)
+		}
 		if c.Power.ID == "TY-D10" && len(critical) > 0 && critical[0] {
 			delta += int64(universalScaleBP(n, -c.RollValue("benefit", 3000))) - int64(n)
 		}

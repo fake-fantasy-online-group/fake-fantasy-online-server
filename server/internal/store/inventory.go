@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"sort"
@@ -107,7 +108,7 @@ func (p *Postgres) LoadQuests(ctx context.Context, charID int64) (domain.QuestLo
 }
 func loadQuests(ctx context.Context, q querier, charID int64) (domain.QuestLog, error) {
 	rows, err := q.Query(ctx,
-		`SELECT task_id, state, progress, accepted_at_ms, rift_completion_run_id FROM character_quests WHERE char_id = $1`, charID)
+		`SELECT task_id, state, progress, accepted_at_ms, rift_completion_run_id, spirit_daily FROM character_quests WHERE char_id = $1`, charID)
 	if err != nil {
 		return nil, fmt.Errorf("store: 查任务本: %w", err)
 	}
@@ -118,10 +119,15 @@ func loadQuests(ctx context.Context, q querier, charID int64) (domain.QuestLog, 
 		var id, state, progress int32
 		var acceptedAtMS int64
 		var riftCompletionRunID string
-		if err := rows.Scan(&id, &state, &progress, &acceptedAtMS, &riftCompletionRunID); err != nil {
+		var dailyRaw []byte
+		var daily domain.SpiritDailyQuestState
+		if err := rows.Scan(&id, &state, &progress, &acceptedAtMS, &riftCompletionRunID, &dailyRaw); err != nil {
 			return nil, fmt.Errorf("store: 读任务行: %w", err)
 		}
-		out[domain.QuestID(id)] = domain.QuestEntry{
+		if err := json.Unmarshal(dailyRaw, &daily); err != nil {
+			return nil, fmt.Errorf("store: daily spirit quest: %w", err)
+		}
+		out[domain.QuestID(id)] = domain.QuestEntry{SpiritDaily: daily,
 			State: domain.QuestState(state), Progress: progress, AcceptedAtMS: acceptedAtMS, RiftCompletionRunID: riftCompletionRunID}
 	}
 	if err := rows.Err(); err != nil {
@@ -174,13 +180,17 @@ func saveQuests(ctx context.Context, tx pgx.Tx, charID int64, l domain.QuestLog)
 	var rows [][]any
 	for _, id := range ids {
 		e := l[id]
-		rows = append(rows, []any{charID, int32(id), int32(e.State), e.Progress, e.AcceptedAtMS, e.RiftCompletionRunID})
+		daily, err := json.Marshal(e.SpiritDaily)
+		if err != nil {
+			return err
+		}
+		rows = append(rows, []any{charID, int32(id), int32(e.State), e.Progress, e.AcceptedAtMS, e.RiftCompletionRunID, daily})
 	}
 	if len(rows) == 0 {
 		return nil
 	}
 	_, err := tx.CopyFrom(ctx, pgx.Identifier{"character_quests"},
-		[]string{"char_id", "task_id", "state", "progress", "accepted_at_ms", "rift_completion_run_id"}, pgx.CopyFromRows(rows))
+		[]string{"char_id", "task_id", "state", "progress", "accepted_at_ms", "rift_completion_run_id", "spirit_daily"}, pgx.CopyFromRows(rows))
 	if err != nil {
 		return fmt.Errorf("store: 写任务本: %w", err)
 	}

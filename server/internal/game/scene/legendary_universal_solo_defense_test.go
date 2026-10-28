@@ -59,7 +59,7 @@ func TestLegendaryUniversalSoloIncoming(t *testing.T) {
 						want = want * 80 / 100
 					}
 				case "TY-D08":
-					if kind == "magic" {
+					if kind == "magic" || kind == "dot" {
 						want = 800
 					}
 				case "TY-D10":
@@ -67,7 +67,7 @@ func TestLegendaryUniversalSoloIncoming(t *testing.T) {
 						want = 1400
 					}
 				case "TY-D17":
-					if direct {
+					if direct || kind == "dot" {
 						want = want * 75 / 100
 					}
 				case "TY-D19":
@@ -325,14 +325,18 @@ func TestLegendaryUniversalSoloPeriodic(t *testing.T) {
 			if n != 1 || len(s.casts) != 0 || len(s.attacks) != 0 {
 				t.Fatal("extra state or attack")
 			}
-			// Power-produced periodic payloads must not be amplified recursively.
+			// Origin tagging must not suppress a distinct passive received-heal modifier.
 			d.ID = 190982
 			d.LegendaryPowerID = tc.id
 			d.HPChanges = []domain.ResourceChange{{Value: tc.delta}}
 			dst.HP = 5000
 			s.tickStatus(dst, domain.Active{Def: d, Source: src.ID})
-			if dst.HP-5000 != tc.delta {
-				t.Fatal("recursive periodic amplification")
+			wantGenerated := tc.delta
+			if tc.id == "TY-D12" {
+				wantGenerated = tc.delta * 140 / 100
+			}
+			if dst.HP-5000 != wantGenerated {
+				t.Fatal("generated periodic modifier mismatch", dst.HP-5000, wantGenerated)
 			}
 		})
 	}

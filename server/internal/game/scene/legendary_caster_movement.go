@@ -18,9 +18,12 @@ func (s *Scene) legendaryCasterTeleported(e *entity.Entity, from domain.Pos, ski
 	if len(sources) > 0 {
 		source = sources[0]
 	}
-	for _, c := range s.legendaryContextsFor(e, nil, combat.Blow{SkillID: int32(skill), SourceOffense: source}, event.DamageDealt{}, true) {
+	if source != nil {
+		defer s.withCombatCausalPath(source.CombatCausalPath)()
+	}
+	for _, c := range s.legendaryContextsFor(e, nil, combat.Blow{SkillID: int32(skill), SourceOffense: source}, event.DamageDealt{}, false) {
 		if h := legendaryHandlers[c.Power.ID].Teleported; h != nil {
-			h(&c, from)
+			c.invoke(func(c *legendaryContext) { h(c, from) })
 		}
 	}
 }

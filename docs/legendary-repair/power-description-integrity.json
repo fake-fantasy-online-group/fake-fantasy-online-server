@@ -1,0 +1,39 @@
+{
+  "baseline": "93b05b98d5fca3d2ac78bbc077def87285c250d5",
+  "catalog_non_effect_fields_unchanged": true,
+  "roll_non_display_fields_unchanged": true,
+  "roll_display_changes": [
+    {
+      "id": "YS-A02",
+      "index": 0,
+      "before": "已结算伤害85%",
+      "after": "实际伤害85%"
+    },
+    {
+      "id": "YS-U02",
+      "index": 1,
+      "before": "增益强度按原数值提高50%",
+      "after": "增益强度提高50%"
+    }
+  ],
+  "variant_fixture_non_description_fields_unchanged": true,
+  "historical_migrations_unchanged": true,
+  "validation": [
+    {
+      "command": "go test ./internal/domain -count=1",
+      "result": "PASS",
+      "duration_seconds": 300.155
+    },
+    {
+      "command": "go test ./internal/domain -run 'Test.*(Legendary|Power|Unique|Endgame.*Catalog|WingScroll)' -count=1",
+      "result": "PASS",
+      "duration_seconds": 9.513
+    },
+    {
+      "command": "UPDATE_POWERBOOK_CONTRACT=1 go test ./internal/game/scene -run 'Test(PowerCodexCurrentValue|PowerBookSharedClientContract|PowerCodexSharedContract)' -count=1",
+      "result": "PASS",
+      "duration_seconds": 0.471
+    }
+  ],
+  "scope": "Presentation only; catalog non-effect data and all roll numeric metadata unchanged. Historical migration bytes preserved. Variant runtime descriptions are generated from existing typed parameters so legacy database prose is not displayed."
+}

@@ -286,13 +286,21 @@ func TestRiftCumulativeLegacyPreVariantOracle(t *testing.T) {
 	}
 	// Wings add independent durable metadata; absent powers must not change
 	// this pre-wing gameplay oracle or be mistaken for a changed old drop.
+	// Spirit state was added in a7f4c22. Assert it is absent, then exclude
+	// only those new zero fields from the unchanged historical JSON oracle.
 	type legacyStack domain.Stack
 	type legacyProjection struct {
 		legacyStack
-		WingPowers *domain.WingPowers `json:",omitempty"`
+		WingPowers       *domain.WingPowers       `json:",omitempty"`
+		Spirit           *domain.SpiritState      `json:",omitempty"`
+		FusedSpirit      *domain.SpiritAttachment `json:",omitempty"`
+		SpiritAppearance *domain.ItemID           `json:",omitempty"`
 	}
 	projected := make([]legacyProjection, len(items))
 	for i, st := range items {
+		if st.Spirit != (domain.SpiritState{}) || st.FusedSpirit != (domain.SpiritAttachment{}) || st.SpiritAppearance != 0 {
+			t.Fatal("old paid run gained spirit metadata")
+		}
 		if st.WingPowers != (domain.WingPowers{}) {
 			t.Fatal("old paid run gained wing powers")
 		}

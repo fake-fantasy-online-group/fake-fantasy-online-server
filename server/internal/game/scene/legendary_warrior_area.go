@@ -20,7 +20,7 @@ func warriorEcho(c *legendaryContext, pct int64, farthest bool) {
 	var dist float64
 	for i := range c.Hits {
 		h := &c.Hits[i]
-		if h.src != c.Owner.ID || h.blow.ProcDepth != 0 || h.blow.Origin != domain.DamageNormalOrigin || h.ev.Flag.Has(event.DamageMiss) {
+		if h.src != c.Owner.ID || (h.blow.Origin != domain.DamageNormalOrigin && h.blow.Origin != domain.DamageProcOrigin) || h.ev.Flag.Has(event.DamageMiss) {
 			continue
 		}
 		e := c.Scene.entities[h.dst]
@@ -101,7 +101,7 @@ func init() {
 		}
 		var chosen domain.EntityID
 		for _, h := range c.Hits {
-			if h.ev.Flag.Has(event.DamageMiss) || h.blow.ProcDepth != 0 {
+			if h.ev.Flag.Has(event.DamageMiss) {
 				continue
 			}
 			t := c.Scene.entities[h.dst]

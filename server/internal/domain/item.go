@@ -25,6 +25,7 @@ const (
 	ItemInstanceEquipment
 	ItemInstanceSocketCard
 	ItemInstancePet
+	ItemInstanceSpirit
 )
 
 // ItemIconMapping 是 0x804d 的特殊小图标覆盖。普通物品仍由客户端按自身
@@ -481,6 +482,11 @@ func (d ItemDef) IsEquip() bool { return d.Equip != nil }
 
 // Stack 是背包里的一格。Item == 0 表示空格。
 type Stack struct {
+	// Dynamic spirit state and fused identity use value types: snapshots do not alias.
+	Spirit           SpiritState
+	FusedSpirit      SpiritAttachment
+	SpiritAppearance ItemID
+
 	Endgame EndgameItemState // durable per-instance extension; omitted from native packets
 
 	// UID 是**这一件东西**的唯一标识, 与 ItemID(哪一种)不是一回事。
@@ -596,6 +602,11 @@ func NewStack(def ItemDef, count int32) Stack {
 	if def.InstanceKind == ItemInstanceEquipment && def.Equip != nil {
 		st.Endgame.FormationRollBP = newFormationRollBP()
 		st.Endgame.FormationContentVersion = UniqueContentVersion
+	}
+	if def.InstanceKind == ItemInstanceSpirit {
+		if spirit, ok := SpiritDefinitionForItem(def.ID); ok {
+			st.Spirit.Kind = spirit.Kind
+		}
 	}
 	if def.InstanceKind == ItemInstanceSocketCard {
 		st.Card = def.CardDefaults

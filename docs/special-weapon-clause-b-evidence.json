@@ -1,0 +1,503 @@
+{
+  "scope": "Second28 named item/profession branches, indices28..55. Supplement only; central audit merge and independent gate remain owner-controlled.",
+  "testFile": "server/internal/game/scene/special_weapon_clause_b_test.go",
+  "productionChanges": false,
+  "validation": {
+    "command": "source /workspace/shared/server-toolchains/env.sh; cd server; go test ./internal/game/scene -run '^TestSpecialWeapon(ClauseB|TeleportActual)' -count=3",
+    "status": "PASS",
+    "count": 3,
+    "elapsedSeconds": 1.321,
+    "goVersion": "go1.27.2",
+    "aggregate": {
+      "command": "go test ./internal/game/scene -run '^TestSpecialWeapon' -count=1",
+      "status": "PASS",
+      "elapsedSeconds": 1.991
+    }
+  },
+  "sharedConsumerEvidence": {
+    "cooldown": {
+      "parameterWitness": "TestSpecialWeaponFinalRequestedChanges",
+      "consumerWitness": "TestSpecialWeaponClauseANativeCooldownBoundary",
+      "justification": "All named cooldown ratios feed the same onUseSkill/StartSkillCooldown/SkillReadyAt consumer. Representative native admission rejects before and accepts at exact expiry; per-branch native rank1/5/20/100 transformed ratios remain separately checked."
+    },
+    "circle": {
+      "parameterWitness": [
+        "TestSpecialWeaponAllApprovedGeometryRatios",
+        "TestSpecialWeaponControlAndGeometry"
+      ],
+      "consumerWitness": "TestSpecialWeaponClauseACircleActualBoundaryRecipients",
+      "justification": "Same resolveTargets circle consumer, both caster and target centers, inclusive exact edge and outside edge; branch-specific shape/center/radius transformations separately checked. Cone-to-circle conversion1926 additionally exercises rear/side actual recipients."
+    },
+    "range": {
+      "parameterWitness": "TestSpecialWeaponAllApprovedGeometryRatios",
+      "consumerWitness": "TestSharedReviewSelectedSingleAimRange",
+      "justification": "Native single-aim range admission checks exact distance versus +1 before payment and actual settlement. Branch distance transforms reused rather than pretending every named item repeated native range framework."
+    },
+    "control": {
+      "parameterWitness": "TestSpecialWeaponControlAndGeometry",
+      "consumerWitness": "TestSpecialWeaponClauseANativeControlRelease",
+      "justification": "1922 root duration30% separately resolved; shared native root canMove rejection before and release at exact expiry shown by1024/1521."
+    },
+    "knockback": {
+      "parameterWitness": "TestSpecialWeaponRemovedNativeEffects",
+      "consumerWitness": "TestSpecialWeaponClauseARemovedEffectSettlement",
+      "justification": "1925 knockback is absent from transformed effects; shared effect-list settlement verifies actual displacement removed for1021."
+    }
+  },
+  "branches": [
+    {
+      "key": "1824/3",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponConditionalAndSecondaryHooks"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBBackstabKillNegatives"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "Nonkill and non-backstab no-refresh negatives missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1825/3",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponSmokePersistsAndCleansUp"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBSmokeLearnedAdmissionAndStealthExpiry",
+        "TestSpecialWeaponClauseBSmokeExactZoneBoundary",
+        "TestSpecialWeaponClauseBSmokeLiveDebuffMagnitude"
+      ],
+      "sharedConsumerReuse": [
+        "cooldown"
+      ],
+      "previousClauses": [
+        "Learned vs unlearned dualblade smoke native admission missing.",
+        "120-radius exact edge, half debuff magnitude actual stats,2-second stealth expiry missing.",
+        "150% cooldown actual expiry missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1826/3",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponVisibleBackstabNativeAdmission"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponVisibleBackstabNativeAdmission"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1827/3",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBBackstabRetainsInvisibleAdmission"
+      ],
+      "sharedConsumerReuse": [
+        "cooldown"
+      ],
+      "previousClauses": [
+        "Native visible rejection/invisible acceptance and120% cooldown live expiry missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1922/3",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [],
+      "sharedConsumerReuse": [
+        "cooldown",
+        "control"
+      ],
+      "previousClauses": [
+        "25% cooldown actual expiry and30% root live release missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1923/3",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBNativeManaPayments"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "120% actual mana payment missing (definition arithmetic only)."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1924/3",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponTrapRadiusActualPlacement"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBTrapBoundaryAndUnchangedDamage",
+        "TestSpecialWeaponClauseBTrapNativePlacementRange"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "120% radius stored on trap, actual inside/outside enemy trigger missing.",
+        "Unchanged explosion actual damage missing.",
+        "150% placement-distance native admission edge missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1925/3",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponConditionalAndSecondaryHooks"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBSlowLiveStatsAndPreservation"
+      ],
+      "sharedConsumerReuse": [
+        "knockback"
+      ],
+      "previousClauses": [
+        "No actual knockback movement check.",
+        "30% live movement speed and3-second expiry missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1926/3",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBCircleReplacesConeRearAndSide"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "Actual rear/side inclusion and80% radius edge missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1927/3",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponControlStatusActualApplication"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBSmokeLiveDebuffMagnitude"
+      ],
+      "sharedConsumerReuse": [
+        "circle",
+        "cooldown"
+      ],
+      "previousClauses": [
+        "150-radius target-centered recipient edge missing.",
+        "Unchanged live hit/magic debuff magnitude missing.",
+        "150% cooldown expiry missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1928/3",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponConditionalAndSecondaryHooks"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBSlowLiveStatsAndPreservation",
+        "TestSpecialWeaponClauseBFrostCannotFreeze"
+      ],
+      "sharedConsumerReuse": [
+        "cooldown"
+      ],
+      "previousClauses": [
+        "Actual cannot-freeze check missing.",
+        "70% live speed,6-second expiry and70% cooldown live expiry missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1929/3",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponNativeResourceAcceptance"
+      ],
+      "additionalWitnesses": [],
+      "sharedConsumerReuse": [
+        "cooldown"
+      ],
+      "previousClauses": [
+        "75% cooldown accepted value verified, actual expiry/recast boundary missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1320/4",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponResourceBranchActualSettlement"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBNativeManaPayments"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "110% actual mana payment missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1320/5",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponConditionalAndSecondaryHooks"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBSlowLiveStatsAndPreservation"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "20% slow live speed missing; existing duration2s only.",
+        "Existing stronger/longer slow preservation negative missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1321/4",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponAcceptedGroupCleanseMatchesPreviewAndBrokenGate"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBNativeManaPayments"
+      ],
+      "sharedConsumerReuse": [
+        "cooldown"
+      ],
+      "previousClauses": [
+        "200% actual mana payment and150% cooldown live expiry missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1321/5",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [],
+      "sharedConsumerReuse": [
+        "circle"
+      ],
+      "previousClauses": [
+        "140% radius actual edge recipients missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1322/4",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponOverflowAndActualManaShield"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBOverflowShieldReplacesAndExpires"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "Shield replacement and8-second actual expiry missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1322/5",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponBurnBranchesRouteOwnBurn"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBForeignBurnIsUntouched"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "Foreign-source burn must not cash out missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1323/4",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponHealingActualCastSetIntegration",
+        "TestSpecialWeaponShieldConversionActualSplitSelection"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBShieldForeignSourceAndTie"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "Foreign-source shield ignored and equal-health-ratio deterministic tie selection not separately tested."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1323/5",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponRemoteIceBlastConsumesOnlyActiveIcebind"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBRemoteIceBlastActualRecipients"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "80% actual explosion damage/target center recipients missing (aim+freeze consumption covered)."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Controlled100 attack coefficient gives80 actual HP loss at frozen target center and neighbor, while caster-neighbor untouched; native freeze-source/consumption is separately tested by existing witness."
+    },
+    {
+      "key": "1324/4",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponRemoteGroupHealActualRecipients"
+      ],
+      "additionalWitnesses": [],
+      "sharedConsumerReuse": [
+        "range"
+      ],
+      "previousClauses": [
+        "300-distance actual native admission edge missing; actual remote recipients covered."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Fixed300 remote range is additionally asserted by TestSpecialWeaponRemoteGroupHealActualRecipients prepared definition and actual recipient settlement; shared range admission supplies exact-edge consumer."
+    },
+    {
+      "key": "1324/5",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponStealPreservesExactInstanceBalance"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBStealRejectsPermanentAndNonWhitelist"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "Undispellable defense rejection negative not separately covered."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1325/4",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponHealingActualCastSetIntegration"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBCleanseHealCountCap"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "Multiple removed-status count to3/9% actual heal case missing; current native integration one removal3%."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Count0..4 helper HP test composes with TestSpecialWeaponHealingActualCastSetIntegration native one-removal cast +2/4piece reactions; helper is not claimed as native multi-status cast."
+    },
+    {
+      "key": "1325/5",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponBurnBranchesRouteOwnBurn"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBForeignBurnIsUntouched"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "Foreign-source burn must not cash out missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1326/4",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponConcentrationNextBuffActualShield"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBConcentrationNativeStatAndConsumption"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "25% stat-affix live resulting stats and preserved native next-duration consumption missing; live shield125 covered."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1326/5",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [],
+      "sharedConsumerReuse": [
+        "circle"
+      ],
+      "previousClauses": [
+        "120% radius actual recipient boundary missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1327/4",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponNativeResourceAcceptance"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseBRejuvenationNativeTicksAndRecast"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "Native periodic total heal/duration unchanged and immediate second cast acceptance missing."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    },
+    {
+      "key": "1327/5",
+      "existingActualWitnesses": [
+        "TestSpecialWeaponNativeResourceAcceptance"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponTeleportActualMovementAndRecast"
+      ],
+      "sharedConsumerReuse": [],
+      "previousClauses": [
+        "Actual teleport succeeds/moves and immediate second cast acceptance missing;100%chance only definition assertion."
+      ],
+      "remainingIndependentClauses": [],
+      "notes": "Each mechanism is composed from existing branch consumer witness, added boundary/negative tests, and explicitly named shared consumer where applicable; no identity-only activation test is counted."
+    }
+  ],
+  "crossReview": {
+    "reviewer": "/root/close_named_effect_clauses_a",
+    "result": "Reviewed actual consumer assertions; no remaining mechanism correctness concerns. Separate independent gate reviewed fixture isolation; equipment definition copied and attribute cache invalidated before strengthened stat assertions."
+  }
+}

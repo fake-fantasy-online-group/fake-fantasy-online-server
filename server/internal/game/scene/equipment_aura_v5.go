@@ -74,7 +74,9 @@ func (s *Scene) stepEquipmentAuras() {
 				if sources == nil && len(rt.auraSources) > 0 {
 					sources = make([]equipmentAuraSource, 0, len(rt.auraSources))
 				}
-				sources = append(sources, equipmentAuraSource{id, e.SourceUID, p.Player.Party, *a})
+				s.dispatchEquipmentEffect(p, domain.RuntimeTypedEquipmentEffect(e, false), func() {
+					sources = append(sources, equipmentAuraSource{id, e.SourceUID, p.Player.Party, *a})
+				})
 			}
 		}
 	}
@@ -343,6 +345,12 @@ func (s *Scene) removeEquipmentEntity(id domain.EntityID) {
 	delete(s.equipment.observations, id)
 	delete(s.equipment.classSetCasters, id)
 	delete(s.equipment.absorption, id)
+	// Deferred heals belong to this scene residency, not a reusable entity ID.
+	for target, mend := range s.equipment.variantMends {
+		if mend.source == id || mend.target == id {
+			delete(s.equipment.variantMends, target)
+		}
+	}
 	s.equipment.nextAuraScan = 0
 	s.stepEquipmentAuras()
 }

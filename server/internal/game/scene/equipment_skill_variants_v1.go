@@ -3,7 +3,6 @@ package scene
 import (
 	"fmt"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
-	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 	"sort"
 	"time"
@@ -35,7 +34,7 @@ func (s *Scene) applyEquipmentSkillVariant(p *entity.Entity, def *domain.SkillDe
 	v, _ := s.endgameCatalog.Variant(a.Effect.VariantID)
 	v.SourceUID, v.Item = a.SourceUID, a.Item
 	v.EquipmentRevision = p.Player.Worn.EffectsRevision()
-	applyEquipmentSkillVariantDefinition(def, v)
+	s.dispatchEquipmentEffect(p, domain.RuntimeTypedEquipmentEffect(a, false), func() { applyEquipmentSkillVariantDefinition(def, v) })
 }
 
 func applyEquipmentSkillVariantDefinition(def *domain.SkillDef, v domain.EquipmentSkillVariant) {
@@ -113,43 +112,49 @@ type variantMend struct {
 	amount         int32
 	skill          domain.SkillID
 	variantID      string
+	causalPath     []string
 	due            time.Time
 }
 
 func (s *Scene) startVariantMend(src, dst *entity.Entity, def domain.SkillDef, amount int32) int32 {
-	if s.legendaryCasterSecondaryHeal(src, dst, def.ID) {
-		return amount
-	}
 	rt := s.equipmentState()
-	if old, ok := rt.variantMends[dst.ID]; ok && old.skill == def.ID {
-		delete(rt.variantMends, dst.ID)
-	}
-	if def.EquipmentVariant == nil || def.EquipmentVariant.Behavior != domain.VariantDelayedHeal {
+	v := def.EquipmentVariant
+	if v == nil || v.Behavior != domain.VariantDelayedHeal {
+		if old, ok := rt.variantMends[dst.ID]; ok && old.skill == def.ID {
+			delete(rt.variantMends, dst.ID)
+		}
 		return amount
 	}
-	if rt.variantMends == nil {
-		rt.variantMends = map[domain.EntityID]variantMend{}
-	}
-	delete(rt.variantMends, dst.ID)
-	budget := min(max(int32(0), dst.MaxHP-dst.HP), amount)
-	if budget > 0 {
-		v := def.EquipmentVariant
-		rt.variantMends[dst.ID] = variantMend{source: src.ID, target: dst.ID, uid: v.SourceUID, revision: v.EquipmentRevision,
-			amount: domain.SaturateInt32(int64(budget) * int64(v.Params.DelayedHealPercent) / 100), skill: def.ID, variantID: v.ID,
-			due: s.now().Add(time.Duration(v.Params.DelayMS) * time.Millisecond)}
-	}
-	return int32(int64(budget) * int64(def.EquipmentVariant.Params.ImmediateHealPercent) / 100)
+	immediate := amount
+	effect := domain.RuntimeTypedEquipmentEffect(domain.ActiveEquipmentEffect{SourceUID: v.SourceUID, Item: v.Item, Effect: domain.EquipmentEffect{Kind: "skill_variant", VariantID: v.ID}}, true)
+	s.dispatchEquipmentEffect(src, effect, func() {
+		if rt.variantMends == nil {
+			rt.variantMends = map[domain.EntityID]variantMend{}
+		}
+		delete(rt.variantMends, dst.ID)
+		budget := min(max(int32(0), dst.MaxHP-dst.HP), amount)
+		if budget > 0 {
+			rt.variantMends[dst.ID] = variantMend{source: src.ID, target: dst.ID, uid: v.SourceUID, revision: v.EquipmentRevision,
+				causalPath: append([]string(nil), s.legendaryState().causalPath...),
+				amount:     domain.SaturateInt32(int64(budget) * int64(v.Params.DelayedHealPercent) / 100), skill: def.ID, variantID: v.ID,
+				due: s.now().Add(time.Duration(v.Params.DelayMS) * time.Millisecond)}
+		}
+		immediate = int32(int64(budget) * int64(v.Params.ImmediateHealPercent) / 100)
+	})
+	return immediate
 }
+
 func (s *Scene) stepVariantMends(now time.Time) {
 	rt := s.equipmentState()
 	for id, m := range rt.variantMends {
 		src, dst := s.entities[m.source], s.entities[m.target]
 		valid := src != nil && src.Player != nil && src.Player.EndgameSkillVariants && s.equipmentCombatReady(src) && src.Alive() && dst != nil && dst.Alive() && src.Player.Worn.EffectsRevision() == m.revision
 		found := false
+		var active domain.ActiveEquipmentEffect
 		if valid {
 			for _, a := range s.equipmentEffects(src).effects {
 				if a.SourceUID == m.uid && a.Effect.VariantID == m.variantID {
-					found = true
+					found, active = true, a
 					break
 				}
 			}
@@ -166,8 +171,14 @@ func (s *Scene) stepVariantMends(now time.Time) {
 		if !ok || !s.validTarget(src, dst, def) || !s.equipmentCombatReady(dst) {
 			continue
 		}
-		s.emit(combat.Restore(src, dst, m.amount, int32(m.skill)))
-		s.emitAttributesIfPlayer(dst)
+		// This is settlement of an already-admitted producer, not a second
+		// generation admission. Its saved ancestry still guards all reactions.
+		effect := domain.RuntimeTypedEquipmentEffect(active, false)
+		effect.Trigger = "delayed_release"
+		s.dispatchEquipmentEffect(src, effect, func() {
+			defer s.withCombatCausalPath(m.causalPath)()
+			s.restoreHealthWithReactions(src, dst, m.amount, m.skill)
+		})
 	}
 }
 func variantDisplayLines(def domain.SkillDef, lines []string) []string {
@@ -183,74 +194,78 @@ func (s *Scene) detonateVariantBomb(src, dst *entity.Entity, def domain.SkillDef
 	if def.EquipmentVariant == nil || def.EquipmentVariant.Behavior != domain.VariantDetonateOwnedTrap || src == nil || dst == nil {
 		return
 	}
-	positiveHit := false
-	if root := s.equipmentState().root; root != nil {
-		for _, hit := range root.hits {
-			if hit.dst == dst.ID && hit.ev.Amount > 0 {
-				positiveHit = true
-				break
+	v := def.EquipmentVariant
+	effect := domain.RuntimeTypedEquipmentEffect(domain.ActiveEquipmentEffect{SourceUID: v.SourceUID, Item: v.Item, Effect: domain.EquipmentEffect{Kind: "skill_variant", VariantID: v.ID}}, true)
+	s.dispatchEquipmentEffect(src, effect, func() {
+		positiveHit := false
+		if root := s.equipmentState().root; root != nil {
+			for _, hit := range root.hits {
+				if hit.dst == dst.ID && hit.ev.Amount > 0 {
+					positiveHit = true
+					break
+				}
 			}
 		}
-	}
-	if !positiveHit {
-		return
-	}
-	at := dst.Pos
-	if len(impact) > 0 {
-		at = impact[0]
-	}
-	var chosen *entity.Entity
-	params := def.EquipmentVariant.Params
-	best := float64(params.TrapSearchRadius) * float64(params.TrapSearchRadius)
-	for _, t := range s.traps {
-		if t == nil || t.Trap == nil || t.Trap.Owner != src.ID || t.Trap.Def.ID != params.TrapSkillID {
-			continue
-		}
-		d := sqDist(t.Pos, at)
-		if d > best {
-			continue
-		}
-		if chosen == nil || d < best || t.ID < chosen.ID {
-			chosen, best = t, d
-		}
-	}
-	if chosen == nil {
-		return
-	}
-	if chosen.Trap.Def.FormulaVersion == domain.SkillFormulaVersion {
-		current, ok := s.lesserPersistentSkill(src, chosen.Trap.Def)
-		if !ok {
-			s.removeTrap(chosen.ID)
+		if !positiveHit {
 			return
 		}
-		chosen.Trap.Def = current
-		for _, fx := range current.DirectEffects() {
-			if fx.Kind == domain.EffectPlaceTrap {
-				chosen.Trap.Radius = min(chosen.Trap.Radius, fx.TrapRadius)
+		at := dst.Pos
+		if len(impact) > 0 {
+			at = impact[0]
+		}
+		var chosen *entity.Entity
+		params := def.EquipmentVariant.Params
+		best := float64(params.TrapSearchRadius) * float64(params.TrapSearchRadius)
+		for _, t := range s.traps {
+			if t == nil || t.Trap == nil || t.Trap.Owner != src.ID || t.Trap.Def.ID != params.TrapSkillID {
+				continue
+			}
+			d := sqDist(t.Pos, at)
+			if d > best {
+				continue
+			}
+			if chosen == nil || d < best || t.ID < chosen.ID {
+				chosen, best = t, d
 			}
 		}
-	}
-	chosen.Trap.Radius = max(chosen.Trap.Radius, params.TrapMinRadius)
-	targets := s.trapTargets(chosen)
-	// Consume before settlement. Trap damage is marked and cannot proc equipment.
-	s.removeTrap(chosen.ID)
-	rt := s.equipmentState()
-	previous := rt.root
-	offense := chosen.Trap.EquipmentOffense
-	currentOffense := s.equipmentOffense(src)
-	for i := range offense.Elements {
-		offense.Elements[i].DamageBP = min(offense.Elements[i].DamageBP, currentOffense.Elements[i].DamageBP)
-		offense.Elements[i].PierceBP = min(offense.Elements[i].PierceBP, currentOffense.Elements[i].PierceBP)
-	}
-	rt.root = &equipmentRoot{source: chosen.Trap.SourceOffense, currentSource: s.captureCombatSourceV5(src, entityInvisible(src)), src: src.ID, offense: offense, attackStats: lesserTrapAttackStats(chosen.Trap.AttackStats, src.Stats), attackSnapshot: true}
-	defer func() { rt.root = previous }()
-	payload := trapPayload(chosen.Trap.Def)
-	for _, id := range targets {
-		target := s.entities[id]
-		if target != nil && target.Alive() {
-			s.applySkill(src, target, payload, chosen.Trap.StatusDurationPct, true)
+		if chosen == nil {
+			return
 		}
-	}
+		if chosen.Trap.Def.FormulaVersion == domain.SkillFormulaVersion {
+			current, ok := s.lesserPersistentSkill(src, chosen.Trap.Def)
+			if !ok {
+				s.removeTrap(chosen.ID)
+				return
+			}
+			chosen.Trap.Def = current
+			for _, fx := range current.DirectEffects() {
+				if fx.Kind == domain.EffectPlaceTrap {
+					chosen.Trap.Radius = min(chosen.Trap.Radius, fx.TrapRadius)
+				}
+			}
+		}
+		chosen.Trap.Radius = max(chosen.Trap.Radius, params.TrapMinRadius)
+		targets := s.trapTargets(chosen)
+		// Consume before settlement. Trap damage is marked and cannot proc equipment.
+		s.removeTrap(chosen.ID)
+		rt := s.equipmentState()
+		previous := rt.root
+		offense := chosen.Trap.EquipmentOffense
+		currentOffense := s.equipmentOffense(src)
+		for i := range offense.Elements {
+			offense.Elements[i].DamageBP = min(offense.Elements[i].DamageBP, currentOffense.Elements[i].DamageBP)
+			offense.Elements[i].PierceBP = min(offense.Elements[i].PierceBP, currentOffense.Elements[i].PierceBP)
+		}
+		rt.root = &equipmentRoot{source: chosen.Trap.SourceOffense, currentSource: s.captureCombatSourceV5(src, entityInvisible(src)), src: src.ID, offense: offense, attackStats: lesserTrapAttackStats(chosen.Trap.AttackStats, src.Stats), attackSnapshot: true}
+		defer func() { rt.root = previous }()
+		payload := trapPayload(chosen.Trap.Def)
+		for _, id := range targets {
+			target := s.entities[id]
+			if target != nil && target.Alive() {
+				s.applySkill(src, target, payload, chosen.Trap.StatusDurationPct, true)
+			}
+		}
+	})
 }
 
 // Display dimensions are taken after compatible expansion, never copied from

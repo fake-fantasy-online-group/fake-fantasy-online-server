@@ -86,11 +86,27 @@ func (s *Scene) afterUniqueStrike(src, dst *entity.Entity, ev event.DamageDealt)
 	if src == nil || dst == nil || src.Player == nil || !src.Alive() || dst.Kind != domain.KindMonster || ev.Amount <= 0 || !ev.Flag.Has(event.DamageFatal) || ev.Flag.Has(event.DamageMiss) {
 		return
 	}
-	x := domain.EvaluateUniqueTraits(s.uniqueTraits(src), domain.UniqueContext{})
-	oldHP, oldMP := src.HP, src.MP
-	src.HP = int32(min(int64(src.MaxHP), int64(src.HP)+int64(src.MaxHP)*int64(x.KillHealBP)/10000))
-	src.MP = int32(min(int64(src.MaxMP), int64(src.MP)+int64(src.MaxMP)*int64(x.KillManaBP)/10000))
-	if src.HP != oldHP || src.MP != oldMP {
-		s.emitAttributesIfPlayer(src)
+	// Honor saved pre-registry ancestry, but new branches distinguish the two
+	// independent restoration traits instead of locking their entire family.
+	if s.combatEffectActive(src.ID, "unique:kill-restoration") {
+		return
 	}
+	x := domain.EvaluateUniqueTraits(s.uniqueTraits(src), domain.UniqueContext{})
+	health := domain.RuntimeUniqueEquipmentEffect(domain.UniqueTrait{Kind: "kill_mend", PowerBP: x.KillHealBP})
+	health.Producer = true
+	s.dispatchEquipmentEffect(src, health, func() {
+		heal := int32(int64(src.MaxHP) * int64(x.KillHealBP) / 10000)
+		s.restoreHealthWithReactions(src, src, heal, domain.SkillID(ev.SkillID))
+	})
+	manaEffect := domain.RuntimeUniqueEquipmentEffect(domain.UniqueTrait{Kind: "kill_mana", PowerBP: x.KillManaBP})
+	manaEffect.Producer = true
+	s.dispatchEquipmentEffect(src, manaEffect, func() {
+		oldMP := src.MP
+		mana := int32(int64(src.MaxMP) * int64(x.KillManaBP) / 10000)
+		src.MP = min(src.MaxMP, domain.SaturateInt32(int64(src.MP)+int64(mana)))
+		if src.MP != oldMP {
+			s.legendaryCasterManaRestored(src, src, domain.SkillDef{ID: domain.SkillID(ev.SkillID)}, src.MP-oldMP, max(int32(0), mana-(src.MP-oldMP)))
+			s.emitAttributesIfPlayer(src)
+		}
+	})
 }

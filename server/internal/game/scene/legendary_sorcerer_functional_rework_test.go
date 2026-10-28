@@ -136,3 +136,46 @@ func TestSorcererFunctionalOwnBurnAnyKill(t *testing.T) {
 		t.Fatal("kill reward not exactly once", c.Owner.MP)
 	}
 }
+
+func TestSorcererIceStrideActualTickExpiryAndUnequip(t *testing.T) {
+	for _, mode := range []string{"expires", "unequipped"} {
+		t.Run(mode, func(t *testing.T) {
+			s, p, m := casterIndependentFixture(t, "SS-U04", domain.Learned{10410: 1}, true)
+			s.refreshStats(p)
+			p.MP = p.MaxMP
+			base := s.playerMoveSpeedPX(p)
+			nativeRepairCast(t, s, p, 10410, m.ID)
+			boosted := s.playerMoveSpeedPX(p)
+			if boosted <= base {
+				t.Fatal("successful native ice burst did not activate movement", base, boosted)
+			}
+			s.tick += domain.Ticks(7900)
+			s.stepLegendaryPowers()
+			if s.playerMoveSpeedPX(p) != boosted {
+				t.Fatal("window expired before eight seconds")
+			}
+			if mode == "unequipped" {
+				p.Player.Worn = &domain.EquipSet{}
+				s.pruneLegendaryOwner(p)
+				s.refreshStats(p)
+			} else {
+				// Tick must refresh the cached live stats, not merely hide a
+				// status or wait until another cast causes a stat rebuild.
+				s.tick += domain.Ticks(200)
+			}
+			s.stepLegendaryPowers()
+			if got := s.playerMoveSpeedPX(p); got != base {
+				t.Fatalf("movement remained boosted after %s: got%d want%d", mode, got, base)
+			}
+			for k, st := range s.legendaryState().states {
+				if k.Owner == p.ID && k.Power == "SS-U04" && k.Phase == "ice-stride" && st.ExpiresMS != 0 {
+					t.Fatal("expired/removed movement window retained", k, st)
+				}
+			}
+			s.stepLegendaryPowers()
+			if s.playerMoveSpeedPX(p) != base {
+				t.Fatal("second tick resurrected movement window")
+			}
+		})
+	}
+}

@@ -64,6 +64,9 @@ func saveItemInstances(ctx context.Context, q querier, source string, stacks ...
 		if tag.RowsAffected() != 1 {
 			return fmt.Errorf("store: 物品实例UID冲突 uid=%d item=%d kind=%d", st.UID, st.Item, kind)
 		}
+		if err := saveSpiritInstance(ctx, q, st); err != nil {
+			return err
+		}
 		if kind == domain.ItemInstanceSocketCard {
 			if err := saveCardInstance(ctx, q, st.UID, st.Card); err != nil {
 				return err
@@ -216,6 +219,9 @@ func loadItemInstances(ctx context.Context, q querier, uids []int64) (map[int64]
 		return nil, err
 	}
 	if err := loadWingPowerItems(ctx, q, out); err != nil {
+		return nil, err
+	}
+	if err := loadSpiritInstances(ctx, q, out); err != nil {
 		return nil, err
 	}
 	if err := loadCardInstances(ctx, q, out); err != nil {

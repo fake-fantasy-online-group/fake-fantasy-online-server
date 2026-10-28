@@ -150,7 +150,7 @@ func universalHasNativeShield(c *legendaryContext) bool {
 	found := false
 	if c.Owner != nil && c.Owner.Status != nil {
 		c.Owner.Status.EachEffective(func(a domain.Active) {
-			if a.ShieldLeft > 0 && a.Def.LegendaryPowerID == "" {
+			if a.ShieldLeft > 0 {
 				found = true
 			}
 		})

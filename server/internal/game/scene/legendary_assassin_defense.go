@@ -92,7 +92,7 @@ func legendaryAssassinNativeDefense(c *legendaryContext, n int32) int32 {
 }
 func legendaryAssassinCounterHeal(c *legendaryContext) {
 	if c.Skill == 10203 && !c.Hit.Flag.Has(event.DamageMiss) && c.LostHP > 0 {
-		c.Scene.emit(combat.Restore(c.Owner, c.Owner, clampI32(int64(c.LostHP)*int64(c.RollValue("restore_pct", 15))/100), 10203))
+		c.RestoreHealth(c.Owner, clampI32(int64(c.LostHP)*int64(c.RollValue("restore_pct", 15))/100), 10203)
 		c.Scene.emitAttributesIfPlayer(c.Owner)
 	}
 }
@@ -147,7 +147,7 @@ func legendaryAssassinCleanPoison(c *legendaryContext) {
 }
 
 func legendaryAssassinDefenseRelease(c *legendaryContext) {
-	if c.Power.ID == "CK-D07" && c.Skill == 10219 && !c.IsChild && c.Blow.ProcDepth == 0 && legendaryAssassinLearned(c, 10219) {
+	if c.Power.ID == "CK-D07" && c.Skill == 10219 && legendaryAssassinLearned(c, 10219) {
 		c.State(0, "stun-guard").ExpiresMS = c.NowMS + 8000
 	}
 }

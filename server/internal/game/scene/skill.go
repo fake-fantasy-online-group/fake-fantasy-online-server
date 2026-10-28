@@ -1062,8 +1062,14 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 	// consumed; untouched slots remain available to the next bounded pass.
 	defer func() { s.steppingCasts = false }()
 	teleports := make([]pendingSkillTeleport, 0)
+	initialPath := s.legendaryState().causalPath
+	defer s.withCombatCausalPath(initialPath)()
 	for i := 0; i < originalLen; i++ {
 		c := s.casts[i]
+		s.legendaryState().causalPath = initialPath
+		if c.sourceOffense != nil {
+			s.legendaryState().causalPath = c.sourceOffense.CombatCausalPath
+		}
 		// The current cast owns its targets during settlement; cancellation must
 		// not compact that target backing array underneath the target loop.
 		s.casts[i] = pendingCast{}
@@ -1222,6 +1228,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 		s.flushLegendarySwordRestore()
 		finishEquipment()
 	}
+	s.legendaryState().causalPath = initialPath
 	// One compaction owner, after all reentrant mutation. Include newly queued
 	// casts and preserve original ordering of survivors and future work.
 	waiting := s.casts[:0]
@@ -1369,7 +1376,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			ev := combat.Restore(src, effectTarget, amount, int32(def.ID))
 			s.legendaryCasterHealed(src, effectTarget, def, beforeHealHP, ev.Amount)
 			s.legendaryHealResolved(src, effectTarget, def, amount, ev.Amount, max(int32(0), effectTarget.Status.HealingReceivedAmount(amount)-ev.Amount))
-			if s.legendaryState().depth == 0 && s.equipmentState().classSetTriggered == 0 {
+			{
 				s.legendaryMeleeHealResolved(src, effectTarget, def, ev.Amount, max(int32(0), effectTarget.Status.HealingReceivedAmount(amount)-ev.Amount))
 			}
 			s.emit(ev)
@@ -1414,7 +1421,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 			ev := combat.Restore(src, effectTarget, amount, int32(def.ID))
 			s.legendaryCasterHealed(src, effectTarget, def, beforeHealHP, ev.Amount)
 			s.legendaryHealResolved(src, effectTarget, def, amount, ev.Amount, max(int32(0), effectTarget.Status.HealingReceivedAmount(amount)-ev.Amount))
-			if s.legendaryState().depth == 0 && s.equipmentState().classSetTriggered == 0 {
+			{
 				s.legendaryMeleeHealResolved(src, effectTarget, def, ev.Amount, max(int32(0), effectTarget.Status.HealingReceivedAmount(amount)-ev.Amount))
 			}
 			s.emit(ev)
@@ -1516,7 +1523,7 @@ func (s *Scene) applySkill(src, dst *entity.Entity, def domain.SkillDef, statusD
 					s.attacks = append(s.attacks, counter)
 				}
 			}
-			s.afterStrikeStatuses(src, dst, ev, rawDamage, fullMagicReflect)
+			s.afterStrikeStatuses(src, dst, ev, rawDamage, fullMagicReflect, strikeReactionContext{HurtType: def.HurtType})
 			s.consumeHitDurability(dst, ev)
 			s.emitAttributesIfPlayer(dst)
 			s.aggroAfterHit(dst, src.ID, ev)

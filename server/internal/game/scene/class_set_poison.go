@@ -7,7 +7,7 @@ import (
 
 // prepareClassSetPoison applies only to the assassin's native poison-on-hit
 // carrier, never monster poison, traps, or an arbitrary status sharing its ID.
-func (s *Scene) prepareClassSetPoison(source *entity.Entity, carrier domain.StatusDef, def *domain.StatusDef) {
+func (s *Scene) prepareClassSetPoisonPayload(source *entity.Entity, carrier domain.StatusDef, def *domain.StatusDef) {
 	defer func() { s.legendaryAssassinPreparePoison(source, def) }()
 	if source == nil || !source.Alive() || carrier.ID != 1018 || def == nil || def.ID != domain.StatusPoison || def.IntervalSec <= 0 || def.DurationSec < def.IntervalSec {
 		return
@@ -78,10 +78,20 @@ func (s *Scene) dealClassSetPoisonBurst(target *entity.Entity, source domain.Ent
 	if target == nil || damage <= 0 || !target.Alive() {
 		return
 	}
-	// Reuse DOT mitigation, attribution, death, and event paths without running
-	// a basic attack or applying another status (thus no recursive poison).
-	s.tickStatus(target, domain.Active{Source: source, Def: domain.StatusDef{
-		ID: domain.StatusPoison, TypeKnown: true, Type: domain.StatusBad,
-		HPChanges: []domain.ResourceChange{{Value: -damage, Mode: domain.ModeAbsolute}},
-	}})
+	owner := s.entities[source]
+	if owner == nil {
+		owner = &entity.Entity{ID: source}
+	}
+	s.dispatchEquipmentEffect(owner, domain.RuntimeBuiltinEquipmentEffect("set:poison-burst", true), func() {
+		// Reuse DOT mitigation, attribution, death, and event paths without running
+		// a basic attack or applying another status (thus no recursive poison).
+		s.tickStatus(target, domain.Active{Source: source, Def: domain.StatusDef{
+			ID: domain.StatusPoison, TypeKnown: true, Type: domain.StatusBad,
+			HPChanges: []domain.ResourceChange{{Value: -damage, Mode: domain.ModeAbsolute}},
+		}})
+	})
+}
+
+func (s *Scene) prepareClassSetPoison(source *entity.Entity, carrier domain.StatusDef, def *domain.StatusDef) {
+	s.dispatchEquipmentEffect(source, domain.RuntimeBuiltinEquipmentEffect("set:poison-snapshot", false), func() { s.prepareClassSetPoisonPayload(source, carrier, def) })
 }

@@ -28,6 +28,7 @@ type equipmentHit struct {
 	ev       event.DamageDealt
 }
 type equipmentRoot struct {
+	generated             bool
 	legendaryBasicLeech   int64
 	swordTriggers         map[legendaryStateKey]bool
 	swordRestore          *legendarySwordRestorePayload
@@ -194,10 +195,18 @@ func (s *Scene) equipmentBlow(src *entity.Entity, blow combat.Blow) combat.Blow 
 	return blow
 }
 func (s *Scene) collectEquipmentHit(src, dst *entity.Entity, blow combat.Blow, ev event.DamageDealt) {
-	if blow.Origin != domain.DamageNormalOrigin || blow.ProcDepth != 0 || blow.Trap || src.Kind == domain.KindPet || (src.Monster != nil && src.Monster.Summoner != 0) {
+	if (blow.Origin != domain.DamageNormalOrigin && blow.Origin != domain.DamageProcOrigin) || blow.Trap || src.Kind == domain.KindPet || (src.Monster != nil && src.Monster.Summoner != 0) {
 		return
 	}
 	if !s.equipmentLegalDirectPair(src, dst) {
+		return
+	}
+	blow.EffectCausalPath = append([]string(nil), s.legendaryState().causalPath...)
+	if child := s.legendaryState().child; child != nil {
+		child.Hits = append(child.Hits, equipmentHit{src.ID, dst.ID, blow, ev})
+	}
+	if len(blow.EffectCausalPath) > 0 || blow.Origin == domain.DamageProcOrigin {
+		s.executeEquipmentRoot(&equipmentRoot{id: blow.RootID, src: src.ID, primary: dst.ID, hits: []equipmentHit{{src.ID, dst.ID, blow, ev}}})
 		return
 	}
 	rt := s.equipmentState()
@@ -226,11 +235,18 @@ func (s *Scene) equipmentAbsorb(dst *entity.Entity, damage, absorbBP int32, pvp 
 	if pvp {
 		cap = int64(dst.MaxHP) / 100
 	}
-	result := domain.ResolveElementAbsorb(dst.HP, dst.MaxHP, damage, absorbBP, clampI32(max(int64(0), cap-used)), pvp)
+	quota := clampI32(max(int64(0), cap-used))
+	result := domain.ResolveElementAbsorb(dst.HP, dst.MaxHP, damage, absorbBP, quota, pvp)
 	if result.Heal > 0 {
-		before := result.Heal
-		result.Heal = dst.Status.HealingReceivedAmount(result.Heal)
-		result.HP -= before - result.Heal
+		postDamage := result.HP - result.Heal
+		received := s.legendaryIncomingHeal(dst, result.Heal)
+		if dst.Status != nil {
+			received = dst.Status.HealingReceivedAmount(received)
+		}
+		// Preserve the existing actual-restoration quota and missing-health bound
+		// after incoming modifiers; settle HP once, not through a second Restore.
+		result.Heal = max(int32(0), min(received, min(quota, dst.MaxHP-postDamage)))
+		result.HP = postDamage + result.Heal
 	}
 	if result.Heal > 0 {
 		kept = append(kept, equipmentAbsorbHeal{AtMS: now, Amount: result.Heal})
@@ -277,7 +293,7 @@ func (s *Scene) equipmentLegalDirectPair(a, b *entity.Entity) bool {
 }
 
 func (s *Scene) equipmentAbsorptionEligible(src, dst *entity.Entity, b combat.Blow) bool {
-	if src == nil || dst == nil || src.ID == dst.ID || b.Origin != domain.DamageNormalOrigin || b.ProcDepth != 0 {
+	if src == nil || dst == nil || src.ID == dst.ID {
 		return false
 	}
 	a, d := s.equipmentOwner(src), s.equipmentOwner(dst)
@@ -288,4 +304,18 @@ func (s *Scene) equipmentAbsorptionEligible(src, dst *entity.Entity, b combat.Bl
 		return false
 	}
 	return true
+}
+
+// HP was already settled atomically with the damage. Publish that restoration
+// once; only reaction generation is guarded, never the pure absorption itself.
+func (s *Scene) equipmentAbsorbHealingResolved(dst *entity.Entity, ev event.DamageDealt) {
+	if dst == nil || ev.AbsorbHeal <= 0 {
+		return
+	}
+	s.emit(event.HealDone{Src: dst.ID, Dst: dst.ID, Amount: ev.AbsorbHeal, DstHP: ev.DstHP + ev.AbsorbHeal, DstKind: dst.Kind})
+	s.dispatchEquipmentEffect(dst, domain.RuntimeEquipmentEffect{DefinitionID: "typed:element_absorb_bp", ID: "equipment:element-absorb", SourceKind: domain.EffectSourceTyped, Trigger: "element_absorb_healed", Producer: true}, func() {
+		def := domain.SkillDef{}
+		s.legendaryCasterHealed(dst, dst, def, ev.DstHP, ev.AbsorbHeal)
+		s.legendaryHealResolved(dst, dst, def, ev.AbsorbHeal, ev.AbsorbHeal, 0)
+	})
 }

@@ -19,7 +19,7 @@ func TestEquipmentSourceLevelExactSaveAndMemoryReload(t *testing.T) {
 		if err := saveEndgameItem(context.Background(), q, st); err != nil {
 			t.Fatal(err)
 		}
-		if !strings.Contains(q.statement, "source_level=EXCLUDED.source_level") || len(q.args) != 8 || q.args[7] != int32(43) {
+		if !strings.Contains(q.statement, "source_level=EXCLUDED.source_level") || len(q.args) != 10 || q.args[7] != int32(43) {
 			t.Fatal("source level lost during SQL save", q.statement, q.args)
 		}
 		m, s := endgameFixture(t)

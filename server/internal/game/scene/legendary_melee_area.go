@@ -56,7 +56,7 @@ func init() {
 		if !legendaryMeleeDirect(c) || c.Skill != 10103 || !legendaryMeleePrimary(c) {
 			return n
 		}
-		st := c.State(0, "alone")
+		st := c.State(c.Target.ID, "alone")
 		st.RootID = c.RootID
 		st.Value = 0
 		if len(legendaryMeleeNearbyOthers(c, 75, 1)) == 0 {
@@ -65,7 +65,7 @@ func init() {
 		}
 		return n
 	}, AfterHit: func(c *legendaryContext) {
-		if legendaryMeleeLanded(c) && c.Skill == 10103 && legendaryMeleePrimary(c) && c.State(0, "alone").Value == 0 && legendaryMeleeOnce(c, 0, "splash") {
+		if legendaryMeleeLanded(c) && c.Skill == 10103 && legendaryMeleePrimary(c) && c.State(c.Target.ID, "alone").Value == 0 && legendaryMeleeOnce(c, 0, "splash") {
 			for _, e := range legendaryMeleeNearbyOthers(c, 75, 2) {
 				c.damageVisual("stage-01", e, legendaryMeleeScale(c.Attack(false), 130), false, false)
 			}
@@ -77,17 +77,7 @@ func init() {
 		}
 		return n
 	}, AfterHit: legendaryMeleeMeteor})
-	registerLegendaryHandler("JK-A23", legendaryHandler{BeforeDamage: func(c *legendaryContext, n int32) int32 {
-		if legendaryMeleeDirect(c) && c.Skill == legendarySwordMeteor && legendaryMeleePrimary(c) {
-			st := c.State(0, "low")
-			st.RootID = c.RootID
-			st.Value = 0
-			if int64(c.Target.HP)*2 <= int64(c.Target.MaxHP) {
-				st.Value = 1
-			}
-		}
-		return n
-	}, AfterHit: legendarySwordsmanMeteorBurst})
+	registerLegendaryHandler("JK-A23", legendaryHandler{AfterHit: legendarySwordsmanMeteorBurst})
 }
 
 func legendaryMeleeFarBlade(c *legendaryContext) {
@@ -95,7 +85,7 @@ func legendaryMeleeFarBlade(c *legendaryContext) {
 	far := float64(75 * 75)
 	for i := range c.Hits {
 		h := &c.Hits[i]
-		if h.src != c.Owner.ID || h.blow.SkillID != 10117 || h.blow.Origin != domain.DamageNormalOrigin || h.blow.ProcDepth != 0 || h.ev.Flag.Has(event.DamageMiss) {
+		if h.src != c.Owner.ID || h.blow.SkillID != 10117 || (h.blow.Origin != domain.DamageNormalOrigin && h.blow.Origin != domain.DamageProcOrigin) || h.ev.Flag.Has(event.DamageMiss) {
 			continue
 		}
 		t := c.Scene.entities[h.dst]
@@ -139,8 +129,9 @@ func legendarySwordsmanMeteorBurst(c *legendaryContext) {
 	if !legendaryMeleeLanded(c) || c.Skill != legendarySwordMeteor || !legendaryMeleePrimary(c) {
 		return
 	}
-	low := c.State(0, "low")
-	if !c.Hit.Flag.Has(event.DamageFatal) && (low.RootID != c.RootID || low.Value == 0) {
+	// The strike snapshot belongs to this hit, not a mutable cast-wide cache.
+	// A nested hit can lower the same target without retroactively changing it.
+	if !c.Hit.Flag.Has(event.DamageFatal) && (c.BeforeHP <= 0 || int64(c.BeforeHP)*2 > int64(c.Target.MaxHP)) {
 		return
 	}
 	if !legendaryMeleeOnce(c, 0, "burst") {
@@ -160,14 +151,14 @@ func (s *Scene) legendarySwordsmanInstantDeath(src, dst *entity.Entity, def doma
 		return
 	}
 	for _, hit := range root.hits {
-		if hit.src != src.ID || hit.dst != dst.ID || hit.blow.SkillID != int32(def.ID) || hit.blow.Origin != domain.DamageNormalOrigin || hit.blow.ProcDepth != 0 || hit.ev.Flag.Has(event.DamageMiss) {
+		if hit.src != src.ID || hit.dst != dst.ID || hit.blow.SkillID != int32(def.ID) || (hit.blow.Origin != domain.DamageNormalOrigin && hit.blow.Origin != domain.DamageProcOrigin) || hit.ev.Flag.Has(event.DamageMiss) {
 			continue
 		}
 		dealt := hit.ev
 		dealt.Flag |= event.DamageFatal
 		for _, c := range s.legendaryContexts(src, dst, hit.blow, dealt) {
 			if c.Power.ID == "JK-A23" {
-				legendarySwordsmanMeteorBurst(&c)
+				c.invoke(legendarySwordsmanMeteorBurst)
 			}
 		}
 		return

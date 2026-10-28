@@ -186,8 +186,16 @@ func TestClassSetCardActualHealCopiesEnhancedNominalOnlyOnce(t *testing.T) {
 	}
 	p.HP, friend.HP = 100, 100
 	s.emitCasterSetPayload(p, friend, def)
+	if p.HP != 1250 || friend.HP != 1250 {
+		t.Fatalf("generated heal enhances once and triggers the distinct set copy once: self%d friend%d", p.HP, friend.HP)
+	}
+	// The same copy producer on an ancestor branch must not run again.
+	p.HP, friend.HP = 100, 100
+	restore := s.withCombatCausalPath([]string{s.combatEffectKey(p.ID, "set:healing-copy")})
+	s.emitCasterSetPayload(p, friend, def)
+	restore()
 	if p.HP != 100 || friend.HP != 1250 {
-		t.Fatalf("generated heal must enhance once without self-copy: self%d friend%d", p.HP, friend.HP)
+		t.Fatalf("copy cycle was not blocked independently of recipient healing: %d/%d", p.HP, friend.HP)
 	}
 	_ = targetID
 }
@@ -298,5 +306,52 @@ func TestClassSetCardNativeRejuvenationEnhancedOnce(t *testing.T) {
 	}
 	if p.HP != 132 || ally.HP != 132 {
 		t.Fatalf("periodic heal/copy expected32: %d/%d", p.HP, ally.HP)
+	}
+}
+
+func TestClassSetHealCopyReceivesOwnHealingPowerWithoutRecipientCap(t *testing.T) {
+	for _, power := range []bool{false, true} {
+		for _, pieces := range []int{0, 2, 4} {
+			for _, capped := range []bool{false, true} {
+				powers := []string{}
+				if power {
+					powers = append(powers, "TY-D12")
+				}
+				s, p, _ := nativeRepairFixture(t, domain.Healer, domain.Learned{10301: 1}, powers...)
+				if pieces > 0 {
+					nativeRepairSet(t, s, p, 2, pieces)
+				}
+				friend := nativeRepairAlly(t, s, p, 2, 140)
+				p.HP, p.MaxHP = 100, 10000
+				friend.HP, friend.MaxHP = 100, 10000
+				if capped {
+					friend.HP = 9999
+				}
+				before := friend.HP
+				def := domain.SkillDef{ID: 10301, TargetTeam: true, Effect: domain.SkillEffect{Kind: domain.EffectHeal, HealFlat: 1000}}
+				if !s.applySkill(p, friend, def, 0, false) {
+					t.Fatal("heal rejected")
+				}
+				want := int32(100)
+				if pieces >= 2 {
+					copyAmount := int32(1000)
+					if power {
+						copyAmount = copyAmount * 140 / 100
+					}
+					want += copyAmount
+				}
+				if p.HP != want || friend.HP != min(int32(10000), before+1000) {
+					t.Fatalf("power=%v pieces=%d capped=%v self=%d want=%d recipient=%d", power, pieces, capped, p.HP, want, friend.HP)
+				}
+				// Same producer ancestry blocks only copying, not original healing.
+				p.HP, friend.HP = 100, 100
+				restore := s.withCombatCausalPath([]string{s.combatEffectKey(p.ID, "set:healing-copy")})
+				s.applySkill(p, friend, def, 0, false)
+				restore()
+				if p.HP != 100 || friend.HP != 1100 {
+					t.Fatal("copy re-entered itself or suppressed recipient healing", p.HP, friend.HP)
+				}
+			}
+		}
 	}
 }

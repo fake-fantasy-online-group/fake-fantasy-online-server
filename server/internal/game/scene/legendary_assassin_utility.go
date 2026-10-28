@@ -65,7 +65,7 @@ func legendaryAssassinWindow(c *legendaryContext, skill domain.SkillID) bool {
 	return st.ExpiresMS > c.NowMS
 }
 func legendaryAssassinUtilityRelease(c *legendaryContext) {
-	if c.IsChild || c.Blow.ProcDepth > 0 || !legendaryAssassinLearned(c, c.Skill) {
+	if !legendaryAssassinLearned(c, c.Skill) {
 		return
 	}
 	if c.Power.ID == "CK-U01" && c.Skill == 10208 || c.Power.ID == "CK-U04" && c.Skill == 10228 || c.Power.ID == "CK-U07" && legendaryAssassinTrapSkill(c.Skill) {

@@ -58,6 +58,9 @@ func triggeredStatusIcon(statuses *domain.StatusSet, id domain.StatusID) (icon, 
 // applyStatusDef 让已确认来源的调用方在不改静态表的前提下补展示元数据。
 // 例如物品状态沿用状态定义的数值，但图标来自实际被使用的物品。
 func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src domain.EntityID) bool {
+	def.CombatCausalPath = mergeStatusCausalPath(def.CombatCausalPath, s.legendaryState().causalPath)
+	restorePath := s.withCombatCausalPath(def.CombatCausalPath)
+	defer restorePath()
 	if target == nil || !target.Alive() {
 		return false
 	}
@@ -111,10 +114,11 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	// Periodic damage may outlive a pet/summon/trap entity. Keep its responsible
 	// player's stable source ID now; MF itself is read only at the fatal tick.
 	src = s.periodicDamageOwnerV5(def, src)
-	if def.LegendaryPowerID == "" && !s.legendaryCasterStatusApplying(src, target, &def) {
+	if !s.legendaryCasterStatusApplying(src, target, &def) {
 		return false
 	}
 	s.legendaryFinalizeStatus(&def)
+	def.CombatCausalPath = mergeStatusCausalPath(def.CombatCausalPath, s.legendaryState().causalPath)
 	poisonBurst := s.classSetPoisonBurst(target, def, src)
 	def.DungeonDamageScaleBP = 0
 	if scale := s.dungeonMonsterDamage(s.entities[src], target, 10000); scale != 10000 {
@@ -324,6 +328,9 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		blow.SourceSkillRange = int32(src.Look.AtkDist)
 	}
 	blow = s.equipmentBlow(src, blow)
+	if source := blow.SourceOffense; source != nil {
+		defer s.withCombatCausalPath(mergeStatusCausalPath(source.CombatCausalPath, s.legendaryState().causalPath))()
+	}
 	s.legendaryModifyBlow(src, dst, &blow)
 	if root := s.equipmentState().root; root != nil && root.src == src.ID && !blow.LegendaryChild && blow.Origin == domain.DamageNormalOrigin && blow.SkillID == int32(root.def.ID) {
 		blow.NativeDamageSnapshot = s.legendaryState().nativeDamageSnapshots[root.id]
@@ -487,14 +494,14 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		ev.Flag &^= event.DamageFatal
 	}
 	ev.Amount, ev.DstHP, ev.AbsorbHeal = finalDamage, dst.HP-absorbedHeal, absorbedHeal
-	if len(shieldsBefore) > 0 && blow.ProcDepth == 0 && blow.Origin != domain.DamageProcOrigin {
+	if len(shieldsBefore) > 0 {
 		s.legendaryCasterShieldResolved(dst, src, shieldsBefore)
 	}
 	if finalDamage > 0 {
 		s.beginEndgameTrial()
 	}
 	s.statusesRemoved(dst, removed)
-	if beforeHP > 0 && (blow.Origin == domain.DamageNormalOrigin || blow.Origin == domain.DamageCounterOrigin) && blow.ProcDepth == 0 {
+	if beforeHP > 0 && (blow.Origin == domain.DamageNormalOrigin || blow.Origin == domain.DamageCounterOrigin || blow.Origin == domain.DamageProcOrigin) {
 		s.afterUniqueStrike(src, dst, ev)
 	}
 	s.collectEquipmentHit(src, dst, blow, ev)
@@ -535,22 +542,32 @@ func (s *Scene) passiveGlobalChanceBP(target *entity.Entity, kind domain.Passive
 
 // afterStrikeStatuses 处理命中后的反射、吸血、使毒、冰盾反冻与冰冻碎裂。
 // 反射伤害不再触发反射，避免两个反射状态无限递归。
-func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDealt, rawDamage, fullMagicReflect int32) {
+type strikeReactionContext struct {
+	HurtType              int32
+	PreservedControlSkill domain.SkillID
+}
+
+func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDealt, rawDamage, fullMagicReflect int32, reaction ...strikeReactionContext) {
+	var context strikeReactionContext
+	if len(reaction) > 0 {
+		context = reaction[0]
+	}
 	s.specialWeaponLostHP(dst, ev.Amount)
 	s.afterCastDamage(ev, true)
-	if ev.AbsorbHeal > 0 && dst != nil {
-		s.emit(event.HealDone{Src: dst.ID, Dst: dst.ID, Amount: ev.AbsorbHeal, DstHP: dst.HP, DstKind: dst.Kind})
-	}
+	s.equipmentAbsorbHealingResolved(dst, ev)
 	if src == nil || dst == nil || ev.Flag.Has(event.DamageMiss) || rawDamage <= 0 {
 		return
 	}
 	if fullMagicReflect > 0 {
-		s.emitReflectedDamage(dst, src, fullMagicReflect, true)
+		s.emitReflectedDamage(dst, src, fullMagicReflect, true, context.HurtType)
 		return
 	}
 
 	if ev.Amount > 0 && dst.Status != nil {
 		s.statusesRemoved(dst, dst.Status.RemoveEffectiveWhere(func(d domain.StatusDef) bool {
+			if context.PreservedControlSkill != 0 && (d.SkillSnapshotID == context.PreservedControlSkill || d.SourceSkillID == int32(context.PreservedControlSkill)) {
+				return false
+			}
 			if child := s.legendaryState().child; child != nil && child.PreserveControlSkill != 0 && (d.SkillSnapshotID == child.PreserveControlSkill || d.SourceSkillID == int32(child.PreserveControlSkill)) {
 				return false
 			}
@@ -561,7 +578,7 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 		}))
 	}
 
-	if ev.Origin == domain.DamageProcOrigin || ev.Origin == domain.DamageAuraOrigin {
+	if ev.Origin == domain.DamageAuraOrigin {
 		return
 	}
 
@@ -579,14 +596,18 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 		if lifePct > 0 && int32(s.rng.Intn(100)) < lifeChance {
 			amount := clampI32(int64(ev.Amount) * int64(lifePct) / 100)
 			if amount > 0 {
-				s.emit(combat.Restore(src, src, s.legendaryIncomingHeal(src, amount), ev.SkillID))
+				s.dispatchEquipmentEffect(src, domain.RuntimeBuiltinEquipmentEffect("native:life-leech", true), func() {
+					s.restoreHealthWithReactions(src, src, amount, domain.SkillID(ev.SkillID))
+				})
 			}
 		}
 		if manaPct > 0 && int32(s.rng.Intn(100)) < manaChance {
-			src.MP = clampI32(int64(src.MP) + int64(ev.Amount)*int64(manaPct)/100)
-			if src.MP > src.MaxMP {
-				src.MP = src.MaxMP
-			}
+			s.dispatchEquipmentEffect(src, domain.RuntimeBuiltinEquipmentEffect("native:mana-leech", true), func() {
+				beforeMP := src.MP
+				amount := clampI32(int64(ev.Amount) * int64(manaPct) / 100)
+				src.MP = min(src.MaxMP, clampI32(int64(src.MP)+int64(amount)))
+				s.legendaryCasterManaRestored(src, src, domain.SkillDef{ID: domain.SkillID(ev.SkillID)}, max(int32(0), src.MP-beforeMP), max(int32(0), amount-(src.MP-beforeMP)))
+			})
 		}
 		s.emitAttributesIfPlayer(src)
 	}
@@ -597,10 +618,10 @@ func (s *Scene) afterStrikeStatuses(src, dst *entity.Entity, ev event.DamageDeal
 	reflectPct := dst.Status.ReflectPct(magic)
 	reflectFlat, reflectFlatAsMagic := dst.Status.ReflectFlat(magic)
 	reflected := clampI32(int64(ev.Amount)*int64(reflectPct)/100 + int64(reflectFlat))
-	s.emitReflectedDamage(dst, src, reflected, magic || reflectFlatAsMagic)
+	s.emitReflectedDamage(dst, src, reflected, magic || reflectFlatAsMagic, context.HurtType)
 }
 
-func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount int32, magic bool) {
+func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount int32, magic bool, originalHurt ...int32) {
 	if s.riftMonster(reflector) || reflector == nil || attacker == nil || amount <= 0 || !attacker.Alive() || gmGodEnabled(attacker) {
 		return
 	}
@@ -614,6 +635,9 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 		return
 	}
 	blow := combat.Blow{Origin: domain.DamageReflectionOrigin, Magic: magic}
+	if len(originalHurt) > 0 {
+		blow.HurtType = originalHurt[0]
+	}
 	amount = s.legendarySecondaryIncoming(reflector, attacker, blow, amount)
 	// Reflection is enemy damage too. Spend mana only after its pure reductions,
 	// without entering any strike, on-hit, or reflection-generating callback.
@@ -630,8 +654,15 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 	if amount <= 0 {
 		return
 	}
-	attacker.HP -= amount
-	reflectEvent := event.DamageDealt{Origin: domain.DamageReflectionOrigin, Src: reflector.ID, Dst: attacker.ID, Amount: amount, DstHP: attacker.HP}
+	absorbedHeal := int32(0)
+	if element := domain.HurtElementIndex(blow.HurtType); element >= 0 && s.equipmentAbsorptionEligible(reflector, attacker, blow) {
+		pvp := s.equipmentPVP(reflector, attacker)
+		absorbed := s.equipmentAbsorb(attacker, amount, s.equipmentDefense(attacker, pvp).Elements[element].AbsorbBP, pvp)
+		amount, absorbedHeal, attacker.HP = absorbed.Damage, absorbed.Heal, absorbed.HP
+	} else {
+		attacker.HP -= amount
+	}
+	reflectEvent := event.DamageDealt{Origin: domain.DamageReflectionOrigin, Src: reflector.ID, Dst: attacker.ID, Amount: amount, DstHP: attacker.HP - absorbedHeal, AbsorbHeal: absorbedHeal}
 	if magic {
 		reflectEvent.Flag |= event.DamageMagic
 	}
@@ -641,6 +672,7 @@ func (s *Scene) emitReflectedDamage(reflector, attacker *entity.Entity, amount i
 		reflectEvent.Flag |= event.DamageFatal
 	}
 	s.emit(reflectEvent)
+	s.equipmentAbsorbHealingResolved(attacker, reflectEvent)
 	s.afterCastDamage(reflectEvent, false)
 	if reflectEvent.Amount > 0 && attacker.Status != nil {
 		s.statusesRemoved(attacker, attacker.Status.RemoveEffectiveWhere(func(d domain.StatusDef) bool {
@@ -1064,6 +1096,9 @@ func (s *Scene) statusDefByID(id domain.StatusID) (domain.StatusDef, bool) {
 // attr38 与 attr446 修改当前生命，attr447 修改当前法力。Mode=1 按对应
 // 上限取百分比；此前把“每两秒减少生命上限6%”错算成固定 6 点。
 func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
+	// A timer is a continuation of its applying effect, not a new root attack.
+	restorePath := s.withCombatCausalPath(mergeStatusCausalPath(a.Def.CombatCausalPath, s.legendaryState().causalPath))
+	defer restorePath()
 	if e != nil {
 		beforeHP := e.HP
 		defer func() { s.specialWeaponLostHP(e, max(int32(0), beforeHP-e.HP)) }()
@@ -1093,9 +1128,14 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 	if (hpDelta == 0 && mpDelta == 0) || !e.Alive() {
 		return
 	}
-	src := e
-	if o, ok := s.entities[a.Source]; ok {
-		src = o
+	// Missing producers keep their identity; never impersonate the victim.
+	src := s.entities[a.Source]
+	if src == nil {
+		if a.Source == e.ID {
+			src = e
+		} else {
+			src = &entity.Entity{ID: a.Source}
+		}
 	}
 	if hpDelta > 0 {
 		if originalSource := s.entities[a.Source]; (a.Def.SkillApplied || a.Def.SkillSnapshotID > 0) && originalSource != nil {
@@ -1103,17 +1143,16 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 		}
 		s.casterSetCopyHeal(src, e, clampI32(hpDelta), domain.SkillID(a.Def.ID))
 		beforeHeal := e.HP
-		if a.Def.LegendaryPowerID == "" {
-			hpDelta = int64(s.legendaryCasterModifyHeal(e, clampI32(hpDelta)))
-		}
+		hpDelta = int64(s.legendaryCasterModifyHeal(e, clampI32(hpDelta)))
 		heal := combat.Restore(src, e, clampI32(hpDelta), int32(a.Def.ID))
 		s.emit(heal)
-		if a.Def.LegendaryPowerID == "" && s.legendaryState().depth == 0 {
+		{
 			skillID := a.Def.SkillSnapshotID
 			if skillID == 0 {
 				skillID = domain.SkillID(a.Def.SourceSkillID)
 			}
 			s.legendaryCasterHealed(src, e, domain.SkillDef{ID: skillID}, beforeHeal, heal.Amount)
+			s.legendaryHealResolved(src, e, domain.SkillDef{ID: skillID}, clampI32(hpDelta), heal.Amount, max(int32(0), clampI32(hpDelta)-heal.Amount))
 		}
 	} else if hpDelta < 0 {
 		// 掉血。走一条独立的路径而不是 combat.Strike ——
@@ -1145,7 +1184,7 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 				periodicContexts = s.universalPeriodicIncomingContexts(s.entities[a.Source], e, a.Source)
 				dmg = universalPeriodicReduce(periodicContexts, dmg, periodicCrit)
 			}
-			dmg = s.legendarySecondaryIncoming(s.entities[a.Source], e, periodicBlow, dmg)
+			dmg = s.legendarySecondaryIncoming(src, e, periodicBlow, dmg)
 			dmg = universalPeriodicAbsorb(periodicContexts, dmg)
 			if dmg > 0 {
 				var removed []domain.StatusID
@@ -1153,8 +1192,15 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 				s.statusesRemoved(e, removed)
 			}
 			dmg = s.petGuardDamage(e, a.Source, dmg)
-			e.HP -= dmg
-			ev := event.DamageDealt{Origin: domain.DamageDOTOrigin, Src: a.Source, Dst: e.ID, Amount: dmg, DstHP: e.HP, Flag: event.DamageMagic}
+			absorbedHeal := int32(0)
+			if element := domain.HurtElementIndex(periodicBlow.HurtType); element >= 0 && s.equipmentAbsorptionEligible(src, e, periodicBlow) {
+				pvp := s.equipmentPVP(src, e)
+				absorbed := s.equipmentAbsorb(e, dmg, s.equipmentDefense(e, pvp).Elements[element].AbsorbBP, pvp)
+				dmg, absorbedHeal, e.HP = absorbed.Damage, absorbed.Heal, absorbed.HP
+			} else {
+				e.HP -= dmg
+			}
+			ev := event.DamageDealt{Origin: domain.DamageDOTOrigin, Src: a.Source, Dst: e.ID, Amount: dmg, DstHP: e.HP - absorbedHeal, AbsorbHeal: absorbedHeal, Flag: event.DamageMagic}
 			if periodicCrit {
 				ev.Flag |= event.DamageCrit
 			}
@@ -1168,6 +1214,7 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 				ev.Flag |= event.DamageFatal
 			}
 			s.emit(ev)
+			s.equipmentAbsorbHealingResolved(e, ev)
 			s.legendaryAssassinPeriodicDamage(src, e, ev)
 			s.legendaryPeriodicResolved(src, e, a, ev)
 			s.afterCastDamage(ev, false)
@@ -1187,12 +1234,20 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 		}
 	}
 	if mpDelta != 0 {
+		beforeMP := e.MP
 		e.MP = clampI32(int64(e.MP) + mpDelta)
 		if e.MP < 0 {
 			e.MP = 0
 		}
 		if e.MP > e.MaxMP {
 			e.MP = e.MaxMP
+		}
+		if mpDelta > 0 {
+			skillID := a.Def.SkillSnapshotID
+			if skillID == 0 {
+				skillID = domain.SkillID(a.Def.SourceSkillID)
+			}
+			s.legendaryCasterManaRestored(src, e, domain.SkillDef{ID: skillID}, max(int32(0), e.MP-beforeMP), clampI32(max(int64(0), int64(beforeMP)+mpDelta-int64(e.MaxMP))))
 		}
 	}
 	s.emitAttributesIfPlayer(e)

@@ -25,6 +25,12 @@ func (s *Scene) onApplyAvatar(cmd ApplyAvatar) {
 		reject("背包中的融合道具无效")
 		return
 	}
+	_, dynamicSpirit := domain.SpiritDefinitionForItem(toolStack.Item)
+	_, spiritAppearance := domain.SpiritAppearanceForItem(toolStack.Item)
+	if dynamicSpirit || spiritAppearance {
+		reject("请使用新版灵融合交互")
+		return
+	}
 	targetSlot := domain.EquipSlot(cmd.TargetSlot)
 	target := p.Player.Worn.At(targetSlot)
 	targetBagSlot := -1
@@ -53,6 +59,10 @@ func (s *Scene) onApplyAvatar(cmd ApplyAvatar) {
 		} else {
 			p.Player.Worn.Set(targetSlot, st)
 		}
+	}
+	if cmd.Kind == 1 && !target.FusedSpirit.Empty() {
+		reject("请使用新版灵融合交互，以保留原有灵")
+		return
 	}
 	originalTarget := target
 	var text string

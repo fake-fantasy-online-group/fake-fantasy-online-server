@@ -43,7 +43,7 @@ func (s *Scene) onInspectPlayer(cmd InspectPlayer) {
 			CurrentDurability: row.item.Durability,
 			MaxDurability:     domain.MaxDurabilityOf(row.item, def),
 			Avatar:            0,
-			SoulAvatar:        int32(row.item.FusedSoul),
+			SoulAvatar:        domain.EquipmentSoulAvatar(row.item),
 			Quality:           equipmentQuality(def, row.item),
 		})
 	}

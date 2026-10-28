@@ -149,7 +149,7 @@ func TestEveryUniquePowerAtExecutedBoundary(t *testing.T) {
 			}
 		})
 	}
-	for _, kind := range []string{"healing_cost", "spell_economy", "swift_cast"} {
+	for _, kind := range []string{"healing_cost", "skill_economy", "spell_economy", "swift_cast"} {
 		t.Run(kind, func(t *testing.T) {
 			s, p, _ := uniqueTestGear(t, kind)
 			def := domain.SkillDef{ID: 10301, Level: 1, Kind: domain.SkillSingle, HurtType: domain.HurtHoly, MPCost: 100, PrepareMS: 1000, TargetSelf: true, Effect: domain.SkillEffect{Kind: domain.EffectHeal, HealFlat: 100}}

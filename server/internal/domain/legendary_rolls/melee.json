@@ -729,9 +729,6 @@
         "divisor": 1,
         "unit": "%"
       }
-    ],
-    "omit_when_rolled": [
-      "，合计最高恢复原量的3倍"
     ]
   },
   {

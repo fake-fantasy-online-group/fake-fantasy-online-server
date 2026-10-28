@@ -30,8 +30,8 @@ func TestLegendaryPowerRollBoundsLegacyAndIsolation(t *testing.T) {
 		}
 		for _, roll := range []int32{7500, 8123, 9999, 10000} {
 			p, ok := LegendaryPowerForRoll(id, roll)
-			if !ok || !strings.Contains(p.Effect, "～") {
-				t.Fatal(id, "missing authored range", p.Effect)
+			if !ok || strings.Contains(p.Effect, "～") {
+				t.Fatal(id, "equipment description contains range", p.Effect)
 			}
 			for _, parameter := range spec.Parameters {
 				value := LegendaryPowerRollValue(id, parameter.Key, parameter.Base, roll)
@@ -184,5 +184,54 @@ func TestLegendaryPowerRollAllPowersClassified(t *testing.T) {
 	}
 	if ranged != 315 || fixed != 15 {
 		t.Fatal("re-review power coverage after classification changes", ranged, fixed)
+	}
+}
+
+func TestLegendaryEquipmentCurrentValuesAndSeparateCodexRanges(t *testing.T) {
+	for _, spec := range LegendaryPowerRollSpecs() {
+		ranges := LegendaryPowerRangeText(spec.ID)
+		if len(spec.Parameters) == 0 {
+			if ranges != "" {
+				t.Fatalf("%s fixed effect has a numerical range: %s", spec.ID, ranges)
+			}
+			continue
+		}
+		for _, parameter := range spec.Parameters {
+			lo := powerRollNumber(LegendaryPowerRollValue(spec.ID, parameter.Key, parameter.Base, LegendaryPowerRollMinBP), parameter.Divisor) + parameter.Unit
+			hi := powerRollNumber(parameter.Base, parameter.Divisor) + parameter.Unit
+			if !strings.Contains(ranges, lo+"～"+hi) {
+				t.Errorf("%s codex missing parameter %s range %s～%s: %s", spec.ID, parameter.Key, lo, hi, ranges)
+			}
+		}
+		for _, roll := range []int32{0, LegendaryPowerRollMinBP, 8123, LegendaryPowerRollMaxBP} {
+			p, ok := LegendaryPowerForRoll(spec.ID, roll)
+			if !ok || strings.Contains(p.Effect, "～") {
+				t.Fatalf("%s invalid equipment description: %s", spec.ID, p.Effect)
+			}
+			for _, parameter := range spec.Parameters {
+				current := powerRollNumber(LegendaryPowerRollValue(spec.ID, parameter.Key, parameter.Base, roll), parameter.Divisor) + parameter.Unit
+				if !strings.Contains(p.Effect, current) {
+					t.Errorf("%s missing current %s: %s", spec.ID, current, p.Effect)
+				}
+			}
+		}
+	}
+	if LegendaryPowerRangeText("unknown") != "" {
+		t.Fatal("unknown power has ranges")
+	}
+}
+
+func TestPowerBookRangeTextJSON(t *testing.T) {
+	v := EndgamePowerBookView{PowerID: "ZS-A01", RangeText: LegendaryPowerRangeText("ZS-A01")}
+	raw, err := json.Marshal(v)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var decoded EndgamePowerBookView
+	if err = json.Unmarshal(raw, &decoded); err != nil {
+		t.Fatal(err)
+	}
+	if decoded.RangeText != "连环枪法伤害提高60%～80%" {
+		t.Fatalf("codex range contract: %s", raw)
 	}
 }

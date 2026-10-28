@@ -104,6 +104,7 @@ func TestLegendaryPowerRollRuleVersionAndHistoricalJSON(t *testing.T) {
 	}{{4, false, true}, {4, true, false}, {5, false, false}, {5, true, true}, {6, true, true}} {
 		r := legacy
 		r.Version = tc.version
+		r.RetiredCubeMaterials = tc.version >= 6
 		r.LegendaryPowerPolicy = 1
 		r.LegendaryPowerRolls = tc.rolls
 		table, err := NewLootRuleTable(tc.version, []LootRuleSet{legacy, r}, balanceItemsFixture())

@@ -38,7 +38,9 @@ type LootRuleSet struct {
 	// Zero preserves historical mixed-pool RNG. One selects class/universal 50:50.
 	LegendaryPowerPolicy int32 `json:",omitempty"`
 	// Absent in all historical snapshots; only loot5+ draws numerical potency.
-	LegendaryPowerRolls            bool `json:",omitempty"`
+	LegendaryPowerRolls bool `json:",omitempty"`
+	// Loot6 retires new obsolete cube-material production, never existing balances.
+	RetiredCubeMaterials           bool `json:",omitempty"`
 	MinRuneLevel                   int32
 	UniqueBasePPB                  int64
 	UniqueMFBoost, UniqueMFDivisor int64
@@ -81,6 +83,9 @@ func NewLootRuleTable(active int32, rows []LootRuleSet, items map[ItemID]ItemDef
 		}
 		if r.LegendaryPowerPolicy < 0 || r.LegendaryPowerPolicy > 1 || (r.Version < 4 && r.LegendaryPowerPolicy != 0) {
 			return nil, fmt.Errorf("invalid legendary power policy for loot version %d", r.Version)
+		}
+		if r.RetiredCubeMaterials != (r.Version >= 6) {
+			return nil, fmt.Errorf("invalid retired cube material policy for loot version %d", r.Version)
 		}
 		if r.LegendaryPowerRolls != (r.Version >= 5) {
 			return nil, fmt.Errorf("invalid numerical legendary power roll policy for loot version %d", r.Version)
@@ -222,4 +227,9 @@ func (r *LootRuleSet) SocketCapacity(level int32) int {
 		cap = int(l.Cap)
 	}
 	return cap
+}
+
+// AllowsCombatMaterial only gates new generation; inventory and ready grants are untouched.
+func (r *LootRuleSet) AllowsCombatMaterial(id ItemID) bool {
+	return r == nil || !r.RetiredCubeMaterials || (id != CubeStarMarrow && id != CubePurifiedDust && id != CubeImmortalEcho)
 }

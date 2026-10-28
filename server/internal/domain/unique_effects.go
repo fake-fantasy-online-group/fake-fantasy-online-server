@@ -54,56 +54,58 @@ func EvaluateUniqueTraits(traits []UniqueTrait, c UniqueContext) UniqueEffects {
 		if t.SkillID != 0 && t.SkillID != c.SkillID {
 			continue
 		}
-		ok := false
-		switch t.Kind {
-		case "healthy_assault", "healthy_guard":
-			ok = c.HPPercent >= t.ThresholdPct
-		case "desperate_assault", "desperate_guard":
-			ok = c.HPPercent <= t.ThresholdPct
-		case "execution":
-			ok = c.TargetHPPercent <= t.ThresholdPct
-		case "ambush":
-			ok = c.TargetHPPercent >= t.ThresholdPct
-		case "elite_hunter":
-			ok = c.TargetElite
-		case "critical_focus":
-			ok = c.Critical
-		case "physical_guard":
-			ok = !c.Magic
-		case "magic_guard":
-			ok = c.Magic
-		case "healing_grace", "healing_cost":
-			ok = c.Healing
-		case "rescue_heal":
-			ok = c.Healing && c.TargetHPPercent <= t.ThresholdPct
-		case "selfless_heal":
-			ok = c.Healing && c.Ally
-		case "spell_economy":
-			ok = c.Skill && c.Magic
-		case "swift_cast", "skill_focus", "skill_economy":
-			ok = c.Skill
-		case "area_expansion", "area_focus":
-			ok = c.Skill && c.Area
-		case "trap_expansion":
-			ok = c.Skill && c.Trap
-		case "fire_mastery":
-			ok = c.Magic && c.HurtType == HurtFire
-		case "ice_mastery":
-			ok = c.Magic && c.HurtType == HurtIce
-		case "holy_mastery":
-			ok = c.Magic && c.HurtType == HurtHoly
-		case "single_focus":
-			ok = c.Skill && !c.Area && !c.Trap
-		case "invisible_focus":
-			ok = c.Invisible
-		case "kill_mend", "kill_mana":
-			ok = true
-		case "basic_focus":
-			ok = !c.Skill
-		}
-		if ok && t.PowerBP > active[t.Kind] {
-			active[t.Kind] = t.PowerBP
-		}
+		DispatchEquipmentEffect(RuntimeUniqueEquipmentEffect(t), func() {
+			ok := false
+			switch t.Kind {
+			case "healthy_assault", "healthy_guard":
+				ok = c.HPPercent >= t.ThresholdPct
+			case "desperate_assault", "desperate_guard":
+				ok = c.HPPercent <= t.ThresholdPct
+			case "execution":
+				ok = c.TargetHPPercent <= t.ThresholdPct
+			case "ambush":
+				ok = c.TargetHPPercent >= t.ThresholdPct
+			case "elite_hunter":
+				ok = c.TargetElite
+			case "critical_focus":
+				ok = c.Critical
+			case "physical_guard":
+				ok = !c.Magic
+			case "magic_guard":
+				ok = c.Magic
+			case "healing_grace", "healing_cost":
+				ok = c.Healing
+			case "rescue_heal":
+				ok = c.Healing && c.TargetHPPercent <= t.ThresholdPct
+			case "selfless_heal":
+				ok = c.Healing && c.Ally
+			case "spell_economy":
+				ok = c.Skill && c.Magic
+			case "swift_cast", "skill_focus", "skill_economy":
+				ok = c.Skill
+			case "area_expansion", "area_focus":
+				ok = c.Skill && c.Area
+			case "trap_expansion":
+				ok = c.Skill && c.Trap
+			case "fire_mastery":
+				ok = c.Magic && c.HurtType == HurtFire
+			case "ice_mastery":
+				ok = c.Magic && c.HurtType == HurtIce
+			case "holy_mastery":
+				ok = c.Magic && c.HurtType == HurtHoly
+			case "single_focus":
+				ok = c.Skill && !c.Area && !c.Trap
+			case "invisible_focus":
+				ok = c.Invisible
+			case "kill_mend", "kill_mana":
+				ok = true
+			case "basic_focus":
+				ok = !c.Skill
+			}
+			if ok && t.PowerBP > active[t.Kind] {
+				active[t.Kind] = t.PowerBP
+			}
+		})
 	}
 	var out UniqueEffects
 	for kind, power := range active {
@@ -149,7 +151,7 @@ func ActiveUniqueTraits(worn *EquipSet, defs func(ItemID) (ItemDef, bool), ch *C
 		if !ok || def.Equip == nil || int32(slot) != def.Equip.Slot || !EquipmentFunctional(st, def) || !def.Equip.Need.AllowsCharacter(ch) || ch.Level < EquipmentRequiredLevel(def, st) {
 			return
 		}
-		d, ok := UniqueOf(st,def.EndgameCatalog)
+		d, ok := UniqueOf(st, def.EndgameCatalog)
 		if !ok {
 			return
 		}

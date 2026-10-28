@@ -82,8 +82,8 @@ func TestLegendaryMeleeFunctionalDefenseWindows(t *testing.T) {
 			if get(domain.DamageNormalOrigin, tc.magic) != tc.want {
 				t.Fatal("window missing")
 			}
-			if get(domain.DamageDOTOrigin, tc.magic) != 100 {
-				t.Fatal("direct defense changed DOT")
+			if get(domain.DamageDOTOrigin, tc.magic) != tc.want {
+				t.Fatal("matching periodic damage bypassed reduction")
 			}
 			if tc.magic && get(domain.DamageNormalOrigin, false) != 100 {
 				t.Fatal("magic defense reduced physical")
@@ -100,15 +100,32 @@ func TestLegendaryMeleeFunctionalManaAndSlow(t *testing.T) {
 		id    string
 		skill domain.SkillID
 	}{{"ZS-U01", 10002}, {"JK-U06", 10111}} {
-		s, p, m := legendaryMeleeFixture(t, tc.id)
-		d := domain.SkillDef{ID: tc.skill, MPCost: 100, ManaCostFractionNumerator: 100, ManaCostFractionDenominator: 1, Dist: 100}
-		s.legendaryPrepareSkill(p, &d, m.ID)
-		if d.MPCost != 0 || d.ManaCostFractionNumerator != 0 {
-			t.Fatal("not free", tc.id, d.MPCost)
-		}
-		if tc.id == "JK-U06" && d.Dist != 180 {
-			t.Fatal("bind range", d.Dist)
-		}
+		t.Run(tc.id, func(t *testing.T) {
+			for _, mode := range []string{"equipped", "unequipped", "wrong-skill"} {
+				t.Run(mode, func(t *testing.T) {
+					s, p, m := legendaryMeleeFixture(t, tc.id)
+					if mode == "unequipped" {
+						p.Player.Worn = &domain.EquipSet{}
+					}
+					skill := tc.skill
+					if mode == "wrong-skill" {
+						skill = 10999
+					}
+					d := domain.SkillDef{ID: skill, MPCost: 100, ManaCostFractionNumerator: 100, ManaCostFractionDenominator: 1, Dist: 100}
+					s.legendaryPrepareSkill(p, &d, m.ID)
+					wantCost, wantDist := int32(100), int32(100)
+					if mode == "equipped" {
+						wantCost = 0
+						if tc.id == "JK-U06" {
+							wantDist = 180
+						}
+					}
+					if d.MPCost != wantCost || d.ManaCostFractionNumerator != int64(wantCost) || d.Dist != wantDist {
+						t.Fatalf("cost/fraction/range=%d/%d/%d want %d/%d/%d", d.MPCost, d.ManaCostFractionNumerator, d.Dist, wantCost, wantCost, wantDist)
+					}
+				})
+			}
+		})
 	}
 	s, p, m := legendaryMeleeFixture(t, "JK-U05")
 	s.legendaryCastReleased(p, domain.SkillDef{ID: 10103}, m.ID, nil)

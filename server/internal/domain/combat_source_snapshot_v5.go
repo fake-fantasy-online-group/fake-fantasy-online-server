@@ -14,6 +14,7 @@ type LegendaryChildPreparationSnapshot struct {
 // CombatSourceSnapshotV5 is an immutable, accepted-action source snapshot.
 // Target conditions and per-hit random rolls are deliberately not captured.
 type CombatSourceSnapshotV5 struct {
+	CombatCausalPath        []string                           `json:",omitempty"`
 	ChildPreparation        *LegendaryChildPreparationSnapshot `json:",omitempty"`
 	Position                Pos
 	LegendaryPowers         []ActiveLegendaryPower

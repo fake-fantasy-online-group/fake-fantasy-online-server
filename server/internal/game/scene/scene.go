@@ -118,7 +118,8 @@ type Config struct {
 	// StatusOverlay 是状态叠加矩阵。nil 时保留旧测试的单实例语义。
 	StatusOverlay domain.StatusOverlay
 	// Quests 是任务表。nil 表示接不了任务(测试用)。
-	Quests domain.QuestTable
+	Quests             domain.QuestTable
+	SpiritDailyTargets []domain.SpiritDailyTarget
 	// Works 是打工定义, Stamina 是耐力规则。
 	Works          domain.WorkTable
 	Stamina        domain.StaminaRule
@@ -316,6 +317,7 @@ type Scene struct {
 	statuses                   domain.StatusTable   // 状态定义
 	statusOverlay              domain.StatusOverlay // 状态叠加矩阵
 	monsterPickupQuestItems    map[domain.ItemID]bool
+	spiritDailyTargets         []domain.SpiritDailyTarget
 	quests                     domain.QuestTable   // 任务定义
 	dungeons                   domain.DungeonTable // 副本表
 	works                      domain.WorkTable    // 打工定义
@@ -461,66 +463,67 @@ func New(cfg Config) *Scene {
 		frames:               cfg.Frames,
 		spawner:              cfg.Spawner,
 		trial:                cfg.Trial, dungeonParty: cfg.DungeonParty, dungeonNotify: cfg.DungeonNotify,
-		walkable:          cfg.Walkable,
-		nativeMapWidth:    cfg.NativeMapWidth,
-		nativeMapHeight:   cfg.NativeMapHeight,
-		portals:           cfg.Portals,
-		riftPortalAreas:   cfg.RiftPortalAreas,
-		transports:        cfg.Transports,
-		shops:             cfg.Shops,
-		portalBlocked:     map[domain.EntityID]struct{}{},
-		moveWindows:       map[domain.EntityID]playerMoveWindow{},
-		stallBrowsers:     map[domain.EntityID]map[domain.EntityID]struct{}{},
-		revive:            cfg.Revive,
-		home:              cfg.Home,
-		levels:            cfg.Levels,
-		defs:              cfg.Defs,
-		items:             cfg.Items,
-		itemIcons:         append([]domain.ItemIconMapping(nil), cfg.ItemIcons...),
-		itemIconsKnown:    cfg.ItemIconsKnown,
-		skills:            cfg.Skills,
-		statuses:          cfg.Statuses,
-		statusVisuals:     cfg.StatusVisuals,
-		statusOverlay:     cfg.StatusOverlay,
-		quests:            cfg.Quests,
-		dungeons:          cfg.Dungeons,
-		dungeonEncounters: cfg.DungeonEncounters,
-		encounterDone:     make(map[domain.MonsterID]bool),
-		dungeon:           cfg.Dungeon,
-		dungeonDifficulty: cfg.DungeonDifficulty,
-		works:             cfg.Works,
-		nianliCreation:    cfg.NianliCreation,
-		requireWorkGather: cfg.RequireWorkGather,
-		crafts:            cfg.Crafts,
-		refines:           cfg.Refines,
-		sockets:           cfg.Sockets,
-		washes:            cfg.Washes,
-		warehouseRule:     cfg.WarehouseRule,
-		wardrobes:         cfg.Wardrobes,
-		wardrobeRule:      cfg.WardrobeRule,
-		hairRules:         cfg.HairRules,
-		stallOpenItems:    cfg.StallOpenItems,
-		rack:              cfg.Rack,
-		depositRule:       cfg.DepositRule,
-		petDefs:           cfg.Pets,
-		petLvls:           cfg.PetLevels,
-		petFoods:          cfg.PetFoods,
-		petPrefixes:       cfg.PetPrefixes,
-		petSkills:         cfg.PetSkills,
-		petLearnItems:     cfg.PetLearningItems,
-		petRule:           cfg.PetRule,
-		rideInviteSeconds: cfg.RideInviteSeconds,
-		pickupRange:       cfg.PickupRange,
-		skipNPC:           cfg.SkipNPCSpawn,
-		stamina:           cfg.Stamina,
-		rest:              cfg.Rest,
-		death:             cfg.Death,
-		penalty:           cfg.Penalty,
-		now:               cfg.Now,
-		lootTable:         cfg.Loot,
-		equipmentRoll:     cfg.EquipmentRoll,
-		bossFixedDrops:    cfg.BossFixedDrops,
-		alloc:             cfg.Alloc,
+		walkable:           cfg.Walkable,
+		nativeMapWidth:     cfg.NativeMapWidth,
+		nativeMapHeight:    cfg.NativeMapHeight,
+		portals:            cfg.Portals,
+		riftPortalAreas:    cfg.RiftPortalAreas,
+		transports:         cfg.Transports,
+		shops:              cfg.Shops,
+		portalBlocked:      map[domain.EntityID]struct{}{},
+		moveWindows:        map[domain.EntityID]playerMoveWindow{},
+		stallBrowsers:      map[domain.EntityID]map[domain.EntityID]struct{}{},
+		revive:             cfg.Revive,
+		home:               cfg.Home,
+		levels:             cfg.Levels,
+		defs:               cfg.Defs,
+		items:              cfg.Items,
+		itemIcons:          append([]domain.ItemIconMapping(nil), cfg.ItemIcons...),
+		itemIconsKnown:     cfg.ItemIconsKnown,
+		skills:             cfg.Skills,
+		statuses:           cfg.Statuses,
+		statusVisuals:      cfg.StatusVisuals,
+		statusOverlay:      cfg.StatusOverlay,
+		quests:             cfg.Quests,
+		spiritDailyTargets: cfg.SpiritDailyTargets,
+		dungeons:           cfg.Dungeons,
+		dungeonEncounters:  cfg.DungeonEncounters,
+		encounterDone:      make(map[domain.MonsterID]bool),
+		dungeon:            cfg.Dungeon,
+		dungeonDifficulty:  cfg.DungeonDifficulty,
+		works:              cfg.Works,
+		nianliCreation:     cfg.NianliCreation,
+		requireWorkGather:  cfg.RequireWorkGather,
+		crafts:             cfg.Crafts,
+		refines:            cfg.Refines,
+		sockets:            cfg.Sockets,
+		washes:             cfg.Washes,
+		warehouseRule:      cfg.WarehouseRule,
+		wardrobes:          cfg.Wardrobes,
+		wardrobeRule:       cfg.WardrobeRule,
+		hairRules:          cfg.HairRules,
+		stallOpenItems:     cfg.StallOpenItems,
+		rack:               cfg.Rack,
+		depositRule:        cfg.DepositRule,
+		petDefs:            cfg.Pets,
+		petLvls:            cfg.PetLevels,
+		petFoods:           cfg.PetFoods,
+		petPrefixes:        cfg.PetPrefixes,
+		petSkills:          cfg.PetSkills,
+		petLearnItems:      cfg.PetLearningItems,
+		petRule:            cfg.PetRule,
+		rideInviteSeconds:  cfg.RideInviteSeconds,
+		pickupRange:        cfg.PickupRange,
+		skipNPC:            cfg.SkipNPCSpawn,
+		stamina:            cfg.Stamina,
+		rest:               cfg.Rest,
+		death:              cfg.Death,
+		penalty:            cfg.Penalty,
+		now:                cfg.Now,
+		lootTable:          cfg.Loot,
+		equipmentRoll:      cfg.EquipmentRoll,
+		bossFixedDrops:     cfg.BossFixedDrops,
+		alloc:              cfg.Alloc,
 	}
 	for _, item := range cfg.Items {
 		if item.PetAffectionPP != nil {
@@ -1101,7 +1104,7 @@ func (s *Scene) stepCombatAt(now time.Time, timedOnly bool) {
 				counters = append(counters, counter)
 			}
 		}
-		s.afterStrikeStatuses(src, dst, ev, rawDamage, fullMagicReflect)
+		s.afterStrikeStatuses(src, dst, ev, rawDamage, fullMagicReflect, strikeReactionContext{HurtType: at.blow.HurtType})
 		if at.counter {
 			s.legendaryAssassinCounterArea(src, dst, at.blow)
 		}

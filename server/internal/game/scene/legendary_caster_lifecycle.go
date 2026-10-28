@@ -9,35 +9,29 @@ import (
 )
 
 func (s *Scene) legendaryCasterHealed(src, dst *entity.Entity, def domain.SkillDef, beforeHP, effective int32) {
-	if effective <= 0 || s.equipmentState().classSetTriggered != 0 || s.legendaryCasterSecondaryHeal(src, dst, def.ID) {
+	if effective <= 0 {
 		return
 	}
 	for _, c := range s.legendaryContexts(src, dst, combat.Blow{SkillID: int32(def.ID)}, event.DamageDealt{}) {
 		c.Def = def
 		if h := legendaryHandlers[c.Power.ID].Healed; h != nil {
-			h(&c, beforeHP, effective)
+			c.invoke(func(c *legendaryContext) { h(c, beforeHP, effective) })
 		}
 	}
 }
 func (s *Scene) legendaryCasterManaRestored(src, dst *entity.Entity, def domain.SkillDef, effective, overflow int32) {
-	if s.equipmentState().classSetTriggered != 0 {
-		return
-	}
 	for _, c := range s.legendaryContexts(src, dst, combat.Blow{SkillID: int32(def.ID)}, event.DamageDealt{}) {
 		c.Def = def
 		if h := legendaryHandlers[c.Power.ID].ManaRestored; h != nil {
-			h(&c, effective, overflow)
+			c.invoke(func(c *legendaryContext) { h(c, effective, overflow) })
 		}
 	}
 }
 func (s *Scene) legendaryCasterDispelled(src, dst *entity.Entity, def domain.SkillDef, removed []domain.Active) {
-	if s.equipmentState().classSetTriggered != 0 {
-		return
-	}
 	for _, c := range s.legendaryContexts(src, dst, combat.Blow{SkillID: int32(def.ID)}, event.DamageDealt{}) {
 		c.Def = def
 		if h := legendaryHandlers[c.Power.ID].Dispelled; h != nil {
-			h(&c, removed)
+			c.invoke(func(c *legendaryContext) { h(c, removed) })
 		}
 	}
 }
@@ -47,7 +41,7 @@ func (s *Scene) legendaryCasterStatusApplying(source domain.EntityID, target *en
 	if skill == 0 {
 		skill = domain.SkillID(def.SourceSkillID)
 	}
-	for _, c := range s.legendaryContextsFor(s.entities[source], target, combat.Blow{SkillID: int32(skill)}, event.DamageDealt{}, s.legendaryState().child != nil) {
+	for _, c := range s.legendaryContextsFor(s.entities[source], target, combat.Blow{SkillID: int32(skill)}, event.DamageDealt{}, true) {
 		if child := s.legendaryState().child; child != nil {
 			c.IsChild = true
 			c.Def = child.Def
@@ -74,7 +68,10 @@ func legendaryCasterRestoreMP(c *legendaryContext, target *entity.Entity, n int3
 	if target == nil || !target.Alive() || n <= 0 {
 		return
 	}
+	defer c.Scene.withCombatCausalPath(c.effectPath())()
+	before := target.MP
 	target.MP = min(target.MaxMP, clampI32(int64(target.MP)+int64(n)))
+	c.Scene.legendaryCasterManaRestored(c.Owner, target, domain.SkillDef{ID: c.Skill}, target.MP-before, max(int32(0), n-(target.MP-before)))
 	c.Scene.emitAttributesIfPlayer(target)
 }
 
@@ -133,7 +130,6 @@ func legendaryCasterSteal(c *legendaryContext, removed []domain.Active) {
 		a.Def.ChanceExplicit, a.Def.ChanceBP = true, 10000
 		a.Def.LegendaryPermanentPower = ""
 		a.Def.LegendaryPowerID = ""
-		c.Scene.legendaryCasterStatusApplying(c.Owner.ID, c.Owner, &a.Def)
 		a.Def.LegendaryPowerID, a.Def.LegendarySourceUID = c.Power.ID, c.SourceUID
 		c.Scene.applyStatusDef(c.Owner, a.Def, c.Owner.ID)
 	}

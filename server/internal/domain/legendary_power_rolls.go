@@ -115,8 +115,8 @@ func powerRollNumber(value, divisor int32) string {
 	return strconv.FormatFloat(float64(value)/float64(divisor), 'f', -1, 64)
 }
 
-// Legacy descriptions remain byte-identical. Rolled instances show the actual
-// value followed by its authored range, within the normal power effect text.
+// Equipment descriptions show current values only. The codex exposes ranges
+// separately through LegendaryPowerRangeText.
 func LegendaryPowerForRoll(id string, roll int32) (LegendaryPowerDefinition, bool) {
 	p, ok := LegendaryPower(id)
 	if !ok || !LegendaryPowerRollValid(id, roll) {
@@ -131,12 +131,61 @@ func LegendaryPowerForRoll(id string, roll int32) (LegendaryPowerDefinition, boo
 	for _, parameter := range legendaryRollSpecs[id].Parameters {
 		old := powerRollNumber(parameter.Base, parameter.Divisor) + parameter.Unit
 		value := powerRollNumber(LegendaryPowerRollValue(id, parameter.Key, parameter.Base, roll), parameter.Divisor) + parameter.Unit
-		low := powerRollNumber(LegendaryPowerRollValue(id, parameter.Key, parameter.Base, LegendaryPowerRollMinBP), parameter.Divisor) + parameter.Unit
-		replacement := strings.Replace(parameter.Text, old, value+"（"+low+"～"+old+"）", 1)
+		replacement := strings.Replace(parameter.Text, old, value, 1)
 		p.Effect = strings.ReplaceAll(p.Effect, parameter.Text, replacement)
 	}
 	return p, true
 }
+
+// LegendaryPowerCurrentValueText is the first authored beneficial parameter,
+// not the roll-quality percentage or the first number in the effect prose.
+// Owned legacy roll zero retains its existing full-strength interpretation.
+// Callers must check ownership separately; absent records are not legacy gear.
+func LegendaryPowerCurrentValueText(id string, roll int32) string {
+	if !LegendaryPowerRollValid(id, roll) || !LegendaryPowerHasRoll(id) {
+		return ""
+	}
+	parameter := legendaryRollSpecs[id].Parameters[0]
+	value := LegendaryPowerRollValue(id, parameter.Key, parameter.Base, roll)
+	return powerRollNumber(value, parameter.Divisor) + parameter.Unit
+}
+
+// LegendaryPowerPrimaryRangeText matches CurrentValueText's authored parameter
+// even when effect prose mentions another parameter first (for example SS-A13).
+func LegendaryPowerPrimaryRangeText(id string) string {
+	if !LegendaryPowerHasRoll(id) {
+		return ""
+	}
+	parameter := legendaryRollSpecs[id].Parameters[0]
+	low := LegendaryPowerRollValue(id, parameter.Key, parameter.Base, LegendaryPowerRollMinBP)
+	return powerRollNumber(low, parameter.Divisor) + parameter.Unit + "～" + powerRollNumber(parameter.Base, parameter.Divisor) + parameter.Unit
+}
+
+// LegendaryPowerRangeText renders authored parameter bounds with their effect
+// context. It does not expose the internal roll-quality percentage as a stat.
+func LegendaryPowerRangeText(id string) string {
+	power, ok := LegendaryPower(id)
+	if !ok || !LegendaryPowerHasRoll(id) {
+		return ""
+	}
+	effect := power.Effect
+	for _, parameter := range legendaryRollSpecs[id].Parameters {
+		high := powerRollNumber(parameter.Base, parameter.Divisor) + parameter.Unit
+		low := powerRollNumber(LegendaryPowerRollValue(id, parameter.Key, parameter.Base, LegendaryPowerRollMinBP), parameter.Divisor) + parameter.Unit
+		replacement := strings.Replace(parameter.Text, high, low+"～"+high, 1)
+		effect = strings.ReplaceAll(effect, parameter.Text, replacement)
+	}
+	var lines []string
+	for _, clause := range strings.FieldsFunc(effect, func(r rune) bool {
+		return r == '。' || r == '；' || r == '，'
+	}) {
+		if strings.Contains(clause, "～") {
+			lines = append(lines, clause)
+		}
+	}
+	return strings.Join(lines, "\n")
+}
+
 func LegendaryPowerRollSpecs() []LegendaryPowerRollSpec {
 	out := make([]LegendaryPowerRollSpec, 0, len(legendaryRollSpecs))
 	for _, spec := range legendaryRollSpecs {

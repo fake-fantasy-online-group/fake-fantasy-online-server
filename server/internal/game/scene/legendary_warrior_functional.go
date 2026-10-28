@@ -17,7 +17,7 @@ func warriorFunctionalActive(c *legendaryContext, skill domain.SkillID) bool {
 }
 func warriorFunctionalRelease(skill domain.SkillID, duration int64, movement bool) func(*legendaryContext) {
 	return func(c *legendaryContext) {
-		if c.Skill != skill || c.IsChild || c.IsBasic || c.Blow.ProcDepth != 0 || !warriorFunctionalLearned(c, skill) {
+		if c.Skill != skill || c.IsBasic || !warriorFunctionalLearned(c, skill) {
 			return
 		}
 		st := c.State(0, "functional-window")

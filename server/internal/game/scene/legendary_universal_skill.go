@@ -77,7 +77,7 @@ func universalSynergyPrepare(c *legendaryContext, d *domain.SkillDef) {
 			m.WidthBP += c.RollValue("benefit", universalTuning.RectangleWidthBP)
 		}
 	case "TY-A08":
-		if !d.LegendaryBasic && universalSingleDamage(d) {
+		if !d.LegendaryBasic && (universalSingleDamage(d) || d.LegendaryModifiers.UniversalSingleCircle) {
 			m.DamageBP += c.RollValue("benefit", universalTuning.SingleTargetDamageBP)
 		}
 	case "TY-A24":

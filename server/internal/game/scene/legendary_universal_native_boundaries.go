@@ -19,7 +19,7 @@ func (s *Scene) legendaryStatusAccuracy(src, dst *entity.Entity, d *domain.Statu
 	}
 }
 func (s *Scene) legendaryIncomingHeal(dst *entity.Entity, n int32) int32 {
-	if dst == nil || n <= 0 || s.legendaryState().depth > 0 && s.legendaryState().child == nil || s.equipmentState().classSetTriggered != 0 {
+	if dst == nil || n <= 0 {
 		return n
 	}
 	total := int64(n)
@@ -34,7 +34,7 @@ func init() {
 	registerLegendarySynergyHandler("TY-A20", legendaryHandler{Teleported: universalLandingPull})
 }
 func universalLandingPull(c *legendaryContext, from domain.Pos) {
-	if c.Skill == 0 || c.IsChild || c.Owner == nil || from == c.Owner.Pos {
+	if c.Skill == 0 || c.Owner == nil || from == c.Owner.Pos {
 		return
 	}
 	d := c.Def

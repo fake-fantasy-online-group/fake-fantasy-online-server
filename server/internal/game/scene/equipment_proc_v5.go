@@ -75,13 +75,11 @@ func (s *Scene) executeEquipmentRoot(root *equipmentRoot) {
 			}
 			return candidates[i].active.SourceUID < candidates[j].active.SourceUID
 		})
-		groups := map[string]bool{}
 		for _, c := range candidates {
 			p := c.active.Effect.Proc
-			if groups[p.SharedGroup] {
+			if slices.Contains(c.hit.blow.EffectCausalPath, s.combatEffectKey(owner.ID, "equipment:"+p.ID)) {
 				continue
 			}
-			groups[p.SharedGroup] = true
 			if s.reserveEquipmentProc(owner, p, root.id) {
 				s.executeEquipmentProc(owner, c)
 				s.publishEquipmentCombatStats(owner)
@@ -104,7 +102,7 @@ func equipmentRootOwners(hits []equipmentHit, owners []domain.EntityID) []domain
 func (s *Scene) reserveEquipmentProc(owner *entity.Entity, p *domain.EquipmentProc, root uint64) bool {
 	now := s.now().UnixMilli()
 	cd := owner.Player.Char.EquipmentProcCooldowns
-	if cd["group:"+p.SharedGroup] > now || cd["effect:"+p.ID] > now {
+	if cd["effect:"+p.ID] > now {
 		return false
 	}
 	if p.ChanceBP <= 0 || p.ChanceBP < 10000 && s.equipmentProcRoll(owner.ID, p.ID, root) >= uint64(p.ChanceBP) {
@@ -119,7 +117,6 @@ func (s *Scene) reserveEquipmentProc(owner *entity.Entity, p *domain.EquipmentPr
 			delete(cd, key)
 		}
 	}
-	cd["group:"+p.SharedGroup] = now + int64(p.ICDMS)
 	cd["effect:"+p.ID] = now + int64(p.ICDMS)
 	owner.Player.MarkDirty()
 	return true
@@ -141,6 +138,13 @@ func (s *Scene) executeEquipmentProc(owner *entity.Entity, c equipmentProcCandid
 	if owner == nil || !owner.Alive() || s.entityMapLoading(owner) {
 		return
 	}
+	defer s.withCombatCausalPath(c.hit.blow.EffectCausalPath)()
+	s.dispatchEquipmentEffect(owner, domain.RuntimeTypedEquipmentEffect(c.active, true), func() {
+		s.executeEquipmentProcPayload(owner, c)
+	})
+}
+
+func (s *Scene) executeEquipmentProcPayload(owner *entity.Entity, c equipmentProcCandidate) {
 	p := c.active.Effect.Proc
 	stillActive := false
 	for _, a := range s.equipmentEffects(owner).effects {
@@ -193,7 +197,7 @@ func (s *Scene) executeEquipmentProc(owner *entity.Entity, c equipmentProcCandid
 	for _, effect := range def.DirectEffects() {
 		if p.Payload == "heal" && effect.Kind == domain.EffectHeal {
 			amount := clampI32(int64(effect.HealAmount(target.MaxHP)) * int64(scale) / 10000)
-			s.emit(combat.Restore(owner, target, amount, int32(def.ID)))
+			s.restoreHealthWithReactions(owner, target, amount, def.ID)
 			s.emitAttributesIfPlayer(target)
 			break
 		}
@@ -207,7 +211,7 @@ func (s *Scene) executeEquipmentProc(owner *entity.Entity, c equipmentProcCandid
 			blow.SkillPctNumerator, blow.SkillPctDenominator = effect.DamagePctNumerator, effect.DamagePctDenominator
 			ev, raw, reflected := s.resolveStrikeStatuses(owner, target, tr, blow)
 			s.emit(ev)
-			s.afterStrikeStatuses(owner, target, ev, raw, reflected)
+			s.afterStrikeStatuses(owner, target, ev, raw, reflected, strikeReactionContext{HurtType: blow.HurtType})
 			s.emitAttributesIfPlayer(target)
 			s.aggroAfterHit(target, owner.ID, ev)
 			if ev.Flag.Has(event.DamageFatal) {
@@ -280,7 +284,7 @@ func (s *Scene) equipmentProcReadiness(p *entity.Entity) []EquipmentProcReadines
 			continue
 		}
 		seen[v.ID] = true
-		remaining := max(int64(0), max(cd["effect:"+v.ID], cd["group:"+v.SharedGroup])-now)
+		remaining := max(int64(0), cd["effect:"+v.ID]-now)
 		global := int64(0) // Legacy global cooldown is intentionally no longer active.
 		out = append(out, EquipmentProcReadinessView{EffectID: v.ID, SourceUID: a.SourceUID, Trigger: v.Trigger, SkillID: v.SkillID, FixedRank: v.FixedRank, ChanceBP: v.ChanceBP, ICDMS: v.ICDMS, RemainingMS: remaining, GlobalRemainingMS: global, Ready: p.Alive() && s.equipmentCombatReady(p) && remaining == 0 && global == 0})
 		if len(out) >= domain.MaxEquipmentProcReadiness {

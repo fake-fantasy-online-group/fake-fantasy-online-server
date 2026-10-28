@@ -111,8 +111,17 @@ func TestLegendaryCasterBurnBurstsPreserveSourceAndDuration(t *testing.T) {
 			c.RootID++
 			c.Blow.ProcDepth = 1
 			legendaryHandlers[tc.id].SkillResolved(c)
-			if c.Target.HP != hp {
-				t.Fatal("recursive burst")
+			if c.Target.HP != hp-int32(before)*tc.pct/100 {
+				t.Fatal("independent generated hit lost burn burst")
+			}
+			// Producer ancestry, not the generated-hit flag, blocks a cycle.
+			restore := s.withCombatCausalPath([]string{s.combatEffectKey(c.Owner.ID, tc.id)})
+			contexts := s.legendaryContextsFor(c.Owner, c.Target, c.Blow, c.Hit, false)
+			restore()
+			for _, nested := range contexts {
+				if nested.Power.ID == tc.id {
+					t.Fatal("same producer re-entered its causal branch")
+				}
 			}
 		})
 	}

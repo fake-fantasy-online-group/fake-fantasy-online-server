@@ -8,7 +8,7 @@ import (
 )
 
 func legendarySorcererManual(c *legendaryContext, skills ...domain.SkillID) bool {
-	if c.IsChild || c.Blow.ProcDepth != 0 || c.Owner == nil || !c.Owner.Alive() || c.Owner.Player == nil {
+	if c.Owner == nil || !c.Owner.Alive() || c.Owner.Player == nil {
 		return false
 	}
 	for _, id := range skills {

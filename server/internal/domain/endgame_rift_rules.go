@@ -174,6 +174,9 @@ func (r *RiftRules) Validate() error {
 	if (r.Version < 16 && r.Loot.LegendaryPowerPolicy != 0) || (r.Version >= 16 && r.Loot.LegendaryPowerPolicy != 1) {
 		return fmt.Errorf("invalid versioned rift legendary power policy")
 	}
+	if r.Loot.RetiredCubeMaterials != (r.Version >= 18) || (r.Version >= 18 && r.LootVersion < 6) {
+		return fmt.Errorf("invalid versioned rift retired material policy")
+	}
 	if r.Loot.LegendaryPowerRolls != (r.Version >= 17) || (r.Version >= 17 && r.LootVersion < 5) {
 		return fmt.Errorf("invalid versioned rift numerical power roll policy")
 	}
@@ -253,6 +256,9 @@ func NewRiftRuleTable(active int32, rows []RiftRules, loot *LootRuleTable, items
 			return nil, err
 		}
 		if err := r.validateWingRewards(items); err != nil {
+			return nil, err
+		}
+		if err := r.validateSpiritRewards(items); err != nil {
 			return nil, err
 		}
 		d, ok := items[r.DustItem]

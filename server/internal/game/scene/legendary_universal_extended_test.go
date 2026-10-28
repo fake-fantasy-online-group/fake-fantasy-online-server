@@ -91,7 +91,7 @@ func TestLegendaryUniversalSingleCircleThenGenericShape(t *testing.T) {
 	warriorEquip(t, s, p, "TY-A08", domain.SlotRing)
 	d := domain.SkillDef{ID: 123, Kind: domain.SkillSingle, TargetEnemy: true, Dist: 300, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100}}}
 	s.legendaryPrepareSkill(p, &d, m.ID)
-	if !d.Area.Valid() || d.Area.Radius != 168 || d.Effects[0].DamagePct != 100 {
+	if !d.Area.Valid() || d.Area.Radius != 168 || d.Effects[0].DamagePct != 160 {
 		t.Fatalf("geometry%+v damage%d", d.Area, d.Effects[0].DamagePct)
 	}
 }

@@ -221,7 +221,7 @@ func legendaryAssassinLifesteal(c *legendaryContext) {
 	if amount <= 0 {
 		return
 	}
-	c.Scene.emit(combat.Restore(c.Owner, c.Owner, amount, 10209))
+	c.RestoreHealth(c.Owner, amount, 10209)
 	c.Scene.emitAttributesIfPlayer(c.Owner)
 }
 func legendaryAssassinBackstabCooldown(c *legendaryContext) {

@@ -391,7 +391,7 @@ func (s *Scene) resolveEndgameRiftAbility(m *entity.Entity, cast *endgameRiftAbi
 		ev, raw, reflected := s.resolveStrikeStatuses(m, p, tr, combat.Blow{Area: true, Magic: magic,
 			HurtType: hurtType, SkillID: int32(cast.visual.ID), SkillPct: cast.damagePct, GuaranteedHit: true})
 		s.emit(ev)
-		s.afterStrikeStatuses(m, p, ev, raw, reflected)
+		s.afterStrikeStatuses(m, p, ev, raw, reflected, strikeReactionContext{HurtType: hurtType})
 		s.consumeHitDurability(p, ev)
 		s.emitAttributesIfPlayer(p)
 		if cast.visual.HitEffect != "" && ev.Amount > 0 {

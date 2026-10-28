@@ -100,11 +100,11 @@ func TestLegendaryPowerRollAcceptedSnapshotAndTooltipAgree(t *testing.T) {
 	st.Legendary.PowerRollBP = 10000
 	p.Player.Worn.Set(slot, st)
 	contexts := s.legendaryContextsFor(p, m, combat.Blow{SourceOffense: accepted}, event.DamageDealt{}, true)
-	if len(contexts) != 1 || contexts[0].PowerRollBP != 7500 || !strings.Contains(contexts[0].Power.Effect, "45%（45%～60%）") {
+	if len(contexts) != 1 || contexts[0].PowerRollBP != 7500 || !strings.Contains(contexts[0].Power.Effect, "长度提高45%") {
 		t.Fatal("inflight attack upgraded", contexts)
 	}
 	view := s.endgameItem(st, "equipment", int32(slot))
-	if view.Legendary == nil || !strings.Contains(view.Legendary.Description, "60%（45%～60%）") {
-		t.Fatal("equipped value/range missing", view.Legendary)
+	if view.Legendary == nil || !strings.Contains(view.Legendary.Description, "长度提高60%") {
+		t.Fatal("equipped current value missing", view.Legendary)
 	}
 }

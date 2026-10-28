@@ -319,7 +319,7 @@ func (s *Scene) hitRiftHazard(h *endgameRiftHazard, p *entity.Entity, pct int32)
 	}
 	ev, raw, reflected := s.resolveStrikeStatuses(source, p, &combat.HitTracker{}, combat.Blow{Origin: domain.DamageAuraOrigin, Area: true, Magic: magic, HurtType: hurt, SkillPct: pct, GuaranteedHit: true, AttackStatsSnapshot: true, AttackStats: attack})
 	s.emit(ev)
-	s.afterStrikeStatuses(source, p, ev, raw, reflected)
+	s.afterStrikeStatuses(source, p, ev, raw, reflected, strikeReactionContext{HurtType: hurt})
 	s.consumeHitDurability(p, ev)
 	s.emitAttributesIfPlayer(p)
 	if ev.Flag.Has(event.DamageFatal) {

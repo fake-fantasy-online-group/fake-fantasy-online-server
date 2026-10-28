@@ -2,7 +2,6 @@ package scene
 
 import (
 	"encoding/json"
-	"sort"
 	"strconv"
 
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -15,32 +14,39 @@ func (s *Scene) onEndgamePowerBook(p *entity.Entity, req domain.EndgameRequest) 
 	if p == nil || p.Player == nil || p.Player.Char == nil || p.Player.Bag == nil {
 		return
 	}
+	if !p.Player.EndgamePowerCodex && req.Op != "powerbook.imprint" {
+		s.endgameError(p, req, "update_required", "请更新客户端后翻阅秘典或使用威能卷轴")
+		return
+	}
 	x := s.endgamePlayer(p)
 	if !x.loaded || s.endgameBackend == nil {
-		s.endgameError(p, req, "storage", "威能录尚未载入")
+		s.endgameError(p, req, "storage", "秘典尚未载入")
 		return
 	}
 	book, err := domain.ReadLegendaryPowerBook(x.state.Payload)
 	if err != nil {
-		s.endgameError(p, req, "storage", "威能录暂不可读，器物尚未改动")
+		s.endgameError(p, req, "storage", "秘典暂不可读，器物尚未改动")
 		return
 	}
 	switch req.Op {
 	case "powerbook.list":
+		if !s.hasPowerCodex(p) {
+			s.endgameError(p, req, "tool_required", "请将秘典带在背包中再翻阅")
+			return
+		}
 		offset := 0
 		if req.Cursor != "" {
 			n, e := strconv.Atoi(req.Cursor)
-			if e != nil || n < 0 || n > len(book) || strconv.Itoa(n) != req.Cursor {
-				s.endgameError(p, req, "cursor", "威能录页码无效，请重新翻阅")
+			if e != nil || n < 0 || n > len(domain.LegendaryPowers()) || strconv.Itoa(n) != req.Cursor {
+				s.endgameError(p, req, "cursor", "秘典页码无效，请重新翻阅")
 				return
 			}
 			offset = n
 		}
-		ids := make([]string, 0, len(book))
-		for id := range book {
-			ids = append(ids, id)
+		ids := make([]string, 0, len(domain.LegendaryPowers()))
+		for _, power := range domain.LegendaryPowers() {
+			ids = append(ids, power.ID)
 		}
-		sort.Strings(ids)
 		end := offset + powerBookPageSize
 		if end > len(ids) {
 			end = len(ids)
@@ -53,9 +59,13 @@ func (s *Scene) onEndgamePowerBook(p *entity.Entity, req domain.EndgameRequest) 
 				}
 				return 0
 			}())
-			v := domain.EndgamePowerBookView{PowerID: id, Name: power.Name, Category: power.Category, Class: power.Class, Description: power.Name + "：" + power.Effect, MinLevel: power.MinLevel}
+			_, unlocked := book[id]
+			v := domain.EndgamePowerBookView{Unlocked: unlocked, Slots: powerCodexSlots(power), PowerID: id, Name: power.Name, Category: power.Category, Class: power.Class, Description: power.Name + "：" + power.Effect, RangeText: domain.LegendaryPowerRangeText(id), PrimaryRangeText: domain.LegendaryPowerPrimaryRangeText(id), MinLevel: power.MinLevel}
 			if domain.LegendaryPowerHasRoll(id) {
-				v.RollBP = domain.EffectiveLegendaryPowerRollBP(id, book[id])
+				if unlocked {
+					v.RollBP = domain.EffectiveLegendaryPowerRollBP(id, book[id])
+					v.CurrentValueText = domain.LegendaryPowerCurrentValueText(id, book[id])
+				}
 				v.MinRollBP = domain.LegendaryPowerRollMinBP
 				v.MaxRollBP = domain.LegendaryPowerRollMaxBP
 			}
@@ -76,59 +86,24 @@ func (s *Scene) onEndgamePowerBook(p *entity.Entity, req domain.EndgameRequest) 
 			next = strconv.Itoa(end)
 		}
 		s.endgameReply(p, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Powers: views, Cursor: req.Cursor, NextCursor: next})
+	case "powerbook.extract":
+		s.extractPowerScroll(p, req, book)
+	case "powerbook.apply":
+		s.applyPowerScroll(p, req)
+	case "powerbook.recover":
+		s.recoverPowerCodex(p, req)
 	case "powerbook.imprint":
-		if !p.Alive() {
-			s.endgameError(p, req, "requirements", "角色当前不能刻印威能")
-			return
-		}
-		if req.PowerID == "" || req.RuneUID != "" || req.RecipeID != 0 || req.QuoteID != "" || len(req.ItemUIDs) != 0 || len(req.CubeInputs) != 0 || req.NPCEntityID != 0 || req.Socket != 0 || req.Tier != 0 || req.RunID != "" {
-			s.endgameError(p, req, "invalid_request", "请选择一件装备和一项已收录威能")
-			return
-		}
-		uid, e := strconv.ParseInt(req.TargetUID, 10, 64)
-		if e != nil || uid <= 0 || strconv.FormatInt(uid, 10) != req.TargetUID {
-			s.endgameError(p, req, "invalid_request", "装备实例号无效")
-			return
-		}
-		slot := -1
-		for i := 0; i < p.Player.Bag.Cap(); i++ {
-			st := p.Player.Bag.At(i)
-			if !st.Empty() && st.UID == uid {
-				if slot >= 0 {
-					s.endgameError(p, req, "requirements", "装备实例状态异常")
-					return
-				}
-				slot = i
-			}
-		}
-		if slot < 0 {
-			s.endgameError(p, req, "not_owner", "请将待刻印装备放入自己的背包")
-			return
-		}
-		st := p.Player.Bag.At(slot)
-		def, ok := s.itemDef(st.Item)
-		if !ok || !def.InventoryTabKnown || !p.Player.Bag.AllowsSlot(def, slot) {
-			s.endgameError(p, req, "requirements", "装备位置或模板无效")
-			return
-		}
-		changed, e := book.ImprintPower(st, def, p.Player.Char, req.PowerID)
-		if e != nil {
-			s.endgameError(p, req, domain.CubeErrorCode(e), e.Error())
-			return
-		}
-		changed.Endgame.Revision++
-		candidate := s.snapshotOf(p).Clone()
-		candidate.Bag.Set(slot, changed)
-		s.endgameCommit(p, req, candidate, domain.EndgameResponse{Kind: "powerbook.result", Message: "威能已刻入器物。", Result: map[string]string{"itemUid": req.TargetUID, "powerId": req.PowerID}}, nil, 0, nil)
+		s.endgameError(p, req, "scroll_required", "请提取卷轴后，右击卷轴附着威能")
+
 	default:
-		s.endgameError(p, req, "unsupported_operation", "不支持的威能录操作")
+		s.endgameError(p, req, "unsupported_operation", "不支持的秘典操作")
 	}
 }
 
 // The book update shares the cube inventory transaction and receipt. No live
 // book or item is changed during quotation, failed storage, or replay recovery.
 func powerBookAfterCube(payload string, before *domain.Bag, plan domain.CubePlan) (string, error) {
-	if plan.Recipe.Operation != "salvage.unique" {
+	if plan.Recipe.Operation != "salvage.unique" && plan.Recipe.Operation != "life.salvage.unique" {
 		return payload, nil
 	}
 	book, err := domain.ReadLegendaryPowerBook(payload)

@@ -71,7 +71,11 @@ func TestLegendaryUniversalSoloDamageBoundaries(t *testing.T) {
 				}
 			}
 			assassinRegressionCast(t, s, p, UseSkill{Skill: 10002, Target: m.ID})
-			universalSoloDamage(t, s, m.ID, 10002, 130, 1)
+			want := int32(130)
+			if kind == "power_shield" {
+				want = 130 * 140 / 100
+			}
+			universalSoloDamage(t, s, m.ID, 10002, want, 1)
 		})
 	}
 	t.Run("TY-A38/current_mana_independent", func(t *testing.T) {
@@ -188,14 +192,14 @@ func TestLegendaryUniversalSoloRecoveryBoundaries(t *testing.T) {
 			t.Fatal("direct-heal power amplified HoT")
 		}
 	})
-	t.Run("TY-D12/no_generated_heal_amplification", func(t *testing.T) {
+	t.Run("TY-D12/generated_heal_received_modifier", func(t *testing.T) {
 		s, p, m := universalSoloFixture(t, "TY-D12", domain.Healer, domain.Learned{})
 		p.HP = 1
 		s.legendaryState().depth = 1
 		s.applySkill(m, p, domain.SkillDef{ID: 10301, Effects: []domain.SkillEffect{{Kind: domain.EffectHeal, HealFlat: 100}}}, 0, false)
 		s.legendaryState().depth = 0
-		if p.HP != 101 {
-			t.Fatal("generated heal amplified", p.HP)
+		if p.HP != 1+100*140/100 {
+			t.Fatal("generated heal missing received modifier", p.HP)
 		}
 	})
 	t.Run("TY-U17/full_cap_no_auto_revive", func(t *testing.T) {

@@ -402,6 +402,17 @@ func AppearanceFromEquipment(base Appearance, worn *EquipSet, defs func(ItemID) 
 				}
 			}
 		}
+		// Spirit weapon appearances change only the displayed model; attack
+		// motion, reach and damage remain those of the actual equipped weapon.
+		if appearance, ok := SpiritAppearanceForItem(st.SpiritAppearance); ok &&
+			appearance.Kind == 9 && (slot == SlotWeapon || slot == SlotTwoHand) {
+			if model, ok := defs(appearance.BonusItemID); ok && model.Equip != nil {
+				ap := model.Equip.Appearance
+				if ap.Known && ap.Part < appearancePartCount && AppearancePartAcceptsSlot(ap.Part, slot) {
+					out.EquipView[ap.Part] = ap.Model
+				}
+			}
+		}
 		if baseAppearance.AttackKnown {
 			out.AtkVariant = baseAppearance.AtkVariant
 			out.WeaponCType = baseAppearance.WeaponCType
@@ -532,12 +543,33 @@ func Compute(in StatSource) (Base, Stats) {
 				}
 			}
 		}
-		if st.FusedSoul != 0 {
+		if !st.FusedSpirit.Empty() {
+			if spirit, ok := SpiritDefinitionForKind(st.FusedSpirit.State.Kind); ok &&
+				spirit.AcceptsSlot(slot) && st.FusedSpirit.State.Validate() == nil {
+				affixes := st.FusedSpirit.State.Affixes()
+				if st.FusedSpirit.State.LegacyFixed {
+					if soul, ok := src.Defs(st.FusedSpirit.Item); ok && soul.EquipmentSoul != nil && soul.EquipmentSoul.AcceptsSlot(slot) {
+						affixes = soul.EquipmentSoul.Affixes
+					}
+				}
+				for _, a := range affixes {
+					applyItemAffix(a)
+				}
+			}
+		} else if st.FusedSoul != 0 {
 			if soul, ok := src.Defs(st.FusedSoul); ok && soul.EquipmentSoul != nil &&
 				soul.EquipmentSoul.AcceptsSlot(slot) {
 				for _, a := range soul.EquipmentSoul.Affixes {
 					applyItemAffix(a)
 				}
+			}
+		}
+		// Appearance bonuses belong to equipment, not the attached spirit.
+		// They remain on the equipment after a lossless spirit separation.
+		if appearance, ok := SpiritAppearanceForItem(st.SpiritAppearance); ok &&
+			(appearance.Slot == slot || appearance.Kind == 9 && slot == SlotTwoHand) {
+			for _, a := range appearance.Extra {
+				applyItemAffix(a)
 			}
 		}
 		if st.FusedDragon != 0 {
@@ -816,4 +848,13 @@ func (e *EquipSet) WeaponEffectsRevision() uint64 {
 		return 0
 	}
 	return e.weaponEffectsRevision
+}
+
+// EquipmentSoulAvatar is the native soul-effect lookup key (equipment template),
+// not an effect resource ID. Legacy fixed souls retain their previous value.
+func EquipmentSoulAvatar(st Stack) int32 {
+	if appearance, ok := SpiritAppearanceForItem(st.SpiritAppearance); ok {
+		return int32(appearance.BonusItemID)
+	}
+	return int32(st.FusedSoul)
 }

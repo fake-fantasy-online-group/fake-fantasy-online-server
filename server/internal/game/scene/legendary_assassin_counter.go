@@ -43,7 +43,7 @@ func (s *Scene) legendaryAssassinCounterArea(owner, primary *entity.Entity, b co
 		}
 		ev, raw, reflect := s.resolveStrikeStatuses(owner, v, tr, b)
 		s.emit(ev)
-		s.afterStrikeStatuses(owner, v, ev, raw, reflect)
+		s.afterStrikeStatuses(owner, v, ev, raw, reflect, strikeReactionContext{HurtType: b.HurtType})
 		s.consumeHitDurability(v, ev)
 		s.emitAttributesIfPlayer(v)
 		s.aggroAfterHit(v, owner.ID, ev)

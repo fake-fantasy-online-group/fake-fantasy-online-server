@@ -118,8 +118,8 @@ func TestLegendaryUniversalSourceAccuracyAndReceivedHealing(t *testing.T) {
 		t.Fatal("received healing missing")
 	}
 	s.legendaryState().depth = 1
-	if s.legendaryIncomingHeal(p, 100) != 100 {
-		t.Fatal("recursive heal amplification")
+	if s.legendaryIncomingHeal(p, 100) != 140 {
+		t.Fatal("generated heal lost pure received-healing modifier")
 	}
 }
 func TestLegendaryUniversalNativeCritAndPenetration(t *testing.T) {

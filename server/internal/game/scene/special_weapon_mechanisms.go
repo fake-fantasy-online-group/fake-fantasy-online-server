@@ -9,24 +9,29 @@ import (
 // Native templates remain inert. The difficulty registry is the sole authority
 // for deciding which worn template carries the approved enhanced mechanics.
 func (s *Scene) specialWeapon(p *entity.Entity) domain.ItemID {
+	effect, _ := s.equippedSpecialWeaponEffect(p)
+	return effect.Parameters.SpecialWeaponBase
+}
+
+func (s *Scene) equippedSpecialWeaponEffect(p *entity.Entity) (domain.RuntimeEquipmentEffect, bool) {
 	if p == nil || p.Player == nil || p.Player.Char == nil {
-		return 0
+		return domain.RuntimeEquipmentEffect{}, false
 	}
 	worn := s.functionalWorn(p)
 	if worn == nil {
-		return 0
+		return domain.RuntimeEquipmentEffect{}, false
 	}
 	for _, slot := range []domain.EquipSlot{domain.SlotWeapon, domain.SlotTwoHand} {
-		st := worn.At(slot)
-		def, ok := s.itemDef(st.Item)
-		if !ok || !domain.EquipmentFunctional(st, def) {
+		stack := worn.At(slot)
+		definition, ok := s.itemDef(stack.Item)
+		if !ok {
 			continue
 		}
-		if id := domain.EnhancedWeaponBaseID(st.Item); id != 0 {
-			return id
+		if effect, ok := domain.SpecialWeaponSourceCandidate(stack, definition); ok {
+			return effect, true
 		}
 	}
-	return 0
+	return domain.RuntimeEquipmentEffect{}, false
 }
 
 func specialScale(v, pct int32) int32 { return domain.SaturateInt32(int64(v) * int64(pct) / 100) }
@@ -72,6 +77,16 @@ func specialCircle(d *domain.SkillDef, radius int32, center domain.SkillAreaCent
 // This function is pure: copied skill definitions can be used for both UI
 // contracts and accepted casts without mutating the learned/static catalogue.
 func applySpecialWeaponDefinition(base domain.ItemID, d *domain.SkillDef) {
+	if d == nil {
+		return
+	}
+	effect, ok := domain.RuntimeSpecialWeaponEffect(base, d.Prof, "skill-definition", false)
+	if !ok {
+		return
+	}
+	domain.DispatchEquipmentEffect(effect, func() { applySpecialWeaponDefinitionRuntime(base, d) })
+}
+func applySpecialWeaponDefinitionRuntime(base domain.ItemID, d *domain.SkillDef) {
 	if d == nil || !specialWeaponSkillMatches(base, d.ID, d.Prof) {
 		return
 	}
@@ -249,10 +264,20 @@ func applySpecialWeaponDefinition(base domain.ItemID, d *domain.SkillDef) {
 }
 
 func (s *Scene) applySpecialWeaponModifiers(p *entity.Entity, d *domain.SkillDef, hard domain.Learned) {
-	if p == nil || p.Player == nil || hard[d.ID] <= 0 {
+	if p == nil || p.Player == nil || d == nil || hard[d.ID] <= 0 {
 		return
 	}
-	applySpecialWeaponDefinition(s.specialWeapon(p), d)
+	source, ok := s.equippedSpecialWeaponEffect(p)
+	if !ok {
+		return
+	}
+	base := source.Parameters.SpecialWeaponBase
+	effect, ok := domain.RuntimeSpecialWeaponEffect(base, d.Prof, "skill-definition", false)
+	if !ok {
+		return
+	}
+	effect.SourceUID, effect.Item = source.SourceUID, source.Item
+	s.dispatchEquipmentEffect(p, effect, func() { applySpecialWeaponDefinitionRuntime(base, d) })
 }
 func (s *Scene) limitSpecialWeaponTargets(src *entity.Entity, d domain.SkillDef, ids []domain.EntityID, primary domain.EntityID) []domain.EntityID {
 	if len(ids) < 2 {
@@ -281,6 +306,22 @@ func (s *Scene) limitSpecialWeaponTargets(src *entity.Entity, d domain.SkillDef,
 	return ids
 }
 func specialWeaponStatus(d domain.SkillDef, status *domain.StatusDef) {
+	if status == nil {
+		return
+	}
+	base := d.SpecialWeaponBaseID
+	if base == 0 && d.SpecialWeaponStatusPowerPct > 0 {
+		// The next-status buff is a captured 1326 effect, even when the next
+		// accepted spell belongs to another weapon or has no weapon effect.
+		base = 1326
+	}
+	effect, ok := domain.RuntimeSpecialWeaponEffect(base, 0, "status-definition", false)
+	if !ok {
+		return
+	}
+	domain.DispatchEquipmentEffect(effect, func() { specialWeaponStatusRuntime(d, status) })
+}
+func specialWeaponStatusRuntime(d domain.SkillDef, status *domain.StatusDef) {
 	if d.SpecialWeaponBaseID == 0 && d.SpecialWeaponStatusPowerPct == 0 {
 		return
 	}

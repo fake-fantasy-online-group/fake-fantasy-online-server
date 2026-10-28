@@ -1,7 +1,7 @@
 {
-  "powerId": "TY-A01",
-  "op": "powerbook.imprint",
+  "op": "powerbook.apply",
   "requestId": "powerbook-fixture-0001",
   "expectedRevision": "0",
-  "targetUid": "42"
+  "targetUid": "42",
+  "runeUid": "92"
 }

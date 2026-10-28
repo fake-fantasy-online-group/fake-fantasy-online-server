@@ -140,7 +140,7 @@ func (s *Scene) inventorySnapshot(p *entity.Entity) (event.InventorySnapshot, er
 			Slot: item.slot, Item: item.st.Item, Name: itemDisplayName(def, item.st),
 			Desc:              s.itemTooltipForViewerResolved(def, item.st, p, p, resolution),
 			CurrentDurability: item.st.Durability, MaxDurability: domain.MaxDurabilityOf(item.st, def),
-			Avatar: 0, SoulAvatar: int32(item.st.FusedSoul),
+			Avatar: 0, SoulAvatar: domain.EquipmentSoulAvatar(item.st),
 			Quality: equipmentQuality(def, item.st),
 		})
 	}
@@ -514,6 +514,13 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 	}
 	if def.Equip == nil {
 		lines := make([]string, 0, 2)
+		if st.Spirit.Kind != 0 && st.Spirit.Validate() == nil {
+			lines = append(lines, s.spiritInstanceTooltipLines(st.Item, st.Spirit)...)
+			if st.Bound {
+				lines = append(lines, "（绑定物品不可交易/摆摊/邮寄, 可卖NPC）")
+			}
+			return strings.Join(lines, "\n")
+		}
 		if rune, ok := domain.AstralRune(st.Item, s.endgameCatalog); ok {
 			level := fmt.Sprintf("需要等级: %d", rune.MinLevel)
 			if ch != nil && ch.Level < rune.MinLevel {
@@ -535,6 +542,11 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 			}
 		} else if text != "" {
 			lines = append(lines, text)
+		}
+		if st.Item == domain.PowerScrollItemID {
+			if power, ok := domain.LegendaryPowerForRoll(st.Endgame.PowerScrollID, st.Endgame.PowerScrollRollBP); ok {
+				lines = append(lines, "\x06"+power.Name+"："+power.Effect)
+			}
 		}
 		return strings.Join(lines, "\n")
 	}
@@ -566,7 +578,7 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 		for _, tr := range d.Traits {
 			specialEffects = append(specialEffects, tr.Describe(10000))
 		}
-		lines = append(lines, "同名仙遗特性取最高值；不同特性按通道上限叠加。", d.Description(), "")
+		lines = append(lines, d.Description(), "")
 	}
 	if st.Bound {
 		lines = append(lines, "（绑定）（可用天工剪解除绑定）")
@@ -582,7 +594,13 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 			}
 		}
 	}
-	if st.FusedSoul != 0 {
+	lines = append(lines, s.spiritAppearanceTooltipLines(st)...)
+	if !st.FusedSpirit.Empty() {
+		if spirit, ok := domain.SpiritDefinitionForKind(st.FusedSpirit.State.Kind); ok {
+			lines = append(lines, qualityColoredLine(4, "变装: "+spirit.Name))
+			lines = append(lines, s.spiritInstanceTooltipLines(st.FusedSpirit.Item, st.FusedSpirit.State)...)
+		}
+	} else if st.FusedSoul != 0 {
 		if soul, ok := s.itemDef(st.FusedSoul); ok && soul.EquipmentSoul != nil {
 			lines = append(lines, qualityColoredLine(4, "变装: "+soul.Name))
 			for _, affix := range soul.EquipmentSoul.Affixes {
@@ -636,7 +654,8 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 		appendEquipmentAffixes(&lines, e.Affixes, textQuality)
 	}
 	if power, ok := domain.LegendaryPowerForRoll(st.Legendary.PowerID, st.Legendary.PowerRollBP); ok {
-		for _, a := range st.Legendary.Affixes {
+		for i := range st.Legendary.Affixes {
+			a, _ := st.Legendary.EffectiveAffix(i)
 			lines = append(lines, qualityColoredLine(tooltipDarkGold, affixText(a.Affix)))
 		}
 		specialEffects = append(specialEffects, power.Name+"："+power.Effect)
@@ -769,7 +788,7 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 }
 
 func (s *Scene) fusedDescription(st domain.Stack) string {
-	if st.FusedAppearance == 0 && st.FusedSoul == 0 && st.FusedDragon == 0 {
+	if st.FusedAppearance == 0 && st.FusedSoul == 0 && st.FusedDragon == 0 && st.FusedSpirit.Empty() && st.SpiritAppearance == 0 {
 		return ""
 	}
 	var lines []string
@@ -785,7 +804,13 @@ func (s *Scene) fusedDescription(st domain.Stack) string {
 			}
 		}
 	}
-	if st.FusedSoul != 0 {
+	lines = append(lines, s.spiritAppearanceTooltipLines(st)...)
+	if !st.FusedSpirit.Empty() {
+		if spirit, ok := domain.SpiritDefinitionForKind(st.FusedSpirit.State.Kind); ok {
+			lines = append(lines, qualityColoredLine(4, "变装: "+spirit.Name))
+			lines = append(lines, s.spiritInstanceTooltipLines(st.FusedSpirit.Item, st.FusedSpirit.State)...)
+		}
+	} else if st.FusedSoul != 0 {
 		def, ok := s.itemDef(st.FusedSoul)
 		if ok && def.EquipmentSoul != nil {
 			lines = append(lines, qualityColoredLine(4, "变装: "+def.Name))
@@ -1055,4 +1080,57 @@ func checkedAdd64(a, b int64) (int64, bool) {
 		return 0, false
 	}
 	return a + b, true
+}
+
+func spiritStateTooltipLines(state domain.SpiritState) []string {
+	if state.Validate() != nil {
+		return nil
+	}
+	if state.AttrCount == 0 {
+		return []string{"尚未解封"}
+	}
+	lines := []string{fmt.Sprintf("加工等级: %d", state.Level())}
+	levels, perfect := state.Levels(), state.PerfectLevels()
+	for i, a := range state.Affixes() {
+		lines = append(lines, qualityColoredLine(4, affixText(a))+
+			fmt.Sprintf("（加工 %d，完美 %d）", levels[i], perfect[i]))
+	}
+	return lines
+}
+
+func (s *Scene) spiritAppearanceTooltipLines(st domain.Stack) []string {
+	appearance, ok := domain.SpiritAppearanceForItem(st.SpiritAppearance)
+	if !ok {
+		return nil
+	}
+	name := ""
+	if def, ok := s.itemDef(appearance.BonusItemID); ok {
+		name = def.Name
+	}
+	if name == "" {
+		if def, ok := s.itemDef(appearance.ItemID); ok {
+			name = def.Name
+		}
+	}
+	lines := []string{qualityColoredLine(4, "变装: "+name)}
+	for _, a := range appearance.Extra {
+		lines = append(lines, qualityColoredLine(4, affixText(a)))
+	}
+	return lines
+}
+
+func (s *Scene) spiritInstanceTooltipLines(item domain.ItemID, state domain.SpiritState) []string {
+	if !state.LegacyFixed {
+		return spiritStateTooltipLines(state)
+	}
+	if state.Validate() != nil {
+		return nil
+	}
+	var lines []string
+	if def, ok := s.itemDef(item); ok && def.EquipmentSoul != nil {
+		for _, a := range def.EquipmentSoul.Affixes {
+			lines = append(lines, qualityColoredLine(4, affixText(a)))
+		}
+	}
+	return lines
 }

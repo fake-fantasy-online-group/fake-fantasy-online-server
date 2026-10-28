@@ -6,7 +6,7 @@ import (
 )
 
 // Read the activated native card rows, not a second table of hard-coded bonuses.
-func (s *Scene) classSetCardCombat(p *entity.Entity) (out domain.SuitCombatBonuses) {
+func (s *Scene) classSetCardCombatPayload(p *entity.Entity) (out domain.SuitCombatBonuses) {
 	if p == nil || p.Player == nil || p.Player.Char == nil {
 		return
 	}
@@ -112,4 +112,10 @@ func scaleClassSetTrapStatus(d *domain.StatusDef, bp int32) {
 		d.HPChanges = append(d.HPChanges, domain.ResourceChange{Value: -clampI32(whole)})
 	}
 	d.PeriodicDamageFraction100 = fraction % 100
+}
+
+func (s *Scene) classSetCardCombat(p *entity.Entity) domain.SuitCombatBonuses {
+	out := domain.SuitCombatBonuses{}
+	s.dispatchEquipmentEffect(p, domain.RuntimeBuiltinEquipmentEffect("set:card-bonuses", false), func() { out = s.classSetCardCombatPayload(p) })
+	return out
 }

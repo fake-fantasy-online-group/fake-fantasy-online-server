@@ -149,7 +149,7 @@ func universalExtendedTarget(c *legendaryContext, d *domain.SkillDef) {
 	legendaryAddTargetDamage(d, bp)
 }
 func universalExtendedIncoming(c *legendaryContext, n int32) int32 {
-	if c.Owner == nil || c.Target == nil || c.Owner.ID == c.Target.ID || sameParty(c.Owner, c.Target) || c.Blow.Origin == domain.DamageDOTOrigin {
+	if c.Owner == nil || c.Target == nil || c.Owner.ID == c.Target.ID || sameParty(c.Owner, c.Target) {
 		return n
 	}
 	var bp int32

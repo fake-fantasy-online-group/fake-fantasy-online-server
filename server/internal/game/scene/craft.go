@@ -17,7 +17,13 @@ func (s *Scene) onOpenFurnace(cmd OpenFurnace) {
 
 func (s *Scene) craftRecipeSnapshot(p *entity.Entity, makeType uint8) event.CraftRecipeSnapshot {
 	snap := event.CraftRecipeSnapshot{Who: p.ID, MakeType: makeType}
+	seen := map[domain.ItemID]bool{}
 	for _, recipe := range s.crafts.Recipes(makeType) {
+		// Native requests carry the product, not a recipe ID. Match execution
+		// ordering and expose only its first affordable route per product.
+		if seen[recipe.Product] {
+			continue
+		}
 		// 客户端会为每条配方同步构建完整行与材料提示。一次下发数千条会
 		// 卡死界面；只发送当前技能、熟练度、金钱、材料和背包都已满足，
 		// 此刻确实可以执行的配方。
@@ -41,6 +47,7 @@ func (s *Scene) craftRecipeSnapshot(p *entity.Entity, makeType uint8) event.Craf
 				Have: p.Player.Bag.UsableCountOf(material.Item), Name: def.Name,
 			})
 		}
+		seen[recipe.Product] = true
 		view.CanMake = true
 		snap.Recipes = append(snap.Recipes, view)
 	}

@@ -15,6 +15,9 @@ type NativeDamageSnapshot struct {
 }
 
 type Blow struct {
+	PrimaryTarget domain.EntityID
+	// Server-only immutable causal ancestry; never serialized onto the damage wire.
+	EffectCausalPath              []string
 	NativeDamageSnapshot          *NativeDamageSnapshot
 	CritChanceBonusBP             int32
 	FixedDefensePenetrationBP     int32

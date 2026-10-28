@@ -24,8 +24,14 @@ func TestLegendarySourceReuseNativeTriplePlacement(t *testing.T) {
 		t.Fatalf("native triple placement produced %d traps", len(s.traps))
 	}
 	for _, trap := range s.traps {
-		if trap.Trap.SourceOffense != accepted || trap.Trap.SourceOffense.ChildPreparation != accepted.ChildPreparation {
-			t.Fatal("root/side trap did not reuse the accepted immutable source")
+		if trap.Trap.SourceOffense.ChildPreparation != accepted.ChildPreparation {
+			t.Fatal("root/side trap did not reuse the accepted immutable preparation")
+		}
+		if trap.Trap.LegendaryChildPlacement && len(trap.Trap.SourceOffense.CombatCausalPath) == 0 {
+			t.Fatal("generated side trap lost producer ancestry")
+		}
+		if !trap.Trap.LegendaryChildPlacement && trap.Trap.SourceOffense != accepted {
+			t.Fatal("native root trap discarded accepted source")
 		}
 		if trap.Trap.SourceOffense.ChildPreparation.Hard[10213] != 1 || trap.Trap.AttackStats != accepted.Stats {
 			t.Fatal("live source update changed an accepted trap")
@@ -37,8 +43,8 @@ func TestLegendarySourceReuseNativeTriplePlacement(t *testing.T) {
 	// A placement without an accepted source still captures a new, independent
 	// source. Nil in the optional slot has the same fallback meaning.
 	s.placeAssassinTrap(p, def, m.Pos, 100, 100, false, nil)
-	if len(s.traps) != 1 {
-		t.Fatal("fresh placement missing")
+	if len(s.traps) != 3 {
+		t.Fatal("fresh placement should also receive equipped triple placement")
 	}
 	for _, trap := range s.traps {
 		fresh := trap.Trap.SourceOffense

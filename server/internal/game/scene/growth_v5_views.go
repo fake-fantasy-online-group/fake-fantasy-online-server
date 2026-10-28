@@ -120,7 +120,7 @@ func (s *Scene) equipmentV5Lines(effects []domain.EquipmentEffect, bonuses []dom
 			}
 		case "skill_variant":
 			if v, ok := s.endgameCatalog.Variant(e.VariantID); ok {
-				text = "已学技能形态·" + v.Name + "：" + v.Description + "（同技能主形态不叠加；需新版客户端）"
+				text = "已学技能形态·" + v.Name + "：" + v.Description
 			}
 		case "aura":
 			if e.Aura != nil {

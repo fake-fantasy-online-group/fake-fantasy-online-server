@@ -121,7 +121,7 @@ func TestLegendarySwordsmanRestoreActualHitsAndNonRecursive(t *testing.T) {
 	finish := s.beginEquipmentRoot(p.ID, m.ID, domain.EquipmentCombatStats{})
 	r := s.equipmentState().root
 	r.def = swordDualDef(10104)
-	// Duplicate hits of one enemy and child damage cannot raise native restoration.
+	// Duplicate hits of one enemy count once; an admitted child hitting another enemy contributes independently.
 	r.hits = []equipmentHit{{src: p.ID, dst: m.ID, blow: combat.Blow{SkillID: 10104}}, {src: p.ID, dst: m.ID, blow: combat.Blow{SkillID: 10104}}, {src: p.ID, dst: other.ID, blow: combat.Blow{SkillID: 10104, ProcDepth: 1}}}
 	if !s.queueLegendarySwordRestore(p, p, r.def, 20, false) {
 		t.Fatal("not queued")
@@ -129,8 +129,8 @@ func TestLegendarySwordsmanRestoreActualHitsAndNonRecursive(t *testing.T) {
 	s.queueLegendarySwordRestore(p, p, r.def, 999, false)
 	s.flushLegendarySwordRestore()
 	s.flushLegendarySwordRestore()
-	if p.HP != 9030 {
-		t.Fatal("repeat or proc amplified native heal", p.HP)
+	if p.HP != 9040 {
+		t.Fatal("distinct target restoration or duplicate flush incorrect", p.HP)
 	}
 	finish()
 	s.legendaryState().depth = 1

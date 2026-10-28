@@ -27,7 +27,7 @@ func init() {
 		}
 	}})
 	registerLegendarySynergyHandler("JK-U05", legendaryHandler{CastReleased: func(c *legendaryContext) {
-		if c.Skill == 10103 && warriorFunctionalLearned(c, 10103) && !c.IsChild && c.Blow.ProcDepth == 0 {
+		if c.Skill == 10103 && warriorFunctionalLearned(c, 10103) {
 			warriorFunctionalRelease(10103, int64(c.RollValue("duration_ms", 8000)), false)(c)
 			swordCleanse(c, false)
 		}

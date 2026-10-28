@@ -1,0 +1,1129 @@
+{
+  "scope": "ZS/JK actual runtime test partition",
+  "catalogEffects": 100,
+  "effectsWithExecutedNamedBehaviorCase": 100,
+  "passingTestNodes": 890,
+  "effectPresenceIsNotStatementCoverage": true,
+  "statementCoverage": {
+    "covered": 1102,
+    "total": 1210,
+    "percent": 91.07,
+    "files": {
+      "legendary_melee.go": {
+        "covered": 12,
+        "total": 12
+      },
+      "legendary_melee_area.go": {
+        "covered": 82,
+        "total": 92
+      },
+      "legendary_melee_defense.go": {
+        "covered": 10,
+        "total": 15
+      },
+      "legendary_melee_healing.go": {
+        "covered": 5,
+        "total": 5
+      },
+      "legendary_melee_movement.go": {
+        "covered": 1,
+        "total": 1
+      },
+      "legendary_melee_resource.go": {
+        "covered": 4,
+        "total": 5
+      },
+      "legendary_melee_skill.go": {
+        "covered": 9,
+        "total": 9
+      },
+      "legendary_melee_targeting.go": {
+        "covered": 27,
+        "total": 30
+      },
+      "legendary_melee_triggers.go": {
+        "covered": 0,
+        "total": 0
+      },
+      "legendary_melee_visuals.go": {
+        "covered": 30,
+        "total": 32
+      },
+      "legendary_swordsman_defaults.go": {
+        "covered": 131,
+        "total": 148
+      },
+      "legendary_swordsman_immediate.go": {
+        "covered": 52,
+        "total": 59
+      },
+      "legendary_swordsman_keep.go": {
+        "covered": 39,
+        "total": 40
+      },
+      "legendary_swordsman_restore.go": {
+        "covered": 34,
+        "total": 35
+      },
+      "legendary_swordsman_synergy.go": {
+        "covered": 119,
+        "total": 141
+      },
+      "legendary_warrior.go": {
+        "covered": 97,
+        "total": 99
+      },
+      "legendary_warrior_area.go": {
+        "covered": 89,
+        "total": 96
+      },
+      "legendary_warrior_functional.go": {
+        "covered": 29,
+        "total": 31
+      },
+      "legendary_warrior_guard.go": {
+        "covered": 113,
+        "total": 120
+      },
+      "legendary_warrior_remaining.go": {
+        "covered": 71,
+        "total": 77
+      },
+      "legendary_warrior_snapshot.go": {
+        "covered": 50,
+        "total": 59
+      },
+      "legendary_warrior_synergy.go": {
+        "covered": 98,
+        "total": 104
+      }
+    }
+  },
+  "effects": [
+    {
+      "powerId": "JK-A01",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A01/10102",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A01",
+        "TestLegendarySwordsmanSoloNativePreservation/JK-A01",
+        "TestLegendarySwordsmanImmediateAttackDefaults/JK-A01"
+      ]
+    },
+    {
+      "powerId": "JK-A02",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A02/10117",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A02",
+        "TestLegendarySwordsmanSoloTargetCaps/JK-A02",
+        "TestLegendarySwordsmanExplicitKeeps/JK-A02"
+      ]
+    },
+    {
+      "powerId": "JK-A03",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A03/10102",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A03",
+        "TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce/JK-A03",
+        "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A03",
+        "TestLegendarySwordsmanImmediateAttackDefaults/JK-A03"
+      ]
+    },
+    {
+      "powerId": "JK-A04",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeSwordAreaActualVisuals/JK-A04",
+        "TestLegendarySwordsmanSoloTargetCaps/JK-A04",
+        "TestLegendarySwordsmanSoloSpecialCoverage/JK-A04",
+        "TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce/JK-A04",
+        "TestLegendarySwordsmanExplicitKeeps/JK-A04"
+      ]
+    },
+    {
+      "powerId": "JK-A05",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A05/10111",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A05",
+        "TestLegendarySwordsmanSoloControlCoverage/JK-A05",
+        "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A05"
+      ]
+    },
+    {
+      "powerId": "JK-A06",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRevisedImmediateStages/JK-A06",
+        "TestLegendarySwordsmanSoloControlCoverage/JK-A06",
+        "TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce/JK-A06"
+      ]
+    },
+    {
+      "powerId": "JK-A07",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanOwnPureModifierInsideProducerLineage/JK-A07",
+        "TestLegendaryMeleeActualImpactVisuals/JK-A07",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A07/10103",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A07",
+        "TestLegendarySwordsmanSoloSpecialCoverage/JK-A07",
+        "TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce/JK-A07",
+        "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A07",
+        "TestLegendarySwordsmanExplicitKeeps/JK-A07"
+      ]
+    },
+    {
+      "powerId": "JK-A08",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeSwordAreaActualVisuals/JK-A08",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A08/10103",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A08",
+        "TestLegendarySwordsmanSoloTargetCaps/JK-A08",
+        "TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce/JK-A08",
+        "TestLegendarySwordsmanExplicitKeeps/JK-A08"
+      ]
+    },
+    {
+      "powerId": "JK-A09",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A09/10104",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A09/10119",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A09",
+        "TestLegendarySwordsmanSoloTargetCaps/JK-A09",
+        "TestLegendaryMeleeFunctionalUnlimitedAreaCandidates/JK-A09"
+      ]
+    },
+    {
+      "powerId": "JK-A10",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A10"
+      ]
+    },
+    {
+      "powerId": "JK-A11",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A11"
+      ]
+    },
+    {
+      "powerId": "JK-A12",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRevisedImmediateStages/JK-A12",
+        "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-A12",
+        "TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce/JK-A12"
+      ]
+    },
+    {
+      "powerId": "JK-A13",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeNoObsoleteMarksOrGround/JK-A13",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A13/10113",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A13",
+        "TestLegendarySwordsmanSoloControlCoverage/JK-A13",
+        "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A13"
+      ]
+    },
+    {
+      "powerId": "JK-A14",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A14/10113",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A14",
+        "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A14"
+      ]
+    },
+    {
+      "powerId": "JK-A15",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A15/10121",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A15",
+        "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A15",
+        "TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce/JK-A15"
+      ]
+    },
+    {
+      "powerId": "JK-A16",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeNoObsoleteMarksOrGround/JK-A16",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A16/10121",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A16",
+        "TestLegendarySwordsmanSoloSettledAndPullBoundaries/JK-A16",
+        "TestLegendarySwordsmanSoloPullCap/JK-A16"
+      ]
+    },
+    {
+      "powerId": "JK-A17",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeNoObsoleteMarksOrGround/JK-A17",
+        "TestLegendarySwordsmanSoloSpecialCoverage/JK-A17"
+      ]
+    },
+    {
+      "powerId": "JK-A18",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeAdditionalUnequippedControls/JK-A18",
+        "TestLegendarySwordsmanSoloControlCoverage/JK-A18",
+        "TestLegendarySwordsmanSoloNativePreservation/JK-A18"
+      ]
+    },
+    {
+      "powerId": "JK-A19",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeSwordAreaActualVisuals/JK-A19",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A19/10102",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A19/10122",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A19",
+        "TestLegendarySwordsmanSoloTargetCaps/JK-A19",
+        "TestLegendarySwordsmanSoloSpecialCoverage/JK-A19",
+        "TestLegendarySwordsmanSoloNativePreservation/JK-A19",
+        "TestLegendarySwordsmanImmediateAttackDefaults/JK-A19"
+      ]
+    },
+    {
+      "powerId": "JK-A20",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeAdditionalUnequippedControls/JK-A20",
+        "TestLegendaryMeleeSwordAreaActualVisuals/JK-A20",
+        "TestLegendarySwordsmanSoloTargetCaps/JK-A20",
+        "TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce/JK-A20"
+      ]
+    },
+    {
+      "powerId": "JK-A21",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeNoObsoleteMarksOrGround/JK-A21",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A21/10116",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A21",
+        "TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce/JK-A21",
+        "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A21",
+        "TestLegendarySwordsmanImmediateAttackDefaults/JK-A21"
+      ]
+    },
+    {
+      "powerId": "JK-A22",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanOwnPureModifierInsideProducerLineage/JK-A22",
+        "TestLegendaryMeleeSwordAreaActualVisuals/JK-A22",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A22/10123",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A22",
+        "TestLegendarySwordsmanSoloTargetCaps/JK-A22",
+        "TestLegendarySwordsmanSoloNativePreservation/JK-A22",
+        "TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce/JK-A22",
+        "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A22",
+        "TestLegendarySwordsmanExplicitKeeps/JK-A22"
+      ]
+    },
+    {
+      "powerId": "JK-A23",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeSwordAreaActualVisuals/JK-A23",
+        "TestLegendarySwordsmanSoloTargetCaps/JK-A23",
+        "TestLegendarySwordsmanSoloSpecialCoverage/JK-A23",
+        "TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce/JK-A23",
+        "TestLegendarySwordsmanExplicitKeeps/JK-A23"
+      ]
+    },
+    {
+      "powerId": "JK-A24",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A24/10126",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A24",
+        "TestLegendarySwordsmanSoloControlCoverage/JK-A24",
+        "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A24"
+      ]
+    },
+    {
+      "powerId": "JK-A25",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRevisedImmediateStages/JK-A25",
+        "TestLegendarySwordsmanSoloSpecialCoverage/JK-A25"
+      ]
+    },
+    {
+      "powerId": "JK-A26",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A26/10102",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A26/10117",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A26/10104",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A26/10119",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A26",
+        "TestLegendarySwordsmanSoloNativePreservation/JK-A26",
+        "TestLegendarySwordsmanImmediateAttackDefaults/JK-A26"
+      ]
+    },
+    {
+      "powerId": "JK-A27",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeSwordAreaActualVisuals/JK-A27",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A27/10102",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A27/10103",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A27/10121",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A27",
+        "TestLegendarySwordsmanSoloTargetCaps/JK-A27",
+        "TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce/JK-A27",
+        "TestLegendarySwordsmanImmediateAttackDefaults/JK-A27"
+      ]
+    },
+    {
+      "powerId": "JK-A28",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeActualImpactVisuals/JK-A28",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A28/10104",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A28/10119",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A28",
+        "TestLegendarySwordsmanCoverageGeneratedHitsLeechOnce/JK-A28",
+        "TestLegendarySwordsmanSoloExactPayloadClauses/JK-A28",
+        "TestLegendarySwordsmanImmediateAttackDefaults/JK-A28"
+      ]
+    },
+    {
+      "powerId": "JK-A29",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloSpecialCoverage/JK-A29"
+      ]
+    },
+    {
+      "powerId": "JK-A30",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A30/10116",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A30/10123",
+        "TestLegendarySwordsmanSoloDamageCoverage/JK-A30",
+        "TestLegendarySwordsmanSoloNativePreservation/JK-A30",
+        "TestLegendarySwordsmanImmediateAttackDefaults/JK-A30"
+      ]
+    },
+    {
+      "powerId": "JK-D01",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeCastCuesAndShields/JK-D01",
+        "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D01",
+        "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D01",
+        "TestLegendarySwordsmanPermanentShieldUnequip/JK-D01"
+      ]
+    },
+    {
+      "powerId": "JK-D02",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/equipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/unequipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/dot",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/condition-false",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02/magic",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D02"
+      ]
+    },
+    {
+      "powerId": "JK-D03",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D03",
+        "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D03",
+        "TestLegendarySwordsmanPermanentShieldUnequip/JK-D03"
+      ]
+    },
+    {
+      "powerId": "JK-D04",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/equipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/unequipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/dot",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/condition-false",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04/magic",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D04"
+      ]
+    },
+    {
+      "powerId": "JK-D05",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/equipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/unequipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/dot",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/condition-false",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05/magic",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D05"
+      ]
+    },
+    {
+      "powerId": "JK-D06",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/equipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/unequipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/dot",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/condition-false",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06/magic",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D06",
+        "TestLegendarySwordsmanSoloNativePreservation/JK-D06",
+        "TestLegendaryMeleeFunctionalDefenseWindows/JK-D06"
+      ]
+    },
+    {
+      "powerId": "JK-D07",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/equipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/unequipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/dot",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/condition-false",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07/magic",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D07",
+        "TestLegendaryMeleeFunctionalDefenseWindows/JK-D07"
+      ]
+    },
+    {
+      "powerId": "JK-D08",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeCastCuesAndShields/JK-D08",
+        "TestLegendarySwordsmanSoloRestoreAndShieldCoverage/JK-D08",
+        "TestLegendarySwordsmanSoloShieldRefreshEdges/JK-D08",
+        "TestLegendarySwordsmanPermanentShieldUnequip/JK-D08"
+      ]
+    },
+    {
+      "powerId": "JK-D09",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/equipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/unequipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/dot",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/condition-false",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09/magic",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D09",
+        "TestLegendarySwordsmanSoloNativePreservation/JK-D09"
+      ]
+    },
+    {
+      "powerId": "JK-D10",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/equipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/unequipped",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/dot",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/condition-false",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10/magic",
+        "TestLegendarySwordsmanSoloIncomingCoverage/JK-D10"
+      ]
+    },
+    {
+      "powerId": "JK-U01",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U01",
+        "TestLegendarySwordsmanSoloMovementOutput/JK-U01",
+        "TestLegendaryMeleeFunctionalMovementWindows/JK-U01"
+      ]
+    },
+    {
+      "powerId": "JK-U02",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U02"
+      ]
+    },
+    {
+      "powerId": "JK-U03",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U03"
+      ]
+    },
+    {
+      "powerId": "JK-U04",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/JK-U04",
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U04"
+      ]
+    },
+    {
+      "powerId": "JK-U05",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U05"
+      ]
+    },
+    {
+      "powerId": "JK-U06",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanFreeBindConsumesNoMana/JK-U06",
+        "TestLegendaryMeleeFunctionalManaAndSlow/JK-U06/equipped",
+        "TestLegendaryMeleeFunctionalManaAndSlow/JK-U06/unequipped",
+        "TestLegendaryMeleeFunctionalManaAndSlow/JK-U06/wrong-skill",
+        "TestLegendaryMeleeFunctionalManaAndSlow/JK-U06"
+      ]
+    },
+    {
+      "powerId": "JK-U07",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U07"
+      ]
+    },
+    {
+      "powerId": "JK-U08",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/lifecycle-1009-1",
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/lifecycle-10111-1",
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/lifecycle-1034-41",
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1002-existing-false",
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1002-existing-true",
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1004-existing-false",
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1004-existing-true",
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1005-existing-false",
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-1005-existing-true",
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-81020-existing-false",
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08/mixed-81020-existing-true",
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U08"
+      ]
+    },
+    {
+      "powerId": "JK-U09",
+      "passingBehaviorTests": [
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U09"
+      ]
+    },
+    {
+      "powerId": "JK-U10",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeNoObsoleteMarksOrGround/JK-U10",
+        "TestLegendarySwordsmanSoloUtilityCoverage/JK-U10"
+      ]
+    },
+    {
+      "powerId": "ZS-A01",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-A01",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A01",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A01/10002",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A01"
+      ]
+    },
+    {
+      "powerId": "ZS-A02",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeActualImpactVisuals/ZS-A02",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A02/10002",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A02",
+        "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A02",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A02",
+        "TestLegendaryMeleeFunctionalUnlimitedAreaCandidates/ZS-A02"
+      ]
+    },
+    {
+      "powerId": "ZS-A03",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorSoloSpecialCoverage/ZS-A03"
+      ]
+    },
+    {
+      "powerId": "ZS-A04",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-A04",
+        "TestLegendaryMeleeCastCuesAndShields/ZS-A04",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A04",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A04/10005",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A04",
+        "TestLegendaryWarriorSoloGeometryConsumers/ZS-A04/10005"
+      ]
+    },
+    {
+      "powerId": "ZS-A05",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-A05",
+        "TestLegendaryMeleeActualImpactVisuals/ZS-A05",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A05",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A05/10005",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A05",
+        "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A05"
+      ]
+    },
+    {
+      "powerId": "ZS-A06",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeActualImpactVisuals/ZS-A06",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A06",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A06/10005",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A06",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A06"
+      ]
+    },
+    {
+      "powerId": "ZS-A07",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/0",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/1",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/2",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A07/10005/3",
+        "TestLegendaryMeleeRollActualModifiers/ZS-A07",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A07",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A07/10005",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A07/10009",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A07",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/unlearned",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/skill-immune",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/status-immune",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A07/miss",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A07"
+      ]
+    },
+    {
+      "powerId": "ZS-A08",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorSoloSpecialCoverage/ZS-A08",
+        "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/1",
+        "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/5",
+        "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08/20",
+        "TestLegendaryWarriorSoloArmorCapCoverage/ZS-A08",
+        "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/authored-below-minus100",
+        "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/absolute-unmodified-scaling",
+        "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/positive-defense-unchanged",
+        "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08/other-attribute-unchanged",
+        "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-A08"
+      ]
+    },
+    {
+      "powerId": "ZS-A09",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A09",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A09/10013",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A09",
+        "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A09"
+      ]
+    },
+    {
+      "powerId": "ZS-A10",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeNoObsoleteMarksOrGround/ZS-A10",
+        "TestLegendaryWarriorSoloDrainConsumers/ZS-A10"
+      ]
+    },
+    {
+      "powerId": "ZS-A11",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-A11",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A11",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A11/10017",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A11"
+      ]
+    },
+    {
+      "powerId": "ZS-A12",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A12",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A12/10017",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A12",
+        "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A12"
+      ]
+    },
+    {
+      "powerId": "ZS-A13",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-A13",
+        "TestLegendaryMeleeActualImpactVisuals/ZS-A13",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A13",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A13/10006",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A13",
+        "TestLegendaryWarriorSoloGeometryConsumers/ZS-A13/10006",
+        "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A13"
+      ]
+    },
+    {
+      "powerId": "ZS-A14",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/same-roll-defense",
+        "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/empty-cast",
+        "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/accepted-source",
+        "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14/overlap-lifetime",
+        "TestLegendaryWarriorSoloSpecialCoverage/ZS-A14"
+      ]
+    },
+    {
+      "powerId": "ZS-A15",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-A15",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A15",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A15/10006",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A15",
+        "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A15"
+      ]
+    },
+    {
+      "powerId": "ZS-A16",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeActualImpactVisuals/ZS-A16",
+        "TestLegendaryMeleeCastCuesAndShields/ZS-A16",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A16",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A16/10003",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A16",
+        "TestLegendaryWarriorSoloGeometryConsumers/ZS-A16/10003",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A16"
+      ]
+    },
+    {
+      "powerId": "ZS-A17",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-A17",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A17",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A17/10003",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A17",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A17"
+      ]
+    },
+    {
+      "powerId": "ZS-A18",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeActualImpactVisuals/ZS-A18",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A18",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A18/10021",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A18/10015",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A18",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A18"
+      ]
+    },
+    {
+      "powerId": "ZS-A19",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-A19",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A19",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A19/10021",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A19",
+        "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-A19"
+      ]
+    },
+    {
+      "powerId": "ZS-A20",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A20",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A20/10015",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A20",
+        "TestLegendaryWarriorSoloGeometryConsumers/ZS-A20/10015",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A20"
+      ]
+    },
+    {
+      "powerId": "ZS-A21",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A21",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A21/10015",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A21",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A21"
+      ]
+    },
+    {
+      "powerId": "ZS-A22",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-A22",
+        "TestLegendaryMeleeActualImpactVisuals/ZS-A22",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A22",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A22/10022",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A22",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A22"
+      ]
+    },
+    {
+      "powerId": "ZS-A23",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeActualImpactVisuals/ZS-A23",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A23",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A23/10022",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A23",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A23"
+      ]
+    },
+    {
+      "powerId": "ZS-A24",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-A24",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A24",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A24/10023",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A24",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A24"
+      ]
+    },
+    {
+      "powerId": "ZS-A25",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/0",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/1",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/2",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10022/3",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/0",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/1",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/2",
+        "TestLegendaryWarriorAuditArmorBeforeNativeHit/ZS-A25/10023/3",
+        "TestLegendaryMeleeRollActualModifiers/ZS-A25",
+        "TestLegendaryMeleeNoObsoleteMarksOrGround/ZS-A25",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A25",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A25/10023",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A25/10022",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A25"
+      ]
+    },
+    {
+      "powerId": "ZS-A26",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorSoloSpecialCoverage/ZS-A26"
+      ]
+    },
+    {
+      "powerId": "ZS-A27",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-A27",
+        "TestLegendaryMeleeNoObsoleteMarksOrGround/ZS-A27",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A27",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A27/10027",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A27/10009",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A27",
+        "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-A27"
+      ]
+    },
+    {
+      "powerId": "ZS-A28",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeNoObsoleteMarksOrGround/ZS-A28",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A28",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10002",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10005",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10013",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10017",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10006",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10003",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10021",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10015",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10022",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10023",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A28/10027",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A28",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A28"
+      ]
+    },
+    {
+      "powerId": "ZS-A29",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A29",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10002",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10005",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10013",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10017",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10006",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10003",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10021",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10015",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10022",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10023",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A29/10027",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A29",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A29"
+      ]
+    },
+    {
+      "powerId": "ZS-A30",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-A30",
+        "TestLegendaryWarriorDirectDamageContracts/ZS-A30",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A30/10017",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A30/10002",
+        "TestLegendaryWarriorSoloDamageCoverage/ZS-A30",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-A30",
+        "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-A30"
+      ]
+    },
+    {
+      "powerId": "ZS-D01",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeCastCuesAndShields/ZS-D01",
+        "TestLegendaryWarriorShieldRefillsAndSlowImmunity/ZS-D01",
+        "TestLegendaryWarriorSoloSpecialCoverage/ZS-D01"
+      ]
+    },
+    {
+      "powerId": "ZS-D02",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorIncomingContracts/ZS-D02",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/equipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/unequipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/dot",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02/condition-false",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D02",
+        "TestLegendaryWarriorSoloRemainingClauses/ZS-D02",
+        "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/1",
+        "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/5",
+        "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02/20",
+        "TestLegendaryWarriorSoloArmorCapCoverage/ZS-D02",
+        "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/authored-below-minus100",
+        "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/absolute-unmodified-scaling",
+        "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/positive-defense-unchanged",
+        "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02/other-attribute-unchanged",
+        "TestLegendaryWarriorSoloArmorCapBoundaries/ZS-D02"
+      ]
+    },
+    {
+      "powerId": "ZS-D03",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/equipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/unequipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/dot",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03/condition-false",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D03"
+      ]
+    },
+    {
+      "powerId": "ZS-D04",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorIncomingContracts/ZS-D04",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04/equipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04/unequipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04/dot",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04/condition-false",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D04",
+        "TestLegendaryWarriorSoloDrainConsumers/ZS-D04"
+      ]
+    },
+    {
+      "powerId": "ZS-D05",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorIncomingContracts/ZS-D05",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05/equipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05/unequipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05/dot",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05/condition-false",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D05"
+      ]
+    },
+    {
+      "powerId": "ZS-D06",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorIncomingContracts/ZS-D06",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06/equipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06/unequipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06/dot",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06/condition-false",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D06"
+      ]
+    },
+    {
+      "powerId": "ZS-D07",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorIncomingContracts/ZS-D07",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07/equipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07/unequipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07/dot",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07/condition-false",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D07"
+      ]
+    },
+    {
+      "powerId": "ZS-D08",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorIncomingContracts/ZS-D08",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08/equipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08/unequipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08/dot",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08/condition-false",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D08",
+        "TestLegendaryWarriorSoloGeometryConsumers/ZS-D08/10022"
+      ]
+    },
+    {
+      "powerId": "ZS-D09",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeCastCuesAndShields/ZS-D09",
+        "TestLegendaryWarriorShieldRefillsAndSlowImmunity/ZS-D09",
+        "TestLegendaryWarriorSoloSpecialCoverage/ZS-D09",
+        "TestLegendaryWarriorSoloNativeEdgeCoverage/ZS-D09"
+      ]
+    },
+    {
+      "powerId": "ZS-D10",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorIncomingContracts/ZS-D10",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/equipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/unequipped",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/dot",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10/condition-false",
+        "TestLegendaryWarriorSoloIncomingCoverage/ZS-D10",
+        "TestLegendaryWarriorSoloSpecialCoverage/ZS-D10"
+      ]
+    },
+    {
+      "powerId": "ZS-U01",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorResourceAndGeometryContracts/ZS-U01",
+        "TestLegendaryWarriorSoloResourceConsumers/ZS-U01/10002",
+        "TestLegendaryMeleeFunctionalManaAndSlow/ZS-U01/equipped",
+        "TestLegendaryMeleeFunctionalManaAndSlow/ZS-U01/unequipped",
+        "TestLegendaryMeleeFunctionalManaAndSlow/ZS-U01/wrong-skill",
+        "TestLegendaryMeleeFunctionalManaAndSlow/ZS-U01"
+      ]
+    },
+    {
+      "powerId": "ZS-U02",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-U02",
+        "TestLegendaryWarriorResourceAndGeometryContracts/ZS-U02",
+        "TestLegendaryWarriorSoloResourceConsumers/ZS-U02/10013",
+        "TestLegendaryWarriorSoloDrainConsumers/ZS-U02"
+      ]
+    },
+    {
+      "powerId": "ZS-U03",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorResourceAndGeometryContracts/ZS-U03",
+        "TestLegendaryWarriorSoloRangeAndTimingConsumers/ZS-U03",
+        "TestLegendaryWarriorSoloMovementOutput/ZS-U03",
+        "TestLegendaryMeleeFunctionalMovementWindows/ZS-U03"
+      ]
+    },
+    {
+      "powerId": "ZS-U04",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeCastCuesAndShields/ZS-U04",
+        "TestLegendaryWarriorResourceAndGeometryContracts/ZS-U04",
+        "TestLegendaryWarriorSoloResourceConsumers/ZS-U04/10028",
+        "TestLegendaryWarriorSoloGeometryConsumers/ZS-U04/10028",
+        "TestLegendaryWarriorSoloSpecialCoverage/ZS-U04",
+        "TestLegendaryWarriorSoloMovementOutput/ZS-U04",
+        "TestLegendaryMeleeFunctionalMovementWindows/ZS-U04"
+      ]
+    },
+    {
+      "powerId": "ZS-U05",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-U05",
+        "TestLegendaryWarriorResourceAndGeometryContracts/ZS-U05",
+        "TestLegendaryWarriorSoloResourceConsumers/ZS-U05/10006",
+        "TestLegendaryWarriorSoloGeometryConsumers/ZS-U05/10006",
+        "TestLegendaryWarriorSoloTargetAndStatusCoverage/ZS-U05"
+      ]
+    },
+    {
+      "powerId": "ZS-U06",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorResourceAndGeometryContracts/ZS-U06",
+        "TestLegendaryWarriorSoloResourceConsumers/ZS-U06/10002",
+        "TestLegendaryWarriorSoloResourceConsumers/ZS-U06/10005",
+        "TestLegendaryWarriorSoloResourceConsumers/ZS-U06/10023"
+      ]
+    },
+    {
+      "powerId": "ZS-U07",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorSoloRangeAndTimingConsumers/ZS-U07"
+      ]
+    },
+    {
+      "powerId": "ZS-U08",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-U08",
+        "TestLegendaryMeleeCastCuesAndShields/ZS-U08",
+        "TestLegendaryWarriorResourceAndGeometryContracts/ZS-U08",
+        "TestLegendaryWarriorSoloResourceConsumers/ZS-U08/10005",
+        "TestLegendaryWarriorSoloResourceConsumers/ZS-U08/10028",
+        "TestLegendaryWarriorSoloGeometryConsumers/ZS-U08/10005",
+        "TestLegendaryWarriorSoloGeometryConsumers/ZS-U08/10028"
+      ]
+    },
+    {
+      "powerId": "ZS-U09",
+      "passingBehaviorTests": [
+        "TestLegendaryWarriorResourceAndGeometryContracts/ZS-U09",
+        "TestLegendaryWarriorSoloRangeAndTimingConsumers/ZS-U09"
+      ]
+    },
+    {
+      "powerId": "ZS-U10",
+      "passingBehaviorTests": [
+        "TestLegendaryMeleeRollActualModifiers/ZS-U10",
+        "TestLegendaryMeleeCastCuesAndShields/ZS-U10",
+        "TestLegendaryWarriorResourceAndGeometryContracts/ZS-U10",
+        "TestLegendaryWarriorSoloResourceConsumers/ZS-U10/10028",
+        "TestLegendaryWarriorSoloResourceConsumers/ZS-U10/10023",
+        "TestLegendaryWarriorSoloGeometryConsumers/ZS-U10/10028"
+      ]
+    }
+  ]
+}

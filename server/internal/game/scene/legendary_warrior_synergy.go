@@ -22,12 +22,12 @@ func warriorDrain(c *legendaryContext, d *domain.SkillDef) {
 // Native defense is also evasion. Apply borrowed armor break before the hit
 // formula, not in BeforeDamage after CalculateStrike has already decided miss.
 func (s *Scene) legendaryWarriorBeforeStrike(src, dst *entity.Entity, blow combat.Blow) {
-	if blow.LegendaryChild || blow.LegendaryPayload || blow.Origin != domain.DamageNormalOrigin || blow.ProcDepth != 0 {
+	if blow.Origin != domain.DamageNormalOrigin && blow.Origin != domain.DamageProcOrigin {
 		return
 	}
 	for _, c := range s.legendaryContexts(src, dst, blow, event.DamageDealt{}) {
 		if c.Power.ID == "ZS-A07" && c.Skill == 10005 || c.Power.ID == "ZS-A25" && (c.Skill == 10023 || c.Skill == 10022) {
-			warriorArmor(&c)
+			c.invoke(warriorArmor)
 		}
 	}
 }

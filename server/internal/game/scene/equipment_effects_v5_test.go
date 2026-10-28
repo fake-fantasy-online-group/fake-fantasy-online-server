@@ -82,9 +82,13 @@ func TestEquipmentAbsorbV5ShieldReflectionAndOrigins(t *testing.T) {
 	m := putMonster(s, 900, 1000, domain.Stats{MAtk: 100}, 110, 100)
 	for _, origin := range []domain.DamageOrigin{domain.DamageProcOrigin, domain.DamageAuraOrigin, domain.DamageReflectionOrigin, domain.DamageDOTOrigin, domain.DamageEnvironmentOrigin} {
 		p.HP = 1000
+		p.Player.EquipmentAbsorbRestores = nil // Each origin is an independent quota case.
 		ev, _, _ := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{Magic: true, HurtType: domain.HurtFire, Origin: origin})
-		if ev.Amount != 100 || ev.AbsorbHeal != 0 || p.HP != 900 {
-			t.Fatal(origin, ev)
+		// Element matching and legal ownership, not event origin, determine
+		// absorption. Actual DoT/aura/reflection consumers have separate tests.
+		damage, heal, hp := int32(80), int32(20), int32(940)
+		if ev.Amount != damage || ev.AbsorbHeal != heal || p.HP != hp {
+			t.Fatal(origin, ev, p.HP)
 		}
 	}
 }
@@ -161,8 +165,9 @@ func TestEquipmentProcV5ActualRootFixedRankAndCooldown(t *testing.T) {
 		t.Fatal("reconnect reset cooldown")
 	}
 }
-func TestEquipmentProcV5DeadAndSecondaryNeverTrigger(t *testing.T) {
+func TestEquipmentProcV5DeadAndCausalSecondaryAdmission(t *testing.T) {
 	s := newCombatScene(t)
+	s.skills = skillTable(domain.SkillDef{ID: 10301, Level: 5, Effect: domain.SkillEffect{Kind: domain.EffectHeal, HealFlat: 100}})
 	join(t, s, 1, 100, "甲", 100, 100)
 	p := s.players[1]
 	wearEquipmentV5(t, s, p, 2509, 9100)
@@ -179,8 +184,28 @@ func TestEquipmentProcV5DeadAndSecondaryNeverTrigger(t *testing.T) {
 	done = s.beginEquipmentRoot(m.ID, p.ID, domain.EquipmentCombatStats{})
 	s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true, Origin: domain.DamageProcOrigin, ProcDepth: 1})
 	done()
-	if len(p.Player.Char.EquipmentProcCooldowns) > 0 {
-		t.Fatal("recursive proc")
+	if len(p.Player.Char.EquipmentProcCooldowns) == 0 || p.HP <= 100 {
+		t.Fatal("independent generated hit did not trigger emergency healing", p.HP)
+	}
+	var effectID string
+	for _, a := range s.equipmentEffects(p).effects {
+		if a.Effect.Proc != nil {
+			effectID = a.Effect.Proc.ID
+			break
+		}
+	}
+	if effectID == "" {
+		t.Fatal("fixture missing proc")
+	}
+	p.Player.Char.EquipmentProcCooldowns = nil
+	p.HP = 200
+	restore := s.withCombatCausalPath([]string{s.combatEffectKey(p.ID, "equipment:"+effectID)})
+	done = s.beginEquipmentRoot(m.ID, p.ID, domain.EquipmentCombatStats{})
+	s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true, Origin: domain.DamageProcOrigin, ProcDepth: 1})
+	done()
+	restore()
+	if len(p.Player.Char.EquipmentProcCooldowns) > 0 || p.HP != 100 {
+		t.Fatal("same producer recurred", p.HP)
 	}
 }
 func TestEquipmentAuraV5PartyRangeFallbackAOIAndTeardown(t *testing.T) {

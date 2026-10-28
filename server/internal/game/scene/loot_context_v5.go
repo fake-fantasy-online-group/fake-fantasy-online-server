@@ -21,7 +21,9 @@ func (s *Scene) magicFindV5(p *entity.Entity) int64 {
 	var total int64
 	for _, active := range domain.ActiveEquipmentEffects(worn, s.itemDef, p.Player.Char) {
 		if active.Effect.Kind == "magic_find_pct" {
-			total += int64(active.Effect.Value)
+			s.dispatchEquipmentEffect(p, domain.RuntimeTypedEquipmentEffect(active, false), func() {
+				total += int64(active.Effect.Value)
+			})
 		}
 	}
 	return max(int64(0), total)

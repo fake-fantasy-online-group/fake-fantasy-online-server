@@ -1,8 +1,8 @@
 {
-  "kind": "powerbook.imprint",
+  "kind": "powerbook.extract",
   "requestId": "powerbook-fixture-0002",
   "ok": false,
   "error": "power_locked",
-  "message": "此威能尚未收入威能录",
+  "message": "此威能尚未收录",
   "revision": "1"
 }

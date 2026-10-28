@@ -7,6 +7,9 @@ import (
 )
 
 func validateEndgameItem(st domain.Stack, catalog *domain.EndgameCatalog) error {
+	if err := domain.ValidateSpiritStack(st); err != nil {
+		return err
+	}
 	if err := validateWingPowerItem(st); err != nil {
 		return err
 	}
@@ -14,6 +17,22 @@ func validateEndgameItem(st domain.Stack, catalog *domain.EndgameCatalog) error 
 		return err
 	}
 	v := st.Endgame
+	if st.Item == domain.PowerScrollItemID || v.PowerScrollID != "" || v.PowerScrollRollBP != 0 {
+		if st.Item != domain.PowerScrollItemID || !st.Bound || st.Count != 1 || st.UID <= 0 || v.PowerScrollID == "" || !domain.LegendaryPowerRollValid(v.PowerScrollID, v.PowerScrollRollBP) {
+			return fmt.Errorf("endgame: invalid power scroll uid=%d", st.UID)
+		}
+		if _, ok := domain.LegendaryPower(v.PowerScrollID); !ok {
+			return fmt.Errorf("endgame: unknown scroll power uid=%d", st.UID)
+		}
+		clean := v
+		clean.PowerScrollID = ""
+		clean.PowerScrollRollBP = 0
+		if clean != (domain.EndgameItemState{}) || st.Legendary.PowerID != "" || st.SocketCount != 0 || st.WingPowers != (domain.WingPowers{}) {
+			return fmt.Errorf("endgame: mixed power scroll metadata uid=%d", st.UID)
+		}
+		return nil
+	}
+
 	// A revision belongs to every mutated equipment instance, not only uniques.
 	// Legacy ordinary items without metadata need no overlay row.
 	if v == (domain.EndgameItemState{}) {
@@ -49,6 +68,9 @@ func validateEndgameItem(st domain.Stack, catalog *domain.EndgameCatalog) error 
 	return nil
 }
 func validateEndgameSnapshot(s domain.Snapshot, catalog *domain.EndgameCatalog) error {
+	if err := validateSpiritOwnership(s); err != nil {
+		return err
+	}
 	var err error
 	visit := func(st domain.Stack) {
 		if err == nil {
@@ -77,7 +99,7 @@ func saveEndgameItem(ctx context.Context, q querier, st domain.Stack) error {
 		_, err := q.Exec(ctx, `DELETE FROM equipment_endgame_state WHERE uid=$1`, st.UID)
 		return err
 	}
-	_, err := q.Exec(ctx, `INSERT INTO equipment_endgame_state(uid,revision,unique_id,unique_roll_bp,formation_roll_bp,unique_content_version,formation_content_version,source_level) VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT(uid) DO UPDATE SET revision=EXCLUDED.revision,unique_id=EXCLUDED.unique_id,unique_roll_bp=EXCLUDED.unique_roll_bp,formation_roll_bp=EXCLUDED.formation_roll_bp,unique_content_version=EXCLUDED.unique_content_version,formation_content_version=EXCLUDED.formation_content_version,source_level=EXCLUDED.source_level`, st.UID, st.Endgame.Revision, st.Endgame.UniqueID, st.Endgame.UniqueRollBP, st.Endgame.FormationRollBP, st.Endgame.UniqueContentVersion, st.Endgame.FormationContentVersion, st.Endgame.SourceLevel)
+	_, err := q.Exec(ctx, `INSERT INTO equipment_endgame_state(uid,revision,unique_id,unique_roll_bp,formation_roll_bp,unique_content_version,formation_content_version,source_level,power_scroll_id,power_scroll_roll_bp) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) ON CONFLICT(uid) DO UPDATE SET revision=EXCLUDED.revision,unique_id=EXCLUDED.unique_id,unique_roll_bp=EXCLUDED.unique_roll_bp,formation_roll_bp=EXCLUDED.formation_roll_bp,unique_content_version=EXCLUDED.unique_content_version,formation_content_version=EXCLUDED.formation_content_version,source_level=EXCLUDED.source_level,power_scroll_id=EXCLUDED.power_scroll_id,power_scroll_roll_bp=EXCLUDED.power_scroll_roll_bp`, st.UID, st.Endgame.Revision, st.Endgame.UniqueID, st.Endgame.UniqueRollBP, st.Endgame.FormationRollBP, st.Endgame.UniqueContentVersion, st.Endgame.FormationContentVersion, st.Endgame.SourceLevel, st.Endgame.PowerScrollID, st.Endgame.PowerScrollRollBP)
 	return err
 }
 func loadEndgameItems(ctx context.Context, q querier, items map[int64]domain.Stack) error {
@@ -88,7 +110,7 @@ func loadEndgameItems(ctx context.Context, q querier, items map[int64]domain.Sta
 	if len(ids) == 0 {
 		return nil
 	}
-	rows, err := q.Query(ctx, `SELECT uid,revision,unique_id,unique_roll_bp,formation_roll_bp,unique_content_version,formation_content_version,source_level FROM equipment_endgame_state WHERE uid=ANY($1)`, ids)
+	rows, err := q.Query(ctx, `SELECT uid,revision,unique_id,unique_roll_bp,formation_roll_bp,unique_content_version,formation_content_version,source_level,power_scroll_id,power_scroll_roll_bp FROM equipment_endgame_state WHERE uid=ANY($1)`, ids)
 	if err != nil {
 		return err
 	}
@@ -96,7 +118,7 @@ func loadEndgameItems(ctx context.Context, q querier, items map[int64]domain.Sta
 	for rows.Next() {
 		var id int64
 		var v domain.EndgameItemState
-		if err := rows.Scan(&id, &v.Revision, &v.UniqueID, &v.UniqueRollBP, &v.FormationRollBP, &v.UniqueContentVersion, &v.FormationContentVersion, &v.SourceLevel); err != nil {
+		if err := rows.Scan(&id, &v.Revision, &v.UniqueID, &v.UniqueRollBP, &v.FormationRollBP, &v.UniqueContentVersion, &v.FormationContentVersion, &v.SourceLevel, &v.PowerScrollID, &v.PowerScrollRollBP); err != nil {
 			return err
 		}
 		st := items[id]

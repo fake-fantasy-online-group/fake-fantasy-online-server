@@ -18,18 +18,20 @@ func AggregateEquipmentCombat(effects []ActiveEquipmentEffect) EquipmentCombatSt
 		}
 		x := &out.Elements[i]
 		add := func(dst *int32) { *dst = SaturateInt32(int64(*dst) + int64(e.Value)) }
-		switch e.Kind {
-		case "element_damage_bp":
-			add(&x.DamageBP)
-		case "element_resist_bp":
-			add(&x.ResistBP)
-		case "enemy_element_pierce_bp":
-			add(&x.PierceBP)
-		case "element_mitigation_bp":
-			add(&x.MitigationBP)
-		case "element_absorb_bp":
-			add(&x.AbsorbBP)
-		}
+		DispatchEquipmentEffect(RuntimeTypedEquipmentEffect(a, false), func() {
+			switch e.Kind {
+			case "element_damage_bp":
+				add(&x.DamageBP)
+			case "element_resist_bp":
+				add(&x.ResistBP)
+			case "enemy_element_pierce_bp":
+				add(&x.PierceBP)
+			case "element_mitigation_bp":
+				add(&x.MitigationBP)
+			case "element_absorb_bp":
+				add(&x.AbsorbBP)
+			}
+		})
 	}
 	return out
 }

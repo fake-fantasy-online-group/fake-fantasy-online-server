@@ -2,6 +2,7 @@ package scene
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 	"math"
@@ -45,8 +46,8 @@ func init() {
 			legendaryMeleeStripControl(c, d)
 		}
 	}})
-	registerLegendarySynergyHandler("JK-D06", legendaryHandler{CastReleased: warriorFunctionalRelease(10111, 8000, false), Tick: warriorFunctionalTick(10111, false), BeforeIncoming: func(c *legendaryContext, n int32) int32 {
-		if legendaryMeleeIncoming(c) && warriorFunctionalActive(c, 10111) {
+	registerLegendarySynergyHandler("JK-D06", legendaryHandler{AllDamageIncoming: true, CastReleased: warriorFunctionalRelease(10111, 8000, false), Tick: warriorFunctionalTick(10111, false), BeforeIncoming: func(c *legendaryContext, n int32) int32 {
+		if legendaryPureIncoming(c) && warriorFunctionalActive(c, 10111) {
 			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 35)))
 		}
 		return n
@@ -117,7 +118,7 @@ func swordExpand(c *legendaryContext, ids []domain.EntityID, radius float64, roo
 func swordLandedCount(owner domain.EntityID, skill domain.SkillID, hits []equipmentHit) int {
 	seen := map[domain.EntityID]bool{}
 	for _, h := range hits {
-		if h.src == owner && h.blow.SkillID == int32(skill) && h.blow.Origin == domain.DamageNormalOrigin && h.blow.ProcDepth == 0 && !h.ev.Flag.Has(event.DamageMiss) {
+		if h.src == owner && h.blow.SkillID == int32(skill) && (h.blow.Origin == domain.DamageNormalOrigin || h.blow.Origin == domain.DamageProcOrigin) && !h.ev.Flag.Has(event.DamageMiss) {
 			seen[h.dst] = true
 		}
 	}
@@ -175,7 +176,7 @@ func swordConcentrate(c *legendaryContext) {
 	c.DeleteState(0, "cast-actual-damage")
 	var target *entity.Entity
 	for _, h := range c.Hits {
-		if h.src != c.Owner.ID || h.blow.SkillID != 10121 || h.blow.Origin != domain.DamageNormalOrigin || h.blow.ProcDepth != 0 || h.ev.Flag.Has(event.DamageMiss) {
+		if h.src != c.Owner.ID || h.blow.SkillID != 10121 || (h.blow.Origin != domain.DamageNormalOrigin && h.blow.Origin != domain.DamageProcOrigin) || h.ev.Flag.Has(event.DamageMiss) {
 			continue
 		}
 		e := c.Scene.entities[h.dst]
@@ -189,7 +190,7 @@ func swordConcentrate(c *legendaryContext) {
 }
 
 func (s *Scene) legendarySwordsmanNativeRestoreAmount(src *entity.Entity, def domain.SkillDef, amount int32, hits []equipmentHit) int32 {
-	if src == nil || !swordDual(def.ID) || s.legendaryState().depth != 0 || s.equipmentState().classSetTriggered != 0 {
+	if src == nil || !swordDual(def.ID) {
 		return amount
 	}
 	s.forEachLegendary(src, func(c *legendaryContext) {
@@ -202,16 +203,16 @@ func (s *Scene) legendarySwordsmanNativeRestoreAmount(src *entity.Entity, def do
 	return amount
 }
 func (s *Scene) legendarySwordsmanNativeRestoreResolved(src *entity.Entity, def domain.SkillDef, effective, overflow int32) {
-	if src == nil || !swordDual(def.ID) || s.legendaryState().depth != 0 || s.equipmentState().classSetTriggered != 0 {
+	if src == nil || !swordDual(def.ID) {
 		return
 	}
-	s.forEachLegendary(src, func(c *legendaryContext) {
+	for _, c := range s.legendaryContexts(src, nil, combat.Blow{SkillID: int32(def.ID)}, event.DamageDealt{}) {
 		c.Skill = def.ID
 		c.Def = def
 		if h := legendaryHandlers[c.Power.ID].NativeRestoreResolved; h != nil {
-			h(c, effective, overflow)
+			c.invoke(func(c *legendaryContext) { h(c, effective, overflow) })
 		}
-	})
+	}
 }
 
 func swordRecordActualDamage(c *legendaryContext) {

@@ -276,3 +276,49 @@ idempotence, immutable guards and selector preservation. Official PostgreSQL
 17.11 also applied the upgrade twice against a disposable complete 0–114 seed;
 the seed explicitly activates published Rift 10 after migration 99 to model the
 prior rollout (99 intentionally does not activate it). No production DB used.
+
+### 000119 — wing power scroll descriptions
+
+Apply only after item-based power codex migration 118, with its matching server
+and client. The removed wing extraction recipe 900000 was code-only; the server
+rejects quote/execute and grid entry independently of this migration. This
+transaction updates wing task and codex/scroll descriptions, is idempotent, and
+never rewrites owned wings, power rolls, quests' completion, or inventory. Never
+apply this change to the life-only branch which has no usable scroll flow.
+
+### 000124 — reviewed codex icon/descriptions and wing spirit buy-only shop
+
+Apply after 123 on the complete item-codex/spirit branch. This transaction changes
+only the codex's two icon fields (native 封印的涅磐之书 index10757, icon12143),
+book/scroll display descriptions, and `game_shops.allow_sell` for verified wing
+spirit shop6203 (qw0007/NPC257/Nyuling1). Its SellList, 10-gold purchase stock,
+other eight spirit shops, ring NPC, daily quests, workbench, binding, trading,
+consumption and reclaim behavior remain unchanged. Existing server sell handling
+already rejects `allow_sell=false`; matching client hides only this NPC's sell
+menu. No packet changes. Original migration checksums remain untouched.
+
+Missing/mismatched item, metadata, native icon or exclusive shop prerequisites
+abort atomically. Reapplying124 is safe. Do not replay older122 after124: its
+historical precondition describes the original sell-enabled shop. Never use
+fresh init on an existing DB. Transaction failure rolls back all124 changes;
+any deliberate post-commit rollback should restore only these presentation and
+shop fields from a pre-upgrade backup, not inventory/quest state.
+
+Validation: `PGLITE_MODULE=/path/to/@electric-sql/pglite node
+server/tests/ui_review_metadata_postgres.mjs` (focused real PostgreSQL engine,
+reduced prerequisites, not live/full initializer).
+
+### 000125 — all spirit NPC shops buy-only (scope correction)
+
+Apply atomically after124. All nine implemented spirit shops6201–6209 now reject
+item sales, not only wing spirit6203. Every native NPC identity and exact one-item
+stock is verified before changing only `allow_sell`. Stock/10-gold purchase prices,
+daily quests, opening/applying/separating spirits and ordinary vendors remain
+unchanged. Native ring spirit Njieling has SellList0 and is not modified. The
+matching client removes sales from all spirit NPC menus, including the ring name
+without enabling/changing its old services. No new packet or gameplay handler.
+
+Reapply125 is safe; missing/mismatched/shared shop identities fail atomically.
+Historical124 remains immutable; on a fresh initializer it runs before125.
+As before, never replay older122 after the buy-only migrations. Test via
+`PGLITE_MODULE=/path/to/@electric-sql/pglite node server/tests/spirit_buy_only_postgres.mjs`.

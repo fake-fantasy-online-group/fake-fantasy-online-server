@@ -189,7 +189,7 @@ func TestLegendarySwordsmanExplicitKeeps(t *testing.T) {
 		primary, side int32
 		far           bool
 	}{
-		{"JK-A02", 10117, 115, 115, true}, {"JK-A04", 10117, 175, 75, true}, {"JK-A07", 10103, 200, 0, false}, {"JK-A08", 10103, 100, 130, false}, {"JK-A22", 10123, 190, 170, false}, {"JK-A23", 10123, 100, 110, false},
+		{"JK-A02", 10117, 115, 115, true}, {"JK-A04", 10117, 175, 75, true}, {"JK-A07", 10103, 110 + 2*(45*110/100), 0, false}, {"JK-A08", 10103, 100, 130, false}, {"JK-A22", 10123, 120 + 70*120/100, 100*120/100 + 70*120/100, false}, {"JK-A23", 10123, 100, 110, false},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := legendaryMeleeFixture(t, tc.id)
@@ -240,12 +240,21 @@ func TestLegendarySwordsmanRefundCapsAndDefensiveCounter(t *testing.T) {
 		t.Fatal("instant counter missing", m.HP)
 	}
 	before := m.HP
-	s.legendaryState().depth = 1
 	s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{SkillPct: 100, GuaranteedHit: true, Origin: domain.DamageProcOrigin, ProcDepth: 1})
-	s.legendaryState().depth = 0
-	if m.HP != before {
-		t.Fatal("proc counter recursively fired")
+	if m.HP != before-180 {
+		t.Fatal("independent generated hit did not trigger counter", m.HP, before)
 	}
+	before = m.HP
+	ok, restore := s.enterCombatEffect(p.ID, "JK-A29")
+	if !ok {
+		t.Fatal("fresh counter producer denied")
+	}
+	s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{SkillPct: 100, GuaranteedHit: true, Origin: domain.DamageProcOrigin, ProcDepth: 1})
+	restore()
+	if m.HP != before {
+		t.Fatal("counter reentered its own causal branch")
+	}
+
 }
 func TestLegendarySwordsmanAllyShieldPrunedWithSource(t *testing.T) {
 	s, p, m := legendaryMeleeFixture(t, "JK-D08")

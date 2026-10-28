@@ -33,6 +33,15 @@ func (s *Scene) onNpcTasks(cmd NpcTasks) {
 	offers := domain.OffersOf(s.quests, npc, ch, func(it domain.ItemID) int32 {
 		return p.Player.Bag.CountOf(it)
 	})
+	offers = s.filterPowerCodexOffers(p, offers)
+	offers = s.spiritDailyOffers(p, npc, offers)
+	// Clear yesterday's finished-ID cache on the native client without requiring relog.
+	for _, spirit := range domain.SpiritDefinitions() {
+		if spirit.NPCName == npc {
+			s.pushQuestLog(p)
+			break
+		}
+	}
 	// NPC 对话内容与职能菜单全部由客户端原生逻辑负责；服务端这里只刷新任务列表。
 	// 不下发 NpcDialogText/ShowSay，避免清空客户端 BuildMenu 生成的职能菜单。
 	// **列表为空也要回。** 不回的话客户端的对话框会一直等,
@@ -50,6 +59,10 @@ func (s *Scene) onAcceptQuest(cmd AcceptQuest) {
 	reject := func(r event.RejectReason) {
 		s.emitTo(p.ID, event.Rejected{Who: p.ID, Cmd: "AcceptQuest", Reason: r})
 	}
+	if cmd.Quest == domain.SpiritDailyQuestID {
+		s.acceptSpiritDaily(p, cmd.NPC)
+		return
+	}
 	if cmd.Quest == domain.WingGuideQuestID && s.wingRules == nil {
 		reject(event.RejectUnknown)
 		return
@@ -65,6 +78,10 @@ func (s *Scene) onAcceptQuest(cmd AcceptQuest) {
 	def, ok := s.quests[cmd.Quest]
 	if !ok {
 		reject(event.RejectNoTarget)
+		return
+	}
+	if def.ID == domain.PowerCodexQuestID {
+		reject(event.RejectQuestNotDone)
 		return
 	}
 	// **发布者以任务定义为准, 不信客户端。**
@@ -125,6 +142,10 @@ func (s *Scene) onAbandonQuest(cmd AbandonQuest) {
 	if !ok || !p.Alive() {
 		return
 	}
+	if cmd.Quest == domain.SpiritDailyQuestID {
+		s.abandonSpiritDaily(p)
+		return
+	}
 	ch := p.Player.Char
 	if ch.Quests == nil || !ch.Quests.Abandon(cmd.Quest) {
 		// 没接过或已经做完时仍需发送拒绝回执。
@@ -146,6 +167,10 @@ func (s *Scene) onAbandonQuest(cmd AbandonQuest) {
 func (s *Scene) onCompleteQuest(cmd CompleteQuest) {
 	p, ok := s.players[cmd.ID]
 	if !ok || !p.Alive() {
+		return
+	}
+	if cmd.Quest == domain.SpiritDailyQuestID {
+		s.completeSpiritDaily(p)
 		return
 	}
 	reject := func(r event.RejectReason) {
@@ -179,6 +204,10 @@ func (s *Scene) onCompleteQuest(cmd CompleteQuest) {
 	}
 	if s.wingRules != nil && def.ID == s.wingRules.Config().Quest {
 		s.completeWingGuide(p, def, reject)
+		return
+	}
+	if def.ID == domain.PowerCodexQuestID {
+		s.completePowerCodexQuest(p, def, reject)
 		return
 	}
 	if def.RecoveryItem != 0 {
@@ -494,9 +523,20 @@ func (s *Scene) pushQuestLog(p *entity.Entity) {
 		return p.Player.Bag.CountOf(it)
 	})
 	list = s.trialQuestLog(p, list)
+	list = s.spiritDailyLog(p, list)
+	done := ch.Quests.FinishedIDs()
+	if e, ok := ch.Quests[domain.SpiritDailyQuestID]; ok && e.SpiritDaily.ClaimedDay < domain.SpiritDailyDay(s.now()) {
+		filtered := done[:0]
+		for _, id := range done {
+			if id != int32(domain.SpiritDailyQuestID) {
+				filtered = append(filtered, id)
+			}
+		}
+		done = filtered
+	}
 	// 已完成的也要发: 客户端拿它判断 NPC 头顶显示什么、任务能不能再接。
 	// 不发的话做过的任务会重新显示成"可接"。
-	s.emitTo(p.ID, event.ActiveQuests{Who: p.ID, List: list, Done: ch.Quests.FinishedIDs()})
+	s.emitTo(p.ID, event.ActiveQuests{Who: p.ID, List: list, Done: done})
 }
 
 // pushQuestOffers 把当前 NPC 的任务列表与任务本一起刷新。客户端把 0x8027
@@ -511,6 +551,8 @@ func (s *Scene) pushQuestOffers(p *entity.Entity, npc string) {
 	offers := domain.OffersOf(s.quests, npc, ch, func(it domain.ItemID) int32 {
 		return p.Player.Bag.CountOf(it)
 	})
+	offers = s.filterPowerCodexOffers(p, offers)
+	offers = s.spiritDailyOffers(p, npc, offers)
 	s.emitTo(p.ID, event.NpcTasks{Who: p.ID, NPC: npc, Offers: offers})
 }
 
@@ -528,7 +570,8 @@ func (s *Scene) recordQuestKill(dead *entity.Entity, killer domain.EntityID) {
 		return
 	}
 	changed := p.Player.Char.Quests.RecordKill(s.quests, dead.Monster.TypeID)
-	if len(changed) == 0 {
+	dailyChanged := s.recordSpiritDailyKill(p, dead)
+	if len(changed) == 0 && !dailyChanged {
 		return
 	}
 	p.Player.MarkDirty()

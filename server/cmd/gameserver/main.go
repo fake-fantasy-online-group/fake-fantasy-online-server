@@ -226,6 +226,7 @@ func run() int {
 	// ── 场景路由: 按需建场景。371 张图不会全部常驻, 有人进才起 ──
 	saveEvery := domain.Ticks(*saveSec * 1000)
 	var router *scene.Router // Builder 里要用 router.Alloc(), 而它总在 router 赋值之后才被调用
+	spiritDailyTargets := data.SpiritDailyTargets(world.spawns, world.monsters, world.dungeons, mapCatalog, world.trial)
 	router = scene.NewRouter(func(id domain.SceneID) (*scene.Scene, error) {
 		// 客户端把幻想小岛的线上地图号写成 60, 静态资源表却按内部
 		// pworld 号 21000 索引。场景/存档/协议一律继续使用 60；只有
@@ -300,8 +301,9 @@ func run() int {
 			EquipmentRoll: world.equipmentRoll, BossFixedDrops: world.bossFixedDrops,
 			ItemIconsKnown: world.itemIconsKnown,
 			Skills:         world.skills, Statuses: world.statuses, StatusVisuals: world.statusVisuals,
-			StatusOverlay: world.statusOverlay,
-			Quests:        world.quests, NPCs: npcSpawns(world.npcs[dataMapID], id.MapID),
+			StatusOverlay:      world.statusOverlay,
+			SpiritDailyTargets: spiritDailyTargets,
+			Quests:             world.quests, NPCs: npcSpawns(world.npcs[dataMapID], id.MapID),
 			Dungeons: world.dungeons, DungeonEncounters: world.dungeonEncounters,
 			Works: world.works, Stamina: world.stamina,
 			NianliCreation: world.nianliCreation,

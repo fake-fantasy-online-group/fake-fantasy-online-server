@@ -1,0 +1,2642 @@
+[
+  {
+    "id": "CK-A01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "狙击改为朝选中目标方向贯穿的矩形攻击，长度取施法距离与武器攻击距离中的较大值，宽度取40与武器攻击距离一半中的较大值。所有命中敌人承受完整技能伤害；冷却时间缩短30%。"
+  },
+  {
+    "id": "CK-A02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "狙击必定命中并暴击。"
+  },
+  {
+    "id": "CK-A03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "狙击伤害提高80%。"
+  },
+  {
+    "id": "CK-A04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "连续投掷伤害提高50%。"
+  },
+  {
+    "id": "CK-A05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "连续投掷额外攻击选中目标附近所有敌人，每个目标承受完整技能伤害。额外目标的搜索半径至少100。"
+  },
+  {
+    "id": "CK-A06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "多重投掷改为攻击自身周围一整圈敌人，作用半径提高20%，伤害提高50%。"
+  },
+  {
+    "id": "CK-A07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "多重投掷对选中目标的伤害提高50%。"
+  },
+  {
+    "id": "CK-A08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受你淬毒术中毒影响的敌人死亡时，将剩余中毒效果传给其周围半径200内敌人。"
+  },
+  {
+    "id": "CK-A09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "淬毒术造成的每次中毒伤害提高100%。"
+  },
+  {
+    "id": "CK-A10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学会淬毒术时，装备期间淬毒术按当前技能等级常驻，不随攻击消耗。淬毒术生效期间，连续投掷和多重投掷命中时也会施加淬毒术的中毒效果。"
+  },
+  {
+    "id": "CK-A11",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "陷阱：爆弹放置后立即爆炸，投放距离提高50%，爆炸半径提高30%，伤害提高40%。"
+  },
+  {
+    "id": "CK-A12",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "陷阱：爆弹的伤害提高90%，爆炸半径提高30%。"
+  },
+  {
+    "id": "CK-A13",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "一次施放陷阱：爆弹，在选定地点及其两侧放置共3枚爆弹。两侧各偏移爆弹未经威能强化时半径的75%；每枚保留完整伤害，爆炸重叠时可命中同一敌人。"
+  },
+  {
+    "id": "CK-A14",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "陷阱：毒雾放置后立即触发，作用半径提高30%。"
+  },
+  {
+    "id": "CK-A15",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "陷阱：毒雾造成的每次中毒伤害提高100%。"
+  },
+  {
+    "id": "CK-A16",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "陷阱：封印的作用半径提高30%，伤害提高50%。"
+  },
+  {
+    "id": "CK-A17",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "背刺和陷阱：冻气的伤害提高50%；陷阱：冻气的作用半径额外提高30%。"
+  },
+  {
+    "id": "CK-A18",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "学会淬毒术后，陷阱：冻气成功冻结敌人时，也会尝试施加淬毒术的中毒。此中毒不会打破这次冻结。"
+  },
+  {
+    "id": "CK-A19",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "背刺同时攻击选中目标和前方120度扇形内所有其他敌人，每个目标承受完整背刺伤害。扇形半径取背刺施放距离和武器攻击距离中较大的一项。"
+  },
+  {
+    "id": "CK-A20",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "背刺无需隐身也能使用，伤害提高25%。"
+  },
+  {
+    "id": "CK-A21",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "背刺对选中目标的伤害提高75%。"
+  },
+  {
+    "id": "CK-A22",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "背刺每次命中时，按该目标实际损失生命的15%恢复自身生命。"
+  },
+  {
+    "id": "CK-A23",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "击晕伤害提高35%，冷却时间缩短40%。对免疫本次眩晕的目标，攻击仍能造成伤害，并额外增加相当于160%物理攻击的伤害。"
+  },
+  {
+    "id": "CK-A24",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "反击术的伤害提高50%。"
+  },
+  {
+    "id": "CK-A25",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "反击术触发时，同时攻击原攻击者及其周围半径100内的敌人，每个目标承受完整反击伤害。"
+  },
+  {
+    "id": "CK-A26",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "对可偷窃且不免疫偷窃的目标施放偷窃术时，对自身周围半径180内的敌人造成物理攻击力240%的伤害。"
+  },
+  {
+    "id": "CK-A27",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "连续投掷与多重投掷的施法距离、作用范围均提高50%。"
+  },
+  {
+    "id": "CK-A28",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "环形爆发伤害提高45%，命中的敌人随后向你拉近最多120，最近停在距你40的位置。"
+  },
+  {
+    "id": "CK-A29",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "暗杀术的直接伤害提高80%。"
+  },
+  {
+    "id": "CK-A30",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "学会爆发冲击后，环形爆发的作用半径扩大50%，不再先击退，而是在命中后将仍存活的敌人收拢至距自己40的可站立位置。"
+  },
+  {
+    "id": "CK-D01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学习隐身术时，隐身术生效期间受到的伤害降低35%，隐身结束后继续保持8秒。"
+  },
+  {
+    "id": "CK-D02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "烟雾弹改为影响选中目标及其周围半径至少100内的敌人。受你烟雾弹影响的敌人，对你造成的伤害降低20%。"
+  },
+  {
+    "id": "CK-D03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "反击术每次命中时，按该目标实际损失生命的15%恢复自身生命。"
+  },
+  {
+    "id": "CK-D04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受你淬毒术中毒影响的敌人，对你造成的直接伤害降低20%。"
+  },
+  {
+    "id": "CK-D05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到的眩晕、冻结和定身持续时间缩短30%。"
+  },
+  {
+    "id": "CK-D06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "陷阱：爆弹的法力消耗降低30%；受到的远程伤害降低20%。"
+  },
+  {
+    "id": "CK-D07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "击晕的冷却时间缩短30%；主动施放已学习的击晕后8秒内，受到的伤害降低35%。"
+  },
+  {
+    "id": "CK-D08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到的中毒伤害降低30%。主动施放淬毒术时，立即移除自身最多2个可清除的中毒效果。"
+  },
+  {
+    "id": "CK-D09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "生命上限提高20%，隐身术的法力消耗降低30%。"
+  },
+  {
+    "id": "CK-D10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "学会陷阱回避后，受到的陷阱伤害降低20%。"
+  },
+  {
+    "id": "CK-U01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "隐身术的法力消耗降低30%；主动施放已学习的隐身术后10秒内，所有技能法力消耗降低45%。"
+  },
+  {
+    "id": "CK-U02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "烟雾弹改为影响选中目标周围的敌人，施放距离提高50%。范围半径在至少100的基础上提高30%。"
+  },
+  {
+    "id": "CK-U03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "解除陷阱不消耗法力，以选中的可见敌方陷阱为中心，同时尝试拆除半径150内的可见敌方陷阱；每个陷阱的拆除成功率提高25个百分点。"
+  },
+  {
+    "id": "CK-U04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "侦测陷阱的侦测半径提高50%；主动施放已学习的侦测陷阱后10秒内，移动速度提高60%。"
+  },
+  {
+    "id": "CK-U05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "学会暗器回收后，狙击、连续投掷和多重投掷的法力消耗降低45%。"
+  },
+  {
+    "id": "CK-U06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "背刺命中后，隐身术的剩余冷却时间缩短35%；若这次背刺直接击杀敌人，则改为缩短80%。"
+  },
+  {
+    "id": "CK-U07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "主动施放已学习的陷阱：爆弹、毒雾、封印、冻气或新星后10秒内，这五种陷阱的法力消耗降低55%。"
+  },
+  {
+    "id": "CK-U08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "隐身术持续时间延长5秒；已学习隐身术时，在其生效期间布置陷阱不会打破隐身。"
+  },
+  {
+    "id": "CK-U09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "狙击和击晕的法力消耗降低30%，冷却时间缩短20%。"
+  },
+  {
+    "id": "CK-U10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "隐身术生效期间，额外获得40%移动速度。"
+  },
+  {
+    "id": "JK-A01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "罡气剑的直接伤害提高100%。"
+  },
+  {
+    "id": "JK-A02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "选中有效目标施放真空剑时，还会攻击你周围150距离内的所有敌人；所有目标的直接伤害提高15%。"
+  },
+  {
+    "id": "JK-A03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "罡气剑命中主目标后，对仍存活的主目标追加攻击力160%的物理伤害。"
+  },
+  {
+    "id": "JK-A04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "真空剑命中敌人后，若最远的命中敌人距你至少75，在其命中位置立即释放一道剑痕，对周围半径100内敌人造成原技能单次基础伤害75%的物理伤害。"
+  },
+  {
+    "id": "JK-A05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "金缚剑冷却改为24秒，直接伤害提高40%；除主目标外，还会攻击其周围150距离内敌人。"
+  },
+  {
+    "id": "JK-A06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "金缚剑成功施加自身的定身后，对该敌人追加攻击力200%的物理伤害。"
+  },
+  {
+    "id": "JK-A07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "幻影剑的直接伤害提高10%。命中主目标后，若它仍存活且距你不超过150，再追加两道剑影，每道造成原技能基础伤害45%的物理伤害。"
+  },
+  {
+    "id": "JK-A08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "幻影剑主目标周围75距离内没有其他敌人时，对主目标的直接伤害提高90%；否则，命中主目标后，对该范围内其他敌人各追加攻击力130%的物理伤害。"
+  },
+  {
+    "id": "JK-A09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "饮血剑和噬魂剑除主目标外，还会攻击其周围100距离内敌人；所有目标的直接伤害提高15%。"
+  },
+  {
+    "id": "JK-A10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "饮血剑命中主目标后，使其受到的治疗和生命偷取恢复量降低65%，持续8秒。"
+  },
+  {
+    "id": "JK-A11",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "饮血剑和噬魂剑的自带恢复量提高50%；本次每多命中一名不同敌人，再增加原恢复量的50%。"
+  },
+  {
+    "id": "JK-A12",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "噬魂剑恢复法力后，对仍存活的主目标追加实际恢复法力量280%的物理伤害。"
+  },
+  {
+    "id": "JK-A13",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "封法剑冷却改为24秒，直接伤害提高70%；除主目标外，还会攻击其周围100距离内敌人。"
+  },
+  {
+    "id": "JK-A14",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "封法剑命中有护盾的主目标时，额外削减相当于本次生命伤害与护盾吸收量之和120%的护盾。命中无盾敌人时，对其直接伤害提高50%。"
+  },
+  {
+    "id": "JK-A15",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "旋风剑的直接伤害提高60%。本次直接攻击实际扣除的生命值总和的35%，会追加给命中后仍存活、当前生命值最高的一名敌人。"
+  },
+  {
+    "id": "JK-A16",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "旋风剑先将你周围半径150内可拉拽敌人拉向距你50的位置，直接伤害提高30%。"
+  },
+  {
+    "id": "JK-A17",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "旋风剑的自身中心作用半径至少提高至150。"
+  },
+  {
+    "id": "JK-A18",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "混沌剑命中后，使敌人物理防御降低30%，持续8秒。"
+  },
+  {
+    "id": "JK-A19",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "混沌剑和罡气剑的直接伤害提高25%，真空剑的直接伤害提高100%。罡气剑还会攻击主目标周围150距离内其他敌人，造成相同直接伤害。"
+  },
+  {
+    "id": "JK-A20",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "狮心剑命中主目标后，对其周围150距离内其他敌人各追加攻击力160%的物理伤害。"
+  },
+  {
+    "id": "JK-A21",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "狮心剑命中主目标后，对仍存活的主目标追加攻击力320%的物理伤害。"
+  },
+  {
+    "id": "JK-A22",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "陨星剑的直接伤害提高20%。命中主目标后，对其周围120距离内其他敌人追加原技能基础伤害100%的物理伤害，再对同一区域敌人追加基础伤害70%的物理伤害。"
+  },
+  {
+    "id": "JK-A23",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "陨星剑击杀主目标，或命中前主目标生命不高于50%时，在其位置触发剑爆，对周围150距离内其他敌人造成原技能基础伤害110%的物理伤害。"
+  },
+  {
+    "id": "JK-A24",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "强击冷却改为18秒，直接伤害提高80%。若命中前主目标已被定身，还会攻击其周围150距离内已被定身的敌人。"
+  },
+  {
+    "id": "JK-A25",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "挑衅成功使怪物以你为当前攻击目标后，对该怪物追加攻击力160%的物理伤害。"
+  },
+  {
+    "id": "JK-A26",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "罡气剑、真空剑、饮血剑和噬魂剑的直接伤害提高100%。"
+  },
+  {
+    "id": "JK-A27",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "罡气剑、幻影剑或旋风剑每次施放命中至少一名敌人后，以本次命中敌人中距你最近者的位置为中心，对150距离内敌人各追加攻击力320%的物理伤害。"
+  },
+  {
+    "id": "JK-A28",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "饮血剑或噬魂剑命中主目标后，对仍存活的主目标追加攻击力260%的物理伤害。"
+  },
+  {
+    "id": "JK-A29",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "被敌人直接攻击命中且你仍存活时，立即对攻击者反击，造成攻击力180%的物理伤害。"
+  },
+  {
+    "id": "JK-A30",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "狮心剑和陨星剑对主目标的直接伤害提高110%。"
+  },
+  {
+    "id": "JK-D01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "罡气剑命中敌人后，获得最大生命12%的护盾，持续到被消耗。"
+  },
+  {
+    "id": "JK-D02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "装备期间，受到的持续伤害降低55%。"
+  },
+  {
+    "id": "JK-D03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "饮血剑的溢出治疗、噬魂剑的溢出法力恢复，按溢出量100%转为自身护盾，护盾量为自身最大生命的16%以内。"
+  },
+  {
+    "id": "JK-D04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "当前因你的挑衅而攻击你的敌人，对你造成的直接伤害降低50%。"
+  },
+  {
+    "id": "JK-D05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "来自你周围75距离内敌人的直接物理伤害降低40%。"
+  },
+  {
+    "id": "JK-D06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "施放已学习的金缚剑后，8秒内受到的伤害降低35%。"
+  },
+  {
+    "id": "JK-D07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "施放已学习的封法剑后，8秒内受到的魔法伤害降低50%。"
+  },
+  {
+    "id": "JK-D08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "狮心剑命中主目标后，你与180距离内所有队友，各获得相当于你最大生命14%的护盾，持续到被消耗。"
+  },
+  {
+    "id": "JK-D09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "敌人的当次直接伤害达到你最大生命的8%，该次伤害再降低45%。"
+  },
+  {
+    "id": "JK-D10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "来自你75距离之外敌人的直接伤害降低35%。"
+  },
+  {
+    "id": "JK-U01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "施放已学习的真空剑后，8秒内移动速度提高80%。"
+  },
+  {
+    "id": "JK-U02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "饮血剑实际施放时，移除自身中毒与不附带控制的移动减速。"
+  },
+  {
+    "id": "JK-U03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "噬魂剑本次命中至少一名敌人后，返还本次实际消耗法力的60%。"
+  },
+  {
+    "id": "JK-U04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "挑衅的作用半径提高80%，法力消耗降低50%。"
+  },
+  {
+    "id": "JK-U05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "施放已学习的幻影剑时，清除自身不附带控制的移动减速，并在8秒内免疫移动减速。"
+  },
+  {
+    "id": "JK-U06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "金缚剑的施法距离提高80%，不消耗法力。"
+  },
+  {
+    "id": "JK-U07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "罡气剑、真空剑或幻影剑每次施放命中至少一名敌人后，恢复自身最大法力的12%。"
+  },
+  {
+    "id": "JK-U08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "装备期间免疫移动减速和定身，装备时解除已有的移动减速和定身。"
+  },
+  {
+    "id": "JK-U09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "主动伤害技能本次命中至少一名敌人后，返还本次实际消耗法力的80%。"
+  },
+  {
+    "id": "JK-U10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "封法剑的施法距离提高45%。"
+  },
+  {
+    "id": "SS-A01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "火球术直接伤害提高70%；目标带有你施加的燃烧时，再提高40%。"
+  },
+  {
+    "id": "SS-A02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "火弹术命中带有你施加的燃烧的敌人时，额外造成相当于这些燃烧剩余伤害80%的火系伤害。"
+  },
+  {
+    "id": "SS-A03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "火弹术保留主目标完整伤害和效果，并同时攻击其周围半径150内其他敌人，各造成火弹术基础伤害100%的火系伤害。"
+  },
+  {
+    "id": "SS-A04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "火球术保留原有伤害，并在爆炸中心立即追加一次同范围爆炸，造成该次火球术基础伤害的70%。"
+  },
+  {
+    "id": "SS-A05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "火球术命中1至2名敌人时，对这些敌人的直接伤害提高75%；命中至少3名敌人时，只对选中的主目标提高35%。"
+  },
+  {
+    "id": "SS-A06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "火球术范围半径扩大65%。原半径内侧一半区域的直接伤害提高20%；超过该距离的环带区域提高45%。"
+  },
+  {
+    "id": "SS-A07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "火球术命中带有你施加的燃烧的敌人时，选取本次命中者中剩余燃烧伤害最高的一名，将该剩余伤害的90%分别造成给爆炸范围内其他敌人。"
+  },
+  {
+    "id": "SS-A08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "冰箭术命中时，若你与目标的距离达到本次施法距离的一半，直接伤害提高55%；不足一半时提高20%。"
+  },
+  {
+    "id": "SS-A09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学习冰系掌握时，冰箭术必定附加其原有减速。目标在命中前已被冻结或减速时，冰箭术直接伤害提高100%。"
+  },
+  {
+    "id": "SS-A10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "冰箭术及其追加伤害，忽略目标50%的冰系百分比减伤。"
+  },
+  {
+    "id": "SS-A11",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "冰箭术命中带有你施加的燃烧的敌人时，额外造成相当于这些燃烧剩余伤害100%的冰系伤害。"
+  },
+  {
+    "id": "SS-A12",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "冰爆术可选择施法距离内的合法敌人为爆炸中心，也可保持以自身为中心释放。射程与冰封相同，直接伤害提高20%。"
+  },
+  {
+    "id": "SS-A13",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "冰爆术直接伤害提高65%；位于原半径内侧一半的敌人改为受到85%的伤害加成。"
+  },
+  {
+    "id": "SS-A14",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "冰爆术直接伤害提高20%。命中后，将本次命中的所有可被位移的敌人向中心拉近最多90距离。"
+  },
+  {
+    "id": "SS-A15",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "冰爆术命中在本次施法前已被冻结或减速的敌人时，直接伤害提高60%。"
+  },
+  {
+    "id": "SS-A16",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "风焰术命中时，额外造成相当于目标身上由你施加的燃烧剩余伤害160%的火系伤害。"
+  },
+  {
+    "id": "SS-A17",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学习燃烧时，风焰术每次命中必定附加当前等级的燃烧，这份燃烧每跳伤害提高82%。"
+  },
+  {
+    "id": "SS-A18",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "风焰术的圆形作用范围扩大80%，直接伤害提高40%。"
+  },
+  {
+    "id": "SS-A19",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "你成功施加燃烧时，立即额外造成相当于这份燃烧初始总伤害65%的火系伤害。"
+  },
+  {
+    "id": "SS-A20",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "暴雪术直接伤害提高55%，范围半径扩大40%，冷却时间缩短20%。"
+  },
+  {
+    "id": "SS-A21",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "暴雪术原半径内侧三分之二区域的直接伤害提高80%，其余区域提高20%。"
+  },
+  {
+    "id": "SS-A22",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "暴雪术对已被冻结或减速的敌人，直接伤害提高90%。"
+  },
+  {
+    "id": "SS-A23",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "冰封作用半径增加150，优先冻结主目标，并对范围内其他敌人施加冻结。"
+  },
+  {
+    "id": "SS-A24",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学习冰箭术时，冰封保留原冻结，并对目标立即追加当前等级冰箭术基础伤害150%的冰系伤害。"
+  },
+  {
+    "id": "SS-A25",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "火系伤害额外享受你已学习的寒冰之魂加成，冰系伤害额外享受你已学习的红莲之魂加成。"
+  },
+  {
+    "id": "SS-A26",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "魔镜术成功抵抗魔法攻击时，向攻击者反射本次被抵抗伤害的120%，单次不超过你的最大生命18%。"
+  },
+  {
+    "id": "SS-A27",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "秘术：幻影成功移动后，在出发点周围半径180内立即造成火系爆炸，伤害为当前等级火弹术基础伤害的180%；未学火弹术时使用其1级伤害。"
+  },
+  {
+    "id": "SS-A28",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "秘术：消除额外造成当前等级火弹术基础伤害220%的魔法伤害；未学火弹术时使用其1级伤害。你每拥有一种防御魔法，再增加50%火弹术基础伤害。"
+  },
+  {
+    "id": "SS-A29",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "秘术：集中、释能或瞬发强化一次伤害技能时，该次技能额外获得66%的直接伤害加成。"
+  },
+  {
+    "id": "SS-A30",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学会瞬发时，装备期间瞬发按当前技能等级常驻，不随施法消耗。每次受到瞬发强化的手动伤害技能命中后，向仍存活的原主目标追加80%技能基础伤害。"
+  },
+  {
+    "id": "SS-D01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "火盾生效期间，180距离内敌人对你造成的伤害降低28%。"
+  },
+  {
+    "id": "SS-D02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "冰盾生效期间，单次将承受的伤害超过最大生命的8%，该次伤害再降低55%。"
+  },
+  {
+    "id": "SS-D03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "魔镜术生效期间，受到的魔法伤害额外降低75%。自身防御魔法的抗性数值和反射伤害提高50%，冻结或抵抗概率提高30个百分点。"
+  },
+  {
+    "id": "SS-D04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "最大生命提高30%，秘术：幻影伤害提高30%。"
+  },
+  {
+    "id": "SS-D05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "秘术：集中状态存在时，每次受到伤害可减免50%，单次减免量在最大生命的22%以内。"
+  },
+  {
+    "id": "SS-D06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "冰封改为以主目标为中心、半径100的范围冻结。装备期间受到的伤害降低35%。"
+  },
+  {
+    "id": "SS-D07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "火盾与冰盾可同时生效；最大生命提高28%。"
+  },
+  {
+    "id": "SS-D08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "最大生命提高30%，所有技能的法力消耗降低20%。"
+  },
+  {
+    "id": "SS-D09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "带有你施加的燃烧的敌人对你造成伤害时，伤害降低40%。"
+  },
+  {
+    "id": "SS-D10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学会释能时，装备期间释能按当前技能等级常驻，不随施法消耗，受到的伤害降低35%；释能强化的伤害技能直接伤害再提高35%。"
+  },
+  {
+    "id": "SS-U01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "秘术：幻影冷却时间变为0，成功率变为100%，法力消耗降低15%。"
+  },
+  {
+    "id": "SS-U02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "消除改为以目标为中心、半径250的群体消除，对范围内所有可驱散的防御魔法必定驱散成功。偷来的防御魔法获得完整持续时间和完整护盾。"
+  },
+  {
+    "id": "SS-U03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学会集中时，装备期间集中按当前技能等级常驻，不随施法消耗。每次符合集中条件的带状态技能法力消耗降低55%。"
+  },
+  {
+    "id": "SS-U04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "主动施放已学习的冰爆术或暴雪术后，8秒内移动速度提高80%。"
+  },
+  {
+    "id": "SS-U05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自己击杀带有自己燃烧的敌人时，恢复最大法力的10%。"
+  },
+  {
+    "id": "SS-U06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学会幻影时，允许在昏迷、封印等控制下施放幻影；成功移动后清除自身的控制和减速。"
+  },
+  {
+    "id": "SS-U07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "主动施放已学习的火球术、冰爆术、风焰术或暴雪术后，10秒内所有技能法力消耗降低45%。"
+  },
+  {
+    "id": "SS-U08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学会魔镜时，装备期间获得当前技能等级的常驻魔镜；获得魔镜时清除已有减速，魔镜生效期间免疫移动减速。"
+  },
+  {
+    "id": "SS-U09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "火球术、冰爆术、风焰术和暴雪术的冷却时间缩短30%，法力消耗降低20%。"
+  },
+  {
+    "id": "SS-U10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学习的幻影成功移动后，12秒内以敌人为目标且有施法距离的法术射程提高100%。"
+  },
+  {
+    "id": "TY-A01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "普通攻击改为前方120度扇形攻击，范围等于普通攻击距离。选中目标保留100%伤害，范围内其他敌人各承受70%普通攻击伤害。"
+  },
+  {
+    "id": "TY-A02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "矩形技能的长度提高60%，宽度不变。"
+  },
+  {
+    "id": "TY-A03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "扇形技能的半径提高50%，角度不变。"
+  },
+  {
+    "id": "TY-A04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "圆形技能半径提高40%，扇形技能角度提高40%。"
+  },
+  {
+    "id": "TY-A05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "单体伤害技能改为攻击选中目标及其周围半径120内的敌人。"
+  },
+  {
+    "id": "TY-A06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "矩形技能的宽度提高60%，长度不变。"
+  },
+  {
+    "id": "TY-A07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "具有飞行弹道的技能，弹速提高100%，施法距离提高40%。"
+  },
+  {
+    "id": "TY-A08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "单体敌方直接伤害技能，伤害系数提高60%。"
+  },
+  {
+    "id": "TY-A09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "普通攻击必定命中。"
+  },
+  {
+    "id": "TY-A10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "普通攻击的出手间隔缩短20%。"
+  },
+  {
+    "id": "TY-A11",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "直接伤害的暴击率增加20个百分点。"
+  },
+  {
+    "id": "TY-A12",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "直接伤害忽略目标30%的固定物理抗性或固定魔法抗性。"
+  },
+  {
+    "id": "TY-A13",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身技能施加的眩晕、沉默、冻结、石化或定身等可延长控制，持续时间提高40%。"
+  },
+  {
+    "id": "TY-A14",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身技能施加的移动减速，减速幅度提高50%。"
+  },
+  {
+    "id": "TY-A15",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身技能对敌方施加状态时，效果命中增加30个百分点。"
+  },
+  {
+    "id": "TY-A16",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "直接伤害破坏敌方吸收护盾的效率提高100%。"
+  },
+  {
+    "id": "TY-A17",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已有吸血效果的恢复量提高60%。"
+  },
+  {
+    "id": "TY-A18",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身技能造成的中毒，每次伤害提高100%。"
+  },
+  {
+    "id": "TY-A19",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "技能原有的法力伤害提高80%。"
+  },
+  {
+    "id": "TY-A20",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "位移技能成功移动后，将落点周围200范围内可牵引敌人向落点拉近最多100距离。"
+  },
+  {
+    "id": "TY-A21",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "陷阱的触发半径和作用半径提高50%。"
+  },
+  {
+    "id": "TY-A22",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身技能造成的中毒和燃烧，持续时间提高50%。"
+  },
+  {
+    "id": "TY-A23",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已有淬毒效果的中毒触发率增加40个百分点。"
+  },
+  {
+    "id": "TY-A24",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "装备每提供1个百分点的法力消耗降低，同时为主动伤害技能提供2%伤害加成。"
+  },
+  {
+    "id": "TY-A25",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "物理主动技能的基础伤害，额外加入装备提供的物理攻击上限的50%。"
+  },
+  {
+    "id": "TY-A26",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "魔法主动技能的基础伤害，额外加入装备提供的魔法攻击的50%。"
+  },
+  {
+    "id": "TY-A27",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身技能造成的燃烧，每次伤害提高100%。"
+  },
+  {
+    "id": "TY-A28",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身技能造成的中毒，每次伤害均可暴击。采用物理暴击率，基础暴击伤害为2倍。"
+  },
+  {
+    "id": "TY-A29",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身技能造成的燃烧，每次伤害均可暴击。采用魔法暴击率，基础暴击伤害为2倍。"
+  },
+  {
+    "id": "TY-A30",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "对正受到眩晕、沉默、冻结、石化或定身等控制的敌人，直接伤害提高50%。"
+  },
+  {
+    "id": "TY-A31",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "对正在受到你施加的中毒的敌人，直接伤害提高40%。"
+  },
+  {
+    "id": "TY-A32",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "对正在受到你施加的燃烧的敌人，直接伤害提高40%。"
+  },
+  {
+    "id": "TY-A33",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "直接伤害的暴击倍率额外增加50个百分点。"
+  },
+  {
+    "id": "TY-A34",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "范围伤害有明确选中目标时，该目标的本次伤害系数提高80%。"
+  },
+  {
+    "id": "TY-A35",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "普通攻击距离提高50%。"
+  },
+  {
+    "id": "TY-A36",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "范围伤害有明确选中目标时，其他目标的伤害系数提高40%。"
+  },
+  {
+    "id": "TY-A37",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "普通攻击的伤害系数提高75%。"
+  },
+  {
+    "id": "TY-A38",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "主动伤害技能的基础伤害，额外增加自身最大法力的4%。"
+  },
+  {
+    "id": "TY-A39",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "普通攻击的基础伤害，额外增加装备提供的物理防御的20%。"
+  },
+  {
+    "id": "TY-A40",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "施放主动直接伤害技能时，若自身有尚未耗尽的技能吸收护盾，本次伤害系数提高40%。"
+  },
+  {
+    "id": "TY-D01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "装备提供的物理防御提高40%。"
+  },
+  {
+    "id": "TY-D02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "装备提供的魔法防御提高40%。"
+  },
+  {
+    "id": "TY-D03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "装备提供的最大生命提高30%。"
+  },
+  {
+    "id": "TY-D04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "装备提供的最大法力提高40%。"
+  },
+  {
+    "id": "TY-D05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到敌方范围直接伤害时，伤害降低25%。"
+  },
+  {
+    "id": "TY-D06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到普通攻击的直接伤害降低25%。"
+  },
+  {
+    "id": "TY-D07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到的直接物理伤害降低20%。"
+  },
+  {
+    "id": "TY-D08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到的魔法伤害降低20%。"
+  },
+  {
+    "id": "TY-D09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "敌方施加的眩晕、沉默、冻结、石化或定身等可缩短控制，持续时间缩短30%。"
+  },
+  {
+    "id": "TY-D10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到的暴击伤害降低30%。"
+  },
+  {
+    "id": "TY-D11",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到敌人伤害时，先用法力抵扣伤害的30%，每1点法力抵扣1点伤害；法力不足的部分仍扣生命。"
+  },
+  {
+    "id": "TY-D12",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到的技能直接治疗和持续治疗提高40%。"
+  },
+  {
+    "id": "TY-D13",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "他人为你施加的技能吸收护盾，初始护盾量提高40%。"
+  },
+  {
+    "id": "TY-D14",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "敌方状态对你的物理防御、魔法防御削减幅度降低40%。"
+  },
+  {
+    "id": "TY-D15",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "敌方状态对你的攻击速度削减幅度降低40%。"
+  },
+  {
+    "id": "TY-D16",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "本人技能施加的吸收护盾，初始护盾量提高60%。"
+  },
+  {
+    "id": "TY-D17",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身正受到眩晕、沉默、冻结、石化或定身等控制时，受到的伤害降低25%。"
+  },
+  {
+    "id": "TY-D18",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身技能施加的吸收护盾，持续时间提高40%。"
+  },
+  {
+    "id": "TY-D19",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到敌方持续伤害时，伤害降低25%。"
+  },
+  {
+    "id": "TY-D20",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "敌方中毒和燃烧作用于你的持续时间缩短40%。"
+  },
+  {
+    "id": "TY-U01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "主动技能的原有吟唱时间缩短30%。"
+  },
+  {
+    "id": "TY-U02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "普通攻击成功命中时恢复10点法力。"
+  },
+  {
+    "id": "TY-U03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "主动技能法力消耗降低30%。"
+  },
+  {
+    "id": "TY-U04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "带有治疗效果的主动技能，法力消耗降低30%。"
+  },
+  {
+    "id": "TY-U05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身技能施加的持续治疗，每次治疗量提高60%。"
+  },
+  {
+    "id": "TY-U06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "技能原有的直接法力恢复量提高50%。"
+  },
+  {
+    "id": "TY-U07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "主动瞬移或跳跃技能的位移距离、可选目标距离提高40%。"
+  },
+  {
+    "id": "TY-U08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "敌方施加的减速，对你移动速度的削减幅度降低40%。"
+  },
+  {
+    "id": "TY-U09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身基础移动速度提高20%。"
+  },
+  {
+    "id": "TY-U10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "圆形或扇形的范围治疗技能，治疗半径提高40%。"
+  },
+  {
+    "id": "TY-U11",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "本人技能施加的有益状态，持续时间提高50%；吸收护盾和持续治疗不受此项加成。"
+  },
+  {
+    "id": "TY-U12",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "会施加眩晕、沉默、冻结、石化或定身等控制的主动技能，法力消耗降低30%。"
+  },
+  {
+    "id": "TY-U13",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "会创建吸收护盾的主动技能，法力消耗降低20%。"
+  },
+  {
+    "id": "TY-U14",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "会施加中毒、燃烧或淬毒效果的主动技能，法力消耗降低30%。"
+  },
+  {
+    "id": "TY-U15",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "主动技能本身的冷却时间缩短20%。"
+  },
+  {
+    "id": "TY-U16",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "技能直接治疗的固定值和治疗系数提高60%。"
+  },
+  {
+    "id": "TY-U17",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "复活技能恢复的生命比例提高50%。"
+  },
+  {
+    "id": "TY-U18",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "驱散效果的基础成功率增加40个百分点。"
+  },
+  {
+    "id": "TY-U19",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "技能原有破隐和陷阱侦测的范围提高100%。"
+  },
+  {
+    "id": "TY-U20",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "装备提供的移动速度收益提高40%。"
+  },
+  {
+    "id": "YS-A01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "光弹术保留主目标完整伤害，并对主目标周围180范围内所有其他敌人造成60%的光弹伤害。"
+  },
+  {
+    "id": "YS-A02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "光弹术命中后，立即向同一目标追加本次实际伤害85%的伤害。"
+  },
+  {
+    "id": "YS-A03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "光弹术直接伤害提高60%。命中存活目标时，移除其1份可移除的持续回血状态。"
+  },
+  {
+    "id": "YS-A04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "光弹术命中带有你施加的衰弱术或枷锁术状态的敌人时，直接伤害提高90%。"
+  },
+  {
+    "id": "YS-A05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "圣光术仍可攻击敌人，也可选自己或600范围内的队友作为中心。选择友方中心时，攻击其周围200范围内的敌人，伤害提高20%。"
+  },
+  {
+    "id": "YS-A06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "圣光术改为目标位置周围半径200的圆形攻击。距中心100以内的敌人伤害提高60%，外圈敌人伤害提高20%。"
+  },
+  {
+    "id": "YS-A07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "圣光术直接伤害提高10%。施法中心留下半径180、持续4秒的光区，每秒造成该等级圣光基础伤害30%的魔法伤害。"
+  },
+  {
+    "id": "YS-A08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "圣光术沿主目标方向形成长600、宽160的矩形攻击，直接伤害提高80%。"
+  },
+  {
+    "id": "YS-A09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "驱魔术可攻击所有合法敌人，不再限定亡灵和恶魔；作用半径由150扩大至220，伤害提高40%。命中时尝试移除至多2个可驱散增益。"
+  },
+  {
+    "id": "YS-A10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "衰弱术改为目标位置周围的范围技能，作用半径在当前基础上增加100；原有降低攻击效果提高60%。"
+  },
+  {
+    "id": "YS-A11",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "驱魔术作用半径增加120，直接伤害提高45%。"
+  },
+  {
+    "id": "YS-A12",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "驱魔术直接伤害提高50%。命中时打断敌人可被打断的吟唱。"
+  },
+  {
+    "id": "YS-A13",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "神威术命中带有你施加的枷锁术状态的敌人时，直接伤害提高80%。"
+  },
+  {
+    "id": "YS-A14",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "神威术冷却时间缩短45%。"
+  },
+  {
+    "id": "YS-A15",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "神威术保留所有目标的完整伤害。若选中了敌方主目标，将其他敌人本次实际损失生命总和的35%追加给该主目标。"
+  },
+  {
+    "id": "YS-A16",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "神威术作用半径增加100，施法距离增加200，直接伤害提高35%。"
+  },
+  {
+    "id": "YS-A17",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "衰弱术取消吟唱，改为目标位置周围半径250的攻击，对每个敌人造成180%魔法攻击力的神圣伤害，并施加衰弱。你的驱魔术命中带有任意施法者衰弱术状态的敌人时，直接伤害提高60%。"
+  },
+  {
+    "id": "YS-A18",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "枷锁术降低攻击速度的效果提高50%；若枷锁术具有直接伤害，该伤害提高60%。"
+  },
+  {
+    "id": "YS-A19",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "枷锁术改为目标位置周围半径250的范围技能，对每名敌人造成200%魔法攻击力的神圣伤害，并施加减攻速。可移动的普通敌人被拉向中心，最多拉到距中心80的位置。"
+  },
+  {
+    "id": "YS-A20",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身针刺护体生效期间，主动施放光弹术、圣光术或驱魔术，直接伤害提高40%；这些技能若以自身为中心攻击周围敌人，攻击半径为220。"
+  },
+  {
+    "id": "YS-A21",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "主动施放光盾术后，每名本次获得光盾的友方，都对其周围半径220内的敌人造成等于该盾初始吸收量80%的魔法伤害。"
+  },
+  {
+    "id": "YS-A22",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "成功施放净化术后，主净化目标周围220范围内的敌人各受到220%魔法攻击力的神圣伤害。"
+  },
+  {
+    "id": "YS-A23",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "每次主动施放治愈术，保留完整治疗，并向主治疗目标周围250范围内的所有敌人分别发出光弹。每发基础伤害等于本次主目标应有治疗量的100%，满血也可触发。"
+  },
+  {
+    "id": "YS-A24",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "施放群疗术后，在本次治疗中心周围250范围内，对每名敌人造成250%魔法攻击力的神圣伤害。"
+  },
+  {
+    "id": "YS-A25",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "祝福术改为主目标周围半径250的友方群体技能，原有物理攻击和魔法攻击增益强度提高60%。"
+  },
+  {
+    "id": "YS-A26",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "防御术原有防御效果提高70%，并额外覆盖主目标周围250范围内所有队友。防御状态存在期间，受益者主动造成的神圣伤害提高40%。"
+  },
+  {
+    "id": "YS-A27",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身有有效加速术状态时，光弹术、圣光术和驱魔术的直接伤害提高50%。"
+  },
+  {
+    "id": "YS-A28",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "复法术基础回蓝提高70%。成功主动施放时，主目标周围180范围内的敌人各受到220%魔法攻击力的神圣伤害。"
+  },
+  {
+    "id": "YS-A29",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学会神术释能时，装备期间神术释能按当前技能等级常驻，不随施法消耗。神术：释能保留强化每次法术的效果，伤害增强系数额外提高50个百分点。被强化的光弹术改为主目标周围半径220的圆形攻击；圣光术、驱魔术和神威术扩大范围：圆形半径增加100，矩形长度和宽度各增加100。范围内所有目标保留完整伤害。"
+  },
+  {
+    "id": "YS-A30",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学会神术瞬发时，装备期间神术瞬发按当前技能等级常驻，不随施法消耗。神术：瞬发使其强化的每次吟唱技能完全免除吟唱，并使该次直接伤害或直接治疗提高40%。"
+  },
+  {
+    "id": "YS-D01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "治愈术直接治疗量提高60%。"
+  },
+  {
+    "id": "YS-D02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "净化术改为主目标周围半径250的友方群体技能，对原本可清除的状态，净化成功率为100%。"
+  },
+  {
+    "id": "YS-D03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "光盾术初始吸收量提高60%，并为主目标周围250范围内所有队友施加同样强度的光盾。"
+  },
+  {
+    "id": "YS-D04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "防御术的物理和魔法减伤各提高35个百分点。"
+  },
+  {
+    "id": "YS-D05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学会回春术且自身回春术状态有效期间，受到伤害降低25%；吟唱治愈术、群疗术或复活术时不会被普通受伤打断。"
+  },
+  {
+    "id": "YS-D06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "实际吟唱群疗术期间，受到伤害降低40%，并且不会被普通受伤打断。"
+  },
+  {
+    "id": "YS-D07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "清身术改为主目标周围半径250的友方群体技能。"
+  },
+  {
+    "id": "YS-D08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "实际吟唱复活术期间，受到伤害降低60%。"
+  },
+  {
+    "id": "YS-D09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "自身针刺护体状态有效期间，受到的普通攻击伤害降低35%；由你施加的针刺护体，其原物理反射比例提高75%。"
+  },
+  {
+    "id": "YS-D10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "你施加的枷锁术状态仍在敌人身上时，该敌人对你造成的伤害降低40%。"
+  },
+  {
+    "id": "YS-U01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "回春术无技能冷却，法力消耗降低20%，每次原有回血量提高50%。"
+  },
+  {
+    "id": "YS-U02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "已学会神术集中时，装备期间神术集中按当前技能等级常驻，不随施法消耗。神术：集中保留延长每次技能状态持续时间的效果，一级延长50%，其他等级不变；同时使该技能的正面增益强度提高50%，集中自身法力消耗降低30%。"
+  },
+  {
+    "id": "YS-U03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "复法术对主目标产生的溢出法力，可按溢出量的100%分给该目标周围350范围内所有队友。先给法力比例最低者，每人最多获得其最大法力的20%。"
+  },
+  {
+    "id": "YS-U04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "治愈术保留主目标完整治疗，并对主目标周围250范围内所有队友，各提供一次100%倍率的治愈术治疗，每人按自身最大生命计算。群疗术优先治疗低血者，至少产生一次有效治疗时返还本次实际消耗法力的35%。"
+  },
+  {
+    "id": "YS-U05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "加速术作用半径扩大至220，原加速强度提高30%。可仍以自己为中心，也可选600范围内队友为中心；远程施放时自己也获得相同加速。"
+  },
+  {
+    "id": "YS-U06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "主动施放祝福术时，为同一批受术友方一并施加你已学会的防御术和加速术。"
+  },
+  {
+    "id": "YS-U07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "主动施放已学习的净化术后，8秒内移动速度提高60%，受到的物理和魔法伤害降低25%。"
+  },
+  {
+    "id": "YS-U08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "主动施放已学习的鹰眼术后，12秒内仍为友方单体的技能施法距离增加400、法力消耗降低45%。"
+  },
+  {
+    "id": "YS-U09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "复活术成功复活的目标，生命至少恢复至最大生命的70%；仅实际复活成功时返还本次实付法力的50%。"
+  },
+  {
+    "id": "YS-U10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "解咒术改为主目标周围半径250的友方群体技能，对原本可清除的诅咒，净化成功率为100%。"
+  },
+  {
+    "id": "ZS-A01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "连环枪法伤害提高80%。"
+  },
+  {
+    "id": "ZS-A02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "连环枪法伤害提高15%，同时攻击自身周围1.3倍普通攻击距离内的敌人。"
+  },
+  {
+    "id": "ZS-A03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "连环枪法与普通攻击都采用两者中较高的基础伤害倍率；普通攻击的伤害另提高120%。"
+  },
+  {
+    "id": "ZS-A04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "穿刺之枪伤害提高15%，攻击宽度增加90%、长度增加20%。"
+  },
+  {
+    "id": "ZS-A05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "穿刺之枪对所有目标的伤害提高60%。"
+  },
+  {
+    "id": "ZS-A06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "穿刺之枪对选中目标追加相当于该目标本次实际伤害110%的伤害；未选中目标时，追加给最近的命中敌人。"
+  },
+  {
+    "id": "ZS-A07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "穿刺之枪先施加你已学破防之枪的减防效果；破防之枪和穿刺之枪的伤害均提高50%。"
+  },
+  {
+    "id": "ZS-A08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "破防之枪改为前方矩形攻击，长、宽采用穿刺之枪当前的范围，并始终保留选中目标；未学穿刺之枪时，使用其1级范围。破防之枪的减防强度提高50%。"
+  },
+  {
+    "id": "ZS-A09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "破法之枪伤害提高25%。若目标身上有吸收伤害的护盾，本次伤害改为提高120%。"
+  },
+  {
+    "id": "ZS-A10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "破法之枪将本次应削减法力量的200%加入物理基础伤害。"
+  },
+  {
+    "id": "ZS-A11",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "飞翔之枪伤害提高60%。"
+  },
+  {
+    "id": "ZS-A12",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "飞翔之枪伤害提高10%。命中原目标后，同时攻击其周围1.5倍普通攻击距离内的敌人。"
+  },
+  {
+    "id": "ZS-A13",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "震地之枪伤害提高45%，攻击半径增加20%。"
+  },
+  {
+    "id": "ZS-A14",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "震地之枪在自身脚下留下持续3秒的圆形余震区，每秒造成一次物理伤害，伤害为本次技能防御前伤害的35%。"
+  },
+  {
+    "id": "ZS-A15",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "震地之枪对所有目标的伤害提高60%。"
+  },
+  {
+    "id": "ZS-A16",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "裂空之枪伤害提高15%，并额外攻击前方长180、宽120范围内的敌人。"
+  },
+  {
+    "id": "ZS-A17",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "裂空之枪伤害提高30%，不再消耗武器耐久。"
+  },
+  {
+    "id": "ZS-A18",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "流虹之枪或心眼之枪命中后，对距离你最远的命中敌人，额外造成相当于该目标本次实际伤害90%的伤害。"
+  },
+  {
+    "id": "ZS-A19",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "流虹之枪对所有目标的伤害提高70%。"
+  },
+  {
+    "id": "ZS-A20",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "心眼之枪变为前方长180、宽120的矩形范围攻击，保留原选中目标，并且必定命中。每名目标的本次基础伤害额外增加物理攻击力的240%。"
+  },
+  {
+    "id": "ZS-A21",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "普通攻击改用已学心眼之枪的伤害倍率，并且必定命中。主动施放心眼之枪伤害提高100%。未学心眼之枪时，普通攻击改为必中、伤害提高100%。"
+  },
+  {
+    "id": "ZS-A22",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "野战八荒伤害提高20%，作用半径增加15%。可以选中3倍普通攻击距离内的敌人，以它为中心施放；不选目标时仍以自身为中心。"
+  },
+  {
+    "id": "ZS-A23",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "野战八荒伤害提高80%，并对原选中目标追加物理攻击力160%的物理伤害。未选中目标时，追加给命中敌人中剩余生命比例最高的一名。"
+  },
+  {
+    "id": "ZS-A24",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "战神之枪伤害提高85%，攻击范围改为你已学野战八荒当前的范围，同时保留原选中目标。未学野战八荒时，保持战神之枪原有范围。"
+  },
+  {
+    "id": "ZS-A25",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "战神之枪与野战八荒的直接伤害提高35%，并先施加你已学破防之枪的减防效果。"
+  },
+  {
+    "id": "ZS-A26",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "石化之枪冷却缩短50%，并对原目标立即造成物理攻击力240%的物理伤害。"
+  },
+  {
+    "id": "ZS-A27",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "重击伤害提高80%，攻击范围改为破防之枪当前的范围；未学破防之枪时，使用其1级范围。破防之枪伤害也提高80%。"
+  },
+  {
+    "id": "ZS-A28",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "战吼半径增加70%，嘲讽强度提高100%，并将范围内可牵引的敌人拉向自身附近。枪系直接伤害提高40%。"
+  },
+  {
+    "id": "ZS-A29",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "枪系主动技能的基础伤害额外增加物理攻击力的180%。"
+  },
+  {
+    "id": "ZS-A30",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "飞翔之枪和连环枪法的伤害均提高65%。连环枪法的施法距离至少提高至飞翔之枪的施法距离；未学飞翔之枪时，使用其1级施法距离。"
+  },
+  {
+    "id": "ZS-D01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "施放战吼时，立即获得相当于最大生命25%的护盾。"
+  },
+  {
+    "id": "ZS-D02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到的直接伤害降低16%。穿刺之枪和破防之枪已有的减防效果增强25%。"
+  },
+  {
+    "id": "ZS-D03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "正受到你施加的破防之枪减防效果的敌人，对你造成的直接伤害降低50%。"
+  },
+  {
+    "id": "ZS-D04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到的魔法直接伤害降低60%。破法之枪的削蓝量提高25%。"
+  },
+  {
+    "id": "ZS-D05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到的直接伤害降低40%。"
+  },
+  {
+    "id": "ZS-D06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "当伤害来源处于你1.5倍普通攻击距离内时，它对你造成的直接伤害降低35%。"
+  },
+  {
+    "id": "ZS-D07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到的直接伤害降低45%。"
+  },
+  {
+    "id": "ZS-D08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到的直接伤害降低30%，野战八荒的作用半径增加20%。"
+  },
+  {
+    "id": "ZS-D09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "石化之枪冷却缩短50%；成功施放时，立即获得相当于最大生命25%的护盾。"
+  },
+  {
+    "id": "ZS-D10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "受到的直接伤害降低25%，免疫减速。"
+  },
+  {
+    "id": "ZS-U01",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "连环枪法不消耗法力。"
+  },
+  {
+    "id": "ZS-U02",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "破法之枪的法力消耗降低60%，削蓝量提高60%。"
+  },
+  {
+    "id": "ZS-U03",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "飞翔之枪的施法距离增加50%；施放已学习的飞翔之枪后，8秒内移动速度提高80%。"
+  },
+  {
+    "id": "ZS-U04",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "战吼的半径增加70%、法力消耗降低30%；施放已学习的战吼后，12秒内移动速度提高60%。"
+  },
+  {
+    "id": "ZS-U05",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "震地之枪的扇形攻击半径增加45%，法力消耗降低45%。"
+  },
+  {
+    "id": "ZS-U06",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "枪系主动技能的法力消耗降低60%。"
+  },
+  {
+    "id": "ZS-U07",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "普通攻击命中时，立即恢复最大法力的5%。"
+  },
+  {
+    "id": "ZS-U08",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "穿刺之枪的攻击长度和宽度各增加70%，战吼的半径增加70%；这两个技能的法力消耗都降低30%。"
+  },
+  {
+    "id": "ZS-U09",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "飞翔之枪的准备时间和冷却时间均缩短50%，重击的冷却时间缩短50%。"
+  },
+  {
+    "id": "ZS-U10",
+    "kind": "legendary",
+    "consumer": "LegendaryPowerForRoll -\u003e native equipment/inspection/wings, snapshot gear/scroll, powerbook",
+    "description": "战吼不消耗法力，半径增加25%；战神之枪的法力消耗降低60%。"
+  },
+  {
+    "id": "native:life-leech",
+    "kind": "native",
+    "consumer": "native affix/stat formatter (registry dispatch description not appended)",
+    "description": "命中恢复生命"
+  },
+  {
+    "id": "native:mana-leech",
+    "kind": "native",
+    "consumer": "native affix/stat formatter (registry dispatch description not appended)",
+    "description": "命中恢复法力"
+  },
+  {
+    "id": "set:blood-cost",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装技能生命消耗"
+  },
+  {
+    "id": "set:card-bonuses",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装属性修正"
+  },
+  {
+    "id": "set:dragon-stats",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装属性修正"
+  },
+  {
+    "id": "set:dragon-steal",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装伤害恢复生命"
+  },
+  {
+    "id": "set:element-window",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装属性修正"
+  },
+  {
+    "id": "set:healing-copy",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装治疗复制"
+  },
+  {
+    "id": "set:melee-mitigation",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装属性修正"
+  },
+  {
+    "id": "set:missing-health",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装属性修正"
+  },
+  {
+    "id": "set:opposite-spell",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装追加异系法术"
+  },
+  {
+    "id": "set:party-aura",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装队伍光环"
+  },
+  {
+    "id": "set:periodic-mana",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装周期恢复法力"
+  },
+  {
+    "id": "set:poison-burst",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装毒伤爆发"
+  },
+  {
+    "id": "set:poison-snapshot",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装毒伤快照"
+  },
+  {
+    "id": "set:unruly-release",
+    "kind": "set",
+    "consumer": "classSetSkillText / native set bonus formatter (registry dispatch description not appended)",
+    "description": "套装属性修正"
+  },
+  {
+    "id": "special-weapon:1021:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "罡气剑不再击退敌人，伤害提高30%，适合贴身连续进攻。"
+  },
+  {
+    "id": "special-weapon:1022:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "幻影剑改为攻击自身周围100范围内的敌人，每个目标受到原伤害的80%；降低命中的效果保留，持续时间缩短50%。"
+  },
+  {
+    "id": "special-weapon:1023:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "饮血剑的生命恢复量提高60%，伤害降低10%，更适合以战养战。"
+  },
+  {
+    "id": "special-weapon:1024:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "金缚剑冷却缩短60%，定身时间缩短50%，可以更频繁地截停敌人。"
+  },
+  {
+    "id": "special-weapon:1025:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "封法剑冷却缩短70%，封印持续时间缩短70%，伤害不变，改为频繁打断施法的短封印。"
+  },
+  {
+    "id": "special-weapon:1026:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "铁城神盾持续时间缩短为原来的20%，减伤强度提高50%，冷却缩短40%。提高后的减伤最高80%；若原强度已经超过80%，保留原强度。"
+  },
+  {
+    "id": "special-weapon:1027:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "混沌剑命中时，额外驱散目标身上的一个可驱散防御增益，并保留原有的禁止获得有益状态效果。"
+  },
+  {
+    "id": "special-weapon:1028:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "狮心剑攻击生命低于50%的敌人时，伤害提高45%，适合稳定收割残血目标。"
+  },
+  {
+    "id": "special-weapon:1320:4",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "治愈术治疗量提高30%，法力消耗提高10%，强化单体急救。"
+  },
+  {
+    "id": "special-weapon:1320:5",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "冰箭术伤害提高30%，命中必定施加2秒的20%减速；已有更强或更久的减速保持不变。"
+  },
+  {
+    "id": "special-weapon:1321:4",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "净化术同时作用于目标及其附近的队友，法力消耗翻倍，冷却增加50%，适合集合解除异常状态。"
+  },
+  {
+    "id": "special-weapon:1321:5",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "冰爆术作用半径扩大40%，伤害降低10%，更容易处理贴近自身的敌人。"
+  },
+  {
+    "id": "special-weapon:1322:4",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "复法术先恢复目标法力，超过目标缺失法力的部分，有50%转为持续8秒的护盾；护盾不累加。"
+  },
+  {
+    "id": "special-weapon:1322:5",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "火弹术命中自己施加了燃烧的目标时，立即结算剩余燃烧伤害的60%，并结束这次燃烧，牺牲后续持续伤害换取提前爆发。"
+  },
+  {
+    "id": "special-weapon:1323:4",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "对仍有自己光盾的队友再次施放光盾术时，消耗剩余护盾，将剩余额度的60%转为治疗，由该队友和其周围150范围内最缺血的另一名队友平分；没有另一名受伤队友时，全部治疗给原目标。这次不再生成新盾。"
+  },
+  {
+    "id": "special-weapon:1323:5",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "对被自己主动冰封的目标使用冰爆术时，爆炸中心改为该目标，伤害为原来的80%；随后解除这次冰封，这次冰爆不再附加冻结。"
+  },
+  {
+    "id": "special-weapon:1324:4",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "群疗术可以选择300距离内的队友作为治疗中心，范围与治疗量不变，不必再贴近队伍中心施放。"
+  },
+  {
+    "id": "special-weapon:1324:5",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "秘术：消除改为将敌人身上可移除的防御魔法夺取为自身状态，其余原技能规则不变。"
+  },
+  {
+    "id": "special-weapon:1325:4",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "清身术每成功移除一种异常状态，就为目标恢复3%最大生命，每次最多恢复9%，解除减益的同时救急。"
+  },
+  {
+    "id": "special-weapon:1325:5",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "风焰术命中带有自己燃烧效果的敌人时，立即结算其剩余燃烧伤害；原燃烧效果继续存在，持续时间不缩短。"
+  },
+  {
+    "id": "special-weapon:1326:4",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "神术：集中保留原有延长下一次状态时间的效果，并使这次增益状态的效果额外提高25%。"
+  },
+  {
+    "id": "special-weapon:1326:5",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "暴雪术伤害提高25%，作用半径扩大20%，冷却保持原值。"
+  },
+  {
+    "id": "special-weapon:1327:4",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "回春术无冷却，原有总治疗量、持续时间和法力消耗不变。"
+  },
+  {
+    "id": "special-weapon:1327:5",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "秘术：幻影无冷却，瞬移成功率为100%，法力消耗提高30%。"
+  },
+  {
+    "id": "special-weapon:1520:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "真空剑攻击距离提高40%，伤害提高15%，可以在更远处持续出剑。"
+  },
+  {
+    "id": "special-weapon:1521:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "金缚剑同时攻击目标及其附近的敌人，每个目标受到原伤害的65%；定身时间缩短50%，冷却缩短50%。"
+  },
+  {
+    "id": "special-weapon:1522:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "噬魂剑恢复法力后，超出自身缺失法力的部分转为持续5秒的护盾，转化比例为50%。"
+  },
+  {
+    "id": "special-weapon:1523:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "噬魂剑伤害提高35%，恢复法力的效果降低50%，从续航技能改为更强的输出技能。"
+  },
+  {
+    "id": "special-weapon:1524:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "旋风剑作用半径扩大35%，伤害降低10%，更适合站进怪群持续清场。"
+  },
+  {
+    "id": "special-weapon:1525:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "混沌剑额外使目标防御降低15%，持续5秒，可以先破防再接其他剑技。"
+  },
+  {
+    "id": "special-weapon:1526:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "挑衅作用半径扩大60%；一次影响至少3名敌人时，自身移动速度提高20%，持续5秒，方便聚怪和调整位置。"
+  },
+  {
+    "id": "special-weapon:1527:2",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "陨星剑取消即死判定，改为对生命低于30%的敌人伤害提高80%，从碰运气斩杀改为稳定终结技。"
+  },
+  {
+    "id": "special-weapon:1620:1",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "穿刺之枪的攻击宽度扩大60%，伤害提高10%，更容易同时刺中并排敌人。"
+  },
+  {
+    "id": "special-weapon:1621:1",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "飞翔之枪攻击距离提高40%，伤害提高15%，适合远距离拉扯。"
+  },
+  {
+    "id": "special-weapon:1622:1",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "破法之枪将实际削掉的敌方法力的50%转为自身护盾，持续4秒。新护盾替换旧护盾，不累加。"
+  },
+  {
+    "id": "special-weapon:1623:1",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "震地之枪的扇形角度扩大为原来的1.5倍，伤害不变，更适合面对扇面展开的怪群。"
+  },
+  {
+    "id": "special-weapon:1624:1",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "战吼后3秒内，将自身实际损失生命的20%积蓄下来；下一次枪系攻击时转为持续5秒的护盾，最高为自身最大生命的10%。重复战吼刷新窗口，不累积多个窗口。"
+  },
+  {
+    "id": "special-weapon:1625:1",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "流虹之枪的攻击宽度翻倍，长度缩短20%，从狭长穿阵改为近中距离横扫。"
+  },
+  {
+    "id": "special-weapon:1626:1",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "重击冷却缩短65%，眩晕时间缩短50%；命中后5秒内，下一次破防之枪伤害提高40%。"
+  },
+  {
+    "id": "special-weapon:1627:1",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "野战八荒伤害提高35%，作用半径缩小20%，适合贴身集中处理精英和首领。"
+  },
+  {
+    "id": "special-weapon:1820:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "击晕冷却缩短75%，眩晕时间缩短80%，伤害降低30%，改为可以更频繁使用的短打断。"
+  },
+  {
+    "id": "special-weapon:1821:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "反击术的反击伤害提高50%，普通攻击伤害降低10%，鼓励依靠回避与反击作战。"
+  },
+  {
+    "id": "special-weapon:1822:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "爆弹陷阱放置距离提高20%，放置后立即爆炸。"
+  },
+  {
+    "id": "special-weapon:1823:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "隐身术持续时间缩短50%；进入隐身后的第一次普通攻击伤害提高60%，适合短潜行后主动抢攻。"
+  },
+  {
+    "id": "special-weapon:1824:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "背刺击杀敌人后，隐身术的剩余冷却缩短50%，适合连续寻找脆弱目标发动暗杀。"
+  },
+  {
+    "id": "special-weapon:1825:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "装备后，双刃也可使用已经学会的烟雾弹。烟雾弹改为在自身周围120范围形成持续6秒的烟幕，影响范围内的敌人，原减益强度减半；施放时自身获得一次2秒隐身，可接背刺或脱离包围。冷却增加50%。"
+  },
+  {
+    "id": "special-weapon:1826:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "背刺不再要求处于隐身状态，伤害变为原来的65%，可以作为正面近战的常用技能。"
+  },
+  {
+    "id": "special-weapon:1827:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "背刺伤害提高35%，冷却增加20%，保留隐身要求，强化一次出手的爆发。"
+  },
+  {
+    "id": "special-weapon:1922:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "狙击冷却缩短75%，定身时间缩短70%，伤害降低30%，适合反复拦住追兵、边退边打。"
+  },
+  {
+    "id": "special-weapon:1923:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "连续投掷伤害提高30%，法力消耗提高20%，强化远程主攻能力。"
+  },
+  {
+    "id": "special-weapon:1924:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "爆弹陷阱放置距离提高50%，爆炸范围提高20%，伤害不变，适合更远、更宽的区域布雷。"
+  },
+  {
+    "id": "special-weapon:1925:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "雷火弹不再击退敌人，伤害提高30%，并使目标移动速度降低30%，持续3秒，更容易将敌人留在陷阱附近。"
+  },
+  {
+    "id": "special-weapon:1926:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "多重投掷从前方扇形改为自身周围一整圈，半径为原来的80%，伤害比原技能提高20%，可以应对四面包围。"
+  },
+  {
+    "id": "special-weapon:1927:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "烟雾弹作用于目标周围150范围内的敌人，原有降低命中与魔攻的强度不变，持续时间为原来的一半，冷却增加50%。"
+  },
+  {
+    "id": "special-weapon:1928:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "冻气陷阱不再冻结，改为使敌人移动速度降低70%，持续6秒；爆炸伤害提高40%，冷却缩短30%。"
+  },
+  {
+    "id": "special-weapon:1929:3",
+    "kind": "special_weapon",
+    "consumer": "DungeonWeaponEffectLines -\u003e native specialEffects (registry text not appended)",
+    "description": "环形爆发冷却缩短25%，法力消耗降低20%，适合更频繁地冲进怪群清场。"
+  },
+  {
+    "id": "typed:aura",
+    "kind": "typed",
+    "consumer": "equipmentV5Lines -\u003e typed attributes/effects (internal registry English description not appended)",
+    "description": "Typed equipment channel: aura"
+  },
+  {
+    "id": "typed:element_absorb_bp",
+    "kind": "typed",
+    "consumer": "equipmentV5Lines -\u003e typed attributes/effects (internal registry English description not appended)",
+    "description": "Typed equipment channel: element_absorb_bp"
+  },
+  {
+    "id": "typed:element_damage_bp",
+    "kind": "typed",
+    "consumer": "equipmentV5Lines -\u003e typed attributes/effects (internal registry English description not appended)",
+    "description": "Typed equipment channel: element_damage_bp"
+  },
+  {
+    "id": "typed:element_mitigation_bp",
+    "kind": "typed",
+    "consumer": "equipmentV5Lines -\u003e typed attributes/effects (internal registry English description not appended)",
+    "description": "Typed equipment channel: element_mitigation_bp"
+  },
+  {
+    "id": "typed:element_resist_bp",
+    "kind": "typed",
+    "consumer": "equipmentV5Lines -\u003e typed attributes/effects (internal registry English description not appended)",
+    "description": "Typed equipment channel: element_resist_bp"
+  },
+  {
+    "id": "typed:enemy_element_pierce_bp",
+    "kind": "typed",
+    "consumer": "equipmentV5Lines -\u003e typed attributes/effects (internal registry English description not appended)",
+    "description": "Typed equipment channel: enemy_element_pierce_bp"
+  },
+  {
+    "id": "typed:magic_find_pct",
+    "kind": "typed",
+    "consumer": "equipmentV5Lines -\u003e typed attributes/effects (internal registry English description not appended)",
+    "description": "Typed equipment channel: magic_find_pct"
+  },
+  {
+    "id": "typed:proc",
+    "kind": "typed",
+    "consumer": "equipmentV5Lines -\u003e typed attributes/effects (internal registry English description not appended)",
+    "description": "Typed equipment channel: proc"
+  },
+  {
+    "id": "typed:skill_variant",
+    "kind": "typed",
+    "consumer": "equipmentV5Lines -\u003e typed attributes/effects (internal registry English description not appended)",
+    "description": "Typed equipment channel: skill_variant"
+  },
+  {
+    "id": "unique:ambush",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "初锋"
+  },
+  {
+    "id": "unique:area_expansion",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "广法"
+  },
+  {
+    "id": "unique:area_focus",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "八相"
+  },
+  {
+    "id": "unique:basic_focus",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "砺锋"
+  },
+  {
+    "id": "unique:critical_focus",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "会心问道"
+  },
+  {
+    "id": "unique:desperate_assault",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "绝境回锋"
+  },
+  {
+    "id": "unique:desperate_guard",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "危身护命"
+  },
+  {
+    "id": "unique:elite_hunter",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "诛邪"
+  },
+  {
+    "id": "unique:execution",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "断劫"
+  },
+  {
+    "id": "unique:fire_mastery",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "红莲"
+  },
+  {
+    "id": "unique:healing_cost",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "悬壶归元"
+  },
+  {
+    "id": "unique:healing_grace",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "济世"
+  },
+  {
+    "id": "unique:healthy_assault",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "盈生破阵"
+  },
+  {
+    "id": "unique:healthy_guard",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "圆满护体"
+  },
+  {
+    "id": "unique:holy_mastery",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "净光"
+  },
+  {
+    "id": "unique:ice_mastery",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "寒山"
+  },
+  {
+    "id": "unique:invisible_focus",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "无痕"
+  },
+  {
+    "id": "unique:kill_mana",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "纳炁"
+  },
+  {
+    "id": "unique:kill_mend",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "还丹"
+  },
+  {
+    "id": "unique:magic_guard",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "清心"
+  },
+  {
+    "id": "unique:physical_guard",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "金身"
+  },
+  {
+    "id": "unique:rescue_heal",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "救急"
+  },
+  {
+    "id": "unique:selfless_heal",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "渡人"
+  },
+  {
+    "id": "unique:single_focus",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "一心"
+  },
+  {
+    "id": "unique:skill_economy",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "行炁"
+  },
+  {
+    "id": "unique:skill_focus",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "通玄"
+  },
+  {
+    "id": "unique:spell_economy",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "节炁"
+  },
+  {
+    "id": "unique:swift_cast",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "瞬念"
+  },
+  {
+    "id": "unique:trap_expansion",
+    "kind": "unique_trait",
+    "consumer": "UniqueTrait.Describe -\u003e native specialEffects and snapshot Trait (registry label not appended)",
+    "description": "罗网"
+  }
+]

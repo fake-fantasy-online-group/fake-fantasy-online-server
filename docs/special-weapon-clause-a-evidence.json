@@ -1,0 +1,391 @@
+{
+  "scope": "first 28 approved branches, ordered 1021/2 through1823/3",
+  "testFile": "server/internal/game/scene/special_weapon_clause_a_test.go",
+  "validation": {
+    "command": "go test ./internal/game/scene -run '^TestSpecialWeaponClauseA' -count=1",
+    "result": "PASS",
+    "elapsedSeconds": 0.248,
+    "sharedRangeCommand": "go test ./internal/game/scene -run '^(TestSpecialWeaponClauseA|TestSharedReviewSelectedSingleAimRange)' -count=1"
+  },
+  "evidencePolicy": "A shared consumer witness plus branch-specific parameter assertion is explicit composition, NOT a claim that every branch ran every boundary. Identity-only tests are not counted as behavioral witnesses. Existing witnesses retained.",
+  "corrections": [
+    {
+      "key": "1525/2",
+      "text": "Original unproved clause expected increased physical damage after lowering Def. combat/damage.go explicitly excludes Def from per-hit damage; Def affects HitChance. New test verifies actual Def100→85, increased HitChance, pre-expiry85 and expiry100. Do not invent damage amplification."
+    }
+  ],
+  "productionBug": {
+    "key": "1027/2",
+    "test": "TestSpecialWeaponClauseAChaosPreservesUndispellableDefense",
+    "red": "Permanent defense1010 incorrectly removed instead of eligible1011; eligible1021 remains.",
+    "green": "Owner fixed both selection and removal with !Permanent; full A suite passes.",
+    "fixCommit": "b7cdb2b"
+  },
+  "branches": [
+    {
+      "key": "1021/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseARemovedEffectSettlement"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1022/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseACircleActualBoundaryRecipients",
+        "TestSpecialWeaponClauseABlindMagnitudeAndHalfExpiry"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1023/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponResourceBranchActualSettlement"
+      ],
+      "additionalWitnesses": [],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1024/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponControlStatusActualApplication"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseANativeControlRelease",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ],
+      "sharedParameterizedConsumerWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges"
+      ],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1025/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponControlStatusActualApplication"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseANativeControlRelease",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ],
+      "sharedParameterizedConsumerWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges"
+      ],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1026/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponControlStatusActualApplication",
+        "TestSpecialWeaponDefenseBranchActualIncomingDamage"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseADefenseCapSettlement",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ],
+      "sharedParameterizedConsumerWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges"
+      ],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1027/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponConditionalAndSecondaryHooks"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseAChaosNativeDenialAndDispelSelection",
+        "TestSpecialWeaponClauseAChaosPreservesUndispellableDefense"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1028/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponConditionalDamageActualSettlement"
+      ],
+      "additionalWitnesses": [],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1520/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [],
+      "sharedParameterizedConsumerWitnesses": [
+        "TestSpecialWeaponAllApprovedGeometryRatios",
+        "TestSharedReviewSelectedSingleAimRange"
+      ],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1521/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseACircleActualBoundaryRecipients",
+        "TestSpecialWeaponClauseANativeControlRelease",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ],
+      "sharedParameterizedConsumerWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges"
+      ],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1522/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponSwordOverflowNativeRoot"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseAShieldsReplaceAndExpire"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1523/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement",
+        "TestSpecialWeaponResourceBranchActualSettlement"
+      ],
+      "additionalWitnesses": [],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1524/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseACircleActualBoundaryRecipients"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1525/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponConditionalAndSecondaryHooks"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseADefenseDebuffActualStatsAndExpiry"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1526/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponConditionalAndSecondaryHooks"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseACircleActualBoundaryRecipients",
+        "TestSpecialWeaponClauseATauntSpeedThresholdAndExpiry"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1527/2",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponConditionalDamageActualSettlement"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseARemovedEffectSettlement"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1620/1",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [],
+      "sharedParameterizedConsumerWitnesses": [
+        "TestSpecialWeaponAllApprovedGeometryRatios",
+        "TestSpecialWeaponGeometryActualRecipients"
+      ],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1621/1",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [],
+      "sharedParameterizedConsumerWitnesses": [
+        "TestSpecialWeaponAllApprovedGeometryRatios",
+        "TestSharedReviewSelectedSingleAimRange"
+      ],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1622/1",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponOverflowAndActualManaShield"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseAShieldsReplaceAndExpire"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1623/1",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponGeometryActualRecipients"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseAUnchangedConeAndBasicTradeoffHP"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1624/1",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponWarcryAndFollowupAreConsumedOnce"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseAWarcryRefreshAndGunOnly"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1625/1",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponGeometryActualRecipients"
+      ],
+      "additionalWitnesses": [],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1626/1",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponWarcryAndFollowupAreConsumedOnce",
+        "TestSpecialWeaponBreakFollowupActualDamage"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseABreakFollowupExpiry",
+        "TestSpecialWeaponClauseANativeControlRelease",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ],
+      "sharedParameterizedConsumerWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges"
+      ],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1627/1",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseACircleActualBoundaryRecipients"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1820/3",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponDamageBranchActualSettlement"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseANativeControlRelease",
+        "TestSpecialWeaponClauseANativeCooldownBoundary"
+      ],
+      "sharedParameterizedConsumerWitnesses": [
+        "TestSpecialWeaponFinalRequestedChanges"
+      ],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1821/3",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponCounterActualSettlement"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseAUnchangedConeAndBasicTradeoffHP"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1822/3",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponInstantTrapDoesNotRemainPlaced"
+      ],
+      "additionalWitnesses": [],
+      "sharedParameterizedConsumerWitnesses": [
+        "TestSpecialWeaponAllApprovedGeometryRatios",
+        "TestSharedReviewSelectedSingleAimRange"
+      ],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    },
+    {
+      "key": "1823/3",
+      "existingActualConsumerWitnesses": [
+        "TestSpecialWeaponControlStatusActualApplication",
+        "TestSpecialWeaponStealthBranchActualFirstHit"
+      ],
+      "additionalWitnesses": [
+        "TestSpecialWeaponClauseAStealthHalfExpiry"
+      ],
+      "sharedParameterizedConsumerWitnesses": [],
+      "assessment": "effect_clauses_witnessed_with_shared_parameter_consumers",
+      "unresolvedClauses": []
+    }
+  ],
+  "crossReview": {
+    "reviewer": "close_named_effect_clauses_b",
+    "finding": "Strengthen cooldown boundary from readiness predicate to actual UseSkill rejection and admission.",
+    "resolution": "NativeCooldownBoundary now finishes first cast, rejects UseSkill expiry-1, accepts UseSkill at expiry; targeted PASS0.085s."
+  }
+}

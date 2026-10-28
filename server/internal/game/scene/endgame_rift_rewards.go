@@ -139,6 +139,12 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			continue
 		}
 		grant := endgameRiftGrant{}
+		spiritStacks, err := s.riftSpiritEssenceStacks(char)
+		if err != nil {
+			s.log.Warn("洞天元神配置无效，保留待生成状态", "run", r.RunID, "error", err)
+			return
+		}
+		grant.Items = append(grant.Items, spiritStacks...)
 		rareStacks, err := s.riftRareFeatherStacks(char)
 		if err != nil {
 			s.log.Warn("洞天稀羽配置无效，保留待生成状态", "run", r.RunID, "error", err)
@@ -267,7 +273,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 				grant.Items = append(grant.Items, stack)
 			}
 		}
-		if def, ok := s.itemDef(r.Rules.DustItem); ok {
+		if def, ok := s.itemDef(r.Rules.DustItem); ok && r.Rules.Loot.AllowsCombatMaterial(r.Rules.DustItem) {
 			stack := domain.NewStack(def, plan.Dust)
 			stack.Bound = true
 			grant.Items = append(grant.Items, stack)

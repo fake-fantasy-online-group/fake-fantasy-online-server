@@ -1701,22 +1701,74 @@ func TestAssassinUnitCoverageCounterProbability(t *testing.T) {
 		t.Fatal("native probability corpus lacks both outcomes")
 	}
 }
-func TestAssassinUnitCoveragePullCombinationOneMovement(t *testing.T) {
-	s, p, m := nativeRepairFixture(t, domain.Assassin, domain.Learned{10225: 1, 10226: 1}, "CK-A28", "CK-A30")
-	m.Pos.X = 300
-	s.aoi.Move(m, m.Pos)
-	d := assassinCoverageSkill(10225)
-	d.Effects = []domain.SkillEffect{d.Effect, {Kind: domain.EffectKnockback, ChanceBP: 10000, ChanceExplicit: true, KnockbackDistance: 120}}
-	s.legendaryPrepareSkill(p, &d, m.ID)
-	s.outbox = nil
-	assassinNativeHits(s, p, d, m.ID, []domain.EntityID{m.ID})
-	moves := 0
-	for _, o := range s.outbox {
-		if ev, ok := o.ev.(event.EntityMoved); ok && ev.ID == m.ID {
-			moves++
+func TestAssassinUnitCoveragePullCombinationIndependentEffects(t *testing.T) {
+	for _, learned := range []bool{false, true} {
+		for _, immune := range []bool{false, true} {
+			for _, powers := range [][]string{nil, {"CK-A28"}, {"CK-A30"}, {"CK-A28", "CK-A30"}, {"CK-A30", "CK-A28"}} {
+				t.Run(fmt.Sprintf("learned=%v/immune=%v/powers=%v", learned, immune, powers), func(t *testing.T) {
+					skills := domain.Learned{10225: 1}
+					if learned {
+						skills[10226] = 1
+					}
+					s, p, m := nativeRepairFixture(t, domain.Assassin, skills, powers...)
+					m.Pos.X = 300
+					s.aoi.Move(m, m.Pos)
+					if immune {
+						m.Status.Apply(domain.StatusDef{ID: 9999, TypeKnown: true, Type: domain.StatusGood, DurationSec: 60, SuppressHarmful: true}, s.tick, m.ID)
+					}
+					d := assassinCoverageSkill(10225)
+					if learned {
+						d.Effects = []domain.SkillEffect{d.Effect, {Kind: domain.EffectKnockback, ChanceBP: 10000, ChanceExplicit: true, KnockbackDistance: 120}}
+					}
+					s.legendaryPrepareSkill(p, &d, m.ID)
+					s.outbox = nil
+					assassinNativeHits(s, p, d, m.ID, []domain.EntityID{m.ID})
+					hasLimited, hasGather := false, false
+					for _, power := range powers {
+						hasLimited = hasLimited || power == "CK-A28"
+						hasGather = hasGather || power == "CK-A30"
+					}
+					// Independent oracle: learned native knockback adds120 unless
+					// A30 transforms it; A28 pulls120, then A30 pulls to distance40.
+					wantX := float64(300)
+					var wantMoves []float64
+					if !immune {
+						if learned && !hasGather {
+							wantX += 120
+							wantMoves = append(wantMoves, wantX)
+						}
+						if hasLimited {
+							wantX = max(p.Pos.X+40, wantX-120)
+							wantMoves = append(wantMoves, wantX)
+						}
+						if hasGather && learned && wantX > p.Pos.X+40 {
+							wantX = p.Pos.X + 40
+							wantMoves = append(wantMoves, wantX)
+						}
+					}
+					var gotMoves []float64
+					for _, o := range s.outbox {
+						if ev, ok := o.ev.(event.EntityMoved); ok && ev.ID == m.ID {
+							gotMoves = append(gotMoves, ev.To.X)
+						}
+					}
+					if len(gotMoves) != len(wantMoves) {
+						t.Fatalf("trajectory %v want %v", gotMoves, wantMoves)
+					}
+					for i := range wantMoves {
+						if gotMoves[i] != wantMoves[i] {
+							t.Fatalf("trajectory %v want %v", gotMoves, wantMoves)
+						}
+					}
+					wantDamage := int32(100)
+					if hasLimited {
+						wantDamage = 145
+					}
+					if m.Pos.X != wantX || m.MaxHP-m.HP != wantDamage {
+						t.Fatalf("position/damage=(%v,%d) want(%v,%d)", m.Pos.X, m.MaxHP-m.HP, wantX, wantDamage)
+					}
+				})
+			}
 		}
-	}
-	if m.Pos.X != 140 || moves != 1 || m.MaxHP-m.HP != 145 {
-		t.Fatal("combined pull knocked back or pulled twice", m.Pos.X, moves, m.MaxHP-m.HP)
 	}
 }

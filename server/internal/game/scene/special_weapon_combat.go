@@ -4,7 +4,6 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
-	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
 
 type specialWeaponState struct {
@@ -36,6 +35,13 @@ func (s *Scene) specialWeaponState(p *entity.Entity) *specialWeaponState {
 	return st
 }
 func (s *Scene) specialWeaponShield(target *entity.Entity, base domain.ItemID, amount, seconds int32, source domain.EntityID) {
+	owner := s.entities[source]
+	if owner == nil {
+		owner = &entity.Entity{ID: source}
+	}
+	s.dispatchSpecialWeaponEffect(owner, base, 0, "shield", true, func() { s.specialWeaponShieldRuntime(target, base, amount, seconds, source) })
+}
+func (s *Scene) specialWeaponShieldRuntime(target *entity.Entity, base domain.ItemID, amount, seconds int32, source domain.EntityID) {
 	if amount <= 0 {
 		return
 	}
@@ -51,10 +57,13 @@ func (s *Scene) specialWeaponLostHP(p *entity.Entity, amount int32) {
 	}
 	st := s.specialWeapons.players[p.ID]
 	if st != nil && st.owner == p && st.weaponRevision == p.Player.Worn.WeaponEffectsRevision() && st.base == 1624 && st.cryUntil > s.tick && s.specialWeapon(p) == 1624 {
-		st.cryDamage += int64(amount)
+		s.dispatchSpecialWeaponEffect(p, 1624, 1, "warcry-accumulate", false, func() { st.cryDamage += int64(amount) })
 	}
 }
 func (s *Scene) specialWeaponConsumeCry(p *entity.Entity) {
+	s.dispatchSpecialWeaponEffect(p, s.specialWeapon(p), 0, "warcry-shield", true, func() { s.specialWeaponConsumeCryRuntime(p) })
+}
+func (s *Scene) specialWeaponConsumeCryRuntime(p *entity.Entity) {
 	if s.specialWeapons == nil || p == nil {
 		return
 	}
@@ -76,8 +85,10 @@ func (s *Scene) specialWeaponPrepareCast(p *entity.Entity, d *domain.SkillDef) {
 	if d.SpecialWeaponBaseID == 1626 && d.ID == 10009 && s.specialWeapons != nil {
 		st := s.specialWeapons.players[p.ID]
 		if st != nil && st.owner == p && st.weaponRevision == p.Player.Worn.WeaponEffectsRevision() && st.breakUntil > s.tick {
-			specialDamage(d, 140)
-			st.breakUntil = 0
+			s.dispatchSpecialWeaponEffect(p, 1626, 1, "break-followup", false, func() {
+				specialDamage(d, 140)
+				st.breakUntil = 0
+			})
 		}
 	}
 	if p.Status != nil && len(d.Statuses) > 0 {
@@ -88,7 +99,7 @@ func (s *Scene) specialWeaponPrepareCast(p *entity.Entity, d *domain.SkillDef) {
 		})
 	}
 }
-func (s *Scene) specialWeaponCastReleased(p *entity.Entity, d domain.SkillDef) {
+func (s *Scene) specialWeaponCastReleasedRuntime(p *entity.Entity, d domain.SkillDef) {
 	if d.SpecialWeaponBaseID == 1624 && d.ID == 10028 {
 		st := s.specialWeaponState(p)
 		st.cryUntil = s.tick + domain.Ticks(3000)
@@ -98,7 +109,7 @@ func (s *Scene) specialWeaponCastReleased(p *entity.Entity, d domain.SkillDef) {
 		s.applyStatusDef(p, domain.StatusDef{ID: domain.StatusStealth, Level: 1, Name: "烟幕隐身", TypeKnown: true, Type: domain.StatusGood, DurationSec: 2, Invisible: true, BreakOnAttack: true}, p.ID)
 	}
 }
-func (s *Scene) specialWeaponCastFinished(p *entity.Entity, d domain.SkillDef, hits []domain.EntityID) {
+func (s *Scene) specialWeaponCastFinishedRuntime(p *entity.Entity, d domain.SkillDef, hits []domain.EntityID) {
 	if d.SpecialWeaponBaseID == 1825 && d.ID == 10224 {
 		s.specialWeaponState(p)
 		if s.specialWeapons.smoke == nil {
@@ -110,7 +121,7 @@ func (s *Scene) specialWeaponCastFinished(p *entity.Entity, d domain.SkillDef, h
 		s.applyStatusDef(p, domain.StatusDef{ID: 1800101526, Name: "挑衅疾行", Level: 1, TypeKnown: true, Type: domain.StatusGood, DurationSec: 5, Affixes: []domain.Affix{{Attr: domain.AttrMoveSpeed, Mode: domain.ModePercent, Value: 20}}}, p.ID)
 	}
 }
-func (s *Scene) specialWeaponBeforeHit(src, dst *entity.Entity, d *domain.SkillDef) {
+func (s *Scene) specialWeaponBeforeHitRuntime(src, dst *entity.Entity, d *domain.SkillDef) {
 	if d.SpecialWeaponBaseID == 1028 && int64(dst.HP)*2 < int64(dst.MaxHP) {
 		specialDamage(d, 145)
 	}
@@ -118,7 +129,7 @@ func (s *Scene) specialWeaponBeforeHit(src, dst *entity.Entity, d *domain.SkillD
 		specialDamage(d, 180)
 	}
 }
-func (s *Scene) specialWeaponAfterHit(src, dst *entity.Entity, d domain.SkillDef, landed, killed bool) {
+func (s *Scene) specialWeaponAfterHitRuntime(src, dst *entity.Entity, d domain.SkillDef, landed, killed bool) {
 	if !landed {
 		return
 	}
@@ -202,25 +213,17 @@ func (s *Scene) specialWeaponDispelOne(src, dst *entity.Entity) {
 	}
 	var selected domain.StatusID
 	dst.Status.EachEffective(func(a domain.Active) {
-		if specialDefensiveStatus(a.Def.ID) && (selected == 0 || a.Def.ID < selected) {
+		if !a.Def.Permanent && specialDefensiveStatus(a.Def.ID) && (selected == 0 || a.Def.ID < selected) {
 			selected = a.Def.ID
 		}
 	})
 	if selected != 0 {
-		s.statusesRemoved(dst, dst.Status.RemoveWhere(func(d domain.StatusDef) bool { return d.ID == selected }))
+		s.statusesRemoved(dst, dst.Status.RemoveWhere(func(d domain.StatusDef) bool { return d.ID == selected && !d.Permanent }))
 	}
 }
 func (s *Scene) specialWeaponDispel(src, dst *entity.Entity, d domain.SkillDef, ids []domain.StatusID) []domain.Active {
 	if d.SpecialWeaponBaseID != 1324 || d.ID != 10433 || dst.Status == nil {
 		return nil
-	}
-	// The learned legendary group steal owns this cast's transfer. Running the
-	// older weapon transfer first would overwrite its fresh shield on later
-	// victims before the legendary same-status deduplicator rejects them.
-	for _, ctx := range s.legendaryContexts(src, dst, combat.Blow{SkillID: int32(d.ID)}, event.DamageDealt{}) {
-		if ctx.Power.ID == "SS-U02" {
-			return nil
-		}
 	}
 	var stolen []domain.Active
 	dst.Status.EachEffective(func(a domain.Active) {
@@ -233,7 +236,7 @@ func (s *Scene) specialWeaponDispel(src, dst *entity.Entity, d domain.SkillDef, 
 	})
 	return stolen
 }
-func (s *Scene) specialWeaponAfterDispel(src, dst *entity.Entity, d domain.SkillDef, removed []domain.StatusID, stolen []domain.Active) {
+func (s *Scene) specialWeaponAfterDispelRuntime(src, dst *entity.Entity, d domain.SkillDef, removed []domain.StatusID, stolen []domain.Active) {
 	if d.SpecialWeaponBaseID == 1325 && d.ID == 10316 && len(removed) > 0 {
 		amount := domain.SaturateInt32(int64(dst.MaxHP) * int64(min(3, len(removed))) * 3 / 100)
 		s.specialWeaponHeal(src, dst, amount, d)
@@ -247,6 +250,17 @@ func (s *Scene) specialWeaponAfterDispel(src, dst *entity.Entity, d domain.Skill
 			continue
 		}
 		if a.ExpireAt <= s.tick && !a.Def.Permanent {
+			continue
+		}
+		// A later victim's residual copy must not downgrade the fresh instance
+		// already granted by group steal. Other status kinds still transfer.
+		preserveFresh := false
+		src.Status.EachEffective(func(existing domain.Active) {
+			if existing.Def.ID == a.Def.ID && existing.Def.LegendaryPowerID == "SS-U02" && existing.ShieldLeft >= a.ShieldLeft && existing.ExpireAt >= a.ExpireAt {
+				preserveFresh = true
+			}
+		})
+		if preserveFresh {
 			continue
 		}
 		x := a.Def
@@ -268,7 +282,7 @@ func (s *Scene) specialWeaponAfterDispel(src, dst *entity.Entity, d domain.Skill
 		}
 	}
 }
-func (s *Scene) specialWeaponConvertShield(src, dst *entity.Entity, d domain.SkillDef) bool {
+func (s *Scene) specialWeaponConvertShieldRuntime(src, dst *entity.Entity, d domain.SkillDef) bool {
 	if d.SpecialWeaponBaseID != 1323 || d.ID != 10320 || dst.Status == nil {
 		return false
 	}
@@ -300,7 +314,7 @@ func (s *Scene) specialWeaponConvertShield(src, dst *entity.Entity, d domain.Ski
 	s.specialWeaponHeal(src, dst, amount, d)
 	return true
 }
-func (s *Scene) specialWeaponAim(src *entity.Entity, d *domain.SkillDef, target domain.EntityID) {
+func (s *Scene) specialWeaponAimRuntime(src *entity.Entity, d *domain.SkillDef, target domain.EntityID) {
 	if d.SpecialWeaponBaseID != 1323 || d.ID != 10410 {
 		return
 	}
@@ -332,7 +346,7 @@ func (s *Scene) specialWeaponAim(src *entity.Entity, d *domain.SkillDef, target 
 	}
 	d.Statuses = out
 }
-func (s *Scene) specialWeaponConsumeFreeze(src *entity.Entity, d domain.SkillDef) {
+func (s *Scene) specialWeaponConsumeFreezeRuntime(src *entity.Entity, d domain.SkillDef) {
 	if d.SpecialWeaponConsumeFreeze == 0 {
 		return
 	}
@@ -347,7 +361,7 @@ func (s *Scene) specialWeaponConsumeFreeze(src *entity.Entity, d domain.SkillDef
 }
 func (s *Scene) specialWeaponCounterDamage(p *entity.Entity, damage int32) int32 {
 	if s.specialWeapon(p) == 1821 {
-		return specialScale(damage, 150)
+		s.dispatchSpecialWeaponEffect(p, 1821, 3, "counter-damage", false, func() { damage = specialScale(damage, 150) })
 	}
 	return damage
 }
@@ -362,7 +376,7 @@ func (s *Scene) specialWeaponBasicAttack(p *entity.Entity, blow *combat.Blow) {
 			if pct == 0 {
 				pct = 100
 			}
-			blow.SkillPct = specialScale(pct, 100+bonus)
+			s.dispatchSpecialWeaponEffect(p, 1823, 3, "inherited-basic-bonus", false, func() { blow.SkillPct = specialScale(pct, 100+bonus) })
 		}
 	}
 	if s.specialWeapon(p) == 1821 && p.Player.Char.Skills[10203] > 0 {
@@ -370,7 +384,7 @@ func (s *Scene) specialWeaponBasicAttack(p *entity.Entity, blow *combat.Blow) {
 		if pct == 0 {
 			pct = 100
 		}
-		blow.SkillPct = specialScale(pct, 90)
+		s.dispatchSpecialWeaponEffect(p, 1821, 3, "basic-attack", false, func() { blow.SkillPct = specialScale(pct, 90) })
 	}
 }
 
@@ -405,7 +419,7 @@ func specialWeaponBuffPower(d *domain.StatusDef, pct int32) {
 	// Boolean immunity/stealth remains binary; strengthening never extends its
 	// duration a second time or creates unsupported 125%-true control semantics.
 }
-func (s *Scene) specialWeaponImmediateTrap(src *entity.Entity, d domain.SkillDef, at domain.Pos, radius int32, duration int32, source *domain.CombatSourceSnapshotV5) bool {
+func (s *Scene) specialWeaponImmediateTrapRuntime(src *entity.Entity, d domain.SkillDef, at domain.Pos, radius int32, duration int32, source *domain.CombatSourceSnapshotV5) bool {
 	if d.SpecialWeaponBaseID != 1822 || d.ID != 10213 {
 		return false
 	}
@@ -504,7 +518,7 @@ func (s *Scene) stepSpecialWeaponSmoke() {
 				state, ok := s.resolveSkillStatusDef(area.def, app, 0)
 				if ok {
 					state.DurationSec = max(int32(1), int32((area.expires-s.tick+domain.Ticks(1000)-1)/domain.Ticks(1000)))
-					s.applyStatusDef(dst, state, id)
+					s.dispatchSpecialWeaponEffect(area.owner, 1825, 3, "smoke-status", true, func() { s.applyStatusDef(dst, state, id) })
 				}
 			}
 		}
@@ -513,14 +527,14 @@ func (s *Scene) stepSpecialWeaponSmoke() {
 }
 
 // These are real healing events and keep the ordinary healer equipment chain.
-func (s *Scene) specialWeaponHeal(src, dst *entity.Entity, amount int32, d domain.SkillDef) {
-	if amount <= 0 {
+func (s *Scene) specialWeaponHealRuntime(src, dst *entity.Entity, amount int32, d domain.SkillDef) {
+	if amount <= 0 || src == nil || dst == nil {
 		return
 	}
 	amount = s.uniqueHealing(src, dst, amount, d)
 	amount = s.classSetCardHealing(src, amount)
 	s.casterSetCopyHeal(src, dst, amount, d.ID)
-	s.emit(combat.Restore(src, dst, amount, int32(d.ID)))
+	s.restoreHealthWithReactions(src, dst, amount, d.ID)
 	s.emitAttributesIfPlayer(dst)
 	rt := s.equipmentState()
 	if rt.classSetTriggered == 0 && rt.root != nil && rt.root.src == src.ID {

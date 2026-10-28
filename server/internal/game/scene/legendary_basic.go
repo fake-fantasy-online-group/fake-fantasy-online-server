@@ -72,7 +72,7 @@ func (s *Scene) legendaryBasicAttack(src, dst *entity.Entity, tr *combat.HitTrac
 			blow.Area = len(targets) > 1
 			ev, raw, reflect := s.resolveStrikeStatuses(src, target, tr, blow)
 			s.emit(ev)
-			s.afterStrikeStatuses(src, target, ev, raw, reflect)
+			s.afterStrikeStatuses(src, target, ev, raw, reflect, strikeReactionContext{HurtType: blow.HurtType})
 			s.consumeHitDurability(target, ev)
 			s.emitAttributesIfPlayer(target)
 			s.aggroAfterHit(target, src.ID, ev)

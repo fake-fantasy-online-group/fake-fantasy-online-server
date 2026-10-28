@@ -1,6 +1,7 @@
 package scene
 
 import (
+	"slices"
 	"sort"
 
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
@@ -24,6 +25,14 @@ func (s *Scene) placeAssassinTrap(owner *entity.Entity, def domain.SkillDef, at 
 		// Do not allocate a new snapshot only to discard it immediately.
 		source = s.captureCombatSourceV5(owner, def.UniqueInvisibleStart || entityInvisible(owner))
 	}
+	// A secondary placement reuses stats, but must pin its new producer ancestry.
+	path := mergeStatusCausalPath(source.CombatCausalPath, s.legendaryState().causalPath)
+	if !slices.Equal(path, source.CombatCausalPath) {
+		copySource := *source
+		copySource.CombatCausalPath = path
+		source = &copySource
+	}
+	defer s.withCombatCausalPath(source.CombatCausalPath)()
 	trap := &entity.Entity{
 		ID: s.alloc.Trap(), Kind: domain.KindTrap, Name: def.Name, Pos: at,
 		Trap: &entity.Trap{

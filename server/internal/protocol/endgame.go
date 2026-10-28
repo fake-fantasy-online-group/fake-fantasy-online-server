@@ -130,19 +130,38 @@ func endgameDecimal(s string, zero bool) bool {
 	return e == nil && (n > 0 || zero && n == 0) && strconv.FormatInt(n, 10) == s
 }
 func validEndgameRequest(v domain.EndgameRequest) bool {
-	if v.NPCEntityID != 0 && v.Op != "rift.start" && v.Op != "cube.quote" && v.Op != "cube.execute" && v.Op != "cube.recover" {
+	if v.NPCEntityID != 0 && v.Op != "rift.start" && v.Op != "cube.quote" && v.Op != "cube.execute" && v.Op != "cube.recover" && v.Op != "powerbook.recover" {
 		return false
 	}
 	switch v.Op {
-	case "powerbook.list", "powerbook.imprint", "skill.ranks", "skill.upgrade", "hello", "capabilities", "snapshot", "catalog", "socket.insert", "socket.remove", "cube.quote", "cube.execute", "cube.recover", "rift.start", "rift.state", "rift.claim", "rift.leave", "rift.advance":
+	case "powerbook.list", "powerbook.extract", "powerbook.apply", "powerbook.recover", "powerbook.imprint", "skill.ranks", "skill.upgrade", "hello", "capabilities", "snapshot", "catalog", "socket.insert", "socket.remove", "cube.quote", "cube.execute", "cube.recover", "rift.start", "rift.state", "rift.claim", "rift.leave", "rift.advance":
 	default:
 		return false
 	}
-	if v.PowerID != "" && (v.Op != "powerbook.imprint" || !endgameASCII(v.PowerID, 1, 32)) {
+	if v.PowerID != "" && ((v.Op != "powerbook.imprint" && v.Op != "powerbook.extract") || !endgameASCII(v.PowerID, 1, 32)) {
 		return false
 	}
 	if v.Op == "powerbook.imprint" && (v.PowerID == "" || v.TargetUID == "" || v.RuneUID != "" || v.RecipeID != 0 || v.QuoteID != "" || len(v.ItemUIDs) != 0 || len(v.CubeInputs) != 0 || v.Socket != 0 || v.Tier != 0 || v.RunID != "" || v.Cursor != "" || v.Catalog != "" || v.FloorIndex != 0 || len(v.Capabilities) != 0) {
 		return false
+	}
+	if v.Op == "powerbook.extract" || v.Op == "powerbook.apply" || v.Op == "powerbook.recover" {
+		if v.RecipeID != 0 || v.QuoteID != "" || len(v.ItemUIDs) != 0 || len(v.CubeInputs) != 0 || v.Socket != 0 || v.Tier != 0 || v.RunID != "" || v.Cursor != "" || v.Catalog != "" || v.FloorIndex != 0 || len(v.Capabilities) != 0 {
+			return false
+		}
+		switch v.Op {
+		case "powerbook.extract":
+			if v.PowerID == "" || v.TargetUID != "" || v.RuneUID != "" || v.NPCEntityID != 0 {
+				return false
+			}
+		case "powerbook.apply":
+			if v.PowerID != "" || v.TargetUID == "" || v.RuneUID == "" || v.NPCEntityID != 0 {
+				return false
+			}
+		case "powerbook.recover":
+			if v.PowerID != "" || v.TargetUID != "" || v.RuneUID != "" || v.NPCEntityID <= 0 {
+				return false
+			}
+		}
 	}
 	if v.Op == "skill.upgrade" && v.SkillID <= 0 {
 		return false
@@ -173,7 +192,14 @@ func validEndgameRequest(v domain.EndgameRequest) bool {
 			return false
 		}
 	}
-	if len(v.ItemUIDs) > 10 || len(v.Capabilities) > 8 {
+	maxCapabilities := 8
+	for _, c := range v.Capabilities {
+		if c == domain.EndgamePowerCodexV1 {
+			maxCapabilities = 9
+			break
+		}
+	}
+	if len(v.ItemUIDs) > 10 || len(v.Capabilities) > maxCapabilities {
 		return false
 	}
 	for _, id := range v.ItemUIDs {

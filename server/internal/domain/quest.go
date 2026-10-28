@@ -321,6 +321,7 @@ func (t QuestTable) ByNPC(npc string) []QuestDef {
 
 // QuestEntry 是一个任务在角色身上的进度。
 type QuestEntry struct {
+	SpiritDaily SpiritDailyQuestState
 	// AcceptedAtMS is the server acceptance time; zero cannot earn event credit.
 	AcceptedAtMS int64
 	// RiftCompletionRunID identifies one durable eligible completion after acceptance.

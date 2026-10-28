@@ -1,0 +1,39 @@
+{
+  "spirit": {
+    "kind": 9,
+    "itemId": 8038,
+    "sealed": false,
+    "level": 1,
+    "attrs": [
+      {
+        "attr": 1,
+        "value": 20,
+        "permanent": 20,
+        "last": 20,
+        "level": 1,
+        "perfectLevel": 1
+      },
+      {
+        "attr": 7,
+        "value": 20,
+        "permanent": 20,
+        "last": 20,
+        "level": 1,
+        "perfectLevel": 1
+      }
+    ],
+    "canUnseal": false,
+    "canProcess": true,
+    "canRollback": false,
+    "canReset": false,
+    "unsealEssence": 2,
+    "processEssence": 2,
+    "rollbackEssence": 1,
+    "resetEssence": 200,
+    "processMoney": "100000"
+  },
+  "kind": "spirit.preview",
+  "requestId": "spirit-preview-0001",
+  "ok": true,
+  "revision": "0"
+}
