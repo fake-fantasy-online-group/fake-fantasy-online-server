@@ -66,8 +66,8 @@ func (s *Scene) inventorySnapshot(p *entity.Entity) (event.InventorySnapshot, er
 		view := event.InventoryItemView{
 			BagIndex: int32(clientSlot), Item: st.Item, Count: st.Count,
 			Tab: def.InventoryTab, Name: itemDisplayName(def, st), Desc: s.itemTooltipForViewerResolved(def, st, p, p, resolution),
-			Sell: def.SellPrice, Slot: -1, Bound: st.Bound, Blocked: s.equipmentBlockedForResolved(p, def, st, resolution),
-			Locked: st.Locked, Quality: equipmentQuality(def, st), Cosmetic: def.AvatarFusion != nil,
+			Sell: def.SellPrice, Slot: -1, Bound: st.Bound || domain.IsAstralRuneStack(st) && st.Card.Bound, Blocked: s.equipmentBlockedForResolved(p, def, st, resolution),
+			Locked: st.Locked || domain.IsAstralRuneStack(st) && st.Card.Locked, Quality: equipmentQuality(def, st), Cosmetic: def.AvatarFusion != nil,
 			FusedDesc: s.fusedDescription(st),
 		}
 		if def.Equip != nil {
@@ -298,7 +298,8 @@ func (s *Scene) onSortBag(cmd SortBag) {
 const dropPlacementRange = 150
 
 // onDropBagItem 处理 0x100f。客户端给出的格号、物品号与落点都只是引用；
-// 服务端复核背包实例、分页、距离和 MASK 后，才把同一份实例移到地面。
+// 未绑定实例复核距离和 MASK 后移到地面；绑定实例经客户端确认后直接销毁。
+// 0x100f 没有数量字段，始终操作选定整格；部分丢弃先走 0x1016 拆分。
 func (s *Scene) onDropBagItem(cmd DropBagItem) {
 	p := s.players[cmd.ID]
 	if p == nil || !p.Alive() || p.Player == nil || p.Player.Bag == nil {
@@ -309,7 +310,7 @@ func (s *Scene) onDropBagItem(cmd DropBagItem) {
 		return
 	}
 	bag := p.Player.Bag
-	if s.alloc == nil || cmd.Slot < 0 || cmd.Slot >= bag.Cap() {
+	if cmd.Slot < 0 || cmd.Slot >= bag.Cap() {
 		_ = s.pushInventory(p)
 		return
 	}
@@ -320,20 +321,25 @@ func (s *Scene) onDropBagItem(cmd DropBagItem) {
 		return
 	}
 	if st.Empty() || !ok || st.Item != cmd.Item || !def.InventoryTabKnown ||
-		def.InventoryTab != cmd.Tab || (st.Bound && !domain.IsStartingSword(st.Item)) || st.Locked || domain.AstralRuneTransferProtected(st) {
+		def.InventoryTab != cmd.Tab || st.Locked || domain.IsAstralRuneStack(st) && st.Card.Locked {
+		_ = s.pushInventory(p)
+		return
+	}
+	bound := st.Bound || domain.IsAstralRuneStack(st) && st.Card.Bound
+	if bound && !cmd.Confirmed {
 		_ = s.pushInventory(p)
 		return
 	}
 	at := cmd.At
 	at.MapID = p.Pos.MapID
-	if sqDist(p.Pos, at) > dropPlacementRange*dropPlacementRange ||
-		s.walkable != nil && !s.walkable(at) {
+	if !bound && (s.alloc == nil || sqDist(p.Pos, at) > dropPlacementRange*dropPlacementRange ||
+		s.walkable != nil && !s.walkable(at)) {
 		_ = s.pushInventory(p)
 		return
 	}
 
 	planned := bag.Clone()
-	if planned == nil || !planned.Set(cmd.Slot, domain.Stack{}) {
+	if planned == nil || !planned.RemoveAt(cmd.Slot, st.Count) {
 		_ = s.pushInventory(p)
 		return
 	}
@@ -343,13 +349,15 @@ func (s *Scene) onDropBagItem(cmd DropBagItem) {
 		p.Player.Bag, p.Player.RepairQuote = old, oldQuote
 		return
 	}
-	s.spawnPlayerDrop(def, st, at, p.ID)
+	if !bound {
+		s.spawnPlayerDrop(def, st, at, p.ID)
+	}
 	p.Player.MarkDirty()
 	if s.saver != nil {
 		s.saver.Save(s.snapshotOf(p))
 	}
 	s.log.Debug("丢弃背包物品", "char", p.Name, "item", def.Name, "count", st.Count,
-		"tab", cmd.Tab, "slot", cmd.Slot, "confirmed", cmd.Confirmed, "x", at.X, "y", at.Y)
+		"tab", cmd.Tab, "slot", cmd.Slot, "destroyed", bound, "confirmed", cmd.Confirmed, "x", at.X, "y", at.Y)
 }
 
 // onSplitBagItem 处理 0x1016。count 是拆到新格中的数量，不是拆分后的剩余量。

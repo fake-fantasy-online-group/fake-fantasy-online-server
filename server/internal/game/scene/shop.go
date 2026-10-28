@@ -129,12 +129,14 @@ func (s *Scene) onSellItem(cmd SellItem) {
 		return
 	}
 	def, ok := s.itemDef(stack.Item)
-	if !ok || !def.InventoryTabKnown || def.InventoryTab != cmd.Tab || def.SellPrice <= 0 {
+	if !ok || !def.InventoryTabKnown || def.InventoryTab != cmd.Tab || def.SellPrice < 0 {
 		reject(event.RejectInvalid)
 		return
 	}
 	proceeds, ok := checkedMul64(def.SellPrice, int64(cmd.Count))
-	if !ok || proceeds <= 0 {
+	// Zero is a legitimate sale price: consume the requested items without
+	// crediting money. Missing definitions and negative/overflow prices still fail.
+	if !ok || proceeds < 0 {
 		reject(event.RejectInvalid)
 		return
 	}

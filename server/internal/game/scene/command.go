@@ -607,14 +607,14 @@ type SortWarehouse struct {
 
 func (SortWarehouse) CmdName() string { return "SortWarehouse" }
 
-// DropBagItem 把一格权威背包实例放到角色附近的地面。
+// DropBagItem 丢弃一格权威背包实例：绑定物品确认后销毁，其余放到附近地面。
 type DropBagItem struct {
 	ID        domain.EntityID
 	Tab       uint8
 	Slot      int
 	Item      domain.ItemID
 	At        domain.Pos
-	Confirmed bool // 客户端是否已经走过本地确认框；不作为服务端授权依据
+	Confirmed bool // 绑定物品必须走过本地销毁确认框；仍需复核权威实例及保护状态
 }
 
 func (DropBagItem) CmdName() string { return "DropBagItem" }
