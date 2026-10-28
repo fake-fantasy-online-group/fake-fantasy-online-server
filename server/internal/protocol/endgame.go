@@ -192,11 +192,18 @@ func validEndgameRequest(v domain.EndgameRequest) bool {
 			return false
 		}
 	}
+	// Preserve the legacy budget, adding one slot per distinct supported
+	// extension. Published clients advertise both codex and spirit in hello.
 	maxCapabilities := 8
+	codex, spirit := false, false
 	for _, c := range v.Capabilities {
-		if c == domain.EndgamePowerCodexV1 {
-			maxCapabilities = 9
-			break
+		if c == domain.EndgamePowerCodexV1 && !codex {
+			codex = true
+			maxCapabilities++
+		}
+		if c == domain.EndgameSpiritV1 && !spirit {
+			spirit = true
+			maxCapabilities++
 		}
 	}
 	if len(v.ItemUIDs) > 10 || len(v.Capabilities) > maxCapabilities {
