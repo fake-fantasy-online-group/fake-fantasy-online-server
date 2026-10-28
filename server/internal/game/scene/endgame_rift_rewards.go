@@ -267,7 +267,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 				grant.Items = append(grant.Items, stack)
 			}
 		}
-		if def, ok := s.itemDef(r.Rules.DustItem); ok {
+		if def, ok := s.itemDef(r.Rules.DustItem); ok && r.Rules.Loot.AllowsCombatMaterial(r.Rules.DustItem) {
 			stack := domain.NewStack(def, plan.Dust)
 			stack.Bound = true
 			grant.Items = append(grant.Items, stack)

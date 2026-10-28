@@ -1,0 +1,26 @@
+{
+  "kind": "snapshot",
+  "ok": true,
+  "revision": "1",
+  "items": [
+    {
+      "powerScroll": {
+        "powerId": "TY-A02",
+        "rollBp": 8123,
+        "name": "长锋",
+        "description": "长锋：矩形技能的长度提高48.73%（45%～60%），宽度不变。按职业威能改造后的形状生效，与同类长度加成相加。"
+      },
+      "tab": 0,
+      "uid": "9007199254740993",
+      "itemId": 1900028303,
+      "location": "bag",
+      "slot": 6,
+      "revision": "0",
+      "name": "长锋卷轴",
+      "description": "长锋：矩形技能的长度提高48.73%（45%～60%），宽度不变。按职业威能改造后的形状生效，与同类长度加成相加。",
+      "socketCount": 0,
+      "bound": true,
+      "locked": false
+    }
+  ]
+}

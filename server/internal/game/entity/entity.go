@@ -215,6 +215,7 @@ type PlayerRuntime struct {
 	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
 	EndgameRiftPortals      bool // negotiated server-owned rift gate context
 	EndgameGroundFX         bool // connection-scoped optional fixed ground effects
+	EndgamePowerCodex       bool
 	EndgameRiftPages        bool // connection-scoped atomic byte-paged rift snapshots
 	EndgameSkillVariants    bool // negotiated equipment skill variants
 	EndgameSkillBehavior    bool // negotiated typed skill behavior; connection-scoped
@@ -290,6 +291,7 @@ func (e *Entity) CapturePlayerRuntime(now domain.Tick) PlayerRuntime {
 		r.EndgameGrowthV5 = e.Player.EndgameGrowthV5
 		r.EndgameSkillVariants = e.Player.EndgameSkillVariants
 		r.EndgameRiftPortals = e.Player.EndgameRiftPortals
+		r.EndgamePowerCodex = e.Player.EndgamePowerCodex
 		r.EndgameRiftPages = e.Player.EndgameRiftPages
 		r.EndgameGroundFX = e.Player.EndgameGroundFX
 		r.EndgameSkillBehavior = e.Player.EndgameSkillBehavior
@@ -335,6 +337,7 @@ func (e *Entity) RestorePlayerRuntime(r PlayerRuntime, now domain.Tick) {
 		e.Player.EndgameGrowthV5 = r.EndgameGrowthV5
 		e.Player.EndgameSkillVariants = r.EndgameSkillVariants
 		e.Player.EndgameRiftPortals = r.EndgameRiftPortals
+		e.Player.EndgamePowerCodex = r.EndgamePowerCodex
 		e.Player.EndgameRiftPages = r.EndgameRiftPages
 		e.Player.EndgameGroundFX = r.EndgameGroundFX
 		e.Player.EndgameSkillBehavior = r.EndgameSkillBehavior
@@ -496,6 +499,7 @@ type Player struct {
 	EquipmentAbsorbRestores []domain.EquipmentAbsorbRestore
 	EndgameRiftPortals      bool // negotiated server-owned rift gate context
 	EndgameGroundFX         bool // connection-scoped optional fixed ground effects
+	EndgamePowerCodex       bool
 	EndgameRiftPages        bool // reset on fresh login, preserved on map handoff
 	EndgameSkillVariants    bool // negotiated equipment skill variants
 	EndgameSkillBehavior    bool // negotiated typed skill behavior; connection-scoped

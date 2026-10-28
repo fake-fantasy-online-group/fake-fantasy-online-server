@@ -33,6 +33,7 @@ func (s *Scene) onNpcTasks(cmd NpcTasks) {
 	offers := domain.OffersOf(s.quests, npc, ch, func(it domain.ItemID) int32 {
 		return p.Player.Bag.CountOf(it)
 	})
+	offers = s.filterPowerCodexOffers(p, offers)
 	// NPC 对话内容与职能菜单全部由客户端原生逻辑负责；服务端这里只刷新任务列表。
 	// 不下发 NpcDialogText/ShowSay，避免清空客户端 BuildMenu 生成的职能菜单。
 	// **列表为空也要回。** 不回的话客户端的对话框会一直等,
@@ -65,6 +66,10 @@ func (s *Scene) onAcceptQuest(cmd AcceptQuest) {
 	def, ok := s.quests[cmd.Quest]
 	if !ok {
 		reject(event.RejectNoTarget)
+		return
+	}
+	if def.ID == domain.PowerCodexQuestID {
+		reject(event.RejectQuestNotDone)
 		return
 	}
 	// **发布者以任务定义为准, 不信客户端。**
@@ -179,6 +184,10 @@ func (s *Scene) onCompleteQuest(cmd CompleteQuest) {
 	}
 	if s.wingRules != nil && def.ID == s.wingRules.Config().Quest {
 		s.completeWingGuide(p, def, reject)
+		return
+	}
+	if def.ID == domain.PowerCodexQuestID {
+		s.completePowerCodexQuest(p, def, reject)
 		return
 	}
 	if def.RecoveryItem != 0 {
@@ -511,6 +520,7 @@ func (s *Scene) pushQuestOffers(p *entity.Entity, npc string) {
 	offers := domain.OffersOf(s.quests, npc, ch, func(it domain.ItemID) int32 {
 		return p.Player.Bag.CountOf(it)
 	})
+	offers = s.filterPowerCodexOffers(p, offers)
 	s.emitTo(p.ID, event.NpcTasks{Who: p.ID, NPC: npc, Offers: offers})
 }
 

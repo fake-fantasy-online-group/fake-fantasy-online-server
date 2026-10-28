@@ -636,7 +636,8 @@ func (s *Scene) itemTooltipForViewerResolved(def domain.ItemDef, st domain.Stack
 		appendEquipmentAffixes(&lines, e.Affixes, textQuality)
 	}
 	if power, ok := domain.LegendaryPowerForRoll(st.Legendary.PowerID, st.Legendary.PowerRollBP); ok {
-		for _, a := range st.Legendary.Affixes {
+		for i := range st.Legendary.Affixes {
+			a, _ := st.Legendary.EffectiveAffix(i)
 			lines = append(lines, qualityColoredLine(tooltipDarkGold, affixText(a.Affix)))
 		}
 		specialEffects = append(specialEffects, power.Name+"："+power.Effect)

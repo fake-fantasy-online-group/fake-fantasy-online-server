@@ -829,6 +829,9 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 				d.ID, cooldownSec, cooldownGroup)
 		}
 		d.Stackable = pile != 0
+		if d.ID == domain.PowerScrollItemID && d.UseAction == "power_scroll" || d.ID == domain.PowerCodexItemID && d.UseAction == "power_codex" {
+			d.InstanceKind = domain.ItemInstanceEquipment
+		}
 		if physicalSocketCard {
 			d.InstanceKind = domain.ItemInstanceSocketCard
 			d.CardDefaults.Initialized = true

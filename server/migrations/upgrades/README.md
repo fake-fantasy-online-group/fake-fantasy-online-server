@@ -276,3 +276,12 @@ idempotence, immutable guards and selector preservation. Official PostgreSQL
 17.11 also applied the upgrade twice against a disposable complete 0–114 seed;
 the seed explicitly activates published Rift 10 after migration 99 to model the
 prior rollout (99 intentionally does not activate it). No production DB used.
+
+### 000119 — wing power scroll descriptions
+
+Apply only after item-based power codex migration 118, with its matching server
+and client. The removed wing extraction recipe 900000 was code-only; the server
+rejects quote/execute and grid entry independently of this migration. This
+transaction updates wing task and codex/scroll descriptions, is idempotent, and
+never rewrites owned wings, power rolls, quests' completion, or inventory. Never
+apply this change to the life-only branch which has no usable scroll flow.

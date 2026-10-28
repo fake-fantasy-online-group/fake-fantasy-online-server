@@ -358,6 +358,9 @@ func PlanRiftRewards(tier int32, timely bool, rule *RiftRules) RiftRewardPlan {
 		p.Rune += rule.TimelyRunes
 		p.Dust += rule.TimelyDust
 	}
+	if !rule.Loot.AllowsCombatMaterial(rule.DustItem) {
+		p.Dust = 0
+	}
 	if rule.CumulativeLegendaryPerTier > 0 {
 		// Replace, rather than multiply, the old special slot and its timely bonus.
 		p.Equipment, p.UniqueChance = 0, 0

@@ -30,7 +30,8 @@ func TestPowerBookSharedClientContract(t *testing.T) {
 	st := p.Player.Bag.At(200)
 	st.Legendary.PowerID = "TY-A02"
 	p.Player.Bag.Set(200, st)
-	req := domain.EndgameRequest{Op: "powerbook.imprint", RequestID: "powerbook-fixture-0001", ExpectedRevision: "0", TargetUID: "42", PowerID: "TY-A01"}
+	p.Player.Bag.Set(6, domain.Stack{Item: domain.PowerScrollItemID, UID: 92, Count: 1, Bound: true, Endgame: domain.EndgameItemState{PowerScrollID: "TY-A01", PowerScrollRollBP: 8123}})
+	req := domain.EndgameRequest{Op: "powerbook.apply", RequestID: "powerbook-fixture-0001", ExpectedRevision: "0", TargetUID: "42", RuneUID: "92"}
 	s.onEndgame(EndgameRequest{ID: p.ID, Request: req})
 	s.finishEndgame(false)
 	if b.commits != 1 {
@@ -44,6 +45,9 @@ func TestPowerBookSharedClientContract(t *testing.T) {
 	}
 	req.RequestID = "powerbook-fixture-0002"
 	req.ExpectedRevision = "1"
+	req.Op = "powerbook.extract"
+	req.TargetUID = ""
+	req.RuneUID = ""
 	req.PowerID = "TY-A02"
 	s.onEndgame(EndgameRequest{ID: p.ID, Request: req})
 	s.finishEndgame(false)
@@ -51,7 +55,7 @@ func TestPowerBookSharedClientContract(t *testing.T) {
 	if !ok || failure.Message.OK || failure.Message.Error != "power_locked" {
 		t.Fatal("failure fixture", failure)
 	}
-	fixtures := map[string]any{"list": list.Message, "imprint-success": success.Message, "imprint-error": failure.Message, "imprint-request": domain.EndgameRequest{Op: "powerbook.imprint", RequestID: "powerbook-fixture-0001", ExpectedRevision: "0", TargetUID: "42", PowerID: "TY-A01"}}
+	fixtures := map[string]any{"list": list.Message, "imprint-success": success.Message, "imprint-error": failure.Message, "imprint-request": domain.EndgameRequest{Op: "powerbook.apply", RequestID: "powerbook-fixture-0001", ExpectedRevision: "0", TargetUID: "42", RuneUID: "92"}}
 	for name, value := range fixtures {
 		path := filepath.Join("testdata", "powerbook", name+".json")
 		encoded, err := json.MarshalIndent(value, "", "  ")

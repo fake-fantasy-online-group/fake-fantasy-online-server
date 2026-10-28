@@ -29,3 +29,18 @@ func TestPowerBookClosedProtocol(t *testing.T) {
 		t.Fatal("list protocol")
 	}
 }
+func TestPowerCodexScrollClosedProtocol(t *testing.T) {
+	for _, body := range []string{`"op":"powerbook.extract","powerId":"SS-A01"`, `"op":"powerbook.apply","runeUid":"92","targetUid":"42"`, `"op":"powerbook.recover","npcEntityId":73`} {
+		good := `{` + body + `,"requestId":"codex-protocol-0001","expectedRevision":"0"}`
+		req, ok := DecodeEndgame(endgamePayload(good))
+		if !ok || !req.Mutates() {
+			t.Fatal(good)
+		}
+		for _, extra := range []string{`,"rollBp":10000`, `,"recipeId":1001`, `,"cubeInputs":[{"uid":"42","count":1}]`} {
+			bad := strings.TrimSuffix(good, "}") + extra + "}"
+			if _, ok := DecodeEndgame(endgamePayload(bad)); ok {
+				t.Fatal("injected inputs accepted", bad)
+			}
+		}
+	}
+}

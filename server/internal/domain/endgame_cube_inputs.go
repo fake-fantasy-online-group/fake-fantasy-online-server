@@ -32,6 +32,9 @@ func MatchCubeInputs(ctx CubeContext, input EndgameRequest) ([]EndgameRequest, [
 	if input.Socket != 0 || input.Tier != 0 || input.RunID != "" || len(input.ItemUIDs) > 5 || input.RecipeID != 0 || input.TargetUID != "" || input.RuneUID != "" || len(input.CubeInputs) == 0 || len(input.CubeInputs) > CubeInputCapacity {
 		return fail("invalid_request", "请将背包中的物品放入鼎中")
 	}
+	if requests, plans, handled, err := matchLifeCubeInputs(ctx, input); handled {
+		return requests, plans, err
+	}
 	materials := map[ItemID]int32{}
 	seen := map[int64]bool{}
 	var gear string
@@ -78,6 +81,10 @@ func MatchCubeInputs(ctx CubeContext, input EndgameRequest) ([]EndgameRequest, [
 	}
 	if requests, plans, handled, err := matchWingCubeInputs(ctx, input, materials, gears, runes); handled {
 		return requests, plans, err
+	}
+	if len(gears) > 1 && len(materials) == 0 && len(runes) == 0 && len(input.ItemUIDs) == 0 {
+		req, plan, err := matchBatchSalvage(ctx, input)
+		return []EndgameRequest{req}, []CubePlan{plan}, err
 	}
 	if len(gears) > 1 {
 		return fail("partial_match", "部分材料相合，尚需调配。")

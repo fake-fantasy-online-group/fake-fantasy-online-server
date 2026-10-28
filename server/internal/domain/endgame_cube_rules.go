@@ -98,7 +98,7 @@ func validateCubeRecipe(r CubeRecipeDef, items map[ItemID]ItemDef) error {
 	}
 	target := true
 	switch r.Operation {
-	case "salvage.normal", "salvage.unique", "socket.open", "socket.extract", "socket.reorder", "socket.array", "unique.awaken", "unique.reforge", "unique.temper":
+	case "life.salvage.normal", "life.salvage.unique", "life.affix.type", "life.affix.value", "life.affix.shuffle", "life.affix.temper", "salvage.normal", "salvage.unique", "socket.open", "socket.extract", "socket.reorder", "socket.array", "unique.awaken", "unique.reforge", "unique.temper":
 	case "salvage.rune", "rune.inscribe", "rune.convert":
 		target = false
 	default:
@@ -124,10 +124,30 @@ func validateCubeRecipe(r CubeRecipeDef, items map[ItemID]ItemDef) error {
 	seen := map[ItemID]bool{}
 	for _, m := range r.Materials {
 		d, ok := items[m.ItemID]
-		if !ok || cubeTextUnits(d.Name) > 8192 || !d.InventoryTabKnown || !d.Stackable || d.InstanceKind != ItemInstanceNone || m.Count <= 0 || seen[m.ItemID] {
+		if !ok || cubeTextUnits(d.Name) > 8192 || !d.InventoryTabKnown || !d.Stackable || (d.InstanceKind != ItemInstanceNone && !(strings.HasPrefix(r.Operation, "life.affix.") && m.ItemID >= FirstAstralRune && m.ItemID <= LastAstralRune && d.InstanceKind == ItemInstanceSocketCard)) || m.Count <= 0 || seen[m.ItemID] {
 			return fmt.Errorf("invalid material %d", m.ItemID)
 		}
 		seen[m.ItemID] = true
+	}
+	if r.Operation == "life.affix.type" || r.Operation == "life.affix.value" {
+		want := 1
+		if r.Operation == "life.affix.type" {
+			want = 7
+		}
+		if len(r.Materials) != want {
+			return fmt.Errorf("invalid life rune materials")
+		}
+		quadrant := -1
+		for _, m := range r.Materials {
+			if m.ItemID < FirstAstralRune || m.ItemID > LastAstralRune {
+				return fmt.Errorf("life wash requires runes only")
+			}
+			q := int((m.ItemID - FirstAstralRune) / 7)
+			if quadrant != -1 && quadrant != q {
+				return fmt.Errorf("mixed life rune quadrant")
+			}
+			quadrant = q
+		}
 	}
 	runeOutput := r.Operation == "rune.inscribe" || r.Operation == "rune.convert"
 	salvage := r.Operation == "salvage.normal" || r.Operation == "salvage.unique" || r.Operation == "salvage.rune"

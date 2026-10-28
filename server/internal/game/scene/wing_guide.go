@@ -58,7 +58,7 @@ func (s *Scene) completeWingGuide(p *entity.Entity, q domain.QuestDef, reject fu
 	}
 	snap.Char.Quests.Finish(q.ID)
 	req := domain.EndgameRequest{Op: "wing.guide", RequestID: "wing-guide-claim-" + strconv.Itoa(int(q.ID)), ExpectedRevision: strconv.FormatInt(x.state.Revision, 10)}
-	s.endgameCommit(p, req, snap, domain.EndgameResponse{Kind: req.Op, Message: "光之翼已放入背包。破境或勤修皆可积羽，可用周天鼎升阶、换系与融入威能。"}, nil, 0, func() {
+	s.endgameCommit(p, req, snap, domain.EndgameResponse{Kind: req.Op, Message: "光之翼已放入背包。破境或勤修皆可积羽，可用周天鼎升阶、换系，以威能卷轴融入威能。"}, nil, 0, func() {
 		s.pushQuestLog(p)
 		s.pushQuestOffers(p, p.Player.QuestNPC)
 		s.emitTo(p.ID, s.questCompletedEvent(p.ID, q, q.Reward, ""))

@@ -22,6 +22,13 @@ func endgameStats(a []domain.Affix) []domain.EndgameStatView {
 func (s *Scene) endgameItem(st domain.Stack, loc string, slot int32) domain.EndgameItemView {
 	d, _ := s.itemDef(st.Item)
 	v := domain.EndgameItemView{UID: strconv.FormatInt(st.UID, 10), ItemID: int32(st.Item), Location: loc, Slot: slot, Revision: strconv.FormatInt(st.Endgame.Revision, 10), UniqueID: st.Endgame.UniqueID, UniqueRollBP: st.Endgame.UniqueRollBP, Name: d.Name, Tab: int32(d.InventoryTab), SocketCount: int32(st.SocketCount), Bound: st.Bound, Locked: st.Locked}
+	if st.Item == domain.PowerScrollItemID && st.Endgame.PowerScrollID != "" {
+		if power, ok := domain.LegendaryPowerForRoll(st.Endgame.PowerScrollID, st.Endgame.PowerScrollRollBP); ok {
+			v.PowerScroll = &domain.EndgamePowerScrollView{PowerID: power.ID, RollBP: st.Endgame.PowerScrollRollBP, Name: power.Name, Description: power.Name + "：" + power.Effect}
+			v.Name = power.Name + "卷轴"
+			v.Description = v.PowerScroll.Description
+		}
+	}
 	if d.Equip != nil {
 		// Use the actual onEquip character-level gate, not the resource tier.
 		v.Level = domain.EquipmentRequiredLevel(d, st)
@@ -58,8 +65,8 @@ func (s *Scene) endgameItem(st domain.Stack, loc string, slot int32) domain.Endg
 		v.Legendary = &domain.LegendaryItemView{Tier: st.Legendary.Tier, PowerID: power.ID, Name: power.Name, Description: power.Name + "：" + power.Effect}
 		v.Name = domain.LegendaryInstanceDisplayName(d.Name, power, st.Legendary)
 		v.Stats = nil
-		for i, a := range st.Legendary.Affixes {
-			b := st.Legendary.Bounds[i]
+		for i := range st.Legendary.Affixes {
+			a, b := st.Legendary.EffectiveAffix(i)
 			v.Legendary.Affixes = append(v.Legendary.Affixes, domain.LegendaryAffixView{Attr: a.Affix.Attr, Value: a.Affix.Value, Mode: a.Affix.Mode, Min: b.Min, Max: b.Max})
 			v.Stats = append(v.Stats, domain.EndgameStatView{Attr: a.Affix.Attr, Value: a.Affix.Value, Mode: a.Affix.Mode})
 		}

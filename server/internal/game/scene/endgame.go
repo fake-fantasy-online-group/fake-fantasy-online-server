@@ -45,6 +45,12 @@ func (s *Scene) endgameReply(p *entity.Entity, r domain.EndgameResponse) {
 	if r.Revision == "" {
 		r.Revision = strconv.FormatInt(s.endgamePlayer(p).state.Revision, 10)
 	}
+	if !p.Player.EndgamePowerCodex && len(r.Items) > 0 {
+		r.Items = append([]domain.EndgameItemView(nil), r.Items...)
+		for i := range r.Items {
+			r.Items[i].PowerScroll = nil
+		}
+	}
 	s.replyNativeAstralInlay(p, r)
 	if r.Rift != nil && r.Rift.GeneratorVersion >= domain.RiftFloorFullCoverageVersion && !p.Player.EndgameRiftPages {
 		r = domain.EndgameResponse{Kind: r.Kind, RequestID: r.RequestID, Revision: r.Revision,
@@ -64,7 +70,10 @@ func (s *Scene) endgameReply(p *entity.Entity, r domain.EndgameResponse) {
 	}
 	// Public clients already route native 0x8008 mode 5 to the bottom-right
 	// notice box. Keep the structured failure too so pending requests settle.
-	if (r.Kind == "cube.quote" || r.Kind == "cube.execute") && !r.OK && r.Error != "" && r.Message != "" {
+	if (r.Kind == "cube.quote" || r.Kind == "cube.execute" || strings.HasPrefix(r.Kind, "powerbook.")) && !r.OK && r.Error != "" && r.Message != "" {
+		s.emitTo(p.ID, event.NewbieTextNotice{Who: p.ID, Text: r.Message})
+	}
+	if r.OK && r.Kind == "powerbook.result" && r.Message != "" {
 		s.emitTo(p.ID, event.NewbieTextNotice{Who: p.ID, Text: r.Message})
 	}
 	if (r.Kind == "cube.claim" || r.Kind == "cube.recover") && r.Message != "" {
@@ -252,12 +261,26 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 				}
 			}
 		}
+		p.Player.EndgamePowerCodex = false
+		for _, cap := range r.Capabilities {
+			if cap == domain.EndgamePowerCodexV1 {
+				p.Player.EndgamePowerCodex = true
+				caps = append(caps, cap)
+				break
+			}
+		}
 		configuration := s.cubeToolConfiguration()
 		if configuration == nil {
 			configuration = map[string]string{}
 		}
 		configuration["riftPages"] = "1"
-		configuration["powerBook"] = "1"
+		configuration["powerBook"] = "0"
+		if p.Player.EndgamePowerCodex {
+			configuration["powerBook"] = "1"
+		}
+		for k, v := range s.powerCodexConfiguration() {
+			configuration[k] = v
+		}
 		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: caps, CatalogVersion: domain.UniqueCatalogVersion, RiftEntrances: entrances, Result: configuration})
 		s.sendRiftSceneContext(p)
 		s.sendEndgameSnapshot(p)
@@ -317,6 +340,7 @@ func (s *Scene) finishEndgame(wait bool) {
 			}
 			x.state = r.State
 			x.loaded = true
+			s.recoverPowerCodexQuest(p)
 			s.onEndgame(EndgameRequest{ID: id, Request: x.pending})
 		}
 		if x.receipt != nil {

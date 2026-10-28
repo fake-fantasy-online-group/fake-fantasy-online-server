@@ -69,6 +69,15 @@ func CubeFingerprint(bag *Bag, money int64, req EndgameRequest) string {
 // Capacity and costs are checked without RNG or permanent UID allocation first.
 // execute still produces only a candidate for the actor's atomic transaction.
 func PlanCube(ctx CubeContext, req EndgameRequest, execute bool) (CubePlan, error) {
+	if ctx.Rules != nil && len(req.CubeInputs) > 1 {
+		if r, ok := ctx.Rules.Recipe(req.RecipeID); ok && (r.Operation == "life.salvage.normal" || r.Operation == "life.salvage.unique") {
+			p, err := planBatchSalvage(ctx, req, false)
+			if err != nil || !execute {
+				return p, err
+			}
+			return planBatchSalvage(ctx, req, true)
+		}
+	}
 	if req.RecipeID >= WingPowerRecipeID && req.RecipeID <= 901024 {
 		return planWingCube(ctx, req)
 	}
@@ -211,7 +220,7 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 	if req.Socket != 0 || req.Tier != 0 || req.RunID != "" || len(req.ItemUIDs) > 5 {
 		return p, cubeError("invalid_request", "周天鼎参数不适用于该配方")
 	}
-	usesSources := convert || recipe.Operation == "socket.reorder" || recipe.Operation == "socket.array"
+	usesSources := recipe.Operation == "life.affix.type" || convert || recipe.Operation == "socket.reorder" || recipe.Operation == "socket.array"
 	if !usesSources && len(req.ItemUIDs) > 0 || recipe.Operation != "salvage.rune" && req.RuneUID != "" {
 		return p, cubeError("invalid_request", "额外投料参数无效")
 	}
@@ -220,6 +229,15 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 		return p, cubeError("funds", fmt.Sprintf("铜币不足：需要%d，当前%d", fee, ctx.Money))
 	}
 	for _, m := range r.Materials {
+		if strings.HasPrefix(recipe.Operation, "life.affix.") && ItemID(m.ItemID) >= FirstAstralRune && ItemID(m.ItemID) <= LastAstralRune {
+			owned, err := lifeConsumeRunes(ctx, &p, req, ItemID(m.ItemID), m.Count, diagnostic)
+			if err != nil {
+				return p, err
+			}
+			m.Owned = owned
+			p.Materials = append(p.Materials, m)
+			continue
+		}
 		d, exists := ctx.Items[ItemID(m.ItemID)]
 		if !exists || !d.Stackable || d.InstanceKind != ItemInstanceNone || !d.InventoryTabKnown || m.Count <= 0 {
 			return p, cubeError("requirements", "材料模板缺失")
@@ -293,7 +311,56 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 		_, ok := UniqueForBase(target.Item, ctx.Catalog)
 		return ok
 	}
+	// Progression wings must never be destroyed by the salvage fallback (or a
+	// direct salvage recipe ID), even after the old two-gear recipe is removed.
+	if ctx.WingRules != nil && (recipe.Operation == "life.salvage.normal" || recipe.Operation == "life.salvage.unique" || recipe.Operation == "salvage.normal" || recipe.Operation == "salvage.unique") {
+		if _, wing := ctx.WingRules.Item(target.Item); wing {
+			return p, cubeError("requirements", "成长羽翼不可分解，请使用升阶、换系或威能卷轴。")
+		}
+	}
 	switch recipe.Operation {
+	case "life.affix.type", "life.affix.value", "life.affix.shuffle", "life.affix.temper":
+		var err error
+		target, err = lifeApplyCubeAffix(ctx, req, recipe, target, def, &p, execute, diagnostic)
+		if err != nil {
+			return p, err
+		}
+	case "life.salvage.normal", "life.salvage.unique":
+		if recipe.Operation == "life.salvage.unique" && !hasUnique || recipe.Operation == "life.salvage.normal" && hasUnique {
+			return p, cubeError("requirements", "此配方不适用于所选装备")
+		}
+		p.Bag.Set(slot, Stack{})
+		p.ConsumedUIDs = append(p.ConsumedUIDs, target.UID)
+		if err := extract(); err != nil {
+			return p, err
+		}
+		var rng func(int) int
+		if execute {
+			rng = ctx.Intn
+			if rng == nil {
+				return p, cubeError("configuration", "炼化机缘尚未就绪")
+			}
+		}
+		quality := EquipmentSalvageQuality(target, def)
+		outputs := RollEquipmentSalvageOres(def.Equip.LevelReq, def.Equip.Slot, quality, rng)
+		if len(outputs) == 0 {
+			return p, cubeError("configuration", "炼化机缘无效")
+		}
+		if !execute && !diagnostic {
+			// Reserve worst-case space before ANY random draw. A full bag must
+			// not become an oracle that discards unfavourable rolled outcomes.
+			outputs = nil
+			unlocked := max(1, min(10, 1+int(max(0, def.Equip.LevelReq-1))/15))
+			for i := 0; i < unlocked; i++ {
+				outputs = append(outputs, CubeMaterialDef{ItemID: ItemID(4001 + 3*i), Count: EquipmentSalvageOreCount(def.Equip.Slot, quality)})
+			}
+		}
+		for _, o := range outputs {
+			if err := material(o.ItemID, o.Count); err != nil {
+				return p, err
+			}
+		}
+		target = Stack{}
 	case "salvage.normal", "salvage.unique":
 		// V5 narrows new unique generation only. Keep the previously supported
 		// ordinary and legacy-unique salvage scope independent of that list.

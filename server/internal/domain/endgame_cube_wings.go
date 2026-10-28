@@ -13,7 +13,6 @@ func matchWingCubeInputs(ctx CubeContext, input EndgameRequest, materials map[It
 		return nil, nil, false, nil
 	}
 	var wing string
-	var source string
 	var wingItem ItemID
 	for _, raw := range gears {
 		_, st, err := wingCubeTarget(ctx, raw)
@@ -25,8 +24,6 @@ func matchWingCubeInputs(ctx CubeContext, input EndgameRequest, materials map[It
 				return nil, nil, true, cubeError("partial_match", "部分材料相合，尚需调配。")
 			}
 			wing, wingItem = raw, st.Item
-		} else {
-			source = raw
 		}
 	}
 
@@ -34,14 +31,8 @@ func matchWingCubeInputs(ctx CubeContext, input EndgameRequest, materials map[It
 	for _, id := range ctx.WingRules.config.FeatherIDs {
 		feather = feather || materials[id] > 0
 	}
-	if len(gears) == 2 && len(materials) == 0 && len(runes) == 0 && len(input.ItemUIDs) == 0 {
-		req := input
-		req.CubeInputs = nil
-		req.RecipeID = WingPowerRecipeID
-		req.TargetUID = wing
-		req.ItemUIDs = []string{source}
-		plan, err := planWingCube(ctx, req)
-		return []EndgameRequest{req}, []CubePlan{plan}, true, err
+	if wing != "" && len(gears) > 1 {
+		return nil, nil, true, cubeError("recipe_removed", "羽翼融威旧方已撤，请使用威能卷轴。")
 	}
 	if wing == "" && (!feather || len(gears) > 0 || len(runes) > 0) {
 		return nil, nil, false, nil
@@ -160,6 +151,9 @@ func wingCubeTarget(ctx CubeContext, raw string) (int, Stack, error) {
 
 func planWingCube(ctx CubeContext, req EndgameRequest) (CubePlan, error) {
 	p := CubePlan{Money: ctx.Money, Fingerprint: CubeFingerprint(ctx.Bag, ctx.Money, req)}
+	if req.RecipeID == WingPowerRecipeID {
+		return p, cubeError("recipe_removed", "羽翼融威旧方已撤，请使用威能卷轴。")
+	}
 	if ctx.WingRules == nil || ctx.Bag == nil {
 		return p, cubeError("configuration", "羽翼炼方尚未载入")
 	}
@@ -180,28 +174,7 @@ func planWingCube(ctx CubeContext, req EndgameRequest) (CubePlan, error) {
 		return p, cubeError("requirements", "此物并非成长羽翼")
 	}
 	p.Bag = ctx.Bag.Clone()
-	if req.RecipeID == WingPowerRecipeID {
-		if len(req.CubeInputs) != 0 {
-			return p, cubeError("invalid_request", "额外投料参数无效")
-		}
-		if len(req.ItemUIDs) != 1 || req.ItemUIDs[0] == req.TargetUID {
-			return p, cubeError("partial_match", "部分材料相合，尚需调配。")
-		}
-		sourceSlot, source, err := wingCubeTarget(ctx, req.ItemUIDs[0])
-		if err != nil {
-			return p, err
-		}
-		if _, ok := ctx.WingRules.Item(source.Item); ok {
-			return p, cubeError("partial_match", "部分材料相合，尚需调配。")
-		}
-		target, err = ExtractWingPower(target, source, ctx.Items[source.Item])
-		if err != nil {
-			return p, cubeError("requirements", err.Error())
-		}
-		p.Bag.Set(sourceSlot, Stack{})
-		p.ConsumedUIDs = []int64{source.UID}
-		p.Recipe = EndgameRecipeView{ID: WingPowerRecipeID, Name: "羽翼融威", Operation: "wing.power", TargetRequired: true, Money: "0", Description: "消耗暗金器物，将其威能融入羽翼；仅覆盖同类威能，其他两类保留。"}
-	} else {
+	{
 		recipe, ok := ctx.WingRules.Recipe(req.RecipeID)
 		if !ok || recipe.Source != target.Item {
 			return p, cubeError("requirements", "这副羽翼尚不合此炼方")

@@ -21,13 +21,13 @@ func (s *Scene) theftEntries(monster domain.MonsterID) []domain.DropEntry {
 			continue
 		}
 		if len(entry.Choices) == 0 {
-			if _, ok := s.items[entry.Item]; !ok {
+			if _, ok := s.items[entry.Item]; !ok || !s.lootRules.Active().AllowsCombatMaterial(entry.Item) {
 				continue
 			}
 		} else {
 			valid := true
 			for _, id := range entry.Choices {
-				if _, ok := s.items[id]; !ok {
+				if _, ok := s.items[id]; !ok || !s.lootRules.Active().AllowsCombatMaterial(id) {
 					valid = false
 					break
 				}
