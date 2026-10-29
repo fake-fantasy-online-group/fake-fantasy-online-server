@@ -21,6 +21,8 @@ func TestPowerBookProfessionPagesAndSharedWire(t *testing.T) {
 		Race     int                      `json:"race"`
 		Employed bool                     `json:"employed"`
 		Class    string                   `json:"class"`
+		Done     []int32                  `json:"done"`
+		Legacy   bool                     `json:"legacy"`
 		Pages    []domain.EndgameResponse `json:"pages"`
 	}
 	var fixture []wireCase
@@ -28,7 +30,12 @@ func TestPowerBookProfessionPagesAndSharedWire(t *testing.T) {
 	for _, tc := range []wireCase{
 		{Name: "warrior", Race: 0, Employed: true, Class: "战士"}, {Name: "swordsman", Race: 1, Employed: true, Class: "剑客"},
 		{Name: "assassin", Race: 2, Employed: true, Class: "刺客"}, {Name: "healer", Race: 3, Employed: true, Class: "药师"},
-		{Name: "warlock", Race: 4, Employed: true, Class: "术士"}, {Name: "novice", Race: 4}, {Name: "unknown", Race: 99, Employed: true},
+		{Name: "warlock", Race: 4, Employed: true, Class: "术士"}, {Name: "novice", Race: 4},
+		{Name: "legacy-warrior", Race: 0, Employed: true, Class: "战士", Legacy: true},
+		{Name: "legacy-swordsman", Race: 1, Employed: true, Class: "剑客", Legacy: true},
+		{Name: "legacy-assassin", Race: 2, Employed: true, Class: "刺客", Legacy: true},
+		{Name: "legacy-healer", Race: 3, Employed: true, Class: "药师", Legacy: true},
+		{Name: "legacy-warlock", Race: 4, Employed: true, Class: "术士", Legacy: true}, {Name: "unknown", Race: 99, Employed: true},
 	} {
 		t.Run(tc.Name, func(t *testing.T) {
 			s, sink, b := powerBookSceneFixture(t)
@@ -36,6 +43,31 @@ func TestPowerBookProfessionPagesAndSharedWire(t *testing.T) {
 			p.Player.Char.Race = domain.Race(tc.Race)
 			p.Player.Char.Employed = tc.Employed
 			p.Player.Char.EmploymentKnown = true
+			// Produce the native task receipt independently of employment. The
+			// folded 0036 migration marks legacy characters employed but does not
+			// invent a 400..404 completion; exercise that real persisted shape.
+			s.quests = domain.QuestTable{}
+			jobs := []domain.QuestID{403, 404, 402, 400, 401}
+			if tc.Employed && !tc.Legacy && tc.Race < len(jobs) {
+				p.Player.Char.Quests.Finish(jobs[tc.Race])
+			}
+			questBefore := p.Player.Char.Quests.FinishedIDs()
+			s.pushQuestLog(p)
+			tasks, ok := firstOf[event.ActiveQuests](cubeTake(s, sink))
+			if !ok || !reflect.DeepEqual(tasks.Done, questBefore) {
+				t.Fatal("real task receipt changed quest history", tasks)
+			}
+			tc.Done = tasks.Done
+			hasJob := false
+			for _, id := range tc.Done {
+				if id >= 400 && id <= 404 {
+					hasJob = true
+				}
+			}
+			if hasJob != (tc.Employed && !tc.Legacy && tc.Race < len(jobs)) {
+				t.Fatal("fabricated/missing career task", tc.Done)
+			}
+
 			book := domain.LegendaryPowerBook{}
 			expected := map[string]bool{}
 			for i, power := range domain.LegendaryPowers() {
@@ -64,6 +96,13 @@ func TestPowerBookProfessionPagesAndSharedWire(t *testing.T) {
 				reply, ok := firstOf[event.EndgameMessage](cubeTake(s, sink))
 				if !ok || !reply.Message.OK {
 					t.Fatal(reply)
+				}
+				expectedProfession := 0
+				if tc.Class != "" {
+					expectedProfession = tc.Race + 1
+				}
+				if reply.Message.Result["powerBookProfession"] != strconv.Itoa(expectedProfession) {
+					t.Fatal("authoritative profession metadata", reply.Message.Result)
 				}
 				raw, err := json.Marshal(reply.Message)
 				if err != nil || len(raw) > domain.EndgameMaxJSONBytes {
@@ -115,7 +154,7 @@ func TestPowerBookProfessionPagesAndSharedWire(t *testing.T) {
 					t.Fatal("invalid cursor", cursor, reply)
 				}
 			}
-			if b.commits != 0 || payload != s.endgamePlayer(p).state.Payload || !reflect.DeepEqual(bag, p.Player.Bag) {
+			if b.commits != 0 || payload != s.endgamePlayer(p).state.Payload || !reflect.DeepEqual(bag, p.Player.Bag) || !reflect.DeepEqual(questBefore, p.Player.Char.Quests.FinishedIDs()) {
 				t.Fatal("read changed inventory or records")
 			}
 			fixture = append(fixture, tc)
@@ -137,7 +176,7 @@ func TestPowerBookProfessionPagesAndSharedWire(t *testing.T) {
 	if err != nil || string(stored) != string(raw) {
 		t.Fatal("profession wire fixture differs", err)
 	}
-	t.Logf("7 authoritative profession contexts; %d total visible rows across %d production wire pages", totalRows, totalPages)
+	t.Logf("%d authoritative profession/task-receipt contexts; %d total visible rows across %d production wire pages", len(fixture), totalRows, totalPages)
 }
 
 func TestPowerBookProfessionChangeRejectsOldCursorWithoutDeletingRecords(t *testing.T) {

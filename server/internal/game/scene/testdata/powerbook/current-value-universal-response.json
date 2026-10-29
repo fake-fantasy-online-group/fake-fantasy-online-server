@@ -1191,5 +1191,8 @@
   "ok": true,
   "revision": "0",
   "cursor": "50",
-  "nextCursor": "100"
+  "nextCursor": "100",
+  "result": {
+    "powerBookProfession": "5"
+  }
 }

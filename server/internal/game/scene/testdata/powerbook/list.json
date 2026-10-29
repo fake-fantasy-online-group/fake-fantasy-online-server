@@ -1190,5 +1190,8 @@
   "requestId": "powerbook-list-fixture",
   "ok": true,
   "revision": "0",
-  "nextCursor": "50"
+  "nextCursor": "50",
+  "result": {
+    "powerBookProfession": "1"
+  }
 }

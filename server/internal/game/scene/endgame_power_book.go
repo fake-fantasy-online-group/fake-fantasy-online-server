@@ -82,7 +82,7 @@ func (s *Scene) onEndgamePowerBook(p *entity.Entity, req domain.EndgameRequest) 
 		if end < len(ids) {
 			next = strconv.Itoa(end)
 		}
-		s.endgameReply(p, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Powers: views, Cursor: req.Cursor, NextCursor: next})
+		s.endgameReply(p, domain.EndgameResponse{Kind: req.Op, RequestID: req.RequestID, OK: true, Powers: views, Cursor: req.Cursor, NextCursor: next, Result: map[string]string{"powerBookProfession": strconv.Itoa(powerBookProfession(p.Player.Char))}})
 	case "powerbook.extract":
 		s.extractPowerScroll(p, req, book)
 	case "powerbook.apply":
@@ -129,24 +129,20 @@ func powerBookAfterCube(payload string, before *domain.Bag, plan domain.CubePlan
 	return domain.WriteLegendaryPowerBook(payload, book)
 }
 
-// Filter before pagination. Recorded powers of other professions remain in the
-// character's book, but cannot leak through a page or inflate its cursor range.
-func powerBookIDsForCharacter(ch *domain.Character) []string {
-	class := ""
-	if ch != nil && ch.HasProfession() {
-		switch ch.Race {
-		case domain.Warrior:
-			class = "战士"
-		case domain.Swordsman:
-			class = "剑客"
-		case domain.Assassin:
-			class = "刺客"
-		case domain.Healer:
-			class = "药师"
-		case domain.Warlock:
-			class = "术士"
-		}
+// Explicit 0 means unknown/unemployed; 1..5 match the native route plus one.
+// Employment is not inferred from quest history: migrated characters can be
+// authoritatively employed without a historical 400..404 completion record.
+func powerBookProfession(ch *domain.Character) int {
+	if ch == nil || !ch.HasProfession() || !ch.Race.Valid() {
+		return 0
 	}
+	return int(ch.Race) + 1
+}
+
+// Filter before pagination. Keep other professions recorded, not visible.
+func powerBookIDsForCharacter(ch *domain.Character) []string {
+	classes := [...]string{"", "战士", "剑客", "刺客", "药师", "术士"}
+	class := classes[powerBookProfession(ch)]
 	ids := []string{}
 	for _, power := range domain.LegendaryPowers() {
 		if power.Class == "全职业" || class != "" && power.Class == class {
