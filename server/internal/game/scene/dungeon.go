@@ -320,6 +320,9 @@ func (s *Scene) openPlayerDungeon(p *entity.Entity, def domain.DungeonDef) (doma
 
 func (s *Scene) openPlayerDungeonDifficulty(p *entity.Entity, def domain.DungeonDef, difficulty domain.DungeonDifficulty, explicit bool) (domain.SceneID, error) {
 	ch := p.Player.Char
+	if !domain.CanEnterQuestDungeon(def.Enter.MapID, ch.Quests) {
+		return domain.SceneID{}, fmt.Errorf("请先领取对应任务；单人任务副本在任务完成后不可再次进入")
+	}
 	owner := def.Owner(domain.CharID(ch.ID), p.Player.Party)
 	canCreate := def.Solo || s.dungeonParty == nil
 	roster := domain.DungeonParty{}

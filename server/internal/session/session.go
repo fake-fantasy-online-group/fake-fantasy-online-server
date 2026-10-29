@@ -1612,7 +1612,7 @@ func (s *Session) resolveLoginScene(ctx context.Context, char *domain.Character,
 		return domain.SceneID{MapID: char.Pos.MapID}, nil
 	}
 	saved := domain.SceneID{MapID: char.Pos.MapID, Instance: char.SceneInstance}
-	if dungeon && (s.deps.Router.ActiveRiftForCharacter(saved, domain.CharID(char.ID)) || s.deps.Router.ActiveForOwner(saved, def.Owner(domain.CharID(char.ID), partyID))) {
+	if dungeon && (s.deps.Router.ActiveRiftForCharacter(saved, domain.CharID(char.ID)) || domain.CanEnterQuestDungeon(saved.MapID, char.Quests) && s.deps.Router.ActiveForOwner(saved, def.Owner(domain.CharID(char.ID), partyID))) {
 		return saved, nil
 	}
 	if !dungeon {

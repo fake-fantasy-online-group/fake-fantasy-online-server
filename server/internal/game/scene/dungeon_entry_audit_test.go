@@ -11,11 +11,10 @@ import (
 	catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
 )
 
-// Characterization for the entry-menu audit, not a proposed eligibility policy.
-// The four quest descriptions imply restrictions that current entry code does not
-// implement. Preserve that distinction until the owner reviews the audit; do not
-// silently add a finished/active/one-attempt gate while removing duplicate UI.
-func TestDungeonEntryAuditCurrentQuestStateMatrix(t *testing.T) {
+// Approved task-only entry rule: three loaded solo story maps (355 remains held) accept unfinished tasks,
+// including Deliver, but reject missing/abandoned/finished. Ordinary farm maps
+// stay unrestricted; the special trial retains its stricter Active-only rule.
+func TestDungeonQuestEntryStateMatrix(t *testing.T) {
 	for _, target := range []struct {
 		mapID       int32
 		quest       domain.QuestID
@@ -64,7 +63,8 @@ func TestDungeonEntryAuditCurrentQuestStateMatrix(t *testing.T) {
 				t.Cleanup(cancel)
 				s.router = r
 				id, err := s.openPlayerDungeon(p, def)
-				want := !target.trial || (state.present && state.value == domain.QuestActive)
+				restricted := domain.DungeonEntryQuest(target.mapID) != 0
+				want := !restricted && !target.trial || state.present && (target.trial && state.value == domain.QuestActive || restricted && (state.value == domain.QuestActive || state.value == domain.QuestDeliver))
 				if (err == nil) != want {
 					t.Fatalf("current gate allow=%v, instance=%v err=%v", want, id, err)
 				}

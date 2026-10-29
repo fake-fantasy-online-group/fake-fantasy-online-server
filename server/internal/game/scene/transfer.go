@@ -64,6 +64,18 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 		s.log.Info("客户端仍在加载，保留最新传送目标", "entity", cmd.ID, "to", cmd.To, "epoch", loading.epoch)
 		return true
 	}
+	// Check every ordinary cross-scene entry, including direct map-ready requests
+	// and explicit instance destinations. RiftRunID is the existing server-owned
+	// rift handoff and must not inherit task rules from a reused map template.
+	if cmd.To != s.id && cmd.RiftRunID == "" && domain.DungeonEntryQuest(cmd.To.MapID) != 0 &&
+		(e.Player == nil || e.Player.Char == nil || !domain.CanEnterQuestDungeon(cmd.To.MapID, e.Player.Char.Quests)) {
+		s.emitTo(e.ID, event.Rejected{Who: e.ID, Cmd: "EnterDungeon", Reason: event.RejectInvalid})
+		s.trialNotice(e, "请先领取对应任务；单人任务副本在任务完成后不可再次进入")
+		if cmd.ClientMapReady {
+			return s.onTeleport(Teleport{ID: e.ID, To: s.id, At: e.Pos})
+		}
+		return false
+	}
 	// 所有切图路径在此按数据库识别副本，包括 NPC 传送、普通门、GM 和
 	// 客户端先切图后上报位置。任何入口都不能把副本送入 Instance=0。
 	if def, dungeon := s.dungeons[cmd.To.MapID]; dungeon && cmd.To.Persistent() {
