@@ -30,6 +30,7 @@ func socketUIDsOf(st domain.Stack) []int64 {
 func saveItemInstances(ctx context.Context, q querier, source string, stacks ...domain.Stack) error {
 	seen := make(map[int64]struct{}, len(stacks))
 	for _, st := range stacks {
+		st = normalizeStoredBinding(q, st)
 		if st.Empty() {
 			continue
 		}
@@ -227,12 +228,21 @@ func loadItemInstances(ctx context.Context, q querier, uids []int64) (map[int64]
 	if err := loadCardInstances(ctx, q, out); err != nil {
 		return nil, err
 	}
+	for uid, st := range out {
+		out[uid] = normalizeStoredBinding(q, st)
+	}
 	return out, nil
 }
 
-func hydrateStack(cached domain.Stack, facts map[int64]domain.Stack) (domain.Stack, error) {
+func hydrateStack(cached domain.Stack, facts map[int64]domain.Stack, queries ...querier) (domain.Stack, error) {
+	normalize := func(st domain.Stack) domain.Stack {
+		if len(queries) > 0 {
+			return normalizeStoredBinding(queries[0], st)
+		}
+		return st
+	}
 	if cached.UID <= 0 {
-		return cached, nil
+		return normalize(cached), nil
 	}
 	fact, ok := facts[cached.UID]
 	if !ok {
@@ -253,5 +263,5 @@ func hydrateStack(cached domain.Stack, facts map[int64]domain.Stack) (domain.Sta
 	if fact.InstanceKind == domain.ItemInstanceEquipment && cached.InstanceKind == domain.ItemInstanceNone && fact.WingPowers == (domain.WingPowers{}) {
 		fact.InstanceKind = domain.ItemInstanceNone
 	}
-	return fact, nil
+	return normalize(fact), nil
 }

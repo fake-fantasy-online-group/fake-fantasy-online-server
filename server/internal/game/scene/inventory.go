@@ -415,18 +415,26 @@ func (s *Scene) onSplitBagItem(cmd SplitBagItem) {
 // instance snapshots adjacent (e.g. rune rolls A, B, A). Never normalize away
 // instance metadata to make stacks compatible.
 func (s *Scene) mergeSortedBagStacks(stacks []domain.Stack) []domain.Stack {
+	return s.mergeInventoryStacks(stacks, domain.MaxStack)
+}
+
+func (s *Scene) mergeInventoryStacks(stacks []domain.Stack, limit int32) []domain.Stack {
 	out := make([]domain.Stack, 0, len(stacks))
 	for _, st := range stacks {
 		def, ok := s.itemDef(st.Item)
+		st = domain.NormalizeItemBinding(def, st)
+		stackLimit := limit
+		if domain.IsAstralRuneStack(st) && stackLimit > domain.MaxStack {
+			stackLimit = domain.MaxStack
+		}
 		if !ok || !def.Stackable || (st.UID != 0 && !domain.IsAstralRuneStack(st)) {
 			out = append(out, st)
 			continue
 		}
-		// A bound rune cannot become transferable again. Older loot paths set
-		// the root flag without mirroring it into the card snapshot, whereas
-		// crafting sets both. Reconcile only this redundant protection bit on
-		// a validated rune; never erase effects or relax binding/locking.
-		if domain.IsAstralRuneStack(st) && st.Bound {
+		// Compatibility only for definitions without an authored policy. Known
+		// non-equipment binding is already canonical above, including fixed
+		// unbound runes; no acquisition-channel bit may override that rule.
+		if def.FixedBinding == domain.ItemBindingUnspecified && domain.IsAstralRuneStack(st) && st.Bound {
 			st.Card.Bound = true
 		}
 		for i := range out {
@@ -434,10 +442,10 @@ func (s *Scene) mergeSortedBagStacks(stacks []domain.Stack) []domain.Stack {
 			if st.Count == 0 {
 				break
 			}
-			if dst.Count >= domain.MaxStack || !domain.SameStackInstance(*dst, st) {
+			if dst.Count >= stackLimit || !domain.SameStackInstance(*dst, st) {
 				continue
 			}
-			put := domain.MaxStack - dst.Count
+			put := stackLimit - dst.Count
 			if put > st.Count {
 				put = st.Count
 			}
@@ -446,13 +454,22 @@ func (s *Scene) mergeSortedBagStacks(stacks []domain.Stack) []domain.Stack {
 		}
 		for st.Count > 0 {
 			put := st.Count
-			if put > domain.MaxStack {
-				put = domain.MaxStack
+			if put > stackLimit {
+				put = stackLimit
 			}
 			next := st
-			next.Count = put
+			if st.UID != 0 && put < st.Count {
+				remaining, taken, ok := domain.SplitOwnedStack(st, put)
+				if !ok {
+					out = append(out, st)
+					break
+				}
+				st, next = remaining, taken
+			} else {
+				next.Count = put
+				st.Count -= put
+			}
 			out = append(out, next)
-			st.Count -= put
 		}
 	}
 	return out

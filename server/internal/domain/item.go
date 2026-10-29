@@ -201,7 +201,8 @@ type ItemDef struct {
 	InventoryTab      uint8
 	InventoryTabKnown bool
 	// Stackable 来自 ov_item.can_pile。**是真数据**, 不要按类别猜。
-	Stackable bool
+	Stackable    bool
+	FixedBinding ItemBindingMode // loaded from authored game_items/game_equipment fixed_binding columns
 	// InstanceKind 非零表示每一件都必须有独立 UID。实体镶嵌卡即使原始
 	// can_pile 允许堆叠，也必须拆成独立实例，才能保证镶嵌和分离返回同一张卡。
 	InstanceKind ItemInstanceKind
@@ -508,7 +509,7 @@ type Stack struct {
 	// 将余数落盘可让 attack_consume=1 精确地每 300 次扣 1 点，且重登不能
 	// 清空进度；同一实例的攻击、受击和死亡损耗共享这份累计值。
 	DurabilityWearRaw int32
-	// Bound 是这一件物品的永久绑定状态，不是物品模板属性。
+	// Bound 是当前绑定状态：真正装备保留实例绑定；已审定的非装备由模板 FixedBinding 唯一决定。
 	// 真实 0x8006 在背包项中显式下发该字段；未绑定普通装备
 	// 通过 0x1007 穿上后，原服装备描述会变为“（绑定）”。
 	Bound bool
@@ -611,7 +612,7 @@ func NewStack(def ItemDef, count int32) Stack {
 	if def.InstanceKind == ItemInstanceSocketCard {
 		st.Card = def.CardDefaults
 	}
-	return st
+	return NormalizeItemBinding(def, st)
 }
 
 // IsMiningTool 报告这件物品是否为客户端特判的采矿工具。
@@ -765,6 +766,22 @@ func (b *Bag) Add(def ItemDef, count int32) int32 {
 	if b == nil || count <= 0 || def.ID == 0 {
 		return count
 	}
+	if def.FixedBinding != ItemBindingUnspecified && def.Equip == nil {
+		for count > 0 {
+			n := count
+			if !def.Stackable {
+				n = 1
+			} else if n > MaxStack {
+				n = MaxStack
+			}
+			left := b.AddStack(def, NewStack(def, n))
+			count -= n - left
+			if left != 0 {
+				return count
+			}
+		}
+		return 0
+	}
 	start, end := bagRange(def, len(b.slots))
 	if start >= end {
 		return count
@@ -833,12 +850,13 @@ func (b *Bag) Add(def ItemDef, count int32) int32 {
 
 // AddStack 把一份已有实例放回背包，返回未放下的数量。
 //
-// 与 Add 的区别是它保留 UID、耐久和绑定状态，供玩家丢弃后重新拾取、仓库和
+// 与 Add 的区别是它保留 UID、耐久等实例状态，并按已审定模板规范绑定，供玩家丢弃后重新拾取、仓库和
 // 交易使用。实例字段不同的堆绝不能合并；不可堆叠实例也不能为了腾位置复制 UID。
 func (b *Bag) AddStack(def ItemDef, incoming Stack) int32 {
 	if b == nil || incoming.Empty() || incoming.Item != def.ID {
 		return incoming.Count
 	}
+	incoming = NormalizeItemBinding(def, incoming)
 	start, end := bagRange(def, len(b.slots))
 	if start >= end {
 		return incoming.Count
@@ -866,7 +884,11 @@ func (b *Bag) AddStack(def ItemDef, incoming Stack) int32 {
 			return 0
 		}
 		dst := &b.slots[i]
-		if dst.Item != incoming.Item || dst.UID != 0 || dst.Bound != incoming.Bound ||
+		normalized := NormalizeItemBinding(def, *dst)
+		if def.FixedBinding != ItemBindingUnspecified && !SameStackInstance(normalized, incoming) {
+			continue
+		}
+		if normalized.Item != incoming.Item || dst.UID != 0 || normalized.Bound != incoming.Bound ||
 			dst.Locked != incoming.Locked ||
 			dst.Durability != 0 || dst.MaxDurability != 0 || dst.DurabilityWearRaw != 0 ||
 			dst.FusedAppearance != incoming.FusedAppearance ||
@@ -877,6 +899,7 @@ func (b *Bag) AddStack(def ItemDef, incoming Stack) int32 {
 		if put > left {
 			put = left
 		}
+		*dst = normalized
 		dst.Count += put
 		left -= put
 	}

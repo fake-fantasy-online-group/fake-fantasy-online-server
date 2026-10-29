@@ -81,10 +81,7 @@ func loadStall(ctx context.Context, q querier, charID int64) (*domain.Stall, err
 		return nil, err
 	}
 	for i := range stall.Items {
-		if stall.Items[i].Stack.UID <= 0 {
-			continue
-		}
-		st, err := hydrateStack(stall.Items[i].Stack, facts)
+		st, err := hydrateStack(stall.Items[i].Stack, facts, q)
 		if err != nil {
 			return nil, err
 		}
@@ -135,7 +132,7 @@ func saveStall(ctx context.Context, tx pgx.Tx, charID int64, stall *domain.Stall
 		return fmt.Errorf("store: 写角色摊位: %w", err)
 	}
 	for position, item := range stall.Items {
-		s := item.Stack
+		s := normalizeStoredBinding(tx, item.Stack)
 		wa, wv, wm := washArraysOf(s)
 		if _, err := tx.Exec(ctx, `
 			INSERT INTO character_stall_items(char_id,position,uid,item_id,count,unit_price,

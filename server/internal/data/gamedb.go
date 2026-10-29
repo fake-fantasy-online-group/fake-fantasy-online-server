@@ -1122,6 +1122,9 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 		return nil, err
 	}
 	finalizeDynamicSpiritItems(out)
+	if err := loadFixedItemBindings(ctx, q, out); err != nil {
+		return nil, err
+	}
 	return out, nil
 }
 

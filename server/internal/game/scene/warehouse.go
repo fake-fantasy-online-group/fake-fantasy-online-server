@@ -68,6 +68,7 @@ func removeStackCount(st domain.Stack, count int32) (domain.Stack, domain.Stack,
 }
 
 func putWarehouse(w *domain.Warehouse, def domain.ItemDef, page, slot int, moved domain.Stack) bool {
+	moved = domain.NormalizeItemBinding(def, moved)
 	if w == nil || moved.Empty() || page < 0 || page >= w.PageCount() {
 		return false
 	}
@@ -85,7 +86,7 @@ func putWarehouse(w *domain.Warehouse, def domain.ItemDef, page, slot int, moved
 	}
 	if slot < 0 {
 		for i := 0; i < w.SlotsPerPage(); i++ {
-			dst := w.At(page, i)
+			dst := domain.NormalizeItemBinding(def, w.At(page, i))
 			if domain.SameStackInstance(dst, moved) && w.MaxStack()-dst.Count >= moved.Count {
 				dst.Count += moved.Count
 				return w.Set(page, i, dst)
@@ -96,7 +97,7 @@ func putWarehouse(w *domain.Warehouse, def domain.ItemDef, page, slot int, moved
 	if slot < 0 || slot >= w.SlotsPerPage() {
 		return false
 	}
-	dst := w.At(page, slot)
+	dst := domain.NormalizeItemBinding(def, w.At(page, slot))
 	if dst.Empty() {
 		return w.Set(page, slot, moved)
 	}
@@ -108,6 +109,7 @@ func putWarehouse(w *domain.Warehouse, def domain.ItemDef, page, slot int, moved
 }
 
 func putBag(bag *domain.Bag, def domain.ItemDef, slot int, moved domain.Stack) bool {
+	moved = domain.NormalizeItemBinding(def, moved)
 	if bag == nil || moved.Empty() {
 		return false
 	}
@@ -117,7 +119,7 @@ func putBag(bag *domain.Bag, def domain.ItemDef, slot int, moved domain.Stack) b
 	if !bag.AllowsSlot(def, slot) {
 		return false
 	}
-	dst := bag.At(slot)
+	dst := domain.NormalizeItemBinding(def, bag.At(slot))
 	if !def.Stackable || (moved.UID != 0 && !domain.IsAstralRuneStack(moved)) {
 		return moved.Count == 1 && dst.Empty() && bag.Set(slot, moved)
 	}
@@ -391,6 +393,15 @@ func (s *Scene) onSortWarehouse(cmd SortWarehouse) {
 			items = append(items, st)
 		}
 	}
+	for _, st := range items {
+		if _, ok := s.itemDef(st.Item); !ok {
+			return
+		}
+	}
+	items = s.mergeInventoryStacks(items, w.MaxStack())
+	if len(items) > w.SlotsPerPage() {
+		return
+	}
 	sort.SliceStable(items, func(i, j int) bool {
 		if items[i].Item != items[j].Item {
 			return items[i].Item < items[j].Item
@@ -403,27 +414,7 @@ func (s *Scene) onSortWarehouse(cmd SortWarehouse) {
 		}
 		return items[i].UID < items[j].UID
 	})
-	merged := make([]domain.Stack, 0, len(items))
-	for _, st := range items {
-		def, ok := s.itemDef(st.Item)
-		if !ok {
-			return
-		}
-		if def.Stackable && (st.UID == 0 || domain.IsAstralRuneStack(st)) && len(merged) > 0 {
-			last := &merged[len(merged)-1]
-			if domain.SameStackInstance(*last, st) && last.Count < w.MaxStack() {
-				put := w.MaxStack() - last.Count
-				if put > st.Count {
-					put = st.Count
-				}
-				last.Count += put
-				st.Count -= put
-			}
-		}
-		if st.Count > 0 {
-			merged = append(merged, st)
-		}
-	}
+	merged := items
 	for slot := 0; slot < w.SlotsPerPage(); slot++ {
 		var st domain.Stack
 		if slot < len(merged) {

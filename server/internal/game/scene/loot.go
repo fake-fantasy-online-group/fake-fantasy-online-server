@@ -341,6 +341,7 @@ func (s *Scene) spawnLoot(def domain.ItemDef, at domain.Pos, owner domain.Entity
 // spawnGeneratedLoot 把已经创建好的实例放到地上。随机词条与 UID 在此之前
 // 已经确定，拾取、丢弃和再次拾取都只移动这份 Stack，不会重新抽取。
 func (s *Scene) spawnGeneratedLoot(def domain.ItemDef, stack domain.Stack, at domain.Pos, owner domain.EntityID) {
+	stack = domain.NormalizeStackBindings(stack, s.itemDef)
 	// Defense in depth: inherited drops, theft, rewards and generic helpers must
 	// never leak hard-dungeon equipment into Rift or public/normal scenes.
 	if def.HardDungeonOnly && (!s.nativeDifficultyDungeon() || s.dungeonDifficulty != domain.DungeonHard) {

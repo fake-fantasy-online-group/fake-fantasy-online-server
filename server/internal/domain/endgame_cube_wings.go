@@ -240,7 +240,7 @@ func planWingCube(ctx CubeContext, req EndgameRequest) (CubePlan, error) {
 		}
 		change := wingPaymentChange(recipe, consumed)
 		if change > 0 {
-			refund := Stack{Item: 25027, Count: change, Bound: refundBound}
+			refund := NormalizeItemBinding(ctx.Items[25027], Stack{Item: 25027, Count: change, Bound: refundBound})
 			if p.Bag.AddStack(ctx.Items[25027], refund) != 0 {
 				return p, cubeError("bag_full", "背包空间不足，未消耗任何物品")
 			}
@@ -283,7 +283,7 @@ func planWingFeather(ctx CubeContext, req EndgameRequest, recipe WingCubeRecipeD
 		}
 	}
 	for _, o := range recipe.Outputs {
-		st := Stack{Item: o.ItemID, Count: o.Count, Bound: true}
+		st := NormalizeItemBinding(ctx.Items[o.ItemID], Stack{Item: o.ItemID, Count: o.Count, Bound: true})
 		if p.Bag.AddStack(ctx.Items[o.ItemID], st) != 0 {
 			return p, cubeError("bag_full", "背包空间不足，未消耗任何物品")
 		}

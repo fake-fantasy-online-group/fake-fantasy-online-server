@@ -352,6 +352,7 @@ func (s *Scene) claimEndgameRift(p *entity.Entity, req domain.EndgameRequest, d 
 		batch := next.Run.Rules.WingRewards != nil
 		partial, collected := false, false
 		for index, stack := range grant.Items {
+			stack = domain.NormalizeStackBindings(stack, s.itemDef)
 			if grant.Collected[index] {
 				continue
 			}

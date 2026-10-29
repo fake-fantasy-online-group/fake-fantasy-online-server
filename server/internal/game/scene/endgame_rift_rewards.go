@@ -167,7 +167,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 					s.log.Warn("洞天暗金奖励生成失败，保留待生成状态", "run", r.RunID, "character", char, "ordinal", i)
 					return
 				}
-				grant.Items = append(grant.Items, stack)
+				grant.Items = append(grant.Items, domain.NormalizeStackBindings(stack, s.itemDef))
 			}
 		}
 		var equipment, guaranteedUniques []domain.ItemID
@@ -260,7 +260,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 					}
 				}
 			}
-			grant.Items = append(grant.Items, stack)
+			grant.Items = append(grant.Items, domain.NormalizeStackBindings(stack, s.itemDef))
 		}
 		for i := int32(0); i < plan.Rune; i++ {
 			id, ok := r.Rules.Loot.RollRune(rng.Intn)
@@ -271,13 +271,13 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 				stack := domain.NewStack(def, 1)
 				stack.Bound = true
 				stack.Card.Bound = true
-				grant.Items = append(grant.Items, stack)
+				grant.Items = append(grant.Items, domain.NormalizeStackBindings(stack, s.itemDef))
 			}
 		}
 		if def, ok := s.itemDef(r.Rules.DustItem); ok && r.Rules.Loot.AllowsCombatMaterial(r.Rules.DustItem) {
 			stack := domain.NewStack(def, plan.Dust)
 			stack.Bound = true
-			grant.Items = append(grant.Items, stack)
+			grant.Items = append(grant.Items, domain.NormalizeStackBindings(stack, s.itemDef))
 		}
 		// Fixed boss quantities do not take the level-gap occurrence penalty. Use
 		// the same wearer-legal, level-appropriate native pool as ordinary slots,
@@ -286,7 +286,7 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			grant.MagicFind = contexts[char].MagicFind
 			for i := int32(0); i < plan.NormalBossEquipment && len(equipment) > 0; i++ {
 				if stack := s.rollEndgameRiftNormalBossEquipment(char, i, equipment, grant.MagicFind, d.RewardClasses[char]); !stack.Empty() {
-					grant.Items = append(grant.Items, stack)
+					grant.Items = append(grant.Items, domain.NormalizeStackBindings(stack, s.itemDef))
 				}
 			}
 		}

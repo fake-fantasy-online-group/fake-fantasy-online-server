@@ -204,6 +204,13 @@ func run() int {
 			return 1
 		}
 	}
+	if *dsn != "" || world.items != nil {
+		if err := store.SetItemDefinitions(st, world.items); err != nil {
+			log.Error("安装物品固定绑定规则失败，拒绝启动", "err", err)
+			_ = wb.Close(time.Second)
+			return 1
+		}
+	}
 	// Even optional seed imports must use the same validated catalog as live saves.
 	seedChars(ctx, st, log)
 	// Router 通过独立 buildMu 串行调用 Builder，因此这份按静态地图号共享的懒加载缓存

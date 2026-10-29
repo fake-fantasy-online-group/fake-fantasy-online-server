@@ -259,6 +259,7 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 		if !exists || !d.InventoryTabKnown {
 			return cubeError("requirements", "产物模板缺失")
 		}
+		st = NormalizeItemBinding(d, st)
 		if p.Bag.AddStack(d, st) != 0 {
 			return cubeError("bag_full", "背包空间不足，未消耗任何物品")
 		}
@@ -504,6 +505,7 @@ func planCubeMode(ctx CubeContext, req EndgameRequest, execute, diagnostic bool)
 			st = unit
 			card := st.Card
 			card.Bound = st.Bound || card.Bound || target.Bound
+			card = NormalizeItemBinding(ctx.Items[st.Item], Stack{Item: st.Item, InstanceKind: ItemInstanceSocketCard, Bound: card.Bound, Card: card}).Card
 			target.Bound = target.Bound || card.Bound
 			target.Sockets[i] = st.Item
 			target.SocketUIDs[i] = st.UID

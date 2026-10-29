@@ -223,6 +223,7 @@ func (s *Scene) syncEndgameRiftCompletion() {
 			continue
 		}
 		for index, stack := range x.data.Grants[char].Items {
+			stack = domain.NormalizeStackBindings(stack, s.itemDef)
 			ref := endgameRiftGroundReward{Char: char, Index: index}
 			if active[ref] || x.data.Grants[char].Collected[index] {
 				continue
@@ -348,7 +349,7 @@ func (s *Scene) pickUpEndgameRiftReward(p, drop *entity.Entity, pickupRange int3
 		s.syncEndgameRiftCompletion()
 		return true
 	}
-	stack := grant.Items[ref.Index]
+	stack := domain.NormalizeStackBindings(grant.Items[ref.Index], s.itemDef)
 	def, ok := s.itemDef(stack.Item)
 	if !ok || def.HardDungeonOnly {
 		return true

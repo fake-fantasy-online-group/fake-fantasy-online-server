@@ -46,13 +46,15 @@ func (b *Bag) addAstralRuneStack(def ItemDef, incoming Stack) int32 {
 	remaining := incoming
 	for i := start; i < end; i++ {
 		dst := &b.slots[i]
-		if !IsAstralRuneStack(*dst) || dst.UID == incoming.UID || !SameStackInstance(*dst, incoming) || dst.Count >= MaxStack {
+		normalized := NormalizeItemBinding(def, *dst)
+		if !IsAstralRuneStack(normalized) || dst.UID == incoming.UID || !SameStackInstance(normalized, incoming) || dst.Count >= MaxStack {
 			continue
 		}
 		n := MaxStack - dst.Count
 		if n > remaining.Count {
 			n = remaining.Count
 		}
+		*dst = normalized
 		dst.Count += n
 		remaining.Count -= n
 		if remaining.Count == 0 {
