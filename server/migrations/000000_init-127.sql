@@ -1,3 +1,5 @@
+SET LOCAL lock_timeout='5s';
+SET LOCAL statement_timeout='60s';
 -- Authored non-equipment binding policy, never inferred from route or trade flags.
 -- Upgrade MUST run offline after final character save and a verified backup.
 -- No merge, UID reassignment, lock/effect/quantity/currency change or ACL change.
