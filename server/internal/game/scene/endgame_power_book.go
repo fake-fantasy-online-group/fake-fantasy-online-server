@@ -34,18 +34,15 @@ func (s *Scene) onEndgamePowerBook(p *entity.Entity, req domain.EndgameRequest) 
 			s.endgameError(p, req, "tool_required", "请将秘典带在背包中再翻阅")
 			return
 		}
+		ids := powerBookIDsForCharacter(p.Player.Char)
 		offset := 0
 		if req.Cursor != "" {
 			n, e := strconv.Atoi(req.Cursor)
-			if e != nil || n < 0 || n > len(domain.LegendaryPowers()) || strconv.Itoa(n) != req.Cursor {
+			if e != nil || n < 0 || n > len(ids) || strconv.Itoa(n) != req.Cursor {
 				s.endgameError(p, req, "cursor", "秘典页码无效，请重新翻阅")
 				return
 			}
 			offset = n
-		}
-		ids := make([]string, 0, len(domain.LegendaryPowers()))
-		for _, power := range domain.LegendaryPowers() {
-			ids = append(ids, power.ID)
 		}
 		end := offset + powerBookPageSize
 		if end > len(ids) {
@@ -130,4 +127,31 @@ func powerBookAfterCube(payload string, before *domain.Bag, plan domain.CubePlan
 		return payload, nil
 	}
 	return domain.WriteLegendaryPowerBook(payload, book)
+}
+
+// Filter before pagination. Recorded powers of other professions remain in the
+// character's book, but cannot leak through a page or inflate its cursor range.
+func powerBookIDsForCharacter(ch *domain.Character) []string {
+	class := ""
+	if ch != nil && ch.HasProfession() {
+		switch ch.Race {
+		case domain.Warrior:
+			class = "战士"
+		case domain.Swordsman:
+			class = "剑客"
+		case domain.Assassin:
+			class = "刺客"
+		case domain.Healer:
+			class = "药师"
+		case domain.Warlock:
+			class = "术士"
+		}
+	}
+	ids := []string{}
+	for _, power := range domain.LegendaryPowers() {
+		if power.Class == "全职业" || class != "" && power.Class == class {
+			ids = append(ids, power.ID)
+		}
+	}
+	return ids
 }

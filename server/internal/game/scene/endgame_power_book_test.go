@@ -181,7 +181,7 @@ func TestPowerBookPagesAllRecordsAndPacketBudget(t *testing.T) {
 		cursor = ev.Message.NextCursor
 	}
 	t.Logf("%d powers across %d pages, largest JSON page %d bytes (budget %d)", len(seen), pages, maxPageBytes, domain.EndgameMaxJSONBytes)
-	if len(seen) != len(book) {
+	if len(seen) != len(powerBookIDsForCharacter(p.Player.Char)) {
 		t.Fatal("records omitted", len(seen), len(book))
 	}
 	for _, cursor := range []string{"-1", "01", "999", "bad"} {

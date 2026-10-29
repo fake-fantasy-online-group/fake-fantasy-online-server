@@ -1551,6 +1551,6 @@
   "requestId": "current-value-response",
   "ok": true,
   "revision": "0",
-  "cursor": "100",
-  "nextCursor": "150"
+  "cursor": "0",
+  "nextCursor": "50"
 }

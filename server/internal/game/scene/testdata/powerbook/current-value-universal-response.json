@@ -1190,6 +1190,6 @@
   "requestId": "current-value-universal-response",
   "ok": true,
   "revision": "0",
-  "cursor": "150",
-  "nextCursor": "200"
+  "cursor": "50",
+  "nextCursor": "100"
 }
