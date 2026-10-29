@@ -340,13 +340,13 @@ The matching empty-database tail is `000000_init-126.sql`.
 Regression: `node tests/power_codex_icon_mapping_postgres.mjs` using
 `PGLITE_MODULE` when PGlite is installed outside the repository.
 
-## 128: native shelf catalog restoration
+## 129: native shelf catalog restoration
 
-`000128_20261029_rack_restoration.sql` retires the reviewed shelf saddles,
+`000129_20261029_rack_restoration.sql` retires the reviewed shelf saddles,
 saddle-required pets/eggs, ore products, peaches and ring spirits; applies
 verified pet blessing-tier prices and native equipment-slot costume categories.
 Ring-spirit NPC stock is removed with stable contiguous-slot repacking. Owned
 items/pets, global templates, balances and purchase history are untouched.
 The operation is explicit, atomic, guarded and idempotent; do not run it on a
 live database without separately approved maintenance and backup. See
-`docs/commerce/rack-restoration-128.md` and its full ID/source/missing-data JSON.
+`docs/commerce/rack-restoration-129.md` and its full ID/source/missing-data JSON.

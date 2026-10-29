@@ -1,6 +1,6 @@
 # 原生货架恢复（128，未部署）
 
-基线：server `6f01fdcf0051ff6b204acc60f73ea96de2a25df4`，client `36aab0ec93b1912905bd1e77165a63c951e50a6c`。完整逐项表、名称、宠物 ID、原价/新价、部位、来源缺项见 [机器可读清单](rack-restoration-128.json)。不改版本、不发布、不写线上库。
+基线：server `6f01fdcf0051ff6b204acc60f73ea96de2a25df4`，client `36aab0ec93b1912905bd1e77165a63c951e50a6c`。完整逐项表、名称、宠物 ID、原价/新价、部位、来源缺项见 [机器可读清单](rack-restoration-129.json)。不改版本、不发布、不写线上库。
 
 ## 范围与结果
 
@@ -46,7 +46,7 @@
 
 ## 执行与验证
 
-已有库只能在另行获准的维护窗口、确认备份及目标后执行 `migrations/upgrades/000128_20261029_rack_restoration.sql`，然后按正常方式刷新服务端缓存。新库由初始化器消费 `000000_init-128.sql`。本次没有执行上线维护、自动迁移或重启。
+已有库只能在另行获准的维护窗口、确认备份及目标后执行 `migrations/upgrades/000129_20261029_rack_restoration.sql`，然后按正常方式刷新服务端缓存。新库由初始化器消费 `000000_init-129.sql`。本次没有执行上线维护、自动迁移或重启。
 
 云端测试：
 

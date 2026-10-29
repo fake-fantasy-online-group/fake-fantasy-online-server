@@ -8,7 +8,7 @@ SET LOCAL statement_timeout = '60s';
 -- The site's 1..5 control is 加持能力 (not a growth stat): all 373 overlapping
 -- listed pets agree with native ov_petgrow.pet_circle. Missing site records use
 -- that verified native field; tier 0 is deliberately not repriced.
--- Full IDs, source hashes, exceptions and before/after values: docs/commerce/rack-restoration-128.json.
+-- Full IDs, source hashes, exceptions and before/after values: docs/commerce/rack-restoration-129.json.
 -- Required saddle pets: explicit native saddle mapping, no innate/learnable 坐骑.
 -- Three naturally rideable camels keep their pets; their optional saddles retire.
 CREATE TEMP TABLE rack_restore_remove(item_id int PRIMARY KEY,expected_name text,pet_id int,reason text) ON COMMIT DROP;

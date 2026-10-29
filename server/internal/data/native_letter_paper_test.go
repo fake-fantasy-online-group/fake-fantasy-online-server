@@ -30,8 +30,8 @@ func TestNativeLetterPaperProvenanceAndMigrationScope(t *testing.T) {
 			t.Fatal("missing native mail usage evidence", evidence)
 		}
 	}
-	init := read("../../migrations/000000_init-127.sql")
-	upgrade := read("../../migrations/upgrades/000127_20261029_native_letter_paper.sql")
+	init := read("../../migrations/000000_init-128.sql")
+	upgrade := read("../../migrations/upgrades/000128_20261029_native_letter_paper.sql")
 	if strings.TrimSpace(upgrade) != "BEGIN;\n"+strings.TrimSpace(init)+"\n\nCOMMIT;" {
 		t.Fatal("init/transactional upgrade drift")
 	}
