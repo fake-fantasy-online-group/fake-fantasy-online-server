@@ -322,3 +322,20 @@ Reapply125 is safe; missing/mismatched/shared shop identities fail atomically.
 Historical124 remains immutable; on a fresh initializer it runs before125.
 As before, never replay older122 after the buy-only migrations. Test via
 `PGLITE_MODULE=/path/to/@electric-sql/pglite node server/tests/spirit_buy_only_postgres.mjs`.
+
+## 000126_20261028_power_codex_icon_mapping.sql
+
+Adds only the missing `0x804D` special-icon mappings for the permanent codex
+(1900028302 → 12143) and power scroll (1900028303 → 39440). `ov_desc` alone is
+not the server's native override-map source. Requires existing item identities
+and verified description icons; conflicting rows, including NULL fields, abort
+without overwrite. Idempotent under a bounded table lock. No inventory, account,
+permissions, item stats or original asset files are changed.
+
+Apply with `ON_ERROR_STOP` in an authorized maintenance window. The server loads
+this mapping at startup, and sends it on fresh world entry. After restart verify
+both pairs in `0x804D` (U16 count, followed by I32 item / I32 icon entries).
+The matching empty-database tail is `000000_init-126.sql`.
+
+Regression: `node tests/power_codex_icon_mapping_postgres.mjs` using
+`PGLITE_MODULE` when PGlite is installed outside the repository.
