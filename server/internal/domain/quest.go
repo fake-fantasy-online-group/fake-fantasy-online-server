@@ -734,6 +734,15 @@ func ActiveQuestsOf(all QuestTable, ch *Character, bagCount func(ItemID) int32) 
 		}
 		d, ok := all[id]
 		if !ok {
+			// Quest355 is disabled by its missing NPC definition, not deleted from
+			// character history. Preserve only its real unfinished record in the
+			// existing receipt so task-dungeon visibility matches server admission.
+			// No definition, offer, target NPC, reward or synthetic step count is
+			// restored. All other unknown IDs retain the existing skip behavior.
+			if id == 355 && (e.State == QuestActive || e.State == QuestDeliver) {
+				out = append(out, ActiveQuest{ID: id, Step: e.Progress,
+					Text: "九转（法系）", Ready: e.State == QuestDeliver})
+			}
 			continue // 任务表换了版本, 旧存档里可能有已经不存在的任务号
 		}
 		q := activeQuestOf(d, e, ch.Quests, bagCount)

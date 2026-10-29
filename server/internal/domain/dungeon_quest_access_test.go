@@ -3,7 +3,7 @@ package domain
 import "testing"
 
 func TestQuestOnlyDungeonAdmissionAndOrdinaryFarmExclusions(t *testing.T) {
-	for _, pair := range [][2]int32{{29400, 356}, {29900, 359}, {30000, 361}} {
+	for _, pair := range [][2]int32{{29200, 355}, {29400, 356}, {29900, 359}, {30000, 361}} {
 		for _, state := range []int{-1, 0, 1, 2, 3} {
 			log := QuestLog{}
 			if state >= 0 {
@@ -32,5 +32,33 @@ func TestQuestOnlyDungeonAdmissionAndOrdinaryFarmExclusions(t *testing.T) {
 		if DungeonEntryQuest(mid) != 0 || !CanEnterQuestDungeon(mid, nil) || !CanEnterQuestDungeon(mid, QuestLog{355: {State: QuestFinished}}) {
 			t.Fatal("unrelated/farm/trial map gated", mid)
 		}
+	}
+}
+
+// Missing definitions must not fabricate an accepted quest, but they must not
+// erase the real eligibility of a character's retained unfinished 355 record.
+func TestQuestDungeonRetainedDisabled355Projection(t *testing.T) {
+	for _, state := range []int{-1, 0, 1, 2, 3} {
+		ch := &Character{Quests: QuestLog{999: {State: QuestActive}}}
+		if state >= 0 {
+			ch.Quests[355] = QuestEntry{State: QuestState(state), Progress: 2}
+		}
+		got := ActiveQuestsOf(QuestTable{}, ch, nil)
+		want := state == 0 || state == 1
+		if (len(got) == 1) != want || CanEnterQuestDungeon(29200, ch.Quests) != want {
+			t.Fatalf("state%d projection/admission disagree: %#v", state, got)
+		}
+		if want && (got[0].ID != 355 || got[0].Text != "九转（法系）" || got[0].Step != 2 || got[0].Ready != (state == 1) || got[0].Total != 0 || got[0].To != "") {
+			t.Fatalf("projection invented or lost saved/native facts: %#v", got)
+		}
+		if state == 2 && len(ch.Quests.FinishedIDs()) != 1 {
+			t.Fatal("finished record lost")
+		}
+	}
+	ch := &Character{Quests: QuestLog{355: {State: QuestActive}}}
+	def := QuestDef{ID: 355, Name: "九转（法系）", Desc: "loaded definition", NPC: "native publisher"}
+	got := ActiveQuestsOf(QuestTable{355: def}, ch, nil)
+	if len(got) != 1 || got[0].Text != def.Desc || got[0].To != def.NPC {
+		t.Fatal("fallback replaced a real definition", got)
 	}
 }

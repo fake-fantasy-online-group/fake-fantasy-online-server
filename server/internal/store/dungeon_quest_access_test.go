@@ -54,7 +54,7 @@ func TestQuestDungeonFinishedHistoryLoadsThroughPostgresQuery(t *testing.T) {
 		if len(q.queries) != 2 || !strings.Contains(q.queries[0], "WHERE char_id = $1") || strings.Contains(q.queries[0], "state <") || strings.Contains(q.queries[0], "state =") {
 			t.Fatal("query filtered history", q.queries)
 		}
-		for _, pair := range [][2]int32{{29400, 356}, {29900, 359}, {30000, 361}} {
+		for _, pair := range [][2]int32{{29200, 355}, {29400, 356}, {29900, 359}, {30000, 361}} {
 			if log[domain.QuestID(pair[1])].State != state || domain.CanEnterQuestDungeon(pair[0], log) != (state != domain.QuestFinished) {
 				t.Fatal("reloaded admission differs", pair, state)
 			}
@@ -72,7 +72,7 @@ func TestQuestDungeonFinishedSnapshotSurvivesReload(t *testing.T) {
 	}
 	s.Char.Quests = domain.QuestLog{}
 	log, err := m.LoadQuests(context.Background(), s.Char.ID)
-	if err != nil || !domain.CanEnterQuestDungeon(29200, log) || !domain.CanEnterQuestDungeon(29400, log) || !domain.CanEnterQuestDungeon(29900, log) || domain.CanEnterQuestDungeon(30000, log) {
+	if err != nil || domain.CanEnterQuestDungeon(29200, log) || !domain.CanEnterQuestDungeon(29400, log) || !domain.CanEnterQuestDungeon(29900, log) || domain.CanEnterQuestDungeon(30000, log) {
 		t.Fatal("reload changed unfinished/completed admission", log, err)
 	}
 }

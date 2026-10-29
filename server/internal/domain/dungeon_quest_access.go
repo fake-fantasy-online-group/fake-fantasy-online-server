@@ -1,13 +1,15 @@
 package domain
 
 // DungeonEntryQuest is an explicit task-only map binding, not a name/level/loot
-// heuristic. Evidence: init-32 task steps 356/359/361 and init-0 solo maps.
+// heuristic. Evidence: init-32 task steps 355/356/359/361 and init-0 solo maps.
 // Ordinary repeatable reward dungeons and the separately guarded trial/rift are
 // intentionally absent. A related quest alone never makes a dungeon task-only.
-// 29200/355 is deliberately held: the current missing publisher disables quest355
-// in LoadQuests, so existing 0x8027 Active cannot faithfully expose saved progress.
+// A disabled quest definition does not grant access: admission uses the saved log.
+// Quest355 remains unavailable for new acceptance until its NPC chain is repaired.
 func DungeonEntryQuest(mapID int32) QuestID {
 	switch mapID {
+	case 29200:
+		return 355
 	case 29400:
 		return 356
 	case 29900:
@@ -20,7 +22,7 @@ func DungeonEntryQuest(mapID int32) QuestID {
 
 // CanEnterQuestDungeon admits each character from their own persisted log.
 // Active and Deliver are both unfinished; Finished is not permission to return
-// to these three solo task maps. No attempt counter or party-companion rule.
+// to these four solo task maps. No attempt counter or party-companion rule.
 func CanEnterQuestDungeon(mapID int32, log QuestLog) bool {
 	quest := DungeonEntryQuest(mapID)
 	if quest == 0 {

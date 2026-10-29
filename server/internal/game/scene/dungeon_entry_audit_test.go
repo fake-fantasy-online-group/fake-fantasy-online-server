@@ -11,7 +11,7 @@ import (
 	catalogfixture "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/testfixture/catalog"
 )
 
-// Approved task-only entry rule: three loaded solo story maps (355 remains held) accept unfinished tasks,
+// Approved task-only entry rule: four solo story maps accept unfinished tasks,
 // including Deliver, but reject missing/abandoned/finished. Ordinary farm maps
 // stay unrestricted; the special trial retains its stricter Active-only rule.
 func TestDungeonQuestEntryStateMatrix(t *testing.T) {
