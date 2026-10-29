@@ -100,10 +100,7 @@ func loadFamilyStash(ctx context.Context, q querier, charID int64) (*domain.Fami
 		return nil, err
 	}
 	for i := range out.Entries {
-		if out.Entries[i].Stack.UID <= 0 {
-			continue
-		}
-		out.Entries[i].Stack, err = hydrateStack(out.Entries[i].Stack, facts)
+		out.Entries[i].Stack, err = hydrateStack(out.Entries[i].Stack, facts, q)
 		if err != nil {
 			return nil, err
 		}
@@ -112,6 +109,7 @@ func loadFamilyStash(ctx context.Context, q querier, charID int64) (*domain.Fami
 }
 
 func (t *pgTx) DepositFamilyStash(ctx context.Context, charID int64, stack domain.Stack, by string) error {
+	stack = normalizeStoredBinding(t.tx, stack)
 	header, err := familyStashHeader(ctx, t.tx, charID, true)
 	by = strings.TrimSpace(by)
 	if err != nil {
@@ -220,12 +218,12 @@ func loadFamilyStashEntryForUpdate(ctx context.Context, q querier, familyID int6
 		if err != nil {
 			return domain.Stack{}, err
 		}
-		stack, err = hydrateStack(stack, facts)
+		stack, err = hydrateStack(stack, facts, q)
 		if err != nil {
 			return domain.Stack{}, err
 		}
 	}
-	return stack, nil
+	return normalizeStoredBinding(q, stack), nil
 }
 
 func (t *pgTx) SetFamilyStashTakePosition(ctx context.Context, charID int64,

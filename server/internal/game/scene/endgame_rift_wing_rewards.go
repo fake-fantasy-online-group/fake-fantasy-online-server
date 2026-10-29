@@ -17,7 +17,7 @@ func (s *Scene) riftWingStacks(item domain.ItemID, count int32) ([]domain.Stack,
 		n := min(count, domain.MaxStack)
 		stack := domain.NewStack(def, n)
 		stack.Bound = true
-		stacks = append(stacks, stack)
+		stacks = append(stacks, domain.NormalizeItemBinding(def, stack))
 		count -= n
 	}
 	return stacks, nil

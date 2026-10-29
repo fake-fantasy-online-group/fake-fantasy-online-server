@@ -1,0 +1,70 @@
+{
+  "source": "2026-10-29 read-only production LoadBag probe; only item IDs/counts retained; effects from authored SQL fixtures",
+  "pairs": [
+    {
+      "item": 1900028001,
+      "unbound_count": 1,
+      "bound_count": 2
+    },
+    {
+      "item": 1900028002,
+      "unbound_count": 5,
+      "bound_count": 7
+    },
+    {
+      "item": 1900028003,
+      "unbound_count": 1,
+      "bound_count": 1
+    },
+    {
+      "item": 1900028004,
+      "unbound_count": 2,
+      "bound_count": 3
+    },
+    {
+      "item": 1900028008,
+      "unbound_count": 2,
+      "bound_count": 3
+    },
+    {
+      "item": 1900028009,
+      "unbound_count": 3,
+      "bound_count": 3
+    },
+    {
+      "item": 1900028011,
+      "unbound_count": 1,
+      "bound_count": 2
+    },
+    {
+      "item": 1900028012,
+      "unbound_count": 3,
+      "bound_count": 2
+    },
+    {
+      "item": 1900028013,
+      "unbound_count": 1,
+      "bound_count": 3
+    },
+    {
+      "item": 1900028014,
+      "unbound_count": 1,
+      "bound_count": 1
+    },
+    {
+      "item": 1900028017,
+      "unbound_count": 1,
+      "bound_count": 2
+    },
+    {
+      "item": 1900028024,
+      "unbound_count": 1,
+      "bound_count": 1
+    },
+    {
+      "item": 1900028026,
+      "unbound_count": 1,
+      "bound_count": 2
+    }
+  ]
+}

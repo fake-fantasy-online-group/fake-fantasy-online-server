@@ -29,7 +29,7 @@ func SetEndgameCatalog(s Store, c *domain.EndgameCatalog) error {
 		if err := set(&x.endgameCatalog); err != nil {
 			return err
 		}
-		x.tx = &endgameCatalogTx{Tx: x.tx, catalog: c}
+		x.tx = &endgameCatalogTx{Tx: x.tx, catalog: c, items: x.itemDefinitions}
 		return nil
 	case *txView:
 		return set(&x.m.endgameCatalog)
@@ -40,6 +40,7 @@ func SetEndgameCatalog(s Store, c *domain.EndgameCatalog) error {
 type endgameCatalogQuerier struct {
 	querier
 	catalog *domain.EndgameCatalog
+	items   map[domain.ItemID]domain.ItemDef
 }
 
 func (q endgameCatalogQuerier) EndgameCatalog() *domain.EndgameCatalog { return q.catalog }
@@ -47,6 +48,7 @@ func (q endgameCatalogQuerier) EndgameCatalog() *domain.EndgameCatalog { return 
 type endgameCatalogTx struct {
 	pgx.Tx
 	catalog *domain.EndgameCatalog
+	items   map[domain.ItemID]domain.ItemDef
 }
 
 func (q *endgameCatalogTx) EndgameCatalog() *domain.EndgameCatalog { return q.catalog }
@@ -69,18 +71,20 @@ func catalogOfStore(s Store) *domain.EndgameCatalog {
 	}
 	return nil
 }
-func (p *Postgres) catalogQuery() querier { return endgameCatalogQuerier{p.pool, p.endgameCatalog} }
+func (p *Postgres) catalogQuery() querier {
+	return endgameCatalogQuerier{p.pool, p.endgameCatalog, p.itemDefinitions}
+}
 func (p *Postgres) begin(ctx context.Context) (pgx.Tx, error) {
 	tx, err := p.pool.Begin(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return &endgameCatalogTx{Tx: tx, catalog: p.endgameCatalog}, nil
+	return &endgameCatalogTx{Tx: tx, catalog: p.endgameCatalog, items: p.itemDefinitions}, nil
 }
 func (p *Postgres) beginTx(ctx context.Context, opts pgx.TxOptions) (pgx.Tx, error) {
 	tx, err := p.pool.BeginTx(ctx, opts)
 	if err != nil {
 		return nil, err
 	}
-	return &endgameCatalogTx{Tx: tx, catalog: p.endgameCatalog}, nil
+	return &endgameCatalogTx{Tx: tx, catalog: p.endgameCatalog, items: p.itemDefinitions}, nil
 }

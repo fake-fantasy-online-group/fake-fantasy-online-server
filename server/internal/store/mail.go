@@ -192,10 +192,7 @@ func (p *Postgres) loadMailAttachments(ctx context.Context, mailID int64) ([]dom
 		return nil, err
 	}
 	for i := range out {
-		if out[i].Stack.UID <= 0 {
-			continue
-		}
-		out[i].Stack, err = hydrateStack(out[i].Stack, facts)
+		out[i].Stack, err = hydrateStack(out[i].Stack, facts, p.catalogQuery())
 		if err != nil {
 			return nil, err
 		}
@@ -259,7 +256,7 @@ func insertMailAttachments(ctx context.Context, tx pgx.Tx, mailID int64, attachm
 		return err
 	}
 	for i, a := range attachments {
-		s := a.Stack
+		s := normalizeStoredBinding(tx, a.Stack)
 		wa, wv, wm := washArraysOf(s)
 		if _, err := tx.Exec(ctx, `
 			INSERT INTO character_mail_attachments(mail_id,ordinal,uid,item_id,count,durability,

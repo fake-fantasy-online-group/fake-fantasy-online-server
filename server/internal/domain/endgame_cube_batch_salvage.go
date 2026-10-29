@@ -155,7 +155,7 @@ func planBatchSalvage(ctx CubeContext, req EndgameRequest, execute bool) (CubePl
 	}
 	sort.Ints(ids)
 	for _, id := range ids {
-		p.Outputs = append(p.Outputs, Stack{Item: ItemID(id), Count: ores[ItemID(id)], Bound: true})
+		p.Outputs = append(p.Outputs, NormalizeItemBinding(ctx.Items[ItemID(id)], Stack{Item: ItemID(id), Count: ores[ItemID(id)], Bound: true}))
 	}
 	for _, out := range p.Outputs {
 		def, exists := ctx.Items[out.Item]

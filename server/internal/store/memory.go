@@ -14,7 +14,8 @@ import (
 // 生产用 PostgreSQL 实现(接同一接口)。这里刻意做成线程安全, 语义与真实存储对齐,
 // 以便上层逻辑在两种实现下行为一致。
 type Memory struct {
- endgameCatalog *domain.EndgameCatalog
+	itemDefinitions map[domain.ItemID]domain.ItemDef
+	endgameCatalog  *domain.EndgameCatalog
 	endgameStates   map[int64]domain.EndgameState
 	endgameReceipts map[endgameReceiptKey]domain.EndgameReceipt
 	endgameRuns     map[string]domain.EndgameRunRecord
@@ -40,9 +41,12 @@ type Memory struct {
 }
 
 func NewMemory(catalogs ...*domain.EndgameCatalog) *Memory {
- var catalog *domain.EndgameCatalog;if len(catalogs)==1{catalog=catalogs[0]}
+	var catalog *domain.EndgameCatalog
+	if len(catalogs) == 1 {
+		catalog = catalogs[0]
+	}
 	return &Memory{
- endgameCatalog:catalog,
+		endgameCatalog:  catalog,
 		endgameStates:   map[int64]domain.EndgameState{},
 		endgameReceipts: map[endgameReceiptKey]domain.EndgameReceipt{},
 		endgameRuns:     map[string]domain.EndgameRunRecord{},
@@ -232,7 +236,7 @@ func (m *Memory) LoadBag(_ context.Context, charID int64, slots int) (*domain.Ba
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	if b, ok := m.bags[charID]; ok && b != nil {
-		return b, nil
+		return normalizeBindingSnapshot(domain.Snapshot{Bag: b}, m.itemDefinitions).Bag, nil
 	}
 	return domain.NewBag(slots), nil
 }
@@ -241,7 +245,7 @@ func (m *Memory) LoadWarehouse(_ context.Context, charID int64, rule domain.Ware
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	if w := m.warehouses[charID]; w != nil {
-		return w, nil
+		return normalizeBindingSnapshot(domain.Snapshot{Warehouse: w}, m.itemDefinitions).Warehouse, nil
 	}
 	if !rule.Valid() {
 		return nil, fmt.Errorf("store: 非法个人仓库规则")
@@ -264,7 +268,7 @@ func (m *Memory) LoadWardrobe(_ context.Context, charID int64, rule domain.Wardr
 func (m *Memory) LoadStall(_ context.Context, charID int64) (*domain.Stall, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	return m.stalls[charID].Clone(), nil
+	return normalizeBindingSnapshot(domain.Snapshot{Stall: m.stalls[charID]}, m.itemDefinitions).Stall, nil
 }
 
 // LoadEquips 内存实现。
@@ -272,7 +276,7 @@ func (m *Memory) LoadEquips(_ context.Context, charID int64) (*domain.EquipSet, 
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	if w, ok := m.worn[charID]; ok && w != nil {
-		return w, nil
+		return normalizeBindingSnapshot(domain.Snapshot{Worn: w}, m.itemDefinitions).Worn, nil
 	}
 	return domain.NewEquipSet(), nil
 }
@@ -285,7 +289,7 @@ func (m *Memory) LoadChangeSet(_ context.Context, charID int64) (*domain.ChangeS
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	if set := m.changeSets[charID]; set != nil {
-		return set, nil
+		return normalizeBindingSnapshot(domain.Snapshot{ChangeSet: set}, m.itemDefinitions).ChangeSet, nil
 	}
 	return domain.NewChangeSet(), nil
 }
@@ -471,10 +475,10 @@ func (m *Memory) saveSnapshotLocked(snap domain.Snapshot) error {
 	if snap.Char.Caiyu < 0 {
 		return fmt.Errorf("store: 彩玉余额不能为负")
 	}
-	if err := validateEndgameSnapshot(snap,m.endgameCatalog); err != nil {
+	if err := validateEndgameSnapshot(snap, m.endgameCatalog); err != nil {
 		return err
 	}
-	cloned := snap.Clone()
+	cloned := normalizeBindingSnapshot(snap, m.itemDefinitions)
 	cloned.Char.Trial.CompletedOnce = snap.Char.HasCompletedTrial() || m.chars[snap.Char.ID].HasCompletedTrial()
 	if a := m.accByID[snap.Char.AccountID]; a != nil {
 		a.Caiyu = snap.Char.Caiyu

@@ -179,6 +179,7 @@ func (s *Scene) onInlayItem(cmd InlayItem) {
 		return
 	}
 	runeDef, ok := s.itemDef(rune.Item)
+	rune = domain.NormalizeItemBinding(runeDef, rune)
 	if !ok || rune.Empty() || rune.Locked || !rune.Card.Initialized || rune.Count != 1 || rune.UID <= 0 ||
 		rune.InstanceKind != domain.ItemInstanceSocketCard ||
 		runeDef.InstanceKind != domain.ItemInstanceSocketCard ||

@@ -133,6 +133,7 @@ func PlanAstralInsert(bag *Bag, worn *EquipSet, defs func(ItemID) (ItemDef, bool
 	if _, astral := AstralRune(rune.Item, rd.EndgameCatalog); !ok || !astral || rd.InstanceKind != ItemInstanceSocketCard || rune.InstanceKind != ItemInstanceSocketCard || !IsAstralRuneStack(rune) || !rune.Card.Initialized {
 		return AstralSocketPlan{}, AstralSocketError("invalid_rune")
 	}
+	rune = NormalizeItemBinding(rd, rune)
 	runeDef, _ := AstralRune(rune.Item, rd.EndgameCatalog)
 	if ch == nil || ch.Level < runeDef.MinLevel {
 		return AstralSocketPlan{}, AstralSocketError("rune_level")
@@ -149,6 +150,7 @@ func PlanAstralInsert(bag *Bag, worn *EquipSet, defs func(ItemID) (ItemDef, bool
 	p.Bag.Set(slot, remaining)
 	card := rune.Card
 	card.Bound = rune.Bound || rune.Card.Bound || t.stack.Bound
+	card = NormalizeItemBinding(rd, Stack{Item: rune.Item, InstanceKind: ItemInstanceSocketCard, Bound: card.Bound, Card: card}).Card
 	card.Locked = false
 	p.Target.Bound = p.Target.Bound || card.Bound
 	p.Target.Sockets[hole] = rune.Item
@@ -186,7 +188,7 @@ func PlanAstralRemove(bag *Bag, worn *EquipSet, defs func(ItemID) (ItemDef, bool
 	if !ok || def.InstanceKind != ItemInstanceSocketCard {
 		return AstralSocketPlan{}, AstralSocketError("invalid_rune")
 	}
-	rune := Stack{UID: uid, Item: id, Count: 1, InstanceKind: ItemInstanceSocketCard, Card: card, Bound: card.Bound, Locked: card.Locked}
+	rune := NormalizeItemBinding(def, Stack{UID: uid, Item: id, Count: 1, InstanceKind: ItemInstanceSocketCard, Card: card, Bound: card.Bound, Locked: card.Locked})
 	p := AstralSocketPlan{Bag: bag.Clone(), Worn: worn.Clone(), Target: t.stack, Rune: rune, Socket: hole}
 	if p.Bag.AddStack(def, rune) != 0 {
 		return AstralSocketPlan{}, AstralSocketError("bag_full")

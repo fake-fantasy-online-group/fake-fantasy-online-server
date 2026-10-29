@@ -89,6 +89,9 @@ func run() error {
 			return e
 		}
 		domain.AttachEndgameCatalog(defs, catalog)
+		if e = store.SetItemDefinitions(tx, defs); e != nil {
+			return e
+		}
 		if e = store.SetEndgameCatalog(tx, catalog); e != nil {
 			return e
 		}

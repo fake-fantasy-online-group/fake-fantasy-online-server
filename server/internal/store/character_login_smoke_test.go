@@ -79,6 +79,9 @@ func TestCharacterLoginReadOnlySmoke(t *testing.T) {
 		t.Fatal("endgame catalog", err)
 	}
 	s := &pgTx{tx: tx}
+	if err := SetItemDefinitions(s, items); err != nil {
+		t.Fatal(err)
+	}
 	if err := SetEndgameCatalog(s, catalog); err != nil {
 		t.Fatal(err)
 	}

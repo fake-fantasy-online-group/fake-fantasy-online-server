@@ -269,11 +269,11 @@ func loadEquips(ctx context.Context, q querier, charID int64) (*domain.EquipSet,
 	}
 	var hydrateErr error
 	worn.Each(func(slot domain.EquipSlot, cached domain.Stack) {
-		if hydrateErr != nil || cached.UID <= 0 {
+		if hydrateErr != nil {
 			return
 		}
 		var st domain.Stack
-		st, hydrateErr = hydrateStack(cached, facts)
+		st, hydrateErr = hydrateStack(cached, facts, q)
 		if hydrateErr == nil {
 			worn.Set(slot, st)
 		}
@@ -341,11 +341,11 @@ func loadChangeSet(ctx context.Context, q querier, charID int64) (*domain.Change
 	}
 	var hydrateErr error
 	set.Each(func(cell domain.EquipSlot, cached domain.Stack) {
-		if hydrateErr != nil || cached.UID <= 0 {
+		if hydrateErr != nil {
 			return
 		}
 		var st domain.Stack
-		st, hydrateErr = hydrateStack(cached, facts)
+		st, hydrateErr = hydrateStack(cached, facts, q)
 		if hydrateErr == nil {
 			set.Set(cell, st)
 		}
@@ -371,6 +371,7 @@ func saveEquips(ctx context.Context, tx pgx.Tx, charID int64, worn *domain.Equip
 	}
 	var rows [][]any
 	worn.Each(func(slot domain.EquipSlot, s domain.Stack) {
+		s = normalizeStoredBinding(tx, s)
 		wa, wv, wm := washArraysOf(s)
 		rows = append(rows, []any{charID, int32(slot), s.UID, int32(s.Item), s.Durability,
 			s.MaxDurability, s.DurabilityWearRaw, s.Bound, s.Locked, s.RefineLevel,
@@ -400,6 +401,7 @@ func saveChangeSet(ctx context.Context, tx pgx.Tx, charID int64, set *domain.Cha
 	}
 	var rows [][]any
 	set.Each(func(cell domain.EquipSlot, st domain.Stack) {
+		st = normalizeStoredBinding(tx, st)
 		wa, wv, wm := washArraysOf(st)
 		rows = append(rows, []any{charID, int32(cell), st.UID, int32(st.Item), st.Durability,
 			st.MaxDurability, st.DurabilityWearRaw, st.Bound, st.Locked, st.RefineLevel,
@@ -475,11 +477,11 @@ func loadBag(ctx context.Context, q querier, charID int64, slots int) (*domain.B
 	}
 	var hydrateErr error
 	bag.Each(func(slot int, cached domain.Stack) {
-		if hydrateErr != nil || cached.UID <= 0 {
+		if hydrateErr != nil {
 			return
 		}
 		var st domain.Stack
-		st, hydrateErr = hydrateStack(cached, facts)
+		st, hydrateErr = hydrateStack(cached, facts, q)
 		if hydrateErr == nil {
 			bag.Set(slot, st)
 		}
@@ -632,11 +634,11 @@ func loadWarehouse(ctx context.Context, q querier, charID int64, rule domain.War
 	}
 	var hydrateErr error
 	w.Each(func(page, slot int, cached domain.Stack) {
-		if hydrateErr != nil || cached.UID <= 0 {
+		if hydrateErr != nil {
 			return
 		}
 		var st domain.Stack
-		st, hydrateErr = hydrateStack(cached, facts)
+		st, hydrateErr = hydrateStack(cached, facts, q)
 		if hydrateErr == nil {
 			w.Set(page, slot, st)
 		}
@@ -740,6 +742,7 @@ func saveBag(ctx context.Context, tx pgx.Tx, charID int64, bag *domain.Bag) erro
 	}
 	var rows [][]any
 	bag.Each(func(slot int, s domain.Stack) {
+		s = normalizeStoredBinding(tx, s)
 		wa, wv, wm := washArraysOf(s)
 		rows = append(rows, []any{charID, slot, s.UID, int32(s.Item), s.Count, s.Durability,
 			s.MaxDurability, s.DurabilityWearRaw, s.Bound, s.Locked, s.RefineLevel,
@@ -779,6 +782,7 @@ func saveWarehouse(ctx context.Context, tx pgx.Tx, charID int64, w *domain.Wareh
 	}
 	var records [][]any
 	w.Each(func(page, slot int, st domain.Stack) {
+		st = normalizeStoredBinding(tx, st)
 		wa, wv, wm := washArraysOf(st)
 		records = append(records, []any{charID, page, slot, st.UID, int32(st.Item), st.Count,
 			st.Durability, st.MaxDurability, st.DurabilityWearRaw, st.Bound, st.Locked,

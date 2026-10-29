@@ -18,6 +18,7 @@ import (
 // Postgres 是 Store 的 PostgreSQL 实现(生产存储)。语义与 Memory 一致, 保证上层逻辑
 // 在两种实现下行为相同。连接池由 pgxpool 管理; 事务用真实 DB 事务。
 type Postgres struct {
+	itemDefinitions     map[domain.ItemID]domain.ItemDef
 	mailOperationsReady atomic.Bool
 	endgameCatalog      *domain.EndgameCatalog
 	pool                *pgxpool.Pool
@@ -506,7 +507,7 @@ func (p *Postgres) WithTx(ctx context.Context, fn func(Store) error) error {
 		return err
 	}
 	defer tx.Rollback(ctx)
-	if err := fn(&pgTx{tx: tx, endgameCatalog: p.endgameCatalog}); err != nil {
+	if err := fn(&pgTx{tx: tx, endgameCatalog: p.endgameCatalog, itemDefinitions: p.itemDefinitions}); err != nil {
 		return err
 	}
 	return classifyCommitError(tx.Commit(ctx))
@@ -514,8 +515,9 @@ func (p *Postgres) WithTx(ctx context.Context, fn func(Store) error) error {
 
 // pgTx 是事务内的 Store 视图, 所有操作走同一个 tx。
 type pgTx struct {
-	tx             pgx.Tx
-	endgameCatalog *domain.EndgameCatalog
+	itemDefinitions map[domain.ItemID]domain.ItemDef
+	tx              pgx.Tx
+	endgameCatalog  *domain.EndgameCatalog
 }
 
 func (t *pgTx) AccountByName(ctx context.Context, u string) (*Account, error) {

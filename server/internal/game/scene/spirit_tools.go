@@ -83,10 +83,12 @@ func (s *Scene) applySpiritTool(p *entity.Entity, req domain.EndgameRequest) {
 			// Old fixed souls retain their template; never manufacture dynamic rolls.
 			returned = domain.NewStack(old, 1)
 			returned.Bound = target.Bound
+			returned = domain.NormalizeStackBindings(returned, s.itemDef)
 			if _, dynamic := domain.SpiritDefinitionForItem(returned.Item); dynamic {
 				returned.Spirit.LegacyFixed = true
 			}
 		}
+		tool = domain.NormalizeStackBindings(tool, s.itemDef)
 		target.FusedSpirit = domain.SpiritAttachmentOf(tool)
 		target.FusedSoul = tool.Item
 		if tool.Bound {
@@ -121,6 +123,7 @@ func (s *Scene) applySpiritTool(p *entity.Entity, req domain.EndgameRequest) {
 			}
 			returned = domain.NewStack(old, 1)
 			returned.Bound = target.Bound
+			returned = domain.NormalizeStackBindings(returned, s.itemDef)
 			if _, dynamic := domain.SpiritDefinitionForItem(returned.Item); dynamic {
 				returned.Spirit.LegacyFixed = true
 			}
