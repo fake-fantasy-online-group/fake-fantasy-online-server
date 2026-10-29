@@ -2,6 +2,11 @@ package domain
 
 import "time"
 
+// Native ov_item 3309 (script "paper") and ov_help "发送邮件" / "群发邮件":
+// one sheet is spent per letter recipient. Opening or cancelling the editor is
+// not a send. Parcel material/slot rules are deliberately unchanged here.
+const MailLetterPaperID ItemID = 3309
+
 type MailRule struct {
 	Capacity   int32
 	ExpireDays int32

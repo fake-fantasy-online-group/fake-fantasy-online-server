@@ -86,6 +86,24 @@ func (s *Scene) onReserveMailSend(cmd ReserveMailSend) {
 			return
 		}
 	}
+	// Letter paper is reserved with the existing durable mail operation, never
+	// consumed by UseItem/editor-open. A failed send restores BeforeBag; an
+	// uncertain durable outcome retains the ordinary MailBusy fence.
+	// Infer a letter from its contents rather than trusting the client's type,
+	// so relabelling an empty letter as a parcel cannot bypass the paper cost.
+	if cmd.Money == 0 && len(cmd.Items) == 0 {
+		paperSlot := -1
+		p.Player.Bag.Each(func(slot int, stack domain.Stack) {
+			if paperSlot < 0 && stack.Item == domain.MailLetterPaperID &&
+				!stack.Empty() && !stack.Locked {
+				paperSlot = slot
+			}
+		})
+		if paperSlot < 0 || !p.Player.Bag.RemoveAt(paperSlot, 1) {
+			result.Reason = "寄送信件需要1张未加锁的信纸，请向书商购买"
+			return
+		}
+	}
 	p.Player.Char.Money = moneyFromInventory(money - cmd.Money)
 	p.Player.MailBusy = true
 	p.Player.MarkDirty()
