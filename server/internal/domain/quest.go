@@ -732,6 +732,14 @@ func ActiveQuestsOf(all QuestTable, ch *Character, bagCount func(ItemID) int32) 
 		if e.State == QuestFinished {
 			continue
 		}
+		// The task receipt has no raw state field. Only these task-only
+		// dungeon quests must project exactly the states admitted at entry.
+		switch id {
+		case 355, 356, 359, 361:
+			if e.State != QuestActive && e.State != QuestDeliver {
+				continue
+			}
+		}
 		d, ok := all[id]
 		if !ok {
 			// Quest355 is disabled by its missing NPC definition, not deleted from

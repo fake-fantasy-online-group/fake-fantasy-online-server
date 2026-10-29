@@ -127,6 +127,15 @@ func loadQuests(ctx context.Context, q querier, charID int64) (domain.QuestLog, 
 		if err := json.Unmarshal(dailyRaw, &daily); err != nil {
 			return nil, fmt.Errorf("store: daily spirit quest: %w", err)
 		}
+		// QuestState is uint8: validate only the four task-dungeon records
+		// before narrowing, so raw 256/257 cannot become Active/Deliver (or
+		// 258 become finished history). Preserve other tasks' existing behavior.
+		switch domain.QuestID(id) {
+		case 355, 356, 359, 361:
+			if state < int32(domain.QuestActive) || state > int32(domain.QuestFinished) {
+				state = 3 // invalid: neither admission nor completed history
+			}
+		}
 		out[domain.QuestID(id)] = domain.QuestEntry{SpiritDaily: daily,
 			State: domain.QuestState(state), Progress: progress, AcceptedAtMS: acceptedAtMS, RiftCompletionRunID: riftCompletionRunID}
 	}
