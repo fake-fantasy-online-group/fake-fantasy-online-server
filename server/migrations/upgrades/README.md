@@ -167,7 +167,20 @@ init-100 and init-101 fragments, with no manual post-init step.
 The upgrade files own their transactions and can be reapplied. Fresh-init bodies
 have no transaction control, so the initializer retains one all-or-nothing
 transaction. Neither path deploys/restarts a server, activates rift 10, or converts
-existing player items. The class-set player-data decision remains a release gate;
+existing player items.
+
+Rollout note: 000099 publishes Rift 10 but is contractually forbidden from updating
+`game_rift_rule_active`, so after 99-102 the active selector stays at 9. Rift 10
+(selector 10 / floor_layout_version 6 / published) was activated afterwards by a
+separate maintenance step, and upgrades 105-122 then walk that already-active selector
+to 19. Official tests for later migrations model the same activation after 99.
+
+Because already-applied upgrades through 127 must not be rewritten, and no numbered
+slot exists between 99 and 105, empty-database initialization splices
+`migrations/fresh/activate-published-rift-10.sql` after `000000_init-99.sql`. This hook
+is not consumed by the production upgrade path. A complete fresh init through 129 then
+reaches the same active rift 19 / loot 6 selectors as production after 127 (128-129 do
+not change those selectors). The class-set player-data decision remains a release gate;
 merging these files is not authorization to execute them.
 
 See `server/docs/quest-special-weapons-100.md` and

@@ -146,6 +146,24 @@ func loadInit(dir string) ([]byte, string, int, error) {
 			return nil, "", 0, fmt.Errorf("%s 为空", part.path)
 		}
 		_, _ = body.Write(fragment)
+		// Production activated published Rift 10 in a separately authorized
+		// step after 99; that UPDATE is intentionally absent from 000099 and
+		// must not be rewritten into already-applied upgrades. Splice the
+		// fresh-only hook so empty-database init can reach later selectors.
+		if part.index == 99 {
+			extraPath := filepath.Join(dir, "fresh", "activate-published-rift-10.sql")
+			extra, err := os.ReadFile(extraPath)
+			if err != nil {
+				return nil, "", 0, fmt.Errorf("缺少空库专用 rift10 激活钩子 %s: %w", extraPath, err)
+			}
+			if len(bytes.TrimSpace(extra)) == 0 {
+				return nil, "", 0, fmt.Errorf("%s 为空", extraPath)
+			}
+			if regexp.MustCompile(`(?m)^\s*(BEGIN|COMMIT|ROLLBACK);`).Match(extra) {
+				return nil, "", 0, fmt.Errorf("%s 不得自行管理事务", extraPath)
+			}
+			_, _ = body.Write(extra)
+		}
 	}
 	joined := body.Bytes()
 	if len(bytes.TrimSpace(joined)) == 0 {
