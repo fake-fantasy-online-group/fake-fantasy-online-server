@@ -47,7 +47,7 @@ func DecodeEndgame(payload []byte) (v domain.EndgameRequest, ok bool) {
 	if json.Unmarshal([]byte(raw), &keys) != nil {
 		return v, false
 	}
-	allowed := map[string]bool{"powerId": true, "skillId": true, "op": true, "requestId": true, "expectedRevision": true, "capabilities": true, "catalog": true, "cursor": true, "targetUid": true, "runeUid": true, "socket": true, "recipeId": true, "quoteId": true, "runId": true, "tier": true, "floorIndex": true, "itemUids": true, "npcEntityId": true, "cubeInputs": true}
+	allowed := map[string]bool{"powerId": true, "skillId": true, "op": true, "requestId": true, "expectedRevision": true, "capabilities": true, "catalog": true, "cursor": true, "targetUid": true, "runeUid": true, "socket": true, "recipeId": true, "quoteId": true, "runId": true, "tier": true, "floorIndex": true, "itemUids": true, "npcEntityId": true, "cubeInputs": true, "spiritItem": true, "spiritMaterial": true}
 	for key := range keys {
 		if !allowed[key] {
 			return v, false
@@ -61,6 +61,20 @@ func DecodeEndgame(payload []byte) (v domain.EndgameRequest, ok bool) {
 		for _, row := range rows {
 			for key := range row {
 				if key != "uid" && key != "itemId" && key != "count" {
+					return v, false
+				}
+			}
+		}
+	}
+	// Spirit selections are the native bag address; reject aliases and extra keys.
+	for _, name := range []string{"spiritItem", "spiritMaterial"} {
+		if selected, exists := keys[name]; exists {
+			var row map[string]json.RawMessage
+			if json.Unmarshal(selected, &row) != nil || row == nil {
+				return v, false
+			}
+			for key := range row {
+				if key != "tab" && key != "slot" && key != "itemId" && key != "uid" {
 					return v, false
 				}
 			}
@@ -130,12 +144,19 @@ func endgameDecimal(s string, zero bool) bool {
 	return e == nil && (n > 0 || zero && n == 0) && strconv.FormatInt(n, 10) == s
 }
 func validEndgameRequest(v domain.EndgameRequest) bool {
-	if v.NPCEntityID != 0 && v.Op != "rift.start" && v.Op != "cube.quote" && v.Op != "cube.execute" && v.Op != "cube.recover" && v.Op != "powerbook.recover" {
+	if v.NPCEntityID != 0 && v.Op != "rift.start" && v.Op != "cube.quote" && v.Op != "cube.execute" && v.Op != "cube.recover" && v.Op != "powerbook.recover" && !spiritWorkbenchOp(v.Op) {
 		return false
 	}
 	switch v.Op {
+	case "spirit.open", "spirit.preview", "spirit.unseal", "spirit.process", "spirit.rollback", "spirit.reset", "spirit.fuse", "spirit.separate", "spirit.appearance":
+		if !validSpiritRequest(v) {
+			return false
+		}
 	case "powerbook.list", "powerbook.extract", "powerbook.apply", "powerbook.recover", "powerbook.imprint", "skill.ranks", "skill.upgrade", "hello", "capabilities", "snapshot", "catalog", "socket.insert", "socket.remove", "cube.quote", "cube.execute", "cube.recover", "rift.start", "rift.state", "rift.claim", "rift.leave", "rift.advance":
 	default:
+		return false
+	}
+	if !spiritOp(v.Op) && (v.SpiritItem != nil || v.SpiritMaterial != nil) {
 		return false
 	}
 	if v.PowerID != "" && ((v.Op != "powerbook.imprint" && v.Op != "powerbook.extract") || !endgameASCII(v.PowerID, 1, 32)) {
@@ -228,4 +249,45 @@ func validEndgameRequest(v domain.EndgameRequest) bool {
 		return false
 	}
 	return v.FloorIndex >= 0 && v.Socket >= 0 && v.Socket < 5 && v.RecipeID >= 0 && v.Tier >= 0 && v.Tier <= domain.RiftMaxTier
+}
+
+func spiritOp(op string) bool { return len(op) > 7 && op[:7] == "spirit." }
+
+// spiritWorkbenchOp lists the operations the native spirit panel sends with
+// the fairy NPC entity; fuse/separate/appearance never carry an NPC.
+func spiritWorkbenchOp(op string) bool {
+	switch op {
+	case "spirit.open", "spirit.preview", "spirit.unseal", "spirit.process", "spirit.rollback", "spirit.reset":
+		return true
+	}
+	return false
+}
+
+func validSpiritSelection(s *domain.SpiritSelection) bool {
+	return s != nil && s.Tab >= 0 && s.Tab < domain.BagTabCount && s.Slot >= 0 && s.Slot < domain.BagPageSlots && s.ItemID > 0 &&
+		(s.UID == "" || endgameDecimal(s.UID, false))
+}
+
+// validSpiritRequest mirrors the native panel request shapes.
+func validSpiritRequest(v domain.EndgameRequest) bool {
+	if v.RuneUID != "" || v.Socket != 0 || v.RecipeID != 0 || v.QuoteID != "" || v.RunID != "" || v.Tier != 0 || len(v.ItemUIDs) != 0 ||
+		v.Catalog != "" || v.Cursor != "" || v.FloorIndex != 0 || len(v.CubeInputs) != 0 || v.PowerID != "" || v.SkillID != 0 || len(v.Capabilities) != 0 {
+		return false
+	}
+	if spiritWorkbenchOp(v.Op) {
+		if v.NPCEntityID == 0 || v.TargetUID != "" {
+			return false
+		}
+		switch v.Op {
+		case "spirit.open":
+			return v.SpiritItem == nil && v.SpiritMaterial == nil
+		case "spirit.preview":
+			return validSpiritSelection(v.SpiritItem) && v.SpiritMaterial == nil
+		}
+		return validSpiritSelection(v.SpiritItem) && validSpiritSelection(v.SpiritMaterial) &&
+			(v.SpiritItem.Tab != v.SpiritMaterial.Tab || v.SpiritItem.Slot != v.SpiritMaterial.Slot)
+	}
+	// fuse / separate / appearance: a bag tool on a UID-guarded target, no NPC.
+	return v.NPCEntityID == 0 && v.SpiritMaterial == nil && validSpiritSelection(v.SpiritItem) && v.TargetUID != "" &&
+		(v.SpiritItem.UID == "" || v.SpiritItem.UID != v.TargetUID)
 }
