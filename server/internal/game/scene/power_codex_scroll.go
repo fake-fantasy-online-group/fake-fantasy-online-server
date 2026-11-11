@@ -18,12 +18,23 @@ func (s *Scene) hasPowerCodex(p *entity.Entity) bool {
 	})
 	return found
 }
-func (s *Scene) powerCodexConfiguration() map[string]string {
+func (s *Scene) powerCodexConfiguration(p *entity.Entity) map[string]string {
 	d, ok := s.itemDef(domain.PowerCodexItemID)
 	if !ok {
 		return nil
 	}
-	return map[string]string{"powerBookItem": "1", "powerCodexItemId": strconv.Itoa(int(domain.PowerCodexItemID)), "powerScrollItemId": strconv.Itoa(int(domain.PowerScrollItemID)), "powerBookName": d.Name, "powerBookNPC": "巧匠左慈"}
+	cfg := map[string]string{
+		"powerBookItem":      "1",
+		"powerCodexItemId":   strconv.Itoa(int(domain.PowerCodexItemID)),
+		"powerScrollItemId":  strconv.Itoa(int(domain.PowerScrollItemID)),
+		"powerBookName":      d.Name,
+	}
+	// The official client assembles 寻回万象秘典 from powerBookNPC. Only advertise
+	// the artisan after 万象留痕 is finished, matching recoverPowerCodex.
+	if p != nil && p.Player != nil && p.Player.Char != nil && p.Player.Char.Quests.Done(domain.PowerCodexQuestID) {
+		cfg["powerBookNPC"] = "巧匠左慈"
+	}
+	return cfg
 }
 func powerCodexSlots(power domain.LegendaryPowerDefinition) []string {
 	names := map[int32]string{1: "面饰", 2: "头盔", 3: "项链", 4: "单手武器", 5: "盾", 6: "手套", 7: "戒指", 8: "衣服", 9: "鞋", 10: "背包", 11: "法宝", 13: "双手武器", 14: "耳饰", 15: "手镯", 16: "腰带"}

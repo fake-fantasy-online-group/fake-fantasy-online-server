@@ -301,7 +301,7 @@ func (s *Scene) dispatchEndgame(p *entity.Entity, r domain.EndgameRequest) {
 		if p.Player.EndgamePowerCodex {
 			configuration["powerBook"] = "1"
 		}
-		for k, v := range s.powerCodexConfiguration() {
+		for k, v := range s.powerCodexConfiguration(p) {
 			configuration[k] = v
 		}
 		s.endgameReply(p, domain.EndgameResponse{Kind: "hello", RequestID: r.RequestID, OK: true, Capabilities: caps, CatalogVersion: domain.UniqueCatalogVersion, RiftEntrances: entrances, Result: configuration, Spirits: domain.SpiritDefinitionViews(), SpiritAppearanceIDs: domain.SpiritAppearanceIDs()})

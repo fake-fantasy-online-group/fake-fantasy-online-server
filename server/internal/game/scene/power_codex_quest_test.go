@@ -118,3 +118,30 @@ func TestPowerCodexRecoveryRejectsWarehouseDuplicate(t *testing.T) {
 		t.Fatal("warehouse duplicate issued")
 	}
 }
+
+func helloPowerBookResult(t *testing.T, s *Scene, p *entity.Entity) map[string]string {
+	t.Helper()
+	s.dispatchEndgame(p, domain.EndgameRequest{Op: "hello", Capabilities: []string{domain.EndgameV1, domain.EndgamePowerCodexV1}})
+	s.flush()
+	for _, ev := range p.Player.Sink.(*fakeSink).take() {
+		if m, ok := ev.(event.EndgameMessage); ok && m.Message.Kind == "hello" {
+			return m.Message.Result
+		}
+	}
+	t.Fatal("missing hello")
+	return nil
+}
+
+func TestPowerCodexHelloHidesRecoverNPCUntilQuestDone(t *testing.T) {
+	s, _, _ := powerBookSceneFixture(t)
+	p := s.players[1]
+	got := helloPowerBookResult(t, s, p)
+	if got["powerBook"] != "1" || got["powerBookItem"] != "1" || got["powerBookNPC"] != "巧匠左慈" {
+		t.Fatalf("finished quest should advertise artisan: %v", got)
+	}
+	delete(p.Player.Char.Quests, domain.PowerCodexQuestID)
+	got = helloPowerBookResult(t, s, p)
+	if got["powerBook"] != "1" || got["powerBookItem"] != "1" || got["powerBookNPC"] != "" {
+		t.Fatalf("unfinished quest still advertised recover NPC: %v", got)
+	}
+}
