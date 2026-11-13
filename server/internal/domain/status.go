@@ -158,7 +158,9 @@ type StatusDef struct {
 	IconKnown bool
 	// SourceSkillID 仅供无原表的来源状态使用；原表状态保持0并使用状态身份。
 	SourceSkillID int32
-	Invisible     bool
+	// DOTFamily is a shared status identity, never a producing skill or equipment ID.
+	DOTFamily string `json:",omitempty"`
+	Invisible bool
 	// PreventInvisible 表示该状态生效期间不能获得隐身。它用于神术：鹰眼
 	// 破隐后的持续压制；不能借用减速/禁无敌等旧状态来附带实现。
 	PreventInvisible bool

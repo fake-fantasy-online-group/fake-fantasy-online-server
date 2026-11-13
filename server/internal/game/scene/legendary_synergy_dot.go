@@ -86,7 +86,10 @@ func synergyProfessionDOT(c *legendaryContext) {
 	if amount <= 0 {
 		return
 	}
-	d := domain.StatusDef{ID: legendaryMeleeStatusID(c, "synergy-dot"), Level: 1, Name: name, Desc: c.Power.Effect, TypeKnown: true, Type: domain.StatusBad, DurationSec: 6, IntervalSec: 1, LegendaryPowerID: c.Power.ID, LegendarySourceUID: c.SourceUID, SkillApplied: true, SourceSkillID: int32(skill), Icon: legendaryMeleeIcon(c), IconKnown: true, SynergyDOTVersion: 1, SynergyDOTPhysical: physical, SynergyDOTNew: true, ClassSetPoisonBonusTotal: amount}
+	d := domain.StatusDef{ID: legendaryMeleeStatusID(c, "synergy-dot"), Level: 1, Name: name, DOTFamily: domain.DOTBleed, TypeKnown: true, Type: domain.StatusBad, DurationSec: 6, IntervalSec: 1, LegendaryPowerID: c.Power.ID, LegendarySourceUID: c.SourceUID, SkillApplied: true, SourceSkillID: int32(skill), Icon: domain.DOTBleedIcon, IconKnown: true, SynergyDOTVersion: 1, SynergyDOTPhysical: physical, SynergyDOTNew: true, ClassSetPoisonBonusTotal: amount}
+	if !physical {
+		d.DOTFamily, d.Icon = domain.DOTRadiant, domain.DOTRadiantIcon
+	}
 	c.Scene.applyStatusDef(c.Target, d, c.Owner.ID)
 }
 

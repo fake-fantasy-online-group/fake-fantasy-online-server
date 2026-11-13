@@ -187,14 +187,14 @@ func TestSynergyHealerDOTAndVisualContract(t *testing.T) {
 	count := 0
 	c.Target.Status.Each(func(a domain.Active) {
 		count++
-		if a.Def.Name != "灼光" || a.Def.Icon <= 0 || a.Def.SynergyDOTPhysical {
+		if a.Def.Name != "灼光" || a.Def.DOTFamily != domain.DOTRadiant || a.Def.Icon != domain.DOTRadiantIcon || a.Def.SynergyDOTPhysical {
 			t.Fatal("healer presentation/type")
 		}
 		if got := classSetPoisonRemaining(a, s.tick, c.Target.MaxHP); got != 420 {
 			t.Fatalf("healer total %d", got)
 		}
 		fx, name, _ := s.statusVisual(a.Def)
-		if fx != "光系聚气" || name != "灼光" {
+		if fx != "灼光" || name != "灼光" {
 			t.Fatalf("visual %s/%s", fx, name)
 		}
 	})

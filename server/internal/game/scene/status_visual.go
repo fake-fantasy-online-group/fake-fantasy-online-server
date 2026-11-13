@@ -15,14 +15,15 @@ func (s *Scene) statusVisual(def domain.StatusDef) (effect, buffName string, pos
 	if def.LegendaryPowerID == "TY-A39" && def.DamageShield > 0 {
 		return "伤害吸收", def.Name, 0
 	}
-	// Existing package references only: blade traces for physical wounds, light
-	// charge for healer afterglow. Display names remain independent of resource keys.
-	if def.SynergyDOTVersion > 0 && def.SynergyDOTNew {
-		switch def.LegendaryPowerID {
-		case "ZS-A01", "JK-A01":
-			return "刀光1", def.Name, 0
-		case "YS-A03":
-			return "光系聚气", def.Name, 0
+	if family := domain.GenericDOTFamily(def); family != "" {
+		name, _ := domain.GenericDOTIdentity(family)
+		switch family {
+		case domain.DOTPoison:
+			return "中毒", name, statusPositionMode(def)
+		case domain.DOTBurn:
+			return "燃烧1", name, 0
+		default:
+			return name, name, 0
 		}
 	}
 
@@ -94,7 +95,7 @@ func (s *Scene) reconcileStatusVisuals(e *entity.Entity, statuses []statusPresen
 	}
 	removed := make(map[string]event.EntityStatusEffect)
 	for id, effects := range e.PublishedStatusEffects {
-		if !s.hasStatusVisual(id) {
+		if !s.hasStatusVisual(id) && !genericPublishedDOT(effects) {
 			continue
 		}
 		for _, effect := range effects {
@@ -117,7 +118,7 @@ func (s *Scene) reconcileStatusVisuals(e *entity.Entity, statuses []statusPresen
 
 func (s *Scene) configuredStatusKeyWasPublished(e *entity.Entity, name string) bool {
 	for id, effects := range e.PublishedStatusEffects {
-		if !s.hasStatusVisual(id) {
+		if !s.hasStatusVisual(id) && !genericPublishedDOT(effects) {
 			continue
 		}
 		for _, effect := range effects {

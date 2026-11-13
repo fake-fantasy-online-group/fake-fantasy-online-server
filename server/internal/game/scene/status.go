@@ -941,6 +941,11 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 		if native, ok := s.statuses.Get(a.Def.ID, a.Def.Level); ok && native.IconKnown {
 			a.Def.Icon, a.Def.IconKnown, a.Def.SourceSkillID = native.Icon, true, 0
 		}
+		family := domain.GenericDOTFamily(a.Def)
+		if family != "" {
+			a.Def.Name, a.Def.Icon = domain.GenericDOTIdentity(family)
+			a.Def.Desc, a.Def.IconKnown = genericDOTDescription(a), true
+		}
 		remainMS := int32(1<<31 - 1) // 永久状态的客户端展示哨兵
 		if a.ExpireAt != 0 {
 			remainMS = nonnegativeI32((a.ExpireAt - s.tick).Millis())
@@ -959,11 +964,11 @@ func (s *Scene) visibleStatuses(e *entity.Entity) []statusPresentation {
 			Beneficial: beneficial, RemainMS: remainMS,
 		}
 		skillID := a.Def.SourceSkillID
-		if skillID == 0 {
+		if skillID == 0 || family != "" {
 			skillID = int32(a.Def.ID)
 		}
 		effectName, buffName, positionMode := s.statusVisual(a.Def)
-		if a.Def.LegendaryVisualStage != "" {
+		if family == "" && a.Def.LegendaryVisualStage != "" {
 			if fx, mode, ok := legendaryVisualEffect(a.Def.LegendaryPowerID, a.Def.LegendaryVisualStage); ok {
 				effectName = fx
 				positionMode = uint8(mode)
