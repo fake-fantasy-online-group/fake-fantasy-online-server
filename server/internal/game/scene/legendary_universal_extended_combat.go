@@ -159,5 +159,5 @@ func universalExtendedIncoming(c *legendaryContext, n int32) int32 {
 			bp = c.RollValue("benefit", 2500)
 		}
 	}
-	return universalScaleBP(n, -synergyReductionBP(c, bp))
+	return universalScaleBP(n, -bp)
 }

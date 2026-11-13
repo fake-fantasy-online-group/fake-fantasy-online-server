@@ -1177,9 +1177,6 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 			// Apply ordinary magic native defense once to the raw snapshot,
 			// before incoming percentage/flat reductions and shields.
 			rawWide := synergyScale64(hpDelta, -1, 1)
-			if a.Def.SynergyDOTNew && (a.Def.SynergyDOTPVP || s.equipmentPVP(src, e)) {
-				rawWide /= 4
-			}
 			raw := clampI32(rawWide)
 			incoming := combat.RollMagicFixedDefense(raw, 100, e.Stats.MDef, e.Stats.MagicResist)
 			if a.Def.SynergyDOTPhysical {

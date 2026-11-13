@@ -162,11 +162,11 @@ func universalSynergyIncoming(c *legendaryContext, n int32) int32 {
 	switch c.Power.ID {
 	case "TY-D05":
 		if c.Blow.Area && c.Blow.Origin != domain.DamageDOTOrigin {
-			return universalScaleBP(n, -synergyReductionBP(c, c.RollValue("benefit", universalTuning.AreaMitigationBP)))
+			return universalScaleBP(n, -c.RollValue("benefit", universalTuning.AreaMitigationBP))
 		}
 	case "TY-D19":
 		if c.Blow.Origin == domain.DamageDOTOrigin {
-			return universalScaleBP(n, -synergyReductionBP(c, c.RollValue("benefit", universalTuning.PeriodicMitigationBP)))
+			return universalScaleBP(n, -c.RollValue("benefit", universalTuning.PeriodicMitigationBP))
 		}
 	case "TY-D11":
 		taken := min(max(int32(0), c.Owner.MP), domain.SaturateInt32(int64(n)*int64(c.RollValue("benefit", universalTuning.ManaAbsorbBP))/10000))

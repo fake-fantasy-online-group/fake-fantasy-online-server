@@ -212,12 +212,14 @@ func TestSynergyPVPQuarterAndDefenseCoefficient(t *testing.T) {
 	d := domain.StatusDef{ID: 1900012345, IntervalSec: 1, DurationSec: 6, SynergyDOTVersion: 1, SynergyDOTNew: true, SynergyDOTPhysical: true, HPChanges: []domain.ResourceChange{{Value: -1000}}}
 	before := q.HP
 	s.tickStatus(q, domain.Active{Source: p.ID, Def: d})
-	if before-q.HP != 250 {
+	// Feature DOTs use the ordinary PvP path only; there is no extra 25% coefficient.
+	if before-q.HP != 1000 {
 		t.Fatalf("pvp tick%d", before-q.HP)
 	}
 	c.Target = q
 	c.Blow.Area = true
-	if n := universalSynergyIncoming(c, 1000); n != 670 {
+	// TY-D05 keeps its 55% PvE benefit in PvP; no extra 60% haircut (was 670).
+	if n := universalSynergyIncoming(c, 1000); n != 450 {
 		t.Fatalf("pvp reduction%d", n)
 	}
 }
@@ -271,7 +273,7 @@ func TestSynergyPVPSnapshotSurvivesDisconnectedSource(t *testing.T) {
 	d := domain.StatusDef{ID: 1900012345, IntervalSec: 1, DurationSec: 6, SynergyDOTVersion: 1, SynergyDOTNew: true, SynergyDOTPVP: true, SynergyDOTPhysical: true, HPChanges: []domain.ResourceChange{{Value: -1000}}}
 	before := q.HP
 	s.tickStatus(q, domain.Active{Source: source, Def: d})
-	if before-q.HP != 250 {
+	if before-q.HP != 1000 {
 		t.Fatalf("offline pvp loss%d", before-q.HP)
 	}
 }

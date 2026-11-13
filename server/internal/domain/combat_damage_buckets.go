@@ -50,13 +50,7 @@ func (b CombatDamageBuckets) IncomingDamage(amount int32) int32 {
 	taken := max(int32(0), b.DamageTakenIncreasePct)
 	wide := int64(amount) + int64(amount)*int64(taken)/100
 	baseline := wide
-	pierce := b.ResistancePierceBP
-	capPierce := int32(3000)
-	if b.PVP {
-		pierce /= 2
-		capPierce = 1500
-	}
-	pierce = min(capPierce, max(int32(0), pierce))
+	pierce := min(int32(3000), max(int32(0), b.ResistancePierceBP))
 	resist := max(int64(-5000), int64(b.ResistanceBP)-int64(pierce))
 	if resist < 0 {
 		baseline = scaleDamageWide(baseline, 10000-resist, 10000)

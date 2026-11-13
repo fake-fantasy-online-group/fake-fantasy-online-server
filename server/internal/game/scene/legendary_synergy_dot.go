@@ -178,9 +178,6 @@ func synergySkillProc(c *legendaryContext) {
 	}
 	target.RootID = c.RootID
 	n := domain.SaturateInt32(int64(c.Attack(c.Blow.Magic)) * int64(c.RollValue("proc_pct", 800)) / 100)
-	if c.Scene.equipmentPVP(c.Owner, c.Target) {
-		n /= 4
-	}
 	c.Damage(c.Target, n, c.Blow.Magic, false)
 }
 func synergySkillShield(c *legendaryContext) {
@@ -190,13 +187,6 @@ func synergySkillShield(c *legendaryContext) {
 	n := domain.SaturateInt32(int64(c.Owner.MaxHP) * int64(c.RollValue("benefit", 20)) / 100)
 	c.Scene.applyStatusDef(c.Owner, domain.StatusDef{ID: legendaryMeleeStatusID(c, "skill-shield"), Level: 1, Name: "护势", Desc: c.Power.Effect, TypeKnown: true, Type: domain.StatusGood, DurationSec: 4, DamageShield: n, LegendaryPowerID: c.Power.ID, LegendarySourceUID: c.SourceUID, Icon: legendaryMeleeIcon(c), IconKnown: true}, c.Owner.ID)
 }
-func synergyReductionBP(c *legendaryContext, bp int32) int32 {
-	if c != nil && c.Scene != nil && (c.Blow.PeriodicPVP || c.Scene.equipmentPVP(c.Owner, c.Target)) {
-		return bp * 60 / 100
-	}
-	return bp
-}
-
 // Copy scales frozen base and remainders, never re-enters application modifiers.
 func synergyScaleActive(a domain.Active, bp int64) domain.Active {
 	d := &a.Def

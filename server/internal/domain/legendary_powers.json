@@ -10,7 +10,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "连环枪法伤害提高200%。命中附加流血：6秒总计300%面板物攻的物理持续伤害。新生成持续伤害对玩家为25%。",
+    "effect": "连环枪法伤害提高200%。命中附加流血：6秒总计300%面板物攻的物理持续伤害。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -980,7 +980,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "罡气剑的直接伤害提高250%。命中附加流血：6秒总计360%面板物攻的物理持续伤害。新生成持续伤害对玩家为25%。",
+    "effect": "罡气剑的直接伤害提高250%。命中附加流血：6秒总计360%面板物攻的物理持续伤害。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3930,7 +3930,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "光弹术直接伤害提高180%。命中存活目标时，移除其1份可移除的持续回血状态。命中附加灼光：6秒总计420%面板魔攻的光系持续伤害。新生成持续伤害对玩家为25%。",
+    "effect": "光弹术直接伤害提高180%。命中存活目标时，移除其1份可移除的持续回血状态。命中附加灼光：6秒总计420%面板魔攻的光系持续伤害。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4863,7 +4863,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "主动直接伤害技能命中时，消耗目标本人持续伤害剩余余额的35%，在160范围结算一次；每次施放最多一次，冷却1秒。复制体不可兑现，玩家目标伤害为25%。",
+    "effect": "主动直接伤害技能命中时，消耗目标本人持续伤害剩余余额的35%，在160范围结算一次；每次施放最多一次，冷却1秒。复制体不可兑现。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
