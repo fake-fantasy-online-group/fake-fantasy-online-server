@@ -48,19 +48,19 @@ func TestLegendaryUniversalSoloIncoming(t *testing.T) {
 				switch id {
 				case "TY-D05":
 					if kind == "area" {
-						want = 750
+						want = 450
 					}
 				case "TY-D06":
 					if kind == "basic" {
-						want = 750
+						want = 450
 					}
 				case "TY-D07":
 					if direct && kind != "magic" {
-						want = want * 80 / 100
+						want = want * 50 / 100
 					}
 				case "TY-D08":
 					if kind == "magic" || kind == "dot" {
-						want = 800
+						want = 500
 					}
 				case "TY-D10":
 					if kind == "critical" {
@@ -72,7 +72,7 @@ func TestLegendaryUniversalSoloIncoming(t *testing.T) {
 					}
 				case "TY-D19":
 					if kind == "dot" {
-						want = 750
+						want = 400
 					}
 				}
 				spent := int32(0)
@@ -147,7 +147,7 @@ func TestLegendaryUniversalSoloStatusLifetime(t *testing.T) {
 		duration int
 		receive  bool
 	}{
-		{"TY-A13", 1034, 14000, false}, {"TY-A22", domain.StatusPoison, 15000, false}, {"TY-A22", 1036, 15000, false},
+		{"TY-A13", 1034, 14000, false}, {"TY-A22", domain.StatusPoison, 20000, false}, {"TY-A22", 1036, 20000, false},
 		{"TY-D09", 1034, 7000, true}, {"TY-D18", 10320, 14000, false}, {"TY-D20", domain.StatusPoison, 6000, true}, {"TY-D20", 1036, 6000, true}, {"TY-U11", 10321, 15000, false},
 	} {
 		t.Run(fmt.Sprintf("%s/status=%d", tc.id, tc.status), func(t *testing.T) {
@@ -264,7 +264,7 @@ func TestLegendaryUniversalSoloPeriodic(t *testing.T) {
 		delta, want int32
 		receive     bool
 	}{
-		{"TY-A18", domain.StatusPoison, -100, -200, false}, {"TY-A27", 1036, -100, -200, false},
+		{"TY-A18", domain.StatusPoison, -100, -300, false}, {"TY-A27", 1036, -100, -200, false},
 		{"TY-A28", domain.StatusPoison, -100, -200, false}, {"TY-A29", 1036, -100, -200, false},
 		{"TY-U05", 10303, 100, 160, false}, {"TY-D12", 10303, 100, 140, true},
 	} {
@@ -360,9 +360,9 @@ func TestLegendaryUniversalSoloShield(t *testing.T) {
 				}
 				want := int32(100)
 				if id == "TY-D16" {
-					want = 160
+					want = 300
 				} else if !self {
-					want = 140
+					want = 250
 				}
 				if universalShieldValue(dst) != want {
 					t.Fatal("initial shield", universalShieldValue(dst), want)
@@ -392,7 +392,7 @@ func TestLegendaryUniversalSoloShield(t *testing.T) {
 				attacker.Stats.MinAtk = 200
 				attacker.Stats.MaxAtk = 200
 				s.resolveStrikeStatuses(attacker, dst, &combat.HitTracker{}, combat.Blow{SkillID: 10002, GuaranteedHit: true})
-				if hp-dst.HP != 200-want || universalShieldValue(dst) != 0 {
+				if hp-dst.HP != max(int32(0), 200-want) || universalShieldValue(dst) != max(int32(0), want-200) {
 					t.Fatal("shield not consumed once", dst.HP)
 				}
 			})
@@ -425,7 +425,7 @@ func TestLegendaryUniversalSoloPeriodicProvenance(t *testing.T) {
 		id                 string
 		powerPayload, crit bool
 		hp, mp             int32
-	}{{"TY-D11", true, false, 700, 300}, {"TY-D19", true, false, 750, 0}, {"TY-D10", false, true, 1400, 0}} {
+	}{{"TY-D11", true, false, 700, 300}, {"TY-D19", true, false, 400, 0}, {"TY-D10", false, true, 1400, 0}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := universalSoloFixture(t, tc.id, domain.Warrior, domain.Learned{})
 			p.Stats = domain.Stats{}

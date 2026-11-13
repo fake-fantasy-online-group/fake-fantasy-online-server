@@ -39,7 +39,7 @@ func TestLegendaryUniversalPowerRollSkillBenefitsAndGuaranteedMechanic(t *testin
 		}
 	}
 	c := legendaryContext{Power: domain.LegendaryPowerDefinition{ID: "TY-A09"}}
-	d := domain.SkillDef{LegendaryBasic: true, Effect: domain.SkillEffect{Kind: domain.EffectDamage}}
+	d := domain.SkillDef{ID: 123, Effect: domain.SkillEffect{Kind: domain.EffectDamage}}
 	legendaryHandlers["TY-A09"].PrepareSkill(&c, &d)
 	if !d.DirectEffects()[0].GuaranteedHit || domain.LegendaryPowerHasRoll("TY-A09") {
 		t.Fatal("guaranteed hit randomized")
@@ -63,7 +63,7 @@ func TestLegendaryUniversalPowerRollActualIncomingStatusAndStats(t *testing.T) {
 			t.Fatal("active roll missing", contexts)
 		}
 		got := legendaryHandlers["TY-D07"].ModifyIncoming(&contexts[0], 10000)
-		want := 10000 - domain.LegendaryPowerRollValue("TY-D07", "benefit", 2000, roll)
+		want := 10000 - domain.LegendaryPowerRollValue("TY-D07", "benefit", 5000, roll)
 		if got != want {
 			t.Fatal("actual mitigation", got, want)
 		}
@@ -77,8 +77,10 @@ func TestLegendaryUniversalPowerRollActualIncomingStatusAndStats(t *testing.T) {
 		}
 		c.Power.ID = "TY-A10"
 		stats := domain.Stats{AtkSpeedMS: 1000}
-		legendaryHandlers["TY-A10"].PassiveStats(&c, &stats)
-		bp := domain.LegendaryPowerRollValue("TY-A10", "benefit", 2000, roll)
+		if h := legendaryHandlers["TY-A10"].PassiveStats; h != nil {
+			h(&c, &stats)
+		}
+		bp := int32(0) // Retired haste must not modify basic cadence at any roll.
 		if stats.AtkSpeedMS != 1000*(10000-bp)/10000 || stats.AtkSpeedPct != int32(1000000/int64(10000-bp)-100) {
 			t.Fatal("attack interval inconsistent", stats, bp)
 		}

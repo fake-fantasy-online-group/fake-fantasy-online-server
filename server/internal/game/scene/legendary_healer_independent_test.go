@@ -163,7 +163,7 @@ func TestHealerIndependentA03(t *testing.T) {
 		if !on {
 			base = loss
 		} else {
-			healerSoloNear(t, loss, base, 160)
+			healerSoloNear(t, loss, base, 280)
 		}
 		n := 0
 		for _, id := range []domain.StatusID{190500, 190501} {
@@ -1877,11 +1877,11 @@ func TestHealerIndependentCombinations(t *testing.T) {
 		third := healerSoloMonster(s, 903, 420, 100)
 		excluded := healerSoloMonster(s, 904, 430, 100)
 		nativeRepairCast(t, s, p, 10301, p.ID)
-		if p.HP != 1101 || 100000-m.HP != 1760 {
+		if p.HP != 1101 || 100000-m.HP != 3080 {
 			t.Fatal("heal-derived light lost direct strength or main heal")
 		}
 		for _, e := range []*entity.Entity{side, extra, third, excluded} {
-			if 100000-e.HP != 1056 {
+			if 100000-e.HP != 1848 {
 				t.Fatal("heal-derived split amplification", e.ID, 100000-e.HP)
 			}
 			_, n := healerSoloCount(s, e.ID)

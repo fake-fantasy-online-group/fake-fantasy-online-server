@@ -459,7 +459,7 @@ func TestCasterIndependentA17BurnTickAndDuration(t *testing.T) {
 			baseDuration = a.ExpireAt - s.tick
 		}
 	}
-	casterIndependentNear(t, boostTick, baseTick, 182)
+	casterIndependentNear(t, boostTick, baseTick, 280)
 	if boostDuration != baseDuration {
 		t.Fatal("burn duration changed", baseDuration, boostDuration)
 	}

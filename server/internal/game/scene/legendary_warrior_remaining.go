@@ -86,8 +86,11 @@ func warriorQuakeZone(c *legendaryContext) {
 	st.ExpiresMS = c.NowMS + 3000
 	st.NextMS = c.NowMS + 1000
 	st.GroundEffectKey = fmt.Sprintf("%s/%d/stage-01", c.Power.ID, c.RootID)
-	c.VisualAt("stage-01", st.Position, 3000)
 	st.Value = int64(c.SnapshotNativeDamage()) * int64(c.RollValue("field_pct", 35)) / 100
+	st.GroundDOT = c.Scene.synergyGroundSnapshot(c, domain.SaturateInt32(st.Value), 3)
+	st.GroundDOTTick = 0
+	st.ExpiresMS = c.NowMS + int64(st.GroundDOT.DurationSec)*1000
+	c.VisualAt("stage-01", st.Position, int32(st.ExpiresMS-c.NowMS))
 	st.Stacks = max(c.Def.Area.Radius, c.Def.Radius)
 
 	st.Name = c.Power.Name
@@ -105,6 +108,7 @@ func warriorQuakeTick(c *legendaryContext) {
 		for st.NextMS > 0 && st.NextMS <= c.NowMS && st.NextMS <= st.ExpiresMS {
 			at := st.NextMS
 			st.NextMS += 1000
+			st.GroundDOTTick++
 			visual := *c
 			visual.RootID = st.RootID
 			visual.VisualAt("stage-02", st.Position, 0)
@@ -117,7 +121,13 @@ func warriorQuakeTick(c *legendaryContext) {
 					continue
 				}
 				last.Value = at
-				c.Damage(t, domain.SaturateInt32(st.Value), true, false)
+				if st.GroundDOT != nil {
+					d := *st.GroundDOT
+					d.SynergyDOTPVP = c.Scene.equipmentPVP(c.Owner, t)
+					total, ticks := d.ClassSetPoisonBonusTotal, int64(d.DurationSec)
+					extra := synergyScale64(total, st.GroundDOTTick, ticks) - synergyScale64(total, st.GroundDOTTick-1, ticks)
+					c.Scene.tickStatus(t, domain.Active{Def: d, Source: c.Owner.ID, PeriodicDamageTickExtra: domain.SaturateInt32(extra)})
+				}
 			}
 		}
 	}

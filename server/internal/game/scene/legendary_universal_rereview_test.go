@@ -36,6 +36,7 @@ func TestLegendaryUniversalRereviewNativePeriodicTriple(t *testing.T) {
 					s, p, m := nativeRepairFixture(t, tc.race, domain.Learned{tc.skill: 1}, powers...)
 					s.rng = rand.New(rand.NewSource(1))
 					p.Stats.CritRate, p.Stats.MCritRate = 10000, 10000
+					p.Stats.MinAtk, p.Stats.MaxAtk, p.Stats.MAtk = 90, 90, 90
 					cmd := UseSkill{Skill: tc.skill, Target: m.ID}
 					if tc.race == domain.Assassin {
 						cmd.Target, cmd.At = 0, &m.Pos
@@ -61,7 +62,7 @@ func TestLegendaryUniversalRereviewNativePeriodicTriple(t *testing.T) {
 					tick := func() int32 {
 						s.outbox = nil
 						before := m.HP
-						s.tickStatus(m, active)
+						synergyScheduledTickForTest(s, m, active.Def.ID)
 						n := 0
 						for _, out := range s.outbox {
 							if e, ok := out.ev.(event.DamageDealt); ok && e.Dst == m.ID {
@@ -84,8 +85,12 @@ func TestLegendaryUniversalRereviewNativePeriodicTriple(t *testing.T) {
 						}
 						return
 					}
-					if damage != baseDamage*4 || active.Def.LegendaryDurationMS != baseDuration*1500 {
-						t.Fatalf("native triple damage=%d duration=%dms want=%d/%dms", damage, active.Def.LegendaryDurationMS, baseDamage*4, baseDuration*1500)
+					wantDamage := baseDamage * 4
+					if tc.name == "poison" {
+						wantDamage = 720
+					}
+					if damage != wantDamage || active.Def.LegendaryDurationMS != baseDuration*2000 {
+						t.Fatalf("native triple damage=%d duration=%dms want=%d/%dms", damage, active.Def.LegendaryDurationMS, baseDamage*4, baseDuration*2000)
 					}
 					// Removing equipment and changing live crit cannot rewrite an existing DOT.
 					p.Player.Worn = domain.NewEquipSet()
@@ -128,8 +133,8 @@ func TestLegendaryUniversalRereviewNativeShieldTripleAndRecipient(t *testing.T) 
 				baseShield = shield
 				return
 			}
-			if shield != baseShield*2 {
-				t.Fatalf("source 60%% and receiver 40%% must add once: shield=%d want%d", shield, baseShield*2)
+			if shield != baseShield*450/100 {
+				t.Fatalf("source 200%% and receiver 150%% must add once: shield=%d want%d", shield, baseShield*450/100)
 			}
 			wantCost := (native.MPCost + 1) / 2
 			if before-p.MP != wantCost || d.MPCost != wantCost {
@@ -152,7 +157,7 @@ func TestLegendaryUniversalRereviewNativeBasicReachTriple(t *testing.T) {
 	item.Equip.Appearance = domain.EquipAppearance{Part: domain.AppearanceWeaponR, Known: true, AttackKnown: true, AtkDist: 100}
 	s.items[item.ID] = item
 	s.refreshAppearance(p)
-	if p.Look.AtkDist != 150 || p.UsesRangedWeapon() {
+	if p.Look.AtkDist != 100 || p.UsesRangedWeapon() {
 		t.Fatal("reach must not change native melee identity", p.Look.AtkDist)
 	}
 	inside := putMonster(s, 901, 100000, domain.Stats{}, 300, 100)
@@ -163,7 +168,7 @@ func TestLegendaryUniversalRereviewNativeBasicReachTriple(t *testing.T) {
 		t.Fatal("native attack admission failed")
 	}
 	s.stepCombatAt(s.now().Add(time.Second), false)
-	if m.HP != 99900 || inside.HP != 99930 || outside.HP != 100000 {
+	if m.HP != 99900 || inside.HP != 100000 || outside.HP != 100000 {
 		t.Fatalf("reach150 then fan+50%% must hit side200 but not226: hp=%d/%d/%d", m.HP, inside.HP, outside.HP)
 	}
 }

@@ -144,7 +144,7 @@ func TestLegendaryAssassinSynergyCircleNativePoison(t *testing.T) {
 	}
 	before = m.HP
 	poisonTicks(s, 1)
-	if before-m.HP != 20 {
+	if before-m.HP != 30 {
 		t.Fatalf("same poison tick=%d", before-m.HP)
 	}
 	p.Status.EachEffective(func(a domain.Active) {
@@ -204,12 +204,12 @@ func TestLegendaryAssassinSynergyNativePoisonAmplifiesOnce(t *testing.T) {
 		}
 	})
 	legendaryAssassinAmplifyPoison(&copied)
-	if copied.LegendaryModifiers.DamageTickBP != 10000 {
+	if copied.LegendaryModifiers.DamageTickBP != 20000 {
 		t.Fatalf("copied poison amplified twice: %+v", copied.LegendaryModifiers)
 	}
 	before := m.HP
 	poisonTicks(s, 1)
-	if before-m.HP != 20 {
+	if before-m.HP != 30 {
 		t.Fatalf("native basic poison tick=%d", before-m.HP)
 	}
 }
@@ -297,12 +297,12 @@ func TestLegendaryAssassinSynergyPoisonDefenseAndSpread(t *testing.T) {
 			copy = a
 		}
 	})
-	if !copy.Def.LegendaryPoisonCopy || copy.Def.LegendaryModifiers.DamageTickBP != 10000 {
+	if !copy.Def.LegendaryPoisonCopy || copy.Def.LegendaryModifiers.DamageTickBP != 20000 {
 		t.Fatalf("wrong native copied poison: %+v", copy.Def)
 	}
 	before := next.HP
 	poisonTicks(s, 1)
-	if before-next.HP != 20 {
+	if before-next.HP != 30 {
 		t.Fatal("copied tick", before-next.HP)
 	}
 	last := putMonster(s, 902, 10000, domain.Stats{}, 150, 100)
@@ -365,7 +365,7 @@ func TestLegendaryAssassinSynergyFrostNativePoisonSourceGuard(t *testing.T) {
 	}
 	before := m.HP
 	poisonTicks(s, 1)
-	if before-m.HP != 20 || !m.Status.Has(domain.StatusFreeze) {
+	if before-m.HP != 30 || !m.Status.Has(domain.StatusFreeze) {
 		t.Fatal("own native poison broke native freeze", before-m.HP)
 	}
 
@@ -582,7 +582,7 @@ func TestLegendaryAssassinSynergyNativeTrapVariants(t *testing.T) {
 	s.applyStatusDef(m, d, p.ID)
 	before := m.HP
 	poisonTicks(s, 1)
-	if before-m.HP != 20 {
+	if before-m.HP != 30 {
 		t.Fatal("same native trap poison", before-m.HP)
 	}
 }

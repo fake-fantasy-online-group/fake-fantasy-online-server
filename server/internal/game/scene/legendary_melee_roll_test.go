@@ -49,7 +49,7 @@ func TestLegendaryMeleeRollActualModifiers(t *testing.T) {
 		field string
 		base  int32
 	}{
-		{"ZS-A01", 10002, "damage", 8000}, {"ZS-A04", 10005, "damage", 1500}, {"ZS-A05", 10005, "damage", 6000}, {"ZS-A07", 10009, "damage", 5000}, {"ZS-A11", 10017, "damage", 6000}, {"ZS-A13", 10006, "damage", 4500}, {"ZS-A15", 10006, "damage", 6000}, {"ZS-A17", 10003, "damage", 3000}, {"ZS-A19", 10021, "damage", 7000}, {"ZS-A22", 10022, "damage", 2000}, {"ZS-A24", 10023, "damage", 8500}, {"ZS-A25", 10022, "damage", 3500}, {"ZS-A27", 10027, "damage", 8000}, {"ZS-A30", 10017, "damage", 6500},
+		{"ZS-A01", 10002, "damage", 20000}, {"ZS-A04", 10005, "damage", 1500}, {"ZS-A05", 10005, "damage", 6000}, {"ZS-A07", 10009, "damage", 5000}, {"ZS-A11", 10017, "damage", 6000}, {"ZS-A13", 10006, "damage", 4500}, {"ZS-A15", 10006, "damage", 6000}, {"ZS-A17", 10003, "damage", 3000}, {"ZS-A19", 10021, "damage", 7000}, {"ZS-A22", 10022, "damage", 2000}, {"ZS-A24", 10023, "damage", 8500}, {"ZS-A25", 10022, "damage", 3500}, {"ZS-A27", 10027, "damage", 8000}, {"ZS-A30", 10017, "damage", 6500},
 		{"ZS-U02", 10013, "mana", 6000}, {"ZS-U05", 10006, "mana", 4500}, {"ZS-U08", 10005, "mana", 3000}, {"ZS-U10", 10023, "mana", 6000}, {"JK-U04", 10127, "mana", 5000},
 		{"CK-A01", 10221, "cooldown", 3000}, {"CK-A03", 10221, "damage", 8000}, {"CK-A04", 10205, "damage", 5000}, {"CK-A06", 10206, "damage", 5000}, {"CK-A11", 10213, "damage", 4000}, {"CK-A12", 10213, "damage", 9000}, {"CK-A14", 10214, "radius", 3000}, {"CK-A16", 10215, "damage", 5000}, {"CK-A17", 10209, "damage", 5000}, {"CK-A20", 10209, "damage", 2500}, {"CK-A23", 10219, "damage", 3500}, {"CK-A24", 10203, "damage", 5000}, {"CK-A29", 10210, "damage", 8000}, {"CK-U09", 10221, "mana", 3000},
 	} {
@@ -119,12 +119,12 @@ func TestLegendaryMeleeRollPoisonPayload(t *testing.T) {
 		c.PowerRollBP = 7500
 		d := domain.StatusDef{ID: domain.StatusPoison, ClassSetPoison: true, SourceSkillID: 10214}
 		legendaryHandlers[id].StatusApplied(c, &d)
-		if d.LegendaryModifiers.DamageTickBP != 7500 {
+		if d.LegendaryModifiers.DamageTickBP != 15000 {
 			t.Fatal(id, d.LegendaryModifiers.DamageTickBP)
 		}
 		if id == "CK-A09" {
 			legendaryHandlers[id].StatusApplied(c, &d)
-			if d.LegendaryModifiers.DamageTickBP != 7500 {
+			if d.LegendaryModifiers.DamageTickBP != 15000 {
 				t.Fatal("duplicate poison scaling")
 			}
 		}
@@ -151,7 +151,7 @@ func TestLegendaryMeleeRollLiveSourceHelpers(t *testing.T) {
 			case "CK-A09":
 				d := domain.StatusDef{ID: domain.StatusPoison, ClassSetPoison: true}
 				s.legendaryAssassinPreparePoison(p, &d)
-				if d.LegendaryModifiers.DamageTickBP != 7500 {
+				if d.LegendaryModifiers.DamageTickBP != 15000 {
 					t.Fatal("native poison reverted to fixed full value")
 				}
 			case "CK-D08":

@@ -12,7 +12,7 @@ func TestLegendaryUniversalExtendedGeometryAndUtilities(t *testing.T) {
 		effect domain.EffectKind
 		want   int32
 	}{
-		{"TY-A02", domain.EffectDamage, 160}, {"TY-A03", domain.EffectDamage, 150}, {"TY-A07", domain.EffectDamage, 200}, {"TY-A09", domain.EffectDamage, 1}, {"TY-A19", domain.EffectDamageMP, 8000}, {"TY-A21", domain.EffectPlaceTrap, 150}, {"TY-U01", domain.EffectDamage, 700}, {"TY-U04", domain.EffectHeal, 70}, {"TY-U06", domain.EffectRestoreMP, 150}, {"TY-U07", domain.EffectTeleportPoint, 140}, {"TY-U16", domain.EffectHeal, 160}, {"TY-U17", domain.EffectResurrect, 75}, {"TY-U18", domain.EffectHeal, 9000}, {"TY-U19", domain.EffectRevealInvisible, 200},
+		{"TY-A02", domain.EffectDamage, 160}, {"TY-A03", domain.EffectDamage, 150}, {"TY-A07", domain.EffectDamage, 200}, {"TY-A09", domain.EffectDamage, 0}, {"TY-A19", domain.EffectDamageMP, 8000}, {"TY-A21", domain.EffectPlaceTrap, 150}, {"TY-U01", domain.EffectDamage, 700}, {"TY-U04", domain.EffectHeal, 70}, {"TY-U06", domain.EffectRestoreMP, 150}, {"TY-U07", domain.EffectTeleportPoint, 140}, {"TY-U16", domain.EffectHeal, 160}, {"TY-U17", domain.EffectResurrect, 75}, {"TY-U18", domain.EffectHeal, 9000}, {"TY-U19", domain.EffectRevealInvisible, 200},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m, _ := universalTestContext(t, tc.id)
@@ -91,7 +91,7 @@ func TestLegendaryUniversalSingleCircleThenGenericShape(t *testing.T) {
 	warriorEquip(t, s, p, "TY-A08", domain.SlotRing)
 	d := domain.SkillDef{ID: 123, Kind: domain.SkillSingle, TargetEnemy: true, Dist: 300, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100}}}
 	s.legendaryPrepareSkill(p, &d, m.ID)
-	if !d.Area.Valid() || d.Area.Radius != 168 || d.Effects[0].DamagePct != 160 {
+	if !d.Area.Valid() || d.Area.Radius != 168 || d.Effects[0].DamagePct != 250 {
 		t.Fatalf("geometry%+v damage%d", d.Area, d.Effects[0].DamagePct)
 	}
 }
@@ -125,7 +125,7 @@ func TestLegendaryUniversalExtendedEquipmentStats(t *testing.T) {
 	for _, tc := range []struct {
 		id   string
 		want int32
-	}{{"TY-A10", 1200}, {"TY-D02", 1040}, {"TY-D03", 1030}, {"TY-D04", 1040}, {"TY-U09", 0}} {
+	}{{"TY-A10", 1500}, {"TY-D02", 1200}, {"TY-D03", 1120}, {"TY-D04", 1040}, {"TY-U09", 0}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, _, _, c := universalTestContext(t, tc.id)
 			item := s.items[900001]
@@ -155,7 +155,7 @@ func TestLegendaryUniversalNativeBaseContributions(t *testing.T) {
 	for _, tc := range []struct {
 		id   string
 		want int32
-	}{{"TY-A25", 50}, {"TY-A26", 50}, {"TY-A38", 40}, {"TY-A39", 20}} {
+	}{{"TY-A25", 50}, {"TY-A26", 50}, {"TY-A38", 40}, {"TY-A39", 0}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m, _ := universalTestContext(t, tc.id)
 			item := s.items[900001]
@@ -226,22 +226,22 @@ func TestLegendaryUniversalBasicReachNativeAppearance(t *testing.T) {
 	item.Equip.Appearance = domain.EquipAppearance{Part: domain.AppearanceWeaponR, Known: true, AttackKnown: true, AtkDist: 100}
 	s.items[900001] = item
 	s.refreshAppearance(p)
-	if p.Look.AtkDist != 150 || p.Player.Char.Appear.AtkDist != 100 {
+	if p.Look.AtkDist != 100 || p.Player.Char.Appear.AtkDist != 100 {
 		t.Fatalf("effective%d persisted%d", p.Look.AtkDist, p.Player.Char.Appear.AtkDist)
 	}
 	s.refreshAppearance(p)
-	if p.Look.AtkDist != 150 {
+	if p.Look.AtkDist != 100 {
 		t.Fatal("refresh stacked reach")
 	}
 	p.HP = 0
-	if got := s.classSetAppearance(p, p.Player.Char.Appear).AtkDist; got != 150 {
+	if got := s.classSetAppearance(p, p.Player.Char.Appear).AtkDist; got != 100 {
 		t.Fatalf("dead/login projection%d", got)
 	}
 	p.HP = 10000
 	warriorEquip(t, s, p, "TY-A01", domain.SlotGlove)
 	d := domain.SkillDef{LegendaryBasic: true, Dist: int32(p.Look.AtkDist), Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100}}}
 	s.legendaryPrepareSkill(p, &d, m.ID)
-	if d.Area.Radius != 150 {
+	if d.Area.Radius != 0 {
 		t.Fatalf("fan double range%d", d.Area.Radius)
 	}
 	st := p.Player.Worn.At(domain.SlotWeapon)
@@ -270,7 +270,7 @@ func TestLegendaryUniversalBasicRangeKeepsNativeWeaponIdentity(t *testing.T) {
 		item.Equip.Appearance = domain.EquipAppearance{Part: domain.AppearanceWeaponR, Known: true, AttackKnown: true, AtkDist: tc.native}
 		s.items[900001] = item
 		s.refreshAppearance(p)
-		if p.Look.AtkDist != tc.native*3/2 || p.UsesRangedWeapon() != tc.ranged {
+		if p.Look.AtkDist != tc.native || p.UsesRangedWeapon() != tc.ranged {
 			t.Fatalf("native%d effective%d ranged%v", tc.native, p.Look.AtkDist, p.UsesRangedWeapon())
 		}
 	}
@@ -282,7 +282,7 @@ func TestLegendaryUniversalAttackSpeedUsesNativeCadence(t *testing.T) {
 	p.Player.Char.Appear.AtkDist = 100
 	universalExtendedStats(c, &p.Stats)
 	p.DidBasicAttack(s.tick)
-	if p.ReadyToAttack(s.tick+domain.Ticks(700)) || !p.ReadyToAttack(s.tick+domain.Ticks(800)) {
-		t.Fatal("20percent native cadence reduction not applied")
+	if p.ReadyToAttack(s.tick+domain.Ticks(900)) || !p.ReadyToAttack(s.tick+domain.Ticks(1000)) {
+		t.Fatal("retired universal haste changed native cadence")
 	}
 }

@@ -303,8 +303,8 @@ func TestLegendaryWarriorIncomingMitigationAddsAcrossGear(t *testing.T) {
 	warriorEquip(t, s, p, "ZS-D07", domain.SlotHead)
 	m.Stats = domain.Stats{MinAtk: 100, MaxAtk: 100}
 	ev, _, _ := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true, SkillPct: 100})
-	if ev.Amount != 15 {
-		t.Fatalf("expected85%% additive mitigation, got%d", ev.Amount)
+	if ev.Amount != 30 {
+		t.Fatalf("expected70%% capped additive mitigation, got%d", ev.Amount)
 	}
 }
 func TestLegendaryWarriorQuakeExactReleaseSnapshotAndDefenses(t *testing.T) {
@@ -328,7 +328,7 @@ func TestLegendaryWarriorQuakeExactReleaseSnapshotAndDefenses(t *testing.T) {
 	s.tick = domain.Tick(1000 / domain.TickMS)
 	before, otherBefore = m.HP, other.HP
 	s.stepLegendaryPowers()
-	if before-m.HP != damage*35/100 || otherBefore-other.HP != max(int32(1), damage*35/100-83) {
+	if before-m.HP != damage*35/100 || otherBefore-other.HP != max(int32(1), damage*35/100-20) {
 		t.Fatalf("field did not share source snapshot, initial%d pulse%d other%d", damage, before-m.HP, otherBefore-other.HP)
 	}
 	if len(s.legendaryState().nativeDamageSnapshots) != 0 {

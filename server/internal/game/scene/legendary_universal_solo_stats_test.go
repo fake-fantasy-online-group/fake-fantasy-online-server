@@ -35,15 +35,15 @@ func TestLegendaryUniversalSoloEquipmentStats(t *testing.T) {
 			base := p.Stats
 			switch id {
 			case "TY-D01":
-				if enhanced.Def-base.Def != 40 {
+				if enhanced.Def-base.Def != 200 {
 					t.Fatal("equipment-only defense", enhanced.Def, base.Def)
 				}
 			case "TY-D02":
-				if enhanced.MDef-base.MDef != 40 {
+				if enhanced.MDef-base.MDef != 200 {
 					t.Fatal("equipment-only magic defense", enhanced.MDef, base.MDef)
 				}
 			case "TY-D03":
-				if enhanced.MaxHP-base.MaxHP != 30 || p.MaxHP != base.MaxHP {
+				if enhanced.MaxHP-base.MaxHP != 120 || p.MaxHP != base.MaxHP {
 					t.Fatal("maximum HP lifecycle")
 				}
 			case "TY-D04":

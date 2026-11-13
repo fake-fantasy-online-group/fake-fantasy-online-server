@@ -158,12 +158,12 @@ func TestLegendaryHealerFunctionalHealingPrismBatchDeduplicates(t *testing.T) {
 	}
 	for _, id := range primaries {
 		damage, count := healerSoloCount(s, id)
-		if damage != 1760 || count != 1 {
-			t.Fatalf("primary %d received %d damage in %d hits; want one full 1760 hit", id, damage, count)
+		if damage != 3080 || count != 1 {
+			t.Fatalf("primary %d received %d damage in %d hits; want one full 3080 hit", id, damage, count)
 		}
 	}
-	if damage, count := healerSoloCount(s, secondary.ID); damage != 1056 || count != 1 {
-		t.Fatalf("overlapping secondary received %d damage in %d hits; want one 60%% 1056 hit", damage, count)
+	if damage, count := healerSoloCount(s, secondary.ID); damage != 1848 || count != 1 {
+		t.Fatalf("overlapping secondary received %d damage in %d hits; want one 60%% 1848 hit", damage, count)
 	}
 	if damage, count := healerSoloCount(s, outside.ID); damage != 0 || count != 0 {
 		t.Fatalf("batch recurred beyond its range: damage=%d hits=%d", damage, count)

@@ -28,7 +28,7 @@ func TestLegendarySwordsmanImmediateAttackDefaults(t *testing.T) {
 		skill domain.SkillID
 		want  int32
 	}{
-		{"JK-A01", 10102, 200}, {"JK-A03", 10102, 260}, {"JK-A19", 10122, 125}, {"JK-A21", 10116, 420}, {"JK-A26", 10104, 200}, {"JK-A27", 10102, 420}, {"JK-A28", 10119, 360}, {"JK-A30", 10123, 210},
+		{"JK-A01", 10102, 350}, {"JK-A03", 10102, 260}, {"JK-A19", 10122, 125}, {"JK-A21", 10116, 420}, {"JK-A26", 10104, 200}, {"JK-A27", 10102, 420}, {"JK-A28", 10119, 360}, {"JK-A30", 10123, 210},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := legendaryMeleeFixture(t, tc.id)

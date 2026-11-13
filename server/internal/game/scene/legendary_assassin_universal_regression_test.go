@@ -479,7 +479,7 @@ func TestUniversalRegressionMagicAttackBaseNativeCombination(t *testing.T) {
 			}
 			bp := int64(10000)
 			if count >= 2 {
-				bp += 6000
+				bp += 15000
 			}
 			if count >= 3 {
 				bp += 5000

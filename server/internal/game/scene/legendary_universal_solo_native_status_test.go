@@ -17,9 +17,9 @@ func TestLegendaryUniversalSoloNativePeriodicProducer(t *testing.T) {
 		status                 domain.StatusID
 		damagePct, durationPct int32
 	}{
-		{"TY-A18", domain.Assassin, 10214, domain.StatusPoison, 200, 100},
-		{"TY-A22", domain.Assassin, 10214, domain.StatusPoison, 100, 150},
-		{"TY-A22", domain.Warlock, 10421, 1036, 100, 150},
+		{"TY-A18", domain.Assassin, 10214, domain.StatusPoison, 300, 100},
+		{"TY-A22", domain.Assassin, 10214, domain.StatusPoison, 100, 200},
+		{"TY-A22", domain.Warlock, 10421, 1036, 100, 200},
 		{"TY-A27", domain.Warlock, 10421, 1036, 200, 100},
 		{"TY-A28", domain.Assassin, 10214, domain.StatusPoison, 200, 100},
 		{"TY-A29", domain.Warlock, 10421, 1036, 200, 100},
@@ -39,6 +39,7 @@ func TestLegendaryUniversalSoloNativePeriodicProducer(t *testing.T) {
 					s.rng = rand.New(rand.NewSource(1))
 					s.refreshStats(p)
 					p.MP = p.MaxMP
+					p.Stats.MinAtk, p.Stats.MaxAtk, p.Stats.MAtk = 90, 90, 90
 					p.Stats.CritRate = 10000
 					p.Stats.MCritRate = 10000
 					target := m
@@ -60,19 +61,24 @@ func TestLegendaryUniversalSoloNativePeriodicProducer(t *testing.T) {
 					a := universalSoloActive(t, target, tc.status)
 					target.HP = target.MaxHP / 2
 					before := target.HP
-					s.tickStatus(target, a)
+					initialDuration := a.ExpireAt - s.tick
+					synergyScheduledTickForTest(s, target, a.Def.ID)
 					damage := before - target.HP
 					if damage < 0 {
 						damage = -damage
 					}
 					if !enabled {
-						baseDamage, baseDuration, baseInterval = damage, a.ExpireAt-s.tick, a.Def.IntervalSec
+						baseDamage, baseDuration, baseInterval = damage, initialDuration, a.Def.IntervalSec
 						if baseDamage <= 0 {
 							t.Fatal("native periodic source did not act")
 						}
 						return
 					}
-					if damage != baseDamage*tc.damagePct/100 || a.ExpireAt-s.tick != baseDuration*domain.Tick(tc.durationPct)/100 || a.Def.IntervalSec != baseInterval {
+					wantDamage := baseDamage * tc.damagePct / 100
+					if tc.id == "TY-A18" {
+						wantDamage = 360
+					}
+					if damage != wantDamage || initialDuration != baseDuration*domain.Tick(tc.durationPct)/100 || a.Def.IntervalSec != baseInterval {
 						t.Fatalf("native periodic result amount%d duration%d interval%d want%d/%d/%d", damage, a.ExpireAt-s.tick, a.Def.IntervalSec, baseDamage*tc.damagePct/100, baseDuration*domain.Tick(tc.durationPct)/100, baseInterval)
 					}
 					if a.Source != p.ID || a.Def.LegendaryPowerID != "" {
@@ -93,7 +99,7 @@ func TestLegendaryUniversalSoloNativeStatusProducer(t *testing.T) {
 		durationPct, shieldPct int32
 	}{
 		{"TY-A13", domain.Warlock, 10428, domain.StatusFreeze, 140, 100},
-		{"TY-D16", domain.Healer, 10320, 1021, 100, 160},
+		{"TY-D16", domain.Healer, 10320, 1021, 100, 300},
 		{"TY-D18", domain.Healer, 10320, 1021, 140, 100},
 		{"TY-U11", domain.Healer, 10321, 10321, 150, 100},
 	} {

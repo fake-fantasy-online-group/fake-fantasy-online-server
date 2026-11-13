@@ -52,8 +52,8 @@ func TestLegendaryUniversalContractCombinations(t *testing.T) {
 		d := domain.StatusDef{ID: domain.StatusPoison, SourceSkillID: 10214, HPChanges: []domain.ResourceChange{{Value: -1000}}, TypeKnown: true, Type: domain.StatusBad, LegendaryModifiers: domain.LegendaryStatusModifiers{PeriodicCanCrit: true, PeriodicCritChanceBP: 10000}}
 		hp := p.HP
 		s.tickStatus(p, domain.Active{Source: m.ID, Def: d})
-		if hp-p.HP != 530 || p.MP != 730 || universalShieldValue(p) != 0 {
-			t.Fatalf("2000 minus additive30+25%% then mana30%% then shield100: hp%d mp%d shield%d", hp-p.HP, p.MP, universalShieldValue(p))
+		if hp-p.HP != 320 || p.MP != 820 || universalShieldValue(p) != 0 {
+			t.Fatalf("2000 minus additive30+60%%, capped70%% then mana30%% then shield100: hp%d mp%d shield%d", hp-p.HP, p.MP, universalShieldValue(p))
 		}
 	})
 	t.Run("reflection_no_recursive_reflection", func(t *testing.T) {
@@ -99,8 +99,8 @@ func TestLegendaryUniversalContractCombinations(t *testing.T) {
 		side := putMonster(s, 901, 10000, domain.Stats{}, 280, 100)
 		outside := putMonster(s, 902, 10000, domain.Stats{}, 299, 100)
 		assassinRegressionCast(t, s, p, UseSkill{Skill: 10002, Target: m.ID})
-		universalSoloDamage(t, s, m.ID, 10002, 130*160/100, 1)
-		universalSoloDamage(t, s, side.ID, 10002, 130*160/100, 1)
+		universalSoloDamage(t, s, m.ID, 10002, 130*250/100, 1)
+		universalSoloDamage(t, s, side.ID, 10002, 130*250/100, 1)
 		if outside.HP != 10000 {
 			t.Fatal("single conversion final radius168 escaped")
 		}
@@ -113,7 +113,7 @@ func TestLegendaryUniversalContractCombinations(t *testing.T) {
 		s.items[st.Item] = it
 		p.Look.AtkDist = 100
 		universalSoloAttack(t, s, p, m, combat.Blow{GuaranteedHit: true})
-		universalSoloDamage(t, s, m.ID, 0, 128, 1)
+		universalSoloDamage(t, s, m.ID, 0, 100, 1)
 	})
 	t.Run("native_lifesteal_healing_additive", func(t *testing.T) {
 		s, p, m := nativeRepairFixture(t, domain.Swordsman, domain.Learned{10104: 1}, "TY-A17", "TY-U16")
@@ -150,8 +150,8 @@ func TestLegendaryUniversalBasicFanTargetCoefficientCombination(t *testing.T) {
 	p.Look.AtkDist = 100
 	side := putMonster(s, 901, 10000, domain.Stats{}, 150, 100)
 	universalSoloAttack(t, s, p, m, combat.Blow{GuaranteedHit: true})
-	universalSoloDamage(t, s, m.ID, 0, 180, 1)
-	universalSoloDamage(t, s, side.ID, 0, 98, 1)
+	universalSoloDamage(t, s, m.ID, 0, 100, 1)
+	universalSoloDamage(t, s, side.ID, 0, 0, 0)
 }
 
 func TestLegendaryUniversalClassConeComposition(t *testing.T) {

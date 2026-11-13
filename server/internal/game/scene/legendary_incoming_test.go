@@ -212,7 +212,7 @@ func TestLegendaryIncomingRiftHazardNotBasic(t *testing.T) {
 	p.Stats = domain.Stats{}
 	m.Stats = domain.Stats{MinAtk: 100, MaxAtk: 100}
 	ev, _, _ := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true})
-	if ev.Amount != 75 {
+	if ev.Amount != 45 {
 		t.Fatalf("native monster basic must still reduce: %d", ev.Amount)
 	}
 	ev, _, _ = s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{SkillID: 999001, GuaranteedHit: true})
@@ -424,7 +424,7 @@ func TestLegendaryIncomingWarriorBucketNotReapplied(t *testing.T) {
 	for _, b := range []combat.Blow{{GuaranteedHit: true}, {Origin: domain.DamageProcOrigin, ProcDepth: 1, LegendaryChild: true, GuaranteedHit: true}} {
 		p.HP = p.MaxHP
 		ev, _, _ := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, b)
-		if ev.Amount != 150 {
+		if ev.Amount != 300 {
 			t.Fatalf("warrior40+45 additive bucket must run once: %d", ev.Amount)
 		}
 	}

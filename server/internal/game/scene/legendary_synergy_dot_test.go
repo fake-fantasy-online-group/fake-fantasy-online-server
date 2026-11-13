@@ -3,6 +3,7 @@ package scene
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
+	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 	"math"
 	"testing"
@@ -272,5 +273,84 @@ func TestSynergyPVPSnapshotSurvivesDisconnectedSource(t *testing.T) {
 	s.tickStatus(q, domain.Active{Source: source, Def: d})
 	if before-q.HP != 250 {
 		t.Fatalf("offline pvp loss%d", before-q.HP)
+	}
+}
+
+// Consume the actual domain scheduler, including exact-total/fractional budgets.
+func synergyScheduledTickForTest(s *Scene, e *entity.Entity, id domain.StatusID) {
+	var next domain.Tick
+	e.Status.EachEffective(func(a domain.Active) {
+		if a.Def.ID == id {
+			next = a.NextTickAt
+		}
+	})
+	s.tick = next
+	for _, a := range e.Status.DueTicks(s.tick) {
+		if a.Def.ID == id {
+			s.tickStatus(e, a)
+		}
+	}
+}
+
+func TestSynergyGroundGrowthPoolDurationAndOverlap(t *testing.T) {
+	s, p, m, c := universalTestContext(t, "ZS-A14")
+	warriorEquip(t, s, p, "TY-A18", domain.SlotRing)
+	warriorEquip(t, s, p, "TY-A22", domain.SlotGlove)
+	warriorEquip(t, s, p, "TY-A37", domain.SlotHead)
+	warriorEquip(t, s, p, "TY-U02", domain.SlotNeck)
+	p.MP = 0
+	c.Skill = 10006
+	c.RootID = 1
+	c.Center = p.Pos
+	c.Def = domain.SkillDef{ID: 10006, HurtType: domain.HurtPhysical, TargetEnemy: true, Area: domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Radius: 100, Center: domain.SkillAreaCenterCaster}, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
+	warriorQuakeZone(c)
+	c.RootID = 2
+	warriorQuakeZone(c)
+	st := c.State(0, "quake-1")
+	if st.ExpiresMS != 6000 || st.GroundDOT.LegendaryModifiers.DamageTickBP != 20000 {
+		t.Fatal("field not frozen through generic pool", st)
+	}
+	before := m.HP
+	for i := int64(1); i <= 6; i++ {
+		s.tick = domain.Tick(i * 1000 / domain.TickMS)
+		c.NowMS = i * 1000
+		warriorQuakeTick(c)
+	}
+	if before-m.HP != 1200 || p.MP != 0 {
+		t.Fatal("overlap/proc budget", before-m.HP, p.MP)
+	}
+	n := 0
+	m.Status.EachEffective(func(domain.Active) { n++ })
+	if n != 0 {
+		t.Fatal("ground also attached a target DOT")
+	}
+	for _, o := range s.outbox {
+		if e, ok := o.ev.(event.DamageDealt); ok && (e.Origin != domain.DamageProcOrigin || e.ProcDepth != 1) {
+			t.Fatal("ground periodic provenance", e)
+		}
+	}
+	s.tick = domain.Tick(7000 / domain.TickMS)
+	c.NowMS = 7000
+	hp := m.HP
+	warriorQuakeTick(c)
+	if m.HP != hp {
+		t.Fatal("pulse after deadline")
+	}
+}
+func TestSynergyGroundLeavingAreaStopsPulse(t *testing.T) {
+	s, p, m, c := universalTestContext(t, "ZS-A14")
+	warriorEquip(t, s, p, "TY-A18", domain.SlotRing)
+	c.Skill = 10006
+	c.RootID = 1
+	c.Center = p.Pos
+	c.Def = domain.SkillDef{ID: 10006, HurtType: domain.HurtPhysical, Area: domain.SkillAreaTargeting{Radius: 100}, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
+	warriorQuakeZone(c)
+	s.aoi.Move(m, domain.Pos{MapID: p.Pos.MapID, X: 1000, Y: 1000})
+	s.tick = domain.Tick(1000 / domain.TickMS)
+	c.NowMS = 1000
+	hp := m.HP
+	warriorQuakeTick(c)
+	if m.HP != hp {
+		t.Fatal("ground followed departed target")
 	}
 }

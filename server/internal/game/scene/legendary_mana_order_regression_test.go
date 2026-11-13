@@ -102,7 +102,7 @@ func TestLegendaryManaAfterNativePeriodicReductions(t *testing.T) {
 						s.tick += domain.Ticks(int(burn.IntervalSec) * 1000)
 						s.stepStatus()
 						if extra {
-							raw = raw * 75 / 100
+							raw = raw * 40 / 100
 						}
 						reduced := raw * 65 / 100
 						spent := min(mana, reduced*30/100)

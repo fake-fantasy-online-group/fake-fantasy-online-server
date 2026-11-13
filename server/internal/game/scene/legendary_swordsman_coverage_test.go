@@ -43,7 +43,7 @@ func TestLegendarySwordsmanSoloDamageCoverage(t *testing.T) {
 		skills []domain.SkillID
 		want   int32
 	}{
-		{"JK-A01", []domain.SkillID{10102}, 200}, {"JK-A02", []domain.SkillID{10117}, 115}, {"JK-A03", []domain.SkillID{10102}, 260},
+		{"JK-A01", []domain.SkillID{10102}, 350}, {"JK-A02", []domain.SkillID{10117}, 115}, {"JK-A03", []domain.SkillID{10102}, 260},
 		{"JK-A05", []domain.SkillID{10111}, 140}, {"JK-A07", []domain.SkillID{10103}, 110 + 2*(45*110/100)}, {"JK-A08", []domain.SkillID{10103}, 190},
 		{"JK-A09", []domain.SkillID{10104, 10119}, 115}, {"JK-A13", []domain.SkillID{10113}, 170}, {"JK-A14", []domain.SkillID{10113}, 150},
 		{"JK-A15", []domain.SkillID{10121}, 216}, {"JK-A16", []domain.SkillID{10121}, 130}, {"JK-A19", []domain.SkillID{10102, 10122}, 125},
@@ -732,6 +732,9 @@ func TestLegendarySwordsmanSoloNativePreservation(t *testing.T) {
 				t.Fatal("native knockback changed", distance)
 			}
 			pct := int32(200)
+			if id == "JK-A01" {
+				pct = 350
+			}
 			if id == "JK-A19" {
 				pct = 125
 			}

@@ -279,7 +279,7 @@ func TestLegendaryRepairBasicFanTargetModifiers(t *testing.T) {
 	if got := 100000 - m.HP; got != 190 {
 		t.Fatalf("basic primary target bonuses=%d want190", got)
 	}
-	if got := 100000 - side.HP; got != 133 {
+	if got := 100000 - side.HP; got != 0 {
 		t.Fatalf("fan side target bonuses=%d want133", got)
 	}
 }

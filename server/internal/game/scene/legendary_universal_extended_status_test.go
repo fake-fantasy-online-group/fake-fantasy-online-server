@@ -11,7 +11,7 @@ func TestLegendaryUniversalExtendedStatusFamilies(t *testing.T) {
 	for _, tc := range []struct {
 		id   string
 		want int32
-	}{{"TY-A13", 7000}, {"TY-A14", -60}, {"TY-A17", 16}, {"TY-A22", 7500}, {"TY-A23", 60}, {"TY-D18", 7000}, {"TY-U11", 7500}} {
+	}{{"TY-A13", 7000}, {"TY-A14", -60}, {"TY-A17", 16}, {"TY-A22", 10000}, {"TY-A23", 60}, {"TY-D18", 7000}, {"TY-U11", 7500}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, _, _, c := universalTestContext(t, tc.id)
 			d := domain.StatusDef{ID: 998, SourceSkillID: 123, DurationSec: 5}
@@ -24,6 +24,8 @@ func TestLegendaryUniversalExtendedStatusFamilies(t *testing.T) {
 				d.LifeStealPct = 10
 			case "TY-A22":
 				d.ID = domain.StatusPoison
+				d.IntervalSec = 1
+				d.HPChanges = []domain.ResourceChange{{Value: -10}}
 			case "TY-A23":
 				d.PoisonOnHitChance = 20
 			case "TY-D18":
@@ -50,7 +52,7 @@ func TestLegendaryUniversalReceiverStatusFamilies(t *testing.T) {
 	for _, tc := range []struct {
 		id   string
 		want int32
-	}{{"TY-D13", 140}, {"TY-D14", -60}, {"TY-D15", 60}, {"TY-D20", 3000}} {
+	}{{"TY-D13", 250}, {"TY-D14", -60}, {"TY-D15", 60}, {"TY-D20", 3000}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, _, _, c := universalTestContext(t, tc.id)
 			d := domain.StatusDef{ID: 998, SourceSkillID: 123, DurationSec: 5}
@@ -150,7 +152,7 @@ func TestLegendaryUniversalExtendedIncomingKinds(t *testing.T) {
 	for _, tc := range []struct {
 		id   string
 		want int32
-	}{{"TY-D06", 75}, {"TY-D07", 80}, {"TY-D08", 80}, {"TY-D10", 70}, {"TY-D17", 75}} {
+	}{{"TY-D06", 45}, {"TY-D07", 50}, {"TY-D08", 50}, {"TY-D10", 70}, {"TY-D17", 75}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, _, c := universalTestContext(t, tc.id)
 			c.IsBasic = true

@@ -122,6 +122,9 @@ type legendaryStateKey struct {
 	Phase  string
 }
 type legendaryPowerState struct {
+	GroundDOT     *domain.StatusDef // Frozen ground pulse: not a second target-bound status.
+	GroundDOTTick int64
+
 	GroundEffectKey   string // Explicit current-state presentation; never transferred across maps.
 	VisualStage       string
 	ValueIsTimestamp  bool

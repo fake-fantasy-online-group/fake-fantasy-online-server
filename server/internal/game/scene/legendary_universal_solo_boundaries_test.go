@@ -264,7 +264,7 @@ func TestLegendaryUniversalSoloStateBoundary(t *testing.T) {
 			s.legendaryState().depth = 1
 			s.tickStatus(p, domain.Active{Source: m.ID, Def: d})
 			s.legendaryState().depth = 0
-			want := int32(750)
+			want := int32(400)
 			if id == "TY-D11" {
 				want = 700
 			}

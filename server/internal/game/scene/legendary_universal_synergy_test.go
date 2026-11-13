@@ -377,14 +377,14 @@ func TestLegendaryUniversalManaDefenseNativeRestoration(t *testing.T) {
 }
 func TestLegendaryUniversalCopiedPoisonKeepsSnapshotOnce(t *testing.T) {
 	s, _, _, c := universalTestContext(t, "TY-A18")
-	d := domain.StatusDef{ID: domain.StatusPoison, SourceSkillID: 10211, IntervalSec: 1, DurationSec: 5}
+	d := domain.StatusDef{ID: domain.StatusPoison, SourceSkillID: 10211, IntervalSec: 1, DurationSec: 5, HPChanges: []domain.ResourceChange{{Value: -100}}}
 	universalNativeStatus(c, &d)
 	s.legendaryFinalizeStatus(&d)
 	copy := d
 	copy.LegendaryPoisonCopy = true
 	universalNativeStatus(c, &copy)
 	s.legendaryFinalizeStatus(&copy)
-	if s.legendaryPeriodicAmount(domain.Active{Def: copy}, -100) != -200 {
+	if s.legendaryPeriodicAmount(domain.Active{Def: copy}, -100) != -300 {
 		t.Fatal("copied poison reapplied source bucket")
 	}
 }
@@ -401,19 +401,18 @@ func TestLegendaryUniversalActiveCostDamageNeverBecomesBasicBonus(t *testing.T) 
 func TestLegendaryUniversalBasicPowerRetainsNativeCritical(t *testing.T) {
 	s, p, m, _ := universalTestContext(t, "TY-A37")
 	p.Stats.CritRate = 10000
-	finish := s.beginEquipmentRoot(p.ID, m.ID, domain.EquipmentCombatStats{})
 	before := m.HP
-	if !s.legendaryBasicAttack(p, m, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true, SkillPct: 100}) {
-		t.Fatal("basic modifier not executed")
+	if s.legendaryBasicAttack(p, m, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true, SkillPct: 100}) {
+		t.Fatal("retired power intercepted basic")
 	}
-	finish()
-	if before-m.HP != 350 {
-		t.Fatalf("native critical lost: damage%d", before-m.HP)
+	s.resolveStrikeStatuses(p, m, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true, SkillPct: 100})
+	if before-m.HP != 200 {
+		t.Fatal("native critical changed", before-m.HP)
 	}
 }
 func TestLegendaryUniversalPeriodicDefenseOutlivesEnemySource(t *testing.T) {
 	s, p, _, _ := universalTestContext(t, "TY-D19")
-	if n := s.universalPeriodicIncoming(nil, p, 100, domain.EntityID(99999)); n != 75 {
+	if n := s.universalPeriodicIncoming(nil, p, 100, domain.EntityID(99999)); n != 40 {
 		t.Fatalf("despawned source damage%d", n)
 	}
 	if n := s.universalPeriodicIncoming(nil, p, 100, p.ID); n != 100 {

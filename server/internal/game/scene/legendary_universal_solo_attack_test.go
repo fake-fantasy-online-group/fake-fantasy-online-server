@@ -10,7 +10,6 @@ import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/combat"
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/entity"
-	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 )
 
 // Solo means exactly one equipped legendary, not one ID mentioned in a test.
@@ -154,141 +153,29 @@ func TestLegendaryUniversalSoloGeometry(t *testing.T) {
 }
 
 func TestLegendaryUniversalSoloBasic(t *testing.T) {
-	t.Run("TY-A01", func(t *testing.T) {
-		s, p, m := universalSoloFixture(t, "TY-A01", domain.Assassin, domain.Learned{})
-		p.Look.AtkDist = 100
-		p.HP = 1000
-		p.MP = 0
-		p.Status.Apply(domain.StatusDef{ID: 1018, SourceSkillID: 10211, DurationSec: 120, PoisonOnHitChance: 100, PoisonOnHitLevel: 21, SourceEffectHitKnown: true, LifeStealPct: 10, LifeStealChance: 100, ManaStealPct: 10, ManaStealChance: 100}, s.tick, p.ID)
-		sides := []*entity.Entity{}
-		for i := 0; i < 6; i++ {
-			sides = append(sides, putMonster(s, domain.EntityID(901+i), 10000, domain.Stats{}, 140+float64(i*8), 100))
-		}
-		behind := putMonster(s, 907, 10000, domain.Stats{}, 80, 100)
-		universalSoloAttack(t, s, p, m, combat.Blow{GuaranteedHit: true})
-		universalSoloDamage(t, s, m.ID, 0, 100, 1)
-		for i, e := range sides {
-			want := int32(70)
-			if 10000-e.HP != want {
-				t.Fatalf("cap/nearest side%d damage%d", i, 10000-e.HP)
-			}
-			if !e.Status.Has(domain.StatusPoison) {
-				t.Fatal("native poison missing")
-			}
-		}
-		if p.HP != 1052 || p.MP != 52 || behind.HP != 10000 || !m.Status.Has(domain.StatusPoison) {
-			t.Fatalf("fan leech/geometry hp%d mp%d behind%d", p.HP, p.MP, behind.HP)
-		}
-	})
-	for _, id := range []string{"TY-A09", "TY-A37", "TY-A39"} {
+	for _, id := range []string{"TY-A01", "TY-A09", "TY-A10", "TY-A35", "TY-A37", "TY-A39", "TY-U02"} {
 		t.Run(id, func(t *testing.T) {
 			s, p, m := universalSoloFixture(t, id, domain.Warrior, domain.Learned{})
 			p.Look.AtkDist = 100
-			want := int32(175)
-			b := combat.Blow{GuaranteedHit: true}
-			if id == "TY-A09" {
-				p.Stats.Hit = 0
-				m.Stats.Def = 100000
-				p.Stats.CritRate = 10000
-				b.GuaranteedHit = false
-				want = 200
+			p.Player.Char.Appear.AtkDist = 100
+			p.MP = 0
+			p.Stats.CritRate = 10000
+			side := putMonster(s, 901, 10000, domain.Stats{}, 150, 100)
+			universalSoloAttack(t, s, p, m, combat.Blow{GuaranteedHit: true})
+			universalSoloDamage(t, s, m.ID, 0, 200, 1)
+			if side.HP != 10000 || p.MP != 0 || universalShieldValue(p) != 0 || p.Look.AtkDist != 100 {
+				t.Fatal("retired power affected basic", id)
 			}
-			if id == "TY-A39" {
-				st := p.Player.Worn.At(domain.SlotWeapon)
-				it := s.items[st.Item]
-				it.Equip.Bonus.Def = 100
-				s.items[st.Item] = it
-				want = 120
+			before := p.Stats.AttackIntervalTicks()
+			st := p.Player.Worn.At(domain.SlotWeapon)
+			st.Legendary = domain.LegendaryInstance{}
+			p.Player.Worn.Set(domain.SlotWeapon, st)
+			s.refreshStats(p)
+			if before != p.Stats.AttackIntervalTicks() {
+				t.Fatal("universal changed native cadence", id)
 			}
-			universalSoloAttack(t, s, p, m, b)
-			universalSoloDamage(t, s, m.ID, 0, want, 1)
 		})
 	}
-	t.Run("TY-A35", func(t *testing.T) {
-		s, p, m := universalSoloFixture(t, "TY-A35", domain.Warrior, domain.Learned{})
-		st := p.Player.Worn.At(domain.SlotWeapon)
-		it := s.items[st.Item]
-		it.Equip.Appearance = domain.EquipAppearance{Part: domain.AppearanceWeaponR, Known: true, AttackKnown: true, AtkDist: 100}
-		s.items[st.Item] = it
-		s.refreshAppearance(p)
-		s.aoi.Move(m, domain.Pos{MapID: m.Pos.MapID, X: 240, Y: 100})
-		universalSoloAttack(t, s, p, m, combat.Blow{GuaranteedHit: true})
-		universalSoloDamage(t, s, m.ID, 0, 100, 1)
-		beforeReady := p.CapturePlayerRuntime(s.tick).AttackReadyIn
-		assertLook := func(want uint16) {
-			t.Helper()
-			n := 0
-			for _, o := range s.outbox {
-				if e, ok := o.ev.(event.AppearanceChanged); ok && e.Who == p.ID {
-					n++
-					if e.Appearance.AtkDist != want {
-						t.Fatalf("published distance%d want%d", e.Appearance.AtkDist, want)
-					}
-				}
-			}
-			if n != 1 {
-				t.Fatal("appearance output count", n)
-			}
-		}
-		s.outbox = nil
-		s.refreshAppearance(p)
-		assertLook(150)
-		st.Legendary = domain.LegendaryInstance{}
-		p.Player.Worn.Set(domain.SlotWeapon, st)
-		s.outbox = nil
-		s.refreshAppearance(p)
-		assertLook(100)
-		if p.CapturePlayerRuntime(s.tick).AttackReadyIn != beforeReady || p.Player.Char.Appear.AtkDist != 100 || p.UsesRangedWeapon() {
-			t.Fatal("reach altered native identity/cadence")
-		}
-
-	})
-	t.Run("TY-U02", func(t *testing.T) {
-		for _, tc := range []struct {
-			name     string
-			mp, want int32
-			miss     bool
-		}{{"success", 0, 10, false}, {"cap", 9995, 10000, false}, {"miss", 0, 0, true}} {
-			t.Run(tc.name, func(t *testing.T) {
-				s, p, m := universalSoloFixture(t, "TY-U02", domain.Warrior, domain.Learned{})
-				p.Look.AtkDist = 100
-				p.MP = tc.mp
-				b := combat.Blow{GuaranteedHit: true}
-				if tc.miss {
-					p.Stats.Hit = 0
-					m.Stats.Def = 100000
-					b.GuaranteedHit = false
-				}
-				universalSoloAttack(t, s, p, m, b)
-				if p.MP != tc.want {
-					t.Fatalf("mp%d want%d", p.MP, tc.want)
-				}
-			})
-		}
-	})
-	t.Run("TY-A10", func(t *testing.T) {
-		s, p, m := universalSoloFixture(t, "TY-A10", domain.Warrior, domain.Learned{})
-		s.refreshStats(p)
-		p.Look.AtkDist = 100
-		universalSoloAttack(t, s, p, m, combat.Blow{GuaranteedHit: true})
-		ready := p.CapturePlayerRuntime(s.tick).AttackReadyIn
-		if ready <= 0 {
-			t.Fatal("cadence missing")
-		}
-		s.tick += ready - 1
-		s.onAttack(Attack{ID: p.ID, Target: m.ID})
-		if len(s.attacks) != 0 {
-			t.Fatal("attacked before shortened cooldown")
-		}
-		s.tick++
-		universalSoloAttack(t, s, p, m, combat.Blow{GuaranteedHit: true})
-		base := p.Stats
-		p.Player.Worn = domain.NewEquipSet()
-		s.refreshStats(p)
-		if base.AttackIntervalTicks() >= p.Stats.AttackIntervalTicks() {
-			t.Fatal("effective attack interval not shortened")
-		}
-	})
 }
 
 func TestLegendaryUniversalSoloActiveDamage(t *testing.T) {
@@ -298,7 +185,7 @@ func TestLegendaryUniversalSoloActiveDamage(t *testing.T) {
 		skill domain.SkillID
 		want  int32
 	}{
-		{"TY-A08", domain.Warrior, 10002, 208}, {"TY-A25", domain.Warrior, 10002, 195}, {"TY-A26", domain.Warlock, 10409, 150},
+		{"TY-A08", domain.Warrior, 10002, 325}, {"TY-A25", domain.Warrior, 10002, 195}, {"TY-A26", domain.Warlock, 10409, 150},
 		{"TY-A38", domain.Warrior, 10002, 530}, {"TY-A40", domain.Warrior, 10002, 182},
 	} {
 		t.Run(tc.id, func(t *testing.T) {

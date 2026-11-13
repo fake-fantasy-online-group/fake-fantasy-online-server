@@ -125,7 +125,7 @@ func TestWarriorFinalReviewChainSharesReplacedBasicCoefficient(t *testing.T) {
 					}
 					baseNum, baseDen := want.DamagePctNumerator, want.DamagePctDenominator
 					if mode == "third-damage" {
-						domain.ScaleSkillDamageFraction(&want, 180, 100)
+						domain.ScaleSkillDamageFraction(&want, 300, 100)
 					}
 					hp, mp := m.HP, p.MP
 					d := meleeAuditCast(t, s, p, 10002, m.ID)
@@ -262,7 +262,7 @@ func TestAssassinFinalReviewFrostBorrowedPoisonAcceptedRanks(t *testing.T) {
 					base -= a.Value
 				}
 			}
-			if base != 10 || poison.Def.LegendaryModifiers.DamageTickBP != 10000 {
+			if base != 10 || poison.Def.LegendaryModifiers.DamageTickBP != 20000 {
 				t.Fatalf("bounded rank/A09 composition=%d/%d want10/10000", base, poison.Def.LegendaryModifiers.DamageTickBP)
 			}
 		})

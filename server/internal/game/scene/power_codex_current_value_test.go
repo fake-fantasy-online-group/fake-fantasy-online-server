@@ -77,7 +77,7 @@ func TestPowerCodexCurrentValueAll330OwnedBoundariesAndUnowned(t *testing.T) {
 					if row.Unlocked != tc.owned || row.CurrentValueText != want || row.PrimaryRangeText != domain.LegendaryPowerPrimaryRangeText(row.PowerID) {
 						t.Fatalf("%s %+v want %s", tc.name, row, want)
 					}
-					if tc.name == "8123" && row.PowerID == "TY-A01" && row.CurrentValueText != "56%" {
+					if tc.name == "8123" && row.PowerID == "TY-A01" && row.CurrentValueText != "28.43%" {
 						t.Fatal("not authored primary stat", row)
 					}
 					out.Rows = append(out.Rows, valueRow{row.PowerID, row.Unlocked, row.CurrentValueText, row.RangeText, row.PrimaryRangeText})

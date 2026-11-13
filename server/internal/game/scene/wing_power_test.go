@@ -25,7 +25,7 @@ func TestWingPowerThreeRuntimeEffectsAndDuplicate(t *testing.T) {
 	d := domain.SkillDef{ID: 10002, Level: 1, TargetEnemy: true, Kind: domain.SkillSingle, HurtType: domain.HurtPhysical, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100, GuaranteedHit: true}}
 	before := m.HP
 	warriorTestCast(t, s, p, m, d)
-	if got := before - m.HP; got != 180 {
+	if got := before - m.HP; got != 300 {
 		t.Fatalf("wing attack damage=%d", got)
 	}
 	utility := domain.SkillDef{ID: 123, Kind: domain.SkillSingle, TargetEnemy: true, PrepareMS: 1000, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100}}}

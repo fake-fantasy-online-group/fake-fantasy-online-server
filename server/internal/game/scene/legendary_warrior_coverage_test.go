@@ -45,7 +45,7 @@ func TestLegendaryWarriorSoloDamageCoverage(t *testing.T) {
 		skills []domain.SkillID
 		want   int32
 	}{
-		{"ZS-A01", []domain.SkillID{10002}, 180}, {"ZS-A02", []domain.SkillID{10002}, 115},
+		{"ZS-A01", []domain.SkillID{10002}, 300}, {"ZS-A02", []domain.SkillID{10002}, 115},
 		{"ZS-A04", []domain.SkillID{10005}, 115}, {"ZS-A05", []domain.SkillID{10005}, 160},
 		{"ZS-A06", []domain.SkillID{10005}, 210}, {"ZS-A07", []domain.SkillID{10005, 10009}, 150},
 		{"ZS-A09", []domain.SkillID{10013}, 125}, {"ZS-A11", []domain.SkillID{10017}, 160},

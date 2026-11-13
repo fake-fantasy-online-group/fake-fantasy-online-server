@@ -51,8 +51,8 @@
       {
         "powerId": "CK-A09",
         "unlocked": false,
-        "rangeText": "淬毒术造成的每次中毒伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "rangeText": "淬毒术造成的每次中毒伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A10",
@@ -83,8 +83,8 @@
       {
         "powerId": "CK-A15",
         "unlocked": false,
-        "rangeText": "陷阱：毒雾造成的每次中毒伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "rangeText": "陷阱：毒雾造成的每次中毒伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A16",
@@ -295,8 +295,8 @@
       {
         "powerId": "JK-A01",
         "unlocked": false,
-        "rangeText": "罡气剑的直接伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "rangeText": "罡气剑的直接伤害提高187%～250%\n命中附加流血：6秒总计270%～360%面板物攻的物理持续伤害",
+        "primaryRangeText": "187%～250%"
       },
       {
         "powerId": "JK-A02",
@@ -687,8 +687,8 @@
       {
         "powerId": "SS-A17",
         "unlocked": false,
-        "rangeText": "这份燃烧每跳伤害提高61.5%～82%",
-        "primaryRangeText": "61.5%～82%"
+        "rangeText": "这份燃烧每跳伤害提高135%～180%",
+        "primaryRangeText": "135%～180%"
       },
       {
         "powerId": "SS-A18",
@@ -885,8 +885,8 @@
       {
         "powerId": "TY-A01",
         "unlocked": false,
-        "rangeText": "范围内其他敌人各承受52%～70%普通攻击伤害",
-        "primaryRangeText": "52%～70%"
+        "rangeText": "消耗目标本人持续伤害剩余余额的26.25%～35%",
+        "primaryRangeText": "26.25%～35%"
       },
       {
         "powerId": "TY-A02",
@@ -927,8 +927,8 @@
       {
         "powerId": "TY-A08",
         "unlocked": false,
-        "rangeText": "伤害系数提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "rangeText": "伤害系数提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "TY-A09",
@@ -937,8 +937,8 @@
       {
         "powerId": "TY-A10",
         "unlocked": false,
-        "rangeText": "普通攻击的出手间隔缩短15%～20%",
-        "primaryRangeText": "15%～20%"
+        "rangeText": "向180范围最近6名合法敌人复制37.5%～50%的每跳伤害与原到期时间",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-A11",
@@ -985,8 +985,8 @@
       {
         "powerId": "TY-A18",
         "unlocked": false,
-        "rangeText": "每次伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "rangeText": "每跳伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-A19",
@@ -1009,8 +1009,8 @@
       {
         "powerId": "TY-A22",
         "unlocked": false,
-        "rangeText": "持续时间提高37.5%～50%",
-        "primaryRangeText": "37.5%～50%"
+        "rangeText": "本人合格技能或装备持续伤害持续时间提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "TY-A23",
@@ -1083,7 +1083,7 @@
       {
         "powerId": "TY-A35",
         "unlocked": false,
-        "rangeText": "普通攻击距离提高37.5%～50%",
+        "rangeText": "主动技能施法距离提高37.5%～50%",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -1095,8 +1095,8 @@
       {
         "powerId": "TY-A37",
         "unlocked": false,
-        "rangeText": "普通攻击的伤害系数提高56.25%～75%",
-        "primaryRangeText": "56.25%～75%"
+        "rangeText": "主动直接伤害技能首次命中时有25%概率追加600%～800%施加时面板攻击伤害",
+        "primaryRangeText": "600%～800%"
       },
       {
         "powerId": "TY-A38",
@@ -1107,7 +1107,7 @@
       {
         "powerId": "TY-A39",
         "unlocked": false,
-        "rangeText": "额外增加装备提供的物理防御的15%～20%",
+        "rangeText": "获得持续4秒、吸收自身最大生命15%～20%伤害的护盾",
         "primaryRangeText": "15%～20%"
       },
       {
@@ -1119,20 +1119,20 @@
       {
         "powerId": "TY-D01",
         "unlocked": false,
-        "rangeText": "装备提供的物理防御提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "rangeText": "装备提供的物理防御提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D02",
         "unlocked": false,
-        "rangeText": "装备提供的魔法防御提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "rangeText": "装备提供的魔法防御提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D03",
         "unlocked": false,
-        "rangeText": "装备提供的最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "rangeText": "装备提供的最大生命提高90%～120%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-D04",
@@ -1143,26 +1143,26 @@
       {
         "powerId": "TY-D05",
         "unlocked": false,
-        "rangeText": "伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "rangeText": "伤害降低41.25%～55%",
+        "primaryRangeText": "41.25%～55%"
       },
       {
         "powerId": "TY-D06",
         "unlocked": false,
-        "rangeText": "受到普通攻击的直接伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "rangeText": "受到普通攻击的直接伤害降低41.25%～55%",
+        "primaryRangeText": "41.25%～55%"
       },
       {
         "powerId": "TY-D07",
         "unlocked": false,
-        "rangeText": "受到的直接物理伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "rangeText": "受到的直接物理伤害降低37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-D08",
         "unlocked": false,
-        "rangeText": "受到的魔法伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "rangeText": "受到的魔法伤害降低37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-D09",
@@ -1191,8 +1191,8 @@
       {
         "powerId": "TY-D13",
         "unlocked": false,
-        "rangeText": "初始护盾量提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "rangeText": "初始护盾量提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "TY-D14",
@@ -1209,8 +1209,8 @@
       {
         "powerId": "TY-D16",
         "unlocked": false,
-        "rangeText": "初始护盾量提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "rangeText": "初始护盾量提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D17",
@@ -1227,8 +1227,8 @@
       {
         "powerId": "TY-D19",
         "unlocked": false,
-        "rangeText": "伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "rangeText": "伤害降低45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "TY-D20",
@@ -1245,7 +1245,7 @@
       {
         "powerId": "TY-U02",
         "unlocked": false,
-        "rangeText": "普通攻击成功命中时恢复7点法力～10点法力",
+        "rangeText": "主动直接伤害技能命中时恢复7点法力～10点法力",
         "primaryRangeText": "7点法力～10点法力"
       },
       {
@@ -1371,8 +1371,8 @@
       {
         "powerId": "YS-A03",
         "unlocked": false,
-        "rangeText": "光弹术直接伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "rangeText": "光弹术直接伤害提高135%～180%\n命中附加灼光：6秒总计315%～420%面板魔攻的光系持续伤害",
+        "primaryRangeText": "135%～180%"
       },
       {
         "powerId": "YS-A04",
@@ -1657,8 +1657,8 @@
       {
         "powerId": "ZS-A01",
         "unlocked": false,
-        "rangeText": "连环枪法伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "rangeText": "连环枪法伤害提高150%～200%\n命中附加流血：6秒总计225%～300%面板物攻的物理持续伤害",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "ZS-A02",
@@ -2013,9 +2013,9 @@
       {
         "powerId": "CK-A09",
         "unlocked": true,
-        "currentValueText": "100%",
-        "rangeText": "淬毒术造成的每次中毒伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "200%",
+        "rangeText": "淬毒术造成的每次中毒伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A10",
@@ -2049,9 +2049,9 @@
       {
         "powerId": "CK-A15",
         "unlocked": true,
-        "currentValueText": "100%",
-        "rangeText": "陷阱：毒雾造成的每次中毒伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "200%",
+        "rangeText": "陷阱：毒雾造成的每次中毒伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A16",
@@ -2295,9 +2295,9 @@
       {
         "powerId": "JK-A01",
         "unlocked": true,
-        "currentValueText": "100%",
-        "rangeText": "罡气剑的直接伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "250%",
+        "rangeText": "罡气剑的直接伤害提高187%～250%\n命中附加流血：6秒总计270%～360%面板物攻的物理持续伤害",
+        "primaryRangeText": "187%～250%"
       },
       {
         "powerId": "JK-A02",
@@ -2751,9 +2751,9 @@
       {
         "powerId": "SS-A17",
         "unlocked": true,
-        "currentValueText": "82%",
-        "rangeText": "这份燃烧每跳伤害提高61.5%～82%",
-        "primaryRangeText": "61.5%～82%"
+        "currentValueText": "180%",
+        "rangeText": "这份燃烧每跳伤害提高135%～180%",
+        "primaryRangeText": "135%～180%"
       },
       {
         "powerId": "SS-A18",
@@ -2980,9 +2980,9 @@
       {
         "powerId": "TY-A01",
         "unlocked": true,
-        "currentValueText": "70%",
-        "rangeText": "范围内其他敌人各承受52%～70%普通攻击伤害",
-        "primaryRangeText": "52%～70%"
+        "currentValueText": "35%",
+        "rangeText": "消耗目标本人持续伤害剩余余额的26.25%～35%",
+        "primaryRangeText": "26.25%～35%"
       },
       {
         "powerId": "TY-A02",
@@ -3029,9 +3029,9 @@
       {
         "powerId": "TY-A08",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "伤害系数提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "150%",
+        "rangeText": "伤害系数提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "TY-A09",
@@ -3040,9 +3040,9 @@
       {
         "powerId": "TY-A10",
         "unlocked": true,
-        "currentValueText": "20%",
-        "rangeText": "普通攻击的出手间隔缩短15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "50%",
+        "rangeText": "向180范围最近6名合法敌人复制37.5%～50%的每跳伤害与原到期时间",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-A11",
@@ -3096,9 +3096,9 @@
       {
         "powerId": "TY-A18",
         "unlocked": true,
-        "currentValueText": "100%",
-        "rangeText": "每次伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "200%",
+        "rangeText": "每跳伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-A19",
@@ -3124,9 +3124,9 @@
       {
         "powerId": "TY-A22",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "持续时间提高37.5%～50%",
-        "primaryRangeText": "37.5%～50%"
+        "currentValueText": "100%",
+        "rangeText": "本人合格技能或装备持续伤害持续时间提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "TY-A23",
@@ -3210,7 +3210,7 @@
         "powerId": "TY-A35",
         "unlocked": true,
         "currentValueText": "50%",
-        "rangeText": "普通攻击距离提高37.5%～50%",
+        "rangeText": "主动技能施法距离提高37.5%～50%",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -3223,9 +3223,9 @@
       {
         "powerId": "TY-A37",
         "unlocked": true,
-        "currentValueText": "75%",
-        "rangeText": "普通攻击的伤害系数提高56.25%～75%",
-        "primaryRangeText": "56.25%～75%"
+        "currentValueText": "800%",
+        "rangeText": "主动直接伤害技能首次命中时有25%概率追加600%～800%施加时面板攻击伤害",
+        "primaryRangeText": "600%～800%"
       },
       {
         "powerId": "TY-A38",
@@ -3238,7 +3238,7 @@
         "powerId": "TY-A39",
         "unlocked": true,
         "currentValueText": "20%",
-        "rangeText": "额外增加装备提供的物理防御的15%～20%",
+        "rangeText": "获得持续4秒、吸收自身最大生命15%～20%伤害的护盾",
         "primaryRangeText": "15%～20%"
       },
       {
@@ -3251,23 +3251,23 @@
       {
         "powerId": "TY-D01",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "装备提供的物理防御提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "200%",
+        "rangeText": "装备提供的物理防御提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D02",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "装备提供的魔法防御提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "200%",
+        "rangeText": "装备提供的魔法防御提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D03",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "装备提供的最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "120%",
+        "rangeText": "装备提供的最大生命提高90%～120%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-D04",
@@ -3279,30 +3279,30 @@
       {
         "powerId": "TY-D05",
         "unlocked": true,
-        "currentValueText": "25%",
-        "rangeText": "伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "55%",
+        "rangeText": "伤害降低41.25%～55%",
+        "primaryRangeText": "41.25%～55%"
       },
       {
         "powerId": "TY-D06",
         "unlocked": true,
-        "currentValueText": "25%",
-        "rangeText": "受到普通攻击的直接伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "55%",
+        "rangeText": "受到普通攻击的直接伤害降低41.25%～55%",
+        "primaryRangeText": "41.25%～55%"
       },
       {
         "powerId": "TY-D07",
         "unlocked": true,
-        "currentValueText": "20%",
-        "rangeText": "受到的直接物理伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "50%",
+        "rangeText": "受到的直接物理伤害降低37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-D08",
         "unlocked": true,
-        "currentValueText": "20%",
-        "rangeText": "受到的魔法伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "50%",
+        "rangeText": "受到的魔法伤害降低37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-D09",
@@ -3335,9 +3335,9 @@
       {
         "powerId": "TY-D13",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "初始护盾量提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "150%",
+        "rangeText": "初始护盾量提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "TY-D14",
@@ -3356,9 +3356,9 @@
       {
         "powerId": "TY-D16",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "初始护盾量提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "200%",
+        "rangeText": "初始护盾量提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D17",
@@ -3377,9 +3377,9 @@
       {
         "powerId": "TY-D19",
         "unlocked": true,
-        "currentValueText": "25%",
-        "rangeText": "伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "60%",
+        "rangeText": "伤害降低45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "TY-D20",
@@ -3399,7 +3399,7 @@
         "powerId": "TY-U02",
         "unlocked": true,
         "currentValueText": "10点法力",
-        "rangeText": "普通攻击成功命中时恢复7点法力～10点法力",
+        "rangeText": "主动直接伤害技能命中时恢复7点法力～10点法力",
         "primaryRangeText": "7点法力～10点法力"
       },
       {
@@ -3545,9 +3545,9 @@
       {
         "powerId": "YS-A03",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "光弹术直接伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "180%",
+        "rangeText": "光弹术直接伤害提高135%～180%\n命中附加灼光：6秒总计315%～420%面板魔攻的光系持续伤害",
+        "primaryRangeText": "135%～180%"
       },
       {
         "powerId": "YS-A04",
@@ -3878,9 +3878,9 @@
       {
         "powerId": "ZS-A01",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "连环枪法伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "200%",
+        "rangeText": "连环枪法伤害提高150%～200%\n命中附加流血：6秒总计225%～300%面板物攻的物理持续伤害",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "ZS-A02",
@@ -4283,9 +4283,9 @@
       {
         "powerId": "CK-A09",
         "unlocked": true,
-        "currentValueText": "75%",
-        "rangeText": "淬毒术造成的每次中毒伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "150%",
+        "rangeText": "淬毒术造成的每次中毒伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A10",
@@ -4319,9 +4319,9 @@
       {
         "powerId": "CK-A15",
         "unlocked": true,
-        "currentValueText": "75%",
-        "rangeText": "陷阱：毒雾造成的每次中毒伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "150%",
+        "rangeText": "陷阱：毒雾造成的每次中毒伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A16",
@@ -4565,9 +4565,9 @@
       {
         "powerId": "JK-A01",
         "unlocked": true,
-        "currentValueText": "75%",
-        "rangeText": "罡气剑的直接伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "187%",
+        "rangeText": "罡气剑的直接伤害提高187%～250%\n命中附加流血：6秒总计270%～360%面板物攻的物理持续伤害",
+        "primaryRangeText": "187%～250%"
       },
       {
         "powerId": "JK-A02",
@@ -5021,9 +5021,9 @@
       {
         "powerId": "SS-A17",
         "unlocked": true,
-        "currentValueText": "61.5%",
-        "rangeText": "这份燃烧每跳伤害提高61.5%～82%",
-        "primaryRangeText": "61.5%～82%"
+        "currentValueText": "135%",
+        "rangeText": "这份燃烧每跳伤害提高135%～180%",
+        "primaryRangeText": "135%～180%"
       },
       {
         "powerId": "SS-A18",
@@ -5250,9 +5250,9 @@
       {
         "powerId": "TY-A01",
         "unlocked": true,
-        "currentValueText": "52%",
-        "rangeText": "范围内其他敌人各承受52%～70%普通攻击伤害",
-        "primaryRangeText": "52%～70%"
+        "currentValueText": "26.25%",
+        "rangeText": "消耗目标本人持续伤害剩余余额的26.25%～35%",
+        "primaryRangeText": "26.25%～35%"
       },
       {
         "powerId": "TY-A02",
@@ -5299,9 +5299,9 @@
       {
         "powerId": "TY-A08",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "伤害系数提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "112.5%",
+        "rangeText": "伤害系数提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "TY-A09",
@@ -5310,9 +5310,9 @@
       {
         "powerId": "TY-A10",
         "unlocked": true,
-        "currentValueText": "15%",
-        "rangeText": "普通攻击的出手间隔缩短15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "37.5%",
+        "rangeText": "向180范围最近6名合法敌人复制37.5%～50%的每跳伤害与原到期时间",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-A11",
@@ -5366,9 +5366,9 @@
       {
         "powerId": "TY-A18",
         "unlocked": true,
-        "currentValueText": "75%",
-        "rangeText": "每次伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "150%",
+        "rangeText": "每跳伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-A19",
@@ -5394,9 +5394,9 @@
       {
         "powerId": "TY-A22",
         "unlocked": true,
-        "currentValueText": "37.5%",
-        "rangeText": "持续时间提高37.5%～50%",
-        "primaryRangeText": "37.5%～50%"
+        "currentValueText": "75%",
+        "rangeText": "本人合格技能或装备持续伤害持续时间提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "TY-A23",
@@ -5480,7 +5480,7 @@
         "powerId": "TY-A35",
         "unlocked": true,
         "currentValueText": "37.5%",
-        "rangeText": "普通攻击距离提高37.5%～50%",
+        "rangeText": "主动技能施法距离提高37.5%～50%",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -5493,9 +5493,9 @@
       {
         "powerId": "TY-A37",
         "unlocked": true,
-        "currentValueText": "56.25%",
-        "rangeText": "普通攻击的伤害系数提高56.25%～75%",
-        "primaryRangeText": "56.25%～75%"
+        "currentValueText": "600%",
+        "rangeText": "主动直接伤害技能首次命中时有25%概率追加600%～800%施加时面板攻击伤害",
+        "primaryRangeText": "600%～800%"
       },
       {
         "powerId": "TY-A38",
@@ -5508,7 +5508,7 @@
         "powerId": "TY-A39",
         "unlocked": true,
         "currentValueText": "15%",
-        "rangeText": "额外增加装备提供的物理防御的15%～20%",
+        "rangeText": "获得持续4秒、吸收自身最大生命15%～20%伤害的护盾",
         "primaryRangeText": "15%～20%"
       },
       {
@@ -5521,23 +5521,23 @@
       {
         "powerId": "TY-D01",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "装备提供的物理防御提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "150%",
+        "rangeText": "装备提供的物理防御提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D02",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "装备提供的魔法防御提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "150%",
+        "rangeText": "装备提供的魔法防御提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D03",
         "unlocked": true,
-        "currentValueText": "22%",
-        "rangeText": "装备提供的最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "90%",
+        "rangeText": "装备提供的最大生命提高90%～120%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-D04",
@@ -5549,30 +5549,30 @@
       {
         "powerId": "TY-D05",
         "unlocked": true,
-        "currentValueText": "18.75%",
-        "rangeText": "伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "41.25%",
+        "rangeText": "伤害降低41.25%～55%",
+        "primaryRangeText": "41.25%～55%"
       },
       {
         "powerId": "TY-D06",
         "unlocked": true,
-        "currentValueText": "18.75%",
-        "rangeText": "受到普通攻击的直接伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "41.25%",
+        "rangeText": "受到普通攻击的直接伤害降低41.25%～55%",
+        "primaryRangeText": "41.25%～55%"
       },
       {
         "powerId": "TY-D07",
         "unlocked": true,
-        "currentValueText": "15%",
-        "rangeText": "受到的直接物理伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "37.5%",
+        "rangeText": "受到的直接物理伤害降低37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-D08",
         "unlocked": true,
-        "currentValueText": "15%",
-        "rangeText": "受到的魔法伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "37.5%",
+        "rangeText": "受到的魔法伤害降低37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-D09",
@@ -5605,9 +5605,9 @@
       {
         "powerId": "TY-D13",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "初始护盾量提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "112.5%",
+        "rangeText": "初始护盾量提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "TY-D14",
@@ -5626,9 +5626,9 @@
       {
         "powerId": "TY-D16",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "初始护盾量提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "150%",
+        "rangeText": "初始护盾量提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D17",
@@ -5647,9 +5647,9 @@
       {
         "powerId": "TY-D19",
         "unlocked": true,
-        "currentValueText": "18.75%",
-        "rangeText": "伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "45%",
+        "rangeText": "伤害降低45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "TY-D20",
@@ -5669,7 +5669,7 @@
         "powerId": "TY-U02",
         "unlocked": true,
         "currentValueText": "7点法力",
-        "rangeText": "普通攻击成功命中时恢复7点法力～10点法力",
+        "rangeText": "主动直接伤害技能命中时恢复7点法力～10点法力",
         "primaryRangeText": "7点法力～10点法力"
       },
       {
@@ -5815,9 +5815,9 @@
       {
         "powerId": "YS-A03",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "光弹术直接伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "135%",
+        "rangeText": "光弹术直接伤害提高135%～180%\n命中附加灼光：6秒总计315%～420%面板魔攻的光系持续伤害",
+        "primaryRangeText": "135%～180%"
       },
       {
         "powerId": "YS-A04",
@@ -6148,9 +6148,9 @@
       {
         "powerId": "ZS-A01",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "连环枪法伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "150%",
+        "rangeText": "连环枪法伤害提高150%～200%\n命中附加流血：6秒总计225%～300%面板物攻的物理持续伤害",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "ZS-A02",
@@ -6553,9 +6553,9 @@
       {
         "powerId": "CK-A09",
         "unlocked": true,
-        "currentValueText": "81.23%",
-        "rangeText": "淬毒术造成的每次中毒伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "162.46%",
+        "rangeText": "淬毒术造成的每次中毒伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A10",
@@ -6589,9 +6589,9 @@
       {
         "powerId": "CK-A15",
         "unlocked": true,
-        "currentValueText": "81.23%",
-        "rangeText": "陷阱：毒雾造成的每次中毒伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "162.46%",
+        "rangeText": "陷阱：毒雾造成的每次中毒伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A16",
@@ -6835,9 +6835,9 @@
       {
         "powerId": "JK-A01",
         "unlocked": true,
-        "currentValueText": "81%",
-        "rangeText": "罡气剑的直接伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "203%",
+        "rangeText": "罡气剑的直接伤害提高187%～250%\n命中附加流血：6秒总计270%～360%面板物攻的物理持续伤害",
+        "primaryRangeText": "187%～250%"
       },
       {
         "powerId": "JK-A02",
@@ -7291,9 +7291,9 @@
       {
         "powerId": "SS-A17",
         "unlocked": true,
-        "currentValueText": "66.6%",
-        "rangeText": "这份燃烧每跳伤害提高61.5%～82%",
-        "primaryRangeText": "61.5%～82%"
+        "currentValueText": "146.21%",
+        "rangeText": "这份燃烧每跳伤害提高135%～180%",
+        "primaryRangeText": "135%～180%"
       },
       {
         "powerId": "SS-A18",
@@ -7520,9 +7520,9 @@
       {
         "powerId": "TY-A01",
         "unlocked": true,
-        "currentValueText": "56%",
-        "rangeText": "范围内其他敌人各承受52%～70%普通攻击伤害",
-        "primaryRangeText": "52%～70%"
+        "currentValueText": "28.43%",
+        "rangeText": "消耗目标本人持续伤害剩余余额的26.25%～35%",
+        "primaryRangeText": "26.25%～35%"
       },
       {
         "powerId": "TY-A02",
@@ -7569,9 +7569,9 @@
       {
         "powerId": "TY-A08",
         "unlocked": true,
-        "currentValueText": "48.73%",
-        "rangeText": "伤害系数提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "121.84%",
+        "rangeText": "伤害系数提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "TY-A09",
@@ -7580,9 +7580,9 @@
       {
         "powerId": "TY-A10",
         "unlocked": true,
-        "currentValueText": "16.24%",
-        "rangeText": "普通攻击的出手间隔缩短15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "40.61%",
+        "rangeText": "向180范围最近6名合法敌人复制37.5%～50%的每跳伤害与原到期时间",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-A11",
@@ -7636,9 +7636,9 @@
       {
         "powerId": "TY-A18",
         "unlocked": true,
-        "currentValueText": "81.23%",
-        "rangeText": "每次伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "162.46%",
+        "rangeText": "每跳伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-A19",
@@ -7664,9 +7664,9 @@
       {
         "powerId": "TY-A22",
         "unlocked": true,
-        "currentValueText": "40.61%",
-        "rangeText": "持续时间提高37.5%～50%",
-        "primaryRangeText": "37.5%～50%"
+        "currentValueText": "81.23%",
+        "rangeText": "本人合格技能或装备持续伤害持续时间提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "TY-A23",
@@ -7750,7 +7750,7 @@
         "powerId": "TY-A35",
         "unlocked": true,
         "currentValueText": "40.61%",
-        "rangeText": "普通攻击距离提高37.5%～50%",
+        "rangeText": "主动技能施法距离提高37.5%～50%",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -7763,9 +7763,9 @@
       {
         "powerId": "TY-A37",
         "unlocked": true,
-        "currentValueText": "60.92%",
-        "rangeText": "普通攻击的伤害系数提高56.25%～75%",
-        "primaryRangeText": "56.25%～75%"
+        "currentValueText": "649%",
+        "rangeText": "主动直接伤害技能首次命中时有25%概率追加600%～800%施加时面板攻击伤害",
+        "primaryRangeText": "600%～800%"
       },
       {
         "powerId": "TY-A38",
@@ -7778,7 +7778,7 @@
         "powerId": "TY-A39",
         "unlocked": true,
         "currentValueText": "16%",
-        "rangeText": "额外增加装备提供的物理防御的15%～20%",
+        "rangeText": "获得持续4秒、吸收自身最大生命15%～20%伤害的护盾",
         "primaryRangeText": "15%～20%"
       },
       {
@@ -7791,23 +7791,23 @@
       {
         "powerId": "TY-D01",
         "unlocked": true,
-        "currentValueText": "32.49%",
-        "rangeText": "装备提供的物理防御提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "162.46%",
+        "rangeText": "装备提供的物理防御提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D02",
         "unlocked": true,
-        "currentValueText": "32%",
-        "rangeText": "装备提供的魔法防御提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "162%",
+        "rangeText": "装备提供的魔法防御提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D03",
         "unlocked": true,
-        "currentValueText": "24%",
-        "rangeText": "装备提供的最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "97%",
+        "rangeText": "装备提供的最大生命提高90%～120%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-D04",
@@ -7819,30 +7819,30 @@
       {
         "powerId": "TY-D05",
         "unlocked": true,
-        "currentValueText": "20.3%",
-        "rangeText": "伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "44.67%",
+        "rangeText": "伤害降低41.25%～55%",
+        "primaryRangeText": "41.25%～55%"
       },
       {
         "powerId": "TY-D06",
         "unlocked": true,
-        "currentValueText": "20.3%",
-        "rangeText": "受到普通攻击的直接伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "44.67%",
+        "rangeText": "受到普通攻击的直接伤害降低41.25%～55%",
+        "primaryRangeText": "41.25%～55%"
       },
       {
         "powerId": "TY-D07",
         "unlocked": true,
-        "currentValueText": "16.24%",
-        "rangeText": "受到的直接物理伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "40.61%",
+        "rangeText": "受到的直接物理伤害降低37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-D08",
         "unlocked": true,
-        "currentValueText": "16.24%",
-        "rangeText": "受到的魔法伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "40.61%",
+        "rangeText": "受到的魔法伤害降低37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-D09",
@@ -7875,9 +7875,9 @@
       {
         "powerId": "TY-D13",
         "unlocked": true,
-        "currentValueText": "32.49%",
-        "rangeText": "初始护盾量提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "121.84%",
+        "rangeText": "初始护盾量提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "TY-D14",
@@ -7896,9 +7896,9 @@
       {
         "powerId": "TY-D16",
         "unlocked": true,
-        "currentValueText": "48.73%",
-        "rangeText": "初始护盾量提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "162.46%",
+        "rangeText": "初始护盾量提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D17",
@@ -7917,9 +7917,9 @@
       {
         "powerId": "TY-D19",
         "unlocked": true,
-        "currentValueText": "20.3%",
-        "rangeText": "伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "48.73%",
+        "rangeText": "伤害降低45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "TY-D20",
@@ -7939,7 +7939,7 @@
         "powerId": "TY-U02",
         "unlocked": true,
         "currentValueText": "8点法力",
-        "rangeText": "普通攻击成功命中时恢复7点法力～10点法力",
+        "rangeText": "主动直接伤害技能命中时恢复7点法力～10点法力",
         "primaryRangeText": "7点法力～10点法力"
       },
       {
@@ -8085,9 +8085,9 @@
       {
         "powerId": "YS-A03",
         "unlocked": true,
-        "currentValueText": "48.73%",
-        "rangeText": "光弹术直接伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "146.21%",
+        "rangeText": "光弹术直接伤害提高135%～180%\n命中附加灼光：6秒总计315%～420%面板魔攻的光系持续伤害",
+        "primaryRangeText": "135%～180%"
       },
       {
         "powerId": "YS-A04",
@@ -8418,9 +8418,9 @@
       {
         "powerId": "ZS-A01",
         "unlocked": true,
-        "currentValueText": "64.98%",
-        "rangeText": "连环枪法伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "162.46%",
+        "rangeText": "连环枪法伤害提高150%～200%\n命中附加流血：6秒总计225%～300%面板物攻的物理持续伤害",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "ZS-A02",
@@ -8823,9 +8823,9 @@
       {
         "powerId": "CK-A09",
         "unlocked": true,
-        "currentValueText": "100%",
-        "rangeText": "淬毒术造成的每次中毒伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "200%",
+        "rangeText": "淬毒术造成的每次中毒伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A10",
@@ -8859,9 +8859,9 @@
       {
         "powerId": "CK-A15",
         "unlocked": true,
-        "currentValueText": "100%",
-        "rangeText": "陷阱：毒雾造成的每次中毒伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "200%",
+        "rangeText": "陷阱：毒雾造成的每次中毒伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A16",
@@ -9105,9 +9105,9 @@
       {
         "powerId": "JK-A01",
         "unlocked": true,
-        "currentValueText": "100%",
-        "rangeText": "罡气剑的直接伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "250%",
+        "rangeText": "罡气剑的直接伤害提高187%～250%\n命中附加流血：6秒总计270%～360%面板物攻的物理持续伤害",
+        "primaryRangeText": "187%～250%"
       },
       {
         "powerId": "JK-A02",
@@ -9561,9 +9561,9 @@
       {
         "powerId": "SS-A17",
         "unlocked": true,
-        "currentValueText": "82%",
-        "rangeText": "这份燃烧每跳伤害提高61.5%～82%",
-        "primaryRangeText": "61.5%～82%"
+        "currentValueText": "180%",
+        "rangeText": "这份燃烧每跳伤害提高135%～180%",
+        "primaryRangeText": "135%～180%"
       },
       {
         "powerId": "SS-A18",
@@ -9790,9 +9790,9 @@
       {
         "powerId": "TY-A01",
         "unlocked": true,
-        "currentValueText": "70%",
-        "rangeText": "范围内其他敌人各承受52%～70%普通攻击伤害",
-        "primaryRangeText": "52%～70%"
+        "currentValueText": "35%",
+        "rangeText": "消耗目标本人持续伤害剩余余额的26.25%～35%",
+        "primaryRangeText": "26.25%～35%"
       },
       {
         "powerId": "TY-A02",
@@ -9839,9 +9839,9 @@
       {
         "powerId": "TY-A08",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "伤害系数提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "150%",
+        "rangeText": "伤害系数提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "TY-A09",
@@ -9850,9 +9850,9 @@
       {
         "powerId": "TY-A10",
         "unlocked": true,
-        "currentValueText": "20%",
-        "rangeText": "普通攻击的出手间隔缩短15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "50%",
+        "rangeText": "向180范围最近6名合法敌人复制37.5%～50%的每跳伤害与原到期时间",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-A11",
@@ -9906,9 +9906,9 @@
       {
         "powerId": "TY-A18",
         "unlocked": true,
-        "currentValueText": "100%",
-        "rangeText": "每次伤害提高75%～100%",
-        "primaryRangeText": "75%～100%"
+        "currentValueText": "200%",
+        "rangeText": "每跳伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-A19",
@@ -9934,9 +9934,9 @@
       {
         "powerId": "TY-A22",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "持续时间提高37.5%～50%",
-        "primaryRangeText": "37.5%～50%"
+        "currentValueText": "100%",
+        "rangeText": "本人合格技能或装备持续伤害持续时间提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "TY-A23",
@@ -10020,7 +10020,7 @@
         "powerId": "TY-A35",
         "unlocked": true,
         "currentValueText": "50%",
-        "rangeText": "普通攻击距离提高37.5%～50%",
+        "rangeText": "主动技能施法距离提高37.5%～50%",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -10033,9 +10033,9 @@
       {
         "powerId": "TY-A37",
         "unlocked": true,
-        "currentValueText": "75%",
-        "rangeText": "普通攻击的伤害系数提高56.25%～75%",
-        "primaryRangeText": "56.25%～75%"
+        "currentValueText": "800%",
+        "rangeText": "主动直接伤害技能首次命中时有25%概率追加600%～800%施加时面板攻击伤害",
+        "primaryRangeText": "600%～800%"
       },
       {
         "powerId": "TY-A38",
@@ -10048,7 +10048,7 @@
         "powerId": "TY-A39",
         "unlocked": true,
         "currentValueText": "20%",
-        "rangeText": "额外增加装备提供的物理防御的15%～20%",
+        "rangeText": "获得持续4秒、吸收自身最大生命15%～20%伤害的护盾",
         "primaryRangeText": "15%～20%"
       },
       {
@@ -10061,23 +10061,23 @@
       {
         "powerId": "TY-D01",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "装备提供的物理防御提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "200%",
+        "rangeText": "装备提供的物理防御提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D02",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "装备提供的魔法防御提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "200%",
+        "rangeText": "装备提供的魔法防御提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D03",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "装备提供的最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "120%",
+        "rangeText": "装备提供的最大生命提高90%～120%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-D04",
@@ -10089,30 +10089,30 @@
       {
         "powerId": "TY-D05",
         "unlocked": true,
-        "currentValueText": "25%",
-        "rangeText": "伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "55%",
+        "rangeText": "伤害降低41.25%～55%",
+        "primaryRangeText": "41.25%～55%"
       },
       {
         "powerId": "TY-D06",
         "unlocked": true,
-        "currentValueText": "25%",
-        "rangeText": "受到普通攻击的直接伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "55%",
+        "rangeText": "受到普通攻击的直接伤害降低41.25%～55%",
+        "primaryRangeText": "41.25%～55%"
       },
       {
         "powerId": "TY-D07",
         "unlocked": true,
-        "currentValueText": "20%",
-        "rangeText": "受到的直接物理伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "50%",
+        "rangeText": "受到的直接物理伤害降低37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-D08",
         "unlocked": true,
-        "currentValueText": "20%",
-        "rangeText": "受到的魔法伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "50%",
+        "rangeText": "受到的魔法伤害降低37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "TY-D09",
@@ -10145,9 +10145,9 @@
       {
         "powerId": "TY-D13",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "初始护盾量提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "150%",
+        "rangeText": "初始护盾量提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "TY-D14",
@@ -10166,9 +10166,9 @@
       {
         "powerId": "TY-D16",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "初始护盾量提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "200%",
+        "rangeText": "初始护盾量提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "TY-D17",
@@ -10187,9 +10187,9 @@
       {
         "powerId": "TY-D19",
         "unlocked": true,
-        "currentValueText": "25%",
-        "rangeText": "伤害降低18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "60%",
+        "rangeText": "伤害降低45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "TY-D20",
@@ -10209,7 +10209,7 @@
         "powerId": "TY-U02",
         "unlocked": true,
         "currentValueText": "10点法力",
-        "rangeText": "普通攻击成功命中时恢复7点法力～10点法力",
+        "rangeText": "主动直接伤害技能命中时恢复7点法力～10点法力",
         "primaryRangeText": "7点法力～10点法力"
       },
       {
@@ -10355,9 +10355,9 @@
       {
         "powerId": "YS-A03",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "光弹术直接伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "180%",
+        "rangeText": "光弹术直接伤害提高135%～180%\n命中附加灼光：6秒总计315%～420%面板魔攻的光系持续伤害",
+        "primaryRangeText": "135%～180%"
       },
       {
         "powerId": "YS-A04",
@@ -10688,9 +10688,9 @@
       {
         "powerId": "ZS-A01",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "连环枪法伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "200%",
+        "rangeText": "连环枪法伤害提高150%～200%\n命中附加流血：6秒总计225%～300%面板物攻的物理持续伤害",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "ZS-A02",

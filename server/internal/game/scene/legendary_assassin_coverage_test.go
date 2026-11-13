@@ -409,7 +409,7 @@ func assassinCoveragePoisonLifetime(t *testing.T, id string) {
 			}
 			want := int32(10)
 			if enabled && eligible {
-				want = 20
+				want = 30
 			}
 			for i := 0; i < 5; i++ {
 				hp := m.HP

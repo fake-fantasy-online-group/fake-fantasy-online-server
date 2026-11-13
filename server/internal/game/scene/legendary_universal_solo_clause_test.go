@@ -78,7 +78,7 @@ func TestLegendaryUniversalSoloClauseInvariants(t *testing.T) {
 			universalSoloAttack(t, s, p, m, combat.Blow{GuaranteedHit: true})
 			want := int32(200)
 			if id == "TY-A37" {
-				want = 350
+				want = 200
 			}
 			universalSoloDamage(t, s, m.ID, 0, want, 1)
 			if !m.Status.Has(domain.StatusPoison) {
@@ -134,7 +134,7 @@ func TestLegendaryUniversalSoloClauseInvariants(t *testing.T) {
 		s, p, m := universalSoloFixture(t, "TY-A08", domain.Warrior, domain.Learned{10002: 1})
 		side := putMonster(s, 901, 10000, domain.Stats{}, 140, 100)
 		assassinRegressionCast(t, s, p, UseSkill{Skill: 10002, Target: m.ID})
-		universalSoloDamage(t, s, m.ID, 10002, 208, 1)
+		universalSoloDamage(t, s, m.ID, 10002, 325, 1)
 		if side.HP != 10000 {
 			t.Fatal("single became area")
 		}
