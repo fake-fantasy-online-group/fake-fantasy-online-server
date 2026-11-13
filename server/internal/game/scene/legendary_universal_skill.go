@@ -22,7 +22,7 @@ func init() {
 		registerLegendarySynergyHandler(id, legendaryHandler{ModifyIncoming: universalSynergyIncoming})
 	}
 	registerLegendarySynergyHandler("TY-D11", legendaryHandler{AbsorbIncoming: universalSynergyIncoming})
-	registerLegendarySynergyHandler("TY-U02", legendaryHandler{AfterHit: universalBasicMana, RootFinished: func(c *legendaryContext) { c.DeleteState(0, "basic-root") }})
+	registerLegendarySynergyHandler("TY-U02", legendaryHandler{AfterHit: universalSkillMana, RootFinished: func(c *legendaryContext) { c.DeleteState(0, "basic-root") }})
 	// Receiver-side native status modifiers are called at the common boundary.
 	for _, id := range []string{"TY-D09", "TY-U08"} {
 		registerLegendarySynergyHandler(id, legendaryHandler{StatusReceiving: universalNativeStatusReceiving})

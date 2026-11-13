@@ -94,7 +94,7 @@ func legendaryAssassinUtilityTick(c *legendaryContext) {
 }
 func legendaryAssassinTrapPoison(c *legendaryContext, d *domain.StatusDef) {
 	if d.ID == domain.StatusPoison && (d.SourceSkillID == 10214 || d.SkillSnapshotID == 10214) {
-		d.LegendaryModifiers.DamageTickBP += c.RollValue("tick_bp", 10000)
+		d.LegendaryModifiers.DamageTickBP += c.RollValue("tick_bp", 20000)
 	}
 }
 

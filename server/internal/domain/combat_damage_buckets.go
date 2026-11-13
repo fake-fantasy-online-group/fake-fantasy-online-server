@@ -7,6 +7,8 @@ package domain
 // Immunity, reflection, consumable shields and HP commitment remain lifecycle
 // operations after/beside these arithmetic stages.
 type CombatDamageBuckets struct {
+	SelectiveReductionBP int32
+
 	DamageIncreaseBP          int64
 	PVPScaledDamageIncreaseBP int64
 	// Scaled contributions retain fractional BP until the common sum is rounded.
@@ -47,7 +49,28 @@ func (b CombatDamageBuckets) OutgoingDamage(amount int32) int32 {
 func (b CombatDamageBuckets) IncomingDamage(amount int32) int32 {
 	taken := max(int32(0), b.DamageTakenIncreasePct)
 	wide := int64(amount) + int64(amount)*int64(taken)/100
+	baseline := wide
+	pierce := b.ResistancePierceBP
+	capPierce := int32(3000)
+	if b.PVP {
+		pierce /= 2
+		capPierce = 1500
+	}
+	pierce = min(capPierce, max(int32(0), pierce))
+	resist := max(int64(-5000), int64(b.ResistanceBP)-int64(pierce))
+	if resist < 0 {
+		baseline = scaleDamageWide(baseline, 10000-resist, 10000)
+	}
 	wide = MitigatePercentDamageV7WithCap(wide, b.ResistanceBP, b.ResistancePierceBP,
 		SaturateInt32(b.MitigationBP), b.DamageReductionPct, b.HalfDamageLayers, b.PVP, b.DamageReductionCapPct, b.FlatReduction)
+	if b.SelectiveReductionBP > 0 {
+		wide = scaleDamageWide(wide, 10000-int64(min(int32(7000), b.SelectiveReductionBP)), 10000)
+		// Generic equipment reductions cannot reopen the ordinary mitigation budget.
+		floor := baseline / 4
+		if baseline%4 != 0 {
+			floor++
+		}
+		wide = max(wide, floor)
+	}
 	return max(int32(0), SaturateInt32(wide))
 }

@@ -40,6 +40,12 @@ func universalExtendedBlow(c *legendaryContext, b *combat.Blow) {
 	}
 }
 func universalExtendedStatus(c *legendaryContext, d *domain.StatusDef) {
+	if c.Power.ID == "TY-A22" && d != nil && !d.LegendaryModifiers.Applied && synergyQualifyingDOT(*d) {
+		d.SynergyDOTVersion = 1
+		d.LegendaryModifiers.DurationBP += c.RollValue("benefit", 10000)
+		return
+	}
+
 	if d == nil || d.LegendaryModifiers.Applied || d.LegendaryPowerID != "" || (!d.SkillApplied && d.SkillSnapshotID == 0 && d.SourceSkillID == 0) {
 		return
 	}
@@ -56,10 +62,6 @@ func universalExtendedStatus(c *legendaryContext, d *domain.StatusDef) {
 	case "TY-A17":
 		if d.LifeStealPct > 0 {
 			m.LifeStealBP += c.RollValue("benefit", 6000)
-		}
-	case "TY-A22":
-		if d.ID == domain.StatusPoison || d.ID == 1036 {
-			m.DurationBP += c.RollValue("benefit", 5000)
 		}
 	case "TY-A23":
 		if d.PoisonOnHitChance > 0 {
@@ -99,7 +101,7 @@ func universalExtendedReceiving(c *legendaryContext, d *domain.StatusDef) bool {
 	}
 	if c.Power.ID == "TY-D13" {
 		if c.Owner.ID != c.Target.ID && !d.Harmful() && d.DamageShield > 0 {
-			d.LegendaryModifiers.ShieldBP += c.RollValue("benefit", 4000)
+			d.LegendaryModifiers.ShieldBP += c.RollValue("benefit", 15000)
 		}
 		return true
 	}

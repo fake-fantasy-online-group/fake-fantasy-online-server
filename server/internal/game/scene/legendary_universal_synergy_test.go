@@ -27,7 +27,7 @@ func TestLegendaryUniversalSkillSynergy(t *testing.T) {
 		kind  domain.SkillKind
 		want  int32
 	}{
-		{"TY-A04", domain.SkillAreaCircle, domain.SkillArea, 140}, {"TY-A06", domain.SkillAreaRectangle, domain.SkillArea, 160}, {"TY-A08", 0, domain.SkillSingle, 160}, {"TY-U03", 0, domain.SkillSingle, 70}, {"TY-U15", 0, domain.SkillSingle, 800}, {"TY-A37", 0, domain.SkillSingle, 175},
+		{"TY-A04", domain.SkillAreaCircle, domain.SkillArea, 140}, {"TY-A06", domain.SkillAreaRectangle, domain.SkillArea, 160}, {"TY-A08", 0, domain.SkillSingle, 250}, {"TY-U03", 0, domain.SkillSingle, 70}, {"TY-U15", 0, domain.SkillSingle, 800},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m, _ := universalTestContext(t, tc.id)
@@ -55,7 +55,7 @@ func TestLegendaryUniversalSkillSynergy(t *testing.T) {
 				t.Fatalf("got %d want %d def=%+v", got, tc.want, d)
 			}
 			s.legendaryFinalizeSkill(&d)
-			if d.LegendaryModifiers.AppliedDamageBP > 7500 {
+			if d.LegendaryModifiers.AppliedDamageBP > 15000 {
 				t.Fatal("double applied")
 			}
 		})
@@ -111,10 +111,10 @@ func TestLegendaryUniversalNativePeriodicModifiers(t *testing.T) {
 		id          string
 		status      domain.StatusID
 		delta, want int64
-	}{{"TY-A18", domain.StatusPoison, -100, -200}, {"TY-A27", 1036, -100, -200}, {"TY-U05", 998, 100, 160}} {
+	}{{"TY-A18", domain.StatusPoison, -100, -300}, {"TY-A27", 1036, -100, -200}, {"TY-U05", 998, 100, 160}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, _, _, c := universalTestContext(t, tc.id)
-			d := domain.StatusDef{ID: tc.status, SourceSkillID: 123, IntervalSec: 1, DurationSec: 9}
+			d := domain.StatusDef{ID: tc.status, SourceSkillID: 123, IntervalSec: 1, DurationSec: 9, HPChanges: []domain.ResourceChange{{Value: -100}}}
 			if tc.delta > 0 {
 				d.Affixes = []domain.Affix{{Attr: domain.AttrHPRegen, Value: 100}}
 			}
@@ -127,6 +127,7 @@ func TestLegendaryUniversalNativePeriodicModifiers(t *testing.T) {
 				t.Fatal("duration changed")
 			}
 			d.LegendaryPowerID = "TY-A18"
+			d.SynergyDOTVersion = 0
 			if s.legendaryPeriodicAmount(domain.Active{Def: d}, tc.delta) != tc.delta {
 				t.Fatal("recursive power tick amplified")
 			}
@@ -139,7 +140,7 @@ func TestLegendaryUniversalShieldStrengthAndCost(t *testing.T) {
 	universalNativeStatus(c, &d)
 	s.legendaryFinalizeStatus(&d)
 	s.legendaryFinalizeStatus(&d)
-	if d.DamageShield != 160 {
+	if d.DamageShield != 300 {
 		t.Fatalf("shield %d", d.DamageShield)
 	}
 	_ = p
@@ -158,7 +159,7 @@ func TestLegendaryUniversalDefenseAndSelfDamage(t *testing.T) {
 		area             bool
 		origin           domain.DamageOrigin
 		mp, want, mpwant int32
-	}{{"TY-D05", true, domain.DamageNormalOrigin, 100, 75, 100}, {"TY-D19", false, domain.DamageDOTOrigin, 100, 75, 100}, {"TY-D11", false, domain.DamageNormalOrigin, 20, 80, 0}} {
+	}{{"TY-D05", true, domain.DamageNormalOrigin, 100, 45, 100}, {"TY-D19", false, domain.DamageDOTOrigin, 100, 40, 100}, {"TY-D11", false, domain.DamageNormalOrigin, 20, 80, 0}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m, c := universalTestContext(t, tc.id)
 			_ = s
@@ -205,7 +206,11 @@ func TestLegendaryUniversalEquipmentOnlyStats(t *testing.T) {
 			if id == "TY-U20" {
 				got = stats.MoveSpeed
 			}
-			if got != 1040 {
+			want := int32(1040)
+			if id == "TY-D01" {
+				want = 1200
+			}
+			if got != want {
 				t.Fatalf("equipment boost=%d", got)
 			}
 			p.Player.Worn = &domain.EquipSet{}
@@ -230,60 +235,49 @@ func TestLegendaryUniversalShieldBreakNoHPAmplification(t *testing.T) {
 		}
 	}
 }
-func TestLegendaryUniversalBasicRootManaOnce(t *testing.T) {
+func TestLegendaryUniversalSkillRootManaOnce(t *testing.T) {
 	s, p, m, c := universalTestContext(t, "TY-U02")
 	p.MP = 0
 	p.MaxMP = 100
-	c.IsBasic = true
+	c.IsBasic = false
 	c.Skill = 10021
 	c.RootID = 1
 	c.Blow.Origin = domain.DamageNormalOrigin
-	universalBasicMana(c)
-	universalBasicMana(c)
+	universalSkillMana(c)
+	universalSkillMana(c)
 	if p.MP != 10 {
 		t.Fatalf("root mana=%d", p.MP)
 	}
 	c.IsChild = true
 	c.RootID = 2
-	universalBasicMana(c)
+	universalSkillMana(c)
 	if p.MP != 10 {
 		t.Fatal("child regenerated resources")
 	}
 	_ = s
 	_ = m
 }
-func TestLegendaryUniversalBasicFanSharedNativeRoot(t *testing.T) {
-	s, p, m, _ := universalTestContext(t, "TY-A01")
-	warriorEquip(t, s, p, "TY-A37", domain.SlotGlove)
-	warriorEquip(t, s, p, "TY-U02", domain.SlotRing)
-	p.MP = 0
-	p.MaxMP = 100
-	p.Look.AtkDist = 100
-	p.HP = 1000
-	p.Status.Apply(domain.StatusDef{ID: 1018, DurationSec: 120, PoisonOnHitChance: 100, PoisonOnHitLevel: 21, SourceSkillID: 10211, SourceEffectHitKnown: true, LifeStealPct: 10, LifeStealChance: 100}, s.tick, p.ID)
-	s.statuses = map[domain.StatusKey]domain.StatusDef{}
-	s.statuses[domain.StatusKey{ID: domain.StatusPoison, Level: 21}] = domain.StatusDef{ID: domain.StatusPoison, Level: 21, TypeKnown: true, Type: domain.StatusBad, DurationSec: 60, IntervalSec: 2, Affixes: []domain.Affix{{Attr: domain.AttrHPRegen, Value: -10}}}
-	side := putMonster(s, 901, 10000, domain.Stats{}, 140, 105)
-	outside := putMonster(s, 902, 10000, domain.Stats{}, 50, 100)
-	finish := s.beginEquipmentRoot(p.ID, m.ID, domain.EquipmentCombatStats{})
-	before := m.HP
-	sideBefore := side.HP
-	outsideBefore := outside.HP
-	if !s.legendaryBasicAttack(p, m, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true, SkillPct: 100}) {
-		t.Fatal("not transformed")
-	}
-	finish()
-	if before-m.HP != 175 || sideBefore-side.HP != 122 || outsideBefore-outside.HP != 0 {
-		t.Fatalf("main %d side%d outside%d", before-m.HP, sideBefore-side.HP, outsideBefore-outside.HP)
-	}
-	if p.MP != 10 {
-		t.Fatalf("fan resource once=%d", p.MP)
-	}
-	if !m.Status.Has(domain.StatusPoison) || !side.Status.Has(domain.StatusPoison) {
-		t.Fatal("native poison not inherited by fan")
-	}
-	if p.HP != 1029 {
-		t.Fatalf("native lifesteal main+side=%d", p.HP)
+func TestSynergyBasicDoesNotProcOrConvert(t *testing.T) {
+	for _, id := range []string{"TY-A01", "TY-A09", "TY-A10", "TY-A35", "TY-A37", "TY-A39", "TY-U02"} {
+		t.Run(id, func(t *testing.T) {
+			s, p, m, c := universalTestContext(t, id)
+			p.MP = 0
+			p.MaxMP = 100
+			c.IsBasic = true
+			c.RootID = 1
+			c.Blow.Origin = domain.DamageNormalOrigin
+			c.Skill = 10021
+			before := m.HP
+			h := legendaryHandlers[id]
+			if h.AfterHit != nil {
+				h.AfterHit(c)
+			}
+			d := domain.SkillDef{ID: 10021, Kind: domain.SkillSingle, LegendaryBasic: true, Dist: 100, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100}}}
+			s.legendaryPrepareSkill(p, &d, m.ID)
+			if p.MP != 0 || m.HP != before || d.Effects[0].DamagePct != 100 || d.Area.Valid() || d.Dist != 100 {
+				t.Fatal("basic build support remains")
+			}
+		})
 	}
 }
 func TestLegendaryUniversalNativeManaEquipmentConservation(t *testing.T) {
@@ -343,14 +337,14 @@ func TestLegendaryUniversalNativeStatusBoundaryAndTick(t *testing.T) {
 	before := m.HP
 	s.tick += domain.Ticks(1000)
 	s.stepStatus()
-	if before-m.HP != 200 {
+	if before-m.HP != 300 {
 		t.Fatalf("native tick=%d", before-m.HP)
 	}
 	s, p, _, _ = universalTestContext(t, "TY-D16")
 	if !s.applyStatusDef(p, domain.StatusDef{ID: 998, SourceSkillID: 10320, DurationSec: 5, DamageShield: 100}, p.ID) {
 		t.Fatal("native shield rejected")
 	}
-	if universalShieldValue(p) != 160 {
+	if universalShieldValue(p) != 300 {
 		t.Fatalf("native shield=%d", universalShieldValue(p))
 	}
 }

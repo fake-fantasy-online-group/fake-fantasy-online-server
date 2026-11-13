@@ -68,7 +68,7 @@ func warriorBorrowedSkill(c *legendaryContext, id domain.SkillID, composed bool)
 	return d, true
 }
 func init() {
-	registerWarriorPower("ZS-A01", warriorSkill(10002, 80, 0, 0, 0))
+	registerWarriorPower("ZS-A01", warriorSynergyDOTHandler())
 	registerWarriorPower("ZS-A04", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10005 {
 			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 1500)

@@ -15,6 +15,9 @@ type NativeDamageSnapshot struct {
 }
 
 type Blow struct {
+	// Server snapshot: retain PvP budgets after a periodic source disconnects.
+	PeriodicPVP bool
+
 	PrimaryTarget domain.EntityID
 	// Server-only immutable causal ancestry; never serialized onto the damage wire.
 	EffectCausalPath              []string

@@ -217,8 +217,8 @@
     "parameters": [
       {
         "key": "tick_bp",
-        "text": "每跳伤害提高82%",
-        "base": 8200,
+        "text": "每跳伤害提高180%",
+        "base": 18000,
         "divisor": 100,
         "unit": "%"
       }
@@ -635,9 +635,16 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "伤害提高60%",
-        "base": 6000,
+        "text": "伤害提高180%",
+        "base": 18000,
         "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "dot_total_pct",
+        "text": "6秒总计420%",
+        "base": 420,
+        "divisor": 1,
         "unit": "%"
       }
     ]

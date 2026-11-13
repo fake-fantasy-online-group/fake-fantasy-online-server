@@ -11,7 +11,7 @@ import (
 // Exact coefficients and replacement directions are recorded separately in the
 // reviewed swordsman implementation specification, never inferred at runtime.
 func init() {
-	registerLegendarySynergyHandler("JK-A01", legendaryHandler{BeforeDamage: legendaryMeleeSkillDamage(10102, 200)})
+	registerLegendarySynergyHandler("JK-A01", legendaryHandler{BeforeDamage: legendaryMeleeSkillDamage(10102, 350), AfterHit: synergyProfessionDOT})
 	registerLegendarySynergyHandler("JK-A03", legendaryHandler{AfterHit: swordImmediatePrimary(10102, 160)})
 	registerLegendarySynergyHandler("JK-A06", legendaryHandler{StatusCommitted: func(c *legendaryContext, d *domain.StatusDef) {
 		if c.Def.ID == 10111 && d.BlockMove && d.Control != domain.ControlStun && swordRooted(c.Target, c.Owner.ID) && swordNativeOnce(c, c.Target.ID) {

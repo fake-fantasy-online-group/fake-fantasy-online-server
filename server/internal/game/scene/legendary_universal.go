@@ -24,14 +24,14 @@ type universalSynergyTuning struct {
 // Values are not represented as user-finalized balance.
 var universalTuning = universalSynergyTuning{
 	AreaRadiusBP: 4000, ConeAngleBP: 4000, RectangleWidthBP: 6000,
-	SingleTargetDamageBP: 6000, PrimaryAreaDamageBP: 8000,
-	PoisonTickBP: 10000, BurnTickBP: 10000, HealingTickBP: 6000, ShieldStrengthBP: 6000,
+	SingleTargetDamageBP: 15000, PrimaryAreaDamageBP: 8000,
+	PoisonTickBP: 20000, BurnTickBP: 10000, HealingTickBP: 6000, ShieldStrengthBP: 20000,
 	ManaReductionBP: 3000, ShieldManaReductionBP: 2000, ManaReductionCapBP: 10000,
 	ConservationDamagePerReductionBP: 20000,
-	ManaAbsorbBP:                     3000, AreaMitigationBP: 2500, PeriodicMitigationBP: 2500,
+	ManaAbsorbBP:                     3000, AreaMitigationBP: 5500, PeriodicMitigationBP: 6000,
 	ControlDurationReductionBP: 3000, SlowMagnitudeReductionBP: 4000,
 	HealingRadiusBP: 4000, CooldownReductionBP: 2000, BasicManaFlat: 10,
-	EquipmentDefenseBP: 4000, EquipmentMoveBP: 4000,
+	EquipmentDefenseBP: 20000, EquipmentMoveBP: 4000,
 	BasicDamageBP: 7500, ShieldDamageBP: 10000,
 }
 

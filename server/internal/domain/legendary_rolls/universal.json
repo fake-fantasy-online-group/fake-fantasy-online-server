@@ -3,10 +3,10 @@
     "id": "TY-A01",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "70%",
-        "base": 70,
-        "divisor": 1,
+        "key": "consume_bp",
+        "text": "35%",
+        "base": 3500,
+        "divisor": 100,
         "unit": "%"
       }
     ]
@@ -95,8 +95,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "60%",
-        "base": 6000,
+        "text": "150%",
+        "base": 15000,
         "divisor": 100,
         "unit": "%"
       }
@@ -111,9 +111,9 @@
     "id": "TY-A10",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "20%",
-        "base": 2000,
+        "key": "copy_bp",
+        "text": "50%",
+        "base": 5000,
         "divisor": 100,
         "unit": "%"
       }
@@ -208,8 +208,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "100%",
-        "base": 10000,
+        "text": "200%",
+        "base": 20000,
         "divisor": 100,
         "unit": "%"
       }
@@ -256,8 +256,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "50%",
-        "base": 5000,
+        "text": "100%",
+        "base": 10000,
         "divisor": 100,
         "unit": "%"
       }
@@ -421,10 +421,10 @@
     "id": "TY-A37",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "75%",
-        "base": 7500,
-        "divisor": 100,
+        "key": "proc_pct",
+        "text": "800%",
+        "base": 800,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -470,8 +470,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "40%",
-        "base": 4000,
+        "text": "200%",
+        "base": 20000,
         "divisor": 100,
         "unit": "%"
       }
@@ -482,8 +482,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "40%",
-        "base": 40,
+        "text": "200%",
+        "base": 200,
         "divisor": 1,
         "unit": "%"
       }
@@ -494,8 +494,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "30%",
-        "base": 30,
+        "text": "120%",
+        "base": 120,
         "divisor": 1,
         "unit": "%"
       }
@@ -518,8 +518,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "25%",
-        "base": 2500,
+        "text": "55%",
+        "base": 5500,
         "divisor": 100,
         "unit": "%"
       }
@@ -530,8 +530,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "25%",
-        "base": 2500,
+        "text": "55%",
+        "base": 5500,
         "divisor": 100,
         "unit": "%"
       }
@@ -542,8 +542,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "20%",
-        "base": 2000,
+        "text": "50%",
+        "base": 5000,
         "divisor": 100,
         "unit": "%"
       }
@@ -554,8 +554,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "20%",
-        "base": 2000,
+        "text": "50%",
+        "base": 5000,
         "divisor": 100,
         "unit": "%"
       }
@@ -614,8 +614,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "40%",
-        "base": 4000,
+        "text": "150%",
+        "base": 15000,
         "divisor": 100,
         "unit": "%"
       }
@@ -650,8 +650,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "60%",
-        "base": 6000,
+        "text": "200%",
+        "base": 20000,
         "divisor": 100,
         "unit": "%"
       }
@@ -686,8 +686,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "25%",
-        "base": 2500,
+        "text": "60%",
+        "base": 6000,
         "divisor": 100,
         "unit": "%"
       }

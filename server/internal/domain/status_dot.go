@@ -58,6 +58,7 @@ func (s *StatusSet) applyDOT(def StatusDef, now Tick, src EntityID) {
 		if overlayReplacementBlocked(previous.Def, incoming.Def) {
 			incoming = previous // Preserve strength and attribution together.
 		}
+		incoming.Def.SynergySpreadNext = max(incoming.Def.SynergySpreadNext, previous.Def.SynergySpreadNext)
 		incoming.dotRefreshed = true
 		incoming.dotPreviousExpire = previous.ExpireAt
 		incoming.ExpireAt = expiry

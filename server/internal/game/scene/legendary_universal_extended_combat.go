@@ -7,10 +7,10 @@ import (
 )
 
 func init() {
-	for _, id := range []string{"TY-A10", "TY-D02", "TY-D03", "TY-D04", "TY-U09"} {
+	for _, id := range []string{"TY-D02", "TY-D03", "TY-D04", "TY-U09"} {
 		registerLegendarySynergyHandler(id, legendaryHandler{PassiveStats: universalExtendedStats})
 	}
-	for _, id := range []string{"TY-A25", "TY-A26", "TY-A38", "TY-A39"} {
+	for _, id := range []string{"TY-A25", "TY-A26", "TY-A38"} {
 		registerLegendarySynergyHandler(id, legendaryHandler{BaseSkill: universalExtendedBase})
 	}
 	for _, id := range []string{"TY-A30", "TY-A31", "TY-A32", "TY-A36"} {
@@ -38,17 +38,10 @@ func universalEquipmentContribution(c *legendaryContext) (domain.Stats, domain.S
 func universalExtendedStats(c *legendaryContext, st *domain.Stats) {
 	eq, bare := universalEquipmentContribution(c)
 	switch c.Power.ID {
-	case "TY-A10":
-		ms := st.AtkSpeedMS
-		if ms <= 0 {
-			ms = 1500
-		}
-		st.AtkSpeedMS = max(int32(100), universalScaleBP(ms, -c.RollValue("benefit", 2000)))
-		st.AtkSpeedPct = domain.SaturateInt32((100+int64(st.AtkSpeedPct))*10000/int64(10000-c.RollValue("benefit", 2000)) - 100)
 	case "TY-D02":
-		st.MDef = domain.SaturateInt32(int64(st.MDef) + int64(universalPct(max(int32(0), eq.MDef-bare.MDef), int64(c.RollValue("benefit", 40)))))
+		st.MDef = domain.SaturateInt32(int64(st.MDef) + int64(universalPct(max(int32(0), eq.MDef-bare.MDef), int64(c.RollValue("benefit", 200)))))
 	case "TY-D03":
-		st.MaxHP = domain.SaturateInt32(int64(st.MaxHP) + int64(universalPct(max(int32(0), eq.MaxHP-bare.MaxHP), int64(c.RollValue("benefit", 30)))))
+		st.MaxHP = domain.SaturateInt32(int64(st.MaxHP) + int64(universalPct(max(int32(0), eq.MaxHP-bare.MaxHP), int64(c.RollValue("benefit", 120)))))
 	case "TY-D04":
 		st.MaxMP = domain.SaturateInt32(int64(st.MaxMP) + int64(universalPct(max(int32(0), eq.MaxMP-bare.MaxMP), int64(c.RollValue("benefit", 40)))))
 	case "TY-U09":
@@ -78,16 +71,7 @@ func universalExtendedBase(c *legendaryContext, d *domain.SkillDef) {
 			}
 			base = universalPct(maximum, int64(c.RollValue("benefit", 4)))
 		}
-	case "TY-A39":
-		if d.LegendaryBasic {
-			contribution := max(int32(0), eq.Def-bare.Def)
-			c.Scene.forEachLegendary(c.Owner, func(other *legendaryContext) {
-				if other.Power.ID == "TY-D01" {
-					contribution = universalScaleBP(contribution, other.RollValue("benefit", universalTuning.EquipmentDefenseBP))
-				}
-			})
-			base = universalPct(contribution, int64(c.RollValue("benefit", 20)))
-		}
+
 	}
 	if base > 0 {
 		universalEditEffects(d, func(e *domain.SkillEffect) {
@@ -156,15 +140,15 @@ func universalExtendedIncoming(c *legendaryContext, n int32) int32 {
 	switch c.Power.ID {
 	case "TY-D06":
 		if c.IsBasic {
-			bp = c.RollValue("benefit", 2500)
+			bp = c.RollValue("benefit", 5500)
 		}
 	case "TY-D07":
 		if !c.Blow.Magic && !c.Hit.Flag.Has(event.DamageMagic) {
-			bp = c.RollValue("benefit", 2000)
+			bp = c.RollValue("benefit", 5000)
 		}
 	case "TY-D08":
 		if c.Blow.Magic || c.Hit.Flag.Has(event.DamageMagic) {
-			bp = c.RollValue("benefit", 2000)
+			bp = c.RollValue("benefit", 5000)
 		}
 	case "TY-D10":
 		if c.Hit.Flag.Has(event.DamageCrit) {
@@ -175,5 +159,5 @@ func universalExtendedIncoming(c *legendaryContext, n int32) int32 {
 			bp = c.RollValue("benefit", 2500)
 		}
 	}
-	return universalScaleBP(n, -bp)
+	return universalScaleBP(n, -synergyReductionBP(c, bp))
 }

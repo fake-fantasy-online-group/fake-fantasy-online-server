@@ -58,10 +58,6 @@ func TestTargetCountUnlimitedSelections(t *testing.T) {
 	}
 	c := s.legendaryContexts(p, m, combat.Blow{}, event.DamageDealt{})[0]
 	c.Primary = m.ID
-	c.Def.LegendaryBasic = true
-	if got := universalBasicTargets(&c, ids); len(got) != len(ids) || got[0] != m.ID {
-		t.Fatal("fan headcount or primary changed")
-	}
 	c.Def.LegendaryBasic = false
 	c.Def.LegendaryModifiers.UniversalSingleCircle = true
 	c.Def.Area = domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterTarget, Radius: 120}

@@ -12,6 +12,20 @@ import (
 // are never changed. Legacy self clients share the HUD title and aura name.
 func (s *Scene) statusVisual(def domain.StatusDef) (effect, buffName string, position uint8) {
 	effect, buffName, position = def.Name, def.Name, statusPositionMode(def)
+	if def.LegendaryPowerID == "TY-A39" && def.DamageShield > 0 {
+		return "伤害吸收", def.Name, 0
+	}
+	// Existing package references only: blade traces for physical wounds, light
+	// charge for healer afterglow. Display names remain independent of resource keys.
+	if def.SynergyDOTVersion > 0 && def.SynergyDOTNew {
+		switch def.LegendaryPowerID {
+		case "ZS-A01", "JK-A01":
+			return "刀光1", def.Name, 0
+		case "YS-A03":
+			return "光系聚气", def.Name, 0
+		}
+	}
+
 	if rule, ok := s.statusVisuals.Get(def.ID, def.Name); ok {
 		effect = rule.EffectName
 		if rule.UseEffectNameForSelf {

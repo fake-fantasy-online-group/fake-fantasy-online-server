@@ -51,6 +51,7 @@ func (s *Scene) legendaryCasterStatusApplying(source domain.EntityID, target *en
 		}
 	}
 
+	s.synergySnapshotDOT(s.entities[source], def)
 	return true
 }
 func legendaryCasterSlow(d domain.StatusDef) bool {

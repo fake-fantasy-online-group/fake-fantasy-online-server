@@ -93,6 +93,15 @@ const (
 
 // StatusDef 是一个状态在某一级上的定义。
 type StatusDef struct {
+	// Zero is a legacy snapshot: never upgrade saved damage on login.
+	SynergyDOTVersion  int32 `json:",omitempty"`
+	SynergyDOTPVP      bool  `json:",omitempty"`
+	SynergyDOTHurtType int32 `json:",omitempty"`
+	SynergyDOTPhysical bool  `json:",omitempty"`
+	SynergyDOTCopy     bool  `json:",omitempty"`
+	SynergyDOTNew      bool  `json:",omitempty"`
+	SynergySpreadNext  Tick  `json:",omitempty"`
+
 	// Equipment-owned native buff; reconstructed from learned skill, never saved.
 	LegendaryPermanentPower     string               `json:",omitempty"`
 	LegendarySources            []LegendarySourceRef `json:",omitempty"`

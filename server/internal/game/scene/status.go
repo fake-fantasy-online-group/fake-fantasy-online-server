@@ -117,6 +117,9 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	if !s.legendaryCasterStatusApplying(src, target, &def) {
 		return false
 	}
+	if synergyQualifyingDOT(def) && s.entities[src] != nil {
+		def.SynergyDOTPVP = s.equipmentPVP(s.entities[src], target)
+	}
 	s.legendaryFinalizeStatus(&def)
 	def.CombatCausalPath = mergeStatusCausalPath(def.CombatCausalPath, s.legendaryState().causalPath)
 	poisonBurst := s.classSetPoisonBurst(target, def, src)
@@ -445,6 +448,7 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 			}
 			flatReduction += int64(s.petProcAmount(dst, kind)) + int64(s.petFlatReduction(dst, magic))
 		}
+		buckets.SelectiveReductionBP = s.synergyPoolReduction(src, dst, blow, ev)
 		buckets.MitigationBP = extraMitigation
 		buckets.DamageTakenIncreasePct = dst.Status.DamageTakenIncreasePct(magic)
 		buckets.DamageReductionPct = dst.Status.DamageReductionPct(magic)
@@ -1167,9 +1171,17 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 			}
 			// Apply ordinary magic native defense once to the raw snapshot,
 			// before incoming percentage/flat reductions and shields.
-			incoming := combat.RollMagicFixedDefense(clampI32(-hpDelta), 100, e.Stats.MDef, e.Stats.MagicResist)
+			rawWide := synergyScale64(hpDelta, -1, 1)
+			if a.Def.SynergyDOTNew && (a.Def.SynergyDOTPVP || s.equipmentPVP(src, e)) {
+				rawWide /= 4
+			}
+			raw := clampI32(rawWide)
+			incoming := combat.RollMagicFixedDefense(raw, 100, e.Stats.MDef, e.Stats.MagicResist)
+			if a.Def.SynergyDOTPhysical {
+				incoming = combat.RollPhysicalSkill(raw, raw, e.Stats.PhysResist, 100, nil)
+			}
 			periodicBlow := s.legendaryPeriodicBlow(a)
-			dmg := s.periodicMagicBeforeShield(e, s.entities[a.Source], periodicBlow, incoming, scaleBP)
+			dmg := s.periodicMagicBeforeShield(e, src, periodicBlow, incoming, scaleBP, periodicCrit)
 			if a.Def.ID == domain.StatusPoison {
 				dmg = s.legendaryAssassinPoisonIncoming(e, dmg)
 			}
@@ -1182,7 +1194,10 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 				// produced periodic payload is still enemy damage and must not
 				// bypass periodic reduction or mana absorption.
 				periodicContexts = s.universalPeriodicIncomingContexts(s.entities[a.Source], e, a.Source)
-				dmg = universalPeriodicReduce(periodicContexts, dmg, periodicCrit)
+				for i := range periodicContexts {
+					periodicContexts[i].Blow = periodicBlow
+				}
+				// Pure periodic reductions already share the ordinary bucket above.
 			}
 			dmg = s.legendarySecondaryIncoming(src, e, periodicBlow, dmg)
 			dmg = universalPeriodicAbsorb(periodicContexts, dmg)
@@ -1201,6 +1216,9 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 				e.HP -= dmg
 			}
 			ev := event.DamageDealt{Origin: domain.DamageDOTOrigin, Src: a.Source, Dst: e.ID, Amount: dmg, DstHP: e.HP - absorbedHeal, AbsorbHeal: absorbedHeal, Flag: event.DamageMagic}
+			if a.Def.SynergyDOTPhysical {
+				ev.Flag = event.DamageNormal
+			}
 			if periodicCrit {
 				ev.Flag |= event.DamageCrit
 			}

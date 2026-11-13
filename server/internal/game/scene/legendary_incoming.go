@@ -54,14 +54,14 @@ func (s *Scene) legendarySecondaryIncoming(src, dst *entity.Entity, blow combat.
 	return legendaryAllDamageIncoming(s.legendaryIncomingContexts(src, dst, blow, hit), amount)
 }
 
-// All periodic HP damage is magic. Source metadata only refines its element
-// and lineage; a missing source must not turn a tick into a basic attack.
+// Legacy periodic HP damage remains magic. Explicit wound snapshots have an
+// independent physical branch; missing sources never become basic attacks.
 func (s *Scene) legendaryPeriodicBlow(a domain.Active) combat.Blow {
 	skill := a.Def.SkillSnapshotID
 	if skill == 0 {
 		skill = domain.SkillID(a.Def.SourceSkillID)
 	}
-	b := combat.Blow{Magic: true, Origin: domain.DamageDOTOrigin, SkillID: int32(skill), SourceSkillRange: a.Def.DamageSourceRange, SourceTrap: a.Def.DamageSourceTrap}
+	b := combat.Blow{PeriodicPVP: a.Def.SynergyDOTPVP, Magic: !a.Def.SynergyDOTPhysical, Origin: domain.DamageDOTOrigin, SkillID: int32(skill), SourceSkillRange: a.Def.DamageSourceRange, SourceTrap: a.Def.DamageSourceTrap}
 	if a.Def.LegendaryPowerID != "" {
 		b.ProcDepth = 1
 	}
@@ -71,6 +71,12 @@ func (s *Scene) legendaryPeriodicBlow(a domain.Active) combat.Blow {
 	// Native 燃烧 is carried by status1036; its applying skill10421 has
 	// no direct damage/HurtType. Burn remains fire even when another spell
 	// applies it, rather than borrowing that spell's ice/holy element.
+	if a.Def.SynergyDOTHurtType != 0 {
+		b.HurtType = a.Def.SynergyDOTHurtType
+	}
+	if a.Def.SynergyDOTPhysical {
+		b.HurtType = domain.HurtPhysical
+	}
 	if a.Def.ID == 1036 {
 		b.HurtType = domain.HurtFire
 	}

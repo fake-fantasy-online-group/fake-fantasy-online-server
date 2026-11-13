@@ -4,9 +4,16 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "80%",
-        "base": 8000,
+        "text": "200%",
+        "base": 20000,
         "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "dot_total_pct",
+        "text": "6秒总计300%",
+        "base": 300,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -604,8 +611,15 @@
     "parameters": [
       {
         "key": "damage_pct",
-        "text": "直接伤害提高100%",
-        "base": 100,
+        "text": "直接伤害提高250%",
+        "base": 250,
+        "divisor": 1,
+        "unit": "%"
+      },
+      {
+        "key": "dot_total_pct",
+        "text": "6秒总计360%",
+        "base": 360,
         "divisor": 1,
         "unit": "%"
       }
@@ -1286,8 +1300,8 @@
     "parameters": [
       {
         "key": "tick_bp",
-        "text": "中毒伤害提高100%",
-        "base": 10000,
+        "text": "中毒伤害提高200%",
+        "base": 20000,
         "divisor": 100,
         "unit": "%"
       }
@@ -1344,8 +1358,8 @@
     "parameters": [
       {
         "key": "tick_bp",
-        "text": "中毒伤害提高100%",
-        "base": 10000,
+        "text": "中毒伤害提高200%",
+        "base": 20000,
         "divisor": 100,
         "unit": "%"
       }

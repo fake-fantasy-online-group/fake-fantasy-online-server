@@ -49,7 +49,7 @@ func TestLegendaryPowerCurrentValueAll330AuthoredPrimaryParameters(t *testing.T)
 		roll int32
 		want string
 	}{
-		{"TY-A01", 8123, "56%"}, {"TY-A01", 7500, "52%"}, {"TY-A01", 0, "70%"},
+		{"TY-A01", 8123, "28.43%"}, {"TY-A01", 7500, "26.25%"}, {"TY-A01", 0, "35%"},
 		{"SS-A01", 8123, "56.86%"}, {"SS-A05", 8123, "60%"}, {"SS-A08", 8123, "44%"}, {"SS-A13", 8123, "69%"},
 		{"SS-U06", 0, ""}, {"unknown", 8123, ""}, {"TY-A01", 1, ""},
 	} {

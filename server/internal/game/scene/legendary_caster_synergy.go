@@ -240,7 +240,7 @@ func init() {
 			if _, ok := legendaryCasterSkill(c, 10421); !ok {
 				return
 			}
-			d.LegendaryModifiers.DamageTickBP += c.RollValue("tick_bp", 8200)
+			d.LegendaryModifiers.DamageTickBP += c.RollValue("tick_bp", 18000)
 		}
 	},
 	})

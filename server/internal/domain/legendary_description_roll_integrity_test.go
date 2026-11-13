@@ -38,12 +38,23 @@ func TestLegendaryConciseDescriptionsAllParametersAtEveryQuality(t *testing.T) {
 
 func TestUniversalSweepDescriptionContainsOnlyItsEffect(t *testing.T) {
 	for id, want := range map[string]string{
-		"TY-A01": "普通攻击改为前方120度扇形攻击，范围等于普通攻击距离。选中目标保留100%伤害，范围内其他敌人各承受70%普通攻击伤害。",
 		"TY-A02": "矩形技能的长度提高60%，宽度不变。",
 	} {
 		p, _ := LegendaryPower(id)
 		if p.Effect != want {
 			t.Errorf("%s: %s", id, p.Effect)
 		}
+	}
+}
+
+func TestUniversalCashoutReplacesSweep(t *testing.T) {
+	p, _ := LegendaryPower("TY-A01")
+	for _, v := range []string{"35%", "160", "冷却1秒", "复制体不可兑现"} {
+		if !strings.Contains(p.Effect, v) {
+			t.Fatal(p.Effect)
+		}
+	}
+	if strings.Contains(p.Effect, "普通攻击") {
+		t.Fatal("retired sweep remains")
 	}
 }

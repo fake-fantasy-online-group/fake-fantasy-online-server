@@ -6,8 +6,10 @@ import (
 )
 
 func init() {
-	registerLegendarySynergyHandler("TY-A35", legendaryHandler{ModifyAppearance: func(c *legendaryContext, look *domain.Appearance) {
-		look.AtkDist = uint16(min(int32(65535), universalScaleBP(int32(look.AtkDist), c.RollValue("benefit", 5000))))
+	registerLegendarySynergyHandler("TY-A35", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
+		if !c.IsBasic && !d.LegendaryBasic && d.Kind.Active() {
+			d.Dist = universalScaleBP(d.Dist, c.RollValue("benefit", 5000))
+		}
 	}})
 }
 

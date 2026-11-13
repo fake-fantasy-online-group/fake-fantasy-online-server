@@ -15,9 +15,9 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("YS-A03", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryLightBolt {
-			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 6000)
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 18000)
 		}
-	}, SkillResolved: func(c *legendaryContext) {
+	}, AfterHit: synergyProfessionDOT, SkillResolved: func(c *legendaryContext) {
 		if c.Skill != legendaryLightBolt || c.Target == nil || c.Target.Status == nil {
 			return
 		}

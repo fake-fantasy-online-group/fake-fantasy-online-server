@@ -427,16 +427,8 @@ func (s *Scene) legendaryBeforeDamage(src, dst *entity.Entity, blow combat.Blow,
 	}
 	if incoming {
 		contexts := s.legendaryIncomingContexts(src, dst, blow, hit)
-		base := amount
-		delta := int64(0)
-		for _, c := range contexts {
-			c.BeforeHP = dst.HP
-			c.PreviousHP = dst.HP
-			if h := legendaryHandlers[c.Power.ID].ModifyIncoming; h != nil {
-				delta += int64(h(&c, base)) - int64(base)
-			}
-		}
-		amount = max(int32(0), clampI32(int64(base)+delta))
+		// ModifyIncoming values have joined the shared pre-shield budget.
+
 		amount = legendaryAllDamageIncoming(contexts, amount)
 		{
 			// Causal producer identity, not generated origin, bounds reactions.

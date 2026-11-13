@@ -10,7 +10,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "连环枪法伤害提高80%。",
+    "effect": "连环枪法伤害提高200%。命中附加流血：6秒总计300%面板物攻的物理持续伤害。新生成持续伤害对玩家为25%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -980,7 +980,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "罡气剑的直接伤害提高100%。",
+    "effect": "罡气剑的直接伤害提高250%。命中附加流血：6秒总计360%面板物攻的物理持续伤害。新生成持续伤害对玩家为25%。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2110,7 +2110,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "淬毒术造成的每次中毒伤害提高100%。",
+    "effect": "淬毒术造成的每次中毒伤害提高200%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2230,7 +2230,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "陷阱：毒雾造成的每次中毒伤害提高100%。",
+    "effect": "陷阱：毒雾造成的每次中毒伤害提高200%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3240,7 +3240,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "已学习燃烧时，风焰术每次命中必定附加当前等级的燃烧，这份燃烧每跳伤害提高82%。",
+    "effect": "已学习燃烧时，风焰术每次命中必定附加当前等级的燃烧，这份燃烧每跳伤害提高180%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3930,7 +3930,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "光弹术直接伤害提高60%。命中存活目标时，移除其1份可移除的持续回血状态。",
+    "effect": "光弹术直接伤害提高180%。命中存活目标时，移除其1份可移除的持续回血状态。命中附加灼光：6秒总计420%面板魔攻的光系持续伤害。新生成持续伤害对玩家为25%。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4851,7 +4851,7 @@
   },
   {
     "id": "TY-A01",
-    "name": "普攻横扫",
+    "name": "余痕兑现",
     "category": "攻击",
     "class": "全职业",
     "min_level": 10,
@@ -4863,7 +4863,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "普通攻击改为前方120度扇形攻击，范围等于普通攻击距离。选中目标保留100%伤害，范围内其他敌人各承受70%普通攻击伤害。",
+    "effect": "主动直接伤害技能命中时，消耗目标本人持续伤害剩余余额的35%，在160范围结算一次；每次施放最多一次，冷却1秒。复制体不可兑现，玩家目标伤害为25%。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5024,7 +5024,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "单体敌方直接伤害技能，伤害系数提高60%。",
+    "effect": "单体敌方直接伤害技能，伤害系数提高150%。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5035,7 +5035,7 @@
   },
   {
     "id": "TY-A09",
-    "name": "必中手",
+    "name": "技击必中",
     "category": "攻击",
     "class": "全职业",
     "min_level": 26,
@@ -5047,7 +5047,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "普通攻击必定命中。",
+    "effect": "主动直接伤害技能必定命中；普通攻击不受影响。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5058,7 +5058,7 @@
   },
   {
     "id": "TY-A10",
-    "name": "迅击",
+    "name": "裂痕扩散",
     "category": "攻击",
     "class": "全职业",
     "min_level": 28,
@@ -5070,7 +5070,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "普通攻击的出手间隔缩短20%。",
+    "effect": "本人原始持续伤害每2秒最多扩散一次，向180范围最近6名合法敌人复制50%的每跳伤害与原到期时间；复制体不可扩散或兑现。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5254,7 +5254,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "自身技能造成的中毒，每次伤害提高100%。",
+    "effect": "本人合格技能或装备持续伤害的6秒等效基础总额至少为施加时面板攻击的4倍，每跳伤害提高200%；与职业周期增伤同池，最多提高500%。刺客10倍物攻毒不重复抬底，百分比扣血及场景危害除外。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5346,7 +5346,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "自身技能造成的中毒和燃烧，持续时间提高50%。",
+    "effect": "本人合格技能或装备持续伤害持续时间提高100%，保持每跳伤害；重施不重置下一跳。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5633,7 +5633,7 @@
   },
   {
     "id": "TY-A35",
-    "name": "伸锋",
+    "name": "远投",
     "category": "攻击",
     "class": "全职业",
     "min_level": 34,
@@ -5645,7 +5645,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "普通攻击距离提高50%。",
+    "effect": "主动技能施法距离提高50%；普通攻击不受影响。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5679,7 +5679,7 @@
   },
   {
     "id": "TY-A37",
-    "name": "稳刃",
+    "name": "蓄势爆发",
     "category": "攻击",
     "class": "全职业",
     "min_level": 22,
@@ -5691,7 +5691,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "普通攻击的伤害系数提高75%。",
+    "effect": "主动直接伤害技能首次命中时有25%概率追加800%施加时面板攻击伤害，冷却4秒；每次施放只判定一次，追加伤害不再触发追加。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5725,7 +5725,7 @@
   },
   {
     "id": "TY-A39",
-    "name": "铠锋",
+    "name": "施法护势",
     "category": "攻击",
     "class": "全职业",
     "min_level": 46,
@@ -5737,7 +5737,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "普通攻击的基础伤害，额外增加装备提供的物理防御的20%。",
+    "effect": "主动直接伤害技能命中时，获得持续4秒、吸收自身最大生命20%伤害的护盾，冷却4秒；每次施放最多一次。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5783,7 +5783,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "装备提供的物理防御提高40%。",
+    "effect": "装备提供的物理防御提高200%。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5806,7 +5806,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "装备提供的魔法防御提高40%。",
+    "effect": "装备提供的魔法防御提高200%。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5829,7 +5829,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "装备提供的最大生命提高30%。",
+    "effect": "装备提供的最大生命提高120%。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5875,7 +5875,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "受到敌方范围直接伤害时，伤害降低25%。",
+    "effect": "受到敌方范围直接伤害时，伤害降低55%。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5898,7 +5898,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "受到普通攻击的直接伤害降低25%。",
+    "effect": "受到普通攻击的直接伤害降低55%。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5921,7 +5921,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "受到的直接物理伤害降低20%。",
+    "effect": "受到的直接物理伤害降低50%。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5944,7 +5944,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "受到的魔法伤害降低20%。",
+    "effect": "受到的魔法伤害降低50%。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -6059,7 +6059,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "他人为你施加的技能吸收护盾，初始护盾量提高40%。",
+    "effect": "他人为你施加的技能吸收护盾，初始护盾量提高150%。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -6128,7 +6128,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "本人技能施加的吸收护盾，初始护盾量提高60%。",
+    "effect": "本人技能施加的吸收护盾，初始护盾量提高200%。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -6197,7 +6197,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "受到敌方持续伤害时，伤害降低25%。",
+    "effect": "受到敌方持续伤害时，伤害降低60%。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -6254,7 +6254,7 @@
   },
   {
     "id": "TY-U02",
-    "name": "普攻汲能",
+    "name": "技击回法",
     "category": "通用",
     "class": "全职业",
     "min_level": 12,
@@ -6266,7 +6266,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "普通攻击成功命中时恢复10点法力。",
+    "effect": "主动直接伤害技能命中时恢复10点法力，每次施放最多一次，冷却1秒。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",

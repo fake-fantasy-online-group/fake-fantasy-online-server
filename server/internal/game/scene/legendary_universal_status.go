@@ -8,12 +8,13 @@ import (
 )
 
 func universalNativeStatus(c *legendaryContext, d *domain.StatusDef) {
-	if d == nil || d.LegendaryModifiers.Applied || d.LegendaryPowerID != "" || (!d.SkillApplied && d.SkillSnapshotID == 0 && d.SourceSkillID == 0) {
+	if d == nil || d.LegendaryModifiers.Applied || (!d.SkillApplied && d.SkillSnapshotID == 0 && d.SourceSkillID == 0) {
 		return
 	}
 	switch c.Power.ID {
 	case "TY-A18":
-		if d.ID == domain.StatusPoison && d.IntervalSec > 0 {
+		if synergyQualifyingDOT(*d) {
+			d.SynergyDOTVersion = 1
 			d.LegendaryModifiers.DamageTickBP += c.RollValue("benefit", universalTuning.PoisonTickBP)
 		}
 	case "TY-A27":
@@ -59,6 +60,12 @@ func (s *Scene) legendaryFinalizeStatus(d *domain.StatusDef) {
 		return
 	}
 	m := &d.LegendaryModifiers
+	oldDuration := d.DurationSec
+	defer func() {
+		if d.SynergyDOTVersion > 0 && oldDuration > 0 && d.ClassSetPoisonBonusTotal > 0 {
+			d.ClassSetPoisonBonusTotal = synergyScale64(d.ClassSetPoisonBonusTotal, int64(d.DurationSec), int64(oldDuration))
+		}
+	}()
 	m.Applied = true
 	if (d.DurationSec > 0 || d.LegendaryDurationMS > 0) && (m.DurationBP != 0 || m.ControlDurationReductionBP != 0 || m.DurationBonusMS != 0) {
 		base := d.LegendaryDurationMS
@@ -115,17 +122,17 @@ func (s *Scene) legendaryPeriodicAmount(a domain.Active, delta int64) int64 {
 }
 func (s *Scene) legendaryPeriodicAmountResult(a domain.Active, delta int64) (int64, bool) {
 	crit := false
-	if a.Def.LegendaryPowerID != "" {
+	if a.Def.LegendaryPowerID != "" && a.Def.SynergyDOTVersion == 0 {
 		return delta, false
 	}
 	bp := a.Def.LegendaryModifiers.HealingTickBP
 	if delta < 0 {
-		bp = a.Def.LegendaryModifiers.DamageTickBP
+		bp = min(int32(50000), max(int32(0), a.Def.LegendaryModifiers.DamageTickBP))
 	}
-	delta = delta * (10000 + int64(bp)) / 10000
+	delta = synergyScale64(delta, 10000+int64(bp), 10000)
 	if delta < 0 && a.Def.LegendaryModifiers.PeriodicCanCrit && s.rng.Intn(10000) < int(min(int32(10000), a.Def.LegendaryModifiers.PeriodicCritChanceBP)) {
 		crit = true
-		delta = delta * (20000 + int64(a.Def.LegendaryModifiers.PeriodicCritBonusBP)) / 10000
+		delta = synergyScale64(delta, 20000+int64(a.Def.LegendaryModifiers.PeriodicCritBonusBP), 10000)
 	}
 	return delta, crit
 }
@@ -155,11 +162,11 @@ func universalSynergyIncoming(c *legendaryContext, n int32) int32 {
 	switch c.Power.ID {
 	case "TY-D05":
 		if c.Blow.Area && c.Blow.Origin != domain.DamageDOTOrigin {
-			return universalScaleBP(n, -c.RollValue("benefit", universalTuning.AreaMitigationBP))
+			return universalScaleBP(n, -synergyReductionBP(c, c.RollValue("benefit", universalTuning.AreaMitigationBP)))
 		}
 	case "TY-D19":
 		if c.Blow.Origin == domain.DamageDOTOrigin {
-			return universalScaleBP(n, -c.RollValue("benefit", universalTuning.PeriodicMitigationBP))
+			return universalScaleBP(n, -synergyReductionBP(c, c.RollValue("benefit", universalTuning.PeriodicMitigationBP)))
 		}
 	case "TY-D11":
 		taken := min(max(int32(0), c.Owner.MP), domain.SaturateInt32(int64(n)*int64(c.RollValue("benefit", universalTuning.ManaAbsorbBP))/10000))
@@ -195,7 +202,7 @@ func universalPeriodicReduce(contexts []legendaryContext, n int32, critical ...b
 			delta += int64(universalScaleBP(n, -c.RollValue("benefit", 3000))) - int64(n)
 		}
 	}
-	return max(int32(0), domain.SaturateInt32(int64(n)+delta))
+	return max(int32(0), domain.SaturateInt32(int64(n)+max(delta, -int64(n)*7000/10000)))
 }
 func universalPeriodicAbsorb(contexts []legendaryContext, n int32) int32 {
 	for _, c := range contexts {
@@ -212,8 +219,8 @@ func (s *Scene) universalPeriodicIncoming(src, dst *entity.Entity, n int32, sour
 	contexts := s.universalPeriodicIncomingContexts(src, dst, sourceID...)
 	return universalPeriodicAbsorb(contexts, universalPeriodicReduce(contexts, n))
 }
-func universalBasicMana(c *legendaryContext) {
-	if !c.IsBasic || c.IsChild || c.RootID == 0 || c.Blow.ProcDepth != 0 || c.Blow.Origin != domain.DamageNormalOrigin || c.Hit.Flag.Has(event.DamageMiss) || c.Owner == nil || c.Target == nil || c.Owner == c.Target || sameParty(c.Owner, c.Target) {
+func universalSkillMana(c *legendaryContext) {
+	if !synergyNativeHit(c) {
 		return
 	}
 	st := c.State(0, "basic-root")
@@ -221,6 +228,9 @@ func universalBasicMana(c *legendaryContext) {
 		return
 	}
 	st.RootID = c.RootID
+	if !c.Ready(1000) {
+		return
+	}
 	c.Owner.MP = min(c.Owner.MaxMP, c.Owner.MP+c.RollValue("benefit", universalTuning.BasicManaFlat))
 	c.Scene.emitAttributesIfPlayer(c.Owner)
 }

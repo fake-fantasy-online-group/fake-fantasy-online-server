@@ -77,7 +77,7 @@ func universalExtendedPrepare(c *legendaryContext, d *domain.SkillDef) {
 			d.Dist = universalScaleBP(d.Dist, c.RollValue("benefit", 4000))
 		}
 	case "TY-A09":
-		if d.LegendaryBasic {
+		if !d.LegendaryBasic && !c.IsBasic && !c.IsChild {
 			universalEditEffects(d, func(e *domain.SkillEffect) {
 				if e.Kind == domain.EffectDamage {
 					e.GuaranteedHit = true
