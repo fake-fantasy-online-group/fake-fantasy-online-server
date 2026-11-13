@@ -1215,7 +1215,7 @@ func (s *Scene) tickStatus(e *entity.Entity, a domain.Active) {
 			} else {
 				e.HP -= dmg
 			}
-			ev := event.DamageDealt{Origin: domain.DamageDOTOrigin, Src: a.Source, Dst: e.ID, Amount: dmg, DstHP: e.HP - absorbedHeal, AbsorbHeal: absorbedHeal, Flag: event.DamageMagic}
+			ev := event.DamageDealt{Origin: domain.DamageDOTOrigin, Periodic: true, Src: a.Source, Dst: e.ID, Amount: dmg, DstHP: e.HP - absorbedHeal, AbsorbHeal: absorbedHeal, Flag: event.DamageMagic}
 			if a.Def.SynergyDOTPhysical {
 				ev.Flag = event.DamageNormal
 			}

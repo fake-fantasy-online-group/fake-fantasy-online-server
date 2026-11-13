@@ -32,6 +32,9 @@ type DamageDealt struct {
 	Origin    domain.DamageOrigin
 	RootID    uint64
 	ProcDepth uint8
+	// Periodic remains true even for terminal legendary proc-origin ticks.
+	// Internal routing/presentation only; the original source identity is retained.
+	Periodic bool
 
 	Src, Dst domain.EntityID
 	Amount   int32

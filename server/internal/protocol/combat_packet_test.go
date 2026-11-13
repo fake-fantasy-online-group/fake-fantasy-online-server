@@ -35,3 +35,11 @@ func TestCombatDamageEncodingAndOwnership(t *testing.T) {
 		}
 	}
 }
+
+func TestLegendaryPeriodicDamageKeepsSourceAndSkillPresentation(t *testing.T) {
+	e := event.DamageDealt{Src: 123, Dst: 456, Amount: 53, DstHP: 789, Origin: domain.DamageProcOrigin, ProcDepth: 1, Periodic: true}
+	p := CombatDamage(e)
+	if len(p) != 19 || p[14]&wireHitSkill == 0 || int32(binary.LittleEndian.Uint32(p[2:])) != 123 || int32(binary.LittleEndian.Uint32(p[15:])) != 789 {
+		t.Fatalf("periodic packet changed attribution/HP or plays basic presentation: %x", p)
+	}
+}

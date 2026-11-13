@@ -914,7 +914,7 @@ func encodeDamage(e event.DamageDealt) []byte {
 	// Status ticks have no SkillID, but are explicitly marked as periodic.
 	// Classify each result, not its caster: a basic hit followed by an equipment
 	// proc (or interleaved with a multi-hit skill) retains its own weapon sound.
-	if e.SkillID > 0 || e.Origin == domain.DamageDOTOrigin {
+	if e.SkillID > 0 || e.Origin == domain.DamageDOTOrigin || e.Periodic {
 		flags |= wireHitSkill
 	}
 	return newFixedW(SCCombat, 19).

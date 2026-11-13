@@ -51,3 +51,7 @@ magical; its initial direct physical strike remains unchanged.
 - `scene/TestPeriodic*`, `TestRiftPeriodic*`: real magic defenses and reductions,
   shields, live changes, missing sources, zero damage, independent ground cadence
   and restore/rearm behavior.
+
+## 脱场来源与重登观察
+
+冻结的目标DOT可合法持续至原到期时间，不因施法者下线/转场或以新实体号重登而重置余额、续期或改归属。周期伤害的内部Periodic标记独立于legendary proc origin；在线施法者仍使用原有单收件人优化，旧来源实体已不在players时改走受击方可见性约束的观察流。这样重登可见目标的权威HP继续更新，与仍合法存在的状态图标/目标FX一致；禁止把旧实体号重绑成当前玩家或把目标冒充来源。

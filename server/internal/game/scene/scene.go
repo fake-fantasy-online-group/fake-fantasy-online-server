@@ -1517,7 +1517,16 @@ func (s *Scene) emit(ev event.Event) {
 	// lethal result remains a broadcast because it starts the native death animation.
 	if hit, ok := ev.(event.DamageDealt); ok && !hit.Flag.Has(event.DamageFatal) {
 		if target := s.entities[hit.Dst]; target != nil && target.Kind == domain.KindMonster {
-			s.emitTo(hit.Src, ev)
+			// Frozen DOTs may outlive the casting entity. Rejoining uses a new
+			// entity ID: sending only to the old ID silently loses authoritative
+			// HP while the legitimately surviving status/FX remains visible.
+			// Keep attribution and expiry unchanged; only fall back to the
+			// ordinary visibility-gated observer stream when no live caster exists.
+			if hit.Periodic && s.players[hit.Src] == nil {
+				s.push(ev, 0, 0)
+			} else {
+				s.emitTo(hit.Src, ev)
+			}
 			if hit.Amount > 0 && !hit.Flag.Has(event.DamageMiss) {
 				s.monsterSpeak(target, domain.MonsterSceneBeHit)
 			}
