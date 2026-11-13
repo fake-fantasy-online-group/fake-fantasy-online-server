@@ -154,9 +154,26 @@ func synergyOnce(c *legendaryContext, phase string) bool {
 	return true
 }
 func synergySkillProc(c *legendaryContext) {
-	if !synergyNativeHit(c) || !synergyOnce(c, "skill-proc-root") || c.Scene.rng.Intn(100) >= 25 || !c.Ready(4000) {
+	if !synergyNativeHit(c) {
 		return
 	}
+	// One chance/ICD decision per cast, not one victim per cast. An admitted
+	// area cast pays the full terminal payload to every distinct native hit.
+	root := c.State(0, "skill-proc-root")
+	if root.RootID != c.RootID {
+		root.RootID, root.Stacks = c.RootID, 0
+		if c.Scene.rng.Intn(100) < 25 && c.Ready(4000) {
+			root.Stacks = 1
+		}
+	}
+	if root.Stacks == 0 {
+		return
+	}
+	target := c.State(c.Target.ID, "skill-proc-target")
+	if target.RootID == c.RootID {
+		return
+	}
+	target.RootID = c.RootID
 	n := domain.SaturateInt32(int64(c.Attack(c.Blow.Magic)) * int64(c.RollValue("proc_pct", 800)) / 100)
 	if c.Scene.equipmentPVP(c.Owner, c.Target) {
 		n /= 4
@@ -258,13 +275,9 @@ func synergySpread(c *legendaryContext, a domain.Active) {
 	copy.Def.SynergyDOTCopy = true
 	copy.Def.SynergyDOTVersion = 1
 	copy.Def.LegendaryModifiers.Applied = true
-	count := 0
 	for _, target := range c.Enemies(c.Target.Pos, 180, 0) {
 		if target.ID == c.Target.ID {
 			continue
-		}
-		if count >= 6 {
-			break
 		}
 		incoming := copy
 		exists := false
@@ -287,7 +300,6 @@ func synergySpread(c *legendaryContext, a domain.Active) {
 		if c.Scene.applyStatusDef(target, incoming.Def, a.Source) {
 			target.Status.RestoreTransferredStatusBalance(a.Source, incoming)
 			c.Scene.pushStatusSnapshots(target)
-			count++
 		}
 	}
 }

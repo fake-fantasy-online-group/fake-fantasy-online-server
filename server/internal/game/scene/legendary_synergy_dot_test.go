@@ -109,8 +109,8 @@ func TestSynergySpreadTerminalAndExpiry(t *testing.T) {
 			synergySpread(c, x)
 		})
 	}
-	if n != 6 {
-		t.Fatalf("spread targets%d", n)
+	if n != 8 {
+		t.Fatalf("spread must include all eligible targets, got%d", n)
 	}
 	s.tick = a.ExpireAt + 1
 	s.stepStatus()

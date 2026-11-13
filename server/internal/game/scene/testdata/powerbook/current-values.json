@@ -937,7 +937,7 @@
       {
         "powerId": "TY-A10",
         "unlocked": false,
-        "rangeText": "向180范围最近6名合法敌人复制37.5%～50%的每跳伤害与原到期时间",
+        "rangeText": "向180范围内所有合法敌人复制37.5%～50%的每跳伤害与原到期时间",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -3041,7 +3041,7 @@
         "powerId": "TY-A10",
         "unlocked": true,
         "currentValueText": "50%",
-        "rangeText": "向180范围最近6名合法敌人复制37.5%～50%的每跳伤害与原到期时间",
+        "rangeText": "向180范围内所有合法敌人复制37.5%～50%的每跳伤害与原到期时间",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -5311,7 +5311,7 @@
         "powerId": "TY-A10",
         "unlocked": true,
         "currentValueText": "37.5%",
-        "rangeText": "向180范围最近6名合法敌人复制37.5%～50%的每跳伤害与原到期时间",
+        "rangeText": "向180范围内所有合法敌人复制37.5%～50%的每跳伤害与原到期时间",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -7581,7 +7581,7 @@
         "powerId": "TY-A10",
         "unlocked": true,
         "currentValueText": "40.61%",
-        "rangeText": "向180范围最近6名合法敌人复制37.5%～50%的每跳伤害与原到期时间",
+        "rangeText": "向180范围内所有合法敌人复制37.5%～50%的每跳伤害与原到期时间",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -9851,7 +9851,7 @@
         "powerId": "TY-A10",
         "unlocked": true,
         "currentValueText": "50%",
-        "rangeText": "向180范围最近6名合法敌人复制37.5%～50%的每跳伤害与原到期时间",
+        "rangeText": "向180范围内所有合法敌人复制37.5%～50%的每跳伤害与原到期时间",
         "primaryRangeText": "37.5%～50%"
       },
       {

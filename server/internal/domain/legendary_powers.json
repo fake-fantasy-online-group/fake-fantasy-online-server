@@ -5070,7 +5070,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "本人原始持续伤害每2秒最多扩散一次，向180范围最近6名合法敌人复制50%的每跳伤害与原到期时间；复制体不可扩散或兑现。",
+    "effect": "本人原始持续伤害每2秒最多扩散一次，向180范围内所有合法敌人复制50%的每跳伤害与原到期时间；复制体不可扩散或兑现。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5691,7 +5691,7 @@
       "头盔",
       "手套"
     ],
-    "effect": "主动直接伤害技能首次命中时有25%概率追加800%施加时面板攻击伤害，冷却4秒；每次施放只判定一次，追加伤害不再触发追加。",
+    "effect": "主动直接伤害技能每次施放有25%概率触发爆发，对本次施放命中的所有合法敌人各追加800%施加时面板攻击伤害，冷却4秒；每次施放只判定一次、同目标最多追加一次，追加伤害不再触发追加。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
