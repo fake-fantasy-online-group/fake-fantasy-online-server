@@ -1095,7 +1095,7 @@
       {
         "powerId": "TY-A37",
         "unlocked": false,
-        "rangeText": "主动直接伤害技能首次命中时有25%概率追加600%～800%施加时面板攻击伤害",
+        "rangeText": "对本次施放命中的所有合法敌人各追加600%～800%施加时面板攻击伤害",
         "primaryRangeText": "600%～800%"
       },
       {
@@ -3224,7 +3224,7 @@
         "powerId": "TY-A37",
         "unlocked": true,
         "currentValueText": "800%",
-        "rangeText": "主动直接伤害技能首次命中时有25%概率追加600%～800%施加时面板攻击伤害",
+        "rangeText": "对本次施放命中的所有合法敌人各追加600%～800%施加时面板攻击伤害",
         "primaryRangeText": "600%～800%"
       },
       {
@@ -5494,7 +5494,7 @@
         "powerId": "TY-A37",
         "unlocked": true,
         "currentValueText": "600%",
-        "rangeText": "主动直接伤害技能首次命中时有25%概率追加600%～800%施加时面板攻击伤害",
+        "rangeText": "对本次施放命中的所有合法敌人各追加600%～800%施加时面板攻击伤害",
         "primaryRangeText": "600%～800%"
       },
       {
@@ -7764,7 +7764,7 @@
         "powerId": "TY-A37",
         "unlocked": true,
         "currentValueText": "649%",
-        "rangeText": "主动直接伤害技能首次命中时有25%概率追加600%～800%施加时面板攻击伤害",
+        "rangeText": "对本次施放命中的所有合法敌人各追加600%～800%施加时面板攻击伤害",
         "primaryRangeText": "600%～800%"
       },
       {
@@ -10034,7 +10034,7 @@
         "powerId": "TY-A37",
         "unlocked": true,
         "currentValueText": "800%",
-        "rangeText": "主动直接伤害技能首次命中时有25%概率追加600%～800%施加时面板攻击伤害",
+        "rangeText": "对本次施放命中的所有合法敌人各追加600%～800%施加时面板攻击伤害",
         "primaryRangeText": "600%～800%"
       },
       {
