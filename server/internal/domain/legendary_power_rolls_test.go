@@ -231,7 +231,7 @@ func TestPowerBookRangeTextJSON(t *testing.T) {
 	if err = json.Unmarshal(raw, &decoded); err != nil {
 		t.Fatal(err)
 	}
-	if decoded.RangeText != "连环枪法伤害提高150%～200%" {
+	if decoded.RangeText != "连环枪法伤害提高150%～200%\n命中附加流血：6秒总计225%～300%面板物攻的物理持续伤害" {
 		t.Fatalf("codex range contract: %s", raw)
 	}
 }
