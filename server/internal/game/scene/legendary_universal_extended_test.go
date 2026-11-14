@@ -12,7 +12,7 @@ func TestLegendaryUniversalExtendedGeometryAndUtilities(t *testing.T) {
 		effect domain.EffectKind
 		want   int32
 	}{
-		{"TY-A02", domain.EffectDamage, 160}, {"TY-A03", domain.EffectDamage, 150}, {"TY-A07", domain.EffectDamage, 200}, {"TY-A09", domain.EffectDamage, 0}, {"TY-A19", domain.EffectDamageMP, 8000}, {"TY-A21", domain.EffectPlaceTrap, 150}, {"TY-U01", domain.EffectDamage, 700}, {"TY-U04", domain.EffectHeal, 70}, {"TY-U06", domain.EffectRestoreMP, 150}, {"TY-U07", domain.EffectTeleportPoint, 140}, {"TY-U16", domain.EffectHeal, 160}, {"TY-U17", domain.EffectResurrect, 75}, {"TY-U18", domain.EffectHeal, 9000}, {"TY-U19", domain.EffectRevealInvisible, 200},
+		{"TY-A02", domain.EffectDamage, 160}, {"TY-A03", domain.EffectDamage, 150}, {"TY-A07", domain.EffectDamage, 200}, {"TY-A09", domain.EffectDamage, 0}, {"TY-A19", domain.EffectDamageMP, 8000}, {"TY-A21", domain.EffectPlaceTrap, 150}, {"TY-U01", domain.EffectDamage, 400}, {"TY-U04", domain.EffectHeal, 100}, {"TY-U06", domain.EffectRestoreMP, 100}, {"TY-U07", domain.EffectTeleportPoint, 180}, {"TY-U16", domain.EffectHeal, 200}, {"TY-U17", domain.EffectResurrect, 100}, {"TY-U18", domain.EffectHeal, 10000}, {"TY-U19", domain.EffectRevealInvisible, 250},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m, _ := universalTestContext(t, tc.id)
@@ -106,7 +106,8 @@ func TestLegendaryUniversalNativeStatusCostClassification(t *testing.T) {
 			s.statuses = map[domain.StatusKey]domain.StatusDef{{ID: tc.status.ID, Level: 1}: tc.status}
 			d := domain.SkillDef{ID: 123, MPCost: 100, Statuses: []domain.StatusApplication{{ID: tc.status.ID, Level: 1}}}
 			s.legendaryPrepareSkill(p, &d, m.ID)
-			if d.MPCost != 70 {
+			// Redesigned TY-U12/U14 no longer discount mana; cost stays native.
+			if d.MPCost != 100 {
 				t.Fatalf("cost%d", d.MPCost)
 			}
 		})
@@ -216,8 +217,9 @@ func TestLegendaryUniversalNativeLifestealAndHealCombine(t *testing.T) {
 	warriorEquip(t, s, p, "TY-U16", domain.SlotRing)
 	d := domain.SkillDef{ID: 10103, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100}, {Kind: domain.EffectRestoreHP, Target: domain.EffectTargetCaster, SourceAttackPct: 100, RequiresPreviousLanded: true}}}
 	s.legendaryPrepareSkill(p, &d, m.ID)
-	if d.Effects[1].SourceAttackPct != 220 {
-		t.Fatalf("life+heal should add60+60, got%d", d.Effects[1].SourceAttackPct)
+	// Redesigned TY-U16 amps skill HealingBP, not lifesteal SourceAttackPct.
+	if d.Effects[1].SourceAttackPct != 160 {
+		t.Fatalf("life+heal should keep TY-A17 +60 only, got%d", d.Effects[1].SourceAttackPct)
 	}
 }
 func TestLegendaryUniversalBasicReachNativeAppearance(t *testing.T) {
@@ -256,7 +258,7 @@ func TestLegendaryUniversalDetectionUsesNativeRadius(t *testing.T) {
 	s, p, m, _ := universalTestContext(t, "TY-U19")
 	d := domain.SkillDef{ID: 123, Radius: 100, Effects: []domain.SkillEffect{{Kind: domain.EffectDetectTrap}}}
 	s.legendaryPrepareSkill(p, &d, m.ID)
-	if d.Radius != 200 {
+	if d.Radius != 250 {
 		t.Fatalf("native detection radius%d", d.Radius)
 	}
 }

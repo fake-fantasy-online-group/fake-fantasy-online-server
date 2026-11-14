@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Scene) legendaryCasterShieldResolved(target, attacker *entity.Entity, before []domain.Active) {
-
+	typifiedOnShieldsResolved(s, target, before)
 }
 func init() {
 

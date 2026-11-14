@@ -78,7 +78,7 @@ func TestPowerBookProfessionPagesAndSharedWire(t *testing.T) {
 					}
 					book[power.ID] = roll
 				}
-				if power.Class == "全职业" || tc.Class != "" && power.Class == tc.Class {
+				if domain.LegendaryPowerVisibleToClass(power.Class, tc.Class) {
 					expected[power.ID] = true
 				}
 			}
@@ -202,7 +202,7 @@ func TestPowerBookProfessionChangeRejectsOldCursorWithoutDeletingRecords(t *test
 		t.Fatal(reply)
 	}
 	for _, row := range reply.Message.Powers {
-		if row.Class != "战士" && row.Class != "全职业" {
+		if !domain.LegendaryPowerVisibleToClass(row.Class, "战士") {
 			t.Fatal("old class leaked", row)
 		}
 	}

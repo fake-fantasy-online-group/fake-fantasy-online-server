@@ -60,9 +60,12 @@ func TestLegendarySplitPolicyEveryProfessionAndSlot(t *testing.T) {
 				if len(ActiveLegendaryPowers(worn, defs, ch)) != 1 {
 					t.Fatal("new slot power does not activate", race, slot, power.ID)
 				}
-				ch.Race = (race + 1) % 5
-				if got := len(ActiveLegendaryPowers(worn, defs, ch)); (got == 1) != (categoryRoll == 1) {
-					t.Fatal("wrong profession activated class power", race, slot, power.ID)
+				next := (race + 1) % 5
+				ch.Race = next
+				classNames := []string{"战士", "剑客", "刺客", "药师", "术士"}
+				wantActive := categoryRoll == 1 || LegendaryPowerVisibleToClass(power.Class, classNames[next])
+				if got := len(ActiveLegendaryPowers(worn, defs, ch)); (got == 1) != wantActive {
+					t.Fatal("wrong profession activated class power", race, slot, power.ID, power.Class)
 				}
 				before := st
 				if table.ApplyLegendaryForRecipientWithPolicyAtLevel(&st, def, 100, recipient, LegendaryPowerPolicySplit, true, func(int) int { t.Fatal("owned item rerolled"); return 0 }) || st != before {
@@ -85,9 +88,15 @@ func TestLegendarySplitPolicyEmptyClassAndRestrictedBases(t *testing.T) {
 				t.Fatal("universal fallback absent")
 			}
 			for _, p := range powers {
-				if p.Class != "全职业" {
-					t.Fatal("invalid profession/level admitted", recipient, level, p.ID)
+				if p.Class == "全职业" {
+					continue
 				}
+				// Official 术士 at typified source levels may receive typified class-limited
+				// powers. Profession-specific MinLevel and unofficial recipient masks stay unchanged.
+				if recipient == 16 && typifiedCatalogPower(p.ID) && recipient.allows(p) {
+					continue
+				}
+				t.Fatal("invalid profession/level admitted", recipient, level, p.ID)
 			}
 			st := NewStack(def, 1)
 			first := true

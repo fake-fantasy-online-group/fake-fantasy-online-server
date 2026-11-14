@@ -470,9 +470,9 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "200%",
-        "base": 20000,
-        "divisor": 100,
+        "text": "提高80%",
+        "base": 80,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -482,8 +482,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "200%",
-        "base": 200,
+        "text": "提高80%",
+        "base": 80,
         "divisor": 1,
         "unit": "%"
       }
@@ -494,8 +494,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "120%",
-        "base": 120,
+        "text": "提高50%",
+        "base": 50,
         "divisor": 1,
         "unit": "%"
       }
@@ -506,8 +506,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "40%",
-        "base": 40,
+        "text": "提高50%",
+        "base": 50,
         "divisor": 1,
         "unit": "%"
       }
@@ -518,8 +518,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "55%",
-        "base": 5500,
+        "text": "降低60%",
+        "base": 6000,
         "divisor": 100,
         "unit": "%"
       }
@@ -530,7 +530,7 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "55%",
+        "text": "降低55%",
         "base": 5500,
         "divisor": 100,
         "unit": "%"
@@ -542,8 +542,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "50%",
-        "base": 5000,
+        "text": "降低55%",
+        "base": 5500,
         "divisor": 100,
         "unit": "%"
       }
@@ -554,8 +554,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "50%",
-        "base": 5000,
+        "text": "降低55%",
+        "base": 5500,
         "divisor": 100,
         "unit": "%"
       }
@@ -566,9 +566,16 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "30%",
-        "base": 3000,
+        "text": "缩短50%",
+        "base": 5000,
         "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "shield_pct",
+        "text": "最大生命20%",
+        "base": 20,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -577,8 +584,15 @@
     "id": "TY-D10",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "30%",
+        "key": "crit_bp",
+        "text": "降低50%",
+        "base": 5000,
+        "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "heavy_bp",
+        "text": "降低30%",
         "base": 3000,
         "divisor": 100,
         "unit": "%"
@@ -590,8 +604,15 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "30%",
-        "base": 3000,
+        "text": "45%",
+        "base": 4500,
+        "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "low_bp",
+        "text": "70%",
+        "base": 7000,
         "divisor": 100,
         "unit": "%"
       }
@@ -602,8 +623,15 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "40%",
-        "base": 4000,
+        "text": "提高80%",
+        "base": 8000,
+        "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "reduction_pct",
+        "text": "降低25%",
+        "base": 2500,
         "divisor": 100,
         "unit": "%"
       }
@@ -614,9 +642,16 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "150%",
-        "base": 15000,
+        "text": "提高200%",
+        "base": 20000,
         "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "heal_pct",
+        "text": "20%",
+        "base": 20,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -625,11 +660,11 @@
     "id": "TY-D14",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "40%",
-        "base": 4000,
-        "divisor": 100,
-        "unit": "%"
+        "key": "duration_ms",
+        "text": "8秒",
+        "base": 8000,
+        "divisor": 1000,
+        "unit": "秒"
       }
     ]
   },
@@ -637,10 +672,17 @@
     "id": "TY-D15",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "40%",
-        "base": 4000,
-        "divisor": 100,
+        "key": "duration_ms",
+        "text": "5秒",
+        "base": 5000,
+        "divisor": 1000,
+        "unit": "秒"
+      },
+      {
+        "key": "speed_pct",
+        "text": "提高30%",
+        "base": 30,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -649,9 +691,16 @@
     "id": "TY-D16",
     "parameters": [
       {
+        "key": "shield_pct",
+        "text": "最大生命45%",
+        "base": 45,
+        "divisor": 1,
+        "unit": "%"
+      },
+      {
         "key": "benefit",
-        "text": "200%",
-        "base": 20000,
+        "text": "提高100%",
+        "base": 10000,
         "divisor": 100,
         "unit": "%"
       }
@@ -662,9 +711,16 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "25%",
-        "base": 2500,
+        "text": "降低45%",
+        "base": 4500,
         "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "move_pct",
+        "text": "提高40%",
+        "base": 40,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -674,9 +730,16 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "40%",
-        "base": 4000,
+        "text": "提高100%",
+        "base": 10000,
         "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "heal_pct",
+        "text": "30%",
+        "base": 30,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -686,8 +749,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "60%",
-        "base": 6000,
+        "text": "降低65%",
+        "base": 6500,
         "divisor": 100,
         "unit": "%"
       }
@@ -698,10 +761,17 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "40%",
-        "base": 4000,
+        "text": "缩短60%",
+        "base": 6000,
         "divisor": 100,
         "unit": "%"
+      },
+      {
+        "key": "duration_ms",
+        "text": "5秒",
+        "base": 5000,
+        "divisor": 1000,
+        "unit": "秒"
       }
     ]
   },
@@ -709,11 +779,18 @@
     "id": "TY-U01",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "30%",
-        "base": 3000,
+        "key": "prepare_bp",
+        "text": "缩短60%",
+        "base": 6000,
         "divisor": 100,
         "unit": "%"
+      },
+      {
+        "key": "shred_ms",
+        "text": "1.5秒",
+        "base": 1500,
+        "divisor": 1000,
+        "unit": "秒"
       }
     ]
   },
@@ -721,11 +798,11 @@
     "id": "TY-U02",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "10点法力",
-        "base": 10,
+        "key": "restore_pct",
+        "text": "最大法力的6%",
+        "base": 6,
         "divisor": 1,
-        "unit": "点法力"
+        "unit": "%"
       }
     ]
   },
@@ -733,10 +810,17 @@
     "id": "TY-U03",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "30%",
+        "key": "mana_bp",
+        "text": "降低30%",
         "base": 3000,
         "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "refund_pct",
+        "text": "40%",
+        "base": 40,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -745,10 +829,17 @@
     "id": "TY-U04",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "30%",
-        "base": 3000,
-        "divisor": 100,
+        "key": "heal_pct",
+        "text": "最大生命的5%",
+        "base": 5,
+        "divisor": 1,
+        "unit": "%"
+      },
+      {
+        "key": "restore_pct",
+        "text": "最大法力的3%",
+        "base": 3,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -758,8 +849,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "60%",
-        "base": 6000,
+        "text": "提高100%",
+        "base": 10000,
         "divisor": 100,
         "unit": "%"
       }
@@ -769,9 +860,16 @@
     "id": "TY-U06",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "50%",
-        "base": 5000,
+        "key": "maxmp_pct",
+        "text": "提高35%",
+        "base": 35,
+        "divisor": 1,
+        "unit": "%"
+      },
+      {
+        "key": "restore_pct",
+        "text": "2.5%",
+        "base": 250,
         "divisor": 100,
         "unit": "%"
       }
@@ -781,9 +879,16 @@
     "id": "TY-U07",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "40%",
-        "base": 4000,
+        "key": "move_bp",
+        "text": "提高80%",
+        "base": 8000,
+        "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "range_bp",
+        "text": "提高50%",
+        "base": 5000,
         "divisor": 100,
         "unit": "%"
       }
@@ -793,11 +898,11 @@
     "id": "TY-U08",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "40%",
+        "key": "duration_ms",
+        "text": "4秒",
         "base": 4000,
-        "divisor": 100,
-        "unit": "%"
+        "divisor": 1000,
+        "unit": "秒"
       }
     ]
   },
@@ -806,8 +911,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "20%",
-        "base": 20,
+        "text": "提高40%",
+        "base": 40,
         "divisor": 1,
         "unit": "%"
       }
@@ -817,7 +922,14 @@
     "id": "TY-U10",
     "parameters": [
       {
-        "key": "benefit",
+        "key": "radius_bp",
+        "text": "提高80%",
+        "base": 8000,
+        "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "primary_bp",
         "text": "40%",
         "base": 4000,
         "divisor": 100,
@@ -830,8 +942,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "50%",
-        "base": 5000,
+        "text": "提高100%",
+        "base": 10000,
         "divisor": 100,
         "unit": "%"
       }
@@ -841,9 +953,23 @@
     "id": "TY-U12",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "30%",
+        "key": "shred_ms",
+        "text": "3秒",
         "base": 3000,
+        "divisor": 1000,
+        "unit": "秒"
+      },
+      {
+        "key": "prepare_bp",
+        "text": "缩短40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "power_bp",
+        "text": "提高25%",
+        "base": 2500,
         "divisor": 100,
         "unit": "%"
       }
@@ -853,10 +979,10 @@
     "id": "TY-U13",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "20%",
-        "base": 2000,
-        "divisor": 100,
+        "key": "shield_pct",
+        "text": "最大生命25%",
+        "base": 25,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -865,9 +991,9 @@
     "id": "TY-U14",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "30%",
-        "base": 3000,
+        "key": "power_bp",
+        "text": "提高60%",
+        "base": 6000,
         "divisor": 100,
         "unit": "%"
       }
@@ -878,8 +1004,15 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "20%",
-        "base": 2000,
+        "text": "缩短40%",
+        "base": 4000,
+        "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "shred_bp",
+        "text": "25%",
+        "base": 2500,
         "divisor": 100,
         "unit": "%"
       }
@@ -890,9 +1023,16 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "60%",
-        "base": 6000,
+        "text": "提高100%",
+        "base": 10000,
         "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "convert_pct",
+        "text": "50%",
+        "base": 50,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -901,10 +1041,17 @@
     "id": "TY-U17",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "50%",
-        "base": 5000,
-        "divisor": 100,
+        "key": "life_pct",
+        "text": "100%",
+        "base": 100,
+        "divisor": 1,
+        "unit": "%"
+      },
+      {
+        "key": "reduction_pct",
+        "text": "降低30%",
+        "base": 30,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -914,10 +1061,17 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "40个百分点",
-        "base": 4000,
+        "text": "70个百分点",
+        "base": 7000,
         "divisor": 100,
         "unit": "个百分点"
+      },
+      {
+        "key": "shield_pct",
+        "text": "最大生命15%",
+        "base": 15,
+        "divisor": 1,
+        "unit": "%"
       }
     ]
   },
@@ -925,9 +1079,23 @@
     "id": "TY-U19",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "100%",
-        "base": 10000,
+        "key": "aura",
+        "text": "半径400",
+        "base": 400,
+        "divisor": 1,
+        "unit": ""
+      },
+      {
+        "key": "radius_bp",
+        "text": "提高150%",
+        "base": 15000,
+        "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "damage_bp",
+        "text": "提高25%",
+        "base": 2500,
         "divisor": 100,
         "unit": "%"
       }
@@ -938,9 +1106,9 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "40%",
-        "base": 4000,
-        "divisor": 100,
+        "text": "提高50%",
+        "base": 50,
+        "divisor": 1,
         "unit": "%"
       }
     ]

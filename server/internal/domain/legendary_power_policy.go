@@ -10,7 +10,7 @@ const LegendaryPowerPolicySplit int32 = 1
 // retain their original A/D/U slot restrictions. Native wear restrictions and
 // monster source-level requirements are not relaxed.
 func legendaryPowerEligibleAllClassSlots(p LegendaryPowerDefinition, base ItemDef, sourceLevel int32) bool {
-	if p.Class == "全职业" {
+	if p.Class == "全职业" || typifiedCatalogPower(p.ID) {
 		return LegendaryPowerEligibleAtLevel(p, base, sourceLevel)
 	}
 	e := base.Equip
@@ -38,7 +38,7 @@ func LegendaryCandidatesForRecipientWithPolicyAtLevel(def ItemDef, sourceLevel i
 	}
 	var powers []LegendaryPowerDefinition
 	for _, p := range LegendaryPowers() {
-		if recipient.allows(p) && LegendaryPowerExecutable(p.ID) && legendaryPowerEligibleAllClassSlots(p, def, sourceLevel) {
+		if recipient.allowsOnItem(p, def) && LegendaryPowerExecutable(p.ID) && legendaryPowerEligibleAllClassSlots(p, def, sourceLevel) {
 			powers = append(powers, p)
 		}
 	}
@@ -48,7 +48,11 @@ func LegendaryCandidatesForRecipientWithPolicyAtLevel(def ItemDef, sourceLevel i
 func chooseLegendaryPowerPool(powers []LegendaryPowerDefinition, rng func(int) int) ([]LegendaryPowerDefinition, bool) {
 	var profession, universal []LegendaryPowerDefinition
 	for _, p := range powers {
-		if p.Class == "全职业" {
+		// Typified A/D/U stay in the typified generation pool even after a
+		// class restriction. Profession-specific 100-power entries remain
+		// the only members of the profession split. Recipient class already
+		// filtered the typified entries above.
+		if p.Class == "全职业" || typifiedCatalogPower(p.ID) {
 			universal = append(universal, p)
 		} else {
 			profession = append(profession, p)

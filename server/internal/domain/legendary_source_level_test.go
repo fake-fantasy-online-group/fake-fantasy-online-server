@@ -30,8 +30,8 @@ func TestLegendarySourceLevelCandidateBoundaries(t *testing.T) {
 	def, _ := sourceLevelFixture(t)
 	aboveWear := false
 	for _, p := range LegendaryCandidatesAtLevel(def, 43) {
-		if p.Class != "全职业" || (p.Category != "防御" && p.Category != "通用") {
-			t.Fatal("invalid face candidate", p.ID)
+		if !typifiedCatalogPower(p.ID) || (p.Category != "防御" && p.Category != "通用") {
+			t.Fatal("invalid face candidate", p.ID, p.Class)
 		}
 		aboveWear = aboveWear || p.MinLevel > def.Equip.LevelReq
 	}

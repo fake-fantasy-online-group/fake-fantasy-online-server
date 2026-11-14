@@ -84,6 +84,9 @@ func legendaryClassMask(class string) uint8 {
 	case "全职业":
 		return 31
 	}
+	if strings.Contains(class, ",") {
+		return parseLegendaryClassParts(class)
+	}
 	return 0
 }
 
@@ -110,14 +113,24 @@ func LegendaryPowerEligibleForItem(p LegendaryPowerDefinition, base ItemDef, st 
 	// Owned instances are never rerolled. Accept the new all-slot profession
 	// placement as well as every historically legal placement. Generation uses
 	// its separately frozen policy, not this runtime compatibility predicate.
+	// Class-limited catalog powers, including former typified universals, use
+	// the current Class for both generation and owned-instance eligibility.
 	return legendaryPowerEligibleAllClassSlots(p, base, LegendaryGenerationLevel(base, st))
+}
+
+// typifiedCatalogPower is the typified A/D/U family (TY-*). Catalog MinLevel on
+// these IDs is historical design metadata. Class restrictions are applied
+// separately and must not inherit profession-power source-level gates.
+func typifiedCatalogPower(id string) bool {
+	return strings.HasPrefix(id, "TY-")
 }
 
 // LegendaryPowerSourceLevelEligible validates provenance for every power, but
 // only profession-specific powers retain a minimum drop-level requirement.
-// Universal A/D/U powers keep catalog MinLevel as historical design metadata.
+// Typified A/D/U powers keep catalog MinLevel as historical design metadata,
+// whether or not their current Class is 全职业.
 func LegendaryPowerSourceLevelEligible(p LegendaryPowerDefinition, sourceLevel int32) bool {
-	return sourceLevel > 0 && (p.Class == "全职业" || p.MinLevel > 0 && sourceLevel >= p.MinLevel)
+	return sourceLevel > 0 && (typifiedCatalogPower(p.ID) || p.Class == "全职业" || p.MinLevel > 0 && sourceLevel >= p.MinLevel)
 }
 
 // LegendaryPowerEligibleAtLevel separates the monster's generation level from
@@ -148,11 +161,22 @@ func LegendaryPowerEligibleAtLevel(p LegendaryPowerDefinition, base ItemDef, sou
 	if p.Class == "全职业" {
 		return true
 	}
+	mask := legendaryClassMask(p.Class)
+	if mask == 0 {
+		return false
+	}
+	// Typified class-limited powers keep historical A/D/U slots. Do not apply
+	// the narrower profession-power slot gate just because Class changed.
+	if typifiedCatalogPower(p.ID) {
+		if e.Need.Professions == 0 && !e.Need.ProfessionRestricted {
+			return true
+		}
+		return e.Need.Professions&mask != 0
+	}
 	if slot != SlotWeapon && slot != SlotTwoHand && slot != SlotBody && slot != SlotHead {
 		return false
 	}
-	mask := legendaryClassMask(p.Class)
-	return mask != 0 && e.Need.Professions&mask != 0
+	return e.Need.Professions&mask != 0
 }
 
 type ActiveLegendaryPower struct {

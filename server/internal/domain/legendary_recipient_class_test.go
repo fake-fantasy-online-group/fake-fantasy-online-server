@@ -29,9 +29,22 @@ func TestLegendaryRecipientCandidatesIntersectBaseSlotAndSource(t *testing.T) {
 					t.Fatal("recipient roll lost power, six affixes, provenance or variant", st)
 				}
 			}
-			wantOwn := slot == SlotWeapon || slot == SlotTwoHand || slot == SlotBody || slot == SlotHead
+			wantOwn := false
+			for _, power := range LegendaryPowers() {
+				if power.Class != "全职业" && LegendaryPowerEligibleAtLevel(power, def, 43) && recipient.allows(power) {
+					wantOwn = true
+					break
+				}
+			}
 			if !universal || own != wantOwn {
 				t.Fatal("wrong slot-specific class support", race, slot, universal, own)
+			}
+			// Profession-specific powers still cannot leave the four class slots.
+			classSlot := slot == SlotWeapon || slot == SlotTwoHand || slot == SlotBody || slot == SlotHead
+			for _, power := range powers {
+				if power.Class != "全职业" && !typifiedCatalogPower(power.ID) && !classSlot {
+					t.Fatal("profession-specific power left class slots", race, slot, power.ID)
+				}
 			}
 		}
 	}
@@ -49,7 +62,7 @@ func TestLegendaryRecipientCandidatesIntersectBaseSlotAndSource(t *testing.T) {
 	}
 	def.Equip.Need.Professions = 31
 	for _, power := range LegendaryCandidatesForRecipientAtLevel(def, 1, 1) {
-		if power.Class != "全职业" {
+		if power.Class != "全职业" && !typifiedCatalogPower(power.ID) {
 			t.Fatal("recipient bypassed monster source-level requirement", power.ID)
 		}
 	}

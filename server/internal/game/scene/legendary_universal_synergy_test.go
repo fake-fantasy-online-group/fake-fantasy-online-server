@@ -27,7 +27,7 @@ func TestLegendaryUniversalSkillSynergy(t *testing.T) {
 		kind  domain.SkillKind
 		want  int32
 	}{
-		{"TY-A04", domain.SkillAreaCircle, domain.SkillArea, 140}, {"TY-A06", domain.SkillAreaRectangle, domain.SkillArea, 160}, {"TY-A08", 0, domain.SkillSingle, 250}, {"TY-U03", 0, domain.SkillSingle, 70}, {"TY-U15", 0, domain.SkillSingle, 800},
+		{"TY-A04", domain.SkillAreaCircle, domain.SkillArea, 140}, {"TY-A06", domain.SkillAreaRectangle, domain.SkillArea, 160}, {"TY-A08", 0, domain.SkillSingle, 250}, {"TY-U03", 0, domain.SkillSingle, 70}, {"TY-U15", 0, domain.SkillSingle, 600},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m, _ := universalTestContext(t, tc.id)
@@ -102,7 +102,7 @@ func TestLegendaryUniversalPrimaryAndHealGeometry(t *testing.T) {
 	s, p, m, _ = universalTestContext(t, "TY-U10")
 	d = domain.SkillDef{Kind: domain.SkillArea, Area: domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterCaster, Radius: 100}, Effects: []domain.SkillEffect{{Kind: domain.EffectHeal}}}
 	s.legendaryPrepareSkill(p, &d, m.ID)
-	if d.Area.Radius != 140 {
+	if d.Area.Radius != 180 {
 		t.Fatalf("heal radius=%d", d.Area.Radius)
 	}
 }
@@ -149,7 +149,8 @@ func TestLegendaryUniversalShieldStrengthAndCost(t *testing.T) {
 	warriorEquip(t, s, p, "TY-U03", domain.SlotRing)
 	skill := domain.SkillDef{Kind: domain.SkillSingle, MPCost: 100, Statuses: []domain.StatusApplication{{ProgressionDamageShield: 100}}}
 	s.legendaryPrepareSkill(p, &skill, m.ID)
-	if skill.MPCost != 50 {
+	// Redesigned TY-U13 no longer discounts mana; only TY-U03's 30% applies.
+	if skill.MPCost != 70 {
 		t.Fatalf("stack cost %d", skill.MPCost)
 	}
 }
@@ -182,13 +183,21 @@ func TestLegendaryUniversalControlAndSlow(t *testing.T) {
 		t.Run(id, func(t *testing.T) {
 			s, p, m, _ := universalTestContext(t, id)
 			d := domain.StatusDef{ID: 998, DurationSec: 5, BlockMove: true, Affixes: []domain.Affix{{Attr: domain.AttrMoveSpeed, Value: -100}}}
-			s.legendaryStatusReceiving(p, m, &d)
+			ok := s.legendaryStatusReceiving(p, m, &d)
 			s.legendaryFinalizeStatus(&d)
-			if id == "TY-D09" && d.LegendaryDurationMS != 3500 {
-				t.Fatalf("duration %d", d.LegendaryDurationMS)
+			if id == "TY-D09" && d.LegendaryModifiers.ControlDurationReductionBP < 5000 {
+				t.Fatalf("duration %+v", d.LegendaryModifiers)
 			}
-			if id == "TY-U08" && d.Affixes[0].Value != -60 {
-				t.Fatalf("slow %d", d.Affixes[0].Value)
+			if id == "TY-U08" {
+				hasSlow := false
+				for _, a := range d.Affixes {
+					if a.Attr == domain.AttrMoveSpeed && a.Value < 0 {
+						hasSlow = true
+					}
+				}
+				if hasSlow || (ok && d.BlockMove) {
+					t.Fatalf("U08 should strip or reject movement limits ok=%v def=%+v", ok, d)
+				}
 			}
 		})
 	}
@@ -344,13 +353,19 @@ func TestLegendaryUniversalNativeStatusBoundaryAndTick(t *testing.T) {
 	if !s.applyStatusDef(p, domain.StatusDef{ID: 998, SourceSkillID: 10320, DurationSec: 5, DamageShield: 100}, p.ID) {
 		t.Fatal("native shield rejected")
 	}
-	if universalShieldValue(p) != 300 {
+	if universalShieldValue(p) != 200 {
 		t.Fatalf("native shield=%d", universalShieldValue(p))
 	}
 }
 func TestLegendaryUniversalManaDefenseNativeRestoration(t *testing.T) {
 	s, p, m, _ := universalTestContext(t, "TY-D11")
-	warriorEquip(t, s, p, "TY-U03", domain.SlotRing)
+	// typifiedCompatibleRace switches D11 wearers off Warrior; warriorEquip's Professions:1 item would stay inactive.
+	item := domain.ItemID(920000 + int(domain.SlotRing))
+	s.items[item] = domain.ItemDef{ID: item, Equip: &domain.EquipDef{Slot: int32(domain.SlotRing), LevelReq: 100, Durable: 100, Need: domain.Requirement{Professions: 31}}}
+	p.Player.Worn.Set(domain.SlotRing, domain.Stack{UID: int64(item), Item: item, Count: 1, Durability: 100, MaxDurability: 100, Legendary: domain.LegendaryInstance{PowerID: "TY-U03"}})
+	if got := domain.ActiveLegendaryPowers(s.functionalWorn(p), s.itemDef, p.Player.Char); len(got) != 2 {
+		t.Fatalf("U03 not active alongside D11: %+v", got)
+	}
 	p.MP = 20
 	p.MaxMP = 100
 	m.Stats.MinAtk = 100
@@ -366,13 +381,15 @@ func TestLegendaryUniversalManaDefenseNativeRestoration(t *testing.T) {
 	}
 	before = p.HP
 	_, _, _ = s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true, SkillPct: 100})
-	if before-p.HP != 70 || p.MP != 20 {
+	// Redesigned TY-D11 absorbs 45% after mitigation (50 MP available → 45 spent).
+	if before-p.HP != 55 || p.MP != 5 {
 		t.Fatalf("recovered mana shield HP%d MP%d", before-p.HP, p.MP)
 	}
 	d := domain.SkillDef{ID: 10002, Kind: domain.SkillSingle, MPCost: 20, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100}}}
 	s.legendaryPrepareSkill(p, &d, m.ID)
+	s.legendaryFinalizeSkill(&d)
 	if d.MPCost != 14 {
-		t.Fatalf("cheap skill=%d", d.MPCost)
+		t.Fatalf("cheap skill=%d modifiers=%+v", d.MPCost, d.LegendaryModifiers)
 	}
 }
 func TestLegendaryUniversalCopiedPoisonKeepsSnapshotOnce(t *testing.T) {
@@ -412,11 +429,14 @@ func TestLegendaryUniversalBasicPowerRetainsNativeCritical(t *testing.T) {
 }
 func TestLegendaryUniversalPeriodicDefenseOutlivesEnemySource(t *testing.T) {
 	s, p, _, _ := universalTestContext(t, "TY-D19")
-	if n := s.universalPeriodicIncoming(nil, p, 100, domain.EntityID(99999)); n != 40 {
-		t.Fatalf("despawned source damage%d", n)
+	src := &entity.Entity{ID: 99999}
+	blow := combat.Blow{Magic: true, Origin: domain.DamageDOTOrigin}
+	hit := event.DamageDealt{Src: src.ID, Dst: p.ID, Amount: 100, Origin: domain.DamageDOTOrigin, Flag: event.DamageMagic}
+	if bp := s.typifiedPoolReduction(src, p, blow, hit); bp != 6500 {
+		t.Fatalf("despawned source typified bp %d", bp)
 	}
-	if n := s.universalPeriodicIncoming(nil, p, 100, p.ID); n != 100 {
-		t.Fatal("self periodic abuse")
+	if bp := s.typifiedPoolReduction(p, p, blow, hit); bp != 0 {
+		t.Fatal("self periodic abuse", bp)
 	}
 }
 

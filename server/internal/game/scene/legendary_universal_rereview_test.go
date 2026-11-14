@@ -133,10 +133,11 @@ func TestLegendaryUniversalRereviewNativeShieldTripleAndRecipient(t *testing.T) 
 				baseShield = shield
 				return
 			}
-			if shield != baseShield*450/100 {
-				t.Fatalf("source 200%% and receiver 150%% must add once: shield=%d want%d", shield, baseShield*450/100)
+			// Redesigned TY-D16 (+100%) and TY-D13 (+200%) add once; TY-U13 no longer amps received shields.
+			if shield != baseShield*400/100 {
+				t.Fatalf("source 100%% and receiver 200%% must add once: shield=%d want%d", shield, baseShield*400/100)
 			}
-			wantCost := (native.MPCost + 1) / 2
+			wantCost := (native.MPCost*70 + 99) / 100
 			if before-p.MP != wantCost || d.MPCost != wantCost {
 				t.Fatalf("native shield 20%%+30%% reduction paid=%d prepared=%d want%d", before-p.MP, d.MPCost, wantCost)
 			}

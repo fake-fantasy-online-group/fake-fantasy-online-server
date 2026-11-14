@@ -145,7 +145,8 @@ func LegendaryClassForCharacter(ch *Character) LegendaryRecipientClass {
 }
 
 func (recipient LegendaryRecipientClass) allows(power LegendaryPowerDefinition) bool {
-	return power.Class == "全职业" || recipient != 0 && recipient&(recipient-1) == 0 && uint8(recipient) == legendaryClassMask(power.Class)
+	mask := legendaryClassMask(power.Class)
+	return power.Class == "全职业" || recipient != 0 && recipient&(recipient-1) == 0 && mask != 0 && uint8(recipient)&mask != 0
 }
 
 // Recipient filtering intersects, never replaces, the item's existing native
@@ -155,7 +156,7 @@ func LegendaryCandidatesForRecipientAtLevel(def ItemDef, sourceLevel int32, reci
 	candidates := LegendaryCandidatesAtLevel(def, sourceLevel)
 	out := candidates[:0]
 	for _, power := range candidates {
-		if recipient.allows(power) {
+		if recipient.allowsOnItem(power, def) {
 			out = append(out, power)
 		}
 	}

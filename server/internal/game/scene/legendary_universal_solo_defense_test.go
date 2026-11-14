@@ -48,36 +48,37 @@ func TestLegendaryUniversalSoloIncoming(t *testing.T) {
 				switch id {
 				case "TY-D05":
 					if kind == "area" {
-						want = 450
+						want = 400 // typified area direct 60%
 					}
 				case "TY-D06":
-					if kind == "basic" {
-						want = 450
+					if kind != "area" && kind != "dot" && kind != "reflection" && kind != "self" {
+						want = want * 45 / 100 // typified single-target direct 55%
 					}
 				case "TY-D07":
 					if direct && kind != "magic" {
-						want = want * 50 / 100
+						want = want * 45 / 100 // typified physical direct 55%
 					}
 				case "TY-D08":
 					if kind == "magic" || kind == "dot" {
-						want = 500
+						want = 450 // typified magic 55%
 					}
 				case "TY-D10":
 					if kind == "critical" {
-						want = 1400
+						// 50% crit reduction plus 30% heavy-hit clause on the typified pool.
+						want = 600
 					}
 				case "TY-D17":
 					if direct || kind == "dot" {
-						want = want * 75 / 100
+						want = want * 55 / 100 // typified controlled incoming 45%
 					}
 				case "TY-D19":
 					if kind == "dot" {
-						want = 400
+						want = 350 // typified DOT 65%
 					}
 				}
 				spent := int32(0)
 				if id == "TY-D11" && kind != "self" {
-					spent = want * 30 / 100
+					spent = want * 45 / 100 // typified mana absorb 45% after DR
 					want -= spent
 				}
 				before := p.HP
@@ -127,7 +128,7 @@ func TestLegendaryUniversalSoloManaOrder(t *testing.T) {
 				}
 				// Physical direct/reflection and magical periodic reduction precede mana and shield once.
 				reduced := int32(800)
-				spent := min(mp, reduced*30/100)
+				spent := min(mp, reduced*45/100) // typified mana absorb 45% after ordinary DR
 				want := reduced - spent - 100
 				if hp-p.HP != want || mp-p.MP != spent || universalShieldValue(p) != 0 {
 					t.Fatalf("order hp%d mp%d shield%d want%d/%d/0", hp-p.HP, mp-p.MP, universalShieldValue(p), want, spent)
@@ -148,7 +149,7 @@ func TestLegendaryUniversalSoloStatusLifetime(t *testing.T) {
 		receive  bool
 	}{
 		{"TY-A13", 1034, 14000, false}, {"TY-A22", domain.StatusPoison, 20000, false}, {"TY-A22", 1036, 20000, false},
-		{"TY-D09", 1034, 7000, true}, {"TY-D18", 10320, 14000, false}, {"TY-D20", domain.StatusPoison, 6000, true}, {"TY-D20", 1036, 6000, true}, {"TY-U11", 10321, 15000, false},
+		{"TY-D09", 1034, 5000, true}, {"TY-D18", 10320, 20000, false}, {"TY-D20", domain.StatusPoison, 4000, true}, {"TY-D20", 1036, 4000, true}, {"TY-U11", 10321, 20000, false},
 	} {
 		t.Run(fmt.Sprintf("%s/status=%d", tc.id, tc.status), func(t *testing.T) {
 			s, p, m := universalSoloFixture(t, tc.id, domain.Warrior, domain.Learned{})
@@ -174,6 +175,12 @@ func TestLegendaryUniversalSoloStatusLifetime(t *testing.T) {
 			}
 			if tc.receive {
 				dst, src = p, m
+			}
+			if tc.id == "TY-D20" {
+				// First poison/burn is cleansed and rejected; the follow-up lands with the duration cut.
+				if s.applyStatusDef(dst, d, src.ID) {
+					t.Fatal("D20 should reject the first poison/burn")
+				}
 			}
 			if !s.applyStatusDef(dst, d, src.ID) {
 				t.Fatal("status rejected")
@@ -234,24 +241,25 @@ func TestLegendaryUniversalSoloStatusLifetime(t *testing.T) {
 	}
 	t.Run("TY-U11/exclusions", func(t *testing.T) {
 		s, p, _ := universalSoloFixture(t, "TY-U11", domain.Healer, domain.Learned{})
-		for _, d := range []domain.StatusDef{{ID: 10320, SourceSkillID: 10320, DurationSec: 10, DamageShield: 100}, {ID: 10303, SourceSkillID: 10303, DurationSec: 10, IntervalSec: 1, HPChanges: []domain.ResourceChange{{Value: 10}}}} {
+		// Redesigned TY-U11 extends skill shields and HoTs; typified-generated statuses stay unchanged.
+		for _, d := range []domain.StatusDef{{ID: 10320, SourceSkillID: 10320, DurationSec: 10, DamageShield: 100, TypeKnown: true, Type: domain.StatusGood}, {ID: 10303, SourceSkillID: 10303, DurationSec: 10, IntervalSec: 1, HPChanges: []domain.ResourceChange{{Value: 10}}, TypeKnown: true, Type: domain.StatusGood}} {
 			if !s.applyStatusDef(p, d, p.ID) {
 				t.Fatal("native status missing")
 			}
 			a := universalSoloActive(t, p, d.ID)
 			start := s.tick
-			if a.ExpireAt-start != domain.Ticks(10000) {
-				t.Fatal("excluded status duration changed", a.ExpireAt-start)
+			if a.ExpireAt-start != domain.Ticks(20000) {
+				t.Fatal("skill shield/hot should gain typified U11 duration", a.ExpireAt-start)
 			}
-			s.tick = start + domain.Ticks(10000) - 1
+			s.tick = start + domain.Ticks(20000) - 1
 			s.stepStatus()
 			if !p.Status.Has(d.ID) {
-				t.Fatal("excluded status expired early")
+				t.Fatal("extended skill shield/hot expired early")
 			}
-			s.tick = start + domain.Ticks(10000)
+			s.tick = start + domain.Ticks(20000)
 			s.stepStatus()
 			if p.Status.Has(d.ID) {
-				t.Fatal("shield/hot extended by beneficial duration")
+				t.Fatal("skill shield/hot did not expire after typified duration")
 			}
 		}
 	})
@@ -266,7 +274,7 @@ func TestLegendaryUniversalSoloPeriodic(t *testing.T) {
 	}{
 		{"TY-A18", domain.StatusPoison, -100, -300, false}, {"TY-A27", 1036, -100, -200, false},
 		{"TY-A28", domain.StatusPoison, -100, -200, false}, {"TY-A29", 1036, -100, -200, false},
-		{"TY-U05", 10303, 100, 160, false}, {"TY-D12", 10303, 100, 140, true},
+		{"TY-U05", 10303, 100, 200, false}, {"TY-D12", 10303, 100, 180, true},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := universalSoloFixture(t, tc.id, domain.Warrior, domain.Learned{})
@@ -333,7 +341,7 @@ func TestLegendaryUniversalSoloPeriodic(t *testing.T) {
 			s.tickStatus(dst, domain.Active{Def: d, Source: src.ID})
 			wantGenerated := tc.delta
 			if tc.id == "TY-D12" {
-				wantGenerated = tc.delta * 140 / 100
+				wantGenerated = tc.delta * 180 / 100
 			}
 			if dst.HP-5000 != wantGenerated {
 				t.Fatal("generated periodic modifier mismatch", dst.HP-5000, wantGenerated)
@@ -360,9 +368,9 @@ func TestLegendaryUniversalSoloShield(t *testing.T) {
 				}
 				want := int32(100)
 				if id == "TY-D16" {
-					want = 300
+					want = 200 // typified skill-shield +100%
 				} else if !self {
-					want = 250
+					want = 300 // typified ally-shield +200%
 				}
 				if universalShieldValue(dst) != want {
 					t.Fatal("initial shield", universalShieldValue(dst), want)
@@ -425,7 +433,7 @@ func TestLegendaryUniversalSoloPeriodicProvenance(t *testing.T) {
 		id                 string
 		powerPayload, crit bool
 		hp, mp             int32
-	}{{"TY-D11", true, false, 700, 300}, {"TY-D19", true, false, 400, 0}, {"TY-D10", false, true, 1400, 0}} {
+	}{{"TY-D11", true, false, 550, 450}, {"TY-D19", true, false, 350, 0}, {"TY-D10", false, true, 1000, 0}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := universalSoloFixture(t, tc.id, domain.Warrior, domain.Learned{})
 			p.Stats = domain.Stats{}

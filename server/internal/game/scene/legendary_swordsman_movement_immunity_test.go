@@ -145,8 +145,10 @@ func TestLegendarySwordsmanMovementImmunityMixedStatusPreservation(t *testing.T)
 					} else if canMove(p) || got.Def.Immobile != 1 || p.Status.Controlled() != domain.ControlStun {
 						t.Fatal("hard control incorrectly immunized")
 					}
-					if powerCount == 3 && (existing || id != 81020) && got.Def.LegendaryDurationMS != 7000 {
-						t.Fatal("other control-duration power lost", got.Def.LegendaryDurationMS)
+					// Redesigned TY-D09 shortens residual hard control to 50% (5s / LegendaryDurationMS 5000).
+					// 81020 is a BlockMove root: TY-U08 strips that control-like bit, so no control remains to shorten.
+					if powerCount == 3 && id != 81020 && got.Def.LegendaryDurationMS != 5000 && got.Def.LegendaryModifiers.ControlDurationReductionBP < 5000 {
+						t.Fatal("other control-duration power lost", got.Def.LegendaryDurationMS, got.Def.LegendaryModifiers)
 					}
 					if d.Affixes[0].Value != -50 || len(d.Affixes) != 2 {
 						t.Fatal("incoming source definition mutated")

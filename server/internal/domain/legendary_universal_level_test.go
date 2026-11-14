@@ -13,12 +13,12 @@ func TestLegendaryUniversalEightyPowersIgnoreMinimumAtMonsterOne(t *testing.T) {
 	def.Equip.Need.Level = 1
 	powers := LegendaryCandidatesAtLevel(def, 1)
 	if len(powers) != 80 {
-		t.Fatal("level1 shoe must admit exactly80 universal powers", len(powers))
+		t.Fatal("level1 shoe must admit exactly the remaining universal powers", len(powers))
 	}
 	categories := map[string]int{}
 	for index, p := range powers {
-		if p.Class != "全职业" {
-			t.Fatal("profession power leaked into level1", p.ID)
+		if !typifiedCatalogPower(p.ID) {
+			t.Fatal("profession-specific power leaked into typified level1 pool", p.ID)
 		}
 		categories[p.Category]++
 		ignored := p
@@ -66,13 +66,43 @@ func TestLegendaryUniversalEightyPowersIgnoreMinimumAtMonsterOne(t *testing.T) {
 			}
 			worn := NewEquipSet()
 			worn.Set(SlotShoe, loaded)
-			if len(ActiveLegendaryPowers(worn, func(ItemID) (ItemDef, bool) { return def, true }, &Character{Level: 1})) != 1 {
-				t.Fatal("universal activation still gated", p.ID)
+			ch := &Character{Level: 1}
+			if p.Class != "全职业" {
+				ch.EmploymentKnown, ch.Employed = true, true
+				mask := legendaryClassMask(p.Class)
+				for race := Warrior; race <= Warlock; race++ {
+					if mask&(1<<uint8(race)) != 0 {
+						ch.Race = race
+						break
+					}
+				}
+			}
+			if len(ActiveLegendaryPowers(worn, func(ItemID) (ItemDef, bool) { return def, true }, ch)) != 1 {
+				t.Fatal("typified activation still gated by source or wear level", p.ID, p.Class)
+			}
+			if p.Class != "全职业" {
+				wrong := &Character{Level: 1, EmploymentKnown: true, Employed: true}
+				mask := legendaryClassMask(p.Class)
+				for race := Warrior; race <= Warlock; race++ {
+					if mask&(1<<uint8(race)) == 0 {
+						wrong.Race = race
+						break
+					}
+				}
+				if len(ActiveLegendaryPowers(worn, func(ItemID) (ItemDef, bool) { return def, true }, wrong)) != 0 {
+					t.Fatal("class-limited typified activated on the wrong profession", p.ID, p.Class)
+				}
 			}
 		}
 	}
 	if categories["攻击"] != 40 || categories["防御"] != 20 || categories["通用"] != 20 {
 		t.Fatal("universal category scope changed", categories)
+	}
+	for _, id := range []string{"TY-U04", "TY-U05", "TY-U07", "TY-U10", "TY-U14", "TY-U16", "TY-U17", "TY-U18", "TY-D01", "TY-D02", "TY-D07", "TY-D08", "TY-D11"} {
+		p, ok := LegendaryPower(id)
+		if !ok || p.Class == "全职业" || !LegendaryPowerEligibleAtLevel(p, def, 1) {
+			t.Fatal("reclassed typified power must keep typified source policy and still be class-limited", id, p.Class)
+		}
 	}
 	def.Equip.Slot = -1
 	if len(LegendaryCandidatesAtLevel(def, 100)) != 0 {

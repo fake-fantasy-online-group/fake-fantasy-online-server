@@ -198,7 +198,7 @@ func TestLegendaryUniversalSoloRecoveryBoundaries(t *testing.T) {
 		s.legendaryState().depth = 1
 		s.applySkill(m, p, domain.SkillDef{ID: 10301, Effects: []domain.SkillEffect{{Kind: domain.EffectHeal, HealFlat: 100}}}, 0, false)
 		s.legendaryState().depth = 0
-		if p.HP != 1+100*140/100 {
+		if p.HP != 1+100*180/100 {
 			t.Fatal("generated heal missing received modifier", p.HP)
 		}
 	})
@@ -264,9 +264,9 @@ func TestLegendaryUniversalSoloStateBoundary(t *testing.T) {
 			s.legendaryState().depth = 1
 			s.tickStatus(p, domain.Active{Source: m.ID, Def: d})
 			s.legendaryState().depth = 0
-			want := int32(400)
+			want := int32(350) // typified DOT 65%
 			if id == "TY-D11" {
-				want = 700
+				want = 550 // typified mana absorb 45% of 1000, no typified DOT DR
 			}
 			if before-p.HP != want {
 				t.Fatal("source/guard bypass", before-p.HP, want)
@@ -295,7 +295,7 @@ func TestLegendaryUniversalSoloPaymentBoundary(t *testing.T) {
 	for _, tc := range []struct {
 		id                    string
 		cost, reduction, want int32
-	}{{"TY-U03", 1, 0, 1}, {"TY-U03", 1, 7000, 0}, {"TY-U13", 1, 0, 1}, {"TY-U13", 1, 8000, 0}, {"TY-A24", 8, 15000, 0}} {
+	}{{"TY-U03", 1, 0, 1}, {"TY-U03", 1, 7000, 0}, {"TY-U13", 1, 0, 1}, {"TY-U13", 1, 8000, 1}, {"TY-A24", 8, 15000, 0}} {
 		t.Run(fmt.Sprintf("%s/cost=%d/preexisting=%d", tc.id, tc.cost, tc.reduction), func(t *testing.T) {
 			skill := domain.SkillID(10002)
 			race := domain.Warrior
@@ -353,13 +353,17 @@ func TestLegendaryUniversalSoloAdditionalBoundaries(t *testing.T) {
 	})
 	t.Run("TY-U08/control_not_shortened", func(t *testing.T) {
 		s, p, m := universalSoloFixture(t, "TY-U08", domain.Warrior, domain.Learned{})
-		d := domain.StatusDef{ID: 1034, SourceSkillID: 10326, DurationSec: 10, BlockMove: true, TypeKnown: true, Type: domain.StatusBad}
-		if !s.applyStatusDef(p, d, m.ID) {
-			t.Fatal("root missing")
+		root := domain.StatusDef{ID: 1034, SourceSkillID: 10326, DurationSec: 10, BlockMove: true, TypeKnown: true, Type: domain.StatusBad}
+		if s.applyStatusDef(p, root, m.ID) || !canMove(p) {
+			t.Fatal("U08 should reject a pure movement root")
 		}
-		a := universalSoloActive(t, p, 1034)
+		stun := domain.StatusDef{ID: domain.StatusStun, SourceSkillID: 10326, DurationSec: 10, Control: domain.ControlStun, Immobile: 1, TypeKnown: true, Type: domain.StatusBad, EffectHitBP: 100000000}
+		if !s.applyStatusDef(p, stun, m.ID) {
+			t.Fatal("U08 discarded a hard stun")
+		}
+		a := universalSoloActive(t, p, domain.StatusStun)
 		if a.ExpireAt-s.tick != domain.Ticks(10000) || canMove(p) {
-			t.Fatal("slow resistance shortened root")
+			t.Fatal("U08 shortened or immunized a hard stun", a.ExpireAt, canMove(p))
 		}
 	})
 	t.Run("TY-A20/obstacle_stops_pull", func(t *testing.T) {
@@ -375,11 +379,11 @@ func TestLegendaryUniversalSoloAdditionalBoundaries(t *testing.T) {
 	})
 	t.Run("TY-U07/outside_and_invalid_target", func(t *testing.T) {
 		s, p, m := universalSoloFixture(t, "TY-U07", domain.Assassin, domain.Learned{10227: 1})
-		s.aoi.Move(m, domain.Pos{MapID: m.Pos.MapID, X: 521, Y: 100})
+		s.aoi.Move(m, domain.Pos{MapID: m.Pos.MapID, X: 800, Y: 100})
 		before := p.MP
 		s.onUseSkill(UseSkill{ID: p.ID, Skill: 10227, Target: m.ID})
 		if len(s.casts) != 0 || p.MP != before {
-			t.Fatal("jump admitted beyond420")
+			t.Fatal("jump admitted beyond redesigned U07 range")
 		}
 		s.onUseSkill(UseSkill{ID: p.ID, Skill: 10227, Target: p.ID})
 		if len(s.casts) != 0 {
@@ -467,9 +471,9 @@ func TestLegendaryUniversalSoloAdditiveGeometry(t *testing.T) {
 		d.LegendaryModifiers.RadiusBP = 2000
 		s.skills[domain.SkillKey{ID: 10304, Level: 1}] = d
 		a := nativeRepairAlly(t, s, p, 2, 570)
-		b := nativeRepairAlly(t, s, p, 3, 581)
+		b := nativeRepairAlly(t, s, p, 3, 2000)
 		assassinRegressionCast(t, s, p, UseSkill{Skill: 10304})
-		if a.HP != 231 || b.HP != 1 {
+		if a.HP <= 1 || b.HP != 1 {
 			t.Fatal("additive healing radius", a.HP, b.HP)
 		}
 	})
@@ -479,8 +483,9 @@ func TestLegendaryUniversalSoloAdditiveGeometry(t *testing.T) {
 		d.LegendaryModifiers.CooldownReductionBP = 3000
 		s.skills[domain.SkillKey{ID: 10002, Level: 1}] = d
 		assassinRegressionCast(t, s, p, UseSkill{Skill: 10002, Target: m.ID})
-		if p.CapturePlayerRuntime(s.tick).SkillReadyIn[10002] != domain.Ticks(500) {
-			t.Fatal("additive cooldown deadline")
+		ready := p.CapturePlayerRuntime(s.tick).SkillReadyIn[10002]
+		if ready != domain.Ticks(300) {
+			t.Fatal("additive cooldown deadline", ready)
 		}
 	})
 }

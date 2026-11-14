@@ -145,7 +145,7 @@ func powerBookIDsForCharacter(ch *domain.Character) []string {
 	class := classes[powerBookProfession(ch)]
 	ids := []string{}
 	for _, power := range domain.LegendaryPowers() {
-		if power.Class == "全职业" || class != "" && power.Class == class {
+		if domain.LegendaryPowerVisibleToClass(power.Class, class) {
 			ids = append(ids, power.ID)
 		}
 	}

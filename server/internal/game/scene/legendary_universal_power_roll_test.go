@@ -13,19 +13,20 @@ func TestLegendaryUniversalPowerRollSkillBenefitsAndGuaranteedMechanic(t *testin
 	for _, roll := range []int32{0, 7500, 8765, 10000} {
 		for _, tc := range []struct {
 			id    string
+			key   string
 			base  int32
 			field func(domain.LegendarySkillModifiers) int32
 		}{
-			{"TY-A02", 6000, func(m domain.LegendarySkillModifiers) int32 { return m.LengthBP }},
-			{"TY-U03", 3000, func(m domain.LegendarySkillModifiers) int32 { return m.ManaReductionBP }},
-			{"TY-U15", 2000, func(m domain.LegendarySkillModifiers) int32 { return m.CooldownReductionBP }},
-			{"TY-U16", 6000, func(m domain.LegendarySkillModifiers) int32 { return m.HealingBP }},
+			{"TY-A02", "benefit", 6000, func(m domain.LegendarySkillModifiers) int32 { return m.LengthBP }},
+			{"TY-U03", "mana_bp", 3000, func(m domain.LegendarySkillModifiers) int32 { return m.ManaReductionBP }},
+			{"TY-U15", "benefit", 4000, func(m domain.LegendarySkillModifiers) int32 { return m.CooldownReductionBP }},
+			{"TY-U16", "benefit", 10000, func(m domain.LegendarySkillModifiers) int32 { return m.HealingBP }},
 		} {
 			p, _ := domain.LegendaryPowerForRoll(tc.id, roll)
 			c := legendaryContext{Power: p, PowerRollBP: roll}
 			d := domain.SkillDef{Kind: domain.SkillSingle, MPCost: 100, CooldownMS: 1000, Area: domain.SkillAreaTargeting{Shape: domain.SkillAreaRectangle, Center: domain.SkillAreaCenterCaster, Length: 100, Width: 100}}
 			legendaryHandlers[tc.id].PrepareSkill(&c, &d)
-			want := domain.LegendaryPowerRollValue(tc.id, "benefit", tc.base, roll)
+			want := domain.LegendaryPowerRollValue(tc.id, tc.key, tc.base, roll)
 			if got := tc.field(d.LegendaryModifiers); got != want {
 				t.Fatalf("%s roll%d got%d want%d", tc.id, roll, got, want)
 			}
@@ -63,7 +64,7 @@ func TestLegendaryUniversalPowerRollActualIncomingStatusAndStats(t *testing.T) {
 			t.Fatal("active roll missing", contexts)
 		}
 		got := legendaryHandlers["TY-D07"].ModifyIncoming(&contexts[0], 10000)
-		want := 10000 - domain.LegendaryPowerRollValue("TY-D07", "benefit", 5000, roll)
+		want := 10000 - domain.LegendaryPowerRollValue("TY-D07", "benefit", 5500, roll)
 		if got != want {
 			t.Fatal("actual mitigation", got, want)
 		}

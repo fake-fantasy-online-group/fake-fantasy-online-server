@@ -198,6 +198,7 @@ func (s *Scene) onTeleport(cmd Teleport) bool {
 
 	s.revokeDepartingSkillSource(e)
 	s.revokeLegendaryForeignShields(e)
+	typifiedClearHeldGeneratedShields(s, e)
 	runtime := e.CapturePlayerRuntime(s.tick)
 	runtime.ClassSets = s.captureClassSetRuntime(e)
 	runtime.Legendary = s.captureLegendaryRuntime(e)

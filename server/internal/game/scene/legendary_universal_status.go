@@ -190,8 +190,13 @@ func (s *Scene) universalPeriodicIncomingContexts(src, dst *entity.Entity, sourc
 func universalPeriodicReduce(contexts []legendaryContext, n int32, critical ...bool) int32 {
 	// Match the direct incoming additive bucket. Periodic critical mitigation
 	// is a value consumer, never a new strike or a critical roll.
+	// Typified D/U reductions already sit in TypifiedReductionBP; do not reuse
+	// retired synergy adapters for those IDs or they would double or drift.
 	delta := int64(0)
 	for _, c := range contexts {
+		if len(c.Power.ID) >= 3 && c.Power.ID[:3] == "TY-" {
+			continue
+		}
 		if c.Power.ID == "TY-D19" {
 			delta += int64(universalSynergyIncoming(&c, n)) - int64(n)
 		}
@@ -206,8 +211,8 @@ func universalPeriodicReduce(contexts []legendaryContext, n int32, critical ...b
 }
 func universalPeriodicAbsorb(contexts []legendaryContext, n int32) int32 {
 	for _, c := range contexts {
-		if c.Power.ID == "TY-D11" {
-			n = universalSynergyIncoming(&c, n)
+		if h := legendaryHandlers[c.Power.ID].AbsorbIncoming; h != nil {
+			n = max(int32(0), h(&c, n))
 		}
 	}
 	return n

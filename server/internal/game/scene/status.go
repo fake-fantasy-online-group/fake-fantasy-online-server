@@ -141,6 +141,7 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 			s.refreshEntityStats(target)
 			s.emitAttributesIfPlayer(target)
 			s.pushStatusSnapshots(target)
+			typifiedAfterStatusMutation(s, target)
 		}
 		return false
 	}
@@ -158,6 +159,8 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	}
 	s.updatePlayerVisibility(target, wasInvisible)
 	s.refreshEntityStats(target)
+	typifiedStatusPostCommit(s, target, s.entities[src], &def)
+	typifiedAfterStatusMutation(s, target)
 	s.emitAttributesIfPlayer(target)
 	s.pushStatusSnapshots(target)
 	durationMS := int64(def.DurationSec) * 1000
@@ -449,6 +452,11 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 			flatReduction += int64(s.petProcAmount(dst, kind)) + int64(s.petFlatReduction(dst, magic))
 		}
 		buckets.SelectiveReductionBP = s.synergyPoolReduction(src, dst, blow, ev)
+		typifiedHit := ev
+		if typifiedHit.Amount == 0 {
+			typifiedHit.Amount = domain.SaturateInt32(int64(rawDamage))
+		}
+		buckets.TypifiedReductionBP = s.typifiedPoolReduction(src, dst, blow, typifiedHit)
 		buckets.MitigationBP = extraMitigation
 		buckets.DamageTakenIncreasePct = dst.Status.DamageTakenIncreasePct(magic)
 		buckets.DamageReductionPct = dst.Status.DamageReductionPct(magic)
@@ -758,6 +766,7 @@ func (s *Scene) statusesRemoved(e *entity.Entity, ids []domain.StatusID) {
 	s.cancelControlledWindup(e)
 	s.emitAttributesIfPlayer(e)
 	s.pushStatusSnapshots(e)
+	typifiedAfterStatusMutation(s, e)
 }
 
 // cancelControlledWindup also handles a stored control becoming effective when
@@ -826,6 +835,7 @@ func (s *Scene) stepStatus() {
 			s.cancelControlledWindup(e)
 			s.emitAttributesIfPlayer(e)
 			s.pushStatusSnapshots(e)
+			typifiedAfterStatusMutation(s, e)
 		}
 	}
 }

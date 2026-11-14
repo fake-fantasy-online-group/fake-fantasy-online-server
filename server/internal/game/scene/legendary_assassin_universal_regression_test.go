@@ -269,9 +269,10 @@ func TestUniversalRegressionHealingStatusManaNativeCast(t *testing.T) {
 			native, _ := s.skills.Get(10303, 1)
 			before := p.MP
 			d := assassinRegressionCast(t, s, p, UseSkill{Skill: 10303, Target: p.ID})
-			pct := int32(70)
+			// Redesigned TY-U04 no longer discounts mana; TY-U03 still cuts 30%.
+			pct := int32(100)
 			if extra {
-				pct = 40
+				pct = 70
 			}
 			want := (native.MPCost*pct + 99) / 100
 			if before-p.MP != want || d.MPCost != want {

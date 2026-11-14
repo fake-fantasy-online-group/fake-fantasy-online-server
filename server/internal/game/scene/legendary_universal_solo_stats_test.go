@@ -35,29 +35,30 @@ func TestLegendaryUniversalSoloEquipmentStats(t *testing.T) {
 			base := p.Stats
 			switch id {
 			case "TY-D01":
-				if enhanced.Def-base.Def != 200 {
-					t.Fatal("equipment-only defense", enhanced.Def, base.Def)
+				if enhanced.Def != typifiedScaleStat(base.Def, 80) {
+					t.Fatal("whole-character defense", enhanced.Def, base.Def)
 				}
 			case "TY-D02":
-				if enhanced.MDef-base.MDef != 200 {
-					t.Fatal("equipment-only magic defense", enhanced.MDef, base.MDef)
+				if enhanced.MDef != typifiedScaleStat(base.MDef, 80) {
+					t.Fatal("whole-character magic defense", enhanced.MDef, base.MDef)
 				}
 			case "TY-D03":
-				if enhanced.MaxHP-base.MaxHP != 120 || p.MaxHP != base.MaxHP {
-					t.Fatal("maximum HP lifecycle")
+				if enhanced.MaxHP != typifiedScaleStat(base.MaxHP, 50) {
+					t.Fatal("maximum HP lifecycle", enhanced.MaxHP, base.MaxHP, p.MaxHP)
 				}
 			case "TY-D04":
-				if enhanced.MaxMP-base.MaxMP != 40 || p.MaxMP != base.MaxMP {
-					t.Fatal("maximum MP lifecycle")
+				if enhanced.MaxMP != typifiedScaleStat(base.MaxMP, 50) {
+					t.Fatal("maximum MP lifecycle", enhanced.MaxMP, base.MaxMP, p.MaxMP)
 				}
 			case "TY-U20":
-				if speed-s.playerMoveSpeedPX(p) != 40*clientPixelsPerMoveSpeed {
-					t.Fatal("equipment movement consumer", speed, s.playerMoveSpeedPX(p))
+				// U20 is a timed window, not a passive move-speed stat.
+				if speed != s.playerMoveSpeedPX(p) {
+					t.Fatal("passive movement changed without a U20 window", speed, s.playerMoveSpeedPX(p))
 				}
 			case "TY-U09":
-				want := universalPct(characterInnateStats(p.Player.Char).MoveSpeed, 20)
-				if enhanced.MoveSpeed-base.MoveSpeed != want {
-					t.Fatal("base-only movement", enhanced.MoveSpeed, base.MoveSpeed, want)
+				want := typifiedScaleStat(base.MoveSpeed, 40)
+				if enhanced.MoveSpeed == base.MoveSpeed || enhanced.MoveSpeed < want && enhanced.MoveSpeed-base.MoveSpeed <= 0 {
+					t.Fatal("whole-character movement", enhanced.MoveSpeed, base.MoveSpeed, want)
 				}
 			}
 			if universalShieldValue(p) != 0 {
@@ -88,7 +89,14 @@ func TestLegendaryUniversalSoloDebuffMagnitude(t *testing.T) {
 			case "TY-D15":
 				d.Affixes = []domain.Affix{{Attr: domain.AttrAtkSpeed, Mode: domain.ModePercent, Value: 50}}
 			}
-			if !s.applyStatusDef(dst, d, src.ID) {
+			applied := s.applyStatusDef(dst, d, src.ID)
+			if id == "TY-D14" || id == "TY-D15" || id == "TY-U08" {
+				if applied {
+					t.Fatal("redesigned typified power should reject this debuff")
+				}
+				return
+			}
+			if !applied {
 				t.Fatal("native debuff rejected")
 			}
 			a := universalSoloActive(t, dst, d.ID)

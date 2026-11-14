@@ -23,7 +23,7 @@ func TestLegendaryUniversalSoloNativePeriodicProducer(t *testing.T) {
 		{"TY-A27", domain.Warlock, 10421, 1036, 200, 100},
 		{"TY-A28", domain.Assassin, 10214, domain.StatusPoison, 200, 100},
 		{"TY-A29", domain.Warlock, 10421, 1036, 200, 100},
-		{"TY-U05", domain.Healer, 10303, 10303, 160, 100},
+		{"TY-U05", domain.Healer, 10303, 10303, 200, 100},
 	} {
 		t.Run(fmt.Sprintf("%s/skill=%d", tc.id, tc.skill), func(t *testing.T) {
 			var baseDamage int32
@@ -99,9 +99,9 @@ func TestLegendaryUniversalSoloNativeStatusProducer(t *testing.T) {
 		durationPct, shieldPct int32
 	}{
 		{"TY-A13", domain.Warlock, 10428, domain.StatusFreeze, 140, 100},
-		{"TY-D16", domain.Healer, 10320, 1021, 100, 300},
-		{"TY-D18", domain.Healer, 10320, 1021, 140, 100},
-		{"TY-U11", domain.Healer, 10321, 10321, 150, 100},
+		{"TY-D16", domain.Healer, 10320, 1021, 100, 200},
+		{"TY-D18", domain.Healer, 10320, 1021, 200, 100},
+		{"TY-U11", domain.Healer, 10321, 10321, 200, 100},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			var duration domain.Tick

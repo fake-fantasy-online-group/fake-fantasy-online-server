@@ -354,6 +354,9 @@ func (s *Scene) synergyPoolReduction(src, dst *entity.Entity, blow combat.Blow, 
 			continue
 		}
 		// D07 remains direct-only, while D08 applies to magic ticks as before.
+		if typifiedReductionPower(c.Power.ID) {
+			continue
+		}
 		if c.Power.ID == "TY-D07" && blow.Origin == domain.DamageDOTOrigin {
 			continue
 		}

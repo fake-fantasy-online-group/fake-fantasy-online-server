@@ -182,7 +182,7 @@ func TestLegendaryIncomingCombinationShieldAndManaOnce(t *testing.T) {
 			}
 			// Native20%, 72%,60%, then mana30%, and finally shield once.
 			// Reflection shares resource absorption, not direct-only reductions.
-			want, spent := int32(142), int32(103)
+			want, spent := int32(90), int32(155)
 			if before-p.HP != want || mp-p.MP != spent {
 				t.Fatalf("HP=%d MP=%d want %d/%d", before-p.HP, mp-p.MP, want, spent)
 			}
@@ -216,8 +216,9 @@ func TestLegendaryIncomingRiftHazardNotBasic(t *testing.T) {
 		t.Fatalf("native monster basic must still reduce: %d", ev.Amount)
 	}
 	ev, _, _ = s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{SkillID: 999001, GuaranteedHit: true})
-	if ev.Amount != 100 {
-		t.Fatalf("monster skill is not basic: %d", ev.Amount)
+	// Redesigned TY-D06 reduces single-target direct hits, including non-basic monster skills.
+	if ev.Amount != 45 {
+		t.Fatalf("monster skill should also take typified D06 55%% cut: %d", ev.Amount)
 	}
 }
 

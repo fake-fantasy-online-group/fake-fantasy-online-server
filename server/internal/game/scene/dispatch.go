@@ -745,6 +745,7 @@ func (s *Scene) onLeave(cmd Leave) {
 		return
 	}
 	s.revokeLegendaryForeignShields(e)
+	typifiedClearHeldGeneratedShields(s, e)
 	s.disconnectEndgameRift(e)
 	s.stepEndgameTrial()
 	s.clearCastWindup(e.ID)

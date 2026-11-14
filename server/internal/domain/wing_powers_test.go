@@ -73,12 +73,13 @@ func TestWingPowerActivationClassDuplicateWearAndClone(t *testing.T) {
 		t.Fatal("three slots inactive")
 	}
 	ch.Race = Healer
-	if len(ActiveLegendaryPowers(w, defs, ch)) != 2 {
+	// TY-D01 is now melee-limited; only the remaining all-class power stays up.
+	if len(ActiveLegendaryPowers(w, defs, ch)) != 1 {
 		t.Fatal("class restriction lost")
 	}
 	ch.Race = Warrior
 	ch.EmploymentKnown = true
-	if len(ActiveLegendaryPowers(w, defs, ch)) != 2 {
+	if len(ActiveLegendaryPowers(w, defs, ch)) != 1 {
 		t.Fatal("beginner class power")
 	}
 	ch.Employed = true

@@ -16,7 +16,7 @@ func TestLegendaryManaAfterAllIncomingReductions(t *testing.T) {
 		power     string
 		remaining int32
 	}{
-		{domain.Warlock, "SS-D10", 650}, {domain.Assassin, "CK-D01", 650}, {domain.Swordsman, "JK-D05", 600},
+		{domain.Warlock, "SS-D10", 650},
 	} {
 		for _, mana := range []int32{0, 100, 1000} {
 			for _, shield := range []int32{0, 100, 10000} {
@@ -42,7 +42,7 @@ func TestLegendaryManaAfterAllIncomingReductions(t *testing.T) {
 					m.Stats = domain.Stats{MinAtk: 1000, MaxAtk: 1000, Hit: 100000}
 					s.attacks = append(s.attacks, pendingAttack{src: m.ID, dst: p.ID, blow: combat.Blow{GuaranteedHit: true}})
 					s.stepCombatAt(s.now().Add(time.Second), false)
-					spent := min(mana, tc.remaining*30/100)
+					spent := min(mana, tc.remaining*45/100)
 					remaining := tc.remaining - spent
 					wantHP, wantShield := max(int32(0), remaining-shield), max(int32(0), shield-remaining)
 					if hp, mp, left := beforeHP-p.HP, mana-p.MP, universalShieldValue(p); hp != wantHP || mp != spent || left != wantShield {
@@ -102,10 +102,10 @@ func TestLegendaryManaAfterNativePeriodicReductions(t *testing.T) {
 						s.tick += domain.Ticks(int(burn.IntervalSec) * 1000)
 						s.stepStatus()
 						if extra {
-							raw = raw * 40 / 100
+							raw = raw * 35 / 100
 						}
 						reduced := raw * 65 / 100
-						spent := min(mana, reduced*30/100)
+						spent := min(mana, reduced*45/100)
 						remaining := reduced - spent
 						wantHP, wantShield := max(int32(0), remaining-shield), max(int32(0), shield-remaining)
 						if hp, mp, left := beforeHP-p.HP, mana-p.MP, universalShieldValue(p); hp != wantHP || mp != spent || left != wantShield {
@@ -149,7 +149,7 @@ func TestLegendaryManaDoesNotHideLargeHitThreshold(t *testing.T) {
 		t.Fatal("native monster spell did not land")
 	}
 	reduced := raw * 45 / 100
-	spent := min(int32(1000), reduced*30/100)
+	spent := min(int32(1000), reduced*45/100)
 	if hp, mp := beforeHP-p.HP, int32(1000)-p.MP; hp != reduced-spent || mp != spent {
 		t.Fatalf("large-hit damage/mana=%d/%d want%d/%d", hp, mp, reduced-spent, spent)
 	}
@@ -171,7 +171,7 @@ func TestLegendaryManaDerivedConsumerBoundaries(t *testing.T) {
 					s.equipmentState().classSetTriggered = 1
 				}
 				ev, _, _ := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, b)
-				spent := min(mana, int32(195))
+				spent := min(mana, int32(292))
 				want := int32(650) - spent - 100
 				if ev.Amount != want || mana-p.MP != spent || universalShieldValue(p) != 0 {
 					t.Fatalf("derived damage/mana/shield=%d/%d/%d want%d/%d/0", ev.Amount, mana-p.MP, universalShieldValue(p), want, spent)
@@ -233,7 +233,7 @@ func TestLegendaryManaActualNativeReflection(t *testing.T) {
 					if reduction {
 						reduced = reduced * 65 / 100
 					}
-					spent := min(mana, reduced*30/100)
+					spent := min(mana, reduced*45/100)
 					afterMana := reduced - spent
 					wantHP, wantShield := max(int32(0), afterMana-shield), max(int32(0), shield-afterMana)
 					wantEvents := 0

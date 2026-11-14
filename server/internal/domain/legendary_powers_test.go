@@ -71,18 +71,24 @@ func TestLegendarySlotCategoryAndProfessionMatrix(t *testing.T) {
 		for _, p := range LegendaryPowers() {
 			base := ItemDef{Equip: &EquipDef{Slot: int32(slot), LevelReq: p.MinLevel, Need: Requirement{Professions: 31}}}
 			classSlot := slot == SlotHead || slot == SlotBody || slot == SlotWeapon || slot == SlotTwoHand
-			want := categories[slot][p.Category] && (p.Class == "全职业" || classSlot)
+			typified := typifiedCatalogPower(p.ID)
+			// Typified class-limited powers keep historical A/D/U slots and typified
+			// source policy. Profession-specific powers still need the four class slots.
+			want := categories[slot][p.Category] && (p.Class == "全职业" || typified || classSlot)
 			if got := LegendaryPowerEligible(p, base); got != want {
 				t.Fatalf("slot %d power %s category %s class %s: eligible=%v want %v", slot, p.ID, p.Category, p.Class, got, want)
 			}
 			base.Equip.LevelReq--
-			if got := LegendaryPowerEligible(p, base); got != (want && p.Class == "全职业") {
-				t.Fatalf("slot %d power %s has wrong universal/profession level policy", slot, p.ID)
+			wantLow := want && base.Equip.LevelReq > 0 && (p.Class == "全职业" || typified)
+			if got := LegendaryPowerEligible(p, base); got != wantLow {
+				t.Fatalf("slot %d power %s has wrong typified/profession level policy", slot, p.ID)
 			}
 			base.Equip.LevelReq++
 			base.Equip.Need.Professions = 0
-			if got := LegendaryPowerEligible(p, base); got != (want && p.Class == "全职业") {
-				t.Fatalf("slot %d power %s ignored profession restriction", slot, p.ID)
+			// Professions==0 without ProfessionRestricted is an unrestricted base.
+			wantOpen := want && (p.Class == "全职业" || typified)
+			if got := LegendaryPowerEligible(p, base); got != wantOpen {
+				t.Fatalf("slot %d power %s ignored typified unrestricted-base policy", slot, p.ID)
 			}
 		}
 	}

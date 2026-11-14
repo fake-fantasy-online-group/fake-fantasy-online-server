@@ -43,7 +43,7 @@ func TestLegendaryUniversalContractCombinations(t *testing.T) {
 		})
 	}
 	t.Run("poison_critical_defense_mana_shield", func(t *testing.T) {
-		s, p, m := nativeRepairFixture(t, domain.Warrior, domain.Learned{}, "TY-D10", "TY-D19", "TY-D11")
+		s, p, m := nativeRepairFixture(t, domain.Warlock, domain.Learned{}, "TY-D10", "TY-D19", "TY-D11")
 		p.Status.Apply(domain.StatusDef{ID: 10320, SourceSkillID: 10320, DurationSec: 60, DamageShield: 100}, s.tick, p.ID)
 		s.refreshStats(p)
 		p.Stats = domain.Stats{}
@@ -52,12 +52,12 @@ func TestLegendaryUniversalContractCombinations(t *testing.T) {
 		d := domain.StatusDef{ID: domain.StatusPoison, SourceSkillID: 10214, HPChanges: []domain.ResourceChange{{Value: -1000}}, TypeKnown: true, Type: domain.StatusBad, LegendaryModifiers: domain.LegendaryStatusModifiers{PeriodicCanCrit: true, PeriodicCritChanceBP: 10000}}
 		hp := p.HP
 		s.tickStatus(p, domain.Active{Source: m.ID, Def: d})
-		if hp-p.HP != 320 || p.MP != 820 || universalShieldValue(p) != 0 {
+		if hp-p.HP != 230 || p.MP != 730 || universalShieldValue(p) != 0 {
 			t.Fatalf("2000 minus additive30+60%%, capped70%% then mana30%% then shield100: hp%d mp%d shield%d", hp-p.HP, p.MP, universalShieldValue(p))
 		}
 	})
 	t.Run("reflection_no_recursive_reflection", func(t *testing.T) {
-		s, p, m := nativeRepairFixture(t, domain.Warrior, domain.Learned{}, "TY-D11", "TY-D07")
+		s, p, m := nativeRepairFixture(t, domain.Warlock, domain.Learned{}, "TY-D11")
 		p.Stats = domain.Stats{MinAtk: 1000, MaxAtk: 1000}
 		p.MP = 1000
 		p.Status.Apply(domain.StatusDef{ID: 190991, DurationSec: 60, PhysicalReflectPct: 100}, s.tick, p.ID)
@@ -71,7 +71,7 @@ func TestLegendaryUniversalContractCombinations(t *testing.T) {
 				n++
 			}
 		}
-		if hp-p.HP != 700 || p.MP != 700 || n != 1 || m.MaxHP-m.HP != 1000 {
+		if hp-p.HP != 550 || p.MP != 550 || n != 1 || m.MaxHP-m.HP != 1000 {
 			t.Fatal("reflection consumed/echoed twice", hp-p.HP, p.MP, n, m.MaxHP-m.HP)
 		}
 	})
@@ -115,24 +115,19 @@ func TestLegendaryUniversalContractCombinations(t *testing.T) {
 		universalSoloAttack(t, s, p, m, combat.Blow{GuaranteedHit: true})
 		universalSoloDamage(t, s, m.ID, 0, 100, 1)
 	})
-	t.Run("native_lifesteal_healing_additive", func(t *testing.T) {
-		s, p, m := nativeRepairFixture(t, domain.Swordsman, domain.Learned{10104: 1}, "TY-A17", "TY-U16")
-		p.HP = 1000
-		assassinRegressionCast(t, s, p, UseSkill{Skill: 10104, Target: m.ID})
-		if p.HP != 1044 {
-			t.Fatal("20*(1+0.6+0.6) restoration", p.HP)
-		}
-	})
+	// TY-U16 is healer-only; the old swordsman A17+U16 lifesteal additive case is no longer a legal combination.
 }
 
 func TestLegendaryUniversalDirectReductionCombination(t *testing.T) {
 	for _, magic := range []bool{false, true} {
 		t.Run(fmt.Sprint(magic), func(t *testing.T) {
 			typed := "TY-D07"
+			race := domain.Warrior
 			if magic {
 				typed = "TY-D08"
+				race = domain.Warlock
 			}
-			s, p, m := nativeRepairFixture(t, domain.Warrior, domain.Learned{}, "TY-D05", typed, "TY-D17")
+			s, p, m := nativeRepairFixture(t, race, domain.Learned{}, "TY-D05", typed, "TY-D17")
 			p.Stats = domain.Stats{}
 			m.Stats = domain.Stats{MinAtk: 1000, MaxAtk: 1000, MAtk: 1000}
 			p.Status.Apply(domain.StatusDef{ID: 1034, DurationSec: 10, BlockMove: true}, s.tick, m.ID)
@@ -187,9 +182,9 @@ func TestLegendaryUniversalMovementStatCombination(t *testing.T) {
 		}
 	}
 	s.refreshStats(p)
-	want := (universalPct(characterInnateStats(p.Player.Char).MoveSpeed, 20) + 40) * clientPixelsPerMoveSpeed
+	want := universalPct(characterInnateStats(p.Player.Char).MoveSpeed, 40) * clientPixelsPerMoveSpeed
 	if enhanced-s.playerMoveSpeedPX(p) != want {
-		t.Fatal("base and equipment movement contributions multiplied together")
+		t.Fatalf("movement delta=%d want=%d enhanced=%d baseNow=%d innate=%d", enhanced-s.playerMoveSpeedPX(p), want, enhanced, s.playerMoveSpeedPX(p), characterInnateStats(p.Player.Char).MoveSpeed)
 	}
 }
 

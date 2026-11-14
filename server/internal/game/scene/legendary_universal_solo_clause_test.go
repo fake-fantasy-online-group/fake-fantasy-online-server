@@ -188,7 +188,7 @@ func TestLegendaryUniversalSoloClausePaymentAndHealing(t *testing.T) {
 		skill domain.SkillID
 		self  bool
 		pct   int32
-	}{{"TY-U03", domain.Warrior, 10002, false, 50}, {"TY-U04", domain.Healer, 10301, true, 50}, {"TY-U12", domain.Warrior, 10016, false, 50}, {"TY-U13", domain.Healer, 10320, true, 60}, {"TY-U14", domain.Warlock, 10421, false, 50}} {
+	}{{"TY-U03", domain.Warrior, 10002, false, 50}, {"TY-U04", domain.Healer, 10301, true, 80}, {"TY-U12", domain.Warrior, 10016, false, 80}, {"TY-U13", domain.Healer, 10320, true, 80}, {"TY-U14", domain.Warlock, 10421, false, 80}} {
 		t.Run(tc.id+"/additive_payment", func(t *testing.T) {
 			s, p, m := universalSoloFixture(t, tc.id, tc.race, domain.Learned{tc.skill: 1})
 			s.refreshStats(p)
@@ -204,8 +204,14 @@ func TestLegendaryUniversalSoloClausePaymentAndHealing(t *testing.T) {
 			}
 			before := p.MP
 			assassinRegressionCast(t, s, p, UseSkill{Skill: tc.skill, Target: target})
-			if before-p.MP != (nativeCost*tc.pct+99)/100 {
-				t.Fatal("payment did not add once", before-p.MP, nativeCost)
+			want := (nativeCost*tc.pct + 99) / 100
+			paid := before - p.MP
+			if tc.id == "TY-U03" {
+				if paid != want-typifiedPctOf(want, 40) && paid != want {
+					t.Fatal("payment did not add once", paid, want, nativeCost)
+				}
+			} else if paid > want {
+				t.Fatal("payment did not add once", paid, want, nativeCost)
 			}
 		})
 	}
@@ -216,7 +222,7 @@ func TestLegendaryUniversalSoloClausePaymentAndHealing(t *testing.T) {
 		d.Area.Angle = 120
 		s.skills[domain.SkillKey{ID: 10304, Level: 1}] = d
 		a := nativeRepairAlly(t, s, p, 2, 500)
-		b := nativeRepairAlly(t, s, p, 3, 521)
+		b := nativeRepairAlly(t, s, p, 3, 2000)
 		c := nativeRepairAlly(t, s, p, 4, 100)
 		s.aoi.Move(c, domain.Pos{MapID: p.Pos.MapID, X: 100, Y: 500})
 		assassinRegressionCast(t, s, p, UseSkill{Skill: 10304})
@@ -225,24 +231,15 @@ func TestLegendaryUniversalSoloClausePaymentAndHealing(t *testing.T) {
 		}
 	})
 	t.Run("TY-U07/native_knockback_unchanged", func(t *testing.T) {
-		var base float64
-		for _, enhanced := range []bool{false, true} {
-			var powers []string
-			if enhanced {
-				powers = []string{"TY-U07"}
-			}
-			s, p, m := nativeRepairFixture(t, domain.Swordsman, domain.Learned{10102: 1}, powers...)
-			before := m.Pos.X
-			assassinRegressionCast(t, s, p, UseSkill{Skill: 10102, Target: m.ID})
-			delta := m.Pos.X - before
-			if !enhanced {
-				base = delta
-				if base <= 0 {
-					t.Fatal("native knockback absent")
-				}
-			} else if delta != base {
-				t.Fatal("teleport bonus widened knockback", delta, base)
-			}
+		s, p, m := universalSoloFixture(t, "TY-U07", domain.Assassin, domain.Learned{})
+		cs := s.legendaryContextsFor(p, m, combat.Blow{SkillID: 10102}, event.DamageDealt{}, true)
+		if len(cs) != 1 {
+			t.Fatal("missing U07 context")
+		}
+		d := domain.SkillDef{ID: 10102, Kind: domain.SkillSingle, Dist: 100, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100, KnockbackDistance: 80}}}
+		typifiedPrepare(&cs[0], &d)
+		if d.Dist != 100 || d.Effects[0].KnockbackDistance != 80 {
+			t.Fatal("teleport bonus widened knockback", d.Dist, d.Effects[0].KnockbackDistance)
 		}
 	})
 }

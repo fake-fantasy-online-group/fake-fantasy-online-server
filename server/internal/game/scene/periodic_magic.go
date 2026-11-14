@@ -47,6 +47,7 @@ func (s *Scene) periodicMagicBeforeShield(target *entity.Entity, source *entity.
 	}
 	buckets := domain.CombatDamageBuckets{
 		SelectiveReductionBP: s.synergyPoolReduction(source, target, blow, hit),
+		TypifiedReductionBP:  s.typifiedPoolReduction(source, target, blow, hit),
 		ResistanceBP:         elemental.ResistBP, MitigationBP: int64(elemental.MitigationBP) + int64(guard.MitigationBP),
 		DamageTakenIncreasePct: target.Status.DamageTakenIncreasePct(magic),
 		DamageReductionPct:     target.Status.DamageReductionPct(magic), DamageReductionCapPct: target.Status.DamageReductionCapPct(),

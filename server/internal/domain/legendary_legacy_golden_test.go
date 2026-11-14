@@ -8,7 +8,13 @@ import (
 	"testing"
 )
 
-// Golden was captured from published commit 1e650f40, before split-policy code.
+// Golden recaptured after typified source-policy decoupling: typified class-limited
+// powers (TY-U/D with a profession Class) stay in the typified A/D/U pool and keep
+// typified source-level rules (sourceLevel>0; catalog MinLevel is metadata). They
+// were incorrectly excluded from source 43 rolls when MinLevel>43 (notably TY-U17
+// and TY-D11). Recipient class still filters activation and generation. Previous
+// hashes: 1e650f40/2652489 = 3aa18e6f3d8e16a22a6b39836d88c30e8cdde60707418b608627e0befec5c209;
+// post-reclass+MinLevel-coupling = 7b73f2ee859c9f7fa93f9f1ad742c1943bf391917940815bd2057523f06e0ccc.
 func TestLegendaryLegacyPublishedGolden(t *testing.T) {
 	def, table := sourceLevelFixture(t)
 	hash := sha256.New()
@@ -41,7 +47,7 @@ func TestLegendaryLegacyPublishedGolden(t *testing.T) {
 		}
 	}
 	got := fmt.Sprintf("%x", hash.Sum(nil))
-	const want = "3aa18e6f3d8e16a22a6b39836d88c30e8cdde60707418b608627e0befec5c209"
+	const want = "4e4790a6c95916c5161b291aa37b11b00cd56390b8b1052f57b5538b88e6441c"
 	if got != want {
 		t.Fatalf("published generation/RNG changed: got %s want %s", got, want)
 	}

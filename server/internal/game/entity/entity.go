@@ -1032,3 +1032,21 @@ func (p *Player) ReduceRemainingSkillCooldown(id domain.SkillID, now, delta doma
 	}
 	p.skillReady[id] -= min(delta, p.skillReady[id]-now)
 }
+
+func (p *Player) RemainingSkillCooldown(id domain.SkillID, now domain.Tick) domain.Tick {
+	if p == nil || p.skillReady[id] <= now {
+		return 0
+	}
+	return p.skillReady[id] - now
+}
+
+func (p *Player) ReduceRemainingSkillCooldownWithFloor(id domain.SkillID, now, delta, floor domain.Tick) {
+	if p == nil || p.skillReady[id] <= now {
+		return
+	}
+	minReady := now + floor
+	if p.skillReady[id] <= minReady {
+		return
+	}
+	p.skillReady[id] -= min(delta, p.skillReady[id]-minReady)
+}

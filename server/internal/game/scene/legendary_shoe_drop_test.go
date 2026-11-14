@@ -2,6 +2,7 @@ package scene
 
 import (
 	"fmt"
+	"strings"
 	"reflect"
 	"sort"
 	"testing"
@@ -30,7 +31,7 @@ func TestLegendaryShoesNative42And43CandidatesAndNaturalDrops(t *testing.T) {
 				}
 				categories := map[string]bool{}
 				for _, p := range domain.LegendaryCandidates(def) {
-					if p.Class != "全职业" {
+					if p.Class != "全职业" && !strings.HasPrefix(p.ID, "TY-") {
 						t.Fatalf("shoe %d admitted class/over-level power %s", id, p.ID)
 					}
 					categories[p.Category] = true
@@ -48,7 +49,7 @@ func TestLegendaryShoesNative42And43CandidatesAndNaturalDrops(t *testing.T) {
 					loot := &domain.LootRuleSet{UniqueBasePPB: domain.LootProbabilityScaleV5, UniqueMFDivisor: 250}
 					s.rollNaturalEquipmentQualityV5(def, &st, level, domain.DefaultColorProfile, true, 0, loot, &quality, &values, &unique, &variables)
 					p, ok := domain.LegendaryPower(st.Legendary.PowerID)
-					if !ok || p.Class != "全职业" || !domain.LegendaryPowerEligibleForItem(p, def, st) || st.Legendary.Validate() != nil {
+					if !ok || (p.Class != "全职业" && !strings.HasPrefix(p.ID, "TY-")) || !domain.LegendaryPowerEligibleForItem(p, def, st) || st.Legendary.Validate() != nil {
 						t.Fatalf("native shoe %d generated invalid legendary: %+v", id, st.Legendary)
 					}
 					if len(domain.LegendaryItemBonuses(def, st)) != domain.LegendaryAffixCount {
@@ -56,7 +57,7 @@ func TestLegendaryShoesNative42And43CandidatesAndNaturalDrops(t *testing.T) {
 					}
 					worn := domain.NewEquipSet()
 					worn.Set(domain.SlotShoe, st)
-					ch := &domain.Character{Race: 2, Employed: true, EmploymentKnown: true, Level: level}
+					ch := &domain.Character{Race: typifiedCompatibleRace(p.ID, domain.Assassin), Employed: true, EmploymentKnown: true, Level: level}
 					active := domain.ActiveLegendaryPowers(worn, s.itemDef, ch)
 					if len(active) != 1 || active[0].Power.ID != p.ID {
 						t.Fatal("legal shoe power did not activate", id, p.ID)
@@ -92,7 +93,7 @@ func TestLegendaryShoesRealRiftRewards(t *testing.T) {
 						continue
 					}
 					p, ok := domain.LegendaryPower(st.Legendary.PowerID)
-					if !ok || p.Class != "全职业" || !domain.LegendaryPowerEligibleForItem(p, def, st) || st.Legendary.Validate() != nil || observed[st.Item] == nil {
+					if !ok || (p.Class != "全职业" && !strings.HasPrefix(p.ID, "TY-")) || !domain.LegendaryPowerEligibleForItem(p, def, st) || st.Legendary.Validate() != nil || observed[st.Item] == nil {
 						t.Fatal("invalid legendary shoe reward", st.Item, st.Legendary.PowerID)
 					}
 					observed[st.Item][p.Category] = true

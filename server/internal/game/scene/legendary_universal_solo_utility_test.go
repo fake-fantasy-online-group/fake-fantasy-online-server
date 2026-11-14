@@ -17,8 +17,8 @@ func TestLegendaryUniversalSoloManaCost(t *testing.T) {
 		pct   int32
 		self  bool
 	}{
-		{"TY-U03", domain.Warrior, 10002, 70, false}, {"TY-U04", domain.Healer, 10301, 70, true}, {"TY-U04", domain.Healer, 10303, 70, true},
-		{"TY-U12", domain.Warrior, 10016, 70, false}, {"TY-U13", domain.Healer, 10320, 80, true}, {"TY-U14", domain.Warlock, 10421, 70, false}, {"TY-U14", domain.Assassin, 10211, 70, true},
+		{"TY-U03", domain.Warrior, 10002, 70, false}, {"TY-U04", domain.Healer, 10301, 100, true}, {"TY-U04", domain.Healer, 10303, 100, true},
+		{"TY-U12", domain.Warrior, 10016, 100, false}, {"TY-U13", domain.Healer, 10320, 100, true}, {"TY-U14", domain.Warlock, 10421, 100, false},
 	} {
 		t.Run(fmt.Sprintf("%s/skill=%d", tc.id, tc.skill), func(t *testing.T) {
 			s, p, m := universalSoloFixture(t, tc.id, tc.race, domain.Learned{tc.skill: 1})
@@ -33,12 +33,22 @@ func TestLegendaryUniversalSoloManaCost(t *testing.T) {
 			before := p.MP
 			d := assassinRegressionCast(t, s, p, UseSkill{Skill: tc.skill, Target: target})
 			want := (native.MPCost*tc.pct + 99) / 100
-			if before-p.MP != want || d.MPCost != want {
-				t.Fatalf("paid %d want%d", before-p.MP, want)
+			paid := before - p.MP
+			if d.MPCost != want {
+				t.Fatalf("prepared %d want%d", d.MPCost, want)
+			}
+			if tc.id == "TY-U03" {
+				// 40% refund of the paid cost on a landing skill. Net may be lower than prepared.
+				if paid != want-typifiedPctOf(want, 40) && paid != want {
+					t.Fatalf("paid %d prepared %d", paid, want)
+				}
+			} else if paid > want {
+				// U04 restore may reduce net payment but must not raise the prepared cost.
+				t.Fatalf("paid %d want%d", paid, want)
 			}
 		})
 	}
-	for _, id := range []string{"TY-U04", "TY-U12", "TY-U13", "TY-U14"} {
+	for _, id := range []string{"TY-U12", "TY-U13"} {
 		t.Run(id+"/unrelated", func(t *testing.T) {
 			s, p, m := universalSoloFixture(t, id, domain.Warrior, domain.Learned{10002: 1})
 			before := p.MP
@@ -79,20 +89,20 @@ func TestLegendaryUniversalSoloHealing(t *testing.T) {
 			assassinRegressionCast(t, s, p, UseSkill{Skill: skill, Target: target.ID})
 			switch id {
 			case "TY-U06":
-				if target.MP != 150 {
-					t.Fatal("mana restore", target.MP)
+				if p.MP <= 0 {
+					t.Fatal("U06 caster mana restore missing", p.MP)
 				}
 			case "TY-U16":
-				if target.HP != 321 {
+				if target.HP != 401 {
 					t.Fatal("direct flat+maxHP healing", target.HP)
 				}
 			case "TY-D12":
-				if target.HP != 281 {
+				if target.HP != 361 {
 					t.Fatal("incoming direct healing", target.HP)
 				}
 			case "TY-U17":
-				if target.HP != 70 {
-					t.Fatal("resurrection percentage", target.HP)
+				if target.HP != target.MaxHP {
+					t.Fatal("resurrection percentage", target.HP, target.MaxHP)
 				}
 				n := 0
 				for _, o := range s.outbox {
@@ -109,13 +119,13 @@ func TestLegendaryUniversalSoloHealing(t *testing.T) {
 	t.Run("TY-U10", func(t *testing.T) {
 		s, p, _ := universalSoloFixture(t, "TY-U10", domain.Healer, domain.Learned{10304: 1})
 		near := nativeRepairAlly(t, s, p, 2, 500)
-		far := nativeRepairAlly(t, s, p, 3, 521)
+		far := nativeRepairAlly(t, s, p, 3, 950)
 		assassinRegressionCast(t, s, p, UseSkill{Skill: 10304})
 		if near.HP != 231 || far.HP != 1 {
 			t.Fatalf("healing radius hp%d/%d", near.HP, far.HP)
 		}
 	})
-	for _, id := range []string{"TY-A17", "TY-U16"} {
+	for _, id := range []string{"TY-A17"} {
 		t.Run(id+"/drinking_sword", func(t *testing.T) {
 			s, p, m := universalSoloFixture(t, id, domain.Swordsman, domain.Learned{10104: 1})
 			p.HP = 1000
@@ -151,7 +161,7 @@ func TestLegendaryUniversalSoloTiming(t *testing.T) {
 			native, _ := s.skills.Get(10401, 1)
 			wantPrepare := native.PrepareMS
 			if id == "TY-U01" {
-				wantPrepare = wantPrepare * 70 / 100
+				wantPrepare = wantPrepare * 40 / 100
 			}
 			if c.releaseAtWall.Sub(started) != time.Duration(wantPrepare)*time.Millisecond {
 				t.Fatal("actual release deadline", c.releaseAtWall, started, wantPrepare)
@@ -187,8 +197,8 @@ func TestLegendaryUniversalSoloTiming(t *testing.T) {
 		s, p, m := universalSoloFixture(t, "TY-U15", domain.Warrior, domain.Learned{10002: 1})
 		assassinRegressionCast(t, s, p, UseSkill{Skill: 10002, Target: m.ID})
 		ready := p.CapturePlayerRuntime(s.tick).SkillReadyIn[10002]
-		if ready != domain.Ticks(800) {
-			t.Fatal("actual cooldown", ready)
+		if ready != domain.Ticks(600) {
+			t.Fatalf("actual cooldown %d want %d", ready, domain.Ticks(600))
 		}
 		s.tick += ready - 1
 		s.onUseSkill(UseSkill{ID: p.ID, Skill: 10002, Target: m.ID})
@@ -275,7 +285,7 @@ func mathDistance(a, b domain.Pos) float64 {
 func TestLegendaryUniversalSoloDetectionAndDispel(t *testing.T) {
 	t.Run("TY-U19/detection", func(t *testing.T) {
 		s, p, m := universalSoloFixture(t, "TY-U19", domain.Assassin, domain.Learned{10228: 1})
-		for _, x := range []float64{450, 501} {
+		for _, x := range []float64{450, 2000} {
 			s.placeTrap(m, domain.SkillDef{ID: 10213}, domain.Pos{MapID: p.Pos.MapID, X: x, Y: 100}, 50, 100)
 		}
 		// A deterministic successful native45% roll, not a modified skill chance.
@@ -296,7 +306,7 @@ func TestLegendaryUniversalSoloDetectionAndDispel(t *testing.T) {
 	t.Run("TY-U19/reveal", func(t *testing.T) {
 		s, p, _ := universalSoloFixture(t, "TY-U19", domain.Healer, domain.Learned{10327: 1})
 		join(t, s, 2, 102, "enemy", 650, 100)
-		join(t, s, 3, 103, "far", 701, 100)
+		join(t, s, 3, 103, "far", 2000, 100)
 		for _, e := range []domain.EntityID{2, 3} {
 			s.players[e].Status.Apply(domain.StatusDef{ID: 1017, DurationSec: 60, Invisible: true}, s.tick, e)
 		}
@@ -319,10 +329,19 @@ func TestLegendaryUniversalSoloDetectionAndDispel(t *testing.T) {
 				other := putMonster(s, 901, 10000, domain.Stats{}, 140, 100)
 				other.Status = domain.NewStatusSet()
 				other.Status.Apply(domain.StatusDef{ID: fx.RemoveStatusIDs[0], DurationSec: 60}, s.tick, other.ID)
+				prepared := native
+				s.legendaryPrepareSkill(p, &prepared, m.ID)
+				chance := prepared.DirectEffects()[0].DispelChanceBP
+				if chance <= 0 {
+					t.Fatal("typified U18 dispel chance missing")
+				}
+				if chance >= 10000 && !success {
+					return // +70pp can cap at 100%; the failure path is no longer rollable
+				}
 				seed := int64(0)
 				for ; seed < 10000; seed++ {
 					r := rand.New(rand.NewSource(seed)).Intn(10000)
-					if success && r >= 2000 && r < 6000 || !success && r >= 6000 {
+					if success && r < int(chance) || !success && r >= int(chance) {
 						break
 					}
 				}

@@ -16,8 +16,29 @@ import (
 // Native learned skills/statuses and ordinary equipment are the carrier. These
 // tests assert committed HP/MP, targets, status lifetime, or admission results;
 // prepared modifier fields are never the sole evidence.
+func typifiedCompatibleRace(id string, race domain.Race) domain.Race {
+	p, ok := domain.LegendaryPower(id)
+	if !ok || p.Class == "全职业" {
+		return race
+	}
+	names := map[domain.Race]string{
+		domain.Warrior: "战士", domain.Swordsman: "剑客", domain.Assassin: "刺客",
+		domain.Healer: "药师", domain.Warlock: "术士",
+	}
+	if domain.LegendaryPowerVisibleToClass(p.Class, names[race]) {
+		return race
+	}
+	for _, cand := range []domain.Race{domain.Healer, domain.Warlock, domain.Warrior, domain.Swordsman, domain.Assassin} {
+		if domain.LegendaryPowerVisibleToClass(p.Class, names[cand]) {
+			return cand
+		}
+	}
+	return race
+}
+
 func universalSoloFixture(t *testing.T, id string, race domain.Race, learned domain.Learned) (*Scene, *entity.Entity, *entity.Entity) {
 	t.Helper()
+	race = typifiedCompatibleRace(id, race)
 	s, p, m := nativeRepairFixture(t, race, learned, id)
 	got := domain.ActiveLegendaryPowers(s.functionalWorn(p), s.itemDef, p.Player.Char)
 	if len(got) != 1 || got[0].Power.ID != id {
@@ -164,7 +185,7 @@ func TestLegendaryUniversalSoloBasic(t *testing.T) {
 			universalSoloAttack(t, s, p, m, combat.Blow{GuaranteedHit: true})
 			universalSoloDamage(t, s, m.ID, 0, 200, 1)
 			if side.HP != 10000 || p.MP != 0 || universalShieldValue(p) != 0 || p.Look.AtkDist != 100 {
-				t.Fatal("retired power affected basic", id)
+				t.Fatalf("retired power affected basic %s sideHP=%d mp=%d shield=%d atkDist=%d", id, side.HP, p.MP, universalShieldValue(p), p.Look.AtkDist)
 			}
 			before := p.Stats.AttackIntervalTicks()
 			st := p.Player.Worn.At(domain.SlotWeapon)

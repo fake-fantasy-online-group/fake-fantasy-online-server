@@ -8,6 +8,9 @@ package domain
 // operations after/beside these arithmetic stages.
 type CombatDamageBuckets struct {
 	SelectiveReductionBP int32
+	// TypifiedReductionBP is this batch's post-ordinary path.
+	// It has a 70% cap and does not use the shared 25% floor.
+	TypifiedReductionBP int32
 
 	DamageIncreaseBP          int64
 	PVPScaledDamageIncreaseBP int64
@@ -65,6 +68,9 @@ func (b CombatDamageBuckets) IncomingDamage(amount int32) int32 {
 			floor++
 		}
 		wide = max(wide, floor)
+	}
+	if b.TypifiedReductionBP > 0 {
+		wide = scaleDamageWide(wide, 10000-int64(min(int32(7000), b.TypifiedReductionBP)), 10000)
 	}
 	return max(int32(0), SaturateInt32(wide))
 }
