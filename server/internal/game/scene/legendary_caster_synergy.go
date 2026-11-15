@@ -550,16 +550,13 @@ func init() {
 }
 
 func (s *Scene) legendaryCasterOverlay(target *entity.Entity, d domain.StatusDef, base domain.StatusOverlay) domain.StatusOverlay {
+	return elementalShieldOverlay(d, base)
+}
+
+// Fire and ice shields coexist by default, independently of SS-D07.
+// The global overlay matrix is not mutated; this copy only affects the apply.
+func elementalShieldOverlay(d domain.StatusDef, base domain.StatusOverlay) domain.StatusOverlay {
 	if d.ID != 1037 && d.ID != 1038 {
-		return base
-	}
-	enabled := false
-	s.forEachLegendary(target, func(c *legendaryContext) {
-		if c.Power.ID == "SS-D07" {
-			enabled = true
-		}
-	})
-	if !enabled {
 		return base
 	}
 	out := make(domain.StatusOverlay, len(base)+2)

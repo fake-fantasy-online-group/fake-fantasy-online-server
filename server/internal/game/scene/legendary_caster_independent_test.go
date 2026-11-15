@@ -1050,7 +1050,7 @@ func TestCasterIndependentD07NativeShields(t *testing.T) {
 			s.statusOverlay = domain.StatusOverlay{{Existing: 1037, Incoming: 1038}: domain.OverlayMustReplace, {Existing: 1038, Incoming: 1037}: domain.OverlayMustReplace}
 			nativeRepairCast(t, s, p, 10425, p.ID)
 			nativeRepairCast(t, s, p, 10435, p.ID)
-			if p.Status.HasEffective(1037) != on || !p.Status.HasEffective(1038) {
+			if !p.Status.HasEffective(1037) || !p.Status.HasEffective(1038) {
 				t.Fatal("native shield coexist", on)
 			}
 			p.Stats = domain.Stats{}
@@ -1059,12 +1059,8 @@ func TestCasterIndependentD07NativeShields(t *testing.T) {
 			before, enemy := p.HP, m.HP
 			ev, raw, reflected := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true})
 			s.afterStrikeStatuses(m, p, ev, raw, reflected)
-			want := int32(700)
-			if on {
-				want = 400
-			}
-			if before-p.HP != want {
-				t.Fatal("native resist consumers", before-p.HP, want)
+			if before-p.HP != 400 {
+				t.Fatal("native resist consumers", before-p.HP, 400, on)
 			}
 			froze := false
 			for _, o := range s.outbox {
@@ -1075,8 +1071,8 @@ func TestCasterIndependentD07NativeShields(t *testing.T) {
 			if !froze {
 				t.Fatal("native ice counter-freeze never applied")
 			}
-			if on && m.HP >= enemy {
-				t.Fatal("native fire reflection lost")
+			if m.HP >= enemy {
+				t.Fatal("native fire reflection lost", on)
 			}
 			if s.statusOverlay[domain.OverlayKey{Existing: 1037, Incoming: 1038}] != domain.OverlayMustReplace {
 				t.Fatal("global overlay mutated")

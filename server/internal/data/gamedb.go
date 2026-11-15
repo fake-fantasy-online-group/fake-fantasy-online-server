@@ -1125,6 +1125,7 @@ func LoadItems(ctx context.Context, q Querier) (ItemDefs, error) {
 	if err := loadFixedItemBindings(ctx, q, out); err != nil {
 		return nil, err
 	}
+	domain.RegisterRiftClearPack(out)
 	return out, nil
 }
 

@@ -1608,21 +1608,34 @@ func (s *Session) resolveLoginScene(ctx context.Context, char *domain.Character,
 		return id, nil
 	}
 	def, dungeon := s.deps.Dungeons[char.Pos.MapID]
+	saved := domain.SceneID{MapID: char.Pos.MapID, Instance: char.SceneInstance}
+	if s.deps.Router != nil && s.deps.Router.CancelledRiftNeedsCityReturn(domain.CharID(char.ID), saved, char.Pos) {
+		char.Pos = domain.LongchengSpawn
+		char.SceneInstance = 0
+		if err := s.deps.Store.SaveChar(ctx, char); err != nil {
+			return domain.SceneID{}, fmt.Errorf("清理失效洞天存档: %w", err)
+		}
+		s.log.Info("原洞天实例已取消或失效，改落龙城", "char", char.Name,
+			"scene", saved, "party", partyID, "spawn", domain.LongchengSpawn)
+		return domain.SceneID{MapID: domain.LongchengSpawn.MapID}, nil
+	}
 	if char.SceneInstance == 0 && !dungeon {
 		return domain.SceneID{MapID: char.Pos.MapID}, nil
 	}
-	saved := domain.SceneID{MapID: char.Pos.MapID, Instance: char.SceneInstance}
 	if dungeon && (s.deps.Router.ActiveRiftForCharacter(saved, domain.CharID(char.ID)) || domain.CanEnterQuestDungeon(saved.MapID, char.Quests) && s.deps.Router.ActiveForOwner(saved, def.Owner(domain.CharID(char.ID), partyID))) {
 		return saved, nil
 	}
 	if !dungeon {
-		// A lost rift on an ordinary map can safely return to the public
-		// counterpart at the last collision-valid position; no instance recreation.
+		// A cancelled or vanished rift must not land on the pre-rift map or the
+		// public counterpart of the expired instance. Use the official 龙城 spawn.
+		char.Pos = domain.LongchengSpawn
 		char.SceneInstance = 0
 		if err := s.deps.Store.SaveChar(ctx, char); err != nil {
 			return domain.SceneID{}, err
 		}
-		return domain.SceneID{MapID: char.Pos.MapID}, nil
+		s.log.Info("原洞天实例已不可恢复，改落龙城", "char", char.Name,
+			"scene", saved, "party", partyID, "spawn", domain.LongchengSpawn)
+		return domain.SceneID{MapID: domain.LongchengSpawn.MapID}, nil
 	}
 	char.Pos = def.Exit
 	char.SceneInstance = 0

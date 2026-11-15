@@ -314,6 +314,10 @@ func (s *Scene) generateEndgameRiftGrantsWithContexts(contexts map[domain.CharID
 			allowedItems = append(allowedItems, stack)
 		}
 		grant.Items = allowedItems
+		if def, ok := s.itemDef(domain.RiftClearPackItemID); ok {
+			stack := domain.NewStack(def, 1)
+			grant.Items = append(grant.Items, domain.NormalizeStackBindings(stack, s.itemDef))
+		}
 		grants[char] = grant
 	}
 	d.Grants = grants

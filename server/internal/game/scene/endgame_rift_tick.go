@@ -155,7 +155,7 @@ func (s *Scene) stepEndgameRift() {
 		}
 		if now >= x.terminalUntil || len(s.players) == 0 {
 			for id := range s.players {
-				s.onTeleport(Teleport{ID: id, To: domain.SceneID{MapID: x.data.Return.MapID}, At: x.data.Return})
+				s.onTeleport(Teleport{ID: id, To: domain.SceneID{MapID: domain.LongchengSpawn.MapID}, At: domain.LongchengSpawn})
 			}
 			s.Stop()
 		}
@@ -192,7 +192,7 @@ func (s *Scene) pollEndgameRiftReload(now int64) {
 			char := domain.CharID(p.Player.Char.ID)
 			if !x.data.Run.Admitted(char) {
 				s.router.withdrawRift(s.id, char)
-				s.onTeleport(Teleport{ID: id, To: domain.SceneID{MapID: x.data.Return.MapID}, At: x.data.Return})
+				s.onTeleport(Teleport{ID: id, To: domain.SceneID{MapID: domain.LongchengSpawn.MapID}, At: domain.LongchengSpawn})
 			}
 		}
 	default:

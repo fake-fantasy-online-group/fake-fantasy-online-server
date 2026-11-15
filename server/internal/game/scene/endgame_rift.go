@@ -466,7 +466,7 @@ func (s *Scene) leaveEndgameRift(p *entity.Entity, req domain.EndgameRequest) {
 		id := p.ID
 		s.timer.after(s.tick, 1, func() {
 			if s.players[id] != nil {
-				s.onTeleport(Teleport{ID: id, To: domain.SceneID{MapID: next.Return.MapID}, At: next.Return})
+				s.onTeleport(Teleport{ID: id, To: domain.SceneID{MapID: domain.LongchengSpawn.MapID}, At: domain.LongchengSpawn})
 			}
 		})
 	}, withRiftProfile(s.endgamePlayer(p).state.Payload, profile))

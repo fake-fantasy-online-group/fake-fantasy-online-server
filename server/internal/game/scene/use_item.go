@@ -496,6 +496,19 @@ func (s *Scene) useGachaBoxItem(p *entity.Entity, bagSlot int, item domain.ItemD
 		}
 		gained = append(gained, domain.RewardItem{Item: reward.Item, Qty: qty})
 	}
+	if item.ID == domain.RiftClearPackItemID && p.Player != nil && p.Player.Char != nil && riftClearPackTrueSetHit(s) {
+		for _, piece := range domain.TrueSetPiecesForCharacter(s.items, p.Player.Char) {
+			def, ok := s.itemDef(piece)
+			if !ok {
+				continue
+			}
+			if bag.Add(def, 1) != 0 {
+				s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: "背包空间不足，无法打开礼包"})
+				return
+			}
+			gained = append(gained, domain.RewardItem{Item: piece, Qty: 1})
+		}
+	}
 	p.Player.Bag = bag
 	p.Player.MarkDirty()
 	startCooldown()

@@ -127,6 +127,21 @@ func (r *RiftRun) Clone() *RiftRun {
 func (r *RiftRun) Terminal() bool {
 	return r.Phase == RiftCompleted || r.Phase == RiftClosed || r.Phase == RiftFailed || r.Phase == RiftAborted
 }
+
+// ResumeAllowed reports that a disconnected member may still re-enter this run.
+// Failed, aborted and closed runs must fall back to 龙城. A completed run stays
+// enterable while its settlement instance is still up, so loot can be claimed.
+func (r *RiftRun) ResumeAllowed() bool {
+	if r == nil {
+		return false
+	}
+	switch r.Phase {
+	case RiftReserved, RiftActive, RiftBoss, RiftBossArriving, RiftCompleted:
+		return true
+	default:
+		return false
+	}
+}
 func (r *RiftRun) Admitted(id CharID) bool { m := r.Members[id]; return m != nil && !m.Departed }
 func (r *RiftRun) Activate(now int64) bool {
 	if r.Rules == nil {

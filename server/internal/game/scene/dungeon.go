@@ -124,6 +124,12 @@ func (s *Scene) checkDungeonEligibility() {
 // persistedPosition 统一决定存档中的场景位置。在副本中仍有组队资格时
 // 保留实例号；已失去资格而下线/小退时直接落副本出口。
 func (s *Scene) persistedPosition(p *entity.Entity) (domain.Pos, uint32) {
+	if s.rift != nil {
+		if p != nil && p.Player != nil && s.rift.data.Run != nil && !s.rift.retired && s.rift.data.Run.ResumeAllowed() && s.rift.data.Run.Admitted(domain.CharID(p.Player.Char.ID)) {
+			return p.Pos, s.id.Instance
+		}
+		return domain.LongchengSpawn, 0
+	}
 	if s.dungeon == nil {
 		return p.Pos, 0
 	}

@@ -3633,7 +3633,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "火盾与冰盾可同时生效；最大生命提高28%。",
+    "effect": "最大生命提高28%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
