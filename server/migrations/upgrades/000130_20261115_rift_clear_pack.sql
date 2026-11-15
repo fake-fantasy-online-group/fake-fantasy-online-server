@@ -41,9 +41,10 @@ BEGIN
   'small_map',icon,'big_map',icon,'can_pile',1,'can_mail',0,'can_deal',0,'can_buy',0,'can_drop',0,'weight',0,'sell_price',0,'self_use',1,'other_use',0))).*
   WHERE NOT EXISTS(SELECT FROM gamedata.ov_desc WHERE index=pack OR row_no=pack);
 
+ -- min_free_slots stays 0: open pre-checks worst-case rewards against current stacks in code.
  INSERT INTO game_item_gacha_boxes(source_item_id,key_item_id,key_quantity,min_free_slots)
- VALUES(pack,0,0,32)
- ON CONFLICT(source_item_id) DO UPDATE SET key_item_id=0, key_quantity=0, min_free_slots=32;
+ VALUES(pack,0,0,0)
+ ON CONFLICT(source_item_id) DO UPDATE SET key_item_id=0, key_quantity=0, min_free_slots=0;
 
  DELETE FROM game_item_gacha_rewards WHERE source_item_id=pack;
  INSERT INTO game_item_gacha_rewards(source_item_id,seq,reward_item_id,min_quantity,max_quantity,chance_bp) VALUES

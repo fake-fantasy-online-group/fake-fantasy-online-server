@@ -457,7 +457,12 @@ func (s *Scene) useGachaBoxItem(p *entity.Entity, bagSlot int, item domain.ItemD
 		reject(event.RejectInvalid)
 		return
 	}
-	if box.MinFreeSlots > 0 && bag.FreeSlots() < int(box.MinFreeSlots) {
+	if item.ID == domain.RiftClearPackItemID {
+		if p.Player.Char == nil || !domain.RiftClearPackFitsWorstCase(p.Player.Bag, s.items, p.Player.Char, bagSlot) {
+			s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: "背包空间不足，无法打开礼包"})
+			return
+		}
+	} else if box.MinFreeSlots > 0 && bag.FreeSlots() < int(box.MinFreeSlots) {
 		s.emitTo(p.ID, event.ServerNotice{Who: p.ID,
 			Text: fmt.Sprintf("背包剩余空间不足%d格，无法打开礼包", box.MinFreeSlots)})
 		return
@@ -502,7 +507,7 @@ func (s *Scene) useGachaBoxItem(p *entity.Entity, bagSlot int, item domain.ItemD
 			if !ok {
 				continue
 			}
-			if bag.Add(def, 1) != 0 {
+			if domain.AddRiftClearPackReward(bag, def, 1) != 0 {
 				s.emitTo(p.ID, event.ServerNotice{Who: p.ID, Text: "背包空间不足，无法打开礼包"})
 				return
 			}

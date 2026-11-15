@@ -24,7 +24,7 @@ func TestRiftClearPackPotionTableUsesExistingCatalogItems(t *testing.T) {
 		t.Fatal("天山雪莲 and 长白参 must both be present as distinct items")
 	}
 	item := NewRiftClearPackItem()
-	if item.ID != RiftClearPackItemID || item.Name != RiftClearPackName || item.FixedBinding != ItemBindingFixedBound || item.GachaBox == nil || item.GachaBox.MinFreeSlots != RiftClearPackMinFreeSlots {
+	if item.ID != RiftClearPackItemID || item.Name != RiftClearPackName || item.FixedBinding != ItemBindingFixedBound || item.GachaBox == nil || item.GachaBox.MinFreeSlots != 0 {
 		t.Fatalf("pack definition %+v", item)
 	}
 	if !reflect.DeepEqual(item.GachaBox.Rewards, rewards) {
@@ -89,5 +89,76 @@ func TestRiftRunResumeAllowedKeepsCompletedButNotCancelled(t *testing.T) {
 	}
 	if (*RiftRun)(nil).ResumeAllowed() {
 		t.Fatal("nil run")
+	}
+}
+
+func TestTrueSetPiecesRejectedForBeginnerOrInvalidRace(t *testing.T) {
+	piece := HardDungeonItemOffset + 8005
+	items := map[ItemID]ItemDef{piece: hardPiece(piece, "真*战士甲", 1<<Warrior, 0)}
+	beginner := &Character{Race: Warrior, EmploymentKnown: true, Employed: false, Appear: Appearance{Gender: 1}}
+	if got := TrueSetPiecesForCharacter(items, beginner); len(got) != 0 {
+		t.Fatalf("beginner received true set %v", got)
+	}
+	invalid := &Character{Race: Race(9), Employed: true, EmploymentKnown: true, Appear: Appearance{Gender: 1}}
+	if got := TrueSetPiecesForCharacter(items, invalid); len(got) != 0 {
+		t.Fatalf("invalid race received true set %v", got)
+	}
+	warrior := &Character{Race: Warrior, Employed: true, EmploymentKnown: true, Appear: Appearance{Gender: 1}}
+	if got := TrueSetPiecesForCharacter(items, warrior); len(got) != 1 || got[0] != piece {
+		t.Fatalf("employed warrior should receive the set %v", got)
+	}
+}
+
+func TestRiftClearPackFitsWorstCaseUsesExistingStacks(t *testing.T) {
+	items := map[ItemID]ItemDef{RiftClearPackItemID: NewRiftClearPackItem()}
+	for _, reward := range RiftClearPackPotionRewards() {
+		items[reward.Item] = ItemDef{ID: reward.Item, Stackable: true, InventoryTab: 0, InventoryTabKnown: true}
+	}
+	piece := HardDungeonItemOffset + 8401
+	items[piece] = hardPiece(piece, "真*术士袍", 1<<Warlock, 0)
+	warlock := &Character{Race: Warlock, Employed: true, EmploymentKnown: true, Appear: Appearance{Gender: 1}}
+
+	bag := NewBag(20)
+	pack := items[RiftClearPackItemID]
+	if bag.Add(pack, 1) != 0 {
+		t.Fatal("pack")
+	}
+	for _, reward := range RiftClearPackPotionRewards() {
+		if bag.Add(items[reward.Item], reward.MaxQty) != 0 {
+			t.Fatal("potion seed", reward.Item)
+		}
+	}
+	// 14 potion stacks + pack leave 5 empty slots, far below the old fixed 32.
+	// Fillers are unstackable so they occupy distinct slots instead of merging.
+	nextFiller := ItemID(99001)
+	fillSlot := func() {
+		def := ItemDef{ID: nextFiller, InventoryTab: 0, InventoryTabKnown: true}
+		items[nextFiller] = def
+		if bag.Add(def, 1) != 0 {
+			t.Fatal("filler", nextFiller)
+		}
+		nextFiller++
+	}
+	for bag.FreeSlots() > 1 {
+		fillSlot()
+	}
+	if bag.FreeSlots() != 1 {
+		t.Fatalf("setup free slots %d", bag.FreeSlots())
+	}
+	if !RiftClearPackFitsWorstCase(bag, items, warlock, 0) {
+		t.Fatal("existing potion stacks should cover worst-case potions, leaving the pack slot plus one empty for the set")
+	}
+
+	// One leftover empty slot plus the pack slot would still fit a single 真* piece.
+	// A second piece makes worst-case overflow after the pack is consumed.
+	second := HardDungeonItemOffset + 8451
+	items[second] = hardPiece(second, "真*术士帽", 1<<Warlock, 0)
+	fillSlot()
+	if bag.FreeSlots() != 0 {
+		t.Fatalf("expected full bag %d", bag.FreeSlots())
+	}
+	// Consume pack frees 1 slot; two true-set pieces cannot both fit.
+	if RiftClearPackFitsWorstCase(bag, items, warlock, 0) {
+		t.Fatal("two set pieces must not fit into the single slot freed by the pack")
 	}
 }

@@ -106,14 +106,13 @@ func TestRiftClearPackOpenUsesOpenerClassAndRollsBackWhenFull(t *testing.T) {
 		t.Fatal("miss still granted a true set or lost potions")
 	}
 
-	// MinFreeSlots / mid-open overflow keeps the pack and grants nothing.
+	// Worst-case pre-check refuses before rolling when even max potions cannot fit.
 	p.Player.Bag = domain.NewBag(14)
-	pack.GachaBox.MinFreeSlots = 0
-	s.items[domain.RiftClearPackItemID] = pack
 	p.Player.Bag.Add(pack, 1)
 	for i := 2; i < 14; i++ {
 		p.Player.Bag.Add(s.items[9998], 1)
 	}
+	p.Player.Char.Race = domain.Warlock
 	riftClearPackTrueSetRoll = func(*Scene) bool { return true }
 	sink.take()
 	s.exec(UseItem{ID: 1, Item: domain.RiftClearPackItemID, Tab: 0, BagSlot: 0})
@@ -124,6 +123,60 @@ func TestRiftClearPackOpenUsesOpenerClassAndRollsBackWhenFull(t *testing.T) {
 	}
 	if !joinedNotice(evs, "背包空间不足") {
 		t.Fatal("full bag notice", noticeTexts(evs))
+	}
+}
+
+func TestRiftClearPackOpenWithExistingStacksBelowThirtyTwoFreeSlots(t *testing.T) {
+	s, sink := gachaScene(t, nil)
+	registerPackAndPotions(s)
+	warlockPiece := domain.HardDungeonItemOffset + 8401
+	s.items[warlockPiece] = domain.ItemDef{ID: warlockPiece, Name: "真*术士袍", HardDungeonOnly: true, InventoryTab: 2, InventoryTabKnown: true, Equip: &domain.EquipDef{Need: domain.Requirement{Professions: 1 << domain.Warlock, ProfessionRestricted: true}}}
+	pack := domain.NewRiftClearPackItem()
+	s.items[domain.RiftClearPackItemID] = pack
+	p := s.entities[1]
+	p.Player.Char.Race = domain.Warlock
+	p.Player.Char.Employed = true
+	p.Player.Char.EmploymentKnown = true
+	p.Player.Bag = domain.NewBag(20)
+	if p.Player.Bag.Add(pack, 1) != 0 {
+		t.Fatal("pack")
+	}
+	for _, reward := range domain.RiftClearPackPotionRewards() {
+		if p.Player.Bag.Add(s.items[reward.Item], reward.MaxQty) != 0 {
+			t.Fatal("seed", reward.Item)
+		}
+	}
+	nextFiller := domain.ItemID(99001)
+	for p.Player.Bag.FreeSlots() > 1 {
+		def := domain.ItemDef{ID: nextFiller, InventoryTab: 0, InventoryTabKnown: true}
+		s.items[nextFiller] = def
+		if p.Player.Bag.Add(def, 1) != 0 {
+			t.Fatal("filler", nextFiller)
+		}
+		nextFiller++
+	}
+	if p.Player.Bag.FreeSlots() != 1 {
+		t.Fatalf("setup free slots %d", p.Player.Bag.FreeSlots())
+	}
+	riftClearPackTrueSetRoll = func(*Scene) bool { return true }
+	t.Cleanup(func() { riftClearPackTrueSetRoll = nil })
+	s.exec(UseItem{ID: 1, Item: domain.RiftClearPackItemID, Tab: 0, BagSlot: 0})
+	s.step()
+	evs := sink.take()
+	if p.Player.Bag.CountOf(domain.RiftClearPackItemID) != 0 || p.Player.Bag.CountOf(3121) < 3+5 || p.Player.Bag.CountOf(warlockPiece) != 1 {
+		t.Fatal("stack-aware open failed", p.Player.Bag.FreeSlots(), p.Player.Bag.CountOf(3121), p.Player.Bag.CountOf(warlockPiece), noticeTexts(evs))
+	}
+	if !joinedNotice(evs, "打开成功") {
+		t.Fatal("success notice", noticeTexts(evs))
+	}
+	foundBound := false
+	p.Player.Bag.Each(func(_ int, st domain.Stack) {
+		if st.Item == warlockPiece && st.Bound && st.Count == 1 {
+			foundBound = true
+		}
+	})
+	if !foundBound {
+		t.Fatal("true set piece was not bound")
 	}
 }
 

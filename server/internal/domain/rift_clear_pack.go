@@ -11,9 +11,8 @@ const RiftClearPackItemID ItemID = 1900028304
 // implementer choice, not a player-specified rate, and stays deterministic in tests.
 const RiftClearPackTrueSetChanceBP int32 = 1
 
-// RiftClearPackMinFreeSlots reserves space for every potion stack plus a full
-// class 真* set, so a rare hit cannot be retried just because the bag was short.
-const RiftClearPackMinFreeSlots int32 = 32
+// The static gacha MinFreeSlots field is left at 0. A fixed empty-slot floor
+// cannot see existing stacks; open uses RiftClearPackFitsWorstCase instead.
 
 // RiftClearPackName is the catalog display name of the clear gift.
 const RiftClearPackName = "洞天通关礼包"
@@ -55,8 +54,7 @@ func NewRiftClearPackItem() ItemDef {
 		InventoryTab:      0,
 		InventoryTabKnown: true,
 		GachaBox: &GachaBoxDef{
-			MinFreeSlots: RiftClearPackMinFreeSlots,
-			Rewards:      RiftClearPackPotionRewards(),
+			Rewards: RiftClearPackPotionRewards(),
 		},
 	}
 }
@@ -73,16 +71,17 @@ func RegisterRiftClearPack(items map[ItemID]ItemDef) {
 		return
 	}
 	if def.GachaBox == nil {
-		def.GachaBox = &GachaBoxDef{MinFreeSlots: RiftClearPackMinFreeSlots, Rewards: RiftClearPackPotionRewards()}
-		items[RiftClearPackItemID] = def
+		def.GachaBox = &GachaBoxDef{Rewards: RiftClearPackPotionRewards()}
 	}
+	def.GachaBox.MinFreeSlots = 0
+	items[RiftClearPackItemID] = def
 }
 
 // TrueSetPiecesForCharacter returns the original hard-dungeon 真* set pieces the
 // character can wear (profession and sex). Missing catalog entries are skipped.
 // The result is sorted for deterministic tests and grant order.
 func TrueSetPiecesForCharacter(items map[ItemID]ItemDef, ch *Character) []ItemID {
-	if items == nil || ch == nil {
+	if items == nil || ch == nil || !ch.HasProfession() || !ch.Race.Valid() {
 		return nil
 	}
 	sex := uint8(2)
@@ -128,4 +127,52 @@ func RiftClearPackTrueSetHit(intn func(int) int) bool {
 		return false
 	}
 	return intn(10000) < int(RiftClearPackTrueSetChanceBP)
+}
+
+// AddRiftClearPackReward places a preview or real open reward using the same
+// stacking rules as Bag.Add, and binds 真* equipment so it cannot be traded.
+func AddRiftClearPackReward(bag *Bag, def ItemDef, qty int32) int32 {
+	if bag == nil || qty <= 0 || def.ID == 0 {
+		return qty
+	}
+	if def.Equip != nil {
+		left := qty
+		for left > 0 {
+			st := NewStack(def, 1)
+			st.Bound = true
+			if bag.AddStack(def, st) != 0 {
+				return left
+			}
+			left--
+		}
+		return 0
+	}
+	return bag.Add(def, qty)
+}
+
+// RiftClearPackFitsWorstCase reports whether the bag can hold every potion at
+// MaxQty plus every wearable 真* piece for this character, after consuming the
+// pack at packSlot. It reuses Bag stacking, including room already in existing
+// stacks, so a rare hit cannot be rolled and then refused for lack of space.
+func RiftClearPackFitsWorstCase(bag *Bag, items map[ItemID]ItemDef, ch *Character, packSlot int) bool {
+	if bag == nil || items == nil {
+		return false
+	}
+	preview := bag.Clone()
+	if preview == nil || !preview.RemoveAt(packSlot, 1) {
+		return false
+	}
+	for _, reward := range RiftClearPackPotionRewards() {
+		def, ok := items[reward.Item]
+		if !ok || AddRiftClearPackReward(preview, def, reward.MaxQty) != 0 {
+			return false
+		}
+	}
+	for _, id := range TrueSetPiecesForCharacter(items, ch) {
+		def, ok := items[id]
+		if !ok || AddRiftClearPackReward(preview, def, 1) != 0 {
+			return false
+		}
+	}
+	return true
 }
