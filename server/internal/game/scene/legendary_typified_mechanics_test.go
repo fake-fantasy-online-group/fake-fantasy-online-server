@@ -32,10 +32,9 @@ func TestTypifiedPassiveWholeCharacterStats(t *testing.T) {
 	}{
 		{"TY-D01", domain.Warrior, func(s *domain.Stats) { s.Def = 100 }, func(s domain.Stats) int32 { return s.Def }, 180},
 		{"TY-D02", domain.Healer, func(s *domain.Stats) { s.MDef = 100 }, func(s domain.Stats) int32 { return s.MDef }, 180},
-		{"TY-D03", domain.Warrior, func(s *domain.Stats) { s.MaxHP = 100 }, func(s domain.Stats) int32 { return s.MaxHP }, 150},
-		{"TY-D04", domain.Warrior, func(s *domain.Stats) { s.MaxMP = 100 }, func(s domain.Stats) int32 { return s.MaxMP }, 150},
+		{"TY-D03", domain.Warrior, func(s *domain.Stats) { s.MaxHP = 100 }, func(s domain.Stats) int32 { return s.MaxHP }, 135},
 		{"TY-U06", domain.Warrior, func(s *domain.Stats) { s.MaxMP = 100 }, func(s domain.Stats) int32 { return s.MaxMP }, 135},
-		{"TY-U09", domain.Warrior, func(s *domain.Stats) { s.MoveSpeed = 100 }, func(s domain.Stats) int32 { return s.MoveSpeed }, 140},
+		{"TY-U09", domain.Warrior, func(s *domain.Stats) { s.MoveSpeed = 100 }, func(s domain.Stats) int32 { return s.MoveSpeed }, 160},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, _ := universalSoloFixture(t, tc.id, tc.race, domain.Learned{})
@@ -68,14 +67,14 @@ func TestTypifiedIndependentDamageReduction(t *testing.T) {
 	if got := typifiedIncoming(t, "TY-D05", domain.Warrior, area, 10000, 1000); got != 400 {
 		t.Fatalf("D05 area 60%% got %d", got)
 	}
-	if got := typifiedIncoming(t, "TY-D06", domain.Warrior, hit, 10000, 1000); got != 450 {
-		t.Fatalf("D06 single 55%% including non-basic got %d", got)
+	if got := typifiedIncoming(t, "TY-D06", domain.Warrior, hit, 10000, 1000); got != 600 {
+		t.Fatalf("D06 single 40%% including non-basic got %d", got)
 	}
-	if got := typifiedIncoming(t, "TY-D07", domain.Warrior, hit, 10000, 1000); got != 450 {
-		t.Fatalf("D07 physical 55%% got %d", got)
+	if got := typifiedIncoming(t, "TY-D07", domain.Warrior, hit, 10000, 1000); got != 600 {
+		t.Fatalf("D07 physical 40%% got %d", got)
 	}
-	if got := typifiedIncoming(t, "TY-D08", domain.Healer, magic, 10000, 1000); got != 450 {
-		t.Fatalf("D08 magic 55%% got %d", got)
+	if got := typifiedIncoming(t, "TY-D08", domain.Healer, magic, 10000, 1000); got != 600 {
+		t.Fatalf("D08 magic 40%% got %d", got)
 	}
 	if got := typifiedIncoming(t, "TY-D19", domain.Warrior, dot, 10000, 1000); got != 350 {
 		t.Fatalf("D19 dot 65%% got %d", got)
@@ -165,8 +164,8 @@ func TestTypifiedHealWindowAndShieldSources(t *testing.T) {
 		if len(cs) != 1 {
 			t.Fatal("missing D12 context")
 		}
-		if got := typifiedIncomingHeal(&cs[0], 100); got != 180 {
-			t.Fatalf("D12 incoming heal hook %d want 180", got)
+		if got := typifiedIncomingHeal(&cs[0], 100); got != 220 {
+			t.Fatalf("D12 incoming heal hook %d want 220", got)
 		}
 		// typifiedIncomingHeal already marks the window on the first call.
 		if !typifiedHasWindow(p, "TY-D12") {
@@ -177,8 +176,8 @@ func TestTypifiedHealWindowAndShieldSources(t *testing.T) {
 		p.HP, p.MaxHP = 10000, 10000
 		before := p.HP
 		s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{SkillID: 10002, GuaranteedHit: true, SkillPct: 100})
-		if before-p.HP != 750 {
-			t.Fatalf("D12 window 25%% DR got %d", before-p.HP)
+		if before-p.HP != 650 {
+			t.Fatalf("D12 window 35%% DR got %d", before-p.HP)
 		}
 	})
 	t.Run("TY-D13/ally-not-self", func(t *testing.T) {
@@ -241,7 +240,7 @@ func TestTypifiedHealWindowAndShieldSources(t *testing.T) {
 			p.HP = 6000
 			s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{SkillID: 10002, GuaranteedHit: true, SkillPct: 100})
 		}
-		if universalShieldValue(p) != typifiedPctOf(p.MaxHP, 45) {
+		if universalShieldValue(p) != typifiedPctOf(p.MaxHP, 35) {
 			t.Fatalf("D16 emergency shield %d", universalShieldValue(p))
 		}
 		typifiedClearHeldGeneratedShields(s, p)
@@ -279,9 +278,9 @@ func TestTypifiedStatusRulesAndCooldowns(t *testing.T) {
 		if got.Def.LegendaryModifiers.ControlDurationReductionBP < 5000 {
 			t.Fatalf("D09 missing 50%% control cut: %+v", got.Def.LegendaryModifiers)
 		}
-		want := typifiedPctOf(p.MaxHP, 20)
+		want := typifiedPctOf(p.MaxHP, 35)
 		if got := universalShieldValue(p); got != want {
-			t.Fatalf("D09 on-control shield %d want %d (20%% of MaxHP %d)", got, want, p.MaxHP)
+			t.Fatalf("D09 on-control shield %d want %d (35%% of MaxHP %d)", got, want, p.MaxHP)
 		}
 	})
 	t.Run("TY-D14/defense-loss", func(t *testing.T) {
@@ -666,8 +665,8 @@ func TestTypifiedRemainingMainBehaviors(t *testing.T) {
 		p.Status.EachEffective(func(a domain.Active) { snapshot = append(snapshot, a) })
 		p.Status.Remove(199918)
 		typifiedOnShieldsResolved(s, p, snapshot)
-		if p.HP != before+typifiedPctOf(200, 30) {
-			t.Fatalf("D18 break heal HP %d want %d", p.HP, before+typifiedPctOf(200, 30))
+		if p.HP != before+typifiedPctOf(200, 50) {
+			t.Fatalf("D18 break heal HP %d want %d", p.HP, before+typifiedPctOf(200, 50))
 		}
 	})
 }

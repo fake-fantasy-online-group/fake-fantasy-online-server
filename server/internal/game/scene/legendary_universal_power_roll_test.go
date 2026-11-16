@@ -64,7 +64,7 @@ func TestLegendaryUniversalPowerRollActualIncomingStatusAndStats(t *testing.T) {
 			t.Fatal("active roll missing", contexts)
 		}
 		got := legendaryHandlers["TY-D07"].ModifyIncoming(&contexts[0], 10000)
-		want := 10000 - domain.LegendaryPowerRollValue("TY-D07", "benefit", 5500, roll)
+		want := 10000 - domain.LegendaryPowerRollValue("TY-D07", "benefit", 4000, roll)
 		if got != want {
 			t.Fatal("actual mitigation", got, want)
 		}

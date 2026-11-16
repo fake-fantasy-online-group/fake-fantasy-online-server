@@ -24,19 +24,19 @@ func init() {
 		return legendaryMeleeScale(n, 100+int64(c.RollValue("restore_pct", 50))*(1+int64(min(3, max(0, swordLandedCount(c.Owner.ID, c.Skill, hits)-1)))))
 	}})
 	registerLegendarySynergyHandler("JK-D03", legendaryHandler{NativeRestoreResolved: swordOverflowShield})
-	registerLegendarySynergyHandler("JK-A05", legendaryHandler{PrepareSkill: swordCooldown(10111, 24000), BeforeDamage: legendaryMeleeSkillDamage(10111, 140), ImpactTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {
+	registerLegendarySynergyHandler("JK-A05", legendaryHandler{PrepareSkill: swordCooldown(10111, 10000), BeforeDamage: legendaryMeleeSkillDamage(10111, 300), ImpactTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {
 		if c.Skill == 10111 {
 			return swordExpand(c, ids, 150, false)
 		}
 		return ids
 	}})
-	registerLegendarySynergyHandler("JK-A13", legendaryHandler{PrepareSkill: swordCooldown(10113, 24000), BeforeDamage: legendaryMeleeSkillDamage(10113, 170), ImpactTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {
+	registerLegendarySynergyHandler("JK-A13", legendaryHandler{PrepareSkill: swordCooldown(10113, 10000), BeforeDamage: legendaryMeleeSkillDamage(10113, 300), ImpactTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {
 		if c.Skill == 10113 {
 			return swordExpand(c, ids, 100, false)
 		}
 		return ids
 	}})
-	registerLegendarySynergyHandler("JK-A24", legendaryHandler{PrepareSkill: swordCooldown(10126, 18000), BeforeDamage: legendaryMeleeSkillDamage(10126, 180), ImpactTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {
+	registerLegendarySynergyHandler("JK-A24", legendaryHandler{PrepareSkill: swordCooldown(10126, 8000), BeforeDamage: legendaryMeleeSkillDamage(10126, 400), ImpactTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {
 		if c.Skill == 10126 && swordRooted(c.Target, 0) {
 			return swordExpand(c, ids, 150, true)
 		}
@@ -46,17 +46,17 @@ func init() {
 			legendaryMeleeStripControl(c, d)
 		}
 	}})
-	registerLegendarySynergyHandler("JK-D06", legendaryHandler{AllDamageIncoming: true, CastReleased: warriorFunctionalRelease(10111, 8000, false), Tick: warriorFunctionalTick(10111, false), BeforeIncoming: func(c *legendaryContext, n int32) int32 {
+	registerLegendarySynergyHandler("JK-D06", legendaryHandler{AllDamageIncoming: true, CastReleased: warriorFunctionalRelease(10111, 12000, false), Tick: warriorFunctionalTick(10111, false), BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if legendaryPureIncoming(c) && warriorFunctionalActive(c, 10111) {
-			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 35)))
+			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 55)))
 		}
 		return n
 	}})
-	registerLegendarySynergyHandler("JK-A16", legendaryHandler{BeforeDamage: legendaryMeleeSkillDamage(10121, 130), SelectTargets: swordGatherAdmission, ImpactTargets: swordGather})
-	registerLegendarySynergyHandler("JK-A15", legendaryHandler{BeforeDamage: legendaryMeleeSkillDamage(10121, 160), AfterHit: swordRecordActualDamage, RootFinished: swordConcentrate})
+	registerLegendarySynergyHandler("JK-A16", legendaryHandler{BeforeDamage: legendaryMeleeSkillDamage(10121, 200), SelectTargets: swordGatherAdmission, ImpactTargets: swordGather})
+	registerLegendarySynergyHandler("JK-A15", legendaryHandler{BeforeDamage: legendaryMeleeSkillDamage(10121, 250), AfterHit: swordRecordActualDamage, RootFinished: swordConcentrate})
 	registerLegendarySynergyHandler("JK-D05", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {
-		if legendaryMeleeIncoming(c) && !c.Blow.Magic && c.Owner.Pos.MapID == c.Target.Pos.MapID && sqDist(c.Owner.Pos, c.Target.Pos) <= 75*75 {
-			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 40)))
+		if legendaryMeleeIncoming(c) && !c.Blow.Magic && c.Owner.Pos.MapID == c.Target.Pos.MapID && sqDist(c.Owner.Pos, c.Target.Pos) <= 150*150 {
+			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 55)))
 		}
 		return n
 	}})

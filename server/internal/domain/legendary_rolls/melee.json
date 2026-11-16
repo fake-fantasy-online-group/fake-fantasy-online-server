@@ -47,8 +47,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "15%",
-        "base": 1500,
+        "text": "60%",
+        "base": 6000,
         "divisor": 100,
         "unit": "%"
       }
@@ -59,8 +59,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "60%",
-        "base": 6000,
+        "text": "150%",
+        "base": 15000,
         "divisor": 100,
         "unit": "%"
       }
@@ -162,8 +162,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "45%",
-        "base": 4500,
+        "text": "90%",
+        "base": 9000,
         "divisor": 100,
         "unit": "%"
       }
@@ -174,8 +174,8 @@
     "parameters": [
       {
         "key": "field_pct",
-        "text": "35%",
-        "base": 35,
+        "text": "60%",
+        "base": 60,
         "divisor": 1,
         "unit": "%"
       }
@@ -186,8 +186,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "60%",
-        "base": 6000,
+        "text": "150%",
+        "base": 15000,
         "divisor": 100,
         "unit": "%"
       }
@@ -282,8 +282,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "80%",
-        "base": 8000,
+        "text": "150%",
+        "base": 15000,
         "divisor": 100,
         "unit": "%"
       }
@@ -294,8 +294,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "85%",
-        "base": 8500,
+        "text": "200%",
+        "base": 20000,
         "divisor": 100,
         "unit": "%"
       }
@@ -306,8 +306,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "35%",
-        "base": 3500,
+        "text": "70%",
+        "base": 7000,
         "divisor": 100,
         "unit": "%"
       }
@@ -342,8 +342,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "40%",
-        "base": 4000,
+        "text": "直接伤害提高100%",
+        "base": 10000,
         "divisor": 100,
         "unit": "%"
       }
@@ -474,7 +474,7 @@
     "parameters": [
       {
         "key": "shield_pct",
-        "text": "25%",
+        "text": "最大生命25%的护盾",
         "base": 25,
         "divisor": 1,
         "unit": "%"
@@ -514,9 +514,9 @@
     "id": "ZS-U03",
     "parameters": [
       {
-        "key": "move_pct",
-        "text": "移动速度提高80%",
-        "base": 80,
+        "key": "damage_pct",
+        "text": "枪系技能伤害提高50%",
+        "base": 50,
         "divisor": 1,
         "unit": "%"
       }
@@ -666,8 +666,8 @@
     "parameters": [
       {
         "key": "damage_pct",
-        "text": "直接伤害提高40%",
-        "base": 40,
+        "text": "直接伤害提高200%",
+        "base": 200,
         "divisor": 1,
         "unit": "%"
       }
@@ -762,8 +762,8 @@
     "parameters": [
       {
         "key": "damage_pct",
-        "text": "直接伤害提高70%",
-        "base": 70,
+        "text": "直接伤害提高200%",
+        "base": 200,
         "divisor": 1,
         "unit": "%"
       }
@@ -786,8 +786,8 @@
     "parameters": [
       {
         "key": "damage_pct",
-        "text": "直接伤害提高60%",
-        "base": 60,
+        "text": "直接伤害提高150%",
+        "base": 150,
         "divisor": 1,
         "unit": "%"
       }
@@ -798,8 +798,8 @@
     "parameters": [
       {
         "key": "damage_pct",
-        "text": "直接伤害提高30%",
-        "base": 30,
+        "text": "直接伤害提高100%",
+        "base": 100,
         "divisor": 1,
         "unit": "%"
       }
@@ -810,8 +810,8 @@
     "parameters": [
       {
         "key": "radius",
-        "text": "至少提高至150",
-        "base": 150,
+        "text": "至少提高至200",
+        "base": 200,
         "divisor": 1,
         "unit": ""
       }
@@ -901,8 +901,8 @@
     "parameters": [
       {
         "key": "damage_pct",
-        "text": "直接伤害提高80%",
-        "base": 80,
+        "text": "直接伤害提高300%",
+        "base": 300,
         "divisor": 1,
         "unit": "%"
       }
@@ -937,8 +937,8 @@
     "parameters": [
       {
         "key": "proc_pct",
-        "text": "攻击力320%",
-        "base": 320,
+        "text": "攻击力500%",
+        "base": 500,
         "divisor": 1,
         "unit": "%"
       }
@@ -1021,8 +1021,8 @@
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "降低50%",
-        "base": 50,
+        "text": "降低65%",
+        "base": 65,
         "divisor": 1,
         "unit": "%"
       }
@@ -1033,8 +1033,8 @@
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "降低40%",
-        "base": 40,
+        "text": "降低55%",
+        "base": 55,
         "divisor": 1,
         "unit": "%"
       }
@@ -1045,8 +1045,8 @@
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "降低35%",
-        "base": 35,
+        "text": "降低55%",
+        "base": 55,
         "divisor": 1,
         "unit": "%"
       }
@@ -1057,8 +1057,8 @@
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "降低50%",
-        "base": 50,
+        "text": "降低65%",
+        "base": 65,
         "divisor": 1,
         "unit": "%"
       }
@@ -1081,8 +1081,8 @@
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "降低45%",
-        "base": 45,
+        "text": "降低65%",
+        "base": 65,
         "divisor": 1,
         "unit": "%"
       }
@@ -1093,8 +1093,8 @@
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "降低35%",
-        "base": 35,
+        "text": "降低55%",
+        "base": 55,
         "divisor": 1,
         "unit": "%"
       }
@@ -1102,15 +1102,8 @@
   },
   {
     "id": "JK-U01",
-    "parameters": [
-      {
-        "key": "move_pct",
-        "text": "移动速度提高80%",
-        "base": 80,
-        "divisor": 1,
-        "unit": "%"
-      }
-    ]
+    "parameters": [],
+    "fixed_reason": "突进位移的机制开关，距离与时长为固定值，无独立可变数值。"
   },
   {
     "id": "JK-U02",
@@ -1122,8 +1115,8 @@
     "parameters": [
       {
         "key": "refund_pct",
-        "text": "法力的60%",
-        "base": 60,
+        "text": "法力的80%",
+        "base": 80,
         "divisor": 1,
         "unit": "%"
       }
@@ -1199,8 +1192,8 @@
     "parameters": [
       {
         "key": "range_pct",
-        "text": "施法距离提高45%",
-        "base": 45,
+        "text": "施法距离提高80%",
+        "base": 80,
         "divisor": 1,
         "unit": "%"
       }
@@ -1208,28 +1201,28 @@
   },
   {
     "id": "CK-A01",
-    "parameters": [
-      {
-        "key": "cooldown_bp",
-        "text": "冷却时间缩短30%",
-        "base": 3000,
-        "divisor": 100,
-        "unit": "%"
-      }
-    ]
+    "parameters": [],
+    "fixed_reason": "矩形贯穿与2秒冷却为固定机制。"
   },
   {
     "id": "CK-A02",
-    "parameters": [],
-    "fixed_reason": "必中、必暴击机制开关，保留角色自身暴击倍率。"
+    "parameters": [
+      {
+        "key": "final_pct",
+        "text": "最终伤害变为300%",
+        "base": 300,
+        "divisor": 1,
+        "unit": "%"
+      }
+    ]
   },
   {
     "id": "CK-A03",
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "伤害提高80%",
-        "base": 8000,
+        "text": "伤害提高300%",
+        "base": 30000,
         "divisor": 100,
         "unit": "%"
       }
@@ -1300,8 +1293,8 @@
     "parameters": [
       {
         "key": "tick_bp",
-        "text": "中毒伤害提高200%",
-        "base": 20000,
+        "text": "中毒伤害提高300%",
+        "base": 30000,
         "divisor": 100,
         "unit": "%"
       }
@@ -1309,16 +1302,23 @@
   },
   {
     "id": "CK-A10",
-    "parameters": [],
-    "fixed_reason": "已学习淬毒术常驻与投掷传毒机制，数值沿用技能等级。"
+    "parameters": [
+      {
+        "key": "damage_bp",
+        "text": "伤害提高150%",
+        "base": 15000,
+        "divisor": 100,
+        "unit": "%"
+      }
+    ]
   },
   {
     "id": "CK-A11",
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "伤害提高40%",
-        "base": 4000,
+        "text": "伤害提高100%",
+        "base": 10000,
         "divisor": 100,
         "unit": "%"
       }
@@ -1329,8 +1329,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "伤害提高90%",
-        "base": 9000,
+        "text": "伤害提高200%",
+        "base": 20000,
         "divisor": 100,
         "unit": "%"
       }
@@ -1339,7 +1339,7 @@
   {
     "id": "CK-A13",
     "parameters": [],
-    "fixed_reason": "三枚爆弹固定阵型机制；数量与位置不随机，沿用原技能伤害。"
+    "fixed_reason": "五枚爆弹固定阵型机制；数量与位置不随机，沿用原技能伤害。"
   },
   {
     "id": "CK-A14",
@@ -1386,6 +1386,13 @@
         "base": 5000,
         "divisor": 100,
         "unit": "%"
+      },
+      {
+        "key": "final_pct",
+        "text": "原来的400%",
+        "base": 400,
+        "divisor": 1,
+        "unit": "%"
       }
     ]
   },
@@ -1404,8 +1411,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "伤害提高25%",
-        "base": 2500,
+        "text": "伤害提高100%",
+        "base": 10000,
         "divisor": 100,
         "unit": "%"
       }
@@ -1500,8 +1507,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "伤害提高45%",
-        "base": 4500,
+        "text": "伤害提高300%",
+        "base": 30000,
         "divisor": 100,
         "unit": "%"
       }
@@ -1527,6 +1534,13 @@
         "text": "作用半径扩大50%",
         "base": 5000,
         "divisor": 100,
+        "unit": "%"
+      },
+      {
+        "key": "proc_pct",
+        "text": "实际伤害100%",
+        "base": 100,
+        "divisor": 1,
         "unit": "%"
       }
     ]
@@ -1560,8 +1574,8 @@
     "parameters": [
       {
         "key": "restore_pct",
-        "text": "损失生命的15%",
-        "base": 15,
+        "text": "损失生命的30%",
+        "base": 30,
         "divisor": 1,
         "unit": "%"
       }
@@ -1584,8 +1598,8 @@
     "parameters": [
       {
         "key": "control_bp",
-        "text": "持续时间缩短30%",
-        "base": 3000,
+        "text": "持续时间缩短50%",
+        "base": 5000,
         "divisor": 100,
         "unit": "%"
       }
@@ -1620,8 +1634,8 @@
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "中毒伤害降低30%",
-        "base": 30,
+        "text": "中毒伤害降低60%",
+        "base": 60,
         "divisor": 1,
         "unit": "%"
       }
@@ -1632,8 +1646,8 @@
     "parameters": [
       {
         "key": "life_pct",
-        "text": "生命上限提高20%",
-        "base": 20,
+        "text": "生命上限提高40%",
+        "base": 40,
         "divisor": 1,
         "unit": "%"
       }
@@ -1643,9 +1657,9 @@
     "id": "CK-D10",
     "parameters": [
       {
-        "key": "reduction_pct",
-        "text": "伤害降低20%",
-        "base": 20,
+        "key": "dodge_pct",
+        "text": "15%概率",
+        "base": 15,
         "divisor": 1,
         "unit": "%"
       }
@@ -1679,11 +1693,11 @@
     "id": "CK-U03",
     "parameters": [
       {
-        "key": "disarm_bp",
-        "text": "成功率提高25个百分点",
-        "base": 2500,
+        "key": "radius_bp",
+        "text": "作用半径提高50%",
+        "base": 5000,
         "divisor": 100,
-        "unit": "个百分点"
+        "unit": "%"
       }
     ]
   },
@@ -1771,8 +1785,8 @@
     "parameters": [
       {
         "key": "move_pct",
-        "text": "40%移动速度",
-        "base": 40,
+        "text": "80%移动速度",
+        "base": 80,
         "divisor": 1,
         "unit": "%"
       }

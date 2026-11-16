@@ -84,7 +84,7 @@ func TestLegendaryCasterSorcererRemainingTargetBonuses(t *testing.T) {
 		skill     domain.SkillID
 		near, far int32
 	}{
-		{"SS-A06", legendaryFireball, 120, 145}, {"SS-A08", legendaryIceArrow, 120, 155}, {"SS-A21", legendaryBlizzard, 180, 120}, {"SS-A14", legendaryIceBurst, 120, 120},
+		{"SS-A06", legendaryFireball, 120, 145}, {"SS-A08", legendaryIceArrow, 120, 155}, {"SS-A21", legendaryBlizzard, 300, 150}, {"SS-A14", legendaryIceBurst, 120, 120},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, c := legendaryCasterFixture(t, tc.id)
@@ -151,7 +151,11 @@ func TestLegendaryCasterSorcererRemainingFrozenBonuses(t *testing.T) {
 				t.Fatal("learned native slow not guaranteed")
 			}
 			got := s.legendaryTargetDefinition(c.Owner, d, c.Target, c.Target.ID, []domain.EntityID{c.Target.ID})
-			if got.DirectEffects()[0].DamagePct != 100 {
+			unslowed := int32(100)
+			if id == "SS-A22" {
+				unslowed = want // SS-A22 now boosts every blizzard target
+			}
+			if got.DirectEffects()[0].DamagePct != unslowed {
 				t.Fatal("no slow still boosted")
 			}
 			c.Target.Status.Apply(domain.StatusDef{ID: domain.StatusSlow, DurationSec: 10, TypeKnown: true, Type: domain.StatusBad}, s.tick, c.Owner.ID)
@@ -230,7 +234,7 @@ func TestLegendaryCasterSorcererRemainingPassives(t *testing.T) {
 	for _, tc := range []struct {
 		id        string
 		hp, speed int32
-	}{{"SS-D04", 1300, 100}, {"SS-D08", 1300, 100}, {"SS-U04", 1000, 100}} {
+	}{{"SS-D04", 1400, 100}, {"SS-D08", 1450, 100}, {"SS-U04", 1000, 100}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, c := legendaryCasterFixture(t, tc.id)
 			st := domain.Stats{MaxHP: 1000, MoveSpeed: 100}
@@ -273,7 +277,7 @@ func TestLegendaryCasterSorcererRemainingIncoming(t *testing.T) {
 				state.NextStatusDurationPct = 100
 			}
 			sorcererRemainingReady(c, state)
-			want := int32(720)
+			want := int32(650)
 			switch id {
 			case "SS-D02":
 				want = 450
@@ -294,8 +298,8 @@ func TestLegendaryCasterSorcererRemainingIncoming(t *testing.T) {
 			if id == "SS-D02" && hit(800) != 800 {
 				t.Fatal("8percent threshold must be strict")
 			}
-			if id == "SS-D05" && hit(10000) != 7800 {
-				t.Fatal("22percent maxHP cap missing")
+			if id == "SS-D05" && hit(10000) != 6500 {
+				t.Fatal("35percent maxHP cap missing")
 			}
 		})
 	}

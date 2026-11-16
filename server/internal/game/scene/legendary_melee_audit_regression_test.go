@@ -336,9 +336,9 @@ func TestLegendaryWarriorAuditNativeA23PrimaryAndSet(t *testing.T) {
 				}
 				before := m.HP
 				meleeAuditCast(t, s, p, 10022, target)
-				want := int32(493)
+				want := int32(796)
 				if set {
-					want = 526
+					want = 845
 				}
 				if got := before - m.HP; got != want {
 					t.Fatalf("native bonus=%d want%d", got, want)
@@ -384,16 +384,16 @@ func TestLegendarySwordsmanAuditA14PrimaryShieldContract(t *testing.T) {
 				e.Status.EachEffective(func(a domain.Active) { n += a.ShieldLeft })
 				return n
 			}
-			direct := int32(263)
+			direct := int32(465)
 			if mode == "single" {
 				direct = 155
 			}
 			if mode == "shield-cap" {
-				direct = 368
+				direct = 651
 			}
 			switch mode {
 			case "primary-unshielded", "all-unshielded":
-				if before-m.HP != 394 {
+				if before-m.HP != 697 {
 					t.Fatal("primary unshielded damage changed", before-m.HP)
 				}
 			default:
@@ -403,7 +403,7 @@ func TestLegendarySwordsmanAuditA14PrimaryShieldContract(t *testing.T) {
 				}
 			}
 			if mode == "all-unshielded" {
-				if q.HP != 10000-394 {
+				if q.HP != 10000-697 {
 					t.Fatal("secondary unshielded bonus lost", q.HP)
 				}
 			} else if mode == "single" {
@@ -457,9 +457,9 @@ func TestLegendarySwordsmanAuditNativeTauntReachAndSet(t *testing.T) {
 				}
 				edge.Stats.MinAtk, edge.Stats.MaxAtk = 100, 100
 				ev, _, _ := s.resolveStrikeStatuses(edge, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true})
-				want := int32(50)
+				want := int32(35)
 				if mode == "class-set" {
-					want = 47
+					want = 33
 				}
 				if ev.Amount != want {
 					t.Fatal("taunted-enemy mitigation lost", ev.Amount, want)

@@ -170,11 +170,11 @@ func TestCasterRepairHealerShackleAndHolyGeometry(t *testing.T) {
 			}
 		}
 		if len(powers) == 1 && powers[0] == "YS-A19" {
-			if damage != 200 || slow != 30 {
+			if damage != 500 || slow != 30 {
 				t.Fatal("base A19 shackle", damage, slow)
 			}
 		}
-		if len(powers) == 2 && (damage != 320 || slow != 45) {
+		if len(powers) == 2 && (damage != 1250 || slow != 45) { // 500% shackle, YS-A18 +150%
 			t.Fatal("A18 must amplify A19 direct damage and native attack slow", damage, slow)
 		}
 	}
@@ -480,7 +480,7 @@ func TestCasterRepairFireBasisNoLearningPrerequisite(t *testing.T) {
 					// Native Fire Bolt has coefficient 208% at rank one and
 					// 240% at rank five; this fixture has exactly 100 MAtk.
 					base := map[int32]int32{0: 208, 1: 208, 5: 240}[rank]
-					want := base * 270 / 100 // 220% plus one newly stolen defense kind.
+					want := base * 270 / 100 * 115 / 100 // 220% plus one newly stolen defense kind, then SS-U02 +15% dispel damage.
 					if power == "SS-A27" {
 						want = base * 180 / 100
 						if triple {

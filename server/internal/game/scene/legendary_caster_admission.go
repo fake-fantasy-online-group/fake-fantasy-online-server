@@ -28,7 +28,7 @@ func init() {
 				d.Area.Center = domain.SkillAreaCenterTarget
 				d.Dist = 600
 			}
-			d.LegendaryModifiers.StatusPowerBP += c.RollValue("buff_bp", 3000)
+			d.LegendaryModifiers.StatusPowerBP += c.RollValue("buff_bp", 6000)
 		},
 		SelectTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {
 			if c.Skill != 10311 || c.Target == nil || c.Target == c.Owner || !sameParty(c.Owner, c.Target) {

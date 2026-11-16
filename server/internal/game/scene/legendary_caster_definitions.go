@@ -9,7 +9,7 @@ func init() {
 		if d.ID == legendaryBlizzard {
 			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 5500)
 			d.LegendaryModifiers.RadiusBP += 4000
-			d.LegendaryModifiers.CooldownReductionBP += 2000
+			d.LegendaryModifiers.CooldownReductionBP += 5000
 		}
 	}})
 	registerLegendarySynergyHandler("SS-A06", legendaryHandler{
@@ -58,9 +58,9 @@ func init() {
 		}
 		r := float64(max(d.Radius, d.Area.Radius)) * 2 / 3
 		if sqDist(legendaryCasterCenter(c), c.Target.Pos) <= r*r {
-			return specialScale(n, 100+c.RollValue("damage_pct", 80))
+			return specialScale(n, 100+c.RollValue("damage_pct", 200))
 		}
-		return specialScale(n, 100+c.RollValue("damage_pct", 20))
+		return specialScale(n, 100+c.RollValue("damage_pct", 50))
 	})})
 	registerLegendarySynergyHandler("SS-U01", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID != 10432 {

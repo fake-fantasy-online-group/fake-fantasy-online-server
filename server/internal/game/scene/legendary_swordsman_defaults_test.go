@@ -28,7 +28,7 @@ func TestLegendarySwordsmanImmediateAttackDefaults(t *testing.T) {
 		skill domain.SkillID
 		want  int32
 	}{
-		{"JK-A01", 10102, 350}, {"JK-A03", 10102, 260}, {"JK-A19", 10122, 125}, {"JK-A21", 10116, 420}, {"JK-A26", 10104, 200}, {"JK-A27", 10102, 420}, {"JK-A28", 10119, 360}, {"JK-A30", 10123, 210},
+		{"JK-A01", 10102, 350}, {"JK-A03", 10102, 260}, {"JK-A19", 10122, 125}, {"JK-A21", 10116, 420}, {"JK-A26", 10104, 200}, {"JK-A27", 10102, 600}, {"JK-A28", 10119, 360}, {"JK-A30", 10123, 210},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := legendaryMeleeFixture(t, tc.id)
@@ -87,7 +87,7 @@ func TestLegendarySwordsmanRootArrayOnlyOnce(t *testing.T) {
 		s.resolveStrikeStatuses(p, dst, &combat.HitTracker{}, combat.Blow{SkillID: 10121, SkillPct: 100, GuaranteedHit: true})
 	}
 	finish()
-	if m.HP != 99580 || q.HP != 9580 {
+	if m.HP != 99400 || q.HP != 9400 {
 		t.Fatal("AoE multiplied per native hit", m.HP, q.HP)
 	}
 }
@@ -131,7 +131,7 @@ func TestLegendarySwordsmanImmediateDefenseDefaults(t *testing.T) {
 		damage   int32
 		want     int32
 	}{
-		{"JK-D04", 30, 100, 50}, {"JK-D07", 30, 100, 100}, {"JK-D09", 30, 800, 440}, {"JK-D09", 30, 799, 799}, {"JK-D10", 76, 100, 65}, {"JK-D10", 75, 100, 100},
+		{"JK-D04", 30, 100, 35}, {"JK-D07", 30, 100, 100}, {"JK-D09", 30, 800, 280}, {"JK-D09", 30, 799, 799}, {"JK-D10", 76, 100, 45}, {"JK-D10", 75, 100, 100},
 	} {
 		s, p, m := legendaryMeleeFixture(t, tc.id)
 		m.Pos.X = p.Pos.X + tc.distance
@@ -173,7 +173,7 @@ func TestLegendarySwordsmanImmediateUtilityDefaults(t *testing.T) {
 		id           string
 		skill        domain.SkillID
 		dist, radius int32
-	}{{"JK-U04", 10127, 100, 180}, {"JK-U10", 10113, 145, 100}, {"JK-A17", 10121, 100, 150}} {
+	}{{"JK-U04", 10127, 100, 180}, {"JK-U10", 10113, 180, 100}, {"JK-A17", 10121, 100, 200}} {
 		s, p, m = legendaryMeleeFixture(t, tc.id)
 		d := domain.SkillDef{ID: tc.skill, Dist: 100, Radius: 100}
 		s.legendaryPrepareSkill(p, &d, m.ID)
@@ -224,7 +224,7 @@ func TestLegendarySwordsmanRefundCapsAndDefensiveCounter(t *testing.T) {
 		r.paidMP = 100
 		s.resolveStrikeStatuses(p, m, &combat.HitTracker{}, combat.Blow{SkillID: int32(skill), SkillPct: 100, GuaranteedHit: true})
 		finish()
-		want := int32(60)
+		want := int32(80)
 		if id == "JK-U09" {
 			want = 80
 		}
@@ -309,7 +309,7 @@ func TestLegendarySwordsmanMovePassiveAndCleanseScope(t *testing.T) {
 	s.legendaryCastReleased(p, domain.SkillDef{ID: 10117}, 0, nil)
 	stats := domain.Stats{MoveSpeed: 100}
 	s.legendaryPassiveStats(p, &stats)
-	if stats.MoveSpeed != 180 {
+	if stats.MoveSpeed != 100 { // JK-U01 lunge replaced the old speed window
 		t.Fatal("passive move", stats.MoveSpeed)
 	}
 	s, p, m = legendaryMeleeFixture(t, "JK-U05")

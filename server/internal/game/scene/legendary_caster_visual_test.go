@@ -219,7 +219,8 @@ func TestLegendaryCasterVisualManaOnlyActualRecipients(t *testing.T) {
 	s.outbox = nil
 	legendaryHandlers[c.Power.ID].ManaRestored(c, 0, 500)
 	hits, _, _ := casterVisualEvents(s)
-	if len(hits) != 3 || hits[0].Target != 2 || hits[1].Target != 3 || hits[2].Target != 4 {
+	// 40% max-MP cap: 400 + 100 exhausts the 500 overflow before player 4.
+	if len(hits) != 2 || hits[0].Target != 2 || hits[1].Target != 3 {
 		t.Fatal("not all actual mana recipients", hits)
 	}
 	s.outbox = nil

@@ -47,7 +47,7 @@ func TestLegendaryLegacyPublishedGolden(t *testing.T) {
 		}
 	}
 	got := fmt.Sprintf("%x", hash.Sum(nil))
-	const want = "4e4790a6c95916c5161b291aa37b11b00cd56390b8b1052f57b5538b88e6441c"
+	const want = "609d1bd0a78cfdb7ec294f7c501d9fff48b438d79597734e33325b6a6d06d08a"
 	if got != want {
 		t.Fatalf("published generation/RNG changed: got %s want %s", got, want)
 	}

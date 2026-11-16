@@ -12,13 +12,44 @@ import (
 // delayed detonations, independent proc damage, or independent ICDs remain.
 func init() {
 	for _, id := range []string{"CK-A01", "CK-A23", "CK-A02", "CK-A27", "CK-A03", "CK-A04", "CK-A05", "CK-A07", "CK-A14", "CK-A16", "CK-A17", "CK-A24", "CK-A06", "CK-A11", "CK-A12", "CK-A19", "CK-A20", "CK-A21", "CK-A29", "CK-U05"} {
-		registerLegendarySynergyHandler(id, legendaryHandler{TransformSkill: legendaryAssassinTransform, PrepareSkill: legendaryAssassinPrepare, SelectTargets: legendaryAssassinTargets, TargetDefinition: legendaryAssassinTargetDefinition})
+		h := legendaryHandler{TransformSkill: legendaryAssassinTransform, PrepareSkill: legendaryAssassinPrepare, SelectTargets: legendaryAssassinTargets, TargetDefinition: legendaryAssassinTargetDefinition}
+		if id == "CK-A02" || id == "CK-A03" || id == "CK-A17" {
+			h.BeforeDamage = legendaryAssassinFinalDamage
+		}
+		registerLegendarySynergyHandler(id, h)
 	}
 	registerLegendarySynergyHandler("CK-A09", legendaryHandler{StatusApplied: legendaryAssassinPoisonStatus})
-	registerLegendarySynergyHandler("CK-A10", legendaryHandler{AfterHit: legendaryAssassinNativePoisonHit})
+	registerLegendarySynergyHandler("CK-A10", legendaryHandler{AfterHit: legendaryAssassinNativePoisonHit, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
+		if d.ID == 10205 || d.ID == 10206 {
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 15000)
+		}
+	}})
 	registerLegendarySynergyHandler("CK-A22", legendaryHandler{AfterHit: legendaryAssassinLifesteal})
 	registerLegendarySynergyHandler("CK-A13", legendaryHandler{TrapPlaced: legendaryAssassinTriplePlacement})
 	registerLegendarySynergyHandler("CK-U06", legendaryHandler{RootFinished: legendaryAssassinBackstabCooldown})
+}
+
+// legendaryAssassinFinalDamage applies the independent final multipliers of
+// CK-A02 (sniper x3), CK-A03 (sniper beyond 300 x1.3) and CK-A17 (backstab x4).
+func legendaryAssassinFinalDamage(c *legendaryContext, n int32) int32 {
+	if !legendaryMeleeDirect(c) || c.Blow.Origin != domain.DamageNormalOrigin {
+		return n
+	}
+	switch c.Power.ID {
+	case "CK-A02":
+		if c.Skill == 10221 {
+			return legendaryMeleeScale(n, int64(c.RollValue("final_pct", 300)))
+		}
+	case "CK-A03":
+		if c.Skill == 10221 && c.Owner.Pos.MapID == c.Target.Pos.MapID && sqDist(c.Owner.Pos, c.Target.Pos) > 300*300 {
+			return legendaryMeleeScale(n, 130)
+		}
+	case "CK-A17":
+		if c.Skill == 10209 {
+			return legendaryMeleeScale(n, int64(c.RollValue("final_pct", 400)))
+		}
+	}
+	return n
 }
 func legendaryAssassinTransform(c *legendaryContext, d *domain.SkillDef) {
 	switch c.Power.ID {
@@ -64,7 +95,7 @@ func legendaryAssassinPrepare(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10216 {
 			d.LegendaryModifiers.RadiusBP += 3000
 		}
-		if d.ID == 10216 || d.ID == 10209 {
+		if d.ID == 10216 {
 			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 5000)
 		}
 	case "CK-A24":
@@ -95,11 +126,11 @@ func legendaryAssassinPrepare(c *legendaryContext, d *domain.SkillDef) {
 		}
 	case "CK-A01":
 		if d.ID == 10221 {
-			d.LegendaryModifiers.CooldownReductionBP += c.RollValue("cooldown_bp", 3000)
+			d.CooldownMS = 2000
 		}
 	case "CK-A03":
 		if d.ID == 10221 {
-			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 8000)
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 30000)
 		}
 	case "CK-A06":
 		if d.ID == 10206 {
@@ -110,16 +141,16 @@ func legendaryAssassinPrepare(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10213 {
 			d.Dist = specialScale(d.Dist, 150)
 			d.LegendaryModifiers.RadiusBP += 3000
-			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 4000)
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 10000)
 		}
 	case "CK-A12":
 		if d.ID == 10213 {
 			d.LegendaryModifiers.RadiusBP += 3000
-			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 9000)
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 20000)
 		}
 	case "CK-A20":
 		if d.ID == 10209 {
-			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 2500)
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 10000)
 		}
 	case "CK-A29":
 		if d.ID == 10210 {

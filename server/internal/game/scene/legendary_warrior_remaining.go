@@ -86,7 +86,7 @@ func warriorQuakeZone(c *legendaryContext) {
 	st.ExpiresMS = c.NowMS + 3000
 	st.NextMS = c.NowMS + 1000
 	st.GroundEffectKey = fmt.Sprintf("%s/%d/stage-01", c.Power.ID, c.RootID)
-	st.Value = int64(c.SnapshotNativeDamage()) * int64(c.RollValue("field_pct", 35)) / 100
+	st.Value = int64(c.SnapshotNativeDamage()) * int64(c.RollValue("field_pct", 60)) / 100
 	st.GroundDOT = c.Scene.synergyGroundSnapshot(c, domain.SaturateInt32(st.Value), 3)
 	st.GroundDOTTick = 0
 	st.ExpiresMS = c.NowMS + int64(st.GroundDOT.DurationSec)*1000

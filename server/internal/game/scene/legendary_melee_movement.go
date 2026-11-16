@@ -9,5 +9,5 @@ func (s *Scene) legendaryMeleeAdjustStatus(target *entity.Entity, def *domain.St
 	// No extra slow-resistance timer in the replacement design.
 }
 func (s *Scene) legendaryMeleeDisplacementImmune(target *entity.Entity) bool {
-	return s.legendarySwordsmanDisplacementImmune(target)
+	return s.dashControlImmune(target) || s.legendarySwordsmanDisplacementImmune(target)
 }

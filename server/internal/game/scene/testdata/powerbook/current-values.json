@@ -4,19 +4,19 @@
     "rows": [
       {
         "powerId": "CK-A01",
-        "unlocked": false,
-        "rangeText": "冷却时间缩短22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "unlocked": false
       },
       {
         "powerId": "CK-A02",
-        "unlocked": false
+        "unlocked": false,
+        "rangeText": "且最终伤害变为225%～300%（独立乘算）",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A03",
         "unlocked": false,
-        "rangeText": "狙击伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "rangeText": "狙击伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A04",
@@ -51,24 +51,26 @@
       {
         "powerId": "CK-A09",
         "unlocked": false,
-        "rangeText": "淬毒术造成的每次中毒伤害提高150%～200%",
-        "primaryRangeText": "150%～200%"
+        "rangeText": "淬毒术造成的每次中毒伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A10",
-        "unlocked": false
+        "unlocked": false,
+        "rangeText": "装备期间连续投掷与多重投掷的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "CK-A11",
         "unlocked": false,
-        "rangeText": "伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "rangeText": "伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "CK-A12",
         "unlocked": false,
-        "rangeText": "陷阱：爆弹的伤害提高67.5%～90%",
-        "primaryRangeText": "67.5%～90%"
+        "rangeText": "陷阱：爆弹的伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A13",
@@ -95,7 +97,7 @@
       {
         "powerId": "CK-A17",
         "unlocked": false,
-        "rangeText": "背刺和陷阱：冻气的伤害提高37.5%～50%",
+        "rangeText": "背刺最终伤害变为原来的300%～400%（独立乘算）\n陷阱：冻气的伤害提高37.5%～50%",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -109,8 +111,8 @@
       {
         "powerId": "CK-A20",
         "unlocked": false,
-        "rangeText": "伤害提高18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "rangeText": "伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "CK-A21",
@@ -157,8 +159,8 @@
       {
         "powerId": "CK-A28",
         "unlocked": false,
-        "rangeText": "环形爆发伤害提高33.75%～45%",
-        "primaryRangeText": "33.75%～45%"
+        "rangeText": "环形爆发伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A29",
@@ -169,7 +171,7 @@
       {
         "powerId": "CK-A30",
         "unlocked": false,
-        "rangeText": "环形爆发的作用半径扩大37.5%～50%",
+        "rangeText": "环形爆发的作用半径扩大37.5%～50%\n被收拢的敌人再受到一次等同本次环形爆发实际伤害75%～100%的伤害（合计2倍）",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -187,8 +189,8 @@
       {
         "powerId": "CK-D03",
         "unlocked": false,
-        "rangeText": "按该目标实际损失生命的11%～15%恢复自身生命",
-        "primaryRangeText": "11%～15%"
+        "rangeText": "按该目标实际损失生命的22%～30%恢复自身生命",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "CK-D04",
@@ -199,8 +201,8 @@
       {
         "powerId": "CK-D05",
         "unlocked": false,
-        "rangeText": "受到的眩晕、冻结和定身持续时间缩短22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "rangeText": "受到的眩晕、冻结和定身持续时间缩短37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "CK-D06",
@@ -217,20 +219,20 @@
       {
         "powerId": "CK-D08",
         "unlocked": false,
-        "rangeText": "受到的中毒伤害降低22%～30%",
-        "primaryRangeText": "22%～30%"
+        "rangeText": "受到的中毒伤害降低45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "CK-D09",
         "unlocked": false,
-        "rangeText": "生命上限提高15%～20%",
-        "primaryRangeText": "15%～20%"
+        "rangeText": "生命上限提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "CK-D10",
         "unlocked": false,
-        "rangeText": "受到的陷阱伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "rangeText": "受到的所有直接伤害（含魔法与暴击）有11%～15%概率被闪避",
+        "primaryRangeText": "11%～15%"
       },
       {
         "powerId": "CK-U01",
@@ -247,13 +249,13 @@
       {
         "powerId": "CK-U03",
         "unlocked": false,
-        "rangeText": "每个陷阱的拆除成功率提高18.75个百分点～25个百分点",
-        "primaryRangeText": "18.75个百分点～25个百分点"
+        "rangeText": "陷阱：封印与陷阱：冻气的作用半径提高37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "CK-U04",
         "unlocked": false,
-        "rangeText": "移动速度提高45%～60%",
+        "rangeText": "施放已学习的阴影跳跃后3秒内移动速度提高45%～60%",
         "primaryRangeText": "45%～60%"
       },
       {
@@ -289,8 +291,8 @@
       {
         "powerId": "CK-U10",
         "unlocked": false,
-        "rangeText": "额外获得30%～40%移动速度",
-        "primaryRangeText": "30%～40%"
+        "rangeText": "额外获得60%～80%移动速度",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "JK-A01",
@@ -319,8 +321,8 @@
       {
         "powerId": "JK-A05",
         "unlocked": false,
-        "rangeText": "直接伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "JK-A06",
@@ -367,8 +369,8 @@
       {
         "powerId": "JK-A13",
         "unlocked": false,
-        "rangeText": "直接伤害提高52%～70%",
-        "primaryRangeText": "52%～70%"
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "JK-A14",
@@ -379,20 +381,20 @@
       {
         "powerId": "JK-A15",
         "unlocked": false,
-        "rangeText": "旋风剑的直接伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "rangeText": "旋风剑的直接伤害提高112%～150%",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "JK-A16",
         "unlocked": false,
-        "rangeText": "直接伤害提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "rangeText": "直接伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "JK-A17",
         "unlocked": false,
-        "rangeText": "旋风剑的自身中心作用半径至少提高至112～150",
-        "primaryRangeText": "112～150"
+        "rangeText": "旋风剑的自身中心作用半径至少提高至150～200",
+        "primaryRangeText": "150～200"
       },
       {
         "powerId": "JK-A18",
@@ -433,8 +435,8 @@
       {
         "powerId": "JK-A24",
         "unlocked": false,
-        "rangeText": "直接伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "rangeText": "直接伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "JK-A25",
@@ -451,8 +453,8 @@
       {
         "powerId": "JK-A27",
         "unlocked": false,
-        "rangeText": "对150距离内敌人各追加攻击力240%～320%的物理伤害",
-        "primaryRangeText": "240%～320%"
+        "rangeText": "对150距离内敌人各追加攻击力375%～500%的物理伤害",
+        "primaryRangeText": "375%～500%"
       },
       {
         "powerId": "JK-A28",
@@ -493,26 +495,26 @@
       {
         "powerId": "JK-D04",
         "unlocked": false,
-        "rangeText": "对你造成的直接伤害降低37%～50%",
-        "primaryRangeText": "37%～50%"
+        "rangeText": "对你造成的直接伤害降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D05",
         "unlocked": false,
-        "rangeText": "来自你周围75距离内敌人的直接物理伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "rangeText": "来自你周围150距离内敌人的直接物理伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-D06",
         "unlocked": false,
-        "rangeText": "8秒内受到的伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "rangeText": "12秒内受到的伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-D07",
         "unlocked": false,
-        "rangeText": "8秒内受到的魔法伤害降低37%～50%",
-        "primaryRangeText": "37%～50%"
+        "rangeText": "12秒内受到的魔法伤害降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D08",
@@ -523,20 +525,18 @@
       {
         "powerId": "JK-D09",
         "unlocked": false,
-        "rangeText": "该次伤害再降低33%～45%",
-        "primaryRangeText": "33%～45%"
+        "rangeText": "该次伤害再降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D10",
         "unlocked": false,
-        "rangeText": "来自你75距离之外敌人的直接伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "rangeText": "来自你75距离之外敌人的直接伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-U01",
-        "unlocked": false,
-        "rangeText": "8秒内移动速度提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "unlocked": false
       },
       {
         "powerId": "JK-U02",
@@ -545,8 +545,8 @@
       {
         "powerId": "JK-U03",
         "unlocked": false,
-        "rangeText": "返还本次实际消耗法力的45%～60%",
-        "primaryRangeText": "45%～60%"
+        "rangeText": "返还本次实际消耗法力的60%～80%",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "JK-U04",
@@ -585,8 +585,8 @@
       {
         "powerId": "JK-U10",
         "unlocked": false,
-        "rangeText": "封法剑的施法距离提高33%～45%",
-        "primaryRangeText": "33%～45%"
+        "rangeText": "封法剑的施法距离提高60%～80%",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "SS-A01",
@@ -711,13 +711,13 @@
       {
         "powerId": "SS-A21",
         "unlocked": false,
-        "rangeText": "暴雪术原半径内侧三分之二区域的直接伤害提高60%～80%\n其余区域提高15%～20%",
-        "primaryRangeText": "60%～80%"
+        "rangeText": "暴雪术原半径内侧三分之二区域的直接伤害提高150%～200%\n其余区域提高37%～50%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "SS-A22",
         "unlocked": false,
-        "rangeText": "直接伤害提高67.5%～90%",
+        "rangeText": "暴雪术对范围内所有敌人的直接伤害提高67.5%～90%",
         "primaryRangeText": "67.5%～90%"
       },
       {
@@ -739,8 +739,8 @@
       {
         "powerId": "SS-A26",
         "unlocked": false,
-        "rangeText": "单次不超过你的最大生命13%～18%",
-        "primaryRangeText": "13%～18%"
+        "rangeText": "单次不超过你的最大生命22%～30%",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "SS-A27",
@@ -769,8 +769,8 @@
       {
         "powerId": "SS-D01",
         "unlocked": false,
-        "rangeText": "180距离内敌人对你造成的伤害降低21%～28%",
-        "primaryRangeText": "21%～28%"
+        "rangeText": "180距离内敌人对你造成的伤害降低26%～35%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "SS-D02",
@@ -787,38 +787,38 @@
       {
         "powerId": "SS-D04",
         "unlocked": false,
-        "rangeText": "最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "rangeText": "最大生命提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D05",
         "unlocked": false,
-        "rangeText": "单次减免量在最大生命的16%～22%以内",
-        "primaryRangeText": "16%～22%"
+        "rangeText": "单次减免量在最大生命的26%～35%以内",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "SS-D06",
         "unlocked": false,
-        "rangeText": "装备期间受到的伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "rangeText": "装备期间受到的伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D07",
         "unlocked": false,
-        "rangeText": "最大生命提高21%～28%",
-        "primaryRangeText": "21%～28%"
+        "rangeText": "最大生命提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D08",
         "unlocked": false,
-        "rangeText": "最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "rangeText": "最大生命提高33%～45%",
+        "primaryRangeText": "33%～45%"
       },
       {
         "powerId": "SS-D09",
         "unlocked": false,
-        "rangeText": "伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "rangeText": "伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "SS-D10",
@@ -853,8 +853,8 @@
       {
         "powerId": "SS-U05",
         "unlocked": false,
-        "rangeText": "恢复最大法力的7%～10%",
-        "primaryRangeText": "7%～10%"
+        "rangeText": "在燃烧持续期间受到的物理与魔法伤害提高9%～12%",
+        "primaryRangeText": "9%～12%"
       },
       {
         "powerId": "SS-U06",
@@ -1131,14 +1131,14 @@
       {
         "powerId": "TY-D03",
         "unlocked": false,
-        "rangeText": "自身最大生命提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "rangeText": "自身最大生命提高26%～35%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "TY-D04",
         "unlocked": false,
-        "rangeText": "自身最大法力提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "rangeText": "你造成的全部直接伤害的6%～8%转化为自身生命\n生命低于35%时提高为11%～15%",
+        "primaryRangeText": "6%～8%"
       },
       {
         "powerId": "TY-D05",
@@ -1149,25 +1149,25 @@
       {
         "powerId": "TY-D06",
         "unlocked": false,
-        "rangeText": "伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "rangeText": "伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D07",
         "unlocked": false,
-        "rangeText": "受到的直接物理伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "rangeText": "受到的直接物理伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D08",
         "unlocked": false,
-        "rangeText": "受到的魔法伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "rangeText": "受到的魔法伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D09",
         "unlocked": false,
-        "rangeText": "敌方施加的可缩短控制持续时间缩短37.5%～50%\n立即获得吸收自身最大生命15%～20%伤害的护盾",
+        "rangeText": "敌方施加的可缩短控制持续时间缩短37.5%～50%\n立即获得吸收自身最大生命26%～35%伤害的护盾",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -1185,8 +1185,8 @@
       {
         "powerId": "TY-D12",
         "unlocked": false,
-        "rangeText": "受到的技能直接治疗和持续治疗提高60%～80%\n4秒内受到的伤害降低18.75%～25%",
-        "primaryRangeText": "60%～80%"
+        "rangeText": "受到的技能直接治疗和持续治疗提高90%～120%\n4秒内受到的伤害降低26.25%～35%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-D13",
@@ -1209,8 +1209,8 @@
       {
         "powerId": "TY-D16",
         "unlocked": false,
-        "rangeText": "获得吸收自身最大生命33%～45%伤害的护盾\n本人技能施加的吸收护盾初始量另外提高75%～100%",
-        "primaryRangeText": "33%～45%"
+        "rangeText": "获得吸收自身最大生命26%～35%伤害的护盾\n本人技能施加的吸收护盾初始量另外提高75%～100%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "TY-D17",
@@ -1221,7 +1221,7 @@
       {
         "powerId": "TY-D18",
         "unlocked": false,
-        "rangeText": "你持有的吸收护盾持续时间提高75%～100%\n在3秒内回复被打破吸收量的22%～30%生命",
+        "rangeText": "你持有的吸收护盾持续时间提高75%～100%\n立即回复被打破吸收量的37%～50%生命",
         "primaryRangeText": "75%～100%"
       },
       {
@@ -1275,8 +1275,8 @@
       {
         "powerId": "TY-U07",
         "unlocked": false,
-        "rangeText": "主动位移或跳跃技能的位移距离和可选目标距离提高60%～80%\n下一次主动技能施法距离提高37.5%～50%",
-        "primaryRangeText": "60%～80%"
+        "rangeText": "主动位移或跳跃技能的位移距离和可选目标距离提高90%～120%\n下一次主动技能施法距离提高37.5%～50%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-U08",
@@ -1287,8 +1287,8 @@
       {
         "powerId": "TY-U09",
         "unlocked": false,
-        "rangeText": "自身基础移动速度提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "rangeText": "自身基础移动速度提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "TY-U10",
@@ -1347,14 +1347,14 @@
       {
         "powerId": "TY-U19",
         "unlocked": false,
-        "rangeText": "装备后你持续侦测周围半径300～400的范围：其中隐身或潜行的敌人对你显形\n并在该显形期间你对其造成的直接伤害提高18.75%～25%\n其原有范围再提高112.5%～150%",
+        "rangeText": "装备后你持续侦测周围半径300～400的范围：其中隐身或潜行的敌人对你显形\n并在该显形期间你对其造成的直接伤害提高30%～40%\n其原有范围再提高112.5%～150%",
         "primaryRangeText": "300～400"
       },
       {
         "powerId": "TY-U20",
         "unlocked": false,
-        "rangeText": "6秒内移动速度提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "rangeText": "6秒内移动速度提高52%～70%",
+        "primaryRangeText": "52%～70%"
       },
       {
         "powerId": "YS-A01",
@@ -1365,8 +1365,8 @@
       {
         "powerId": "YS-A02",
         "unlocked": false,
-        "rangeText": "立即向同一目标追加本次实际伤害63%～85%的伤害",
-        "primaryRangeText": "63%～85%"
+        "rangeText": "立即向同一目标追加本次实际伤害112%～150%的伤害",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "YS-A03",
@@ -1395,14 +1395,14 @@
       {
         "powerId": "YS-A07",
         "unlocked": false,
-        "rangeText": "每秒造成该等级圣光基础伤害22%～30%的魔法伤害",
-        "primaryRangeText": "22%～30%"
+        "rangeText": "每秒造成该等级圣光基础伤害112%～150%的魔法伤害",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "YS-A08",
         "unlocked": false,
-        "rangeText": "直接伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "YS-A09",
@@ -1461,14 +1461,14 @@
       {
         "powerId": "YS-A18",
         "unlocked": false,
-        "rangeText": "该伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "rangeText": "该伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "YS-A19",
         "unlocked": false,
-        "rangeText": "对每名敌人造成150%～200%魔法攻击力的神圣伤害",
-        "primaryRangeText": "150%～200%"
+        "rangeText": "对每名敌人造成375%～500%魔法攻击力的神圣伤害",
+        "primaryRangeText": "375%～500%"
       },
       {
         "powerId": "YS-A20",
@@ -1515,8 +1515,8 @@
       {
         "powerId": "YS-A27",
         "unlocked": false,
-        "rangeText": "光弹术、圣光术和驱魔术的直接伤害提高37.5%～50%",
-        "primaryRangeText": "37.5%～50%"
+        "rangeText": "光弹术、圣光术和驱魔术的直接伤害提高90%～120%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "YS-A28",
@@ -1527,8 +1527,8 @@
       {
         "powerId": "YS-A29",
         "unlocked": false,
-        "rangeText": "伤害增强系数额外提高37个百分点～50个百分点",
-        "primaryRangeText": "37个百分点～50个百分点"
+        "rangeText": "伤害增强系数额外提高75个百分点～100个百分点",
+        "primaryRangeText": "75个百分点～100个百分点"
       },
       {
         "powerId": "YS-A30",
@@ -1539,8 +1539,8 @@
       {
         "powerId": "YS-D01",
         "unlocked": false,
-        "rangeText": "治愈术直接治疗量提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "rangeText": "治愈术直接治疗量提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "YS-D02",
@@ -1557,20 +1557,20 @@
       {
         "powerId": "YS-D04",
         "unlocked": false,
-        "rangeText": "防御术的物理和魔法减伤各提高26个百分点～35个百分点",
-        "primaryRangeText": "26个百分点～35个百分点"
+        "rangeText": "防御术的物理和魔法减伤各提高37个百分点～50个百分点",
+        "primaryRangeText": "37个百分点～50个百分点"
       },
       {
         "powerId": "YS-D05",
         "unlocked": false,
-        "rangeText": "受到伤害降低18%～25%",
-        "primaryRangeText": "18%～25%"
+        "rangeText": "受到伤害降低22%～30%",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "YS-D06",
         "unlocked": false,
-        "rangeText": "受到伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "rangeText": "受到伤害降低37%～50%",
+        "primaryRangeText": "37%～50%"
       },
       {
         "powerId": "YS-D07",
@@ -1580,21 +1580,19 @@
       },
       {
         "powerId": "YS-D08",
-        "unlocked": false,
-        "rangeText": "受到伤害降低45%～60%",
-        "primaryRangeText": "45%～60%"
+        "unlocked": false
       },
       {
         "powerId": "YS-D09",
         "unlocked": false,
-        "rangeText": "受到的普通攻击伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "rangeText": "受到的全部直接伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "YS-D10",
         "unlocked": false,
-        "rangeText": "该敌人对你造成的伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "rangeText": "该敌人对你造成的伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "YS-U01",
@@ -1611,8 +1609,8 @@
       {
         "powerId": "YS-U03",
         "unlocked": false,
-        "rangeText": "每人最多获得其最大法力的15%～20%",
-        "primaryRangeText": "15%～20%"
+        "rangeText": "每人最多获得其最大法力的30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "YS-U04",
@@ -1623,8 +1621,8 @@
       {
         "powerId": "YS-U05",
         "unlocked": false,
-        "rangeText": "原加速强度提高22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "rangeText": "原加速强度提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "YS-U06",
@@ -1675,19 +1673,19 @@
       {
         "powerId": "ZS-A04",
         "unlocked": false,
-        "rangeText": "穿刺之枪伤害提高11.25%～15%",
-        "primaryRangeText": "11.25%～15%"
+        "rangeText": "穿刺之枪伤害提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "ZS-A05",
         "unlocked": false,
-        "rangeText": "穿刺之枪对所有目标的伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "rangeText": "穿刺之枪对所有目标的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A06",
         "unlocked": false,
-        "rangeText": "穿刺之枪对选中目标追加相当于该目标本次实际伤害82%～110%的伤害",
+        "rangeText": "对每个命中的敌人各追加相当于该目标本次实际伤害82%～110%的伤害",
         "primaryRangeText": "82%～110%"
       },
       {
@@ -1729,20 +1727,20 @@
       {
         "powerId": "ZS-A13",
         "unlocked": false,
-        "rangeText": "震地之枪伤害提高33.75%～45%",
-        "primaryRangeText": "33.75%～45%"
+        "rangeText": "震地之枪伤害提高67.5%～90%",
+        "primaryRangeText": "67.5%～90%"
       },
       {
         "powerId": "ZS-A14",
         "unlocked": false,
-        "rangeText": "伤害为本次技能防御前伤害的26%～35%",
-        "primaryRangeText": "26%～35%"
+        "rangeText": "伤害为本次技能防御前伤害的45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "ZS-A15",
         "unlocked": false,
-        "rangeText": "震地之枪对所有目标的伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "rangeText": "震地之枪对所有目标的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A16",
@@ -1789,20 +1787,20 @@
       {
         "powerId": "ZS-A23",
         "unlocked": false,
-        "rangeText": "野战八荒伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "rangeText": "野战八荒伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A24",
         "unlocked": false,
-        "rangeText": "战神之枪伤害提高63.75%～85%",
-        "primaryRangeText": "63.75%～85%"
+        "rangeText": "战神之枪伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "ZS-A25",
         "unlocked": false,
-        "rangeText": "战神之枪与野战八荒的直接伤害提高26.25%～35%",
-        "primaryRangeText": "26.25%～35%"
+        "rangeText": "战神之枪与野战八荒的直接伤害提高52.5%～70%",
+        "primaryRangeText": "52.5%～70%"
       },
       {
         "powerId": "ZS-A26",
@@ -1819,8 +1817,8 @@
       {
         "powerId": "ZS-A28",
         "unlocked": false,
-        "rangeText": "枪系直接伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "rangeText": "枪系直接伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "ZS-A29",
@@ -1907,8 +1905,8 @@
       {
         "powerId": "ZS-U03",
         "unlocked": false,
-        "rangeText": "8秒内移动速度提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "rangeText": "之后3秒内枪系技能伤害提高37%～50%",
+        "primaryRangeText": "37%～50%"
       },
       {
         "powerId": "ZS-U04",
@@ -1959,21 +1957,21 @@
     "rows": [
       {
         "powerId": "CK-A01",
-        "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "冷却时间缩短22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "unlocked": true
       },
       {
         "powerId": "CK-A02",
-        "unlocked": true
+        "unlocked": true,
+        "currentValueText": "300%",
+        "rangeText": "且最终伤害变为225%～300%（独立乘算）",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A03",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "狙击伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "300%",
+        "rangeText": "狙击伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A04",
@@ -2013,27 +2011,30 @@
       {
         "powerId": "CK-A09",
         "unlocked": true,
-        "currentValueText": "200%",
-        "rangeText": "淬毒术造成的每次中毒伤害提高150%～200%",
-        "primaryRangeText": "150%～200%"
+        "currentValueText": "300%",
+        "rangeText": "淬毒术造成的每次中毒伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A10",
-        "unlocked": true
+        "unlocked": true,
+        "currentValueText": "150%",
+        "rangeText": "装备期间连续投掷与多重投掷的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "CK-A11",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "100%",
+        "rangeText": "伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "CK-A12",
         "unlocked": true,
-        "currentValueText": "90%",
-        "rangeText": "陷阱：爆弹的伤害提高67.5%～90%",
-        "primaryRangeText": "67.5%～90%"
+        "currentValueText": "200%",
+        "rangeText": "陷阱：爆弹的伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A13",
@@ -2064,7 +2065,7 @@
         "powerId": "CK-A17",
         "unlocked": true,
         "currentValueText": "50%",
-        "rangeText": "背刺和陷阱：冻气的伤害提高37.5%～50%",
+        "rangeText": "背刺最终伤害变为原来的300%～400%（独立乘算）\n陷阱：冻气的伤害提高37.5%～50%",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -2078,9 +2079,9 @@
       {
         "powerId": "CK-A20",
         "unlocked": true,
-        "currentValueText": "25%",
-        "rangeText": "伤害提高18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "100%",
+        "rangeText": "伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "CK-A21",
@@ -2134,9 +2135,9 @@
       {
         "powerId": "CK-A28",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "环形爆发伤害提高33.75%～45%",
-        "primaryRangeText": "33.75%～45%"
+        "currentValueText": "300%",
+        "rangeText": "环形爆发伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A29",
@@ -2149,7 +2150,7 @@
         "powerId": "CK-A30",
         "unlocked": true,
         "currentValueText": "50%",
-        "rangeText": "环形爆发的作用半径扩大37.5%～50%",
+        "rangeText": "环形爆发的作用半径扩大37.5%～50%\n被收拢的敌人再受到一次等同本次环形爆发实际伤害75%～100%的伤害（合计2倍）",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -2169,9 +2170,9 @@
       {
         "powerId": "CK-D03",
         "unlocked": true,
-        "currentValueText": "15%",
-        "rangeText": "按该目标实际损失生命的11%～15%恢复自身生命",
-        "primaryRangeText": "11%～15%"
+        "currentValueText": "30%",
+        "rangeText": "按该目标实际损失生命的22%～30%恢复自身生命",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "CK-D04",
@@ -2183,9 +2184,9 @@
       {
         "powerId": "CK-D05",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "受到的眩晕、冻结和定身持续时间缩短22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "currentValueText": "50%",
+        "rangeText": "受到的眩晕、冻结和定身持续时间缩短37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "CK-D06",
@@ -2204,23 +2205,23 @@
       {
         "powerId": "CK-D08",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "受到的中毒伤害降低22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "60%",
+        "rangeText": "受到的中毒伤害降低45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "CK-D09",
         "unlocked": true,
-        "currentValueText": "20%",
-        "rangeText": "生命上限提高15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "40%",
+        "rangeText": "生命上限提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "CK-D10",
         "unlocked": true,
-        "currentValueText": "20%",
-        "rangeText": "受到的陷阱伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "15%",
+        "rangeText": "受到的所有直接伤害（含魔法与暴击）有11%～15%概率被闪避",
+        "primaryRangeText": "11%～15%"
       },
       {
         "powerId": "CK-U01",
@@ -2239,15 +2240,15 @@
       {
         "powerId": "CK-U03",
         "unlocked": true,
-        "currentValueText": "25个百分点",
-        "rangeText": "每个陷阱的拆除成功率提高18.75个百分点～25个百分点",
-        "primaryRangeText": "18.75个百分点～25个百分点"
+        "currentValueText": "50%",
+        "rangeText": "陷阱：封印与陷阱：冻气的作用半径提高37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "CK-U04",
         "unlocked": true,
         "currentValueText": "60%",
-        "rangeText": "移动速度提高45%～60%",
+        "rangeText": "施放已学习的阴影跳跃后3秒内移动速度提高45%～60%",
         "primaryRangeText": "45%～60%"
       },
       {
@@ -2288,9 +2289,9 @@
       {
         "powerId": "CK-U10",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "额外获得30%～40%移动速度",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "80%",
+        "rangeText": "额外获得60%～80%移动速度",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "JK-A01",
@@ -2323,9 +2324,9 @@
       {
         "powerId": "JK-A05",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "直接伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "200%",
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "JK-A06",
@@ -2379,9 +2380,9 @@
       {
         "powerId": "JK-A13",
         "unlocked": true,
-        "currentValueText": "70%",
-        "rangeText": "直接伤害提高52%～70%",
-        "primaryRangeText": "52%～70%"
+        "currentValueText": "200%",
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "JK-A14",
@@ -2393,23 +2394,23 @@
       {
         "powerId": "JK-A15",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "旋风剑的直接伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "150%",
+        "rangeText": "旋风剑的直接伤害提高112%～150%",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "JK-A16",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "直接伤害提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "100%",
+        "rangeText": "直接伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "JK-A17",
         "unlocked": true,
-        "currentValueText": "150",
-        "rangeText": "旋风剑的自身中心作用半径至少提高至112～150",
-        "primaryRangeText": "112～150"
+        "currentValueText": "200",
+        "rangeText": "旋风剑的自身中心作用半径至少提高至150～200",
+        "primaryRangeText": "150～200"
       },
       {
         "powerId": "JK-A18",
@@ -2456,9 +2457,9 @@
       {
         "powerId": "JK-A24",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "直接伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "300%",
+        "rangeText": "直接伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "JK-A25",
@@ -2477,9 +2478,9 @@
       {
         "powerId": "JK-A27",
         "unlocked": true,
-        "currentValueText": "320%",
-        "rangeText": "对150距离内敌人各追加攻击力240%～320%的物理伤害",
-        "primaryRangeText": "240%～320%"
+        "currentValueText": "500%",
+        "rangeText": "对150距离内敌人各追加攻击力375%～500%的物理伤害",
+        "primaryRangeText": "375%～500%"
       },
       {
         "powerId": "JK-A28",
@@ -2526,30 +2527,30 @@
       {
         "powerId": "JK-D04",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "对你造成的直接伤害降低37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "65%",
+        "rangeText": "对你造成的直接伤害降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D05",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "来自你周围75距离内敌人的直接物理伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "55%",
+        "rangeText": "来自你周围150距离内敌人的直接物理伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-D06",
         "unlocked": true,
-        "currentValueText": "35%",
-        "rangeText": "8秒内受到的伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "55%",
+        "rangeText": "12秒内受到的伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-D07",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "8秒内受到的魔法伤害降低37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "65%",
+        "rangeText": "12秒内受到的魔法伤害降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D08",
@@ -2561,23 +2562,20 @@
       {
         "powerId": "JK-D09",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "该次伤害再降低33%～45%",
-        "primaryRangeText": "33%～45%"
+        "currentValueText": "65%",
+        "rangeText": "该次伤害再降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D10",
         "unlocked": true,
-        "currentValueText": "35%",
-        "rangeText": "来自你75距离之外敌人的直接伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "55%",
+        "rangeText": "来自你75距离之外敌人的直接伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-U01",
-        "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "8秒内移动速度提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "unlocked": true
       },
       {
         "powerId": "JK-U02",
@@ -2586,9 +2584,9 @@
       {
         "powerId": "JK-U03",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "返还本次实际消耗法力的45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "80%",
+        "rangeText": "返还本次实际消耗法力的60%～80%",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "JK-U04",
@@ -2632,9 +2630,9 @@
       {
         "powerId": "JK-U10",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "封法剑的施法距离提高33%～45%",
-        "primaryRangeText": "33%～45%"
+        "currentValueText": "80%",
+        "rangeText": "封法剑的施法距离提高60%～80%",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "SS-A01",
@@ -2779,15 +2777,15 @@
       {
         "powerId": "SS-A21",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "暴雪术原半径内侧三分之二区域的直接伤害提高60%～80%\n其余区域提高15%～20%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "200%",
+        "rangeText": "暴雪术原半径内侧三分之二区域的直接伤害提高150%～200%\n其余区域提高37%～50%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "SS-A22",
         "unlocked": true,
         "currentValueText": "90%",
-        "rangeText": "直接伤害提高67.5%～90%",
+        "rangeText": "暴雪术对范围内所有敌人的直接伤害提高67.5%～90%",
         "primaryRangeText": "67.5%～90%"
       },
       {
@@ -2811,9 +2809,9 @@
       {
         "powerId": "SS-A26",
         "unlocked": true,
-        "currentValueText": "18%",
-        "rangeText": "单次不超过你的最大生命13%～18%",
-        "primaryRangeText": "13%～18%"
+        "currentValueText": "30%",
+        "rangeText": "单次不超过你的最大生命22%～30%",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "SS-A27",
@@ -2846,9 +2844,9 @@
       {
         "powerId": "SS-D01",
         "unlocked": true,
-        "currentValueText": "28%",
-        "rangeText": "180距离内敌人对你造成的伤害降低21%～28%",
-        "primaryRangeText": "21%～28%"
+        "currentValueText": "35%",
+        "rangeText": "180距离内敌人对你造成的伤害降低26%～35%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "SS-D02",
@@ -2867,44 +2865,44 @@
       {
         "powerId": "SS-D04",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "40%",
+        "rangeText": "最大生命提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D05",
         "unlocked": true,
-        "currentValueText": "22%",
-        "rangeText": "单次减免量在最大生命的16%～22%以内",
-        "primaryRangeText": "16%～22%"
+        "currentValueText": "35%",
+        "rangeText": "单次减免量在最大生命的26%～35%以内",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "SS-D06",
         "unlocked": true,
-        "currentValueText": "35%",
-        "rangeText": "装备期间受到的伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "40%",
+        "rangeText": "装备期间受到的伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D07",
         "unlocked": true,
-        "currentValueText": "28%",
-        "rangeText": "最大生命提高21%～28%",
-        "primaryRangeText": "21%～28%"
+        "currentValueText": "40%",
+        "rangeText": "最大生命提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D08",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "45%",
+        "rangeText": "最大生命提高33%～45%",
+        "primaryRangeText": "33%～45%"
       },
       {
         "powerId": "SS-D09",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "55%",
+        "rangeText": "伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "SS-D10",
@@ -2944,9 +2942,9 @@
       {
         "powerId": "SS-U05",
         "unlocked": true,
-        "currentValueText": "10%",
-        "rangeText": "恢复最大法力的7%～10%",
-        "primaryRangeText": "7%～10%"
+        "currentValueText": "12%",
+        "rangeText": "在燃烧持续期间受到的物理与魔法伤害提高9%～12%",
+        "primaryRangeText": "9%～12%"
       },
       {
         "powerId": "SS-U06",
@@ -3265,16 +3263,16 @@
       {
         "powerId": "TY-D03",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "自身最大生命提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "35%",
+        "rangeText": "自身最大生命提高26%～35%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "TY-D04",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "自身最大法力提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "8%",
+        "rangeText": "你造成的全部直接伤害的6%～8%转化为自身生命\n生命低于35%时提高为11%～15%",
+        "primaryRangeText": "6%～8%"
       },
       {
         "powerId": "TY-D05",
@@ -3286,29 +3284,29 @@
       {
         "powerId": "TY-D06",
         "unlocked": true,
-        "currentValueText": "55%",
-        "rangeText": "伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "currentValueText": "40%",
+        "rangeText": "伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D07",
         "unlocked": true,
-        "currentValueText": "55%",
-        "rangeText": "受到的直接物理伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "currentValueText": "40%",
+        "rangeText": "受到的直接物理伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D08",
         "unlocked": true,
-        "currentValueText": "55%",
-        "rangeText": "受到的魔法伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "currentValueText": "40%",
+        "rangeText": "受到的魔法伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D09",
         "unlocked": true,
         "currentValueText": "50%",
-        "rangeText": "敌方施加的可缩短控制持续时间缩短37.5%～50%\n立即获得吸收自身最大生命15%～20%伤害的护盾",
+        "rangeText": "敌方施加的可缩短控制持续时间缩短37.5%～50%\n立即获得吸收自身最大生命26%～35%伤害的护盾",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -3328,9 +3326,9 @@
       {
         "powerId": "TY-D12",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "受到的技能直接治疗和持续治疗提高60%～80%\n4秒内受到的伤害降低18.75%～25%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "120%",
+        "rangeText": "受到的技能直接治疗和持续治疗提高90%～120%\n4秒内受到的伤害降低26.25%～35%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-D13",
@@ -3356,9 +3354,9 @@
       {
         "powerId": "TY-D16",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "获得吸收自身最大生命33%～45%伤害的护盾\n本人技能施加的吸收护盾初始量另外提高75%～100%",
-        "primaryRangeText": "33%～45%"
+        "currentValueText": "35%",
+        "rangeText": "获得吸收自身最大生命26%～35%伤害的护盾\n本人技能施加的吸收护盾初始量另外提高75%～100%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "TY-D17",
@@ -3371,7 +3369,7 @@
         "powerId": "TY-D18",
         "unlocked": true,
         "currentValueText": "100%",
-        "rangeText": "你持有的吸收护盾持续时间提高75%～100%\n在3秒内回复被打破吸收量的22%～30%生命",
+        "rangeText": "你持有的吸收护盾持续时间提高75%～100%\n立即回复被打破吸收量的37%～50%生命",
         "primaryRangeText": "75%～100%"
       },
       {
@@ -3433,9 +3431,9 @@
       {
         "powerId": "TY-U07",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "主动位移或跳跃技能的位移距离和可选目标距离提高60%～80%\n下一次主动技能施法距离提高37.5%～50%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "120%",
+        "rangeText": "主动位移或跳跃技能的位移距离和可选目标距离提高90%～120%\n下一次主动技能施法距离提高37.5%～50%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-U08",
@@ -3447,9 +3445,9 @@
       {
         "powerId": "TY-U09",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "自身基础移动速度提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "60%",
+        "rangeText": "自身基础移动速度提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "TY-U10",
@@ -3518,15 +3516,15 @@
         "powerId": "TY-U19",
         "unlocked": true,
         "currentValueText": "400",
-        "rangeText": "装备后你持续侦测周围半径300～400的范围：其中隐身或潜行的敌人对你显形\n并在该显形期间你对其造成的直接伤害提高18.75%～25%\n其原有范围再提高112.5%～150%",
+        "rangeText": "装备后你持续侦测周围半径300～400的范围：其中隐身或潜行的敌人对你显形\n并在该显形期间你对其造成的直接伤害提高30%～40%\n其原有范围再提高112.5%～150%",
         "primaryRangeText": "300～400"
       },
       {
         "powerId": "TY-U20",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "6秒内移动速度提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "70%",
+        "rangeText": "6秒内移动速度提高52%～70%",
+        "primaryRangeText": "52%～70%"
       },
       {
         "powerId": "YS-A01",
@@ -3538,9 +3536,9 @@
       {
         "powerId": "YS-A02",
         "unlocked": true,
-        "currentValueText": "85%",
-        "rangeText": "立即向同一目标追加本次实际伤害63%～85%的伤害",
-        "primaryRangeText": "63%～85%"
+        "currentValueText": "150%",
+        "rangeText": "立即向同一目标追加本次实际伤害112%～150%的伤害",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "YS-A03",
@@ -3573,16 +3571,16 @@
       {
         "powerId": "YS-A07",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "每秒造成该等级圣光基础伤害22%～30%的魔法伤害",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "150%",
+        "rangeText": "每秒造成该等级圣光基础伤害112%～150%的魔法伤害",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "YS-A08",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "直接伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "200%",
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "YS-A09",
@@ -3650,16 +3648,16 @@
       {
         "powerId": "YS-A18",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "该伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "150%",
+        "rangeText": "该伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "YS-A19",
         "unlocked": true,
-        "currentValueText": "200%",
-        "rangeText": "对每名敌人造成150%～200%魔法攻击力的神圣伤害",
-        "primaryRangeText": "150%～200%"
+        "currentValueText": "500%",
+        "rangeText": "对每名敌人造成375%～500%魔法攻击力的神圣伤害",
+        "primaryRangeText": "375%～500%"
       },
       {
         "powerId": "YS-A20",
@@ -3713,9 +3711,9 @@
       {
         "powerId": "YS-A27",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "光弹术、圣光术和驱魔术的直接伤害提高37.5%～50%",
-        "primaryRangeText": "37.5%～50%"
+        "currentValueText": "120%",
+        "rangeText": "光弹术、圣光术和驱魔术的直接伤害提高90%～120%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "YS-A28",
@@ -3727,9 +3725,9 @@
       {
         "powerId": "YS-A29",
         "unlocked": true,
-        "currentValueText": "50个百分点",
-        "rangeText": "伤害增强系数额外提高37个百分点～50个百分点",
-        "primaryRangeText": "37个百分点～50个百分点"
+        "currentValueText": "100个百分点",
+        "rangeText": "伤害增强系数额外提高75个百分点～100个百分点",
+        "primaryRangeText": "75个百分点～100个百分点"
       },
       {
         "powerId": "YS-A30",
@@ -3741,9 +3739,9 @@
       {
         "powerId": "YS-D01",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "治愈术直接治疗量提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "150%",
+        "rangeText": "治愈术直接治疗量提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "YS-D02",
@@ -3762,23 +3760,23 @@
       {
         "powerId": "YS-D04",
         "unlocked": true,
-        "currentValueText": "35个百分点",
-        "rangeText": "防御术的物理和魔法减伤各提高26个百分点～35个百分点",
-        "primaryRangeText": "26个百分点～35个百分点"
+        "currentValueText": "50个百分点",
+        "rangeText": "防御术的物理和魔法减伤各提高37个百分点～50个百分点",
+        "primaryRangeText": "37个百分点～50个百分点"
       },
       {
         "powerId": "YS-D05",
         "unlocked": true,
-        "currentValueText": "25%",
-        "rangeText": "受到伤害降低18%～25%",
-        "primaryRangeText": "18%～25%"
+        "currentValueText": "30%",
+        "rangeText": "受到伤害降低22%～30%",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "YS-D06",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "受到伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "50%",
+        "rangeText": "受到伤害降低37%～50%",
+        "primaryRangeText": "37%～50%"
       },
       {
         "powerId": "YS-D07",
@@ -3789,24 +3787,21 @@
       },
       {
         "powerId": "YS-D08",
-        "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "受到伤害降低45%～60%",
-        "primaryRangeText": "45%～60%"
+        "unlocked": true
       },
       {
         "powerId": "YS-D09",
         "unlocked": true,
-        "currentValueText": "35%",
-        "rangeText": "受到的普通攻击伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "40%",
+        "rangeText": "受到的全部直接伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "YS-D10",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "该敌人对你造成的伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "55%",
+        "rangeText": "该敌人对你造成的伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "YS-U01",
@@ -3825,9 +3820,9 @@
       {
         "powerId": "YS-U03",
         "unlocked": true,
-        "currentValueText": "20%",
-        "rangeText": "每人最多获得其最大法力的15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "40%",
+        "rangeText": "每人最多获得其最大法力的30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "YS-U04",
@@ -3839,9 +3834,9 @@
       {
         "powerId": "YS-U05",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "原加速强度提高22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "currentValueText": "60%",
+        "rangeText": "原加速强度提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "YS-U06",
@@ -3899,22 +3894,22 @@
       {
         "powerId": "ZS-A04",
         "unlocked": true,
-        "currentValueText": "15%",
-        "rangeText": "穿刺之枪伤害提高11.25%～15%",
-        "primaryRangeText": "11.25%～15%"
+        "currentValueText": "60%",
+        "rangeText": "穿刺之枪伤害提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "ZS-A05",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "穿刺之枪对所有目标的伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "150%",
+        "rangeText": "穿刺之枪对所有目标的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A06",
         "unlocked": true,
         "currentValueText": "110%",
-        "rangeText": "穿刺之枪对选中目标追加相当于该目标本次实际伤害82%～110%的伤害",
+        "rangeText": "对每个命中的敌人各追加相当于该目标本次实际伤害82%～110%的伤害",
         "primaryRangeText": "82%～110%"
       },
       {
@@ -3962,23 +3957,23 @@
       {
         "powerId": "ZS-A13",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "震地之枪伤害提高33.75%～45%",
-        "primaryRangeText": "33.75%～45%"
+        "currentValueText": "90%",
+        "rangeText": "震地之枪伤害提高67.5%～90%",
+        "primaryRangeText": "67.5%～90%"
       },
       {
         "powerId": "ZS-A14",
         "unlocked": true,
-        "currentValueText": "35%",
-        "rangeText": "伤害为本次技能防御前伤害的26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "60%",
+        "rangeText": "伤害为本次技能防御前伤害的45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "ZS-A15",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "震地之枪对所有目标的伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "150%",
+        "rangeText": "震地之枪对所有目标的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A16",
@@ -4032,23 +4027,23 @@
       {
         "powerId": "ZS-A23",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "野战八荒伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "150%",
+        "rangeText": "野战八荒伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A24",
         "unlocked": true,
-        "currentValueText": "85%",
-        "rangeText": "战神之枪伤害提高63.75%～85%",
-        "primaryRangeText": "63.75%～85%"
+        "currentValueText": "200%",
+        "rangeText": "战神之枪伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "ZS-A25",
         "unlocked": true,
-        "currentValueText": "35%",
-        "rangeText": "战神之枪与野战八荒的直接伤害提高26.25%～35%",
-        "primaryRangeText": "26.25%～35%"
+        "currentValueText": "70%",
+        "rangeText": "战神之枪与野战八荒的直接伤害提高52.5%～70%",
+        "primaryRangeText": "52.5%～70%"
       },
       {
         "powerId": "ZS-A26",
@@ -4067,9 +4062,9 @@
       {
         "powerId": "ZS-A28",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "枪系直接伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "100%",
+        "rangeText": "枪系直接伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "ZS-A29",
@@ -4169,9 +4164,9 @@
       {
         "powerId": "ZS-U03",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "8秒内移动速度提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "50%",
+        "rangeText": "之后3秒内枪系技能伤害提高37%～50%",
+        "primaryRangeText": "37%～50%"
       },
       {
         "powerId": "ZS-U04",
@@ -4229,21 +4224,21 @@
     "rows": [
       {
         "powerId": "CK-A01",
-        "unlocked": true,
-        "currentValueText": "22.5%",
-        "rangeText": "冷却时间缩短22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "unlocked": true
       },
       {
         "powerId": "CK-A02",
-        "unlocked": true
+        "unlocked": true,
+        "currentValueText": "225%",
+        "rangeText": "且最终伤害变为225%～300%（独立乘算）",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A03",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "狙击伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "225%",
+        "rangeText": "狙击伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A04",
@@ -4283,27 +4278,30 @@
       {
         "powerId": "CK-A09",
         "unlocked": true,
-        "currentValueText": "150%",
-        "rangeText": "淬毒术造成的每次中毒伤害提高150%～200%",
-        "primaryRangeText": "150%～200%"
+        "currentValueText": "225%",
+        "rangeText": "淬毒术造成的每次中毒伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A10",
-        "unlocked": true
+        "unlocked": true,
+        "currentValueText": "112.5%",
+        "rangeText": "装备期间连续投掷与多重投掷的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "CK-A11",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "75%",
+        "rangeText": "伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "CK-A12",
         "unlocked": true,
-        "currentValueText": "67.5%",
-        "rangeText": "陷阱：爆弹的伤害提高67.5%～90%",
-        "primaryRangeText": "67.5%～90%"
+        "currentValueText": "150%",
+        "rangeText": "陷阱：爆弹的伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A13",
@@ -4334,7 +4332,7 @@
         "powerId": "CK-A17",
         "unlocked": true,
         "currentValueText": "37.5%",
-        "rangeText": "背刺和陷阱：冻气的伤害提高37.5%～50%",
+        "rangeText": "背刺最终伤害变为原来的300%～400%（独立乘算）\n陷阱：冻气的伤害提高37.5%～50%",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -4348,9 +4346,9 @@
       {
         "powerId": "CK-A20",
         "unlocked": true,
-        "currentValueText": "18.75%",
-        "rangeText": "伤害提高18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "75%",
+        "rangeText": "伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "CK-A21",
@@ -4404,9 +4402,9 @@
       {
         "powerId": "CK-A28",
         "unlocked": true,
-        "currentValueText": "33.75%",
-        "rangeText": "环形爆发伤害提高33.75%～45%",
-        "primaryRangeText": "33.75%～45%"
+        "currentValueText": "225%",
+        "rangeText": "环形爆发伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A29",
@@ -4419,7 +4417,7 @@
         "powerId": "CK-A30",
         "unlocked": true,
         "currentValueText": "37.5%",
-        "rangeText": "环形爆发的作用半径扩大37.5%～50%",
+        "rangeText": "环形爆发的作用半径扩大37.5%～50%\n被收拢的敌人再受到一次等同本次环形爆发实际伤害75%～100%的伤害（合计2倍）",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -4439,9 +4437,9 @@
       {
         "powerId": "CK-D03",
         "unlocked": true,
-        "currentValueText": "11%",
-        "rangeText": "按该目标实际损失生命的11%～15%恢复自身生命",
-        "primaryRangeText": "11%～15%"
+        "currentValueText": "22%",
+        "rangeText": "按该目标实际损失生命的22%～30%恢复自身生命",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "CK-D04",
@@ -4453,9 +4451,9 @@
       {
         "powerId": "CK-D05",
         "unlocked": true,
-        "currentValueText": "22.5%",
-        "rangeText": "受到的眩晕、冻结和定身持续时间缩短22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "currentValueText": "37.5%",
+        "rangeText": "受到的眩晕、冻结和定身持续时间缩短37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "CK-D06",
@@ -4474,23 +4472,23 @@
       {
         "powerId": "CK-D08",
         "unlocked": true,
-        "currentValueText": "22%",
-        "rangeText": "受到的中毒伤害降低22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "45%",
+        "rangeText": "受到的中毒伤害降低45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "CK-D09",
         "unlocked": true,
-        "currentValueText": "15%",
-        "rangeText": "生命上限提高15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "30%",
+        "rangeText": "生命上限提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "CK-D10",
         "unlocked": true,
-        "currentValueText": "15%",
-        "rangeText": "受到的陷阱伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "11%",
+        "rangeText": "受到的所有直接伤害（含魔法与暴击）有11%～15%概率被闪避",
+        "primaryRangeText": "11%～15%"
       },
       {
         "powerId": "CK-U01",
@@ -4509,15 +4507,15 @@
       {
         "powerId": "CK-U03",
         "unlocked": true,
-        "currentValueText": "18.75个百分点",
-        "rangeText": "每个陷阱的拆除成功率提高18.75个百分点～25个百分点",
-        "primaryRangeText": "18.75个百分点～25个百分点"
+        "currentValueText": "37.5%",
+        "rangeText": "陷阱：封印与陷阱：冻气的作用半径提高37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "CK-U04",
         "unlocked": true,
         "currentValueText": "45%",
-        "rangeText": "移动速度提高45%～60%",
+        "rangeText": "施放已学习的阴影跳跃后3秒内移动速度提高45%～60%",
         "primaryRangeText": "45%～60%"
       },
       {
@@ -4558,9 +4556,9 @@
       {
         "powerId": "CK-U10",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "额外获得30%～40%移动速度",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "60%",
+        "rangeText": "额外获得60%～80%移动速度",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "JK-A01",
@@ -4593,9 +4591,9 @@
       {
         "powerId": "JK-A05",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "直接伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "150%",
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "JK-A06",
@@ -4649,9 +4647,9 @@
       {
         "powerId": "JK-A13",
         "unlocked": true,
-        "currentValueText": "52%",
-        "rangeText": "直接伤害提高52%～70%",
-        "primaryRangeText": "52%～70%"
+        "currentValueText": "150%",
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "JK-A14",
@@ -4663,23 +4661,23 @@
       {
         "powerId": "JK-A15",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "旋风剑的直接伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "112%",
+        "rangeText": "旋风剑的直接伤害提高112%～150%",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "JK-A16",
         "unlocked": true,
-        "currentValueText": "22%",
-        "rangeText": "直接伤害提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "75%",
+        "rangeText": "直接伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "JK-A17",
         "unlocked": true,
-        "currentValueText": "112",
-        "rangeText": "旋风剑的自身中心作用半径至少提高至112～150",
-        "primaryRangeText": "112～150"
+        "currentValueText": "150",
+        "rangeText": "旋风剑的自身中心作用半径至少提高至150～200",
+        "primaryRangeText": "150～200"
       },
       {
         "powerId": "JK-A18",
@@ -4726,9 +4724,9 @@
       {
         "powerId": "JK-A24",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "直接伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "225%",
+        "rangeText": "直接伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "JK-A25",
@@ -4747,9 +4745,9 @@
       {
         "powerId": "JK-A27",
         "unlocked": true,
-        "currentValueText": "240%",
-        "rangeText": "对150距离内敌人各追加攻击力240%～320%的物理伤害",
-        "primaryRangeText": "240%～320%"
+        "currentValueText": "375%",
+        "rangeText": "对150距离内敌人各追加攻击力375%～500%的物理伤害",
+        "primaryRangeText": "375%～500%"
       },
       {
         "powerId": "JK-A28",
@@ -4796,30 +4794,30 @@
       {
         "powerId": "JK-D04",
         "unlocked": true,
-        "currentValueText": "37%",
-        "rangeText": "对你造成的直接伤害降低37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "48%",
+        "rangeText": "对你造成的直接伤害降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D05",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "来自你周围75距离内敌人的直接物理伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "41%",
+        "rangeText": "来自你周围150距离内敌人的直接物理伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-D06",
         "unlocked": true,
-        "currentValueText": "26%",
-        "rangeText": "8秒内受到的伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "41%",
+        "rangeText": "12秒内受到的伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-D07",
         "unlocked": true,
-        "currentValueText": "37%",
-        "rangeText": "8秒内受到的魔法伤害降低37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "48%",
+        "rangeText": "12秒内受到的魔法伤害降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D08",
@@ -4831,23 +4829,20 @@
       {
         "powerId": "JK-D09",
         "unlocked": true,
-        "currentValueText": "33%",
-        "rangeText": "该次伤害再降低33%～45%",
-        "primaryRangeText": "33%～45%"
+        "currentValueText": "48%",
+        "rangeText": "该次伤害再降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D10",
         "unlocked": true,
-        "currentValueText": "26%",
-        "rangeText": "来自你75距离之外敌人的直接伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "41%",
+        "rangeText": "来自你75距离之外敌人的直接伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-U01",
-        "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "8秒内移动速度提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "unlocked": true
       },
       {
         "powerId": "JK-U02",
@@ -4856,9 +4851,9 @@
       {
         "powerId": "JK-U03",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "返还本次实际消耗法力的45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "60%",
+        "rangeText": "返还本次实际消耗法力的60%～80%",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "JK-U04",
@@ -4902,9 +4897,9 @@
       {
         "powerId": "JK-U10",
         "unlocked": true,
-        "currentValueText": "33%",
-        "rangeText": "封法剑的施法距离提高33%～45%",
-        "primaryRangeText": "33%～45%"
+        "currentValueText": "60%",
+        "rangeText": "封法剑的施法距离提高60%～80%",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "SS-A01",
@@ -5049,15 +5044,15 @@
       {
         "powerId": "SS-A21",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "暴雪术原半径内侧三分之二区域的直接伤害提高60%～80%\n其余区域提高15%～20%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "150%",
+        "rangeText": "暴雪术原半径内侧三分之二区域的直接伤害提高150%～200%\n其余区域提高37%～50%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "SS-A22",
         "unlocked": true,
         "currentValueText": "67.5%",
-        "rangeText": "直接伤害提高67.5%～90%",
+        "rangeText": "暴雪术对范围内所有敌人的直接伤害提高67.5%～90%",
         "primaryRangeText": "67.5%～90%"
       },
       {
@@ -5081,9 +5076,9 @@
       {
         "powerId": "SS-A26",
         "unlocked": true,
-        "currentValueText": "13%",
-        "rangeText": "单次不超过你的最大生命13%～18%",
-        "primaryRangeText": "13%～18%"
+        "currentValueText": "22%",
+        "rangeText": "单次不超过你的最大生命22%～30%",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "SS-A27",
@@ -5116,9 +5111,9 @@
       {
         "powerId": "SS-D01",
         "unlocked": true,
-        "currentValueText": "21%",
-        "rangeText": "180距离内敌人对你造成的伤害降低21%～28%",
-        "primaryRangeText": "21%～28%"
+        "currentValueText": "26%",
+        "rangeText": "180距离内敌人对你造成的伤害降低26%～35%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "SS-D02",
@@ -5137,44 +5132,44 @@
       {
         "powerId": "SS-D04",
         "unlocked": true,
-        "currentValueText": "22%",
-        "rangeText": "最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "30%",
+        "rangeText": "最大生命提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D05",
         "unlocked": true,
-        "currentValueText": "16%",
-        "rangeText": "单次减免量在最大生命的16%～22%以内",
-        "primaryRangeText": "16%～22%"
+        "currentValueText": "26%",
+        "rangeText": "单次减免量在最大生命的26%～35%以内",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "SS-D06",
         "unlocked": true,
-        "currentValueText": "26%",
-        "rangeText": "装备期间受到的伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "30%",
+        "rangeText": "装备期间受到的伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D07",
         "unlocked": true,
-        "currentValueText": "21%",
-        "rangeText": "最大生命提高21%～28%",
-        "primaryRangeText": "21%～28%"
+        "currentValueText": "30%",
+        "rangeText": "最大生命提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D08",
         "unlocked": true,
-        "currentValueText": "22%",
-        "rangeText": "最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "33%",
+        "rangeText": "最大生命提高33%～45%",
+        "primaryRangeText": "33%～45%"
       },
       {
         "powerId": "SS-D09",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "41%",
+        "rangeText": "伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "SS-D10",
@@ -5214,9 +5209,9 @@
       {
         "powerId": "SS-U05",
         "unlocked": true,
-        "currentValueText": "7%",
-        "rangeText": "恢复最大法力的7%～10%",
-        "primaryRangeText": "7%～10%"
+        "currentValueText": "9%",
+        "rangeText": "在燃烧持续期间受到的物理与魔法伤害提高9%～12%",
+        "primaryRangeText": "9%～12%"
       },
       {
         "powerId": "SS-U06",
@@ -5535,16 +5530,16 @@
       {
         "powerId": "TY-D03",
         "unlocked": true,
-        "currentValueText": "37%",
-        "rangeText": "自身最大生命提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "26%",
+        "rangeText": "自身最大生命提高26%～35%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "TY-D04",
         "unlocked": true,
-        "currentValueText": "37%",
-        "rangeText": "自身最大法力提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "6%",
+        "rangeText": "你造成的全部直接伤害的6%～8%转化为自身生命\n生命低于35%时提高为11%～15%",
+        "primaryRangeText": "6%～8%"
       },
       {
         "powerId": "TY-D05",
@@ -5556,29 +5551,29 @@
       {
         "powerId": "TY-D06",
         "unlocked": true,
-        "currentValueText": "41.25%",
-        "rangeText": "伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "currentValueText": "30%",
+        "rangeText": "伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D07",
         "unlocked": true,
-        "currentValueText": "41.25%",
-        "rangeText": "受到的直接物理伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "currentValueText": "30%",
+        "rangeText": "受到的直接物理伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D08",
         "unlocked": true,
-        "currentValueText": "41.25%",
-        "rangeText": "受到的魔法伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "currentValueText": "30%",
+        "rangeText": "受到的魔法伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D09",
         "unlocked": true,
         "currentValueText": "37.5%",
-        "rangeText": "敌方施加的可缩短控制持续时间缩短37.5%～50%\n立即获得吸收自身最大生命15%～20%伤害的护盾",
+        "rangeText": "敌方施加的可缩短控制持续时间缩短37.5%～50%\n立即获得吸收自身最大生命26%～35%伤害的护盾",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -5598,9 +5593,9 @@
       {
         "powerId": "TY-D12",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "受到的技能直接治疗和持续治疗提高60%～80%\n4秒内受到的伤害降低18.75%～25%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "90%",
+        "rangeText": "受到的技能直接治疗和持续治疗提高90%～120%\n4秒内受到的伤害降低26.25%～35%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-D13",
@@ -5626,9 +5621,9 @@
       {
         "powerId": "TY-D16",
         "unlocked": true,
-        "currentValueText": "33%",
-        "rangeText": "获得吸收自身最大生命33%～45%伤害的护盾\n本人技能施加的吸收护盾初始量另外提高75%～100%",
-        "primaryRangeText": "33%～45%"
+        "currentValueText": "26%",
+        "rangeText": "获得吸收自身最大生命26%～35%伤害的护盾\n本人技能施加的吸收护盾初始量另外提高75%～100%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "TY-D17",
@@ -5641,7 +5636,7 @@
         "powerId": "TY-D18",
         "unlocked": true,
         "currentValueText": "75%",
-        "rangeText": "你持有的吸收护盾持续时间提高75%～100%\n在3秒内回复被打破吸收量的22%～30%生命",
+        "rangeText": "你持有的吸收护盾持续时间提高75%～100%\n立即回复被打破吸收量的37%～50%生命",
         "primaryRangeText": "75%～100%"
       },
       {
@@ -5703,9 +5698,9 @@
       {
         "powerId": "TY-U07",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "主动位移或跳跃技能的位移距离和可选目标距离提高60%～80%\n下一次主动技能施法距离提高37.5%～50%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "90%",
+        "rangeText": "主动位移或跳跃技能的位移距离和可选目标距离提高90%～120%\n下一次主动技能施法距离提高37.5%～50%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-U08",
@@ -5717,9 +5712,9 @@
       {
         "powerId": "TY-U09",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "自身基础移动速度提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "45%",
+        "rangeText": "自身基础移动速度提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "TY-U10",
@@ -5788,15 +5783,15 @@
         "powerId": "TY-U19",
         "unlocked": true,
         "currentValueText": "300",
-        "rangeText": "装备后你持续侦测周围半径300～400的范围：其中隐身或潜行的敌人对你显形\n并在该显形期间你对其造成的直接伤害提高18.75%～25%\n其原有范围再提高112.5%～150%",
+        "rangeText": "装备后你持续侦测周围半径300～400的范围：其中隐身或潜行的敌人对你显形\n并在该显形期间你对其造成的直接伤害提高30%～40%\n其原有范围再提高112.5%～150%",
         "primaryRangeText": "300～400"
       },
       {
         "powerId": "TY-U20",
         "unlocked": true,
-        "currentValueText": "37%",
-        "rangeText": "6秒内移动速度提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "52%",
+        "rangeText": "6秒内移动速度提高52%～70%",
+        "primaryRangeText": "52%～70%"
       },
       {
         "powerId": "YS-A01",
@@ -5808,9 +5803,9 @@
       {
         "powerId": "YS-A02",
         "unlocked": true,
-        "currentValueText": "63%",
-        "rangeText": "立即向同一目标追加本次实际伤害63%～85%的伤害",
-        "primaryRangeText": "63%～85%"
+        "currentValueText": "112%",
+        "rangeText": "立即向同一目标追加本次实际伤害112%～150%的伤害",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "YS-A03",
@@ -5843,16 +5838,16 @@
       {
         "powerId": "YS-A07",
         "unlocked": true,
-        "currentValueText": "22%",
-        "rangeText": "每秒造成该等级圣光基础伤害22%～30%的魔法伤害",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "112%",
+        "rangeText": "每秒造成该等级圣光基础伤害112%～150%的魔法伤害",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "YS-A08",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "直接伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "150%",
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "YS-A09",
@@ -5920,16 +5915,16 @@
       {
         "powerId": "YS-A18",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "该伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "112.5%",
+        "rangeText": "该伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "YS-A19",
         "unlocked": true,
-        "currentValueText": "150%",
-        "rangeText": "对每名敌人造成150%～200%魔法攻击力的神圣伤害",
-        "primaryRangeText": "150%～200%"
+        "currentValueText": "375%",
+        "rangeText": "对每名敌人造成375%～500%魔法攻击力的神圣伤害",
+        "primaryRangeText": "375%～500%"
       },
       {
         "powerId": "YS-A20",
@@ -5983,9 +5978,9 @@
       {
         "powerId": "YS-A27",
         "unlocked": true,
-        "currentValueText": "37.5%",
-        "rangeText": "光弹术、圣光术和驱魔术的直接伤害提高37.5%～50%",
-        "primaryRangeText": "37.5%～50%"
+        "currentValueText": "90%",
+        "rangeText": "光弹术、圣光术和驱魔术的直接伤害提高90%～120%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "YS-A28",
@@ -5997,9 +5992,9 @@
       {
         "powerId": "YS-A29",
         "unlocked": true,
-        "currentValueText": "37个百分点",
-        "rangeText": "伤害增强系数额外提高37个百分点～50个百分点",
-        "primaryRangeText": "37个百分点～50个百分点"
+        "currentValueText": "75个百分点",
+        "rangeText": "伤害增强系数额外提高75个百分点～100个百分点",
+        "primaryRangeText": "75个百分点～100个百分点"
       },
       {
         "powerId": "YS-A30",
@@ -6011,9 +6006,9 @@
       {
         "powerId": "YS-D01",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "治愈术直接治疗量提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "112.5%",
+        "rangeText": "治愈术直接治疗量提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "YS-D02",
@@ -6032,23 +6027,23 @@
       {
         "powerId": "YS-D04",
         "unlocked": true,
-        "currentValueText": "26个百分点",
-        "rangeText": "防御术的物理和魔法减伤各提高26个百分点～35个百分点",
-        "primaryRangeText": "26个百分点～35个百分点"
+        "currentValueText": "37个百分点",
+        "rangeText": "防御术的物理和魔法减伤各提高37个百分点～50个百分点",
+        "primaryRangeText": "37个百分点～50个百分点"
       },
       {
         "powerId": "YS-D05",
         "unlocked": true,
-        "currentValueText": "18%",
-        "rangeText": "受到伤害降低18%～25%",
-        "primaryRangeText": "18%～25%"
+        "currentValueText": "22%",
+        "rangeText": "受到伤害降低22%～30%",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "YS-D06",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "受到伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "37%",
+        "rangeText": "受到伤害降低37%～50%",
+        "primaryRangeText": "37%～50%"
       },
       {
         "powerId": "YS-D07",
@@ -6059,24 +6054,21 @@
       },
       {
         "powerId": "YS-D08",
-        "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "受到伤害降低45%～60%",
-        "primaryRangeText": "45%～60%"
+        "unlocked": true
       },
       {
         "powerId": "YS-D09",
         "unlocked": true,
-        "currentValueText": "26%",
-        "rangeText": "受到的普通攻击伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "30%",
+        "rangeText": "受到的全部直接伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "YS-D10",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "该敌人对你造成的伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "41%",
+        "rangeText": "该敌人对你造成的伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "YS-U01",
@@ -6095,9 +6087,9 @@
       {
         "powerId": "YS-U03",
         "unlocked": true,
-        "currentValueText": "15%",
-        "rangeText": "每人最多获得其最大法力的15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "30%",
+        "rangeText": "每人最多获得其最大法力的30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "YS-U04",
@@ -6109,9 +6101,9 @@
       {
         "powerId": "YS-U05",
         "unlocked": true,
-        "currentValueText": "22.5%",
-        "rangeText": "原加速强度提高22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "currentValueText": "45%",
+        "rangeText": "原加速强度提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "YS-U06",
@@ -6169,22 +6161,22 @@
       {
         "powerId": "ZS-A04",
         "unlocked": true,
-        "currentValueText": "11.25%",
-        "rangeText": "穿刺之枪伤害提高11.25%～15%",
-        "primaryRangeText": "11.25%～15%"
+        "currentValueText": "45%",
+        "rangeText": "穿刺之枪伤害提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "ZS-A05",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "穿刺之枪对所有目标的伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "112.5%",
+        "rangeText": "穿刺之枪对所有目标的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A06",
         "unlocked": true,
         "currentValueText": "82%",
-        "rangeText": "穿刺之枪对选中目标追加相当于该目标本次实际伤害82%～110%的伤害",
+        "rangeText": "对每个命中的敌人各追加相当于该目标本次实际伤害82%～110%的伤害",
         "primaryRangeText": "82%～110%"
       },
       {
@@ -6232,23 +6224,23 @@
       {
         "powerId": "ZS-A13",
         "unlocked": true,
-        "currentValueText": "33.75%",
-        "rangeText": "震地之枪伤害提高33.75%～45%",
-        "primaryRangeText": "33.75%～45%"
+        "currentValueText": "67.5%",
+        "rangeText": "震地之枪伤害提高67.5%～90%",
+        "primaryRangeText": "67.5%～90%"
       },
       {
         "powerId": "ZS-A14",
         "unlocked": true,
-        "currentValueText": "26%",
-        "rangeText": "伤害为本次技能防御前伤害的26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "45%",
+        "rangeText": "伤害为本次技能防御前伤害的45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "ZS-A15",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "震地之枪对所有目标的伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "112.5%",
+        "rangeText": "震地之枪对所有目标的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A16",
@@ -6302,23 +6294,23 @@
       {
         "powerId": "ZS-A23",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "野战八荒伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "112.5%",
+        "rangeText": "野战八荒伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A24",
         "unlocked": true,
-        "currentValueText": "63.75%",
-        "rangeText": "战神之枪伤害提高63.75%～85%",
-        "primaryRangeText": "63.75%～85%"
+        "currentValueText": "150%",
+        "rangeText": "战神之枪伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "ZS-A25",
         "unlocked": true,
-        "currentValueText": "26.25%",
-        "rangeText": "战神之枪与野战八荒的直接伤害提高26.25%～35%",
-        "primaryRangeText": "26.25%～35%"
+        "currentValueText": "52.5%",
+        "rangeText": "战神之枪与野战八荒的直接伤害提高52.5%～70%",
+        "primaryRangeText": "52.5%～70%"
       },
       {
         "powerId": "ZS-A26",
@@ -6337,9 +6329,9 @@
       {
         "powerId": "ZS-A28",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "枪系直接伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "75%",
+        "rangeText": "枪系直接伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "ZS-A29",
@@ -6439,9 +6431,9 @@
       {
         "powerId": "ZS-U03",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "8秒内移动速度提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "37%",
+        "rangeText": "之后3秒内枪系技能伤害提高37%～50%",
+        "primaryRangeText": "37%～50%"
       },
       {
         "powerId": "ZS-U04",
@@ -6499,21 +6491,21 @@
     "rows": [
       {
         "powerId": "CK-A01",
-        "unlocked": true,
-        "currentValueText": "24.36%",
-        "rangeText": "冷却时间缩短22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "unlocked": true
       },
       {
         "powerId": "CK-A02",
-        "unlocked": true
+        "unlocked": true,
+        "currentValueText": "243%",
+        "rangeText": "且最终伤害变为225%～300%（独立乘算）",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A03",
         "unlocked": true,
-        "currentValueText": "64.98%",
-        "rangeText": "狙击伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "243.69%",
+        "rangeText": "狙击伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A04",
@@ -6553,27 +6545,30 @@
       {
         "powerId": "CK-A09",
         "unlocked": true,
-        "currentValueText": "162.46%",
-        "rangeText": "淬毒术造成的每次中毒伤害提高150%～200%",
-        "primaryRangeText": "150%～200%"
+        "currentValueText": "243.69%",
+        "rangeText": "淬毒术造成的每次中毒伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A10",
-        "unlocked": true
+        "unlocked": true,
+        "currentValueText": "121.84%",
+        "rangeText": "装备期间连续投掷与多重投掷的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "CK-A11",
         "unlocked": true,
-        "currentValueText": "32.49%",
-        "rangeText": "伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "81.23%",
+        "rangeText": "伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "CK-A12",
         "unlocked": true,
-        "currentValueText": "73.1%",
-        "rangeText": "陷阱：爆弹的伤害提高67.5%～90%",
-        "primaryRangeText": "67.5%～90%"
+        "currentValueText": "162.46%",
+        "rangeText": "陷阱：爆弹的伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A13",
@@ -6604,7 +6599,7 @@
         "powerId": "CK-A17",
         "unlocked": true,
         "currentValueText": "40.61%",
-        "rangeText": "背刺和陷阱：冻气的伤害提高37.5%～50%",
+        "rangeText": "背刺最终伤害变为原来的300%～400%（独立乘算）\n陷阱：冻气的伤害提高37.5%～50%",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -6618,9 +6613,9 @@
       {
         "powerId": "CK-A20",
         "unlocked": true,
-        "currentValueText": "20.3%",
-        "rangeText": "伤害提高18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "81.23%",
+        "rangeText": "伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "CK-A21",
@@ -6674,9 +6669,9 @@
       {
         "powerId": "CK-A28",
         "unlocked": true,
-        "currentValueText": "36.55%",
-        "rangeText": "环形爆发伤害提高33.75%～45%",
-        "primaryRangeText": "33.75%～45%"
+        "currentValueText": "243.69%",
+        "rangeText": "环形爆发伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A29",
@@ -6689,7 +6684,7 @@
         "powerId": "CK-A30",
         "unlocked": true,
         "currentValueText": "40.61%",
-        "rangeText": "环形爆发的作用半径扩大37.5%～50%",
+        "rangeText": "环形爆发的作用半径扩大37.5%～50%\n被收拢的敌人再受到一次等同本次环形爆发实际伤害75%～100%的伤害（合计2倍）",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -6709,9 +6704,9 @@
       {
         "powerId": "CK-D03",
         "unlocked": true,
-        "currentValueText": "12%",
-        "rangeText": "按该目标实际损失生命的11%～15%恢复自身生命",
-        "primaryRangeText": "11%～15%"
+        "currentValueText": "24%",
+        "rangeText": "按该目标实际损失生命的22%～30%恢复自身生命",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "CK-D04",
@@ -6723,9 +6718,9 @@
       {
         "powerId": "CK-D05",
         "unlocked": true,
-        "currentValueText": "24.36%",
-        "rangeText": "受到的眩晕、冻结和定身持续时间缩短22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "currentValueText": "40.61%",
+        "rangeText": "受到的眩晕、冻结和定身持续时间缩短37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "CK-D06",
@@ -6744,23 +6739,23 @@
       {
         "powerId": "CK-D08",
         "unlocked": true,
-        "currentValueText": "24%",
-        "rangeText": "受到的中毒伤害降低22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "48%",
+        "rangeText": "受到的中毒伤害降低45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "CK-D09",
         "unlocked": true,
-        "currentValueText": "16%",
-        "rangeText": "生命上限提高15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "32%",
+        "rangeText": "生命上限提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "CK-D10",
         "unlocked": true,
-        "currentValueText": "16%",
-        "rangeText": "受到的陷阱伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "12%",
+        "rangeText": "受到的所有直接伤害（含魔法与暴击）有11%～15%概率被闪避",
+        "primaryRangeText": "11%～15%"
       },
       {
         "powerId": "CK-U01",
@@ -6779,15 +6774,15 @@
       {
         "powerId": "CK-U03",
         "unlocked": true,
-        "currentValueText": "20.3个百分点",
-        "rangeText": "每个陷阱的拆除成功率提高18.75个百分点～25个百分点",
-        "primaryRangeText": "18.75个百分点～25个百分点"
+        "currentValueText": "40.61%",
+        "rangeText": "陷阱：封印与陷阱：冻气的作用半径提高37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "CK-U04",
         "unlocked": true,
         "currentValueText": "48%",
-        "rangeText": "移动速度提高45%～60%",
+        "rangeText": "施放已学习的阴影跳跃后3秒内移动速度提高45%～60%",
         "primaryRangeText": "45%～60%"
       },
       {
@@ -6828,9 +6823,9 @@
       {
         "powerId": "CK-U10",
         "unlocked": true,
-        "currentValueText": "32%",
-        "rangeText": "额外获得30%～40%移动速度",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "64%",
+        "rangeText": "额外获得60%～80%移动速度",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "JK-A01",
@@ -6863,9 +6858,9 @@
       {
         "powerId": "JK-A05",
         "unlocked": true,
-        "currentValueText": "32%",
-        "rangeText": "直接伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "162%",
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "JK-A06",
@@ -6919,9 +6914,9 @@
       {
         "powerId": "JK-A13",
         "unlocked": true,
-        "currentValueText": "56%",
-        "rangeText": "直接伤害提高52%～70%",
-        "primaryRangeText": "52%～70%"
+        "currentValueText": "162%",
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "JK-A14",
@@ -6933,23 +6928,23 @@
       {
         "powerId": "JK-A15",
         "unlocked": true,
-        "currentValueText": "48%",
-        "rangeText": "旋风剑的直接伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "121%",
+        "rangeText": "旋风剑的直接伤害提高112%～150%",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "JK-A16",
         "unlocked": true,
-        "currentValueText": "24%",
-        "rangeText": "直接伤害提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "81%",
+        "rangeText": "直接伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "JK-A17",
         "unlocked": true,
-        "currentValueText": "121",
-        "rangeText": "旋风剑的自身中心作用半径至少提高至112～150",
-        "primaryRangeText": "112～150"
+        "currentValueText": "162",
+        "rangeText": "旋风剑的自身中心作用半径至少提高至150～200",
+        "primaryRangeText": "150～200"
       },
       {
         "powerId": "JK-A18",
@@ -6996,9 +6991,9 @@
       {
         "powerId": "JK-A24",
         "unlocked": true,
-        "currentValueText": "64%",
-        "rangeText": "直接伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "243%",
+        "rangeText": "直接伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "JK-A25",
@@ -7017,9 +7012,9 @@
       {
         "powerId": "JK-A27",
         "unlocked": true,
-        "currentValueText": "259%",
-        "rangeText": "对150距离内敌人各追加攻击力240%～320%的物理伤害",
-        "primaryRangeText": "240%～320%"
+        "currentValueText": "406%",
+        "rangeText": "对150距离内敌人各追加攻击力375%～500%的物理伤害",
+        "primaryRangeText": "375%～500%"
       },
       {
         "powerId": "JK-A28",
@@ -7066,30 +7061,30 @@
       {
         "powerId": "JK-D04",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "对你造成的直接伤害降低37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "52%",
+        "rangeText": "对你造成的直接伤害降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D05",
         "unlocked": true,
-        "currentValueText": "32%",
-        "rangeText": "来自你周围75距离内敌人的直接物理伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "44%",
+        "rangeText": "来自你周围150距离内敌人的直接物理伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-D06",
         "unlocked": true,
-        "currentValueText": "28%",
-        "rangeText": "8秒内受到的伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "44%",
+        "rangeText": "12秒内受到的伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-D07",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "8秒内受到的魔法伤害降低37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "52%",
+        "rangeText": "12秒内受到的魔法伤害降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D08",
@@ -7101,23 +7096,20 @@
       {
         "powerId": "JK-D09",
         "unlocked": true,
-        "currentValueText": "36%",
-        "rangeText": "该次伤害再降低33%～45%",
-        "primaryRangeText": "33%～45%"
+        "currentValueText": "52%",
+        "rangeText": "该次伤害再降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D10",
         "unlocked": true,
-        "currentValueText": "28%",
-        "rangeText": "来自你75距离之外敌人的直接伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "44%",
+        "rangeText": "来自你75距离之外敌人的直接伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-U01",
-        "unlocked": true,
-        "currentValueText": "64%",
-        "rangeText": "8秒内移动速度提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "unlocked": true
       },
       {
         "powerId": "JK-U02",
@@ -7126,9 +7118,9 @@
       {
         "powerId": "JK-U03",
         "unlocked": true,
-        "currentValueText": "48%",
-        "rangeText": "返还本次实际消耗法力的45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "64%",
+        "rangeText": "返还本次实际消耗法力的60%～80%",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "JK-U04",
@@ -7172,9 +7164,9 @@
       {
         "powerId": "JK-U10",
         "unlocked": true,
-        "currentValueText": "36%",
-        "rangeText": "封法剑的施法距离提高33%～45%",
-        "primaryRangeText": "33%～45%"
+        "currentValueText": "64%",
+        "rangeText": "封法剑的施法距离提高60%～80%",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "SS-A01",
@@ -7319,15 +7311,15 @@
       {
         "powerId": "SS-A21",
         "unlocked": true,
-        "currentValueText": "64%",
-        "rangeText": "暴雪术原半径内侧三分之二区域的直接伤害提高60%～80%\n其余区域提高15%～20%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "162%",
+        "rangeText": "暴雪术原半径内侧三分之二区域的直接伤害提高150%～200%\n其余区域提高37%～50%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "SS-A22",
         "unlocked": true,
         "currentValueText": "73.1%",
-        "rangeText": "直接伤害提高67.5%～90%",
+        "rangeText": "暴雪术对范围内所有敌人的直接伤害提高67.5%～90%",
         "primaryRangeText": "67.5%～90%"
       },
       {
@@ -7351,9 +7343,9 @@
       {
         "powerId": "SS-A26",
         "unlocked": true,
-        "currentValueText": "14%",
-        "rangeText": "单次不超过你的最大生命13%～18%",
-        "primaryRangeText": "13%～18%"
+        "currentValueText": "24%",
+        "rangeText": "单次不超过你的最大生命22%～30%",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "SS-A27",
@@ -7386,9 +7378,9 @@
       {
         "powerId": "SS-D01",
         "unlocked": true,
-        "currentValueText": "22%",
-        "rangeText": "180距离内敌人对你造成的伤害降低21%～28%",
-        "primaryRangeText": "21%～28%"
+        "currentValueText": "28%",
+        "rangeText": "180距离内敌人对你造成的伤害降低26%～35%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "SS-D02",
@@ -7407,44 +7399,44 @@
       {
         "powerId": "SS-D04",
         "unlocked": true,
-        "currentValueText": "24%",
-        "rangeText": "最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "32%",
+        "rangeText": "最大生命提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D05",
         "unlocked": true,
-        "currentValueText": "17%",
-        "rangeText": "单次减免量在最大生命的16%～22%以内",
-        "primaryRangeText": "16%～22%"
+        "currentValueText": "28%",
+        "rangeText": "单次减免量在最大生命的26%～35%以内",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "SS-D06",
         "unlocked": true,
-        "currentValueText": "28%",
-        "rangeText": "装备期间受到的伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "32%",
+        "rangeText": "装备期间受到的伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D07",
         "unlocked": true,
-        "currentValueText": "22%",
-        "rangeText": "最大生命提高21%～28%",
-        "primaryRangeText": "21%～28%"
+        "currentValueText": "32%",
+        "rangeText": "最大生命提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D08",
         "unlocked": true,
-        "currentValueText": "24%",
-        "rangeText": "最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "36%",
+        "rangeText": "最大生命提高33%～45%",
+        "primaryRangeText": "33%～45%"
       },
       {
         "powerId": "SS-D09",
         "unlocked": true,
-        "currentValueText": "32%",
-        "rangeText": "伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "44%",
+        "rangeText": "伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "SS-D10",
@@ -7484,9 +7476,9 @@
       {
         "powerId": "SS-U05",
         "unlocked": true,
-        "currentValueText": "8%",
-        "rangeText": "恢复最大法力的7%～10%",
-        "primaryRangeText": "7%～10%"
+        "currentValueText": "9%",
+        "rangeText": "在燃烧持续期间受到的物理与魔法伤害提高9%～12%",
+        "primaryRangeText": "9%～12%"
       },
       {
         "powerId": "SS-U06",
@@ -7805,16 +7797,16 @@
       {
         "powerId": "TY-D03",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "自身最大生命提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "28%",
+        "rangeText": "自身最大生命提高26%～35%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "TY-D04",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "自身最大法力提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "6%",
+        "rangeText": "你造成的全部直接伤害的6%～8%转化为自身生命\n生命低于35%时提高为11%～15%",
+        "primaryRangeText": "6%～8%"
       },
       {
         "powerId": "TY-D05",
@@ -7826,29 +7818,29 @@
       {
         "powerId": "TY-D06",
         "unlocked": true,
-        "currentValueText": "44.67%",
-        "rangeText": "伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "currentValueText": "32.49%",
+        "rangeText": "伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D07",
         "unlocked": true,
-        "currentValueText": "44.67%",
-        "rangeText": "受到的直接物理伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "currentValueText": "32.49%",
+        "rangeText": "受到的直接物理伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D08",
         "unlocked": true,
-        "currentValueText": "44.67%",
-        "rangeText": "受到的魔法伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "currentValueText": "32.49%",
+        "rangeText": "受到的魔法伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D09",
         "unlocked": true,
         "currentValueText": "40.61%",
-        "rangeText": "敌方施加的可缩短控制持续时间缩短37.5%～50%\n立即获得吸收自身最大生命15%～20%伤害的护盾",
+        "rangeText": "敌方施加的可缩短控制持续时间缩短37.5%～50%\n立即获得吸收自身最大生命26%～35%伤害的护盾",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -7868,9 +7860,9 @@
       {
         "powerId": "TY-D12",
         "unlocked": true,
-        "currentValueText": "64.98%",
-        "rangeText": "受到的技能直接治疗和持续治疗提高60%～80%\n4秒内受到的伤害降低18.75%～25%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "97.47%",
+        "rangeText": "受到的技能直接治疗和持续治疗提高90%～120%\n4秒内受到的伤害降低26.25%～35%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-D13",
@@ -7896,9 +7888,9 @@
       {
         "powerId": "TY-D16",
         "unlocked": true,
-        "currentValueText": "36%",
-        "rangeText": "获得吸收自身最大生命33%～45%伤害的护盾\n本人技能施加的吸收护盾初始量另外提高75%～100%",
-        "primaryRangeText": "33%～45%"
+        "currentValueText": "28%",
+        "rangeText": "获得吸收自身最大生命26%～35%伤害的护盾\n本人技能施加的吸收护盾初始量另外提高75%～100%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "TY-D17",
@@ -7911,7 +7903,7 @@
         "powerId": "TY-D18",
         "unlocked": true,
         "currentValueText": "81.23%",
-        "rangeText": "你持有的吸收护盾持续时间提高75%～100%\n在3秒内回复被打破吸收量的22%～30%生命",
+        "rangeText": "你持有的吸收护盾持续时间提高75%～100%\n立即回复被打破吸收量的37%～50%生命",
         "primaryRangeText": "75%～100%"
       },
       {
@@ -7973,9 +7965,9 @@
       {
         "powerId": "TY-U07",
         "unlocked": true,
-        "currentValueText": "64.98%",
-        "rangeText": "主动位移或跳跃技能的位移距离和可选目标距离提高60%～80%\n下一次主动技能施法距离提高37.5%～50%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "97.47%",
+        "rangeText": "主动位移或跳跃技能的位移距离和可选目标距离提高90%～120%\n下一次主动技能施法距离提高37.5%～50%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-U08",
@@ -7987,9 +7979,9 @@
       {
         "powerId": "TY-U09",
         "unlocked": true,
-        "currentValueText": "32%",
-        "rangeText": "自身基础移动速度提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "48%",
+        "rangeText": "自身基础移动速度提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "TY-U10",
@@ -8058,15 +8050,15 @@
         "powerId": "TY-U19",
         "unlocked": true,
         "currentValueText": "324",
-        "rangeText": "装备后你持续侦测周围半径300～400的范围：其中隐身或潜行的敌人对你显形\n并在该显形期间你对其造成的直接伤害提高18.75%～25%\n其原有范围再提高112.5%～150%",
+        "rangeText": "装备后你持续侦测周围半径300～400的范围：其中隐身或潜行的敌人对你显形\n并在该显形期间你对其造成的直接伤害提高30%～40%\n其原有范围再提高112.5%～150%",
         "primaryRangeText": "300～400"
       },
       {
         "powerId": "TY-U20",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "6秒内移动速度提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "56%",
+        "rangeText": "6秒内移动速度提高52%～70%",
+        "primaryRangeText": "52%～70%"
       },
       {
         "powerId": "YS-A01",
@@ -8078,9 +8070,9 @@
       {
         "powerId": "YS-A02",
         "unlocked": true,
-        "currentValueText": "69%",
-        "rangeText": "立即向同一目标追加本次实际伤害63%～85%的伤害",
-        "primaryRangeText": "63%～85%"
+        "currentValueText": "121%",
+        "rangeText": "立即向同一目标追加本次实际伤害112%～150%的伤害",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "YS-A03",
@@ -8113,16 +8105,16 @@
       {
         "powerId": "YS-A07",
         "unlocked": true,
-        "currentValueText": "24%",
-        "rangeText": "每秒造成该等级圣光基础伤害22%～30%的魔法伤害",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "121%",
+        "rangeText": "每秒造成该等级圣光基础伤害112%～150%的魔法伤害",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "YS-A08",
         "unlocked": true,
-        "currentValueText": "64.98%",
-        "rangeText": "直接伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "162.46%",
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "YS-A09",
@@ -8190,16 +8182,16 @@
       {
         "powerId": "YS-A18",
         "unlocked": true,
-        "currentValueText": "48.73%",
-        "rangeText": "该伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "121.84%",
+        "rangeText": "该伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "YS-A19",
         "unlocked": true,
-        "currentValueText": "162%",
-        "rangeText": "对每名敌人造成150%～200%魔法攻击力的神圣伤害",
-        "primaryRangeText": "150%～200%"
+        "currentValueText": "406%",
+        "rangeText": "对每名敌人造成375%～500%魔法攻击力的神圣伤害",
+        "primaryRangeText": "375%～500%"
       },
       {
         "powerId": "YS-A20",
@@ -8253,9 +8245,9 @@
       {
         "powerId": "YS-A27",
         "unlocked": true,
-        "currentValueText": "40.61%",
-        "rangeText": "光弹术、圣光术和驱魔术的直接伤害提高37.5%～50%",
-        "primaryRangeText": "37.5%～50%"
+        "currentValueText": "97.47%",
+        "rangeText": "光弹术、圣光术和驱魔术的直接伤害提高90%～120%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "YS-A28",
@@ -8267,9 +8259,9 @@
       {
         "powerId": "YS-A29",
         "unlocked": true,
-        "currentValueText": "40个百分点",
-        "rangeText": "伤害增强系数额外提高37个百分点～50个百分点",
-        "primaryRangeText": "37个百分点～50个百分点"
+        "currentValueText": "81个百分点",
+        "rangeText": "伤害增强系数额外提高75个百分点～100个百分点",
+        "primaryRangeText": "75个百分点～100个百分点"
       },
       {
         "powerId": "YS-A30",
@@ -8281,9 +8273,9 @@
       {
         "powerId": "YS-D01",
         "unlocked": true,
-        "currentValueText": "48.73%",
-        "rangeText": "治愈术直接治疗量提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "121.84%",
+        "rangeText": "治愈术直接治疗量提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "YS-D02",
@@ -8302,23 +8294,23 @@
       {
         "powerId": "YS-D04",
         "unlocked": true,
-        "currentValueText": "28个百分点",
-        "rangeText": "防御术的物理和魔法减伤各提高26个百分点～35个百分点",
-        "primaryRangeText": "26个百分点～35个百分点"
+        "currentValueText": "40个百分点",
+        "rangeText": "防御术的物理和魔法减伤各提高37个百分点～50个百分点",
+        "primaryRangeText": "37个百分点～50个百分点"
       },
       {
         "powerId": "YS-D05",
         "unlocked": true,
-        "currentValueText": "20%",
-        "rangeText": "受到伤害降低18%～25%",
-        "primaryRangeText": "18%～25%"
+        "currentValueText": "24%",
+        "rangeText": "受到伤害降低22%～30%",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "YS-D06",
         "unlocked": true,
-        "currentValueText": "32%",
-        "rangeText": "受到伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "40%",
+        "rangeText": "受到伤害降低37%～50%",
+        "primaryRangeText": "37%～50%"
       },
       {
         "powerId": "YS-D07",
@@ -8329,24 +8321,21 @@
       },
       {
         "powerId": "YS-D08",
-        "unlocked": true,
-        "currentValueText": "48%",
-        "rangeText": "受到伤害降低45%～60%",
-        "primaryRangeText": "45%～60%"
+        "unlocked": true
       },
       {
         "powerId": "YS-D09",
         "unlocked": true,
-        "currentValueText": "28%",
-        "rangeText": "受到的普通攻击伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "32%",
+        "rangeText": "受到的全部直接伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "YS-D10",
         "unlocked": true,
-        "currentValueText": "32%",
-        "rangeText": "该敌人对你造成的伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "44%",
+        "rangeText": "该敌人对你造成的伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "YS-U01",
@@ -8365,9 +8354,9 @@
       {
         "powerId": "YS-U03",
         "unlocked": true,
-        "currentValueText": "16%",
-        "rangeText": "每人最多获得其最大法力的15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "32%",
+        "rangeText": "每人最多获得其最大法力的30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "YS-U04",
@@ -8379,9 +8368,9 @@
       {
         "powerId": "YS-U05",
         "unlocked": true,
-        "currentValueText": "24.36%",
-        "rangeText": "原加速强度提高22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "currentValueText": "48.73%",
+        "rangeText": "原加速强度提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "YS-U06",
@@ -8439,22 +8428,22 @@
       {
         "powerId": "ZS-A04",
         "unlocked": true,
-        "currentValueText": "12.18%",
-        "rangeText": "穿刺之枪伤害提高11.25%～15%",
-        "primaryRangeText": "11.25%～15%"
+        "currentValueText": "48.73%",
+        "rangeText": "穿刺之枪伤害提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "ZS-A05",
         "unlocked": true,
-        "currentValueText": "48.73%",
-        "rangeText": "穿刺之枪对所有目标的伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "121.84%",
+        "rangeText": "穿刺之枪对所有目标的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A06",
         "unlocked": true,
         "currentValueText": "89%",
-        "rangeText": "穿刺之枪对选中目标追加相当于该目标本次实际伤害82%～110%的伤害",
+        "rangeText": "对每个命中的敌人各追加相当于该目标本次实际伤害82%～110%的伤害",
         "primaryRangeText": "82%～110%"
       },
       {
@@ -8502,23 +8491,23 @@
       {
         "powerId": "ZS-A13",
         "unlocked": true,
-        "currentValueText": "36.55%",
-        "rangeText": "震地之枪伤害提高33.75%～45%",
-        "primaryRangeText": "33.75%～45%"
+        "currentValueText": "73.1%",
+        "rangeText": "震地之枪伤害提高67.5%～90%",
+        "primaryRangeText": "67.5%～90%"
       },
       {
         "powerId": "ZS-A14",
         "unlocked": true,
-        "currentValueText": "28%",
-        "rangeText": "伤害为本次技能防御前伤害的26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "48%",
+        "rangeText": "伤害为本次技能防御前伤害的45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "ZS-A15",
         "unlocked": true,
-        "currentValueText": "48.73%",
-        "rangeText": "震地之枪对所有目标的伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "121.84%",
+        "rangeText": "震地之枪对所有目标的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A16",
@@ -8572,23 +8561,23 @@
       {
         "powerId": "ZS-A23",
         "unlocked": true,
-        "currentValueText": "64.98%",
-        "rangeText": "野战八荒伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "121.84%",
+        "rangeText": "野战八荒伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A24",
         "unlocked": true,
-        "currentValueText": "69.04%",
-        "rangeText": "战神之枪伤害提高63.75%～85%",
-        "primaryRangeText": "63.75%～85%"
+        "currentValueText": "162.46%",
+        "rangeText": "战神之枪伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "ZS-A25",
         "unlocked": true,
-        "currentValueText": "28.43%",
-        "rangeText": "战神之枪与野战八荒的直接伤害提高26.25%～35%",
-        "primaryRangeText": "26.25%～35%"
+        "currentValueText": "56.86%",
+        "rangeText": "战神之枪与野战八荒的直接伤害提高52.5%～70%",
+        "primaryRangeText": "52.5%～70%"
       },
       {
         "powerId": "ZS-A26",
@@ -8607,9 +8596,9 @@
       {
         "powerId": "ZS-A28",
         "unlocked": true,
-        "currentValueText": "32.49%",
-        "rangeText": "枪系直接伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "81.23%",
+        "rangeText": "枪系直接伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "ZS-A29",
@@ -8709,9 +8698,9 @@
       {
         "powerId": "ZS-U03",
         "unlocked": true,
-        "currentValueText": "64%",
-        "rangeText": "8秒内移动速度提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "40%",
+        "rangeText": "之后3秒内枪系技能伤害提高37%～50%",
+        "primaryRangeText": "37%～50%"
       },
       {
         "powerId": "ZS-U04",
@@ -8769,21 +8758,21 @@
     "rows": [
       {
         "powerId": "CK-A01",
-        "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "冷却时间缩短22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "unlocked": true
       },
       {
         "powerId": "CK-A02",
-        "unlocked": true
+        "unlocked": true,
+        "currentValueText": "300%",
+        "rangeText": "且最终伤害变为225%～300%（独立乘算）",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A03",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "狙击伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "300%",
+        "rangeText": "狙击伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A04",
@@ -8823,27 +8812,30 @@
       {
         "powerId": "CK-A09",
         "unlocked": true,
-        "currentValueText": "200%",
-        "rangeText": "淬毒术造成的每次中毒伤害提高150%～200%",
-        "primaryRangeText": "150%～200%"
+        "currentValueText": "300%",
+        "rangeText": "淬毒术造成的每次中毒伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A10",
-        "unlocked": true
+        "unlocked": true,
+        "currentValueText": "150%",
+        "rangeText": "装备期间连续投掷与多重投掷的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "CK-A11",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "100%",
+        "rangeText": "伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "CK-A12",
         "unlocked": true,
-        "currentValueText": "90%",
-        "rangeText": "陷阱：爆弹的伤害提高67.5%～90%",
-        "primaryRangeText": "67.5%～90%"
+        "currentValueText": "200%",
+        "rangeText": "陷阱：爆弹的伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "CK-A13",
@@ -8874,7 +8866,7 @@
         "powerId": "CK-A17",
         "unlocked": true,
         "currentValueText": "50%",
-        "rangeText": "背刺和陷阱：冻气的伤害提高37.5%～50%",
+        "rangeText": "背刺最终伤害变为原来的300%～400%（独立乘算）\n陷阱：冻气的伤害提高37.5%～50%",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -8888,9 +8880,9 @@
       {
         "powerId": "CK-A20",
         "unlocked": true,
-        "currentValueText": "25%",
-        "rangeText": "伤害提高18.75%～25%",
-        "primaryRangeText": "18.75%～25%"
+        "currentValueText": "100%",
+        "rangeText": "伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "CK-A21",
@@ -8944,9 +8936,9 @@
       {
         "powerId": "CK-A28",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "环形爆发伤害提高33.75%～45%",
-        "primaryRangeText": "33.75%～45%"
+        "currentValueText": "300%",
+        "rangeText": "环形爆发伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "CK-A29",
@@ -8959,7 +8951,7 @@
         "powerId": "CK-A30",
         "unlocked": true,
         "currentValueText": "50%",
-        "rangeText": "环形爆发的作用半径扩大37.5%～50%",
+        "rangeText": "环形爆发的作用半径扩大37.5%～50%\n被收拢的敌人再受到一次等同本次环形爆发实际伤害75%～100%的伤害（合计2倍）",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -8979,9 +8971,9 @@
       {
         "powerId": "CK-D03",
         "unlocked": true,
-        "currentValueText": "15%",
-        "rangeText": "按该目标实际损失生命的11%～15%恢复自身生命",
-        "primaryRangeText": "11%～15%"
+        "currentValueText": "30%",
+        "rangeText": "按该目标实际损失生命的22%～30%恢复自身生命",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "CK-D04",
@@ -8993,9 +8985,9 @@
       {
         "powerId": "CK-D05",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "受到的眩晕、冻结和定身持续时间缩短22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "currentValueText": "50%",
+        "rangeText": "受到的眩晕、冻结和定身持续时间缩短37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "CK-D06",
@@ -9014,23 +9006,23 @@
       {
         "powerId": "CK-D08",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "受到的中毒伤害降低22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "60%",
+        "rangeText": "受到的中毒伤害降低45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "CK-D09",
         "unlocked": true,
-        "currentValueText": "20%",
-        "rangeText": "生命上限提高15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "40%",
+        "rangeText": "生命上限提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "CK-D10",
         "unlocked": true,
-        "currentValueText": "20%",
-        "rangeText": "受到的陷阱伤害降低15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "15%",
+        "rangeText": "受到的所有直接伤害（含魔法与暴击）有11%～15%概率被闪避",
+        "primaryRangeText": "11%～15%"
       },
       {
         "powerId": "CK-U01",
@@ -9049,15 +9041,15 @@
       {
         "powerId": "CK-U03",
         "unlocked": true,
-        "currentValueText": "25个百分点",
-        "rangeText": "每个陷阱的拆除成功率提高18.75个百分点～25个百分点",
-        "primaryRangeText": "18.75个百分点～25个百分点"
+        "currentValueText": "50%",
+        "rangeText": "陷阱：封印与陷阱：冻气的作用半径提高37.5%～50%",
+        "primaryRangeText": "37.5%～50%"
       },
       {
         "powerId": "CK-U04",
         "unlocked": true,
         "currentValueText": "60%",
-        "rangeText": "移动速度提高45%～60%",
+        "rangeText": "施放已学习的阴影跳跃后3秒内移动速度提高45%～60%",
         "primaryRangeText": "45%～60%"
       },
       {
@@ -9098,9 +9090,9 @@
       {
         "powerId": "CK-U10",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "额外获得30%～40%移动速度",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "80%",
+        "rangeText": "额外获得60%～80%移动速度",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "JK-A01",
@@ -9133,9 +9125,9 @@
       {
         "powerId": "JK-A05",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "直接伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "200%",
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "JK-A06",
@@ -9189,9 +9181,9 @@
       {
         "powerId": "JK-A13",
         "unlocked": true,
-        "currentValueText": "70%",
-        "rangeText": "直接伤害提高52%～70%",
-        "primaryRangeText": "52%～70%"
+        "currentValueText": "200%",
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "JK-A14",
@@ -9203,23 +9195,23 @@
       {
         "powerId": "JK-A15",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "旋风剑的直接伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "150%",
+        "rangeText": "旋风剑的直接伤害提高112%～150%",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "JK-A16",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "直接伤害提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "100%",
+        "rangeText": "直接伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "JK-A17",
         "unlocked": true,
-        "currentValueText": "150",
-        "rangeText": "旋风剑的自身中心作用半径至少提高至112～150",
-        "primaryRangeText": "112～150"
+        "currentValueText": "200",
+        "rangeText": "旋风剑的自身中心作用半径至少提高至150～200",
+        "primaryRangeText": "150～200"
       },
       {
         "powerId": "JK-A18",
@@ -9266,9 +9258,9 @@
       {
         "powerId": "JK-A24",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "直接伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "300%",
+        "rangeText": "直接伤害提高225%～300%",
+        "primaryRangeText": "225%～300%"
       },
       {
         "powerId": "JK-A25",
@@ -9287,9 +9279,9 @@
       {
         "powerId": "JK-A27",
         "unlocked": true,
-        "currentValueText": "320%",
-        "rangeText": "对150距离内敌人各追加攻击力240%～320%的物理伤害",
-        "primaryRangeText": "240%～320%"
+        "currentValueText": "500%",
+        "rangeText": "对150距离内敌人各追加攻击力375%～500%的物理伤害",
+        "primaryRangeText": "375%～500%"
       },
       {
         "powerId": "JK-A28",
@@ -9336,30 +9328,30 @@
       {
         "powerId": "JK-D04",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "对你造成的直接伤害降低37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "65%",
+        "rangeText": "对你造成的直接伤害降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D05",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "来自你周围75距离内敌人的直接物理伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "55%",
+        "rangeText": "来自你周围150距离内敌人的直接物理伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-D06",
         "unlocked": true,
-        "currentValueText": "35%",
-        "rangeText": "8秒内受到的伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "55%",
+        "rangeText": "12秒内受到的伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-D07",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "8秒内受到的魔法伤害降低37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "65%",
+        "rangeText": "12秒内受到的魔法伤害降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D08",
@@ -9371,23 +9363,20 @@
       {
         "powerId": "JK-D09",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "该次伤害再降低33%～45%",
-        "primaryRangeText": "33%～45%"
+        "currentValueText": "65%",
+        "rangeText": "该次伤害再降低48%～65%",
+        "primaryRangeText": "48%～65%"
       },
       {
         "powerId": "JK-D10",
         "unlocked": true,
-        "currentValueText": "35%",
-        "rangeText": "来自你75距离之外敌人的直接伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "55%",
+        "rangeText": "来自你75距离之外敌人的直接伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "JK-U01",
-        "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "8秒内移动速度提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "unlocked": true
       },
       {
         "powerId": "JK-U02",
@@ -9396,9 +9385,9 @@
       {
         "powerId": "JK-U03",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "返还本次实际消耗法力的45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "80%",
+        "rangeText": "返还本次实际消耗法力的60%～80%",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "JK-U04",
@@ -9442,9 +9431,9 @@
       {
         "powerId": "JK-U10",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "封法剑的施法距离提高33%～45%",
-        "primaryRangeText": "33%～45%"
+        "currentValueText": "80%",
+        "rangeText": "封法剑的施法距离提高60%～80%",
+        "primaryRangeText": "60%～80%"
       },
       {
         "powerId": "SS-A01",
@@ -9589,15 +9578,15 @@
       {
         "powerId": "SS-A21",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "暴雪术原半径内侧三分之二区域的直接伤害提高60%～80%\n其余区域提高15%～20%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "200%",
+        "rangeText": "暴雪术原半径内侧三分之二区域的直接伤害提高150%～200%\n其余区域提高37%～50%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "SS-A22",
         "unlocked": true,
         "currentValueText": "90%",
-        "rangeText": "直接伤害提高67.5%～90%",
+        "rangeText": "暴雪术对范围内所有敌人的直接伤害提高67.5%～90%",
         "primaryRangeText": "67.5%～90%"
       },
       {
@@ -9621,9 +9610,9 @@
       {
         "powerId": "SS-A26",
         "unlocked": true,
-        "currentValueText": "18%",
-        "rangeText": "单次不超过你的最大生命13%～18%",
-        "primaryRangeText": "13%～18%"
+        "currentValueText": "30%",
+        "rangeText": "单次不超过你的最大生命22%～30%",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "SS-A27",
@@ -9656,9 +9645,9 @@
       {
         "powerId": "SS-D01",
         "unlocked": true,
-        "currentValueText": "28%",
-        "rangeText": "180距离内敌人对你造成的伤害降低21%～28%",
-        "primaryRangeText": "21%～28%"
+        "currentValueText": "35%",
+        "rangeText": "180距离内敌人对你造成的伤害降低26%～35%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "SS-D02",
@@ -9677,44 +9666,44 @@
       {
         "powerId": "SS-D04",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "40%",
+        "rangeText": "最大生命提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D05",
         "unlocked": true,
-        "currentValueText": "22%",
-        "rangeText": "单次减免量在最大生命的16%～22%以内",
-        "primaryRangeText": "16%～22%"
+        "currentValueText": "35%",
+        "rangeText": "单次减免量在最大生命的26%～35%以内",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "SS-D06",
         "unlocked": true,
-        "currentValueText": "35%",
-        "rangeText": "装备期间受到的伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "40%",
+        "rangeText": "装备期间受到的伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D07",
         "unlocked": true,
-        "currentValueText": "28%",
-        "rangeText": "最大生命提高21%～28%",
-        "primaryRangeText": "21%～28%"
+        "currentValueText": "40%",
+        "rangeText": "最大生命提高30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "SS-D08",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "最大生命提高22%～30%",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "45%",
+        "rangeText": "最大生命提高33%～45%",
+        "primaryRangeText": "33%～45%"
       },
       {
         "powerId": "SS-D09",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "55%",
+        "rangeText": "伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "SS-D10",
@@ -9754,9 +9743,9 @@
       {
         "powerId": "SS-U05",
         "unlocked": true,
-        "currentValueText": "10%",
-        "rangeText": "恢复最大法力的7%～10%",
-        "primaryRangeText": "7%～10%"
+        "currentValueText": "12%",
+        "rangeText": "在燃烧持续期间受到的物理与魔法伤害提高9%～12%",
+        "primaryRangeText": "9%～12%"
       },
       {
         "powerId": "SS-U06",
@@ -10075,16 +10064,16 @@
       {
         "powerId": "TY-D03",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "自身最大生命提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "35%",
+        "rangeText": "自身最大生命提高26%～35%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "TY-D04",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "自身最大法力提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "8%",
+        "rangeText": "你造成的全部直接伤害的6%～8%转化为自身生命\n生命低于35%时提高为11%～15%",
+        "primaryRangeText": "6%～8%"
       },
       {
         "powerId": "TY-D05",
@@ -10096,29 +10085,29 @@
       {
         "powerId": "TY-D06",
         "unlocked": true,
-        "currentValueText": "55%",
-        "rangeText": "伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "currentValueText": "40%",
+        "rangeText": "伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D07",
         "unlocked": true,
-        "currentValueText": "55%",
-        "rangeText": "受到的直接物理伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "currentValueText": "40%",
+        "rangeText": "受到的直接物理伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D08",
         "unlocked": true,
-        "currentValueText": "55%",
-        "rangeText": "受到的魔法伤害降低41.25%～55%",
-        "primaryRangeText": "41.25%～55%"
+        "currentValueText": "40%",
+        "rangeText": "受到的魔法伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "TY-D09",
         "unlocked": true,
         "currentValueText": "50%",
-        "rangeText": "敌方施加的可缩短控制持续时间缩短37.5%～50%\n立即获得吸收自身最大生命15%～20%伤害的护盾",
+        "rangeText": "敌方施加的可缩短控制持续时间缩短37.5%～50%\n立即获得吸收自身最大生命26%～35%伤害的护盾",
         "primaryRangeText": "37.5%～50%"
       },
       {
@@ -10138,9 +10127,9 @@
       {
         "powerId": "TY-D12",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "受到的技能直接治疗和持续治疗提高60%～80%\n4秒内受到的伤害降低18.75%～25%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "120%",
+        "rangeText": "受到的技能直接治疗和持续治疗提高90%～120%\n4秒内受到的伤害降低26.25%～35%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-D13",
@@ -10166,9 +10155,9 @@
       {
         "powerId": "TY-D16",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "获得吸收自身最大生命33%～45%伤害的护盾\n本人技能施加的吸收护盾初始量另外提高75%～100%",
-        "primaryRangeText": "33%～45%"
+        "currentValueText": "35%",
+        "rangeText": "获得吸收自身最大生命26%～35%伤害的护盾\n本人技能施加的吸收护盾初始量另外提高75%～100%",
+        "primaryRangeText": "26%～35%"
       },
       {
         "powerId": "TY-D17",
@@ -10181,7 +10170,7 @@
         "powerId": "TY-D18",
         "unlocked": true,
         "currentValueText": "100%",
-        "rangeText": "你持有的吸收护盾持续时间提高75%～100%\n在3秒内回复被打破吸收量的22%～30%生命",
+        "rangeText": "你持有的吸收护盾持续时间提高75%～100%\n立即回复被打破吸收量的37%～50%生命",
         "primaryRangeText": "75%～100%"
       },
       {
@@ -10243,9 +10232,9 @@
       {
         "powerId": "TY-U07",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "主动位移或跳跃技能的位移距离和可选目标距离提高60%～80%\n下一次主动技能施法距离提高37.5%～50%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "120%",
+        "rangeText": "主动位移或跳跃技能的位移距离和可选目标距离提高90%～120%\n下一次主动技能施法距离提高37.5%～50%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "TY-U08",
@@ -10257,9 +10246,9 @@
       {
         "powerId": "TY-U09",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "自身基础移动速度提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "60%",
+        "rangeText": "自身基础移动速度提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "TY-U10",
@@ -10328,15 +10317,15 @@
         "powerId": "TY-U19",
         "unlocked": true,
         "currentValueText": "400",
-        "rangeText": "装备后你持续侦测周围半径300～400的范围：其中隐身或潜行的敌人对你显形\n并在该显形期间你对其造成的直接伤害提高18.75%～25%\n其原有范围再提高112.5%～150%",
+        "rangeText": "装备后你持续侦测周围半径300～400的范围：其中隐身或潜行的敌人对你显形\n并在该显形期间你对其造成的直接伤害提高30%～40%\n其原有范围再提高112.5%～150%",
         "primaryRangeText": "300～400"
       },
       {
         "powerId": "TY-U20",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "6秒内移动速度提高37%～50%",
-        "primaryRangeText": "37%～50%"
+        "currentValueText": "70%",
+        "rangeText": "6秒内移动速度提高52%～70%",
+        "primaryRangeText": "52%～70%"
       },
       {
         "powerId": "YS-A01",
@@ -10348,9 +10337,9 @@
       {
         "powerId": "YS-A02",
         "unlocked": true,
-        "currentValueText": "85%",
-        "rangeText": "立即向同一目标追加本次实际伤害63%～85%的伤害",
-        "primaryRangeText": "63%～85%"
+        "currentValueText": "150%",
+        "rangeText": "立即向同一目标追加本次实际伤害112%～150%的伤害",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "YS-A03",
@@ -10383,16 +10372,16 @@
       {
         "powerId": "YS-A07",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "每秒造成该等级圣光基础伤害22%～30%的魔法伤害",
-        "primaryRangeText": "22%～30%"
+        "currentValueText": "150%",
+        "rangeText": "每秒造成该等级圣光基础伤害112%～150%的魔法伤害",
+        "primaryRangeText": "112%～150%"
       },
       {
         "powerId": "YS-A08",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "直接伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "200%",
+        "rangeText": "直接伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "YS-A09",
@@ -10460,16 +10449,16 @@
       {
         "powerId": "YS-A18",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "该伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "150%",
+        "rangeText": "该伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "YS-A19",
         "unlocked": true,
-        "currentValueText": "200%",
-        "rangeText": "对每名敌人造成150%～200%魔法攻击力的神圣伤害",
-        "primaryRangeText": "150%～200%"
+        "currentValueText": "500%",
+        "rangeText": "对每名敌人造成375%～500%魔法攻击力的神圣伤害",
+        "primaryRangeText": "375%～500%"
       },
       {
         "powerId": "YS-A20",
@@ -10523,9 +10512,9 @@
       {
         "powerId": "YS-A27",
         "unlocked": true,
-        "currentValueText": "50%",
-        "rangeText": "光弹术、圣光术和驱魔术的直接伤害提高37.5%～50%",
-        "primaryRangeText": "37.5%～50%"
+        "currentValueText": "120%",
+        "rangeText": "光弹术、圣光术和驱魔术的直接伤害提高90%～120%",
+        "primaryRangeText": "90%～120%"
       },
       {
         "powerId": "YS-A28",
@@ -10537,9 +10526,9 @@
       {
         "powerId": "YS-A29",
         "unlocked": true,
-        "currentValueText": "50个百分点",
-        "rangeText": "伤害增强系数额外提高37个百分点～50个百分点",
-        "primaryRangeText": "37个百分点～50个百分点"
+        "currentValueText": "100个百分点",
+        "rangeText": "伤害增强系数额外提高75个百分点～100个百分点",
+        "primaryRangeText": "75个百分点～100个百分点"
       },
       {
         "powerId": "YS-A30",
@@ -10551,9 +10540,9 @@
       {
         "powerId": "YS-D01",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "治愈术直接治疗量提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "150%",
+        "rangeText": "治愈术直接治疗量提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "YS-D02",
@@ -10572,23 +10561,23 @@
       {
         "powerId": "YS-D04",
         "unlocked": true,
-        "currentValueText": "35个百分点",
-        "rangeText": "防御术的物理和魔法减伤各提高26个百分点～35个百分点",
-        "primaryRangeText": "26个百分点～35个百分点"
+        "currentValueText": "50个百分点",
+        "rangeText": "防御术的物理和魔法减伤各提高37个百分点～50个百分点",
+        "primaryRangeText": "37个百分点～50个百分点"
       },
       {
         "powerId": "YS-D05",
         "unlocked": true,
-        "currentValueText": "25%",
-        "rangeText": "受到伤害降低18%～25%",
-        "primaryRangeText": "18%～25%"
+        "currentValueText": "30%",
+        "rangeText": "受到伤害降低22%～30%",
+        "primaryRangeText": "22%～30%"
       },
       {
         "powerId": "YS-D06",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "受到伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "50%",
+        "rangeText": "受到伤害降低37%～50%",
+        "primaryRangeText": "37%～50%"
       },
       {
         "powerId": "YS-D07",
@@ -10599,24 +10588,21 @@
       },
       {
         "powerId": "YS-D08",
-        "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "受到伤害降低45%～60%",
-        "primaryRangeText": "45%～60%"
+        "unlocked": true
       },
       {
         "powerId": "YS-D09",
         "unlocked": true,
-        "currentValueText": "35%",
-        "rangeText": "受到的普通攻击伤害降低26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "40%",
+        "rangeText": "受到的全部直接伤害降低30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "YS-D10",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "该敌人对你造成的伤害降低30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "55%",
+        "rangeText": "该敌人对你造成的伤害降低41%～55%",
+        "primaryRangeText": "41%～55%"
       },
       {
         "powerId": "YS-U01",
@@ -10635,9 +10621,9 @@
       {
         "powerId": "YS-U03",
         "unlocked": true,
-        "currentValueText": "20%",
-        "rangeText": "每人最多获得其最大法力的15%～20%",
-        "primaryRangeText": "15%～20%"
+        "currentValueText": "40%",
+        "rangeText": "每人最多获得其最大法力的30%～40%",
+        "primaryRangeText": "30%～40%"
       },
       {
         "powerId": "YS-U04",
@@ -10649,9 +10635,9 @@
       {
         "powerId": "YS-U05",
         "unlocked": true,
-        "currentValueText": "30%",
-        "rangeText": "原加速强度提高22.5%～30%",
-        "primaryRangeText": "22.5%～30%"
+        "currentValueText": "60%",
+        "rangeText": "原加速强度提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "YS-U06",
@@ -10709,22 +10695,22 @@
       {
         "powerId": "ZS-A04",
         "unlocked": true,
-        "currentValueText": "15%",
-        "rangeText": "穿刺之枪伤害提高11.25%～15%",
-        "primaryRangeText": "11.25%～15%"
+        "currentValueText": "60%",
+        "rangeText": "穿刺之枪伤害提高45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "ZS-A05",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "穿刺之枪对所有目标的伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "150%",
+        "rangeText": "穿刺之枪对所有目标的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A06",
         "unlocked": true,
         "currentValueText": "110%",
-        "rangeText": "穿刺之枪对选中目标追加相当于该目标本次实际伤害82%～110%的伤害",
+        "rangeText": "对每个命中的敌人各追加相当于该目标本次实际伤害82%～110%的伤害",
         "primaryRangeText": "82%～110%"
       },
       {
@@ -10772,23 +10758,23 @@
       {
         "powerId": "ZS-A13",
         "unlocked": true,
-        "currentValueText": "45%",
-        "rangeText": "震地之枪伤害提高33.75%～45%",
-        "primaryRangeText": "33.75%～45%"
+        "currentValueText": "90%",
+        "rangeText": "震地之枪伤害提高67.5%～90%",
+        "primaryRangeText": "67.5%～90%"
       },
       {
         "powerId": "ZS-A14",
         "unlocked": true,
-        "currentValueText": "35%",
-        "rangeText": "伤害为本次技能防御前伤害的26%～35%",
-        "primaryRangeText": "26%～35%"
+        "currentValueText": "60%",
+        "rangeText": "伤害为本次技能防御前伤害的45%～60%",
+        "primaryRangeText": "45%～60%"
       },
       {
         "powerId": "ZS-A15",
         "unlocked": true,
-        "currentValueText": "60%",
-        "rangeText": "震地之枪对所有目标的伤害提高45%～60%",
-        "primaryRangeText": "45%～60%"
+        "currentValueText": "150%",
+        "rangeText": "震地之枪对所有目标的伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A16",
@@ -10842,23 +10828,23 @@
       {
         "powerId": "ZS-A23",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "野战八荒伤害提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "150%",
+        "rangeText": "野战八荒伤害提高112.5%～150%",
+        "primaryRangeText": "112.5%～150%"
       },
       {
         "powerId": "ZS-A24",
         "unlocked": true,
-        "currentValueText": "85%",
-        "rangeText": "战神之枪伤害提高63.75%～85%",
-        "primaryRangeText": "63.75%～85%"
+        "currentValueText": "200%",
+        "rangeText": "战神之枪伤害提高150%～200%",
+        "primaryRangeText": "150%～200%"
       },
       {
         "powerId": "ZS-A25",
         "unlocked": true,
-        "currentValueText": "35%",
-        "rangeText": "战神之枪与野战八荒的直接伤害提高26.25%～35%",
-        "primaryRangeText": "26.25%～35%"
+        "currentValueText": "70%",
+        "rangeText": "战神之枪与野战八荒的直接伤害提高52.5%～70%",
+        "primaryRangeText": "52.5%～70%"
       },
       {
         "powerId": "ZS-A26",
@@ -10877,9 +10863,9 @@
       {
         "powerId": "ZS-A28",
         "unlocked": true,
-        "currentValueText": "40%",
-        "rangeText": "枪系直接伤害提高30%～40%",
-        "primaryRangeText": "30%～40%"
+        "currentValueText": "100%",
+        "rangeText": "枪系直接伤害提高75%～100%",
+        "primaryRangeText": "75%～100%"
       },
       {
         "powerId": "ZS-A29",
@@ -10979,9 +10965,9 @@
       {
         "powerId": "ZS-U03",
         "unlocked": true,
-        "currentValueText": "80%",
-        "rangeText": "8秒内移动速度提高60%～80%",
-        "primaryRangeText": "60%～80%"
+        "currentValueText": "50%",
+        "rangeText": "之后3秒内枪系技能伤害提高37%～50%",
+        "primaryRangeText": "37%～50%"
       },
       {
         "powerId": "ZS-U04",

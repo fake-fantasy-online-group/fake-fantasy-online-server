@@ -93,7 +93,7 @@ func init() {
 				key = "light-field-1"
 			}
 			c.Scene.legendaryStopStateGroundEffect(c.key(0, key), c.State(0, key))
-			legendaryCasterArea(c, key, c.Center, 180, specialScale(legendaryCasterBase(c, c.Skill), c.RollValue("field_pct", 30)), 4)
+			legendaryCasterArea(c, key, c.Center, 180, specialScale(legendaryCasterBase(c, c.Skill), c.RollValue("field_pct", 150)), 4)
 			// Slot identity replaces the old visual when the two-zone pool wraps.
 			if fx, _, ok := legendaryVisualEffect(c.Power.ID, "stage-01"); ok && !c.Preview {
 				groundKey := fmt.Sprintf("%s/%d/%s", c.Power.ID, c.SourceUID, key)

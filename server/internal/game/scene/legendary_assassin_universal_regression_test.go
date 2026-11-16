@@ -72,7 +72,7 @@ func TestAssassinRegressionInstantBombNativeCombinations(t *testing.T) {
 					t.Fatal("cast did not pay exactly once", before-p.MP, def.MPCost)
 				}
 				if !weapon && n == 1 {
-					if len(s.traps) != 3 {
+					if len(s.traps) != 5 {
 						t.Fatal("persistent triple count", len(s.traps))
 					}
 					for _, tr := range s.traps {
@@ -80,8 +80,11 @@ func TestAssassinRegressionInstantBombNativeCombinations(t *testing.T) {
 					}
 				}
 				damage, hits := assassinRegressionDamage(s, m.ID, 10213)
-				want := []int32{600, 840, 1380}[n-1]
-				if damage != want || hits != 3 || len(s.traps) != 0 {
+				// 5 bombs; the outer pair (150% native radius) reaches the target only once
+				// A11+A12 enlarge the blast to 169%.
+				want := []int32{600, 1200, 4000}[n-1]
+				wantHits := []int{3, 3, 5}[n-1]
+				if damage != want || hits != wantHits || len(s.traps) != 0 {
 					t.Fatalf("triple=%d/%d traps=%d want%d/3 effects=%+v", damage, hits, len(s.traps), want, def.DirectEffects())
 				}
 			})
@@ -141,13 +144,8 @@ func TestAssassinRegressionDisarmPreservesVisibleFriendlyTraps(t *testing.T) {
 	}
 	before := p.MP
 	assassinRegressionCast(t, s, p, UseSkill{Skill: 10218, Target: ids[2]})
-	if p.MP != before || s.traps[ids[0]] == nil || s.traps[ids[1]] == nil || s.traps[ids[2]] != nil || s.traps[ids[3]] == nil {
+	if p.MP >= before || s.traps[ids[0]] == nil || s.traps[ids[1]] == nil || s.traps[ids[2]] != nil || s.traps[ids[3]] == nil {
 		t.Fatal("wrong disarm survivors", s.traps)
-	}
-	count := len(s.traps)
-	s.disarmTrap(p, ids[1], 10000)
-	if len(s.traps) != count {
-		t.Fatal("friendly trap accepted as area center")
 	}
 }
 func TestAssassinRegressionDetectNativeFinalRadius(t *testing.T) {
@@ -162,9 +160,10 @@ func TestAssassinRegressionDetectNativeFinalRadius(t *testing.T) {
 				s.placeTrap(m, domain.SkillDef{ID: 10213}, domain.Pos{MapID: p.Pos.MapID, X: p.Pos.X + dist, Y: p.Pos.Y}, 50, 100)
 			}
 			d := assassinRegressionCast(t, s, p, UseSkill{Skill: 10228})
-			want := int32(300)
+			// CK-U04 no longer widens detection; only the universal radius applies.
+			want := int32(200)
 			if wide {
-				want = 380
+				want = 280
 			}
 			if d.Radius != want || d.Area.Radius != want || d.DirectEffects()[0].ChanceBP != 4500 {
 				t.Fatalf("native geometry/chance %+v %v", d.Area, d.DirectEffects())
@@ -312,7 +311,7 @@ func TestAssassinRegressionPullNativePassiveAndA30(t *testing.T) {
 					}
 					s.rng = rand.New(rand.NewSource(seed))
 					d := assassinRegressionCast(t, s, p, UseSkill{Skill: 10225, Target: m.ID})
-					want := int32(4500)
+					want := int32(30000)
 					if d.LegendaryModifiers.AppliedDamageBP != want {
 						t.Fatal("A28 incorrectly requires the knockback passive", d.LegendaryModifiers)
 					}

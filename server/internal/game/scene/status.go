@@ -73,6 +73,9 @@ func (s *Scene) applyStatusDef(target *entity.Entity, def domain.StatusDef, src 
 	if !s.legendaryStatusReceiving(target, s.entities[src], &def) {
 		return false
 	}
+	if s.dashBlocksStatus(target, def) {
+		return false
+	}
 	s.clearDisabledRiftMonsterStatuses(target)
 	s.expireHarmfulSuppression(target)
 	if def.Invisible && target.Status != nil && target.Status.PreventsInvisible() {
@@ -342,7 +345,11 @@ func (s *Scene) resolveStrikeStatuses(src, dst *entity.Entity, tr *combat.HitTra
 		blow.NativeDamageSnapshot = s.legendaryState().nativeDamageSnapshots[root.id]
 	}
 	s.legendaryWarriorBeforeStrike(src, dst, blow)
+	blow.DodgeChanceBP = s.legendaryDodgeChanceBP(src, dst, blow)
 	ev := combat.CalculateStrike(src, dst, tr, blow, s.rng)
+	if ev.Flag.Has(event.DamageDodged) {
+		s.legendaryDodged(src, dst, blow, ev)
+	}
 	rawDamage := ev.Amount
 	if ev.Flag.Has(event.DamageMiss) || rawDamage <= 0 && blow.FlatDamage <= 0 {
 		s.collectEquipmentHit(src, dst, blow, ev)

@@ -40,7 +40,7 @@ func typifiedCastReleased(c *legendaryContext) {
 			typifiedApplyShield(c, c.Owner, c.RollValue("shield_pct", 25), 5)
 		}
 	case "TY-U20":
-		typifiedApplyTimedAffix(c, c.Owner, 6, domain.Affix{Attr: domain.AttrMoveSpeed, Value: c.RollValue("benefit", 50), Mode: domain.ModePercent})
+		typifiedApplyTimedAffix(c, c.Owner, 6, domain.Affix{Attr: domain.AttrMoveSpeed, Value: c.RollValue("benefit", 70), Mode: domain.ModePercent})
 	}
 }
 
@@ -186,10 +186,10 @@ func typifiedAfterIncoming(c *legendaryContext) {
 	}
 	switch c.Power.ID {
 	case "TY-U20":
-		typifiedApplyTimedAffix(c, c.Owner, 6, domain.Affix{Attr: domain.AttrMoveSpeed, Value: c.RollValue("benefit", 50), Mode: domain.ModePercent})
+		typifiedApplyTimedAffix(c, c.Owner, 6, domain.Affix{Attr: domain.AttrMoveSpeed, Value: c.RollValue("benefit", 70), Mode: domain.ModePercent})
 	case "TY-D16":
 		if c.Owner.MaxHP > 0 && int64(c.Owner.HP)*100 <= int64(c.Owner.MaxHP)*60 && c.Ready(12000) {
-			typifiedApplyShield(c, c.Owner, c.RollValue("shield_pct", 45), 6)
+			typifiedApplyShield(c, c.Owner, c.RollValue("shield_pct", 35), 6)
 		}
 	}
 }
@@ -263,7 +263,7 @@ func typifiedIncomingHeal(c *legendaryContext, n int32) int32 {
 		return n
 	}
 	if c.Power.ID == "TY-D12" {
-		n = universalScaleBP(n, c.RollValue("benefit", 8000))
+		n = universalScaleBP(n, c.RollValue("benefit", 12000))
 		if n > 0 {
 			typifiedMarkWindow(c, 4, 6000)
 		}
@@ -283,15 +283,15 @@ func typifiedModifyIncoming(c *legendaryContext, n int32) int32 {
 		}
 	case "TY-D06":
 		if typifiedSingleDirect(c) {
-			bp = c.RollValue("benefit", 5500)
+			bp = c.RollValue("benefit", 4000)
 		}
 	case "TY-D07":
 		if typifiedPhysicalDirect(c) {
-			bp = c.RollValue("benefit", 5500)
+			bp = c.RollValue("benefit", 4000)
 		}
 	case "TY-D08":
 		if typifiedMagic(c) {
-			bp = c.RollValue("benefit", 5500)
+			bp = c.RollValue("benefit", 4000)
 		}
 	case "TY-D10":
 		if c.Hit.Flag.Has(event.DamageCrit) {
@@ -306,7 +306,7 @@ func typifiedModifyIncoming(c *legendaryContext, n int32) int32 {
 		}
 	case "TY-D12":
 		if typifiedHasWindow(c.Owner, "TY-D12") {
-			bp = c.RollValue("reduction_pct", 2500)
+			bp = c.RollValue("reduction_pct", 3500)
 		}
 	case "TY-D17":
 		if universalNativeControlled(c.Owner) {
@@ -338,7 +338,7 @@ func typifiedBeforeDamage(c *legendaryContext, n int32) int32 {
 		}
 	case "TY-U19":
 		if c.Target != nil && typifiedHasWindow(c.Target, "TY-U19") {
-			n = universalScaleBP(n, c.RollValue("damage_bp", 2500))
+			n = universalScaleBP(n, c.RollValue("damage_bp", 4000))
 		}
 	}
 	return n
@@ -393,6 +393,6 @@ func typifiedOnShieldsResolved(s *Scene, owner *entity.Entity, before []domain.A
 		if !c.Ready(6000) {
 			continue
 		}
-		typifiedHeal(&c, owner, typifiedPctOf(broken, c.RollValue("heal_pct", 30)))
+		typifiedHeal(&c, owner, typifiedPctOf(broken, c.RollValue("heal_pct", 50)))
 	}
 }

@@ -14,7 +14,8 @@ func TestLegendaryMeleeFunctionalMovementWindows(t *testing.T) {
 		duration int
 		speed    int32
 	}{
-		{"ZS-U03", 10017, 8000, 180}, {"ZS-U04", 10028, 12000, 160}, {"JK-U01", 10117, 8000, 180},
+		// ZS-U03 / JK-U01 became charge/lunge dashes (legendary_buffpass_mobility_test.go).
+		{"ZS-U04", 10028, 12000, 160},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, _ := legendaryMeleeFixture(t, tc.id)
@@ -68,7 +69,7 @@ func TestLegendaryMeleeFunctionalDefenseWindows(t *testing.T) {
 		skill domain.SkillID
 		magic bool
 		want  int32
-	}{{"JK-D06", 10111, false, 65}, {"JK-D07", 10113, true, 50}} {
+	}{{"JK-D06", 10111, false, 45}, {"JK-D07", 10113, true, 35}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := legendaryMeleeFixture(t, tc.id)
 			get := func(origin domain.DamageOrigin, magic bool) int32 {

@@ -88,7 +88,7 @@ func TestLegendaryWarriorArmorBuildSameHitAndGeometry(t *testing.T) {
 		ids    []string
 		damage int32
 		width  int32
-	}{{"width", []string{"ZS-A04"}, 115, 190}, {"apply", []string{"ZS-A07"}, 195, 100}, {"strength", []string{"ZS-A08"}, 100, 100}, {"three", []string{"ZS-A04", "ZS-A07", "ZS-A08"}, 239, 190}} {
+	}{{"width", []string{"ZS-A04"}, 160, 190}, {"apply", []string{"ZS-A07"}, 195, 100}, {"strength", []string{"ZS-A08"}, 100, 100}, {"three", []string{"ZS-A04", "ZS-A07", "ZS-A08"}, 304, 190}} {
 		t.Run(tc.name, func(t *testing.T) {
 			s, p, m := legendaryMeleeFixture(t, tc.ids[0])
 			for i, id := range tc.ids[1:] {
@@ -328,7 +328,7 @@ func TestLegendaryWarriorQuakeExactReleaseSnapshotAndDefenses(t *testing.T) {
 	s.tick = domain.Tick(1000 / domain.TickMS)
 	before, otherBefore = m.HP, other.HP
 	s.stepLegendaryPowers()
-	if before-m.HP != damage*35/100 || otherBefore-other.HP != max(int32(1), damage*35/100-20) {
+	if before-m.HP != damage*60/100 || otherBefore-other.HP != max(int32(1), damage*60/100-20) {
 		t.Fatalf("field did not share source snapshot, initial%d pulse%d other%d", damage, before-m.HP, otherBefore-other.HP)
 	}
 	if len(s.legendaryState().nativeDamageSnapshots) != 0 {
@@ -354,7 +354,7 @@ func TestLegendaryWarriorEmptyQuakeSnapshotsOnce(t *testing.T) {
 			pulse = c.State(0, "quake-1").Value
 		}
 	})
-	if pulse < 56 || pulse > 84 {
+	if pulse < 96 || pulse > 144 {
 		t.Fatalf("empty field did not roll source crit %d", pulse)
 	}
 	s.aoi.Move(m, domain.Pos{MapID: 7, X: 130, Y: 100})
@@ -388,7 +388,7 @@ func TestLegendaryWarriorQuakeUsesAcceptedAttackSnapshot(t *testing.T) {
 	before = m.HP
 	s.tick = domain.Tick(1000 / domain.TickMS)
 	s.stepLegendaryPowers()
-	if before-m.HP != 70 {
+	if before-m.HP != 120 {
 		t.Fatalf("snapshot pulse %d", before-m.HP)
 	}
 }

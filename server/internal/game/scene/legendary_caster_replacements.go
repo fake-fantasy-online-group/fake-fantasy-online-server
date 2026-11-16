@@ -30,7 +30,7 @@ func init() {
 		}
 	}})
 	registerLegendarySynergyHandler("SS-A22", legendaryHandler{TargetDefinition: func(c *legendaryContext, d *domain.SkillDef) {
-		if c.Skill == legendaryBlizzard && legendaryCasterControlled(c.Target) {
+		if c.Skill == legendaryBlizzard && c.Target != nil {
 			legendaryAddTargetDamage(d, c.RollValue("damage_bp", 9000))
 		}
 	}})
@@ -86,7 +86,7 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("YS-A18", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10325 {
-			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 6000)
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 15000)
 		}
 	}, StatusApplied: func(c *legendaryContext, d *domain.StatusDef) {
 		if c.Skill == 10325 {
@@ -109,7 +109,7 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("YS-A26", legendaryHandler{StatusApplied: func(c *legendaryContext, d *domain.StatusDef) {
 		if c.Skill == 10321 {
-			d.HolyActiveDamageBonusBP += 4000
+			d.HolyActiveDamageBonusBP += 10000
 		}
 	}, SelectTargets: func(c *legendaryContext, ids []domain.EntityID) []domain.EntityID {
 		if c.Skill == 10321 {
@@ -123,7 +123,7 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("YS-A27", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if legendaryCasterHasSkill(c.Owner, 10311) && (d.ID == legendaryLightBolt || d.ID == legendaryHolyLight || d.ID == legendaryExorcism) {
-			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 5000)
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 12000)
 		}
 	}})
 	h := legendaryCasterSupportWave(10302, 180, 220)

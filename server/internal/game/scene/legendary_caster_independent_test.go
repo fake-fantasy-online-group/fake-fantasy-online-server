@@ -69,7 +69,7 @@ func TestCasterIndependentDirectDamage(t *testing.T) {
 		skill domain.SkillID
 		pct   int32
 	}{
-		{"SS-A01", 10402, 170}, {"SS-A06", 10402, 120}, {"SS-A08", 10409, 120}, {"SS-A12", 10410, 120}, {"SS-A13", 10410, 185}, {"SS-A14", 10410, 120}, {"SS-A18", 10405, 140}, {"SS-A20", 10412, 155}, {"SS-A21", 10412, 180},
+		{"SS-A01", 10402, 170}, {"SS-A06", 10402, 120}, {"SS-A08", 10409, 120}, {"SS-A12", 10410, 120}, {"SS-A13", 10410, 185}, {"SS-A14", 10410, 120}, {"SS-A18", 10405, 140}, {"SS-A20", 10412, 155}, {"SS-A21", 10412, 300},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			run := func(on bool) int32 {
@@ -244,7 +244,7 @@ func TestCasterIndependentAreaConsumers(t *testing.T) {
 		skill     domain.SkillID
 		radius    float64
 		near, far int32
-	}{{"SS-A06", 10402, 165, 120, 145}, {"SS-A13", 10410, 100, 185, 165}, {"SS-A18", 10405, 270, 140, 140}, {"SS-A20", 10412, 210, 155, 155}, {"SS-A21", 10412, 150, 180, 120}} {
+	}{{"SS-A06", 10402, 165, 120, 145}, {"SS-A13", 10410, 100, 185, 165}, {"SS-A18", 10405, 270, 140, 140}, {"SS-A20", 10412, 210, 155, 155}, {"SS-A21", 10412, 150, 300, 150}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := casterIndependentFixture(t, tc.id, domain.Learned{tc.skill: 1}, true)
 			center := m.Pos
@@ -265,7 +265,7 @@ func TestCasterIndependentAreaConsumers(t *testing.T) {
 			}
 			if tc.id == "SS-A20" {
 				d, _ := s.skills.Get(tc.skill, 1)
-				if p.MP != p.MaxMP-d.MPCost || !p.Player.SkillReadyAt(tc.skill, s.tick+domain.Ticks(int(d.CooldownMS*80/100))) || p.Player.SkillReadyAt(tc.skill, s.tick+domain.Ticks(int(d.CooldownMS*80/100))-1) {
+				if p.MP != p.MaxMP-d.MPCost || !p.Player.SkillReadyAt(tc.skill, s.tick+domain.Ticks(int(d.CooldownMS*50/100))) || p.Player.SkillReadyAt(tc.skill, s.tick+domain.Ticks(int(d.CooldownMS*50/100))-1) {
 					t.Fatal("actual cost/cooldown did not follow A20", p.MP, d.MPCost)
 				}
 			}
@@ -314,7 +314,7 @@ func TestCasterIndependentControlledDamage(t *testing.T) {
 						return 100000 - m.HP
 					}
 					pct := int32(100)
-					if controlled {
+					if controlled || tc.id == "SS-A22" { // SS-A22 no longer needs control
 						pct = tc.pct
 					}
 					casterIndependentNear(t, run(true), run(false), pct)
@@ -776,7 +776,7 @@ func TestCasterIndependentA26Reflection(t *testing.T) {
 			before := p.HP
 			ev, raw, reflected := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{SkillID: 10401, Magic: true, HurtType: domain.HurtFire, GuaranteedHit: true})
 			s.afterStrikeStatuses(m, p, ev, raw, reflected)
-			want := min(raw*120/100, p.MaxHP*18/100)
+			want := min(raw*300/100, p.MaxHP*30/100)
 			if 100000-m.HP != want || p.HP != before {
 				t.Fatal("reflection percent/cap/loop", 100000-m.HP, want, before-p.HP)
 			}
@@ -931,7 +931,7 @@ func TestCasterIndependentPassiveConsumers(t *testing.T) {
 	for _, tc := range []struct {
 		id  string
 		pct int32
-	}{{"SS-D04", 130}, {"SS-D07", 128}, {"SS-D08", 130}, {"SS-U04", 180}} {
+	}{{"SS-D04", 140}, {"SS-D07", 140}, {"SS-D08", 145}, {"SS-U04", 180}} {
 		t.Run(tc.id, func(t *testing.T) {
 			run := func(on bool) (int32, int32, *Scene, *entity.Entity) {
 				learned := domain.Learned{}
@@ -1005,17 +1005,17 @@ func TestCasterIndependentDefenseConditions(t *testing.T) {
 				got, retained := run(state, 1000, 100, 1)
 				want := int32(1000)
 				if id == "SS-D06" {
-					want = 650
+					want = 600
 				} else if state {
 					switch id {
 					case "SS-D01":
-						want = 720
+						want = 650
 					case "SS-D02":
 						want = 450
 					case "SS-D05":
 						want = 500
 					case "SS-D09":
-						want = 600
+						want = 450
 					}
 				}
 				if got != want || !retained {
@@ -1032,8 +1032,8 @@ func TestCasterIndependentDefenseConditions(t *testing.T) {
 					t.Fatal("threshold must be strict")
 				}
 			case "SS-D05":
-				if got, _ := run(true, 8000, 100, 1); got != 5800 {
-					t.Fatal("22% cap", got)
+				if got, _ := run(true, 8000, 100, 1); got != 4500 {
+					t.Fatal("35% cap", got)
 				}
 			case "SS-D09":
 				if got, _ := run(true, 1000, 100, 99); got != 1000 {
@@ -1059,8 +1059,12 @@ func TestCasterIndependentD07NativeShields(t *testing.T) {
 			before, enemy := p.HP, m.HP
 			ev, raw, reflected := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true})
 			s.afterStrikeStatuses(m, p, ev, raw, reflected)
-			if before-p.HP != 400 {
-				t.Fatal("native resist consumers", before-p.HP, 400, on)
+			wantLoss := int32(400)
+			if on { // SS-D07 grants a 10% max-HP shield when a native shield is cast
+				wantLoss = max(int32(0), 400-p.MaxHP*10/100)
+			}
+			if loss := before - p.HP; (!on && loss != wantLoss) || (on && loss > wantLoss) {
+				t.Fatal("native resist consumers", before-p.HP, wantLoss, on)
 			}
 			froze := false
 			for _, o := range s.outbox {
@@ -1071,7 +1075,8 @@ func TestCasterIndependentD07NativeShields(t *testing.T) {
 			if !froze {
 				t.Fatal("native ice counter-freeze never applied")
 			}
-			if m.HP >= enemy {
+			// With SS-D07 the cast ward absorbs the whole hit, so nothing reaches the fire shield to reflect.
+			if !on && m.HP >= enemy {
 				t.Fatal("native fire reflection lost", on)
 			}
 			if s.statusOverlay[domain.OverlayKey{Existing: 1037, Incoming: 1038}] != domain.OverlayMustReplace {
@@ -1087,7 +1092,7 @@ func TestCasterIndependentU01Teleport(t *testing.T) {
 			from := p.Pos
 			to := domain.Pos{MapID: from.MapID, X: 400, Y: 100}
 			if restricted == "distance" {
-				to.X = 551
+				to.X = 951 // SS-U01 now extends phantom range by 50%
 			}
 			if restricted == "blocked_landing" {
 				s.walkable = func(pos domain.Pos) bool { return pos.X < 350 }
@@ -1200,37 +1205,6 @@ func TestCasterIndependentU03Concentration(t *testing.T) {
 		})
 	}
 }
-func TestCasterIndependentU05NativeBurnDeath(t *testing.T) {
-	for _, mode := range []string{"off", "equipped", "unequipped"} {
-		t.Run(mode, func(t *testing.T) {
-			s, p, m := casterIndependentFixture(t, "SS-U05", domain.Learned{10421: 1}, mode != "off")
-			nativeRepairCast(t, s, p, 10421, m.ID)
-			a, ok := legendaryCasterSourceStatus(m, 1036, p.ID)
-			if !ok {
-				t.Fatal("native burn absent")
-			}
-			if mode == "unequipped" {
-				p.Player.Worn = &domain.EquipSet{}
-				s.refreshStats(p)
-			}
-			p.MP = 1000
-			m.HP = 1
-			s.tickStatus(m, a)
-			want := int32(1000)
-			if mode == "equipped" {
-				want += 1000
-			}
-			if m.HP != 0 || p.MP != want {
-				t.Fatal("burn kill mana reward", m.HP, p.MP, want)
-			}
-			s.tickStatus(m, a)
-			if p.MP != want {
-				t.Fatal("same death rewarded twice")
-			}
-		})
-	}
-}
-
 func TestCasterIndependentU08MirrorLifetime(t *testing.T) {
 	s, p, m := casterIndependentFixture(t, "SS-U08", domain.Learned{10417: 1}, true)
 	slow := domain.StatusDef{ID: 199985, DurationSec: 30, TypeKnown: true, Type: domain.StatusBad, Affixes: []domain.Affix{{Attr: domain.AttrMoveSpeed, Mode: domain.ModePercent, Value: -20}}}
@@ -1364,7 +1338,7 @@ func TestCasterCombinationMirror180Cap(t *testing.T) {
 		p.Status.Apply(domain.StatusDef{ID: 1011, SourceSkillID: 10417, DurationSec: 30, MagicFullReflectChancePct: 100}, s.tick, p.ID)
 		ev, raw, reflected := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{SkillID: 10401, Magic: true, GuaranteedHit: true})
 		s.afterStrikeStatuses(m, p, ev, raw, reflected)
-		if got, want := 100000-m.HP, min(raw*180/100, p.MaxHP*18/100); got != want {
+		if got, want := 100000-m.HP, min(raw*400/100, p.MaxHP*30/100); got != want {
 			t.Fatal("mirror combination ratio/cap", got, want)
 		}
 	}
@@ -1409,34 +1383,6 @@ func TestCasterCombinationFreezeArrowMastery(t *testing.T) {
 		return 100000 - m.HP
 	}
 	casterIndependentNear(t, run(true), run(false), 200)
-}
-func TestCasterCombinationBurnKillRewards(t *testing.T) {
-	for _, id := range []string{"SS-A02", "SS-A19"} {
-		t.Run(id, func(t *testing.T) {
-			skill := domain.SkillID(10401)
-			if id == "SS-A19" {
-				skill = 10421
-			}
-			s, p, m := nativeRepairFixture(t, domain.Warlock, domain.Learned{skill: 1}, "SS-U05", id)
-			p.MP = 1000
-			if id == "SS-A02" {
-				casterIndependentBurn(s, p, m, p.ID)
-				m.HP = 250
-			} else {
-				m.HP = 1
-			}
-			d, _ := s.skills.Get(skill, 1)
-			nativeRepairCast(t, s, p, skill, m.ID)
-			want := int32(1000) - d.MPCost + p.MaxMP*10/100
-			if m.HP != 0 || p.MP != want {
-				t.Fatal("derived burn death reward", m.HP, p.MP, want)
-			}
-			s.stepCasts()
-			if p.MP != want {
-				t.Fatal("duplicate death reward")
-			}
-		})
-	}
 }
 func TestCasterIndependentA24DamageImmunity(t *testing.T) {
 	s, p, m := casterIndependentFixture(t, "SS-A24", domain.Learned{10428: 1, 10409: 1}, true)
@@ -1702,7 +1648,8 @@ func TestCasterCombinationDispelSeesSameCastStolenDefense(t *testing.T) {
 	}
 	bs, bp, bm := casterIndependentFixture(t, "SS-A28", domain.Learned{10401: 1}, false)
 	nativeRepairCast(t, bs, bp, 10401, bm.ID)
-	casterIndependentNear(t, 100000-m.HP, 100000-bm.HP, 270)
+	// SS-U02: the dispelled target also takes +15% damage.
+	casterIndependentNear(t, 100000-m.HP, 100000-bm.HP, 270*115/100)
 }
 
 func TestCasterIndependentA05UnselectedCenter(t *testing.T) {

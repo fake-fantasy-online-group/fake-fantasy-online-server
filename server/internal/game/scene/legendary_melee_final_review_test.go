@@ -43,7 +43,7 @@ func TestAssassinFinalReviewPullLearningAndGeometryCombinations(t *testing.T) {
 					}
 					s.applyResolvedSkillModifiers(p, &native, learned, s.rawSkillLevels(p))
 					d := assassinRegressionCast(t, s, p, UseSkill{Skill: 10225, Target: m.ID})
-					wantBP := int32(4500)
+					wantBP := int32(30000)
 					if mode == "a30" {
 						wantBP = 0
 					}
@@ -262,8 +262,8 @@ func TestAssassinFinalReviewFrostBorrowedPoisonAcceptedRanks(t *testing.T) {
 					base -= a.Value
 				}
 			}
-			if base != 10 || poison.Def.LegendaryModifiers.DamageTickBP != 20000 {
-				t.Fatalf("bounded rank/A09 composition=%d/%d want10/10000", base, poison.Def.LegendaryModifiers.DamageTickBP)
+			if base != 10 || poison.Def.LegendaryModifiers.DamageTickBP != 30000 {
+				t.Fatalf("bounded rank/A09 composition=%d/%d want10/30000", base, poison.Def.LegendaryModifiers.DamageTickBP)
 			}
 		})
 	}

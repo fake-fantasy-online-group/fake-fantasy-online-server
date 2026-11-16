@@ -85,11 +85,11 @@ func TestLegendaryAssassinSynergyFanLifesteal(t *testing.T) {
 	p.HP = 5000
 	before := m.HP
 	assassinNativeHits(s, p, d, m.ID, ids)
-	if before-m.HP != 125 || side.HP != 9875 || rear.HP != 10000 {
+	if before-m.HP != 200 || side.HP != 9800 || rear.HP != 10000 {
 		t.Fatalf("native fan damage: primary=%d side=%d rear=%d", before-m.HP, side.HP, rear.HP)
 	}
-	if p.HP != 5036 {
-		t.Fatalf("effective hit lifesteal=%d want36", p.HP-5000)
+	if p.HP != 5060 {
+		t.Fatalf("effective hit lifesteal=%d want60", p.HP-5000)
 	}
 }
 func TestLegendaryAssassinSynergyTripleInstantBomb(t *testing.T) {
@@ -105,8 +105,8 @@ func TestLegendaryAssassinSynergyTripleInstantBomb(t *testing.T) {
 	before := m.HP
 	mp := p.MP
 	s.placeTrap(p, d, m.Pos, radius, 100)
-	if got := before - m.HP; got != 690 {
-		t.Fatalf("three native230 blasts=%d", got)
+	if got := before - m.HP; got != 2000 {
+		t.Fatalf("five native400 blasts=%d", got)
 	}
 	if len(s.traps) != 0 {
 		t.Fatalf("instant children left %d traps", len(s.traps))
@@ -115,7 +115,7 @@ func TestLegendaryAssassinSynergyTripleInstantBomb(t *testing.T) {
 		t.Fatal("placement charged MP again")
 	}
 	s.stepTraps()
-	if before-m.HP != 690 {
+	if before-m.HP != 2000 {
 		t.Fatal("recursive or delayed bomb damage")
 	}
 }
@@ -136,7 +136,7 @@ func TestLegendaryAssassinSynergyCircleNativePoison(t *testing.T) {
 	}
 	before := m.HP
 	assassinNativeHits(s, p, d, m.ID, ids)
-	if before-m.HP != 150 {
+	if before-m.HP != 300 {
 		t.Fatalf("native throw damage=%d", before-m.HP)
 	}
 	if !m.Status.Has(domain.StatusPoison) {
@@ -144,7 +144,7 @@ func TestLegendaryAssassinSynergyCircleNativePoison(t *testing.T) {
 	}
 	before = m.HP
 	poisonTicks(s, 1)
-	if before-m.HP != 30 {
+	if before-m.HP != 40 {
 		t.Fatalf("same poison tick=%d", before-m.HP)
 	}
 	p.Status.EachEffective(func(a domain.Active) {
@@ -168,15 +168,15 @@ func TestLegendaryAssassinSynergyStandaloneBombAndNoChain(t *testing.T) {
 				want = 0
 			}
 			if id == "CK-A13" {
-				want = 3
+				want = 5
 			}
 			if count != want {
 				t.Fatalf("native placement count=%d want%d", count, want)
 			}
 			s.stepTraps()
-			damage := int32(140)
+			damage := int32(200)
 			if id == "CK-A12" {
-				damage = 190
+				damage = 300
 			}
 			if id == "CK-A13" {
 				damage = 300
@@ -184,8 +184,12 @@ func TestLegendaryAssassinSynergyStandaloneBombAndNoChain(t *testing.T) {
 			if before-m.HP != damage {
 				t.Fatalf("native damage=%d want%d", before-m.HP, damage)
 			}
-			if len(s.traps) != 0 {
-				t.Fatal("overlapping native traps failed to trigger")
+			left := 0
+			if id == "CK-A13" {
+				left = 2 // the outer pair (150% native radius) does not reach the target
+			}
+			if len(s.traps) != left {
+				t.Fatal("overlapping native traps failed to trigger", len(s.traps))
 			}
 		})
 	}
@@ -204,12 +208,12 @@ func TestLegendaryAssassinSynergyNativePoisonAmplifiesOnce(t *testing.T) {
 		}
 	})
 	legendaryAssassinAmplifyPoison(&copied)
-	if copied.LegendaryModifiers.DamageTickBP != 20000 {
+	if copied.LegendaryModifiers.DamageTickBP != 30000 {
 		t.Fatalf("copied poison amplified twice: %+v", copied.LegendaryModifiers)
 	}
 	before := m.HP
 	poisonTicks(s, 1)
-	if before-m.HP != 30 {
+	if before-m.HP != 40 {
 		t.Fatalf("native basic poison tick=%d", before-m.HP)
 	}
 }
@@ -229,7 +233,7 @@ func TestLegendaryAssassinSynergyStaticPreparation(t *testing.T) {
 		id             string
 		skill          domain.SkillID
 		damage, mp, cd int32
-	}{{"CK-A03", 10221, 180, 100, 10000}, {"CK-A04", 10205, 150, 100, 10000}, {"CK-A17", 10209, 150, 100, 10000}, {"CK-A24", 10203, 150, 100, 10000}, {"CK-A29", 10210, 180, 100, 10000}, {"CK-U05", 10206, 100, 55, 10000}, {"CK-U07", 10213, 100, 100, 10000}, {"CK-U09", 10221, 100, 70, 8000}, {"CK-D06", 10213, 100, 70, 10000}, {"CK-D09", 10208, 100, 70, 10000}, {"CK-D07", 10219, 100, 100, 7000}, {"CK-A23", 10219, 135, 100, 6000}, {"CK-U03", 10218, 100, 0, 10000}} {
+	}{{"CK-A03", 10221, 400, 100, 10000}, {"CK-A04", 10205, 150, 100, 10000}, {"CK-A17", 10209, 400, 100, 10000}, {"CK-A24", 10203, 150, 100, 10000}, {"CK-A29", 10210, 180, 100, 10000}, {"CK-U05", 10206, 100, 55, 6000}, {"CK-U07", 10213, 100, 100, 10000}, {"CK-U09", 10221, 100, 70, 8000}, {"CK-D06", 10213, 100, 70, 10000}, {"CK-D09", 10208, 100, 70, 10000}, {"CK-D07", 10219, 100, 100, 7000}, {"CK-A23", 10219, 135, 100, 6000}, {"CK-U03", 10218, 100, 100, 10000}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := legendaryAssassinFixture(t, tc.id)
 			d := domain.SkillDef{ID: tc.skill, Kind: domain.SkillSingle, TargetEnemy: true, MPCost: 100, CooldownMS: 10000, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
@@ -297,12 +301,12 @@ func TestLegendaryAssassinSynergyPoisonDefenseAndSpread(t *testing.T) {
 			copy = a
 		}
 	})
-	if !copy.Def.LegendaryPoisonCopy || copy.Def.LegendaryModifiers.DamageTickBP != 20000 {
+	if !copy.Def.LegendaryPoisonCopy || copy.Def.LegendaryModifiers.DamageTickBP != 30000 {
 		t.Fatalf("wrong native copied poison: %+v", copy.Def)
 	}
 	before := next.HP
 	poisonTicks(s, 1)
-	if before-next.HP != 30 {
+	if before-next.HP != 40 {
 		t.Fatal("copied tick", before-next.HP)
 	}
 	last := putMonster(s, 902, 10000, domain.Stats{}, 150, 100)
@@ -313,31 +317,6 @@ func TestLegendaryAssassinSynergyPoisonDefenseAndSpread(t *testing.T) {
 		t.Fatal("copied poison propagated recursively")
 	}
 }
-func TestLegendaryAssassinSynergyEnemyAreaDisarm(t *testing.T) {
-	s, p, _ := legendaryAssassinFixture(t, "CK-U03")
-	enemy := putMonster(s, 905, 10000, domain.Stats{}, 150, 100)
-	d := domain.SkillDef{ID: 10213}
-	s.placeTrap(enemy, d, domain.Pos{MapID: 7, X: 140, Y: 100}, 50, 100)
-	s.placeTrap(enemy, d, domain.Pos{MapID: 7, X: 160, Y: 100}, 50, 100)
-	s.placeTrap(p, d, p.Pos, 50, 100)
-	var target domain.EntityID
-	for id, tr := range s.traps {
-		if tr.Trap.Owner == enemy.ID {
-			target = id
-			tr.Trap.VisibleTo[p.ID] = struct{}{}
-		}
-	}
-	s.disarmTrap(p, target, 7500)
-	if len(s.traps) != 1 {
-		t.Fatal("area enemy disarm failed", len(s.traps))
-	}
-	for _, tr := range s.traps {
-		if tr.Trap.Owner != p.ID {
-			t.Fatal("own bomb was remotely removed")
-		}
-	}
-}
-
 func TestLegendaryAssassinSynergyReplacementCritUsesNativeRules(t *testing.T) {
 	s, p, m := legendaryAssassinFixture(t, "CK-A02")
 	p.Stats.Hit = 0
@@ -350,7 +329,7 @@ func TestLegendaryAssassinSynergyReplacementCritUsesNativeRules(t *testing.T) {
 	}
 	before := m.HP
 	assassinNativeHits(s, p, d, m.ID, []domain.EntityID{m.ID})
-	if before-m.HP != 200 {
+	if before-m.HP != 600 { // native crit 200, then the independent final x3
 		t.Fatalf("native crit=%d", before-m.HP)
 	}
 }
@@ -365,7 +344,7 @@ func TestLegendaryAssassinSynergyFrostNativePoisonSourceGuard(t *testing.T) {
 	}
 	before := m.HP
 	poisonTicks(s, 1)
-	if before-m.HP != 30 || !m.Status.Has(domain.StatusFreeze) {
+	if before-m.HP != 40 || !m.Status.Has(domain.StatusFreeze) {
 		t.Fatal("own native poison broke native freeze", before-m.HP)
 	}
 
@@ -416,7 +395,7 @@ func TestLegendaryAssassinSynergyStealthSpeedSharesStatus(t *testing.T) {
 			}
 		}
 	})
-	if count != 1 || pct != 60 {
+	if count != 1 || pct != 100 {
 		t.Fatalf("native stealth count%d speed%d", count, pct)
 	}
 }
@@ -469,7 +448,7 @@ func TestLegendaryAssassinSynergyCounterAreaNativeChanceAndHeal(t *testing.T) {
 	s.tick++
 	before := m.HP
 	s.stepCombatAt(s.now(), false)
-	if before-m.HP != 150 || side.HP != 9850 || p.HP != 5044 {
+	if before-m.HP != 150 || side.HP != 9850 || p.HP != 5090 {
 		t.Fatalf("counter native damage/heal %d/%d/%d", before-m.HP, 10000-side.HP, p.HP-5000)
 	}
 	if len(s.attacks) != 0 {
@@ -499,7 +478,7 @@ func TestLegendaryAssassinSynergyGeometryAndPrimaryBonuses(t *testing.T) {
 			case "CK-U02":
 				d.ID = 10224
 			case "CK-U04":
-				d.ID = 10228
+				d.ID = 10227
 			}
 			s.legendaryPrepareSkill(p, &d, m.ID)
 			switch id {
@@ -541,8 +520,8 @@ func TestLegendaryAssassinSynergyGeometryAndPrimaryBonuses(t *testing.T) {
 					t.Fatal("smoke native range")
 				}
 			case "CK-U04":
-				if d.Radius != 150 {
-					t.Fatal("detect range")
+				if d.LegendaryModifiers.CooldownReductionBP != 5000 {
+					t.Fatal("shadow jump cooldown")
 				}
 				st := domain.Stats{MoveSpeed: 100}
 				s.legendaryPassiveStats(p, &st)
@@ -613,6 +592,9 @@ func TestLegendaryAssassinSynergyNativeStaticDefenses(t *testing.T) {
 			if id == "CK-D01" || id == "CK-D07" {
 				want = 65
 			}
+			if id == "CK-D10" {
+				want = 100 // dodge replaces the fixed reduction
+			}
 			if ev.Amount != want {
 				t.Fatalf("native mitigation=%d", ev.Amount)
 			}
@@ -626,7 +608,7 @@ func TestLegendaryAssassinSynergyNativeStaticDefenses(t *testing.T) {
 			if id == "CK-D04" || id == "CK-D07" {
 				m.Status = domain.NewStatusSet()
 				if id == "CK-D07" {
-					s.tick += domain.Ticks(8000)
+					s.tick += domain.Ticks(12000)
 				}
 				ev, _, _ = s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, b)
 				if ev.Amount != 100 {
@@ -638,14 +620,14 @@ func TestLegendaryAssassinSynergyNativeStaticDefenses(t *testing.T) {
 	s, p, _ := legendaryAssassinFixture(t, "CK-D05")
 	s.applyStatusDef(p, domain.StatusDef{ID: domain.StatusStun, Control: domain.ControlStun, DurationSec: 10}, 0)
 	p.Status.EachEffective(func(a domain.Active) {
-		if a.Def.ID == domain.StatusStun && a.ExpireAt-s.tick != domain.Ticks(7000) {
+		if a.Def.ID == domain.StatusStun && a.ExpireAt-s.tick != domain.Ticks(5000) {
 			t.Fatal("fixed native control duration", a.ExpireAt-s.tick)
 		}
 	})
 	s, p, _ = legendaryAssassinFixture(t, "CK-D09")
 	st := domain.Stats{MaxHP: 1000}
 	s.legendaryPassiveStats(p, &st)
-	if st.MaxHP != 1200 {
+	if st.MaxHP != 1400 {
 		t.Fatal("static maxHP")
 	}
 }
@@ -655,7 +637,7 @@ func TestLegendaryAssassinSynergyNativeCleanseAndManaRefund(t *testing.T) {
 	p.Status.Apply(poison, s.tick, 900)
 	before := p.HP
 	poisonTicks(s, 1)
-	if before-p.HP != 70 {
+	if before-p.HP != 40 {
 		t.Fatal("static poison reduction", before-p.HP)
 	}
 	s.legendaryCastReleased(p, domain.SkillDef{ID: 10211}, p.ID, []domain.EntityID{p.ID}, 0)
@@ -707,8 +689,8 @@ func TestLegendaryAssassinSynergyNativePullBoundAndSharedTrapRoot(t *testing.T) 
 	s.legendaryPrepareSkill(p, &d, m.ID)
 	before := m.HP
 	assassinNativeHits(s, p, d, m.ID, []domain.EntityID{m.ID})
-	if before-m.HP != 145 || m.Pos.X != 180 {
-		t.Fatal("native145damage and120pull", before-m.HP, m.Pos.X)
+	if before-m.HP != 400 || m.Pos.X != 180 {
+		t.Fatal("native400damage and120pull", before-m.HP, m.Pos.X)
 	}
 	s, p, m = legendaryAssassinFixture(t, "CK-A13")
 	finish := s.beginEquipmentRoot(p.ID, m.ID, s.equipmentOffense(p))
@@ -725,7 +707,7 @@ func TestLegendaryAssassinSynergyNativePullBoundAndSharedTrapRoot(t *testing.T) 
 		}
 	}
 	finish()
-	if children != 2 || len(s.traps) != 3 {
+	if children != 4 || len(s.traps) != 5 {
 		t.Fatal("native placement lineage", children, len(s.traps))
 	}
 }
@@ -742,7 +724,7 @@ func TestLegendaryAssassinSynergyPersistentTrapKeepsAcceptedModifiers(t *testing
 	before := m.HP
 	s.placeTrap(p, d, m.Pos, 130, 100)
 	s.stepTraps()
-	if before-m.HP != 190 {
+	if before-m.HP != 300 {
 		t.Fatalf("persistent native trap lost accepted modifier: %d", before-m.HP)
 	}
 }
@@ -780,7 +762,7 @@ func TestLegendaryAssassinSynergyNativeStealthRefreshKeepsConsumedBudget(t *test
 			}
 			wantCharges, wantDuration, wantSpeed := int32(0), int32(15), int32(20)
 			if id == "CK-U10" {
-				wantCharges, wantDuration, wantSpeed = 0, 10, 60
+				wantCharges, wantDuration, wantSpeed = 0, 10, 100
 			}
 			if next.LegendaryStealthTrapCharges != wantCharges || next.DurationSec != wantDuration {
 				t.Fatalf("rebuild refilled budget/lost duration: %d/%d", next.LegendaryStealthTrapCharges, next.DurationSec)

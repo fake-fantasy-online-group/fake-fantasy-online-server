@@ -198,7 +198,7 @@ func TestLegendaryUniversalSoloRecoveryBoundaries(t *testing.T) {
 		s.legendaryState().depth = 1
 		s.applySkill(m, p, domain.SkillDef{ID: 10301, Effects: []domain.SkillEffect{{Kind: domain.EffectHeal, HealFlat: 100}}}, 0, false)
 		s.legendaryState().depth = 0
-		if p.HP != 1+100*180/100 {
+		if p.HP != 1+100*220/100 {
 			t.Fatal("generated heal missing received modifier", p.HP)
 		}
 	})

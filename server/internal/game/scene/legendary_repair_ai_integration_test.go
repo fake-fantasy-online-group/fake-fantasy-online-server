@@ -58,7 +58,7 @@ func TestLegendaryRepairAreaNativeShieldsAndMonsterAI(t *testing.T) {
 					t.Fatalf("normal/reflect chain repeated: hits=%d reflections=%d", hits, reflections)
 				}
 			}
-			if losses[0] <= 0 || losses[1] != losses[0]*72/100 || losses[2] != losses[1]*60/100 {
+			if losses[0] <= 0 || losses[1] != losses[0]*65/100 || losses[2] != losses[1]*45/100 {
 				t.Fatalf("native shield plus one/two/three powers did not compose once: %v", losses)
 			}
 		})

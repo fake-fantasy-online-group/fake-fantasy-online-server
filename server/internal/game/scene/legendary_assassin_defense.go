@@ -15,7 +15,7 @@ func (s *Scene) legendaryAssassinVisibility(owner *entity.Entity, was, now bool)
 	}
 	for _, c := range s.legendaryContexts(owner, nil, combat.Blow{}, event.DamageDealt{}) {
 		if c.Power.ID == "CK-D01" && legendaryAssassinLearned(&c, 10208) && c.State(0, "stealth-armed").Stacks > 0 {
-			c.State(0, "exit-guard").ExpiresMS = c.NowMS + 8000
+			c.State(0, "exit-guard").ExpiresMS = c.NowMS + 15000
 			c.DeleteState(0, "stealth-armed")
 		}
 	}
@@ -23,7 +23,7 @@ func (s *Scene) legendaryAssassinVisibility(owner *entity.Entity, was, now bool)
 func (s *Scene) legendaryAssassinControlDuration(target *entity.Entity, def *domain.StatusDef) {}
 func (s *Scene) legendaryAssassinPoisonIncoming(target *entity.Entity, amount int32) int32 {
 	if c, ok := legendaryAssassinPowerContext(s, target, "CK-D08"); ok {
-		return clampI32(int64(amount) * int64(100-c.RollValue("reduction_pct", 30)) / 100)
+		return clampI32(int64(amount) * int64(100-c.RollValue("reduction_pct", 60)) / 100)
 	}
 	return amount
 }
@@ -41,6 +41,18 @@ func init() {
 	registerLegendarySynergyHandler("CK-D09", legendaryHandler{PrepareSkill: legendaryAssassinDefensePrepare, PassiveStats: legendaryAssassinDefenseStats})
 }
 func legendaryAssassinNativeDefense(c *legendaryContext, n int32) int32 {
+	if c.Power.ID == "CK-D10" || !legendaryAssassinDefenseActive(c) {
+		return n
+	}
+	if c.Power.ID == "CK-D01" || c.Power.ID == "CK-D07" {
+		return clampI32(int64(n) * int64(100-c.RollValue("reduction_pct", 35)) / 100)
+	}
+	return clampI32(int64(n) * int64(100-c.RollValue("reduction_pct", 20)) / 100)
+}
+
+// legendaryAssassinDefenseActive reports whether a conditional assassin
+// defense currently applies to this incoming hit (shared by reduction and dodge).
+func legendaryAssassinDefenseActive(c *legendaryContext) bool {
 	active := false
 	switch c.Power.ID {
 	case "CK-D06":
@@ -82,23 +94,17 @@ func legendaryAssassinNativeDefense(c *legendaryContext, n int32) int32 {
 	case "CK-D10":
 		active = (c.Blow.Trap || c.Blow.SourceTrap) && c.Owner.Player != nil && c.Owner.Player.Char.Skills[10229] > 0
 	}
-	if active {
-		if c.Power.ID == "CK-D01" || c.Power.ID == "CK-D07" {
-			return clampI32(int64(n) * int64(100-c.RollValue("reduction_pct", 35)) / 100)
-		}
-		return clampI32(int64(n) * int64(100-c.RollValue("reduction_pct", 20)) / 100)
-	}
-	return n
+	return active
 }
 func legendaryAssassinCounterHeal(c *legendaryContext) {
 	if c.Skill == 10203 && !c.Hit.Flag.Has(event.DamageMiss) && c.LostHP > 0 {
-		c.RestoreHealth(c.Owner, clampI32(int64(c.LostHP)*int64(c.RollValue("restore_pct", 15))/100), 10203)
+		c.RestoreHealth(c.Owner, clampI32(int64(c.LostHP)*int64(c.RollValue("restore_pct", 30))/100), 10203)
 		c.Scene.emitAttributesIfPlayer(c.Owner)
 	}
 }
 func legendaryAssassinReceiveControl(c *legendaryContext, d *domain.StatusDef) bool {
 	if d.ID == domain.StatusStun || d.ID == domain.StatusFreeze || d.BlockMove {
-		d.LegendaryModifiers.ControlDurationReductionBP += c.RollValue("control_bp", 3000)
+		d.LegendaryModifiers.ControlDurationReductionBP += c.RollValue("control_bp", 5000)
 	}
 	return true
 }
@@ -115,7 +121,7 @@ func legendaryAssassinDefensePrepare(c *legendaryContext, d *domain.SkillDef) {
 }
 func legendaryAssassinDefenseStats(c *legendaryContext, stats *domain.Stats) {
 	if c.Power.ID == "CK-D09" {
-		stats.MaxHP = clampI32(int64(stats.MaxHP) * int64(100+c.RollValue("life_pct", 20)) / 100)
+		stats.MaxHP = clampI32(int64(stats.MaxHP) * int64(100+c.RollValue("life_pct", 40)) / 100)
 	}
 }
 
@@ -148,7 +154,7 @@ func legendaryAssassinCleanPoison(c *legendaryContext) {
 
 func legendaryAssassinDefenseRelease(c *legendaryContext) {
 	if c.Power.ID == "CK-D07" && c.Skill == 10219 && legendaryAssassinLearned(c, 10219) {
-		c.State(0, "stun-guard").ExpiresMS = c.NowMS + 8000
+		c.State(0, "stun-guard").ExpiresMS = c.NowMS + 12000
 	}
 }
 

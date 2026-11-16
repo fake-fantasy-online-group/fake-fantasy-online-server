@@ -374,6 +374,7 @@ func (s *Scene) legendaryComposeSkill(owner *entity.Entity, def *domain.SkillDef
 		}
 	}
 	def.LegendarySources = sources
+	s.bpComposeShared(owner, def, preview)
 	legendaryCasterHolyStatusBonus(owner, def)
 	s.legendaryFinalizeSkill(def)
 	previewGrowthRounding(owner, def)
@@ -433,6 +434,7 @@ func (s *Scene) legendaryBeforeDamage(src, dst *entity.Entity, blow combat.Blow,
 		// ModifyIncoming values have joined the shared pre-shield budget.
 
 		amount = legendaryAllDamageIncoming(contexts, amount)
+		amount = s.legendaryPartyGuardIncoming(src, dst, blow, hit, amount)
 		{
 			// Causal producer identity, not generated origin, bounds reactions.
 			for _, c := range s.legendaryContextsFor(dst, src, blow, hit, true) {

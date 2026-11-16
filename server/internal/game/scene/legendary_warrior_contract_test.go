@@ -12,7 +12,7 @@ func TestLegendaryWarriorDirectDamageContracts(t *testing.T) {
 		id     string
 		skill  domain.SkillID
 		damage int32
-	}{{"ZS-A01", 10002, 300}, {"ZS-A04", 10005, 115}, {"ZS-A05", 10005, 160}, {"ZS-A06", 10005, 210}, {"ZS-A07", 10005, 150}, {"ZS-A09", 10013, 125}, {"ZS-A11", 10017, 160}, {"ZS-A12", 10017, 110}, {"ZS-A13", 10006, 145}, {"ZS-A15", 10006, 160}, {"ZS-A16", 10003, 115}, {"ZS-A17", 10003, 130}, {"ZS-A18", 10021, 190}, {"ZS-A19", 10021, 170}, {"ZS-A20", 10015, 340}, {"ZS-A21", 10015, 200}, {"ZS-A22", 10022, 120}, {"ZS-A23", 10022, 340}, {"ZS-A24", 10023, 185}, {"ZS-A25", 10023, 135}, {"ZS-A27", 10027, 180}, {"ZS-A28", 10005, 140}, {"ZS-A29", 10005, 280}, {"ZS-A30", 10002, 165}} {
+	}{{"ZS-A01", 10002, 300}, {"ZS-A04", 10005, 160}, {"ZS-A05", 10005, 250}, {"ZS-A06", 10005, 210}, {"ZS-A07", 10005, 150}, {"ZS-A09", 10013, 125}, {"ZS-A11", 10017, 160}, {"ZS-A12", 10017, 110}, {"ZS-A13", 10006, 190}, {"ZS-A15", 10006, 250}, {"ZS-A16", 10003, 115}, {"ZS-A17", 10003, 130}, {"ZS-A18", 10021, 190}, {"ZS-A19", 10021, 170}, {"ZS-A20", 10015, 340}, {"ZS-A21", 10015, 200}, {"ZS-A22", 10022, 120}, {"ZS-A23", 10022, 550}, {"ZS-A24", 10023, 300}, {"ZS-A25", 10023, 170}, {"ZS-A27", 10027, 180}, {"ZS-A28", 10005, 200}, {"ZS-A29", 10005, 280}, {"ZS-A30", 10002, 165}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := legendaryMeleeFixture(t, tc.id)
 			p.Player.Char.Skills = domain.Learned{tc.skill: 1}
@@ -46,7 +46,7 @@ func TestLegendaryWarriorResourceAndGeometryContracts(t *testing.T) {
 		id                                  string
 		skill                               domain.SkillID
 		mana, radius, width, dist, prep, cd int32
-	}{{"ZS-U01", 10002, 0, 100, 100, 100, 1000, 1000}, {"ZS-U02", 10013, 40, 100, 100, 100, 1000, 1000}, {"ZS-U03", 10017, 100, 100, 100, 150, 1000, 1000}, {"ZS-U04", 10028, 70, 170, 100, 100, 1000, 1000}, {"ZS-U05", 10006, 55, 145, 100, 100, 1000, 1000}, {"ZS-U06", 10005, 40, 100, 100, 100, 1000, 1000}, {"ZS-U08", 10005, 70, 100, 170, 100, 1000, 1000}, {"ZS-U09", 10017, 100, 100, 100, 100, 500, 500}, {"ZS-U10", 10028, 0, 125, 100, 100, 1000, 1000}} {
+	}{{"ZS-U01", 10002, 0, 100, 100, 100, 1000, 1000}, {"ZS-U02", 10013, 40, 100, 100, 100, 1000, 1000}, {"ZS-U03", 10017, 100, 100, 100, 500, 1000, 1000}, {"ZS-U04", 10028, 70, 170, 100, 100, 1000, 1000}, {"ZS-U05", 10006, 55, 145, 100, 100, 1000, 1000}, {"ZS-U06", 10005, 40, 100, 100, 100, 1000, 1000}, {"ZS-U08", 10005, 70, 100, 170, 100, 1000, 1000}, {"ZS-U09", 10017, 100, 100, 100, 100, 500, 500}, {"ZS-U10", 10028, 0, 125, 100, 100, 1000, 1000}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := legendaryMeleeFixture(t, tc.id)
 			area := domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterCaster, Radius: 100}
@@ -128,8 +128,8 @@ func TestLegendaryWarriorQuakeOverlapAndLifetime(t *testing.T) {
 		c.NowMS = ms
 		warriorQuakeTick(&c)
 	}
-	if before-m.HP != 105 {
-		t.Fatalf("overlapping quake damage%d want105", before-m.HP)
+	if before-m.HP != 180 {
+		t.Fatalf("overlapping quake damage%d want180", before-m.HP)
 	}
 	c.NowMS = 5000
 	c.Owner.Pos.MapID++
@@ -184,7 +184,7 @@ func TestLegendaryWarriorManaRecoveryOnceBasicRoot(t *testing.T) {
 func TestLegendaryWarriorSpeedAndOwnArmorDefense(t *testing.T) {
 	for _, id := range []string{"ZS-U03", "ZS-U04"} {
 		s, p, _ := legendaryMeleeFixture(t, id)
-		skill, want := domain.SkillID(10017), int32(180)
+		skill, want := domain.SkillID(10017), int32(100) // ZS-U03 is a charge dash now
 		if id == "ZS-U04" {
 			skill, want = 10028, 160
 		}

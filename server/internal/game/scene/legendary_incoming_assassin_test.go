@@ -63,7 +63,8 @@ func TestLegendaryIncomingAssassinAllDamageConsumers(t *testing.T) {
 					want = 650
 				}
 				// A mirror does not inherit the reflected attack's range or trap category.
-				if kind == "reflection" && (id == "CK-D06" || id == "CK-D10") {
+				// CK-D10 now dodges instead of reducing damage.
+				if kind == "reflection" && id == "CK-D06" || id == "CK-D10" {
 					want = 1000
 				}
 				if before-p.HP != want {
@@ -178,7 +179,7 @@ func TestLegendaryIncomingAssassinDebuffOwnerAndRemoval(t *testing.T) {
 				}
 				m.Status = domain.NewStatusSet()
 				if id == "CK-D07" {
-					s.tick += domain.Ticks(8000)
+					s.tick += domain.Ticks(12000)
 				}
 				before = p.HP
 				incomingAssassinHit(s, p, m, kind, combat.Blow{GuaranteedHit: true})
@@ -256,10 +257,7 @@ func TestLegendaryIncomingAssassinRealMonsterTrapDOT(t *testing.T) {
 			} else {
 				s.applySkill(m, p, trapPayload(d), 100, false)
 			}
-			want := int32(1000)
-			if triggered {
-				want = 800
-			}
+			want := int32(1000) // CK-D10 no longer reduces trap damage
 			if before-p.HP != want {
 				t.Fatalf("direct trap loss%d want%d", before-p.HP, want)
 			}
@@ -317,8 +315,8 @@ func TestLegendaryIncomingAssassinDOTProvenancePersistence(t *testing.T) {
 	}
 	before := p.HP
 	s.tickStatus(p, a)
-	if before-p.HP != 640 {
-		t.Fatalf("restored loss%d want640", before-p.HP)
+	if before-p.HP != 800 { // CK-D10 dodges instead of reducing
+		t.Fatalf("restored loss%d want800", before-p.HP)
 	}
 	unknown := def
 	unknown.DamageSourceRange = 0
@@ -450,8 +448,8 @@ func TestLegendaryIncomingAssassinTrapLineageDoesNotReplayNativeHalf(t *testing.
 		b    combat.Blow
 		want int32
 	}{
-		{"native trap halves then fixed defense", combat.Blow{Trap: true}, 400},
-		{"derived trap only fixed defense", combat.Blow{Origin: domain.DamageProcOrigin, ProcDepth: 1, LegendaryPayload: true, SourceTrap: true}, 800},
+		{"native trap halves", combat.Blow{Trap: true}, 500},
+		{"derived trap gets no native half", combat.Blow{Origin: domain.DamageProcOrigin, ProcDepth: 1, LegendaryPayload: true, SourceTrap: true}, 1000},
 		{"unknown proc gets neither", combat.Blow{Origin: domain.DamageProcOrigin, ProcDepth: 1, LegendaryPayload: true}, 1000},
 	} {
 		t.Run(tc.name, func(t *testing.T) {

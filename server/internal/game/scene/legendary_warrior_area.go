@@ -15,6 +15,23 @@ func warriorCircle(c *legendaryContext, ids []domain.EntityID, center domain.Pos
 	}
 	return out
 }
+
+// warriorEchoAll repeats a share of every landed direct hit on its own target.
+func warriorEchoAll(c *legendaryContext, pct int64) {
+	seen := map[domain.EntityID]bool{}
+	for i := range c.Hits {
+		h := &c.Hits[i]
+		if h.src != c.Owner.ID || (h.blow.Origin != domain.DamageNormalOrigin && h.blow.Origin != domain.DamageProcOrigin) || h.ev.Flag.Has(event.DamageMiss) || seen[h.dst] {
+			continue
+		}
+		e := c.Scene.entities[h.dst]
+		if e == nil || !e.Alive() {
+			continue
+		}
+		seen[h.dst] = true
+		c.damageVisual("stage-01", e, legendaryMeleeScale(h.ev.Amount, int64(c.RollValue("proc_pct", int32(pct)))), h.blow.Magic, true)
+	}
+}
 func warriorEcho(c *legendaryContext, pct int64, farthest bool) {
 	var best *equipmentHit
 	var dist float64
@@ -55,7 +72,7 @@ func init() {
 	}})
 	registerWarriorPower("ZS-A06", legendaryHandler{RootFinished: func(c *legendaryContext) {
 		if c.Skill == 10005 {
-			warriorEcho(c, 110, false)
+			warriorEchoAll(c, 110)
 		}
 	}})
 	registerWarriorPower("ZS-A12", legendaryHandler{TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {
@@ -95,7 +112,7 @@ func init() {
 			}
 		}
 	}})
-	registerWarriorPower("ZS-A23", legendaryHandler{PrepareSkill: warriorSkill(10022, 80, 0, 0, 0).PrepareSkill, RootFinished: func(c *legendaryContext) {
+	registerWarriorPower("ZS-A23", legendaryHandler{PrepareSkill: warriorSkill(10022, 150, 0, 0, 0).PrepareSkill, RootFinished: func(c *legendaryContext) {
 		if c.Skill != 10022 {
 			return
 		}
@@ -121,10 +138,10 @@ func init() {
 			return
 		}
 		if chosen != 0 {
-			c.damageVisual("stage-01", c.Scene.entities[chosen], legendaryMeleeScale(c.Attack(false), 160), false, false)
+			c.damageVisual("stage-01", c.Scene.entities[chosen], legendaryMeleeScale(c.Attack(false), 300), false, false)
 		}
 	}})
-	registerWarriorPower("ZS-A24", legendaryHandler{SelectTargets: warriorPreservePrimary, PrepareSkill: warriorSkill(10023, 85, 0, 0, 0).PrepareSkill, TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {
+	registerWarriorPower("ZS-A24", legendaryHandler{SelectTargets: warriorPreservePrimary, PrepareSkill: warriorSkill(10023, 200, 0, 0, 0).PrepareSkill, TransformSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10023 {
 			if w, ok := warriorLearned(c, 10022, true); ok {
 				d.Kind = w.Kind

@@ -25,9 +25,9 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("JK-A17", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10121 {
-			d.Radius = max(d.Radius, c.RollValue("radius", 150))
+			d.Radius = max(d.Radius, c.RollValue("radius", 200))
 			if d.Area.Valid() {
-				d.Area.Radius = max(d.Area.Radius, c.RollValue("radius", 150))
+				d.Area.Radius = max(d.Area.Radius, c.RollValue("radius", 200))
 			}
 		}
 	}})
@@ -97,30 +97,30 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("JK-D04", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if legendaryMeleeIncoming(c) && c.Target.Monster != nil && c.Target.Monster.Target == c.Owner.ID && c.Target.Monster.TauntPower > 0 {
-			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 50)))
+			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 65)))
 		}
 		return n
 	}})
-	registerLegendarySynergyHandler("JK-D07", legendaryHandler{AllDamageIncoming: true, CastReleased: warriorFunctionalRelease(10113, 8000, false), Tick: warriorFunctionalTick(10113, false), BeforeIncoming: func(c *legendaryContext, n int32) int32 {
+	registerLegendarySynergyHandler("JK-D07", legendaryHandler{AllDamageIncoming: true, CastReleased: warriorFunctionalRelease(10113, 12000, false), Tick: warriorFunctionalTick(10113, false), BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if legendaryPureIncoming(c) && c.Blow.Magic && warriorFunctionalActive(c, 10113) {
-			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 50)))
+			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 65)))
 		}
 		return n
 	}})
 	registerLegendarySynergyHandler("JK-D08", legendaryHandler{AfterHit: swordLionShields})
 	registerLegendarySynergyHandler("JK-D09", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if legendaryMeleeIncoming(c) && int64(n)*100 >= int64(c.Owner.MaxHP)*8 {
-			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 45)))
+			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 65)))
 		}
 		return n
 	}})
 	registerLegendarySynergyHandler("JK-D10", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if legendaryMeleeIncoming(c) && sqDist(c.Owner.Pos, c.Target.Pos) > 75*75 {
-			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 35)))
+			return legendaryMeleeScale(n, 100-int64(c.RollValue("reduction_pct", 55)))
 		}
 		return n
 	}})
-	registerLegendarySynergyHandler("JK-U01", legendaryHandler{CastReleased: warriorFunctionalRelease(10117, 8000, true), PassiveStats: warriorFunctionalMove(10117, 80), Tick: warriorFunctionalTick(10117, true)})
+	registerLegendarySynergyHandler("JK-U01", bpVacuumLungeHandler())
 	registerLegendarySynergyHandler("JK-U04", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10127 {
 			d.Radius = legendaryMeleeScale(d.Radius, 180)
@@ -141,7 +141,7 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("JK-U10", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10113 {
-			d.Dist = legendaryMeleeScale(d.Dist, 100+int64(c.RollValue("range_pct", 45)))
+			d.Dist = legendaryMeleeScale(d.Dist, 100+int64(c.RollValue("range_pct", 80)))
 		}
 	}})
 }
@@ -192,7 +192,7 @@ func swordSingleCastArray(c *legendaryContext) {
 		return
 	}
 	for _, e := range c.Enemies(center.Pos, 150, len(c.Scene.entities)) {
-		c.damageVisual("stage-01", e, legendaryMeleeScale(c.Attack(false), int64(c.RollValue("proc_pct", 320))), false, false)
+		c.damageVisual("stage-01", e, legendaryMeleeScale(c.Attack(false), int64(c.RollValue("proc_pct", 500))), false, false)
 	}
 }
 func swordSilencedBy(e *entity.Entity, source domain.EntityID) bool {

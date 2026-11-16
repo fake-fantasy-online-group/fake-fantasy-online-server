@@ -57,7 +57,7 @@ func TestAssassinFunctionalDefense(t *testing.T) {
 	if legendaryAssassinNativeDefense(&c, 100) != 65 {
 		t.Fatal("released guard")
 	}
-	c.NowMS += 8000
+	c.NowMS += 12000
 	if legendaryAssassinNativeDefense(&c, 100) != 100 {
 		t.Fatal("expired guard")
 	}
@@ -109,39 +109,7 @@ func TestAssassinFunctionalExitGuard(t *testing.T) {
 	}
 }
 
-func TestAssassinFunctionalDetectionLifecycle(t *testing.T) {
-	s, p, m := legendaryAssassinFixture(t, "CK-U04")
-	s.refreshStats(p)
-	base := p.Stats.MoveSpeed
-	c := assassinContext(s, p, m, 10228, 1)
-	legendaryAssassinUtilityRelease(&c)
-	if p.Stats.MoveSpeed != base*160/100 {
-		t.Fatalf("window speed %d base %d", p.Stats.MoveSpeed, base)
-	}
-	s.tick += domain.Ticks(10000)
-	s.stepLegendaryPowers()
-	if p.Stats.MoveSpeed != base {
-		t.Fatal("speed persisted after expiry", p.Stats.MoveSpeed, base)
-	}
-	c = assassinContext(s, p, m, 10228, 2)
-	legendaryAssassinUtilityRelease(&c)
-	delete(p.Player.Char.Skills, 10228)
-	s.refreshStats(p)
-	if p.Stats.MoveSpeed != base {
-		t.Fatal("speed persisted after respec")
-	}
-	p.Player.Char.Skills[10228] = 1
-	c = assassinContext(s, p, m, 10228, 3)
-	legendaryAssassinUtilityRelease(&c)
-	p.Player.Worn.Each(func(slot domain.EquipSlot, st domain.Stack) {
-		st.Legendary = domain.LegendaryInstance{}
-		p.Player.Worn.Set(slot, st)
-	})
-	s.refreshStats(p)
-	if p.Stats.MoveSpeed != base {
-		t.Fatal("speed persisted after unequip")
-	}
-}
+func TestAssassinFunctionalDetectionLifecycle(t *testing.T) { buffPassAssassinShadowStep(t) }
 
 func TestAssassinFunctionalNativeTrapRelease(t *testing.T) {
 	s, p, m := nativeRepairFixture(t, domain.Assassin, domain.Learned{10213: 1, 10214: 1}, "CK-U07")

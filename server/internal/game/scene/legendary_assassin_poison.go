@@ -8,7 +8,7 @@ import (
 )
 
 func legendaryAssassinPoisonStatus(c *legendaryContext, d *domain.StatusDef) {
-	legendaryAssassinAmplifyPoisonBonus(d, c.RollValue("tick_bp", 20000))
+	legendaryAssassinAmplifyPoisonBonus(d, c.RollValue("tick_bp", 30000))
 }
 func legendaryAssassinAmplifyPoison(d *domain.StatusDef) {
 	legendaryAssassinAmplifyPoisonBonus(d, 10000)
@@ -22,7 +22,7 @@ func legendaryAssassinAmplifyPoisonBonus(d *domain.StatusDef, bonus int32) {
 }
 func (s *Scene) legendaryAssassinPreparePoison(source *entity.Entity, d *domain.StatusDef) {
 	if c, ok := legendaryAssassinPowerContext(s, source, "CK-A09"); ok {
-		legendaryAssassinAmplifyPoisonBonus(d, c.RollValue("tick_bp", 20000))
+		legendaryAssassinAmplifyPoisonBonus(d, c.RollValue("tick_bp", 30000))
 	}
 }
 func legendaryAssassinNativePoisonHit(c *legendaryContext) {

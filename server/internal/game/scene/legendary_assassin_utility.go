@@ -4,10 +4,12 @@ import "github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/i
 
 // Utility windows are refreshed by learned manual casts, never stacked.
 func init() {
-	for _, id := range []string{"CK-U01", "CK-U02", "CK-U03", "CK-U04", "CK-U07", "CK-U09"} {
-		registerLegendarySynergyHandler(id, legendaryHandler{TransformSkill: legendaryAssassinUtilityTransform, PrepareSkill: legendaryAssassinUtilityPrepare, CastReleased: legendaryAssassinUtilityRelease, PassiveStats: legendaryAssassinUtilityStats, Tick: legendaryAssassinUtilityTick})
+	for _, id := range []string{"CK-U01", "CK-U02", "CK-U07", "CK-U09"} {
+		registerLegendarySynergyHandler(id, legendaryHandler{TransformSkill: legendaryAssassinUtilityTransform, PrepareSkill: legendaryAssassinUtilityPrepare, CastReleased: legendaryAssassinUtilityRelease})
 	}
 	registerLegendarySynergyHandler("CK-A15", legendaryHandler{StatusApplied: legendaryAssassinTrapPoison})
+	registerLegendarySynergyHandler("CK-U03", bpTrapBreakerHandler())
+	registerLegendarySynergyHandler("CK-U04", bpShadowStepHandler())
 }
 func legendaryAssassinUtilityTransform(c *legendaryContext, d *domain.SkillDef) {
 	if c.Power.ID == "CK-U02" && d.ID == 10224 {
@@ -17,12 +19,6 @@ func legendaryAssassinUtilityTransform(c *legendaryContext, d *domain.SkillDef) 
 }
 func legendaryAssassinUtilityPrepare(c *legendaryContext, d *domain.SkillDef) {
 	switch c.Power.ID {
-	case "CK-U03":
-		if d.ID == 10218 {
-			d.MPCost = 0
-			d.ManaCostFractionNumerator = 0
-			d.ManaCostFractionDenominator = 0
-		}
 	case "CK-U01":
 		if legendaryAssassinWindow(c, 10208) {
 			d.LegendaryModifiers.ManaReductionBP += c.RollValue("mana_bp", 4500)
@@ -34,10 +30,6 @@ func legendaryAssassinUtilityPrepare(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10224 {
 			d.Dist = specialScale(d.Dist, 100+c.RollValue("range_pct", 50))
 			d.LegendaryModifiers.RadiusBP += 3000
-		}
-	case "CK-U04":
-		if d.ID == 10228 {
-			d.LegendaryModifiers.RadiusBP += 5000
 		}
 	case "CK-U07":
 		if legendaryAssassinTrapSkill(d.ID) && legendaryAssassinWindow(c, 0) {
@@ -68,28 +60,9 @@ func legendaryAssassinUtilityRelease(c *legendaryContext) {
 	if !legendaryAssassinLearned(c, c.Skill) {
 		return
 	}
-	if c.Power.ID == "CK-U01" && c.Skill == 10208 || c.Power.ID == "CK-U04" && c.Skill == 10228 || c.Power.ID == "CK-U07" && legendaryAssassinTrapSkill(c.Skill) {
+	if c.Power.ID == "CK-U01" && c.Skill == 10208 || c.Power.ID == "CK-U07" && legendaryAssassinTrapSkill(c.Skill) {
 		st := c.State(0, "utility-window")
 		st.ExpiresMS, st.Value = c.NowMS+10000, int64(c.Skill)
-		if c.Power.ID == "CK-U04" {
-			st.Stacks = 1
-			c.Scene.refreshStats(c.Owner)
-		}
-	}
-}
-func legendaryAssassinUtilityStats(c *legendaryContext, st *domain.Stats) {
-	if c.Power.ID == "CK-U04" && legendaryAssassinWindow(c, 10228) {
-		st.MoveSpeed = specialScale(st.MoveSpeed, 100+c.RollValue("move_pct", 60))
-	}
-}
-func legendaryAssassinUtilityTick(c *legendaryContext) {
-	if c.Power.ID != "CK-U04" {
-		return
-	}
-	st := c.State(0, "utility-window")
-	if st.Stacks != 0 && !legendaryAssassinWindow(c, 10228) {
-		st.Stacks = 0
-		c.Scene.refreshStats(c.Owner)
 	}
 }
 func legendaryAssassinTrapPoison(c *legendaryContext, d *domain.StatusDef) {

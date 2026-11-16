@@ -43,11 +43,11 @@ func TestLegendaryUniversalSoloEquipmentStats(t *testing.T) {
 					t.Fatal("whole-character magic defense", enhanced.MDef, base.MDef)
 				}
 			case "TY-D03":
-				if enhanced.MaxHP != typifiedScaleStat(base.MaxHP, 50) {
+				if enhanced.MaxHP != typifiedScaleStat(base.MaxHP, 35) {
 					t.Fatal("maximum HP lifecycle", enhanced.MaxHP, base.MaxHP, p.MaxHP)
 				}
 			case "TY-D04":
-				if enhanced.MaxMP != typifiedScaleStat(base.MaxMP, 50) {
+				if enhanced.MaxMP != base.MaxMP { // TY-D04 is now 饮血 (lifesteal), not a max-MP stat
 					t.Fatal("maximum MP lifecycle", enhanced.MaxMP, base.MaxMP, p.MaxMP)
 				}
 			case "TY-U20":

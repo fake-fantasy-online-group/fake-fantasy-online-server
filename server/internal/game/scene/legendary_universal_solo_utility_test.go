@@ -97,7 +97,7 @@ func TestLegendaryUniversalSoloHealing(t *testing.T) {
 					t.Fatal("direct flat+maxHP healing", target.HP)
 				}
 			case "TY-D12":
-				if target.HP != 361 {
+				if target.HP != 441 {
 					t.Fatal("incoming direct healing", target.HP)
 				}
 			case "TY-U17":

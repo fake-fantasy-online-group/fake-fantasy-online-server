@@ -158,8 +158,8 @@ func TestLegendaryUniversalClassConeComposition(t *testing.T) {
 	a = 85 * math.Pi / 180
 	angleOut := putMonster(s, 903, 10000, domain.Stats{}, 100+100*math.Cos(a), 100+100*math.Sin(a))
 	assassinRegressionCast(t, s, p, UseSkill{Skill: 10006, Target: m.ID})
-	universalSoloDamage(t, s, m.ID, 10006, 188, 1)
-	universalSoloDamage(t, s, inside.ID, 10006, 188, 1)
+	universalSoloDamage(t, s, m.ID, 10006, 247, 1)
+	universalSoloDamage(t, s, inside.ID, 10006, 247, 1)
 	if far.HP != 10000 || angleOut.HP != 10000 {
 		t.Fatal("final class cone boundary", far.HP, angleOut.HP)
 	}
@@ -182,7 +182,7 @@ func TestLegendaryUniversalMovementStatCombination(t *testing.T) {
 		}
 	}
 	s.refreshStats(p)
-	want := universalPct(characterInnateStats(p.Player.Char).MoveSpeed, 40) * clientPixelsPerMoveSpeed
+	want := universalPct(characterInnateStats(p.Player.Char).MoveSpeed, 60) * clientPixelsPerMoveSpeed
 	if enhanced-s.playerMoveSpeedPX(p) != want {
 		t.Fatalf("movement delta=%d want=%d enhanced=%d baseNow=%d innate=%d", enhanced-s.playerMoveSpeedPX(p), want, enhanced, s.playerMoveSpeedPX(p), characterInnateStats(p.Player.Char).MoveSpeed)
 	}

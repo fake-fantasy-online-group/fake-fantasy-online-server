@@ -116,11 +116,11 @@ func TestLegendaryRepairLightSplitPrimarySecondaryAndFullRadius(t *testing.T) {
 	}
 	primary, sides := run(false)
 	echo, echoSides := run(true)
-	if primary != 210 || echo != 388 {
-		t.Fatalf("primary/echo damage %d/%d want210/388", primary, echo)
+	if primary != 210 || echo != 525 {
+		t.Fatalf("primary/echo damage %d/%d want210/525", primary, echo)
 	}
 	for i := 0; i < 5; i++ {
-		if sides[i] != 126 || echoSides[i] != 126+126*85/100 {
+		if sides[i] != 126 || echoSides[i] != 126*250/100 {
 			t.Fatalf("secondary %d lost native 60%% or its distinct 85%% echo: %v/%v", i, sides, echoSides)
 		}
 	}
@@ -244,7 +244,7 @@ func TestLegendaryRepairTrapTargetBonusesAndNativeCost(t *testing.T) {
 	}
 	s.stepCastsAt(s.now().Add(time.Minute), false)
 	s.stepCastsAt(s.now().Add(2*time.Minute), false)
-	if len(s.traps) != 3 {
+	if len(s.traps) != 5 {
 		t.Fatal("triple trap shape lost", len(s.traps))
 	}
 	s.stepTraps()
@@ -254,7 +254,7 @@ func TestLegendaryRepairTrapTargetBonusesAndNativeCost(t *testing.T) {
 	if paid := before - p.MP; paid != 21 {
 		t.Fatal("secondary trap charged extra mana", paid)
 	}
-	if len(s.traps) != 0 {
+	if len(s.traps) != 2 { // the outer pair at 1.5R does not reach the centre target and stays armed
 		t.Fatal("resolved native traps remain", len(s.traps))
 	}
 }

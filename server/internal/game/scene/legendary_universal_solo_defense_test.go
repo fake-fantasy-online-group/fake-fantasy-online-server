@@ -52,15 +52,15 @@ func TestLegendaryUniversalSoloIncoming(t *testing.T) {
 					}
 				case "TY-D06":
 					if kind != "area" && kind != "dot" && kind != "reflection" && kind != "self" {
-						want = want * 45 / 100 // typified single-target direct 55%
+						want = want * 60 / 100 // typified single-target direct 40%
 					}
 				case "TY-D07":
 					if direct && kind != "magic" {
-						want = want * 45 / 100 // typified physical direct 55%
+						want = want * 60 / 100 // typified physical direct 40%
 					}
 				case "TY-D08":
 					if kind == "magic" || kind == "dot" {
-						want = 450 // typified magic 55%
+						want = 600 // typified magic 40%
 					}
 				case "TY-D10":
 					if kind == "critical" {
@@ -274,7 +274,7 @@ func TestLegendaryUniversalSoloPeriodic(t *testing.T) {
 	}{
 		{"TY-A18", domain.StatusPoison, -100, -300, false}, {"TY-A27", 1036, -100, -200, false},
 		{"TY-A28", domain.StatusPoison, -100, -200, false}, {"TY-A29", 1036, -100, -200, false},
-		{"TY-U05", 10303, 100, 200, false}, {"TY-D12", 10303, 100, 180, true},
+		{"TY-U05", 10303, 100, 200, false}, {"TY-D12", 10303, 100, 220, true},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := universalSoloFixture(t, tc.id, domain.Warrior, domain.Learned{})
@@ -341,7 +341,7 @@ func TestLegendaryUniversalSoloPeriodic(t *testing.T) {
 			s.tickStatus(dst, domain.Active{Def: d, Source: src.ID})
 			wantGenerated := tc.delta
 			if tc.id == "TY-D12" {
-				wantGenerated = tc.delta * 180 / 100
+				wantGenerated = tc.delta * 220 / 100
 			}
 			if dst.HP-5000 != wantGenerated {
 				t.Fatal("generated periodic modifier mismatch", dst.HP-5000, wantGenerated)

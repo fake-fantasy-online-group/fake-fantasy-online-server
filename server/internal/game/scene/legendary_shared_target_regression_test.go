@@ -159,10 +159,10 @@ func TestLegendarySharedSelfCirclePrimaryAndAdditiveBuilds(t *testing.T) {
 		primary, side int32
 	}{
 		{"native_no_power", true, nil, 155, 155},
-		{"single_selected", true, []string{"ZS-A23"}, 439, 279},
-		{"single_unselected", false, []string{"ZS-A23"}, 279, 439},
-		{"two_selected", true, []string{"ZS-A23", "TY-A34"}, 563, 279},
-		{"three_selected", true, []string{"ZS-A23", "ZS-A22", "TY-A34"}, 594, 310},
+		{"single_selected", true, []string{"ZS-A23"}, 687, 387},
+		{"single_unselected", false, []string{"ZS-A23"}, 387, 687},
+		{"two_selected", true, []string{"ZS-A23", "TY-A34"}, 811, 387},
+		{"three_selected", true, []string{"ZS-A23", "ZS-A22", "TY-A34"}, 842, 418},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			s, p, m := legendaryMeleeFixture(t, "ZS-A23")

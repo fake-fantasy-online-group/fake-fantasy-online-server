@@ -129,7 +129,7 @@ func TestLegendaryHealerFunctionalRejuvenationGuard(t *testing.T) {
 		t.Fatal("free guard without rejuvenation")
 	}
 	c.Owner.Status.Apply(domain.StatusDef{ID: 199981, Level: 1, DurationSec: 30, SourceSkillID: 10303}, c.Scene.tick, c.Owner.ID)
-	if h.BeforeIncoming(c, 100) != 75 {
+	if h.BeforeIncoming(c, 100) != 70 {
 		t.Fatal("guard still requires actual windup")
 	}
 	delete(c.Owner.Player.Char.Skills, 10303)

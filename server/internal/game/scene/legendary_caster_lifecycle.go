@@ -99,7 +99,7 @@ func init() {
 			if overflow <= 0 {
 				break
 			}
-			amount := min(overflow, specialScale(p.MaxMP, c.RollValue("restore_cap_pct", 20)), max(int32(0), p.MaxMP-p.MP))
+			amount := min(overflow, specialScale(p.MaxMP, c.RollValue("restore_cap_pct", 40)), max(int32(0), p.MaxMP-p.MP))
 			legendaryCasterRestoreMP(c, p, amount)
 			if amount > 0 {
 				c.Visual("stage-01", p)
@@ -137,6 +137,6 @@ func legendaryCasterSteal(c *legendaryContext, removed []domain.Active) {
 }
 func legendaryCasterRegen(c *legendaryContext, d *domain.StatusDef) {
 	if c.Skill == 10303 {
-		d.LegendaryModifiers.HealingTickBP += 5000
+		d.LegendaryModifiers.HealingTickBP += 10000
 	}
 }

@@ -172,6 +172,12 @@ type EntityMoved struct {
 	// 协议层会补默认值；Stop 会在线上明确写 0，让客户端保留现有速度并在目标点
 	// 结束路径。负数只用于 Snap，客户端会立即校正坐标并清空旧路径。
 	Speed int32
+	// Dash marks a server-authored same-map skill displacement. Clients that
+	// announced ClientCapDashMoveV1 interpolate from the current position to To
+	// over DurationMS without a map reload; older clients receive the existing
+	// Snap correction (speed=-1), so Dash events must also set Snap.
+	Dash       bool
+	DurationMS int32
 }
 
 func (e EntityMoved) Subject() domain.EntityID { return e.ID }

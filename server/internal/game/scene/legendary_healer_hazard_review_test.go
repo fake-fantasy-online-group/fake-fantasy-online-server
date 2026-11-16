@@ -47,7 +47,7 @@ func TestCasterReviewThornsStillMitigatesActualBasic(t *testing.T) {
 	m.Stats = domain.Stats{MinAtk: 100, MaxAtk: 100, Hit: 100000}
 	s.attacks = append(s.attacks, pendingAttack{src: m.ID, dst: p.ID, blow: combat.Blow{GuaranteedHit: true}})
 	s.stepCombatAt(s.now().Add(time.Second), false)
-	if got := int32(10000) - p.HP; got != 65 {
+	if got := int32(10000) - p.HP; got != 60 {
 		t.Fatal("native monster basic lost thorns mitigation", got)
 	}
 }

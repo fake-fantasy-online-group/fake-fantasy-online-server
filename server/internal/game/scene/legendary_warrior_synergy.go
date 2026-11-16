@@ -165,7 +165,7 @@ func init() {
 			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 10000)
 		}
 	}})
-	registerWarriorPower("ZS-A25", warriorDamageSkills(35, 10023, 10022))
+	registerWarriorPower("ZS-A25", warriorDamageSkills(70, 10023, 10022))
 	h := warriorIncoming(16)
 	h.StatusApplied = warriorArmorStrength
 	registerWarriorPower("ZS-D02", h)

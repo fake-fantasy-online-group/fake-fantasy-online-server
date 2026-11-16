@@ -28,7 +28,7 @@ func init() {
 	typifiedReplaceHandler("TY-D01", legendaryHandler{PassiveStats: typifiedPassiveStats})
 	typifiedReplaceHandler("TY-D02", legendaryHandler{PassiveStats: typifiedPassiveStats})
 	typifiedReplaceHandler("TY-D03", legendaryHandler{PassiveStats: typifiedPassiveStats})
-	typifiedReplaceHandler("TY-D04", legendaryHandler{PassiveStats: typifiedPassiveStats})
+	typifiedReplaceHandler("TY-D04", legendaryHandler{AfterHit: typifiedDrinkBlood})
 	typifiedReplaceHandler("TY-D05", legendaryHandler{ModifyIncoming: typifiedModifyIncoming})
 	typifiedReplaceHandler("TY-D06", legendaryHandler{ModifyIncoming: typifiedModifyIncoming})
 	typifiedReplaceHandler("TY-D07", legendaryHandler{ModifyIncoming: typifiedModifyIncoming})
@@ -63,7 +63,7 @@ func typifiedPrepare(c *legendaryContext, d *domain.SkillDef) {
 		}
 	case "TY-U07":
 		if universalHasEffect(d, domain.EffectTeleportPoint, domain.EffectTeleportTarget) {
-			d.Dist = universalScaleBP(d.Dist, c.RollValue("move_bp", 8000))
+			d.Dist = universalScaleBP(d.Dist, c.RollValue("move_bp", 12000))
 		}
 		if typifiedHasWindow(c.Owner, "TY-U07") {
 			d.Dist = universalScaleBP(d.Dist, c.RollValue("range_bp", 5000))
@@ -121,9 +121,7 @@ func typifiedPassiveStats(c *legendaryContext, st *domain.Stats) {
 	case "TY-D02":
 		st.MDef = typifiedScaleStat(st.MDef, c.RollValue("benefit", 80))
 	case "TY-D03":
-		st.MaxHP = typifiedScaleStat(st.MaxHP, c.RollValue("benefit", 50))
-	case "TY-D04":
-		st.MaxMP = typifiedScaleStat(st.MaxMP, c.RollValue("benefit", 50))
+		st.MaxHP = typifiedScaleStat(st.MaxHP, c.RollValue("benefit", 35))
 	case "TY-U06":
 		st.MaxMP = typifiedScaleStat(st.MaxMP, c.RollValue("maxmp_pct", 35))
 	case "TY-U09":
@@ -132,7 +130,7 @@ func typifiedPassiveStats(c *legendaryContext, st *domain.Stats) {
 		if base <= 0 {
 			base = st.MoveSpeed
 		}
-		st.MoveSpeed = domain.SaturateInt32(int64(st.MoveSpeed) + int64(base)*int64(c.RollValue("benefit", 40))/100)
+		st.MoveSpeed = domain.SaturateInt32(int64(st.MoveSpeed) + int64(base)*int64(c.RollValue("benefit", 60))/100)
 	}
 }
 
@@ -170,7 +168,7 @@ func typifiedStatusReceiving(c *legendaryContext, d *domain.StatusDef) bool {
 			changed, empty := d.StripMovementImpairments()
 			return !changed || !empty
 		}
-		if typifiedMovementImpairment(d) && c.Ready(12000) {
+		if typifiedMovementImpairment(d) && c.Ready(8000) {
 			typifiedApplyTimedAffix(c, c.Owner, max(int32(1), c.RollValue("duration_ms", 4000)/1000))
 			if c.Owner.Status != nil {
 				changed, removed := c.Owner.Status.StripMovementImpairments()

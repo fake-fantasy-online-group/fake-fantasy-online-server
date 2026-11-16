@@ -458,6 +458,6 @@ func typifiedStatusPostCommit(s *Scene, owner, source *entity.Entity, def *domai
 		if !c.Ready(8000) {
 			continue
 		}
-		typifiedApplyShield(&c, c.Owner, c.RollValue("shield_pct", 20), 4)
+		typifiedApplyShield(&c, c.Owner, c.RollValue("shield_pct", 35), 4)
 	}
 }

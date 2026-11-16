@@ -51,7 +51,7 @@ func (s *Scene) legendarySecondaryIncoming(src, dst *entity.Entity, blow combat.
 	if blow.Magic {
 		hit.Flag |= event.DamageMagic
 	}
-	return legendaryAllDamageIncoming(s.legendaryIncomingContexts(src, dst, blow, hit), amount)
+	return s.legendaryPartyGuardIncoming(src, dst, blow, hit, legendaryAllDamageIncoming(s.legendaryIncomingContexts(src, dst, blow, hit), amount))
 }
 
 // Legacy periodic HP damage remains magic. Explicit wound snapshots have an

@@ -265,15 +265,15 @@
     "parameters": [
       {
         "key": "damage_pct",
-        "text": "80%",
-        "base": 80,
+        "text": "伤害提高200%",
+        "base": 200,
         "divisor": 1,
         "unit": "%"
       },
       {
         "key": "damage_pct",
-        "text": "20%",
-        "base": 20,
+        "text": "区域提高50%",
+        "base": 50,
         "divisor": 1,
         "unit": "%"
       }
@@ -325,8 +325,8 @@
     "parameters": [
       {
         "key": "reflection_cap_pct",
-        "text": "最大生命18%",
-        "base": 18,
+        "text": "最大生命30%",
+        "base": 30,
         "divisor": 1,
         "unit": "%"
       }
@@ -385,8 +385,8 @@
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "降低28%",
-        "base": 28,
+        "text": "降低35%",
+        "base": 35,
         "divisor": 1,
         "unit": "%"
       }
@@ -421,8 +421,8 @@
     "parameters": [
       {
         "key": "life_pct",
-        "text": "最大生命提高30%",
-        "base": 30,
+        "text": "最大生命提高40%",
+        "base": 40,
         "divisor": 1,
         "unit": "%"
       }
@@ -433,8 +433,8 @@
     "parameters": [
       {
         "key": "reduction_cap_pct",
-        "text": "最大生命的22%",
-        "base": 22,
+        "text": "最大生命的35%",
+        "base": 35,
         "divisor": 1,
         "unit": "%"
       }
@@ -445,8 +445,8 @@
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "降低35%",
-        "base": 35,
+        "text": "降低40%",
+        "base": 40,
         "divisor": 1,
         "unit": "%"
       }
@@ -457,8 +457,8 @@
     "parameters": [
       {
         "key": "life_pct",
-        "text": "最大生命提高28%",
-        "base": 28,
+        "text": "最大生命提高40%",
+        "base": 40,
         "divisor": 1,
         "unit": "%"
       }
@@ -469,8 +469,8 @@
     "parameters": [
       {
         "key": "life_pct",
-        "text": "最大生命提高30%",
-        "base": 30,
+        "text": "最大生命提高45%",
+        "base": 45,
         "divisor": 1,
         "unit": "%"
       }
@@ -481,8 +481,8 @@
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "降低40%",
-        "base": 40,
+        "text": "降低55%",
+        "base": 55,
         "divisor": 1,
         "unit": "%"
       }
@@ -552,9 +552,9 @@
     "id": "SS-U05",
     "parameters": [
       {
-        "key": "restore_pct",
-        "text": "最大法力的10%",
-        "base": 10,
+        "key": "vulnerable_pct",
+        "text": "伤害提高12%",
+        "base": 12,
         "divisor": 1,
         "unit": "%"
       }
@@ -623,8 +623,8 @@
     "parameters": [
       {
         "key": "proc_pct",
-        "text": "实际伤害85%",
-        "base": 85,
+        "text": "实际伤害150%",
+        "base": 150,
         "divisor": 1,
         "unit": "%"
       }
@@ -697,8 +697,8 @@
     "parameters": [
       {
         "key": "field_pct",
-        "text": "基础伤害30%",
-        "base": 30,
+        "text": "基础伤害150%",
+        "base": 150,
         "divisor": 1,
         "unit": "%"
       }
@@ -709,8 +709,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "伤害提高80%",
-        "base": 8000,
+        "text": "伤害提高200%",
+        "base": 20000,
         "divisor": 100,
         "unit": "%"
       }
@@ -829,8 +829,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "伤害提高60%",
-        "base": 6000,
+        "text": "伤害提高150%",
+        "base": 15000,
         "divisor": 100,
         "unit": "%"
       }
@@ -841,8 +841,8 @@
     "parameters": [
       {
         "key": "proc_pct",
-        "text": "造成200%",
-        "base": 200,
+        "text": "造成500%",
+        "base": 500,
         "divisor": 1,
         "unit": "%"
       }
@@ -937,8 +937,8 @@
     "parameters": [
       {
         "key": "damage_bp",
-        "text": "伤害提高50%",
-        "base": 5000,
+        "text": "伤害提高120%",
+        "base": 12000,
         "divisor": 100,
         "unit": "%"
       }
@@ -961,8 +961,8 @@
     "parameters": [
       {
         "key": "next_damage_pct",
-        "text": "额外提高50个百分点",
-        "base": 50,
+        "text": "额外提高100个百分点",
+        "base": 100,
         "divisor": 1,
         "unit": "个百分点"
       }
@@ -985,8 +985,8 @@
     "parameters": [
       {
         "key": "healing_bp",
-        "text": "直接治疗量提高60%",
-        "base": 6000,
+        "text": "直接治疗量提高150%",
+        "base": 15000,
         "divisor": 100,
         "unit": "%"
       }
@@ -1021,8 +1021,8 @@
     "parameters": [
       {
         "key": "status_reduction_pct",
-        "text": "各提高35个百分点",
-        "base": 35,
+        "text": "各提高50个百分点",
+        "base": 50,
         "divisor": 1,
         "unit": "个百分点"
       }
@@ -1033,8 +1033,8 @@
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "受到伤害降低25%",
-        "base": 25,
+        "text": "受到伤害降低30%",
+        "base": 30,
         "divisor": 1,
         "unit": "%"
       }
@@ -1045,8 +1045,8 @@
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "伤害降低40%",
-        "base": 40,
+        "text": "伤害降低50%",
+        "base": 50,
         "divisor": 1,
         "unit": "%"
       }
@@ -1066,23 +1066,16 @@
   },
   {
     "id": "YS-D08",
-    "parameters": [
-      {
-        "key": "reduction_pct",
-        "text": "伤害降低60%",
-        "base": 60,
-        "divisor": 1,
-        "unit": "%"
-      }
-    ]
+    "parameters": [],
+    "fixed_reason": "吟唱复活期间免疫伤害并每秒回复5%为固定机制。"
   },
   {
     "id": "YS-D09",
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "伤害降低35%",
-        "base": 35,
+        "text": "伤害降低40%",
+        "base": 40,
         "divisor": 1,
         "unit": "%"
       }
@@ -1093,8 +1086,8 @@
     "parameters": [
       {
         "key": "reduction_pct",
-        "text": "伤害降低40%",
-        "base": 40,
+        "text": "伤害降低55%",
+        "base": 55,
         "divisor": 1,
         "unit": "%"
       }
@@ -1136,8 +1129,8 @@
     "parameters": [
       {
         "key": "restore_cap_pct",
-        "text": "最大法力的20%",
-        "base": 20,
+        "text": "最大法力的40%",
+        "base": 40,
         "divisor": 1,
         "unit": "%"
       }
@@ -1160,8 +1153,8 @@
     "parameters": [
       {
         "key": "buff_bp",
-        "text": "原加速强度提高30%",
-        "base": 3000,
+        "text": "原加速强度提高60%",
+        "base": 6000,
         "divisor": 100,
         "unit": "%"
       }

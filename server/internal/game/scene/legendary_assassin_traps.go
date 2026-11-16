@@ -94,8 +94,10 @@ func legendaryAssassinSidePlacements(owner, at domain.Pos, radius int32, def dom
 	}
 	nativeRadius := float64(radius) * 10000 / float64(10000+def.LegendaryModifiers.RadiusBP+def.LegendaryModifiers.TrapRadiusBP)
 	var positions []domain.Pos
-	for _, sign := range []float64{-1, 1} {
-		positions = append(positions, domain.Pos{MapID: at.MapID, X: at.X - sign*dy/length*nativeRadius*.75, Y: at.Y + sign*dx/length*nativeRadius*.75})
+	for _, offset := range []float64{.75, 1.5} {
+		for _, sign := range []float64{-1, 1} {
+			positions = append(positions, domain.Pos{MapID: at.MapID, X: at.X - sign*dy/length*nativeRadius*offset, Y: at.Y + sign*dx/length*nativeRadius*offset})
+		}
 	}
 	return positions
 }

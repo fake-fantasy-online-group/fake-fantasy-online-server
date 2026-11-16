@@ -129,7 +129,7 @@ func TestHealerIndependentA02(t *testing.T) {
 		if !on {
 			base = loss
 		} else {
-			healerSoloNear(t, loss, base, 185)
+			healerSoloNear(t, loss, base, 250)
 			_, n := healerSoloCount(s, m.ID)
 			if n != 2 {
 				t.Fatal("echo recursion/extra hit", n)
@@ -298,7 +298,7 @@ func TestHealerIndependentA08(t *testing.T) {
 	long := healerSoloMonster(s, 903, 701, 100)
 	nativeRepairCast(t, s, p, 10317, m.ID)
 	for _, v := range []*entity.Entity{m, inside} {
-		healerSoloNear(t, 100000-v.HP, base, 180)
+		healerSoloNear(t, 100000-v.HP, base, 300)
 		_, n := healerSoloCount(s, v.ID)
 		if n != 1 || !v.Status.HasEffective(1008) {
 			t.Fatal("rectangle/primary/blind", n)
@@ -588,7 +588,7 @@ func TestHealerIndependentA07(t *testing.T) {
 	for i := 1; i <= 4; i++ {
 		s.tick += domain.Ticks(1000)
 		s.stepLegendaryPowers()
-		healerSoloNear(t, start-m.HP, base, int32(i*30))
+		healerSoloNear(t, start-m.HP, base, int32(i*150))
 		if edge.Status.Count() != 0 {
 			t.Fatal("field applied blind")
 		}
@@ -599,7 +599,7 @@ func TestHealerIndependentA07(t *testing.T) {
 	if m.HP != hp || outside.HP != 100000 {
 		t.Fatal("field duration/radius")
 	}
-	healerSoloNear(t, 100000-edge.HP, base, 120)
+	healerSoloNear(t, 100000-edge.HP, base, 600)
 	// Create three accepted native casts without advancing the zone clock. The
 	// normal skill cooldown is cleared only to exercise the two-slot field pool.
 	s, p, m = healerSoloFixture(t, "YS-A07", domain.Learned{10317: 1}, true)
@@ -610,7 +610,7 @@ func TestHealerIndependentA07(t *testing.T) {
 	hp = m.HP
 	s.tick += domain.Ticks(1000)
 	s.stepLegendaryPowers()
-	healerSoloNear(t, hp-m.HP, base, 30)
+	healerSoloNear(t, hp-m.HP, base, 150)
 	again := m.HP
 	s.stepLegendaryPowers()
 	if m.HP != again {
@@ -702,7 +702,7 @@ func TestHealerIndependentA19(t *testing.T) {
 		}
 		pos := side.Pos
 		nativeRepairCast(t, s, p, 10325, m.ID)
-		if 100000-m.HP != 200 || 100000-side.HP != 200 || out.HP != 100000 {
+		if 100000-m.HP != 500 || 100000-side.HP != 500 || out.HP != 100000 {
 			t.Fatal("shackle damage/radius")
 		}
 		if kind == "normal" {
@@ -911,14 +911,14 @@ func TestHealerIndependentA26(t *testing.T) {
 		if !on {
 			baseDamage = hp - m.HP
 		} else {
-			healerSoloNear(t, hp-m.HP, baseDamage, 140)
+			healerSoloNear(t, hp-m.HP, baseDamage, 200)
 			if !legendaryCasterHasSkill(a, 10321) || !legendaryCasterHasSkill(b, 10321) || !legendaryCasterHasSkill(excluded, 10321) || legendaryCasterHasSkill(out, 10321) {
 				t.Fatal("all in-range additional recipients")
 			}
 		}
 	}
 }
-func TestHealerIndependentA27(t *testing.T) { healerSoloStatusDamage(t, "YS-A27", 10311, 150) }
+func TestHealerIndependentA27(t *testing.T) { healerSoloStatusDamage(t, "YS-A27", 10311, 220) }
 func TestHealerIndependentA28(t *testing.T) {
 	for _, on := range []bool{false, true} {
 		s, p, m := healerSoloFixture(t, "YS-A28", domain.Learned{10302: 1}, on)
@@ -969,7 +969,7 @@ func TestHealerIndependentA29(t *testing.T) {
 				} else if mode == "native" {
 					healerSoloNear(t, loss, base, 140)
 				} else {
-					healerSoloNear(t, loss, base, 190)
+					healerSoloNear(t, loss, base, 240)
 					if 100000-side.HP != loss || out.HP != 100000 {
 						t.Fatal("release full damage/final circle geometry", skill, loss, 100000-side.HP)
 					}
@@ -1032,7 +1032,7 @@ func TestHealerIndependentD01(t *testing.T) {
 		if !on {
 			base = p.HP - 1
 		} else {
-			healerSoloNear(t, p.HP-1, base, 160)
+			healerSoloNear(t, p.HP-1, base, 250)
 		}
 		if universalShieldValue(p) != 0 {
 			t.Fatal("direct healing generated shield")
@@ -1136,7 +1136,7 @@ func TestHealerIndependentD04(t *testing.T) {
 			st := healerSoloStatus(t, p, 10321)
 			want := int32(900)
 			if on {
-				want = 550
+				want = 400 // native 10% plus 50 percentage points
 			}
 			if got := healerSoloIncoming(s, p, m, magic, false); got != want {
 				t.Fatal("physical/magic reduction consumer", magic, on, got, want)
@@ -1207,7 +1207,7 @@ func healerSoloWindup(t *testing.T, id string, skill domain.SkillID, pct int32, 
 		p.HP = 10000
 		cancelWant := int32(1000)
 		if id == "YS-D05" && mode != "off" && mode != "missing_condition" {
-			cancelWant = 750
+			cancelWant = 700
 		}
 		if got = healerSoloIncoming(s, p, m, false, false); got != cancelWant {
 			t.Fatal("wrong protection after cancellation", got, cancelWant)
@@ -1215,11 +1215,11 @@ func healerSoloWindup(t *testing.T, id string, skill domain.SkillID, pct int32, 
 	}
 }
 func TestHealerIndependentD05(t *testing.T) {
-	healerSoloWindup(t, "YS-D05", 10304, 75, true, true)
-	healerSoloWindup(t, "YS-D05", 10305, 75, true, true)
+	healerSoloWindup(t, "YS-D05", 10304, 70, true, true)
+	healerSoloWindup(t, "YS-D05", 10305, 70, true, true)
 }
-func TestHealerIndependentD06(t *testing.T) { healerSoloWindup(t, "YS-D06", 10304, 60, false, true) }
-func TestHealerIndependentD08(t *testing.T) { healerSoloWindup(t, "YS-D08", 10305, 40, false, false) }
+func TestHealerIndependentD06(t *testing.T) { healerSoloWindup(t, "YS-D06", 10304, 50, false, true) }
+func TestHealerIndependentD08(t *testing.T) { healerSoloWindup(t, "YS-D08", 10305, 0, false, false) }
 func TestHealerIndependentD09(t *testing.T) {
 	for _, on := range []bool{false, true} {
 		for _, active := range []bool{false, true} {
@@ -1232,7 +1232,7 @@ func TestHealerIndependentD09(t *testing.T) {
 			got := healerSoloIncoming(s, p, m, false, true)
 			want := int32(1000)
 			if on && active {
-				want = 650
+				want = 600
 			}
 			if got != want {
 				t.Fatal("actual native basic mitigation", on, active, got)
@@ -1248,8 +1248,12 @@ func TestHealerIndependentD09(t *testing.T) {
 				}
 			}
 			p.HP = 10000
-			if got = healerSoloIncoming(s, p, m, false, false); got != 1000 {
-				t.Fatal("nonbasic skill improperly mitigated", got)
+			wantSkill := int32(1000)
+			if on && active { // YS-D09 now covers basic attacks and skills alike
+				wantSkill = 600
+			}
+			if got = healerSoloIncoming(s, p, m, false, false); got != wantSkill {
+				t.Fatal("nonbasic skill mitigation", got, wantSkill)
 			}
 		}
 	}
@@ -1268,7 +1272,7 @@ func TestHealerIndependentD10(t *testing.T) {
 		}
 		want := int32(1000)
 		if owner == p.ID {
-			want = 600
+			want = 450 - p.MaxHP/100 // 55% reduction, then the 1% max-HP heal on hit
 		}
 		if got := healerSoloIncoming(s, p, m, false, false); got != want {
 			t.Fatal("shackle ownership damage", owner, got, want)
@@ -1331,7 +1335,7 @@ func TestHealerIndependentU01(t *testing.T) {
 		if !on {
 			baseTick = tick
 		} else {
-			healerSoloNear(t, tick, baseTick, 150)
+			healerSoloNear(t, tick, baseTick, 200)
 		}
 		if tick <= 0 {
 			t.Fatal("HOT did not heal")
@@ -1425,7 +1429,7 @@ func TestHealerIndependentU03(t *testing.T) {
 		nativeRepairCast(t, s, p, 10302, a.ID)
 		want1, want2 := int32(0), int32(0)
 		if mode == "overflow" {
-			want1, want2 = 40, 60
+			want1, want2 = 80, 20 // lowest ratio first, each capped at 40% max MP
 		}
 		if mode == "deficit_cap" {
 			want1, want2 = 200, 400
@@ -1519,7 +1523,7 @@ func TestHealerIndependentU05(t *testing.T) {
 		nativeRepairCast(t, s, p, 10311, center.ID)
 		for _, e := range []*entity.Entity{p, center, b} {
 			st := healerSoloStatus(t, e, 10311)
-			if st.Def.DurationSec != 30 || len(st.Def.Affixes) != 1 || st.Def.Affixes[0].Value != 26 {
+			if st.Def.DurationSec != 30 || len(st.Def.Affixes) != 1 || st.Def.Affixes[0].Value != 32 { // native 20 +60%
 				t.Fatal("haste strength/duration", st.Def.Affixes)
 			}
 			count := 0
@@ -1677,7 +1681,7 @@ func TestHealerIndependentU09(t *testing.T) {
 		nativeRepairCast(t, s, p, 10305, a.ID)
 		wantHP, wantCost := int32(50), int32(81)
 		if on {
-			wantHP = 700
+			wantHP = 1000
 			wantCost -= 81 * 50 / 100
 		}
 		if a.HP != wantHP || 10000-p.MP != wantCost {
@@ -1859,7 +1863,7 @@ func TestHealerIndependentCombinations(t *testing.T) {
 		s, p, m := nativeRepairFixture(t, domain.Healer, domain.Learned{10319: 1}, "YS-A01", "YS-A02")
 		side := healerSoloMonster(s, 901, 140, 100)
 		nativeRepairCast(t, s, p, 10319, m.ID)
-		if 100000-m.HP != 388 || 100000-side.HP != 126+126*85/100 {
+		if 100000-m.HP != 525 || 100000-side.HP != 126*250/100 {
 			t.Fatal("secondary lost distinct echo or primary lost full hit", 100000-m.HP, 100000-side.HP)
 		}
 		_, primaryCount := healerSoloCount(s, m.ID)
@@ -1895,7 +1899,7 @@ func TestHealerIndependentCombinations(t *testing.T) {
 		side := healerSoloMonster(s, 901, 330, 100)
 		nativeRepairCast(t, s, p, 10325, m.ID)
 		for _, v := range []*entity.Entity{m, side} {
-			if 100000-v.HP != 320 {
+			if 100000-v.HP != 1250 {
 				t.Fatal("A18 did not amplify granted shackle", 100000-v.HP)
 			}
 			a := healerSoloStatus(t, v, 10325)
@@ -1928,7 +1932,7 @@ func TestHealerIndependentCombinations(t *testing.T) {
 		a := healerSoloAlly(t, s, p, 2, 140, 100, 1, 1000)
 		b := healerSoloAlly(t, s, p, 3, 150, 100, 1, 2000)
 		nativeRepairCast(t, s, p, 10301, p.ID)
-		if p.HP != 1761 || a.HP != 321 || b.HP != 481 {
+		if p.HP != 2751 || a.HP != 501 || b.HP != 751 {
 			t.Fatal("full D01 modifier missing on extra recipients", p.HP, a.HP, b.HP)
 		}
 		if universalShieldValue(p) != 0 || universalShieldValue(a) != 0 {
@@ -2040,7 +2044,7 @@ func TestHealerIndependentA07OverlapUsesStrongerField(t *testing.T) {
 	before := m.HP
 	s.tick += domain.Ticks(1000)
 	s.stepLegendaryPowers()
-	healerSoloNear(t, before-m.HP, strongBase, 30)
+	healerSoloNear(t, before-m.HP, strongBase, 150)
 }
 func TestHealerIndependentU02ReductionStrength(t *testing.T) {
 	for _, on := range []bool{false, true} {
@@ -2089,7 +2093,7 @@ func TestHealerIndependentA26AllyHolyDamage(t *testing.T) {
 		if !on {
 			baseline = 100000 - m.HP
 		} else {
-			healerSoloNear(t, 100000-m.HP, baseline, 140)
+			healerSoloNear(t, 100000-m.HP, baseline, 200)
 		}
 	}
 }
@@ -2210,7 +2214,10 @@ func TestHealerIndependentU01NativeTickCount(t *testing.T) {
 		if !on {
 			baseTotal = total
 		} else {
-			healerSoloNear(t, total, baseTotal, 150)
+			// +100% per tick; late ticks are clipped by max HP, so require clearly more than the old +50%.
+			if total*100 <= baseTotal*160 {
+				t.Fatal("native HOT total", total, baseTotal)
+			}
 		}
 	}
 }
@@ -2263,13 +2270,13 @@ func TestHealerIndependentD05InstantHealRetainsRejuvenationGuard(t *testing.T) {
 	if len(s.casts) != 1 || !s.casts[0].releaseAtWall.IsZero() || s.casts[0].windup != nil {
 		t.Fatal("native instant Heal unexpectedly acquired a windup")
 	}
-	if got := healerSoloIncoming(s, p, m, false, true); got != 750 {
+	if got := healerSoloIncoming(s, p, m, false, true); got != 700 {
 		t.Fatal("rejuvenation guard missing during instant Heal", got)
 	}
 	s.stepCastsAt(s.now().Add(time.Second), false)
 	s.stepCastsAt(s.now().Add(2*time.Second), false)
 	p.HP = 10000
-	if got := healerSoloIncoming(s, p, m, false, true); got != 750 {
+	if got := healerSoloIncoming(s, p, m, false, true); got != 700 {
 		t.Fatal("rejuvenation guard missing after instant Heal", got)
 	}
 }

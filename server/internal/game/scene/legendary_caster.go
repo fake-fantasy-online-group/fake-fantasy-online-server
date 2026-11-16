@@ -143,7 +143,7 @@ func init() {
 
 	registerLegendarySynergyHandler("YS-A02", legendaryHandler{AfterHit: func(c *legendaryContext) {
 		if c.Skill == legendaryLightBolt && legendaryCasterLanded(c) && legendaryCasterOnce(c, c.Target.ID, "second-light") {
-			c.Damage(c.Target, specialScale(c.Hit.Amount, c.RollValue("proc_pct", 85)), true, true)
+			c.Damage(c.Target, specialScale(c.Hit.Amount, c.RollValue("proc_pct", 150)), true, true)
 		}
 	}})
 	registerLegendarySynergyHandler("YS-A01", legendaryHandler{

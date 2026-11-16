@@ -12,7 +12,7 @@ func TestLegendaryUniversalExtendedGeometryAndUtilities(t *testing.T) {
 		effect domain.EffectKind
 		want   int32
 	}{
-		{"TY-A02", domain.EffectDamage, 160}, {"TY-A03", domain.EffectDamage, 150}, {"TY-A07", domain.EffectDamage, 200}, {"TY-A09", domain.EffectDamage, 0}, {"TY-A19", domain.EffectDamageMP, 8000}, {"TY-A21", domain.EffectPlaceTrap, 150}, {"TY-U01", domain.EffectDamage, 400}, {"TY-U04", domain.EffectHeal, 100}, {"TY-U06", domain.EffectRestoreMP, 100}, {"TY-U07", domain.EffectTeleportPoint, 180}, {"TY-U16", domain.EffectHeal, 200}, {"TY-U17", domain.EffectResurrect, 100}, {"TY-U18", domain.EffectHeal, 10000}, {"TY-U19", domain.EffectRevealInvisible, 250},
+		{"TY-A02", domain.EffectDamage, 160}, {"TY-A03", domain.EffectDamage, 150}, {"TY-A07", domain.EffectDamage, 200}, {"TY-A09", domain.EffectDamage, 0}, {"TY-A19", domain.EffectDamageMP, 8000}, {"TY-A21", domain.EffectPlaceTrap, 150}, {"TY-U01", domain.EffectDamage, 400}, {"TY-U04", domain.EffectHeal, 100}, {"TY-U06", domain.EffectRestoreMP, 100}, {"TY-U07", domain.EffectTeleportPoint, 220}, {"TY-U16", domain.EffectHeal, 200}, {"TY-U17", domain.EffectResurrect, 100}, {"TY-U18", domain.EffectHeal, 10000}, {"TY-U19", domain.EffectRevealInvisible, 250},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m, _ := universalTestContext(t, tc.id)

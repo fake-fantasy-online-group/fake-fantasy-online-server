@@ -145,6 +145,14 @@ func (s *eventSink) Emit(ev event.Event) {
 		pkts, stateEncoded = singlePacket[:], true
 	case event.EntityMoved:
 		singlePacket[0] = protocol.EntityMove(e)
+		if e.Dash && s.sess != nil {
+			s.sess.mu.Lock()
+			dash := s.sess.dashMoveV1
+			s.sess.mu.Unlock()
+			if dash {
+				singlePacket[0] = protocol.EntityDash(e)
+			}
+		}
 		pkts, stateEncoded = singlePacket[:], true
 	case event.EntitySpawned:
 		if e.Kind == domain.KindDrop && e.Ground != nil && s.sess != nil {

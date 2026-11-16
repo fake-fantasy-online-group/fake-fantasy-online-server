@@ -116,11 +116,11 @@ func TestLegendaryUniversalSourceAccuracyAndReceivedHealing(t *testing.T) {
 		t.Fatal("accuracy not at pre-roll hook")
 	}
 	s, p, _, _ = universalTestContext(t, "TY-D12")
-	if s.legendaryIncomingHeal(p, 100) != 180 {
+	if s.legendaryIncomingHeal(p, 100) != 220 {
 		t.Fatal("received healing missing")
 	}
 	s.legendaryState().depth = 1
-	if s.legendaryIncomingHeal(p, 100) != 180 {
+	if s.legendaryIncomingHeal(p, 100) != 220 {
 		t.Fatal("generated heal lost pure received-healing modifier")
 	}
 }

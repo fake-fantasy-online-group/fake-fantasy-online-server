@@ -76,7 +76,7 @@ func legendaryHealerFarClinic() legendaryHandler {
 func legendaryHealerRejuvenationGuard() legendaryHandler {
 	return legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if legendaryHealerInvested(c, 10303) && legendaryCasterHasSkill(c.Owner, 10303) {
-			return specialScale(n, 100-c.RollValue("reduction_pct", 25))
+			return specialScale(n, 100-c.RollValue("reduction_pct", 30))
 		}
 		return n
 	}}

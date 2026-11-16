@@ -108,7 +108,7 @@ func assassinCoveragePower(t *testing.T, id string) {
 		TestLegendaryAssassinSynergyReplacementCritUsesNativeRules(t)
 		assassinCoverageCrit(t)
 	case "CK-A03", "CK-A04":
-		skill, want := domain.SkillID(10221), int32(180)
+		skill, want := domain.SkillID(10221), int32(400) // +300%; the x1.3 clause starts beyond 300
 		if id == "CK-A04" {
 			skill, want = 10205, 150
 		}
@@ -236,7 +236,7 @@ func assassinCoverageLine(t *testing.T) {
 			}
 		}
 	}
-	assassinCoverageCosts(t, "CK-A01", []domain.SkillID{10221}, 100, 7000)
+	assassinCoverageCosts(t, "CK-A01", []domain.SkillID{10221}, 100, 2000)
 }
 func assassinCoverageSplash(t *testing.T) {
 	for _, radius := range []int32{0, 200} {
@@ -410,6 +410,9 @@ func assassinCoveragePoisonLifetime(t *testing.T, id string) {
 			want := int32(10)
 			if enabled && eligible {
 				want = 30
+				if id == "CK-A09" {
+					want = 40
+				}
 			}
 			for i := 0; i < 5; i++ {
 				hp := m.HP
@@ -517,9 +520,9 @@ func assassinCoverageTrap(t *testing.T, id string) {
 		if enabled {
 			switch id {
 			case "CK-A11":
-				want = 140
+				want = 200
 			case "CK-A12":
-				want = 190
+				want = 300
 			case "CK-A16", "CK-A17":
 				want = 150
 			}
@@ -544,7 +547,7 @@ func assassinCoverageTrap(t *testing.T, id string) {
 		if id == "CK-A17" {
 			expected := int32(100)
 			if enabled {
-				expected = 150
+				expected = 400 // independent final x4
 			}
 			if assassinCoverageHit(s, p, m, assassinCoverageSkill(10209)) != expected {
 				t.Fatal("backstab clause missing")
@@ -580,7 +583,7 @@ func assassinCoverageTriple(t *testing.T) {
 		}
 		want := 1
 		if enabled {
-			want = 3
+			want = 5
 		}
 		if len(s.traps) != want {
 			t.Fatal("placement cardinality", len(s.traps))
@@ -594,14 +597,16 @@ func assassinCoverageTriple(t *testing.T) {
 				t.Fatal("side placement direction")
 			}
 		}
-		if !positions[0] || enabled && (!positions[float64(radius)*.75] || !positions[-float64(radius)*.75]) {
+		if !positions[0] || enabled && (!positions[float64(radius)*.75] || !positions[-float64(radius)*.75] || !positions[float64(radius)*1.5] || !positions[-float64(radius)*1.5]) {
 			t.Fatal("native radius side spacing", positions, radius)
 		}
 		for _, tr := range s.traps {
 			s.triggerAssassinTrap(tr, false)
 		}
 		damage, hits := assassinRegressionDamage(s, m.ID, 10213)
-		if damage != int32(want)*200 || hits != want || len(s.traps) != 0 {
+		// The outer pair sits 150% of the native radius away and cannot reach the center target.
+		reach := min(want, 3)
+		if damage != int32(reach)*200 || hits != reach || len(s.traps) != 0 {
 			t.Fatal("full overlapping payload or recursive children", damage, hits, len(s.traps))
 		}
 	}
@@ -714,7 +719,7 @@ func assassinCoverageBackstabGate(t *testing.T) {
 					want = 130
 				}
 				if enabled {
-					want = want * 125 / 100
+					want = want * 200 / 100
 				}
 				if stealth {
 					want = want * 150 / 100
@@ -742,6 +747,9 @@ func assassinCoverageLeech(t *testing.T, id string, skill domain.SkillID) {
 			want := int32(0)
 			if enabled {
 				want = 30
+				if id == "CK-D03" {
+					want = 60 // 30% of each target's actual loss
+				}
 				if clamp {
 					want = 1
 				}
@@ -807,7 +815,7 @@ func assassinCoverageCounter(t *testing.T, id string) {
 			heal = want / 10
 		}
 		if enabled && id == "CK-D03" {
-			heal = 15
+			heal = 30
 		}
 		if p.HP != 5000+heal {
 			t.Fatal("counter healing", p.HP, heal)
@@ -914,7 +922,10 @@ func assassinCoveragePull(t *testing.T, id string) {
 				assassinNativeHits(s, p, d, m.ID, ids)
 				wantDamage := int32(100)
 				if enabled && id == "CK-A28" {
-					wantDamage = 145
+					wantDamage = 400
+				}
+				if enabled && id == "CK-A30" && learned {
+					wantDamage = 200 // gathered survivors take a second hit equal to the native damage
 				}
 				if hp-m.HP != min(hp, wantDamage) {
 					t.Fatal("pull changed native damage", hp-m.HP, wantDamage)
@@ -1031,7 +1042,8 @@ func assassinCoverageDefense(t *testing.T, id string) {
 				hp := p.HP
 				incomingAssassinHit(s, p, m, kind, b)
 				want := int32(1000)
-				if enabled && active && (id != "CK-D04" || kind == "native") {
+				// CK-D10 now dodges instead of reducing damage.
+				if enabled && active && id != "CK-D10" && (id != "CK-D04" || kind == "native") {
 					want = 800
 					if id == "CK-D01" || id == "CK-D07" {
 						want = 650
@@ -1048,7 +1060,7 @@ func assassinCoverageDefense(t *testing.T, id string) {
 				}
 				if id == "CK-D01" || id == "CK-D04" || id == "CK-D07" {
 					if id == "CK-D07" {
-						s.tick += domain.Ticks(8000)
+						s.tick += domain.Ticks(12000)
 					}
 					hp = p.HP
 					incomingAssassinHit(s, p, m, kind, b)
@@ -1093,10 +1105,7 @@ func assassinCoverageDefense(t *testing.T, id string) {
 			m.Stats = domain.Stats{MinAtk: 1000, MaxAtk: 1000}
 			hp := p.HP
 			incomingAssassinHit(s, p, m, "native", combat.Blow{GuaranteedHit: true, Trap: true})
-			want := int32(500)
-			if enabled {
-				want = 400
-			}
+			want := int32(500) // CK-D10 no longer stacks a fixed reduction on the native half
 			if hp-p.HP != want {
 				t.Fatal("native probabilistic half removed", hp-p.HP, want)
 			}
@@ -1180,7 +1189,7 @@ func assassinCoverageControl(t *testing.T) {
 			a := assassinCoverageActive(t, p, control.ID)
 			duration := 10000
 			if enabled {
-				duration = 7000
+				duration = 5000
 			}
 			if a.ExpireAt-s.tick != domain.Ticks(duration) {
 				t.Fatal("control duration", control.ID, a.ExpireAt-s.tick)
@@ -1216,10 +1225,10 @@ func assassinCoverageCleanse(t *testing.T) {
 		poisonTicks(s, 1)
 		want := int32(100)
 		if enabled {
-			want = 70
+			want = 40
 		}
 		if hp-p.HP != want {
-			t.Fatal("poison 30% reduction", hp-p.HP)
+			t.Fatal("poison 60% reduction", hp-p.HP)
 		}
 		for _, source := range []domain.EntityID{901, 902} {
 			p.Status.ApplyWithOverlay(poison, s.tick, source, domain.StatusOverlay{{Existing: domain.StatusPoison, Incoming: domain.StatusPoison}: domain.OverlayCoexist})
@@ -1262,7 +1271,7 @@ func assassinCoverageMaxHP(t *testing.T) {
 		s.refreshStats(p)
 		maxima[n] = p.MaxHP
 	}
-	if maxima[0] <= 0 || maxima[1] != maxima[0]*120/100 {
+	if maxima[0] <= 0 || maxima[1] != maxima[0]*140/100 {
 		t.Fatal("actual maximum HP", maxima)
 	}
 	assassinCoverageCosts(t, "CK-D09", []domain.SkillID{10208}, 70, 10000)
@@ -1287,75 +1296,8 @@ func assassinCoverageRefund(t *testing.T) {
 		}
 	}
 }
-func assassinCoverageDisarm(t *testing.T) {
-	for _, chance := range []int32{0, 7500, 10000} {
-		for _, enabled := range []bool{false, true} {
-			s, p, m := assassinCoverageFixture(t, "CK-U03", enabled)
-			s.rng = rand.New(meleeAuditZeroSource{})
-			ids := []domain.EntityID{}
-			for _, x := range []float64{150, 299, 301} {
-				s.placeTrap(m, domain.SkillDef{ID: 10213}, domain.Pos{MapID: p.Pos.MapID, X: x, Y: 100}, 50, 100)
-				for id, tr := range s.traps {
-					if tr.Pos.X == x {
-						ids = append(ids, id)
-						tr.Trap.VisibleTo[p.ID] = struct{}{}
-					}
-				}
-			}
-			s.disarmTrap(p, ids[0], chance)
-			success := chance > 0 || enabled
-			if (s.traps[ids[0]] == nil) != success || (s.traps[ids[1]] == nil) != (enabled && success) || s.traps[ids[2]] == nil {
-				t.Fatal("disarm chance +25pp/cap/150 radius", chance, enabled, len(s.traps))
-			}
-		}
-	}
-	assassinCoverageCosts(t, "CK-U03", []domain.SkillID{10218}, 0, 10000)
-}
-func assassinCoverageDetect(t *testing.T) {
-	// A single-power native detector fixture. Repeated seeded native detection
-	// rolls make the radius boundary observable without changing its probability.
-	for _, enabled := range []bool{false, true} {
-		powers := []string{}
-		if enabled {
-			powers = []string{"CK-U04"}
-		}
-		s, p, m := nativeRepairFixture(t, domain.Assassin, domain.Learned{10228: 1}, powers...)
-		for _, dist := range []float64{199, 250, 301} {
-			s.placeTrap(m, domain.SkillDef{ID: 10213}, domain.Pos{MapID: p.Pos.MapID, X: p.Pos.X + dist, Y: p.Pos.Y}, 50, 100)
-		}
-		s.refreshStats(p)
-		baseSpeed := p.Stats.MoveSpeed
-		d := assassinRegressionCast(t, s, p, UseSkill{Skill: 10228})
-		wantSpeed := baseSpeed
-		if enabled {
-			wantSpeed = baseSpeed * 160 / 100
-		}
-		if p.Stats.MoveSpeed != wantSpeed {
-			t.Fatal("native detection release failed speed window", p.Stats.MoveSpeed, wantSpeed)
-		}
-		for i := 0; i < 50; i++ {
-			s.detectTraps(p, d.Radius, d.DirectEffects()[0].ChanceBP)
-		}
-		want := float64(200)
-		if enabled {
-			want = 300
-		}
-		for _, tr := range s.traps {
-			if tr.Trap.VisibleToPlayer(p.ID) != (tr.Pos.X-p.Pos.X <= want) {
-				t.Fatal("actual detection radius")
-			}
-		}
-	}
-	var speed [2]int32
-	for n, enabled := range []bool{false, true} {
-		s, p, _ := assassinCoverageFixture(t, "CK-U04", enabled)
-		s.refreshStats(p)
-		speed[n] = p.Stats.MoveSpeed
-	}
-	if speed[0] <= 0 || speed[1] != speed[0] {
-		t.Fatal("unconditional actual move speed", speed)
-	}
-}
+func assassinCoverageDisarm(t *testing.T) { buffPassAssassinTrapBreaker(t) }
+func assassinCoverageDetect(t *testing.T) { buffPassAssassinShadowStep(t) }
 func assassinCoverageRecovery(t *testing.T) {
 	for _, learned := range []bool{false, true} {
 		for _, skill := range []domain.SkillID{10221, 10205, 10206} {
@@ -1467,7 +1409,7 @@ func assassinCoverageStealthSpeed(t *testing.T) {
 			s.applyStatusDef(p, d, p.ID)
 			wantPct := nativePct
 			if enabled {
-				wantPct += 40
+				wantPct += 80
 			}
 			if p.Stats.MoveSpeed != base*(100+wantPct)/100 {
 				t.Fatal("actual native + extra stealth speed", base, p.Stats.MoveSpeed, wantPct)
@@ -1495,7 +1437,7 @@ func assassinCoverageCrit(t *testing.T) {
 			got := assassinCoverageHit(s, p, m, d)
 			want := int32(100)
 			if enabled {
-				want = 200 + bonus/100
+				want = (200 + bonus/100) * 3 // native crit, then the independent final x3
 			}
 			if got != want {
 				t.Fatal("native critical multiplier was replaced", got, want)
@@ -1530,7 +1472,7 @@ func TestAssassinUnitCoverageCombinations(t *testing.T) {
 		assassinRegressionCast(t, s, p, UseSkill{Skill: 10208, Target: p.ID})
 		for i := 0; i < 3; i++ {
 			d := assassinRegressionCast(t, s, p, UseSkill{Skill: 10213, At: &m.Pos})
-			if len(s.traps) != 3 {
+			if len(s.traps) != 5 {
 				t.Fatal("triple placement cardinality")
 			}
 			if !entityInvisible(p) {
@@ -1560,7 +1502,7 @@ func TestAssassinUnitCoverageCombinations(t *testing.T) {
 		}
 		ids := s.legendarySelectTargets(p, d, m.ID, []domain.EntityID{m.ID})
 		assassinNativeHits(s, p, d, m.ID, ids)
-		if m.MaxHP-m.HP != 200 || side.HP != 9875 {
+		if m.MaxHP-m.HP != 275 || side.HP != 9800 {
 			t.Fatal("fan primary-only additive bonus", m.HP, side.HP)
 		}
 	})
@@ -1619,31 +1561,6 @@ func TestAssassinUnitCoverageAdditional(t *testing.T) {
 		}
 		if successes == 0 || failures == 0 {
 			t.Fatal("ordinary poison corpus did not exercise success and failure")
-		}
-	})
-	t.Run("CK-U03_exact_probability", func(t *testing.T) {
-		for _, base := range []int32{0, 1000, 7499, 7500, 9000} {
-			for seed := int64(1); seed <= 24; seed++ {
-				for _, enabled := range []bool{false, true} {
-					s, p, m := assassinCoverageFixture(t, "CK-U03", enabled)
-					s.placeTrap(m, domain.SkillDef{ID: 10213}, m.Pos, 50, 100)
-					var target domain.EntityID
-					for id, tr := range s.traps {
-						target = id
-						tr.Trap.VisibleTo[p.ID] = struct{}{}
-					}
-					s.rng = rand.New(rand.NewSource(seed))
-					effective := base
-					if enabled {
-						effective = min(int32(10000), base+2500)
-					}
-					want := effective >= 10000 || effective > 0 && int32(rand.New(rand.NewSource(seed)).Intn(10000)) < effective
-					s.disarmTrap(p, target, base)
-					if (s.traps[target] == nil) != want {
-						t.Fatal("disarm not exact +2500BP", base, seed, enabled)
-					}
-				}
-			}
 		}
 	})
 	for _, id := range []string{"CK-A28", "CK-A30"} {
@@ -1762,7 +1679,10 @@ func TestAssassinUnitCoveragePullCombinationIndependentEffects(t *testing.T) {
 					}
 					wantDamage := int32(100)
 					if hasLimited {
-						wantDamage = 145
+						wantDamage = 400
+					}
+					if hasGather && learned {
+						wantDamage *= 2 // A30 second hit equals the actual native damage
 					}
 					if m.Pos.X != wantX || m.MaxHP-m.HP != wantDamage {
 						t.Fatalf("position/damage=(%v,%d) want(%v,%d)", m.Pos.X, m.MaxHP-m.HP, wantX, wantDamage)

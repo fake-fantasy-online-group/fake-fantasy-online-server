@@ -58,7 +58,7 @@ func TestLegendaryCasterDefinitionModifiers(t *testing.T) {
 		id     string
 		skill  domain.SkillID
 		mp, cd int32
-	}{{"SS-A20", 10412, 100, 80}, {"SS-U01", 10432, 85, 0}, {"YS-U01", 10303, 80, 0}, {"YS-U02", 10322, 70, 100}} {
+	}{{"SS-A20", 10412, 100, 50}, {"SS-U01", 10432, 85, 0}, {"YS-U01", 10303, 80, 0}, {"YS-U02", 10322, 70, 100}} {
 		t.Run(tc.id, func(t *testing.T) {
 			_, c := legendaryCasterFixture(t, tc.id)
 			original, _ := c.Scene.skills.Get(tc.skill, 1)
@@ -131,11 +131,11 @@ func TestLegendaryCasterSecondLightImmediateNoTransfer(t *testing.T) {
 	c.Skill = legendaryLightBolt
 	hp := c.Target.HP
 	legendaryHandlers[c.Power.ID].AfterHit(c)
-	if c.Target.HP != hp-85 {
-		t.Fatal("not immediate85", hp-c.Target.HP)
+	if c.Target.HP != hp-150 {
+		t.Fatal("not immediate150", hp-c.Target.HP)
 	}
 	legendaryHandlers[c.Power.ID].AfterHit(c)
-	if c.Target.HP != hp-85 {
+	if c.Target.HP != hp-150 {
 		t.Fatal("same cast repeated")
 	}
 	c.RootID++
@@ -152,7 +152,7 @@ func TestLegendaryCasterRegenAndDispelStealFullDuration(t *testing.T) {
 	c.Skill = 10303
 	d := domain.StatusDef{DurationSec: 12, HPChanges: []domain.ResourceChange{{Value: 20, Mode: domain.ModeAbsolute}}}
 	legendaryHandlers[c.Power.ID].StatusApplied(c, &d)
-	if d.DurationSec != 12 || c.Scene.legendaryPeriodicAmount(domain.Active{Def: d}, int64(d.HPChanges[0].Value)) != 30 {
+	if d.DurationSec != 12 || c.Scene.legendaryPeriodicAmount(domain.Active{Def: d}, int64(d.HPChanges[0].Value)) != 40 {
 		t.Fatal(d)
 	}
 	_, c = legendaryCasterFixture(t, "SS-U02")
@@ -181,7 +181,7 @@ func TestLegendaryCasterNativeCastEchoAndBurn(t *testing.T) {
 		skill domain.SkillID
 		prof  uint8
 		want  int32
-	}{{"YS-A02", 10319, 4, 185}, {"SS-A02", 10401, 5, 180}} {
+	}{{"YS-A02", 10319, 4, 250}, {"SS-A02", 10401, 5, 180}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, c := legendaryCasterFixture(t, tc.id)
 			d := domain.SkillDef{ID: tc.skill, Level: 1, Prof: int32(tc.prof), Kind: domain.SkillSingle, HurtType: domain.HurtHoly, Dist: 500, MPCost: 20, TargetEnemy: true, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
@@ -258,7 +258,7 @@ func TestLegendaryCasterSynergyFireNativeBurnBeforeSettlement(t *testing.T) {
 	}
 	incoming := *c
 	incoming.Power, _ = domain.LegendaryPower("SS-D09")
-	if n := legendaryHandlers["SS-D09"].BeforeIncoming(&incoming, 100); n != 60 {
+	if n := legendaryHandlers["SS-D09"].BeforeIncoming(&incoming, 100); n != 45 {
 		t.Fatal("burn ownership mitigation", n)
 	}
 }
@@ -395,20 +395,6 @@ func TestLegendaryCasterSynergyExorcismWeaknessPull(t *testing.T) {
 }
 
 func TestLegendaryCasterNativeBurnKillAndMirrorReflection(t *testing.T) {
-	t.Run("burn death", func(t *testing.T) {
-		s, c := legendaryCasterFixture(t, "SS-U05")
-		c.Owner.MP = 500
-		c.Target.HP = 5
-		a := domain.Active{Source: c.Owner.ID, Def: domain.StatusDef{ID: 1036, SkillSnapshotID: 10421, SourceSkillID: 10421, TypeKnown: true, Type: domain.StatusBad, HPChanges: []domain.ResourceChange{{Value: -10, Mode: domain.ModeAbsolute}}}}
-		s.tickStatus(c.Target, a)
-		if c.Owner.MP != 600 {
-			t.Fatal("native fatal burn refund", c.Owner.MP)
-		}
-		s.legendaryPeriodicResolved(c.Owner, c.Target, a, event.DamageDealt{Flag: event.DamageFatal})
-		if c.Owner.MP != 600 {
-			t.Fatal("duplicate death refund", c.Owner.MP)
-		}
-	})
 	t.Run("mirror replacement", func(t *testing.T) {
 		s, c := legendaryCasterFixture(t, "SS-A26")
 		c.Target.Stats.MAtk = 100
@@ -419,7 +405,7 @@ func TestLegendaryCasterNativeBurnKillAndMirrorReflection(t *testing.T) {
 		if reflected <= 0 || before-c.Target.HP != reflected {
 			t.Fatal("mirror reflection doubled or missing", reflected, before-c.Target.HP)
 		}
-		if reflected != min(raw*120/100, c.Owner.MaxHP*18/100) {
+		if reflected != min(raw*300/100, c.Owner.MaxHP*30/100) {
 			t.Fatal("mirror percentage/cap", raw, reflected)
 		}
 	})
@@ -588,7 +574,7 @@ func TestLegendaryCasterNativeWindupDefenseEndsWithCast(t *testing.T) {
 		id    string
 		skill domain.SkillID
 		pct   int32
-	}{{"YS-D06", 10304, 60}, {"YS-D08", 10305, 40}} {
+	}{{"YS-D06", 10304, 50}, {"YS-D08", 10305, 0}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, c := legendaryCasterFixture(t, tc.id)
 			h := legendaryHandlers[tc.id]
@@ -668,7 +654,7 @@ func TestLegendaryCasterDefenseGrantWorksWithoutRecipientGear(t *testing.T) {
 	for _, p := range []*entity.Entity{c.Owner, ally} {
 		d := domain.SkillDef{ID: 10319, Kind: domain.SkillSingle, HurtType: domain.HurtHoly, Effect: domain.SkillEffect{Kind: domain.EffectDamage, DamagePct: 100}}
 		s.legendaryPrepareSkill(p, &d, c.Target.ID)
-		if d.LegendaryModifiers.DamageBP != 4000 {
+		if d.LegendaryModifiers.DamageBP != 10000 {
 			t.Fatal("native defense holy grant absent or duplicated", p.ID, d.LegendaryModifiers.DamageBP)
 		}
 		if p.Status.DamageReductionPct(true) < 35 {

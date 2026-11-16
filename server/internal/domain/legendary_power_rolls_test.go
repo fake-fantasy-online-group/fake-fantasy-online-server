@@ -182,7 +182,7 @@ func TestLegendaryPowerRollAllPowersClassified(t *testing.T) {
 			t.Fatal("cosmetic range without a variable coefficient", spec.ID)
 		}
 	}
-	if ranged != 315 || fixed != 15 {
+	if ranged != 314 || fixed != 16 { // JK-U01 became a fixed lunge switch
 		t.Fatal("re-review power coverage after classification changes", ranged, fixed)
 	}
 }

@@ -23,7 +23,7 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("JK-U03", legendaryHandler{RootFinished: func(c *legendaryContext) {
 		if c.Skill == 10119 && swordLandedCount(c.Owner.ID, c.Skill, c.Hits) > 0 {
-			c.RefundMP(specialScale(c.PaidMP, c.RollValue("refund_pct", 60)))
+			c.RefundMP(specialScale(c.PaidMP, c.RollValue("refund_pct", 80)))
 		}
 	}})
 	registerLegendarySynergyHandler("JK-U05", legendaryHandler{CastReleased: func(c *legendaryContext) {

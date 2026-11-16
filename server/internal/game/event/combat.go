@@ -14,6 +14,7 @@ const (
 	DamageFatal                          // 致命一击, 目标 HP 归零
 	DamageMagic                          // 法术伤害(不判命中, 见 docs/战斗公式.md)
 	DamageOpening                        // 交战的第一击。仅供服务端交战跟踪；客户端线上没有“首击”表现位
+	DamageDodged                         // 传奇闪避造成的未命中，总与 DamageMiss 同时出现。仅服务端使用，不占客户端表现位
 )
 
 func (f DamageFlag) Has(x DamageFlag) bool { return f&x != 0 }

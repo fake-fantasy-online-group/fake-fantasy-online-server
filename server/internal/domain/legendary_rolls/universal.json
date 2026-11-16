@@ -494,8 +494,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "提高50%",
-        "base": 50,
+        "text": "提高35%",
+        "base": 35,
         "divisor": 1,
         "unit": "%"
       }
@@ -505,9 +505,16 @@
     "id": "TY-D04",
     "parameters": [
       {
-        "key": "benefit",
-        "text": "提高50%",
-        "base": 50,
+        "key": "lifesteal_pct",
+        "text": "伤害的8%",
+        "base": 8,
+        "divisor": 1,
+        "unit": "%"
+      },
+      {
+        "key": "low_pct",
+        "text": "提高为15%",
+        "base": 15,
         "divisor": 1,
         "unit": "%"
       }
@@ -530,8 +537,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "降低55%",
-        "base": 5500,
+        "text": "降低40%",
+        "base": 4000,
         "divisor": 100,
         "unit": "%"
       }
@@ -542,8 +549,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "降低55%",
-        "base": 5500,
+        "text": "降低40%",
+        "base": 4000,
         "divisor": 100,
         "unit": "%"
       }
@@ -554,8 +561,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "降低55%",
-        "base": 5500,
+        "text": "降低40%",
+        "base": 4000,
         "divisor": 100,
         "unit": "%"
       }
@@ -573,8 +580,8 @@
       },
       {
         "key": "shield_pct",
-        "text": "最大生命20%",
-        "base": 20,
+        "text": "最大生命35%",
+        "base": 35,
         "divisor": 1,
         "unit": "%"
       }
@@ -623,15 +630,15 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "提高80%",
-        "base": 8000,
+        "text": "提高120%",
+        "base": 12000,
         "divisor": 100,
         "unit": "%"
       },
       {
         "key": "reduction_pct",
-        "text": "降低25%",
-        "base": 2500,
+        "text": "降低35%",
+        "base": 3500,
         "divisor": 100,
         "unit": "%"
       }
@@ -692,8 +699,8 @@
     "parameters": [
       {
         "key": "shield_pct",
-        "text": "最大生命45%",
-        "base": 45,
+        "text": "最大生命35%",
+        "base": 35,
         "divisor": 1,
         "unit": "%"
       },
@@ -737,8 +744,8 @@
       },
       {
         "key": "heal_pct",
-        "text": "30%",
-        "base": 30,
+        "text": "50%",
+        "base": 50,
         "divisor": 1,
         "unit": "%"
       }
@@ -880,8 +887,8 @@
     "parameters": [
       {
         "key": "move_bp",
-        "text": "提高80%",
-        "base": 8000,
+        "text": "提高120%",
+        "base": 12000,
         "divisor": 100,
         "unit": "%"
       },
@@ -911,8 +918,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "提高40%",
-        "base": 40,
+        "text": "提高60%",
+        "base": 60,
         "divisor": 1,
         "unit": "%"
       }
@@ -1094,8 +1101,8 @@
       },
       {
         "key": "damage_bp",
-        "text": "提高25%",
-        "base": 2500,
+        "text": "提高40%",
+        "base": 4000,
         "divisor": 100,
         "unit": "%"
       }
@@ -1106,8 +1113,8 @@
     "parameters": [
       {
         "key": "benefit",
-        "text": "提高50%",
-        "base": 50,
+        "text": "提高70%",
+        "base": 70,
         "divisor": 1,
         "unit": "%"
       }

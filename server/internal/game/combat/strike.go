@@ -74,6 +74,10 @@ type Blow struct {
 	// GuaranteedHit 是技能自身的必中结果，不消耗命中步进器。
 	GuaranteedHit  bool
 	GuaranteedCrit bool
+	// DodgeChanceBP 是守方传奇闪避的合计概率（万分比），由场景层在结算前填入。
+	// 暴击判定之后独立掷骰，对物理、魔法、暴击和必中的直接伤害同样有效；
+	// 持续伤害不判闪避。0 时不消耗随机数。
+	DodgeChanceBP int32
 }
 
 // CalculateStrike evaluates the legacy hit/crit/native-defense formula without
@@ -117,6 +121,16 @@ func CalculateStrike(a, d *entity.Entity, tr *HitTracker, b Blow, rng Rand) even
 	}
 	if crit {
 		ev.Flag |= event.DamageCrit
+	}
+	if b.DodgeChanceBP > 0 && b.Origin != domain.DamageDOTOrigin && rng != nil && int32(rng.Intn(10000)) < min(b.DodgeChanceBP, 10000) {
+		ev.Flag &^= event.DamageCrit
+		ev.Flag |= event.DamageMiss | event.DamageDodged
+		if b.Magic {
+			ev.Flag |= event.DamageMagic
+		}
+		ev.Amount = 0
+		ev.DstHP = d.HP
+		return ev
 	}
 
 	var dmg int32

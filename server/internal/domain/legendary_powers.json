@@ -70,7 +70,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "穿刺之枪伤害提高15%，攻击宽度增加90%、长度增加20%。",
+    "effect": "穿刺之枪伤害提高60%，攻击宽度增加90%、长度增加20%。",
     "design_note": "横向与纵深同时扩展，让穿刺覆盖整排敌人。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "穿刺之枪：一级学习等级10，已核实",
@@ -90,7 +90,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "穿刺之枪对所有目标的伤害提高60%。",
+    "effect": "穿刺之枪对所有目标的伤害提高150%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -110,7 +110,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "穿刺之枪对选中目标追加相当于该目标本次实际伤害110%的伤害；未选中目标时，追加给最近的命中敌人。",
+    "effect": "穿刺之枪命中后，对每个命中的敌人各追加相当于该目标本次实际伤害110%的伤害，不分主次目标。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -250,7 +250,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "震地之枪伤害提高45%，攻击半径增加20%。",
+    "effect": "震地之枪伤害提高90%，攻击半径增加20%。",
     "design_note": "震地的直观强力分支，完整保留击退功能。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "震地之枪：一级学习等级30，已核实；震空枪气：一级学习等级36，已核实",
@@ -270,7 +270,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "震地之枪在自身脚下留下持续3秒的圆形余震区，每秒造成一次物理伤害，伤害为本次技能防御前伤害的35%。",
+    "effect": "震地之枪在自身脚下留下持续3秒的圆形余震区，每秒造成一次物理伤害，伤害为本次技能防御前伤害的60%。",
     "design_note": "Approved synergy retained field with parent-reviewed engineering clarification: one accepted per-cast source roll; not a claim about all native skills.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -290,7 +290,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "震地之枪对所有目标的伤害提高60%。",
+    "effect": "震地之枪对所有目标的伤害提高150%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -450,7 +450,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "野战八荒伤害提高80%，并对原选中目标追加物理攻击力160%的物理伤害。未选中目标时，追加给命中敌人中剩余生命比例最高的一名。",
+    "effect": "野战八荒伤害提高150%，并对原选中目标追加物理攻击力300%的物理伤害。未选中目标时，追加给命中敌人中剩余生命比例最高的一名。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -470,7 +470,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "战神之枪伤害提高85%，攻击范围改为你已学野战八荒当前的范围，同时保留原选中目标。未学野战八荒时，保持战神之枪原有范围。",
+    "effect": "战神之枪伤害提高200%，攻击范围改为你已学野战八荒当前的范围，同时保留原选中目标。未学野战八荒时，保持战神之枪原有范围。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -490,7 +490,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "战神之枪与野战八荒的直接伤害提高35%，并先施加你已学破防之枪的减防效果。",
+    "effect": "战神之枪与野战八荒的直接伤害提高70%，并先施加你已学破防之枪的减防效果。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -550,7 +550,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "战吼半径增加70%，嘲讽强度提高100%，并将范围内可牵引的敌人拉向自身附近。枪系直接伤害提高40%。",
+    "effect": "战吼半径增加70%，嘲讽强度提高100%，并将范围内可牵引的敌人拉向自身附近。枪系直接伤害提高100%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -609,7 +609,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "施放战吼时，立即获得相当于最大生命25%的护盾。",
+    "effect": "施放战吼时，立即获得相当于最大生命25%的护盾。护盾存在期间，你造成的全部直接伤害的3%转化为自身生命。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -628,7 +628,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "受到的直接伤害降低16%。穿刺之枪和破防之枪已有的减防效果增强25%。",
+    "effect": "受到的直接伤害降低16%。穿刺之枪和破防之枪已有的减防效果增强25%。你造成的全部直接伤害的2%转化为自身生命。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -647,7 +647,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "正受到你施加的破防之枪减防效果的敌人，对你造成的直接伤害降低50%。",
+    "effect": "正受到你施加的破防之枪减防效果的敌人，对你造成的直接伤害降低50%。你对这些敌人造成的直接伤害的6%转化为自身生命。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -666,7 +666,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "受到的魔法直接伤害降低60%。破法之枪的削蓝量提高25%。",
+    "effect": "受到的魔法直接伤害降低60%。破法之枪的削蓝量提高25%。最大生命提高20%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -685,7 +685,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "受到的直接伤害降低40%。",
+    "effect": "受到的直接伤害降低40%。生命低于50%时，你造成的全部直接伤害的5%转化为自身生命。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -704,7 +704,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "当伤害来源处于你1.5倍普通攻击距离内时，它对你造成的直接伤害降低35%。",
+    "effect": "当伤害来源处于你1.5倍普通攻击距离内时，它对你造成的直接伤害降低35%。最大生命提高20%；你1.5倍普通攻击距离内有敌人时，你造成的全部直接伤害的3%转化为自身生命。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -723,7 +723,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "受到的直接伤害降低45%。",
+    "effect": "受到的直接伤害降低45%。生命低于50%时，你造成的全部直接伤害的5%转化为自身生命。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -742,7 +742,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "受到的直接伤害降低30%，野战八荒的作用半径增加20%。",
+    "effect": "受到的直接伤害降低30%，野战八荒的作用半径增加20%。你的每次施放每命中1名敌人，回复最大生命的0.5%，单次施放最多回复10%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -761,7 +761,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "石化之枪冷却缩短50%；成功施放时，立即获得相当于最大生命25%的护盾。",
+    "effect": "石化之枪冷却缩短50%；成功施放时，立即获得相当于最大生命25%的护盾。最大生命提高25%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -780,7 +780,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "受到的直接伤害降低25%，免疫减速。",
+    "effect": "受到的直接伤害降低25%，免疫减速。最大生命提高30%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -816,7 +816,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "破法之枪的法力消耗降低60%，削蓝量提高60%。",
+    "effect": "破法之枪的法力消耗降低60%，削蓝量提高60%。破法之枪命中的敌人受到的魔法伤害提高20%，持续10秒。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -834,7 +834,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "飞翔之枪的施法距离增加50%；施放已学习的飞翔之枪后，8秒内移动速度提高80%。",
+    "effect": "飞翔之枪改为冲锋：施放已学习的飞翔之枪时，平滑冲到500范围内目标身侧（150–250毫秒，期间免控），使其眩晕1秒；之后3秒内枪系技能伤害提高50%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -852,7 +852,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "战吼的半径增加70%、法力消耗降低30%；施放已学习的战吼后，12秒内移动速度提高60%。",
+    "effect": "战吼的半径增加70%、法力消耗降低30%；施放已学习的战吼后，12秒内移动速度提高60%。同时使周围250范围内的队友12秒内移动速度提高40%，攻击力与魔法攻击力提高15%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -870,7 +870,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "震地之枪的扇形攻击半径增加45%，法力消耗降低45%。",
+    "effect": "震地之枪的扇形攻击半径增加45%，法力消耗降低45%。震地之枪命中的可移动非首领敌人被拉到你身前60的位置。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -888,7 +888,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "枪系主动技能的法力消耗降低60%。",
+    "effect": "枪系主动技能的法力消耗降低60%。枪系主动技能命中的敌人受到的物理伤害提高10%，持续5秒。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -960,7 +960,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "战吼不消耗法力，半径增加25%；战神之枪的法力消耗降低60%。",
+    "effect": "战吼不消耗法力，半径增加25%；战神之枪的法力消耗降低60%。施放已学习的战吼时，为自己和周围250范围内的队友提供最大生命15%的护盾，持续12秒。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1060,7 +1060,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "金缚剑冷却改为24秒，直接伤害提高40%；除主目标外，还会攻击其周围150距离内敌人。",
+    "effect": "金缚剑冷却改为10秒，直接伤害提高200%；除主目标外，还会攻击其周围150距离内敌人。",
     "design_note": "剑印4秒延至10秒，普攻也可引爆，附伤翻倍并缩短触发间隔。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1220,7 +1220,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "封法剑冷却改为24秒，直接伤害提高70%；除主目标外，还会攻击其周围100距离内敌人。",
+    "effect": "封法剑冷却改为10秒，直接伤害提高200%；除主目标外，还会攻击其周围100距离内敌人。",
     "design_note": "伤害160%提高至300%，延长观察窗，并为不施法目标加入到期结算。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1260,7 +1260,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "旋风剑的直接伤害提高60%。本次直接攻击实际扣除的生命值总和的35%，会追加给命中后仍存活、当前生命值最高的一名敌人。",
+    "effect": "旋风剑的直接伤害提高150%。本次直接攻击实际扣除的生命值总和的35%，会追加给命中后仍存活、当前生命值最高的一名敌人。",
     "design_note": "双目标也享受大增伤，单目标70%升110%，密集战新增45%增伤。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1280,7 +1280,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "旋风剑先将你周围半径150内可拉拽敌人拉向距你50的位置，直接伤害提高30%。",
+    "effect": "旋风剑先将你周围半径150内可拉拽敌人拉向距你50的位置，直接伤害提高100%。",
     "design_note": "每秒伤害翻倍，持续3秒升4秒，范围与目标数加强。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1300,7 +1300,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "旋风剑的自身中心作用半径至少提高至150。",
+    "effect": "旋风剑的自身中心作用半径至少提高至200。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1440,7 +1440,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "强击冷却改为18秒，直接伤害提高80%。若命中前主目标已被定身，还会攻击其周围150距离内已被定身的敌人。",
+    "effect": "强击冷却改为8秒，直接伤害提高300%。若命中前主目标已被定身，还会攻击其周围150距离内已被定身的敌人。",
     "design_note": "失手重试由3秒缩至1秒，增伤翻倍至100%，加返还法力并延长窗口。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1500,7 +1500,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "罡气剑、幻影剑或旋风剑每次施放命中至少一名敌人后，以本次命中敌人中距你最近者的位置为中心，对150距离内敌人各追加攻击力320%的物理伤害。",
+    "effect": "罡气剑、幻影剑或旋风剑每次施放命中至少一名敌人后，以本次命中敌人中距你最近者的位置为中心，对150距离内敌人各追加攻击力500%的物理伤害。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1579,7 +1579,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "罡气剑命中敌人后，获得最大生命12%的护盾，持续到被消耗。",
+    "effect": "罡气剑命中敌人后，获得最大生命12%的护盾，持续到被消耗。护盾存在期间，受到的伤害降低20%。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1598,7 +1598,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "装备期间，受到的持续伤害降低55%。",
+    "effect": "装备期间，受到的持续伤害降低55%。受到的直接伤害另外降低15%。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1636,7 +1636,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "当前因你的挑衅而攻击你的敌人，对你造成的直接伤害降低50%。",
+    "effect": "当前因你的挑衅而攻击你的敌人，对你造成的直接伤害降低65%。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1655,7 +1655,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "来自你周围75距离内敌人的直接物理伤害降低40%。",
+    "effect": "来自你周围150距离内敌人的直接物理伤害降低55%。",
     "design_note": "目标门槛3降2，次数3升4，减伤25%升40%、单次上限翻倍、窗口翻倍。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1674,7 +1674,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "施放已学习的金缚剑后，8秒内受到的伤害降低35%。",
+    "effect": "施放已学习的金缚剑后，12秒内受到的伤害降低55%。",
     "design_note": "减伤20%升35%，持续4秒延至10秒覆盖控制结束后的战斗。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1693,7 +1693,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "施放已学习的封法剑后，8秒内受到的魔法伤害降低50%。",
+    "effect": "施放已学习的封法剑后，12秒内受到的魔法伤害降低65%。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1731,7 +1731,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "敌人的当次直接伤害达到你最大生命的8%，该次伤害再降低45%。",
+    "effect": "敌人的当次直接伤害达到你最大生命的8%，该次伤害再降低65%。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1750,7 +1750,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "来自你75距离之外敌人的直接伤害降低35%。",
+    "effect": "来自你75距离之外敌人的直接伤害降低55%。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1768,7 +1768,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "施放已学习的真空剑后，8秒内移动速度提高80%。",
+    "effect": "真空剑改为突进：施放已学习的真空剑时，平滑冲到400范围内目标身后（150–250毫秒，期间免控）。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1804,7 +1804,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "噬魂剑本次命中至少一名敌人后，返还本次实际消耗法力的60%。",
+    "effect": "噬魂剑本次命中至少一名敌人后，返还本次实际消耗法力的80%。同时周围200范围内的每名队友恢复本次实际消耗法力30%的法力。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1822,7 +1822,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "挑衅的作用半径提高80%，法力消耗降低50%。",
+    "effect": "挑衅的作用半径提高80%，法力消耗降低50%。挑衅把作用半径内可移动的非首领敌人拉到你身边60的位置。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1858,7 +1858,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "金缚剑的施法距离提高80%，不消耗法力。",
+    "effect": "金缚剑的施法距离提高80%，不消耗法力。被金缚的敌人在金缚状态持续期间受到的物理与魔法伤害提高20%。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1930,7 +1930,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "封法剑的施法距离提高45%。",
+    "effect": "封法剑的施法距离提高80%。被封法的敌人受到的魔法伤害提高25%，持续12秒。",
     "design_note": "实施默认值：沿用旧系数或明确替代设计；不是用户逐项指定数值。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1950,7 +1950,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "狙击改为朝选中目标方向贯穿的矩形攻击，长度取施法距离与武器攻击距离中的较大值，宽度取40与武器攻击距离一半中的较大值。所有命中敌人承受完整技能伤害；冷却时间缩短30%。",
+    "effect": "狙击改为朝选中目标方向贯穿的矩形攻击，长度取施法距离与武器攻击距离中的较大值，宽度取40与武器攻击距离一半中的较大值。所有命中敌人承受完整技能伤害；冷却时间改为2秒。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1970,7 +1970,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "狙击必定命中并暴击。",
+    "effect": "狙击必定命中并暴击，且最终伤害变为300%（独立乘算）。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -1990,7 +1990,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "狙击伤害提高80%。",
+    "effect": "狙击伤害提高300%；目标距你超过300时，最终伤害再变为130%（独立乘算）。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2110,7 +2110,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "淬毒术造成的每次中毒伤害提高200%。",
+    "effect": "淬毒术造成的每次中毒伤害提高300%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2130,7 +2130,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "已学会淬毒术时，装备期间淬毒术按当前技能等级常驻，不随攻击消耗。淬毒术生效期间，连续投掷和多重投掷命中时也会施加淬毒术的中毒效果。",
+    "effect": "已学会淬毒术时，装备期间淬毒术按当前技能等级常驻，不随攻击消耗。淬毒术生效期间，连续投掷和多重投掷命中时也会施加淬毒术的中毒效果。装备期间连续投掷与多重投掷的伤害提高150%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2150,7 +2150,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "陷阱：爆弹放置后立即爆炸，投放距离提高50%，爆炸半径提高30%，伤害提高40%。",
+    "effect": "陷阱：爆弹放置后立即爆炸，投放距离提高50%，爆炸半径提高30%，伤害提高100%。",
     "design_note": "保留即时爆弹，投放距离增幅20%升至50%，额外提升半径和伤害。 保留本条机制定位，V2强化数值待实测。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "陷阱：爆弹（10213，一级学习等级25，已核实）；原生形态及冷却已对照 skill-original-ranks.json 一级记录。",
@@ -2170,7 +2170,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "陷阱：爆弹的伤害提高90%，爆炸半径提高30%。",
+    "effect": "陷阱：爆弹的伤害提高200%，爆炸半径提高30%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2190,7 +2190,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "一次施放陷阱：爆弹，在选定地点及其两侧放置共3枚爆弹。两侧各偏移爆弹未经威能强化时半径的75%；每枚保留完整伤害，爆炸重叠时可命中同一敌人。",
+    "effect": "一次施放陷阱：爆弹，在选定地点及其两侧放置共5枚爆弹。两侧各放2枚，分别偏移爆弹未经威能强化时半径的75%与150%；每枚保留完整伤害，爆炸重叠时可命中同一敌人。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2270,7 +2270,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "背刺和陷阱：冻气的伤害提高50%；陷阱：冻气的作用半径额外提高30%。",
+    "effect": "背刺最终伤害变为原来的400%（独立乘算）；陷阱：冻气的伤害提高50%，作用半径额外提高30%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2330,7 +2330,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "背刺无需隐身也能使用，伤害提高25%。",
+    "effect": "背刺无需隐身也能使用，伤害提高100%。",
     "design_note": "完全取消非隐身65%伤害代价，并额外增加25%背刺伤害。 保留本条机制定位，V2强化数值待实测。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "背刺（10209，一级学习等级36，已核实）；原生形态及冷却已对照 skill-original-ranks.json 一级记录。",
@@ -2490,7 +2490,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "环形爆发伤害提高45%，命中的敌人随后向你拉近最多120，最近停在距你40的位置。",
+    "effect": "环形爆发伤害提高300%，命中的敌人随后向你拉近最多120，最近停在距你40的位置。",
     "design_note": "环形爆发的伤害与拉近不新增爆发冲击学习前置；仅收网聚势保留明确的已学条件，位移仍受原生免疫与地形约束。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "环形爆发（10225，一级学习等级51，已核实）；爆发冲击（10226，一级学习等级60，已核实）；原生形态及冷却已对照 skill-original-ranks.json 一级记录。",
@@ -2530,7 +2530,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "学会爆发冲击后，环形爆发的作用半径扩大50%，不再先击退，而是在命中后将仍存活的敌人收拢至距自己40的可站立位置。",
+    "effect": "学会爆发冲击后，环形爆发的作用半径扩大50%，不再先击退，而是在命中后将仍存活的敌人收拢至距自己40的可站立位置；被收拢的敌人再受到一次等同本次环形爆发实际伤害100%的伤害（合计2倍）。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2549,7 +2549,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "已学习隐身术时，隐身术生效期间受到的伤害降低35%，隐身结束后继续保持8秒。",
+    "effect": "已学习隐身术时，隐身术生效期间受到的伤害降低35%，隐身结束后继续保持15秒；该期间受到的直接伤害（含魔法与暴击）有25%概率被闪避。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2568,7 +2568,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "烟雾弹改为影响选中目标及其周围半径至少100内的敌人。受你烟雾弹影响的敌人，对你造成的伤害降低20%。",
+    "effect": "烟雾弹改为影响选中目标及其周围半径至少100内的敌人。受你烟雾弹影响的敌人，对你造成的伤害降低20%。这些敌人对你的直接攻击有30%概率被闪避（含魔法与暴击）。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2587,7 +2587,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "反击术每次命中时，按该目标实际损失生命的15%恢复自身生命。",
+    "effect": "反击术每次命中时，按该目标实际损失生命的30%恢复自身生命。闪避成功时回复最大生命的2%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2606,7 +2606,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "受你淬毒术中毒影响的敌人，对你造成的直接伤害降低20%。",
+    "effect": "受你淬毒术中毒影响的敌人，对你造成的直接伤害降低20%。这些敌人对你的直接攻击有25%概率被闪避（含魔法与暴击）。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2625,7 +2625,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "受到的眩晕、冻结和定身持续时间缩短30%。",
+    "effect": "受到的眩晕、冻结和定身持续时间缩短50%。处于受控状态时，受到的直接伤害有30%概率被闪避（含魔法与暴击）。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2644,7 +2644,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "陷阱：爆弹的法力消耗降低30%；受到的远程伤害降低20%。",
+    "effect": "陷阱：爆弹的法力消耗降低30%；受到的远程伤害降低20%。远程直接攻击（技能距离超过100或远程普通攻击，含远程魔法）有40%概率被闪避。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2663,7 +2663,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "击晕的冷却时间缩短30%；主动施放已学习的击晕后8秒内，受到的伤害降低35%。",
+    "effect": "击晕的冷却时间缩短30%；主动施放已学习的击晕后12秒内，受到的伤害降低35%。该期间受到的直接伤害有25%概率被闪避（含魔法与暴击）。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2682,7 +2682,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "受到的中毒伤害降低30%。主动施放淬毒术时，立即移除自身最多2个可清除的中毒效果。",
+    "effect": "受到的中毒伤害降低60%。主动施放淬毒术时，立即移除自身最多2个可清除的中毒效果。装备期间每秒回复最大生命的1%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2701,7 +2701,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "生命上限提高20%，隐身术的法力消耗降低30%。",
+    "effect": "生命上限提高40%，隐身术的法力消耗降低30%。生命首次降到30%以下时，自动隐身3秒，内置冷却60秒。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2720,7 +2720,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "学会陷阱回避后，受到的陷阱伤害降低20%。",
+    "effect": "学会陷阱回避后，受到的所有直接伤害（含魔法与暴击）有15%概率被闪避。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2756,7 +2756,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "烟雾弹改为影响选中目标周围的敌人，施放距离提高50%。范围半径在至少100的基础上提高30%。",
+    "effect": "烟雾弹改为影响选中目标周围的敌人，施放距离提高50%。范围半径在至少100的基础上提高30%。施放时烟雾范围内的你和队友8秒内受到的物理与魔法伤害降低20%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2774,7 +2774,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "解除陷阱不消耗法力，以选中的可见敌方陷阱为中心，同时尝试拆除半径150内的可见敌方陷阱；每个陷阱的拆除成功率提高25个百分点。",
+    "effect": "陷阱：封印与陷阱：冻气的作用半径提高50%；被这两种陷阱命中的敌人受到的物理伤害提高15%，持续8秒。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2792,7 +2792,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "侦测陷阱的侦测半径提高50%；主动施放已学习的侦测陷阱后10秒内，移动速度提高60%。",
+    "effect": "阴影跳跃的冷却时间缩短50%；施放已学习的阴影跳跃后3秒内移动速度提高60%，且下一次背刺必定暴击。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2810,7 +2810,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "学会暗器回收后，狙击、连续投掷和多重投掷的法力消耗降低45%。",
+    "effect": "学会暗器回收后，狙击、连续投掷和多重投掷的法力消耗降低45%，连续投掷和多重投掷的冷却时间缩短40%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2846,7 +2846,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "主动施放已学习的陷阱：爆弹、毒雾、封印、冻气或新星后10秒内，这五种陷阱的法力消耗降低55%。",
+    "effect": "主动施放已学习的陷阱：爆弹、毒雾、封印、冻气或新星后10秒内，这五种陷阱的法力消耗降低55%。这五种陷阱命中的敌人移动速度降低40%，持续3秒。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -2900,7 +2900,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "隐身术生效期间，额外获得40%移动速度。",
+    "effect": "隐身术生效期间，额外获得80%移动速度。",
     "design_note": "Engineering implementation tuning for approved synergy direction; not separately user-confirmed values.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3300,7 +3300,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "暴雪术直接伤害提高55%，范围半径扩大40%，冷却时间缩短20%。",
+    "effect": "暴雪术直接伤害提高55%，范围半径扩大40%，冷却时间缩短50%；暴雪命中时把范围内可移动的非首领敌人拉向中心，最多拉到距中心80的位置。",
     "design_note": "强化版：伤害25%升至55%、半径20%升至40%，额外减少20%冷却。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "暴雪术（10412，一级学习等级43，已核实）",
@@ -3320,7 +3320,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "暴雪术原半径内侧三分之二区域的直接伤害提高80%，其余区域提高20%。",
+    "effect": "暴雪术原半径内侧三分之二区域的直接伤害提高200%，其余区域提高50%。",
     "design_note": "强化版：取消半径缩小30%，核心覆盖由三分之一扩至三分之二，增伤55%升至80%。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "暴雪术（10412，一级学习等级43，已核实）",
@@ -3340,7 +3340,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "暴雪术对已被冻结或减速的敌人，直接伤害提高90%。",
+    "effect": "暴雪术对范围内所有敌人的直接伤害提高90%。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3420,7 +3420,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "魔镜术成功抵抗魔法攻击时，向攻击者反射本次被抵抗伤害的120%，单次不超过你的最大生命18%。",
+    "effect": "魔镜术成功抵抗魔法攻击时，向攻击者反射本次被抵抗伤害的300%（同时装备镜面偏转时为400%），单次不超过你的最大生命30%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3519,7 +3519,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "火盾生效期间，180距离内敌人对你造成的伤害降低28%。",
+    "effect": "火盾生效期间，180距离内敌人对你造成的伤害降低35%。火盾生效期间，每12秒获得最大生命10%的护盾，持续12秒。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3576,7 +3576,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "最大生命提高30%，秘术：幻影伤害提高30%。",
+    "effect": "最大生命提高40%，秘术：幻影伤害提高30%。施放秘术：幻影后，获得最大生命15%的护盾，持续到被打破。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3595,7 +3595,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "秘术：集中状态存在时，每次受到伤害可减免50%，单次减免量在最大生命的22%以内。",
+    "effect": "秘术：集中状态存在时，每次受到伤害可减免50%，单次减免量在最大生命的35%以内。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3614,7 +3614,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "冰封改为以主目标为中心、半径100的范围冻结。装备期间受到的伤害降低35%。",
+    "effect": "冰封改为以主目标为中心、半径100的范围冻结。装备期间受到的伤害降低40%。冰封命中敌人时，获得最大生命20%的护盾，持续到被打破。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3633,7 +3633,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "最大生命提高28%。",
+    "effect": "最大生命提高40%。施放火盾、冰盾或魔镜术时，获得最大生命10%的护盾，持续到被打破。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3652,7 +3652,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "最大生命提高30%，所有技能的法力消耗降低20%。",
+    "effect": "最大生命提高45%，所有技能的法力消耗降低20%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3671,7 +3671,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "带有你施加的燃烧的敌人对你造成伤害时，伤害降低40%。",
+    "effect": "带有你施加的燃烧的敌人对你造成伤害时，伤害降低55%。你的法术对这些燃烧敌人造成的伤害，6%转化为自身生命。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3708,7 +3708,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "秘术：幻影冷却时间变为0，成功率变为100%，法力消耗降低15%。",
+    "effect": "秘术：幻影冷却时间变为0，成功率变为100%，法力消耗降低15%，位移距离增加50%；施放幻影后2秒内，下一次法术伤害提高30%。幻影为同图平滑位移，期间免控。",
     "design_note": "强化版：取消耗蓝增加30%的代价，并进一步降低原耗蓝15%。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "秘术：幻影（10432，一级学习等级30，已核实）",
@@ -3726,7 +3726,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "消除改为以目标为中心、半径250的群体消除，对范围内所有可驱散的防御魔法必定驱散成功。偷来的防御魔法获得完整持续时间和完整护盾。",
+    "effect": "消除改为以目标为中心、半径250的群体消除，对范围内所有可驱散的防御魔法必定驱散成功。偷来的防御魔法获得完整持续时间和完整护盾。被成功驱散至少一个状态的敌人受到的物理与魔法伤害提高15%，持续8秒。",
     "design_note": "强化版：新增驱散成功率30个百分点，偷取防御魔法的剩余时长提高50%。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "秘术：消除（10433，一级学习等级36，已核实）",
@@ -3780,7 +3780,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "自己击杀带有自己燃烧的敌人时，恢复最大法力的10%。",
+    "effect": "带有你施加的燃烧的敌人，在燃烧持续期间受到的物理与魔法伤害提高12%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3816,7 +3816,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "主动施放已学习的火球术、冰爆术、风焰术或暴雪术后，10秒内所有技能法力消耗降低45%。",
+    "effect": "主动施放已学习的火球术、冰爆术、风焰术或暴雪术后，10秒内所有技能法力消耗降低45%。该期间周围250范围内的队友施放技能的法力消耗降低30%。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -3910,7 +3910,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "光弹术命中后，立即向同一目标追加本次实际伤害85%的伤害。",
+    "effect": "光弹术命中后，立即向同一目标追加本次实际伤害150%的伤害。",
     "design_note": "仅删除触发条件满足之后的固定短等待；原条件、数值、目标、范围、冷却与连招窗口不变。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "光弹术（ID 10319，一级学习等级10，已核实）",
@@ -4010,7 +4010,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "圣光术直接伤害提高10%。施法中心留下半径180、持续4秒的光区，每秒造成该等级圣光基础伤害30%的魔法伤害。",
+    "effect": "圣光术直接伤害提高10%。施法中心留下半径180、持续4秒的光区，每秒造成该等级圣光基础伤害150%的魔法伤害。",
     "design_note": "强化版：首击70%折损改为110%，光区更大、持续更久、每跳更强，并允许双点布区。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "圣光术（ID 10317，一级学习等级20，已核实）",
@@ -4030,7 +4030,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "圣光术沿主目标方向形成长600、宽160的矩形攻击，直接伤害提高80%。",
+    "effect": "圣光术沿主目标方向形成长600、宽160的矩形攻击，直接伤害提高200%。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4230,7 +4230,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "枷锁术降低攻击速度的效果提高50%；若枷锁术具有直接伤害，该伤害提高60%。",
+    "effect": "枷锁术降低攻击速度的效果提高50%；若枷锁术具有直接伤害，该伤害提高150%。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4250,7 +4250,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "枷锁术改为目标位置周围半径250的范围技能，对每名敌人造成200%魔法攻击力的神圣伤害，并施加减攻速。可移动的普通敌人被拉向中心，最多拉到距中心80的位置。",
+    "effect": "枷锁术改为目标位置周围半径250的范围技能，对每名敌人造成500%魔法攻击力的神圣伤害，并施加减攻速；枷锁状态持续期间，被锁敌人受到的物理与魔法伤害提高20%。可移动的普通敌人被拉向中心，最多拉到距中心80的位置。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4390,7 +4390,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "防御术原有防御效果提高70%，并额外覆盖主目标周围250范围内所有队友。防御状态存在期间，受益者主动造成的神圣伤害提高40%。",
+    "effect": "防御术原有防御效果提高70%，并额外覆盖主目标周围250范围内所有队友。防御状态存在期间，受益者主动造成的神圣伤害提高100%。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4410,7 +4410,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "自身有有效加速术状态时，光弹术、圣光术和驱魔术的直接伤害提高50%。",
+    "effect": "自身有有效加速术状态时，光弹术、圣光术和驱魔术的直接伤害提高120%。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4450,7 +4450,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "已学会神术释能时，装备期间神术释能按当前技能等级常驻，不随施法消耗。神术：释能保留强化每次法术的效果，伤害增强系数额外提高50个百分点。被强化的光弹术改为主目标周围半径220的圆形攻击；圣光术、驱魔术和神威术扩大范围：圆形半径增加100，矩形长度和宽度各增加100。范围内所有目标保留完整伤害。",
+    "effect": "已学会神术释能时，装备期间神术释能按当前技能等级常驻，不随施法消耗。神术：释能保留强化每次法术的效果，伤害增强系数额外提高100个百分点。被强化的光弹术改为主目标周围半径220的圆形攻击；圣光术、驱魔术和神威术扩大范围：圆形半径增加100，矩形长度和宽度各增加100。范围内所有目标保留完整伤害。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4489,7 +4489,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "治愈术直接治疗量提高60%。",
+    "effect": "治愈术直接治疗量提高150%。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4546,7 +4546,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "防御术的物理和魔法减伤各提高35个百分点。",
+    "effect": "防御术的物理和魔法减伤各提高50个百分点。自身防御术状态有效期间，每秒回复最大生命的1%。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4565,7 +4565,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "已学会回春术且自身回春术状态有效期间，受到伤害降低25%；吟唱治愈术、群疗术或复活术时不会被普通受伤打断。",
+    "effect": "已学会回春术且自身回春术状态有效期间，受到伤害降低30%；吟唱治愈术、群疗术或复活术时不会被普通受伤打断。自身身上由你施放的回春术每次回复量变为2倍。",
     "design_note": "Synergy v1 rewrite replaces obsolete timing mechanics; exact runtime coverage is reported separately.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4584,7 +4584,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "实际吟唱群疗术期间，受到伤害降低40%，并且不会被普通受伤打断。",
+    "effect": "实际吟唱群疗术期间，受到伤害降低50%，并且不会被普通受伤打断。群疗术对你自己的治疗量额外提高50%。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4622,7 +4622,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "实际吟唱复活术期间，受到伤害降低60%。",
+    "effect": "实际吟唱复活术期间，免疫所受伤害，并每秒回复最大生命的5%。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4641,7 +4641,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "自身针刺护体状态有效期间，受到的普通攻击伤害降低35%；由你施加的针刺护体，其原物理反射比例提高75%。",
+    "effect": "自身针刺护体状态有效期间，受到的全部直接伤害降低40%，并每秒回复最大生命的1%；由你施加的针刺护体，其原物理反射比例提高75%。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4660,7 +4660,7 @@
       "衣服",
       "头盔"
     ],
-    "effect": "你施加的枷锁术状态仍在敌人身上时，该敌人对你造成的伤害降低40%。",
+    "effect": "你施加的枷锁术状态仍在敌人身上时，该敌人对你造成的伤害降低55%，对你的队友造成的伤害降低25%；该敌人每次命中你，你回复最大生命的1%。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -4678,7 +4678,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "回春术无技能冷却，法力消耗降低20%，每次原有回血量提高50%。",
+    "effect": "回春术无技能冷却，法力消耗降低20%，每次原有回血量提高100%。",
     "design_note": "强化版：无冷却保留，在此基础上每跳治疗提高50%、法力消耗降低20%。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "回春术（ID 10303，一级学习等级51，已核实）",
@@ -4714,7 +4714,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "复法术对主目标产生的溢出法力，可按溢出量的100%分给该目标周围350范围内所有队友。先给法力比例最低者，每人最多获得其最大法力的20%。",
+    "effect": "复法术对主目标产生的溢出法力，可按溢出量的100%分给该目标周围350范围内所有队友。先给法力比例最低者，每人最多获得其最大法力的40%。",
     "design_note": "强化版：溢出利用率60%提高至100%，扩大范围与单人上限，最多分给2人且不复制法力。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "复法术（ID 10302，一级学习等级25，已核实）",
@@ -4750,7 +4750,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "加速术作用半径扩大至220，原加速强度提高30%。可仍以自己为中心，也可选600范围内队友为中心；远程施放时自己也获得相同加速。",
+    "effect": "加速术作用半径扩大至220，原加速强度提高60%。可仍以自己为中心，也可选600范围内队友为中心；远程施放时自己也获得相同加速。",
     "design_note": "强化版：取消远端施法失去自身加速的代价，扩大投送和作用范围，并提高加速强度30%。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "加速术（ID 10311，一级学习等级36，已核实）",
@@ -4786,7 +4786,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "主动施放已学习的净化术后，8秒内移动速度提高60%，受到的物理和魔法伤害降低25%。",
+    "effect": "主动施放已学习的净化术后，8秒内移动速度提高60%，受到的物理和魔法伤害降低25%。净化术可选600范围内队友为目标，施放时平滑位移到其身边（期间免控），被净化的队友同样获得8秒受到的物理和魔法伤害降低25%。",
     "design_note": "强化版：空诊返蓝70%提高至90%、冷却缩短50%提高至80%，成功净化也有30%返蓝收益。",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "净化术（ID 10306，一级学习等级20，已核实）",
@@ -4822,7 +4822,7 @@
     "slots": [
       "武器"
     ],
-    "effect": "复活术成功复活的目标，生命至少恢复至最大生命的70%；仅实际复活成功时返还本次实付法力的50%。",
+    "effect": "复活术成功复活的目标，生命至少恢复至最大生命的100%；仅实际复活成功时返还本次实付法力的50%。",
     "design_note": "parent-reviewed engineering defaults; not individually user-confirmed",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5829,7 +5829,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "自身最大生命提高50%，按未计入本效果的完整最大生命计算，不是只放大装备差值。",
+    "effect": "自身最大生命提高35%，按未计入本效果的完整最大生命计算，不是只放大装备差值。",
     "design_note": "Whole max HP, no gear-delta misread.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5840,7 +5840,7 @@
   },
   {
     "id": "TY-D04",
-    "name": "灵容",
+    "name": "饮血",
     "category": "防御",
     "class": "全职业",
     "min_level": 22,
@@ -5852,7 +5852,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "自身最大法力提高50%，按未计入本效果的完整最大法力计算，不是只放大装备差值。",
+    "effect": "你造成的全部直接伤害的8%转化为自身生命；生命低于35%时提高为15%。",
     "design_note": "Whole max MP, no gear-delta misread.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5898,7 +5898,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "受到敌方单体直接伤害时，伤害降低55%，普通攻击和单体技能都生效。与其他通用防御减伤合计最多降低70%，在普通防御结算之后生效，不受原25%地板限制。",
+    "effect": "受到敌方单体直接伤害时，伤害降低40%，普通攻击和单体技能都生效。与其他通用防御减伤合计最多降低70%，在普通防御结算之后生效，不受原25%地板限制。",
     "design_note": "Single-target direct including auto-attacks, not auto-only.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5921,7 +5921,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "受到的直接物理伤害降低55%，包括技能与普通攻击。与其他通用防御减伤合计最多降低70%，在普通防御结算之后生效，不受原25%地板限制。",
+    "effect": "受到的直接物理伤害降低40%，包括技能与普通攻击。与其他通用防御减伤合计最多降低70%，在普通防御结算之后生效，不受原25%地板限制。",
     "design_note": "All direct physical on own path.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5944,7 +5944,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "受到的魔法伤害降低55%，包括直接魔法伤害与魔法持续伤害。与其他通用防御减伤合计最多降低70%，在普通防御结算之后生效，不受原25%地板限制。",
+    "effect": "受到的魔法伤害降低40%，包括直接魔法伤害与魔法持续伤害。与其他通用防御减伤合计最多降低70%，在普通防御结算之后生效，不受原25%地板限制。",
     "design_note": "All magic including ticks, own path.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -5967,7 +5967,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "敌方施加的可缩短控制持续时间缩短50%。被施加控制时，立即获得吸收自身最大生命20%伤害的护盾，持续4秒，内置冷却8秒。不要求先学会护盾技能。",
+    "effect": "敌方施加的可缩短控制持续时间缩短50%。被施加控制时，立即获得吸收自身最大生命35%伤害的护盾，持续4秒，内置冷却8秒。不要求先学会护盾技能。",
     "design_note": "Stronger control duration cut plus on-control shield.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -6036,7 +6036,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "受到的技能直接治疗和持续治疗提高80%。受到治疗后，4秒内受到的伤害降低25%，内置冷却6秒。与其他通用防御减伤合计最多降低70%，在普通防御结算之后生效。治疗不会被本减伤窗口再次放大。",
+    "effect": "受到的技能直接治疗和持续治疗提高120%。受到治疗后，4秒内受到的伤害降低35%，内置冷却6秒。与其他通用防御减伤合计最多降低70%，在普通防御结算之后生效。治疗不会被本减伤窗口再次放大。",
     "design_note": "Strong incoming heal plus short DR window.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -6128,7 +6128,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "生命首次降至60%及以下时，获得吸收自身最大生命45%伤害的护盾，持续6秒，内置冷却12秒。不要求先学会护盾技能。本人技能施加的吸收护盾初始量另外提高100%。换装、离场或换图时清除本特效护盾。",
+    "effect": "生命处于60%及以下时受到伤害，获得吸收自身最大生命35%伤害的护盾，持续6秒，内置冷却12秒。不要求先学会护盾技能。本人技能施加的吸收护盾初始量另外提高100%。换装、离场或换图时清除本特效护盾。",
     "design_note": "Emergency large shield without shield-skill gate, plus self-shield amp.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -6174,7 +6174,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "你持有的吸收护盾持续时间提高100%，包括技能护盾与本类装备特效生成的护盾。护盾被打破时，在3秒内回复被打破吸收量的30%生命，内置冷却6秒。回复不会再生成护盾。",
+    "effect": "你持有的吸收护盾持续时间提高100%，包括技能护盾与本类装备特效生成的护盾。护盾被打破时，立即回复被打破吸收量的50%生命，内置冷却6秒。回复不会再生成护盾。",
     "design_note": "All owned absorb shields, including legendary-generated ones, so classes without shield skills still benefit.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -6371,7 +6371,7 @@
     "id": "TY-U07",
     "name": "远跃",
     "category": "通用",
-    "class": "刺客,术士",
+    "class": "战士,剑客,刺客,术士",
     "min_level": 32,
     "slots": [
       "武器",
@@ -6381,7 +6381,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "主动位移或跳跃技能的位移距离和可选目标距离提高80%。位移成功后6秒内，下一次主动技能施法距离提高50%，内置冷却3秒。",
+    "effect": "主动位移或跳跃技能的位移距离和可选目标距离提高120%。位移成功后6秒内，下一次主动技能施法距离提高50%，内置冷却3秒。",
     "design_note": "Broader movement coverage plus follow-up range window.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -6404,7 +6404,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "当你被施加减速、定身或其他禁止移动的效果时，立即清除该次移动限制，并在4秒内免疫移动限制，内置冷却12秒。",
+    "effect": "当你被施加减速、定身或其他禁止移动的效果时，立即清除该次移动限制，并在4秒内免疫移动限制，内置冷却8秒。",
     "design_note": "Rule change: cleanse plus short immunity with explicit ICD, not a small slow resist.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -6427,7 +6427,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "自身基础移动速度提高40%。按未计入本效果的基础移动速度计算，避免递归。",
+    "effect": "自身基础移动速度提高60%。按未计入本效果的基础移动速度计算，避免递归。",
     "design_note": "Bold always-on body MS, not gear-move scaling.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -6657,7 +6657,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "装备后你持续侦测周围半径400的范围：其中隐身或潜行的敌人对你显形，敌方陷阱也对你可见，不要求先学会侦测或破隐技能。主动技能命中隐身或潜行敌人时，使其再显形6秒，并在该显形期间你对其造成的直接伤害提高25%。若技能本身已有破隐或陷阱侦测，其原有范围再提高150%。",
+    "effect": "装备后你持续侦测周围半径400的范围：其中隐身或潜行的敌人对你显形，敌方陷阱也对你可见，不要求先学会侦测或破隐技能。主动技能命中隐身或潜行敌人时，使其再显形6秒，并在该显形期间你对其造成的直接伤害提高40%。若技能本身已有破隐或陷阱侦测，其原有范围再提高150%。",
     "design_note": "Inherent all-class detect aura, not only amplifying native detect skills.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",
@@ -6680,7 +6680,7 @@
       "背包",
       "盾牌"
     ],
-    "effect": "主动技能成功施放或受到伤害后，6秒内移动速度提高50%。重复触发刷新持续，不叠层，不改变基础移速计算。",
+    "effect": "主动技能成功施放或受到伤害后，6秒内移动速度提高70%。重复触发刷新持续，不叠层，不改变基础移速计算。",
     "design_note": "Combat burst MS after cast or hit, distinct from always-on 轻行.",
     "implementation": "Explicit typed handler required; no prose execution.",
     "skill_basis": "See current effect and typed handler; superseded historical mechanics are not authoritative.",

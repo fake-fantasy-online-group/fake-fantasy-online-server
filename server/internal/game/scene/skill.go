@@ -1246,7 +1246,7 @@ func (s *Scene) stepCastsAt(now time.Time, timedOnly bool) {
 			continue
 		}
 		legendaryFrom := player.Pos
-		if s.onTeleport(Teleport{ID: player.ID, To: s.id, At: teleport.to, Dir: player.Dir}) {
+		if s.skillDash(player, teleport.to, player.Dir) {
 			s.legendaryCasterTeleported(player, legendaryFrom, teleport.skill, teleport.source)
 		}
 	}

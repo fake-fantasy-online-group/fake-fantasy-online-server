@@ -44,7 +44,7 @@ func init() {
 		}
 	}, PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == legendaryHolyLight {
-			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 8000)
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 20000)
 		}
 	}})
 	registerLegendarySynergyHandler("YS-A12", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
@@ -70,7 +70,7 @@ func init() {
 	registerLegendarySynergyHandler("YS-A24", legendaryCasterSupportWave(10304, 250, 250))
 	registerLegendarySynergyHandler("YS-D01", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10301 {
-			d.LegendaryModifiers.HealingBP += c.RollValue("healing_bp", 6000)
+			d.LegendaryModifiers.HealingBP += c.RollValue("healing_bp", 15000)
 		}
 	}})
 	registerLegendarySynergyHandler("YS-D02", legendaryCasterGroupCleanse(10306, true))
@@ -78,25 +78,25 @@ func init() {
 	registerLegendarySynergyHandler("YS-U10", legendaryCasterGroupCleanse(10318, true))
 	registerLegendarySynergyHandler("YS-D04", legendaryHandler{StatusApplied: func(c *legendaryContext, d *domain.StatusDef) {
 		if c.Skill == 10321 {
-			d.LegendaryModifiers.PhysicalReductionBonusPct += c.RollValue("status_reduction_pct", 35)
-			d.LegendaryModifiers.MagicReductionBonusPct += c.RollValue("status_reduction_pct", 35)
+			d.LegendaryModifiers.PhysicalReductionBonusPct += c.RollValue("status_reduction_pct", 50)
+			d.LegendaryModifiers.MagicReductionBonusPct += c.RollValue("status_reduction_pct", 50)
 		}
 	}})
 	registerLegendarySynergyHandler("YS-D06", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if c.Scene.legendaryCasterWinding(c.Owner, 10304) {
-			return specialScale(n, 100-c.RollValue("reduction_pct", 40))
+			return specialScale(n, 100-c.RollValue("reduction_pct", 50))
 		}
 		return n
 	}})
 	registerLegendarySynergyHandler("YS-D08", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if c.Scene.legendaryCasterWinding(c.Owner, 10305) {
-			return specialScale(n, 100-c.RollValue("reduction_pct", 60))
+			return 0
 		}
 		return n
 	}})
 	registerLegendarySynergyHandler("YS-D09", legendaryHandler{BeforeIncoming: func(c *legendaryContext, n int32) int32 {
-		if c.IsBasic && legendaryCasterHasSkill(c.Owner, 10330) {
-			return specialScale(n, 100-c.RollValue("reduction_pct", 35))
+		if legendaryMeleeIncoming(c) && legendaryCasterHasSkill(c.Owner, 10330) {
+			return specialScale(n, 100-c.RollValue("reduction_pct", 40))
 		}
 		return n
 	}, StatusApplied: func(c *legendaryContext, d *domain.StatusDef) {
@@ -106,7 +106,7 @@ func init() {
 	}})
 	registerLegendarySynergyHandler("YS-D10", legendaryHandler{AllDamageIncoming: true, BeforeIncoming: func(c *legendaryContext, n int32) int32 {
 		if legendaryCasterOwnSkill(c.Target, c.Owner.ID, 10325) {
-			return specialScale(n, 100-c.RollValue("reduction_pct", 40))
+			return specialScale(n, 100-c.RollValue("reduction_pct", 55))
 		}
 		return n
 	}})
@@ -116,7 +116,7 @@ func init() {
 			d.Effects = append([]domain.SkillEffect(nil), d.DirectEffects()...)
 			for i := range d.Effects {
 				if d.Effects[i].Kind == domain.EffectResurrect {
-					d.Effects[i].HealPctOfMax = max(d.Effects[i].HealPctOfMax, 70)
+					d.Effects[i].HealPctOfMax = max(d.Effects[i].HealPctOfMax, 100)
 				}
 			}
 		}

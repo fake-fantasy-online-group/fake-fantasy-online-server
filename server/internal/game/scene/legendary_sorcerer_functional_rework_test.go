@@ -2,7 +2,6 @@ package scene
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
-	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 	"testing"
 )
 
@@ -123,20 +122,6 @@ func TestSorcererFunctionalGroupStealFreshDedup(t *testing.T) {
 		t.Fatal("permanent unstealable removed")
 	}
 }
-func TestSorcererFunctionalOwnBurnAnyKill(t *testing.T) {
-	s, c := legendaryCasterFixture(t, "SS-U05")
-	c.Owner.MP = 0
-	c.Target.Status.Apply(domain.StatusDef{ID: 1036, Level: 1, DurationSec: 10}, s.tick, c.Owner.ID)
-	c.Target.HP = 0
-	c.Hit.Flag = event.DamageFatal
-	h := legendaryHandlers["SS-U05"]
-	h.AfterHit(c)
-	h.AfterHit(c)
-	if c.Owner.MP != c.Owner.MaxMP/10 {
-		t.Fatal("kill reward not exactly once", c.Owner.MP)
-	}
-}
-
 func TestSorcererIceStrideActualTickExpiryAndUnequip(t *testing.T) {
 	for _, mode := range []string{"expires", "unequipped"} {
 		t.Run(mode, func(t *testing.T) {

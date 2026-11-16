@@ -20,7 +20,7 @@ func TestLegendarySourceReuseNativeTriplePlacement(t *testing.T) {
 	p.Player.Char.Skills[10213] = 5
 	p.Stats.MinAtk, p.Stats.MaxAtk = 900, 900
 	sharedTargetFinishCasts(t, s)
-	if len(s.traps) != 3 {
+	if len(s.traps) != 5 {
 		t.Fatalf("native triple placement produced %d traps", len(s.traps))
 	}
 	for _, trap := range s.traps {
@@ -43,7 +43,7 @@ func TestLegendarySourceReuseNativeTriplePlacement(t *testing.T) {
 	// A placement without an accepted source still captures a new, independent
 	// source. Nil in the optional slot has the same fallback meaning.
 	s.placeAssassinTrap(p, def, m.Pos, 100, 100, false, nil)
-	if len(s.traps) != 3 {
+	if len(s.traps) != 5 {
 		t.Fatal("fresh placement should also receive equipped triple placement")
 	}
 	for _, trap := range s.traps {

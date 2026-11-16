@@ -46,17 +46,17 @@ func TestLegendaryWarriorSoloDamageCoverage(t *testing.T) {
 		want   int32
 	}{
 		{"ZS-A01", []domain.SkillID{10002}, 300}, {"ZS-A02", []domain.SkillID{10002}, 115},
-		{"ZS-A04", []domain.SkillID{10005}, 115}, {"ZS-A05", []domain.SkillID{10005}, 160},
+		{"ZS-A04", []domain.SkillID{10005}, 160}, {"ZS-A05", []domain.SkillID{10005}, 250},
 		{"ZS-A06", []domain.SkillID{10005}, 210}, {"ZS-A07", []domain.SkillID{10005, 10009}, 150},
 		{"ZS-A09", []domain.SkillID{10013}, 125}, {"ZS-A11", []domain.SkillID{10017}, 160},
-		{"ZS-A12", []domain.SkillID{10017}, 110}, {"ZS-A13", []domain.SkillID{10006}, 145},
-		{"ZS-A15", []domain.SkillID{10006}, 160}, {"ZS-A16", []domain.SkillID{10003}, 115},
+		{"ZS-A12", []domain.SkillID{10017}, 110}, {"ZS-A13", []domain.SkillID{10006}, 190},
+		{"ZS-A15", []domain.SkillID{10006}, 250}, {"ZS-A16", []domain.SkillID{10003}, 115},
 		{"ZS-A17", []domain.SkillID{10003}, 130}, {"ZS-A18", []domain.SkillID{10021, 10015}, 190},
 		{"ZS-A19", []domain.SkillID{10021}, 170}, {"ZS-A20", []domain.SkillID{10015}, 340},
 		{"ZS-A21", []domain.SkillID{10015}, 200}, {"ZS-A22", []domain.SkillID{10022}, 120},
-		{"ZS-A23", []domain.SkillID{10022}, 340}, {"ZS-A24", []domain.SkillID{10023}, 185},
-		{"ZS-A25", []domain.SkillID{10023, 10022}, 135}, {"ZS-A27", []domain.SkillID{10027, 10009}, 180},
-		{"ZS-A28", []domain.SkillID{10002, 10005, 10013, 10017, 10006, 10003, 10021, 10015, 10022, 10023, 10027}, 140},
+		{"ZS-A23", []domain.SkillID{10022}, 550}, {"ZS-A24", []domain.SkillID{10023}, 300},
+		{"ZS-A25", []domain.SkillID{10023, 10022}, 170}, {"ZS-A27", []domain.SkillID{10027, 10009}, 180},
+		{"ZS-A28", []domain.SkillID{10002, 10005, 10013, 10017, 10006, 10003, 10021, 10015, 10022, 10023, 10027}, 200},
 		{"ZS-A29", []domain.SkillID{10002, 10005, 10013, 10017, 10006, 10003, 10021, 10015, 10022, 10023, 10027}, 280},
 		{"ZS-A30", []domain.SkillID{10017, 10002}, 165},
 	} {
@@ -189,7 +189,7 @@ func TestLegendaryWarriorSoloGeometryConsumers(t *testing.T) {
 		x, y                  float64
 		want                  int32
 	}{
-		{"ZS-A04", 10005, domain.SkillAreaRectangle, 100, 100, 0, 210, 180, 115}, {"ZS-A13", 10006, domain.SkillAreaCircle, 0, 0, 100, 215, 100, 145},
+		{"ZS-A04", 10005, domain.SkillAreaRectangle, 100, 100, 0, 210, 180, 160}, {"ZS-A13", 10006, domain.SkillAreaCircle, 0, 0, 100, 215, 100, 190},
 		{"ZS-A16", 10003, domain.SkillAreaRectangle, 0, 0, 0, 260, 150, 115}, {"ZS-A20", 10015, domain.SkillAreaRectangle, 0, 0, 0, 260, 150, 340},
 		{"ZS-D08", 10022, domain.SkillAreaCircle, 0, 0, 100, 215, 100, 100}, {"ZS-U04", 10028, domain.SkillAreaCircle, 0, 0, 100, 260, 100, 100},
 		{"ZS-U05", 10006, domain.SkillAreaCircle, 0, 0, 100, 240, 100, 100}, {"ZS-U08", 10005, domain.SkillAreaRectangle, 100, 100, 0, 260, 180, 100},
@@ -236,11 +236,7 @@ func TestLegendaryWarriorSoloRangeAndTimingConsumers(t *testing.T) {
 			}
 			st := domain.Stats{MoveSpeed: 100}
 			s.legendaryPassiveStats(p, &st)
-			want := int32(100)
-			if equipped {
-				want = 180
-			}
-			if st.MoveSpeed != want {
+			if st.MoveSpeed != 100 { // ZS-U03 charge replaced the old speed window
 				t.Fatal("movement consumer", st.MoveSpeed)
 			}
 		}
@@ -479,7 +475,7 @@ func TestLegendaryWarriorSoloTargetAndStatusCoverage(t *testing.T) {
 		id    string
 		skill domain.SkillID
 		want  int32
-	}{{"ZS-A05", 10005, 160}, {"ZS-A15", 10006, 160}, {"ZS-A19", 10021, 170}} {
+	}{{"ZS-A05", 10005, 250}, {"ZS-A15", 10006, 250}, {"ZS-A19", 10021, 170}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := warriorCoverageFixture(t, tc.id, true)
 			q := putMonster(s, 901, 10000, domain.Stats{}, 150, 100)
@@ -505,7 +501,12 @@ func TestLegendaryWarriorSoloTargetAndStatusCoverage(t *testing.T) {
 			d.Effects = []domain.SkillEffect{d.Effect, {Kind: domain.EffectKnockback, KnockbackDistance: 40, ChanceBP: 10000, ChanceExplicit: true, RequiresPreviousLanded: true}}
 			before := m.Pos
 			warriorTestCast(t, s, p, m, d)
-			if m.Pos.X-before.X != 40 {
+			if id == "ZS-U05" {
+				// Buff pass: ZS-U05 gathers quake victims to 60 in front of the wearer.
+				if sqDist(p.Pos, m.Pos) > 61*61 {
+					t.Fatalf("quake gather missing %+v -> %+v", before, m.Pos)
+				}
+			} else if m.Pos.X-before.X != 40 {
 				t.Fatalf("native knockback changed %+v -> %+v", before, m.Pos)
 			}
 		})
@@ -573,7 +574,10 @@ func TestLegendaryWarriorSoloRemainingClauses(t *testing.T) {
 				if id == "ZS-A18" {
 					echo = 72
 				}
-				if primary || id == "ZS-A18" {
+				if id == "ZS-A06" {
+					// Buff pass: ZS-A06 echoes 110% on every landed target.
+					mWant, qWant = mWant+echo, qWant+echo
+				} else if primary || id == "ZS-A18" {
 					mWant += echo
 				} else {
 					qWant += echo
@@ -731,7 +735,7 @@ func TestLegendaryWarriorSoloRemainingClauses(t *testing.T) {
 		d.Area = domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterCaster, Radius: 100}
 		before := m.HP
 		warriorCoverageNativeCast(t, s, p, d, 0)
-		if before-m.HP != 180 || q.MaxHP-q.HP != 340 {
+		if before-m.HP != 250 || q.MaxHP-q.HP != 550 {
 			t.Fatal("highest remaining ratio fallback/once", m.HP, q.HP)
 		}
 	})
@@ -753,7 +757,7 @@ func TestLegendaryWarriorSoloRemainingClauses(t *testing.T) {
 			warriorTestCast(t, s, p, m, d)
 			want := int32(0)
 			if learned {
-				want = 185
+				want = 300
 			}
 			if side.MaxHP-side.HP != want {
 				t.Fatal("learned-only geometry borrowing", side.HP)
@@ -821,7 +825,7 @@ func TestLegendaryWarriorSoloRemainingClauses(t *testing.T) {
 
 func TestLegendaryWarriorSoloMovementOutput(t *testing.T) {
 	for _, id := range []string{"ZS-U03", "ZS-U04"} {
-		pct := int32(180)
+		pct := int32(100) // ZS-U03 is a charge dash, no speed window
 		if id == "ZS-U04" {
 			pct = 160
 		}

@@ -138,7 +138,7 @@ func TestTypifiedUnifiedClassSourceAndWingPolicy(t *testing.T) {
 	limited := map[string]string{
 		"TY-D01": "战士,剑客,刺客", "TY-D02": "药师,术士", "TY-D07": "战士,剑客,刺客",
 		"TY-D08": "药师,术士", "TY-D11": "药师,术士", "TY-U04": "药师", "TY-U05": "药师",
-		"TY-U07": "刺客,术士", "TY-U10": "药师", "TY-U14": "药师,术士", "TY-U16": "药师",
+		"TY-U07": "战士,剑客,刺客,术士", "TY-U10": "药师", "TY-U14": "药师,术士", "TY-U16": "药师",
 		"TY-U17": "药师", "TY-U18": "药师,术士",
 	}
 	var typified []LegendaryPowerDefinition

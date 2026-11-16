@@ -325,7 +325,7 @@ func TestStatusCausalMagicDefenseAfterSourceLeaves(t *testing.T) {
 		id    string
 		skill domain.SkillID
 		want  int32
-	}{{"JK-D06", 10111, 65}, {"JK-D07", 10113, 50}} {
+	}{{"JK-D06", 10111, 45}, {"JK-D07", 10113, 35}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := swordsmanCoverageFixture(t, tc.id, true)
 			p.Stats = domain.Stats{}
@@ -349,8 +349,8 @@ func TestStatusCausalDifferentProducerTrapCanTriple(t *testing.T) {
 	restore := s.withCombatCausalPath([]string{s.combatEffectKey(p.ID, "CK-A26")})
 	s.placeAssassinTrap(p, def, m.Pos, 100, 100, false)
 	restore()
-	if len(s.traps) != 3 {
-		t.Fatalf("different producer -> triple got%d want3 (never9)", len(s.traps))
+	if len(s.traps) != 5 {
+		t.Fatalf("different producer -> triple got%d want5 (never25)", len(s.traps))
 	}
 	side := 0
 	for _, tr := range s.traps {
@@ -361,7 +361,7 @@ func TestStatusCausalDifferentProducerTrapCanTriple(t *testing.T) {
 			t.Fatal("original producer lost")
 		}
 	}
-	if side != 2 {
+	if side != 4 {
 		t.Fatalf("triple side branches=%d", side)
 	}
 	if len(s.legendaryState().causalPath) != 0 {

@@ -167,23 +167,6 @@ func (s *Scene) detectTraps(detector *entity.Entity, radius, chanceBP int32) {
 }
 
 func (s *Scene) disarmTrap(detector *entity.Entity, trapID domain.EntityID, chanceBP int32) {
-	if c, ok := legendaryAssassinPowerContext(s, detector, "CK-U03"); detector != nil && ok {
-		center := s.traps[trapID]
-		if center == nil || center.Trap == nil || !s.enemyTrapOwner(detector, center.Trap.Owner) || !center.Trap.VisibleToPlayer(detector.ID) {
-			return
-		}
-		ids := []domain.EntityID{}
-		for id, t := range s.traps {
-			if t != nil && t.Trap != nil && s.enemyTrapOwner(detector, t.Trap.Owner) && t.Trap.VisibleToPlayer(detector.ID) && sqDist(center.Pos, t.Pos) <= 150*150 {
-				ids = append(ids, id)
-			}
-		}
-		sort.Slice(ids, func(i, j int) bool { return ids[i] < ids[j] })
-		for _, id := range ids {
-			s.disarmSingleTrap(detector, id, min(int32(10000), chanceBP+c.RollValue("disarm_bp", 2500)))
-		}
-		return
-	}
 	s.disarmSingleTrap(detector, trapID, chanceBP)
 }
 func (s *Scene) disarmSingleTrap(detector *entity.Entity, trapID domain.EntityID, chanceBP int32) {

@@ -71,15 +71,15 @@ func init() {
 	registerWarriorPower("ZS-A01", warriorSynergyDOTHandler())
 	registerWarriorPower("ZS-A04", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10005 {
-			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 1500)
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 6000)
 			d.LegendaryModifiers.WidthBP += 9000
 			d.LegendaryModifiers.LengthBP += 2000
 		}
 	}})
-	registerWarriorPower("ZS-A05", warriorSkill(10005, 60, 0, 0, 0))
+	registerWarriorPower("ZS-A05", warriorSkill(10005, 150, 0, 0, 0))
 	registerWarriorPower("ZS-A11", warriorSkill(10017, 60, 0, 0, 0))
-	registerWarriorPower("ZS-A13", warriorSkill(10006, 45, 0, 20, 0))
-	registerWarriorPower("ZS-A15", warriorSkill(10006, 60, 0, 0, 0))
+	registerWarriorPower("ZS-A13", warriorSkill(10006, 90, 0, 20, 0))
+	registerWarriorPower("ZS-A15", warriorSkill(10006, 150, 0, 0, 0))
 	registerWarriorPower("ZS-A17", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		if d.ID == 10003 {
 			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 3000)

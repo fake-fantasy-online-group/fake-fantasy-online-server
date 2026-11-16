@@ -101,7 +101,7 @@ func init() {
 	registerWarriorPower("ZS-A28", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		warriorWarcryRadius(c, d)
 		if legendaryMeleeSpearActive(*d) && d.HasDamageEffect() {
-			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 4000)
+			d.LegendaryModifiers.DamageBP += c.RollValue("damage_bp", 10000)
 		}
 		if d.ID == 10028 {
 			warriorEffects(d, func(e *domain.SkillEffect) {
@@ -157,11 +157,7 @@ func init() {
 	h.EquipmentChanged = legendaryMeleeRemoveSlow
 	h.StatusReceiving = func(c *legendaryContext, d *domain.StatusDef) bool { return !warriorSlow(d) }
 	registerWarriorPower("ZS-D10", h)
-	registerWarriorPower("ZS-U03", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
-		if d.ID == 10017 {
-			d.Dist = specialScale(d.Dist, 150)
-		}
-	}, CastReleased: warriorFunctionalRelease(10017, 8000, true), PassiveStats: warriorFunctionalMove(10017, 80), Tick: warriorFunctionalTick(10017, true)})
+	registerWarriorPower("ZS-U03", bpLanceChargeHandler())
 	registerWarriorPower("ZS-U04", legendaryHandler{PrepareSkill: func(c *legendaryContext, d *domain.SkillDef) {
 		warriorWarcryRadius(c, d)
 		if d.ID == 10028 {

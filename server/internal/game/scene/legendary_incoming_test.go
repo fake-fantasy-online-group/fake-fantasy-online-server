@@ -94,8 +94,9 @@ func TestLegendaryIncomingAllDamageConsumerMatrix(t *testing.T) {
 		id   string
 		want int32
 	}{
-		{"SS-D01", 720}, {"SS-D02", 450}, {"SS-D03", 250}, {"SS-D05", 500}, {"SS-D06", 650}, {"SS-D09", 600}, {"SS-D10", 650},
-		{"YS-D05", 750}, {"YS-D06", 600}, {"YS-D08", 400}, {"YS-D10", 600},
+		{"SS-D01", 650}, {"SS-D02", 450}, {"SS-D03", 250}, {"SS-D05", 500}, {"SS-D06", 600}, {"SS-D09", 450}, {"SS-D10", 650},
+		// YS-D10: 55% reduction, then its 1% max-HP heal on the hit.
+		{"YS-D05", 700}, {"YS-D06", 500}, {"YS-D08", 0}, {"YS-D10", 350},
 	} {
 		for _, kind := range []string{"native", "proc", "child", "set_proc", "dot", "proc_dot", "reflection"} {
 			t.Run(tc.id+"/"+kind, func(t *testing.T) {
@@ -131,8 +132,12 @@ func TestLegendaryIncomingAllDamageConsumerMatrix(t *testing.T) {
 				default:
 					s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, blow)
 				}
-				if got := before - p.HP; got != tc.want {
-					t.Fatalf("actual HP loss %d want %d", got, tc.want)
+				want := tc.want
+				if tc.id == "YS-D10" && (kind == "dot" || kind == "proc_dot" || kind == "reflection") {
+					want = 450 // the 1% max-HP heal is on hits only
+				}
+				if got := before - p.HP; got != want {
+					t.Fatalf("actual HP loss %d want %d", got, want)
 				}
 				if s.legendaryState().depth != 0 {
 					t.Fatal("recursion guard leaked")
@@ -180,9 +185,9 @@ func TestLegendaryIncomingCombinationShieldAndManaOnce(t *testing.T) {
 			default:
 				s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, b)
 			}
-			// Native20%, 72%,60%, then mana30%, and finally shield once.
+			// Native20%, 65%,45%, then mana30%, and finally shield once.
 			// Reflection shares resource absorption, not direct-only reductions.
-			want, spent := int32(90), int32(155)
+			want, spent := int32(29), int32(105)
 			if before-p.HP != want || mp-p.MP != spent {
 				t.Fatalf("HP=%d MP=%d want %d/%d", before-p.HP, mp-p.MP, want, spent)
 			}
@@ -212,13 +217,13 @@ func TestLegendaryIncomingRiftHazardNotBasic(t *testing.T) {
 	p.Stats = domain.Stats{}
 	m.Stats = domain.Stats{MinAtk: 100, MaxAtk: 100}
 	ev, _, _ := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true})
-	if ev.Amount != 45 {
+	if ev.Amount != 60 { // TY-D06 mild tier: 40%
 		t.Fatalf("native monster basic must still reduce: %d", ev.Amount)
 	}
 	ev, _, _ = s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{SkillID: 999001, GuaranteedHit: true})
 	// Redesigned TY-D06 reduces single-target direct hits, including non-basic monster skills.
-	if ev.Amount != 45 {
-		t.Fatalf("monster skill should also take typified D06 55%% cut: %d", ev.Amount)
+	if ev.Amount != 60 {
+		t.Fatalf("monster skill should also take typified D06 40%% cut: %d", ev.Amount)
 	}
 }
 
@@ -276,7 +281,7 @@ func TestLegendaryIncomingMirrorProcCapAndNoReflectionLoop(t *testing.T) {
 			before := m.HP
 			ev, raw, reflected := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, b)
 			s.afterStrikeStatuses(m, p, ev, raw, reflected)
-			if ev.Amount != 0 || reflected != 1800 || before-m.HP != 1800 || p.HP != 10000 {
+			if ev.Amount != 0 || reflected != 3000 || before-m.HP != 3000 || p.HP != 10000 { // 300%, capped at 30% max HP
 				t.Fatalf("mirror cap/loop ev=%+v reflected=%d loss=%d", ev, reflected, before-m.HP)
 			}
 		})
@@ -329,12 +334,12 @@ func TestLegendaryIncomingNativeBuffMagnitudeCombinations(t *testing.T) {
 				d = a.Def
 			}
 		})
-		// Native 10% * (1+70%+50%) + the separate35-point D04 grant.
-		if d.PhysicalDamageReductionPct != 57 || d.MagicDamageReductionPct != 57 {
+		// Native 10% * (1+70%+50%) + the separate 50-point D04 grant.
+		if d.PhysicalDamageReductionPct != 72 || d.MagicDamageReductionPct != 72 {
 			t.Fatalf("wrong shared/flat buckets: %+v", d)
 		}
 		s.legendaryFinalizeStatus(&d)
-		if d.PhysicalDamageReductionPct != 57 {
+		if d.PhysicalDamageReductionPct != 72 {
 			t.Fatal("finalization compounded defense")
 		}
 		c.Owner.Stats = domain.Stats{}
@@ -342,7 +347,7 @@ func TestLegendaryIncomingNativeBuffMagnitudeCombinations(t *testing.T) {
 		for _, magic := range []bool{false, true} {
 			c.Owner.HP = c.Owner.MaxHP
 			ev, _, _ := s.resolveStrikeStatuses(c.Target, c.Owner, &combat.HitTracker{}, combat.Blow{SkillID: 999001, Magic: magic, GuaranteedHit: true})
-			if ev.Amount != 430 {
+			if ev.Amount != 280 {
 				t.Fatalf("defense consumer magic=%v got=%d", magic, ev.Amount)
 			}
 		}
@@ -411,8 +416,8 @@ func TestLegendaryIncomingSetAuraAndShieldCombination(t *testing.T) {
 	}
 	before := p.HP
 	ev, _, _ := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true})
-	// 1000 * native80% * actual set92% * power65% * power65% - shield100.
-	if ev.Amount != 210 || before-p.HP != 210 {
+	// 1000 * native80% * actual set92% * SS-D10 65% * SS-D06 60% - shield100.
+	if ev.Amount != 186 || before-p.HP != 186 {
 		t.Fatalf("set/power/shield double settlement: ev%d HP%d", ev.Amount, before-p.HP)
 	}
 }
@@ -451,8 +456,8 @@ func TestLegendaryIncomingMirrorAmplifierInsideGenerationGuard(t *testing.T) {
 	s.legendaryState().depth = 1
 	s.equipmentState().classSetTriggered = 1
 	_, _, reflected := s.resolveStrikeStatuses(c.Target, c.Owner, &combat.HitTracker{}, combat.Blow{Origin: domain.DamageProcOrigin, ProcDepth: 1, Magic: true, HurtType: domain.HurtFire})
-	if reflected != 900 {
-		t.Fatalf("120%% * D03 150%% multiplier lost inside guard: %d", reflected)
+	if reflected != 2000 {
+		t.Fatalf("300%% * D03 150%% (30%% max-HP cap) lost inside guard: %d", reflected)
 	}
 }
 
@@ -477,12 +482,12 @@ func TestLegendaryIncomingActualNativeFireShieldCombination(t *testing.T) {
 	p.HP = p.MaxHP
 	m.Stats = domain.Stats{MinAtk: 1000, MaxAtk: 1000}
 	ev, _, _ := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true})
-	if ev.Amount != 396 {
-		t.Fatalf("native45%% shield + nearby28%% power got%d want396", ev.Amount)
+	if ev.Amount != 357 {
+		t.Fatalf("native45%% shield + nearby35%% power got%d want357", ev.Amount)
 	}
 	before := p.HP
 	s.emitReflectedDamage(m, p, 1000, false)
-	if before-p.HP != 396 {
+	if before-p.HP != 357 {
 		t.Fatal("same shield/power pair not respected by reflection")
 	}
 	p.Player.Worn.Set(domain.SlotHead, domain.Stack{})
@@ -508,17 +513,17 @@ func TestLegendaryIncomingActualHealerWindupCombination(t *testing.T) {
 	m.Stats = domain.Stats{MinAtk: 1000, MaxAtk: 1000}
 	ev, raw, reflected := s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true})
 	s.afterStrikeStatuses(m, p, ev, raw, reflected)
-	if ev.Amount != 450 || !s.legendaryCasterWinding(p, 10304) {
+	if ev.Amount != 350 || !s.legendaryCasterWinding(p, 10304) { // YS-D05 70% * YS-D06 50%
 		t.Fatalf("native winding protection amount%d", ev.Amount)
 	}
 	before := p.HP
 	s.tickStatus(p, domain.Active{Source: m.ID, Def: domain.StatusDef{ID: 199907, TypeKnown: true, Type: domain.StatusBad, HPChanges: []domain.ResourceChange{{Value: -1000}}}})
-	if before-p.HP != 450 {
+	if before-p.HP != 350 {
 		t.Fatal("real healing windup did not protect DOT", before-p.HP)
 	}
 	before = p.HP
 	s.emitReflectedDamage(m, p, 1000, false)
-	if before-p.HP != 450 {
+	if before-p.HP != 350 {
 		t.Fatal("real healing windup did not protect reflection", before-p.HP)
 	}
 }

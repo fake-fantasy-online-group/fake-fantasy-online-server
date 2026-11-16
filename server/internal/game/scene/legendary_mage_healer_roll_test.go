@@ -46,7 +46,7 @@ func TestLegendaryMageHealerRollMetadataAndLegacy(t *testing.T) {
 			}
 		}
 	}
-	if ranged != 96 || fixed != 4 {
+	if ranged != 95 || fixed != 5 {
 		t.Fatalf("coverage: ranged=%d fixed=%d", ranged, fixed)
 	}
 }
@@ -60,10 +60,10 @@ func TestLegendaryMageHealerRollActualModifierHooks(t *testing.T) {
 	}{
 		{"SS-A01", 10402, "damage", 7000}, {"SS-A12", 10410, "damage", 2000}, {"SS-A18", 10405, "damage", 4000}, {"SS-A20", 10412, "damage", 5500},
 		{"SS-A06", 10402, "radius", 6500}, {"SS-U01", 10432, "mana", 1500}, {"SS-U09", 10402, "cooldown", 3000},
-		{"YS-A03", 10319, "damage", 18000}, {"YS-A08", 10317, "damage", 8000}, {"YS-A09", 10312, "damage", 4000}, {"YS-A11", 10312, "damage", 4500},
-		{"YS-A12", 10312, "damage", 5000}, {"YS-A14", 10326, "cooldown", 4500}, {"YS-A16", 10326, "damage", 3500}, {"YS-A18", 10325, "damage", 6000},
-		{"YS-A25", 10307, "buff", 6000}, {"YS-A26", 10321, "buff", 7000}, {"YS-D01", 10301, "healing", 6000}, {"YS-D03", 10320, "buff", 6000},
-		{"YS-U01", 10303, "mana", 2000}, {"YS-U05", 10311, "buff", 3000},
+		{"YS-A03", 10319, "damage", 18000}, {"YS-A08", 10317, "damage", 20000}, {"YS-A09", 10312, "damage", 4000}, {"YS-A11", 10312, "damage", 4500},
+		{"YS-A12", 10312, "damage", 5000}, {"YS-A14", 10326, "cooldown", 4500}, {"YS-A16", 10326, "damage", 3500}, {"YS-A18", 10325, "damage", 15000},
+		{"YS-A25", 10307, "buff", 6000}, {"YS-A26", 10321, "buff", 7000}, {"YS-D01", 10301, "healing", 15000}, {"YS-D03", 10320, "buff", 6000},
+		{"YS-U01", 10303, "mana", 2000}, {"YS-U05", 10311, "buff", 6000},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			_, c := legendaryCasterFixture(t, tc.id)
@@ -106,7 +106,7 @@ func TestLegendaryMageHealerRollDefensesNeverInvert(t *testing.T) {
 	for _, tc := range []struct {
 		id        string
 		reduction int32
-	}{{"SS-D06", 35}, {"SS-D10", 35}} {
+	}{{"SS-D06", 40}, {"SS-D10", 35}} {
 		_, c := legendaryCasterFixture(t, tc.id)
 		c.Owner.Player.Char.Skills[10419] = 1
 		for _, roll := range []int32{7500, 10000, 0} {

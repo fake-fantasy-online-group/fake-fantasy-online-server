@@ -149,7 +149,7 @@ func TestLegendarySwordsmanBoundStrikeAndSourceDefense(t *testing.T) {
 	q := putMonster(s, 901, 10000, domain.Stats{}, 140, 100)
 	d := domain.SkillDef{ID: 10111, CooldownMS: 120000, HurtType: domain.HurtPhysical, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100, GuaranteedHit: true}}, Statuses: []domain.StatusApplication{{ID: rootDef.ID, Level: 1}}}
 	s.legendaryPrepareSkill(p, &d, m.ID)
-	if d.CooldownMS != 24000 {
+	if d.CooldownMS != 10000 {
 		t.Fatal(d.CooldownMS)
 	}
 	ids := swordCast(t, s, p, m, d)
@@ -160,12 +160,12 @@ func TestLegendarySwordsmanBoundStrikeAndSourceDefense(t *testing.T) {
 	d.CooldownMS = 120000
 	d.Statuses = []domain.StatusApplication{{ID: domain.StatusStun, Level: 1}}
 	s.legendaryPrepareSkill(p, &d, m.ID)
-	if d.CooldownMS != 18000 {
+	if d.CooldownMS != 8000 {
 		t.Fatal(d.CooldownMS)
 	}
 	before := q.HP
 	ids = swordCast(t, s, p, m, d)
-	if len(ids) != 2 || q.HP != before-180 || q.Status.Controlled() == domain.ControlStun {
+	if len(ids) != 2 || q.HP != before-400 || q.Status.Controlled() == domain.ControlStun {
 		t.Fatal("root expansion copied stun or damage failed", ids, q.HP)
 	}
 	s.legendaryCastReleased(p, domain.SkillDef{ID: 10111}, q.ID, nil)
@@ -175,15 +175,15 @@ func TestLegendarySwordsmanBoundStrikeAndSourceDefense(t *testing.T) {
 			c = ctx
 		}
 	}
-	if n := legendaryHandlers["JK-D06"].BeforeIncoming(&c, 100); n != 65 {
+	if n := legendaryHandlers["JK-D06"].BeforeIncoming(&c, 100); n != 45 {
 		t.Fatal("missing bind window defense", n)
 	}
 	q.Status = domain.NewStatusSet()
 	q.Status.Apply(rootDef, s.tick, 999)
-	if n := legendaryHandlers["JK-D06"].BeforeIncoming(&c, 100); n != 65 {
+	if n := legendaryHandlers["JK-D06"].BeforeIncoming(&c, 100); n != 45 {
 		t.Fatal("window incorrectly depends on target control", n)
 	}
-	c.NowMS += 8000
+	c.NowMS += 12000
 	if n := legendaryHandlers["JK-D06"].BeforeIncoming(&c, 100); n != 100 {
 		t.Fatal("expired window remained", n)
 	}
@@ -200,15 +200,15 @@ func TestLegendarySwordsmanGatherConcentrateProximity(t *testing.T) {
 	if len(ids) != 2 || sqDist(p.Pos, q.Pos) > 50*50 {
 		t.Fatalf("gather targets=%v positions %v", ids, q.Pos)
 	}
-	// 100*1.3*1.6=208 each; sum416 =>145 concentrated on highest current HP.
-	if q.HP != 10000-208 || m.HP != 100000-208-145 {
+	// 100*2.0*2.5=500 each; sum1000 =>350 concentrated on highest current HP.
+	if q.HP != 10000-500 || m.HP != 100000-500-350 {
 		t.Fatal("concentrated native actual sum", m.HP, q.HP)
 	}
 	c := legendaryContext{Scene: s, Owner: p, Target: q}
-	if n := legendaryHandlers["JK-D05"].BeforeIncoming(&c, 100); n != 60 {
+	if n := legendaryHandlers["JK-D05"].BeforeIncoming(&c, 100); n != 45 {
 		t.Fatal(n)
 	}
-	q.Pos.X = p.Pos.X + 76
+	q.Pos.X = p.Pos.X + 151
 	if n := legendaryHandlers["JK-D05"].BeforeIncoming(&c, 100); n != 100 {
 		t.Fatal(n)
 	}
@@ -259,8 +259,8 @@ func TestLegendarySwordsmanConcentrateExcludesOverkill(t *testing.T) {
 		s.resolveStrikeStatuses(p, dst, &combat.HitTracker{}, combat.Blow{SkillID: 10121, SkillPct: 100, GuaranteedHit: true})
 	}
 	finish()
-	// Real HP loss is160+10, not160+160;35% is59, not112.
-	if m.HP != 100000-160-59 {
+	// Real HP loss is250+10, not250+250;35% is91, not175.
+	if m.HP != 100000-250-91 {
 		t.Fatal("overkill inflated concentrated slash", m.HP)
 	}
 }
@@ -275,7 +275,7 @@ func TestLegendarySwordsmanGatherImmunityAndRadius(t *testing.T) {
 	q.Status.Apply(domain.StatusDef{ID: 900001, Level: 1, DurationSec: 10, SuppressHarmful: true}, s.tick, q.ID)
 	d := domain.SkillDef{ID: 10121, HurtType: domain.HurtPhysical, Radius: 100, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100, GuaranteedHit: true}}}
 	ids := swordCast(t, s, p, m, d)
-	if len(ids) != 1 || ids[0] != q.ID || m.Pos.X != 220 || m.HP != 100000 || q.HP != 9870 {
+	if len(ids) != 1 || ids[0] != q.ID || m.Pos.X != 220 || m.HP != 100000 || q.HP != 9800 {
 		t.Fatal("immune target teleported or out-of-radius damage", ids, m.Pos, m.HP, q.HP)
 	}
 }
@@ -320,7 +320,7 @@ func TestLegendarySwordsmanStandaloneAndTwoPieceControls(t *testing.T) {
 		}
 		d := domain.SkillDef{ID: 10126, HurtType: domain.HurtPhysical, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100, GuaranteedHit: true}}}
 		ids := swordCast(t, s, p, m, d)
-		if len(ids) != 2 || q.HP != 9820 {
+		if len(ids) != 2 || q.HP != 9600 {
 			t.Fatal("standalone strongstrike rejected legal other-source root", ids, q.HP)
 		}
 	}
@@ -336,7 +336,7 @@ func TestLegendarySwordsmanStandaloneAndTwoPieceControls(t *testing.T) {
 	s.aoi.Move(m, m.Pos)
 	swordCast(t, s, p, m, domain.SkillDef{ID: 10121, HurtType: domain.HurtPhysical, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100, GuaranteedHit: true}}})
 	c := legendaryContext{Scene: s, Owner: p, Target: m}
-	if n := legendaryHandlers["JK-D05"].BeforeIncoming(&c, 100); n != 60 {
+	if n := legendaryHandlers["JK-D05"].BeforeIncoming(&c, 100); n != 45 {
 		t.Fatal("two-piece gather did not enable proximity defense", n)
 	}
 }
@@ -350,7 +350,7 @@ func TestLegendarySwordsmanSilenceAndArmorRefresh(t *testing.T) {
 	d := domain.SkillDef{ID: 10113, CooldownMS: 120000, HurtType: domain.HurtPhysical, Effects: []domain.SkillEffect{{Kind: domain.EffectDamage, DamagePct: 100, GuaranteedHit: true}}, Statuses: []domain.StatusApplication{{ID: st.ID, Level: 1}}}
 	s.legendaryPrepareSkill(p, &d, m.ID)
 	ids := swordCast(t, s, p, m, d)
-	if d.CooldownMS != 24000 || len(ids) != 6 {
+	if d.CooldownMS != 10000 || len(ids) != 6 {
 		t.Fatal("group silence shape/cooldown", d.CooldownMS, ids)
 	}
 	for _, id := range ids {

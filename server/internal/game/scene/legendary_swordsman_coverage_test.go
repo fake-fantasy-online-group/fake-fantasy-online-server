@@ -44,11 +44,11 @@ func TestLegendarySwordsmanSoloDamageCoverage(t *testing.T) {
 		want   int32
 	}{
 		{"JK-A01", []domain.SkillID{10102}, 350}, {"JK-A02", []domain.SkillID{10117}, 115}, {"JK-A03", []domain.SkillID{10102}, 260},
-		{"JK-A05", []domain.SkillID{10111}, 140}, {"JK-A07", []domain.SkillID{10103}, 110 + 2*(45*110/100)}, {"JK-A08", []domain.SkillID{10103}, 190},
-		{"JK-A09", []domain.SkillID{10104, 10119}, 115}, {"JK-A13", []domain.SkillID{10113}, 170}, {"JK-A14", []domain.SkillID{10113}, 150},
-		{"JK-A15", []domain.SkillID{10121}, 216}, {"JK-A16", []domain.SkillID{10121}, 130}, {"JK-A19", []domain.SkillID{10102, 10122}, 125},
-		{"JK-A21", []domain.SkillID{10116}, 420}, {"JK-A22", []domain.SkillID{10123}, 120 + 70*120/100}, {"JK-A24", []domain.SkillID{10126}, 180},
-		{"JK-A26", []domain.SkillID{10102, 10117, 10104, 10119}, 200}, {"JK-A27", []domain.SkillID{10102, 10103, 10121}, 420},
+		{"JK-A05", []domain.SkillID{10111}, 300}, {"JK-A07", []domain.SkillID{10103}, 110 + 2*(45*110/100)}, {"JK-A08", []domain.SkillID{10103}, 190},
+		{"JK-A09", []domain.SkillID{10104, 10119}, 115}, {"JK-A13", []domain.SkillID{10113}, 300}, {"JK-A14", []domain.SkillID{10113}, 150},
+		{"JK-A15", []domain.SkillID{10121}, 337}, {"JK-A16", []domain.SkillID{10121}, 200}, {"JK-A19", []domain.SkillID{10102, 10122}, 125},
+		{"JK-A21", []domain.SkillID{10116}, 420}, {"JK-A22", []domain.SkillID{10123}, 120 + 70*120/100}, {"JK-A24", []domain.SkillID{10126}, 400},
+		{"JK-A26", []domain.SkillID{10102, 10117, 10104, 10119}, 200}, {"JK-A27", []domain.SkillID{10102, 10103, 10121}, 600},
 		{"JK-A28", []domain.SkillID{10104, 10119}, 360}, {"JK-A30", []domain.SkillID{10116, 10123}, 210},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
@@ -76,7 +76,7 @@ func TestLegendarySwordsmanSoloIncomingCoverage(t *testing.T) {
 	for _, tc := range []struct {
 		id   string
 		want int32
-	}{{"JK-D02", 100}, {"JK-D04", 50}, {"JK-D05", 60}, {"JK-D06", 65}, {"JK-D07", 100}, {"JK-D09", 550}, {"JK-D10", 65}} {
+	}{{"JK-D02", 85}, {"JK-D04", 35}, {"JK-D05", 45}, {"JK-D06", 45}, {"JK-D07", 100}, {"JK-D09", 350}, {"JK-D10", 45}} {
 		t.Run(tc.id, func(t *testing.T) {
 			for _, mode := range []string{"equipped", "unequipped", "dot", "condition-false", "magic"} {
 				t.Run(mode, func(t *testing.T) {
@@ -95,7 +95,7 @@ func TestLegendarySwordsmanSoloIncomingCoverage(t *testing.T) {
 						}
 					}
 					if tc.id == "JK-D05" && mode == "condition-false" {
-						m.Pos.X = p.Pos.X + 76
+						m.Pos.X = p.Pos.X + 151
 					}
 					if tc.id == "JK-D10" {
 						m.Pos.X = p.Pos.X + 76
@@ -122,19 +122,22 @@ func TestLegendarySwordsmanSoloIncomingCoverage(t *testing.T) {
 					}
 					want := tc.want
 					if tc.id == "JK-D07" && mode == "magic" {
-						want = 50
+						want = 35
 					}
 					if mode == "unequipped" || mode == "condition-false" || mode == "dot" {
 						want = damage
 					}
 					if tc.id == "JK-D06" && mode == "dot" {
-						want = 65
+						want = 45
 					}
 					if tc.id == "JK-D07" && mode == "dot" {
-						want = 50
+						want = 35
 					}
 					if tc.id == "JK-D02" && mode == "dot" {
 						want = 45
+					}
+					if tc.id == "JK-D02" && mode == "condition-false" {
+						want = 85 // direct damage is reduced 15% unconditionally
 					}
 					if tc.id == "JK-D05" && mode == "magic" {
 						want = 100
@@ -160,7 +163,7 @@ func TestLegendarySwordsmanSoloTargetCaps(t *testing.T) {
 		{"JK-A08", 10103, 11, 100, 130, false}, {"JK-A09", 10104, 11, 115, 115, false},
 		{"JK-A19", 10102, 11, 125, 125, false}, {"JK-A20", 10116, 11, 100, 160, false},
 		{"JK-A22", 10123, 11, 120 + 70*120/100, 100*120/100 + 70*120/100, false}, {"JK-A23", 10123, 11, 100, 110, false},
-		{"JK-A27", 10103, 11, 420, 320, false},
+		{"JK-A27", 10103, 11, 600, 500, false},
 	} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := swordsmanCoverageFixture(t, tc.id, true)
@@ -207,7 +210,7 @@ func TestLegendarySwordsmanSoloControlCoverage(t *testing.T) {
 		skill            domain.SkillID
 		limit            int
 		damage, cooldown int32
-	}{{"JK-A05", 10111, 9, 140, 24000}, {"JK-A13", 10113, 9, 170, 24000}, {"JK-A24", 10126, 9, 180, 18000}} {
+	}{{"JK-A05", 10111, 9, 300, 10000}, {"JK-A13", 10113, 9, 300, 10000}, {"JK-A24", 10126, 9, 400, 8000}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, p, m := swordsmanCoverageFixture(t, tc.id, true)
 			st := swordsmanCoverageRootStatus()
@@ -448,11 +451,7 @@ func TestLegendarySwordsmanSoloUtilityCoverage(t *testing.T) {
 			s.legendaryCastReleased(p, domain.SkillDef{ID: 10117}, 0, nil)
 			st := domain.Stats{MoveSpeed: 100}
 			s.legendaryPassiveStats(p, &st)
-			want := int32(100)
-			if equipped {
-				want = 180
-			}
-			if st.MoveSpeed != want {
+			if st.MoveSpeed != 100 { // JK-U01 lunge replaced the old speed window
 				t.Fatal("movement stat consumer", st.MoveSpeed)
 			}
 		}
@@ -496,7 +495,7 @@ func TestLegendarySwordsmanSoloUtilityCoverage(t *testing.T) {
 		id     string
 		skill  domain.SkillID
 		refund int32
-	}{{"JK-U03", 10119, 60}, {"JK-U09", 10103, 80}} {
+	}{{"JK-U03", 10119, 80}, {"JK-U09", 10103, 80}} {
 		t.Run(tc.id, func(t *testing.T) {
 			for _, mode := range []string{"equipped", "unequipped", "miss", "control-success"} {
 				s, p, m := swordsmanCoverageFixture(t, tc.id, mode != "unequipped")
@@ -583,18 +582,18 @@ func TestLegendarySwordsmanSoloUtilityCoverage(t *testing.T) {
 
 func TestLegendarySwordsmanSoloSpecialCoverage(t *testing.T) {
 	t.Run("JK-A17", func(t *testing.T) {
-		for _, radius := range []int32{100, 200} {
+		for _, radius := range []int32{100, 250} {
 			for _, equipped := range []bool{false, true} {
 				s, p, m := swordsmanCoverageFixture(t, "JK-A17", equipped)
-				m.Pos.X = 240
+				m.Pos.X = 280
 				s.aoi.Move(m, m.Pos)
-				far := putMonster(s, 901, 10000, domain.Stats{}, 280, 100)
+				far := putMonster(s, 901, 10000, domain.Stats{}, 330, 100)
 				d := swordsmanCoverageDef(10121)
 				d.Kind = domain.SkillArea
 				d.Radius = radius
 				d.Area = domain.SkillAreaTargeting{Shape: domain.SkillAreaCircle, Center: domain.SkillAreaCenterCaster, Radius: radius}
 				swordsmanCoverageNativeCast(t, s, p, d, 0)
-				if (m.HP < m.MaxHP) != (equipped || radius == 200) || (far.HP < far.MaxHP) != (radius == 200) {
+				if (m.HP < m.MaxHP) != (equipped || radius == 250) || (far.HP < far.MaxHP) != (radius == 250) {
 					t.Fatal("minimum radius/original larger radius not consumed", m.HP, far.HP)
 				}
 			}
@@ -807,7 +806,7 @@ func TestLegendarySwordsmanSoloNativePreservation(t *testing.T) {
 			m.Stats = domain.Stats{MinAtk: 100, MaxAtk: 100}
 			before := p.HP
 			s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true, SkillPct: 100})
-			if before-p.HP != 65 {
+			if before-p.HP != 45 {
 				t.Fatal("own hard-control source ignored", status)
 			}
 		}
@@ -822,7 +821,7 @@ func TestLegendarySwordsmanSoloNativePreservation(t *testing.T) {
 			s.resolveStrikeStatuses(m, p, &combat.HitTracker{}, combat.Blow{GuaranteedHit: true, SkillPct: 100})
 			want := int32(799)
 			if damage == 1000 {
-				want = 440
+				want = 280
 			}
 			if p.HP != before || universalShieldValue(p) != 2000-want {
 				t.Fatalf("post-mitigation/pre-shield threshold absorbed=%d want=%d", 2000-universalShieldValue(p), want)
@@ -880,7 +879,7 @@ func TestLegendarySwordsmanSoloSettledAndPullBoundaries(t *testing.T) {
 			s.resolveStrikeStatuses(p, e, &combat.HitTracker{}, combat.Blow{SkillID: 10121, SkillPct: 100, GuaranteedHit: true})
 		}
 		finish()
-		if m.MaxHP-m.HP != 128+44 || q.HP != 10000 {
+		if m.MaxHP-m.HP != 200+70 || q.HP != 10000 {
 			t.Fatal("settled actual-health sum/resistance reapplication", m.HP, q.HP)
 		}
 	})
@@ -901,7 +900,7 @@ func TestLegendarySwordsmanSoloSettledAndPullBoundaries(t *testing.T) {
 }
 
 func TestLegendarySwordsmanSoloMovementOutput(t *testing.T) {
-	t.Run("JK-U01", func(t *testing.T) { meleeCoverageMovementOutput(t, "JK-U01", 180) })
+	t.Run("JK-U01", func(t *testing.T) { meleeCoverageMovementOutput(t, "JK-U01", 100) })
 }
 func swordsmanCoverageSoloMovementImmunity(t *testing.T) {
 	for _, key := range []domain.StatusKey{{ID: 1009, Level: 1}, {ID: 10111, Level: 1}, {ID: 1034, Level: 41}} {

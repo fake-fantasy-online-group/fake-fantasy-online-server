@@ -2,7 +2,6 @@ package scene
 
 import (
 	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/domain"
-	"github.com/fake-fantasy-online-group/fake-fantasy-online-server/server/internal/game/event"
 	"testing"
 	"time"
 )
@@ -46,7 +45,7 @@ func TestLegendaryCasterRemainingHealerNativeStatusBranches(t *testing.T) {
 		status domain.SkillID
 		skill  domain.SkillID
 		bonus  int32
-	}{{"YS-A20", 10330, 10319, 4000}, {"YS-A27", 10311, 10312, 5000}} {
+	}{{"YS-A20", 10330, 10319, 4000}, {"YS-A27", 10311, 10312, 12000}} {
 		t.Run(tc.id, func(t *testing.T) {
 			s, c := legendaryCasterFixture(t, tc.id)
 			d, _ := s.skills.Get(tc.skill, 1)
@@ -80,11 +79,11 @@ func TestLegendaryCasterRemainingHealerDefenses(t *testing.T) {
 			case "YS-D05":
 				c.Owner.Status.Apply(domain.StatusDef{ID: 190100, SkillSnapshotID: 10303, DurationSec: 30}, s.tick, c.Owner.ID)
 				s.casts = append(s.casts, pendingCast{src: c.Owner.ID, def: domain.SkillDef{ID: 10301}, releaseAtWall: s.now().Add(time.Second), windup: &castWindup{}})
-				if h.BeforeIncoming(c, 100) != 75 || !s.legendaryCasterSteadyCast(c.Owner, 10301) {
+				if h.BeforeIncoming(c, 100) != 70 || !s.legendaryCasterSteadyCast(c.Owner, 10301) {
 					t.Fatal("HoT native windup defense missing")
 				}
 				s.casts = nil
-				if h.BeforeIncoming(c, 100) != 75 {
+				if h.BeforeIncoming(c, 100) != 70 {
 					t.Fatal("HoT guard disappeared after windup")
 				}
 				c.Owner.Status.Remove(190100)
@@ -92,14 +91,18 @@ func TestLegendaryCasterRemainingHealerDefenses(t *testing.T) {
 				c.Owner.Status.Apply(domain.StatusDef{ID: 190100, SkillSnapshotID: 10330, DurationSec: 30}, s.tick, c.Owner.ID)
 				c.Skill = 0
 				c.IsBasic = true
-				if h.BeforeIncoming(c, 100) != 65 {
+				if h.BeforeIncoming(c, 100) != 60 {
 					t.Fatal("needle basic defense missing")
 				}
 				c.Skill = 10401
 				c.IsBasic = false
+				if h.BeforeIncoming(c, 100) != 60 { // now every direct hit
+					t.Fatal("needle skill defense missing")
+				}
+				c.Owner.Status.Remove(190100)
 			case "YS-D10":
 				c.Target.Status.Apply(domain.StatusDef{ID: 190100, SkillSnapshotID: 10325, DurationSec: 30}, s.tick, c.Owner.ID)
-				if h.BeforeIncoming(c, 100) != 60 {
+				if h.BeforeIncoming(c, 100) != 45 {
 					t.Fatal("owned shackle defense missing")
 				}
 				c.Target.Status.Remove(190100)
@@ -168,7 +171,7 @@ func TestLegendaryCasterRemainingHealerReleaseAndInstant(t *testing.T) {
 			d.PrepareMS = 1000
 			s.legendaryPrepareSkill(c.Owner, &d, c.Target.ID)
 			if id == "YS-A29" {
-				if d.Area.Radius != 220 || d.LegendaryNextDamageBonusPct != 50 {
+				if d.Area.Radius != 220 || d.LegendaryNextDamageBonusPct != 100 {
 					t.Fatal("release geometry/coefficient missing", d)
 				}
 			} else if !d.LegendaryInstantCast || d.LegendaryModifiers.DamageBP != 4000 || d.LegendaryModifiers.HealingBP != 4000 {
@@ -190,63 +193,15 @@ func TestLegendaryCasterRemainingHealerManaTransfers(t *testing.T) {
 		p.MP = 0
 	}
 	legendaryHandlers["YS-U03"].ManaRestored(c, 0, 500)
-	if s.players[2].MP != 200 || s.players[3].MP != 200 || s.players[4].MP != 100 {
+	if s.players[2].MP != 400 || s.players[3].MP != 100 || s.players[4].MP != 0 { // 40% max-MP cap
 		t.Fatal("overflow transfer bounds")
 	}
 	c.Skill = 10301
 	legendaryHandlers["YS-U03"].ManaRestored(c, 0, 500)
-	if s.players[2].MP != 200 {
+	if s.players[2].MP != 400 {
 		t.Fatal("unrelated heal generated mana")
 	}
 }
-func TestLegendaryCasterBurnSettlementKillReward(t *testing.T) {
-	s, c := legendaryCasterFixture(t, "SS-U05")
-	legendaryCasterEquipBuild(t, s, c.Owner, "SS-U05", "SS-A02")
-	c.Owner.MP = 0
-	c.Target.HP = 500
-	c.Target.Status.Apply(domain.StatusDef{ID: 1036, DurationSec: 20, IntervalSec: 1, TypeKnown: true, Type: domain.StatusBad, HPChanges: []domain.ResourceChange{{Value: -100, Mode: domain.ModeAbsolute}}}, s.tick, c.Owner.ID)
-	legendaryCasterCastNow(t, s, c.Owner, 10401, c.Target.ID)
-	if c.Target.Alive() || c.Owner.MP != c.Owner.MaxMP*10/100 {
-		t.Fatal("burn settlement fatal did not restore exactly10 percent", c.Target.HP, c.Owner.MP, c.Owner.MaxMP)
-	}
-	c.Hit = event.DamageDealt{Flag: event.DamageFatal}
-	c.Target.HP = 0
-	c.Power, _ = domain.LegendaryPower("SS-A02")
-	before := c.Owner.MP
-	s.legendaryCasterDamageResolved(c, c.Target, c.Hit)
-	if c.Owner.MP != before {
-		t.Fatal("duplicate death rewarded")
-	}
-	c.Target.LegendaryLifeSequence++
-	s.legendaryCasterDamageResolved(c, c.Target, c.Hit)
-	if c.Owner.MP != before+c.Owner.MaxMP*10/100 {
-		t.Fatal("new life death incorrectly deduplicated")
-	}
-	c.Power, _ = domain.LegendaryPower("SS-A04")
-	c.Target.LegendaryLifeSequence++
-	before = c.Owner.MP
-	s.legendaryCasterDamageResolved(c, c.Target, c.Hit)
-	if c.Owner.MP != before+c.Owner.MaxMP*10/100 {
-		t.Fatal("ordinary damage kill of own burning target lost reward")
-	}
-	// A fire damage label alone is insufficient; the dying target must carry
-	// this caster's own burning status, not another caster's burn.
-	c.Target.Status.Remove(1036)
-	c.Target.LegendaryLifeSequence++
-	before = c.Owner.MP
-	s.legendaryCasterDamageResolved(c, c.Target, c.Hit)
-	if c.Owner.MP != before {
-		t.Fatal("kill without burn generated reward")
-	}
-	c.Target.Status.Apply(domain.StatusDef{ID: 1036, DurationSec: 20, IntervalSec: 1, TypeKnown: true, Type: domain.StatusBad, HPChanges: []domain.ResourceChange{{Value: -100, Mode: domain.ModeAbsolute}}}, s.tick, 999)
-	c.Target.LegendaryLifeSequence++
-	s.legendaryCasterDamageResolved(c, c.Target, c.Hit)
-	if c.Owner.MP != before {
-		t.Fatal("another caster's burn generated reward")
-	}
-
-}
-
 func TestLegendaryCasterRemainingHealerCenterAndDamageLedger(t *testing.T) {
 	t.Run("YS-A06", func(t *testing.T) {
 		s, c := legendaryCasterFixture(t, "YS-A06")
