@@ -31,6 +31,9 @@ type Op uint16
 // AllowedDuringMapLoad keeps connection control and map acknowledgement available
 // while the client rebuilds its world. Gameplay packets cannot mutate that world.
 func AllowedDuringMapLoad(op Op) bool {
+	if ClientLogOpcode(op) {
+		return true // a background /report upload must survive a map change
+	}
 	e, ok := decoders[op]
 	if !ok {
 		return false

@@ -47,6 +47,10 @@ const gmHelpText = "GM命令：\n" +
 	"/mute <角色名> <分钟> (WIZARD)\n" +
 	"/unmute <角色名> (WIZARD)\n" +
 	"/announce <内容> (WIZARD)\n" +
+	"/reportallow <角色名> [备注] (WIZARD)\n" +
+	"/reportdeny <角色名> (WIZARD)\n" +
+	"/reportlist (WIZARD)\n" +
+	"/reports <角色名> (WIZARD)\n" +
 	"/kick <角色名> (ARCH)\n" +
 	"/ban <角色名> [分钟] (ADMIN)\n" +
 	"/unban <角色名> (ADMIN)"
@@ -61,6 +65,10 @@ const (
 	gmAdminUnban
 	gmAdminMute
 	gmAdminUnmute
+	gmAdminReportAllow
+	gmAdminReportDeny
+	gmAdminReportList
+	gmAdminReports
 )
 
 type parsedGMCommand struct {
@@ -448,6 +456,33 @@ func (s *Session) parseGMCommand(raw string) (parsedGMCommand, bool, bool, error
 			return parsed, true, prefixed, fmt.Errorf("用法：/unmute <角色名>")
 		}
 		return parsed, true, prefixed, nil
+	case "reportallow":
+		parsed.admin, parsed.minimum = gmAdminReportAllow, store.GMWizard
+		if len(args) < 1 {
+			return parsed, true, prefixed, fmt.Errorf("用法：/reportallow <角色名> [备注]")
+		}
+		parsed.target = args[0]
+		parsed.text = strings.TrimSpace(strings.Join(args[1:], " "))
+		if len([]rune(parsed.text)) > 80 {
+			return parsed, true, prefixed, fmt.Errorf("备注最多80字")
+		}
+		return parsed, true, prefixed, nil
+	case "reportdeny", "reports":
+		parsed.admin, parsed.minimum = gmAdminReportDeny, store.GMWizard
+		if name == "reports" {
+			parsed.admin = gmAdminReports
+		}
+		parsed.target = strings.TrimSpace(strings.Join(args, " "))
+		if parsed.target == "" {
+			return parsed, true, prefixed, fmt.Errorf("用法：/%s <角色名>", name)
+		}
+		return parsed, true, prefixed, nil
+	case "reportlist":
+		parsed.admin, parsed.minimum = gmAdminReportList, store.GMWizard
+		if len(args) != 0 {
+			return parsed, true, prefixed, fmt.Errorf("用法：/reportlist")
+		}
+		return parsed, true, prefixed, nil
 	case "kick":
 		parsed.admin, parsed.minimum = gmAdminKick, store.GMArch
 		parsed.target = strings.TrimSpace(strings.Join(args, " "))
@@ -655,6 +690,10 @@ func (c gmSessionControl) EndTrade(color uint8, text string) {
 
 func (s *Session) executeGMAdmin(parsed parsedGMCommand, account *store.Account,
 	actor *domain.Character) (bool, string) {
+	switch parsed.admin {
+	case gmAdminReportAllow, gmAdminReportDeny, gmAdminReportList, gmAdminReports:
+		return s.executeGMReport(parsed, account)
+	}
 	if s.deps.Online == nil {
 		return false, "在线索引不可用"
 	}

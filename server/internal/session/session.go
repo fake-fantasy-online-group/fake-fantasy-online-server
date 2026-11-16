@@ -109,7 +109,10 @@ type Deps struct {
 	// Trades is the process-wide registry of active two-client handshakes. Inventory
 	// references remain scene-owned and enter this registry only after validation.
 	Trades *trade.Registry
-	Log    *slog.Logger
+	// ClientLogs is the /report service (in-memory whitelist + file storage).
+	// nil disables uploads; Begin is answered with ClientLogDisabled.
+	ClientLogs *ClientLogs
+	Log        *slog.Logger
 }
 
 // Session 一个客户端会话。
@@ -128,6 +131,8 @@ type Session struct {
 	growthV5             bool
 	groundPresentationV1 bool
 	dashMoveV1           bool
+	clientLog            *clientLogUpload // guarded by mu; /report upload in progress
+	clientLogGen         uint64
 	nativeAttackRangeV1  bool
 	childSkillVisualV1   bool
 	account              *store.Account
@@ -266,6 +271,10 @@ func (s *Session) OnPacket(op uint16, payload []byte) {
 			return
 		}
 		s.onBlockRequest(req)
+		return
+	}
+	if protocol.ClientLogOpcode(protocol.Op(op)) {
+		s.onClientLog(protocol.Op(op), payload)
 		return
 	}
 	if protocol.CapabilityOpcode(protocol.Op(op)) {
@@ -983,6 +992,9 @@ func sample(p []byte) []byte {
 
 func (s *Session) OnClose(reason string) {
 	s.leaveWorld(reason, StageClosed)
+	s.mu.Lock()
+	s.dropClientLogLocked()
+	s.mu.Unlock()
 	s.mu.Lock()
 	account := s.account
 	s.mu.Unlock()

@@ -363,3 +363,15 @@ items/pets, global templates, balances and purchase history are untouched.
 The operation is explicit, atomic, guarded and idempotent; do not run it on a
 live database without separately approved maintenance and backup. See
 `docs/commerce/rack-restoration-129.md` and its full ID/source/missing-data JSON.
+
+## 131: client log reports (/report)
+
+`000131_20261116_client_log_reports.sql` creates `client_log_reports`, the
+metadata index for player `/report` uploads (report number, account, character,
+map, client version, platform, level, range, note, size, truncation flag,
+SHA-256, file path, time). The empty-database tail is `000000_init-130.sql`
+(identical body, no transaction statements). Schema only, idempotent, no player
+data touched. The gameserver writes files under `-client-log-dir` and deletes
+rows and files older than 14 days hourly. The /report whitelist is in memory
+only and has no table. Apply only with separately approved maintenance:
+`psql -v ON_ERROR_STOP=1 -f 000131_20261116_client_log_reports.sql`.

@@ -87,6 +87,8 @@ func main() {
 	mux.HandleFunc("/api/catalog/entries", catalog.entriesHandler)
 	mux.HandleFunc("/api/catalog/relations", catalog.relationsHandler)
 	mux.HandleFunc("/api/gm/accounts", catalog.accountsHandler)
+	mux.HandleFunc("/api/gm/client-logs", catalog.clientLogsHandler)
+	mux.HandleFunc("/api/gm/client-logs/download", catalog.clientLogDownloadHandler)
 	mux.Handle("/fantasy-db/", workbenchHeaders(http.StripPrefix("/fantasy-db/", http.FileServer(http.FS(webRoot)))))
 	mux.HandleFunc("/fantasy-db", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/fantasy-db/", http.StatusTemporaryRedirect)

@@ -53,6 +53,8 @@ var (
 	drainSec = flag.Int("drain", 30, "关服时等待场景与写回队列的上限(秒)")
 	debugLog = flag.Bool("debug", false, "打开调试日志")
 	noNPC    = flag.Bool("no-npc", false, "不下发 NPC 初始场景数据")
+	// 玩家 /report 日志：文件按日期写入此目录，元数据写 client_log_reports，保留14天。
+	clientLogDir = flag.String("client-log-dir", "client-logs", "玩家 /report 日志目录（留空关闭上报）")
 )
 
 func main() {
@@ -389,6 +391,22 @@ func run() int {
 	// 玩家进图时由场景一次性发全图。以前那条"客户端请求场景加载 → 会话回一份
 	// 静态 NPC 包"的路已经删掉 —— 那个请求号(0x1017)其实是移动上报, 从来就不是
 	// 场景加载, 而且会话编的 2000000+ 实体 id 与场景里的对不上, 客户端点了没反应。
+	// /report：白名单只在内存；元数据用 PostgreSQL，内存存储自测时用内存索引。
+	var clientLogStore store.ClientLogStore = store.NewMemoryClientLogs()
+	if cls, ok := st.(store.ClientLogStore); ok {
+		clientLogStore = cls
+	}
+	clientLogs, err := session.NewClientLogs(*clientLogDir, clientLogStore, log)
+	if err != nil {
+		log.Error("初始化客户端日志目录失败", "dir", *clientLogDir, "err", err)
+		return 1
+	}
+	if clientLogs != nil {
+		log.Info("客户端日志上报已启用", "dir", clientLogs.Dir(), "index", fmt.Sprintf("%T", clientLogStore))
+		go clientLogs.RunRetention(ctx)
+	} else {
+		log.Info("客户端日志上报未启用(-client-log-dir 为空)")
+	}
 	factory := func(sink gnet.Sink) gnet.Handler {
 		return session.New(sink, session.Deps{
 			RequireGrowthV5: true,
@@ -406,7 +424,8 @@ func run() int {
 			},
 			Unknown: unknownOps, Party: parties, Online: onlineIdx,
 			Requests: friendReqs, Trades: trades,
-			Log: log,
+			ClientLogs: clientLogs,
+			Log:        log,
 		})
 	}
 	// One budget includes gateway handlers, scene shutdown and final persistence.
