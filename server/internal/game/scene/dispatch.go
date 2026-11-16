@@ -882,6 +882,9 @@ func (s *Scene) move(cmd MoveTo, checkPortal, force bool) {
 	if !force && s.entityMapLoading(e) {
 		return // also reject commands queued before the session barrier was set
 	}
+	if !force && !s.filterClientReport(e, cmd) {
+		return
+	}
 	if e.Player != nil && e.Player.Stall != nil {
 		s.stallNotice(e, "摆摊中不能攻击，请先结束摊位")
 		return

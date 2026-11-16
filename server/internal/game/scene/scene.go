@@ -303,7 +303,9 @@ type Scene struct {
 	// 不进角色存档，也不跨场景交接。
 	moveWindows map[domain.EntityID]playerMoveWindow
 	// dashImmuneUntil is the control/displacement immunity window of a skill dash.
-	dashImmuneUntil            map[domain.EntityID]domain.Tick
+	dashImmuneUntil map[domain.EntityID]domain.Tick
+	// dashLanding guards the client's reports right after a skill dash.
+	dashLanding                map[domain.EntityID]dashLandingGuard
 	stallBrowsers              map[domain.EntityID]map[domain.EntityID]struct{}
 	levels                     *domain.LevelTable               // 经验曲线
 	defs                       spawn.Defs                       // 怪物模板, 结算经验时回查

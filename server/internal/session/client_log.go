@@ -12,7 +12,6 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
-	"regexp"
 	"sort"
 	"strings"
 	"sync"
@@ -254,29 +253,6 @@ func gunzipLimited(compressed []byte, limit int64) ([]byte, error) {
 		return nil, errClientLogTooLarge
 	}
 	return plain, nil
-}
-
-// Redaction rules shared with the client (ClientLogRedactor.cs). The server
-// applies them again as a backstop before anything touches disk.
-var clientLogRedactions = []struct {
-	re   *regexp.Regexp
-	repl string
-}{
-	{regexp.MustCompile(`(?i)(authorization\s*[:=]\s*)(bearer\s+|basic\s+)?[^\s,;"'&]+`), "${1}***"},
-	{regexp.MustCompile(`(?i)((?:token|ticket|session|password|passwd|pwd|secret|密码)[A-Za-z_]*["']?\s*[:=]\s*["']?)[^\s,;"'&]+`), "${1}***"},
-	{regexp.MustCompile(`[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}`), "[email]"},
-	{regexp.MustCompile(`\b[0-9a-fA-F]{32,}\b`), "[hex]"},
-	{regexp.MustCompile(`[A-Za-z0-9+/_\-]{32,}={0,2}`), "[b64]"},
-	{regexp.MustCompile(`(^|[^0-9])((?:\+?86[\- ]?)?1[3-9][0-9]{9})([^0-9]|$)`), "${1}[phone]${3}"},
-}
-
-// RedactClientLog masks credentials, long hex/base64 strings, e-mail
-// addresses and mainland mobile numbers.
-func RedactClientLog(b []byte) []byte {
-	for _, r := range clientLogRedactions {
-		b = r.re.ReplaceAll(b, []byte(r.repl))
-	}
-	return b
 }
 
 // clientLogUpload is the per-session upload state machine.

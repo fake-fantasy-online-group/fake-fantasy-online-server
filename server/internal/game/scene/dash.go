@@ -27,6 +27,9 @@ func dashDurationMS(from, to domain.Pos) int32 {
 // skillDash moves e to a walkable same-map point. It returns false when the
 // move was not performed; the caller must not apply arrival effects then.
 func (s *Scene) skillDash(e *entity.Entity, to domain.Pos, dir uint8) bool {
+	// The wire carries integer coordinates and the client reports its landing
+	// as integers; land on whole pixels so that echo equals the server position.
+	to.X, to.Y = math.Round(to.X), math.Round(to.Y)
 	if e == nil || !e.Alive() || !s.spawnPositionWalkable(to) {
 		return false
 	}
@@ -54,10 +57,59 @@ func (s *Scene) skillDash(e *entity.Entity, to domain.Pos, dir uint8) bool {
 		s.dashImmuneUntil = map[domain.EntityID]domain.Tick{}
 	}
 	s.dashImmuneUntil[e.ID] = s.tick + domain.Ticks(int(duration))
+	if e.Player != nil {
+		if s.dashLanding == nil {
+			s.dashLanding = map[domain.EntityID]dashLandingGuard{}
+		}
+		s.dashLanding[e.ID] = dashLandingGuard{from: from, to: e.Pos, until: s.tick + domain.Ticks(int(duration)+dashReportGraceMS)}
+	}
 	// Everyone, including the dasher, receives the authoritative dash; the
 	// dasher's client did not predict the server-chosen landing point.
 	s.emit(event.EntityMoved{ID: e.ID, To: to, Dir: dir, Stop: true, Snap: true, Dash: true, DurationMS: duration})
 	return true
+}
+
+// dashReportGraceMS covers reports the client sent before it received the
+// dash (network round trip) on top of the dash duration itself.
+const dashReportGraceMS = 1500
+
+// dashLandingGuard remembers a player's last skill dash until the client has
+// caught up with the server-authored landing point.
+type dashLandingGuard struct {
+	from, to domain.Pos
+	until    domain.Tick
+}
+
+// filterClientReport decides what to do with a real client position report
+// (0x1017/0x100a, ReceivedAt set). It returns false when the report must be
+// ignored without side effects:
+//   - a report equal to the current position (the client echoes the dash
+//     landing once it finishes interpolating) is not a move: it must not
+//     spend speed credit, re-trigger portals, stop resting, re-broadcast a
+//     walk to observers (which would cut their dash interpolation short) or
+//     reset the facing chosen by the dash;
+//   - inside the grace window after a dash, a report nearer the pre-dash
+//     origin than the landing point is a stale pre-dash report and would
+//     otherwise drag the player back while their own client stays at the
+//     landing point.
+func (s *Scene) filterClientReport(e *entity.Entity, cmd MoveTo) bool {
+	if e.Player == nil || cmd.ReceivedAt.IsZero() {
+		return true
+	}
+	echo := e.Pos.X == cmd.To.X && e.Pos.Y == cmd.To.Y && e.Pos.MapID == cmd.To.MapID
+	if g, ok := s.dashLanding[e.ID]; ok {
+		switch {
+		case s.tick >= g.until || e.Pos != g.to:
+			delete(s.dashLanding, e.ID)
+		case echo:
+			delete(s.dashLanding, e.ID)
+		case math.Hypot(cmd.To.X-g.from.X, cmd.To.Y-g.from.Y) < math.Hypot(cmd.To.X-g.to.X, cmd.To.Y-g.to.Y):
+			return false
+		default:
+			delete(s.dashLanding, e.ID)
+		}
+	}
+	return !echo
 }
 
 // dashControlImmune reports whether e is inside its dash window.
